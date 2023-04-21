@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.scheduler;
+package montiarc.rte.scheduling;
 
 /**
  * Scheduler implementation acting like there is no scheduler.
@@ -8,7 +8,7 @@ package montiarc.rte.scheduler;
  * Any incoming computation is performed instantly, with no regard for any other running computations.
  * This is most similar to a simulation without schedulers.
  */
-public class InstantScheduler implements IScheduler {
+public class InstantSchedule implements ISchedule {
 
   /**
    * Register the given computation to be executed according to this scheduler's system.

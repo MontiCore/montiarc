@@ -4,8 +4,8 @@ package montiarc.scheduling;
 import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
-import montiarc.rte.scheduler.Computation;
-import montiarc.rte.scheduler.IScheduler;
+import montiarc.rte.scheduling.Computation;
+import montiarc.rte.scheduling.ISchedule;
 
 import java.util.List;
 
@@ -28,11 +28,11 @@ public class ScheduledInner implements ITimedComponent {
     return List.of(output);
   }
 
-  IScheduler scheduler;
+  ISchedule scheduler;
   StringBuilder trace;
   String instanceName;
 
-  public ScheduledInner(String qualifiedInstanceName, IScheduler scheduler,
+  public ScheduledInner(String qualifiedInstanceName, ISchedule scheduler,
                         StringBuilder trace, String instanceName) { // last 2 parameters are from the model, first 2 are "default"
     this.qualifiedInstanceName = qualifiedInstanceName;
     this.scheduler = scheduler;

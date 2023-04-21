@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.scheduler;
+package montiarc.rte.scheduling;
 
 import montiarc.rte.component.IComponent;
 

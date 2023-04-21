@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.scheduler;
+package montiarc.rte.scheduling;
 
 import java.util.Optional;
 
@@ -10,7 +10,7 @@ import java.util.Optional;
  * Then, the next computation (according to the specific scheduler's system) is retrieved and executed.
  * As long as more computations are available, they will be executed in order.
  */
-public abstract class AbstractScheduler implements IScheduler {
+public abstract class AbstractSchedule implements ISchedule {
 
   protected boolean runningComputation = false;
 

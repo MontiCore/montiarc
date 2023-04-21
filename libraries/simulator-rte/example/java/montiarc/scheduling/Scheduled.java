@@ -4,7 +4,7 @@ package montiarc.scheduling;
 import montiarc.rte.component.IComponent;
 import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.rte.port.TimeAwarePortForward;
-import montiarc.rte.scheduler.IScheduler;
+import montiarc.rte.scheduling.ISchedule;
 
 import java.util.List;
 
@@ -27,14 +27,14 @@ public class Scheduled implements IComponent<TimeAwarePortForward<?>, TimeAwareO
     return List.of();
   }
 
-  IScheduler scheduler;
+  ISchedule scheduler;
   StringBuilder trace;
 
   TimeAwarePortForward<Boolean> trigger = new TimeAwarePortForward<>(getQualifiedInstanceName() + ".trigger");
 
   ScheduledInner a, b, c, d, e, f, g, h, i, j, k;
 
-  public Scheduled(String qualifiedInstanceName, IScheduler scheduler,
+  public Scheduled(String qualifiedInstanceName, ISchedule scheduler,
                    StringBuilder trace) { // last parameter is from the model, first 2 are "default"
     this.qualifiedInstanceName = qualifiedInstanceName;
     this.scheduler = scheduler;

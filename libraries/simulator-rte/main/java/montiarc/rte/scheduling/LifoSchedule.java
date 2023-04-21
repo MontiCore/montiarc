@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.scheduler;
+package montiarc.rte.scheduling;
 
 import java.util.Optional;
 import java.util.Stack;
@@ -7,7 +7,7 @@ import java.util.Stack;
 /**
  * A basic scheduler in which execution order is based on order of registration in a LIFO Stack.
  */
-public class LifoScheduler extends AbstractScheduler {
+public class LifoSchedule extends AbstractSchedule {
 
   Stack<Computation> computations = new Stack<>();
 

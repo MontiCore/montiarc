@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.scheduler;
+package montiarc.rte.scheduling;
 
 /**
  * This interface defines the main interaction point(s) with a scheduler used in a MontiArc simulation.
@@ -9,7 +9,7 @@ package montiarc.rte.scheduler;
  * <br>
  * The registered computations should, in the end, be executed by the scheduler according to some system.
  */
-public interface IScheduler {
+public interface ISchedule {
 
   /**
    * Register the given computation to be executed according to this scheduler's system.

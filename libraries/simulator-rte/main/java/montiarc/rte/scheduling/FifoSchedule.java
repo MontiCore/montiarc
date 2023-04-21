@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.scheduler;
+package montiarc.rte.scheduling;
 
 import java.util.ArrayDeque;
 import java.util.Optional;
@@ -8,7 +8,7 @@ import java.util.Queue;
 /**
  * A basic scheduler in which execution order is based on order of registration in a FIFO Queue.
  */
-public class FifoScheduler extends AbstractScheduler {
+public class FifoSchedule extends AbstractSchedule {
   
   Queue<Computation> computations = new ArrayDeque<>();
   
