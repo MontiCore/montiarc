@@ -24,6 +24,11 @@ val exampleTestImplementation: Configuration by configurations.getting {
   extendsFrom(configurations.testImplementation.get())
 }
 
+val exampleTestRuntimeOnly : Configuration by configurations.getting {
+  extendsFrom(configurations["exampleRuntimeOnly"])
+  extendsFrom(configurations.testRuntimeOnly.get())
+}
+
 dependencies {
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
 
