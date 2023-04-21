@@ -130,8 +130,12 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(cl);
 
-    Log.info("Run symbol-table creation phase 1", "MontiArcTool");
     Log.enableFailQuick(false);
+
+    Log.info("Run post parsing transformations", "MontiArcTool");
+    this.runAfterParsingTrafos(asts);
+
+    Log.info("Run symbol-table creation phase 1", "MontiArcTool");
     Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
 
     Log.info("Run symbol-table creation phase 2", "MontiArcTool");
@@ -232,6 +236,16 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void runSymbolTablePhase3(@NotNull Collection<ASTMACompilationUnit> nodes) {
     Preconditions.checkNotNull(nodes);
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(nodes);
+  }
+
+  public void runAfterParsingTrafos(@NotNull Collection<ASTMACompilationUnit> asts) {
+    Preconditions.checkNotNull(asts);
+    asts.forEach(this::runAfterParsingTrafos);
+  }
+
+  public void runAfterParsingTrafos(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    MontiArcTrafos.afterParsing().applyAll(ast);
   }
 
   public void runAfterSymbolTablePhase3Trafos(@NotNull Collection<ASTMACompilationUnit> asts) {

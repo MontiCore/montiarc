@@ -39,6 +39,7 @@ public class MAStreamHelperTest {
     tool.init();
     Collection<ASTMACompilationUnit> asts = tool.parse(".arc",
         Paths.get(TEST_RESOURCE_PATH, "StreamHelper").toAbsolutePath());
+    tool.runAfterParsingTrafos(asts);
     tool.createSymbolTable(asts);
     tool.runSymbolTablePhase2(asts);
     tool.runSymbolTablePhase3(asts);

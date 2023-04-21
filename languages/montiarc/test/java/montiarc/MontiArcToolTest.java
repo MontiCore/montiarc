@@ -553,6 +553,32 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   }
 
   /**
+   * Method under test {@link MontiArcTool#runAfterParsingTrafos(Collection)}
+   */
+  @Test
+  void runAfterParsingTrafosCollectionShouldThrowException() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class,
+      () -> tool.runAfterParsingTrafos((Collection<ASTMACompilationUnit>) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#runAfterParsingTrafos(ASTMACompilationUnit)}
+   */
+  @Test
+  void runAfterParsingTrafosShouldThrowException() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    Assertions.assertThrows(NullPointerException.class,
+      () -> tool.runAfterParsingTrafos((ASTMACompilationUnit) null));
+  }
+
+  /**
    * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(Collection)}
    */
   @Test
@@ -634,10 +660,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
     ComponentInstanceSymbol aInstance = bCompType.getSubComponent("a").orElseThrow();
 
-    ASTConnector connector = astB.getComponentType().getBody().streamArcElements()
-      .filter(ASTConnector.class::isInstance)
-      .map(ASTConnector.class::cast)
-      .findFirst().orElseThrow();
+    ASTConnector connector = astB.getComponentType().getConnectors().get(0);
     ASTPortAccess bAccess = connector.getSource();
     ASTPortAccess aAccess = connector.getTarget(0);
 
@@ -654,6 +677,29 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
       () -> Assertions.assertSame(aInstance, aAccess.getComponentSymbol(), "B component mismatch")
     );
   }
+
+  @Test
+  void shouldRunAfterParsingTransformations() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+    tool.initializeBasicTypes();
+    String pakkage = "transformations/afterParsingTrafos";
+    Path packagePath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
+
+    ASTMACompilationUnit astA = MontiArcMill.parser().parse(
+      packagePath.resolve("A.arc").toAbsolutePath().toString()).orElseThrow();
+
+    int connectorCountBeforeTrafo = astA.getComponentType().getConnectors().size();
+
+    // When
+    tool.runAfterParsingTrafos(astA);
+
+    // Then
+    int connectorCountAfterTrafo = astA.getComponentType().getConnectors().size();
+
+    Assertions.assertTrue(connectorCountAfterTrafo > connectorCountBeforeTrafo, "Expected new connectors");
+  }
+
 
   /**
    * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(ASTMACompilationUnit)}
@@ -677,19 +723,13 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     tool.runSymbolTablePhase3(astA);
     tool.runSymbolTablePhase3(astB);
 
-    long connectorCountBeforeTrafo = astB.getComponentType().getBody().streamArcElements()
-      .filter(ASTConnector.class::isInstance)
-      .map(ASTConnector.class::cast)
-      .count();
+    int connectorCountBeforeTrafo = astB.getComponentType().getConnectors().size();
 
     // When
     tool.runAfterSymbolTablePhase3Trafos(astB);
 
     // Then
-    long connectorCountAfterTrafo = astB.getComponentType().getBody().streamArcElements()
-      .filter(ASTConnector.class::isInstance)
-      .map(ASTConnector.class::cast)
-      .count();
+    long connectorCountAfterTrafo = astB.getComponentType().getConnectors().size();
 
     Assertions.assertTrue(connectorCountAfterTrafo > connectorCountBeforeTrafo, "Expected new connectors");
   }
@@ -756,12 +796,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     Options options = tool.initOptions();
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
-
-    tool.createSymbolTable(innerComponents);
-    tool.runSymbolTablePhase2(innerComponents);
-    tool.runSymbolTablePhase3(innerComponents);
-    tool.runAfterSymbolTablePhase3Trafos(innerComponents);
-
+    
     // When && Then
     Assertions.assertDoesNotThrow(() -> tool.runTasks(innerComponents, cli));
     Assertions.assertTrue(serializeFile.exists());

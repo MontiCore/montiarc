@@ -10,7 +10,9 @@ package montiarc.util;
 public enum ComfortableArcError implements Error {
 
   MULTIPLE_AUTOCONNECTS("0xC1450", "There are %s autoconnect declarations in this component. Only 1 is allowed"),
-  AUTOCONNECT_IN_ATOMIC_COMPONENT("0xC1451", "This autoconnect declaration is in an atomic component which is illegal");
+  AUTOCONNECT_IN_ATOMIC_COMPONENT("0xC1451", "This autoconnect declaration is in an atomic component which is illegal"),
+  CONNECTED_COMPONENT_CONNECTOR_SRC_HAS_COMP_NAME("0xC1452", "Source ports of connectors declared during component " +
+    "instantiation may only reference the component instance they belong to. -> '%s' is disallowed.");
 
   private final String errorCode;
   private final String errorMessage;

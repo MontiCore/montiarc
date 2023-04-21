@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents component declarations. Extends {@link ASTComponentType} with utility functions
+ * Represents component declarations. Extends {@link ASTComponentTypeTOP} with utility functions
  * for easy access.
  */
 public class ASTComponentType extends ASTComponentTypeTOP {
@@ -26,6 +26,10 @@ public class ASTComponentType extends ASTComponentTypeTOP {
       .getArcElementList();
   }
 
+  protected <T extends ASTArcElement> List<T> getArcElementListOfType(@NotNull Class<T> typeToSearch) {
+    return this.getBody().getElementsOfType(typeToSearch);
+  }
+
   /**
    * Returns a list of all port declarations contained in the body of this component in no specific
    * order. The list is empty if this component contains no port declarations.
@@ -33,10 +37,8 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all port declarations of this component
    */
   public List<ASTPortDeclaration> getPortDeclarations() {
-    return getArcElementList()
-      .stream()
-      .filter(element -> element instanceof ASTComponentInterface)
-      .map(compInterface -> ((ASTComponentInterface) compInterface).getPortDeclarationList())
+    return getArcElementListOfType(ASTComponentInterface.class).stream()
+      .map(ASTComponentInterface::getPortDeclarationList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
@@ -72,11 +74,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all field declarations of this component
    */
   public List<ASTArcFieldDeclaration> getFieldDeclarations() {
-    return getArcElementList()
-      .stream()
-      .filter(element -> element instanceof ASTArcFieldDeclaration)
-      .map(fieldDec -> (ASTArcFieldDeclaration) fieldDec)
-      .collect(Collectors.toList());
+    return getArcElementListOfType(ASTArcFieldDeclaration.class);
   }
 
   /**
@@ -112,11 +110,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all connectors contained in the topology of this component.
    */
   public List<ASTConnector> getConnectors() {
-    return getArcElementList()
-      .stream()
-      .filter(element -> element instanceof ASTConnector)
-      .map(connector -> (ASTConnector) connector)
-      .collect(Collectors.toList());
+    return getArcElementListOfType(ASTConnector.class);
   }
 
   /**
@@ -251,11 +245,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * component.
    */
   public List<ASTComponentInstantiation> getSubComponentInstantiations() {
-    return getArcElementList()
-      .stream()
-      .filter(element -> element instanceof ASTComponentInstantiation)
-      .map(subComponent -> (ASTComponentInstantiation) subComponent)
-      .collect(Collectors.toList());
+    return getArcElementListOfType(ASTComponentInstantiation.class);
   }
 
   /**
@@ -300,11 +290,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * component.
    */
   public List<ASTComponentType> getInnerComponents() {
-    return getArcElementList()
-      .stream()
-      .filter(element -> element instanceof ASTComponentType)
-      .map(innerComponent -> (ASTComponentType) innerComponent)
-      .collect(Collectors.toList());
+    return getArcElementListOfType(ASTComponentType.class);
   }
 
   /**

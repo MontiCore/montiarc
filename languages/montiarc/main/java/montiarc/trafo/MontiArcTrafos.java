@@ -21,6 +21,12 @@ public class MontiArcTrafos {
     trafos.apply(ast);
   }
 
+  public static MontiArcTrafos afterParsing() {
+    return new MontiArcTrafos(
+      new MAConnectedToNormalCompInstanceTrafo()
+    );
+  }
+
   public static MontiArcTrafos afterSymTab() {
     return new MontiArcTrafos(
       new MAAutoConnectTrafo(new TypeRelations())

@@ -149,6 +149,7 @@ public class MAExtractionHelper<T extends Formula> {
       asts = tool.parse(".arc", path);
     }
 
+    tool.runAfterParsingTrafos(asts);
     tool.createSymbolTable(asts);
     tool.runSymbolTablePhase2(asts);
     tool.runSymbolTablePhase3(asts);

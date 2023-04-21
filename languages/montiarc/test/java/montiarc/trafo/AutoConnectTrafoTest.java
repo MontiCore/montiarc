@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.trafo;
 
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
@@ -23,7 +22,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class AutoConnectTrafoTest extends MontiArcAbstractTest {
@@ -196,14 +194,14 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
-    List<ASTConnector> before = connectorsWithin(ast.getComponentType());
+    List<ASTConnector> before = ast.getComponentType().getConnectors();
 
     MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
 
     // When
     trafo.apply(ast);
 
-    List<ASTConnector> after = connectorsWithin(ast.getComponentType());
+    List<ASTConnector> after = ast.getComponentType().getConnectors();
 
     // Then
     SoftAssertions.assertSoftly(a -> {
@@ -289,17 +287,8 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     trafo.apply(ast);
 
     // Then
-    Assertions.assertThat(connectorsWithin(ast.getComponentType()))
+    Assertions.assertThat(ast.getComponentType().getConnectors())
       .as("Checking connectors within component")
       .isEmpty();
-  }
-
-  private List<ASTConnector> connectorsWithin(ASTComponentType comp) {
-    return
-      comp.getBody()
-        .streamArcElements()
-        .filter(ASTConnector.class::isInstance)
-        .map(ASTConnector.class::cast)
-        .collect(Collectors.toList());
   }
 }
