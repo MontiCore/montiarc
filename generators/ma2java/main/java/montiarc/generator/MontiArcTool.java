@@ -49,7 +49,10 @@ public class MontiArcTool extends montiarc.MontiArcTool {
       .hasArgs()
       .desc("Sets the artifact path for handwritten code (optional).")
       .build());
-
+    options.addOption(org.apache.commons.cli.Option.builder("symbolic")
+        .longOpt("symbolic-execution")
+        .desc("Sets the template to symbolic template).")
+        .build());
     return super.addStandardOptions(options);
   }
 
@@ -61,26 +64,26 @@ public class MontiArcTool extends montiarc.MontiArcTool {
 
     if(cl.hasOption("output")) {
       Log.info("Generate java", "MontiArcTool");
-      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""));
+      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""), cl.hasOption("symbolic"));
     }
   }
 
-  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc) {
+  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc, boolean symbolic) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(!target.isEmpty());
-    asts.forEach(ast -> this.generate(ast, target, hwc));
+    asts.forEach(ast -> this.generate(ast, target, hwc, symbolic));
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc) {
+  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc, boolean symbolic) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
     MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), splitPathEntriesToList(hwc));
-    generator.generate(ast);
+    generator.generate(ast, symbolic);
   }
 
   @Override

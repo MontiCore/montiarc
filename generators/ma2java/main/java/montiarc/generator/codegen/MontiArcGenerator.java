@@ -8,6 +8,7 @@ import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
+import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
@@ -84,9 +85,10 @@ public class MontiArcGenerator {
     return this.codeFormatter;
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast) {
+  public void generate(@NotNull ASTMACompilationUnit ast, boolean symbolic) {
     Preconditions.checkNotNull(ast);
-    final String template = "ma2java.component.CompilationUnit.ftl";
+
+    final String template= "ma2java.component.CompilationUnit.ftl";
     final boolean existsHwc = existsHandWrittenCodeFor(ast.getComponentType().getSymbol(), COMPONENT_ADDENDUM);
     final String usedAddendum = existsHwc ? COMPONENT_ADDENDUM + "TOP" : COMPONENT_ADDENDUM;
     final Path outPath = Paths.get(

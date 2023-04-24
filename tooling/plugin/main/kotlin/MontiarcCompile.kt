@@ -5,6 +5,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
+import org.gradle.api.provider.ListProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
@@ -30,6 +31,10 @@ abstract class MontiarcCompile : JavaExec() {
   @get:IgnoreEmptyDirectories
   abstract val hwcPath : ConfigurableFileCollection
 
+  @get:Input
+  @get:Optional
+  abstract val symbolic : Property<Boolean>
+
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
@@ -45,6 +50,7 @@ abstract class MontiarcCompile : JavaExec() {
     mainClass.convention(MA_TOOL_CLASS)
 
     useClass2Mc.convention(false)
+    symbolic.convention(false)
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -76,6 +82,9 @@ abstract class MontiarcCompile : JavaExec() {
     if (!cleanSymbolImportDirs.isEmpty) {
       args("-path", cleanSymbolImportDirs.asPath)
     }
+
+    if(symbolic.get()){args("-symbolic");}
+
 
     // 3) Execute
     if (cleanModelPath.isEmpty) {
