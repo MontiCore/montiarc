@@ -3,6 +3,7 @@ package comfortablearc.trafo;
 
 import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisVisitor2;
+import arcbasis.trafo.SourcePositionUtil;
 import com.google.common.base.Preconditions;
 import comfortablearc.ComfortableArcMill;
 import comfortablearc._ast.ASTConnectedComponentInstance;
@@ -11,8 +12,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ComfortableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -24,29 +23,9 @@ import java.util.stream.Collectors;
  */
 public class ConnectedToNormalCompInstanceTrafo implements ArcBasisVisitor2 {
 
-  protected Deque<ASTComponentType> comps;
-
-  public ConnectedToNormalCompInstanceTrafo() {
-    comps = new ArrayDeque<>();
-  }
-
-  @Override
-  public void visit(@NotNull ASTComponentType cType) {
-    Preconditions.checkNotNull(cType);
-    comps.push(cType);
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTComponentType cType) {
-    Preconditions.checkNotNull(cType);
-    Preconditions.checkState(comps.peek() == cType);
-    comps.pop();
-  }
-
   @Override
   public void visit(@NotNull ASTComponentBody body) {
     Preconditions.checkNotNull(body);
-    Preconditions.checkState(!comps.isEmpty());
 
     var instantiationsWithConnectedComps = instantiationToConnectedComps(body);
     for (ASTComponentInstantiation instantiation : instantiationsWithConnectedComps.keySet()) {
@@ -123,20 +102,7 @@ public class ConnectedToNormalCompInstanceTrafo implements ArcBasisVisitor2 {
     } else {
       // We can not just call .getName().get_SourcePositionEnd(), as getName() is a String-Token that has no
       // SourcePosition associated with it.
-      return elongate(instance.get_SourcePositionStart(), instance.getName().length());
+      return SourcePositionUtil.elongate(instance.get_SourcePositionStart(), instance.getName().length());
     }
-  }
-
-  /**
-   * @return A new {@link SourcePosition} with the same line number and file name (if given) like {@code otherPos}, but
-   * with {@code amount} added to the column number.
-   * @throws IllegalArgumentException if amount < 0
-   */
-  protected SourcePosition elongate(SourcePosition otherPos, int amount) {
-    Preconditions.checkArgument(amount >= 0);
-
-    SourcePosition newPos = new SourcePosition(otherPos.getLine(),otherPos.getColumn() + amount);
-    otherPos.getFileName().ifPresent(newPos::setFileName);
-    return newPos;
   }
 }

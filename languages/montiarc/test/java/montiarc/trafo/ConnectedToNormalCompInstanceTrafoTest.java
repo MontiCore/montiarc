@@ -72,8 +72,6 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
           "    port out int x;" +
           "  }" +
           "}", 2, 2),
-      /* #Deactivated because the transformation does not consider instances declared together with their type
-       * definition. First https://git.rwth-aachen.de/monticore/montiarc/core/-/issues/349 has to be implemented.
       Arguments.of(
         "component PairedWithDirectCompInstantiation {" +
           "  port out int a;" +
@@ -82,7 +80,6 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
           "    port out int x;" +
           "  }" +
           "}", 1, 1),
-       */
       Arguments.of(
         "component ToOtherInstance {" +
           "  Other other;" +
@@ -117,6 +114,8 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(model);
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    new MASeparateCompInstantiationFromTypeDeclTrafo().apply(ast);
+
     MAConnectedToNormalCompInstanceTrafo trafo = new MAConnectedToNormalCompInstanceTrafo();
 
     // When

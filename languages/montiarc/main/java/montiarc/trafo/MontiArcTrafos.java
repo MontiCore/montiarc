@@ -22,8 +22,10 @@ public class MontiArcTrafos {
   }
 
   public static MontiArcTrafos afterParsing() {
-    return new MontiArcTrafos(
-      new MAConnectedToNormalCompInstanceTrafo()
+    return new MontiArcTrafos(ast ->
+      new MASeparateCompInstantiationFromTypeDeclTrafo()
+        .andThen(new MAConnectedToNormalCompInstanceTrafo())
+        .apply(ast)
     );
   }
 
