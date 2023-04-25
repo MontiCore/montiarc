@@ -15,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
+import variablearc._ast.ASTArcVarIf;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -170,5 +172,44 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcAbstractTes
     Assertions.assertThat(realInstantiation)
       .as("Instantiation should equal %s", expectedTransformedAstNode)
       .matches(expectedTransformedAstNode::deepEquals);
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"{ component Inner inner {} }", "component Inner inner {}"})
+  void shouldAppylTrafoInVarIf(@NotNull String varIfThenElement) throws IOException {
+    Preconditions.checkNotNull(varIfThenElement);
+    // Given
+    String model =
+      "component Comp {" +
+        "  port out int a;" +
+        "  " +
+        "  varif (true) {" +
+        "    varif (true) " + varIfThenElement +
+        "  }" +
+        "}";
+
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    new MAEnforceBlocksInVarIfTrafo().apply(ast);
+
+    MASeparateCompInstantiationFromTypeDeclTrafo trafo = new MASeparateCompInstantiationFromTypeDeclTrafo();
+
+    // When
+    trafo.apply(ast);
+
+    // Then
+    ASTArcVarIf firstArcIf = ast.getComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
+    ASTArcVarIf nestedArcIf = ((ASTComponentBody) firstArcIf.getThen()).getElementsOfType(ASTArcVarIf.class).get(0);
+
+    Assertions.assertThat(nestedArcIf.getThen()).as("Then statement").isInstanceOf(ASTComponentBody.class);
+    ASTComponentBody arcIfContent = (ASTComponentBody) nestedArcIf.getThen();
+
+    SoftAssertions.assertSoftly(s -> {
+      s.assertThat(arcIfContent.getElementsOfType(ASTComponentInstantiation.class))
+        .as("Instantiation declarations")
+        .hasSize(1);
+      s.assertThat(arcIfContent.getElementsOfType(ASTComponentType.class).get(0).getComponentInstanceList())
+        .as("Instantiations paired with their type's declaration")
+        .isEmpty();
+    });
   }
 }

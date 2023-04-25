@@ -19,6 +19,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._ast.ASTArcVarIf;
 
 import java.io.IOException;
@@ -224,17 +225,17 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
         ComfortableArcError.CONNECTED_COMPONENT_CONNECTOR_SRC_HAS_COMP_NAME
       }));
   }
-  @Test
-  void shouldTransformWithinVarIfBlock() throws IOException {
+  @ParameterizedTest
+  @ValueSource(strings = {"{ Inner inner [x -> a;]; }", "Inner inner [x -> a;];"})
+  void shouldTransformWithinVarIfBlock(@NotNull String varIfThenElement) throws IOException {
+    Preconditions.checkNotNull(varIfThenElement);
     // Given
     String model =
       "component Comp {" +
       "  port out int a;" +
       "  " +
       "  varif (true) {" +
-      "    varif (true) {" +
-      "      Inner inner [x -> a;];" +
-      "    }" +
+      "    varif (true) " + varIfThenElement +
       "  }" +
       "  " +
       "  component Inner {" +
@@ -242,6 +243,8 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
       "  }" +
       "}";
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    new MAEnforceBlocksInVarIfTrafo().apply(ast);
+
     MAConnectedToNormalCompInstanceTrafo trafo = new MAConnectedToNormalCompInstanceTrafo();
 
     // When

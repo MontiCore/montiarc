@@ -23,7 +23,8 @@ public class MontiArcTrafos {
 
   public static MontiArcTrafos afterParsing() {
     return new MontiArcTrafos(ast ->
-      new MASeparateCompInstantiationFromTypeDeclTrafo()
+      new MAEnforceBlocksInVarIfTrafo()
+        .andThen(new MASeparateCompInstantiationFromTypeDeclTrafo())
         .andThen(new MAConnectedToNormalCompInstanceTrafo())
         .apply(ast)
     );
