@@ -51,13 +51,16 @@ public class ComponentConverter {
     converter.setPrefix(listToString(prefixes));
 
     // convert constraints
-    ArrayList<BoolExpr> contextExpr = componentTypeSymbol.getAstNode().getBody()
-      .getArcElementList().stream()
-      .filter(e -> e instanceof ASTArcConstraintDeclaration)
-      .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
-      .filter(Optional::isPresent)
-      .map(Optional::get)
-      .collect(Collectors.toCollection(ArrayList::new));
+    ArrayList<BoolExpr> contextExpr = new ArrayList<>();
+    if (componentTypeSymbol.isPresentAstNode()) {
+      contextExpr = componentTypeSymbol.getAstNode().getBody()
+        .getArcElementList().stream()
+        .filter(e -> e instanceof ASTArcConstraintDeclaration)
+        .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .collect(Collectors.toCollection(ArrayList::new));
+    }
 
     // convert subcomponents
     for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getSubComponents()) {

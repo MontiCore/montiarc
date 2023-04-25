@@ -39,7 +39,7 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
 
   protected static VariableComponentTypeSymbol createComponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints) {
-    IVariableArcScope scope = MontiArcMill.scope();
+    IMontiArcScope scope = MontiArcMill.scope();
 
     ASTExpressionSetEnclosingScope scopeSetter = new ASTExpressionSetEnclosingScope(scope);
     variationPoints.forEach(vp -> scopeSetter.setEnclosingScope(vp.getCondition().getAstExpression()));
@@ -75,10 +75,13 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
   protected static VariableComponentTypeSymbol createComponentWithSubcomponents(
     List<VariableArcVariationPoint> variationPoints, List<ComponentInstanceSymbol> subcomponents) {
     VariableComponentTypeSymbol component = createComponentWithVariationPoints(variationPoints);
+    ASTExpressionSetEnclosingScope scopeSetter = new ASTExpressionSetEnclosingScope(
+      (IMontiArcScope) component.getSpannedScope());
 
     for (ComponentInstanceSymbol subcomponent : subcomponents) {
       component.getSpannedScope().add(subcomponent);
       subcomponent.bindParameters();
+      subcomponent.getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
     }
 
     return component;
@@ -87,10 +90,13 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
   protected static VariableComponentTypeSymbol createComponentWithSubcomponentsAndAddFirstToFirstVP(
     List<VariableArcVariationPoint> variationPoints, List<ComponentInstanceSymbol> subcomponents) {
     VariableComponentTypeSymbol component = createComponentWithVariationPoints(variationPoints);
+    ASTExpressionSetEnclosingScope scopeSetter = new ASTExpressionSetEnclosingScope(
+      (IMontiArcScope) component.getSpannedScope());
 
     for (ComponentInstanceSymbol subcomponent : subcomponents) {
       component.getSpannedScope().add(subcomponent);
       subcomponent.bindParameters();
+      subcomponent.getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
     }
 
     variationPoints.get(0).add(subcomponents.get(0));
@@ -130,7 +136,8 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
     VariableArcVariationPoint vpA2 = new VariableArcVariationPoint(new Expression(aExpression));
 
     VariableArcVariationPoint vpFalseParent = new VariableArcVariationPoint(new Expression(falseExpression));
-    VariableArcVariationPoint vpTrueChild = new VariableArcVariationPoint(new Expression(trueExpression), vpFalseParent);
+    VariableArcVariationPoint vpTrueChild =
+      new VariableArcVariationPoint(new Expression(trueExpression), vpFalseParent);
 
     VariableArcVariationPoint vpPIntGreater0 = new VariableArcVariationPoint(new Expression(
       MontiArcMill.greaterThanExpressionBuilder().setLeft(pIntExpression).setOperator(">")
@@ -207,7 +214,15 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
       Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponentsAndAddFirstToFirstVP(
           List.of(vpPIntGreater0), List.of(
             createInstance("i", createComponentWithVariationPoints(List.of(vpA)), List.of(aArgument, pIntArgument)))),
-        3)
+        3),
+      // 15: Component with subcomponent that has no variation points but a subcomponent with one
+      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+          Collections.emptyList(), List.of(
+            createInstance("i", createComponentWithSubcomponents(Collections.emptyList(),
+                Collections.singletonList(
+                  createInstance("j", createComponentWithVariationPoints(List.of(vpA)), List.of(aArgument, pIntArgument)))),
+              List.of(aArgument, pIntArgument)))),
+        2)
     );
   }
 

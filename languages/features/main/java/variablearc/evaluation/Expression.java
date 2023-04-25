@@ -46,7 +46,21 @@ public class Expression {
     return negated;
   }
 
-  public Expression copyWithPrefix(String prefix) {
+  /**
+   * @param prefix The new value of prefix
+   * @return A new expression object with an updated prefix
+   */
+  public Expression copyWithPrefix(@Nullable String prefix) {
     return new Expression(astExpression, negated, prefix);
+  }
+
+  /**
+   * Duplicates the Expression and concatenates the added prefix with the existing prefix seperated by {@code "."}
+   *
+   * @param prefix The added prefix
+   * @return A new expression object with an updated prefix
+   */
+  public Expression copyAddPrefix(@NotNull String prefix) {
+    return copyWithPrefix(this.prefix != null ? prefix + "." + this.prefix : prefix);
   }
 }

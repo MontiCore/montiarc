@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.VariationPointSolver;
 
 import java.util.ArrayList;
@@ -62,19 +63,20 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
             Collectors.toList());
 
       if (subcomponents.isEmpty()) {
-        variants.add(new VariantComponentTypeSymbol(this, variationPoints));
+        variants.add(new VariantComponentTypeSymbol(this, variationPoints,
+          vpSolver.getConditionsForVariationPoints(this, variationPoints)));
       } else {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
         for (ComponentInstanceSymbol instance : subcomponents) {
           VariableComponentTypeSymbol typeSymbol = (VariableComponentTypeSymbol) instance.getType().getTypeInfo();
-          subComponentVariants.put(instance, vpSolver.getCombinations(typeSymbol,
-              instance.getName(), variationPoints).stream().map(l -> new VariantComponentTypeSymbol(typeSymbol, l))
-            .collect(Collectors.toList()));
+          subComponentVariants.put(instance, vpSolver.getSubComponentVariants(typeSymbol,
+            instance.getName(), variationPoints));
+
         }
 
         // Expand variants by possible subcomponent variants
         expandCombinations(subComponentVariants).forEach(
-          e -> variants.add(new VariantComponentTypeSymbol(this, variationPoints, e))
+          e -> variants.add(new VariantComponentTypeSymbol(this, variationPoints, vpSolver.getConditionsForVariationPoints(this, variationPoints), e))
         );
       }
     }

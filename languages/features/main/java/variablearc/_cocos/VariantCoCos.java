@@ -40,6 +40,7 @@ public class VariantCoCos implements ArcBasisASTComponentTypeCoCo {
     traverser.add4ArcBasis(new ConnectorPortsExist());
     traverser.add4ArcBasis(new ConnectorTypesFit(new TypeRelations()));
     traverser.add4ArcBasis(new ConnectorTimingsFit());
+    traverser.add4ArcBasis(new FeedbackStrongCausality());
     traverser.add4ArcBasis(new PortHeritageTypeFits(new TypeRelations()));
     traverser.add4ArcBasis(new PortsConnected());
     traverser.add4ArcBasis(new PortUniqueSender());

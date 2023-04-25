@@ -59,6 +59,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component L { port in int i; feature ff; varif (ff) { port out int o; } else { port <<delayed>> out int o; } }");
     compile("package a.b; component M { feature ff; varif (ff) { port in int i; } }");
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } }");
+    compile("package a.b; component O { feature ff; port out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
   }
 
   @ParameterizedTest
@@ -399,7 +400,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "} else { " +
       "i -> sub1.i2; " +
       "}" +
-      "constraint (sub2.ff = f); " +
+      "constraint (sub2.ff == f); " +
       "}",
     // in port unused, component with variable configuration, excluded variation point
     "component Comp39 { " +
@@ -440,6 +441,13 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     "component Comp44 { " +
       "a.b.N sub; " +
       "constraint (!sub.ff); " +
+      "}",
+    // timing of subcomponent is implicitly set by its composition
+    "component Comp45 { " +
+      "port <<timed>> out int o; " +
+      "a.b.O sub; " +
+      "sub.o -> o; " +
+      "constraint(!sub.ff); " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -864,7 +872,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
         ArcError.CONNECTOR_TIMING_MISMATCH,
         ArcError.CONNECTOR_TIMING_MISMATCH),
       // feedback loop, weakly-causal feedback
-      /*arg("component Comp41 { " +
+      arg("component Comp41 { " +
           "port in int i; " +
           "port out int o; " +
           "a.b.C sub1; " +
@@ -903,9 +911,9 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "} else { " +
           "i -> sub1.i2; " +
           "}" +
-          "constraint (sub2.ff = f); " +
+          "constraint (sub2.ff == f); " +
           "}",
-        ArcError.FEEDBACK_CAUSALITY)*/
+        ArcError.FEEDBACK_CAUSALITY),
       // in port unused
       arg("component Comp44 { " +
           "port in int i; " +
@@ -1073,7 +1081,16 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "compute { } " +
           "compute { } " +
           "}",
-        ArcError.MULTIPLE_BEHAVIOR)
+        ArcError.MULTIPLE_BEHAVIOR),
+      // timing mismatch with implicitly set timing
+      arg("component Comp63 { " +
+        "feature ff; " +
+        "port <<timed>> out int o; " +
+        "a.b.O sub; " +
+        "sub.o -> o; " +
+        "constraint(ff == sub.ff); " +
+        "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH)
     );
   }
 }

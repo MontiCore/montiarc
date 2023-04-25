@@ -12,6 +12,7 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc._symboltable.IMontiArcScope;
 import montiarc.evaluation.util.ASTExpressionSetEnclosingScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -23,6 +24,7 @@ import org.mockito.Mockito;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
+import variablearc._symboltable.VariantComponentTypeSymbol;
 import variablearc.evaluation.Expression;
 import variablearc.evaluation.VariationPointSolver;
 
@@ -31,6 +33,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -44,7 +47,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
   protected static VariableComponentTypeSymbol createComponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints) {
-    IVariableArcScope scope = MontiArcMill.scope();
+    IMontiArcScope scope = MontiArcMill.scope();
 
     ASTExpressionSetEnclosingScope scopeSetter = new ASTExpressionSetEnclosingScope(scope);
     variationPoints.forEach(vp -> scopeSetter.setEnclosingScope(vp.getCondition().getAstExpression()));
@@ -241,9 +244,10 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
     // When
     Set<Set<VariableArcVariationPoint>> actual =
-      variationPointSolver.getCombinations(
+      variationPointSolver.getSubComponentVariants(
         (VariableComponentTypeSymbol) originSymbol.getSubComponent(childComponentName).get().getType().getTypeInfo(),
-        childComponentName, new HashSet<>(originSymbol.getAllVariationPoints()));
+        childComponentName, new HashSet<>(originSymbol.getAllVariationPoints())).stream().map(
+        VariantComponentTypeSymbol::getIncludedVariationPoints).collect(Collectors.toSet());
     variationPointSolver.close();
 
     // Then

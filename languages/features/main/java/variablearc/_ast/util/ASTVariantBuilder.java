@@ -2,15 +2,20 @@
 package variablearc._ast.util;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTArcElement;
-import arcbasis._ast.ASTConnector;
-import arcbasis._ast.ASTPortAccess;
+import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
+import com.google.common.base.Preconditions;
+import de.monticore.types.check.SymTypeExpression;
+import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.VariantComponentTypeSymbol;
 
+/**
+ * A class that can duplicate AST elements or update symbols.
+ * It partly duplicates the behavior of the symbol table completer but using a component variant when needed.
+ */
 public class ASTVariantBuilder implements ArcBasisHandler {
 
   protected ArcBasisTraverser traverser;
@@ -29,6 +34,12 @@ public class ASTVariantBuilder implements ArcBasisHandler {
     this.traverser = traverser;
   }
 
+  /**
+   * Does nothing, return a complete new version of the AST element, or update variant symbols of the enclComp.
+   *
+   * @param node the element the builder deals with
+   * @return either {@param node} or a duplicated version of it
+   */
   public ASTArcElement duplicate(ASTArcElement node) {
     result = node;
     traverser = VariableArcMill.traverser();
@@ -37,6 +48,11 @@ public class ASTVariantBuilder implements ArcBasisHandler {
     return result;
   }
 
+  /**
+   * Duplicates a connector and then updates the component and ports of its port access'
+   *
+   * @param node the connector to be duplicated
+   */
   @Override
   public void handle(@NotNull ASTConnector node) {
     if (node == result) {
@@ -61,6 +77,11 @@ public class ASTVariantBuilder implements ArcBasisHandler {
     }
   }
 
+  /**
+   * Duplicates the behavior of the symbol table completer in respect to the enclosing variant
+   *
+   * @param node the port access to be updated
+   */
   @Override
   public void handle(ASTPortAccess node) {
     if (node.isPresentComponent()) {
@@ -75,6 +96,24 @@ public class ASTVariantBuilder implements ArcBasisHandler {
       }
     } else {
       enclComponent.getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+    }
+  }
+
+  /**
+   * Set the timing and delay of a {@link variablearc._symboltable.VariantPortSymbol}
+   *
+   * @param node the port declaration used
+   */
+  @Override
+  public void handle(@NotNull ASTPortDeclaration node) {
+    Preconditions.checkNotNull(node);
+    Timing timing = node.getTiming().orElse(null);
+
+    for (ASTPort port : node.getPortList()) {
+      if (enclComponent.containsSymbol(port.getSymbol())) {
+        enclComponent.getPort(port.getName()).ifPresent(p -> p.setTiming(timing));
+        if (node.hasDelay()) enclComponent.getPort(port.getName()).ifPresent(p -> p.setDelayed(true));
+      }
     }
   }
 }

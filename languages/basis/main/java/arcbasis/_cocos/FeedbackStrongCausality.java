@@ -26,7 +26,7 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
 
     Set<ComponentInstanceSymbol> visited = new HashSet<>();
 
-    for (ComponentInstanceSymbol vertex : node.getSpannedScope().getLocalComponentInstanceSymbols()) {
+    for (ComponentInstanceSymbol vertex : node.getSymbol().getSubComponents()) {
       if (!visited.contains(vertex)) {
         this.check(node, vertex, new Stack<>(), visited);
       }

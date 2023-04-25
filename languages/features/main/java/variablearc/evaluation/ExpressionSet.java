@@ -3,6 +3,7 @@ package variablearc.evaluation;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents a set of expressions.
@@ -42,5 +43,19 @@ public class ExpressionSet {
 
   public int size() {
     return expressions.size() + negatedConjunctions.size();
+  }
+
+  public ExpressionSet copyWithPrefix(String prefix) {
+    return new ExpressionSet(this.getExpressions().stream().map(e -> e.copyWithPrefix(prefix)).collect(
+      Collectors.toList()),
+      this.getNegatedConjunctions().stream().map(l -> l.stream().map(e -> e.copyWithPrefix(prefix)).collect(
+        Collectors.toList())).collect(Collectors.toList()));
+  }
+
+  public ExpressionSet copyWithAddPrefix(String prefix) {
+    return new ExpressionSet(this.getExpressions().stream().map(e -> e.copyAddPrefix(prefix)).collect(
+      Collectors.toList()),
+      this.getNegatedConjunctions().stream().map(l -> l.stream().map(e -> e.copyAddPrefix(prefix)).collect(
+        Collectors.toList())).collect(Collectors.toList()));
   }
 }

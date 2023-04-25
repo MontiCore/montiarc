@@ -3,15 +3,15 @@ package montiarc.evaluation.util;
 
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
+import montiarc._symboltable.IMontiArcScope;
 import variablearc.VariableArcMill;
-import variablearc._symboltable.IVariableArcScope;
 import variablearc._visitor.VariableArcTraverser;
 
 public class ASTExpressionSetEnclosingScope implements ExpressionsBasisVisitor2 {
 
-  protected IVariableArcScope scope;
+  protected IMontiArcScope scope;
 
-  public ASTExpressionSetEnclosingScope(IVariableArcScope scope) {
+  public ASTExpressionSetEnclosingScope(IMontiArcScope scope) {
     this.scope = scope;
   }
 

@@ -8,11 +8,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
+import variablearc._symboltable.VariantComponentTypeSymbol;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -57,24 +55,35 @@ public class VariationPointSolver {
    * @param originConfiguration provided configuration for the origin component.
    * @return Set of immutable sets of variation points.
    */
-  public Set<Set<VariableArcVariationPoint>> getCombinations(@NotNull VariableComponentTypeSymbol type,
-                                                             @NotNull String prefix,
-                                                             @NotNull Set<VariableArcVariationPoint> originConfiguration) {
+  public List<VariantComponentTypeSymbol> getSubComponentVariants(@NotNull VariableComponentTypeSymbol type,
+                                                                  @NotNull String prefix,
+                                                                  @NotNull Set<VariableArcVariationPoint> originConfiguration) {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(originConfiguration);
 
-    Set<Set<VariableArcVariationPoint>> res =
-      new HashSet<>(Sets.powerSet(ImmutableSet.copyOf(type.getAllVariationPoints())));
+    List<VariantComponentTypeSymbol> res =
+      new ArrayList<>(type.getVariants());
     res.removeIf(
-      includedVPs -> {
-
-        ExpressionSet expressions = getConditionsForVariationPoints(type, includedVPs, prefix);
+      variant -> {
+        ExpressionSet expressions = variant.getConditions().copyWithAddPrefix(prefix);
         expressions.add(getConditionsForVariationPoints(origin, originConfiguration, null));
-
         return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
       });
     return res;
+  }
+
+  /**
+   * Get all AST Expressions that have to hold for a specific variant.
+   * This includes the included variation point conditions as well as the negated excluded variations points.
+   *
+   * @param type        The type of the component
+   * @param includedVPs The selected variationPoints
+   * @return The expression set that has to hold for only includedVP to be active
+   */
+  public ExpressionSet getConditionsForVariationPoints(@NotNull VariableComponentTypeSymbol type,
+                                                       @NotNull Collection<VariableArcVariationPoint> includedVPs) {
+    return getConditionsForVariationPoints(type, includedVPs, null);
   }
 
   /**
