@@ -1,18 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.tooling.cd2pojo.plugin.Cd2PojoCompile
+
 plugins {
   id("montiarc.build.integration-test")
   id("montiarc")
+  id("cd2pojo")
 }
-
-val cdModelDir = "$projectDir/main/resources"
-val cdHWCDir = "$projectDir/main/java"
-val cdGenJavaDir = "$buildDir/cd/java"
-val cdGenSymDir = "$buildDir/cd/sym"
 
 sourceSets {
   main {
-    java {
-      srcDir(cdGenJavaDir)
+    cd2pojo {
+      setSrcDirs(setOf("$projectDir/main/resources"))
     }
     montiarc {
       setSrcDirs(setOf("$projectDir/main/montiarc"))
@@ -20,37 +18,26 @@ sourceSets {
   }
 }
 
-val cd4a: Configuration = configurations.create("cd4a")
-
 dependencies {
-  cd4a(project(":generators:cd2pojo"))
-
   implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
   implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
   implementation("${libs.guava}:${libs.guavaVersion}")
   implementation("${libs.codehausJanino}:${libs.codehausVersion}")
 }
 
-val compileCD4A = tasks.register<JavaExec>("compileCD4A") {
-  classpath(cd4a)
-  mainClass.set("de.monticore.cd2pojo.CD2PojoTool")
-
-  args("-i", cdModelDir)
-  args("-c")
-  args("-c2mc")
-  args("-o", cdGenJavaDir)
-  args("-s", cdGenSymDir)
-  args("-hwc", cdHWCDir)
-  inputs.dir(cdModelDir)
-  outputs.dirs(cdGenJavaDir, cdGenSymDir)
+cd2pojo {
+  internalMontiArcTesting.set(true)
 }
 
 montiarc {
   internalMontiArcTesting.set(true)
 }
 
+tasks.compileCd2pojo {
+  useClass2Mc.set(true)
+}
+
 tasks.compileMontiarc {
-  symbolImportDir.from(cdGenSymDir)
   useClass2Mc.set(true)
 
   val enableAttachDebugger = false
@@ -59,7 +46,4 @@ tasks.compileMontiarc {
   }
 }
 
-tasks.compileMontiarc { dependsOn(compileCD4A) }
-
-compileCD4A { mustRunAfter(project(":generators:cd2pojo").tasks.withType(Test::class)) }
-tasks.compileMontiarc { mustRunAfter(project(":generators:ma2java").tasks.withType(Test::class)) }
+tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }

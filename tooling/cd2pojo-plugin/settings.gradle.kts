@@ -13,4 +13,3 @@ pluginManagement {
 }
 
 includeBuild("../../build-logic")
-includeBuild("../cd2pojo-plugin")

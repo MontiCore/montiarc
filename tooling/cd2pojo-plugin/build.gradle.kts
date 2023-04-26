@@ -1,21 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 import montiarc.build.VersionInjection.Companion.registerVersionInjection
-import java.nio.file.Files
 
 plugins {
   id("montiarc.build.plugins")
 }
 
 group = "montiarc.tooling"
-dependencies {
-  implementation("montiarc.tooling:cd2pojo-plugin:${project.version}")
-}
 
 gradlePlugin {
   plugins {
-    create("Montiarc") {
-      id = "montiarc"
-      implementationClass = "montiarc.tooling.plugin.MontiarcPlugin"
+    create("Cd2pojo") {
+      id = "cd2pojo"
+      implementationClass = "montiarc.tooling.cd2pojo.plugin.Cd2PojoPlugin"
     }
   }
 }
@@ -31,7 +27,7 @@ sourceSets {
 registerVersionInjection(
   taskName = "injectGeneratorVersion",
   genDir = genDir4GeneratorVersionInjection,
-  packageName = "montiarc.tooling.plugin",
+  packageName = "montiarc.tooling.cd2pojo.plugin",
   constantName = "GENERATOR_VERSION"
 )
 
