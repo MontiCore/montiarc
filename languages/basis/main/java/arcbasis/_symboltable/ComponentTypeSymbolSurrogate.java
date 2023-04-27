@@ -2,6 +2,7 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -96,14 +97,14 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<ASTExpression> getParentConfiguration() {
+  public List<ASTArcArgument> getParentConfiguration() {
     return checkLazyLoadDelegate() ?
       this.lazyLoadDelegate().getParentConfiguration() :
       super.getParentConfiguration();  // Avoid infinite recursion with this case
   }
 
   @Override
-  public void setParentConfigurationExpressions(@NotNull List<ASTExpression> expressions) {
+  public void setParentConfigurationExpressions(@NotNull List<ASTArcArgument> expressions) {
     if (checkLazyLoadDelegate()) {
       this.lazyLoadDelegate().setParentConfigurationExpressions(expressions);
     } else {

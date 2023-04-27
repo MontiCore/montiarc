@@ -95,15 +95,15 @@ public class VariableArcScopesGenitorP2Test extends VariableArcAbstractTest {
     ComponentInstanceSymbol symbol = VariableArcMill.componentInstanceSymbolBuilder()
       .setArcArguments(bindings).setType(typeExpr).setName("c1").build();
 
-    ImmutableList<ASTArcArgument> bindingsBeforeCompletion = symbol.getBindingsAsList();
+    List<ASTArcArgument> bindingsBeforeCompletion = symbol.getType().getParamBindingsAsList();
     // When
     getScopesGenP2().visit(symbol);
 
     // Then
-   Assertions.assertNotEquals(symbol.getBindingsAsList(),bindingsBeforeCompletion);
+   Assertions.assertNotEquals(symbol.getType().getParamBindingsAsList(),bindingsBeforeCompletion);
     Assertions.assertEquals(typeExpr.getTypeInfo(), symbol.getType()
       .getTypeInfo());
     Assertions.assertTrue(symbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope);
-    Assertions.assertIterableEquals(bindings, (symbol.getBindingsAsList()));
+    Assertions.assertIterableEquals(bindings, (symbol.getType().getParamBindingsAsList()));
   }
 }

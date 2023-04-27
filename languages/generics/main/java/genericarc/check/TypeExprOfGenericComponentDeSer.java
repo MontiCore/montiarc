@@ -31,7 +31,7 @@ public class TypeExprOfGenericComponentDeSer implements CompTypeExpressionDeSer<
     printer.beginObject();
     printer.member(JsonDeSers.KIND, SERIALIZED_KIND);
     printer.member(COMP_TYPE_NAME, toSerialize.getTypeInfo().getFullName());
-    SymTypeExpressionDeSer.serializeMember(printer, TYPE_VAR_BINDINGS, toSerialize.getBindingsAsList());
+    SymTypeExpressionDeSer.serializeMember(printer, TYPE_VAR_BINDINGS, toSerialize.getTypeBindingsAsList());
     printer.endObject();
 
     return printer.getContent();

@@ -5,6 +5,7 @@ import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -19,10 +20,12 @@ public class ComponentInstanceSymbolTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldAddArguments() {
-    ComponentInstanceSymbol symbol = ArcBasisMill.componentInstanceSymbolBuilder()
-      .setName("a").setType(mock(CompTypeExpression.class)).build();
-    Assertions.assertEquals(symbol .getArcArguments().size(), 0);
-    symbol.addArcArguments(Arrays.asList(mock(ASTArcArgument.class), mock(ASTArcArgument.class)));
-    Assertions.assertEquals(symbol.getArcArguments().size(), 2);
+    IArcBasisScope scope = ArcBasisMill.scope();
+    ComponentTypeSymbol typeSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A").setSpannedScope(scope).build();
+    ComponentInstanceSymbol instanceSymbol = ArcBasisMill.componentInstanceSymbolBuilder()
+      .setName("a").setType(new TypeExprOfComponent(typeSymbol)).build();
+    Assertions.assertEquals(0, instanceSymbol.getType().getArcArguments().size());
+    instanceSymbol.getType().addArcArguments(Arrays.asList(mock(ASTArcArgument.class), mock(ASTArcArgument.class)));
+    Assertions.assertEquals(2, instanceSymbol.getType().getArcArguments().size());
   }
 }

@@ -60,7 +60,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     ComponentTypeSymbol parentSym = parentExpr.getTypeInfo();
 
     List<TypeVarSymbol> parentSymTypeParameters = parentSym.getTypeParameters();
-    List<SymTypeExpression> args = parentExpr.getBindingsAsList();
+    List<SymTypeExpression> args = parentExpr.getTypeBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
       Log.error(
         GenericArcError.HERITAGE_TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
@@ -96,7 +96,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     ComponentTypeSymbol parentSym = parentExpr.getTypeInfo();
 
     for (TypeVarSymbol typeVar : parentSym.getTypeParameters()) {
-      Optional<SymTypeExpression> typeVarBinding = parentExpr.getBindingFor(typeVar);
+      Optional<SymTypeExpression> typeVarBinding = parentExpr.getTypeBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
           if (!tr.compatible(bound, typeVarBinding.get())) {

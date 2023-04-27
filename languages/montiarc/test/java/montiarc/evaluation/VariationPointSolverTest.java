@@ -110,7 +110,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     ComponentInstanceSymbol instanceSymbol =
       MontiArcMill.componentInstanceSymbolBuilder().setName(childComponentName)
         .setType(new TypeExprOfComponent(typeSymbol)).setArcArguments(bindings).build();
-    instanceSymbol.bindParameters();
+    instanceSymbol.getType().bindParams();
     parentScope.add(instanceSymbol);
 
     return (VariableComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)

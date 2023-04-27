@@ -4,6 +4,8 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
+import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
@@ -17,9 +19,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -55,19 +55,20 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    */
   protected static void assertConsistentArguments(@NotNull ASTComponentInstance astInst) {
     Preconditions.checkNotNull(astInst);
+
     if (astInst.isPresentSymbol()) {
-
-      Preconditions.checkArgument(
-        astInst.getSymbol().getArcArguments().isEmpty()
-          == (!astInst.isPresentArcArguments() || astInst.getArcArguments().getArcArgumentList().isEmpty())
-      );
-
-      if (!astInst.getSymbol().getArcArguments().isEmpty()) {
-        Preconditions.checkArgument(astInst.getSymbol().getArcArguments().size()
-          == astInst.getArcArguments().getArcArgumentList().size()
+      if (astInst.getSymbol().isPresentType()) {
+        Preconditions.checkArgument(
+          astInst.getSymbol().getType().getArcArguments().isEmpty()
+            == (!astInst.isPresentArcArguments() || astInst.getArcArguments().getArcArgumentList().isEmpty())
         );
-      }
 
+        if (!astInst.getSymbol().getType().getArcArguments().isEmpty()) {
+          Preconditions.checkArgument(astInst.getSymbol().getType().getArcArguments().size()
+            == astInst.getArcArguments().getArcArgumentList().size()
+          );
+        }
+      }
     }
   }
 
@@ -80,8 +81,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     checkInstantiationArgsAreNotTooMany(astInst);
     if(checkKeywordsMustBeParameters(astInst) &
       checkKeywordArgsLast(astInst)) {
-      checkInstantiationArgsHaveCorrectTypes(astInst);
       checkInstantiationArgsBindAllMandatoryParams(astInst);
+      if(checkArgValuesUnique(astInst) & checkKeywordArgsUnique(astInst)) {
+        checkInstantiationArgsHaveCorrectTypes(astInst);
+      }
     }
   }
 
@@ -102,7 +105,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(instance.getSymbol().getType().getTypeInfo());
     assertConsistentArguments(instance);
 
-    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getArcArguments();
+    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getType().getArcArguments();
     CompTypeExpression toInstantiate = instance.getSymbol().getType();
     List<VariableSymbol> paramsOfCompType = toInstantiate.getTypeInfo().getParameters();
 
@@ -132,7 +135,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     }
     assertConsistentArguments(instance);
 
-    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getArcArguments();
+    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getType().getArcArguments();
     CompTypeExpression toInstantiate = instance.getSymbol().getType();
     List<VariableSymbol> paramsOfCompType = toInstantiate.getTypeInfo().getParameters();
 
@@ -184,7 +187,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(instance.getSymbol().getType().getTypeInfo());
     assertConsistentArguments(instance);
 
-    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getArcArguments();
+    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getType().getArcArguments();
     List<String> paramNames = instance.getSymbol().getType().getTypeInfo().getParameters()
             .stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
@@ -222,11 +225,6 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       } else if (instantiationArgs.get(i).isPresentName()) {
         String argumentKey = instantiationArgs.get(i).getName();
         int paramIndex = paramIndices.get(argumentKey);
-        if (paramIndex<posArgsAmount){
-          Log.error(ArcError.COMP_ARG_MULTIPLE_VALUES.format(argumentKey),
-            instantiationArgs.get(i).get_SourcePositionStart(), instantiationArgs.get(i).get_SourcePositionEnd()
-          );
-        }
         if (paramSignatureOfCompType.get(paramIndex).isEmpty() || !tr.compatible(paramSignatureOfCompType.get(paramIndex).get(), instArgs.get(i).getResult())) {
           ASTExpression incompatibleArgument = instance.getArcArguments().getArcArgument(i).getExpression();
 
@@ -248,17 +246,108 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   }
 
   /**
+   * Checks that keyword based instantiation arguments of a component instance are only used once.
+   *
+   * @param instance The AST node of the component instance whose instantiation arguments should be checked.
+   */
+  protected boolean checkKeywordArgsUnique(@NotNull ASTComponentInstance instance) {
+    Preconditions.checkNotNull(instance);
+    Preconditions.checkArgument(instance.isPresentSymbol());
+
+    if (!instance.getSymbol().isPresentType()) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+        this.getClass().getSimpleName());
+      return false;
+    }
+
+    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getType().getArcArguments();
+
+
+    Set<String> keywordArguments = new HashSet<>();
+    int keywordCounter=0;
+
+    boolean isUnique = true;
+    for (ASTArcArgument argument : instantiationArgs) {
+      if (argument.isPresentName()){
+        keywordCounter = keywordArguments.size();
+        keywordArguments.add(argument.getName());
+        if (keywordCounter == keywordArguments.size()){
+          Log.error(ArcError.KEY_NOT_UNIQUE.format(
+              argument.getName(), instance.getName()), argument.get_SourcePositionStart(),
+            argument.get_SourcePositionEnd()
+          );
+          isUnique=false;
+        }
+      }
+    }
+
+    return isUnique;
+  }
+
+  /**
+   * Checks that keyword based parent configuration arguments do not overwrite position based parameter values
+   * set position based Keywords.
+   *
+   * @param instance The AST node of the component instance whose instantiation arguments should be checked.
+   */
+  protected boolean checkArgValuesUnique(@NotNull ASTComponentInstance instance) {
+    Preconditions.checkNotNull(instance);
+    Preconditions.checkArgument(instance.isPresentSymbol());
+
+    if (!instance.getSymbol().isPresentType()) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+        this.getClass().getSimpleName());
+      return false;
+    }
+    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getType().getArcArguments();
+    List<String> paramNames = instance.getSymbol().getType().getTypeInfo().getParameters()
+      .stream().map(VariableSymbol::getName).collect(Collectors.toList());
+    Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
+      .collect(Collectors.toMap(paramNames::get, Function.identity()));
+
+    long posArgsAmount = instantiationArgs.stream()
+      .filter(Predicate.not(ASTArcArgument::isPresentName))
+      .count();
+
+
+    boolean isUnique = true;
+    for (int i = 0; i < instantiationArgs.size(); i++) {
+      ASTArcArgument argument = instantiationArgs.get(i);
+      if (argument.isPresentName()){
+        String argumentKey = instantiationArgs.get(i).getName();
+        int paramIndex = paramIndices.get(argumentKey);
+        if (paramIndex<posArgsAmount){
+          Log.error(ArcError.COMP_ARG_MULTIPLE_VALUES.format(argumentKey),
+            instantiationArgs.get(i).get_SourcePositionStart(), instantiationArgs.get(i).get_SourcePositionEnd()
+          );
+        }
+      }
+
+    }
+
+    return isUnique;
+  }
+
+
+  /**
    * Checks that keyword based instantiation arguments of a component instance come after positional arguments.
    *
    * @param instance The AST node of the component instance whose instantiation arguments should be checked.
    */
   protected boolean checkKeywordArgsLast(@NotNull ASTComponentInstance instance) {
     Preconditions.checkNotNull(instance);
+    Preconditions.checkArgument(instance.isPresentSymbol());
+
+    if (!instance.getSymbol().isPresentType()) {
+      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+        this.getClass().getSimpleName());
+      return false;
+    }
 
     boolean keywordAssignmentPresent=false;
     boolean rightArgumentOrder=true;
 
-    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getArcArguments();
+    List<ASTArcArgument> instantiationArgs = instance.getSymbol().getType().getArcArguments();
 
     for (ASTArcArgument argument : instantiationArgs) {
       if (argument.isPresentName()){
@@ -289,7 +378,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       return true;
     }
 
-    List<ASTArcArgument> keywordArgs =  instance.getSymbol().getArcArguments().stream()
+    List<ASTArcArgument> keywordArgs =  instance.getSymbol().getType().getArcArguments().stream()
       .filter(ASTArcArgument::isPresentName)
       .collect(Collectors.toList());
 

@@ -48,7 +48,7 @@ component grammar GenericArc extends ArcBasis {
   GenericComponentHead extends ComponentHead =
     "<" (ArcTypeParameter || ",")+ ">"
     ( "(" (ArcParameter || ",")+ ")" )?
-    ( "extends" parent:MCType ( "(" parentConfiguration:(Expression || ",")* ")" )? )?
+    ( "extends" parent:MCType ( "(" parentConfiguration:(ArcArgument || ",")* ")" )? )?
   ;
 
   /**

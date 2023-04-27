@@ -51,10 +51,10 @@ public class ComponentInstanceSymbolBuilder extends ComponentInstanceSymbolBuild
       Preconditions.checkState(this.getName() != null);
     }
     ComponentInstanceSymbol symbol = super.build();
-    if (this.getArcArguments() != null) {
-      symbol.addArcArguments(this.getArcArguments());
-    }
     symbol.setType(this.getType());
+    if (this.getArcArguments() != null && this.getType() != null) {
+      symbol.getType().addArcArguments(this.getArcArguments());
+    }
     return symbol;
   }
 

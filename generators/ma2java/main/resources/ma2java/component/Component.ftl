@@ -69,7 +69,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
   <#assign name>${comp.getName()}<#if isTop>TOP</#if></#assign>
   public ${name}(<@printParametersAsList comp/>) {
     <#if comp.isPresentParent()>
-      super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelper.printExpression(parentConfiguration)}<#sep>, </#sep></#list>);
+      super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelper.printExpression(parentConfiguration.getExpression())}<#sep>, </#sep></#list>);
     </#if>
 
     <#list comp.getParameters() as param>

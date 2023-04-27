@@ -49,6 +49,7 @@ public enum ArcError implements Error {
   PARAM_DEFAULT_TYPE_MISMATCH("0xC1139", "Type mismatch, expected '%s' but provided '%s'"),
   TYPE_REF_DEFAULT_VALUE("0xC1140", "Expected an expression, but found a type name"),
   COMP_ARG_PORT_REF("0xC1141", "Port cannot be referenced in static context"),
+  COMP_ARG_MULTI_ASSIGNMENT("0xC1142", "Invalid syntax, no assignment in default value"),
   COMPONENT_LOWER_CASE("0xC1143", "Convention violation, components should be upper case"),
   SUBCOMPONENT_UPPER_CASE("0xC1144", "Convention violation, subcomponents should be lower case"),
   PORT_UPPER_CASE("0xC1145", "Convention violation, ports should be lower case"),
@@ -65,7 +66,12 @@ public enum ArcError implements Error {
   INVALID_CONTEXT_INC_PREFIX("0xC1155", "Invalid syntax, no increment in this context"),
   INVALID_CONTEXT_DEC_PREFIX("0xC1156", "Invalid syntax, no decrement in this context"),
   INVALID_CONTEXT_INC_SUFFIX("0xC1157", "Invalid syntax, no increment in this context"),
-  INVALID_CONTEXT_DEC_SUFFIX("0xC1158", "Invalid syntax, no decrement in this context");
+  INVALID_CONTEXT_DEC_SUFFIX("0xC1158", "Invalid syntax, no decrement in this context"),
+  KEY_NOT_UNIQUE("0xC1159", "Cannot use key '%s' of component '%s' multiple times to set parameters."),
+  HERITAGE_KEY_NOT_UNIQUE("0xC1160", "Cannot use key '%s' of component '%s' multiple times to set parameters."),
+  HERITAGE_COMP_ARG_MULTIPLE_VALUES("0xC1161", "Multiple values for argument '%s'"),
+  HERITAGE_COMP_ARG_KEY_INVALID("0xC1162", "Unexpected key argument '%s'"),
+  HERITAGE_COMP_ARG_VALUE_AFTER_KEY("0xC1163", "Positional assignments after key argument");
 
   private final String errorCode;
   private final String errorMessage;

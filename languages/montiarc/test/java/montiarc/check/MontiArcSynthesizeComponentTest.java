@@ -116,12 +116,12 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
     TypeExprOfGenericComponent resultAsGeneric = (TypeExprOfGenericComponent) result.get();
 
     Assertions.assertEquals(compSym, resultAsGeneric.getTypeInfo());
-    Assertions.assertTrue(resultAsGeneric.getBindingFor("K").get() instanceof SymTypeOfObject);
-    Assertions.assertTrue(resultAsGeneric.getBindingFor("V").get() instanceof SymTypeOfGenerics);
-    Assertions.assertEquals(stringSym, resultAsGeneric.getBindingFor("K").get().getTypeInfo());
-    Assertions.assertEquals(listSym, resultAsGeneric.getBindingFor("V").get().getTypeInfo());
+    Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject);
+    Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics);
+    Assertions.assertEquals(stringSym, resultAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
+    Assertions.assertEquals(listSym, resultAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
     Assertions.assertEquals(stringSym,
-      ((SymTypeOfGenerics) resultAsGeneric.getBindingFor("V").get()).getArgument(0).getTypeInfo()
+      ((SymTypeOfGenerics) resultAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
     );
   }
   

@@ -66,9 +66,9 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   @Override
   public String printName() {
     StringBuilder builder = new StringBuilder(this.getTypeInfo().getName()).append('<');
-    for (int i = 0; i < this.getBindingsAsList().size(); i++) {
-      builder.append(this.getBindingsAsList().get(i).print());
-      if (i < this.getBindingsAsList().size() - 1) {
+    for (int i = 0; i < this.getTypeBindingsAsList().size(); i++) {
+      builder.append(this.getTypeBindingsAsList().get(i).print());
+      if (i < this.getTypeBindingsAsList().size() - 1) {
         builder.append(',');
       }
     }
@@ -78,9 +78,9 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   @Override
   public String printFullName() {
     StringBuilder builder = new StringBuilder(this.getTypeInfo().getFullName()).append('<');
-    for (int i = 0; i < this.getBindingsAsList().size(); i++) {
-      builder.append(this.getBindingsAsList().get(i).printFullName());
-      if (i < this.getBindingsAsList().size() - 1) {
+    for (int i = 0; i < this.getTypeBindingsAsList().size(); i++) {
+      builder.append(this.getTypeBindingsAsList().get(i).printFullName());
+      if (i < this.getTypeBindingsAsList().size() - 1) {
         builder.append(',');
       }
     }
@@ -143,12 +143,12 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     return this.createBoundTypeExpression(unboundParamType);
   }
 
-  public Optional<SymTypeExpression> getBindingFor(@NotNull TypeVarSymbol typeVar) {
+  public Optional<SymTypeExpression> getTypeBindingFor(@NotNull TypeVarSymbol typeVar) {
     Preconditions.checkNotNull(typeVar);
     return Optional.ofNullable(this.getTypeVarBindings().get(typeVar));
   }
 
-  public Optional<SymTypeExpression> getBindingFor(@NotNull String typeVarName) {
+  public Optional<SymTypeExpression> getTypeBindingFor(@NotNull String typeVarName) {
     Preconditions.checkNotNull(typeVarName);
     Optional<TypeVarSymbol> searchedTypeVar = this.getTypeVarBindings().keySet().stream()
       .filter(tvar -> tvar.getName().equals(typeVarName))
@@ -156,7 +156,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     return searchedTypeVar.map(typeVarSymbol -> this.getTypeVarBindings().get(typeVarSymbol));
   }
 
-  public ImmutableList<SymTypeExpression> getBindingsAsList() {
+  public ImmutableList<SymTypeExpression> getTypeBindingsAsList() {
     return this.typeArguments;
   }
 
@@ -188,7 +188,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   @Override
   public TypeExprOfGenericComponent deepClone() {
-    List<SymTypeExpression> clonedBindings = this.getBindingsAsList().stream()
+    List<SymTypeExpression> clonedBindings = this.getTypeBindingsAsList().stream()
       .map(SymTypeExpression::deepClone)
       .collect(Collectors.toList());
     return new TypeExprOfGenericComponent(this.getTypeInfo(), clonedBindings);
@@ -204,9 +204,9 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     TypeExprOfGenericComponent otherCompExpr = (TypeExprOfGenericComponent) compSymType;
 
     boolean equal = this.getTypeInfo().equals(compSymType.getTypeInfo());
-    equal &= this.getBindingsAsList().size() == otherCompExpr.getBindingsAsList().size();
-    for(int i = 0; i < this.getBindingsAsList().size(); i++) {
-      equal &= this.getBindingsAsList().get(i).deepEquals(otherCompExpr.getBindingsAsList().get(i));
+    equal &= this.getTypeBindingsAsList().size() == otherCompExpr.getTypeBindingsAsList().size();
+    for(int i = 0; i < this.getTypeBindingsAsList().size(); i++) {
+      equal &= this.getTypeBindingsAsList().get(i).deepEquals(otherCompExpr.getTypeBindingsAsList().get(i));
     }
 
     return equal;
@@ -216,7 +216,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     if (unboundTypeExpr.isPrimitive() || unboundTypeExpr.isObjectType() || unboundTypeExpr.isNullType()) {
       return Optional.of(unboundTypeExpr);
     } else if (unboundTypeExpr.isTypeVariable()) {
-      return this.getBindingFor(unboundTypeExpr.getTypeInfo().getName());
+      return this.getTypeBindingFor(unboundTypeExpr.getTypeInfo().getName());
     } else {
       SymTypeExpression boundSymType = unboundTypeExpr.deepClone();
       boundSymType.replaceTypeVariables(this.getTypeVarBindings());

@@ -132,7 +132,10 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
     Preconditions.checkArgument(node.isPresentSymbol());
 
     if (this.getCurrentCompInstanceType().isPresent()) {
-      node.getSymbol().setType(this.getCurrentCompInstanceType().get());
+      node.getSymbol().setType(this.getCurrentCompInstanceType().get().deepClone());
+      if (node.isPresentArcArguments()) {
+        node.getSymbol().getType().addArcArguments(node.getArcArguments().getArcArgumentList());
+      }
     }
   }
 

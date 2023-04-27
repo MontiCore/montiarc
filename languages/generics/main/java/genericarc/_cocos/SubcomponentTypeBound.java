@@ -46,7 +46,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
     ComponentTypeSymbol compTypeSymbol = compTypeExpr.getTypeInfo();
 
     for (TypeVarSymbol typeVar : compTypeSymbol.getTypeParameters()) {
-      Optional<SymTypeExpression> typeVarBinding = compTypeExpr.getBindingFor(typeVar);
+      Optional<SymTypeExpression> typeVarBinding = compTypeExpr.getTypeBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
         for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
           if (!this.tr.compatible(bound, typeVarBinding.get())) {
@@ -102,7 +102,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
     ComponentTypeSymbol compTypeSymbol = compTypeExpr.getTypeInfo();
 
     List<TypeVarSymbol> parentSymTypeParameters = compTypeSymbol.getTypeParameters();
-    List<SymTypeExpression> args = compTypeExpr.getBindingsAsList();
+    List<SymTypeExpression> args = compTypeExpr.getTypeBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
       Log.error(
         GenericArcError.TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),

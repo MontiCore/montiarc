@@ -10,6 +10,8 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfComponent;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
@@ -17,17 +19,13 @@ import com.google.common.collect.ImmutableMap;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.tf.odrulegeneration._ast.ASTVariable;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
+import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.generator.MA2JavaFullPrettyPrinter;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Helper class used in the template to generate target code of atomic or composed components.
@@ -93,24 +91,46 @@ public class ComponentHelper {
   }
 
   /**
-   * Calculates the values of the parameters of a {@link ComponentInstanceSymbol}. This takes default values for
-   * parameters into account and adds them as required. Default values are only added from left to right in order. <br/>
-   * Example: For a component with parameters
-   * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
-   * that is instantiated with parameters <code>"Test String", 5</code> this method adds <code>new Object()</code> as
-   * the last parameter.
+   * Calculates the values of the parameters of a {@link CompTypeExpression}.
    *
-   * @param param The {@link ComponentInstanceSymbol} for which the parameters should be calculated.
+   * @param expr The {@link CompTypeExpression} for which the parameters should be calculated.
    * @return The parameters.
    */
-  public Collection<String> getParamValues(ComponentInstanceSymbol param) {
-    ImmutableMap<VariableSymbol, ASTArcArgument> configArguments = param.getParameterBindings();
+  public Collection<String> getParamValues(CompTypeExpression expr) {
+   return getParamValues(expr.getParamBindings(), expr.getTypeInfo());
+  }
+
+  /**
+   * Calculates the values of hierarchical parameter instantiations of a {@link ComponentTypeSymbol}.
+   *
+   * @param comp The {@link CompTypeExpression} for which the parameters should be calculated.
+   * @return The parameters.
+   */
+  public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
+    return getParamValues(comp.getParent().getParamBindings(), comp.getParent().getTypeInfo());
+  }
+    /**
+     * Calculates the values of the parameters for a given {@link Map} containing the {@link VariableSymbol} and the
+     * matching {@link ASTArcArgument}, given its referencing ComponentTypeSymbol. This takes default values for parameters into account and adds them as
+     * required. Default values are only added from left to right in order. <br/>
+     * Example: For a component with parameters
+     * <code>String stringParam, Integer integerParam = 2, Object objectParam = new Object()</code>
+     * that is instantiated with parameters <code>"Test String", 5</code> this method adds <code>new Object()</code> as
+     * the last parameter.
+     *
+     * @param configArguments The {@link Map} that contains the parameter bindings.
+     * @param comp The {@link ComponentTypeSymbol} for which the parameters should be calculated.
+     * @return The parameters.
+     */
+  public Collection<String> getParamValues(Map<VariableSymbol, ASTArcArgument> configArguments, ComponentTypeSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();
 
+
+
     //can only print default parameters if ASTNode exists.
-    if(param.getType().getTypeInfo().isPresentAstNode()){
-      final ASTComponentType astNode = param.getType().getTypeInfo().getAstNode();
+    if(comp.isPresentAstNode()){
+      final ASTComponentType astNode = comp.getAstNode();
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -120,7 +140,7 @@ public class ComponentHelper {
           defaultValues.put(parameter.getName(), parameter.getDefault());
         }
       }
-      for (VariableSymbol v : param.getType().getTypeInfo().getParameters()){
+      for (VariableSymbol v : comp.getParameters()){
         if (configArguments.containsKey(v)){
           final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v).getExpression());
           outputParameters.add(prettyprint);
@@ -130,7 +150,7 @@ public class ComponentHelper {
         }
       }
     }else{
-      for (VariableSymbol v : param.getType().getTypeInfo().getParameters()) {
+      for (VariableSymbol v : comp.getParameters()) {
         Preconditions.checkNotNull(configArguments.get(v));
         final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v).getExpression());
         outputParameters.add(prettyprint);
@@ -138,6 +158,9 @@ public class ComponentHelper {
     }
     return outputParameters;
   }
+
+
+
 
   /**
    * Print the type of the specified subcomponent.

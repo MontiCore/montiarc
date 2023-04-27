@@ -82,8 +82,8 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
-    Assertions.assertTrue(bParent.getBindingFor(parent.getTypeParameters().get(0)).isPresent());
-    Assertions.assertEquals(typeArg, bParent.getBindingFor(parent.getTypeParameters().get(0)).get());
+    Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
+    Assertions.assertEquals(typeArg, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
   }
 
   @Test
@@ -104,8 +104,8 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
-    Assertions.assertTrue(bParent.getBindingFor(parent.getTypeParameters().get(0)).isPresent());
-    Assertions.assertEquals(typeArg, bParent.getBindingFor(parent.getTypeParameters().get(0)).get());
+    Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
+    Assertions.assertEquals(typeArg, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
   }
 
   @Test
@@ -128,10 +128,10 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
-    Assertions.assertTrue(bParent.getBindingFor(parent.getTypeParameters().get(0)).isPresent());
-    Assertions.assertEquals(typeArg1, bParent.getBindingFor(parent.getTypeParameters().get(0)).get());
-    Assertions.assertTrue(bParent.getBindingFor(parent.getTypeParameters().get(1)).isPresent());
-    Assertions.assertEquals(typeArg2, bParent.getBindingFor(parent.getTypeParameters().get(1)).get());
+    Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
+    Assertions.assertEquals(typeArg1, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
+    Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(1)).isPresent());
+    Assertions.assertEquals(typeArg2, bParent.getTypeBindingFor(parent.getTypeParameters().get(1)).get());
   }
 
   @Test
@@ -153,8 +153,8 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
-    Assertions.assertTrue(bParent.getBindingFor(parent.getTypeParameters().get(0)).isPresent());
-    Assertions.assertEquals(typeArg, bParent.getBindingFor(parent.getTypeParameters().get(0)).get());
+    Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
+    Assertions.assertEquals(typeArg, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
   }
 
   protected static Stream<Arguments> compWithTypeParamAndOptionallySurrogateProvider() {
@@ -341,7 +341,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     TypeExprOfGenericComponent compTypeExpr = new TypeExprOfGenericComponent(comp, typeExprList);
 
     // Then
-    List<SymTypeExpression> returnedBindings = compTypeExpr.getBindingsAsList();
+    List<SymTypeExpression> returnedBindings = compTypeExpr.getTypeBindingsAsList();
     Assertions.assertEquals(typeExprList, returnedBindings);
   }
 
@@ -367,9 +367,9 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertEquals(floatTypeExpr, compTypeExpr.getBindingFor("A").orElseThrow()),
-      () -> Assertions.assertEquals(intTypeExpr, compTypeExpr.getBindingFor("B").orElseThrow()),
-      () -> Assertions.assertEquals(boolTypeExpr, compTypeExpr.getBindingFor("C").orElseThrow()),
+      () -> Assertions.assertEquals(floatTypeExpr, compTypeExpr.getTypeBindingFor("A").orElseThrow()),
+      () -> Assertions.assertEquals(intTypeExpr, compTypeExpr.getTypeBindingFor("B").orElseThrow()),
+      () -> Assertions.assertEquals(boolTypeExpr, compTypeExpr.getTypeBindingFor("C").orElseThrow()),
       () -> Assertions.assertEquals(3, compTypeExpr.getTypeVarBindings().size())
     );
 

@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis._ast.ASTArcArgument;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -15,7 +16,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   protected ComponentTypeSymbol outerComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
-  protected List<ASTExpression> parentConfiguration;
+  protected List<ASTArcArgument> parentConfiguration;
 
   public ComponentTypeSymbolBuilder() {
     super();
@@ -65,11 +66,11 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public List<ASTExpression> getParentConfiguration() {
+  public List<ASTArcArgument> getParentConfiguration() {
     return this.parentConfiguration;
   }
 
-  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull List<ASTExpression> parentConfiguration) {
+  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull List<ASTArcArgument> parentConfiguration) {
     Preconditions.checkNotNull(parentConfiguration);
     Preconditions.checkArgument(!parentConfiguration.contains(null));
     this.parentConfiguration = parentConfiguration;

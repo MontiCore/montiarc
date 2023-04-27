@@ -48,14 +48,16 @@ public class ComponentArgumentsOmitPortRef implements ArcBasisASTComponentTypeCo
     portReferencesToLookFor.addAll(IPortReferenceInExpressionExtractor.PortReference.ofSubComponentPorts(comp));
 
     for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
-      for(ASTArcArgument arg : subComp.getArcArguments()) {
-        HashMap<PortReference, SourcePosition> foundPortReferences =
-          this.portRefExtractor.findPortReferences(arg.getExpression(), portReferencesToLookFor, ArcBasisMill.traverser());
+      if(subComp.isPresentType()) {
+        for (ASTArcArgument arg : subComp.getType().getArcArguments()) {
+          HashMap<PortReference, SourcePosition> foundPortReferences =
+            this.portRefExtractor.findPortReferences(arg.getExpression(), portReferencesToLookFor, ArcBasisMill.traverser());
 
-        for(PortReference portRef : foundPortReferences.keySet()) {
-          SourcePosition portRefLoc = foundPortReferences.get(portRef);
+          for (PortReference portRef : foundPortReferences.keySet()) {
+            SourcePosition portRefLoc = foundPortReferences.get(portRef);
 
-          Log.error(ArcError.COMP_ARG_PORT_REF.toString(), portRefLoc);
+            Log.error(ArcError.COMP_ARG_PORT_REF.toString(), portRefLoc);
+          }
         }
       }
     }

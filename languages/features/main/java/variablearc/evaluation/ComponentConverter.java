@@ -99,7 +99,7 @@ public class ComponentConverter {
       // Convert parameters
       for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getSpannedScope()
         .getLocalVariableSymbols()) {
-        Optional<ASTArcArgument> bindingExpression = componentInstanceSymbol.getBindingFor(variable);
+        Optional<ASTArcArgument> bindingExpression = componentInstanceSymbol.getType().getParamBindingFor(variable);
         Optional<Expr<?>> bindingSolverExpression =
           bindingExpression.map(ASTArcArgument::getExpression).flatMap(converter::toExpr);
 

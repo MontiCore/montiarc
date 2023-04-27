@@ -79,7 +79,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   @Override
-  public IArcBasisArtifactScope createFromAST(@NotNull ASTArcElement rootNode)  {
+  public IArcBasisArtifactScope createFromAST(@NotNull ASTArcElement rootNode) {
     Preconditions.checkNotNull(rootNode);
     IArcBasisArtifactScope artifactScope = arcbasis.ArcBasisMill.artifactScope();
     artifactScope.setPackageName("");
@@ -109,6 +109,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   /**
    * if this is an inner component, this method sets the outer component of this one
+   *
    * @param symbol component to integrate into the structure
    */
   protected void setOuter(@NotNull ComponentTypeSymbol symbol) {
@@ -282,15 +283,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
       node.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
       symbol.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
       getCurrentEnclosingScope4Instances().get().add(symbol);
-    }
-  }
-
-  @Override
-  public void endVisit(ASTComponentInstance ast){
-    Preconditions.checkNotNull(ast);
-    Preconditions.checkState(ast.isPresentSymbol());
-    if (ast.isPresentArcArguments()) {
-      ast.getSymbol().addArcArguments(ast.getArcArguments().getArcArgumentList());
     }
   }
 }

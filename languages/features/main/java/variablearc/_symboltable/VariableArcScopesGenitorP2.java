@@ -29,7 +29,7 @@ public class VariableArcScopesGenitorP2 implements VariableArcVisitor2, Variable
     Preconditions.checkNotNull(node);
 
     if (node.isPresentType()) {
-      node.bindParameters();
+      node.getType().bindParams();
     }
   }
 }

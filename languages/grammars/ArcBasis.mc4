@@ -83,7 +83,7 @@ component grammar ArcBasis extends
    */
   ComponentHead =
     ( "(" (ArcParameter || ",")* ")" )?
-    ( "extends" parent:MCType ( "(" parentConfiguration:(Expression || ",")* ")" )? )?
+    ( "extends" parent:MCType ( "(" parentConfiguration:(ArcArgument || ",")* ")" )? )?
   ;
 
   /**

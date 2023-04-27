@@ -19,7 +19,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
@@ -80,8 +79,8 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
 
     for (ComponentInstanceSymbol subcomponent : subcomponents) {
       component.getSpannedScope().add(subcomponent);
-      subcomponent.bindParameters();
-      subcomponent.getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
+      subcomponent.getType().bindParams();
+      subcomponent.getType().getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
     }
 
     return component;
@@ -95,8 +94,8 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
 
     for (ComponentInstanceSymbol subcomponent : subcomponents) {
       component.getSpannedScope().add(subcomponent);
-      subcomponent.bindParameters();
-      subcomponent.getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
+      subcomponent.getType().bindParams();
+      subcomponent.getType().getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
     }
 
     variationPoints.get(0).add(subcomponents.get(0));

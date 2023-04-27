@@ -27,13 +27,6 @@ public class VariantComponentInstanceSymbol extends ComponentInstanceSymbol {
     this.setType(type);
     this.parent = parent;
   }
-
-
-  @Override
-  public List<ASTArcArgument> getArcArguments() {
-    return parent.getArcArguments();
-  }
-
   @Override
   public IArcBasisScope getEnclosingScope() {
     return parent.getEnclosingScope();

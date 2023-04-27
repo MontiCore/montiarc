@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
@@ -18,9 +20,11 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
@@ -43,10 +47,14 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     if (component.isPresentParent()) {
       CompTypeExpression parent = component.getParent();
 
-      // Check CoCos
       checkParentInstantiationArgsAreNotTooMany(component, parent);
-      checkParentInstantiationArgsBindAllMandatoryParams(component, parent);
-      checkParentInstantiationArgsHaveCorrectTypes(component, parent);
+      if( checkParentKeywordsMustBeParameters(component, parent) &
+        checkParentKeywordArgsLast(component, parent)) {
+        checkParentInstantiationArgsBindAllMandatoryParams(component, parent);
+        if(checkParentArgValuesUnique(component, parent) & checkParentKeywordArgsUnique(component, parent)) {
+          checkParentInstantiationArgsHaveCorrectTypes(component, parent);
+        }
+      }
     }
   }
 
@@ -62,12 +70,12 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<ASTExpression> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
     List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
 
     if (parentArgs.size() > paramsOfParentCompType.size()) {
-      ASTExpression firstIllegalArg = parentArgs.get(paramsOfParentCompType.size());
-      ASTExpression lastIllegalArg = parentArgs.get(parentArgs.size() - 1);
+      ASTArcArgument firstIllegalArg = parentArgs.get(paramsOfParentCompType.size());
+      ASTArcArgument lastIllegalArg = parentArgs.get(parentArgs.size() - 1);
 
       Log.error(ArcError.HERITAGE_TOO_MANY_ARGUMENTS.format(
           paramsOfParentCompType.size(), parentArgs.size()
@@ -88,7 +96,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent.getTypeInfo());
 
 
-    List<ASTExpression> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
     List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
 
     long mandatoryParamsAmount = paramsOfParentCompType.stream()
@@ -97,16 +105,178 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
         .filter(param -> !param.isPresentDefault())
         .count();
 
-    if (mandatoryParamsAmount > parentArgs.size()) {
+    List<String> paramNames = paramsOfParentCompType.stream()
+      .map(VariableSymbol::getName).collect(Collectors.toList());
+    Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
+      .collect(Collectors.toMap(paramNames::get, Function.identity()));
+
+    List<ASTArcArgument> keywordArgs = parentArgs.stream()
+      .filter(ASTArcArgument::isPresentName)
+      .collect(Collectors.toList());
+
+    int defaultAssignedByKey = 0;
+
+    for (ASTArcArgument keywordArg : keywordArgs) {
+      String argumentKey = keywordArg.getName();
+      int paramIndex = paramIndices.get(argumentKey);
+      if (paramIndex >= mandatoryParamsAmount) {
+        defaultAssignedByKey++;
+      }
+    }
+
+    if (mandatoryParamsAmount + defaultAssignedByKey > parentArgs.size()) {
       SourcePosition lastArgumentPos = !parentArgs.isEmpty() ?
-          parentArgs.get(parentArgs.size() - 1).get_SourcePositionEnd() :
-          comp.getAstNode().get_SourcePositionEnd();
+        parentArgs.get(parentArgs.size() - 1).get_SourcePositionEnd() :
+        comp.getAstNode().get_SourcePositionEnd();
 
       Log.error(ArcError.HERITAGE_TOO_FEW_ARGUMENTS.format(
         mandatoryParamsAmount, parentArgs.size()
       ), lastArgumentPos);
     }
+
   }
+
+  /**
+   * Checks that keyword instantiations only use keywords referring to parameters of the component instance type
+   *
+   * @param comp   The AST node of the component whose parent arguments should be checked.
+   * @param parent The parent to be checked against
+   */
+  protected boolean checkParentKeywordsMustBeParameters(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent){
+    Preconditions.checkNotNull(comp);
+    Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
+
+    List<ASTArcArgument> keywordArgs =  comp.getParentConfiguration().stream()
+      .filter(ASTArcArgument::isPresentName)
+      .collect(Collectors.toList());
+
+    boolean keysAreParams = true;
+
+    for (ASTArcArgument argument : keywordArgs){
+      String paramName = argument.getName();
+
+      if (parent.getTypeInfo().getParameters().stream()
+        .noneMatch(param -> param.getName().equals(paramName))){
+        Log.error(ArcError.HERITAGE_COMP_ARG_KEY_INVALID.format(
+            comp.getName()), argument.get_SourcePositionStart(),
+          argument.get_SourcePositionEnd()
+        );
+        keysAreParams = false;
+      }
+
+    }
+    return keysAreParams;
+  }
+
+  /**
+   * Checks that keyword based parent configuration arguments are only used once
+   *
+   * @param comp   The AST node of the component whose parent arguments should be checked.
+   * @param parent The parent to be checked against
+   */
+  protected boolean checkParentKeywordArgsUnique(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
+    Preconditions.checkNotNull(comp);
+    Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
+
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    Set<String> keywordArguments = new HashSet<>();
+    int keywordCounter=0;
+
+    boolean isUnique = true;
+    for (int i = 0; i < parentArgs.size(); i++) {
+      ASTArcArgument argument = parentArgs.get(i);
+      if (argument.isPresentName()){
+        keywordCounter = keywordArguments.size();
+        keywordArguments.add(argument.getName());
+        if (keywordCounter == keywordArguments.size()){
+          Log.error(ArcError.HERITAGE_KEY_NOT_UNIQUE.format(
+              argument.getName(), comp.getName()), argument.get_SourcePositionStart(),
+            argument.get_SourcePositionEnd()
+          );
+          isUnique=false;
+        }
+      }
+    }
+
+    return isUnique;
+  }
+
+  /**
+   * Checks that keyword based parent configuration arguments do not overwrite position based parameter values
+   * set position based Keywords.
+   *
+   * @param comp   The AST node of the component whose parent arguments should be checked.
+   * @param parent The parent to be checked against
+   */
+  protected boolean checkParentArgValuesUnique(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
+    Preconditions.checkNotNull(comp);
+    Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
+
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    long posArgsAmount = parentArgs.stream()
+      .filter(Predicate.not(ASTArcArgument::isPresentName))
+      .count();
+
+    List<String> paramNames = parent.getTypeInfo().getParameters()
+      .stream().map(VariableSymbol::getName).collect(Collectors.toList());
+
+    Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
+      .collect(Collectors.toMap(paramNames::get, Function.identity()));
+
+    boolean isUnique = true;
+    for (int i = 0; i < parentArgs.size(); i++) {
+      ASTArcArgument argument = parentArgs.get(i);
+      if (argument.isPresentName()){
+        String argumentKey = argument.getName();
+        int paramIndex = paramIndices.get(argumentKey);
+        if (paramIndex<posArgsAmount){
+          Log.error(ArcError.HERITAGE_COMP_ARG_MULTIPLE_VALUES.format(argumentKey),
+            parentArgs.get(i).get_SourcePositionStart(), parentArgs.get(i).get_SourcePositionEnd()
+          );
+          isUnique=false;
+        }
+      }
+
+    }
+
+    return isUnique;
+  }
+
+
+  /**
+   * Checks that keyword based instantiation arguments of a component instance come after positional arguments.
+   *
+   * @param comp   The AST node of the component whose parent arguments should be checked.
+   * @param parent The parent to be checked against
+   */
+  protected boolean checkParentKeywordArgsLast(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
+    Preconditions.checkNotNull(comp);
+    Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(parent.getTypeInfo());
+
+    boolean keywordAssignmentPresent=false;
+    boolean rightArgumentOrder=true;
+
+    List<ASTArcArgument> instantiationArgs = comp.getParentConfiguration();
+
+    for (ASTArcArgument argument : instantiationArgs) {
+      if (argument.isPresentName()){
+        keywordAssignmentPresent=true;
+      }else{
+        if(keywordAssignmentPresent) {
+          Log.error(ArcError.HERITAGE_COMP_ARG_VALUE_AFTER_KEY.format(
+              comp.getName()), argument.get_SourcePositionStart(),
+            argument.get_SourcePositionEnd());
+          rightArgumentOrder=false;
+        }
+      }
+    }
+    return rightArgumentOrder;
+  }
+
 
   /**
    * Checks that all arguments have compatible types with the parent's configurations arguments.
@@ -115,44 +285,59 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
    * @param parent The parent to be checked against
    */
   protected void checkParentInstantiationArgsHaveCorrectTypes(@NotNull ComponentTypeSymbol comp, @NotNull CompTypeExpression parent) {
+
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<TypeCheckResult> parentArgs = comp.getParentConfiguration().stream()
-        .map(this.tc::deriveType)
-        .collect(Collectors.toList());
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
 
     List<Optional<SymTypeExpression>> parentSignature = parent.getTypeInfo()
-        .getParameters().stream()
-        .map(ISymbol::getName)
-        .map(parent::getTypeExprOfParameter)
-        .collect(Collectors.toList());
+      .getParameters().stream()
+      .map(ISymbol::getName)
+      .map(parent::getTypeExprOfParameter)
+      .collect(Collectors.toList());
 
-    for (int i = 0; i < Math.min(parentArgs.size(), parentSignature.size()); i++) {
-      if (!parentArgs.get(i).isPresentResult()) {
-        Log.debug(String.format("Checking coco '%s' is skipped for parent configuration argument No. '%d', as the type of " +
-                    "the argument expression could not be calculated. Position: '%s'.",
-                this.getClass().getSimpleName(), i + 1,
-                comp.getParentConfiguration().get(i).get_SourcePositionStart()),
-            "CoCos");
+    List<TypeCheckResult> parentArgsCheck = parentArgs.stream()
+      .map(ASTArcArgument::getExpression).map(this.tc::deriveType)
+      .collect(Collectors.toList());
 
-      } else if (parentArgs.get(i).isType()) {
-        ASTExpression typeRefExpr = comp.getParentConfiguration().get(i);
+    List<String> paramNames = parent.getTypeInfo().getParameters().stream()
+      .map(VariableSymbol::getName).collect(Collectors.toList());
+    Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
+      .collect(Collectors.toMap(paramNames::get, Function.identity()));
+
+    for (int i = 0; i < Math.min(parentArgsCheck.size(), parentSignature.size()); i++) {
+      if (!parentArgsCheck.get(i).isPresentResult()) {
+        Log.info(String.format("Checking coco '%s' is skipped for instantiation argument No. '%d', as the type of " +
+              "the argument expression could not be calculated. Position: '%s'.",
+            this.getClass().getSimpleName(), i + 1, parent.getArcArguments().get(i).get_SourcePositionStart()),
+          "CoCos");
+      } else if (parentArgsCheck.get(i).isType()) {
+        ASTExpression typeRefExpr = parent.getArcArguments().get(i).getExpression();
 
         Log.error(ArcError.TYPE_REF_NO_EXPRESSION2.toString(),
           typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd()
         );
+      } else if (parentArgs.get(i).isPresentName()) {
+        String argumentKey = parentArgs.get(i).getName();
+        int paramIndex = paramIndices.get(argumentKey);
+        if (parentSignature.get(paramIndex).isEmpty() || !tr.compatible(parentSignature.get(paramIndex).get(), parentArgsCheck.get(i).getResult())) {
+          ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
 
-      } else if (parentSignature.get(i).isEmpty() ||
-          !tr.compatible(parentSignature.get(i).get(), parentArgs.get(i).getResult())) {
-        ASTExpression incompatibleArgument = comp.getParentConfiguration().get(i);
+          Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).getResult().print(),
+              parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+            incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd()
+          );
+        }
+      } else {
+        if (parentSignature.get(i).isEmpty() || !tr.compatible(parentSignature.get(i).get(), parentArgsCheck.get(i).getResult())) {
+          ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
 
-        Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(
-          parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN"),
-            parentArgs.get(i).getResult().print()),
-          incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd()
-        );
+          Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).getResult().print(),
+              parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+            incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
+        }
       }
     }
   }

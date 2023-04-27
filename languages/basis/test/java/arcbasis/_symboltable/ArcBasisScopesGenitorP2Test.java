@@ -3,14 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTArcFieldDeclaration;
-import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTPortDeclaration;
+import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -36,6 +29,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -866,7 +860,9 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
   public void shouldVisitComponentInstance() {
     // Given
     ASTComponentInstance astInstance = ArcBasisMill.componentInstanceBuilder()
-      .setName("inst").build();
+      .setName("inst").setArcArguments(arcbasis.ArcBasisMill.arcArgumentsBuilder().setArcArgumentsList(
+        Arrays.asList(this.argumentMockValues(3))).build()
+      ).build();
     ComponentInstanceSymbol symInstance = ArcBasisMill.componentInstanceSymbolBuilder()
       .setName("inst").build();
 
@@ -886,8 +882,17 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
     Assertions.assertDoesNotThrow(astInstance.getSymbol()::getType);
     Assertions.assertTrue(astInstance.getSymbol().getType() instanceof TypeExprOfComponent);
     Assertions.assertEquals(compType, astInstance.getSymbol().getType().getTypeInfo());
+    Assertions.assertEquals(3, astInstance.getSymbol().getType().getArcArguments().size());
   }
 
+  protected ASTArcArgument[] argumentMockValues(int length) {
+    ASTArcArgument[] values = new ASTArcArgument[length];
+    for (int i = 0; i < length; i++) {
+      values[i] = Mockito.mock(ASTArcArgument.class);
+      values[i].setExpression(Mockito.mock(ASTExpression.class));
+    }
+    return values;
+  }
   @Test
   public void shouldHandleComponentInstantiationByCompletingComponentInstanceSymbols() {
     // Given

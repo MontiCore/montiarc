@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
@@ -23,7 +24,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
   protected List<VariableSymbol> parameters;
-  protected List<ASTExpression> parentConfiguration;
+  protected List<ASTArcArgument> parentConfiguration;
 
   /**
    * @param name the name of this component type.
@@ -117,7 +118,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   /**
    * @return a {@code List} of the configuration parameters of this component type.
    */
-  public List<ASTExpression> getParentConfiguration() {
+  public List<ASTArcArgument> getParentConfiguration() {
     return this.parentConfiguration;
   }
 
@@ -130,7 +131,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @param expressions the symbols to add.
    * @see this#addParameter(VariableSymbol)
    */
-  public void setParentConfigurationExpressions(@NotNull List<ASTExpression> expressions) {
+  public void setParentConfigurationExpressions(@NotNull List<ASTArcArgument> expressions) {
     Preconditions.checkNotNull(expressions);
     Preconditions.checkArgument(!expressions.contains(null));
     this.parentConfiguration = expressions;

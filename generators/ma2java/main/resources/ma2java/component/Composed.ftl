@@ -62,7 +62,7 @@
       super.setUp();
     </#if>
     <#list comp.getSubComponents() as subcomponent>
-      this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent) as param>${param}<#sep>, </#sep></#list>);
+      this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent.getType()) as param>${param}<#sep>, </#sep></#list>);
       this.${subcomponent.getName()}.setInstanceName(!this.getInstanceName().isBlank() ? this.getInstanceName() + ".${subcomponent.getName()}" : "${subcomponent.getName()}");
       this.${subcomponent.getName()}.setUp();
     </#list>

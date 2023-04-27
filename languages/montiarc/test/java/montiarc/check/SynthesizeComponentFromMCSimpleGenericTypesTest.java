@@ -119,20 +119,20 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
     Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo());
     Assertions.assertEquals(compSym, result4qual.getResult().get().getTypeInfo());
 
-    Assertions.assertTrue(result4normalAsGeneric.getBindingFor("K").get() instanceof SymTypeOfObject);
-    Assertions.assertTrue(result4normalAsGeneric.getBindingFor("V").get() instanceof SymTypeOfGenerics);
-    Assertions.assertEquals(stringSym, result4normalAsGeneric.getBindingFor("K").get().getTypeInfo());
-    Assertions.assertEquals(listSym, result4normalAsGeneric.getBindingFor("V").get().getTypeInfo());
+    Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject);
+    Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics);
+    Assertions.assertEquals(stringSym, result4normalAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
+    Assertions.assertEquals(listSym, result4normalAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
     Assertions.assertEquals(stringSym,
-      ((SymTypeOfGenerics) result4normalAsGeneric.getBindingFor("V").get()).getArgument(0).getTypeInfo()
+      ((SymTypeOfGenerics) result4normalAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
     );
 
-    Assertions.assertTrue(result4qualAsGeneric.getBindingFor("K").get() instanceof SymTypeOfGenerics);
-    Assertions.assertTrue(result4qualAsGeneric.getBindingFor("V").get() instanceof SymTypeOfObject);
-    Assertions.assertEquals(stringSym, result4qualAsGeneric.getBindingFor("V").get().getTypeInfo());
-    Assertions.assertEquals(listSym, result4qualAsGeneric.getBindingFor("K").get().getTypeInfo());
+    Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfGenerics);
+    Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfObject);
+    Assertions.assertEquals(stringSym, result4qualAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
+    Assertions.assertEquals(listSym, result4qualAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
     Assertions.assertEquals(stringSym,
-      ((SymTypeOfGenerics) result4qualAsGeneric.getBindingFor("K").get()).getArgument(0).getTypeInfo()
+      ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
     );
   }
 

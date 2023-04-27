@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -349,11 +350,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    List<ASTExpression> parentConfig = Collections.singletonList(Mockito.mock(ASTExpression.class));
+    List<ASTArcArgument> parentConfig = Collections.singletonList(Mockito.mock(ASTArcArgument.class));
     comp.setParentConfigurationExpressions(parentConfig);
 
     // When
-    List<ASTExpression> parentConfigCalculated = surrogate.getParentConfiguration();
+    List<ASTArcArgument> parentConfigCalculated = surrogate.getParentConfiguration();
 
     // Then
     Assertions.assertArrayEquals(parentConfig.toArray(), parentConfigCalculated.toArray());
@@ -367,7 +368,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    List<ASTExpression> parentConfig = Collections.singletonList(Mockito.mock(ASTExpression.class));
+    List<ASTArcArgument> parentConfig = Collections.singletonList(Mockito.mock(ASTArcArgument.class));
 
     // When
     surrogate.setParentConfigurationExpressions(parentConfig);
