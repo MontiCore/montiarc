@@ -104,7 +104,7 @@ Deploy Nexus:
   dependencies:
     - Build jdk17 #download artifacts from build
   script:
-    - gradle publish :plugin:publish -PmavenPassword=$pass -PmavenUser=$user
+    - gradle publish :plugin:publish :cd2pojo-plugin:publish -PmavenPassword=$pass -PmavenUser=$user
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
