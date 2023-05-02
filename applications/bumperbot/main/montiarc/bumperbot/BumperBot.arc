@@ -11,8 +11,8 @@ component BumperBot {
   Logger logger;
 
   sensor.distance   -> controller.distance;
-  controller.right  -> leftMotor.cmd;
-  controller.left   -> rightMotor.cmd;
+  controller.right  -> rightMotor.cmd;
+  controller.left   -> leftMotor.cmd;
   controller.timer  -> timer.cmd;
   timer.signal      -> controller.signal;
   controller.speed  -> leftMotor.speed;
