@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.tooling.cd2pojo.plugin.Cd2PojoCompile
 
 plugins {
   id("montiarc.build.integration-test")
