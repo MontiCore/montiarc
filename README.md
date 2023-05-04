@@ -31,7 +31,9 @@ or via integration of handcrafted code. For composed components, the behavior em
 
 ```
 git clone <link to this Git repository>
-cd core
+```
+Then enter the newly created folder and do 
+```
 gradle build
 ```
 
