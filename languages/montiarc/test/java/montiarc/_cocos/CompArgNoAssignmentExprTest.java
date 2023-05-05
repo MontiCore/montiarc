@@ -10,6 +10,7 @@ import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.trafo.MontiArcTrafos;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
@@ -44,6 +45,18 @@ public class CompArgNoAssignmentExprTest extends MontiArcAbstractTest {
   @AfterEach
   public void tearDown() {
     Log.clearFindings();
+  }
+
+  public static ASTMACompilationUnit compile(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+    try {
+      ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model)
+        .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
+      MontiArcTrafos.afterParsing().applyAll(ast);
+      return ast;
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   protected static void setUpComponents() {
