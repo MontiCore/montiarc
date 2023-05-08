@@ -85,10 +85,17 @@ public class MontiArcGenerator {
     return this.codeFormatter;
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, boolean symbolic) {
+  public void generate(@NotNull ASTMACompilationUnit ast, boolean dse) {
     Preconditions.checkNotNull(ast);
 
-    final String template= "ma2java.component.CompilationUnit.ftl";
+    if (dse) {
+      engineSetup.getGlex().replaceTemplate("ma2java.Import.ftl", new TemplateHookPoint("ma2java.dse.Import-dse.ftl"));
+      engineSetup.getGlex().replaceTemplate("ma2java.component.Automaton.ftl", new TemplateHookPoint("ma2java.dse.Automaton-dse.ftl"));
+      engineSetup.getGlex().replaceTemplate("ma2java.component.Component.ftl", new TemplateHookPoint("ma2java.dse.Component-dse.ftl"));
+      engineSetup.getGlex().replaceTemplate("ma2java.component.Port.ftl", new TemplateHookPoint("ma2java.dse.Port-dse.ftl"));
+    }
+
+    final String template = "ma2java.component.CompilationUnit.ftl";
     final boolean existsHwc = existsHandWrittenCodeFor(ast.getComponentType().getSymbol(), COMPONENT_ADDENDUM);
     final String usedAddendum = existsHwc ? COMPONENT_ADDENDUM + "TOP" : COMPONENT_ADDENDUM;
     final Path outPath = Paths.get(

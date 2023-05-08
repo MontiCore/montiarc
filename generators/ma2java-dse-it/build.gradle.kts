@@ -1,5 +1,3 @@
-import java.util.stream.Stream
-
 /* (c) https://github.com/MontiCore/monticore */
 plugins {
   id("montiarc.build.integration-test")
@@ -26,12 +24,8 @@ val cd4a: Configuration = configurations.create("cd4a")
 
 dependencies {
   cd4a(project(":generators:cd2pojo"))
-
-  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
-  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-}
+  implementation(project(":libraries:majava-dse-rte"))
+  }
 
 val compileCD4A = tasks.register<JavaExec>("compileCD4A") {
   classpath(cd4a)
@@ -52,10 +46,9 @@ montiarc {
 }
 
 tasks.compileMontiarc {
-  symbolic.set(true)
+  dse.set(true)
   symbolImportDir.from(cdGenSymDir)
   useClass2Mc.set(true)
-
 
   val enableAttachDebugger = false
   if(enableAttachDebugger) {

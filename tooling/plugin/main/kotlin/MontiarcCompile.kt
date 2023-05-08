@@ -33,7 +33,7 @@ abstract class MontiarcCompile : JavaExec() {
 
   @get:Input
   @get:Optional
-  abstract val symbolic : Property<Boolean>
+  abstract val dse : Property<Boolean>
 
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
@@ -50,7 +50,7 @@ abstract class MontiarcCompile : JavaExec() {
     mainClass.convention(MA_TOOL_CLASS)
 
     useClass2Mc.convention(false)
-    symbolic.convention(false)
+    dse.convention(false)
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -83,7 +83,7 @@ abstract class MontiarcCompile : JavaExec() {
       args("-path", cleanSymbolImportDirs.asPath)
     }
 
-    if(symbolic.get()){args("-symbolic");}
+    if(dse.get()){args("-dse");}
 
 
     // 3) Execute

@@ -49,8 +49,8 @@ public class MontiArcTool extends montiarc.MontiArcTool {
       .hasArgs()
       .desc("Sets the artifact path for handwritten code (optional).")
       .build());
-    options.addOption(org.apache.commons.cli.Option.builder("symbolic")
-        .longOpt("symbolic-execution")
+    options.addOption(org.apache.commons.cli.Option.builder("dse")
+        .longOpt("dynamic-symbolic-execution")
         .desc("Sets the template to symbolic template).")
         .build());
     return super.addStandardOptions(options);
@@ -64,26 +64,26 @@ public class MontiArcTool extends montiarc.MontiArcTool {
 
     if(cl.hasOption("output")) {
       Log.info("Generate java", "MontiArcTool");
-      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""), cl.hasOption("symbolic"));
+      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""), cl.hasOption("dse"));
     }
   }
 
-  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc, boolean symbolic) {
+  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc, boolean dse) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(!target.isEmpty());
-    asts.forEach(ast -> this.generate(ast, target, hwc, symbolic));
+    asts.forEach(ast -> this.generate(ast, target, hwc, dse));
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc, boolean symbolic) {
+  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc, boolean dse) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
     MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), splitPathEntriesToList(hwc));
-    generator.generate(ast, symbolic);
+    generator.generate(ast, dse);
   }
 
   @Override
