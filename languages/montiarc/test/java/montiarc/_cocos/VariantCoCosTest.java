@@ -2,6 +2,7 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
@@ -32,6 +33,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     MontiArcMill.reset();
     MontiArcMill.init();
     BasicSymbolsMill.initializePrimitives();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     setUpComponents();
   }
 
@@ -60,6 +63,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component M { feature ff; varif (ff) { port in int i; } }");
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } }");
     compile("package a.b; component O { feature ff; port out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
+    compile("package a.b; component P<A,B> { feature ff; varif (ff) { port <<sync>> out A o; } else { port <<sync>> out B o; } }");
   }
 
   @ParameterizedTest
@@ -448,6 +452,22 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "a.b.O sub; " +
       "sub.o -> o; " +
       "constraint(!sub.ff); " +
+      "}",
+    // out port forward, subcomponent with variable generic interface type (selected feature)
+    "component Comp46<T> { " +
+      "port <<sync>> out T o; " +
+      "a.b.P<T, java.lang.Integer> sub; " +
+      "sub.o -> o; " +
+      "constraint(sub.ff); " +
+      "}",
+    // out port forward, subcomponent with variable generic interface type
+    "component Comp47<A, B> { " +
+      "feature f; " +
+      "varif (f) { port <<sync>> out A o; } " +
+      "else { port <<sync>> out B o; } " +
+      "a.b.P<A, B> sub; " +
+      "sub.o -> o; " +
+      "constraint(sub.ff == f); " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -1084,13 +1104,22 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
         ArcError.MULTIPLE_BEHAVIOR),
       // timing mismatch with implicitly set timing
       arg("component Comp63 { " +
-        "feature ff; " +
-        "port <<timed>> out int o; " +
-        "a.b.O sub; " +
-        "sub.o -> o; " +
-        "constraint(ff == sub.ff); " +
-        "}",
-        ArcError.CONNECTOR_TIMING_MISMATCH)
+          "feature ff; " +
+          "port <<timed>> out int o; " +
+          "a.b.O sub; " +
+          "sub.o -> o; " +
+          "constraint(ff == sub.ff); " +
+          "}",
+        ArcError.CONNECTOR_TIMING_MISMATCH),
+      // out port forward, subcomponent with variable generic interface type (deselected feature)
+      arg(
+        "component Comp64<T> { " +
+          "port <<sync>> out T o; " +
+          "a.b.P<T, java.lang.Integer> sub; " +
+          "sub.o -> o; " +
+          "constraint(!sub.ff); " +
+          "}",
+        ArcError.CONNECTOR_TYPE_MISMATCH)
     );
   }
 }

@@ -54,8 +54,8 @@ public class TypeExprOfComponent extends CompTypeExpression {
   }
 
   @Override
-  public CompTypeExpression deepClone() {
-    return new TypeExprOfComponent(this.getTypeInfo());
+  public CompTypeExpression deepClone(@NotNull ComponentTypeSymbol compTypeSymbol) {
+    return new TypeExprOfComponent(compTypeSymbol);
   }
 
   @Override

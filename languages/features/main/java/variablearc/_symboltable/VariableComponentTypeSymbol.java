@@ -106,8 +106,7 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
       List<HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol>> res = new ArrayList<>();
       for (VariantComponentTypeSymbol variant : variants) {
         HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol> pre = new HashMap<>();
-        pre.put(instance, new VariantComponentInstanceSymbol(instance,
-          new VariantCompTypeExpression(variant)));
+        pre.put(instance, new VariantComponentInstanceSymbol(instance, instance.getType().deepClone(variant)));
         res.add(pre);
       }
       return res;
@@ -120,7 +119,7 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
         for (HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol> pre : prev) {
           pre = new HashMap<>(pre);
           pre.put(instance, new VariantComponentInstanceSymbol(instance,
-            new VariantCompTypeExpression(variant)));
+            instance.getType().deepClone(variant)));
           res.add(pre);
         }
       }

@@ -146,7 +146,11 @@ public abstract class CompTypeExpression {
    */
   public abstract Optional<SymTypeExpression> getTypeExprOfParameter(@NotNull String parameterName);
 
-  public abstract CompTypeExpression deepClone();
+  public CompTypeExpression deepClone() {
+    return deepClone(getTypeInfo());
+  }
+
+  public abstract CompTypeExpression deepClone(@NotNull ComponentTypeSymbol compTypeSymbol);
 
   public abstract boolean deepEquals(@NotNull CompTypeExpression compSymType);
 }
