@@ -1,0 +1,10 @@
+/* (c) https://github.com/MontiCore/monticore */
+package consumerpackage;
+
+import libpackage.LibDiagram.TypeWithInt;
+
+classdiagram ConsumerDiagram {
+  public class FirstConsumer {
+    private TypeWithInt intHolder;
+  }
+}

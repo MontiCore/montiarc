@@ -33,7 +33,7 @@ class Cd2PojoPlugin : Plugin<Project> {
     this.cdExtension = project.extensions.create(DSL_EXTENSION_NAME, Cd2PojoExtension::class.java)
 
     with (project) {
-      project.pluginManager.apply("java-base")
+      pluginManager.apply("java-base")
 
       addGeneratorDependency()
 
@@ -42,6 +42,8 @@ class Cd2PojoPlugin : Plugin<Project> {
         addCd2PojoEntryToSourceSet(sourceSet)
         createCompileCd2PojoTask(sourceSet)
       }
+
+      pluginManager.apply(Cd2PojoDistributionPlugin::class.java)
     }
   }
 
@@ -99,7 +101,7 @@ class Cd2PojoPlugin : Plugin<Project> {
   }
 
   /**
-   * Create a task that compiles the MontiArc sources of the specified source set.
+   * Create a task that compiles the class diagram sources of the specified source set.
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * task is added to the java sources of the same SourceSet.
    */

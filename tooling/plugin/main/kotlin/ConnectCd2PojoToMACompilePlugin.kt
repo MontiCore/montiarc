@@ -21,9 +21,6 @@ class ConnectCd2PojoToMACompilePlugin : Plugin<Project> {
     sourceSetsOf(project).all { sourceSet ->
       connectCdSymbolsToMontiarc(sourceSet)
       createDependencyBetweenCdAndMaCompileTasks(sourceSet)
-      // TODO: add cd dependency config for montiarc
-      //       also add transitive dependencies of the cd models to the dependencies of montiarc
-      //       maybe this could be performed within the montiarc plugin
     }
   }
 

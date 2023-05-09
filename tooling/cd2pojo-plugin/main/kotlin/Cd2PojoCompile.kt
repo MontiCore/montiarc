@@ -65,7 +65,7 @@ abstract class Cd2PojoCompile : JavaExec() {
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
     val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
-    // 2) Build args for the montiarc generator
+    // 2) Build args for the cd2pojo generator
     args("--checkcococs")
     args("--input", cleanModelPath.asPath)
     args("--output", this.javaOutputDir().get().asFile.path)
