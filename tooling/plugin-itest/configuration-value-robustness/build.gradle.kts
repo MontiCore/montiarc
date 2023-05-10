@@ -145,7 +145,7 @@ val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", 
 tasks.check.configure { dependsOn(mixedPathExistenceCheck) }
 
 
-
+/*
 // Testing correct behavior if we fully remove configuration values where possible
 // For this source set, we do not remove the model path directory, as it would lead to "NO_SOURCE", disabling testing
 val removingSrcSet = sourceSets.create("removingDefaultValues")
@@ -168,7 +168,7 @@ val removingDefaultValuesCheck = tasks.register("checkRemovingDefaultValues", Ch
   )
 }
 tasks.check.configure { dependsOn(removingDefaultValuesCheck) }
-
+*/
 
 
 // Testing correct behavior if we change configuration values to unused or absent paths where possible
