@@ -3,3 +3,5 @@
 import ${ast.getQName()}<#if ast.isStar()>.*</#if>;
 
 import com.microsoft.z3.*;
+import java.util.ArrayList;
+import java.util.List;

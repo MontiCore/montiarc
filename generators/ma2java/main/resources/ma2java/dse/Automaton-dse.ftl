@@ -105,7 +105,7 @@ ${tc.signature("comp")}
 <#macro printTransitionFrom state comp automaton>
   protected void transitionFrom${state.getName()}() {
 
-  // Context für Solver
+  // Context for Solver
   Context ctx = montiarc.rte.dse.TestController.getCtx();
 
   // input
@@ -155,7 +155,7 @@ ${tc.signature("comp")}
   protected void entry${state.getName()}() {
     <#if autHelper.hasEntryAction(state)>
 
-      // Context für Solver
+      // Context for Solver
       Context ctx = montiarc.rte.dse.TestController.getCtx();
 
       // inputs
@@ -165,7 +165,7 @@ ${tc.signature("comp")}
       <@printLocalOutputVariables comp/>
 
       // entry action
-      ${compHelper.printStatement(autHelper.getEntryActionBlockStatement(state))}
+      ${compHelperDse.printStatement(autHelper.getEntryActionBlockStatement(state))}
 
       // result
       <@printSetOutput comp/>
@@ -177,7 +177,7 @@ ${tc.signature("comp")}
   protected void exit${state.getName()}() {
     <#if autHelper.hasExitAction(state)>
 
-      // Context für Solver
+      // Context for Solver
       Context ctx = montiarc.rte.dse.TestController.getCtx();
 
       // inputs
@@ -187,7 +187,7 @@ ${tc.signature("comp")}
       <@printLocalOutputVariables comp/>
 
       // exit action
-      ${compHelper.printStatement(autHelper.getExitActionBlockStatement(state))}
+      ${compHelperDse.printStatement(autHelper.getExitActionBlockStatement(state))}
 
       // result
       <@printSetOutput comp/>
@@ -199,7 +199,7 @@ ${tc.signature("comp")}
   protected void init${state.getName()}() {
     <#if autHelper.hasInitAction(state)>
 
-      // Context für Solver
+      // Context for Solver
       Context ctx = montiarc.rte.dse.TestController.getCtx();
 
       // inputs
@@ -210,7 +210,7 @@ ${tc.signature("comp")}
 
       // initial action
       <#list autHelper.getInitActionStatementList(state) as initAction>
-        ${compHelper.printStatement(initAction)}
+        ${compHelperDse.printStatement(initAction)}
       </#list>
 
       // result

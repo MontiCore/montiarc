@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package automata;
+package assignments;
 
 /**
- * Atomic component with one parameter that is passed directly to the output.
+ * Simple atomic component where the output is assigned a variable
  */
-
-component Parameter (Integer parameter) {
+component AssignmentName {
   port <<sync>> in Integer in;
   port <<sync>> out Integer out;
 
@@ -13,7 +12,7 @@ component Parameter (Integer parameter) {
     initial state Idle;
 
     Idle -> Idle /{
-        out = parameter;
+      out = in;
     };
   }
 }

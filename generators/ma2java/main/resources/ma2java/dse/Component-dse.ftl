@@ -72,16 +72,18 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
       super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelper.printExpression(parentConfiguration)}<#sep>, </#sep></#list>);
     </#if>
 
-    // Context für Solver
+    // Context for Solver
     Context ctx = montiarc.rte.dse.TestController.getCtx();
 
     <#list comp.getParameters() as param>
       this.${param.getName()} = ${param.getName()};
+      montiarc.rte.log.Log.trace("${param.getName()} Expr:" +  ${param.getName()}.getExpr() + " ${param.getName()} Value: " +  ${param.getName()}.getValue());
     </#list>
 
     <#list compHelper.getComponentVariables(comp) as variable>
       <#if compHelper.hasInitializerExpression(variable)>
-        this.${variable.getName()} = ${compHelper.printExpression(compHelper.getInitializerExpression(variable))};
+        this.${variable.getName()} = montiarc.rte.dse.AnnotatedValue.newAnnoValue(${compHelperDse.printExpression(compHelper.getInitializerExpression(variable))}, ${compHelperDseValue.printExpression(compHelper.getInitializerExpression(variable))});
+        montiarc.rte.log.Log.trace("${variable.getName()} Expr:" +  ${variable.getName()}.getExpr() + " ${variable.getName()} Value: " +  ${variable.getName()}.getValue());
       </#if>
     </#list>
   }
@@ -89,6 +91,6 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printParametersAsList comp>
   <#list comp.getParameters() as param>
-      montiarc.rte.dse.AnnotatedValue<Expr<IntSort>,${param.getType().print()}> ${param.getName()}<#t><#sep>, </#sep><#t>
+    montiarc.rte.dse.AnnotatedValue<Expr<IntSort>,${param.getType().print()}> ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
 </#macro>

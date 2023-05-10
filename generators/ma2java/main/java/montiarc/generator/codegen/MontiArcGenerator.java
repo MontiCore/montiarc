@@ -15,6 +15,8 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.helper.ArcAutomatonHelper;
 import montiarc.generator.helper.ComponentHelper;
+import montiarc.generator.helper.dse.ComponentHelperDse;
+import montiarc.generator.helper.dse.ComponentHelperDseValue;
 import montiarc.generator.util.Identifier;
 import montiarc.util.MA2JavaError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -59,6 +61,8 @@ public class MontiArcGenerator {
     setup.setOutputDirectory(targetDir.toFile());
     setup.setHandcodedPath(new MCPath(hwcPath));
     GlobalExtensionManagement glex = new GlobalExtensionManagement();
+    glex.setGlobalValue("compHelperDse", new ComponentHelperDse());
+    glex.setGlobalValue("compHelperDseValue", new ComponentHelperDseValue());
     glex.setGlobalValue("compHelper", new ComponentHelper());
     glex.setGlobalValue("autHelper", new ArcAutomatonHelper());
     glex.setGlobalValue("identifier", new Identifier());
@@ -89,10 +93,19 @@ public class MontiArcGenerator {
     Preconditions.checkNotNull(ast);
 
     if (dse) {
-      engineSetup.getGlex().replaceTemplate("ma2java.Import.ftl", new TemplateHookPoint("ma2java.dse.Import-dse.ftl"));
-      engineSetup.getGlex().replaceTemplate("ma2java.component.Automaton.ftl", new TemplateHookPoint("ma2java.dse.Automaton-dse.ftl"));
-      engineSetup.getGlex().replaceTemplate("ma2java.component.Component.ftl", new TemplateHookPoint("ma2java.dse.Component-dse.ftl"));
-      engineSetup.getGlex().replaceTemplate("ma2java.component.Port.ftl", new TemplateHookPoint("ma2java.dse.Port-dse.ftl"));
+      engineSetup.getGlex()
+        .replaceTemplate("ma2java.Import.ftl", new TemplateHookPoint("ma2java.dse.Import-dse.ftl"));
+      engineSetup.getGlex()
+        .replaceTemplate("ma2java.component.Component.ftl", new TemplateHookPoint("ma2java.dse" +
+          ".Component-dse.ftl"));
+      engineSetup.getGlex()
+        .replaceTemplate("ma2java.component.Automaton.ftl", new TemplateHookPoint("ma2java.dse" +
+          ".Automaton-dse.ftl"));
+      engineSetup.getGlex()
+        .replaceTemplate("ma2java.component.Port.ftl", new TemplateHookPoint("ma2java.dse" +
+          ".Port-dse.ftl"));
+      engineSetup.getGlex()
+        .replaceTemplate("ma2java.component.Transition.ftl", new TemplateHookPoint("ma2java.dse.Transition-dse.ftl"));
     }
 
     final String template = "ma2java.component.CompilationUnit.ftl";

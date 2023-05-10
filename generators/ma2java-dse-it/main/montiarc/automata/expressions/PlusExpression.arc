@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package automata;
+package expressions;
 
 /**
- * Simple atomic component, the input of the component is directly transferred to the output.
+ * Simple atomic component, the output is the input added by one
  */
-component Simple {
+component PlusExpression {
   port <<sync>> in Integer in;
   port <<sync>> out Integer out;
 
@@ -12,7 +12,7 @@ component Simple {
     initial state Idle;
 
     Idle -> Idle /{
-      out = in;
+      out = in + 1;
     };
   }
 }

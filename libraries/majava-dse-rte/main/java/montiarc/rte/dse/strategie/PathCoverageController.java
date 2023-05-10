@@ -1,24 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.dse.strategie;
 
-import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Model;
-import com.microsoft.z3.Solver;
-import com.microsoft.z3.Status;
+import com.microsoft.z3.*;
 import montiarc.rte.dse.TestController;
 import montiarc.rte.dse.TestControllerI;
 import montiarc.rte.log.LogException;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Arrays;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -75,7 +65,8 @@ public class PathCoverageController<In, Out> implements TestControllerI {
 
     montiarc.rte.log.Log.trace("branchingC: " + branchingConditions);
 
-    List<BoolExpr> branches = branchingConditions;  // Lokal speichern, weil das in der Rekursion gelöscht wird
+    List<BoolExpr> branches = branchingConditions;  // Lokal speichern, weil das in der Rekursion
+    // gelöscht wird
 
     for (int i = branchDepth; i < branches.size(); i++) {
       Solver s = ctx.mkSolver();

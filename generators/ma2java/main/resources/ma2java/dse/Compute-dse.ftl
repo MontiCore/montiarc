@@ -10,7 +10,7 @@ public void compute() {
   <@printLocalOutputVariables comp/>
 
   // compute
-  ${compHelper.printStatement(ast.getMCBlockStatement())}
+  ${compHelperDse.printStatement(ast.getMCBlockStatement())}
 
   // result
   <@printSetOutput comp/>
@@ -26,7 +26,7 @@ public void compute() {
 
 <#macro printLocalOutputVariables comp>
   <#list comp.getAllOutgoingPorts() as port>
-    montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = null;
+    montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = montiarc.rte.dse.AnnotatedValue.newAnnoValue(null, null);
   </#list>
 </#macro>
 

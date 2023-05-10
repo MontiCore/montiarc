@@ -2,18 +2,20 @@
 package automata;
 
 /**
- * Atomic component with one parameter that is passed directly to the output.
+ * Simple atomic component with one internal variable. The output is the current state of the internal variable.
  */
-
-component Parameter (Integer parameter) {
+component InternalVariable {
   port <<sync>> in Integer in;
   port <<sync>> out Integer out;
+
+  Integer intern = 0;
 
   automaton{
     initial state Idle;
 
     Idle -> Idle /{
-        out = parameter;
+      intern = intern + 1;
+      out = intern;
     };
   }
 }

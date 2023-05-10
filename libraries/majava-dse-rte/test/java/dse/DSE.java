@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package dse;
 
-import assignments.AssignmentName;
-import automata.Empty;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
 import com.microsoft.z3.Model;
