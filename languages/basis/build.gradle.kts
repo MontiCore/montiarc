@@ -20,7 +20,6 @@ dependencies {
     capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
 
-  // api(platform(project(":base-platform")))
   api(libs.mc.grammar)
   api(libs.se.logging)
 

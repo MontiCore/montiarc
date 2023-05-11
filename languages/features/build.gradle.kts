@@ -16,7 +16,6 @@ dependencies {
     capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
   }
 
-  //MontiCore dependencies
   api(project(":languages:core"))
 
   implementation(libs.guava)

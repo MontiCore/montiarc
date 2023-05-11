@@ -12,9 +12,6 @@ tasks.test {
 dependencies {
   api(project(":languages:montiarc"))
 
-  api(libs.mc.cd4a)
-  api(libs.mc.runtime)
-
   implementation(libs.janino)
   implementation(libs.guava)
   implementation(libs.smt)

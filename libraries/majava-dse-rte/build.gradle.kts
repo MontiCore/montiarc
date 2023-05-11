@@ -6,17 +6,16 @@ plugins {
 }
 
 dependencies {
-  api(libs.se.logging)
-  api("tools.aqua:z3-turnkey:4.8.17")
   api(project(":libraries:majava-rte"))
-  api(libs.se.utilities)
-  api(libs.guava)
-  api(libs.janino)
+  api(libs.z3)
 
-  implementation(group= "org.apache.commons", name= "commons-lang3", version= "3.12.0")
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
+  implementation(libs.apache)
+  implementation(libs.guava)
+  implementation(libs.janino)
 
   testImplementation(libs.mockito)
-
 }
 
 tasks.shadowJar {

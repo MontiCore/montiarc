@@ -16,9 +16,11 @@ sourceSets {
   }
 }
 
-
 dependencies {
   implementation(project(":libraries:majava-dse-rte"))
+
+  implementation(libs.guava)
+  implementation(libs.janino)
 }
 
 cd2pojo {
