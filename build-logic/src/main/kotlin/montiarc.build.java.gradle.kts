@@ -2,7 +2,6 @@
 
 plugins {
   java
-  id("montiarc.build.modules")
   id("montiarc.build.repositories")
   id("montiarc.build.spotless")
 }

@@ -7,7 +7,6 @@ buildscript {
 
 plugins {
   id("montiarc.build.repositories")
-  id("montiarc.build.modules")
   id("montiarc.build.project-version")
 
   id("java-library")
@@ -23,8 +22,8 @@ cd2pojo {
 dependencies {
   cd2pojo(project(":tooling:cd2pojo-plugin-itest:produces-library"))
 
-  implementation("${libs.seCommonsLogging}:${project.version}")
-  implementation("${libs.seCommonsUtils}:${project.version}")
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
 }
 
 tasks.getByName<Test>("test") {

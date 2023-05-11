@@ -18,10 +18,10 @@ sourceSets {
 }
 
 dependencies {
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
-  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
+  implementation(libs.guava)
+  implementation(libs.janino)
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
 }
 
 cd2pojo {

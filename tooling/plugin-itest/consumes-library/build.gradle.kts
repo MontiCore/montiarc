@@ -7,7 +7,6 @@ buildscript {
 
 plugins {
   id("montiarc.build.repositories")
-  id("montiarc.build.modules")
   id("montiarc.build.project-version")
 
   id("java")

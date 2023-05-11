@@ -9,21 +9,21 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.mcGrammarsCapability) }
+  grammar(libs.mc.grammar) {
+    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.scGrammarsCapability) }
+  grammar(libs.mc.sc) {
+    capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
   }
 
   api(project(":languages:basis"))
-  api("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
+  api(libs.mc.sc) {
     exclude("org.apache.groovy", "groovy")
   }
 
-  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation(libs.apache)
+  implementation(libs.guava)
+  implementation(libs.janino)
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
@@ -31,7 +31,7 @@ dependencies {
     }
   }
 
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 }
 
 configureMCTask("ArcAutomaton.mc4")

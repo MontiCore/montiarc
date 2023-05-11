@@ -9,11 +9,11 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.mcGrammarsCapability) }
+  grammar(libs.mc.grammar) {
+    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.scGrammarsCapability) }
+  grammar(libs.mc.sc) {
+    capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
   }
 
   api(project(":languages:core"))
@@ -22,10 +22,10 @@ dependencies {
   api(project(":languages:generics"))
   api(project(":languages:modes"))
 
-  implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.z3Turnkey}:${libs.z3TurnkeyVersion}")
+  implementation(libs.mc.c2mc)
+  implementation(libs.guava)
+  implementation(libs.janino)
+  implementation(libs.z3)
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
@@ -33,7 +33,7 @@ dependencies {
     }
   }
 
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 }
 
 configureMCTask("MontiArc.mc4")

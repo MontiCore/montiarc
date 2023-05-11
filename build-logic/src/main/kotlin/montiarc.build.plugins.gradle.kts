@@ -4,7 +4,6 @@ plugins {
   kotlin("jvm")
   id("java-gradle-plugin")
   id("montiarc.build.project-version")
-  id("montiarc.build.modules")
   id("montiarc.build.repositories")
   id("montiarc.build.publish-base")
 }

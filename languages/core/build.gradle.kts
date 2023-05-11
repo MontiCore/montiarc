@@ -9,11 +9,11 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.mcGrammarsCapability) }
+  grammar(libs.mc.grammar) {
+    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.scGrammarsCapability) }
+  grammar(libs.mc.sc) {
+    capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
   }
 
   //MontiCore dependencies
@@ -21,8 +21,8 @@ dependencies {
   api(project(":languages:comfy"))
   api(project(":languages:generics"))
 
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation(libs.guava)
+  implementation(libs.janino)
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
@@ -30,7 +30,7 @@ dependencies {
     }
   }
 
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 }
 
 configureMCTask("ArcCore.mc4")

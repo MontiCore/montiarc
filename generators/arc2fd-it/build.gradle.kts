@@ -21,8 +21,8 @@ dependencies {
   generateFD(project(":generators:arc2fd"))
 
   implementation(project(":libraries:majava-rte"))
-  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
-  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
 }
 
 val genFdTask = tasks.register<JavaExec>("generateFD") {

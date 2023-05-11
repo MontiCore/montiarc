@@ -12,19 +12,19 @@ tasks.test {
 dependencies {
   api(project(":languages:montiarc"))
 
-  api("${libs.monticoreCD4Analysis}:${libs.monticoreVersion}")
-  api("${libs.monticoreRuntime}:${libs.monticoreVersion}")
+  api(libs.mc.cd4a)
+  api(libs.mc.runtime)
 
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.javaSmt}:${libs.javaSmtVersion}")
+  implementation(libs.janino)
+  implementation(libs.guava)
+  implementation(libs.smt)
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
       requireCapability("montiarc.languages:basis-tests")
     }
   }
-  testImplementation("${libs.fdLang}:${libs.monticoreVersion}")
+  testImplementation(libs.mc.fd)
 }
 
 java {

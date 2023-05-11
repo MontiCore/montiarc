@@ -8,12 +8,12 @@ plugins {
 dependencies {
   api(project(":languages:montiarc"))
   implementation(project(":libraries:majava-rte"))
-  implementation("${libs.format}:${libs.formatVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation(libs.format)
+  implementation(libs.guava)
+  implementation(libs.janino)
 
   testImplementation(project(":generators:cd2pojo"))
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 }
 
 java {

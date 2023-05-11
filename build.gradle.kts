@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
+  id("base")
   id("jacoco-report-aggregation")
-  id("montiarc.build.modules")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 }

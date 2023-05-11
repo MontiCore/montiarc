@@ -6,12 +6,12 @@ plugins {
 }
 
 dependencies {
-  api("${libs.monticoreCD4Analysis}:${libs.monticoreVersion}")
-  implementation("${libs.monticoreRuntime}:${libs.monticoreVersion}")
-  implementation("${libs.monticoreGrammar}:${libs.monticoreVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
+  api(libs.mc.cd4a)
+  implementation(libs.mc.runtime)
+  implementation(libs.mc.grammar)
+  implementation(libs.janino)
+  implementation(libs.guava)
+  implementation(libs.mc.c2mc)
 }
 
 java {

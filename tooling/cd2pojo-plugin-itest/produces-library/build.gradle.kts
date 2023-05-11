@@ -7,7 +7,6 @@ buildscript {
 
 plugins {
   id("montiarc.build.repositories")
-  id("montiarc.build.modules")
   id("montiarc.build.project-version")
 
   id("java-library")
@@ -15,8 +14,8 @@ plugins {
 }
 
 dependencies {
-  implementation("${libs.seCommonsLogging}:${project.version}")
-  implementation("${libs.seCommonsUtils}:${project.version}")
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
 }
 
 group = "montiarc.tooling.cd2pojo-plugin-itest"

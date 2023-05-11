@@ -30,9 +30,9 @@ val exampleTestRuntimeOnly : Configuration by configurations.getting {
 }
 
 dependencies {
-  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
+  implementation(libs.se.logging)
 
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 }
 
 tasks.shadowJar {

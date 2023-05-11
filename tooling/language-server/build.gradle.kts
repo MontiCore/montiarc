@@ -4,20 +4,20 @@ plugins {
 }
 
 dependencies {
-  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.mcGrammarsCapability) }
+  grammar(libs.mc.grammar) {
+    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar("${libs.cd4analysis}:${libs.monticoreVersion}"){
-    capabilities { requireCapability(libs.cd4aGrammarsCapability) }
+  grammar(libs.mc.cd4a){
+    capabilities { requireCapability("de.monticore.lang:cd4analysis-grammars") }
   }
   grammar(project(path = ":languages", configuration = "grammars"))
-  grammar("${libs.monticoreStatecharts}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.scGrammarsCapability) }
+  grammar(libs.mc.sc) {
+    capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
   }
   implementation(project(":languages:montiarc"))
-  implementation("de.monticore.language-server:monticore-language-server-runtime:${libs.monticoreLSPVersion}")
-  implementation("${libs.cd4analysis}:${libs.monticoreVersion}")
-  implementation("${libs.monticoreClass2MC}:${libs.monticoreVersion}")
+  implementation(libs.mc.lsp)
+  implementation(libs.mc.cd4a)
+  implementation(libs.mc.c2mc)
 }
 
 // create needs to be used instead of register, since register is evaluated lazily and this too late,

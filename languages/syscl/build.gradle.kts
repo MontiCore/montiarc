@@ -16,11 +16,11 @@ configurations {
 }
 
 dependencies {
-  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.mcGrammarsCapability) }
+  grammar(libs.mc.grammar) {
+    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar ("${libs.monticoreOCL}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.oclGrammarsCapability) }
+  grammar (libs.mc.ocl) {
+    capabilities { requireCapability("de.monticore.lang:ocl-grammars") }
   }
 
   api(project(":languages:generics"))
@@ -34,10 +34,10 @@ dependencies {
     }
   }
 
-  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
-  implementation("${libs.monticoreOCL}:${libs.monticoreVersion}")
+  implementation(libs.apache)
+  implementation(libs.guava)
+  implementation(libs.janino)
+  implementation(libs.mc.ocl)
 }
 
 configureMCTask("SysCL.mc4")

@@ -42,10 +42,10 @@ configurations {
 dependencies {
   implementation(sourceSets["base"].output)
   implementation(project(":languages:montiarc"))
-  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
-  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
+  implementation(libs.guava)
+  implementation(libs.janino)
 }
 
 cd2pojo {

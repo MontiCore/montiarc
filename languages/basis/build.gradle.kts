@@ -16,19 +16,19 @@ configurations {
 }
 
 dependencies {
-  grammar("${libs.monticoreGrammar}:${libs.monticoreVersion}") {
-    capabilities { requireCapability(libs.mcGrammarsCapability) }
+  grammar(libs.mc.grammar) {
+    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
 
   // api(platform(project(":base-platform")))
-  api("${libs.monticoreGrammar}:${libs.monticoreVersion}")
-  api("${libs.seCommonsLogging}:${libs.monticoreVersion}")
+  api(libs.mc.grammar)
+  api(libs.se.logging)
 
-  implementation("${libs.apache}:${libs.apacheCommonsVersion}")
-  implementation("${libs.guava}:${libs.guavaVersion}")
-  implementation("${libs.codehausJanino}:${libs.codehausVersion}")
+  implementation(libs.apache)
+  implementation(libs.guava)
+  implementation(libs.janino)
 
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 }
 
 configureMCTask("ArcBasis.mc4")

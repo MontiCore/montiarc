@@ -18,8 +18,8 @@ sourceSets {
 }
 
 dependencies {
-  implementation("${libs.seCommonsLogging}:${libs.monticoreVersion}")
-  implementation("${libs.seCommonsUtils}:${libs.monticoreVersion}")
+  implementation(libs.se.logging)
+  implementation(libs.se.utilities)
 }
 
 cd2pojo {

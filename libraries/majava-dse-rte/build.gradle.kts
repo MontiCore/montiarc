@@ -6,16 +6,16 @@ plugins {
 }
 
 dependencies {
-  api("${libs.seCommonsLogging}:${libs.monticoreVersion}")
+  api(libs.se.logging)
   api("tools.aqua:z3-turnkey:4.8.17")
   api(project(":libraries:majava-rte"))
-  api("${libs.seCommonsUtils}:${libs.monticoreVersion}")
-  api("${libs.guava}:${libs.guavaVersion}")
-  api("${libs.codehausJanino}:${libs.codehausVersion}")
+  api(libs.se.utilities)
+  api(libs.guava)
+  api(libs.janino)
 
   implementation(group= "org.apache.commons", name= "commons-lang3", version= "3.12.0")
 
-  testImplementation("${libs.mockito}:${libs.mockitoVersion}")
+  testImplementation(libs.mockito)
 
 }
 
