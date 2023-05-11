@@ -183,7 +183,7 @@ class MontiarcPlugin : Plugin<Project> {
       sourceSet.java.srcDir(genTask.javaOutputDir())
       genTask.hwcPath.setFrom( provider {
         sourceSet.allJava.sourceDirectories.files
-        .filter { !it.startsWith(genTask.javaOutputDir().get().asFile)}
+        .filter { !it.startsWith(buildDir)}
       })
     }
 
