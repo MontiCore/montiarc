@@ -7,18 +7,14 @@ import com.google.common.base.Preconditions;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
-import dse.DSE;
+import com.microsoft.z3.Sort;
 import expressions.DivExpression;
 import expressions.MinusExpression;
 import expressions.MultExpression;
 import expressions.PlusExpression;
 import montiarc.rte.dse.AnnotatedValue;
+import montiarc.rte.dse.MockTestController;
 import montiarc.rte.dse.TestController;
-import montiarc.rte.dse.strategie.MockPathCoverageController;
-import montiarc.rte.dse.strategie.PathCoverageController;
-import montiarc.rte.timesync.IComponent;
-import montiarc.rte.timesync.IInPort;
-import montiarc.rte.timesync.IOutPort;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,6 +22,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -34,262 +31,39 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class ComponentsTest {
 
   static Context ctx;
+  static MockTestController controller;
 
   @BeforeAll
-  static void setUp() throws Exception {
-    PathCoverageController<List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
-      List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller =
-      MockPathCoverageController.init(DSE::runOnce);
-    ctx = TestController.getCtx();
+  static void setUp() {
+    controller = new MockTestController();
+    controller.init();
+    assertThat(controller).isNotNull();
+
+    ctx = controller.getCtx();
     assertThat(ctx).isNotNull();
-  }
 
-  @ParameterizedTest
-  @MethodSource("relations")
-  public void testCompute(@NotNull AnnotatedValue<Expr<IntSort>, Integer> in,
-                          @NotNull AnnotatedValue<Expr<IntSort>, Integer> out,
-                          @NotNull IComponent comp) {
-
-    assertThat(comp instanceof Empty || comp instanceof InternalVariable || comp instanceof Composition
-      || comp instanceof PlusExpression || comp instanceof MultExpression
-      || comp instanceof MinusExpression || comp instanceof DivExpression
-      || comp instanceof AssignmentLiteral || comp instanceof AssignmentName).isEqualTo(true);
-
-    comp.setUp();
-    comp.init();
-
-    if (comp instanceof Empty) ((Empty) comp).getIn().update(in);
-    else if (comp instanceof InternalVariable) ((InternalVariable) comp).getIn().update(in);
-    else if (comp instanceof Composition) ((Composition) comp).getIn().update(in);
-    else if (comp instanceof PlusExpression) ((PlusExpression) comp).getIn().update(in);
-    else if (comp instanceof MinusExpression) ((MinusExpression) comp).getIn().update(in);
-    else if (comp instanceof MultExpression) ((MultExpression) comp).getIn().update(in);
-    else if (comp instanceof DivExpression) ((DivExpression) comp).getIn().update(in);
-    else if (comp instanceof AssignmentLiteral) ((AssignmentLiteral) comp).getIn().update(in);
-    else if (comp instanceof AssignmentName) ((AssignmentName) comp).getIn().update(in);
-
-
-    comp.compute();
-    if (comp instanceof PlusExpression) {
-      assertAll(
-        () -> assertThat(((PlusExpression) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((PlusExpression) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((PlusExpression) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((PlusExpression) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-    else if (comp instanceof MultExpression) {
-      assertAll(
-        () -> assertThat(((MultExpression) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((MultExpression) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((MultExpression) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((MultExpression) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-    else if (comp instanceof MinusExpression) {
-      assertAll(
-        () -> assertThat(((MinusExpression) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((MinusExpression) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((MinusExpression) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((MinusExpression) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-    else if (comp instanceof DivExpression) {
-      assertAll(
-        () -> assertThat(((DivExpression) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((DivExpression) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((DivExpression) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((DivExpression) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-    else if (comp instanceof AssignmentLiteral) {
-      assertAll(
-        () -> assertThat(((AssignmentLiteral) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((AssignmentLiteral) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((AssignmentLiteral) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((AssignmentLiteral) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-    else if (comp instanceof AssignmentName) {
-      assertAll(
-        () -> assertThat(((AssignmentName) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((AssignmentName) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((AssignmentName) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((AssignmentName) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-    else if (comp instanceof Empty) {
-      assertAll(
-        () -> assertThat(((Empty) comp).getIn().getValue().getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((Empty) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((Empty) comp).getOut().getValue()).isEqualTo(out));
-    }
-    else if (comp instanceof InternalVariable) {
-      assertAll(
-        () -> assertThat(((InternalVariable) comp).getIn().getValue()
-          .getValue()).isEqualTo(in.getValue()),
-        () -> assertThat(((InternalVariable) comp).getIn().getValue().getExpr()
-          .toString()).isEqualTo(in.getExpr().toString()),
-        () -> assertThat(((InternalVariable) comp).getOut().getValue()
-          .getValue()).isEqualTo(out.getValue()),
-        () -> assertThat(((InternalVariable) comp).getOut().getValue().getExpr()
-          .toString()).isEqualTo(out.getExpr().toString())
-      );
-    }
-  }
-
-  public static Stream<Arguments> relations() {
-
-    Expr<IntSort> input = ctx.mkConst("input", ctx.mkIntSort());
-    AnnotatedValue<Expr<IntSort>, Integer> in = AnnotatedValue.newAnnoValue(input, 1);
-    Empty empty = new Empty();
-    Composition composition = new Composition();
-
-    InternalVariable internal = new InternalVariable();
-    Expr<IntSort> outputInternal = TestController.getCtx()
-      .mkAdd(TestController.getCtx().mkInt(0), TestController.getCtx().mkInt(1));
-    AnnotatedValue<Expr<IntSort>, Integer> outInternal =
-      AnnotatedValue.newAnnoValue(outputInternal, 1);
-
-    AssignmentName assignmentName = new AssignmentName();
-
-    AssignmentLiteral assignmentLiteral = new AssignmentLiteral();
-    AnnotatedValue<Expr<IntSort>, Integer> outLiteral = AnnotatedValue.newAnnoValue(ctx.mkInt(1),
-      1);
-
-    PlusExpression plusExpression = new PlusExpression();
-    Expr<IntSort> outputPlus = TestController.getCtx()
-      .mkAdd(input, TestController.getCtx().mkInt("1"));
-    AnnotatedValue<Expr<IntSort>, Integer> outPlus = AnnotatedValue.newAnnoValue(outputPlus, 2);
-
-    MultExpression multExpression = new MultExpression();
-    Expr<IntSort> outputMult = TestController.getCtx()
-      .mkMul(input, TestController.getCtx().mkInt("2"));
-    AnnotatedValue<Expr<IntSort>, Integer> outMult = AnnotatedValue.newAnnoValue(outputMult, 2);
-
-    MinusExpression minusExpression = new MinusExpression();
-    Expr<IntSort> outputMinus = TestController.getCtx()
-      .mkSub(input, TestController.getCtx().mkInt("1"));
-    AnnotatedValue<Expr<IntSort>, Integer> outMinus = AnnotatedValue.newAnnoValue(outputMinus, 0);
-
-    DivExpression divExpression = new DivExpression();
-    AnnotatedValue<Expr<IntSort>, Integer> inDiv = AnnotatedValue.newAnnoValue(input, 4);
-    Expr<IntSort> outputDiv = TestController.getCtx()
-      .mkDiv(input, TestController.getCtx().mkInt("2"));
-    AnnotatedValue<Expr<IntSort>, Integer> outDiv = AnnotatedValue.newAnnoValue(outputDiv, 2);
-
-    return Stream.of(
-      Arguments.of(in, null, empty),
-      Arguments.of(in, outInternal, internal),
-      Arguments.of(in, in, composition),
-      Arguments.of(in, in, assignmentName),
-      Arguments.of(in, outLiteral, assignmentLiteral),
-      Arguments.of(in, outPlus, plusExpression),
-      Arguments.of(in, outMult, multExpression),
-      Arguments.of(in, outMinus, minusExpression),
-      Arguments.of(inDiv, outDiv, divExpression)
-    );
   }
 
   @ParameterizedTest
   @MethodSource("histories")
-  public void testCompute(@NotNull Integer[] in,
-                          @NotNull Expr[] exprIn,
-                          @NotNull Integer[] out,
-                          @NotNull Expr[] exprOut,
-                          @NotNull IComponent comp) {
+  public <T extends Sort, X, G extends Sort, Z> void testCompute(@NotNull List<AnnotatedValue<Expr<T>, X>> in,
+                                                                 @NotNull List<AnnotatedValue<Expr<G>, Z>> out,
+                                                                 @NotNull Function<AnnotatedValue<Expr<T>, X>, AnnotatedValue<Expr<G>, Z>> component,
+                                                                 @NotNull List<Integer> pathControl) {
 
     Preconditions.checkNotNull(in);
-    Preconditions.checkArgument(in.length > 0);
-    Preconditions.checkArgument(exprIn.length == in.length);
-    Preconditions.checkArgument(out.length == in.length);
-    Preconditions.checkArgument(exprOut.length == in.length);
+    Preconditions.checkArgument(in.size() > 0);
+    Preconditions.checkArgument(out.size() == in.size());
 
-    assertThat(comp instanceof Empty || comp instanceof InternalVariable || comp instanceof Composition
-      || comp instanceof PlusExpression || comp instanceof MultExpression
-      || comp instanceof MinusExpression || comp instanceof DivExpression).isEqualTo(true);
+    for (int i = 0; i < in.size(); i++) {
+      controller.setTransition(pathControl.get(i));
+      AnnotatedValue<Expr<G>, Z> actOut = component.apply(in.get(0));
 
-    comp.setUp();
-    comp.init();
-
-    Integer[] actOut = new Integer[out.length];
-    Expr<IntSort>[] actExprOut = new Expr[out.length];
-
-    if (comp instanceof PlusExpression) {
-      for (int j = 0; j < in.length; j++) {
-        ((PlusExpression) comp).getIn().update(AnnotatedValue.newAnnoValue(exprIn[j], in[j]));
-
-        comp.compute();
-
-        actOut[j] = ((PlusExpression) comp).getOut().getValue().getValue();
-        actExprOut[j] = ((PlusExpression) comp).getOut().getValue().getExpr();
-      }
+      assertAll(
+        () -> assertThat(actOut.getValue()).isEqualTo(out.get(0).getValue()),
+        () -> assertThat(actOut.getExpr().toString()).isEqualTo(out.get(0).getExpr().toString())
+      );
     }
-    else if (comp instanceof Composition) {
-      for (int j = 0; j < in.length; j++) {
-        ((Composition) comp).getIn().update(AnnotatedValue.newAnnoValue(exprIn[j], in[j]));
-
-        comp.compute();
-
-        actOut[j] = ((Composition) comp).getOut().getValue().getValue();
-        actExprOut[j] = ((Composition) comp).getOut().getValue().getExpr();
-      }
-    }
-    else if (comp instanceof MultExpression) {
-      for (int j = 0; j < in.length; j++) {
-        ((MultExpression) comp).getIn().update(AnnotatedValue.newAnnoValue(exprIn[j], in[j]));
-
-        comp.compute();
-        actOut[j] = ((MultExpression) comp).getOut().getValue().getValue();
-        actExprOut[j] = ((MultExpression) comp).getOut().getValue().getExpr();
-      }
-    }
-    else if (comp instanceof DivExpression) {
-      for (int j = 0; j < in.length; j++) {
-        ((DivExpression) comp).getIn().update(AnnotatedValue.newAnnoValue(exprIn[j], in[j]));
-        comp.compute();
-        actOut[j] = ((DivExpression) comp).getOut().getValue().getValue();
-        actExprOut[j] = ((DivExpression) comp).getOut().getValue().getExpr();
-      }
-    }
-    else if (comp instanceof MinusExpression) {
-      for (int j = 0; j < in.length; j++) {
-        ((MinusExpression) comp).getIn().update(AnnotatedValue.newAnnoValue(exprIn[j], in[j]));
-        comp.compute();
-        actOut[j] = ((MinusExpression) comp).getOut().getValue().getValue();
-        actExprOut[j] = ((MinusExpression) comp).getOut().getValue().getExpr();
-      }
-    }
-
-    assertAll(
-      () -> assertThat(actOut).containsExactly(out),
-      () -> assertThat(actExprOut).containsExactly(exprOut)
-    );
   }
 
   public static Stream<Arguments> histories() {
@@ -297,66 +71,261 @@ public class ComponentsTest {
     Expr<IntSort> input_0 = ctx.mkConst("input_0", ctx.mkIntSort());
     Expr<IntSort> input_1 = ctx.mkConst("input_1", ctx.mkIntSort());
 
-    Composition composition = new Composition();
+    Expr<IntSort> output_0Div = controller.getCtx().mkDiv(input_0, controller.getCtx().mkInt(2));
+    AnnotatedValue<Expr<IntSort>, Integer> inDiv = AnnotatedValue.newAnnoValue(input_0, 4);
+    AnnotatedValue<Expr<IntSort>, Integer> outDiv = AnnotatedValue.newAnnoValue(output_0Div, 2);
 
-    PlusExpression plus = new PlusExpression();
-    Expr<IntSort> output_0Plus = TestController.getCtx()
-      .mkAdd(input_0, TestController.getCtx().mkInt(1));
-    Expr<IntSort> output_1Plus = TestController.getCtx()
-      .mkAdd(input_1, TestController.getCtx().mkInt(1));
+    DivExpression div = new DivExpression();
+    div.setUp();
+    div.init();
 
-    MinusExpression minusExpression = new MinusExpression();
-    Expr<IntSort> output_0Minus = TestController.getCtx()
-      .mkSub(input_0, TestController.getCtx().mkInt(1));
+    Expr<IntSort> outputMinus = TestController.getCtx()
+      .mkSub(input_0, TestController.getCtx().mkInt("1"));
     Expr<IntSort> output_1Minus = TestController.getCtx()
       .mkSub(input_1, TestController.getCtx().mkInt(1));
 
-    DivExpression divExpression = new DivExpression();
-    Expr<IntSort> output_0Div = TestController.getCtx()
-      .mkDiv(input_0, TestController.getCtx().mkInt(2));
-    Expr<IntSort> output_1Div = TestController.getCtx()
-      .mkDiv(input_1, TestController.getCtx().mkInt(2));
+    AnnotatedValue<Expr<IntSort>, Integer> in_1Minus = AnnotatedValue.newAnnoValue(input_0, 42);
+    AnnotatedValue<Expr<IntSort>, Integer> out_1Minus = AnnotatedValue.newAnnoValue(outputMinus,
+      41);
+    AnnotatedValue<Expr<IntSort>, Integer> in_2Minus = AnnotatedValue.newAnnoValue(input_0, 0);
+    AnnotatedValue<Expr<IntSort>, Integer> out_2Minus = AnnotatedValue.newAnnoValue(output_1Minus
+      , -1);
 
-    MultExpression multExpression = new MultExpression();
-    Expr<IntSort> output_0Mult = TestController.getCtx()
-      .mkMul(input_0, TestController.getCtx().mkInt(2));
-    Expr<IntSort> output_1Mult = TestController.getCtx()
-      .mkMul(input_1, TestController.getCtx().mkInt(2));
+    MinusExpression minus = new MinusExpression();
+    minus.setUp();
+    minus.init();
+
+    Expr<IntSort> outputMult = TestController.getCtx()
+      .mkMul(input_0, TestController.getCtx().mkInt("2"));
+    AnnotatedValue<Expr<IntSort>, Integer> inMult = AnnotatedValue.newAnnoValue(input_0, 1);
+    AnnotatedValue<Expr<IntSort>, Integer> outMult = AnnotatedValue.newAnnoValue(outputMult, 2);
+
+    MultExpression mult = new MultExpression();
+    mult.setUp();
+    mult.init();
+
+    Expr<IntSort> outputPlus = TestController.getCtx()
+      .mkAdd(input_0, TestController.getCtx().mkInt("1"));
+    AnnotatedValue<Expr<IntSort>, Integer> inPlus = AnnotatedValue.newAnnoValue(input_0, 1);
+    AnnotatedValue<Expr<IntSort>, Integer> outPlus = AnnotatedValue.newAnnoValue(outputPlus, 2);
+
+    PlusExpression plus = new PlusExpression();
+    plus.setUp();
+    plus.init();
+
+    Expr<IntSort> outputInternal = TestController.getCtx()
+      .mkAdd(TestController.getCtx().mkInt(0), TestController.getCtx().mkInt(1));
+    AnnotatedValue<Expr<IntSort>, Integer> inInternal = AnnotatedValue.newAnnoValue(input_0, 1);
+    AnnotatedValue<Expr<IntSort>, Integer> outInternal =
+      AnnotatedValue.newAnnoValue(outputInternal, 1);
+
+    InternalVariable internal = new InternalVariable();
+    internal.setUp();
+    internal.init();
+
+    Transitions tran0 = new Transitions();
+    tran0.setUp();
+    tran0.init();
+
+    Expr<IntSort> outputTran0 = TestController.getCtx().mkInt(100);
+    AnnotatedValue<Expr<IntSort>, Integer> inTran0 = AnnotatedValue.newAnnoValue(input_0, 1);
+    AnnotatedValue<Expr<IntSort>, Integer> outTran0 = AnnotatedValue.newAnnoValue(outputTran0, 100);
+
+    Transitions tran1 = new Transitions();
+    tran1.setUp();
+    tran1.init();
+
+    Expr<IntSort> outputTran1 = TestController.getCtx()
+      .mkAdd(input_0, TestController.getCtx().mkInt(1));
+    AnnotatedValue<Expr<IntSort>, Integer> inTran1 = AnnotatedValue.newAnnoValue(input_0, 4);
+    AnnotatedValue<Expr<IntSort>, Integer> outTran1 = AnnotatedValue.newAnnoValue(outputTran1, 5);
+
+    Transitions tran2 = new Transitions();
+    tran2.setUp();
+    tran2.init();
+
+    AnnotatedValue<Expr<IntSort>, Integer> inTran2 = AnnotatedValue.newAnnoValue(input_0, 100);
+
+    Transitions tran3 = new Transitions();
+    tran3.setUp();
+    tran3.init();
+
+    Expr<IntSort> output1Tran3 = ctx.mkAdd(input_0, ctx.mkInt(1));
+    Expr<IntSort> output2Tran3 = ctx.mkAdd(input_1, ctx.mkInt(1));
+    AnnotatedValue<Expr<IntSort>, Integer> in2Tran3 = AnnotatedValue.newAnnoValue(input_1, 2);
+    AnnotatedValue<Expr<IntSort>, Integer> out1Tran3 = AnnotatedValue.newAnnoValue(output1Tran3, 5);
+    AnnotatedValue<Expr<IntSort>, Integer> out2Tran3 = AnnotatedValue.newAnnoValue(output2Tran3, 5);
+
+    Transitions tran4 = new Transitions();
+    tran4.setUp();
+    tran4.init();
+
+    Expr<IntSort> output2Tran4 = ctx.mkMul(input_1, ctx.mkInt(2));
+    AnnotatedValue<Expr<IntSort>, Integer> in2Tran4 = AnnotatedValue.newAnnoValue(input_1, 100);
+    AnnotatedValue<Expr<IntSort>, Integer> out2Tran4 = AnnotatedValue.newAnnoValue(output2Tran4,
+      200);
+
+    Composition composition = new Composition();
+    composition.setUp();
+    composition.init();
+
+    AnnotatedValue<Expr<IntSort>, Integer> inComposition = AnnotatedValue.newAnnoValue(input_0, 42);
+
+    AssignmentName name = new AssignmentName();
+    name.setUp();
+    name.init();
+
+    AnnotatedValue<Expr<IntSort>, Integer> inName = AnnotatedValue.newAnnoValue(input_0, 1);
+
+    AssignmentLiteral literal = new AssignmentLiteral();
+    literal.setUp();
+    literal.init();
+
+    AnnotatedValue<Expr<IntSort>, Integer> inLiteral = AnnotatedValue.newAnnoValue(input_0, 1);
+    AnnotatedValue<Expr<IntSort>, Integer> outLiteral = AnnotatedValue.newAnnoValue(ctx.mkInt(1),
+      1);
 
     return Stream.of(
+
       Arguments.of(
-        new Integer[]{42, 10},
-        new Expr[]{input_0, input_1},
-        new Integer[]{43, 11},
-        new Expr[]{output_0Plus, output_1Plus},
-        plus
-      ),
-      Arguments.of(new Integer[]{42, 0},
-        new Expr[]{input_0, input_1},
-        new Integer[]{41, -1},
-        new Expr[]{output_0Minus, output_1Minus},
-        minusExpression
+        List.of(inDiv),
+        List.of(outDiv),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          div.getIn().update(input);
+          div.compute();
+          return div.getOut().getValue();
+        },
+        List.of(1)
       ),
       Arguments.of(
-        new Integer[]{2, 10},
-        new Expr[]{input_0, input_1},
-        new Integer[]{1, 5},
-        new Expr[]{output_0Div, output_1Div},
-        divExpression
+        List.of(in_1Minus),
+        List.of(out_1Minus),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          minus.getIn().update(input);
+          minus.compute();
+          return minus.getOut().getValue();
+        },
+        List.of(1)
       ),
       Arguments.of(
-        new Integer[]{42, 42},
-        new Expr[]{input_0, input_1},
-        new Integer[]{42, 42},
-        new Expr[]{input_0, input_1},
-        composition
+        List.of(in_1Minus, in_2Minus),
+        List.of(out_1Minus, out_2Minus),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          minus.getIn().update(input);
+          minus.compute();
+          return minus.getOut().getValue();
+        },
+        List.of(1, 1)
       ),
       Arguments.of(
-        new Integer[]{2, 5},
-        new Expr[]{input_0, input_1},
-        new Integer[]{4, 10},
-        new Expr[]{output_0Mult, output_1Mult},
-        multExpression
+        List.of(inMult),
+        List.of(outMult),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          mult.getIn().update(input);
+          mult.compute();
+          return mult.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inPlus),
+        List.of(outPlus),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          plus.getIn().update(input);
+          plus.compute();
+          return plus.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inInternal),
+        List.of(outInternal),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          internal.getIn().update(input);
+          internal.compute();
+          return internal.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inTran0),
+        List.of(outTran0),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          tran0.getIn().update(input);
+          tran0.compute();
+          return tran0.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inTran1),
+        List.of(outTran1),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          tran1.getIn().update(input);
+          tran1.compute();
+          return tran1.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inTran2),
+        List.of(outTran0),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          tran2.getIn().update(input);
+          tran2.compute();
+          return tran2.getOut().getValue();
+        },
+        List.of(2)
+      ),
+      Arguments.of(
+        List.of(inTran1, in2Tran3),
+        List.of(out1Tran3, out2Tran3),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          tran3.getIn().update(input);
+          tran3.compute();
+          return tran3.getOut().getValue();
+        },
+        List.of(1, 1)
+      ),
+      Arguments.of(
+        List.of(inTran1, in2Tran4),
+        List.of(outTran1, out2Tran4),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          tran4.getIn().update(input);
+          tran4.compute();
+          return tran4.getOut().getValue();
+        },
+        List.of(1, 1)
+      ),
+      Arguments.of(
+        List.of(inComposition),
+        List.of(inComposition),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          composition.getIn().update(input);
+          composition.compute();
+          return composition.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inName),
+        List.of(inName),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          name.getIn().update(input);
+          name.compute();
+          return name.getOut().getValue();
+        },
+        List.of(1)
+      ),
+      Arguments.of(
+        List.of(inLiteral),
+        List.of(outLiteral),
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+          literal.getIn().update(input);
+          literal.compute();
+          return literal.getOut().getValue();
+        },
+        List.of(1)
       )
     );
   }

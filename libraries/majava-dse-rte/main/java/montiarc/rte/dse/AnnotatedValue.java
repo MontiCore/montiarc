@@ -14,7 +14,8 @@ public class AnnotatedValue<SMTExpr extends Expr<? extends Sort>, T> {
     this.value = value;
   }
 
-  public static <G extends Expr<? extends Sort>, T> AnnotatedValue<G, T> newAnnoValue(G expr, T value) {
+  public static <G extends Expr<? extends Sort>, T> AnnotatedValue<G, T> newAnnoValue(G expr,
+                                                                                      T value) {
     return new AnnotatedValue<>(expr, value);
   }
 

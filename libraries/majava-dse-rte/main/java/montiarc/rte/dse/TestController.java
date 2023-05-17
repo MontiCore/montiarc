@@ -3,6 +3,9 @@ package montiarc.rte.dse;
 
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.List;
 
 public class TestController {
   protected static TestControllerI controller;
@@ -30,4 +33,9 @@ public class TestController {
   public static Context getCtx() {
     return controller.getCtx();
   }
+
+  public static void selectTransition(List<Pair<Runnable, String>> possibleTransitions) {
+    controller.selectTransition(possibleTransitions);
+  }
+
 }

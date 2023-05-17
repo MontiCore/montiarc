@@ -1,0 +1,23 @@
+/* (c) https://github.com/MontiCore/monticore */
+package automata;
+
+classdiagram Datatypes {
+
+  public enum MotorCmd {
+    FORWARD,
+    BACKWARD,
+    STOP;
+  }
+
+  public enum TimerCmd {
+    SINGLE,
+    DOUBLE;
+  }
+
+  public enum TimerSignal {
+    ALERT,
+    SLEEP;
+  }
+
+}
+

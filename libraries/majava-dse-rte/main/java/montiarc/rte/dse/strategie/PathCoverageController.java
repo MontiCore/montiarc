@@ -145,4 +145,19 @@ public class PathCoverageController<In, Out> implements TestControllerI {
     montiarc.rte.log.Log.trace("BranchingCondition:   " + ctx.mkEq(condition, ctx.mkBool(result)));
     return result;
   }
+
+  @Override
+  public void selectTransition(List<Pair<Runnable, String>> possibleTransitions) {
+    if (possibleTransitions.size() == 1) {
+      possibleTransitions.get(0).getKey().run();
+    }
+
+    if (possibleTransitions.size() > 1) {
+      int transition = 0;
+      while (transition < possibleTransitions.size() && !getIfOracle("possibleTransitions")) {
+        transition++;
+      }
+      possibleTransitions.get(transition).getKey().run();
+    }
+  }
 }

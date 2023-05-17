@@ -13,6 +13,8 @@ ${tc.signature("comp")}
 
   <@printTransitionFrom state comp ast/>
 
+  <@printTransitionFunctions state comp ast/>
+
   <@printTransitionTo state/>
 
   <@printEntry state comp/>
@@ -108,34 +110,69 @@ ${tc.signature("comp")}
   // Context for Solver
   Context ctx = montiarc.rte.dse.TestController.getCtx();
 
+  // List for all possible Transitions
+  List<Pair<Runnable, String>> possibleTransitions = new ArrayList<>();
+
   // input
   <@printLocalInputVariables comp/>
+
+  <#assign counter = 0>
   <#assign output><@printLocalOutputVariables comp/></#assign>
   <#assign result><@printSetOutput comp/></#assign>
   <#assign transitions = autHelper.getAllTransitionsWithGuardFrom(automaton, state)/>
+
   <#list transitions>
     <#items as transition>
     ${tc.includeArgs("ma2java.component.Transition.ftl", transition,
-      compHelper.asList(state, automaton, output, result))
+      compHelper.asList(state, automaton, output, result, counter))
     }
-    <#sep> else </#sep>
+    <#assign counter++>
     </#items>
-    else {
   </#list>
+
   <#if autHelper.hasTransitionWithoutGuardFrom(automaton, state)>
     ${tc.includeArgs("ma2java.component.Transition.ftl",
       autHelper.getFirstTransitionWithoutGuardFrom(automaton, state),
-      compHelper.asList(state, automaton, output, result))
+      compHelper.asList(state, automaton, output, result, counter))
     }
   <#elseif autHelper.hasSuperState(automaton, state) && autHelper.isFinalState(automaton, state)>
     // transition from super state
     transitionFrom${autHelper.getSuperState(automaton, state).getName()}();
   </#if>
-  <#if transitions?size != 0>}</#if>
+
+
+  if(possibleTransitions.size() <= 0){
+    montiarc.rte.log.Log.trace(String.format("No transition can be selected"));
+  }
+  montiarc.rte.dse.TestController.selectTransition(possibleTransitions);
 
   <@printSynchronize comp/>
 }
 </#macro>
+
+<#macro printTransitionFunctions state comp automaton>
+  <#assign input><@printLocalInputVariables comp/></#assign>
+  <#assign output><@printLocalOutputVariables comp/></#assign>
+  <#assign result><@printSetOutput comp/></#assign>
+  <#assign transitions = autHelper.getAllTransitionsWithGuardFrom(automaton, state)/>
+  <#assign counter = 0>
+
+  <#list transitions>
+    <#items as transition>
+      ${tc.includeArgs("ma2java.dse.TransitionFunctions-dse.ftl", transition,
+        compHelper.asList(state, automaton, input, output, result, counter))
+      }
+        <#assign counter++>
+    </#items>
+  </#list>
+
+  <#if autHelper.hasTransitionWithoutGuardFrom(automaton, state)>
+    ${tc.includeArgs("ma2java.dse.TransitionFunctions-dse.ftl",
+      autHelper.getFirstTransitionWithoutGuardFrom(automaton, state),
+      compHelper.asList(state, automaton, input, output, result, counter))}
+  </#if>
+ </#macro>
+
 
 <#macro printTransitionTo state>
   protected void transitionTo${state.getName()}() {

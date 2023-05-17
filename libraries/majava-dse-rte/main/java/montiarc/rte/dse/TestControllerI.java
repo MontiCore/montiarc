@@ -4,7 +4,7 @@ package montiarc.rte.dse;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 
-public interface TestControllerI {
+public interface TestControllerI extends TransitionSelectorI {
 
   /**
    * Provides the ability to implement abort strategies for runs
