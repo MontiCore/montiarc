@@ -14,6 +14,7 @@ import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPort;
 import arcbasis._ast.ASTPortDeclaration;
+import arcbasis.trafo.SeparateCompInstantiationFromTypeDeclTrafo;
 import com.google.common.collect.Lists;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -251,7 +252,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
         Arrays.asList(this.argumentMockValues(3))).build()
       ).build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
+    this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     this.getSymTab().endVisit(ast);
   }
@@ -263,7 +264,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
         Arrays.asList(this.argumentMockValues(3))).build()
       ).build();
     IArcBasisScope scope = ArcBasisMill.scope();
-    this.getSymTab().pushCurrentEnclosingScope4Instances(scope);
+    this.getSymTab().putOnStack(scope);
     this.getSymTab().handle(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
     Assertions.assertFalse(scope.getLocalComponentInstanceSymbols().isEmpty());
@@ -316,37 +317,46 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
     Assertions.assertEquals(1, scope.getLocalVariableSymbols().size());
   }
 
+  /**
+   * If a model contains `component Foo fooInst {...}, it is expected to be transformed into two
+   * separate statements `component Foo {...}` and `Foo fooInst;`. The symbol table should handle this
+   * correctly.
+   */
   @Test
-  public void shouldVisitComponentBody() {
+  void shouldHandleTransformedDirectComponentInstantiation() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    ASTComponentBody compBody = arcbasis.ArcBasisMill.componentBodyBuilder().build();
-
-    // When
     this.getSymTab().putOnStack(scope);
-    this.getSymTab().visit(compBody);
-
-    // Then
-    Assertions.assertEquals(scope, compBody.getEnclosingScope());
-    Assertions.assertTrue(this.getSymTab().getCurrentEnclosingScope4Instances().isPresent());
-    Assertions.assertEquals(scope, this.getSymTab().getCurrentEnclosingScope4Instances().get());
-  }
-
-  @Test
-  public void shouldEndVisitComponentBody() {
-    // Given
-    IArcBasisScope lowStackScope = ArcBasisMill.scope();
-    IArcBasisScope highStackScope = ArcBasisMill.scope();
-    ASTComponentBody compBody = arcbasis.ArcBasisMill.componentBodyBuilder().build();
+    ASTComponentBody body = ArcBasisMill.componentBodyBuilder().build();
+    ASTComponentType typeDecl = ArcBasisMill.componentTypeBuilder()
+      .setName("Foo")
+      .addInstance("fooInst")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+    body.addArcElement(typeDecl);
 
     // When
-    this.getSymTab().pushCurrentEnclosingScope4Instances(lowStackScope);
-    this.getSymTab().pushCurrentEnclosingScope4Instances(highStackScope);
-    this.getSymTab().endVisit(compBody);
+    new SeparateCompInstantiationFromTypeDeclTrafo().visit(body);
+    this.getSymTab().handle(body);
 
     // Then
-    Assertions.assertEquals(1, this.getSymTab().getEnclosingScope4InstancesStack().size());
-    Assertions.assertEquals(lowStackScope, this.getSymTab().getCurrentEnclosingScope4Instances().get());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(1, scope.getLocalComponentTypeSymbols().size()),
+      () -> Assertions.assertEquals(1, scope.getLocalComponentInstanceSymbols().size())
+    );
+
+    ComponentTypeSymbol typeSym = scope.getLocalComponentTypeSymbols().get(0);
+    ComponentInstanceSymbol instSym = scope.getLocalComponentInstanceSymbols().get(0);
+
+    Assertions.assertAll(
+      () -> Assertions.assertEquals("Foo", typeSym.getName()),
+      () -> Assertions.assertEquals("fooInst", instSym.getName()),
+      () -> Assertions.assertEquals(scope, typeSym.getEnclosingScope()),
+      () -> Assertions.assertEquals(scope, instSym.getEnclosingScope()),
+      () -> Assertions.assertEquals(scope, typeSym.getAstNode().getEnclosingScope()),
+      () -> Assertions.assertEquals(scope, instSym.getAstNode().getEnclosingScope())
+    );
   }
 
   protected ASTArcArgument[] argumentMockValues(int length) {

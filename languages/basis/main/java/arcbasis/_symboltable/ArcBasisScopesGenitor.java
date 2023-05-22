@@ -6,7 +6,6 @@ import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
@@ -21,20 +20,17 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
-import java.util.EmptyStackException;
 import java.util.Optional;
 import java.util.Stack;
 
 public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   protected Stack<ComponentTypeSymbol> componentStack;
-  protected Stack<IArcBasisScope> enclosingScope4InstancesStack;
   protected ASTPortDirection currentPortDirection;
 
   public ArcBasisScopesGenitor() {
     super();
     this.componentStack = new Stack<>();
-    this.enclosingScope4InstancesStack = new Stack<>();
   }
 
   protected Stack<ComponentTypeSymbol> getComponentStack() {
@@ -59,23 +55,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
   protected void setCurrentPortDirection(@Nullable ASTPortDirection currentPortDirection) {
     this.currentPortDirection = currentPortDirection;
-  }
-
-  protected Stack<IArcBasisScope> getEnclosingScope4InstancesStack() {
-    return this.enclosingScope4InstancesStack;
-  }
-
-  protected Optional<IArcBasisScope> getCurrentEnclosingScope4Instances() {
-    try {
-      return Optional.ofNullable(this.getEnclosingScope4InstancesStack().peek());
-    } catch (EmptyStackException e) {
-      return Optional.empty();
-    }
-  }
-
-  protected void pushCurrentEnclosingScope4Instances(@Nullable IArcBasisScope scope) {
-    Preconditions.checkNotNull(scope);
-    this.getEnclosingScope4InstancesStack().push(scope);
   }
 
   @Override
@@ -155,21 +134,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     node.setEnclosingScope(getCurrentScope().get());
   }
 
-  @Override
-  public void visit(@NotNull ASTComponentBody node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    node.setEnclosingScope(this.getCurrentScope().get());
-    this.pushCurrentEnclosingScope4Instances(this.getCurrentScope().get());
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTComponentBody node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkState(this.getCurrentEnclosingScope4Instances().isPresent());
-    this.getEnclosingScope4InstancesStack().pop();
-  }
-
   protected VariableSymbolBuilder create_ArcParameter(@NotNull ASTArcParameter ast) {
     assert (this.getCurrentScope().isPresent());
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
@@ -238,7 +202,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   protected VariableSymbolBuilder create_ArcField(@NotNull ASTArcField ast) {
-    Preconditions.checkState(this.getCurrentScope().isPresent());
+    Preconditions.checkNotNull(ast);
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
     builder.setName(ast.getName());
     return builder;
@@ -266,8 +230,6 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected ComponentInstanceSymbolBuilder create_ComponentInstance(@NotNull ASTComponentInstance ast) {
     ComponentInstanceSymbolBuilder builder = ArcBasisMill.componentInstanceSymbolBuilder();
     Preconditions.checkNotNull(ast);
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    ast.setEnclosingScope(this.getCurrentScope().get());
     builder.setName(ast.getName());
     return builder;
   }
@@ -275,14 +237,12 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   @Override
   public void visit(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
+    Preconditions.checkState(this.getCurrentScope().isPresent());
 
     ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();
-    node.setSymbol(symbol);
     symbol.setAstNode(node);
-    if (this.getCurrentEnclosingScope4Instances().isPresent()) {
-      node.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
-      symbol.setEnclosingScope(getCurrentEnclosingScope4Instances().get());
-      getCurrentEnclosingScope4Instances().get().add(symbol);
-    }
+    node.setSymbol(symbol);
+    node.setEnclosingScope(this.getCurrentScope().get());
+    this.getCurrentScope().get().add(symbol);
   }
 }

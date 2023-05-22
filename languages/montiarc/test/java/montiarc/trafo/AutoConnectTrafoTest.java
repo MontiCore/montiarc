@@ -192,6 +192,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcTrafos.afterParsing().applyAll(ast);
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
     List<ASTConnector> before = ast.getComponentType().getConnectors();
@@ -245,6 +246,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcTrafos.afterParsing().applyAll(ast);
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
 
@@ -278,6 +280,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
         "}";
 
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MontiArcTrafos.afterParsing().applyAll(ast);
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
 

@@ -77,23 +77,6 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
   }
 
   @Override
-  public void visit(@NotNull ASTComponentType node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-
-    if (!node.getComponentInstanceList().isEmpty()) {
-      this.setCurrentCompInstanceType(new TypeExprOfComponent(node.getSymbol()));
-    }
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTComponentType node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    this.setCurrentCompInstanceType(null);
-  }
-
-  @Override
   public void visit(@NotNull ASTComponentHead node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getEnclosingScope());
