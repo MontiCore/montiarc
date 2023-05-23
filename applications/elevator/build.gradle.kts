@@ -9,7 +9,7 @@ plugins {
 sourceSets {
   main {
     cd2pojo {
-      setSrcDirs(setOf("$projectDir/main/resources"))
+      setSrcDirs(setOf("$projectDir/main/cd2pojo"))
     }
     montiarc {
       setSrcDirs(setOf("$projectDir/main/montiarc"))
