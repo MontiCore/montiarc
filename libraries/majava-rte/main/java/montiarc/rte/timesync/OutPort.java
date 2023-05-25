@@ -8,9 +8,9 @@ import java.util.HashSet;
 
 public class OutPort<T> extends Port<T> implements IOutPort<T> {
 
-  protected Collection<IInPort<T>> observers;
+  protected Collection<IInPort<? super T>> observers;
 
-  protected Collection<IInPort<T>> getObservers() {
+  protected Collection<IInPort<? super T>> getObservers() {
     return this.observers;
   }
 
@@ -43,7 +43,7 @@ public class OutPort<T> extends Port<T> implements IOutPort<T> {
   }
 
   @Override
-  public void connect(IInPort<T> port) {
+  public void connect(IInPort<? super T> port) {
     this.getObservers().add(port);
   }
 

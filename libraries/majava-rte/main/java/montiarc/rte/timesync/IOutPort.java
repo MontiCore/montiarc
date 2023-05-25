@@ -10,7 +10,7 @@ public interface IOutPort<T> extends IPort<T> {
    *
    * @param port the observing input port
    */
-  void connect(IInPort<T> port);
+  void connect(IInPort<? super T> port);
 
   /**
    * Sync this port with the observing input ports

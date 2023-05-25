@@ -8,4 +8,7 @@ classdiagram Types {
   public enum OnOff {
     ON, OFF;
   }
+
+  public class SuperType {}
+  public class ChildType extends SuperType {}
 }
