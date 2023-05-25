@@ -26,18 +26,6 @@ public class ExpressionSolver {
   protected String defaultPrefix;
 
   /**
-   * @param componentInstanceSymbol the instance symbol that holds the expressions.
-   */
-  public ExpressionSolver(@NotNull ComponentInstanceSymbol componentInstanceSymbol) {
-    Preconditions.checkNotNull(componentInstanceSymbol);
-
-    this.context = new Context();
-    ComponentConverter componentConverter = new ComponentConverter(context);
-    this.defaultExpr = componentConverter.convert(componentInstanceSymbol).toArray(BoolExpr[]::new);
-    this.defaultPrefix = componentInstanceSymbol.getType().printName();
-  }
-
-  /**
    * @param componentTypeSymbol the context of the expressions.
    */
   public ExpressionSolver(@NotNull ComponentTypeSymbol componentTypeSymbol) {

@@ -1,14 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._cocos.*;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.types.check.TypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
@@ -19,7 +22,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import variablearc._cocos.VariantCoCos;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -475,9 +477,20 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
+    TypeRelations tr = new TypeRelations();
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new VariantCoCos());
+    checker.addVariantCoCo(new PortsConnected());
+    checker.addVariantCoCo(new PortUniqueSender());
+    checker.addVariantCoCo(new SubPortsConnected());
+    checker.addVariantCoCo(new ConnectorPortsExist());
+    checker.addVariantCoCo(new ConnectorTypesFit(tr));
+    checker.addVariantCoCo(new ConnectorDirectionsFit());
+    checker.addVariantCoCo(new ConnectorTimingsFit());
+    checker.addVariantCoCo(new AtomicMaxOneBehavior());
+    checker.addVariantCoCo(new FeedbackStrongCausality());
+    checker.addVariantCoCo(new PortHeritageTypeFits(tr));
+    checker.addVariantCoCo(new UniqueIdentifier());
 
     // When
     checker.checkAll(ast);
@@ -494,9 +507,20 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
+    TypeRelations tr = new TypeRelations();
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new VariantCoCos());
+    checker.addVariantCoCo(new PortsConnected());
+    checker.addVariantCoCo(new PortUniqueSender());
+    checker.addVariantCoCo(new SubPortsConnected());
+    checker.addVariantCoCo(new ConnectorPortsExist());
+    checker.addVariantCoCo(new ConnectorTypesFit(tr));
+    checker.addVariantCoCo(new ConnectorDirectionsFit());
+    checker.addVariantCoCo(new ConnectorTimingsFit());
+    checker.addVariantCoCo(new AtomicMaxOneBehavior());
+    checker.addVariantCoCo(new FeedbackStrongCausality());
+    checker.addVariantCoCo(new PortHeritageTypeFits(tr));
+    checker.addVariantCoCo(new UniqueIdentifier());
 
     // When
     checker.checkAll(ast);

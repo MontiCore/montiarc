@@ -22,6 +22,7 @@ import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcScopesGenitorP2;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Stack;
 
@@ -121,12 +122,14 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     InternalComponentConverter converter = new InternalComponentConverter(context);
     ComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.emptyList());
     Stack<String> stack = new Stack<>();
+    HashSet<ComponentTypeSymbol> visited = new HashSet<>();
 
     // When
-    List<BoolExpr> exprs = converter.convert(component, stack);
+    List<BoolExpr> exprs = converter.convert(component, stack, visited);
 
     // Then
     Assertions.assertTrue(stack.isEmpty());
+    Assertions.assertIterableEquals(List.of(component), visited);
     Assertions.assertIterableEquals(List.of(context.mkTrue()), exprs);
   }
 
@@ -136,10 +139,13 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     Context context = createContext();
     InternalComponentConverter converter = new InternalComponentConverter(context);
 
+    ComponentInstanceSymbol subcomponent = createInstance("comp1", createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()));
+
     ComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.singletonList(
-      createInstance("comp1", createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()))
+      subcomponent
     ));
     Stack<String> stack = new Stack<>();
+    HashSet<ComponentTypeSymbol> visited = new HashSet<>();
 
     VariableArcScopesGenitorP2 scopesGenP2 = new VariableArcScopesGenitorP2();
     for (ComponentInstanceSymbol componentInstanceSymbol : component.getSubComponents()) {
@@ -147,10 +153,13 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     }
 
     // When
-    List<BoolExpr> exprs = converter.convert(component, stack);
+    List<BoolExpr> exprs = converter.convert(component, stack, visited);
 
     // Then
     Assertions.assertTrue(stack.isEmpty());
+    Assertions.assertEquals(2, visited.size());
+    Assertions.assertTrue(visited.contains(component));
+    Assertions.assertTrue(visited.contains(subcomponent.getType().getTypeInfo()));
     Assertions.assertIterableEquals(List.of(context.mkTrue(), context.mkConst("comp1.a", context.getBoolSort())), exprs);
   }
 

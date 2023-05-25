@@ -17,6 +17,8 @@ import variablearc.check.VariableArcTypeCalculator;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
@@ -40,12 +42,14 @@ public class ComponentConverter {
   public List<BoolExpr> convert(@NotNull ComponentTypeSymbol componentTypeSymbol) {
     Preconditions.checkNotNull(componentTypeSymbol);
 
-    return convert(componentTypeSymbol, new Stack<>());
+    return convert(componentTypeSymbol, new Stack<>(), new HashSet<>());
   }
 
-  protected List<BoolExpr> convert(@NotNull ComponentTypeSymbol componentTypeSymbol, @NotNull Stack<String> prefixes) {
+  protected List<BoolExpr> convert(@NotNull ComponentTypeSymbol componentTypeSymbol, @NotNull Stack<String> prefixes, @NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(componentTypeSymbol);
     Preconditions.checkNotNull(prefixes);
+    Preconditions.checkNotNull(visited);
+    visited.add(componentTypeSymbol);
 
     IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
     converter.setPrefix(listToString(prefixes));
@@ -64,9 +68,9 @@ public class ComponentConverter {
 
     // convert subcomponents
     for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getSubComponents()) {
-      if (instanceSymbol.isPresentType()) {
+      if (instanceSymbol.isPresentType() && !visited.contains(instanceSymbol.getType().getTypeInfo())) {
         prefixes.add(instanceSymbol.getName());
-        contextExpr.addAll(convert(instanceSymbol, prefixes));
+        contextExpr.addAll(convert(instanceSymbol, prefixes, visited));
         prefixes.pop();
       }
     }
@@ -74,24 +78,17 @@ public class ComponentConverter {
     return contextExpr;
   }
 
-  public List<BoolExpr> convert(@NotNull ComponentInstanceSymbol componentInstanceSymbol) {
+  protected List<BoolExpr> convert(@NotNull ComponentInstanceSymbol componentInstanceSymbol, Stack<String> prefixes, @NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(componentInstanceSymbol);
-    Stack<String> prefixes = new Stack<>();
-    prefixes.add(componentInstanceSymbol.getType().printName());
-
-    return convert(componentInstanceSymbol, prefixes);
-  }
-
-  protected List<BoolExpr> convert(@NotNull ComponentInstanceSymbol componentInstanceSymbol, Stack<String> prefixes) {
-    Preconditions.checkNotNull(componentInstanceSymbol);
+    Preconditions.checkArgument(componentInstanceSymbol.isPresentType());
     Preconditions.checkNotNull(prefixes);
+    Preconditions.checkNotNull(visited);
 
     IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
     ArrayList<BoolExpr> contextExpr = new ArrayList<>();
     final String prefix = listToString(prefixes);
 
-    if (componentInstanceSymbol.isPresentType() &&
-      componentInstanceSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
+    if (componentInstanceSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
       // Convert features & parameters
       String parentPrefix = prefixes.size() > 1 ? listToString(prefixes.subList(0, prefixes.size() - 1)) : "";
       converter.setPrefix(parentPrefix);
@@ -112,27 +109,9 @@ public class ComponentConverter {
         }
       }
     }
-    // convert constraints
-    converter.setPrefix(prefix);
-    if (componentInstanceSymbol.getType().getTypeInfo().isPresentAstNode()) {
-      contextExpr.addAll(
-        componentInstanceSymbol.getType().getTypeInfo().getAstNode().getBody()
-          .getArcElementList().stream()
-          .filter(e -> e instanceof ASTArcConstraintDeclaration)
-          .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
-          .filter(Optional::isPresent)
-          .map(Optional::get)
-          .collect(Collectors.toList())
-      );
-    }
-    // convert subcomponents
-    for (ComponentInstanceSymbol instanceSymbol : componentInstanceSymbol.getType().getTypeInfo().getSubComponents()) {
-      prefixes.add(instanceSymbol.getName());
-      contextExpr.addAll(convert(instanceSymbol, prefixes));
-      prefixes.pop();
-    }
 
-
+    // convert component body
+    contextExpr.addAll(convert(componentInstanceSymbol.getType().getTypeInfo(), prefixes, visited));
     return contextExpr;
   }
 

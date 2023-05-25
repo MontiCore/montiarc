@@ -12,7 +12,7 @@ public class SingleASTVariantComponentTypeHandler implements ArcBasisHandler {
 
   protected ArcBasisTraverser traverser;
 
-  protected ASTComponentType startingComponent;
+  protected boolean isHandlingComponent;
 
   @Override
   public ArcBasisTraverser getTraverser() {
@@ -26,9 +26,10 @@ public class SingleASTVariantComponentTypeHandler implements ArcBasisHandler {
 
   @Override
   public void handle(ASTComponentType node) {
-    if (startingComponent == null || node == startingComponent) {
-      startingComponent = node;
+    if (!isHandlingComponent) {
+      isHandlingComponent = true;
       ArcBasisHandler.super.handle(node);
+      isHandlingComponent = false;
     }
   }
 }

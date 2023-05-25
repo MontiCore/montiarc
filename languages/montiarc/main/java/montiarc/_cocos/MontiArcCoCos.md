@@ -10,40 +10,40 @@ Legend:
 
 ## ArcBasis CoCos
 
-| in MA | CoCo(s)                             | Language | Code(s)                                                       | 
-|-------|-------------------------------------|----------|---------------------------------------------------------------|
-| ☑     | CircularInheritance                 | ArcBasis | 0xC1100                                                       |
-| ☑     | PortsConnected                      | ArcBasis | 0xC1103, 0xC1104                                              |
-| ☑     | PortUniqueSender                    | ArcBasis | 0xC1105                                                       |
-| ☑     | SubPortsConnected                   | ArcBasis | 0xC1106, 0xC1107                                              |
-| ☑     | ConnectorPortsExist                 | ArcBasis | 0xC1108, 0xC1109                                              |
-| ☑     | ConnectorTypesFit                   | ArcBasis | 0xC1110                                                       |
-| ☑     | ConnectorDirectionsFit              | ArcBasis | 0xC1111, 0xC1112                                              |
-| ☑     | ConnectorTimingsFit                 | ArcBasis | 0xC1113                                                       |
-| ☑     | OnlyOneTiming                       | ArcBasis | 0xC1114                                                       |
-| ☑     | AtomicMaxOneBehavior                | ArcBasis | 0xC1115                                                       |
-| ☑     | DelayOutPortOnly                    | ArcBasis | 0xC1116                                                       |
-| ☑     | FeedbackStrongCausality             | ArcBasis | 0xC1117                                                       |
-| ☑     | ConfigurationParameterAssignment    | ArcBasis | 0xC1119, 0xC1120, 0xC1121, 0xC1122, 0xC1123, 0xC1124, 0xC1125 |
-| ☑     | OptionalConfigurationParametersLast | ArcBasis | 0xC1126                                                       |
-| ☑     | NoSubcomponentReferenceCycle        | ArcBasis | 0xC1127                                                       |
-| ☑     | ParameterHeritage                   | ArcBasis | 0xC1128, 0xC1129, 0xC1130, 0xC1131                            |
-| ☑     | PortHeritageTypeFits                | ArcBasis | 0xC1132, 0xC1133, 0xC1134                                     |
-| ☑     | FieldInitOmitPortReferences         | ArcBasis | 0xC1135                                                       |
-| ☑     | FieldInitTypeFits                   | ArcBasis | 0xC1136, 0xC1137                                              |
-| ☑     | ParameterDefaultValueOmitsPortRef   | ArcBasis | 0xC1138                                                       |
-| ☑     | ParameterDefaultValueTypeFits       | ArcBasis | 0xC1139, 0xC1140                                              |
-| ☑     | ComponentArgumentsOmitPortRef       | ArcBasis | 0xC1141                                                       |
-| ☑     | ComponentNameCapitalization         | ArcBasis | 0xC1143                                                       |
-| ☑     | SubcomponentNameCapitalization      | ArcBasis | 0xC1144                                                       |
-| ☑     | PortNameCapitalization              | ArcBasis | 0xC1145                                                       |
-| ☑     | FieldNameCapitalization             | ArcBasis | 0xC1146                                                       |
-| ☑     | ParameterNameCapitalization         | ArcBasis | 0xC1147                                                       |
-| ☑     | UniqueIdentifierNames               | ArcBasis | 0xC1148                                                       |
-| ☒     | RestrictedIdentifier                | ArcBasis | 0xC1149                                                       |
-| ☑     | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158                   |
-| ☐     | ImportsAreUnique                    |          |                                                               |
-| ☐     | ImportsAreUsed                      |          |                                                               | 
+| in MA | VariantCoCo | CoCo(s)                             | Language | Code(s)                                                       | 
+|-------|-------------|-------------------------------------|----------|---------------------------------------------------------------|
+| ☑     | ☒           | CircularInheritance                 | ArcBasis | 0xC1100                                                       |
+| ☑     | ☑           | PortsConnected                      | ArcBasis | 0xC1103, 0xC1104                                              |
+| ☑     | ☑           | PortUniqueSender                    | ArcBasis | 0xC1105                                                       |
+| ☑     | ☑           | SubPortsConnected                   | ArcBasis | 0xC1106, 0xC1107                                              |
+| ☑     | ☑           | ConnectorPortsExist                 | ArcBasis | 0xC1108, 0xC1109                                              |
+| ☑     | ☑           | ConnectorTypesFit                   | ArcBasis | 0xC1110                                                       |
+| ☑     | ☑           | ConnectorDirectionsFit              | ArcBasis | 0xC1111, 0xC1112                                              |
+| ☑     | ☑           | ConnectorTimingsFit                 | ArcBasis | 0xC1113                                                       |
+| ☑     | ☒           | OnlyOneTiming                       | ArcBasis | 0xC1114                                                       |
+| ☑     | ☒           | AtomicMaxOneBehavior                | ArcBasis | 0xC1115                                                       |
+| ☑     | ☒           | DelayOutPortOnly                    | ArcBasis | 0xC1116                                                       |
+| ☑     | ☑           | FeedbackStrongCausality             | ArcBasis | 0xC1117                                                       |
+| ☑     | ☒           | ConfigurationParameterAssignment    | ArcBasis | 0xC1119, 0xC1120, 0xC1121, 0xC1122, 0xC1123, 0xC1124, 0xC1125 |
+| ☑     | ☒           | OptionalConfigurationParametersLast | ArcBasis | 0xC1126                                                       |
+| ☑     | ☒           | NoSubcomponentReferenceCycle        | ArcBasis | 0xC1127                                                       |
+| ☑     | ☒           | ParameterHeritage                   | ArcBasis | 0xC1128, 0xC1129, 0xC1130, 0xC1131                            |
+| ☑     | ☑           | PortHeritageTypeFits                | ArcBasis | 0xC1132, 0xC1133, 0xC1134                                     |
+| ☑     | ☒           | FieldInitOmitPortReferences         | ArcBasis | 0xC1135                                                       |
+| ☑     | ☒           | FieldInitTypeFits                   | ArcBasis | 0xC1136, 0xC1137                                              |
+| ☑     | ☒           | ParameterDefaultValueOmitsPortRef   | ArcBasis | 0xC1138                                                       |
+| ☑     | ☒           | ParameterDefaultValueTypeFits       | ArcBasis | 0xC1139, 0xC1140                                              |
+| ☑     | ☒           | ComponentArgumentsOmitPortRef       | ArcBasis | 0xC1141                                                       |
+| ☑     | ☒           | ComponentNameCapitalization         | ArcBasis | 0xC1143                                                       |
+| ☑     | ☒           | SubcomponentNameCapitalization      | ArcBasis | 0xC1144                                                       |
+| ☑     | ☒           | PortNameCapitalization              | ArcBasis | 0xC1145                                                       |
+| ☑     | ☒           | FieldNameCapitalization             | ArcBasis | 0xC1146                                                       |
+| ☑     | ☒           | ParameterNameCapitalization         | ArcBasis | 0xC1147                                                       |
+| ☑     | ☑           | UniqueIdentifierNames               | ArcBasis | 0xC1148                                                       |
+| ☒     | ☒           | RestrictedIdentifier                | ArcBasis | 0xC1149                                                       |
+| ☑     | ☒           | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158                   |
+| ☐     | ☒           | ImportsAreUnique                    |          |                                                               |
+| ☐     | ☒           | ImportsAreUsed                      |          |                                                               | 
 
 ## MontiArc CoCos
 

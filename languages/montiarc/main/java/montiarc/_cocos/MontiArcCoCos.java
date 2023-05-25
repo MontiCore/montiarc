@@ -60,7 +60,6 @@ import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfOmitFieldReferences;
 import variablearc._cocos.VarIfOmitPortReferences;
-import variablearc._cocos.VariantCoCos;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -83,22 +82,22 @@ public class MontiArcCoCos {
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
-    checker.addCoCo(new PortsConnected());
-    checker.addCoCo(new PortUniqueSender());
-    checker.addCoCo(new SubPortsConnected());
-    checker.addCoCo(new ConnectorPortsExist());
-    checker.addCoCo(new ConnectorTypesFit(tr));
-    checker.addCoCo(new ConnectorDirectionsFit());
-    checker.addCoCo(new ConnectorTimingsFit());
+    checker.addVariantCoCo(new PortsConnected());
+    checker.addVariantCoCo(new PortUniqueSender());
+    checker.addVariantCoCo(new SubPortsConnected());
+    checker.addVariantCoCo(new ConnectorPortsExist());
+    checker.addVariantCoCo(new ConnectorTypesFit(tr));
+    checker.addVariantCoCo(new ConnectorDirectionsFit());
+    checker.addVariantCoCo(new ConnectorTimingsFit());
     checker.addCoCo(new OnlyOneTiming());
     checker.addCoCo(new DelayOutPortOnly());
-    checker.addCoCo(new AtomicMaxOneBehavior());
-    checker.addCoCo(new FeedbackStrongCausality());
+    checker.addVariantCoCo(new AtomicMaxOneBehavior());
+    checker.addVariantCoCo(new FeedbackStrongCausality());
     checker.addCoCo(new ConfigurationParameterAssignment(tc, tr));
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
     checker.addCoCo(new ParameterHeritage(tc, tr));
-    checker.addCoCo(new PortHeritageTypeFits(tr));
+    checker.addVariantCoCo(new PortHeritageTypeFits(tr));
     checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldInitTypeFits(tc, tr));
     checker.addCoCo(new ParameterDefaultValueTypeFits(tc, tr));
@@ -109,7 +108,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
-    checker.addCoCo(new UniqueIdentifier());
+    checker.addVariantCoCo(new UniqueIdentifier());
 
     // GenericArc CoCos
     checker.addCoCo(new TypeParameterCapitalization());
@@ -123,7 +122,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences());
     checker.addCoCo(new VarIfIsBoolean(tc, tr));
-    checker.addCoCo(new VariantCoCos());
 
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates());
