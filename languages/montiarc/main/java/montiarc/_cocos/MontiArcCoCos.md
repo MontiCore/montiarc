@@ -61,25 +61,19 @@ Legend:
 
 # VariableArc CoCos
 
-| in MA | CoCo(s)                                 | Language    | Code                                        | Notes                                                      |
-|-------|-----------------------------------------|-------------|---------------------------------------------|------------------------------------------------------------|
-| ☑     | ConstraintNotSatisfied                  | VariableArc | 0xC1401                                     |                                                            |
-| ☑     | ConstraintsOmitPortReferences           | VariableArc | 0xC1408                                     |                                                            |
-| ☑     | ConstraintsOmitFieldReferences          | VariableArc | 0xC1415                                     |                                                            |
-| ☑     | ConstraintsSymbolsExists                | VariableArc | 0xC1414                                     |                                                            |
-| ☑     | ConstraintTypesCorrect                  | VariableArc | 0xC1400                                     |                                                            |
-| ☑     | ConstraintNoAssignmentExpr              | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
-| ☑     | FeatureConfigurationParameterAssignment | VariableArc | 0xC1408, 0xC1409, 0xC1410, 0xC1411          |                                                            |
-| ☑     | FeatureConfigurationParametersLast      | VariableArc | 0xC1406                                     |                                                            |
-| ☑     | FeatureNameCapitalization               | VariableArc | 0xC1402                                     |                                                            |
-| ☐     | FeaturesCorrectlyInherited              | VariableArc | 0xC1412                                     | Unused VariableArcError. Decided against this CoCo for now |
-| ☑     | FeatureUsage                            | VariableArc | 0xC1403                                     |                                                            |
-| ☑     | VarIfOmitPortReferences                 | VariableArc | 0xC1407                                     |                                                            |
-| ☑     | VarIfOmitFieldReferences                | VariableArc | 0xC1416                                     |                                                            |
-| ☑     | VarIfSymbolsExist                       | VariableArc | 0xC1414                                     |                                                            |
-| ☑     | VarIfTypesCorrect                       | VariableArc | 0xC1404                                     |                                                            |
-| ☑     | VariableElementsUsage                   | VariableArc | 0xC1405                                     |                                                            |
-| ☑     | VarIfNoAssignmentExpr                   | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
+| in MA | CoCo(s)                        | Language    | Code                                        | Notes                                                      |
+|-------|--------------------------------|-------------|---------------------------------------------|------------------------------------------------------------|
+| ☑     | ConstraintSatisfied4Comp       | VariableArc | 0xC1401                                     |                                                            |
+| ☑     | ConstraintsOmitPortReferences  | VariableArc | 0xC1408                                     |                                                            |
+| ☑     | ConstraintsOmitFieldReferences | VariableArc | 0xC1415                                     |                                                            |
+| ☑     | ConstraintIsBoolean            | VariableArc | 0xC1400                                     |                                                            |
+| ☑     | ConstraintNoAssignmentExpr     | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
+| ☑     | FeatureNameCapitalization      | VariableArc | 0xC1402                                     |                                                            |
+| ☑     | FeatureUsage                   | VariableArc | 0xC1403                                     |                                                            |
+| ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1407                                     |                                                            |
+| ☑     | VarIfOmitFieldReferences       | VariableArc | 0xC1416                                     |                                                            |
+| ☑     | VarIfIsBoolean                 | VariableArc | 0xC1404                                     |                                                            |
+| ☑     | VarIfNoAssignmentExpr          | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
 
 # Mode Automata
 

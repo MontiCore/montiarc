@@ -53,11 +53,14 @@ import genericarc._cocos.SubcomponentTypeBound;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcTypeCalculator;
 import variablearc._cocos.ConstraintIsBoolean;
+import variablearc._cocos.ConstraintNoAssignmentExpr;
+import variablearc._cocos.ConstraintSatisfied4Comp;
 import variablearc._cocos.ConstraintsOmitFieldReferences;
 import variablearc._cocos.ConstraintsOmitPortReferences;
 import variablearc._cocos.FeatureNameCapitalization;
 import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.VarIfIsBoolean;
+import variablearc._cocos.VarIfNoAssignmentExpr;
 import variablearc._cocos.VarIfOmitFieldReferences;
 import variablearc._cocos.VarIfOmitPortReferences;
 
@@ -114,11 +117,14 @@ public class MontiArcCoCos {
     checker.addCoCo(new TypeParameterCapitalization());
 
     // VariableArc
+    checker.addCoCo(new ConstraintNoAssignmentExpr());
     checker.addCoCo(new ConstraintsOmitFieldReferences());
     checker.addCoCo(new ConstraintsOmitPortReferences());
     checker.addCoCo(new ConstraintIsBoolean(tc, tr));
+    checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
+    checker.addCoCo(new VarIfNoAssignmentExpr());
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences());
     checker.addCoCo(new VarIfIsBoolean(tc, tr));

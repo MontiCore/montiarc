@@ -13,12 +13,6 @@ public enum VariableArcError implements Error {
   FEATURE_UPPER_CASE("0xC1402", "Feature names should start with a lower case letter"),
   FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1404", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  NAMED_ARGUMENTS_LAST("0xC1407", "Ordered arguments must be declared before named parameters, " +
-    "but parameter at position '%d' is preceded by the named argument at position '%d'"),
-  TOO_MANY_INSTANTIATION_FEATURE_ARGUMENTS("0xC1408", "Provided '%d' feature arguments but expected no more than '%d'"),
-  NAMED_ARGUMENT_NO_NAME_LEFT("0xC1409", "Expected a named parameter at argument position '%d'"),
-  NAMED_ARGUMENT_FEATURE_NOT_EXIST("0xC1410", "Cannot resolve feature symbol '%s'"),
-  NAMED_ARGUMENT_EXPRESSION_WRONG_TYPE("0xC1411", "Incompatible types: '%s' cannot be converted to 'boolean'"),
   PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1413", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
   PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1414", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
   FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Variables are an element of the runtime, cannot use field '%s' at design-time"),
