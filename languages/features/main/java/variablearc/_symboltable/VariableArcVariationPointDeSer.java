@@ -8,7 +8,7 @@ import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import variablearc._visitor.VariableArcTraverser;
-import variablearc.evaluation.Expression;
+import variablearc.evaluation.expressions.Expression;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -44,7 +44,6 @@ public class VariableArcVariationPointDeSer {
     p.member(JsonDeSers.KIND, getSerializedKind());
 
     p.member(JSON_CONDITION, this.print.apply(toSerialize.getCondition().getAstExpression()));
-    p.member(JSON_CONDITION_NEGATED, toSerialize.getCondition().isNegated());
 
     p.beginArray(JSON_SYMBOLS);
     for (ISymbol symbol : toSerialize.symbols) {
@@ -73,8 +72,7 @@ public class VariableArcVariationPointDeSer {
       variationPointJson.getBooleanMemberOpt(JSON_CONDITION_NEGATED).isPresent()) {
       try {
         variationPoint.condition = new Expression(
-          this.parse.apply(variationPointJson.getStringMemberOpt(JSON_CONDITION).get()).orElse(null),
-          variationPointJson.getBooleanMemberOpt(JSON_CONDITION_NEGATED).get());
+          this.parse.apply(variationPointJson.getStringMemberOpt(JSON_CONDITION).get()).orElse(null));
       } catch (IOException e) {
         e.printStackTrace();
       }

@@ -1,10 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variablearc.evaluation;
+package variablearc.evaluation.expressions;
 
 import com.google.common.base.Preconditions;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.util.Optional;
 
@@ -15,22 +18,16 @@ import java.util.Optional;
 public class Expression {
 
   protected final ASTExpression astExpression;
-  protected final boolean negated;
   protected final String prefix;
 
   public Expression(@NotNull ASTExpression astExpression) {
-    this(astExpression, false);
+    this(astExpression, null);
   }
 
-  public Expression(@NotNull ASTExpression astExpression, @NotNull boolean negated) {
-    this(astExpression, negated, null);
-  }
-
-  public Expression(@NotNull ASTExpression astExpression, @NotNull boolean negated, @Nullable String prefix) {
+  public Expression(@NotNull ASTExpression astExpression, @Nullable String prefix) {
     Preconditions.checkNotNull(astExpression);
 
     this.astExpression = astExpression;
-    this.negated = negated;
     this.prefix = prefix;
   }
 
@@ -42,16 +39,12 @@ public class Expression {
     return Optional.ofNullable(prefix);
   }
 
-  public boolean isNegated() {
-    return negated;
-  }
-
   /**
    * @param prefix The new value of prefix
    * @return A new expression object with an updated prefix
    */
   public Expression copyWithPrefix(@Nullable String prefix) {
-    return new Expression(astExpression, negated, prefix);
+    return new Expression(astExpression, prefix);
   }
 
   /**
@@ -62,5 +55,10 @@ public class Expression {
    */
   public Expression copyAddPrefix(@NotNull String prefix) {
     return copyWithPrefix(this.prefix != null ? prefix + "." + this.prefix : prefix);
+  }
+
+  public Optional<BoolExpr> convert(Context context, IDeriveSMTExpr converter) {
+    converter.setPrefix(getPrefix().orElse(""));
+    return converter.toBool(getAstExpression());
   }
 }

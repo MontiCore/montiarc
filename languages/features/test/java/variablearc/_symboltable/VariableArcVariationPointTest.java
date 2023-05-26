@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import variablearc.VariableArcAbstractTest;
-import variablearc.evaluation.Expression;
+import variablearc.evaluation.expressions.Expression;
 
 public class VariableArcVariationPointTest extends VariableArcAbstractTest {
 

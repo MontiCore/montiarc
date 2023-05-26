@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
+import variablearc.evaluation.expressions.Expression;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,9 +30,10 @@ public class ExpressionSet {
     this.negatedConjunctions = negatedConjunctions;
   }
 
-  public void add(ExpressionSet expressionSet) {
+  public ExpressionSet add(ExpressionSet expressionSet) {
     expressions.addAll(expressionSet.getExpressions());
     getNegatedConjunctions().addAll(expressionSet.getNegatedConjunctions());
+    return this;
   }
 
   public List<Expression> getExpressions() {
@@ -52,7 +55,7 @@ public class ExpressionSet {
         Collectors.toList())).collect(Collectors.toList()));
   }
 
-  public ExpressionSet copyWithAddPrefix(String prefix) {
+  public ExpressionSet copyAddPrefix(String prefix) {
     return new ExpressionSet(this.getExpressions().stream().map(e -> e.copyAddPrefix(prefix)).collect(
       Collectors.toList()),
       this.getNegatedConjunctions().stream().map(l -> l.stream().map(e -> e.copyAddPrefix(prefix)).collect(

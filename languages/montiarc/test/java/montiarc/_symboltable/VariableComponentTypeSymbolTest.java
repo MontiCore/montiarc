@@ -22,7 +22,7 @@ import org.mockito.Mockito;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
-import variablearc.evaluation.Expression;
+import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collections;

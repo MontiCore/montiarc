@@ -84,7 +84,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
       String name = ((ASTNameExpression) node.getExpression()).getName();
       Optional<ComponentInstanceSymbol> instanceSymbol =
         scope.resolveComponentInstanceMany(name).stream().findFirst();
-      if (instanceSymbol.isPresent() &&
+      if (instanceSymbol.isPresent() && instanceSymbol.get().isPresentType() &&
         !((IVariableArcScope) instanceSymbol.get().getType().getTypeInfo().getSpannedScope()).resolveArcFeatureMany(
           node.getName()).isEmpty()) {
         String prefix = this.deriveSMTExpr.getPrefix().isEmpty() ? "" : this.deriveSMTExpr.getPrefix() + ".";

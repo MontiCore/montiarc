@@ -7,12 +7,15 @@ import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.evaluation.ComponentConverter;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.VariationPointSolver;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +27,7 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
 
   protected List<VariableArcVariationPoint> variationPoints;
   protected List<VariantComponentTypeSymbol> variants;
+  protected ExpressionSet conditions;
 
   /**
    * @param name the name of this component type.
@@ -51,8 +55,22 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
     variants = new ArrayList<>();
     VariationPointSolver vpSolver = new VariationPointSolver(this);
 
-    // iterate over all possible variants of this component and expend with subcomponent variants
-    for (Set<VariableArcVariationPoint> variationPoints : vpSolver.getCombinations()) {
+    if (isPresentParent() && this.getParent().getTypeInfo() != null &&
+      this.getParent().getTypeInfo() instanceof VariableComponentTypeSymbol) {
+      for (VariantComponentTypeSymbol parentVariant : ((VariableComponentTypeSymbol) this.getParent()
+        .getTypeInfo()).getVariants()) {
+        calculateVariants(vpSolver, parentVariant);
+      }
+    } else {
+      calculateVariants(vpSolver, null);
+    }
+
+    vpSolver.close();
+  }
+
+  protected void calculateVariants(VariationPointSolver vpSolver, VariantComponentTypeSymbol parentVariant) {
+    // iterate over all possible variants of this component and expand with subcomponent variants
+    for (Set<VariableArcVariationPoint> variationPoints : vpSolver.getCombinations(parentVariant)) {
       HashMap<ComponentInstanceSymbol, List<VariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
       // filter out subcomponents not included in this variant
       List<ComponentInstanceSymbol> subcomponents =
@@ -64,24 +82,24 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
 
       if (subcomponents.isEmpty()) {
         variants.add(new VariantComponentTypeSymbol(this, variationPoints,
-          vpSolver.getConditionsForVariationPoints(this, variationPoints)));
+          vpSolver.getConditionsForVariationPoints(variationPoints),
+          parentVariant == null ? null : getParent().deepClone(parentVariant)));
       } else {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
         for (ComponentInstanceSymbol instance : subcomponents) {
           VariableComponentTypeSymbol typeSymbol = (VariableComponentTypeSymbol) instance.getType().getTypeInfo();
           subComponentVariants.put(instance, vpSolver.getSubComponentVariants(typeSymbol,
-            instance.getName(), variationPoints));
-
+            instance.getName(), variationPoints, parentVariant));
         }
 
         // Expand variants by possible subcomponent variants
         expandCombinations(subComponentVariants).forEach(
-          e -> variants.add(new VariantComponentTypeSymbol(this, variationPoints, vpSolver.getConditionsForVariationPoints(this, variationPoints), e))
+          e -> variants.add(new VariantComponentTypeSymbol(this, variationPoints,
+            vpSolver.getConditionsForVariationPoints(variationPoints),
+            parentVariant == null ? null : getParent().deepClone(parentVariant), e))
         );
       }
     }
-
-    vpSolver.close();
   }
 
   /**
@@ -137,6 +155,27 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
     variationPoints.add(variationPoint);
   }
 
+  /**
+   * @return All conditions (i.e. constraints) that need to hold
+   */
+  public ExpressionSet getConditions() {
+    if (conditions == null) {
+      return getConditions(new HashSet<>());
+    }
+    return conditions;
+  }
+
+  public ExpressionSet getConditions(Collection<ComponentTypeSymbol> visited) {
+    if (conditions == null) {
+      conditions = new ComponentConverter().convert(this, visited);
+      if (isPresentParent() && this.getParent().getTypeInfo() != null &&
+        this.getParent().getTypeInfo() instanceof VariableComponentTypeSymbol) {
+        conditions.add(((VariableComponentTypeSymbol) this.getParent().getTypeInfo()).getConditions(visited));
+      }
+    }
+    return conditions;
+  }
+
   public List<VariableArcVariationPoint> getAllVariationPoints() {
     return variationPoints;
   }
@@ -149,7 +188,7 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
    */
   public boolean isRootSymbol(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
-    return getAllVariationPoints().stream().noneMatch(vp -> vp.containsSymbol(symbol));
+    return getAllVariationPoints().stream().noneMatch(vp -> vp.containsSymbol(symbol)) && (!isPresentParent() || ((VariableComponentTypeSymbol) getParent().getTypeInfo()).isRootSymbol(symbol));
   }
 
   /**

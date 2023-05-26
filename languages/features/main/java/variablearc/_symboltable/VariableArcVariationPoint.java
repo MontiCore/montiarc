@@ -6,7 +6,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc.evaluation.Expression;
+import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collections;

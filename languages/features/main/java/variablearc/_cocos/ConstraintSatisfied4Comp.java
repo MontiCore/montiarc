@@ -7,6 +7,7 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
@@ -19,9 +20,10 @@ public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
+    if (!(node.getSymbol() instanceof VariableComponentTypeSymbol)) return;
 
-    ExpressionSolver solver = new ExpressionSolver(node.getSymbol());
-    Optional<Boolean> eval = solver.solve(new ExpressionSet(Collections.emptyList()));
+    ExpressionSolver solver = new ExpressionSolver();
+    Optional<Boolean> eval = solver.solve(((VariableComponentTypeSymbol) node.getSymbol()).getConditions());
     solver.close();
     if (eval.isPresent()) {
       if (!eval.get()) {

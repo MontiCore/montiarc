@@ -9,7 +9,8 @@ import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._ast.ASTArcVarIf;
-import variablearc.evaluation.Expression;
+import variablearc.evaluation.expressions.Expression;
+import variablearc.evaluation.expressions.NegatedExpression;
 
 import java.util.Optional;
 import java.util.Stack;
@@ -74,7 +75,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
 
     if (node.isPresentOtherwise()) {
       putOnStack(new VariableArcVariationPoint(
-        new Expression(node.getCondition(), true),
+        new NegatedExpression(node.getCondition()),
         this.getCurrentVariationPoint().orElse(null))
       );
       node.getOtherwise().accept(this.getTraverser());

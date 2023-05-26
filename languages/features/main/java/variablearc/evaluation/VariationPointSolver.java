@@ -9,6 +9,7 @@ import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc.evaluation.expressions.Expression;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,7 +28,7 @@ public class VariationPointSolver {
     Preconditions.checkNotNull(origin);
 
     this.origin = origin;
-    this.expressionSolver = new ExpressionSolver(origin);
+    this.expressionSolver = new ExpressionSolver();
   }
 
   /**
@@ -35,14 +36,17 @@ public class VariationPointSolver {
    *
    * @return Set of immutable sets of variation points
    */
-  public Set<Set<VariableArcVariationPoint>> getCombinations() {
+  public Set<Set<VariableArcVariationPoint>> getCombinations(@Nullable VariantComponentTypeSymbol parentVariant) {
 
     Set<Set<VariableArcVariationPoint>> res =
       new HashSet<>(Sets.powerSet(ImmutableSet.copyOf(origin.getAllVariationPoints())));
     res.removeIf(
-      includedVPs -> !expressionSolver.solve(getConditionsForVariationPoints(origin, includedVPs,
-          expressionSolver.defaultPrefix))
-        .orElse(INCLUDE_INCONVERTIBLE_VARIATIONS));
+      includedVPs -> {
+        ExpressionSet expressions = getConditionsForVariationPoints(includedVPs);
+        expressions.add(origin.getConditions());
+        if (parentVariant != null) expressions.add(parentVariant.getConditions());
+        return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
+      });
     return res;
   }
 
@@ -57,7 +61,8 @@ public class VariationPointSolver {
    */
   public List<VariantComponentTypeSymbol> getSubComponentVariants(@NotNull VariableComponentTypeSymbol type,
                                                                   @NotNull String prefix,
-                                                                  @NotNull Set<VariableArcVariationPoint> originConfiguration) {
+                                                                  @NotNull Set<VariableArcVariationPoint> originConfiguration,
+                                                                  @Nullable VariantComponentTypeSymbol originParentVariant) {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(originConfiguration);
@@ -66,8 +71,10 @@ public class VariationPointSolver {
       new ArrayList<>(type.getVariants());
     res.removeIf(
       variant -> {
-        ExpressionSet expressions = variant.getConditions().copyWithAddPrefix(prefix);
-        expressions.add(getConditionsForVariationPoints(origin, originConfiguration, null));
+        ExpressionSet expressions = variant.getConditions().copyAddPrefix(prefix);
+        expressions.add(getConditionsForVariationPoints(originConfiguration));
+        expressions.add(origin.getConditions());
+        if (originParentVariant != null) expressions.add(originParentVariant.getConditions());
         return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
       });
     return res;
@@ -77,52 +84,30 @@ public class VariationPointSolver {
    * Get all AST Expressions that have to hold for a specific variant.
    * This includes the included variation point conditions as well as the negated excluded variations points.
    *
-   * @param type        The type of the component
    * @param includedVPs The selected variationPoints
    * @return The expression set that has to hold for only includedVP to be active
    */
-  public ExpressionSet getConditionsForVariationPoints(@NotNull VariableComponentTypeSymbol type,
-                                                       @NotNull Collection<VariableArcVariationPoint> includedVPs) {
-    return getConditionsForVariationPoints(type, includedVPs, null);
-  }
-
-  /**
-   * Get all AST Expressions that have to hold for a specific variant.
-   * This includes the included variation point conditions as well as the negated excluded variations points.
-   *
-   * @param type        The type of the component
-   * @param includedVPs The selected variationPoints
-   * @return The expression set that has to hold for only includedVP to be active
-   */
-  public ExpressionSet getConditionsForVariationPoints(@NotNull VariableComponentTypeSymbol type,
-                                                       @NotNull Collection<VariableArcVariationPoint> includedVPs,
-                                                       @Nullable String prefix) {
-    Preconditions.checkNotNull(type);
+  public ExpressionSet getConditionsForVariationPoints(@NotNull Collection<VariableArcVariationPoint> includedVPs) {
     Preconditions.checkNotNull(includedVPs);
 
-    Set<VariableArcVariationPoint> excludedVPs = new HashSet<>(type.getAllVariationPoints());
+    Set<VariableArcVariationPoint> excludedVPs = new HashSet<>(origin.getAllVariationPoints());
     excludedVPs.removeAll(includedVPs);
-    return new ExpressionSet(getConditionsCombined(includedVPs, prefix), getConditions(excludedVPs, prefix));
+    return new ExpressionSet(getConditionsCombined(includedVPs), getConditions(excludedVPs));
   }
 
 
-  protected List<Expression> getConditionsCombined(@NotNull Collection<VariableArcVariationPoint> variationPoints,
-                                                   @Nullable String prefix) {
+  protected List<Expression> getConditionsCombined(@NotNull Collection<VariableArcVariationPoint> variationPoints) {
     return variationPoints
       .stream()
-      .flatMap(vp -> vp.getAllConditions().stream()).map(e -> e.copyWithPrefix(prefix))
+      .flatMap(vp -> vp.getAllConditions().stream())
       .collect(Collectors.toList());
   }
 
-  protected List<List<Expression>> getConditions(@NotNull Collection<VariableArcVariationPoint> variationPoints,
-                                                 @Nullable String prefix) {
+  protected List<List<Expression>> getConditions(@NotNull Collection<VariableArcVariationPoint> variationPoints) {
     return variationPoints
       .stream()
       .map(vp ->
-        vp.getAllConditions()
-          .stream()
-          .map(e -> e.copyWithPrefix(prefix))
-          .collect(Collectors.toList())
+        new ArrayList<>(vp.getAllConditions())
       )
       .collect(Collectors.toList());
   }

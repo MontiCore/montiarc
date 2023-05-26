@@ -25,7 +25,7 @@ import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
-import variablearc.evaluation.Expression;
+import variablearc.evaluation.expressions.Expression;
 import variablearc.evaluation.VariationPointSolver;
 
 import java.util.Collections;
@@ -154,7 +154,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     VariationPointSolver variationPointSolver = new VariationPointSolver(typeSymbol.get());
 
     // When
-    Set<Set<VariableArcVariationPoint>> actual = variationPointSolver.getCombinations();
+    Set<Set<VariableArcVariationPoint>> actual = variationPointSolver.getCombinations(null);
     variationPointSolver.close();
 
     // Then
@@ -246,7 +246,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     Set<Set<VariableArcVariationPoint>> actual =
       variationPointSolver.getSubComponentVariants(
         (VariableComponentTypeSymbol) originSymbol.getSubComponent(childComponentName).get().getType().getTypeInfo(),
-        childComponentName, new HashSet<>(originSymbol.getAllVariationPoints())).stream().map(
+        childComponentName, new HashSet<>(originSymbol.getAllVariationPoints()), null).stream().map(
         VariantComponentTypeSymbol::getIncludedVariationPoints).collect(Collectors.toSet());
     variationPointSolver.close();
 

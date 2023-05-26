@@ -5,23 +5,17 @@ import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Expr;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc.check.VariableArcTypeCalculator;
-import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
+import variablearc._symboltable.VariableComponentTypeSymbol;
+import variablearc.evaluation.expressions.AssignmentExpression;
+import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 import java.util.stream.Collectors;
 
 /**
@@ -33,89 +27,57 @@ import java.util.stream.Collectors;
  */
 public class ComponentConverter {
 
-  final Context context;
-
-  public ComponentConverter(Context context) {
-    this.context = context;
-  }
-
-  public List<BoolExpr> convert(@NotNull ComponentTypeSymbol componentTypeSymbol) {
+  public ExpressionSet convert(@NotNull ComponentTypeSymbol componentTypeSymbol, @NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(componentTypeSymbol);
-
-    return convert(componentTypeSymbol, new Stack<>(), new HashSet<>());
-  }
-
-  protected List<BoolExpr> convert(@NotNull ComponentTypeSymbol componentTypeSymbol, @NotNull Stack<String> prefixes, @NotNull Collection<ComponentTypeSymbol> visited) {
-    Preconditions.checkNotNull(componentTypeSymbol);
-    Preconditions.checkNotNull(prefixes);
     Preconditions.checkNotNull(visited);
     visited.add(componentTypeSymbol);
 
-    IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
-    converter.setPrefix(listToString(prefixes));
-
     // convert constraints
-    ArrayList<BoolExpr> contextExpr = new ArrayList<>();
+    ArrayList<Expression> expressions = new ArrayList<>();
     if (componentTypeSymbol.isPresentAstNode()) {
-      contextExpr = componentTypeSymbol.getAstNode().getBody()
+      expressions = componentTypeSymbol.getAstNode().getBody()
         .getArcElementList().stream()
         .filter(e -> e instanceof ASTArcConstraintDeclaration)
-        .map(e -> converter.toBool(((ASTArcConstraintDeclaration) e).getExpression()))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
+        .map(e -> ((ASTArcConstraintDeclaration) e).getExpression())
+        .map(Expression::new)
         .collect(Collectors.toCollection(ArrayList::new));
     }
+
+    ExpressionSet expressionSet = new ExpressionSet(expressions);
 
     // convert subcomponents
     for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getSubComponents()) {
       if (instanceSymbol.isPresentType() && !visited.contains(instanceSymbol.getType().getTypeInfo())) {
-        prefixes.add(instanceSymbol.getName());
-        contextExpr.addAll(convert(instanceSymbol, prefixes, visited));
-        prefixes.pop();
+        expressionSet.add(convert(instanceSymbol, instanceSymbol.getName(), visited));
       }
     }
 
-    return contextExpr;
+    return expressionSet;
   }
 
-  protected List<BoolExpr> convert(@NotNull ComponentInstanceSymbol componentInstanceSymbol, Stack<String> prefixes, @NotNull Collection<ComponentTypeSymbol> visited) {
+  protected ExpressionSet convert(@NotNull ComponentInstanceSymbol componentInstanceSymbol, @NotNull String prefix, @NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(componentInstanceSymbol);
     Preconditions.checkArgument(componentInstanceSymbol.isPresentType());
-    Preconditions.checkNotNull(prefixes);
+    Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(visited);
 
-    IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
-    ArrayList<BoolExpr> contextExpr = new ArrayList<>();
-    final String prefix = listToString(prefixes);
+    ArrayList<Expression> expressions = new ArrayList<>();
 
     if (componentInstanceSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
-      // Convert features & parameters
-      String parentPrefix = prefixes.size() > 1 ? listToString(prefixes.subList(0, prefixes.size() - 1)) : "";
-      converter.setPrefix(parentPrefix);
-
       // Convert parameters
       for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getSpannedScope()
         .getLocalVariableSymbols()) {
         Optional<ASTArcArgument> bindingExpression = componentInstanceSymbol.getType().getParamBindingFor(variable);
-        Optional<Expr<?>> bindingSolverExpression =
-          bindingExpression.map(ASTArcArgument::getExpression).flatMap(converter::toExpr);
 
-        Optional<Expr<?>> nameExpression =
-          (new VariableArcDeriveSMTSort(new VariableArcTypeCalculator())).toSort(context, variable.getType())
-            .map(s -> context.mkConst(prefix + "." + variable.getName(), s));
-        if (bindingExpression.isPresent() && bindingSolverExpression.isPresent() &&
-          nameExpression.isPresent()) {
-          contextExpr.add(context.mkEq(nameExpression.get(), bindingSolverExpression.get()));
-        }
+        bindingExpression.ifPresent(
+          astArcArgument -> expressions.add(new AssignmentExpression(astArcArgument.getExpression(), variable, prefix)));
       }
     }
+    // add constraints
+    ExpressionSet expressionSet = new ExpressionSet(expressions);
+    expressionSet.add(((VariableComponentTypeSymbol) componentInstanceSymbol.getType().getTypeInfo()).getConditions(visited)
+      .copyAddPrefix(prefix));
 
-    // convert component body
-    contextExpr.addAll(convert(componentInstanceSymbol.getType().getTypeInfo(), prefixes, visited));
-    return contextExpr;
-  }
-
-  protected String listToString(List<String> list) {
-    return list.stream().reduce((a, b) -> a + "." + b).orElse("");
+    return expressionSet;
   }
 }

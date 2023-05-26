@@ -470,7 +470,24 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "a.b.P<A, B> sub; " +
       "sub.o -> o; " +
       "constraint(sub.ff == f); " +
-      "}"
+      "}",
+    // in port forward with inherited port
+    "component Comp48 extends a.b.M { " +
+      "varif (ff) { " +
+      "a.b.A sub;" +
+      "i -> sub.i;" +
+      "} " +
+      "}",
+    // inherited port that switches direction
+    "component Comp49 extends a.b.D { " +
+      "varif (ff) { " +
+      "a.b.A sub;" +
+      "io -> sub.i;" +
+      "} else { " +
+      "a.b.B sub;" +
+      "sub.o -> io;" +
+      "} " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -1143,7 +1160,23 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "sub.o -> o; " +
           "constraint(!sub.ff); " +
           "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH)
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // in port forward with inherited port
+      arg(
+        "component Comp65 extends a.b.M { " +
+          "a.b.A sub;" +
+          "i -> sub.i;" +
+          "}",
+        ArcError.MISSING_PORT
+      ),
+      // inherited port that switches direction
+      arg(
+        "component Comp66 extends a.b.D { " +
+          "a.b.A sub;" +
+          "io -> sub.i;" +
+          "}",
+        ArcError.SOURCE_DIRECTION_MISMATCH
+      )
     );
   }
 }

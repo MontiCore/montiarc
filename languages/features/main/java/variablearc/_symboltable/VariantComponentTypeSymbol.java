@@ -1,16 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.PortSymbol;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._ast.ASTVariantComponentType;
 import variablearc.evaluation.ExpressionSet;
 
@@ -22,18 +23,17 @@ import java.util.stream.Collectors;
  */
 public class VariantComponentTypeSymbol extends VariableComponentTypeSymbol {
 
-  protected VariableComponentTypeSymbol parent;
+  protected VariableComponentTypeSymbol typeSymbol;
   protected Set<VariableArcVariationPoint> includedVariationPoints;
   protected Map<ComponentInstanceSymbol, VariantComponentInstanceSymbol> subcomponentMap;
 
   protected Map<PortSymbol, VariantPortSymbol> portSymbolMap;
 
-  protected ExpressionSet conditions;
-
   protected VariantComponentTypeSymbol(@NotNull VariableComponentTypeSymbol type,
                                        @NotNull Set<VariableArcVariationPoint> variationPoints,
-                                       @NotNull ExpressionSet conditions) {
-    this(type, variationPoints, conditions, Collections.emptyMap());
+                                       @NotNull ExpressionSet conditions,
+                                       @Nullable CompTypeExpression parent) {
+    this(type, variationPoints, conditions, parent, Collections.emptyMap());
   }
 
   /**
@@ -46,24 +46,26 @@ public class VariantComponentTypeSymbol extends VariableComponentTypeSymbol {
   protected VariantComponentTypeSymbol(@NotNull VariableComponentTypeSymbol type,
                                        @NotNull Set<VariableArcVariationPoint> variationPoints,
                                        @NotNull ExpressionSet conditions,
+                                       @Nullable CompTypeExpression parent,
                                        @NotNull Map<ComponentInstanceSymbol, VariantComponentInstanceSymbol> subcomponentMap) {
     super(type.getName());
 
-    parent = type;
+    typeSymbol = type;
     includedVariationPoints = variationPoints;
     this.setAstNodeAbsent();
-    this.conditions = conditions;
+    this.conditions = conditions.add(type.getConditions());
+    this.parent = Optional.ofNullable(parent);
     this.subcomponentMap = subcomponentMap;
     for (VariantComponentInstanceSymbol instanceSymbol : subcomponentMap.values()) {
       // Adds the required conditions of subcomponents to this component
       conditions.add(((VariantComponentTypeSymbol) instanceSymbol.getType().getTypeInfo()).getConditions()
-        .copyWithAddPrefix(instanceSymbol.getName()));
+        .copyAddPrefix(instanceSymbol.getName()));
     }
     portSymbolMap = new HashMap<>();
 
-    if (parent.isPresentAstNode()) {
+    if (typeSymbol.isPresentAstNode()) {
       // Shadow the AST structure
-      this.setAstNode(new ASTVariantComponentType(parent.getAstNode(), this));
+      this.setAstNode(new ASTVariantComponentType(typeSymbol.getAstNode(), this));
     } else {
       this.setAstNodeAbsent();
     }
@@ -72,12 +74,15 @@ public class VariantComponentTypeSymbol extends VariableComponentTypeSymbol {
   /**
    * @return All conditions that need to hold for this variant to be selected (including subcomponent conditions)
    */
+  @Override
   public ExpressionSet getConditions() {
     return conditions;
   }
 
   public boolean containsSymbol(@NotNull ISymbol symbol) {
-    return variationPointsContainSymbol(includedVariationPoints, symbol);
+    return variationPointsContainSymbol(includedVariationPoints, symbol) ||
+      isPresentParent() && ((VariantComponentTypeSymbol) getParent().getTypeInfo()).containsSymbol(symbol) &&
+        !((VariantComponentTypeSymbol) getParent().getTypeInfo()).isRootSymbol(symbol);
   }
 
   public Set<VariableArcVariationPoint> getIncludedVariationPoints() {
@@ -86,28 +91,28 @@ public class VariantComponentTypeSymbol extends VariableComponentTypeSymbol {
 
   @Override
   public List<VariableArcVariationPoint> getAllVariationPoints() {
-    return parent.getAllVariationPoints();
+    return typeSymbol.getAllVariationPoints();
   }
 
   @Override
   public List<VariantComponentTypeSymbol> getVariants() {
-    return parent.getVariants();
+    return typeSymbol.getVariants();
   }
 
   @Override
   public List<VariableSymbol> getFields() {
-    return parent.getFields().stream().filter(this::containsSymbol).collect(Collectors.toList());
+    return typeSymbol.getFields().stream().filter(this::containsSymbol).collect(Collectors.toList());
   }
 
   @Override
   public List<PortSymbol> getAllPorts() {
-    return parent.getAllPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
+    return typeSymbol.getAllPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
   @Override
   public List<PortSymbol> getPorts() {
-    return parent.getPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
+    return typeSymbol.getPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
@@ -128,12 +133,12 @@ public class VariantComponentTypeSymbol extends VariableComponentTypeSymbol {
 
   @Override
   public List<TypeVarSymbol> getTypeParameters() {
-    return parent.getTypeParameters();
+    return typeSymbol.getTypeParameters();
   }
 
   @Override
   public List<ComponentInstanceSymbol> getSubComponents() {
-    return parent.getSubComponents().stream()
+    return typeSymbol.getSubComponents().stream()
       .filter(this::containsSymbol)
       .map(e -> Optional.ofNullable((ComponentInstanceSymbol) subcomponentMap.get(e)).orElse(e))
       .collect(Collectors.toList());
@@ -141,16 +146,16 @@ public class VariantComponentTypeSymbol extends VariableComponentTypeSymbol {
 
   @Override
   public IArcBasisScope getSpannedScope() {
-    return parent.getSpannedScope();
+    return typeSymbol.getSpannedScope();
   }
 
   @Override
   public IArcBasisScope getEnclosingScope() {
-    return parent.getEnclosingScope();
+    return typeSymbol.getEnclosingScope();
   }
 
   @Override
   public SourcePosition getSourcePosition() {
-    return parent.getSourcePosition();
+    return typeSymbol.getSourcePosition();
   }
 }

@@ -2,7 +2,10 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
+import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -10,6 +13,8 @@ import montiarc.util.Error;
 import montiarc.util.VariableArcError;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,6 +28,34 @@ import java.util.stream.Stream;
  * The class under test is {@link ConstraintSatisfied4Comp}.
  */
 public class ConstraintEvaluationTest extends MontiArcAbstractTest {
+
+  @BeforeAll
+  public static void init() {
+    LogStub.init();
+    Log.enableFailQuick(false);
+    MontiArcMill.reset();
+    MontiArcMill.init();
+    BasicSymbolsMill.initializePrimitives();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    setUpComponents();
+  }
+
+  @Override
+  public void setUp() {
+  }
+
+  @AfterEach
+  public void tearDown() {
+    Log.clearFindings();
+  }
+
+  protected static void setUpComponents() {
+    compile("package a.b; component A { feature ff; constraint(ff); }");
+    compile("package a.b; component B extends a.b.A { }");
+    compile("package a.b; component C { feature ff; a.b.B b; constraint(ff == b.ff); }");
+    compile("package a.b; component D extends a.b.C { }");
+  }
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -59,7 +92,13 @@ public class ConstraintEvaluationTest extends MontiArcAbstractTest {
       "Inner2 sub(p); " +
       "} " +
       "Inner1 sub(true); " +
-      "}"
+      "}",
+    // inherited constraint satisfiable
+    "component Comp8 extends a.b.A { }",
+    // implicit inherited constraint in instance satisfiable
+    "component Comp8 extends a.b.A { " +
+      "a.b.D d;" +
+      "} "
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -111,21 +150,21 @@ public class ConstraintEvaluationTest extends MontiArcAbstractTest {
         VariableArcError.CONSTRAINT_NOT_SATISFIED),
       // feature constraint of instance unsatisfied
       arg("component Comp4 { " +
-        "component Inner { " +
-        "feature f; " +
-        "constraint(f); " +
-        "} " +
-        "Inner sub; " +
-        "constraint(!sub.f); " +
-        "}",
-      VariableArcError.CONSTRAINT_NOT_SATISFIED),
+          "component Inner { " +
+          "feature f; " +
+          "constraint(f); " +
+          "} " +
+          "Inner sub; " +
+          "constraint(!sub.f); " +
+          "}",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
       // parameter constraint of instance unsatisfied
       arg("component Comp5 { " +
-        "component Inner(boolean p) { " +
-        "constraint(p); " +
-        "} " +
-        "Inner sub(false); " +
-        "}",
+          "component Inner(boolean p) { " +
+          "constraint(p); " +
+          "} " +
+          "Inner sub(false); " +
+          "}",
         VariableArcError.CONSTRAINT_NOT_SATISFIED),
       // parameter constraint of instance unsatisfied
       arg("component Comp6 { " +
@@ -143,6 +182,23 @@ public class ConstraintEvaluationTest extends MontiArcAbstractTest {
         VariableArcError.CONSTRAINT_NOT_SATISFIED),
       // tautology and unsatisfiable constraint
       arg("component Comp8 { constraint(true); constraint (false); }",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // inherited constraint contradiction
+      arg("component Comp9 extends a.b.A { " +
+          "constraint(!ff); " +
+          "}",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // inherited constraint of instance
+      arg("component Comp10 { " +
+          "a.b.B b; " +
+          "constraint(!b.ff); " +
+          "}",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // implicit inherited constraint in instance
+      arg("component Comp11 { " +
+          "a.b.D d; " +
+          "constraint(!d.ff); " +
+          "}",
         VariableArcError.CONSTRAINT_NOT_SATISFIED)
     );
   }

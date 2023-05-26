@@ -10,6 +10,8 @@ import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.BoolSort;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.IntSort;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -24,6 +26,7 @@ import variablearc._symboltable.VariableArcScopesGenitorP2;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 
 import static org.mockito.ArgumentMatchers.eq;
@@ -34,18 +37,6 @@ import static org.mockito.Mockito.when;
  */
 public class ComponentConverterTest extends VariableArcAbstractTest {
 
-  protected static Context createContext() {
-    Context context = Mockito.mock(Context.class);
-    BoolSort boolSort = Mockito.mock(BoolSort.class);
-    when(context.getBoolSort()).thenReturn(boolSort);
-    when(context.getIntSort()).thenReturn(Mockito.mock(IntSort.class));
-    BoolExpr trueExpr = Mockito.mock(BoolExpr.class);
-    when(context.mkTrue()).thenReturn(trueExpr);
-    when(context.mkBool(true)).thenReturn(trueExpr);
-    when(context.mkConst(eq("comp1.a"), eq(boolSort))).thenReturn(Mockito.mock(BoolExpr.class));
-    return context;
-  }
-
   protected static ComponentInstanceSymbol createInstance(String name, ComponentTypeSymbol component) {
     CompTypeExpression typeExpression = new TypeExprOfComponent(component);
     return VariableArcMill.componentInstanceSymbolBuilder().setName(name).setType(typeExpression).build();
@@ -54,9 +45,7 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
   protected static ComponentTypeSymbol createComponentTypeSymbolWithVariableConstraint(String varName,
                                                                                        List<ComponentInstanceSymbol> instanceSymbols) {
     ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
-    ASTNameExpression expression = VariableArcMill.nameExpressionBuilder()
-      .setName(varName)
-      .build();
+    ASTNameExpression expression = getNameExpression(varName);
     Mockito.when(astComponentType.getBody())
       .thenReturn(VariableArcMill.componentBodyBuilder().setArcElementsList(
         List.of(
@@ -85,10 +74,7 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     Mockito.when(astComponentType.getBody())
       .thenReturn(VariableArcMill.componentBodyBuilder().setArcElementsList(
         List.of(
-          VariableArcMill.arcConstraintDeclarationBuilder().setExpression(VariableArcMill.literalExpressionBuilder()
-              .setLiteral(VariableArcMill.booleanLiteralBuilder()
-                .setSource(ASTConstantsMCCommonLiterals.TRUE).build()).build())
-            .build()
+          VariableArcMill.arcConstraintDeclarationBuilder().setExpression(getTrueExpression()).build()
         )).build());
 
     IVariableArcScope scope = VariableArcMill.scope();
@@ -103,48 +89,46 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
       .build();
   }
 
-  @Test
-  public void createConverter() {
-    // Given
-    Context context = createContext();
+  protected static ASTLiteralExpression getTrueExpression() {
+    return VariableArcMill.literalExpressionBuilder()
+      .setLiteral(VariableArcMill.booleanLiteralBuilder()
+        .setSource(ASTConstantsMCCommonLiterals.TRUE).build()).build();
+  }
 
-    // When
-    InternalComponentConverter converter = new InternalComponentConverter(context);
-
-    // Then
-    Assertions.assertEquals(context, converter.getContext());
+  protected static ASTNameExpression getNameExpression(String name) {
+    return VariableArcMill.nameExpressionBuilder()
+      .setName(name)
+      .build();
   }
 
   @Test
   public void convertComponent() {
     // Given
-    Context context = createContext();
-    InternalComponentConverter converter = new InternalComponentConverter(context);
+    ComponentConverter converter = new ComponentConverter();
     ComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.emptyList());
-    Stack<String> stack = new Stack<>();
     HashSet<ComponentTypeSymbol> visited = new HashSet<>();
 
     // When
-    List<BoolExpr> exprs = converter.convert(component, stack, visited);
+    ExpressionSet exprs = converter.convert(component, visited);
 
     // Then
-    Assertions.assertTrue(stack.isEmpty());
+    Assertions.assertEquals(1, exprs.getExpressions().size());
     Assertions.assertIterableEquals(List.of(component), visited);
-    Assertions.assertIterableEquals(List.of(context.mkTrue()), exprs);
+    Assertions.assertIterableEquals(Collections.emptyList(), exprs.getNegatedConjunctions());
+    Assertions.assertEquals(Optional.empty(), exprs.getExpressions().get(0).getPrefix());
+    Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(0).getAstExpression()));
   }
 
   @Test
   public void convertComponentWithSubcomponent() {
     // Given
-    Context context = createContext();
-    InternalComponentConverter converter = new InternalComponentConverter(context);
+    ComponentConverter converter = new ComponentConverter();
 
     ComponentInstanceSymbol subcomponent = createInstance("comp1", createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()));
 
     ComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.singletonList(
       subcomponent
     ));
-    Stack<String> stack = new Stack<>();
     HashSet<ComponentTypeSymbol> visited = new HashSet<>();
 
     VariableArcScopesGenitorP2 scopesGenP2 = new VariableArcScopesGenitorP2();
@@ -153,45 +137,19 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     }
 
     // When
-    List<BoolExpr> exprs = converter.convert(component, stack, visited);
+    ExpressionSet exprs = converter.convert(component, visited);
 
     // Then
-    Assertions.assertTrue(stack.isEmpty());
+    Assertions.assertEquals(2, exprs.getExpressions().size());
+    Assertions.assertIterableEquals(Collections.emptyList(), exprs.getNegatedConjunctions());
     Assertions.assertEquals(2, visited.size());
     Assertions.assertTrue(visited.contains(component));
     Assertions.assertTrue(visited.contains(subcomponent.getType().getTypeInfo()));
-    Assertions.assertIterableEquals(List.of(context.mkTrue(), context.mkConst("comp1.a", context.getBoolSort())), exprs);
-  }
-
-  @Test
-  public void listToString() {
-    // Given
-    InternalComponentConverter converter = new InternalComponentConverter(createContext());
-
-    // When
-    String res1 = converter.listToString(List.of());
-    String res2 = converter.listToString(List.of("A"));
-    String res3 = converter.listToString(List.of("A", "b", "CD"));
-
-    // Then
-    Assertions.assertEquals("", res1);
-    Assertions.assertEquals("A", res2);
-    Assertions.assertEquals("A.b.CD", res3);
-  }
-
-  protected static class InternalComponentConverter extends ComponentConverter {
-
-    public InternalComponentConverter(Context context) {
-      super(context);
-    }
-
-    public Context getContext() {
-      return context;
-    }
-
-    @Override
-    public String listToString(List<String> list) {
-      return super.listToString(list);
-    }
+    // Assert first expression
+    Assertions.assertEquals(Optional.empty(), exprs.getExpressions().get(0).getPrefix());
+    Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(0).getAstExpression()));
+    // Assert second expression
+    Assertions.assertEquals(Optional.of("comp1"), exprs.getExpressions().get(1).getPrefix());
+    Assertions.assertTrue(getNameExpression("a").deepEquals(exprs.getExpressions().get(1).getAstExpression()));
   }
 }
