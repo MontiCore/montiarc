@@ -1,17 +1,32 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 ## MontiArc Gradle Plugin
 This plugin generates Java code from MontiArc models.
+Moreover, it distributes MontiArc models as jars with `.arcsym` files.
 
 ### Table of contents
-1. [Apply it](#apply-it)
-2. [Configure it](#configure-it)
-3. [Configuration options in detail](#configuration-options-in-detail)
-4. [Added build elements](#added-build-elements)
-5. [Fixing problems](#fixing-problems)
+1. [Apply it](#apply-it-)
+2. [Configure it](#configure-it-)
+3. [Configuration options in detail](#configuration-options-in-detail-)
+4. [Interplay with cd2pojo](#interplay-with-cd2pojo)
+5. [Added build elements](#added-build-elements)
+6. [Fixing problems](#fixing-problems-)
 
 
 ---
 ### Apply it:
+Within gradle's settings script, you need to declare:
+```kotlin
+// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen
+pluginManagement {
+  repositories {
+    maven {
+      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+    }
+  }
+}
+```
+
+Then, within the buildscript, you need to declare:
 ```groovy
 // Groovy:
 buildscript {
@@ -19,8 +34,16 @@ buildscript {
     classpath "montiarc.tooling:plugin:VERSION_YOU_WANT_TO_USE"
   }
 }
+
 plugins {
-  id "montiarc"   
+  id "montiarc"
+}
+
+// The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
+repositories {
+  maven {
+    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+  }
 }
 ```
 
@@ -36,13 +59,20 @@ buildscript {
 plugins {
   id("montiarc")
 }
+
+// The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
+repositories {
+  maven {
+    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+  }
+}
 ```
 ---
 ### Configure it:
 The plugin adds a [MontiarcCompile](./main/kotlin/MontiarcCompile.kt) task for every source set that exists.
 The name of that task is `compileSRC_SET_NAMEMontiarc`, omitting the name of the source set for the *main* source set.
 
-Note that Java source files that the Montiarc generator produces are automatically added to the Java source of the same
+Note that Java source files that the MontiArc generator produces are automatically added to the Java source of the same
 source set. Therefor, the generated source code will automatically be compiled by `compileJava` (or `compileTestJava`,
 etc. )
 ```groovy
@@ -63,7 +93,7 @@ dependencies {
 }
 
 task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
-  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/symbols")  // ← Default value
+  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
   useClass2Mc.set(true)  // Default value is false
 }
 
@@ -91,7 +121,7 @@ dependencies {
 }
 
 task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
-  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/symbols")  // ← Default value
+  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
   useClass2Mc.set(true)  // Default value is false
 }
 
@@ -101,7 +131,9 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 ```
-Note that the generated java code will be generated to `$destinationDirectory/java`.
+Note that the generated java code will be generated to `$destinationDirectory/java` and created `.arcsym` files are
+placed in `$destinationDirectory/symbols` (`destinationDirectory` being defined in the `montiarc` entry of the source
+set).
 
 ### Configuration options in detail:
 Each [MontiarcCompile](./main/kotlin/MontiarcCompile.kt) task has the following configuration options that can be set.
@@ -114,7 +146,7 @@ Some configuration options only have default values, if the task is created for 
 | symbolImportDir | The `montiarcSymbolDependencies` configuration               | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolImportDir.from(...)` statements.                                                                                                                 |
 | useClass2Mc     | `false`                                                      | If you want to use java types (or other JVM types) in your MontiArc models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `maGenerator`) will be accessible from MontiArc models. *Note*: this will be changed in the future. | <!-- TODO: Check if we need to put these types into the generateMA configuration -->
 | outputDir       | `$buildDir/montiarc/SOURCE_SET_NAME`                         | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                       |
-| sourceSetName   | _deprecated_ (None)                                          |                                                                                                                                                                                                                                                                                                                                     |
+| sourceSetName   | _deprecated_ (None)                                          | Has no effect anymore and will be removed soon                                                                                                                                                                                                                                                                                      |
 
 Moreover, there are the following options configurable in the `montiarc` block:
 
@@ -123,21 +155,26 @@ Moreover, there are the following options configurable in the `montiarc` block:
 | internalMontiArcTesting | `false`       | If you are not a MontiArc developer, just ignore it (and omit the option, as its default value is `false`). Otherwise: if you want to apply the plugin from within the MontiArc project, e.g., to test the generator in an integration test, then set this to `true`. By this, the freshly compiled (unpublished) generator will be used instead of the one from the maven repository. |
 
 ---
+### Interplay with cd2pojo
+If the [`cd2pojo` plugin](../cd2pojo-plugin/Readme.md) is also applied, then the class diagram models defined therein
+are also available in the MontiArc models of the same source set.
+
+---
 ### Added build elements
 * The Plugin adds the dependency configuration *maGenerator* on which it places the dependency on the generator that is
   used to generate .java code from the .arc files. If you use `class2mc`, then you can place the java classes that you
   want to use in your models on this configuration.
 * For every SourceSet, the plugin
   * Adds a [MontiarcCompile](./main/kotlin/MontiarcCompile.kt) task that performs the generation step from .arc models
-    to .java code. The task name is `compileMontiarc` for main and `SourceSetNameCompileMontiarc` for others
-  * Adds a jar task packaging the .arc models of the main source set, adding it to the default publication.
+    to .java code. The task name is `compileMontiarc` for main and `compileSourceSetNameMontiarc` for others
+  * Adds a jar task packaging the .arcsym models of the main source set, adding it to the default publication.
   * Adds three configurations:
     * `montiarc` for the main source set and `sourceSetNameMontiarc` for others:\
       Used to declare dependencies on other montiarc models. This configuration is not resolvable or consumable and only
-      serves the purpose to declare dependencies. The models of the dependencies will automatically be integrated into
-      the symbol of the `compileMontiarc` task and their java implementations will automatically be added to the
+      serves the purpose to declare dependencies. The models of the dependencies will automatically be added to
+      the `compileMontiarc` task and their java implementations will automatically be added to the
       `implementation` configuration for compilation and runtime. To this end, `implementation` extends the `montiarc`
-      implementation, as does:
+      configuration, as do:
     * `montiarcSymbolDependencies` for the main source set and `sourceSetNameMontiarcSymbolDependencies` for others:\
       Only contains the montiarc models of the dependencies (represented by .arcsym files). Do not use 
       this configuration to _declare_ the dependencies (use `montiarc` for this purpose instead), but use this
@@ -146,7 +183,7 @@ Moreover, there are the following options configurable in the `montiarc` block:
     * `montiarcSymbolElements` for the main source set and `sourceSetNameMontiarcSymbolElements` for others:\
       Contains the jar of the montiarc models (represented by .arcsym files) that is added to the default publication
       set. By default, this configuration is only added for the main source set.
-  * Models declared in the main source set are available in the test source sets, too.
+  * Models declared in the main source set are also available in the test source sets.
 
 ---
 ### Fixing problems:
@@ -158,8 +195,6 @@ Moreover, there are the following options configurable in the `montiarc` block:
 * There is no _main_ or _test_ source set\
     These source sets only exist if the _java_ plugin is applied. If only the _java-base_ plugin is applied, then there
   are no _main_ or _tests_ source sets.
-* If not transitively included, you have to add a dependency to `montiarc.libraries:majava-rte` for compiling and
-  running your code generated by MontiArc.
 * If your dependencies use class2mc, then you have to activate it for your own project, too.
 * If you activate class2mc for your main source set, you also have to activate it for your test source set.
 
