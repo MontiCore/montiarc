@@ -7,6 +7,8 @@ ${tc.signature("comp")}
 
 <@printStateEnum ast/>
 
+<@printEnumIndexFunction/>
+
 <@printExitStates ast/>
 
 <#list autHelper.getAutomatonStates(ast) as state>
@@ -258,13 +260,13 @@ ${tc.signature("comp")}
 
 <#macro printLocalInputVariables comp>
   <#list comp.getAllIncomingPorts() as port>
-    final montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
+    final montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(port)}>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
   </#list>
 </#macro>
 
 <#macro printLocalOutputVariables comp>
   <#list comp.getAllOutgoingPorts() as port>
-     montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = null;
+     montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(port)}>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = null;
   </#list>
 </#macro>
 
@@ -307,5 +309,19 @@ ${tc.signature("comp")}
     if (from != to && from.getSuperState().isPresent()) {
       exit(from.getSuperState().get(), to);
     }
+  }
+</#macro>
+
+<#macro printEnumIndexFunction>
+  protected Integer getEnumIndex(String name, EnumSort sort) {
+  	int result = -1;
+  	Expr<EnumSort>[] enumSort = sort.getConsts();
+
+  	for(int i=0; i<enumSort.length; i++){
+  	  if(name.equals(String.valueOf(enumSort[i]))){
+  	  	result = i;
+  	  }
+  	}
+  	return result;
   }
 </#macro>

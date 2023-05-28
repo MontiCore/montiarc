@@ -1,6 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 
-protected <@printClass ast.getSymbol()/><montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, <@printType ast.getSymbol()/>>> ${ast.getName()};
+protected <@printClass ast.getSymbol()/><montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort( ast.getSymbol())}>, <@printType ast.getSymbol()/>>> ${ast.getName()};
 
 <@printGetter ast.getSymbol()/>
 
@@ -17,13 +17,13 @@ protected <@printClass ast.getSymbol()/><montiarc.rte.dse.AnnotatedValue<Expr<In
 </#macro>
 
 <#macro printGetter port>
-public <@printClass port/><montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, <@printType ast.getSymbol()/>>> get${port.getName()?cap_first}() {
+public <@printClass port/><montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort( ast.getSymbol())}>, <@printType ast.getSymbol()/>>> get${port.getName()?cap_first}() {
   return this.${port.getName()};
 }
 </#macro>
 
 <#macro printSetter port>
-public void set${port.getName()?cap_first}(<@printClass port/><montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, <@printType ast.getSymbol()/>>> ${port.getName()}) {
+public void set${port.getName()?cap_first}(<@printClass port/><montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort( ast.getSymbol())}>, <@printType ast.getSymbol()/>>> ${port.getName()}) {
   this.${port.getName()} = ${port.getName()};
 }
 </#macro>

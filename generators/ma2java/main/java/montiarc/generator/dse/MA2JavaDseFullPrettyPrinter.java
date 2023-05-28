@@ -33,5 +33,10 @@ public class MA2JavaDseFullPrettyPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.setExpressionsBasisHandler(dseExpressionBasisPrettyPrinter);
     this.traverser.getExpressionsBasisVisitorList().clear();
     this.traverser.add4ExpressionsBasis(dseExpressionBasisPrettyPrinter);
+
+    DseMCCommonLiteralsPrettyPrinter dseMCCommonLiteralsPrettyPrinter = new DseMCCommonLiteralsPrettyPrinter(printer, printComments);
+    this.traverser.setMCCommonLiteralsHandler(dseMCCommonLiteralsPrettyPrinter);
+    this.traverser.getMCCommonLiteralsVisitorList().clear();
+    this.traverser.add4MCCommonLiterals(dseMCCommonLiteralsPrettyPrinter);
   }
 }

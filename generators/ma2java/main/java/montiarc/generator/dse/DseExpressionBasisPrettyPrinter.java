@@ -15,21 +15,6 @@ public class DseExpressionBasisPrettyPrinter extends ExpressionsBasisPrettyPrint
   }
 
   @Override
-  public void handle(de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression node) {
-    if (this.isPrintComments()) {
-      de.monticore.prettyprint.CommentPrettyPrinter.printPreComments(node, getPrinter());
-    }
-
-    getPrinter().print("ctx.mkInt(");
-    node.getLiteral().accept(getTraverser());
-    getPrinter().print(")");
-
-    if (this.isPrintComments()) {
-      de.monticore.prettyprint.CommentPrettyPrinter.printPostComments(node, getPrinter());
-    }
-  }
-
-  @Override
   public void handle(de.monticore.expressions.expressionsbasis._ast.ASTNameExpression node) {
     if (this.isPrintComments()) {
       de.monticore.prettyprint.CommentPrettyPrinter.printPreComments(node, getPrinter());

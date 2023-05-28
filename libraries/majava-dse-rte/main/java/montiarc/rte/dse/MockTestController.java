@@ -46,7 +46,6 @@ public class MockTestController implements TestControllerI {
   }
 
   public Context getCtx() {
-    System.err.println("getCTX");
     return context;
   }
 

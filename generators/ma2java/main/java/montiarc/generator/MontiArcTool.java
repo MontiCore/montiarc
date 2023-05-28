@@ -6,6 +6,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._cocos.MontiArcCoCos;
+import montiarc.cocos.DseSupportedTypes;
 import montiarc.generator.codegen.MontiArcGenerator;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
@@ -19,13 +20,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentInstanceNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.*;
 
 public class MontiArcTool extends montiarc.MontiArcTool {
 
@@ -50,9 +45,9 @@ public class MontiArcTool extends montiarc.MontiArcTool {
       .desc("Sets the artifact path for handwritten code (optional).")
       .build());
     options.addOption(org.apache.commons.cli.Option.builder("dse")
-        .longOpt("dynamic-symbolic-execution")
-        .desc("Sets the template to symbolic template).")
-        .build());
+      .longOpt("dynamic-symbolic-execution")
+      .desc("Sets the template to symbolic template).")
+      .build());
     return super.addStandardOptions(options);
   }
 
@@ -62,13 +57,20 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(cl);
     super.runTasks(asts, cl);
 
-    if(cl.hasOption("output")) {
+    if (cl.hasOption("dse")) {
+      Log.info("Perform remaining context-condition checks", "MontiArcTool-dse");
+      asts.forEach(this::runAdditionalCoCosDse);
+    }
+
+    if (cl.hasOption("output")) {
       Log.info("Generate java", "MontiArcTool");
-      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""), cl.hasOption("dse"));
+      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc"))
+        .orElse(""), cl.hasOption("dse"));
     }
   }
 
-  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc, boolean dse) {
+  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target,
+                       @NotNull String hwc, boolean dse) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
@@ -76,13 +78,15 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     asts.forEach(ast -> this.generate(ast, target, hwc, dse));
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc, boolean dse) {
+  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target,
+                       @NotNull String hwc, boolean dse) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
-    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), splitPathEntriesToList(hwc));
+    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target),
+      splitPathEntriesToList(hwc));
     generator.generate(ast, dse);
   }
 
@@ -98,6 +102,15 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     checker.addCoCo(new AutomatonStateNamesAreNoJavaKeywords());
     checker.addCoCo(new ComponentTypeNamesAreNoJavaKeywords());
     checker.addCoCo(new ComponentInstanceNamesAreNoJavaKeywords());
+
+    checker.checkAll(ast);
+  }
+
+  public void runAdditionalCoCosDse(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab();
+
+    checker.addCoCo(new DseSupportedTypes.DseParameters_VariablesTypes());
 
     checker.checkAll(ast);
   }

@@ -20,13 +20,13 @@ public void compute() {
 
 <#macro printLocalInputVariables comp>
   <#list comp.getAllIncomingPorts() as port>
-    final montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = this.get${port.getName()?cap_first}();
+    final montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(port)}>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = this.get${port.getName()?cap_first}();
   </#list>
 </#macro>
 
 <#macro printLocalOutputVariables comp>
   <#list comp.getAllOutgoingPorts() as port>
-    montiarc.rte.dse.AnnotatedValue<Expr<IntSort>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = montiarc.rte.dse.AnnotatedValue.newAnnoValue(null, null);
+    montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(port)}>, ${compHelper.getRealPortTypeString(port)}> ${port.getName()} = montiarc.rte.dse.AnnotatedValue.newAnnoValue(null, null);
   </#list>
 </#macro>
 

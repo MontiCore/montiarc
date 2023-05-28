@@ -2,10 +2,7 @@
 package montiarc.generator.helper.dse;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTArcField;
-import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.*;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
@@ -17,18 +14,14 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
 import montiarc.generator.dse.MA2JavaDseFullPrettyPrinter;
 import montiarc.generator.helper.ComponentHelper;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Helper class used in the template to generate target code of atomic or composed components.
@@ -42,7 +35,7 @@ public class ComponentHelperDse {
   }
 
   /**
-   * Determines the name of the type of the port represented by its symbol. This takes in to
+   * Determines the name of the type of the port represented by its symbol. This takes into
    * account whether the port is
    * inherited and possible required renamings due to generic type parameters and their actual
    * arguments.
@@ -56,6 +49,145 @@ public class ComponentHelperDse {
       ((SymTypePrimitive) portType).getBoxedPrimitiveName() :
       portType.isTypeVariable() ? portType.print() :
         portType.printFullName();
+  }
+
+  /**
+   * Returns a list of all enum values for an enum that is a type of ASTPort.
+   */
+  public static List<FieldSymbol> getEnumValues(ASTPort port) {
+    if (isEnum(port)) {
+      OOTypeSymbol test = (OOTypeSymbol) port.getSymbol().getTypeInfo();
+      return test.getFieldList();
+    }
+    return null;
+  }
+
+  /**
+   * Returns a list of all enum values for an enum that is a type of VariableSymbol
+   */
+  public static List<FieldSymbol> getEnumValues(VariableSymbol symbol) {
+    if (isEnum(symbol)) {
+      OOTypeSymbol test = (OOTypeSymbol) symbol.getType().getTypeInfo();
+      return test.getFieldList();
+    }
+    return null;
+  }
+
+  /**
+   * Creates a list of VariableSymbols that do not have duplicate types and do not overlap with
+   * port types
+   */
+  public static List<VariableSymbol> getEnumSorts(ASTComponentType comp) {
+    List<String> list = new ArrayList<>();
+    List<VariableSymbol> portsWithOutDuplicates = new ArrayList<>();
+
+    for (ASTPort element : getPortTypes(comp.getPorts())) {
+      list.add(element.getSymbol().getType().print());
+    }
+
+    for (VariableSymbol parameter : comp.getSymbol().getParameters()) {
+      if (!list.contains(parameter.getType().print())) {
+        list.add(parameter.getType().print());
+        portsWithOutDuplicates.add(parameter);
+      }
+    }
+    for (VariableSymbol variable : getComponentVariables(comp.getSymbol())) {
+      if (!list.contains(variable.getType().print())) {
+        list.add(variable.getType().print());
+        portsWithOutDuplicates.add(variable);
+      }
+    }
+    return portsWithOutDuplicates;
+  }
+
+  /**
+   * Creates a list of ASTPorts that have no duplicates with respect to the port type
+   *
+   * @param ports List of ASTPorts
+   * @return list of ASTPorts
+   */
+  public static List<ASTPort> getPortTypes(List<ASTPort> ports) {
+    List<String> list = new ArrayList<>();
+    List<ASTPort> portsWithOutDuplicates = new ArrayList<>();
+
+    for (ASTPort port : ports) {
+      if (!list.contains(port.getSymbol().getType().print())) {
+        list.add(port.getSymbol().getType().print());
+        portsWithOutDuplicates.add(port);
+      }
+    }
+    return portsWithOutDuplicates;
+  }
+
+  /**
+   * Checks if the variable symbol type is an enum or not
+   *
+   * @param symbol to be checked
+   * @return if symbol type is an enum
+   */
+  public static boolean isEnum(VariableSymbol symbol) {
+    if (symbol.getType().getTypeInfo() instanceof OOTypeSymbol) {
+      return ((OOTypeSymbol) symbol.getType().getTypeInfo()).isIsEnum();
+    }
+    return false;
+  }
+
+  /**
+   * Checks if the port type is an enum or not
+   *
+   * @param port to be checked
+   * @return if port type is an enum
+   */
+  public static boolean isEnum(ASTPort port) {
+    if (port.getSymbol().getTypeInfo() instanceof OOTypeSymbol) {
+      return ((OOTypeSymbol) port.getSymbol().getType().getTypeInfo()).isIsEnum();
+    }
+    return false;
+  }
+
+  /**
+   * Returns the sort type corresponding to the VariableSymbol type
+   *
+   * @param sym to get the type from
+   * @return string sort type of the variable symbol type
+   */
+  public static String getPortTypeSort(VariableSymbol sym) {
+    return getSort(sym.getType().print());
+  }
+
+  /**
+   * Returns the sort type corresponding to the port type
+   *
+   * @param port to get the type from
+   * @return string sort type of the port type
+   */
+  public static String getPortTypeSort(PortSymbol port) {
+    return getSort(port.getTypeInfo().getName());
+  }
+
+  public static String getSort(String name) {
+    switch (name) {
+      case "Integer":
+      case "int":
+      case "Long":
+      case "long":
+        return "IntSort";
+      case "Boolean":
+      case "boolean":
+        return "BoolSort";
+      case "Character":
+      case "char":
+        return "CharSort";
+      case "String":
+        return "SeqSort<CharSort>";
+      case "Float":
+      case "double":
+      case "Double":
+      case "float":
+        return "RealSort";
+      default:
+        return "EnumSort<" + name + ">";
+    }
   }
 
   public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {

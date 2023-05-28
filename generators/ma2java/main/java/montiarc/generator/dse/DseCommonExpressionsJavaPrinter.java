@@ -9,6 +9,7 @@ import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symboltable.ISymbol;
+import montiarc.generator.helper.ComponentHelper;
 import montiarc.generator.helper.dse.ComponentHelperDseValue;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -16,10 +17,12 @@ import java.util.Optional;
 
 public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
   ComponentHelperDseValue componentHelperDseValue;
+  ComponentHelper componentHelper;
 
   public DseCommonExpressionsJavaPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     super(printer, printComments);
     this.componentHelperDseValue = new ComponentHelperDseValue();
+    this.componentHelper = new ComponentHelper();
   }
 
   @Override
@@ -105,7 +108,6 @@ public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrin
 
     node.getRight().accept(getTraverser());
     getPrinter().print(")");
-
 
     if (this.isPrintComments()) {
       CommentPrettyPrinter.printPostComments(node, getPrinter());
@@ -296,7 +298,7 @@ public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrin
 
     getPrinter().stripTrailing();
 
-    getPrinter().print("ctx.mkOr()");
+    getPrinter().print("ctx.mkOr(");
     node.getLeft().accept(getTraverser());
 
     getPrinter().print(",");
@@ -307,8 +309,47 @@ public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrin
       de.monticore.prettyprint.CommentPrettyPrinter.printPostComments(node, getPrinter());
     }
   }
+
+  @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression node) {
+
+    if (this.isPrintComments()) {
+      de.monticore.prettyprint.CommentPrettyPrinter.printPreComments(node, getPrinter());
+    }
+
+    getPrinter().print(componentHelper.printExpression(node.getExpression()).toLowerCase());
+    getPrinter().print(".getConst(getEnumIndex(\"" + node.getName() + "\", ");
+    getPrinter().print(componentHelper.printExpression(node.getExpression()).toLowerCase());
+    getPrinter().print("))");
+
+    if (this.isPrintComments()) {
+      de.monticore.prettyprint.CommentPrettyPrinter.printPostComments(node, getPrinter());
+    }
+
+  }
+
+  @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTPlusPrefixExpression node) {
+    montiarc.rte.log.Log.error("The operator \'plus prefix expression\' is not supported");
+  }
+
+  @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTMinusPrefixExpression node) {
+    montiarc.rte.log.Log.error("The operator \'minus prefix expression\' is not supported");
+  }
+
+  @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTModuloExpression node) {
+    montiarc.rte.log.Log.error("The operator \'modulo\' is not supported");
+  }
+
+  @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTConditionalExpression node) {
+    montiarc.rte.log.Log.error("The operator \'conditional expression\' is not supported");
+  }
+
+  @Override
+  public void handle(de.monticore.expressions.commonexpressions._ast.ASTBracketExpression node) {
+    montiarc.rte.log.Log.error("The operator \'Bracket expression\' is not supported");
+  }
 }
-
-
-
-

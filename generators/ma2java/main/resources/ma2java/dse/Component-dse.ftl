@@ -3,10 +3,14 @@ ${tc.signature("isTop")}
 
 ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))} {
 
+	//compHelperDse.checkDataTypes(ast)}
+
   <@printInstanceName/>
 
   // ports
   ${tc.include("ma2java.component.Port.ftl", ast.getPorts())}
+
+  <@printEnumSorts ast/>
 
   // parameters
   <@printParameters ast.getSymbol()/>
@@ -43,13 +47,13 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printParameters comp>
   <#list comp.getParameters() as param>
-    protected final montiarc.rte.dse.AnnotatedValue<Expr<IntSort>,${param.getType().print()}> ${param.getName()};
+    protected final montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(param)}>,<@printType param/>> ${param.getName()};
   </#list>
 </#macro>
 
 <#macro printVariables comp>
   <#list compHelper.getComponentVariables(comp) as variable>
-    protected montiarc.rte.dse.AnnotatedValue<Expr<IntSort>,${variable.getType().print()}> ${variable.getName()};
+    protected montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(variable)}>,<@printType variable/>> ${variable.getName()};
   </#list>
 </#macro>
 
@@ -69,7 +73,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
   <#assign name>${comp.getName()}<#if isTop>TOP</#if></#assign>
   public ${name}(<@printParametersAsList comp/>) {
     <#if comp.isPresentParent()>
-      super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelper.printExpression(parentConfiguration)}<#sep>, </#sep></#list>);
+      super(<#list comp.getParentConfiguration() as parentConfiguration>${compHelperDse.printExpression(parentConfiguration.getExpression())}<#sep>, </#sep></#list>);
     </#if>
 
     // Context for Solver
@@ -91,6 +95,39 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printParametersAsList comp>
   <#list comp.getParameters() as param>
-    montiarc.rte.dse.AnnotatedValue<Expr<IntSort>,${param.getType().print()}> ${param.getName()}<#t><#sep>, </#sep><#t>
+    montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(param)}>,<@printType param/>> ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
+</#macro>
+
+<#macro printEnumSorts ast>
+	<#list compHelperDse.getPortTypes(ast.getPorts()) as port>
+		<#if compHelperDse.isEnum(port)>
+			EnumSort<${port.getSymbol().getType().print()}> ${port.getSymbol().getType().print()?lower_case} = montiarc.rte.dse.TestController.getCtx().mkEnumSort("${port.getSymbol().getType().print()}",
+				<#list compHelperDse.getEnumValues(port) as value>
+					"${value.getName()}"
+					<#sep> , </#sep>
+				</#list>
+			);
+		</#if>
+	</#list>
+	<#list compHelperDse.getEnumSorts(ast) as parameter>
+			<#if compHelperDse.isEnum(parameter)>
+				EnumSort<${parameter.getType().print()}> ${parameter.getType().print()?lower_case} = montiarc.rte.dse.TestController.getCtx().mkEnumSort("${parameter.getType().print()}",
+					<#list compHelperDse.getEnumValues(parameter) as value>
+						"${value.getName()}"
+						<#sep> , </#sep>
+					</#list>
+				);
+			</#if>
+		</#list>
+</#macro>
+
+<#macro printType port>
+  <#if port.getType().isPrimitive()>
+    ${compHelper.boxPrimitive(port.getType())}
+  <#elseif port.getType().isTypeVariable()>
+    ${port.getType().print()}
+  <#else>
+    ${port.getType().printFullName()}
+  </#if>
 </#macro>

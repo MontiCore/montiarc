@@ -26,57 +26,15 @@ public class DseCommonAssignmentJavaPrinter extends AssignmentExpressionsPrettyP
     if (this.isPrintComments()) {
       de.monticore.prettyprint.CommentPrettyPrinter.printPreComments(node, getPrinter());
     }
-    if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.EQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.PLUSEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.MINUSEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.STAREQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.SLASHEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.AND_EQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.PIPEEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.ROOFEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.GTGTEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.GTGTGTEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.LTLTEQUALS || node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.PERCENTEQUALS) { // opt: 0 req: 2
+    if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.EQUALS) {
       getPrinter().print(componentHelper.printExpression(node.getLeft()));
+      getPrinter().stripTrailing();
+      getPrinter().print("= montiarc.rte.dse.AnnotatedValue.newAnnoValue(");
+    }
+    else {
+      montiarc.rte.log.Log.error("The assignment used is not supported. Only \' equals \' is " +
+        "supported");
 
-      if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.LTLTEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("<<=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.PIPEEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("|=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.PLUSEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("+=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.SLASHEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("/=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.MINUSEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("-=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.STAREQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("*=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.GTGTGTEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print(">>>=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.EQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("= montiarc.rte.dse.AnnotatedValue.newAnnoValue(");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.GTGTEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print(">>=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.AND_EQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("&=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.ROOFEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("^=");
-      }
-      else if (node.getOperator() == de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions.PERCENTEQUALS) {
-        getPrinter().stripTrailing();
-        getPrinter().print("%=");
-      }
     }
 
     node.getRight().accept(getTraverser());
