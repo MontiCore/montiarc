@@ -27,7 +27,7 @@ import java.util.stream.Stream;
 /**
  * The class under test is {@link ConstraintSatisfied4Comp}.
  */
-public class ConstraintEvaluationTest extends MontiArcAbstractTest {
+public class ConstraintSatisfied4CompTest extends MontiArcAbstractTest {
 
   @BeforeAll
   public static void init() {
@@ -63,6 +63,8 @@ public class ConstraintEvaluationTest extends MontiArcAbstractTest {
     "component Comp1 { }",
     // tautology constraint
     "component Comp2 { constraint(true); }",
+    // tautology constraint with implicit cast
+    "component Comp2 { constraint(1==1.0); }",
     // feature constraint satisfiable
     "component Comp3 { feature f; constraint(f); } ",
     // parameter constraint satisfiable
@@ -141,6 +143,9 @@ public class ConstraintEvaluationTest extends MontiArcAbstractTest {
     return Stream.of(
       // unsatisfiable constraint
       arg("component Comp1 { constraint(false); }",
+        VariableArcError.CONSTRAINT_NOT_SATISFIED),
+      // unsatisfiable constraint with implicit cast
+      arg("component Comp1 { constraint(1==1.5); }",
         VariableArcError.CONSTRAINT_NOT_SATISFIED),
       // feature constraint unsatisfiable
       arg("component Comp2 { feature f; constraint(f && !f); } ",

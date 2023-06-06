@@ -28,23 +28,35 @@ public class Expr2SMTResult {
   }
 
   public Optional<ArithExpr<?>> getValueAsArith() {
-    if (this.value != null && this.value instanceof ArithExpr<?>) {
+    if (isArith()) {
       return Optional.of((ArithExpr<?>) this.value);
     }
     return Optional.empty();
   }
 
+  public boolean isArith() {
+    return this.value != null && this.value instanceof ArithExpr<?>;
+  }
+
   public Optional<BoolExpr> getValueAsBool() {
-    if (this.value != null && this.value instanceof BoolExpr) {
+    if (isBool()) {
       return Optional.of((BoolExpr)this.value);
     }
     return Optional.empty();
   }
 
+  public boolean isBool() {
+    return this.value != null && this.value instanceof BoolExpr;
+  }
+
   public Optional<IntExpr> getValueAsInt() {
-    if (this.value != null && this.value instanceof IntExpr) {
+    if (isInt()) {
       return Optional.of((IntExpr) this.value);
     }
     return Optional.empty();
+  }
+
+  public boolean isInt() {
+    return this.value != null && this.value instanceof IntExpr;
   }
 }

@@ -51,9 +51,8 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
         case BasicSymbolsMill.LONG:
           return Optional.of(context.getIntSort());
         case BasicSymbolsMill.FLOAT:
-          return Optional.of(context.mkFPSortSingle());
         case BasicSymbolsMill.DOUBLE:
-          return Optional.of(context.mkFPSortDouble());
+          return Optional.of(context.getRealSort());
       }
     }
 

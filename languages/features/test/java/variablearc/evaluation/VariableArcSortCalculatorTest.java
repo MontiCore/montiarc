@@ -5,6 +5,7 @@ import com.microsoft.z3.BoolSort;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.FPSort;
 import com.microsoft.z3.IntSort;
+import com.microsoft.z3.RealSort;
 import com.microsoft.z3.Sort;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -27,8 +28,7 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
     Context context = Mockito.mock(Context.class);
     when(context.getBoolSort()).thenReturn(Mockito.mock(BoolSort.class));
     when(context.getIntSort()).thenReturn(Mockito.mock(IntSort.class));
-    when(context.mkFPSortSingle()).thenReturn(Mockito.mock(FPSort.class));
-    when(context.mkFPSortDouble()).thenReturn(Mockito.mock(FPSort.class));
+    when(context.getRealSort()).thenReturn(Mockito.mock(RealSort.class));
     return context;
   }
 
@@ -85,7 +85,7 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
 
     // Then
     Assertions.assertTrue(sort.isPresent());
-    Assertions.assertTrue(sort.get() instanceof FPSort);
+    Assertions.assertTrue(sort.get() instanceof RealSort);
   }
 
   @Test
@@ -99,6 +99,6 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
 
     // Then
     Assertions.assertTrue(sort.isPresent());
-    Assertions.assertTrue(sort.get() instanceof FPSort);
+    Assertions.assertTrue(sort.get() instanceof RealSort);
   }
 }

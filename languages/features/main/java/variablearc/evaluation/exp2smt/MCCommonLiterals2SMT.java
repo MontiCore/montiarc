@@ -92,24 +92,24 @@ public class MCCommonLiterals2SMT implements MCCommonLiteralsHandler {
   @Override
   public void handle(@NotNull ASTBasicFloatLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkFP(node.getValue(), this.getContext().mkFPSortSingle()));
+    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
   }
 
   @Override
   public void handle(@NotNull ASTSignedBasicFloatLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkFP(node.getValue(), this.getContext().mkFPSortSingle()));
+    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
   }
 
   @Override
   public void handle(@NotNull ASTBasicDoubleLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkFP(node.getValue(), this.getContext().mkFPSortDouble()));
+    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
   }
 
   @Override
   public void handle(@NotNull ASTSignedBasicDoubleLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkFP(node.getValue(), this.getContext().mkFPSortDouble()));
+    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
   }
 }
