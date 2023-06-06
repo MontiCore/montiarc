@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
+import arcautomaton.ArcAutomatonMill;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import com.google.common.base.Preconditions;
@@ -35,6 +36,7 @@ public class MontiArcScopesGenitorP2Delegator {
 
   protected void init() {
     this.initArcBasis();
+    this.initArcAutomaton();
     this.initGenericArc();
     this.initVariableArc();
     this.initVarDeclarationStatements();
@@ -44,6 +46,10 @@ public class MontiArcScopesGenitorP2Delegator {
     ArcBasisScopesGenitorP2 scopesGenP2 = ArcBasisMill.scopesGenitorP2();
     this.getTraverser().add4ArcBasis(scopesGenP2);
     this.getTraverser().setArcBasisHandler(scopesGenP2);
+  }
+  
+  protected void initArcAutomaton() {
+    this.getTraverser().add4ArcAutomaton(ArcAutomatonMill.scopesGenitorP2());
   }
 
   protected void initGenericArc() {

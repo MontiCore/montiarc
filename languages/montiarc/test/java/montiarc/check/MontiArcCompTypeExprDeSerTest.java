@@ -92,7 +92,6 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
 
     SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
-
     CompTypeExpression compTypeExpr =
       new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
     ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();

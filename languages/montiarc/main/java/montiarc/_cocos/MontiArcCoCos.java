@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcautomaton._cocos.NoEventsInSyncAutomata;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
+import arcautomaton._cocos.NoTickEventInUntimedAutomata;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.ComponentArgumentsOmitPortRef;
 import arcbasis._cocos.ComponentNameCapitalization;
@@ -139,6 +141,8 @@ public class MontiArcCoCos {
     // ArcAutomaton CoCos
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
     checker.addCoCo(new MaxOneInitialState());
+    checker.addCoCo(new NoEventsInSyncAutomata());
+    checker.addCoCo(new NoTickEventInUntimedAutomata());
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentHeritageTypeBound(tr));

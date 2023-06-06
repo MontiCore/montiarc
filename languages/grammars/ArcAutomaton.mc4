@@ -2,7 +2,8 @@
 
 component grammar ArcAutomaton extends ArcBasis,
             de.monticore.SCTransitions4Code,
-            de.monticore.SCStateHierarchy {
+            de.monticore.SCStateHierarchy,
+            de.monticore.SCEvents {
 
   /**
    * Allows to specify the behavior of a component by using a statechart
