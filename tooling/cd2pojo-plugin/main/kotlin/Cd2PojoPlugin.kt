@@ -107,7 +107,7 @@ class Cd2PojoPlugin : Plugin<Project> {
    */
   private fun createCompileCd2PojoTask(sourceSet: SourceSet): TaskProvider<Cd2PojoCompile> = with (project) {
     val cdSrcDirSet = sourceSet.extensions.getByType(Cd2PojoSourceDirectorySet::class.java)
-    val taskName = sourceSet.getCompileCd2PojoTaskName()
+    val taskName = sourceSet.compileCd2PojoTaskName
     val generateTask = tasks.register(taskName, Cd2PojoCompile::class.java)
 
     generateTask.configure { genTask ->
@@ -123,9 +123,9 @@ class Cd2PojoPlugin : Plugin<Project> {
       })
     }
 
-    sourceSet.cd2pojo().get().compiledBy(generateTask, Cd2PojoCompile::outputDir)
+    sourceSet.cd2pojo.get().compiledBy(generateTask, Cd2PojoCompile::outputDir)
     setTaskOrderAfterCdGenerator(generateTask)
-    tasks.named(sourceSet.compileJavaTaskName).configure { it.dependsOn(generateTask) }
+    tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
   }

@@ -76,8 +76,10 @@ class MontiarcPlugin : Plugin<Project> {
       }
 
       pluginManager.withPlugin("cd2pojo") {
-        pluginManager.apply(ConnectCd2PojoToMACompilePlugin::class.java)
+        pluginManager.apply(Cd2PojoOutputAsMACompileInputPlugin::class.java)
       }
+
+      pluginManager.apply(Cd2PojoDependencies4MAPlugin::class.java)
     }
   }
 
@@ -168,7 +170,7 @@ class MontiarcPlugin : Plugin<Project> {
    */
   private fun createCompileMontiarcTask(sourceSet: SourceSet): TaskProvider<MontiarcCompile> = with (project) {
     val montiarcSrcDirSet = sourceSet.extensions.getByType(MontiarcSourceDirectorySet::class.java)
-    val taskName = sourceSet.getCompileMontiarcTaskName()
+    val taskName = sourceSet.compileMontiarcTaskName
     val generateTask = tasks.register(taskName, MontiarcCompile::class.java)
 
     generateTask.configure { genTask ->
@@ -177,7 +179,7 @@ class MontiarcPlugin : Plugin<Project> {
       genTask.modelPath.setFrom(montiarcSrcDirSet.sourceDirectories)
       genTask.outputDir.set(montiarcSrcDirSet.destinationDirectory)
       genTask.symbolImportDir.setFrom(
-        configurations.named(sourceSet.montiarcSymbolDependencyConfigurationName())
+        configurations.named(sourceSet.montiarcSymbolDependencyConfigurationName)
       )
 
       sourceSet.java.srcDir(genTask.javaOutputDir())
@@ -187,9 +189,9 @@ class MontiarcPlugin : Plugin<Project> {
       })
     }
 
-    sourceSet.montiarc().get().compiledBy(generateTask, MontiarcCompile::outputDir)
+    sourceSet.montiarc.get().compiledBy(generateTask, MontiarcCompile::outputDir)
     setTaskOrderAfterMaGenerator(generateTask)
-    tasks.named(sourceSet.compileJavaTaskName).configure { it.dependsOn(generateTask) }
+    tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
   }
@@ -211,16 +213,14 @@ class MontiarcPlugin : Plugin<Project> {
    * To this end, the _implementation_ configuration of the source set extends from the created _montiarc_ configuration
    */
   private fun setUpMontiarcDependencyConfiguration(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.montiarcDependencyConfigurationName())
+    val config = configurations.maybeCreate(sourceSet.montiarcDependencyDeclarationConfigName)
     config.isCanBeConsumed = false
     config.isCanBeResolved = false
     config.isVisible = false
     config.description = "Used to declare dependencies on other montiarc projects. This will simultaneously add their " +
       "java implementation to the implementation configuration and their models to to the montiarcSymbolDependencies"
 
-    configurations.named(sourceSet.implementationConfigurationName).configure {
-      it.extendsFrom(config)
-    }
+    configurations.named(sourceSet.implementationConfigurationName) { it.extendsFrom(config) }
 
     return config
   }
@@ -236,7 +236,7 @@ class MontiarcPlugin : Plugin<Project> {
     sourceSet: SourceSet,
     generalDependencyConfiguration: Configuration): Configuration = with (project) {
 
-    return configurations.create(sourceSet.montiarcSymbolDependencyConfigurationName()) { config ->
+    return configurations.create(sourceSet.montiarcSymbolDependencyConfigurationName) { config ->
       config.extendsFrom(generalDependencyConfiguration)
       config.isCanBeResolved = true
       config.isCanBeConsumed = false
@@ -258,8 +258,8 @@ class MontiarcPlugin : Plugin<Project> {
    */
   private fun linkMontiarcDependenciesToOutgoingArcSymbolsConfiguration(sourceSet: SourceSet) {
     val configs = project.configurations
-    val montiarcDependencyConfig = configs.getByName(sourceSet.montiarcSymbolDependencyConfigurationName())
-    val outgoingArcSymbolsConfiguration = configs.getByName(sourceSet.montiarcOutgoingSymbolsConfigurationName())
+    val montiarcDependencyConfig = configs.getByName(sourceSet.montiarcDependencyDeclarationConfigName)
+    val outgoingArcSymbolsConfiguration = configs.getByName(sourceSet.montiarcOutgoingSymbolsConfigurationName)
 
     outgoingArcSymbolsConfiguration.extendsFrom(montiarcDependencyConfig)
   }
@@ -280,14 +280,14 @@ class MontiarcPlugin : Plugin<Project> {
     // 1) Make main's montiarc dependencies also test's montiarc dependencies
     // We only have to link the dependencies to _montiarc_ models. Their _java implementation_ dependencies are already
     // linked, as testImplementation extends implementation
-    val mainModelConfig = configurations.getByName(mainSourceSet.montiarcSymbolDependencyConfigurationName())
-    val testModelConfig = configurations.getByName(testSourceSet.montiarcSymbolDependencyConfigurationName())
+    val mainModelConfig = configurations.getByName(mainSourceSet.montiarcDependencyDeclarationConfigName)
+    val testModelConfig = configurations.getByName(testSourceSet.montiarcDependencyDeclarationConfigName)
     testModelConfig.extendsFrom(mainModelConfig)
 
 
-    val mainCompile = tasks.named(mainSourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java)
+    val mainCompile = tasks.named(mainSourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
     // 2) Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java) {
+    tasks.named(testSourceSet.compileMontiarcTaskName, MontiarcCompile::class.java) {
       it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
     }
   }
@@ -326,7 +326,7 @@ class MontiarcPlugin : Plugin<Project> {
    * Creates a consumable configuration that contains the symbols of the compiled models of the given source set.
    */
   private fun createOutgoingArcSymbolsConfiguration(sourceSet: SourceSet): Configuration {
-    return project.configurations.create(sourceSet.montiarcOutgoingSymbolsConfigurationName()) { config ->
+    return project.configurations.create(sourceSet.montiarcOutgoingSymbolsConfigurationName) { config ->
       config.isCanBeConsumed = true
       config.isCanBeResolved = false
       config.description = "Symbols of the compiled models of source set ${sourceSet.name}"
@@ -340,14 +340,14 @@ class MontiarcPlugin : Plugin<Project> {
    */
   private fun createArcSymbolsJarTask(sourceSet: SourceSet): TaskProvider<Jar> = with (project) {
 
-    val compileTask = tasks.named(sourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java)
+    val compileTask = tasks.named(sourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
 
-    val arcSymbolsJarTask = tasks.register(sourceSet.getMontiarcSymbolsJarTaskName(), Jar::class.java) { jar ->
+    val arcSymbolsJarTask = tasks.register(sourceSet.montiarcSymbolsJarTaskName, Jar::class.java) { jar ->
       jar.from(compileTask.get().symbolOutputDir())
-      jar.archiveClassifier.set(sourceSet.getSymbolsJarClassifierName())
+      jar.archiveClassifier.set(sourceSet.symbolsJarClassifierName)
     }
 
-    tasks.named(BasePlugin.ASSEMBLE_TASK_NAME).configure { it.dependsOn(arcSymbolsJarTask) }
+    tasks.named(BasePlugin.ASSEMBLE_TASK_NAME) { it.dependsOn(arcSymbolsJarTask) }
 
     return arcSymbolsJarTask
   }

@@ -1,0 +1,10 @@
+/* (c) https://github.com/MontiCore/monticore */
+package endconsumerpackage;
+
+import consumerpackage.ConsumerDiagram.FirstConsumer;
+
+classdiagram TransitiveConsumerDiagramTest {
+  class LastConsumerTest {
+    private FirstConsumer firstConsumer;
+  }
+}

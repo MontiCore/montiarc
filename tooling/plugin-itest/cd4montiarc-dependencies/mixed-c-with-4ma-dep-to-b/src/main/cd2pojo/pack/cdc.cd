@@ -1,0 +1,9 @@
+/* (c) https://github.com/MontiCore/monticore */
+package pack;
+
+/**
+ * This is a class diagram of the cd-c project.
+ */
+classdiagram cdc {
+  public enum C { FOO, BAR; }
+}

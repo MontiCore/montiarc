@@ -29,6 +29,7 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
 
   override fun apply(project : Project) {
     this.project = project
+    this.project.pluginManager.apply(Cd2PojoPlugin::class.java)
 
     with (project) {
       extensions.getByType(JavaPluginExtension::class.java)
@@ -52,22 +53,18 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
    * If the java-library plugin is applied, then _api_ will also extend from _cd2pojo_
    */
   private fun setUpDependencyDeclarationConfig(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.cd2PojoDependencyDeclarationConfigName())
+    val config = configurations.maybeCreate(sourceSet.cd2PojoDependencyDeclarationConfigName)
     config.isCanBeConsumed = false
     config.isCanBeResolved = false
     config.isVisible = false
     config.description = "Used to declare dependencies on other cd2pojo projects. This will simultaneously add their " +
       "java implementation to the implementation configuration and their models to to the cd2pojoSymbolDependencies"
 
-    configurations.named(sourceSet.implementationConfigurationName).configure {
-      it.extendsFrom(config)
-    }
+    configurations.named(sourceSet.implementationConfigurationName) { it.extendsFrom(config) }
 
     pluginManager.withPlugin("java-library") {
       if (SourceSet.isMain(sourceSet)) {
-        configurations.named(sourceSet.apiConfigurationName).configure {
-          it.extendsFrom(config)
-        }
+        configurations.named(sourceSet.apiConfigurationName) { it.extendsFrom(config) }
       }
     }
 
@@ -84,7 +81,7 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
   private fun setUpSymbolDependencyConfig(sourceSet: SourceSet,
                                           generalDependencyConfiguration: Configuration): Configuration {
 
-    return project.configurations.create(sourceSet.cd2PojoSymbolDependencyConfigName()) { config ->
+    return project.configurations.create(sourceSet.cd2PojoSymbolDependencyConfigName) { config ->
       config.extendsFrom(generalDependencyConfiguration)
       config.isCanBeResolved = true
       config.isCanBeConsumed = false
@@ -117,7 +114,7 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
    * [sourceSet].
    */
   private fun addDependenciesToTaskInput(sourceSet: SourceSet, dependencyConfig: Configuration) = with (project) {
-    val compileTask = tasks.named(sourceSet.getCompileCd2PojoTaskName(), Cd2PojoCompile::class.java)
+    val compileTask = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
     compileTask.configure { genTask ->
       genTask.symbolImportDir.from(dependencyConfig)
     }
@@ -139,14 +136,14 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
     // 1) Make main's cd2pojo dependencies also test's cd2pojo dependencies
     // We only have to link the dependencies to _cd2pojo_ models. Their _java implementation_ dependencies are already
     // linked, as testImplementation extends implementation
-    val mainModelConfig = configurations.getByName(mainSourceSet.cd2PojoSymbolDependencyConfigName())
-    val testModelConfig = configurations.getByName(testSourceSet.cd2PojoSymbolDependencyConfigName())
+    val mainModelConfig = configurations.getByName(mainSourceSet.cd2PojoDependencyDeclarationConfigName)
+    val testModelConfig = configurations.getByName(testSourceSet.cd2PojoDependencyDeclarationConfigName)
     testModelConfig.extendsFrom(mainModelConfig)
 
 
-    val mainCompile = tasks.named(mainSourceSet.getCompileCd2PojoTaskName(), Cd2PojoCompile::class.java)
+    val mainCompile = tasks.named(mainSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
     // 2) Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.getCompileCd2PojoTaskName(), Cd2PojoCompile::class.java) { testCompile ->
+    tasks.named(testSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java) { testCompile ->
       testCompile.symbolImportDir.from(mainCompile.get().symbolOutputDir())
     }
   }
@@ -185,7 +182,7 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
    * Creates a consumable configuration that contains the symbols of the compiled models of the given source set.
    */
   private fun createOutgoingSymbolsConfig(sourceSet: SourceSet): Configuration {
-    return project.configurations.create(sourceSet.cd2pojoOutgoingSymbolsConfigName()) { config ->
+    return project.configurations.create(sourceSet.cd2pojoOutgoingSymbolsConfigName) { config ->
       config.isCanBeConsumed = true
       config.isCanBeResolved = false
       config.description = "Symbols of the compiled cd models of source set ${sourceSet.name}"
@@ -199,14 +196,14 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
    */
   private fun createSymbolsJarTask(sourceSet: SourceSet): TaskProvider<Jar> = with (project) {
 
-    val compileTask = tasks.named(sourceSet.getCompileCd2PojoTaskName(), Cd2PojoCompile::class.java)
+    val compileTask = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
 
-    val cdSymbolsJarTask = tasks.register(sourceSet.getCd2PojoSymbolsJarTaskName(), Jar::class.java) { jar ->
+    val cdSymbolsJarTask = tasks.register(sourceSet.cd2PojoSymbolsJarTaskName, Jar::class.java) { jar ->
       jar.from(compileTask.get().symbolOutputDir())
-      jar.archiveClassifier.set(sourceSet.getCdSymbolsJarClassifierName())
+      jar.archiveClassifier.set(sourceSet.cdSymbolsJarClassifierName)
     }
 
-    tasks.named(BasePlugin.ASSEMBLE_TASK_NAME).configure { it.dependsOn(cdSymbolsJarTask) }
+    tasks.named(BasePlugin.ASSEMBLE_TASK_NAME) { it.dependsOn(cdSymbolsJarTask) }
 
     return cdSymbolsJarTask
   }
@@ -247,40 +244,40 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
    */
   private fun makeIncomingDependenciesToTransitives(sourceSet: SourceSet) {
     val configs = project.configurations
-    val dependencyConfig = configs.getByName(sourceSet.cd2PojoSymbolDependencyConfigName())
-    val outgoingConfig = configs.getByName(sourceSet.cd2pojoOutgoingSymbolsConfigName())
+    val dependencyConfig = configs.getByName(sourceSet.cd2PojoDependencyDeclarationConfigName)
+    val outgoingConfig = configs.getByName(sourceSet.cd2pojoOutgoingSymbolsConfigName)
 
     outgoingConfig.extendsFrom(dependencyConfig)
   }
 }
 
-fun SourceSet.cd2PojoDependencyDeclarationConfigName() =
-  if (SourceSet.isMain(this)) {
-    "cd2pojo"
-  } else {
-    "${this.name}Cd2pojo"
-  }
+val SourceSet.cd2PojoDependencyDeclarationConfigName: String
+  get() = if (SourceSet.isMain(this)) {
+      "cd2pojo"
+    } else {
+      "${this.name}Cd2pojo"
+    }
 
-fun SourceSet.cd2PojoSymbolDependencyConfigName() =
-  if (SourceSet.isMain(this)) {
-    "cd2pojoSymbolDependencies"
-  } else {
-    this.compileClasspathConfigurationName
-    "${this.name}Cd2pojoSymbolDependencies"
-  }
+val SourceSet.cd2PojoSymbolDependencyConfigName: String
+  get() = if (SourceSet.isMain(this)) {
+      "cd2pojoSymbolDependencies"
+    } else {
+      "${this.name}Cd2pojoSymbolDependencies"
+    }
 
-fun SourceSet.cd2pojoOutgoingSymbolsConfigName() =
-  if (SourceSet.isMain(this)) {
-    "cd2pojoSymbolElements"
-  } else {
-    "${this.name}Cd2pojoSymbolElements"
-  }
+val SourceSet.cd2pojoOutgoingSymbolsConfigName: String
+  get() = if (SourceSet.isMain(this)) {
+      "cd2pojoSymbolElements"
+    } else {
+      "${this.name}Cd2pojoSymbolElements"
+    }
 
-fun SourceSet.getCd2PojoSymbolsJarTaskName(): String = getTaskName("cd2Pojo", "symbolsJar")
+val SourceSet.cd2PojoSymbolsJarTaskName: String
+  get() = getTaskName("cd2Pojo", "symbolsJar")
 
-fun SourceSet.getCdSymbolsJarClassifierName() =
-  if (SourceSet.isMain(this)) {
-    CD2POJO_SYMBOLS_BASE_CLASSIFIER
-  } else {
-    "${this.name}-$CD2POJO_SYMBOLS_BASE_CLASSIFIER"
-  }
+val SourceSet.cdSymbolsJarClassifierName: String
+  get() = if (SourceSet.isMain(this)) {
+      CD2POJO_SYMBOLS_BASE_CLASSIFIER
+    } else {
+      "${this.name}-$CD2POJO_SYMBOLS_BASE_CLASSIFIER"
+    }

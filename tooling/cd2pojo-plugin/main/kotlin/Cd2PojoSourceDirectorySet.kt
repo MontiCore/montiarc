@@ -4,7 +4,7 @@ package montiarc.tooling.cd2pojo.plugin
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.tasks.SourceSet
-import java.util.*
+import java.util.Optional
 import javax.inject.Inject
 
 /**
@@ -17,10 +17,11 @@ abstract class DefaultCd2PojoSourceDirectorySet @Inject constructor(
   // taskDependencyFactory: TaskDependencyFactory  // Needed starting with gradle v.8 */
 ) : DefaultSourceDirectorySet(sourceDirectorySet), Cd2PojoSourceDirectorySet
 
-fun SourceSet.cd2pojo(): Optional<SourceDirectorySet> {
-  return Optional.ofNullable(
+val SourceSet.cd2pojo
+  get(): Optional<SourceDirectorySet> = Optional.ofNullable(
     extensions.findByType(Cd2PojoSourceDirectorySet::class.java)
   )
-}
 
-fun SourceSet.getCompileCd2PojoTaskName(): String = getCompileTaskName("cd2pojo")
+
+val SourceSet.compileCd2PojoTaskName: String
+  get() = getCompileTaskName("cd2pojo")

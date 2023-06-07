@@ -7,16 +7,17 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import montiarc.tooling.cd2pojo.plugin.Cd2PojoCompile
-import montiarc.tooling.cd2pojo.plugin.getCompileCd2PojoTaskName
+import montiarc.tooling.cd2pojo.plugin.compileCd2PojoTaskName
 
 /**
  * Connects the outputs of [Cd2PojoCompile] to the inputs of [MontiarcCompile] (for each [SourceSet]).
  */
-class ConnectCd2PojoToMACompilePlugin : Plugin<Project> {
+class Cd2PojoOutputAsMACompileInputPlugin : Plugin<Project> {
 
   private lateinit var project: Project
   override fun apply(project: Project) {
     this.project = project
+    this.project.pluginManager.apply(MontiarcPlugin::class.java)
 
     sourceSetsOf(project).all { sourceSet ->
       connectCdSymbolsToMontiarc(sourceSet)
@@ -31,8 +32,8 @@ class ConnectCd2PojoToMACompilePlugin : Plugin<Project> {
   }
 
   private fun connectCdSymbolsToMontiarc(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java)
-    val cdCompile = tasks.named(sourceSet.getCompileCd2PojoTaskName(), Cd2PojoCompile::class.java)
+    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
+    val cdCompile = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
 
     maCompile.configure {
       it.symbolImportDir.from(
@@ -42,8 +43,8 @@ class ConnectCd2PojoToMACompilePlugin : Plugin<Project> {
   }
 
   private fun createDependencyBetweenCdAndMaCompileTasks(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.getCompileMontiarcTaskName(), MontiarcCompile::class.java)
-    val cdCompile = tasks.named(sourceSet.getCompileCd2PojoTaskName(), Cd2PojoCompile::class.java)
+    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
+    val cdCompile = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
 
     maCompile.configure { it.dependsOn(cdCompile) }
   }

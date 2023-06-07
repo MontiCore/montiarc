@@ -89,6 +89,7 @@ sourceSets {
 // Declare dependencies on published models
 dependencies {
     montiarc "some.model.publisher:logic-gates:1.2.0"
+    cd2pojo4montiarc "some.class:diagram.types:1.1.0"
     testMontiarc "some.testModel.publisher:logic-gates:1.2.0"
 }
 
@@ -117,6 +118,7 @@ sourceSets {
 // Declare dependencies on published models
 dependencies {
   montiarc("some.model.publisher:logic-gates:1.2.0")
+  cd2pojo4montiarc("some.class:diagram.types:1.1.0")
   testMontiarc("some.testModel.publisher:logic-gates:1.2.0")
 }
 
@@ -170,19 +172,36 @@ are also available in the MontiArc models of the same source set.
   * Adds a jar task packaging the .arcsym models of the main source set, adding it to the default publication.
   * Adds three configurations:
     * `montiarc` for the main source set and `sourceSetNameMontiarc` for others:\
-      Used to declare dependencies on other montiarc models. This configuration is not resolvable or consumable and only
+      Used to declare dependencies on other MontiArc models. This configuration is not resolvable or consumable and only
       serves the purpose to declare dependencies. The models of the dependencies will automatically be added to
       the `compileMontiarc` task and their java implementations will automatically be added to the
-      `implementation` configuration for compilation and runtime. To this end, `implementation` extends the `montiarc`
-      configuration, as do:
+      `implementation` configuration for compilation and runtime.
+    * `cd4pojo4montiarc` for the main source set and `sourceSetNameCd2pojo4montiarc` for others:\
+      Used to declare dependencies of MontiArc models on other class diagram projects. This configuration is not
+      resolvable or consumable and only serves the purpose to declare dependencies. The models of the dependencies will
+      automatically be added to the `compileMontiarc` task and their java implementations will automatically be added to
+      the `implementation` configuration for compilation and runtime.
     * `montiarcSymbolDependencies` for the main source set and `sourceSetNameMontiarcSymbolDependencies` for others:\
-      Only contains the montiarc models of the dependencies (represented by .arcsym files). Do not use 
+      Loads the MontiArc dependencies (represented by .arcsym files). Do not use 
       this configuration to _declare_ the dependencies (use `montiarc` for this purpose instead), but use this
-      configuration, when you want to access the montiarc models of the dependencies. (This configuration is derived
-      from the `montiarc` configuration, only considering the montiarc models.)
+      configuration, when you want to access the MontiArc models of the dependencies. (This configuration is
+      automatically derived from the `montiarc` configuration, only considering the montiarc models.)
+    * `cd2pojo4montiarcSymbolDependencies` for the main source set and `sourceSetNameCd2pojo4montiarcSymbolDependencies`
+      for others:\
+      Loads the class diagram dependencies of our MontiArc models (represented by .cdsym files). Do not use
+      this configuration to _declare_ the dependencies (use `cd2pojo4montiarc` for this purpose instead), but use this
+      configuration, when you want to access the class diagram dependencies. (This configuration is
+      automatically derived from the `cd2pojo4montiarc` configuration, only considering the class diagram models.)
     * `montiarcSymbolElements` for the main source set and `sourceSetNameMontiarcSymbolElements` for others:\
-      Contains the jar of the montiarc models (represented by .arcsym files) that is added to the default publication
-      set. By default, this configuration is only added for the main source set.
+      Contains the jar of the MontiArc models (represented by .arcsym files) that is added to the default publication
+      set. Is also used to publish the list of MontiArc dependencies of this project. To this end, it extends the
+      `montiarc` configuration. By default, this configuration is only added for the main source set.
+    * `cd2pojo4montiarcSymbolDependencyElements` for the main source set and
+      `sourceSetNameCd2pojo4montiarcSymbolDependencyElements` for others:\
+      Used to publish the list of class diagram dependencies of our MontiArc models. To this end, it extends the
+      `cd2pojo4montiarc` configuration. By default, this configuration is only added for the main source set.
+      If the project also applies the `cd2pojo` plugin, then the cd-symbols jar is also published with this
+      configuration. This is due to technical reasons.
   * Models declared in the main source set are also available in the test source sets.
 
 ---
