@@ -208,8 +208,8 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
       "}",
     // S -> S (out port forward, type parameter)
     "component Comp25<S> { " +
-      "port in S o; " +
-      "a.b.M<S> sub; " +
+      "port out S o; " +
+      "a.b.L<S> sub; " +
       "sub.o -> o; " +
       "}",
     // T -> T (in port forward, type parameter)
@@ -220,8 +220,8 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
       "}",
     // T -> T (out port forward, type parameter)
     "component Comp27<T> { " +
-      "port in T o; " +
-      "a.b.M<T> sub; " +
+      "port out T o; " +
+      "a.b.L<T> sub; " +
       "sub.o -> o; " +
       "}",
     // S -> S (hidden channel, type parameter)
