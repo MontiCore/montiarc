@@ -8,6 +8,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.VariableArcMill;
 import variablearc.check.VariableArcTypeCalculator;
 import variablearc.evaluation.VariableArcDeriveSMTSort;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
@@ -48,5 +49,10 @@ public class AssignmentExpression extends Expression {
     }
 
     return Optional.empty();
+  }
+
+  @Override
+  public String print() {
+    return variable.getFullName() + " = " + VariableArcMill.prettyPrint(astExpression, false);
   }
 }

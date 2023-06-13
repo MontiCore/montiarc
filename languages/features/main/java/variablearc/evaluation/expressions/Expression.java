@@ -7,6 +7,7 @@ import com.microsoft.z3.Context;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.util.Optional;
@@ -60,5 +61,9 @@ public class Expression {
   public Optional<BoolExpr> convert(Context context, IDeriveSMTExpr converter) {
     converter.setPrefix(getPrefix().orElse(""));
     return converter.toBool(getAstExpression());
+  }
+
+  public String print() {
+    return VariableArcMill.prettyPrint(astExpression, false);
   }
 }

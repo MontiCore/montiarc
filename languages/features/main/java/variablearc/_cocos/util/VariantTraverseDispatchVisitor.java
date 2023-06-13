@@ -4,10 +4,14 @@ package variablearc._cocos.util;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.VariableArcMill;
+import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableComponentTypeSymbol;
 import variablearc._symboltable.VariantComponentTypeSymbol;
 import variablearc._visitor.VariableArcTraverser;
+import variablearc.evaluation.expressions.Expression;
 
 /**
  * A visitor that invokes another traverser on all component variants.
@@ -33,7 +37,11 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
     }
 
     for (VariantComponentTypeSymbol variant : ((VariableComponentTypeSymbol) node.getSymbol()).getVariants()) {
+      long findings = Log.getFindingsCount();
       variant.getAstNode().accept(traverser);
+      if (findings != Log.getFindingsCount() && !variant.getIncludedVariationPoints().isEmpty()) {
+        Log.info("Error in variant (" + variant.getIncludedVariationPoints().stream().map(VariableArcVariationPoint::getCondition).map(Expression::print).reduce((a, b) -> a + ", " + b).orElse("") + ")", "↳ Variability");
+      }
     }
   }
 }
