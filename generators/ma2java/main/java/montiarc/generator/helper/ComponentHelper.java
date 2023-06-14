@@ -161,7 +161,6 @@ public class ComponentHelper {
 
 
 
-
   /**
    * Print the type of the specified subcomponent.
    *
@@ -193,7 +192,8 @@ public class ComponentHelper {
   public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
     if (comp.isInnerComponent()) {
       //TODO add check for outermost component being TOP-Class or remove this function?
-      return printPackageWithoutKeyWordAndSemicolon(comp.getOuterComponent().get()) + "." + comp.getOuterComponent().get().getName();
+      String outerPackage = printPackageWithoutKeyWordAndSemicolon(comp.getOuterComponent().get());
+      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + comp.getOuterComponent().get().getName();
     } else {
       return comp.getPackageName();
     }
