@@ -38,4 +38,7 @@ public class TestController {
     controller.selectTransition(possibleTransitions);
   }
 
+  public static void addBranch(BoolExpr condition, String branchId) {
+    controller.addBranch(condition, branchId);
+  }
 }

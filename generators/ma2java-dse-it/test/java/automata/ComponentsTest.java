@@ -15,11 +15,6 @@ import expressions.PlusExpression;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.MockTestController;
 import montiarc.rte.dse.TestController;
-import montiarc.rte.dse.strategie.MockPathCoverageController;
-import montiarc.rte.dse.strategie.PathCoverageController;
-import montiarc.rte.timesync.IComponent;
-import montiarc.rte.timesync.IInPort;
-import montiarc.rte.timesync.IOutPort;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -650,6 +645,47 @@ public class ComponentsTest {
           longComponent.getIn().update(input);
           longComponent.compute();
           return longComponent.getOut().getValue();
+        },
+        List.of(1)
+      )
+    );
+
+    AnnotatedValue<Expr<RealSort>, Double> doubleParameter =
+      AnnotatedValue.newAnnoValue(ctx.mkReal("4.2"), 4.2);
+    DoubleComponentParameter doubleComponentParameter =
+      new DoubleComponentParameter(doubleParameter);
+
+    doubleComponentParameter.setUp();
+    doubleComponentParameter.init();
+
+    AnnotatedValue<Expr<RealSort>, Double> inDoubleParmeter =
+      AnnotatedValue.newAnnoValue(inputR_0, 6.4);
+    AnnotatedValue<Expr<RealSort>, Double> outDoubleParmeter =
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(inputR_0, ctx.mkReal("10.2")), 16.6);
+
+    AnnotatedValue<Expr<RealSort>, Double> inDoubleParameter2 =
+      AnnotatedValue.newAnnoValue(inputR_0, 2d);
+
+    result.add(Arguments.of(
+        List.of(inDoubleParmeter),
+        List.of(outDoubleParmeter),
+        (Function<AnnotatedValue<Expr<RealSort>, Double>,
+          AnnotatedValue<Expr<RealSort>, Double>>) (input) -> {
+          doubleComponentParameter.getIn().update(input);
+          doubleComponentParameter.compute();
+          return doubleComponentParameter.getOut().getValue();
+        },
+        List.of(1)
+      )
+    );
+    result.add(Arguments.of(
+        List.of(inDoubleParameter2),
+        List.of(doubleParameter),
+        (Function<AnnotatedValue<Expr<RealSort>, Double>,
+          AnnotatedValue<Expr<RealSort>, Double>>) (input) -> {
+          doubleComponentParameter.getIn().update(input);
+          doubleComponentParameter.compute();
+          return doubleComponentParameter.getOut().getValue();
         },
         List.of(1)
       )

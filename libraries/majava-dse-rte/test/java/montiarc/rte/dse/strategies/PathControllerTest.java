@@ -4,8 +4,8 @@ package montiarc.rte.dse.strategies;
 import com.microsoft.z3.*;
 import dse.DSE;
 import montiarc.rte.dse.AnnotatedValue;
+import montiarc.rte.dse.PathCondition;
 import montiarc.rte.dse.TestController;
-import montiarc.rte.dse.strategie.MockPathCoverageController;
 import montiarc.rte.timesync.IInPort;
 import montiarc.rte.timesync.IOutPort;
 import montiarc.rte.timesync.InPort;
@@ -28,14 +28,17 @@ class PathControllerTest {
       List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
 
   @BeforeEach
-  void setUpMock() throws Exception {
-    controller = MockPathCoverageController.init(DSE::runOnce);
+  void setUpMock(){
+    controller = new MockPathCoverageController<>();
+    assertThat(controller).isNotNull();
+
+    controller.init();
 
     assertThat(controller).isNotNull();
   }
 
   @Test
-  public void teststartTest() {
+  public void testStartTest() throws Exception {
 
     List<Expr<IntSort>> inputExpr = new ArrayList<>();
     List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>> expectedInput = new ArrayList<>();
@@ -55,10 +58,7 @@ class PathControllerTest {
     Set<Pair<List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
       List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>>>
       result = controller.startTest(DSE.getInputValues(solver.getModel(), inputExpr),
-      m -> DSE.getInputValues(m, inputExpr));
-
-    List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>> resKey = new ArrayList<>();
-    List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>> resVal = new ArrayList<>();
+      m -> DSE.getInputValues(m, inputExpr), DSE::runOnce).getInterestingInputs();
 
     assertThat(result).isNotNull();
 
@@ -79,7 +79,6 @@ class PathControllerTest {
         );
       }
     }
-
   }
 
   @Test
@@ -99,11 +98,10 @@ class PathControllerTest {
     assertThat(controller.branchingCondition.size()).isEqualTo(1);
     assertThat(controller.branchingCondition.get(0)
       .toString()).isEqualTo(resultCondition.toString());
-
   }
 
   @Test
-  public void testgetIfOracle() {
+  public void testGetIfOracle() {
 
     controller.getIfOracle("testgetIfOracle");
 
@@ -115,6 +113,20 @@ class PathControllerTest {
     assertThat(controller.branchingCondition.size()).isEqualTo(1);
     assertThat(controller.branchingCondition.get(0)
       .toString()).isEqualTo(resultCondition.toString());
+  }
 
+  @Test
+  public void testAddBranches() {
+
+    BoolExpr branch = controller.getCtx()
+      .mkEq(controller.getCtx().mkInt(42), controller.getCtx().mkInt(43));
+
+    PathCondition expected = new PathCondition();
+    expected.addBranch(branch, "testBranch");
+
+    controller.addBranch(branch, "testBranch");
+
+    assertThat(controller.takenBranches).isNotNull();
+    assertThat(controller.takenBranches.toString()).isEqualTo(expected.toString());
   }
 }

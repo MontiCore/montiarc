@@ -22,9 +22,10 @@ public interface TestControllerI extends TransitionSelectorI {
   boolean getIfOracle(String branchId);
 
   /**
-   * This function adds a condition, equal to the result of its check, to the controller's path
-   * constraint. The result of the check is returned to allow the functionality to store a
-   * condition directly when it is checked.
+   * This function adds a condition equal to the result of its check to the path constraint of
+   * the controller. The result of the check is returned to allow the function to store a
+   * condition directly when it is checked. The purpose of this function is to store all
+   * recognized conditions, regardless of whether the corresponding branch was taken or not.
    *
    * @param condition Branch condition as boolean expression
    * @param result    Result of comparing the branch condition with the actual value
@@ -37,4 +38,14 @@ public interface TestControllerI extends TransitionSelectorI {
    * @return the context of the current TestController
    */
   Context getCtx();
+
+  /**
+   * Adds the given condition to the controller's takenBranches to track the path through the
+   * component. Unlike getIf, this function is only there to store the path conditions of the
+   * taken branches, this is only needed for tracking and evaluating the results.
+   *
+   * @param condition branch condition as boolean expression
+   * @param branchID  taken branch for tracking
+   */
+  void addBranch(BoolExpr condition, String branchID);
 }

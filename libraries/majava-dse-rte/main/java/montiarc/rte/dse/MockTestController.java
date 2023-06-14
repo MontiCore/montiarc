@@ -67,4 +67,7 @@ public class MockTestController implements TestControllerI {
       possibleTransitions.get(transition).getKey().run();
     }
   }
+
+  @Override
+  public void addBranch(BoolExpr condition, String branchID) {}
 }

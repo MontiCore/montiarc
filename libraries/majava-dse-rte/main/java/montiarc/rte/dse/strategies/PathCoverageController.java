@@ -1,49 +1,50 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.dse.strategie;
+package montiarc.rte.dse.strategies;
 
 import com.microsoft.z3.*;
+import montiarc.rte.dse.ControllerI;
+import montiarc.rte.dse.PathCondition;
+import montiarc.rte.dse.ResultI;
 import montiarc.rte.dse.TestController;
-import montiarc.rte.dse.TestControllerI;
 import montiarc.rte.log.LogException;
-import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PathCoverageController<In, Out> implements TestControllerI {
-  protected final Function<In, Out> sut;
-  protected final Context ctx;
+public class PathCoverageController<In, Out> implements ControllerI<In, Out> {
+
+  protected Function<In, Out> sut;
+  protected Context ctx;
   protected Function<Model, In> evalModel;
   protected List<BoolExpr> branchingConditions = new ArrayList<>();
   protected int usedOracleCount = 0;
   protected List<Boolean> oracles = new ArrayList<>();
+  protected PathCondition takenBranches;
 
-  protected PathCoverageController(Function<In, Out> sut) {
-    if (sut == null) {
-      throw new IllegalArgumentException("passed function for PathCoverageController is null");
-    }
-    this.sut = sut;
-
+  @Override
+  public void init() {
     Map<String, String> cfg = new HashMap<>();
     cfg.put("model", "true");
 
     ctx = new Context(cfg);
+    TestController.init(this);
   }
 
-  public static <In, Out> PathCoverageController<In, Out> init(Function<In, Out> sut) throws Exception {
-    PathCoverageController<In, Out> result = new PathCoverageController<>(sut);
-    TestController.init(result);
-    return result;
-  }
+  @Override
+  public ResultI<In, Out> startTest(In initialInput, Function<Model, In> evalModel, Function<In,
+    Out> sut) throws Exception {
+    if (sut == null) {
+      throw new IllegalArgumentException("passed function for PathCoverageController is null");
+    }
 
-  public Set<Pair<In, Out>> startTest(In initialInput, Function<Model, In> evalModel) {
+    this.sut = sut;
     this.evalModel = evalModel;
     return startTest(initialInput, new ArrayList<>(), 0);
   }
 
-  public Set<Pair<In, Out>> startTest(In input, List<Boolean> oracles, int branchDepth) {
+  public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
     if (TestController.getController() != this) {
       throw new LogException("Given controller does not match the " +
         "PathCoverageController");
@@ -58,10 +59,13 @@ public class PathCoverageController<In, Out> implements TestControllerI {
     }
     this.oracles = oracles;
 
-    Set<Pair<In, Out>> result = new HashSet<>();
+    takenBranches = new PathCondition();
+
+    ResultPathController<In, Out> result = new ResultPathController<>();
 
     Out output = sut.apply(input);
-    result.add(ImmutablePair.of(input, output));
+    result.addInterestingInputs(input, output);
+    result.addInputsAndCondition(input, output, takenBranches);
 
     montiarc.rte.log.Log.trace("branchingC: " + branchingConditions);
 
@@ -147,6 +151,11 @@ public class PathCoverageController<In, Out> implements TestControllerI {
   }
 
   @Override
+  public void addBranch(BoolExpr condition, String branchId) {
+    takenBranches.addBranch(condition, branchId);
+  }
+
+  @Override
   public void selectTransition(List<Pair<Runnable, String>> possibleTransitions) {
     if (possibleTransitions.size() == 1) {
       possibleTransitions.get(0).getKey().run();
@@ -154,7 +163,7 @@ public class PathCoverageController<In, Out> implements TestControllerI {
 
     if (possibleTransitions.size() > 1) {
       int transition = 0;
-      while (transition < possibleTransitions.size() && !getIfOracle("possibleTransitions")) {
+      while (transition < possibleTransitions.size() - 1 && !getIfOracle("possibleTransitions")) {
         transition++;
       }
       possibleTransitions.get(transition).getKey().run();

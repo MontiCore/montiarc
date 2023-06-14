@@ -1,6 +1,8 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- Generates the deployment class for a component. -->
-${tc.signature("comp", "isTop")}
+${tc.signature("ast", "isTop")}
+
+<#assign comp = ast.getSymbol()/>
 
 <#if comp.getPackageName() != "">
   package ${comp.getPackageName()};

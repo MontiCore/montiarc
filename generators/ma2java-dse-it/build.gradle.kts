@@ -3,6 +3,7 @@ plugins {
   id("montiarc.build.integration-test")
   id("cd2pojo")
   id("montiarc")
+  application
 }
 
 sourceSets {
@@ -43,4 +44,8 @@ tasks.compileMontiarc {
   if(enableAttachDebugger) {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
+}
+
+application {
+  mainClass.set("main.MainDse")
 }

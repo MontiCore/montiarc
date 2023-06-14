@@ -21,7 +21,16 @@ import de.monticore.types.check.SymTypePrimitive;
 import montiarc.generator.dse.MA2JavaDseFullPrettyPrinter;
 import montiarc.generator.helper.ComponentHelper;
 
-import java.util.*;
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collection;
+import java.util.Optional;
 
 /**
  * Helper class used in the template to generate target code of atomic or composed components.
@@ -40,22 +49,160 @@ public class ComponentHelperDse {
    * inherited and possible required renamings due to generic type parameters and their actual
    * arguments.
    *
-   * @param portSymbol Symbol of the port for which the type name should be determined.
+   * @param type Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
+  public static String getRealPortTypeString(SymTypeExpression type) {
+    return type.isPrimitive() ?
+      ((SymTypePrimitive) type).getBoxedPrimitiveName() :
+      type.isTypeVariable() ? type.print() :
+        type.printFullName();
+  }
   public static String getRealPortTypeString(PortSymbol portSymbol) {
-    SymTypeExpression portType = portSymbol.getType();
-    return portType.isPrimitive() ?
-      ((SymTypePrimitive) portType).getBoxedPrimitiveName() :
-      portType.isTypeVariable() ? portType.print() :
-        portType.printFullName();
+    return getRealPortTypeString(portSymbol.getType());
+  }
+
+  public static String getRealPortTypeString(VariableSymbol symbol){
+    return getRealPortTypeString(symbol.getType());
+  }
+
+  /**
+   * Returns a list with all TestControllers, defined by the user in the package main/java/controller
+   */
+  public static List<String> getPathStrategies() {
+
+    List<String> result = new ArrayList<>();
+    String moduleRelativePath = Paths.get("main/java/controller").toString();
+    Path absolutePath = Paths.get("").toAbsolutePath().resolve(moduleRelativePath);
+    File folder = new File(absolutePath.toAbsolutePath().toString());
+
+    if (folder.exists()) {
+      for (String file : folder.list()) {
+        result.add(file.replace(".java", ""));
+      }
+    }
+    return result;
+  }
+
+  /**
+   * checks if the port has a character as type
+   */
+  public static boolean isCharacter(VariableSymbol port) {
+    switch (port.getType().print()) {
+      case "Character":
+      case "char":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Prints the extraction of numbers of a String
+   */
+  public static String printCharReplace(PortSymbol sym){
+    switch (getRealPortTypeString(sym)){
+      case "char":
+      case "java.lang.Character":
+        return ".replaceAll(\"[^0-9]\", \"\")";
+      default:
+        return "";
+    }
+  }
+
+  /**
+   * checks if the port has a float or double as type
+   */
+  public static boolean isFloatOrDouble(PortSymbol symbol){
+    switch (symbol.getType().print()){
+      case "Double":
+      case "double":
+      case "Float":
+      case "float":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * Prints the parsing phrase with the corresponding element to create an element of a sort
+   */
+  public static String getParameterType(VariableSymbol symbol) {
+    switch (symbol.getType().print()) {
+      case "Integer":
+      case "int":
+      case "Long":
+      case "long":
+        return "mkInt(Integer.parseInt" ;
+      case "Boolean":
+      case "boolean":
+        return "mkBool(Boolean.parseBoolean";
+      case "Character":
+      case "char":
+        return "charFromBv(ctx.mkBV'";
+      case "String":
+        return "mkString(";
+      case "Float":
+      case "double":
+      case "Double":
+      case "float":
+        return "mkReal(String.valueOf";
+      default:
+        return "mkEnumSort(" + symbol.getType().print().toLowerCase();
+    }
+  }
+
+  /**
+   * Prints the parsing phrase according to the port type
+   */
+  public static String getParseType (PortSymbol port){
+    return getParseType(getRealPortTypeString(port));
+  }
+
+  /**
+   * Prints the parsing phrase according to the symobl type
+   */
+  public static String getParseType (VariableSymbol symbol){
+    return getParseType(getRealPortTypeString(symbol));
+  }
+
+  /**
+   * Prints the parsing phrase according to the type
+   */
+  public static String getParseType(String name) {
+    switch (name) {
+      case "java.lang.Integer":
+      case "int":
+        return "Integer.parseInt";
+      case "java.lang.Long":
+      case "long":
+        return "Long.parseLong";
+      case "java.lang.Boolean":
+      case "boolean":
+        return "Boolean.parseBoolean";
+      case "java.lang.Character":
+      case "char":
+        return "(char) Integer.parseInt";
+      case "short":
+      case "java.lang.String":
+        return "";
+      case "java.lang.Float":
+      case "float":
+        return "Float.parseFloat";
+      case "java.lang.Double":
+      case "double":
+        return "Double.parseDouble";
+      default:
+        return name;
+    }
   }
 
   /**
    * Returns a list of all enum values for an enum that is a type of ASTPort.
    */
   public static List<FieldSymbol> getEnumValues(ASTPort port) {
-    if (isEnum(port)) {
+    if (isEnum(port.getSymbol())) {
       OOTypeSymbol test = (OOTypeSymbol) port.getSymbol().getTypeInfo();
       return test.getFieldList();
     }
@@ -138,9 +285,9 @@ public class ComponentHelperDse {
    * @param port to be checked
    * @return if port type is an enum
    */
-  public static boolean isEnum(ASTPort port) {
-    if (port.getSymbol().getTypeInfo() instanceof OOTypeSymbol) {
-      return ((OOTypeSymbol) port.getSymbol().getType().getTypeInfo()).isIsEnum();
+  public static boolean isEnum(PortSymbol port) {
+    if (port.getTypeInfo() instanceof OOTypeSymbol) {
+      return ((OOTypeSymbol) port.getType().getTypeInfo()).isIsEnum();
     }
     return false;
   }
@@ -152,7 +299,7 @@ public class ComponentHelperDse {
    * @return string sort type of the variable symbol type
    */
   public static String getPortTypeSort(VariableSymbol sym) {
-    return getSort(sym.getType().print());
+    return getSort(sym.getType().printFullName());
   }
 
   /**
@@ -162,31 +309,45 @@ public class ComponentHelperDse {
    * @return string sort type of the port type
    */
   public static String getPortTypeSort(PortSymbol port) {
-    return getSort(port.getTypeInfo().getName());
+    return getSort(port.getTypeInfo().getFullName());
   }
 
   public static String getSort(String name) {
     switch (name) {
-      case "Integer":
+      case "java.lang.Integer":
       case "int":
-      case "Long":
+      case "java.lang.Long":
       case "long":
         return "IntSort";
-      case "Boolean":
+      case "java.lang.Boolean":
       case "boolean":
         return "BoolSort";
-      case "Character":
+      case "java.lang.Character":
       case "char":
         return "CharSort";
-      case "String":
+      case "java.lang.String":
         return "SeqSort<CharSort>";
-      case "Float":
+      case "java.lang.Float":
       case "double":
-      case "Double":
+      case "java.lang.Double":
       case "float":
         return "RealSort";
       default:
         return "EnumSort<" + name + ">";
+    }
+  }
+
+  /**
+   * Returns the sort type to print mkSort, according  to the port type
+   * @param symbol
+   * @return
+   */
+  public static String getMkSort(PortSymbol symbol) {
+    switch (symbol.getType().printFullName()){
+      case "java.lang.String":
+        return "StringSort";
+      default:
+        return getSort(symbol.getType().printFullName());
     }
   }
 

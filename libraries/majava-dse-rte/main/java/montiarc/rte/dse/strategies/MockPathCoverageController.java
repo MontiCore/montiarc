@@ -1,11 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.dse.strategie;
+package montiarc.rte.dse.strategies;
 
 import com.microsoft.z3.BoolExpr;
-import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.PathCondition;
 
 import java.util.List;
-import java.util.function.Function;
 
 /**
  * MockPathCoverageController for testing purposes, the oracle of this controller will always
@@ -15,16 +14,13 @@ public class MockPathCoverageController<In, Out> extends PathCoverageController<
 
   public List<BoolExpr> branchingCondition;
 
-  protected MockPathCoverageController(Function<In, Out> sut) {
-    super(sut);
-  }
+  public PathCondition takenBranches;
 
-  public static <In, Out> MockPathCoverageController<In, Out> init(Function<In, Out> sut) throws Exception {
-    MockPathCoverageController<In, Out> result = new MockPathCoverageController<>(sut);
-    TestController.init(result);
-    return result;
+  @Override
+  public void init(){
+    super.init();
+    takenBranches = new PathCondition();
   }
-
   @Override
   public boolean getIfOracle(String branchId) {
     BoolExpr booleExpr = ctx.mkBoolConst("oracle_" + usedOracleCount);
@@ -41,5 +37,10 @@ public class MockPathCoverageController<In, Out> extends PathCoverageController<
     montiarc.rte.log.Log.trace("BranchingCondition:   " + ctx.mkEq(condition, ctx.mkBool(result)));
     branchingCondition = branchingConditions;
     return result;
+  }
+
+  @Override
+  public void addBranch(BoolExpr condition, String branchID) {
+    takenBranches.addBranch(condition, branchID);
   }
 }

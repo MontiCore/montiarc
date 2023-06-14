@@ -15,6 +15,13 @@ protected void from${state.getName()}To${ast.targetName}NoGuard${counter}() {
   //inputs
   ${input}
 
+	// add the branch condition to taken branches
+	<#if ast.getSCTBody().isPresentPre()>
+		montiarc.rte.dse.TestController.addBranch(${compHelperDse.printExpression(ast.getSCTBody().getPre())}, "from${state.getName()}To${ast.targetName}${counter}");
+	<#else>
+		montiarc.rte.dse.TestController.addBranch(ctx.mkBool(true), "from${state.getName()}To${ast.targetName}NoGuard${counter}");
+	</#if>
+
   // exit state(s)
   this.exit(this.get${identifier.getCurrentStateName()?cap_first}(), States.${state.getName()});
   <#list autHelper.getLeavingParentStatesFromWith(automaton, state, ast) as state>

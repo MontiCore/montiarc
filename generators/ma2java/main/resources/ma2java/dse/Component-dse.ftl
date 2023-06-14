@@ -3,8 +3,6 @@ ${tc.signature("isTop")}
 
 ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))} {
 
-	//compHelperDse.checkDataTypes(ast)}
-
   <@printInstanceName/>
 
   // ports
@@ -101,7 +99,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printEnumSorts ast>
 	<#list compHelperDse.getPortTypes(ast.getPorts()) as port>
-		<#if compHelperDse.isEnum(port)>
+		<#if compHelperDse.isEnum(port.getSymbol())>
 			EnumSort<${port.getSymbol().getType().print()}> ${port.getSymbol().getType().print()?lower_case} = montiarc.rte.dse.TestController.getCtx().mkEnumSort("${port.getSymbol().getType().print()}",
 				<#list compHelperDse.getEnumValues(port) as value>
 					"${value.getName()}"

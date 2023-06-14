@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.googlejavaformat.java.Formatter;
@@ -106,6 +107,8 @@ public class MontiArcGenerator {
           ".Port-dse.ftl"));
       engineSetup.getGlex()
         .replaceTemplate("ma2java.component.Transition.ftl", new TemplateHookPoint("ma2java.dse.Transition-dse.ftl"));
+
+      this.generateComponentDse(ast.getComponentType());
     }
 
     final String template = "ma2java.component.CompilationUnit.ftl";
@@ -117,50 +120,56 @@ public class MontiArcGenerator {
     );
 
     String code = getEngine().generateNoA(template, ast, existsHwc).toString();
-    Optional<String> formattedCode = Optional.empty();
 
-    try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(code));
-    } catch (FormatterException e) {
-      Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, template, ast.getComponentType().getSymbol().getFullName(), e.getMessage()));
-    }
-
-    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(code));
+    formatFile(code, outPath, template, ast.getComponentType());
 
     if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
       && ast.getComponentType().getSymbol().getParameters().isEmpty()
       && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
-      this.generateComponentDeployment(ast.getComponentType().getSymbol());
+      this.generateComponentDeployment(ast.getComponentType());
     }
   }
 
   /**
    * Generates a component deployment class that regularly executes {@code comp}
    */
-  protected void generateComponentDeployment(@NotNull ComponentTypeSymbol comp) {
-    Preconditions.checkNotNull(comp);
-
+  protected void generateComponentDeployment(@NotNull ASTComponentType comp) {
     final String templateName = "ma2java.component.Deploy.ftl";
-    final boolean existsHwc = existsHandWrittenCodeFor(comp, "Deploy", "");
-    final String usedAddendum = existsHwc ? "TOP" : "";
-    final Path outPath = Paths.get(
-      this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(comp, "Deploy", usedAddendum).toString()
-    );
+    final boolean existsHwc = existsHandWrittenCodeFor(comp.getSymbol(), "Deploy", "");
+    final String addendum = existsHwc ? "TOP" : "";
+
+    final Path outPath = getCodePath(comp, "Deploy", addendum);
 
     String generatedCode = getEngine().generateNoA(
       templateName, comp, existsHwc).toString();
-    Optional<String> formattedCode = Optional.empty();
 
-    try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
-    } catch (FormatterException e) {
-      Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, templateName, comp.getFullName(), e.getMessage()));
+    formatFile(generatedCode, outPath, templateName, comp);
+  }
+
+  /**
+   * Generates multiple classes that are needed for the dse application
+   *
+   * @param comp
+   */
+  protected void generateComponentDse(@NotNull ASTComponentType comp) {
+
+    String[] templateNames = new String[]{"ma2java.dse.tool.DSEMain.ftl", "ma2java.dse.tool.DSE" +
+      ".ftl"};
+    String[] prefixNames = new String[]{"DSEMain", "DSE"};
+
+    int i = 0;
+    for (String templateName : templateNames) {
+      final String currentPrefixName = prefixNames[i];
+      generateDseFile(comp, templateName, currentPrefixName, "");
+      i++;
     }
 
-    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
+    String[] ListerNames = new String[]{"ListerIn", "ListerOut", "ListerParameter",
+      "ListerExpression", "ListerExprOut"};
+
+    for (String listerName : ListerNames) {
+      generateDseFile(comp, "ma2java.dse.tool.Lister.ftl", listerName, listerName);
+    }
   }
 
   protected Path getFileAsPath(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
@@ -195,5 +204,75 @@ public class MontiArcGenerator {
       this.getEngineSetup().getHandcodedPath(),
       comp.getPackageName() + "." + prefix + comp.getName() + addendum
     );
+  }
+
+  /**
+   * Generates the main entry point and abstract classes for the dse application
+   */
+  public void generateMain(@NotNull ASTMACompilationUnit ast, List<String> names,
+                           List<String> imports) {
+
+    ASTComponentType comp = ast.getComponentType();
+    final String templateName = "ma2java.dse.tool.Main.ftl";
+
+    final Path outPath = Paths.get(
+      this.getEngineSetup().getOutputDirectory().getAbsolutePath(), "main/MainDse" + FILE_EXTENSION
+    );
+
+    String generatedCode = getEngine().generateNoA(
+      templateName, ast, names, imports).toString();
+
+    formatFile(generatedCode, outPath, templateName, comp);
+
+    final String templateNames = "ma2java.dse.tool.DSEMainAbstract.ftl";
+
+    final Path outPaths = Paths.get(
+      this.getEngineSetup().getOutputDirectory().getAbsolutePath(), "main/DSEMain" + FILE_EXTENSION
+    );
+
+    String generatedCodes = getEngine().generateNoA(templateNames).toString();
+
+    formatFile(generatedCodes, outPaths, templateNames, comp);
+  }
+
+  /**
+   * Helper function to generate extra classes
+   */
+  public void generateDseFile(@NotNull ASTComponentType comp, String templateName,
+                              String prefixName, String listerType) {
+
+    final boolean existsHwc = existsHandWrittenCodeFor(comp.getSymbol(), prefixName, "");
+    final String addendum = existsHwc ? "TOP" : "";
+
+    final Path outPath = getCodePath(comp, prefixName, addendum);
+
+    String generatedCode = getEngine().generateNoA(
+      templateName, comp, existsHwc, listerType).toString();
+
+    formatFile(generatedCode, outPath, templateName, comp);
+  }
+
+  protected Path getCodePath(@NotNull ASTComponentType comp, String prefixName, String addendum) {
+    return Paths.get(
+      this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
+      getFileAsPath(comp.getSymbol(), prefixName, addendum).toString()
+    );
+  }
+
+  /**
+   * Helper function to format the generated Code
+   */
+  protected void formatFile(String generatedCode, Path outPath, String templateName,
+                            @NotNull ASTComponentType comp) {
+    Optional<String> formattedCode = Optional.empty();
+
+    try {
+      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
+    }
+    catch (FormatterException e) {
+      Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
+        outPath, templateName, comp.getSymbol().getFullName(), e.getMessage()));
+    }
+    FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
   }
 }

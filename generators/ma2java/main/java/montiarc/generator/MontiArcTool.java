@@ -15,6 +15,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.HashSet;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -75,6 +78,18 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(!target.isEmpty());
+
+    List<String> componentNames = new ArrayList<>();
+    Set<String> imports = new HashSet<>();
+
+    if (dse) {
+      asts.forEach(ast -> componentNames.add(ast.getComponentType().getName()));
+      asts.forEach(ast -> imports.add(ast.getComponentType().getSymbol().getPackageName()));
+      MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target),
+        splitPathEntriesToList(hwc));
+      asts.forEach(ast -> generator.generateMain(ast, componentNames,
+        new ArrayList<>(imports)));
+    }
     asts.forEach(ast -> this.generate(ast, target, hwc, dse));
   }
 
