@@ -206,6 +206,14 @@ public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
       + "inner.o -> o1;"
       + "inner.o -> o2;"
       + "}",
+    // all timings match - pass through connector and implicit timing
+    "component c14 {"
+      + "port in int i;"
+      + "port out int o;"
+      + "i -> o;"
+      + "component Inner { }"
+      + "Inner inner; "
+      + "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -431,6 +439,14 @@ public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
       + "Inner inner;"
       + "inner.o -> o;"
       + "}",
+      // mismatched timing for a pass through connector with default source timing (timed -> sync)
+    "component c21 {"
+      + "port in int i;"
+      + "port <<sync>> out int o;"
+      + "i -> o;"
+      + "component Inner { }"
+      + "Inner inner; "
+      + "}"
   })
   public void shouldReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);

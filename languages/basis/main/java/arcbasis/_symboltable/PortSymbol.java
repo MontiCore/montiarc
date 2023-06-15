@@ -4,6 +4,7 @@ package arcbasis._symboltable;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTConnectorTOP;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._ast.ASTPortAccessTOP;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
@@ -14,8 +15,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PortSymbol extends PortSymbolTOP {
 
@@ -109,21 +112,30 @@ public class PortSymbol extends PortSymbolTOP {
   }
 
   protected Optional<Timing> getHereditaryTiming() {
-    Optional<ComponentTypeSymbol> component = this.getComponent();
-    if (component.isEmpty()) {
+    if (this.getComponent().isEmpty()) {
       return Optional.empty();
-    } else if (component.get().isAtomic()) {
-      return component.get().getTiming();
+    }
+    ComponentTypeSymbol component = getComponent().get();
+    
+    if (component.isAtomic()) {
+      return component.getTiming();
     } else if (this.isOutgoing()) {
-      Optional<ASTPortAccess> source = component.get().getAstNode()
-        .getConnectorsMatchingTarget(this.getName())
-        .stream().findFirst().map(ASTConnector::getSource);
-      return source.filter(ASTPortAccess::isPresentPortSymbol).map(p -> p.getPortSymbol().getTiming());
+      return component.getAstNode()
+          .getConnectorsMatchingTarget(this.getName()).stream()
+          .map(ASTConnector::getSource)
+          .filter(ASTPortAccess::isPresentPortSymbol).map(ASTPortAccess::getPortSymbol)
+          // filter out all ports where there is no timing set and the owning component is the same as ours (which would lead to a stack overflow because of unstopped recursion)
+          .filter(source -> source.timing != null || source.getComponent().map(comp -> comp != component).orElse(true))
+          .findFirst()
+          .map(PortSymbol::getTiming);
     } else if (this.isIncoming()) {
-      Optional<ASTPortAccess> source = component.get().getAstNode()
-        .getConnectorsMatchingSource(this.getName())
-        .stream().findFirst().map(c -> c.getTarget(0));
-      return source.filter(ASTPortAccess::isPresentPortSymbol).map(p -> p.getPortSymbol().getTiming());
+      return component.getAstNode().getConnectorsMatchingSource(this.getName())
+          .stream().map(ASTConnectorTOP::getTargetList).flatMap(Collection::stream)
+          .filter(ASTPortAccessTOP::isPresentComponent)
+          .filter(ASTPortAccess::isPresentPortSymbol)
+          .map(ASTPortAccess::getPortSymbol)
+          .map(PortSymbol::getTiming)
+          .findFirst();
     } else {
       return Optional.empty();
     }
