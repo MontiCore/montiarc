@@ -100,6 +100,9 @@ public class MontiArcGenerator {
         .replaceTemplate("ma2java.component.Component.ftl", new TemplateHookPoint("ma2java.dse" +
           ".Component-dse.ftl"));
       engineSetup.getGlex()
+        .replaceTemplate("ma2java.component.Atomic.ftl", new TemplateHookPoint("ma2java.dse" +
+          ".Atomic-dse.ftl"));
+      engineSetup.getGlex()
         .replaceTemplate("ma2java.component.Automaton.ftl", new TemplateHookPoint("ma2java.dse" +
           ".Automaton-dse.ftl"));
       engineSetup.getGlex()

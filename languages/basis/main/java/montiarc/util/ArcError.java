@@ -71,7 +71,9 @@ public enum ArcError implements Error {
   HERITAGE_KEY_NOT_UNIQUE("0xC1160", "Cannot use key '%s' of component '%s' multiple times to set parameters."),
   HERITAGE_COMP_ARG_MULTIPLE_VALUES("0xC1161", "Multiple values for argument '%s'"),
   HERITAGE_COMP_ARG_KEY_INVALID("0xC1162", "Unexpected key argument '%s'"),
-  HERITAGE_COMP_ARG_VALUE_AFTER_KEY("0xC1163", "Positional assignments after key argument");
+  HERITAGE_COMP_ARG_VALUE_AFTER_KEY("0xC1163", "Positional assignments after key argument"),
+  CONNECT_PRIMITIVE_TO_OBJECT("0xC1164", "Boxing not supported for connectors: Cannot connect primitive type port to object type port."),
+  CONNECT_OBJECT_TO_PRIMITIVE("0xC1165", "Unboxing not supported for connectors: Cannot connect object type port to primitive type port.");
 
   private final String errorCode;
   private final String errorMessage;

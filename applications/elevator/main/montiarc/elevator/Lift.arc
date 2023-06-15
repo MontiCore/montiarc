@@ -6,8 +6,8 @@ import elevator.Commands.LiftCMD;
 component Lift {
 
   port <<sync>> in LiftCMD cmd;
-  port <<sync>> out boolean up;
-  port <<sync>> out boolean down;
+  port <<sync>> out Boolean up;
+  port <<sync>> out Boolean down;
 
   automaton {
     initial state Wait;

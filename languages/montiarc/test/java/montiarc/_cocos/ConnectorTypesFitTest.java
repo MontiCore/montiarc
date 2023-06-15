@@ -92,164 +92,134 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
       "a.b.C sub2; " +
       "sub2.o -> sub1.i; " +
       "}",
-    // java.lang.Boolean -> boolean
-    "component Comp6 { " +
-      "port in java.lang.Boolean i; " +
-      "a.b.B sub; " +
-      "i -> sub.i; " +
-      "}",
-    // boolean -> java.lang.Boolean
-    "component Comp7 { " +
-      "port out java.lang.Boolean o; " +
-      "a.b.C sub; " +
-      "sub.o -> o; " +
-      "}",
     // int -> int (in port forward)
-    "component Comp8 { " +
+    "component Comp6 { " +
       "port in int i; " +
       "a.b.D sub; " +
       "i -> sub.i; " +
       "}",
     // int -> int (out port forward)
-    "component Comp9 { " +
+    "component Comp7 { " +
       "port out int o; " +
       "a.b.E sub; " +
       "sub.o -> o; " +
       "}",
     // int -> int (hidden channel)
-    "component Comp10 { " +
+    "component Comp8 { " +
       "a.b.D sub1; " +
       "a.b.E sub2; " +
       "sub2.o -> sub1.i; " +
       "}",
-    // java.lang.Integer -> int (in port forward)
-    "component Comp11 { " +
-      "port in java.lang.Integer i; " +
-      "a.b.D sub; " +
-      "i -> sub.i; " +
-      "}",
-    // int -> java.lang.Integer (out port forward)
-    "component Comp12 { " +
-      "port out java.lang.Integer o; " +
-      "a.b.E sub; " +
-      "sub.o -> o; " +
-      "}",
-    // int -> java.lang.Integer (in port forward)
-    "component Comp13 { " +
-      "port in int i; " +
-      "a.b.F sub; " +
-      "i -> sub.i; " +
-      "}",
     // java.lang.Integer -> java.lang.Integer (in port forward)
-    "component Comp14 { " +
+    "component Comp9 { " +
       "port in java.lang.Integer i; " +
       "a.b.F sub; " +
       "i -> sub.i; " +
       "}",
     // java.util.List<java.lang.Integer> -> java.util.List<java.lang.Integer> (in port forward)
-    "component Comp15 { " +
+    "component Comp10 { " +
       "port in java.util.List<java.lang.Integer> i; " +
       "a.b.G sub; " +
       "i -> sub.i; " +
       "}",
     // java.util.List<java.lang.Integer> -> java.util.List<java.lang.Integer> (out port forward)
-    "component Comp16 { " +
+    "component Comp11 { " +
       "port in java.util.List<java.lang.Integer> o; " +
       "a.b.H sub; " +
       "sub.o -> o; " +
       "}",
     // java.util.List -> java.util.List<java.lang.Integer> (unchecked assignment)
-    /*"component Comp17 { " +
+    /*"component Comp12 { " +
       "port in java.util.List i; " +
       "a.b.G sub; " +
       "i -> sub.i; " +
       "}",*/
     // java.util.List<java.lang.Integer> -> java.util.List (type erasure)
-    /*"component Comp18 { " +
+    /*"component Comp13 { " +
       "port in java.util.List o; " +
       "a.b.H sub; " +
       "sub.o -> o; " +
       "}",*/
     // java.util.Integer -> java.lang.Comparable<java.lang.Integer> (in port forward,  super type conversion)
-    "component Comp19 { " +
+    "component Comp14 { " +
       "port in java.lang.Integer i; " +
       "a.b.I sub; " +
       "i -> sub.i; " +
       "}",
     // java.lang.Comparable<java.lang.Integer> -> java.lang.Comparable<java.lang.Integer> (in port forward)
-    "component Comp20 { " +
+    "component Comp15 { " +
       "port in java.lang.Comparable<java.lang.Integer> i; " +
       "a.b.I sub; " +
       "i -> sub.i; " +
       "}",
     // java.lang.Comparable<java.lang.Integer> -> java.lang.Comparable<java.lang.Integer> (out port forward)
-    "component Comp21 { " +
+    "component Comp16 { " +
       "port in java.lang.Comparable<java.lang.Integer> o; " +
       "a.b.J sub; " +
       "sub.o -> o; " +
       "}",
     // java.lang.Integer -> java.lang.Integer (in port forward, type parameter)
-    "component Comp22 { " +
+    "component Comp17 { " +
       "port in java.lang.Integer i; " +
       "a.b.K<java.lang.Integer> sub; " +
       "i -> sub.i; " +
       "}",
     // java.lang.Integer -> java.lang.Integer (out port forward, type parameter)
-    "component Comp23 { " +
+    "component Comp18 { " +
       "port in java.lang.Integer o; " +
       "a.b.L<java.lang.Integer> sub; " +
       "o -> sub.o; " +
       "}",
     // S -> S (in port forward, type parameter)
-    "component Comp24<S> { " +
+    "component Comp19<S> { " +
       "port in S i; " +
       "a.b.K<S> sub; " +
       "i -> sub.i; " +
       "}",
     // S -> S (out port forward, type parameter)
-    "component Comp25<S> { " +
+    "component Comp20<S> { " +
       "port out S o; " +
       "a.b.L<S> sub; " +
       "sub.o -> o; " +
       "}",
     // T -> T (in port forward, type parameter)
-    "component Comp26<T> { " +
+    "component Comp21<T> { " +
       "port in T i; " +
       "a.b.K<T> sub; " +
       "i -> sub.i; " +
       "}",
     // T -> T (out port forward, type parameter)
-    "component Comp27<T> { " +
+    "component Comp22<T> { " +
       "port out T o; " +
       "a.b.L<T> sub; " +
       "sub.o -> o; " +
       "}",
     // S -> S (hidden channel, type parameter)
-    "component Comp28<S> { " +
+    "component Comp23<S> { " +
       "a.b.K<S> sub1; " +
       "a.b.L<S> sub2; " +
       "sub2.o -> sub1.i; " +
       "}",
     // int -> int, int (in port forward, multiple targets)
-    "component Comp29 { " +
+    "component Comp24 { " +
       "port in int i; " +
       "a.b.D sub1, sub2; " +
       "i -> sub1.i, sub2.i; " +
       "}",
     // int -> int, int (out port forward, multiple targets)
-    "component Comp30 { " +
+    "component Comp25 { " +
       "port out int o1, o2; " +
       "a.b.E sub; " +
       "sub.o -> o1, o2; " +
       "}",
     // int -> int, int (hidden channel, multiple targets)
-    "component Comp31 { " +
+    "component Comp26 { " +
       "a.b.D sub1; " +
       "a.b.E sub2; " +
       "sub2.o -> sub1.i; " +
       "}",
     // T -> T (inner component)
-    "component Comp32<T> { " +
+    "component Comp27<T> { " +
       "port in T i; " +
       "component Inner<T> { " +
       "port in T i; " +
@@ -258,7 +228,7 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
       "i -> sub.i; " +
       "}",
     // S -> S (inner component)
-    "component Comp33<S> { " +
+    "component Comp28<S> { " +
       "port in S i; " +
       "component Inner<T> { " +
       "port in T i; " +
@@ -437,7 +407,42 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
           "Inner sub; " +
           "i -> sub.i; " +
           "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH)
+        ArcError.CONNECTOR_TYPE_MISMATCH),
+      // java.lang.Boolean -> boolean
+      arg("component Comp19 { " +
+          "port in java.lang.Boolean i; " +
+          "a.b.B sub; " +
+          "i -> sub.i; " +
+          "}",
+          ArcError.CONNECT_OBJECT_TO_PRIMITIVE),
+      // boolean -> java.lang.Boolean
+      arg("component Comp20 { " +
+          "port out java.lang.Boolean o; " +
+          "a.b.C sub; " +
+          "sub.o -> o; " +
+          "}",
+          ArcError.CONNECT_PRIMITIVE_TO_OBJECT),
+      // java.lang.Integer -> int (in port forward)
+      arg("component Comp21 { " +
+          "port in java.lang.Integer i; " +
+          "a.b.D sub; " +
+          "i -> sub.i; " +
+          "}",
+          ArcError.CONNECT_OBJECT_TO_PRIMITIVE),
+      // int -> java.lang.Integer (out port forward)
+      arg("component Comp22 { " +
+          "port out java.lang.Integer o; " +
+          "a.b.E sub; " +
+          "sub.o -> o; " +
+          "}",
+          ArcError.CONNECT_PRIMITIVE_TO_OBJECT),
+      // int -> java.lang.Integer (in port forward)
+      arg("component Comp23 { " +
+          "port in int i; " +
+          "a.b.F sub; " +
+          "i -> sub.i; " +
+          "}",
+          ArcError.CONNECT_PRIMITIVE_TO_OBJECT)
     );
   }
 }

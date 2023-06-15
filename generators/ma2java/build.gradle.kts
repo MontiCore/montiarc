@@ -13,6 +13,7 @@ dependencies {
   implementation(libs.janino)
 
   testImplementation(project(":generators:cd2pojo"))
+  testImplementation(libs.mc.c2mc)
   testImplementation(libs.mockito)
 }
 

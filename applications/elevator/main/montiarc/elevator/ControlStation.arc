@@ -3,10 +3,10 @@ package elevator;
 
 component ControlStation {
 
-  port <<sync>> in boolean btn1, btn2, btn3, btn4,
-       <<sync>> out boolean light1, light2, light3, light4,
-       <<sync>> out boolean req1, req2, req3, req4;
-  port <<sync>> in int clear;
+  port <<sync>> in Boolean btn1, btn2, btn3, btn4,
+       <<sync>> out Boolean light1, light2, light3, light4,
+       <<sync>> out Boolean req1, req2, req3, req4;
+  port <<sync>> in Integer clear;
 
   FloorControl floor1, floor2, floor3, floor4;
 

@@ -197,20 +197,24 @@ ${tc.signature("comp")}
 
 <#macro printLocalInputVariables comp>
   <#list comp.getAllIncomingPorts() as port>
-    final ${compHelper.getRealPortTypeString(port)} ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
+    final <@printType port.getType()/> ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
   </#list>
 </#macro>
 
 <#macro printLocalOutputVariables comp>
   <#list comp.getAllOutgoingPorts() as port>
-    ${compHelper.getRealPortTypeString(port)} ${port.getName()} = null;
+    <@printType port.getType()/> ${port.getName()} = <@printDefaultValue port.getType()/>;
   </#list>
 </#macro>
 
 <#macro printSetOutput comp>
   <#list comp.getAllOutgoingPorts() as port>
-    if (${port.getName()} != null) this.get${port.getName()?cap_first}().setValue(${port.getName()});
+    <#if !port.getType().isPrimitive()>if (${port.getName()} != null) </#if>this.get${port.getName()?cap_first}().setValue(${port.getName()});
   </#list>
+</#macro>
+
+<#macro printType type>
+  <#if type.isPrimitive() || type.isTypeVariable()>${type.print()}<#else>${type.printFullName()}</#if>
 </#macro>
 
 <#macro printSynchronize comp>
@@ -248,3 +252,5 @@ ${tc.signature("comp")}
     }
   }
 </#macro>
+
+<#macro printDefaultValue portType><#if !portType.isPrimitive()>null<#elseif portType.print()?matches("boolean")>false<#else>0</#if></#macro>

@@ -5,7 +5,7 @@ package dataTypes;
  *  Simple atomic component for testing floats
  */
 component FloatComponent {
-  port <<sync>> in float in;
+  port <<sync>> in Float in;
   port <<sync>> out Float out;
 
   Float floater = 42.4f;

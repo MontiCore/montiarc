@@ -3,10 +3,10 @@ package elevator;
 
 component FloorControl {
 
-  port <<sync>> in boolean btn,
-       <<sync>> out boolean light;
-  port <<sync>> in boolean clear,
-       <<sync>> out boolean req;
+  port <<sync>> in Boolean btn,
+       <<sync>> out Boolean light;
+  port <<sync>> in Boolean clear,
+       <<sync>> out Boolean req;
 
   automaton {
     initial state LightOff;

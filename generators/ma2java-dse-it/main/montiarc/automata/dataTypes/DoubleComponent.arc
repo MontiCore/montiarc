@@ -6,7 +6,7 @@ package dataTypes;
  */
 component DoubleComponent {
   port <<sync>> in Double in;
-  port <<sync>> out double out;
+  port <<sync>> out Double out;
 
   Double doubler = 2.4;
 

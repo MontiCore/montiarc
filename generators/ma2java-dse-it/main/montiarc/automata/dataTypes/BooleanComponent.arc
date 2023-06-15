@@ -6,7 +6,7 @@ package dataTypes;
  */
 component BooleanComponent {
   port <<sync>> in Boolean in;
-  port <<sync>> out boolean out;
+  port <<sync>> out Boolean out;
 
   automaton{
     initial state Idle;

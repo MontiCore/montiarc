@@ -4,7 +4,7 @@ package elevator;
 component Splitter {
 
   port <<sync>> in Integer i,
-       <<sync>> out boolean o1, o2, o3, o4;
+       <<sync>> out Boolean o1, o2, o3, o4;
 
   compute {
     if (i == null) {
