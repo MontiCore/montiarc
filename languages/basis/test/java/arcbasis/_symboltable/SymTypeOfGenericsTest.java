@@ -115,7 +115,7 @@ public class SymTypeOfGenericsTest {
     List<SymTypeExpression> symTypes = createSymTypeExpressions();
 
     return Stream.of(
-      Arguments.of(symTypes.get(0), "X<>"),
+      Arguments.of(symTypes.get(0), "X<T>"),
       Arguments.of(symTypes.get(1), "Y<V>"),
       Arguments.of(symTypes.get(2), "Z<V, W>"),
       Arguments.of(symTypes.get(3), "X<Y<V>>"),
@@ -157,7 +157,7 @@ public class SymTypeOfGenericsTest {
     List<SymTypeExpression> symTypes = createSymTypeExpressions();
 
     return Stream.of(
-      Arguments.of(symTypes.get(0), "a.b.c.X<>"),
+      Arguments.of(symTypes.get(0), "a.b.c.X<a.b.c.X.T>"),
       Arguments.of(symTypes.get(1), "a.b.c.Y<d.e.f.V>"),
       Arguments.of(symTypes.get(2), "a.b.c.Z<d.e.f.V, g.h.i.W>"),
       Arguments.of(symTypes.get(3), "a.b.c.X<a.b.c.Y<d.e.f.V>>"),

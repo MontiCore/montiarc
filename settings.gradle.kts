@@ -77,17 +77,17 @@ dependencyResolutionManagement {
       library("mockito", "org.mockito:mockito-core:5.3.1")
       library("z3", "tools.aqua:z3-turnkey:4.11.2")
 
-      library("mc-lsp", "de.monticore.language-server:monticore-language-server-runtime:7.5.0")
-      library("mc-grammar", "de.monticore:monticore-grammar:7.5.0")
-      library("mc-runtime", "de.monticore:monticore-runtime:7.5.0")
-      library("mc-c2mc", "de.monticore:class2mc:7.5.0")
-      library("se-groovy", "de.se_rwth.commons:se-commons-groovy:7.5.0")
-      library("se-logging", "de.se_rwth.commons:se-commons-logging:7.5.0")
-      library("se-utilities", "de.se_rwth.commons:se-commons-utilities:7.5.0")
-      library("mc-cd4a", "de.monticore.lang:cd4analysis:7.5.0")
-      library("mc-ocl", "de.monticore.lang:ocl:7.5.0")
-      library("mc-sc", "de.monticore.lang:statecharts:7.5.0")
-      library("mc-fd", "de.monticore.lang:fd-lang:7.5.0")
+      library("mc-lsp", "de.monticore.language-server:monticore-language-server-runtime:7.6.0-SNAPSHOT")
+      library("mc-grammar", "de.monticore:monticore-grammar:7.6.0-SNAPSHOT")
+      library("mc-runtime", "de.monticore:monticore-runtime:7.6.0-SNAPSHOT")
+      library("mc-c2mc", "de.monticore:class2mc:7.6.0-SNAPSHOT")
+      library("se-groovy", "de.se_rwth.commons:se-commons-groovy:7.6.0-SNAPSHOT")
+      library("se-logging", "de.se_rwth.commons:se-commons-logging:7.6.0-SNAPSHOT")
+      library("se-utilities", "de.se_rwth.commons:se-commons-utilities:7.6.0-SNAPSHOT")
+      library("mc-cd4a", "de.monticore.lang:cd4analysis:7.6.0-SNAPSHOT")
+      library("mc-ocl", "de.monticore.lang:ocl:7.6.0-SNAPSHOT")
+      library("mc-sc", "de.monticore.lang:statecharts:7.6.0-SNAPSHOT")
+      library("mc-fd", "de.monticore.lang:fd-lang:7.6.0-SNAPSHOT")
     }
   }
 }
