@@ -20,7 +20,7 @@ plugins {
 }
 
 group = "montiarc.tooling.plugin-itest.cd4montiarc-dependencies"
-version = "7.5.0-SNAPSHOT"
+version = "7.5.0"
 
 tasks.getByName<Test>("test") {
   enabled = false
