@@ -38,11 +38,6 @@ abstract class MontiarcCompile : JavaExec() {
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
-  @Deprecated("You can now directly declare montiarc sources in the sourceSet { main { montiarc {...} } } block")
-  @get:Input
-  @get:Optional
-  abstract val sourceSetName: Property<String>
-
   init {
     description = "Generates .java code from MontiArc models."
 
