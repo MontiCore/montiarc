@@ -18,11 +18,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class PortSymbol extends PortSymbolTOP {
-
-  protected Boolean stronglyCausal = null;
 
   /**
    * @param name the name of this port.
@@ -159,7 +156,8 @@ public class PortSymbol extends PortSymbolTOP {
     return false;
   }
 
-  public boolean isStronglyCausal() {
+  @Override
+  public Boolean getStronglyCausal() {
     if(this.stronglyCausal == null) {
       if (this.isOutgoing() && this.isDelayed()) {
         this.stronglyCausal = true;
@@ -202,7 +200,7 @@ public class PortSymbol extends PortSymbolTOP {
 
         ASTPortAccess lastSource = path.get(path.size() - 1).getSource(); //the source of the connector that is the furthest away from the current port.
 
-        if(lastSource.isPresentPortSymbol() && lastSource.getPortSymbol().isStronglyCausal()) {
+        if(lastSource.isPresentPortSymbol() && lastSource.getPortSymbol().getStronglyCausal()) {
           // If any part of the path is strongly causal, this path is strongly causal, not compromising the current port's strong causality.
           // not entering this if-block also implies the instance to which this port belongs has incoming ports: if there were none, the port would be strongly causal
           continue;

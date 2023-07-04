@@ -45,15 +45,15 @@ public class DelayAndStronglyCausalPropagationTest extends MontiArcAbstractTest 
     Assertions.assertTrue(pNoPathToIn.isPresent());
 
     Assertions.assertTrue(pDirectDelayed.get().isDelayed());
-    Assertions.assertTrue(pDirectDelayed.get().isStronglyCausal());
+    Assertions.assertTrue(pDirectDelayed.get().getStronglyCausal());
 
     Assertions.assertFalse(pChainedDelayed.get().isDelayed());
-    Assertions.assertTrue(pChainedDelayed.get().isStronglyCausal());
+    Assertions.assertTrue(pChainedDelayed.get().getStronglyCausal());
 
     Assertions.assertFalse(pNotDelayed.get().isDelayed());
-    Assertions.assertFalse(pNotDelayed.get().isStronglyCausal());
+    Assertions.assertFalse(pNotDelayed.get().getStronglyCausal());
 
     Assertions.assertFalse(pNoPathToIn.get().isDelayed());
-    Assertions.assertTrue(pNoPathToIn.get().isStronglyCausal());
+    Assertions.assertTrue(pNoPathToIn.get().getStronglyCausal());
   }
 }

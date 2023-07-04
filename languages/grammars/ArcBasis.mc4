@@ -148,6 +148,7 @@ component grammar ArcBasis extends
     outgoing: boolean
     timing: montiarc.Timing
     delayed: Boolean
+    stronglyCausal: Boolean
   ;
 
   /**

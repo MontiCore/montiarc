@@ -58,7 +58,7 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(path);
     Preconditions.checkNotNull(visited);
 
-    if (next.getSource().isPresentPortSymbol() && !next.getSource().getPortSymbol().isStronglyCausal()) {
+    if (next.getSource().isPresentPortSymbol() && !next.getSource().getPortSymbol().getStronglyCausal()) {
       for (ASTPortAccess target : next.getTargetList()) {
         this.check(graph, target, path, visited);
       }
