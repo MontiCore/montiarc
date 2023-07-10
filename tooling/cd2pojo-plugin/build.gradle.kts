@@ -20,7 +20,7 @@ val genDir4GeneratorVersionInjection = "${project.buildDir}/generatedKotlin"
 
 sourceSets {
   main {
-    java.srcDir(genDir4GeneratorVersionInjection)
+    kotlin.srcDir(genDir4GeneratorVersionInjection)
   }
 }
 

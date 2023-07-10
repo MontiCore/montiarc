@@ -33,16 +33,13 @@ repositories {
 }
 
 tasks.withType<JavaCompile> {
-  sourceCompatibility = JavaVersion.VERSION_11.toString()
-  targetCompatibility = JavaVersion.VERSION_11.toString()
   options.encoding = "UTF-8"
   options.isFork = false
   options.isDeprecation = true
   options.isWarnings = true
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-  kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
-  }
+java {
+  sourceCompatibility = JavaVersion.VERSION_11
+  targetCompatibility = JavaVersion.VERSION_11
 }

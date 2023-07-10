@@ -2,31 +2,19 @@
 
 plugins {
   java
+  id("montiarc.build.jvm")
   id("montiarc.build.repositories")
   id("montiarc.build.spotless")
 }
 
-java {
-  sourceCompatibility = JavaVersion.VERSION_11
-  targetCompatibility = JavaVersion.VERSION_11
-}
-
 sourceSets {
   main {
-    java {
-      setSrcDirs(setOf(layout.projectDirectory.dir("main/java")))
-    }
-    resources {
-      setSrcDirs(setOf(layout.projectDirectory.dir("main/resources")))
-    }
+    java.setSrcDirs(setOf("main/java"))
+    resources.setSrcDirs(setOf("main/resources"))
   }
   test {
-    java {
-      setSrcDirs(setOf(layout.projectDirectory.dir("test/java")))
-    }
-    resources {
-      setSrcDirs(setOf(layout.projectDirectory.dir("test/resources")))
-    }
+    java.setSrcDirs(setOf("test/java"))
+    resources.setSrcDirs(setOf("test/resources"))
   }
 }
 

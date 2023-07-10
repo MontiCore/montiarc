@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  kotlin("jvm")
   id("java-gradle-plugin")
+  id("montiarc.build.kotlin")
   id("montiarc.build.project-version")
   id("montiarc.build.repositories")
   id("montiarc.build.publish-base")
@@ -16,11 +16,5 @@ sourceSets {
   test {
     java.setSrcDirs(setOf("test/kotlin"))
     resources.setSrcDirs(setOf("test/resources"))
-  }
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-  kotlinOptions {
-    jvmTarget = JavaVersion.VERSION_11.toString()
   }
 }
