@@ -26,6 +26,8 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
   <@printSynchronized ast.getSymbol()/>
 
+	<@printInternalStates ast/>
+
   <#list ast.getInnerComponents() as innerComp>
     ${tc.includeArgs("ma2java.component.Component.ftl", innerComp, compHelper.asList(isTop))}
   </#list>
@@ -128,4 +130,32 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
   <#else>
     ${port.getType().printFullName()}
   </#if>
+</#macro>
+
+<#macro printInternalStates comp>
+	public montiarc.rte.dse.StatesList getInternalStates(){
+		<#if !comp.getSymbol().isDecomposed()>
+			List<String> result = new ArrayList(){{
+			<#list compHelper.getComponentVariables(comp.getSymbol()) as variable>
+				add("${variable.getName()}: " + ${variable.getName()}.toString());
+			</#list>
+			}};
+
+			List<montiarc.rte.dse.StateInfo> info = new ArrayList(){{
+				<#if compHelper.getAutomatonBehavior(ast).isPresent()>
+					<#assign automaton = compHelper.getAutomatonBehavior(ast).get()>
+					<#if autHelper.getAutomatonStates(automaton)?size != 0>
+						add(montiarc.rte.dse.StateInfo.newStateInfo(currentState, result, instanceName));
+					</#if>
+				</#if>
+			}};
+		<#else>
+			List<montiarc.rte.dse.StateInfo> info = new ArrayList(){{
+				<#list comp.getSubComponents() as innerComp>
+					addAll(${innerComp.getName()}.getInternalStates().getStates());
+				</#list>
+			}};
+		</#if>
+		return montiarc.rte.dse.StatesList.newStatesList(info);
+	}
 </#macro>

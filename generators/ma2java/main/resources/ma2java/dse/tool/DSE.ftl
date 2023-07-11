@@ -3,6 +3,9 @@ ${tc.signature("ast", "isTop","lister")}
 
 <#assign comp = ast.getSymbol()/>
 
+<#assign tickStatementList = []/>
+<#assign tickStatementListif = []/>
+
 <#if comp.getPackageName() != "">
 	package ${comp.getPackageName()};
 </#if>
@@ -10,6 +13,9 @@ ${tc.signature("ast", "isTop","lister")}
 import com.microsoft.z3.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import montiarc.rte.dse.TestController;
@@ -39,11 +45,12 @@ public class DSE${comp.getName()}{
 				</#list>
 		</#if>
 
+		String evalModel;
 		<#list comp.getAllIncomingPorts() as port>
 			<#if compHelperDse.isEnum(port)>
 				${port.getName()}.update(montiarc.rte.dse.AnnotatedValue.newAnnoValue(inputs.get(i).get${port.getName()}(), ${port.getTypeInfo().getFullName()}.valueOf((model.eval(inputs.get(i).get${port.getName()}(), true).toString().toString()))));
 			<#elseif compHelperDse.isFloatOrDouble(port)>
-				String evalModel = model.eval(inputs.get(i).get${port.getName()}(), true).toString();
+				evalModel = model.eval(inputs.get(i).get${port.getName()}(), true).toString();
 				if(evalModel.contains("/")){
 					<@printType port/> numerator = ${compHelperDse.getParseType(port)}(model.eval(inputs.get(i).get${port.getName()}(), true).toString().substring(0, model.eval(inputs.get(i).get${port.getName()}(), true).toString().lastIndexOf('/')));
 					<@printType port/> denominator = ${compHelperDse.getParseType(port)}(model.eval(inputs.get(i).get${port.getName()}(), true).toString().substring(model.eval(inputs.get(i).get${port.getName()}(), true).toString().lastIndexOf('/')+1));
@@ -51,6 +58,9 @@ public class DSE${comp.getName()}{
 				}else{
 					${port.getName()}.update(montiarc.rte.dse.AnnotatedValue.newAnnoValue(inputs.get(i).get${port.getName()}(), ${compHelperDse.getParseType(port)}(evalModel)));
 				}
+			<#elseif compHelperDse.isString(port)>
+				evalModel = (model.eval(inputs.get(i).get${port.getName()}(), true)).toString();
+				${port.getName()}.update(montiarc.rte.dse.AnnotatedValue.newAnnoValue(inputs.get(i).get${port.getName()}(), evalModel.substring(1, evalModel.length() - 1)));
 			<#else>
 				${port.getName()}.update(montiarc.rte.dse.AnnotatedValue.newAnnoValue(inputs.get(i).get${port.getName()}(), ${compHelperDse.getParseType(port)}(model.eval(inputs.get(i).get${port.getName()}(), true).toString()${compHelperDse.printCharReplace(port)})));
 			</#if>
@@ -95,20 +105,24 @@ public class DSE${comp.getName()}{
 		<#if comp.hasParameters()>
 			for(int i=0; i<input.getKey().size(); i++){
 				<#list comp.getAllIncomingPorts() as port>
-				comp.set${port.getName()?cap_first}(input.getKey().get(i).get${port.getName()}());
+				comp.get${port.getName()?cap_first}().update(input.getKey().get(i).get${port.getName()}().getValue());
 				</#list>
 		<#else>
 			for(int i=0; i<input.size(); i++){
 				<#list comp.getAllIncomingPorts() as port>
-					comp.set${port.getName()?cap_first}(input.get(i).get${port.getName()}());
+					comp.get${port.getName()?cap_first}().update(input.get(i).get${port.getName()}().getValue());
 				</#list>
 		</#if>
 
-			comp.compute();
+		comp.compute();
 
 		<#list comp.getAllOutgoingPorts() as port>
-			 montiarc.rte.timesync.IOutPort< montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(port)}>, ${compHelper.getRealPortTypeString(port)}>> ${port.getName()} = new montiarc.rte.timesync.OutPort<>();
-			 ${port.getName()}.setValue( montiarc.rte.dse.AnnotatedValue.newAnnoValue(comp.get${port.getName()?cap_first}().getValue().getExpr(), comp.get${port.getName()?cap_first}().getValue().getValue()));
+			montiarc.rte.timesync.IOutPort< montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(port)}>, ${compHelper.getRealPortTypeString(port)}>> ${port.getName()} = new montiarc.rte.timesync.OutPort<>();
+			if(comp.get${port.getName()?cap_first}().getValue() != null){
+				${port.getName()}.setValue( montiarc.rte.dse.AnnotatedValue.newAnnoValue(comp.get${port.getName()?cap_first}().getValue().getExpr(), comp.get${port.getName()?cap_first}().getValue().getValue()));
+			}else{
+				${port.getName()}.setValue( null);
+			}
 		</#list>
 
 		result.add(new ListerOut${comp.getName()}(
@@ -117,6 +131,13 @@ public class DSE${comp.getName()}{
 				<#sep> , </#sep>
 			</#list>
 		));
+
+		<@printTick comp/>
+		TestController.saveStates(comp.getInternalStates());
+		if(TestController.shouldEndRun()){
+        return new ArrayList<>();
+		}
+
 		}
 		return result;
 	}
@@ -163,5 +184,67 @@ public class DSE${comp.getName()}{
 		${port.getType().print()}
 	<#else>
 		${port.getType().printFullName()}
+	</#if>
+</#macro>
+
+<#macro printTick comp>
+	<#assign tickStatement = "comp"/>
+	<#list comp.getPorts() as port>
+		<#if port.isDelayed()>
+			<#assign item = tickStatement + "." + port.getName() />
+			<#assign tickStatementList = tickStatementList + [item] />
+		</#if>
+	</#list>
+
+	<#if comp.isDecomposed()>
+		<#list ast.getSubComponents() as inner>
+		<#assign innerComp = inner.getSymbol().getType().getTypeInfo()>
+			<#assign tickStatements = tickStatement + ".getComponent${inner.getName()?cap_first}()"/>
+			<#list innerComp.getPorts() as port>
+				<#if port.isDelayed()>
+					<@printTickDecomposed port tickStatements/>
+				</#if>
+			</#list>
+
+			<#if innerComp.isDecomposed()>
+				<#list innerComp.getSubComponents() as innerComps>
+				<#assign tickPath = tickStatements + ".getComponent${innerComps.getName()?cap_first}()"/>
+						<@printInnerCompTick innerComps.getType().getTypeInfo() tickPath/>
+				</#list>
+			</#if>
+		</#list>
+	</#if>
+
+Set<montiarc.rte.timesync.IOutPort> delayedPorts = new HashSet<>();
+
+	<#list tickStatementList?reverse as item>
+		delayedPorts.add(${item});
+	</#list>
+
+	for(montiarc.rte.timesync.IOutPort port : delayedPorts){
+		port.tick();
+	}
+</#macro>
+
+<#macro printTickDecomposed port ticksPath>
+	<#if port.isDelayed()>
+		<#assign item = ticksPath + ".get" + port.getName()?cap_first + "()"/>
+		<#assign tickStatementList = tickStatementList + [item] />
+	</#if>
+</#macro>
+
+<#macro printInnerCompTick (comp varTickStatement)>
+	<#list comp.getPorts() as port>
+		<#if port.isDelayed()>
+			<@printTickDecomposed port varTickStatement/>
+		</#if>
+	</#list>
+
+	<#if comp.isDecomposed()>
+		<#list comp.getSubComponents() as innerComp>
+			<#assign tickPaths = varTickStatement + ".getComponent${innerComp.getName()?cap_first}()"/>
+
+			<@printInnerCompTick innerComp.getType().getTypeInfo() tickPaths/>
+		</#list>
 	</#if>
 </#macro>

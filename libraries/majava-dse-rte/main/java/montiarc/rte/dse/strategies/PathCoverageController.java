@@ -2,10 +2,7 @@
 package montiarc.rte.dse.strategies;
 
 import com.microsoft.z3.*;
-import montiarc.rte.dse.ControllerI;
-import montiarc.rte.dse.PathCondition;
-import montiarc.rte.dse.ResultI;
-import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.*;
 import montiarc.rte.log.LogException;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -13,7 +10,7 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PathCoverageController<In, Out> implements ControllerI<In, Out> {
+public class PathCoverageController<In, Out> implements ControllerI<In, Out>, EvaluationControllerI {
 
   protected Function<In, Out> sut;
   protected Context ctx;
@@ -22,6 +19,13 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out> {
   protected int usedOracleCount = 0;
   protected List<Boolean> oracles = new ArrayList<>();
   protected PathCondition takenBranches;
+
+  /**
+   * This variable stores all visited states. Since a model to be examined can be a composition
+   * of several models, the overall state must be stored. The total state consists of lists of
+   * StateInfos, each of which reflects the state of the individual components.
+   */
+  protected Set<StatesList> visitedStates = new HashSet<>();
 
   @Override
   public void init() {
@@ -34,7 +38,7 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out> {
 
   @Override
   public ResultI<In, Out> startTest(In initialInput, Function<Model, In> evalModel, Function<In,
-    Out> sut) throws Exception {
+          Out> sut) throws Exception {
     if (sut == null) {
       throw new IllegalArgumentException("passed function for PathCoverageController is null");
     }
@@ -47,15 +51,15 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out> {
   public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
     if (TestController.getController() != this) {
       throw new LogException("Given controller does not match the " +
-        "PathCoverageController");
+              "PathCoverageController");
     }
     if (!branchingConditions.isEmpty()) {
       throw new LogException("BranchingCondition is not empty, although it should " +
-        "be, because a new path was started");
+              "be, because a new path was started");
     }
     if (usedOracleCount != 0) {
       throw new LogException("usedOracleCount is not zero, although it should be, " +
-        "because a new path was started");
+              "because a new path was started");
     }
     this.oracles = oracles;
 
@@ -168,5 +172,15 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out> {
       }
       possibleTransitions.get(transition).getKey().run();
     }
+  }
+
+  @Override
+  public void saveStates(StatesList info) {
+    visitedStates.add(info);
+  }
+
+  @Override
+  public Set<StatesList> getVisitedStates() {
+    return visitedStates;
   }
 }

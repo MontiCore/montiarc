@@ -6,6 +6,7 @@ import com.microsoft.z3.Context;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
+import java.util.Set;
 
 public class TestController {
   protected static TestControllerI controller;
@@ -40,5 +41,9 @@ public class TestController {
 
   public static void addBranch(BoolExpr condition, String branchId) {
     controller.addBranch(condition, branchId);
+  }
+
+  public static void saveStates(StatesList info) {
+    controller.saveStates(info);
   }
 }

@@ -126,6 +126,13 @@ public class ComponentHelperDse {
   }
 
   /**
+   * checks if the port has a string as type
+   */
+  public static boolean isString(PortSymbol symbol){
+    return symbol.getType().print().equals("String");
+  }
+
+  /**
    * Prints the parsing phrase with the corresponding element to create an element of a sort
    */
   public static String getParameterType(VariableSymbol symbol) {

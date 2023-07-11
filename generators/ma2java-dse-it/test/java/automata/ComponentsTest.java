@@ -84,7 +84,7 @@ public class ComponentsTest {
     AnnotatedValue<Expr<IntSort>, Integer> in_1Minus = AnnotatedValue.newAnnoValue(input_0, 42);
     AnnotatedValue<Expr<IntSort>, Integer> out_1Minus = AnnotatedValue.newAnnoValue(outputMinus,
       41);
-    AnnotatedValue<Expr<IntSort>, Integer> in_2Minus = AnnotatedValue.newAnnoValue(input_0, 0);
+    AnnotatedValue<Expr<IntSort>, Integer> in_2Minus = AnnotatedValue.newAnnoValue(input_1, 0);
     AnnotatedValue<Expr<IntSort>, Integer> out_2Minus = AnnotatedValue.newAnnoValue(output_1Minus
       , -1);
 
@@ -251,7 +251,7 @@ public class ComponentsTest {
     result.add(
       Arguments.of(
         List.of(inTran1, in2Tran3),
-        List.of(out1Tran3, out2Tran3),
+        List.of(out1Tran3, out1Tran3),
         (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           tran3.getIn().update(input);
           tran3.compute();
@@ -707,11 +707,13 @@ public class ComponentsTest {
 
     for (int i = 0; i < in.size(); i++) {
       controller.setTransition(pathControl.get(i));
-      AnnotatedValue<Expr<G>, Z> actOut = component.apply(in.get(0));
+      AnnotatedValue<Expr<G>, Z> actOut = component.apply(in.get(i));
 
+      int finalI = i;
       assertAll(
-        () -> assertThat(actOut.getValue()).isEqualTo(out.get(0).getValue()),
-        () -> assertThat(actOut.getExpr().toString()).isEqualTo(out.get(0).getExpr().toString())
+        () -> assertThat(actOut.getValue()).isEqualTo(out.get(finalI).getValue()),
+        () -> assertThat(actOut.getExpr().toString()).isEqualTo(out.get(finalI).getExpr()
+          .toString())
       );
     }
   }

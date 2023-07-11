@@ -17,9 +17,9 @@ protected void from${state.getName()}To${ast.targetName}NoGuard${counter}() {
 
 	// add the branch condition to taken branches
 	<#if ast.getSCTBody().isPresentPre()>
-		montiarc.rte.dse.TestController.addBranch(${compHelperDse.printExpression(ast.getSCTBody().getPre())}, "from${state.getName()}To${ast.targetName}${counter}");
+		montiarc.rte.dse.TestController.addBranch(${compHelperDse.printExpression(ast.getSCTBody().getPre())}, instanceName + "From${state.getName()}To${ast.targetName}${counter}");
 	<#else>
-		montiarc.rte.dse.TestController.addBranch(ctx.mkBool(true), "from${state.getName()}To${ast.targetName}NoGuard${counter}");
+		montiarc.rte.dse.TestController.addBranch(ctx.mkBool(true), instanceName + "From${state.getName()}To${ast.targetName}NoGuard${counter}");
 	</#if>
 
   // exit state(s)

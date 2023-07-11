@@ -44,3 +44,4 @@ public class MockPathCoverageController<In, Out> extends PathCoverageController<
     takenBranches.addBranch(condition, branchID);
   }
 }
+

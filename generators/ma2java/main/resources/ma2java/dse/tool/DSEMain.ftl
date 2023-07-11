@@ -16,31 +16,33 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.Set;
 import main.DSEMain;
 import montiarc.rte.dse.strategies.PathCoverageController;
+import montiarc.rte.dse.ResultI;
+
 
 <#if (strategies?size > 0)>
-	import java.controller.*
+	import controller.*;
 </#if>
 
 public class DSEMain${comp.getName()} extends DSEMain{
 
 	@Override
-	public void runController(String[] args) throws Exception {
+	public ResultI runController(String[] args) throws Exception {
 
 		switch(args[1]){
 			<#list strategies as strategie>
 				<#if comp.hasParameters()>
 					case "${strategie}":
-						run${strategie}(Integer.parseInt(args[2]), args);
+						return run${strategie}(Integer.parseInt(args[2]), args);
 				<#else>
 				case "${strategie}":
-					run${strategie}(Integer.parseInt(args[2]));
+					return run${strategie}(Integer.parseInt(args[2]));
 				</#if>
 			</#list>
 			default:
 				<#if comp.hasParameters()>
-					runPathCoverageController(Integer.parseInt(args[2]), args);
+					return runPathCoverageController(Integer.parseInt(args[2]), args);
 				<#else>
-					runPathCoverageController(Integer.parseInt(args[2]));
+					return runPathCoverageController(Integer.parseInt(args[2]));
 				</#if>
 		}
 	}

@@ -30,7 +30,7 @@ ${tc.signature("comp")}
 <@printInit ast comp/>
 
 <#macro printStateEnum automaton>
-  protected enum States {
+  public enum States {
     <#list autHelper.getAutomatonStates(automaton) as state>
       ${state.getName()}(<#if autHelper.hasSuperState(automaton, state)>${autHelper.getSuperState(automaton, state).getName()}</#if>)<#sep> , </#sep>
     </#list>;
@@ -61,14 +61,20 @@ ${tc.signature("comp")}
     );
     // log input values
     <#list comp.getIncomingPorts() as port>
-      montiarc.rte.log.Log.trace(
-        "Value of input port ${port.getName()} = "
-        + this.get${port.getName()?cap_first}().getValue().getValue()
-      );
-      montiarc.rte.log.Log.trace(
-        "Symbolic Expression of input port ${port.getName()} = "
-        + this.get${port.getName()?cap_first}().getValue().getExpr()
-      );
+    	if( this.get${port.getName()?cap_first}().getValue() != null){
+				montiarc.rte.log.Log.trace(
+					"Value of input port ${port.getName()} = "
+					+ this.get${port.getName()?cap_first}().getValue().getValue()
+				);
+				montiarc.rte.log.Log.trace(
+					"Symbolic Expression of input port ${port.getName()} = "
+					+ this.get${port.getName()?cap_first}().getValue().getExpr()
+				);
+			}else{
+				montiarc.rte.log.Log.trace(
+						"Value of input port ${port.getName()} = null"
+					);
+			}
 
     </#list>
     // transition from the current state
@@ -81,14 +87,20 @@ ${tc.signature("comp")}
     }
     // log output values
     <#list comp.getOutgoingPorts() as port>
-      montiarc.rte.log.Log.trace(
-        "Value of output port ${port.getName()} = "
-        + this.get${port.getName()?cap_first}().getValue().getValue()
-      );
-      montiarc.rte.log.Log.trace(
-        "Symbolic Expression of output port ${port.getName()} = "
-        + this.get${port.getName()?cap_first}().getValue().getExpr()
-      );
+    	if(this.get${port.getName()?cap_first}().getValue() != null){
+				montiarc.rte.log.Log.trace(
+					"Value of output port ${port.getName()} = "
+					+ this.get${port.getName()?cap_first}().getValue().getValue()
+				);
+				montiarc.rte.log.Log.trace(
+					"Symbolic Expression of output port ${port.getName()} = "
+					+ this.get${port.getName()?cap_first}().getValue().getExpr()
+				);
+			}else{
+				montiarc.rte.log.Log.trace(
+					"Value of output port ${port.getName()} = null"
+				);
+			}
     </#list>
     // log state @ post
     montiarc.rte.log.Log.trace(

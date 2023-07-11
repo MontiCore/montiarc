@@ -2,6 +2,8 @@
 
 package main;
 
+import montiarc.rte.dse.ResultI;
+
 abstract public class DSEMain{
-	abstract public void runController(String[] args) throws Exception;
+	abstract public ResultI runController(String[] args) throws Exception;
 }

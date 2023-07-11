@@ -8,6 +8,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.HashSet;
 
 public class MockTestController implements TestControllerI {
   protected static Context context;
@@ -35,8 +37,7 @@ public class MockTestController implements TestControllerI {
     if (transition > 1) {
       transition--;
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -69,5 +70,11 @@ public class MockTestController implements TestControllerI {
   }
 
   @Override
-  public void addBranch(BoolExpr condition, String branchID) {}
+  public void addBranch(BoolExpr condition, String branchID) {
+  }
+
+  @Override
+  public void saveStates(StatesList info) {
+  }
+
 }

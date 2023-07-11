@@ -350,6 +350,16 @@ public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrin
 
   @Override
   public void handle(de.monticore.expressions.commonexpressions._ast.ASTBracketExpression node) {
-    montiarc.rte.log.Log.error("The operator \'Bracket expression\' is not supported");
+    if (this.isPrintComments()) {
+      de.monticore.prettyprint.CommentPrettyPrinter.printPreComments(node, getPrinter());
+    }
+
+    getPrinter().print("(");
+    node.getExpression().accept(getTraverser());
+    getPrinter().print(")");
+
+    if (this.isPrintComments()) {
+      de.monticore.prettyprint.CommentPrettyPrinter.printPostComments(node, getPrinter());
+    }
   }
 }

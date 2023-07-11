@@ -2,7 +2,6 @@
 package montiarc.rte.dse;
 
 import com.microsoft.z3.BoolExpr;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

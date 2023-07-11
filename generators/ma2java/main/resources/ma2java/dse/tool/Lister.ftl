@@ -13,6 +13,7 @@ import com.microsoft.z3.*;
 import montiarc.rte.dse.TestController;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ${lister}${comp.getName()} implements montiarc.rte.dse.ListerI{
 
@@ -42,7 +43,34 @@ public class ${lister}${comp.getName()} implements montiarc.rte.dse.ListerI{
 	<@printGetEntries lister comp/>
 
 	<@printGetExpression lister comp/>
+
+	<@printEquals lister comp/>
 }
+
+<#macro printEquals lister comp>
+@Override
+public boolean equals(Object ob){
+	if(ob==this){
+		return true;
+	}
+	if(ob == null || ob.getClass() != getClass()){
+		return false;
+	}
+
+	${lister}${comp.getName()} listerExpr = (${lister}${comp.getName()}) ob;
+
+	<#if getLister(lister)?size == 0 >
+		return false;
+	<#else>
+		return Objects.equals(
+    			<#list getLister(lister) as element>
+    				get${element.getName()}(), listerExpr.get${element.getName()}()
+    				<#sep> ) && Objects.equals( </#sep>
+    			</#list>
+    		);
+	</#if>
+ }
+</#macro>
 
 <#macro printType port>
   <#if port.getType().isPrimitive()>
@@ -108,15 +136,6 @@ public class ${lister}${comp.getName()} implements montiarc.rte.dse.ListerI{
 
 <#macro printGetEntries lister comp>
 	<#if lister == "ListerExpression" || lister == "ListerExprOut">
-		@Override
-		public String getEntries() {
-			return "[" +
-				<#list list as port>
-					"<" + ${port.getName()}.toString() + ">"
-					<#sep> + "|" + </#sep>
-				</#list>
-			+ "]";
-		}
 	<#elseif lister == "ListerParameter">
 	<#if comp.hasParameters() >
 		@Override
@@ -128,11 +147,6 @@ public class ${lister}${comp.getName()} implements montiarc.rte.dse.ListerI{
 				</#list>
 			+ "]";
 		}
-		<#else>
-			@Override
-			public String getEntries(){
-				return null;
-			}
 		</#if>
 	<#else>
 		@Override
@@ -150,13 +164,38 @@ public class ${lister}${comp.getName()} implements montiarc.rte.dse.ListerI{
 <#macro	printGetExpression lister comp>
 	<#if lister == "ListerOut">
 	public ListerExprOut${comp.getName()} getExpression(){
+		<#list list as element>
+			Expr<${compHelperDse.getPortTypeSort(element)}> result${element.getName()} = null;
+		</#list>
+
+		<#list list as element>
+			if(this.${element.getName()}.getValue() != null){
+				result${element.getName()} = this.${element.getName()}.getValue().getExpr().simplify();
+			}
+		</#list>
 
 		return new ListerExprOut${comp.getName()}(
 				<#list list as element>
-					this.${element.getName()}.getValue().getExpr().simplify()
+					result${element.getName()}
 					<#sep> , </#sep>
 				</#list>
 				);
 	}
 	</#if>
+</#macro>
+
+<#macro printGetEntries lister comp>
+	@Override
+	public String getEntries(){
+	<#if !comp.hasParameters() && lister == "ListerParameter">
+		return null;
+	<#else>
+			return
+			<#list list as port>
+				this.${port.getName()}.toString()
+				<#sep> + </#sep>
+			</#list>
+			;
+	</#if>
+	}
 </#macro>
