@@ -27,6 +27,7 @@ public class VariantPortSymbol extends PortSymbol {
     if (!variantSymbol.isPresentAstNode()) { // workaround for not being able to recalculate the timings without the AST
       this.setTiming(parent.getTiming());
       this.setDelayed(parent.getDelayed());
+      this.setStronglyCausal(parent.getStronglyCausal());
     }
 
     variantComponentTypeSymbol = variantSymbol;

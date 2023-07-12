@@ -8,12 +8,18 @@ import arcbasis._ast.ASTPort;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc._ast.ASTArcConstraintDeclaration;
+import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcVarIf;
+import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.expressions.Expression;
 import variablearc.evaluation.expressions.NegatedExpression;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Stack;
+import java.util.stream.Collectors;
 
 public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   implements arcbasis._visitor.ArcBasisVisitor2 {
@@ -123,5 +129,12 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     if (this.getCurrentVariationPoint().isPresent()) {
       this.getCurrentVariationPoint().get().add(node);
     }
+  }
+
+  @Override
+  public void endVisit(@NotNull ASTArcConstraintDeclaration node) {
+    Preconditions.checkNotNull(node);
+    if (this.getCurrentComponent().isEmpty()) return;
+    this.getCurrentComponent().get().getConstraints().add(new ExpressionSet(Collections.singletonList(new Expression(node.getExpression()))));
   }
 }

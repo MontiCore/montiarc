@@ -53,6 +53,6 @@ public class AssignmentExpression extends Expression {
 
   @Override
   public String print() {
-    return variable.getFullName() + " = " + VariableArcMill.prettyPrint(astExpression, false);
+    return variable.getName() + " = " + VariableArcMill.prettyPrint(astExpression, false);
   }
 }

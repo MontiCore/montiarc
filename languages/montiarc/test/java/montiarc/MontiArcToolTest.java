@@ -952,7 +952,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "compTypesFromSymFiles", "connectedSubComponents", "importFromSubPackage", "ooTypesFromSymFiles"
+    "compTypesFromSymFiles", "connectedSubComponents", "importFromSubPackage", "ooTypesFromSymFiles", "variableCompFromSymFiles"
   })
   void validModelsShouldPassEndToEnd(@NotNull String packageName) {
     Preconditions.checkNotNull(packageName);

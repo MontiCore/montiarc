@@ -19,9 +19,6 @@ public class MontiArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
 
   protected TypeExprOfGenericComponentDeSer genericCompExprDeSer;
 
-  // TODO: integrate VariableArcDeSer when implemented
-  // protected TypeExprOfVariableComponent variableCompExprDeSer;
-
   public MontiArcCompTypeExprDeSer() {
     simpleCompExprDeSer = new TypeExprOfComponentDeSer();
     genericCompExprDeSer = new TypeExprOfGenericComponentDeSer();
@@ -35,9 +32,7 @@ public class MontiArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
       return simpleCompExprDeSer.serializeAsJson((TypeExprOfComponent) toSerialize);
     } else if (toSerialize instanceof TypeExprOfGenericComponent) {
       return genericCompExprDeSer.serializeAsJson((TypeExprOfGenericComponent) toSerialize);
-    } /* else if (toSerialize instanceof TypeExprOfVariableComponent) {
-      return variableCompExprDeSer.serializeAsJson((TypeExprOfVariableComponent) toSerialize);
-    } */ else {
+    } else {
       throw missingDeSerException(toSerialize);
     }
   }
@@ -49,7 +44,6 @@ public class MontiArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
     switch (JsonDeSers.getKind(serialized)) {
       case TypeExprOfComponentDeSer.SERIALIZED_KIND: return simpleCompExprDeSer.deserialize(serialized);
       case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericCompExprDeSer.deserialize(serialized);
-      // case TypeExprOfVariableComponent.SERIALIZED_KIND: return variableCompExprDeSer.deserialize(serialized);
       default:
         throw missingDeSerException(serialized);
     }

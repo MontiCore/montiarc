@@ -3,10 +3,13 @@ package variablearc._symboltable;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.Port2VariableAdapter;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc.evaluation.ComponentConverter;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.VariationPointSolver;
@@ -29,12 +32,20 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
   protected List<VariantComponentTypeSymbol> variants;
   protected ExpressionSet conditions;
 
+  protected ExpressionSet constraints;
+
   /**
    * @param name the name of this component type.
    */
-  protected VariableComponentTypeSymbol(String name) {
+  protected VariableComponentTypeSymbol(@NotNull String name) {
     super(name);
     this.variationPoints = new ArrayList<>();
+    this.constraints = new ExpressionSet();
+  }
+
+  protected void setVariants(@NotNull List<VariantComponentTypeSymbol> variants) {
+    Preconditions.checkNotNull(variants);
+    this.variants = variants;
   }
 
   /**
@@ -68,7 +79,8 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
     vpSolver.close();
   }
 
-  protected void calculateVariants(VariationPointSolver vpSolver, VariantComponentTypeSymbol parentVariant) {
+  protected void calculateVariants(@NotNull VariationPointSolver vpSolver, @Nullable VariantComponentTypeSymbol parentVariant) {
+    Preconditions.checkNotNull(vpSolver);
     // iterate over all possible variants of this component and expand with subcomponent variants
     for (Set<VariableArcVariationPoint> variationPoints : vpSolver.getCombinations(parentVariant)) {
       HashMap<ComponentInstanceSymbol, List<VariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
@@ -165,7 +177,8 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
     return conditions;
   }
 
-  public ExpressionSet getConditions(Collection<ComponentTypeSymbol> visited) {
+  public ExpressionSet getConditions(@NotNull Collection<ComponentTypeSymbol> visited) {
+    Preconditions.checkNotNull(visited);
     if (conditions == null) {
       conditions = new ComponentConverter().convert(this, visited);
       if (isPresentParent() && this.getParent().getTypeInfo() != null &&
@@ -174,6 +187,15 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
       }
     }
     return conditions;
+  }
+
+  public ExpressionSet getConstraints() {
+    return constraints;
+  }
+
+  public void setConstraints(@NotNull ExpressionSet constraints) {
+    Preconditions.checkNotNull(constraints);
+    this.constraints = constraints;
   }
 
   public List<VariableArcVariationPoint> getAllVariationPoints() {
@@ -204,5 +226,12 @@ public class VariableComponentTypeSymbol extends ComponentTypeSymbol {
     Preconditions.checkNotNull(symbol);
 
     return variationPoints.stream().anyMatch(vp -> vp.containsSymbol(symbol)) || isRootSymbol(symbol);
+  }
+
+  @Override
+  public List<VariableSymbol> getFields() {
+    return super.getFields().stream()
+      .filter(f -> !(f instanceof ArcFeature2VariableAdapter))
+      .collect(Collectors.toList());
   }
 }

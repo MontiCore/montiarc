@@ -128,7 +128,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkInstantiationArgsBindAllMandatoryParams(@NotNull ASTComponentInstance instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkState(instance.isPresentSymbol());
-    if (!instance.getSymbol().isPresentType()) {
+    if (!instance.getSymbol().isPresentType() || !instance.getSymbol().getType().getTypeInfo().isPresentAstNode()) {
       Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
           this.getClass().getSimpleName());
       return;

@@ -11,9 +11,4 @@ public class VariableArcMillForMontiArc extends VariableArcMillForMontiArcTOP {
   protected IDeriveSMTExpr _fullConverter(Context context) {
     return montiarc.MontiArcMill.fullConverter(context);
   }
-
-  @Override
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
-    return montiarc.MontiArcMill.compTypeExprDeSer();
-  }
 }

@@ -27,23 +27,18 @@ import java.util.stream.Collectors;
  */
 public class ComponentConverter {
 
-  public ExpressionSet convert(@NotNull ComponentTypeSymbol componentTypeSymbol, @NotNull Collection<ComponentTypeSymbol> visited) {
+  /**
+   * @param componentTypeSymbol the component which constraints are calculated
+   * @param visited already visited components (used to detect circles)
+   * @return the expression set of all the component's constraints
+   */
+  public ExpressionSet convert(@NotNull VariableComponentTypeSymbol componentTypeSymbol, @NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(componentTypeSymbol);
     Preconditions.checkNotNull(visited);
     visited.add(componentTypeSymbol);
 
     // convert constraints
-    ArrayList<Expression> expressions = new ArrayList<>();
-    if (componentTypeSymbol.isPresentAstNode()) {
-      expressions = componentTypeSymbol.getAstNode().getBody()
-        .getArcElementList().stream()
-        .filter(e -> e instanceof ASTArcConstraintDeclaration)
-        .map(e -> ((ASTArcConstraintDeclaration) e).getExpression())
-        .map(Expression::new)
-        .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    ExpressionSet expressionSet = new ExpressionSet(expressions);
+    ExpressionSet expressionSet = componentTypeSymbol.getConstraints().copy();
 
     // convert subcomponents
     for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getSubComponents()) {

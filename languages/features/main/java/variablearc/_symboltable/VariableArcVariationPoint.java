@@ -72,6 +72,10 @@ public class VariableArcVariationPoint {
     return elements;
   }
 
+  public List<ISymbol> getSymbols() {
+    return symbols;
+  }
+
   public boolean containsSymbol(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
     return symbols.contains(symbol);

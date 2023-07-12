@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+/**
+ * Holds tests for {@link ComponentTypeSymbolDeSer}.
+ */
 public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
 
   private static final String SIMPLE_JSON =
@@ -74,6 +77,26 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
       "}]" +
       "}";
 
+  private static final String JSON_WITH_SUB =
+    "{" +
+      "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
+      "\"name\":\"Comp\"," +
+      "\"subcomponents\":[{\"kind\":\"arcbasis._symboltable.ComponentInstanceSymbol\",\"name\":\"inst\"}]" +
+      "}";
+
+  private static final String JSON_WITH_INNER =
+    "{" +
+      "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
+      "\"name\":\"Comp\"," +
+      "\"innerComponents\":[{\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\",\"name\":\"inst\"}]" +
+      "}";
+
+  private static final String JSON_WITH_FIELD =
+    "{" +
+      "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
+      "\"name\":\"Comp\"," +
+      "\"fields\":[{\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\",\"name\":\"inst\",\"type\":null}]" +
+      "}";
 
   @Test
   void shouldSerializeParent() {
@@ -265,7 +288,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
   }
 
   @Test
-  void shouldNotSerializeSubComponents() {
+  void shouldSerializeSubComponents() {
     // Given
     ComponentTypeSymbol comp = createSimpleComp();
     comp.getSpannedScope().add(
@@ -282,11 +305,26 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     String createdJson = deser.serialize(comp, arc2json);
 
     // Then
-    Assertions.assertEquals(SIMPLE_JSON, createdJson);
+    Assertions.assertEquals(JSON_WITH_SUB, createdJson);
   }
 
   @Test
-  void shouldNotSerializeInnerComponents() {
+  void shouldDeserializeSubComponents() {
+    // Given
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+
+    // When
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_SUB);
+
+    // Then
+    Assertions.assertEquals(1, comp.getSubComponents().size());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals("inst", comp.getSubComponents().get(0).getName())
+    );
+  }
+
+  @Test
+  void shouldSerializeInnerComponents() {
     // Given
     ComponentTypeSymbol comp = createSimpleComp();
     comp.getSpannedScope().add(
@@ -303,11 +341,26 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     String createdJson = deser.serialize(comp, arc2json);
 
     // Then
-    Assertions.assertEquals(SIMPLE_JSON, createdJson);
+    Assertions.assertEquals(JSON_WITH_INNER, createdJson);
   }
 
   @Test
-  void shouldNotSerializeFieldsComponents() {
+  void shouldDeserializeInnerComponents() {
+    // Given
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+
+    // When
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_INNER);
+
+    // Then
+    Assertions.assertEquals(1, comp.getInnerComponents().size());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals("inst", comp.getInnerComponents().get(0).getName())
+    );
+  }
+
+  @Test
+  void shouldSerializeFields() {
     // Given
     ComponentTypeSymbol comp = createSimpleComp();
     comp.getSpannedScope().add(
@@ -324,7 +377,22 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     String createdJson = deser.serialize(comp, arc2json);
 
     // Then
-    Assertions.assertEquals(SIMPLE_JSON, createdJson);
+    Assertions.assertEquals(JSON_WITH_FIELD, createdJson);
+  }
+
+  @Test
+  void shouldDeserializeFields() {
+    // Given
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+
+    // When
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_FIELD);
+
+    // Then
+    Assertions.assertEquals(1, comp.getFields().size());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals("inst", comp.getFields().get(0).getName())
+    );
   }
 
   protected static ComponentTypeSymbol createSimpleComp() {
