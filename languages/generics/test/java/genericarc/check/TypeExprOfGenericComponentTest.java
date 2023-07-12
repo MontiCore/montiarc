@@ -278,7 +278,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
       new TypeExprOfGenericComponent(symbolVersionForTypeExpr, Lists.newArrayList(intTypeExpr));
 
     // When
-    Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getTypeExprOfParameter(paramName);
+    Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getParameterType(paramName);
 
     // Then
     Assertions.assertTrue(paramTypeExpr.isPresent(), "param missing");
@@ -291,9 +291,9 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     // Given
     ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
-    String paramName = "parr";
+    String name = "parr";
     VariableSymbol paramOfParent = GenericArcMill.variableSymbolBuilder()
-      .setName(paramName)
+      .setName(name)
       .setType(SymTypeExpressionFactory.createTypeVariable(parentTypeVar))
       .build();
     parentCompDefinition.getSpannedScope().add(paramOfParent);
@@ -302,7 +302,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     ComponentTypeSymbol compDefinition = createComponentWithTypeVar("Comp", "T");
     TypeVarSymbol childTypeVar = compDefinition.getTypeParameters().get(0);
     VariableSymbol paramOfComp = GenericArcMill.variableSymbolBuilder()
-      .setName(paramName)
+      .setName(name)
       .setType(SymTypeExpressionFactory.createTypeVariable(childTypeVar))
       .build();
     compDefinition.getSpannedScope().add(paramOfComp);
@@ -319,7 +319,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
       new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
-    Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getTypeExprOfParameter(paramName);
+    Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getParameterType(name);
 
     // Then
     Assertions.assertTrue(paramTypeExpr.isPresent());

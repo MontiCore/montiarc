@@ -140,11 +140,13 @@ public abstract class CompTypeExpression {
    * {@code Comp<T>}, having a parameter of type {@code T}. Then, as the type argument for {@code T} is {@code Person},
    * the SymTypeExpression returned by this method will be {@code Person} for that parameter.
    *
-   * @param parameterName The name of the parameter for whom the type is requested.
+   * @param name The name of the parameter for whom the type is requested.
    * @return The {@code SymTypeExpressions} of the parameter's type enclosed in an {@code Optional}. An empty {@code
    * Optional} if the component has no such parameter.
    */
-  public abstract Optional<SymTypeExpression> getTypeExprOfParameter(@NotNull String parameterName);
+  public abstract Optional<SymTypeExpression> getParameterType(@NotNull String name);
+
+  public abstract List<SymTypeExpression> getParameterTypes();
 
   public CompTypeExpression deepClone() {
     return deepClone(getTypeInfo());

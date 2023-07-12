@@ -3,7 +3,6 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
@@ -295,7 +294,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     List<Optional<SymTypeExpression>> parentSignature = parent.getTypeInfo()
       .getParameters().stream()
       .map(ISymbol::getName)
-      .map(parent::getTypeExprOfParameter)
+      .map(parent::getParameterType)
       .collect(Collectors.toList());
 
     List<TypeCheckResult> parentArgsCheck = parentArgs.stream()

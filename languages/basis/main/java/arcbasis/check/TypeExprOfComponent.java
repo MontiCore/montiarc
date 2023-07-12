@@ -4,11 +4,14 @@ package arcbasis.check;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Represents component types that are solely defined by their type symbol. I.e. they, for example, are not generic and
@@ -47,10 +50,14 @@ public class TypeExprOfComponent extends CompTypeExpression {
   }
 
   @Override
-  public Optional<SymTypeExpression> getTypeExprOfParameter(@NotNull String parameterName) {
-    Preconditions.checkNotNull(parameterName);
-    return this.getTypeInfo()
-      .getParameter(parameterName).map(VariableSymbolTOP::getType);
+  public Optional<SymTypeExpression> getParameterType(@NotNull String name) {
+    Preconditions.checkNotNull(name);
+    return this.getTypeInfo().getParameter(name).map(VariableSymbol::getType);
+  }
+
+  @Override
+  public List<SymTypeExpression> getParameterTypes() {
+    return this.getTypeInfo().getParameters().stream().map(VariableSymbol::getType).collect(Collectors.toList());
   }
 
   @Override

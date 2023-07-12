@@ -188,7 +188,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
     // When
-    Optional<SymTypeExpression> paramType = compTypeExpr.getTypeExprOfParameter(paramName);
+    Optional<SymTypeExpression> paramType = compTypeExpr.getParameterType(paramName);
 
     // Then
     Assertions.assertTrue(paramType.isPresent(), "Param not present");

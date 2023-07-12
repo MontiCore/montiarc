@@ -9,14 +9,14 @@ import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -121,8 +121,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
         .getPort(portName, false)
         .filter(PortSymbol::isTypePresent)
         .map(PortSymbol::getType);
-      if (unboundPortType.isEmpty()) return Optional.empty();
-      return this.createBoundTypeExpression(unboundPortType.get());
+      return unboundPortType.map(this::createBoundTypeExpression);
     } else if (this.getTypeInfo().isPresentParent()) {
       // We do not have this port. Now we look if our parent has such a port.
       return this.getParentTypeExpr().orElseThrow(IllegalStateException::new).getTypeExprOfPort(portName);
@@ -132,15 +131,19 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   @Override
-  public Optional<SymTypeExpression> getTypeExprOfParameter(@NotNull String parameterName) {
-    Preconditions.checkNotNull(parameterName);
+  public Optional<SymTypeExpression> getParameterType(@NotNull String name) {
+    Preconditions.checkNotNull(name);
 
-    SymTypeExpression unboundParamType = this.getTypeInfo()
-      .getParameter(parameterName)
-      .map(VariableSymbolTOP::getType)
-      .orElseThrow(NoSuchElementException::new);
+    return this.getTypeInfo().getParameter(name).map(p -> this.createBoundTypeExpression(p.getType()));
+  }
 
-    return this.createBoundTypeExpression(unboundParamType);
+  @Override
+  public List<SymTypeExpression> getParameterTypes() {
+    List<SymTypeExpression> unbound = this.getTypeInfo().getParameters()
+      .stream().map(VariableSymbol::getType)
+      .collect(Collectors.toList());
+
+    return this.createBoundTypeExpression(unbound);
   }
 
   public Optional<SymTypeExpression> getTypeBindingFor(@NotNull TypeVarSymbol typeVar) {
@@ -212,15 +215,20 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     return equal;
   }
 
-  protected Optional<SymTypeExpression> createBoundTypeExpression(@NotNull SymTypeExpression unboundTypeExpr) {
-    if (unboundTypeExpr.isPrimitive() || unboundTypeExpr.isObjectType() || unboundTypeExpr.isNullType()) {
-      return Optional.of(unboundTypeExpr);
-    } else if (unboundTypeExpr.isTypeVariable()) {
-      return this.getTypeBindingFor(unboundTypeExpr.getTypeInfo().getName());
+  protected SymTypeExpression createBoundTypeExpression(@NotNull SymTypeExpression typeExpr) {
+    if (typeExpr.isPrimitive() || typeExpr.isObjectType() || typeExpr.isNullType()) {
+      return typeExpr;
+    } else if (typeExpr.isTypeVariable()) {
+      return this.getTypeBindingFor(typeExpr.getTypeInfo().getName()).orElse(SymTypeExpressionFactory.createObscureType());
     } else {
-      SymTypeExpression boundSymType = unboundTypeExpr.deepClone();
-      boundSymType.replaceTypeVariables(this.getTypeVarBindings());
-      return Optional.of(boundSymType);
+      SymTypeExpression boundTypeExpr = typeExpr.deepClone();
+      boundTypeExpr.replaceTypeVariables(this.getTypeVarBindings());
+      return boundTypeExpr;
     }
+  }
+
+  protected List<SymTypeExpression> createBoundTypeExpression(@NotNull List<SymTypeExpression> typeExprS) {
+    Preconditions.checkNotNull(typeExprS);
+    return typeExprS.stream().map(this::createBoundTypeExpression).collect(Collectors.toList());
   }
 }
