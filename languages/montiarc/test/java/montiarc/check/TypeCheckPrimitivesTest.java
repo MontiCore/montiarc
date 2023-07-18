@@ -57,8 +57,8 @@ public class TypeCheckPrimitivesTest extends MontiArcAbstractTest {
 
   protected void initSymbols() {
     this.scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addSubScope(scope);
-    scope.setEnclosingScope(MontiArcMill.globalScope());
+    MontiArcMill.globalScope().addSubScope(this.scope);
+    this.scope.setEnclosingScope(MontiArcMill.globalScope());
     FieldSymbol aBoolean = MontiArcMill.fieldSymbolBuilder()
       .setName("aBoolean")
       .setType(createPrimitive(BOOLEAN))

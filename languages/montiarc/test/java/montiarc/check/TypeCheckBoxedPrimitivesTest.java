@@ -55,15 +55,15 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
   @Override
   public void setUp() {
     super.setUp();
-    this.initSymbols();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    this.initSymbols();
   }
 
   protected void initSymbols() {
     this.scope = MontiArcMill.scope();
-    MontiArcMill.globalScope().addSubScope(scope);
-    scope.setEnclosingScope(MontiArcMill.globalScope());
+    MontiArcMill.globalScope().addSubScope(this.scope);
+    this.scope.setEnclosingScope(MontiArcMill.globalScope());
     FieldSymbol aBoolean = MontiArcMill.fieldSymbolBuilder()
       .setName("aBoolean")
       .setType(createPrimitive(BOOLEAN))
@@ -106,105 +106,132 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     SymbolService.link(this.scope, aDouble);
     FieldSymbol anObject = MontiArcMill.fieldSymbolBuilder()
       .setName("anObject")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Object", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Object").orElseThrow()))
       .build();
     SymbolService.link(this.scope, anObject);
     FieldSymbol aSerializable = MontiArcMill.fieldSymbolBuilder()
       .setName("aSerializable")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.io.Serializable", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.io.Serializable").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aSerializable);
     FieldSymbol aWBoolean = MontiArcMill.fieldSymbolBuilder()
       .setName("aWBoolean")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Boolean", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Boolean").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWBoolean);
     FieldSymbol aWChar = MontiArcMill.fieldSymbolBuilder()
       .setName("aWChar")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Character", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Character").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWChar);
     FieldSymbol aNumber = MontiArcMill.fieldSymbolBuilder()
       .setName("aNumber")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Number", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Number").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aNumber);
     FieldSymbol aWByte = MontiArcMill.fieldSymbolBuilder()
       .setName("aWByte")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Byte", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Byte").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWByte);
     FieldSymbol aWShort = MontiArcMill.fieldSymbolBuilder()
       .setName("aWShort")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Short", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Short").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWShort);
     FieldSymbol aWInt = MontiArcMill.fieldSymbolBuilder()
       .setName("aWInt")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Integer", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Integer").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWInt);
     FieldSymbol aWLong = MontiArcMill.fieldSymbolBuilder()
       .setName("aWLong")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Long", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Long").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWLong);
     FieldSymbol aWFloat = MontiArcMill.fieldSymbolBuilder()
       .setName("aWFloat")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Float", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Float").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWFloat);
     FieldSymbol aWDouble = MontiArcMill.fieldSymbolBuilder()
       .setName("aWDouble")
-      .setType(SymTypeExpressionFactory.createTypeObject("java.lang.Double", this.scope))
+      .setType(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+        .resolveOOType("java.lang.Double").orElseThrow()))
       .build();
     SymbolService.link(this.scope, aWDouble);
     FieldSymbol aCpaBoolean = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaBoolean")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Boolean", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Boolean").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaBoolean);
     FieldSymbol aCpaChar = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaChar")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Character", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Character").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaChar);
     FieldSymbol aCpaByte = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaByte")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Byte", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Byte").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaByte);
     FieldSymbol aCpaShort = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaShort")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Short", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Short").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaShort);
     FieldSymbol aCpaInt = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaInt")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Integer", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Integer").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaInt);
     FieldSymbol aCpaLong = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaLong")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Long", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Long").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaLong);
     FieldSymbol aCpaFloat = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaFloat")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Float", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Float").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaFloat);
     FieldSymbol aCpaDouble = MontiArcMill.fieldSymbolBuilder()
       .setName("aCpaDouble")
-      .setType(SymTypeExpressionFactory.createGenerics("java.lang.Comparable", this.scope,
-        List.of(SymTypeExpressionFactory.createTypeObject("java.lang.Double", this.scope))))
+      .setType(SymTypeExpressionFactory.createGenerics(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Comparable").orElseThrow(),
+        List.of(SymTypeExpressionFactory.createTypeObject(MontiArcMill.globalScope()
+          .resolveOOType("java.lang.Double").orElseThrow()))))
       .build();
     SymbolService.link(this.scope, aCpaDouble);
   }
