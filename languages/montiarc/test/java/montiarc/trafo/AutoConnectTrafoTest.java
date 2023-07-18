@@ -4,7 +4,7 @@ package montiarc.trafo;
 import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
@@ -197,7 +197,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
     List<ASTConnector> before = ast.getComponentType().getConnectors();
 
-    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
+    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new SymTypeRelations());
 
     // When
     trafo.apply(ast);
@@ -250,7 +250,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
 
-    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
+    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new SymTypeRelations());
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortUniqueSender());
@@ -284,7 +284,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
 
-    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new TypeRelations());
+    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo(new SymTypeRelations());
 
     // When
     trafo.apply(ast);

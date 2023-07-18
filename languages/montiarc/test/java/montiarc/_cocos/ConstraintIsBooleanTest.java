@@ -2,7 +2,7 @@
 package montiarc._cocos;
 
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
@@ -46,7 +46,7 @@ public class ConstraintIsBooleanTest extends MontiArcAbstractTest {
   public void testConstraintType(ASTArcConstraintDeclaration constraint,
                                  Error[] errorList) {
     // Given
-    ConstraintIsBoolean coco = new ConstraintIsBoolean(new MontiArcTypeCalculator(), new TypeRelations());
+    ConstraintIsBoolean coco = new ConstraintIsBoolean(new MontiArcTypeCalculator(), new SymTypeRelations());
 
     // When
     coco.check(constraint);

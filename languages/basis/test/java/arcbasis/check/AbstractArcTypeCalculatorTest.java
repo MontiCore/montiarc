@@ -13,8 +13,8 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.check.TypeCheckResult;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -103,16 +103,16 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
     this.getScopeSetter().setScope(expression, this.getScope());
 
     //When
-    TypeCheckResult result = this.getTypeCalculator().deriveType(expression);
+    SymTypeExpression result = this.getTypeCalculator().typeOf(expression);
 
     //Then
-    Assertions.assertTrue(result.isPresentResult());
-    Assertions.assertEquals(isPrimitive, result.getResult().isPrimitive());
-    Assertions.assertEquals(isGeneric, result.getResult().isGenericType());
-    Assertions.assertFalse(result.getResult().isTypeVariable());
-    Assertions.assertTrue(!(result.getResult().getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
-      !(((OOTypeSymbolSurrogate) result.getResult().getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
-    Assertions.assertEquals(expectedType, result.getResult().print());
+    Assertions.assertFalse(result.isObscureType());
+    Assertions.assertEquals(isPrimitive, result.isPrimitive());
+    Assertions.assertEquals(isGeneric, result.isGenericType());
+    Assertions.assertFalse(result.isTypeVariable());
+    Assertions.assertTrue(!(result.getTypeInfo() instanceof OOTypeSymbolSurrogate) ||
+      !(((OOTypeSymbolSurrogate) result.getTypeInfo()).lazyLoadDelegate() instanceof  OOTypeSymbolSurrogate));
+    Assertions.assertEquals(expectedType, result.print());
   }
 
   protected void doCalculateTypeFromNameExpression(@NotNull String expression, @NotNull String expectedType,
@@ -160,10 +160,9 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
     expr.setEnclosingScope(this.getScope());
 
     //When
-    TypeCheckResult result = this.getTypeCalculator().deriveType(expr);
+    SymTypeExpression result = this.getTypeCalculator().typeOf(expr);
 
     //Then
-    Assertions.assertTrue(result.isPresentResult());
-    Assertions.assertTrue(result.getResult().isObscureType());
+    Assertions.assertTrue(result.isObscureType());
   }
 }

@@ -9,7 +9,6 @@ import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
-import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
 import genericarc.GenericArcMill;
@@ -93,14 +92,7 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
 
     for (ASTMCType upperBound : typeParam.getUpperBoundList()) {
       try {
-        TypeCheckResult boundExpr = this.getTypeCalculator().synthesizeType(upperBound);
-        if (boundExpr.isPresentResult()) {
-          typeParamSym.addSuperTypes(boundExpr.getResult());
-        } else {
-          Log.error(String.format("Could not create a SymTypeExpression from '%s'",
-            GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart()
-          );
-        }
+        typeParamSym.addSuperTypes(this.getTypeCalculator().typeOf(upperBound));
       }  catch (ResolvedSeveralEntriesForSymbolException e) {
         Log.error(ArcError.AMBIGUOUS_REFERENCE.format(GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
       }

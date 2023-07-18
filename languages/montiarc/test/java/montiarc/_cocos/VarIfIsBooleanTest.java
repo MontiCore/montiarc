@@ -3,7 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTArcElement;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;
@@ -52,7 +52,7 @@ public class VarIfIsBooleanTest extends MontiArcAbstractTest {
   public void testVarIfType(ASTArcVarIf constraint,
                             Error[] errorList) {
     // Given
-    VarIfIsBoolean coco = new VarIfIsBoolean(new MontiArcTypeCalculator(), new TypeRelations());
+    VarIfIsBoolean coco = new VarIfIsBoolean(new MontiArcTypeCalculator(), new SymTypeRelations());
 
     // When
     coco.check(constraint);

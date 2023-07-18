@@ -4,7 +4,7 @@ package montiarc._cocos;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import genericarc._cocos.ComponentHeritageTypeBound;
@@ -88,7 +88,7 @@ public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ComponentHeritageTypeBound(new TypeRelations()));
+    checker.addCoCo(new ComponentHeritageTypeBound(new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);
@@ -107,7 +107,7 @@ public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ComponentHeritageTypeBound(new TypeRelations()));
+    checker.addCoCo(new ComponentHeritageTypeBound(new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);

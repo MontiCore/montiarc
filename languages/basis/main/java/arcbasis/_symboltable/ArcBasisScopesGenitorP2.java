@@ -7,7 +7,6 @@ import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPort;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
@@ -18,7 +17,6 @@ import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc.Timing;
@@ -69,11 +67,6 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
 
   public ISynthesizeComponent getComponentSynthesizer() {
     return this.componentSynthesizer;
-  }
-
-  public void setComponentSynthesizer(@NotNull ISynthesizeComponent componentSynthesizer) {
-    Preconditions.checkNotNull(componentSynthesizer);
-    this.componentSynthesizer = componentSynthesizer;
   }
 
   @Override
@@ -128,14 +121,14 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
     Preconditions.checkNotNull(node.getMCType());
     Preconditions.checkState(node.isPresentSymbol());
 
-    node.getSymbol().setType(this.getTypeCalculator().synthesizeType(node.getMCType()).getResult());
+    node.getSymbol().setType(this.getTypeCalculator().typeOf(node.getMCType()));
   }
 
   @Override
   public void visit(@NotNull ASTPortDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    SymTypeExpression type = this.getTypeCalculator().synthesizeType(node.getMCType()).getResult();
+    SymTypeExpression type = this.getTypeCalculator().typeOf(node.getMCType());
     Timing timing = node.getTiming().orElse(null);
 
     for (ASTPort port : node.getPortList()) {
@@ -149,7 +142,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
   public void visit(@NotNull ASTArcFieldDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    SymTypeExpression type = this.getTypeCalculator().synthesizeType(node.getMCType()).getResult();
+    SymTypeExpression type = this.getTypeCalculator().typeOf(node.getMCType());
 
     for (ASTArcField field : node.getArcFieldList()) {
       field.getSymbol().setType(type);

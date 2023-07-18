@@ -6,9 +6,8 @@ import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheckResult;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,9 +22,9 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
    */
   protected final IArcTypeCalculator tc;
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public ParameterDefaultValueTypeFits(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+  public ParameterDefaultValueTypeFits(@NotNull IArcTypeCalculator tc, @NotNull SymTypeRelations tr) {
     this.tc = Preconditions.checkNotNull(tc);
     this.tr = Preconditions.checkNotNull(tr);
   }
@@ -46,23 +45,15 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
 
     if (astParam.isPresentDefault()) {
       ASTExpression defaultExpr = astParam.getDefault();
-      TypeCheckResult expressionType = this.tc.deriveType(defaultExpr);
+      SymTypeExpression expressionType = this.tc.typeOf(defaultExpr);
 
-      if (!expressionType.isPresentResult()) {
-        Log.debug(String.format("Checking coco '%s' is skipped for parameter '%s', as the type of the its default " +
-              "value expression could not be calculated. Position: '%s'.",
-            this.getClass().getSimpleName(), astParam.getName(), astParam.get_SourcePositionStart()),
-          "CoCos");
-
-      } else if (expressionType.isType()) {
-        Log.error(ArcError.TYPE_REF_DEFAULT_VALUE.format(
-            expressionType.getResult().print(),
-            paramSym.getName()),
-          astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd()
+      if (expressionType.isObscureType()) {
+        Log.debug(astParam.get_SourcePositionStart()
+            + ": Skip execution of CoCo, could not calculate the parameter's type.",
+          this.getClass().getCanonicalName()
         );
-
-      } else if (!tr.compatible(paramType, expressionType.getResult())) {
-        Log.error(ArcError.PARAM_DEFAULT_TYPE_MISMATCH.format(paramType.print(), expressionType.getResult().print()),
+      } else if (!tr.isCompatible(paramType, expressionType)) {
+        Log.error(ArcError.PARAM_DEFAULT_TYPE_MISMATCH.format(paramType.printFullName(), expressionType.printFullName()),
           astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd()
         );
       }

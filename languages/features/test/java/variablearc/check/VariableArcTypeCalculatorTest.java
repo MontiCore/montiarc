@@ -28,7 +28,7 @@ public class VariableArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest
   @Override
   protected IArcTypeCalculator getTypeCalculator() {
     if (this.typeCalculator == null) {
-      this.typeCalculator = new VariableArcTypeCalculator(new TypeCheckResult());
+      this.typeCalculator = new VariableArcTypeCalculator();
     }
     return this.typeCalculator;
   }

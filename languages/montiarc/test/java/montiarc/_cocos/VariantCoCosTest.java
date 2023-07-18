@@ -5,13 +5,12 @@ import arcbasis._cocos.*;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
@@ -494,7 +493,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
-    TypeRelations tr = new TypeRelations();
+    SymTypeRelations tr = new SymTypeRelations();
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addVariantCoCo(new PortsConnected());
@@ -524,7 +523,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
-    TypeRelations tr = new TypeRelations();
+    SymTypeRelations tr = new SymTypeRelations();
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addVariantCoCo(new PortsConnected());

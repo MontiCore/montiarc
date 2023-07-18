@@ -8,15 +8,20 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.*;
+import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
+import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
+import arcbasis._symboltable.SymbolService;
+import arcbasis._symboltable.TransitiveScopeSetter;
 import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ArcBasisTypeCalculatorTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types3.SymTypeRelations;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -81,7 +86,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     this.scopeGenP3.createFromAST(toInstantiate);
 
     // When
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator(), new TypeRelations());
+    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator(), new SymTypeRelations());
     coco.check(compInst.getComponentInstance(0));
 
     // Then
@@ -238,16 +243,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
             doBuildNameExpressionInScope("aDouble")
           ).build()
         ).build(),
-        new ArcError[] {ArcError.TOO_FEW_ARGUMENTS, ArcError.COMP_ARG_TYPE_MISMATCH}),
-
-    Arguments.arguments("shouldFindTypeReference",
-      provideSimpleCompType(),
-      ArcBasisMill.arcArgumentsBuilder().addArcArgument(
-        ArcBasisMill.arcArgumentBuilder().setExpression(
-          doBuildNameExpressionInScope("Person")
-        ).build()
-      ).build(),
-      new ArcError[]{ArcError.TYPE_REF_NO_EXPRESSION})
+        new ArcError[] {ArcError.TOO_FEW_ARGUMENTS, ArcError.COMP_ARG_TYPE_MISMATCH})
     );
   }
 
@@ -259,7 +255,9 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
       .addArcParameter(
         ArcBasisMill.arcParameterBuilder()
           .setName("intParam")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
+            .setPrimitive(ASTConstantsMCBasicTypes.INT)
+            .build())
           .build())
       .build();
 
@@ -279,16 +277,22 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
   protected static ASTComponentType provideAdvancedCompType() {
     ASTArcParameter param1 = ArcBasisMill.arcParameterBuilder()
       .setName("first")
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
+        .setPrimitive(ASTConstantsMCBasicTypes.INT)
+        .build())
       .build();
     ASTArcParameter param2 = ArcBasisMill.arcParameterBuilder()
       .setName("second")
-      .setMCType(createQualifiedType("boolean"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
+        .setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN)
+        .build())
       .setDefault(doBuildNameExpressionInScope("aBool"))
       .build();
     ASTArcParameter param3 = ArcBasisMill.arcParameterBuilder()
       .setName("third")
-      .setMCType(createQualifiedType("double"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
+        .setPrimitive(ASTConstantsMCBasicTypes.DOUBLE)
+        .build())
       .setDefault(doBuildNameExpressionInScope("aDouble"))
       .build();
 

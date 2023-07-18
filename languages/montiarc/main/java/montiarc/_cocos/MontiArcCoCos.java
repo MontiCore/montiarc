@@ -33,6 +33,7 @@ import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.UniqueIdentifier;
+import arcbasis.check.TypeCheck3AsTypeCalculator;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
@@ -47,8 +48,7 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-import de.monticore.types.check.TypeCalculator;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import genericarc._cocos.ComponentHeritageTypeBound;
 import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
@@ -82,8 +82,8 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker afterSymTab() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
-    TypeRelations tr = new TypeRelations();
-    TypeCalculator mcTypeCheck = new TypeCalculator(tc, tc, tr);
+    SymTypeRelations tr = new SymTypeRelations();
+    TypeCheck3AsTypeCalculator tc2tc = new TypeCheck3AsTypeCalculator(tc, tr);
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
@@ -154,12 +154,12 @@ public class MontiArcCoCos {
     checker.addCoCo(new AtomicNoAutoConnect());
 
     // Basic MontiCore cocos
-    checker.addCoCo(new ExpressionStatementIsValid(mcTypeCheck));
+    checker.addCoCo(new ExpressionStatementIsValid(tc2tc));
     checker.addCoCo(new VarDeclarationInitializationHasCorrectType(tc));
-    checker.addCoCo(new ForConditionHasBooleanType(mcTypeCheck));
-    checker.addCoCo(new ForEachIsValid(mcTypeCheck));
-    checker.addCoCo(new IfConditionHasBooleanType(mcTypeCheck));
-    checker.addCoCo(new SwitchStatementValid(mcTypeCheck));
+    checker.addCoCo(new ForConditionHasBooleanType(tc2tc));
+    checker.addCoCo(new ForEachIsValid(tc2tc));
+    checker.addCoCo(new IfConditionHasBooleanType(tc2tc));
+    checker.addCoCo(new SwitchStatementValid(tc2tc));
 
     // Block unsupported model elements
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());

@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ParameterHeritage;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
@@ -181,7 +181,7 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterHeritage(new MontiArcTypeCalculator(), new TypeRelations()));
+    checker.addCoCo(new ParameterHeritage(new MontiArcTypeCalculator(), new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);
@@ -200,7 +200,7 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterHeritage(new MontiArcTypeCalculator(), new TypeRelations()));
+    checker.addCoCo(new ParameterHeritage(new MontiArcTypeCalculator(), new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);

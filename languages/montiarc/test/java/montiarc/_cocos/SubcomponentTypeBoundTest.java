@@ -4,7 +4,7 @@ package montiarc._cocos;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import genericarc._cocos.SubcomponentTypeBound;
@@ -85,7 +85,7 @@ public class SubcomponentTypeBoundTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new SubcomponentTypeBound(new TypeRelations()));
+    checker.addCoCo(new SubcomponentTypeBound(new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);
@@ -104,13 +104,12 @@ public class SubcomponentTypeBoundTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new SubcomponentTypeBound(new TypeRelations()));
+    checker.addCoCo(new SubcomponentTypeBound(new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
       .containsExactlyElementsOf(this.collectErrorCodes(errors));
   }

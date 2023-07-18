@@ -30,9 +30,9 @@ Legend:
 | ☑     | ☒           | ParameterHeritage                   | ArcBasis | 0xC1128, 0xC1129, 0xC1130, 0xC1131                            |
 | ☑     | ☑           | PortHeritageTypeFits                | ArcBasis | 0xC1132, 0xC1133, 0xC1134                                     |
 | ☑     | ☒           | FieldInitOmitPortReferences         | ArcBasis | 0xC1135                                                       |
-| ☑     | ☒           | FieldInitTypeFits                   | ArcBasis | 0xC1136, 0xC1137                                              |
+| ☑     | ☒           | FieldInitTypeFits                   | ArcBasis | 0xC1137                                                       |
 | ☑     | ☒           | ParameterDefaultValueOmitsPortRef   | ArcBasis | 0xC1138                                                       |
-| ☑     | ☒           | ParameterDefaultValueTypeFits       | ArcBasis | 0xC1139, 0xC1140                                              |
+| ☑     | ☒           | ParameterDefaultValueTypeFits       | ArcBasis | 0xC1139                                                       |
 | ☑     | ☒           | ComponentArgumentsOmitPortRef       | ArcBasis | 0xC1141                                                       |
 | ☑     | ☒           | ComponentNameCapitalization         | ArcBasis | 0xC1143                                                       |
 | ☑     | ☒           | SubcomponentNameCapitalization      | ArcBasis | 0xC1144                                                       |

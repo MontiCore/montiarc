@@ -9,7 +9,6 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
-import de.monticore.types.check.TypeCheckResult;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.exp2smt.IDeriveSMTSort;
 
@@ -17,10 +16,10 @@ import java.util.Optional;
 
 public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
 
-  private final IArcTypeCalculator typeCalculator;
+  private final IArcTypeCalculator tc;
 
-  public VariableArcDeriveSMTSort(@NotNull IArcTypeCalculator typeCalculator) {
-    this.typeCalculator = typeCalculator;
+  public VariableArcDeriveSMTSort(@NotNull IArcTypeCalculator tc) {
+    this.tc = tc;
   }
 
   @Override
@@ -28,12 +27,9 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
     Preconditions.checkNotNull(context);
     Preconditions.checkNotNull(nameExpression);
     Preconditions.checkNotNull(nameExpression.getEnclosingScope());
-    TypeCheckResult typeCheckResult = typeCalculator.deriveType(nameExpression);
+    SymTypeExpression typeOfExpr = this.tc.typeOf(nameExpression);
 
-    if (typeCheckResult.isPresentResult()) {
-      return toSort(context, typeCheckResult.getResult());
-    }
-    return Optional.empty();
+    return toSort(context, typeOfExpr);
   }
 
   @Override

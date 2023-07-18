@@ -45,6 +45,9 @@ public class PortSymbolTest extends ArcBasisAbstractTest {
     ArcBasisScopesGenitorP2Delegator scopesGenP2 = ArcBasisMill.scopesGenitorP2Delegator();
     ArcBasisScopesGenitorP3Delegator scopesGenP3 = ArcBasisMill.scopesGenitorP3Delegator();
 
+    ArcBasisMill.globalScope().add(ArcBasisMill.typeSymbolBuilder()
+      .setName("Integer").setSpannedScope(ArcBasisMill.scope()).build());
+
     ASTPortDeclaration ports = ArcBasisMill.portDeclarationBuilder()
       .setPortList("p")
       .setIncoming(true)
@@ -61,7 +64,6 @@ public class PortSymbolTest extends ArcBasisAbstractTest {
         .build())
       .build();
 
-    ArcBasisMill.globalScope().add(ArcBasisMill.typeSymbolBuilder().setName("Integer").build());
     scopesGen.createFromAST(ast);
     scopesGenP2.createFromAST(ast);
     scopesGenP3.createFromAST(ast);

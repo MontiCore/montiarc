@@ -5,7 +5,7 @@ import arcbasis._cocos.ConnectorTypesFit;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
@@ -244,7 +244,7 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConnectorTypesFit(new TypeRelations()));
+    checker.addCoCo(new ConnectorTypesFit(new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);
@@ -263,7 +263,7 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConnectorTypesFit(new TypeRelations()));
+    checker.addCoCo(new ConnectorTypesFit(new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);

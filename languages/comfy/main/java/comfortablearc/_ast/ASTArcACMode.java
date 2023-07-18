@@ -2,7 +2,7 @@
 package comfortablearc._ast;
 
 import arcbasis._symboltable.PortSymbol;
-import de.monticore.types.check.ITypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public interface ASTArcACMode extends ASTArcACModeTOP {
@@ -12,6 +12,6 @@ public interface ASTArcACMode extends ASTArcACModeTOP {
    * if auto-connect would create a connector from the source to the target
    * given their properties.
    */
-  boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target, @NotNull ITypeRelations tr);
+  boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target, @NotNull SymTypeRelations tr);
 
 }

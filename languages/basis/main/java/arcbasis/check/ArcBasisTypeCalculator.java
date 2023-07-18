@@ -5,13 +5,11 @@ import arcbasis.ArcBasisMill;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
-import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisTraverser;
-import de.monticore.types.check.DeriveSymTypeOfExpression;
-import de.monticore.types.check.DeriveSymTypeOfLiterals;
+import de.monticore.expressions.expressionsbasis.types3.ExpressionBasisTypeVisitor;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SynthesizeSymTypeFromMCBasicTypes;
-import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
+import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
+import de.monticore.types3.Type4Ast;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -21,46 +19,29 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class ArcBasisTypeCalculator extends AbstractArcTypeCalculator {
 
   public ArcBasisTypeCalculator() {
-    this(new TypeCheckResult());
+    this(init(ArcBasisMill.traverser()));
+  }
+  
+  protected ArcBasisTypeCalculator(@NotNull ArcBasisTraverser traverse) {
+    super(traverse);
   }
 
-  public ArcBasisTypeCalculator(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, ArcBasisMill.traverser());
+  public static ArcBasisTraverser init(@NotNull ArcBasisTraverser traverse) {
+    Preconditions.checkNotNull(traverse);
+    initExpressionBasisTypeVisitor(traverse);
+    initMCBasicTypesTypeVisitor(traverse);
+    return traverse;
   }
 
-  protected ArcBasisTypeCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                   @NotNull ArcBasisTraverser traverser) {
-    super(typeCheckResult, traverser);
-    this.init(traverser);
+  public static void initExpressionBasisTypeVisitor(@NotNull ExpressionsBasisTraverser traverse) {
+    Preconditions.checkNotNull(traverse);
+    ExpressionBasisTypeVisitor visitor = new ExpressionBasisTypeVisitor();
+    traverse.add4ExpressionsBasis(visitor);
   }
 
-  protected void init(@NotNull ArcBasisTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    this.initDeriveSymTypeOfLiterals(traverser);
-    this.initDeriveSymTypeOfExpression(traverser);
-    this.initSynthesizeSymTypeFromMCBasicTypes(traverser);
-  }
-
-  protected void initDeriveSymTypeOfLiterals(@NotNull MCLiteralsBasisTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
-    deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCLiteralsBasis(deriveSymTypeOfLiterals);
-  }
-
-  protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
-    deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);
-    traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);
-  }
-
-  protected void initSynthesizeSymTypeFromMCBasicTypes(@NotNull MCBasicTypesTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    SynthesizeSymTypeFromMCBasicTypes mCBasicTypesVisitor = new SynthesizeSymTypeFromMCBasicTypes();
-    mCBasicTypesVisitor.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCBasicTypes(mCBasicTypesVisitor);
-    traverser.setMCBasicTypesHandler(mCBasicTypesVisitor);
+  public static void initMCBasicTypesTypeVisitor(@NotNull MCBasicTypesTraverser traverse) {
+    Preconditions.checkNotNull(traverse);
+    MCBasicTypesTypeVisitor visitor = new MCBasicTypesTypeVisitor();
+    traverse.add4MCBasicTypes(visitor);
   }
 }

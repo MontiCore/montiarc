@@ -2,24 +2,20 @@
 package montiarc.check;
 
 import arcbasis.check.AbstractArcTypeCalculator;
+import arcbasis.check.ArcBasisTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsTraverser;
+import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsTypeVisitor;
+import de.monticore.expressions.bitexpressions._visitor.BitExpressionsTraverser;
+import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
-import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsTraverser;
-import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisTraverser;
-import de.monticore.types.check.DeriveSymTypeOfAssignmentExpressions;
-import de.monticore.types.check.DeriveSymTypeOfExpression;
-import de.monticore.types.check.DeriveSymTypeOfLiterals;
-import de.monticore.types.check.DeriveSymTypeOfMCCommonLiterals;
+import de.monticore.literals.mccommonliterals.types3.MCCommonLiteralsTypeVisitor;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SynthesizeSymTypeFromMCBasicTypes;
-import de.monticore.types.check.SynthesizeSymTypeFromMCCollectionTypes;
-import de.monticore.types.check.SynthesizeSymTypeFromMCSimpleGenericTypes;
-import de.monticore.types.check.TypeCheckResult;
-import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
 import de.monticore.types.mccollectiontypes._visitor.MCCollectionTypesTraverser;
+import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
+import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -31,91 +27,61 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
 
   public MontiArcTypeCalculator() {
-    this(new TypeCheckResult());
+    this(init(MontiArcMill.traverser()));
   }
 
-  public MontiArcTypeCalculator(@NotNull TypeCheckResult typeCheckResult) {
-    this(typeCheckResult, MontiArcMill.traverser());
+  protected MontiArcTypeCalculator(@NotNull MontiArcTraverser t) {
+    super(t);
   }
 
-  protected MontiArcTypeCalculator(@NotNull TypeCheckResult typeCheckResult,
-                                   @NotNull MontiArcTraverser traverser) {
-    super(typeCheckResult, traverser);
-    this.init(traverser);
+  protected static MontiArcTraverser init(@NotNull MontiArcTraverser t) {
+    Preconditions.checkNotNull(t);
+    initMCCommonLiteralsTypeVisitor(t);
+    ArcBasisTypeCalculator.initExpressionBasisTypeVisitor(t);
+    initBitExpressionsTypeVisitor(t);
+    initCommonExpressionsTypeVisitor(t);
+    initAssignmentExpressionsTypeVisitor(t);
+    ArcBasisTypeCalculator.initMCBasicTypesTypeVisitor(t);
+    initMCCollectionTypesTypeVisitor(t);
+    initMCSimpleGenericTypesTypeVisitor(t);
+    return t;
   }
 
-  protected void init(@NotNull MontiArcTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    this.initDeriveSymTypeOfLiterals(traverser);
-    this.initDeriveSymTypeOfExpression(traverser);
-    this.initDeriveSymTypeOfMCCommonLiterals(traverser);
-    this.initDeriveSymTypeOfCommonExpressions(traverser);
-    this.initDeriveSymTypeOfAssignmentExpressions(traverser);
-    this.initSynthesizeSymTypeFromMCBasicTypes(traverser);
-    this.initSynthesizeSymTypeFromMCCollectionTypes(traverser);
-    this.initSynthesizeSymTypeFromMCSimpleGenericTypes(traverser);
+  public static void initMCCommonLiteralsTypeVisitor(@NotNull MCCommonLiteralsTraverser t) {
+    Preconditions.checkNotNull(t);
+    MCCommonLiteralsTypeVisitor visitor = new MCCommonLiteralsTypeVisitor();
+    t.add4MCCommonLiterals(visitor);
   }
 
-  protected void initDeriveSymTypeOfLiterals(@NotNull MCLiteralsBasisTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfLiterals deriveSymTypeOfLiterals = new DeriveSymTypeOfLiterals();
-    deriveSymTypeOfLiterals.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCLiteralsBasis(deriveSymTypeOfLiterals);
+  public static void initCommonExpressionsTypeVisitor(@NotNull CommonExpressionsTraverser t) {
+    Preconditions.checkNotNull(t);
+    MACommonExpressionsTypeVisitor visitor = new MACommonExpressionsTypeVisitor();
+    visitor.setWithinTypeBasicSymbolsResolver(new MAOOWithinTypeBasicSymbolsResolver());
+    t.add4CommonExpressions(visitor);
+    t.setCommonExpressionsHandler(visitor);
   }
 
-  protected void initDeriveSymTypeOfExpression(@NotNull ExpressionsBasisTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfExpression deriveSymTypeOfExpression = new DeriveSymTypeOfExpression();
-    deriveSymTypeOfExpression.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4ExpressionsBasis(deriveSymTypeOfExpression);
-    traverser.setExpressionsBasisHandler(deriveSymTypeOfExpression);
+  public static void initAssignmentExpressionsTypeVisitor(@NotNull AssignmentExpressionsTraverser t) {
+    Preconditions.checkNotNull(t);
+    AssignmentExpressionsTypeVisitor visitor = new AssignmentExpressionsTypeVisitor();
+    t.add4AssignmentExpressions(visitor);
   }
 
-  protected void initDeriveSymTypeOfMCCommonLiterals(@NotNull MCCommonLiteralsTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfMCCommonLiterals deriveSymTypeOfMCCommonLiterals = new DeriveSymTypeOfMCCommonLiterals();
-    deriveSymTypeOfMCCommonLiterals.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCCommonLiterals(deriveSymTypeOfMCCommonLiterals);
+  public static void initBitExpressionsTypeVisitor(@NotNull BitExpressionsTraverser t) {
+    Preconditions.checkNotNull(t);
+    BitExpressionsTypeVisitor visitor = new BitExpressionsTypeVisitor();
+    t.add4BitExpressions(visitor);
   }
 
-  protected void initDeriveSymTypeOfCommonExpressions(@NotNull CommonExpressionsTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    ArcDeriveSymTypeOfCommonExpressions deriveSymTypeOfCommonExpressions = new ArcDeriveSymTypeOfCommonExpressions();
-    deriveSymTypeOfCommonExpressions.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4CommonExpressions(deriveSymTypeOfCommonExpressions);
-    traverser.setCommonExpressionsHandler(deriveSymTypeOfCommonExpressions);
+  public static void initMCCollectionTypesTypeVisitor(@NotNull MCCollectionTypesTraverser t) {
+    Preconditions.checkNotNull(t);
+    MCCollectionTypesTypeVisitor visitor = new MCCollectionTypesTypeVisitor();
+    t.add4MCCollectionTypes(visitor);
   }
 
-  protected void initDeriveSymTypeOfAssignmentExpressions(@NotNull AssignmentExpressionsTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    DeriveSymTypeOfAssignmentExpressions deriveSymTypeOfAssignmentExpressions =
-      new DeriveSymTypeOfAssignmentExpressions();
-    deriveSymTypeOfAssignmentExpressions.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4AssignmentExpressions(deriveSymTypeOfAssignmentExpressions);
-    traverser.setAssignmentExpressionsHandler(deriveSymTypeOfAssignmentExpressions);
-  }
-
-  protected void initSynthesizeSymTypeFromMCBasicTypes(@NotNull MCBasicTypesTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    SynthesizeSymTypeFromMCBasicTypes mCBasicTypesVisitor = new SynthesizeSymTypeFromMCBasicTypes();
-    mCBasicTypesVisitor.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCBasicTypes(mCBasicTypesVisitor);
-    traverser.setMCBasicTypesHandler(mCBasicTypesVisitor);
-  }
-
-  protected void initSynthesizeSymTypeFromMCCollectionTypes(@NotNull MCCollectionTypesTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    SynthesizeSymTypeFromMCCollectionTypes synCollectionTypes = new SynthesizeSymTypeFromMCCollectionTypes();
-    synCollectionTypes.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCCollectionTypes(synCollectionTypes);
-    traverser.setMCCollectionTypesHandler(synCollectionTypes);
-  }
-
-  protected void initSynthesizeSymTypeFromMCSimpleGenericTypes(@NotNull MCSimpleGenericTypesTraverser traverser) {
-    Preconditions.checkNotNull(traverser);
-    SynthesizeSymTypeFromMCSimpleGenericTypes synSimpleGenericTypes = new SynthesizeSymTypeFromMCSimpleGenericTypes();
-    synSimpleGenericTypes.setTypeCheckResult(this.getTypeCheckResult());
-    traverser.add4MCSimpleGenericTypes(synSimpleGenericTypes);
-    traverser.setMCSimpleGenericTypesHandler(synSimpleGenericTypes);
+  public static void initMCSimpleGenericTypesTypeVisitor(@NotNull MCSimpleGenericTypesTraverser t) {
+    Preconditions.checkNotNull(t);
+    MCSimpleGenericTypesTypeVisitor visitor = new MCSimpleGenericTypesTypeVisitor();
+    t.add4MCSimpleGenericTypes(visitor);
   }
 }

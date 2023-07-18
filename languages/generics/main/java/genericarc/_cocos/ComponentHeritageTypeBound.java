@@ -5,11 +5,13 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
@@ -26,9 +28,9 @@ import java.util.Optional;
  */
 public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo {
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public ComponentHeritageTypeBound(@NotNull ITypeRelations tr) {
+  public ComponentHeritageTypeBound(@NotNull SymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
 
@@ -98,8 +100,10 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     for (TypeVarSymbol typeVar : parentSym.getTypeParameters()) {
       Optional<SymTypeExpression> typeVarBinding = parentExpr.getTypeBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
-        for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
-          if (!tr.compatible(bound, typeVarBinding.get())) {
+        for (SymTypeExpression aBound : typeVar.getSuperTypesList()) {
+          SymTypeExpression bound = aBound.deepClone();
+          bound.replaceTypeVariables(parentExpr.getTypeVarBindings());
+          if (!tr.isCompatible(bound, typeVarBinding.get())) {
             Log.error(
               GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
               parentPositionOrElseTypePosition(node));

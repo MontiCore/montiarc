@@ -6,8 +6,8 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -16,9 +16,9 @@ import java.util.Optional;
 
 public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public PortHeritageTypeFits(@NotNull ITypeRelations tr) {
+  public PortHeritageTypeFits(@NotNull SymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
 
@@ -52,11 +52,11 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
     if (inheritedPortType.isPresent()) {
       // then check if their types fit
       if (port.isIncoming()) {
-        if (!tr.compatible(inheritedPortType.get(), port.getType())) {
+        if (!tr.isCompatible(inheritedPortType.get(), port.getType())) {
           Log.error(ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH.toString(), port.getSourcePosition());
         }
       } else {
-        if (!tr.compatible(port.getType(), inheritedPortType.get())) {
+        if (!tr.isCompatible(port.getType(), inheritedPortType.get())) {
           Log.error(ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH.toString(), port.getSourcePosition());
         }
       }

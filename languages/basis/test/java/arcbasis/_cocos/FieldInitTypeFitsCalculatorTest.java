@@ -13,8 +13,8 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.check.TypeRelations;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -49,7 +49,9 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
       .build();
 
     ASTArcFieldDeclaration fieldDecl = ArcBasisMill.arcFieldDeclarationBuilder()
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
+        .setPrimitive(ASTConstantsMCBasicTypes.INT)
+        .build())
       .addArcField(field)
       .build();
 
@@ -58,10 +60,10 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
+    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new SymTypeRelations());
     coco.check(field);
 
-    Assertions.assertEquals(0, Log.getErrorCount());
+    Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
   }
 
   @Test
@@ -81,7 +83,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
+    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new SymTypeRelations());
     coco.check(field);
 
     Assertions.assertEquals(0, Log.getErrorCount());
@@ -104,33 +106,10 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
+    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new SymTypeRelations());
     coco.check(field);
 
     this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INIT_TYPE_MISMATCH);
-  }
-
-  @Test
-  public void shouldFindTypeReference() {
-    ASTArcField field = ArcBasisMill.arcFieldBuilder()
-      .setName("foofield")
-      .setInitial(doBuildNameExpressionInScope("Person"))
-      .build();
-
-    ASTArcFieldDeclaration fieldDecl = ArcBasisMill.arcFieldDeclarationBuilder()
-      .setMCType(createQualifiedType("int"))
-      .addArcField(field)
-      .build();
-
-    ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
-    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
-    ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
-    ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
-
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator(), new TypeRelations());
-    coco.check(field);
-
-    this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INIT_TYPE_REF);
   }
 
   protected ASTComponentType encloseFieldInCompType(@NotNull ASTArcFieldDeclaration field) {

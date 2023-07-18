@@ -6,9 +6,8 @@ import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheckResult;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -23,9 +22,9 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
    */
   protected final IArcTypeCalculator tc;
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public FieldInitTypeFits(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+  public FieldInitTypeFits(@NotNull IArcTypeCalculator tc, @NotNull SymTypeRelations tr) {
     this.tc = Preconditions.checkNotNull(tc);
     this.tr = Preconditions.checkNotNull(tr);
   }
@@ -45,20 +44,15 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
     SymTypeExpression fieldType = fieldSym.getType();
 
     ASTExpression initExpr = astField.getInitial();
-    TypeCheckResult expressionType = this.tc.deriveType(initExpr);
+    SymTypeExpression expressionType = this.tc.typeOf(initExpr);
 
-    if (!expressionType.isPresentResult()) {
-      Log.debug(String.format("Checking coco '%s' is skipped for field '%s', as the type of the initialization " +
-            "expression could not be calculated. Position: '%s'.",
-          this.getClass().getSimpleName(), astField.getName(), astField.get_SourcePositionStart()),
-        "CoCos");
-    } else if (expressionType.isType()) {
-      Log.error(ArcError.FIELD_INIT_TYPE_REF.format(
-          expressionType.getResult().print(),
-          fieldSym.getName()),
-        astField.get_SourcePositionStart(), astField.get_SourcePositionEnd());
-    } else if (!tr.compatible(fieldType, expressionType.getResult())) {
-      Log.error(ArcError.FIELD_INIT_TYPE_MISMATCH.format(fieldType.print(), expressionType.getResult().print()),
+    if (expressionType.isObscureType()) {
+      Log.debug(astField.get_SourcePositionStart()
+          + ": Skip execution of CoCo, could not calculate the field's type.",
+        this.getClass().getCanonicalName()
+      );
+    } else if (!tr.isCompatible(fieldType, expressionType)) {
+      Log.error(ArcError.FIELD_INIT_TYPE_MISMATCH.format(fieldType.printFullName(), expressionType.printFullName()),
         astField.get_SourcePositionStart(), astField.get_SourcePositionEnd()
       );
     }

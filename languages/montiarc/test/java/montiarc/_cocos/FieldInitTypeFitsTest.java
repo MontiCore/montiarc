@@ -3,10 +3,9 @@ package montiarc._cocos;
 
 import arcbasis._cocos.FieldInitTypeFits;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.TypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
-import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.ArcError;
@@ -69,7 +68,7 @@ public class FieldInitTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new TypeRelations()));
+    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);
@@ -88,7 +87,7 @@ public class FieldInitTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new TypeRelations()));
+    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator(), new SymTypeRelations()));
 
     // When
     checker.checkAll(ast);

@@ -8,10 +8,10 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.util.GenericArcError;
@@ -26,9 +26,9 @@ import java.util.Optional;
  */
 public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationCoCo {
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public SubcomponentTypeBound(@NotNull ITypeRelations tr) {
+  public SubcomponentTypeBound(@NotNull SymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
                                                          /**
@@ -48,8 +48,10 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
     for (TypeVarSymbol typeVar : compTypeSymbol.getTypeParameters()) {
       Optional<SymTypeExpression> typeVarBinding = compTypeExpr.getTypeBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
-        for (SymTypeExpression bound : typeVar.getSuperTypesList()) {
-          if (!this.tr.compatible(bound, typeVarBinding.get())) {
+        for (SymTypeExpression aBound : typeVar.getSuperTypesList()) {
+          SymTypeExpression bound = aBound.deepClone();
+          bound.replaceTypeVariables(compTypeExpr.getTypeVarBindings());
+          if (!this.tr.isSubTypeOf(typeVarBinding.get(), bound)) {
             Log.error(
                 GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
                 astInstantiation.get_SourcePositionStart(), astInstantiation.get_SourcePositionEnd()

@@ -3,12 +3,10 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -26,9 +24,9 @@ import java.util.Optional;
  */
 public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public ConnectorTypesFit(@NotNull ITypeRelations tr) {
+  public ConnectorTypesFit(@NotNull SymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
 
@@ -48,7 +46,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
       if (symTypeOfTarget.isPresent()) {
         // Perform type check
         try {
-          if (!tr.compatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
+          if (!tr.isCompatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
             Log.error(
               ArcError.CONNECTOR_TYPE_MISMATCH.format(
                 symTypeOfTarget.get().print(), symTypeOfSource.get().print()),

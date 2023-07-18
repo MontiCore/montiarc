@@ -8,12 +8,10 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheckResult;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -29,9 +27,9 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
   protected final IArcTypeCalculator tc;
 
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public ParameterHeritage(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+  public ParameterHeritage(@NotNull IArcTypeCalculator tc, @NotNull SymTypeRelations tr) {
     this.tc = Preconditions.checkNotNull(tc);
     this.tr = Preconditions.checkNotNull(tr);
   }
@@ -181,20 +179,19 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
     Set<String> keywordArguments = new HashSet<>();
-    int keywordCounter=0;
+    int keywordCounter;
 
     boolean isUnique = true;
-    for (int i = 0; i < parentArgs.size(); i++) {
-      ASTArcArgument argument = parentArgs.get(i);
-      if (argument.isPresentName()){
+    for (ASTArcArgument argument : parentArgs) {
+      if (argument.isPresentName()) {
         keywordCounter = keywordArguments.size();
         keywordArguments.add(argument.getName());
-        if (keywordCounter == keywordArguments.size()){
+        if (keywordCounter == keywordArguments.size()) {
           Log.error(ArcError.HERITAGE_KEY_NOT_UNIQUE.format(
               argument.getName(), comp.getName()), argument.get_SourcePositionStart(),
             argument.get_SourcePositionEnd()
           );
-          isUnique=false;
+          isUnique = false;
         }
       }
     }
@@ -226,24 +223,21 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
     boolean isUnique = true;
-    for (int i = 0; i < parentArgs.size(); i++) {
-      ASTArcArgument argument = parentArgs.get(i);
-      if (argument.isPresentName()){
+    for (ASTArcArgument argument : parentArgs) {
+      if (argument.isPresentName()) {
         String argumentKey = argument.getName();
         int paramIndex = paramIndices.get(argumentKey);
-        if (paramIndex<posArgsAmount){
+        if (paramIndex < posArgsAmount) {
           Log.error(ArcError.HERITAGE_COMP_ARG_MULTIPLE_VALUES.format(argumentKey),
-            parentArgs.get(i).get_SourcePositionStart(), parentArgs.get(i).get_SourcePositionEnd()
+            argument.get_SourcePositionStart(), argument.get_SourcePositionEnd()
           );
-          isUnique=false;
+          isUnique = false;
         }
       }
-
     }
 
     return isUnique;
   }
-
 
   /**
    * Checks that keyword based instantiation arguments of a component instance come after positional arguments.
@@ -276,7 +270,6 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     return rightArgumentOrder;
   }
 
-
   /**
    * Checks that all arguments have compatible types with the parent's configurations arguments.
    *
@@ -297,8 +290,8 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       .map(parent::getParameterType)
       .collect(Collectors.toList());
 
-    List<TypeCheckResult> parentArgsCheck = parentArgs.stream()
-      .map(ASTArcArgument::getExpression).map(this.tc::deriveType)
+    List<SymTypeExpression> parentArgsCheck = parentArgs.stream()
+      .map(ASTArcArgument::getExpression).map(this.tc::typeOf)
       .collect(Collectors.toList());
 
     List<String> paramNames = parent.getTypeInfo().getParameters().stream()
@@ -307,34 +300,28 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
     for (int i = 0; i < Math.min(parentArgsCheck.size(), parentSignature.size()); i++) {
-      if (!parentArgsCheck.get(i).isPresentResult()) {
-        Log.info(String.format("Checking coco '%s' is skipped for instantiation argument No. '%d', as the type of " +
-              "the argument expression could not be calculated. Position: '%s'.",
-            this.getClass().getSimpleName(), i + 1, parent.getArcArguments().get(i).get_SourcePositionStart()),
-          "CoCos");
-      } else if (parentArgsCheck.get(i).isType()) {
-        ASTExpression typeRefExpr = parent.getArcArguments().get(i).getExpression();
-
-        Log.error(ArcError.TYPE_REF_NO_EXPRESSION2.toString(),
-          typeRefExpr.get_SourcePositionStart(), typeRefExpr.get_SourcePositionEnd()
+      if (parentArgsCheck.get(i).isObscureType()) {
+        Log.debug(parent.getArcArguments().get(i).get_SourcePositionStart()
+            + ": Skip execution of CoCo, could not calculate the expression's type.",
+          this.getClass().getCanonicalName()
         );
       } else if (parentArgs.get(i).isPresentName()) {
         String argumentKey = parentArgs.get(i).getName();
         int paramIndex = paramIndices.get(argumentKey);
-        if (parentSignature.get(paramIndex).isEmpty() || !tr.compatible(parentSignature.get(paramIndex).get(), parentArgsCheck.get(i).getResult())) {
+        if (parentSignature.get(paramIndex).isEmpty() || !tr.isCompatible(parentSignature.get(paramIndex).get(), parentArgsCheck.get(i))) {
           ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
 
-          Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).getResult().print(),
-              parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+          Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).printFullName(),
+              parentSignature.get(i).map(SymTypeExpression::printFullName).orElse("UNKNOWN")),
             incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd()
           );
         }
       } else {
-        if (parentSignature.get(i).isEmpty() || !tr.compatible(parentSignature.get(i).get(), parentArgsCheck.get(i).getResult())) {
+        if (parentSignature.get(i).isEmpty() || !tr.isCompatible(parentSignature.get(i).get(), parentArgsCheck.get(i))) {
           ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
 
-          Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).getResult().print(),
-              parentSignature.get(i).map(SymTypeExpression::print).orElse("UNKNOWN")),
+          Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).printFullName(),
+              parentSignature.get(i).map(SymTypeExpression::printFullName).orElse("UNKNOWN")),
             incompatibleArgument.get_SourcePositionStart(), incompatibleArgument.get_SourcePositionEnd());
         }
       }

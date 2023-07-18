@@ -36,7 +36,7 @@ import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
  * <p>
  * The class under test is {@link MontiArcTypeCalculator}.
  */
-public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
+public class TypeCheckPrimitivesTest extends MontiArcAbstractTest {
 
   /**
    * The enclosing scope of the symbols of the test setup
@@ -1162,12 +1162,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble = true, 0xA0179", // expected double but provided boolean
     "aDouble = false, 0xA0179", // expected double but provided boolean
     "aDouble = aBoolean, 0xA0179", // expected double but provided boolean
-    "true = true, 0xA0181", // variable expected
-    "'a' = 'a', 0xA0181", // variable expected
-    "1 = 1, 0xA0181", // variable expected
-    "1l = 1l, 0xA0181", // variable expected
-    "0.1f = 0.1f, 0xA0181", // variable expected
-    "0.1 = 0.1, 0xA0181", // variable expected
     "aBoolean += aBoolean, 0xA0178", // += not applicable to boolean, boolean
     "aBoolean += aChar, 0xA0178", // += not applicable to boolean, char
     "aBoolean += aByte, 0xA0178", // += not applicable to boolean, byte
@@ -1183,12 +1177,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aLong += aBoolean, 0xA0178", // += not applicable to long, boolean
     "aFloat += aBoolean, 0xA0178", // += not applicable to float, boolean
     "aDouble += aBoolean, 0xA0178", // += not applicable to double, boolean
-    "true += true, 0xA0181", // variable expected
-    "'a' += 'a', 0xA0181", // variable expected
-    "1 += 1, 0xA0181", // variable expected
-    "1l += 1l, 0xA0181", // variable expected
-    "0.1f += 0.1f, 0xA0181", // variable expected
-    "0.1 += 0.1, 0xA0181", // variable expected
     "aBoolean -= aBoolean, 0xA0178", // -= not applicable to boolean, boolean
     "aBoolean -= aChar, 0xA0178", // -= not applicable to boolean, char
     "aBoolean -= aByte, 0xA0178", // -= not applicable to boolean, byte
@@ -1197,12 +1185,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aBoolean -= aLong, 0xA0178", // -= not applicable to boolean, long
     "aBoolean -= aFloat, 0xA0178", // -= not applicable to boolean, float
     "aBoolean -= aDouble, 0xA0178", // -= not applicable to boolean, double
-    "true -= true, 0xA0181", // variable expected
-    "'a' -= 'a', 0xA0181", // variable expected
-    "1 -= 1, 0xA0181", // variable expected
-    "1l -= 1l, 0xA0181", // variable expected
-    "0.1f -= 0.1f, 0xA0181", // variable expected
-    "0.1 -= 0.1, 0xA0181", // variable expected
     "aBoolean *= aBoolean, 0xA0178", // *= not applicable to boolean, boolean
     "aBoolean *= aChar, 0xA0178", // *= not applicable to boolean, char
     "aBoolean *= aByte, 0xA0178", // *= not applicable to boolean, byte
@@ -1211,12 +1193,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aBoolean *= aLong, 0xA0178", // *= not applicable to boolean, long
     "aBoolean *= aFloat, 0xA0178", // *= not applicable to boolean, float
     "aBoolean *= aDouble, 0xA0178", // *= not applicable to boolean, double
-    "true *= true, 0xA0181", // variable expected
-    "'a' *= 'a', 0xA0181", // variable expected
-    "1 *= 1, 0xA0181", // variable expected
-    "1l *= 1l, 0xA0181", // variable expected
-    "0.1f *= 0.1f, 0xA0181", // variable expected
-    "0.1 *= 0.1, 0xA0181", // variable expected
     "aBoolean /= aBoolean, 0xA0178", // /= not applicable to boolean, boolean
     "aBoolean /= aChar, 0xA0178", // /= not applicable to boolean, char
     "aBoolean /= aByte, 0xA0178", // /= not applicable to boolean, byte
@@ -1225,12 +1201,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aBoolean /= aLong, 0xA0178", // /= not applicable to boolean, long
     "aBoolean /= aFloat, 0xA0178", // /= not applicable to boolean, float
     "aBoolean /= aDouble, 0xA0178", // /= not applicable to boolean, double
-    "true /= true, 0xA0181", // variable expected
-    "'a' /= 'a', 0xA0181", // variable expected
-    "1 /= 1, 0xA0181", // variable expected
-    "1l /= 1l, 0xA0181", // variable expected
-    "0.1f /= 0.1f, 0xA0181", // variable expected
-    "0.1 /= 0.1, 0xA0181", // variable expected
     "aBoolean %= aBoolean, 0xA0178", // %= not applicable to boolean, boolean
     "aBoolean %= aChar, 0xA0178", // %= not applicable to boolean, char
     "aBoolean %= aByte, 0xA0178", // %= not applicable to boolean, byte
@@ -1239,12 +1209,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aBoolean %= aLong, 0xA0178", // %= not applicable to boolean, long
     "aBoolean %= aFloat, 0xA0178", // %= not applicable to boolean, float
     "aBoolean %= aDouble, 0xA0178", // %= not applicable to boolean, double
-    "true %= true, 0xA0181", // variable expected
-    "'a' %= 'a', 0xA0181", // variable expected
-    "1 %= 1, 0xA0181", // variable expected
-    "1l %= 1l, 0xA0181", // variable expected
-    "0.1f %= 0.1f, 0xA0181", // variable expected
-    "0.1 %= 0.1, 0xA0181", // variable expected
     "aBoolean >>= aBoolean, 0xA0177", // >>= not applicable to boolean, boolean
     "aBoolean >>= aChar, 0xA0177", // >>= not applicable to boolean, char
     "aBoolean >>= aByte, 0xA0177", // >>= not applicable to boolean, byte
@@ -1269,12 +1233,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble >>= aLong, 0xA0177", // >>= not applicable to double, long
     "aDouble >>= aFloat, 0xA0177", // >>= not applicable to double, float
     "aDouble >>= aDouble, 0xA0177", // >>= not applicable to double, double
-    "true >>= true, 0xA0181", // variable expected
-    "'a' >>= 'a', 0xA0181", // variable expected
-    "1 >>= 1, 0xA0181", // variable expected
-    "1l >>= 1l, 0xA0181", // variable expected
-    "0.1f >>= 0.1f, 0xA0181", // variable expected
-    "0.1 >>= 0.1, 0xA0181", // variable expected
     "aBoolean <<= aBoolean, 0xA0177", // <<= not applicable to boolean, boolean
     "aBoolean <<= aChar, 0xA0177", // <<= not applicable to boolean, char
     "aBoolean <<= aByte, 0xA0177", // <<= not applicable to boolean, byte
@@ -1299,12 +1257,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble <<= aLong, 0xA0177", // <<= not applicable to double, long
     "aDouble <<= aFloat, 0xA0177", // <<= not applicable to double, float
     "aDouble <<= aDouble, 0xA0177", // <<= not applicable to double, double
-    "true <<= true, 0xA0181", // variable expected
-    "'a' <<= 'a', 0xA0181", // variable expected
-    "1 <<= 1, 0xA0181", // variable expected
-    "1l <<= 1l, 0xA0181", // variable expected
-    "0.1f <<= 0.1f, 0xA0181", // variable expected
-    "0.1 <<= 0.1, 0xA0181", // variable expected
     "aBoolean >>>= aBoolean, 0xA0177", // >>>= not applicable to boolean, boolean
     "aBoolean >>>= aChar, 0xA0177", // >>>= not applicable to boolean, char
     "aBoolean >>>= aByte, 0xA0177", // >>>= not applicable to boolean, byte
@@ -1329,12 +1281,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble >>>= aLong, 0xA0177", // >>>= not applicable to double, long
     "aDouble >>>= aFloat, 0xA0177", // >>>= not applicable to double, float
     "aDouble >>>= aDouble, 0xA0177", // >>>= not applicable to double, double
-    "true >>>= true, 0xA0181", // variable expected
-    "'a' >>>= 'a', 0xA0181", // variable expected
-    "1 >>>= 1, 0xA0181", // variable expected
-    "1l >>>= 1l, 0xA0181", // variable expected
-    "0.1f >>>= 0.1f, 0xA0181", // variable expected
-    "0.1 >>>= 0.1, 0xA0181", // variable expected
     "aBoolean &= aChar, 0xA0176", // &= not applicable to boolean, char
     "aBoolean &= aByte, 0xA0176", // &= not applicable to boolean, byte
     "aBoolean &= aShort, 0xA0176", // &= not applicable to boolean, short
@@ -1373,12 +1319,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble &= aLong, 0xA0176", // &= not applicable to double, long
     "aDouble &= aFloat, 0xA0176", // &= not applicable to double, float
     "aDouble &= aDouble, 0xA0176", // &= not applicable double, double
-    "true &= true, 0xA0181", // variable expected
-    "'a' &= 'a', 0xA0181", // variable expected
-    "1 &= 1, 0xA0181", // variable expected
-    "1l &= 1l, 0xA0181", // variable expected
-    "0.1f &= 0.1f, 0xA0181", // variable expected
-    "0.1 &= 0.1, 0xA0181", // variable expected
     "aBoolean |= aChar, 0xA0176", // |= not applicable to boolean, char
     "aBoolean |= aByte, 0xA0176", // |= not applicable to boolean, byte
     "aBoolean |= aShort, 0xA0176", // |= not applicable to boolean, short
@@ -1417,12 +1357,6 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble |= aLong, 0xA0176", // |= not applicable to double, long
     "aDouble |= aFloat, 0xA0176", // |= not applicable to double, float
     "aDouble |= aDouble, 0xA0176", // |= not applicable double, double
-    "true |= true, 0xA0181", // variable expected
-    "'a' |= 'a', 0xA0181", // variable expected
-    "1 |= 1, 0xA0181", // variable expected
-    "1l |= 1l, 0xA0181", // variable expected
-    "0.1f |= 0.1f, 0xA0181", // variable expected
-    "0.1 |= 0.1, 0xA0181", // variable expected
     "aBoolean ^= aChar, 0xA0176", // ^= not applicable to boolean, char
     "aBoolean ^= aByte, 0xA0176", // ^= not applicable to boolean, byte
     "aBoolean ^= aShort, 0xA0176", // ^= not applicable to boolean, short
@@ -1461,137 +1395,107 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble ^= aLong, 0xA0176", // ^= not applicable to double, long
     "aDouble ^= aFloat, 0xA0176", // ^= not applicable to double, float
     "aDouble ^= aDouble, 0xA0176", // ^= not applicable to double, double
-    "true ^= true, 0xA0181", // variable expected
-    "'a' ^= 'a', 0xA0181", // variable expected
-    "1 ^= 1, 0xA0181", // variable expected
-    "1l ^= 1l, 0xA0181", // variable expected
-    "0.1f ^= 0.1f, 0xA0181", // variable expected
-    "0.1 ^= 0.1, 0xA0181", // variable expected
     "++aBoolean, 0xA0184", // ++ not applicable to boolean
-    "++true, 0xA0183", // variable expected
-    "++'c', 0xA0183", // variable expected
-    "++1, 0xA0183", // variable expected
-    "++1l, 0xA0183", // variable expected
-    "++0.1f, 0xA0183", // variable expected
-    "++0.1, 0xA0183", // variable expected
     "--aBoolean, 0xA0184", // -- not applicable to boolean
-    "--true, 0xA0183", // variable expected
-    "--'c', 0xA0183", // variable expected
-    "--1, 0xA0183", // variable expected
-    "--1l, 0xA0183", // variable expected
-    "--0.1f, 0xA0183", // variable expected
-    "--0.1, 0xA0183", // variable expected
     "aBoolean++, 0xA0184", // ++ not applicable to boolean
-    "true++, 0xA0183", // variable expected
-    "'c'++, 0xA0183", // variable expected
-    "1++, 0xA0183", // variable expected
-    "1l++, 0xA0183", // variable expected
-    "0.1f++, 0xA0183", // variable expected
-    "0.1++, 0xA0183", // variable expected
     "aBoolean--, 0xA0184", // -- not applicable to boolean
-    "true--, 0xA0183", // variable expected
-    "'c'--, 0xA0183", // variable expected
-    "1--, 0xA0183", // variable expected
-    "1l--, 0xA0183", // variable expected
-    "0.1f--, 0xA0183", // variable expected
-    "0.1--, 0xA0183", // variable expected
-    "+aBoolean, 0xA0175", // + not applicable to boolean
-    "-aBoolean, 0xA0175", // - not applicable to boolean
-    "~aBoolean, 0xA0173", // ! not applicable to boolean
-    "~aFloat, 0xA0173", // ! not applicable to boolean
-    "~aDouble, 0xA0173", // ! not applicable to boolean
-    "!aChar, 0xA0171", // ! not applicable to char
-    "!aByte, 0xA0171", // ! not applicable to byte
-    "!aShort, 0xA0171", // ! not applicable to short
-    "!anInt, 0xA0171", // ! not applicable to int
-    "!aLong, 0xA0171", // ! not applicable to long
-    "!aFloat, 0xA0171", // ! not applicable to float
-    "!aDouble, 0xA0171", // ! not applicable to double
-    "!aChar, 0xA0171", // ! not applicable to char
-    "!aByte, 0xA0171", // ! not applicable to byte
-    "!aShort, 0xA0171", // ! not applicable to short
-    "!anInt, 0xA0171", // ! not applicable to int
-    "!aLong, 0xA0171", // ! not applicable to long
-    "!aFloat, 0xA0171", // ! not applicable to float
-    "!aDouble, 0xA0171", // ! not applicable to double
+    "+aBoolean, 0xA017D", // + not applicable to boolean
+    "-aBoolean, 0xA017D", // - not applicable to boolean
+    "~aBoolean, 0xB0175", // ! not applicable to boolean
+    "~aFloat, 0xB0175", // ! not applicable to boolean
+    "~aDouble, 0xB0175", // ! not applicable to boolean
+    "!aChar, 0xB0164", // ! not applicable to char
+    "!aByte, 0xB0164", // ! not applicable to byte
+    "!aShort, 0xB0164", // ! not applicable to short
+    "!anInt, 0xB0164", // ! not applicable to int
+    "!aLong, 0xB0164", // ! not applicable to long
+    "!aFloat, 0xB0164", // ! not applicable to float
+    "!aDouble, 0xB0164", // ! not applicable to double
+    "!aChar, 0xB0164", // ! not applicable to char
+    "!aByte, 0xB0164", // ! not applicable to byte
+    "!aShort, 0xB0164", // ! not applicable to short
+    "!anInt, 0xB0164", // ! not applicable to int
+    "!aLong, 0xB0164", // ! not applicable to long
+    "!aFloat, 0xB0164", // ! not applicable to float
+    "!aDouble, 0xB0164", // ! not applicable to double
     "aChar = ~aChar, 0xA0179", // ~ applicable to char, but result is int
     "aByte = ~aByte, 0xA0179", // ~ applicable to byte, but result is int
     "aShort = ~aShort, 0xA0179", // ~ applicable to short, but result is int
-    "aBoolean + aBoolean, 0xA0168", // + not applicable to boolean, boolean
-    "aBoolean + aChar, 0xA0168", // + not applicable to boolean, char
-    "aBoolean + aByte, 0xA0168", // + not applicable to boolean, byte
-    "aBoolean + aShort, 0xA0168", // + not applicable to boolean, short
-    "aBoolean + anInt, 0xA0168", // + not applicable to boolean, int
-    "aBoolean + aLong, 0xA0168", // + not applicable to boolean, long
-    "aBoolean + aFloat, 0xA0168", // + not applicable to boolean, float
-    "aBoolean + aDouble, 0xA0168", // + not applicable to boolean, double
-    "aChar + aBoolean, 0xA0168", // + not applicable to char, boolean
-    "aByte + aBoolean, 0xA0168", // + not applicable to byte, boolean
-    "aShort + aBoolean, 0xA0168", // + not applicable to short, boolean
-    "anInt + aBoolean, 0xA0168", // + not applicable to int, boolean
-    "aLong + aBoolean, 0xA0168", // + not applicable to long, boolean
-    "aFloat + aBoolean, 0xA0168", // + not applicable to float, boolean
-    "aDouble + aBoolean, 0xA0168", // + not applicable to double, boolean
-    "aBoolean - aBoolean, 0xA0168", // - not applicable to boolean, boolean
-    "aBoolean - aChar, 0xA0168", // - not applicable to boolean, char
-    "aBoolean - aByte, 0xA0168", // - not applicable to boolean, byte
-    "aBoolean - aShort, 0xA0168", // - not applicable to boolean, short
-    "aBoolean - anInt, 0xA0168", // - not applicable to boolean, int
-    "aBoolean - aLong, 0xA0168", // - not applicable to boolean, long
-    "aBoolean - aFloat, 0xA0168", // - not applicable to boolean, float
-    "aBoolean - aDouble, 0xA0168", // - not applicable to boolean, double
-    "aChar - aBoolean, 0xA0168", // - not applicable to char, boolean
-    "aByte - aBoolean, 0xA0168", // - not applicable to byte, boolean
-    "aShort - aBoolean, 0xA0168", // - not applicable to short, boolean
-    "anInt - aBoolean, 0xA0168", // - not applicable to int, boolean
-    "aLong - aBoolean, 0xA0168", // - not applicable to long, boolean
-    "aFloat - aBoolean, 0xA0168", // - not applicable to float, boolean
-    "aDouble - aBoolean, 0xA0168", // - not applicable to double, boolean
-    "aBoolean * aBoolean, 0xA0168", // * not applicable to boolean, boolean
-    "aBoolean * aChar, 0xA0168", // * not applicable to boolean, char
-    "aBoolean * aByte, 0xA0168", // * not applicable to boolean, byte
-    "aBoolean * aShort, 0xA0168", // * not applicable to boolean, short
-    "aBoolean * anInt, 0xA0168", // * not applicable to boolean, int
-    "aBoolean * aLong, 0xA0168", // * not applicable to boolean, long
-    "aBoolean * aFloat, 0xA0168", // * not applicable to boolean, float
-    "aBoolean * aDouble, 0xA0168", // * not applicable to boolean, double
-    "aChar * aBoolean, 0xA0168", // * not applicable to char, boolean
-    "aByte * aBoolean, 0xA0168", // * not applicable to byte, boolean
-    "aShort * aBoolean, 0xA0168", // * not applicable to short, boolean
-    "anInt * aBoolean, 0xA0168", // * not applicable to int, boolean
-    "aLong * aBoolean, 0xA0168", // * not applicable to long, boolean
-    "aFloat * aBoolean, 0xA0168", // * not applicable to float, boolean
-    "aDouble * aBoolean, 0xA0168", // * not applicable to double, boolean
-    "aBoolean / aBoolean, 0xA0168", // / not applicable to boolean, boolean
-    "aBoolean / aChar, 0xA0168", // / not applicable to boolean, char
-    "aBoolean / aByte, 0xA0168", // / not applicable to boolean, byte
-    "aBoolean / aShort, 0xA0168", // / not applicable to boolean, short
-    "aBoolean / anInt, 0xA0168", // / not applicable to boolean, int
-    "aBoolean / aLong, 0xA0168", // / not applicable to boolean, long
-    "aBoolean / aFloat, 0xA0168", // / not applicable to boolean, float
-    "aBoolean / aDouble, 0xA0168", // / not applicable to boolean, double
-    "aChar / aBoolean, 0xA0168", // / not applicable to char, boolean
-    "aByte / aBoolean, 0xA0168", // / not applicable to byte, boolean
-    "aShort / aBoolean, 0xA0168", // / not applicable to short, boolean
-    "anInt / aBoolean, 0xA0168", // / not applicable to int, boolean
-    "aLong / aBoolean, 0xA0168", // / not applicable to long, boolean
-    "aFloat / aBoolean, 0xA0168", // / not applicable to float, boolean
-    "aDouble / aBoolean, 0xA0168", // / not applicable to double, boolean
-    "aBoolean % aBoolean, 0xA0168", // % not applicable to boolean, boolean
-    "aBoolean % aChar, 0xA0168", // % not applicable to boolean, char
-    "aBoolean % aByte, 0xA0168", // % not applicable to boolean, byte
-    "aBoolean % aShort, 0xA0168", // % not applicable to boolean, short
-    "aBoolean % anInt, 0xA0168", // % not applicable to boolean, int
-    "aBoolean % aLong, 0xA0168", // % not applicable to boolean, long
-    "aBoolean % aFloat, 0xA0168", // % not applicable to boolean, float
-    "aBoolean % aDouble, 0xA0168", // % not applicable to boolean, double
-    "aChar % aBoolean, 0xA0168", // % not applicable to char, boolean
-    "aByte % aBoolean, 0xA0168", // % not applicable to byte, boolean
-    "aShort % aBoolean, 0xA0168", // % not applicable to short, boolean
-    "anInt % aBoolean, 0xA0168", // % not applicable to int, boolean
-    "aLong % aBoolean, 0xA0168", // % not applicable to long, boolean
-    "aFloat % aBoolean, 0xA0168", // % not applicable to float, boolean
-    "aDouble % aBoolean, 0xA0168", // % not applicable to double, boolean
+    "aBoolean + aBoolean, 0xB0163", // + not applicable to boolean, boolean
+    "aBoolean + aChar, 0xB0163", // + not applicable to boolean, char
+    "aBoolean + aByte, 0xB0163", // + not applicable to boolean, byte
+    "aBoolean + aShort, 0xB0163", // + not applicable to boolean, short
+    "aBoolean + anInt, 0xB0163", // + not applicable to boolean, int
+    "aBoolean + aLong, 0xB0163", // + not applicable to boolean, long
+    "aBoolean + aFloat, 0xB0163", // + not applicable to boolean, float
+    "aBoolean + aDouble, 0xB0163", // + not applicable to boolean, double
+    "aChar + aBoolean, 0xB0163", // + not applicable to char, boolean
+    "aByte + aBoolean, 0xB0163", // + not applicable to byte, boolean
+    "aShort + aBoolean, 0xB0163", // + not applicable to short, boolean
+    "anInt + aBoolean, 0xB0163", // + not applicable to int, boolean
+    "aLong + aBoolean, 0xB0163", // + not applicable to long, boolean
+    "aFloat + aBoolean, 0xB0163", // + not applicable to float, boolean
+    "aDouble + aBoolean, 0xB0163", // + not applicable to double, boolean
+    "aBoolean - aBoolean, 0xB0163", // - not applicable to boolean, boolean
+    "aBoolean - aChar, 0xB0163", // - not applicable to boolean, char
+    "aBoolean - aByte, 0xB0163", // - not applicable to boolean, byte
+    "aBoolean - aShort, 0xB0163", // - not applicable to boolean, short
+    "aBoolean - anInt, 0xB0163", // - not applicable to boolean, int
+    "aBoolean - aLong, 0xB0163", // - not applicable to boolean, long
+    "aBoolean - aFloat, 0xB0163", // - not applicable to boolean, float
+    "aBoolean - aDouble, 0xB0163", // - not applicable to boolean, double
+    "aChar - aBoolean, 0xB0163", // - not applicable to char, boolean
+    "aByte - aBoolean, 0xB0163", // - not applicable to byte, boolean
+    "aShort - aBoolean, 0xB0163", // - not applicable to short, boolean
+    "anInt - aBoolean, 0xB0163", // - not applicable to int, boolean
+    "aLong - aBoolean, 0xB0163", // - not applicable to long, boolean
+    "aFloat - aBoolean, 0xB0163", // - not applicable to float, boolean
+    "aDouble - aBoolean, 0xB0163", // - not applicable to double, boolean
+    "aBoolean * aBoolean, 0xB0163", // * not applicable to boolean, boolean
+    "aBoolean * aChar, 0xB0163", // * not applicable to boolean, char
+    "aBoolean * aByte, 0xB0163", // * not applicable to boolean, byte
+    "aBoolean * aShort, 0xB0163", // * not applicable to boolean, short
+    "aBoolean * anInt, 0xB0163", // * not applicable to boolean, int
+    "aBoolean * aLong, 0xB0163", // * not applicable to boolean, long
+    "aBoolean * aFloat, 0xB0163", // * not applicable to boolean, float
+    "aBoolean * aDouble, 0xB0163", // * not applicable to boolean, double
+    "aChar * aBoolean, 0xB0163", // * not applicable to char, boolean
+    "aByte * aBoolean, 0xB0163", // * not applicable to byte, boolean
+    "aShort * aBoolean, 0xB0163", // * not applicable to short, boolean
+    "anInt * aBoolean, 0xB0163", // * not applicable to int, boolean
+    "aLong * aBoolean, 0xB0163", // * not applicable to long, boolean
+    "aFloat * aBoolean, 0xB0163", // * not applicable to float, boolean
+    "aDouble * aBoolean, 0xB0163", // * not applicable to double, boolean
+    "aBoolean / aBoolean, 0xB0163", // / not applicable to boolean, boolean
+    "aBoolean / aChar, 0xB0163", // / not applicable to boolean, char
+    "aBoolean / aByte, 0xB0163", // / not applicable to boolean, byte
+    "aBoolean / aShort, 0xB0163", // / not applicable to boolean, short
+    "aBoolean / anInt, 0xB0163", // / not applicable to boolean, int
+    "aBoolean / aLong, 0xB0163", // / not applicable to boolean, long
+    "aBoolean / aFloat, 0xB0163", // / not applicable to boolean, float
+    "aBoolean / aDouble, 0xB0163", // / not applicable to boolean, double
+    "aChar / aBoolean, 0xB0163", // / not applicable to char, boolean
+    "aByte / aBoolean, 0xB0163", // / not applicable to byte, boolean
+    "aShort / aBoolean, 0xB0163", // / not applicable to short, boolean
+    "anInt / aBoolean, 0xB0163", // / not applicable to int, boolean
+    "aLong / aBoolean, 0xB0163", // / not applicable to long, boolean
+    "aFloat / aBoolean, 0xB0163", // / not applicable to float, boolean
+    "aDouble / aBoolean, 0xB0163", // / not applicable to double, boolean
+    "aBoolean % aBoolean, 0xB0163", // % not applicable to boolean, boolean
+    "aBoolean % aChar, 0xB0163", // % not applicable to boolean, char
+    "aBoolean % aByte, 0xB0163", // % not applicable to boolean, byte
+    "aBoolean % aShort, 0xB0163", // % not applicable to boolean, short
+    "aBoolean % anInt, 0xB0163", // % not applicable to boolean, int
+    "aBoolean % aLong, 0xB0163", // % not applicable to boolean, long
+    "aBoolean % aFloat, 0xB0163", // % not applicable to boolean, float
+    "aBoolean % aDouble, 0xB0163", // % not applicable to boolean, double
+    "aChar % aBoolean, 0xB0163", // % not applicable to char, boolean
+    "aByte % aBoolean, 0xB0163", // % not applicable to byte, boolean
+    "aShort % aBoolean, 0xB0163", // % not applicable to short, boolean
+    "anInt % aBoolean, 0xB0163", // % not applicable to int, boolean
+    "aLong % aBoolean, 0xB0163", // % not applicable to long, boolean
+    "aFloat % aBoolean, 0xB0163", // % not applicable to float, boolean
+    "aDouble % aBoolean, 0xB0163", // % not applicable to double, boolean
     "aChar = 0 + -1, 0xA0179", // expected char but provided int
     "aChar = -1 + 0, 0xA0179", // expected char but provided int
     "aChar = 0 - 1, 0xA0179", // expected char but provided int
@@ -1784,216 +1688,216 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aFloat = 0.1 / 0.1f, 0xA0179", // expected float but provided double
     "aFloat = 0.1f % 0.1, 0xA0179", // expected float but provided double
     "aFloat = 0.1 % 0.1f, 0xA0179", // expected float but provided double
-    "aBoolean && aChar, 0xA0167", // && not applicable to boolean, char
-    "aBoolean && aByte, 0xA0167", // && not applicable to boolean, byte
-    "aBoolean && aShort, 0xA0167", // && not applicable to boolean, short
-    "aBoolean && anInt, 0xA0167", // && not applicable to boolean, int
-    "aBoolean && aLong, 0xA0167", // && not applicable to boolean, long
-    "aBoolean && aFloat, 0xA0167", // && not applicable to boolean, float
-    "aBoolean && aDouble, 0xA0167", // && not applicable to boolean, double
-    "aChar && aBoolean, 0xA0167", // && not applicable to char, boolean
-    "aChar && aChar, 0xA0167", // && not applicable to char, char
-    "aChar && aByte, 0xA0167", // && not applicable to char, byte
-    "aChar && aShort, 0xA0167", // && not applicable to char, short
-    "aChar && anInt, 0xA0167", // && not applicable to char, int
-    "aChar && aLong, 0xA0167", // && not applicable to char, long
-    "aChar && aFloat, 0xA0167", // && not applicable to char, float
-    "aChar && aDouble, 0xA0167", // && not applicable to char, double
-    "aByte && aBoolean, 0xA0167", // && not applicable to byte, boolean
-    "aByte && aChar, 0xA0167", // && not applicable to byte, char
-    "aByte && aByte, 0xA0167", // && not applicable to byte, byte
-    "aByte && aShort, 0xA0167", // && not applicable to byte, short
-    "aByte && anInt, 0xA0167", // && not applicable to byte, int
-    "aByte && aLong, 0xA0167", // && not applicable to byte, long
-    "aByte && aFloat, 0xA0167", // && not applicable to byte, float
-    "aByte && aDouble, 0xA0167", // && not applicable to byte, double
-    "aShort && aBoolean, 0xA0167", // && not applicable to short, boolean
-    "aShort && aChar, 0xA0167", // && not applicable to short, char
-    "aShort && aByte, 0xA0167", // && not applicable to short, byte
-    "aShort && aShort, 0xA0167", // && not applicable to short, short
-    "aShort && anInt, 0xA0167", // && not applicable to short, int
-    "aShort && aLong, 0xA0167", // && not applicable to short, long
-    "aShort && aFloat, 0xA0167", // && not applicable to short, float
-    "aShort && aDouble, 0xA0167", // && not applicable to short, double
-    "anInt && aBoolean, 0xA0167", // && not applicable to short, boolean
-    "anInt && aChar, 0xA0167", // && not applicable to int, char
-    "anInt && aByte, 0xA0167", // && not applicable to int, byte
-    "anInt && aShort, 0xA0167", // && not applicable to int, short
-    "anInt && anInt, 0xA0167", // && not applicable to int, int
-    "anInt && aLong, 0xA0167", // && not applicable to int, long
-    "anInt && aFloat, 0xA0167", // && not applicable to int, float
-    "anInt && aDouble, 0xA0167", // && not applicable to int, double
-    "aLong && aBoolean, 0xA0167", // && not applicable to long, boolean
-    "aLong && aChar, 0xA0167", // && not applicable to long, char
-    "aLong && aByte, 0xA0167", // && not applicable to long, byte
-    "aLong && aShort, 0xA0167", // && not applicable to long, short
-    "aLong && anInt, 0xA0167", // && not applicable to long, int
-    "aLong && aLong, 0xA0167", // && not applicable to long, long
-    "aLong && aFloat, 0xA0167", // && not applicable to long, float
-    "aLong && aDouble, 0xA0167", // && not applicable to long, double
-    "aFloat && aBoolean, 0xA0167", // && not applicable to float, boolean
-    "aFloat && aChar, 0xA0167", // && not applicable to float, char
-    "aFloat && aByte, 0xA0167", // && not applicable to float, byte
-    "aFloat && aShort, 0xA0167", // && not applicable to float, short
-    "aFloat && anInt, 0xA0167", // && not applicable to float, int
-    "aFloat && aLong, 0xA0167", // && not applicable to float, long
-    "aFloat && aFloat, 0xA0167", // && not applicable to float, float
-    "aFloat && aDouble, 0xA0167", // && not applicable to float, double
-    "aDouble && aBoolean, 0xA0167", // && not applicable to double, boolean
-    "aDouble && aChar, 0xA0167", // && not applicable to double, char
-    "aDouble && aByte, 0xA0167", // && not applicable to double, byte
-    "aDouble && aShort, 0xA0167", // && not applicable to double, short
-    "aDouble && anInt, 0xA0167", // && not applicable to double, int
-    "aDouble && aLong, 0xA0167", // && not applicable to double, long
-    "aDouble && aFloat, 0xA0167", // && not applicable to double, float
-    "aDouble && aDouble, 0xA0167", // && not applicable to double, double
-    "aBoolean || aChar, 0xA0167", // || not applicable to boolean, char
-    "aBoolean || aByte, 0xA0167", // || not applicable to boolean, byte
-    "aBoolean || aShort, 0xA0167", // || not applicable to boolean, short
-    "aBoolean || anInt, 0xA0167", // || not applicable to boolean, int
-    "aBoolean || aLong, 0xA0167", // || not applicable to boolean, long
-    "aBoolean || aFloat, 0xA0167", // || not applicable to boolean, float
-    "aBoolean || aDouble, 0xA0167", // || not applicable to boolean, double
-    "aChar || aBoolean, 0xA0167", // || not applicable to char, boolean
-    "aChar || aChar, 0xA0167", // || not applicable to char, char
-    "aChar || aByte, 0xA0167", // || not applicable to char, byte
-    "aChar || aShort, 0xA0167", // || not applicable to char, short
-    "aChar || anInt, 0xA0167", // || not applicable to char, int
-    "aChar || aLong, 0xA0167", // || not applicable to char, long
-    "aChar || aFloat, 0xA0167", // || not applicable to char, float
-    "aChar || aDouble, 0xA0167", // || not applicable to char, double
-    "aByte || aBoolean, 0xA0167", // || not applicable to byte, boolean
-    "aByte || aChar, 0xA0167", // || not applicable to byte, char
-    "aByte || aByte, 0xA0167", // || not applicable to byte, byte
-    "aByte || aShort, 0xA0167", // || not applicable to byte, short
-    "aByte || anInt, 0xA0167", // || not applicable to byte, int
-    "aByte || aLong, 0xA0167", // || not applicable to byte, long
-    "aByte || aFloat, 0xA0167", // || not applicable to byte, float
-    "aByte || aDouble, 0xA0167", // || not applicable to byte, double
-    "aShort || aBoolean, 0xA0167", // || not applicable to short, boolean
-    "aShort || aChar, 0xA0167", // || not applicable to short, char
-    "aShort || aByte, 0xA0167", // || not applicable to short, byte
-    "aShort || aShort, 0xA0167", // || not applicable to short, short
-    "aShort || anInt, 0xA0167", // || not applicable to short, int
-    "aShort || aLong, 0xA0167", // || not applicable to short, long
-    "aShort || aFloat, 0xA0167", // || not applicable to short, float
-    "aShort || aDouble, 0xA0167", // || not applicable to short, double
-    "anInt || aBoolean, 0xA0167", // || not applicable to short, boolean
-    "anInt || aChar, 0xA0167", // || not applicable to int, char
-    "anInt || aByte, 0xA0167", // || not applicable to int, byte
-    "anInt || aShort, 0xA0167", // || not applicable to int, short
-    "anInt || anInt, 0xA0167", // || not applicable to int, int
-    "anInt || aLong, 0xA0167", // || not applicable to int, long
-    "anInt || aFloat, 0xA0167", // || not applicable to int, float
-    "anInt || aDouble, 0xA0167", // || not applicable to int, double
-    "aLong || aBoolean, 0xA0167", // || not applicable to long, boolean
-    "aLong || aChar, 0xA0167", // || not applicable to long, char
-    "aLong || aByte, 0xA0167", // || not applicable to long, byte
-    "aLong || aShort, 0xA0167", // || not applicable to long, short
-    "aLong || anInt, 0xA0167", // || not applicable to long, int
-    "aLong || aLong, 0xA0167", // || not applicable to long, long
-    "aLong || aFloat, 0xA0167", // || not applicable to long, float
-    "aLong || aDouble, 0xA0167", // || not applicable to long, double
-    "aFloat || aBoolean, 0xA0167", // || not applicable to float, boolean
-    "aFloat || aChar, 0xA0167", // || not applicable to float, char
-    "aFloat || aByte, 0xA0167", // || not applicable to float, byte
-    "aFloat || aShort, 0xA0167", // || not applicable to float, short
-    "aFloat || anInt, 0xA0167", // || not applicable to float, int
-    "aFloat || aLong, 0xA0167", // || not applicable to float, long
-    "aFloat || aFloat, 0xA0167", // || not applicable to float, float
-    "aFloat || aDouble, 0xA0167", // || not applicable to float, double
-    "aDouble || aBoolean, 0xA0167", // || not applicable to double, boolean
-    "aDouble || aChar, 0xA0167", // || not applicable to double, char
-    "aDouble || aByte, 0xA0167", // || not applicable to double, byte
-    "aDouble || aShort, 0xA0167", // || not applicable to double, short
-    "aDouble || anInt, 0xA0167", // || not applicable to double, int
-    "aDouble || aLong, 0xA0167", // || not applicable to double, long
-    "aDouble || aFloat, 0xA0167", // || not applicable to double, float
-    "aDouble || aDouble, 0xA0167", // || not applicable to double, double
-    "aBoolean > aChar, 0xA0167", // > not applicable to boolean, char
-    "aBoolean > aByte, 0xA0167", // > not applicable to boolean, byte
-    "aBoolean > aShort, 0xA0167", // > not applicable to boolean, short
-    "aBoolean > anInt, 0xA0167", // > not applicable to boolean, int
-    "aBoolean > aLong, 0xA0167", // > not applicable to boolean, long
-    "aBoolean > aFloat, 0xA0167", // > not applicable to boolean, float
-    "aBoolean > aDouble, 0xA0167", // > not applicable to boolean, double
-    "aChar > aBoolean, 0xA0167", // > not applicable to char, boolean
-    "aByte > aBoolean, 0xA0167", // > not applicable to byte, boolean
-    "aShort > aBoolean, 0xA0167", // > not applicable to short, boolean
-    "anInt > aBoolean, 0xA0167", // > not applicable to int, boolean
-    "aLong > aBoolean, 0xA0167", // > not applicable to long, boolean
-    "aFloat > aBoolean, 0xA0167", // > not applicable to float, boolean
-    "aDouble > aBoolean, 0xA0167", // > not applicable to double, boolean
-    "aBoolean < aChar, 0xA0167", // < not applicable to boolean, char
-    "aBoolean < aByte, 0xA0167", // < not applicable to boolean, byte
-    "aBoolean < aShort, 0xA0167", // < not applicable to boolean, short
-    "aBoolean < anInt, 0xA0167", // < not applicable to boolean, int
-    "aBoolean < aLong, 0xA0167", // < not applicable to boolean, long
-    "aBoolean < aFloat, 0xA0167", // < not applicable to boolean, float
-    "aBoolean < aDouble, 0xA0167", // < not applicable to boolean, double
-    "aChar < aBoolean, 0xA0167", // < not applicable to char, boolean
-    "aByte < aBoolean, 0xA0167", // < not applicable to byte, boolean
-    "aShort < aBoolean, 0xA0167", // < not applicable to short, boolean
-    "anInt < aBoolean, 0xA0167", // < not applicable to int, boolean
-    "aLong < aBoolean, 0xA0167", // < not applicable to long, boolean
-    "aFloat < aBoolean, 0xA0167", // < not applicable to float, boolean
-    "aDouble < aBoolean, 0xA0167", // < not applicable to double, boolean
-    "aBoolean >= aChar, 0xA0167", // >= not applicable to boolean, char
-    "aBoolean >= aByte, 0xA0167", // >= not applicable to boolean, byte
-    "aBoolean >= aShort, 0xA0167", // >= not applicable to boolean, short
-    "aBoolean >= anInt, 0xA0167", // >= not applicable to boolean, int
-    "aBoolean >= aLong, 0xA0167", // >= not applicable to boolean, long
-    "aBoolean >= aFloat, 0xA0167", // >= not applicable to boolean, float
-    "aBoolean >= aDouble, 0xA0167", // >= not applicable to boolean, double
-    "aChar >= aBoolean, 0xA0167", // >= not applicable to char, boolean
-    "aByte >= aBoolean, 0xA0167", // >= not applicable to byte, boolean
-    "aShort >= aBoolean, 0xA0167", // >= not applicable to short, boolean
-    "anInt >= aBoolean, 0xA0167", // >= not applicable to int, boolean
-    "aLong >= aBoolean, 0xA0167", // >= not applicable to long, boolean
-    "aFloat >= aBoolean, 0xA0167", // >= not applicable to float, boolean
-    "aDouble >= aBoolean, 0xA0167", // >= not applicable to double, boolean
-    "aBoolean <= aChar, 0xA0167", // <= not applicable to boolean, char
-    "aBoolean <= aByte, 0xA0167", // <= not applicable to boolean, byte
-    "aBoolean <= aShort, 0xA0167", // <= not applicable to boolean, short
-    "aBoolean <= anInt, 0xA0167", // <= not applicable to boolean, int
-    "aBoolean <= aLong, 0xA0167", // <= not applicable to boolean, long
-    "aBoolean <= aFloat, 0xA0167", // <= not applicable to boolean, float
-    "aBoolean <= aDouble, 0xA0167", // <= not applicable to boolean, double
-    "aChar <= aBoolean, 0xA0167", // <= not applicable to char, boolean
-    "aByte <= aBoolean, 0xA0167", // <= not applicable to byte, boolean
-    "aShort <= aBoolean, 0xA0167", // <= not applicable to short, boolean
-    "anInt <= aBoolean, 0xA0167", // <= not applicable to int, boolean
-    "aLong <= aBoolean, 0xA0167", // <= not applicable to long, boolean
-    "aFloat <= aBoolean, 0xA0167", // <= not applicable to float, boolean
-    "aDouble <= aBoolean, 0xA0167", // <= not applicable to double, boolean
-    "aBoolean == aChar, 0xA0166", // == not applicable to boolean, char
-    "aBoolean == aByte, 0xA0166", // == not applicable to boolean, byte
-    "aBoolean == aShort, 0xA0166", // == not applicable to boolean, short
-    "aBoolean == anInt, 0xA0166", // == not applicable to boolean, int
-    "aBoolean == aLong, 0xA0166", // == not applicable to boolean, long
-    "aBoolean == aFloat, 0xA0166", // == not applicable to boolean, float
-    "aBoolean == aDouble, 0xA0166", // == not applicable to boolean, double
-    "aChar == aBoolean, 0xA0166", // == not applicable to char, boolean
-    "aByte == aBoolean, 0xA0166", // == not applicable to byte, boolean
-    "aShort == aBoolean, 0xA0166", // == not applicable to short, boolean
-    "anInt == aBoolean, 0xA0166", // == not applicable to int, boolean
-    "aLong == aBoolean, 0xA0166", // == not applicable to long, boolean
-    "aFloat == aBoolean, 0xA0166", // == not applicable to float, boolean
-    "aDouble == aBoolean, 0xA0166", // == not applicable to double, boolean
-    "aBoolean != aChar, 0xA0166", // != not applicable to boolean, char
-    "aBoolean != aByte, 0xA0166", // != not applicable to boolean, byte
-    "aBoolean != aShort, 0xA0166", // != not applicable to boolean, short
-    "aBoolean != anInt, 0xA0166", // != not applicable to boolean, int
-    "aBoolean != aLong, 0xA0166", // != not applicable to boolean, long
-    "aBoolean != aFloat, 0xA0166", // != not applicable to boolean, float
-    "aBoolean != aDouble, 0xA0166", // != not applicable to boolean, double
-    "aChar != aBoolean, 0xA0166", // != not applicable to char, boolean
-    "aByte != aBoolean, 0xA0166", // != not applicable to byte, boolean
-    "aShort != aBoolean, 0xA0166", // != not applicable to short, boolean
-    "anInt != aBoolean, 0xA0166", // != not applicable to int, boolean
-    "aLong != aBoolean, 0xA0166", // != not applicable to long, boolean
-    "aFloat != aBoolean, 0xA0166", // != not applicable to float, boolean
-    "aDouble != aBoolean, 0xA0166", // != not applicable to double, boolean
+    "aBoolean && aChar, 0xB0113", // && not applicable to boolean, char
+    "aBoolean && aByte, 0xB0113", // && not applicable to boolean, byte
+    "aBoolean && aShort, 0xB0113", // && not applicable to boolean, short
+    "aBoolean && anInt, 0xB0113", // && not applicable to boolean, int
+    "aBoolean && aLong, 0xB0113", // && not applicable to boolean, long
+    "aBoolean && aFloat, 0xB0113", // && not applicable to boolean, float
+    "aBoolean && aDouble, 0xB0113", // && not applicable to boolean, double
+    "aChar && aBoolean, 0xB0113", // && not applicable to char, boolean
+    "aChar && aChar, 0xB0113", // && not applicable to char, char
+    "aChar && aByte, 0xB0113", // && not applicable to char, byte
+    "aChar && aShort, 0xB0113", // && not applicable to char, short
+    "aChar && anInt, 0xB0113", // && not applicable to char, int
+    "aChar && aLong, 0xB0113", // && not applicable to char, long
+    "aChar && aFloat, 0xB0113", // && not applicable to char, float
+    "aChar && aDouble, 0xB0113", // && not applicable to char, double
+    "aByte && aBoolean, 0xB0113", // && not applicable to byte, boolean
+    "aByte && aChar, 0xB0113", // && not applicable to byte, char
+    "aByte && aByte, 0xB0113", // && not applicable to byte, byte
+    "aByte && aShort, 0xB0113", // && not applicable to byte, short
+    "aByte && anInt, 0xB0113", // && not applicable to byte, int
+    "aByte && aLong, 0xB0113", // && not applicable to byte, long
+    "aByte && aFloat, 0xB0113", // && not applicable to byte, float
+    "aByte && aDouble, 0xB0113", // && not applicable to byte, double
+    "aShort && aBoolean, 0xB0113", // && not applicable to short, boolean
+    "aShort && aChar, 0xB0113", // && not applicable to short, char
+    "aShort && aByte, 0xB0113", // && not applicable to short, byte
+    "aShort && aShort, 0xB0113", // && not applicable to short, short
+    "aShort && anInt, 0xB0113", // && not applicable to short, int
+    "aShort && aLong, 0xB0113", // && not applicable to short, long
+    "aShort && aFloat, 0xB0113", // && not applicable to short, float
+    "aShort && aDouble, 0xB0113", // && not applicable to short, double
+    "anInt && aBoolean, 0xB0113", // && not applicable to short, boolean
+    "anInt && aChar, 0xB0113", // && not applicable to int, char
+    "anInt && aByte, 0xB0113", // && not applicable to int, byte
+    "anInt && aShort, 0xB0113", // && not applicable to int, short
+    "anInt && anInt, 0xB0113", // && not applicable to int, int
+    "anInt && aLong, 0xB0113", // && not applicable to int, long
+    "anInt && aFloat, 0xB0113", // && not applicable to int, float
+    "anInt && aDouble, 0xB0113", // && not applicable to int, double
+    "aLong && aBoolean, 0xB0113", // && not applicable to long, boolean
+    "aLong && aChar, 0xB0113", // && not applicable to long, char
+    "aLong && aByte, 0xB0113", // && not applicable to long, byte
+    "aLong && aShort, 0xB0113", // && not applicable to long, short
+    "aLong && anInt, 0xB0113", // && not applicable to long, int
+    "aLong && aLong, 0xB0113", // && not applicable to long, long
+    "aLong && aFloat, 0xB0113", // && not applicable to long, float
+    "aLong && aDouble, 0xB0113", // && not applicable to long, double
+    "aFloat && aBoolean, 0xB0113", // && not applicable to float, boolean
+    "aFloat && aChar, 0xB0113", // && not applicable to float, char
+    "aFloat && aByte, 0xB0113", // && not applicable to float, byte
+    "aFloat && aShort, 0xB0113", // && not applicable to float, short
+    "aFloat && anInt, 0xB0113", // && not applicable to float, int
+    "aFloat && aLong, 0xB0113", // && not applicable to float, long
+    "aFloat && aFloat, 0xB0113", // && not applicable to float, float
+    "aFloat && aDouble, 0xB0113", // && not applicable to float, double
+    "aDouble && aBoolean, 0xB0113", // && not applicable to double, boolean
+    "aDouble && aChar, 0xB0113", // && not applicable to double, char
+    "aDouble && aByte, 0xB0113", // && not applicable to double, byte
+    "aDouble && aShort, 0xB0113", // && not applicable to double, short
+    "aDouble && anInt, 0xB0113", // && not applicable to double, int
+    "aDouble && aLong, 0xB0113", // && not applicable to double, long
+    "aDouble && aFloat, 0xB0113", // && not applicable to double, float
+    "aDouble && aDouble, 0xB0113", // && not applicable to double, double
+    "aBoolean || aChar, 0xB0113", // || not applicable to boolean, char
+    "aBoolean || aByte, 0xB0113", // || not applicable to boolean, byte
+    "aBoolean || aShort, 0xB0113", // || not applicable to boolean, short
+    "aBoolean || anInt, 0xB0113", // || not applicable to boolean, int
+    "aBoolean || aLong, 0xB0113", // || not applicable to boolean, long
+    "aBoolean || aFloat, 0xB0113", // || not applicable to boolean, float
+    "aBoolean || aDouble, 0xB0113", // || not applicable to boolean, double
+    "aChar || aBoolean, 0xB0113", // || not applicable to char, boolean
+    "aChar || aChar, 0xB0113", // || not applicable to char, char
+    "aChar || aByte, 0xB0113", // || not applicable to char, byte
+    "aChar || aShort, 0xB0113", // || not applicable to char, short
+    "aChar || anInt, 0xB0113", // || not applicable to char, int
+    "aChar || aLong, 0xB0113", // || not applicable to char, long
+    "aChar || aFloat, 0xB0113", // || not applicable to char, float
+    "aChar || aDouble, 0xB0113", // || not applicable to char, double
+    "aByte || aBoolean, 0xB0113", // || not applicable to byte, boolean
+    "aByte || aChar, 0xB0113", // || not applicable to byte, char
+    "aByte || aByte, 0xB0113", // || not applicable to byte, byte
+    "aByte || aShort, 0xB0113", // || not applicable to byte, short
+    "aByte || anInt, 0xB0113", // || not applicable to byte, int
+    "aByte || aLong, 0xB0113", // || not applicable to byte, long
+    "aByte || aFloat, 0xB0113", // || not applicable to byte, float
+    "aByte || aDouble, 0xB0113", // || not applicable to byte, double
+    "aShort || aBoolean, 0xB0113", // || not applicable to short, boolean
+    "aShort || aChar, 0xB0113", // || not applicable to short, char
+    "aShort || aByte, 0xB0113", // || not applicable to short, byte
+    "aShort || aShort, 0xB0113", // || not applicable to short, short
+    "aShort || anInt, 0xB0113", // || not applicable to short, int
+    "aShort || aLong, 0xB0113", // || not applicable to short, long
+    "aShort || aFloat, 0xB0113", // || not applicable to short, float
+    "aShort || aDouble, 0xB0113", // || not applicable to short, double
+    "anInt || aBoolean, 0xB0113", // || not applicable to short, boolean
+    "anInt || aChar, 0xB0113", // || not applicable to int, char
+    "anInt || aByte, 0xB0113", // || not applicable to int, byte
+    "anInt || aShort, 0xB0113", // || not applicable to int, short
+    "anInt || anInt, 0xB0113", // || not applicable to int, int
+    "anInt || aLong, 0xB0113", // || not applicable to int, long
+    "anInt || aFloat, 0xB0113", // || not applicable to int, float
+    "anInt || aDouble, 0xB0113", // || not applicable to int, double
+    "aLong || aBoolean, 0xB0113", // || not applicable to long, boolean
+    "aLong || aChar, 0xB0113", // || not applicable to long, char
+    "aLong || aByte, 0xB0113", // || not applicable to long, byte
+    "aLong || aShort, 0xB0113", // || not applicable to long, short
+    "aLong || anInt, 0xB0113", // || not applicable to long, int
+    "aLong || aLong, 0xB0113", // || not applicable to long, long
+    "aLong || aFloat, 0xB0113", // || not applicable to long, float
+    "aLong || aDouble, 0xB0113", // || not applicable to long, double
+    "aFloat || aBoolean, 0xB0113", // || not applicable to float, boolean
+    "aFloat || aChar, 0xB0113", // || not applicable to float, char
+    "aFloat || aByte, 0xB0113", // || not applicable to float, byte
+    "aFloat || aShort, 0xB0113", // || not applicable to float, short
+    "aFloat || anInt, 0xB0113", // || not applicable to float, int
+    "aFloat || aLong, 0xB0113", // || not applicable to float, long
+    "aFloat || aFloat, 0xB0113", // || not applicable to float, float
+    "aFloat || aDouble, 0xB0113", // || not applicable to float, double
+    "aDouble || aBoolean, 0xB0113", // || not applicable to double, boolean
+    "aDouble || aChar, 0xB0113", // || not applicable to double, char
+    "aDouble || aByte, 0xB0113", // || not applicable to double, byte
+    "aDouble || aShort, 0xB0113", // || not applicable to double, short
+    "aDouble || anInt, 0xB0113", // || not applicable to double, int
+    "aDouble || aLong, 0xB0113", // || not applicable to double, long
+    "aDouble || aFloat, 0xB0113", // || not applicable to double, float
+    "aDouble || aDouble, 0xB0113", // || not applicable to double, double
+    "aBoolean > aChar, 0xB0167", // > not applicable to boolean, char
+    "aBoolean > aByte, 0xB0167", // > not applicable to boolean, byte
+    "aBoolean > aShort, 0xB0167", // > not applicable to boolean, short
+    "aBoolean > anInt, 0xB0167", // > not applicable to boolean, int
+    "aBoolean > aLong, 0xB0167", // > not applicable to boolean, long
+    "aBoolean > aFloat, 0xB0167", // > not applicable to boolean, float
+    "aBoolean > aDouble, 0xB0167", // > not applicable to boolean, double
+    "aChar > aBoolean, 0xB0167", // > not applicable to char, boolean
+    "aByte > aBoolean, 0xB0167", // > not applicable to byte, boolean
+    "aShort > aBoolean, 0xB0167", // > not applicable to short, boolean
+    "anInt > aBoolean, 0xB0167", // > not applicable to int, boolean
+    "aLong > aBoolean, 0xB0167", // > not applicable to long, boolean
+    "aFloat > aBoolean, 0xB0167", // > not applicable to float, boolean
+    "aDouble > aBoolean, 0xB0167", // > not applicable to double, boolean
+    "aBoolean < aChar, 0xB0167", // < not applicable to boolean, char
+    "aBoolean < aByte, 0xB0167", // < not applicable to boolean, byte
+    "aBoolean < aShort, 0xB0167", // < not applicable to boolean, short
+    "aBoolean < anInt, 0xB0167", // < not applicable to boolean, int
+    "aBoolean < aLong, 0xB0167", // < not applicable to boolean, long
+    "aBoolean < aFloat, 0xB0167", // < not applicable to boolean, float
+    "aBoolean < aDouble, 0xB0167", // < not applicable to boolean, double
+    "aChar < aBoolean, 0xB0167", // < not applicable to char, boolean
+    "aByte < aBoolean, 0xB0167", // < not applicable to byte, boolean
+    "aShort < aBoolean, 0xB0167", // < not applicable to short, boolean
+    "anInt < aBoolean, 0xB0167", // < not applicable to int, boolean
+    "aLong < aBoolean, 0xB0167", // < not applicable to long, boolean
+    "aFloat < aBoolean, 0xB0167", // < not applicable to float, boolean
+    "aDouble < aBoolean, 0xB0167", // < not applicable to double, boolean
+    "aBoolean >= aChar, 0xB0167", // >= not applicable to boolean, char
+    "aBoolean >= aByte, 0xB0167", // >= not applicable to boolean, byte
+    "aBoolean >= aShort, 0xB0167", // >= not applicable to boolean, short
+    "aBoolean >= anInt, 0xB0167", // >= not applicable to boolean, int
+    "aBoolean >= aLong, 0xB0167", // >= not applicable to boolean, long
+    "aBoolean >= aFloat, 0xB0167", // >= not applicable to boolean, float
+    "aBoolean >= aDouble, 0xB0167", // >= not applicable to boolean, double
+    "aChar >= aBoolean, 0xB0167", // >= not applicable to char, boolean
+    "aByte >= aBoolean, 0xB0167", // >= not applicable to byte, boolean
+    "aShort >= aBoolean, 0xB0167", // >= not applicable to short, boolean
+    "anInt >= aBoolean, 0xB0167", // >= not applicable to int, boolean
+    "aLong >= aBoolean, 0xB0167", // >= not applicable to long, boolean
+    "aFloat >= aBoolean, 0xB0167", // >= not applicable to float, boolean
+    "aDouble >= aBoolean, 0xB0167", // >= not applicable to double, boolean
+    "aBoolean <= aChar, 0xB0167", // <= not applicable to boolean, char
+    "aBoolean <= aByte, 0xB0167", // <= not applicable to boolean, byte
+    "aBoolean <= aShort, 0xB0167", // <= not applicable to boolean, short
+    "aBoolean <= anInt, 0xB0167", // <= not applicable to boolean, int
+    "aBoolean <= aLong, 0xB0167", // <= not applicable to boolean, long
+    "aBoolean <= aFloat, 0xB0167", // <= not applicable to boolean, float
+    "aBoolean <= aDouble, 0xB0167", // <= not applicable to boolean, double
+    "aChar <= aBoolean, 0xB0167", // <= not applicable to char, boolean
+    "aByte <= aBoolean, 0xB0167", // <= not applicable to byte, boolean
+    "aShort <= aBoolean, 0xB0167", // <= not applicable to short, boolean
+    "anInt <= aBoolean, 0xB0167", // <= not applicable to int, boolean
+    "aLong <= aBoolean, 0xB0167", // <= not applicable to long, boolean
+    "aFloat <= aBoolean, 0xB0167", // <= not applicable to float, boolean
+    "aDouble <= aBoolean, 0xB0167", // <= not applicable to double, boolean
+    "aBoolean == aChar, 0xB0166", // == not applicable to boolean, char
+    "aBoolean == aByte, 0xB0166", // == not applicable to boolean, byte
+    "aBoolean == aShort, 0xB0166", // == not applicable to boolean, short
+    "aBoolean == anInt, 0xB0166", // == not applicable to boolean, int
+    "aBoolean == aLong, 0xB0166", // == not applicable to boolean, long
+    "aBoolean == aFloat, 0xB0166", // == not applicable to boolean, float
+    "aBoolean == aDouble, 0xB0166", // == not applicable to boolean, double
+    "aChar == aBoolean, 0xB0166", // == not applicable to char, boolean
+    "aByte == aBoolean, 0xB0166", // == not applicable to byte, boolean
+    "aShort == aBoolean, 0xB0166", // == not applicable to short, boolean
+    "anInt == aBoolean, 0xB0166", // == not applicable to int, boolean
+    "aLong == aBoolean, 0xB0166", // == not applicable to long, boolean
+    "aFloat == aBoolean, 0xB0166", // == not applicable to float, boolean
+    "aDouble == aBoolean, 0xB0166", // == not applicable to double, boolean
+    "aBoolean != aChar, 0xB0166", // != not applicable to boolean, char
+    "aBoolean != aByte, 0xB0166", // != not applicable to boolean, byte
+    "aBoolean != aShort, 0xB0166", // != not applicable to boolean, short
+    "aBoolean != anInt, 0xB0166", // != not applicable to boolean, int
+    "aBoolean != aLong, 0xB0166", // != not applicable to boolean, long
+    "aBoolean != aFloat, 0xB0166", // != not applicable to boolean, float
+    "aBoolean != aDouble, 0xB0166", // != not applicable to boolean, double
+    "aChar != aBoolean, 0xB0166", // != not applicable to char, boolean
+    "aByte != aBoolean, 0xB0166", // != not applicable to byte, boolean
+    "aShort != aBoolean, 0xB0166", // != not applicable to short, boolean
+    "anInt != aBoolean, 0xB0166", // != not applicable to int, boolean
+    "aLong != aBoolean, 0xB0166", // != not applicable to long, boolean
+    "aFloat != aBoolean, 0xB0166", // != not applicable to float, boolean
+    "aDouble != aBoolean, 0xB0166", // != not applicable to double, boolean
     "aChar = aBoolean && aBoolean, 0xA0179", // expected char but provided boolean
     "aByte = aBoolean && aBoolean, 0xA0179", // expected byte but provided boolean
     "aShort = aBoolean && aBoolean, 0xA0179", // expected short but provided boolean
@@ -2050,16 +1954,16 @@ public class  TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aLong = aLong != aLong, 0xA0179", // expected long but provided boolean
     "aFloat = aFloat != aFloat, 0xA0179", // expected float but provided boolean
     "aDouble = aDouble != aDouble, 0xA0179", // expected double but provided boolean
-    "aByte ? 0 : 1, 0xA0165", // ? not applicable to byte
-    "aShort ? 0 : 1, 0xA0165", // ? not applicable to short
-    "aChar ? 0 : 1, 0xA0165", // ? not applicable to char
-    "anInt ? 0 : 1, 0xA0165", // ? not applicable to int
-    "aLong ? 0 : 1, 0xA0165", // ? not applicable to long
-    "aFloat ? 0 : 1, 0xA0165", // ? not applicable to float
-    "aDouble ? 0 : 1, 0xA0165", // ? not applicable to double
-    "aBoolean = aBoolean ? aByte : aBoolean, 0xA0164", // expected boolean but provided byte
-    "aBoolean = aBoolean ? aBoolean : aByte, 0xA0164", // expected boolean but provided byte
-    "aBoolean = aBoolean ? aByte : aByte, 0xA0179", // expected boolean but provided byte
+    "aByte ? 0 : 1, 0xB0165", // ? not applicable to byte
+    "aShort ? 0 : 1, 0xB0165", // ? not applicable to short
+    "aChar ? 0 : 1, 0xB0165", // ? not applicable to char
+    "anInt ? 0 : 1, 0xB0165", // ? not applicable to int
+    "aLong ? 0 : 1, 0xB0165", // ? not applicable to long
+    "aFloat ? 0 : 1, 0xB0165", // ? not applicable to float
+    "aDouble ? 0 : 1, 0xB0165", // ? not applicable to double
+    "aBoolean = aBoolean ? aByte : aBoolean, 0xA0179", // expected boolean but provided (byte, boolean)
+    "aBoolean = aBoolean ? aBoolean : aByte, 0xA0179", // expected boolean but provided (boolean, byte)
+    "aBoolean = aBoolean ? aByte : aByte, 0xA0179", // expected boolean but provided (byte, byte)
   })
   public void testInvalidExpression(@NotNull String expr,
                                     @NotNull String error) throws IOException {

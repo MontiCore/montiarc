@@ -11,9 +11,8 @@ import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.ITypeRelations;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.TypeCheckResult;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -43,9 +42,9 @@ import java.util.stream.IntStream;
 public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo {
 
   protected final IArcTypeCalculator tc;
-  protected final ITypeRelations tr;
+  protected final SymTypeRelations tr;
 
-  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc, @NotNull ITypeRelations tr) {
+  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc, @NotNull SymTypeRelations tr) {
     Preconditions.checkNotNull(tc);
     Preconditions.checkNotNull(tr);
     this.tc = tc;
@@ -177,34 +176,25 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
-    List<TypeCheckResult> argTypes = arguments.stream()
+    List<SymTypeExpression> argTypes = arguments.stream()
       .map(ASTArcArgument::getExpression)
-      .map(this.tc::deriveType)
+      .map(this.tc::typeOf)
       .collect(Collectors.toList());
 
     List<SymTypeExpression> paramTypes = subcomponent.getType().getParameterTypes();
 
     for (int i = 0; i < Math.min(argTypes.size(), paramTypes.size()); i++) {
-      if (!argTypes.get(i).isPresentResult()) {
-        // no type info available for argument i
-        Log.debug("Skip coco check for argument " + i + ", no type info available.", this.getClass().getCanonicalName());
-      } else if (argTypes.get(i).isType()) {
-        // the provided argument is no expression
-        Log.error(ArcError.TYPE_REF_NO_EXPRESSION.toString(),
-          arguments.get(i).getExpression().get_SourcePositionStart(),
-          arguments.get(i).getExpression().get_SourcePositionEnd()
-        );
-      } else if (arguments.get(i).isPresentName()) {
-        // the keyword argument's type is available
+      if (arguments.get(i).isPresentName()) {
+        // check keyword argument
         String key = arguments.get(i).getName();
 
         int paramIndex = paramIndices.get(key);
-        if (!tr.compatible(paramTypes.get(paramIndex), argTypes.get(i).getResult())) {
-          // the parameter's and keyword argument's types mismatch
+        if (!tr.isCompatible(paramTypes.get(paramIndex), argTypes.get(i))) {
+          // check non-keyword argument
           ASTExpression argument = arguments.get(i).getExpression();
 
           Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
-              paramTypes.get(i).print(), argTypes.get(i).getResult().print()
+              paramTypes.get(i).print(), argTypes.get(i).print()
             ),
             argument.get_SourcePositionStart(),
             argument.get_SourcePositionEnd()
@@ -212,11 +202,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         }
       } else {
         // the non-keyword argument's type is available
-        if (!tr.compatible(paramTypes.get(i), argTypes.get(i).getResult())) {
+        if (!tr.isCompatible(paramTypes.get(i), argTypes.get(i))) {
           ASTExpression argument = arguments.get(i).getExpression();
 
           Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
-              paramTypes.get(i).print(), argTypes.get(i).getResult().print()
+              paramTypes.get(i).print(), argTypes.get(i).print()
             ),
             argument.get_SourcePositionStart(),
             argument.get_SourcePositionEnd());
