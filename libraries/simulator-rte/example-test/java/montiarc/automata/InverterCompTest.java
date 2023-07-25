@@ -14,10 +14,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
-class InverterTest {
+class InverterCompTest {
 
   TimeAwareOutPort<Boolean> input;
-  Inverter inverter;
+  InverterComp inverterComp;
   Message<Boolean> lastOutMessage;
   TimeAwareInPort<Boolean> outRecipient;
 
@@ -26,8 +26,8 @@ class InverterTest {
   @BeforeEach
   public void beforeEach() {
     input = new TimeAwareOutPort<>("valueSource");
-    inverter = new Inverter("inverter");
-    input.connect(inverter.i);
+    inverterComp = new InverterComp("inverter");
+    input.connect(inverterComp.port_i);
 
     lastOutMessage = null;
 
@@ -41,7 +41,7 @@ class InverterTest {
         }
       }
     };
-    inverter.o.connect(outRecipient);
+    inverterComp.port_o.connect(outRecipient);
   }
 
   @ParameterizedTest

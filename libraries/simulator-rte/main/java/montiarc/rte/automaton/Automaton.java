@@ -1,40 +1,38 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-import montiarc.rte.automaton.transition.Transition;
-
 import java.util.Collection;
 
-public abstract class Automaton {
+public abstract class Automaton<Context> {
 
-  protected Collection<Transition> transitions;
+  protected Context context;
+  protected State state;
+  protected Collection<State> states;
 
-  protected State currentState;
-
-  public Collection<Transition> getTransitions() {
-    return transitions;
+  public Automaton(Context context, Collection<State> states, State initial) {
+    this.context = context;
+    this.state = initial;
+    this.states = states;
   }
-
-  public State getCurrentState() {
-    return currentState;
-  }
-
-  public Automaton(Collection<Transition> transitions, State currentState) {
-    this.transitions = transitions;
-    this.currentState = currentState;
+  
+  /**
+   * @return the context (i.e., owning component) of the state machine
+   */
+  protected Context getContext() {
+    return this.context;
   }
 
   /**
-   * Check whether there is a transition from the current state whose guard condition is fulfilled.
-   * This method should operate on the automaton owner.
-   *
-   * @return true if there is a transition that can currently be executed
+   * @return the state space of the state machine
    */
-  public abstract boolean canExecuteTransition();
+  protected Collection<State> getStates() {
+    return this.states;
+  }
 
   /**
-   * Executes a transition which is currently valid.
-   * This method should operate on the automaton owner.
+   * @return the current state of the state machine
    */
-  public abstract void executeAnyValidTransition();
+  protected State getState() {
+    return this.state;
+  }
 }

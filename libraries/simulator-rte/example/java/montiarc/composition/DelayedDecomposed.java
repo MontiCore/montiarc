@@ -9,11 +9,11 @@ import java.util.List;
 
 public class DelayedDecomposed implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -32,12 +32,12 @@ public class DelayedDecomposed implements ITimedComponent {
   Counter gtEq0;
   Counter lt0;
 
-  public DelayedDecomposed(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public DelayedDecomposed(String name) {
+    this.name = name;
 
-    this.delayedSorter = new DelayedSorter(getQualifiedInstanceName() + ".delayedSorter");
-    this.gtEq0 = new Counter(getQualifiedInstanceName() + ".gtEq0");
-    this.lt0 = new Counter(getQualifiedInstanceName() + ".lt0");
+    this.delayedSorter = new DelayedSorter(getName() + ".delayedSorter");
+    this.gtEq0 = new Counter(getName() + ".gtEq0");
+    this.lt0 = new Counter(getName() + ".lt0");
 
     this.iIn = this.delayedSorter.iIn;
     this.delayedSorter.gtEq0.connect(this.gtEq0.iIn);

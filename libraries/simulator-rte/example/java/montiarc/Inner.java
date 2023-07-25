@@ -10,15 +10,15 @@ import java.util.List;
 //used in doc as an example
 public class Inner implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public Inner(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public Inner(String name) {
+    this.name = name;
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override

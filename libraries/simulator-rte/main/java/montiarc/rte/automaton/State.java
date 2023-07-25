@@ -3,11 +3,25 @@ package montiarc.rte.automaton;
 
 /**
  * Represents a state in a MontiArc automaton.
- * <p>
- * A state should define an entry and exit action which operates on a given context.
- * Said methods cannot be defined in this interface because the context would need to be
- * of a concrete type (because the component's interface has to be accessible in the actions).
  */
-public interface State {
+public class State {
 
+  public State(String name) {
+    this.name = name;
+  }
+
+  String name;
+
+  public String name() {
+    return this.name;
+  }
+
+  public void enter() { }
+
+  public void exit() { }
+
+  @Override
+  public boolean equals(Object obj) {
+    return this == obj;
+  }
 }

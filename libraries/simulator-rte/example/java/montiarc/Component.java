@@ -13,11 +13,11 @@ import java.util.List;
 //used in doc as an example
 public class Component implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
   // constructor, etc...
-  public Component(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public Component(String name) {
+    this.name = name;
   }
 
   private boolean componentCanCompute() {
@@ -25,7 +25,7 @@ public class Component implements ITimedComponent {
     return true;
   }
 
-  AbstractInPort<String> incomingPort = new AbstractInPort<>(getQualifiedInstanceName() + ".portName") {
+  AbstractInPort<String> incomingPort = new AbstractInPort<>(getName() + ".portName") {
     @Override
     protected void handleBuffer() {
       if (componentCanCompute()) {
@@ -38,12 +38,12 @@ public class Component implements ITimedComponent {
       return false;
     }
   };
-
+  
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
-
+  
   @Override
   public List<TimeAwareInPort<?>> getAllInPorts() {
     return List.of();

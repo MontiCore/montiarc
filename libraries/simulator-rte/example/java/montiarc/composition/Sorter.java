@@ -9,15 +9,15 @@ import java.util.List;
 
 public class Sorter implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public Sorter(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public Sorter(String name) {
+    this.name = name;
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -30,7 +30,7 @@ public class Sorter implements ITimedComponent {
     return List.of(gtEq0, lt0);
   }
 
-  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getQualifiedInstanceName() + ".iIn") {
+  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -39,8 +39,8 @@ public class Sorter implements ITimedComponent {
     }
   };
 
-  TimeAwareOutPort<Integer> gtEq0 = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".gtEq0");
-  TimeAwareOutPort<Integer> lt0 = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".lt0");
+  TimeAwareOutPort<Integer> gtEq0 = new TimeAwareOutPort<>(getName() + ".gtEq0");
+  TimeAwareOutPort<Integer> lt0 = new TimeAwareOutPort<>(getName() + ".lt0");
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.iIn.isTickBlocked();

@@ -38,7 +38,7 @@ public class SchedulerTest {
       }
 
       @Override
-      public String getQualifiedInstanceName() {
+      public String getName() {
         return "mockSource";
       }
     };

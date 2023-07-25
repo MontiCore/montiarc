@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 component TimedEventBasedInverter {
-  port <<untimed>> in Boolean bIn;
-  port <<untimed>> in Integer iIn;
+  port <<timed>> in Boolean bIn;
+  port <<timed>> in Integer iIn;
 
   port out Boolean bOut;
   port out Integer iOut;

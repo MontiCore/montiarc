@@ -9,15 +9,15 @@ import java.util.List;
 
 public class SyncInverter implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public SyncInverter(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public SyncInverter(String name) {
+    this.name = name;
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -30,7 +30,7 @@ public class SyncInverter implements ITimedComponent {
     return List.of(bOut, iOut);
   }
 
-  protected TimeAwareInPort<Boolean> bIn = new TimeAwareInPort<>(getQualifiedInstanceName() + ".bIn") {
+  protected TimeAwareInPort<Boolean> bIn = new TimeAwareInPort<>(getName() + ".bIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -39,7 +39,7 @@ public class SyncInverter implements ITimedComponent {
     }
   };
 
-  protected TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getQualifiedInstanceName() + ".iIn") {
+  protected TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -48,8 +48,8 @@ public class SyncInverter implements ITimedComponent {
     }
   };
 
-  protected TimeAwareOutPort<Boolean> bOut = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".bOut");
-  protected TimeAwareOutPort<Integer> iOut = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".iOut");
+  protected TimeAwareOutPort<Boolean> bOut = new TimeAwareOutPort<>(getName() + ".bOut");
+  protected TimeAwareOutPort<Integer> iOut = new TimeAwareOutPort<>(getName() + ".iOut");
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.bIn.isTickBlocked() && this.iIn.isTickBlocked();

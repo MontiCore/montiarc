@@ -10,15 +10,15 @@ import java.util.List;
 
 public class DelayedSorter implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public DelayedSorter(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public DelayedSorter(String name) {
+    this.name = name;
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -31,7 +31,7 @@ public class DelayedSorter implements ITimedComponent {
     return List.of(gtEq0, lt0);
   }
 
-  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getQualifiedInstanceName() + ".iIn") {
+  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -40,8 +40,8 @@ public class DelayedSorter implements ITimedComponent {
     }
   };
 
-  DelayedOutPort<Integer> gtEq0 = new DelayedOutPort<>(getQualifiedInstanceName() + ".gtEq0", 1); // explicit delay of 1 is not required, only here for clarity
-  DelayedOutPort<Integer> lt0 = new DelayedOutPort<>(getQualifiedInstanceName() + ".lt0", 1); // explicit delay of 1 is not required, only here for clarity
+  DelayedOutPort<Integer> gtEq0 = new DelayedOutPort<>(getName() + ".gtEq0", 1); // explicit delay of 1 is not required, only here for clarity
+  DelayedOutPort<Integer> lt0 = new DelayedOutPort<>(getName() + ".lt0", 1); // explicit delay of 1 is not required, only here for clarity
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.iIn.isTickBlocked();

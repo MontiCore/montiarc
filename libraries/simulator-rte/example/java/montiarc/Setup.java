@@ -10,11 +10,11 @@ import java.util.List;
 //used in doc as an example
 public class Setup implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -33,8 +33,8 @@ public class Setup implements ITimedComponent {
   Inner i1;
   Inner i2;
 
-  public Setup(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public Setup(String name) {
+    this.name = name;
 
     this.i1 = new Inner("DELETEME");
     this.i2 = new Inner("DELETEME");

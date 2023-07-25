@@ -7,33 +7,52 @@ import montiarc.rte.port.TimeAwareOutPort;
 
 import java.util.List;
 
-public class Inverter implements ITimedComponent {
+public class InverterComp implements InverterContext, ITimedComponent {
 
-  protected InverterAutomaton automaton;
+  protected InverterAut automaton;
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public Inverter(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
-    this.automaton = new InverterAutomaton(this);
+  protected InverterComp(String name) {
+    this.name = name;
+    this.automaton = new InverterAutBuilder(this)
+        .addDefaultStates()
+        .addDefaultTransitions()
+        .setDefaultInitial()
+        .build();
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
+  @Override
+  public InverterAut getBehavior() {
+    return automaton;
+  }
+
+  @Override
+  public TimeAwareInPort<Boolean> port_i() {
+    return this.port_i;
+  }
+  
   @Override
   public List<TimeAwareInPort<?>> getAllInPorts() {
-    return List.of(i);
+    return InverterContext.super.getAllInPorts();
   }
-
+  
+  @Override
+  public TimeAwareOutPort<Boolean> port_o() {
+    return this.port_o;
+  }
+  
   @Override
   public List<TimeAwareOutPort<?>> getAllOutPorts() {
-    return List.of(o);
+    return InverterContext.super.getAllOutPorts();
   }
 
-  protected TimeAwareInPort<Boolean> i = new TimeAwareInPort<>(getQualifiedInstanceName() + ".i") {
+  protected TimeAwareInPort<Boolean> port_i = new TimeAwareInPort<>(getName() + ".i") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -42,18 +61,18 @@ public class Inverter implements ITimedComponent {
     }
   };
 
-  protected TimeAwareOutPort<Boolean> o = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".o");
+  protected TimeAwareOutPort<Boolean> port_o = new TimeAwareOutPort<>(getName() + ".o");
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
-    return this.i.isTickBlocked();
+    return this.port_i().isTickBlocked();
   }
 
   protected void dropTickOnAllInputs() { // this method could be generated for all ports with time-aware input ports
-    this.i.dropBlockingTick();
+    this.port_i().dropBlockingTick();
   }
 
   protected void sendTickOnAllOutputs() { // this method could be generated for all ports with time-aware output ports
-    this.o.sendTick();
+    this.port_o().sendTick();
   }
 
   protected void handleMessageOnBIn() {
@@ -61,7 +80,7 @@ public class Inverter implements ITimedComponent {
   }
 
   protected void handleComputationOnSyncPorts() {
-    boolean allPortsReady = !i.isBufferEmpty();
+    boolean allPortsReady = !port_i.isBufferEmpty();
 
     if (!allPortsReady) return;
 

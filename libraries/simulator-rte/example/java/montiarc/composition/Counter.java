@@ -9,17 +9,17 @@ import java.util.List;
 
 public class Counter implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public Counter(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public Counter(String name) {
+    this.name = name;
   }
-
+  
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
-
+  
   @Override
   public List<TimeAwareInPort<?>> getAllInPorts() {
     return List.of(iIn);
@@ -32,7 +32,7 @@ public class Counter implements ITimedComponent {
 
   Integer cnt = 0;
 
-  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getQualifiedInstanceName() + ".iIn") {
+  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -41,7 +41,7 @@ public class Counter implements ITimedComponent {
     }
   };
 
-  TimeAwareOutPort<Integer> count = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".count");
+  TimeAwareOutPort<Integer> count = new TimeAwareOutPort<>(getName() + ".count");
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.iIn.isTickBlocked();

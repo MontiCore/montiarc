@@ -9,14 +9,14 @@ import java.util.List;
 
 public class Decomposed implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public Decomposed(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public Decomposed(String name) {
+    this.name = name;
 
-    this.sorter = new Sorter(this.qualifiedInstanceName + ".sorter");
-    this.gtEq0 = new Counter(this.qualifiedInstanceName + ".gtEq0");
-    this.lt0 = new Counter(this.qualifiedInstanceName + ".lt0");
+    this.sorter = new Sorter(this.name + ".sorter");
+    this.gtEq0 = new Counter(this.name + ".gtEq0");
+    this.lt0 = new Counter(this.name + ".lt0");
 
     this.iIn = this.sorter.iIn;
     this.sorter.gtEq0.connect(this.gtEq0.iIn);
@@ -24,8 +24,8 @@ public class Decomposed implements ITimedComponent {
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   TimeAwareInPort<Integer> iIn;

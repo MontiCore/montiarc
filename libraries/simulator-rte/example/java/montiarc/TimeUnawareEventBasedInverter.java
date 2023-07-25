@@ -9,15 +9,15 @@ import java.util.List;
 
 public class TimeUnawareEventBasedInverter implements IUntimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  public TimeUnawareEventBasedInverter(String qualifiedInstanceName) {
-    this.qualifiedInstanceName = qualifiedInstanceName;
+  public TimeUnawareEventBasedInverter(String name) {
+    this.name = name;
   }
 
   @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -30,7 +30,7 @@ public class TimeUnawareEventBasedInverter implements IUntimedComponent {
     return List.of(bOut, iOut);
   }
 
-  protected TimeUnawareInPort<Boolean> bIn = new TimeUnawareInPort<>(getQualifiedInstanceName() + ".bIn") {
+  protected TimeUnawareInPort<Boolean> bIn = new TimeUnawareInPort<>(getName() + ".bIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -39,7 +39,7 @@ public class TimeUnawareEventBasedInverter implements IUntimedComponent {
     }
   };
 
-  protected TimeUnawareInPort<Integer> iIn = new TimeUnawareInPort<>(getQualifiedInstanceName() + ".iIn") {
+  protected TimeUnawareInPort<Integer> iIn = new TimeUnawareInPort<>(getName() + ".iIn") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -48,8 +48,8 @@ public class TimeUnawareEventBasedInverter implements IUntimedComponent {
     }
   };
 
-  protected TimeUnawareOutPort<Integer> iOut = new TimeUnawareOutPort<>(getQualifiedInstanceName() + ".iOut");
-  protected TimeUnawareOutPort<Boolean> bOut = new TimeUnawareOutPort<>(getQualifiedInstanceName() + ".bOut");
+  protected TimeUnawareOutPort<Integer> iOut = new TimeUnawareOutPort<>(getName() + ".iOut");
+  protected TimeUnawareOutPort<Boolean> bOut = new TimeUnawareOutPort<>(getName() + ".bOut");
 
 
   protected void handleMessageOnBIn() {

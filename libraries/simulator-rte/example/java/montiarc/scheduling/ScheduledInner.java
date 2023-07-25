@@ -11,11 +11,10 @@ import java.util.List;
 
 public class ScheduledInner implements ITimedComponent {
 
-  protected final String qualifiedInstanceName;
+  protected final String name;
 
-  @Override
-  public String getQualifiedInstanceName() {
-    return qualifiedInstanceName;
+  public String getName() {
+    return name;
   }
 
   @Override
@@ -32,15 +31,15 @@ public class ScheduledInner implements ITimedComponent {
   StringBuilder trace;
   String instanceName;
 
-  public ScheduledInner(String qualifiedInstanceName, ISchedule scheduler,
+  public ScheduledInner(String name, ISchedule scheduler,
                         StringBuilder trace, String instanceName) { // last 2 parameters are from the model, first 2 are "default"
-    this.qualifiedInstanceName = qualifiedInstanceName;
+    this.name = name;
     this.scheduler = scheduler;
     this.trace = trace;
     this.instanceName = instanceName;
   }
 
-  TimeAwareInPort<Boolean> trigger = new TimeAwareInPort<Boolean>(getQualifiedInstanceName() + ".trigger") {
+  TimeAwareInPort<Boolean> trigger = new TimeAwareInPort<Boolean>(getName() + ".trigger") {
     @Override
     protected void handleBuffer() {
       if (buffer.isEmpty()) return;
@@ -49,7 +48,7 @@ public class ScheduledInner implements ITimedComponent {
     }
   };
 
-  TimeAwareOutPort<Boolean> output = new TimeAwareOutPort<>(getQualifiedInstanceName() + ".output");
+  TimeAwareOutPort<Boolean> output = new TimeAwareOutPort<>(getName() + ".output");
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.trigger.isTickBlocked();

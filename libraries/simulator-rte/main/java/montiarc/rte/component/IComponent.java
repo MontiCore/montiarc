@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IComponent<InPort extends IInPort<?>, OutPort extends IOutPort<?>> {
 
-  String getQualifiedInstanceName();
+  String getName();
 
   List<InPort> getAllInPorts();
 
