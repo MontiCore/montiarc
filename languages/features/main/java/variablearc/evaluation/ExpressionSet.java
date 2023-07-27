@@ -20,7 +20,7 @@ public class ExpressionSet {
   // Expressions
   protected final List<Expression> expressions;
 
-  // Expressions where the conjunction is negated (i.e. !(e[0][0] & e[0][1]) & (e[1][0] & ...)
+  // Expressions where the conjunction is negated (i.e. !(e[0][0] & e[0][1]) & !(e[1][0] & ...)
   protected final List<List<Expression>> negatedConjunctions;
 
   public ExpressionSet() {
@@ -89,5 +89,11 @@ public class ExpressionSet {
       Collectors.toList()),
       this.getNegatedConjunctions().stream().map(l -> l.stream().map(e -> e.copyWithPrefix(e.getPrefix().orElse(null))).collect(
         Collectors.toList())).collect(Collectors.toList()));
+  }
+
+  public String print() {
+    return expressions.stream().map(Expression::print).reduce((a, b) -> a + " ∧ " + b).orElse("")
+      + (expressions.isEmpty() || negatedConjunctions.isEmpty() ? "" : " ∧ ") +
+      negatedConjunctions.stream().map((l) -> l.stream().map(Expression::print).reduce((a, b) -> a + "∧" + b).orElse("")).reduce((a, b) -> "¬(" + a + ") ∧ ¬(" + b + ")").orElse("");
   }
 }

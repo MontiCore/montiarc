@@ -13,6 +13,8 @@ import variablearc._symboltable.VariantComponentTypeSymbol;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc.evaluation.expressions.Expression;
 
+import java.util.List;
+
 /**
  * A visitor that invokes another traverser on all component variants.
  * It is recommended that the traverser uses {@link SingleASTVariantComponentTypeHandler}
@@ -36,10 +38,11 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
       node.accept(traverser);
     }
 
-    for (VariantComponentTypeSymbol variant : ((VariableComponentTypeSymbol) node.getSymbol()).getVariants()) {
+    List<VariantComponentTypeSymbol> variants = ((VariableComponentTypeSymbol) node.getSymbol()).getVariants();
+    for (VariantComponentTypeSymbol variant : variants) {
       long findings = Log.getFindingsCount();
       variant.getAstNode().accept(traverser);
-      if (findings != Log.getFindingsCount() && !variant.getIncludedVariationPoints().isEmpty()) {
+      if (findings != Log.getFindingsCount() && variants.size() > 1) {
         Log.info("Error in variant (" + variant.getIncludedVariationPoints().stream().map(VariableArcVariationPoint::getCondition).map(Expression::print).reduce((a, b) -> a + ", " + b).orElse("") + ")", "↳ Variability");
       }
     }
