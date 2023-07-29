@@ -72,7 +72,7 @@ public class MACommonExpressionsTypeVisitor extends CommonExpressionsTypeVisitor
         .collect(Collectors.toSet());
       // filter out all function that do not fit the arguments
       Set<SymTypeOfFunction> callableFuncs = funcs.stream()
-        .filter(f -> getTypeRel().canBeCalledWith(f, args))
+        .filter(f -> getFuncRel().canBeCalledWith(f, args))
         .collect(Collectors.toSet());
       if (callableFuncs.isEmpty()) {
         Log.error("0xCDABE with " + args.size() + " argument ("
@@ -95,7 +95,7 @@ public class MACommonExpressionsTypeVisitor extends CommonExpressionsTypeVisitor
           .map(f -> f.getWithFixedArity(args.size()))
           .collect(Collectors.toSet());
         Optional<SymTypeOfFunction> mostSpecificFunction =
-          getTypeRel().getMostSpecificFunction(callableFuncs);
+          getFuncRel().getMostSpecificFunction(callableFuncs);
         if (mostSpecificFunction.isPresent()) {
           this.getType4Ast().setTypeOfExpression(expr.getExpression(), mostSpecificFunction.get());
           type = mostSpecificFunction.get().getType().deepClone();
