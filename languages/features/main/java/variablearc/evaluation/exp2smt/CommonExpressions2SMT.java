@@ -8,6 +8,8 @@ import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntExpr;
+import com.microsoft.z3.Sort;
+import de.monticore.expressions.commonexpressions.CommonExpressionsMill;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanAndOpExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanNotExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanOrOpExpression;
@@ -29,7 +31,9 @@ import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTPlusExpression;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsHandler;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.se_rwth.commons.Names;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcScope;
 
@@ -77,24 +81,45 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   @Override
   public void handle(@NotNull ASTFieldAccessExpression node) {
     Preconditions.checkNotNull(node);
+    String prefix = this.deriveSMTExpr.getPrefix().isEmpty() ? "" : this.deriveSMTExpr.getPrefix() + ".";
 
-    // Handle only features of subcomponent of form x.f
     IVariableArcScope scope = (IVariableArcScope) node.getEnclosingScope();
-    if (node.getExpression() instanceof ASTNameExpression) {
-      String name = ((ASTNameExpression) node.getExpression()).getName();
+    if (CommonExpressionsMill.typeDispatcher().isASTNameExpression(node.getExpression())) {
+      // Handle only features of subcomponent of form x.f
+      String name = CommonExpressionsMill.typeDispatcher().asASTNameExpression(node.getExpression()).getName();
       Optional<ComponentInstanceSymbol> instanceSymbol =
         scope.resolveComponentInstanceMany(name).stream().findFirst();
       if (instanceSymbol.isPresent() && instanceSymbol.get().isPresentType() &&
         !((IVariableArcScope) instanceSymbol.get().getType().getTypeInfo().getSpannedScope()).resolveArcFeatureMany(
           node.getName()).isEmpty()) {
-        String prefix = this.deriveSMTExpr.getPrefix().isEmpty() ? "" : this.deriveSMTExpr.getPrefix() + ".";
         this.getResult().setValue(
           this.getContext().mkBoolConst(prefix + name + "." + node.getName()));
       } else {
         getResult().clear();
       }
     } else {
-      this.getResult().clear();
+      // Handle all other field access expressions of form a.X...X.b.c
+      Optional<Sort> sort = this.getExpr2Sort().toSort(this.getContext(), node);
+      if (sort.isPresent()) {
+        this.getResult().setValue(this.getContext().mkConst(prefix + getExprAsQName(node), sort.get()));
+      } else {
+        this.getResult().clear();
+      }
+    }
+  }
+
+  protected Optional<String> getExprAsQName(ASTExpression expr) {
+    if (CommonExpressionsMill.typeDispatcher().isASTNameExpression(expr)) {
+      ASTNameExpression nameExpr = CommonExpressionsMill.typeDispatcher().asASTNameExpression(expr);
+      return Optional.of(nameExpr.getName());
+    } else if (CommonExpressionsMill.typeDispatcher().isASTFieldAccessExpression(expr)) {
+      ASTFieldAccessExpression fieldAccessExpression = CommonExpressionsMill.typeDispatcher().asASTFieldAccessExpression(expr);
+      return getExprAsQName(fieldAccessExpression.getExpression())
+        .map(qualifier ->
+          Names.getQualifiedName(qualifier, fieldAccessExpression.getName())
+        );
+    } else {
+      return Optional.empty();
     }
   }
 

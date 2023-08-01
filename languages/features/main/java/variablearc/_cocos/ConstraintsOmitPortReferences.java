@@ -13,6 +13,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
+import variablearc._util.VariableArcTypeDispatcher;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -40,9 +41,11 @@ public class ConstraintsOmitPortReferences implements ArcBasisASTComponentTypeCo
     portReferencesToLookFor.addAll(PortReference.ofComponentTypePorts(comp));
     portReferencesToLookFor.addAll(PortReference.ofSubComponentPorts(comp));
 
+    VariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();
+
     astComp.getBody().getArcElementList().stream()
-      .filter(e -> e instanceof ASTArcConstraintDeclaration)
-      .map(e -> (ASTArcConstraintDeclaration) e)
+      .filter(typeDispatcher::isASTArcConstraintDeclaration)
+      .map(typeDispatcher::asASTArcConstraintDeclaration)
       .forEach((constraint) -> {
         Preconditions.checkNotNull(constraint);
         HashMap<PortReference, SourcePosition> foundPortReferences =
