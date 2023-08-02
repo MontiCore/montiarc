@@ -20,7 +20,7 @@
         "kind": "variablearc.evaluation.ExpressionSet",
         "expressions": [
           {
-            "expression": "f1||f2"
+            "expression": "f1==f2"
           },
           {
             "expression": "p1==f1"

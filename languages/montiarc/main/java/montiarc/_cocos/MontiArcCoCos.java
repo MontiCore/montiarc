@@ -61,6 +61,7 @@ import variablearc._cocos.ConstraintsOmitFieldReferences;
 import variablearc._cocos.ConstraintsOmitPortReferences;
 import variablearc._cocos.FeatureNameCapitalization;
 import variablearc._cocos.FeatureUsage;
+import variablearc._cocos.SubcomponentsConstraint;
 import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfNoAssignmentExpr;
 import variablearc._cocos.VarIfOmitFieldReferences;
@@ -126,6 +127,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
+    checker.addCoCo(new SubcomponentsConstraint());
     checker.addCoCo(new VarIfNoAssignmentExpr());
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences());

@@ -21,9 +21,6 @@ public class ExpressionSolver {
 
   protected Context context;
 
-  /**
-   *
-   */
   public ExpressionSolver() {
     this.context = new Context();
   }
@@ -37,6 +34,46 @@ public class ExpressionSolver {
    * at least one expression cannot be solved or converted by this solver.
    */
   public Optional<Boolean> solve(@NotNull ExpressionSet expressions) {
+    Preconditions.checkNotNull(expressions);
+
+    Status status = getSolver(expressions).map(Solver::check).orElse(Status.UNKNOWN);
+
+    switch (status) {
+      case SATISFIABLE:
+        return Optional.of(true);
+      case UNSATISFIABLE:
+        return Optional.of(false);
+      default:
+      case UNKNOWN:
+        return Optional.empty();
+    }
+  }
+
+  /**
+   * Gets a smt solver with the {@code expressions} already included as constraints in the SMT context of this {@code ExpressionSolver}
+   *
+   * @param expressions the list of boolean expression that are added as constraints to the solver.
+   * @return The smt solver
+   */
+  public Optional<Solver> getSolver(@NotNull ExpressionSet expressions) {
+    Preconditions.checkNotNull(expressions);
+
+    Optional<BoolExpr[]> smtExprOpt = convert(expressions);
+    if (smtExprOpt.isEmpty()) return Optional.empty();
+    BoolExpr[] smtExpr = smtExprOpt.get();
+
+    Solver solver = context.mkSolver();
+    solver.add(smtExpr);
+    return Optional.of(solver);
+  }
+
+  /**
+   * Converts an expression set to smt formulas in the SMT context of this {@code ExpressionSolver}
+   *
+   * @param expressions which are converted
+   * @return An array of BoolExpr or empty if not all expression could be converted
+   */
+  public Optional<BoolExpr[]> convert(@NotNull ExpressionSet expressions) {
     Preconditions.checkNotNull(expressions);
 
     IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
@@ -60,20 +97,14 @@ public class ExpressionSolver {
     if (smtExpr.length < expressions.size()) {
       return Optional.empty();
     }
+    return Optional.of(smtExpr);
+  }
 
-    Solver solver = context.mkSolver();
-    solver.add(smtExpr);
-    Status status = solver.check();
-
-    switch (status) {
-      case SATISFIABLE:
-        return Optional.of(true);
-      case UNSATISFIABLE:
-        return Optional.of(false);
-      default:
-      case UNKNOWN:
-        return Optional.empty();
-    }
+  /**
+   * @return the SMT context of this {@code ExpressionSolver}
+   */
+  public Context getContext() {
+    return context;
   }
 
   /**
