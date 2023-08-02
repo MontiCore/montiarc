@@ -1,5 +1,6 @@
 *	text=auto
-*.txt	text
-*.java	text
-*.arc	text
-*.cd	text
+*.txt text eol=lf
+*.java text eol=lf
+*.kts	text eol=lf
+*.arc	text eol=lf
+*.cd	text eol=lf
