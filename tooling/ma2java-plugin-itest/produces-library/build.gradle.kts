@@ -4,18 +4,13 @@ plugins {
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 
-  id("java-library")
-  id("cd2pojo")
+  id("java")
+  id("montiarc")
 }
 
-dependencies {
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
-}
+group = "montiarc.tooling.ma2java-plugin-itest"
 
-group = "montiarc.tooling.cd2pojo-plugin-itest"
-
-cd2pojo {
+montiarc {
   internalMontiArcTesting.set(true)
 }
 

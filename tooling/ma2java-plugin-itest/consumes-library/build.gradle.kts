@@ -4,21 +4,18 @@ plugins {
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 
-  id("java-library")
-  id("cd2pojo")
+  id("java")
+  id("montiarc")
 }
 
-group = "montiarc.tooling.cd2pojo-plugin-itest"
+group = "montiarc.tooling.ma2java-plugin-itest"
 
-cd2pojo {
+montiarc {
   internalMontiArcTesting.set(true)
 }
 
 dependencies {
-  cd2pojo(project(":tooling:cd2pojo-plugin-itest:produces-library"))
-
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
+  montiarc(project(":tooling:ma2java-plugin-itest:produces-library"))
 }
 
 tasks.getByName<Test>("test") {

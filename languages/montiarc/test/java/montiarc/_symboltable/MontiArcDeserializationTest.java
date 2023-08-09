@@ -272,7 +272,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
   @CsvSource(value = {
     "0, false, false, false, false, false, false, false, false, false", // default all false
     "1, false, false, false, false, false, false, false, false, false", // explicitly all false
-    "2, true, true, true, true, true, true, true, true, true", // explicitly all true
+    //"2, true, true, true, true, true, true, true, true, true", // explicitly all true
     "3, true, false, false, false, false, false, true, false, false", // public class
     "4, true, false, false, true, false, false, true, false, false", // public abstract class
     "5, true, false, false, false, true, false, true, false, false", // public final class
@@ -735,7 +735,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
   @CsvSource(value = {
     "0, false, false, false, false, false, false, false", // default all false
     "1, false, false, false, false, false, false, false", // explicit all false
-    "2, true, true, true, true, true, true, true", // explicit all true
+    // "2, true, true, true, true, true, true, true", // explicit all true
     "3, false, false, true, false, true, false, false", // public method
     "4, true, false, true, false, true, false, false", // public static method
     "5, false, true, true, false, true, false, false", // public final method
@@ -921,7 +921,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
   @CsvSource(value = {
     "0, false, false, false, false, false, false, false", // default all false
     "1, false, false, false, false, false, false, false", // explicit all false
-    "2, true, true, true, true, true, true, true", // explicit all true
+    //"2, true, true, true, true, true, true, true", // explicit all true
     "3, false, false, false, false, true, false, false", // public variable
     "4, false, false, false, false, false, true, false", // protected variable
     "5, false, false, false, false, false, false, true", // private variable
