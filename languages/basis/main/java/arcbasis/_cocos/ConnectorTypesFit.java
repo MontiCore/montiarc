@@ -6,7 +6,7 @@ import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -24,9 +24,9 @@ import java.util.Optional;
  */
 public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
 
-  protected final SymTypeRelations tr;
+  protected final ISymTypeRelations tr;
 
-  public ConnectorTypesFit(@NotNull SymTypeRelations tr) {
+  public ConnectorTypesFit(@NotNull ISymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
 

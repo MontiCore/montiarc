@@ -48,7 +48,8 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.util.SymTypeRelations;
 import genericarc._cocos.ComponentHeritageTypeBound;
 import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
@@ -83,7 +84,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker afterSymTab() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
-    SymTypeRelations tr = new SymTypeRelations();
+    ISymTypeRelations tr = new SymTypeRelations();
     TypeCheck3AsTypeCalculator tc2tc = new TypeCheck3AsTypeCalculator(tc, tr);
 
     // ArcBasis CoCos

@@ -4,7 +4,7 @@ package montiarc.trafo;
 import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.util.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;

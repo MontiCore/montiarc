@@ -2,7 +2,7 @@
 package montiarc._cocos;
 
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.util.SymTypeRelations;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCalculator;

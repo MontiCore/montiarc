@@ -5,7 +5,7 @@ import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,9 +18,9 @@ public class VarIfIsBoolean implements VariableArcASTArcVarIfCoCo {
 
   protected final IArcTypeCalculator tc;
 
-  protected final SymTypeRelations tr;
+  protected final ISymTypeRelations tr;
 
-  public VarIfIsBoolean(@NotNull IArcTypeCalculator tc, @NotNull SymTypeRelations tr) {
+  public VarIfIsBoolean(@NotNull IArcTypeCalculator tc, @NotNull ISymTypeRelations tr) {
     this.tc = Preconditions.checkNotNull(tc);
     this.tr = Preconditions.checkNotNull(tr);
   }

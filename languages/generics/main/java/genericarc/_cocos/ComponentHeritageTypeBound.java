@@ -5,13 +5,11 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
@@ -28,9 +26,9 @@ import java.util.Optional;
  */
 public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo {
 
-  protected final SymTypeRelations tr;
+  protected final ISymTypeRelations tr;
 
-  public ComponentHeritageTypeBound(@NotNull SymTypeRelations tr) {
+  public ComponentHeritageTypeBound(@NotNull ISymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
   }
 

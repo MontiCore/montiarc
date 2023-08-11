@@ -2,7 +2,7 @@
 package comfortablearc._ast;
 
 import arcbasis._symboltable.PortSymbol;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class ASTArcACOff extends ASTArcACOffTOP {
@@ -11,7 +11,7 @@ public class ASTArcACOff extends ASTArcACOffTOP {
    * Iff the auto-connect is turned off, then no two ports match.
    */
   @Override
-  public boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target, @NotNull SymTypeRelations tr) {
+  public boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target, @NotNull ISymTypeRelations tr) {
     return false;
   }
 }

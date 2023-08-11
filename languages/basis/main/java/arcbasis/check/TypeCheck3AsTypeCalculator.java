@@ -4,7 +4,7 @@ package arcbasis.check;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCalculator;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -12,15 +12,15 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * for backwards compatibility with old context-conditions. If possible, use
  * the type check 3 instead. This class will be scheduled for deletion once
  *
- * @deprecated use {@link IArcTypeCalculator}, {@link SymTypeRelations}
+ * @deprecated use {@link IArcTypeCalculator} instead
  */
 @Deprecated
 public class TypeCheck3AsTypeCalculator extends TypeCalculator {
 
-  private final SymTypeRelations tr;
+  private final ISymTypeRelations tr;
 
   public TypeCheck3AsTypeCalculator(@NotNull IArcTypeCalculator tc,
-                                    @NotNull SymTypeRelations tr) {
+                                    @NotNull ISymTypeRelations tr) {
     super(tc, tc);
     this.tr = Preconditions.checkNotNull(tr);
   }

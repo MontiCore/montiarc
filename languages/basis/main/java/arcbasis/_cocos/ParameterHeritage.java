@@ -11,13 +11,17 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -27,9 +31,9 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
   protected final IArcTypeCalculator tc;
 
-  protected final SymTypeRelations tr;
+  protected final ISymTypeRelations tr;
 
-  public ParameterHeritage(@NotNull IArcTypeCalculator tc, @NotNull SymTypeRelations tr) {
+  public ParameterHeritage(@NotNull IArcTypeCalculator tc, @NotNull ISymTypeRelations tr) {
     this.tc = Preconditions.checkNotNull(tc);
     this.tr = Preconditions.checkNotNull(tr);
   }

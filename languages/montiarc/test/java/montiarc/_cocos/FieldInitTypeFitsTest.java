@@ -3,7 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._cocos.FieldInitTypeFits;
 import com.google.common.base.Preconditions;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.util.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc._ast.ASTMACompilationUnit;

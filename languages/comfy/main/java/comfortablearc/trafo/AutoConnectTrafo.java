@@ -9,7 +9,7 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTArcACMode;
 import comfortablearc._ast.ASTArcAutoConnect;
-import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.ISymTypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -27,12 +27,12 @@ import static comfortablearc.trafo.AutoConnectFilters.isAFullyConnectedComponent
 
 public class AutoConnectTrafo implements IAutoConnectTrafo {
 
-  protected final SymTypeRelations tr;
+  protected final ISymTypeRelations tr;
 
   protected Stack<ASTComponentType> comps;
   protected Stack<List<ASTArcElement>> toAdd;
 
-  public AutoConnectTrafo(@NotNull SymTypeRelations tr) {
+  public AutoConnectTrafo(@NotNull ISymTypeRelations tr) {
     this.tr = Preconditions.checkNotNull(tr);
     this.comps = new Stack<>();
     this.toAdd = new Stack<>();
