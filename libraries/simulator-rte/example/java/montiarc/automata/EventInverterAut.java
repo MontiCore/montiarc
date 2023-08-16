@@ -15,26 +15,26 @@ public class EventInverterAut extends EventAutomaton<EventInverterContext> {
   
   public void msg_bIn() {
     if(transition_msg_bIn_1.isEnabled(state)) {
-      transition_msg_bIn_1.execute();
+      transition_msg_bIn_1.execute(this);
     } else if(transition_noStimulus_1.isEnabled(state)) {
-      transition_noStimulus_1.execute(); // TODO discuss: should this be executed here? If no, where else?
+      transition_noStimulus_1.execute(this); // TODO discuss: should this be executed here? If no, where else?
     }
   }
   
   public void msg_iIn() {
     if(transition_msg_iIn_1.isEnabled(state)) {
-      transition_msg_iIn_1.execute();
+      transition_msg_iIn_1.execute(this);
     } else if(transition_noStimulus_1.isEnabled(state)) {
-      transition_noStimulus_1.execute(); // TODO discuss: should this be executed here? If no, where else?
+      transition_noStimulus_1.execute(this); // TODO discuss: should this be executed here? If no, where else?
     }
   }
   
   @Override
   public void tick() {
     if(transition_tick_1.isEnabled(state)) {
-      transition_tick_1.execute();
+      transition_tick_1.execute(this);
     } else if(transition_noStimulus_1.isEnabled(state)) {
-      transition_noStimulus_1.execute(); // TODO discuss: should this be executed here? If no, where else?
+      transition_noStimulus_1.execute(this); // TODO discuss: should this be executed here? If no, where else?
     }
   }
   

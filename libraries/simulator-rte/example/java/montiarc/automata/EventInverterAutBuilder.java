@@ -39,12 +39,4 @@ public class EventInverterAutBuilder extends EventAutomatonBuilder<EventInverter
     
     return new EventInverterAut(context, states, initial);
   }
-  
-  @Override
-  public boolean isValid() {
-    return this.getContext() != null
-      && this.getStates() != null
-      && this.getInitial() != null
-      && this.getStates().contains(this.getInitial());
-  }
 }

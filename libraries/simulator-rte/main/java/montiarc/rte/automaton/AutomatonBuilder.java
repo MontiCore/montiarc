@@ -6,9 +6,9 @@ import java.util.List;
 
 public abstract class AutomatonBuilder<C, A extends Automaton<C>> {
 
-  C context;
-  List<State> states;
-  State initial;
+  protected C context;
+  protected List<State> states;
+  protected State initial;
 
   public AutomatonBuilder(C context, List<State> states) {
     this.context = context;

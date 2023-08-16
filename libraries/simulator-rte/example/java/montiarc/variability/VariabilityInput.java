@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.variability;
 
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 
 import java.util.ArrayList;
@@ -8,8 +9,8 @@ import java.util.List;
 
 public interface VariabilityInput {
   
-  default List<TimeAwareInPort<?>> getAllInPorts() {
-    List<TimeAwareInPort<?>> result = new ArrayList<>();
+  default List<ITimeAwareInPort<?>> getAllInPorts() {
+    List<ITimeAwareInPort<?>> result = new ArrayList<>();
     
     if(port_i1_available()) result.add(port_i1());
   

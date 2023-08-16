@@ -2,6 +2,7 @@
 package montiarc.composition;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
 
@@ -21,7 +22,7 @@ public class Sorter implements ITimedComponent {
   }
 
   @Override
-  public List<TimeAwareInPort<?>> getAllInPorts() {
+  public List<ITimeAwareInPort<?>> getAllInPorts() {
     return List.of(iIn);
   }
 

@@ -2,6 +2,7 @@
 package montiarc.scheduling;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.rte.scheduling.Computation;
@@ -18,7 +19,7 @@ public class ScheduledInner implements ITimedComponent {
   }
 
   @Override
-  public List<TimeAwareInPort<?>> getAllInPorts() {
+  public List<ITimeAwareInPort<?>> getAllInPorts() {
     return List.of(trigger);
   }
 

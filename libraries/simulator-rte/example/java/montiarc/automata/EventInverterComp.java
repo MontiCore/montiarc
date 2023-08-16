@@ -3,6 +3,7 @@ package montiarc.automata;
 
 import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.port.AbstractOutPort;
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
 
@@ -43,7 +44,7 @@ public class EventInverterComp implements EventInverterContext, ITimedComponent 
   }
   
   @Override
-  public List<TimeAwareInPort<?>> getAllInPorts() {
+  public List<ITimeAwareInPort<?>> getAllInPorts() {
     return EventInverterContext.super.getAllInPorts();
   }
   
@@ -95,11 +96,11 @@ public class EventInverterComp implements EventInverterContext, ITimedComponent 
   protected TimeAwareOutPort<Integer> port_iOut = new TimeAwareOutPort<>(getName() + ".o");
   
   protected boolean areAllInputsTickBlocked() {
-    return getAllInPorts().stream().allMatch(TimeAwareInPort::isTickBlocked);
+    return getAllInPorts().stream().allMatch(ITimeAwareInPort::isTickBlocked);
   }
   
   protected void dropTickOnAllInputs() {
-    getAllInPorts().forEach(TimeAwareInPort::dropBlockingTick);
+    getAllInPorts().forEach(ITimeAwareInPort::dropBlockingTick);
   }
   
   protected void sendTickOnAllOutputs() {
@@ -107,6 +108,11 @@ public class EventInverterComp implements EventInverterContext, ITimedComponent 
   }
   
   protected void handleTickEvent() {
-    // TODO
+    if(areAllInputsTickBlocked()) {
+      dropTickOnAllInputs();
+      getBehavior().tick();
+      sendTickOnAllOutputs();
+      getAllInPorts().forEach(ITimeAwareInPort::continueAfterDroppedTick);
+    }
   }
 }

@@ -13,7 +13,7 @@ import montiarc.rte.msg.Message;
  *
  * @param <T> the type that is sent via this forward
  */
-public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements IInPort<T> {
+public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITimeAwareInPort<T> {
 
   public TimeAwarePortForward(String qualifiedName) {
     super(qualifiedName);
@@ -30,4 +30,26 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements IInP
   public void receive(Message<T> message) {
     this.send(message);
   }
+  
+  /**
+   * Port forwards are never tick blocked in this implementation.
+   *
+   * @return false
+   */
+  @Override
+  public boolean isTickBlocked() {
+    return false;
+  }
+  
+  /**
+   * Since port forwards are never tick blocked, this does nothing.
+   */
+  @Override
+  public void dropBlockingTick() { }
+  
+  /**
+   * Since port forwards are never tick blocked, this does nothing.
+   */
+  @Override
+  public void continueAfterDroppedTick() { }
 }

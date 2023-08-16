@@ -41,11 +41,13 @@ public class Transition {
     return this.getSource().equals(current) && this.getGuard().check();
   }
 
-  public void execute() {
+  public void execute(Automaton<?> context) {
     this.getSource().exit();
 
     this.getAction().execute();
 
     this.getTarget().enter();
+    
+    context.setState(this.getTarget());
   }
 }

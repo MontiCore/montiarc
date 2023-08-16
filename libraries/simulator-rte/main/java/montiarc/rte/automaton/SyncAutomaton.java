@@ -38,7 +38,7 @@ public abstract class SyncAutomaton<Context> extends Automaton<Context> {
    * This method should operate on the automaton owner.
    */
   public void executeAnyValidTransition() {
-    getValidTransitions().stream().findFirst().ifPresent(Transition::execute);
+    getValidTransitions().stream().findFirst().ifPresent(tr -> tr.execute(this));
   }
 
   protected Collection<Transition> getValidTransitions() {

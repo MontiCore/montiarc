@@ -2,10 +2,7 @@
 package montiarc.variability;
 
 import montiarc.rte.component.ITimedComponent;
-import montiarc.rte.port.AbstractInPort;
-import montiarc.rte.port.AbstractOutPort;
-import montiarc.rte.port.TimeAwareInPort;
-import montiarc.rte.port.TimeAwareOutPort;
+import montiarc.rte.port.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -134,7 +131,7 @@ public class VariabilityComp implements VariabilityContext, ITimedComponent {
   }
   
   @Override
-  public List<TimeAwareInPort<?>> getAllInPorts() {
+  public List<ITimeAwareInPort<?>> getAllInPorts() {
     return VariabilityContext.super.getAllInPorts();
   }
   
@@ -154,11 +151,11 @@ public class VariabilityComp implements VariabilityContext, ITimedComponent {
   }
   
   protected boolean areAllInputsTickBlocked() {
-    return this.getAllInPorts().stream().allMatch(TimeAwareInPort::isTickBlocked);
+    return this.getAllInPorts().stream().allMatch(ITimeAwareInPort::isTickBlocked);
   }
   
   protected void dropTickOnAllInputs() { // this method could be generated for all ports with time-aware input ports
-    this.getAllInPorts().forEach(TimeAwareInPort::dropBlockingTick);
+    this.getAllInPorts().forEach(ITimeAwareInPort::dropBlockingTick);
   }
   
   protected void sendTickOnAllOutputs() { // this method could be generated for all ports with time-aware output ports
@@ -174,7 +171,10 @@ public class VariabilityComp implements VariabilityContext, ITimedComponent {
   protected void handleMessageOnI4() { handleComputationOnSyncPorts(); }
   
   protected void handleComputationOnSyncPorts() {
-    boolean allPortsReady = getAllInPorts().stream().noneMatch(AbstractInPort::isBufferEmpty);
+    boolean allPortsReady = getAllInPorts().stream()
+        .filter(p -> p instanceof AbstractInPort<?>)
+        .map(p -> (AbstractInPort<?>) p)
+        .noneMatch(AbstractInPort::isBufferEmpty);
     
     if (!allPortsReady) return;
     
