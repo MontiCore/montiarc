@@ -71,14 +71,11 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
     Preconditions.checkArgument(node.getEnclosingScope().getSpanningSymbol() instanceof ComponentTypeSymbol);
 
     if (node.isPresentParent()) {
-      Optional<CompTypeExpression> parentTypeExpr = this.getComponentSynthesizer().synthesizeFrom(node.getParent());
-      if (parentTypeExpr.isPresent()) {
-        ComponentTypeSymbol sym = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
-        sym.setParent(parentTypeExpr.get());
-      } else {
-        Log.error(String.format("Could not create a component type expression from '%s'",
-          GenericArcMill.prettyPrint(node.getParent(), false)), node.get_SourcePositionStart()
-        );
+      Optional<CompTypeExpression> parent = this.getComponentSynthesizer().synthesizeFrom(node.getParent());
+      if (parent.isPresent()) {
+        node.getParent().setDefiningSymbol(parent.get().getTypeInfo());
+        ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
+        comp.setParent(parent.get());
       }
     }
   }

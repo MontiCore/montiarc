@@ -14,7 +14,8 @@ public enum GenericArcError implements Error {
   TOO_MANY_TYPE_ARGUMENTS("0xC1204", "Too many type arguments, expected `%s` but provided `%s`"),
   HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND("0xC1205", "Type parameter '%s' does not respect its upper bound, should extend '%s'"),
   HERITAGE_TOO_FEW_TYPE_ARGUMENTS("0xC1206", "Too few type arguments, expected `%s` but provided `%s`"),
-  HERITAGE_TOO_MANY_TYPE_ARGUMENTS("0xC1207", "Too many type arguments, expected `%s` but provided `%s`");
+  HERITAGE_TOO_MANY_TYPE_ARGUMENTS("0xC1207", "Too many type arguments, expected `%s` but provided `%s`"),
+  RAW_USE_OF_PARAMETRIZED_TYPE("0xC1208", "Raw usage of generic component type `%s`");
 
   private final String errorCode;
   private final String errorMessage;
