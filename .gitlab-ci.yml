@@ -9,8 +9,8 @@ stages:
   - check
   - mirror
       
-Build jdk17:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+Build:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: build
   allow_failure: false
   artifacts:
@@ -27,22 +27,22 @@ Build jdk17:
   script:
     - gradle clean assemble
 
-Verify Formatting jdk17:
+Verify Formatting:
   stage: test
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   dependencies:
-    - Build jdk17
-  needs: ["Build jdk17"]
+    - Build
+  needs: ["Build"]
   allow_failure: false
   script:
     - gradle spotlessCheck
 
-Package Uber jdk17:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+Package:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: post-build
   dependencies:
-    - Build jdk17
-  needs: ["Build jdk17"]
+    - Build
+  needs: ["Build"]
   allow_failure: false
   script:
     - gradle shadowjar
@@ -50,8 +50,8 @@ Package Uber jdk17:
 .unit_test_template: &unit_test_definition
   stage: test
   dependencies: 
-    - Build jdk17
-  needs: ["Build jdk17"]
+    - Build
+  needs: ["Build"]
   script:
     - gradle test jacocoAggregatedTestReport
     - awk -F","
@@ -68,12 +68,12 @@ Package Uber jdk17:
       - languages/build/montiarc/reports/test-coverage/jacoco.xml
     when: always
 
-Unit Test jdk17:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+Unit Test:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   allow_failure: false
   <<: *unit_test_definition
 
-Test Coverage jdk17:
+Test Coverage:
   stage: post-test
   image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
   script:
@@ -90,8 +90,8 @@ Test Coverage jdk17:
       languages/montiarc/main/java/
       > languages/build/montiarc/reports/test-coverage/cobertura.xml
   dependencies:
-    - Unit Test jdk17
-  needs: ["Unit Test jdk17"]
+    - Unit Test
+  needs: ["Unit Test"]
   artifacts:
     reports:
       coverage_report:
@@ -99,10 +99,10 @@ Test Coverage jdk17:
         path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.5.0-jdk17
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
   stage: post-test
   dependencies:
-    - Build jdk17 #download artifacts from build
+    - Build #download artifacts from build
   script:
     - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user
   rules:
