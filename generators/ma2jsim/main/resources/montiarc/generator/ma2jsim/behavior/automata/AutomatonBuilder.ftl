@@ -13,7 +13,7 @@ ${tc.signature("isTop")}
 public ${MODIFIER} class ${CLASS} extends ${SUPER} {
 
 <#-- Constructors -->
-${CONTEXT} context,
+public ${CLASS}(${CONTEXT} context,
     java.util.List${"<"}montiarc.rte.automaton.State${">"} states<#if !isEvent>,
     java.util.List${"<"}montiarc.rte.automaton.Transition${">"} transitions
   </#if>) {

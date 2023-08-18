@@ -32,7 +32,7 @@ public abstract class Automaton<C> {
   /**
    * @return the current state of the state machine
    */
-  protected State getState() {
+  public State getState() {
     return this.state;
   }
   
