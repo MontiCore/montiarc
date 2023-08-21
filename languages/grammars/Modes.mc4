@@ -18,6 +18,6 @@ component grammar Modes extends ArcBasis, de.monticore.SCBasis {
       SCStatechartElement*
     "}";
 
-  symbol scope ArcMode implements ArcElement, SCStatechartElement =
+  symbol scope ArcMode extends SCState =
       SCModifier "mode" Name body:ComponentBody;
 }

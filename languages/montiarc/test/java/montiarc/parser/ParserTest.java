@@ -67,7 +67,7 @@ public class ParserTest extends MontiArcAbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc"})
+  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc", "ModeAutomataSyntax.arc"})
   public void shouldParseWithoutError(String fileName) {
     parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false);
   }
@@ -88,7 +88,7 @@ public class ParserTest extends MontiArcAbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc"})
+  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc", "ModeAutomataSyntax.arc"})
   public void shouldPrintWithoutError(String fileName) {
     ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElseThrow();
     String s = MontiArcMill.prettyPrint(unit, true);

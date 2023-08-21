@@ -73,7 +73,16 @@ public class MaxOneInitialStateTest extends MontiArcAbstractTest {
       "initial state s2; " +
       "} " +
       "} " +
-      "}"
+      "}",
+    // mode automaton no states
+    "component Comp8 {" +
+      "mode automaton { } " +
+      "}",
+    // mode automaton and automaton no states
+    "component Comp9 {" +
+      "mode automaton { } " +
+      "automaton { } " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -101,7 +110,7 @@ public class MaxOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new MaxOneInitialState());
+    checker.addCoCo(new MaxOneInitialState(MontiArcMill.inheritanceTraverser()));
 
     // When
     checker.checkAll(ast);
@@ -131,6 +140,24 @@ public class MaxOneInitialStateTest extends MontiArcAbstractTest {
           "} " +
           "} " +
         "}",
+        SCError.MORE_THAN_ONE_INITIAL_STATE),
+      // mode automaton with two initial state
+      arg("component Comp3 { " +
+          "mode automaton { " +
+          "initial mode s1 { } " +
+          "initial mode s2 { } " +
+          "} " +
+          "}",
+        SCError.MORE_THAN_ONE_INITIAL_STATE),
+      // mode automaton with two initial state and automaton
+      arg("component Comp4 { " +
+          "mode automaton { " +
+          "initial mode s1 { } " +
+          "initial mode s2 { } " +
+          "} " +
+          "automaton { " +
+          "} " +
+          "}",
         SCError.MORE_THAN_ONE_INITIAL_STATE)
     );
   }

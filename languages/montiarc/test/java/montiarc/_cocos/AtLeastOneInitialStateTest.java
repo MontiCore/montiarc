@@ -42,13 +42,20 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
       "} " +
       "}",
     // inner automaton with initial states
-    "component Comp3 { " +
+    "component Comp4 { " +
       "component Inner { " +
       "automaton { " +
       "initial state s; " +
       "} " +
       "} " +
-      "}"
+      "}",
+    //
+    // mode automaton with initial state
+    "component Comp5 { " +
+      "mode automaton { " +
+      "initial mode s { } " +
+      "} " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -57,7 +64,7 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new AtLeastOneInitialState());
+    checker.addCoCo(new AtLeastOneInitialState(MontiArcMill.inheritanceTraverser()));
 
     // When
     checker.checkAll(ast);
@@ -76,7 +83,7 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new AtLeastOneInitialState());
+    checker.addCoCo(new AtLeastOneInitialState(MontiArcMill.inheritanceTraverser()));
 
     // When
     checker.checkAll(ast);
@@ -120,8 +127,28 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
           "automaton { } " +
           "} " +
           "}",
+        SCError.NO_INITIAL_STATE),
+      // mode automaton no initial state
+      arg("component Comp5 { " +
+          "mode automaton { } " +
+          "}",
+        SCError.NO_INITIAL_STATE),
+      // mode automaton no initial state and automaton
+      arg("component Comp6 { " +
+          "mode automaton { } " +
+          "automaton { " +
+          "initial state s; " +
+          "} "+
+          "}",
+        SCError.NO_INITIAL_STATE),
+      // automaton no initial state and mode automaton
+      arg("component Comp7 { " +
+          "automaton { } " +
+          "mode automaton { " +
+          "initial mode s { } " +
+          "} "+
+          "}",
         SCError.NO_INITIAL_STATE)
-      //
     );
   }
 }

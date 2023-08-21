@@ -5,7 +5,6 @@ import arcautomaton._cocos.StateNameIsNoReservedKeyword;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
-import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
@@ -81,6 +80,8 @@ public class StateNameIsNoReservedKeywordTest extends MontiArcAbstractTest {
         ArcError.RESTRICTED_IDENTIFIER),
       arg("component Comp3 { automaton { state key; state key; } }",
         ArcError.RESTRICTED_IDENTIFIER,
+        ArcError.RESTRICTED_IDENTIFIER),
+      arg("component Comp4 { mode automaton { mode word { } } }",
         ArcError.RESTRICTED_IDENTIFIER)
     );
   }

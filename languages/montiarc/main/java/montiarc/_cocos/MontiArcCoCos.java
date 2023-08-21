@@ -55,6 +55,7 @@ import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
 import genericarc._cocos.ComponentHeritageRawType;
 import genericarc._cocos.SubcomponentRawType;
+import montiarc.MontiArcMill;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcTypeCalculator;
 import variablearc._cocos.ConstraintIsBoolean;
@@ -139,15 +140,15 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfIsBoolean(tc, tr));
 
     // SCBasis, SCActions, and SCTransitions4Code CoCos
-    checker.addCoCo(new UniqueStates());
+    checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new TransitionPreconditionsAreBoolean(tc));
-    checker.addCoCo(new AtLeastOneInitialState());
+    checker.addCoCo(new AtLeastOneInitialState(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new AnteBlocksOnlyForInitialStates());
 
     // ArcAutomaton CoCos
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
-    checker.addCoCo(new MaxOneInitialState());
+    checker.addCoCo(new MaxOneInitialState(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new NoEventsInSyncAutomata());
     checker.addCoCo(new NoTickEventInUntimedAutomata());
 
