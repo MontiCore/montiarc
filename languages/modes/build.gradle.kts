@@ -32,3 +32,9 @@ dependencies {
 }
 
 configureMCTask("Modes.mc4")
+
+java.sourceSets["main"].java.srcDirs(tasks.getByName<de.monticore.MCTask>("grammar").outputDir)
+
+java.registerFeature("tests") {
+  usingSourceSet(sourceSets.getByName("test"))
+}

@@ -8,14 +8,11 @@ package montiarc.util;
  * Assigned code range: 0xC1350 - 0xC1399
  */
 public enum ModesError implements Error {
-  INSTANCE_NAME_NOT_UNIQUE_IN_MODE("0xC1350", "There are multiple subcomponents named '%s' in mode '%s'."),
-  COMPONENT_NAME_NOT_UNIQUE_IN_MODE("0xC1351", "There are multiple components named '%s' in mode '%s'."),
-  PORT_NAME_NOT_UNIQUE_IN_MODE("0xC1352", "There are multiple ports named '%s' in mode '%s'."),
-  HIERARCHICAL_MODE_ELEMENTS("0xC1353", "Hierarchical modes are not allowed."),
-  MULTIPLE_MODE_AUTOMATA("0xC1354", "Components may only have one mode-automaton at max."),
-  MODES_WITHOUT_AUTOMATON("0xC1355", "The component '%s' defines modes, but no mode-automaton."),
-  MODE_ELEMENTS_IN_ATOMIC_COMPONENTS("0xC1356", "Atomic components may not define modes and mode automata."),
-  INITIAL_MODE_DOES_NOT_EXIST("0xC1357", "The initial mode '%s' is not defined anywhere in the component '%s'.");
+  MULTIPLE_MODE_AUTOMATA("0xC1350", "Components may only have one mode-automaton at max."),
+  MODE_AUTOMATON_IN_ATOMIC_COMPONENT("0xC1351", "Atomic components may not define modes and mode automata."),
+  MODE_AUTOMATON_CONTAINS_STATE("0xC1352", "Mode automata cannot define states only modes"),
+  STATECHART_CONTAINS_MODE("0xC1353", "The behavior statechart cannot define modes"),
+  MODE_CONTAINS_PORT_DEFINITION("0xC1354", "Port '%s' cannot be defined in mode");
 
   private final String errorCode;
   private final String errorMessage;

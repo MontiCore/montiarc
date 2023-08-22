@@ -55,6 +55,11 @@ import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
 import genericarc._cocos.ComponentHeritageRawType;
 import genericarc._cocos.SubcomponentRawType;
+import modes._cocos.MaxOneModeAutomaton;
+import modes._cocos.ModeAutomatonContainsNoStates;
+import modes._cocos.ModeAutomataInDecomposedComponent;
+import modes._cocos.ModeOmitPortDefinition;
+import modes._cocos.StatechartContainsNoMode;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc.check.MontiArcTypeCalculator;
@@ -138,6 +143,13 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences());
     checker.addCoCo(new VarIfIsBoolean(tc, tr));
+
+    // Modes
+    checker.addCoCo(new MaxOneModeAutomaton());
+    checker.addCoCo(new ModeAutomatonContainsNoStates());
+    checker.addCoCo(new ModeAutomataInDecomposedComponent());
+    checker.addCoCo(new ModeOmitPortDefinition());
+    checker.addCoCo(new StatechartContainsNoMode());
 
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));

@@ -78,8 +78,13 @@ Legend:
 
 # Mode Automata
 
-| in MA | CoCo(s)                   | Language          | Code                      | Notes |
-|-------|---------------------------|-------------------|---------------------------|-------|
+| in MA | CoCo(s)                           | Language | Code    | Notes |
+|-------|-----------------------------------|----------|---------|-------|
+| ☑     | MaxOneModeAutomaton               | Modes    | 0xC1350 |       |
+| ☑     | ModeAutomataInDecomposedComponent | Modes    | 0xC1351 |       |
+| ☑     | ModeAutomatonContainsNoStates     | Modes    | 0xC1352 |       |
+| ☑     | StatechartContainsNoModes         | Modes    | 0xC1353 |       |
+| ☑     | ModeOmitPortDefinition            | Modes    | 0xC1354 |       |
 
 ## Automaton CoCos
 
