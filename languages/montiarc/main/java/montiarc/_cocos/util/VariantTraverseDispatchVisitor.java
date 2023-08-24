@@ -1,17 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variablearc._cocos.util;
+package montiarc._cocos.util;
 
 import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import montiarc._symboltable.MontiArcComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
-import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariableComponentTypeSymbol;
-import variablearc._symboltable.VariantComponentTypeSymbol;
 import variablearc._visitor.VariableArcTraverser;
-import variablearc.evaluation.expressions.Expression;
 
 import java.util.List;
 
@@ -32,18 +29,19 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
     Preconditions.checkNotNull(node);
     if (!node.isPresentSymbol()) return;
 
-    if (!(node.getSymbol() instanceof VariableComponentTypeSymbol) ||
-      ((VariableComponentTypeSymbol) node.getSymbol()).getVariants().isEmpty()) {
+    if (!(node.getSymbol() instanceof MontiArcComponentTypeSymbol) ||
+      ((MontiArcComponentTypeSymbol) node.getSymbol()).getVariants().isEmpty()) {
       // Fallback so it is still traversed (in the context of cocos this means the component is still checked)
       node.accept(traverser);
     }
 
-    List<VariantComponentTypeSymbol> variants = ((VariableComponentTypeSymbol) node.getSymbol()).getVariants();
-    for (VariantComponentTypeSymbol variant : variants) {
+    List<? extends ComponentTypeSymbol> variants = ((MontiArcComponentTypeSymbol) node.getSymbol()).getVariants();
+    for (ComponentTypeSymbol variant : variants) {
       long findings = Log.getFindingsCount();
       variant.getAstNode().accept(traverser);
-      if (findings != Log.getFindingsCount() && variants.size() > 1) {
-        Log.info("Error in variant (" + variant.getIncludedVariationPoints().stream().map(VariableArcVariationPoint::getCondition).map(Expression::print).reduce((a, b) -> a + ", " + b).orElse("") + ")", "↳ Variability");
+      findings = Log.getFindingsCount() - findings;
+      if (findings > 0 && variants.size() > 1) {
+        Log.info(findings + " Error" + (findings > 1 ? "s" : "") + " in " + variant, "↳");
       }
     }
   }

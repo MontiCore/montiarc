@@ -16,7 +16,7 @@ import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc._symboltable.VariableComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.Collections;
@@ -37,29 +37,29 @@ public class SubcomponentsConstraint implements ArcBasisASTComponentTypeCoCo {
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    if (!(node.getSymbol() instanceof VariableComponentTypeSymbol)) return;
+    if (!(node.getSymbol() instanceof IVariableArcComponentTypeSymbol)) return;
 
-    VariableComponentTypeSymbol componentTypeSymbol = (VariableComponentTypeSymbol) node.getSymbol();
+    IVariableArcComponentTypeSymbol componentTypeSymbol = (IVariableArcComponentTypeSymbol) node.getSymbol();
 
     ExpressionSolver solver = new ExpressionSolver();
-    Optional<Expr<BoolSort>> eval = solver.convert(componentTypeSymbol.getConditions())
+    Optional<Expr<BoolSort>> eval = solver.convert(componentTypeSymbol.getConstraints())
       .map(boolExprs -> solver.getContext().mkAnd(boolExprs).substitute(
-        componentTypeSymbol.getSubComponents().stream()
+        componentTypeSymbol.getTypeInfo().getSubComponents().stream()
           .flatMap(instance -> getFeaturesOfInstance(instance).stream()
             .map(feature -> solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName()))
           ).toArray(BoolExpr[]::new),
-        componentTypeSymbol.getSubComponents().stream()
+        componentTypeSymbol.getTypeInfo().getSubComponents().stream()
           .flatMap(instance -> getFeaturesOfInstance(instance).stream()
             .map(feature -> solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__"))
           ).toArray(BoolExpr[]::new)
       ));
 
-    Optional<Solver> smtSolver = solver.getSolver(componentTypeSymbol.getConditions());
+    Optional<Solver> smtSolver = solver.getSolver(componentTypeSymbol.getConstraints());
     if (smtSolver.isPresent() && eval.isPresent()) {
       smtSolver.get().add(eval.get());
       smtSolver.get().add(
         solver.getContext().mkOr(
-          componentTypeSymbol.getSubComponents().stream()
+          componentTypeSymbol.getTypeInfo().getSubComponents().stream()
             .flatMap(instance -> getFeaturesOfInstance(instance).stream().map(feature -> solver.getContext().mkNot(
                 solver.getContext().mkEq(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName()),
                   solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__"))
@@ -72,7 +72,7 @@ public class SubcomponentsConstraint implements ArcBasisASTComponentTypeCoCo {
       if (result) {
         // Collect which features caused this error (the list might not be complete)
         Model model = smtSolver.get().getModel();
-        List<String> causingFeatures = componentTypeSymbol.getSubComponents().stream()
+        List<String> causingFeatures = componentTypeSymbol.getTypeInfo().getSubComponents().stream()
           .flatMap(instance -> getFeaturesOfInstance(instance).stream().filter(feature ->
             model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName())).getBoolValue()
               != model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__")).getBoolValue()

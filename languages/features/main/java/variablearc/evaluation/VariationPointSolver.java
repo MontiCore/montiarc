@@ -7,8 +7,8 @@ import com.google.common.collect.Sets;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariableComponentTypeSymbol;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.*;
@@ -21,10 +21,10 @@ import java.util.stream.Collectors;
 public class VariationPointSolver {
 
   protected static final boolean INCLUDE_INCONVERTIBLE_VARIATIONS = true;
-  protected final VariableComponentTypeSymbol origin;
+  protected final IVariableArcComponentTypeSymbol origin;
   protected final ExpressionSolver expressionSolver;
 
-  public VariationPointSolver(@NotNull VariableComponentTypeSymbol origin) {
+  public VariationPointSolver(@NotNull IVariableArcComponentTypeSymbol origin) {
     Preconditions.checkNotNull(origin);
 
     this.origin = origin;
@@ -36,14 +36,14 @@ public class VariationPointSolver {
    *
    * @return Set of immutable sets of variation points
    */
-  public Set<Set<VariableArcVariationPoint>> getCombinations(@Nullable VariantComponentTypeSymbol parentVariant) {
+  public Set<Set<VariableArcVariationPoint>> getCombinations(@Nullable VariableArcVariantComponentTypeSymbol parentVariant) {
 
     Set<Set<VariableArcVariationPoint>> res =
       new HashSet<>(Sets.powerSet(ImmutableSet.copyOf(origin.getAllVariationPoints())));
     res.removeIf(
       includedVPs -> {
         ExpressionSet expressions = getConditionsForVariationPoints(includedVPs);
-        expressions.add(origin.getConditions());
+        expressions.add(origin.getConstraints());
         if (parentVariant != null) expressions.add(parentVariant.getConditions());
         return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
       });
@@ -59,21 +59,21 @@ public class VariationPointSolver {
    * @param originConfiguration provided configuration for the origin component.
    * @return Set of immutable sets of variation points.
    */
-  public List<VariantComponentTypeSymbol> getSubComponentVariants(@NotNull VariableComponentTypeSymbol type,
-                                                                  @NotNull String prefix,
-                                                                  @NotNull Set<VariableArcVariationPoint> originConfiguration,
-                                                                  @Nullable VariantComponentTypeSymbol originParentVariant) {
+  public List<VariableArcVariantComponentTypeSymbol> getSubComponentVariants(@NotNull IVariableArcComponentTypeSymbol type,
+                                                                             @NotNull String prefix,
+                                                                             @NotNull Set<VariableArcVariationPoint> originConfiguration,
+                                                                             @Nullable VariableArcVariantComponentTypeSymbol originParentVariant) {
     Preconditions.checkNotNull(type);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(originConfiguration);
 
-    List<VariantComponentTypeSymbol> res =
-      new ArrayList<>(type.getVariants());
+    List<VariableArcVariantComponentTypeSymbol> res =
+      new ArrayList<>(type.getVariableArcVariants());
     res.removeIf(
       variant -> {
         ExpressionSet expressions = variant.getConditions().copyAddPrefix(prefix);
         expressions.add(getConditionsForVariationPoints(originConfiguration));
-        expressions.add(origin.getConditions());
+        expressions.add(origin.getConstraints());
         if (originParentVariant != null) expressions.add(originParentVariant.getConditions());
         return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
       });

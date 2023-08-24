@@ -7,16 +7,14 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc._symboltable.VariableComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc.evaluation.expressions.AssignmentExpression;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Converts a component's constraints into solvable SAT formulas.
@@ -29,19 +27,18 @@ public class ComponentConverter {
 
   /**
    * @param componentTypeSymbol the component which constraints are calculated
-   * @param visited already visited components (used to detect circles)
+   * @param visited             already visited components (used to detect circles)
    * @return the expression set of all the component's constraints
    */
-  public ExpressionSet convert(@NotNull VariableComponentTypeSymbol componentTypeSymbol, @NotNull Collection<ComponentTypeSymbol> visited) {
+  public ExpressionSet convert(@NotNull IVariableArcComponentTypeSymbol componentTypeSymbol, @NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(componentTypeSymbol);
     Preconditions.checkNotNull(visited);
-    visited.add(componentTypeSymbol);
 
     // convert constraints
-    ExpressionSet expressionSet = componentTypeSymbol.getConstraints().copy();
+    ExpressionSet expressionSet = componentTypeSymbol.getLocalConstraints().copy();
 
     // convert subcomponents
-    for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getSubComponents()) {
+    for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getTypeInfo().getSubComponents()) {
       if (instanceSymbol.isPresentType() && !visited.contains(instanceSymbol.getType().getTypeInfo())) {
         expressionSet.add(convert(instanceSymbol, instanceSymbol.getName(), visited));
       }
@@ -70,7 +67,7 @@ public class ComponentConverter {
     }
     // add constraints
     ExpressionSet expressionSet = new ExpressionSet(expressions);
-    expressionSet.add(((VariableComponentTypeSymbol) componentInstanceSymbol.getType().getTypeInfo()).getConditions(visited)
+    expressionSet.add(((IVariableArcComponentTypeSymbol) componentInstanceSymbol.getType().getTypeInfo()).getConstraints(visited)
       .copyAddPrefix(prefix));
 
     return expressionSet;

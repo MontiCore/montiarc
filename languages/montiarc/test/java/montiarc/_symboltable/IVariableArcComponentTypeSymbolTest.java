@@ -4,7 +4,6 @@ package montiarc._symboltable;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -20,8 +19,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariableComponentTypeSymbol;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
@@ -31,12 +30,12 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Tests for {@link VariableComponentTypeSymbol}
+ * Tests for {@link IVariableArcComponentTypeSymbol}
  * Focuses on giving back the correct number of Variants (including subcomponent expansion)
  */
-public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
+public class IVariableArcComponentTypeSymbolTest extends MontiArcAbstractTest {
 
-  protected static VariableComponentTypeSymbol createComponentWithVariationPoints(
+  protected static IVariableArcComponentTypeSymbol createComponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints) {
     IMontiArcScope scope = MontiArcMill.scope();
 
@@ -58,27 +57,27 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
     Mockito.when(astComponentType.getBody())
       .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
 
-    VariableComponentTypeSymbol typeSymbol =
-      (VariableComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
+    IVariableArcComponentTypeSymbol typeSymbol =
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
         .setSpannedScope(scope)
         .setAstNode(astComponentType)
         .build();
 
-    typeSymbol.addParameters(scope.getLocalVariableSymbols());
+    typeSymbol.getTypeInfo().addParameters(scope.getLocalVariableSymbols());
 
     variationPoints.forEach(typeSymbol::add);
 
     return typeSymbol;
   }
 
-  protected static VariableComponentTypeSymbol createComponentWithSubcomponents(
+  protected static IVariableArcComponentTypeSymbol createComponentWithSubcomponents(
     List<VariableArcVariationPoint> variationPoints, List<ComponentInstanceSymbol> subcomponents) {
-    VariableComponentTypeSymbol component = createComponentWithVariationPoints(variationPoints);
+    IVariableArcComponentTypeSymbol component = createComponentWithVariationPoints(variationPoints);
     ASTExpressionSetEnclosingScope scopeSetter = new ASTExpressionSetEnclosingScope(
-      (IMontiArcScope) component.getSpannedScope());
+      (IMontiArcScope) component.getTypeInfo().getSpannedScope());
 
     for (ComponentInstanceSymbol subcomponent : subcomponents) {
-      component.getSpannedScope().add(subcomponent);
+      component.getTypeInfo().getSpannedScope().add(subcomponent);
       subcomponent.getType().bindParams();
       subcomponent.getType().getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
     }
@@ -86,14 +85,14 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
     return component;
   }
 
-  protected static VariableComponentTypeSymbol createComponentWithSubcomponentsAndAddFirstToFirstVP(
+  protected static IVariableArcComponentTypeSymbol createComponentWithSubcomponentsAndAddFirstToFirstVP(
     List<VariableArcVariationPoint> variationPoints, List<ComponentInstanceSymbol> subcomponents) {
-    VariableComponentTypeSymbol component = createComponentWithVariationPoints(variationPoints);
+    IVariableArcComponentTypeSymbol component = createComponentWithVariationPoints(variationPoints);
     ASTExpressionSetEnclosingScope scopeSetter = new ASTExpressionSetEnclosingScope(
-      (IMontiArcScope) component.getSpannedScope());
+      (IMontiArcScope) component.getTypeInfo().getSpannedScope());
 
     for (ComponentInstanceSymbol subcomponent : subcomponents) {
-      component.getSpannedScope().add(subcomponent);
+      component.getTypeInfo().getSpannedScope().add(subcomponent);
       subcomponent.getType().bindParams();
       subcomponent.getType().getArcArguments().forEach(arg -> scopeSetter.setEnclosingScope(arg.getExpression()));
     }
@@ -103,10 +102,10 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
     return component;
   }
 
-  protected static ComponentInstanceSymbol createInstance(String name, ComponentTypeSymbol type,
+  protected static ComponentInstanceSymbol createInstance(String name, IVariableArcComponentTypeSymbol type,
                                                           List<ASTArcArgument> arguments) {
     return MontiArcMill.componentInstanceSymbolBuilder().setName(name)
-      .setType(new TypeExprOfComponent(type)).setArcArguments(new ArrayList<>(arguments)).build();
+      .setType(new TypeExprOfComponent(type.getTypeInfo())).setArcArguments(new ArrayList<>(arguments)).build();
   }
 
   protected static ASTExpression getNumberLiteral(int n) {
@@ -153,69 +152,69 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
     return Stream.of(
       // 1: No variation points -> 1 variant
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(Collections.emptyList()),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(Collections.emptyList()),
         1),
       // 2: Always false variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpFalse)),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpFalse)),
         1),
       // 3: Always true variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue)),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue)),
         1),
       // 4: Satisfiable variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpA)),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpA)),
         2),
       // 5: Combination of satisfiable and always included variation point
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue, vpA)),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue, vpA)),
         2),
       // 6: Always false variation point with always true child variation point
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(
           List.of(vpFalseParent, vpTrueChild)),
         1),
       // 7: Satisfiable integer condition
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpPIntGreater0)),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpPIntGreater0)),
         2),
       // 8: Implicit dependency i>1 always requires i>0
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(
           List.of(vpPIntGreater0, vpPIntGreater1)),
         3),
       // 9: Component with subcomponent (both without variants)
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponents(
           Collections.emptyList(), List.of(
             createInstance("i", createComponentWithVariationPoints(Collections.emptyList()),
               List.of(aArgument, pIntArgument)))),
         1),
       // 10: Component with subcomponent (with subcomponent variants)
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponents(
           Collections.emptyList(), List.of(
             createInstance("i", createComponentWithVariationPoints(List.of(vpA)), List.of(aArgument, pIntArgument)))),
         2),
       // 11: Component with subcomponent (both with variants)
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponents(
           List.of(vpPIntGreater0), List.of(
             createInstance("i", createComponentWithVariationPoints(List.of(vpA)), List.of(aArgument, pIntArgument)))),
         4),
       // 12: Component with subcomponent (both with same variation point condition)
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponents(
           List.of(vpA), List.of(
             createInstance("i", createComponentWithVariationPoints(List.of(vpA2)),
               List.of(aArgument, pIntArgument)))),
         2),
       // 13: Component with subcomponent (both with connected variants)
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponents(
           List.of(vpPIntGreater0), List.of(
             createInstance("i", createComponentWithVariationPoints(List.of(vpPIntGreater1)),
               List.of(aArgument, pIntArgument)))),
         3),
       // 14: Component with subcomponent (both with variants and subcomponent inside parent variant)
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponentsAndAddFirstToFirstVP(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponentsAndAddFirstToFirstVP(
           List.of(vpPIntGreater0), List.of(
             createInstance("i", createComponentWithVariationPoints(List.of(vpA)), List.of(aArgument, pIntArgument)))),
         3),
       // 15: Component with subcomponent that has no variation points but a subcomponent with one
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithSubcomponents(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithSubcomponents(
           Collections.emptyList(), List.of(
             createInstance("i", createComponentWithSubcomponents(Collections.emptyList(),
                 Collections.singletonList(
@@ -227,12 +226,12 @@ public class VariableComponentTypeSymbolTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("provideComponentAndExpectedNumberOfVariants")
-  public void getOriginVariationPoints(@NotNull Supplier<VariableComponentTypeSymbol> typeSymbol,
+  public void getOriginVariationPoints(@NotNull Supplier<IVariableArcComponentTypeSymbol> typeSymbol,
                                        @NotNull int expectedNumberOfVariants) {
     Preconditions.checkNotNull(typeSymbol);
 
     // When
-    List<VariantComponentTypeSymbol> variants = typeSymbol.get().getVariants();
+    List<VariableArcVariantComponentTypeSymbol> variants = typeSymbol.get().getVariableArcVariants();
 
     // Then
     Assertions.assertEquals(expectedNumberOfVariants, variants.size());

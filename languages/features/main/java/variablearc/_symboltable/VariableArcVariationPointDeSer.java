@@ -68,7 +68,7 @@ public class VariableArcVariationPointDeSer {
    * @param json      the component which owns the variation points, encoded as JSON.
    * @return the deserialized variation point
    */
-  public VariableArcVariationPoint deserialize(@NotNull VariableComponentTypeSymbol component, @NotNull JsonObject json) {
+  public VariableArcVariationPoint deserialize(@NotNull IVariableArcComponentTypeSymbol component, @NotNull JsonObject json) {
     Preconditions.checkNotNull(component);
     Preconditions.checkNotNull(json);
     return deserialize(component, json, null);
@@ -80,20 +80,20 @@ public class VariableArcVariationPointDeSer {
    * @param parent    the parent variation point of the variation point that is serialized (can be null)
    * @return the deserialized variation point
    */
-  public VariableArcVariationPoint deserialize(@NotNull VariableComponentTypeSymbol component, @NotNull JsonObject json, @Nullable VariableArcVariationPoint parent) {
+  public VariableArcVariationPoint deserialize(@NotNull IVariableArcComponentTypeSymbol component, @NotNull JsonObject json, @Nullable VariableArcVariationPoint parent) {
     Preconditions.checkNotNull(component);
     Preconditions.checkNotNull(json);
 
     String expressionJson = json.getStringMember(EXPRESSION);
     Optional<ASTExpression> expression = parseExpression.apply(expressionJson);
-    TransitiveNameExpressionScopeSetter scopeSetter = new TransitiveNameExpressionScopeSetter(component.getSpannedScope());
+    TransitiveNameExpressionScopeSetter scopeSetter = new TransitiveNameExpressionScopeSetter(component.getTypeInfo().getSpannedScope());
     expression.ifPresent(scopeSetter::set);
 
     if (expression.isEmpty()) {
       Log.error(String.format(
         "Could not deserialize variation point expression '%s' of component '%s'",
         expressionJson,
-        component.getName()
+        component.getTypeInfo().getName()
       ));
       return null;
     }
@@ -115,7 +115,7 @@ public class VariableArcVariationPointDeSer {
    * @param variationPoint the variation point this symbol is part of.
    * @param json           the symbol encoded as json.
    */
-  protected void deserializeSymbol(@NotNull VariableComponentTypeSymbol component, @NotNull VariableArcVariationPoint variationPoint, @NotNull JsonElement json) {
+  protected void deserializeSymbol(@NotNull IVariableArcComponentTypeSymbol component, @NotNull VariableArcVariationPoint variationPoint, @NotNull JsonElement json) {
     Preconditions.checkNotNull(component);
     Preconditions.checkNotNull(variationPoint);
     Preconditions.checkNotNull(json);
@@ -124,7 +124,7 @@ public class VariableArcVariationPointDeSer {
     ISymbolDeSer<?, ?> deSer = ArcBasisMill.globalScope().getSymbolDeSer(symbolKind);
     ISymbol symbol = deSer.deserialize(json.getAsJsonObject());
 
-    ScopeAddSymbolVisitor visitor = new ScopeAddSymbolVisitor((IVariableArcScope) component.getSpannedScope());
+    ScopeAddSymbolVisitor visitor = new ScopeAddSymbolVisitor((IVariableArcScope) component.getTypeInfo().getSpannedScope());
     VariableArcTraverser traverser = VariableArcMill.traverser();
     traverser.add4ArcBasis(visitor);
 

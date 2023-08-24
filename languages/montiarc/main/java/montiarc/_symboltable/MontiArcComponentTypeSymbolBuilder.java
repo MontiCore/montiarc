@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variablearc._symboltable;
+package montiarc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolBuilder;
 import com.google.common.base.Preconditions;
 
-public class VariableArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilder {
+public class MontiArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilder {
 
   @Override
   public ComponentTypeSymbol build() {
@@ -13,7 +13,7 @@ public class VariableArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBu
       Preconditions.checkState(this.getName() != null);
       Preconditions.checkState(this.getSpannedScope() != null);
     }
-    ComponentTypeSymbol symbol = new VariableArcComponentTypeSymbol(name);
+    ComponentTypeSymbol symbol = new MontiArcComponentTypeSymbol(name);
     symbol.setFullName(this.fullName);
     symbol.setPackageName(this.packageName);
     if (this.astNode.isPresent()) {

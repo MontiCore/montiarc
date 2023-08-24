@@ -23,8 +23,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariableComponentTypeSymbol;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc.evaluation.expressions.Expression;
 import variablearc.evaluation.VariationPointSolver;
 
@@ -45,7 +45,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
   protected static final String originComponentTypeName = "C";
   protected static final String childComponentName = "child";
 
-  protected static VariableComponentTypeSymbol createComponentWithVariationPoints(
+  protected static IVariableArcComponentTypeSymbol createComponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints) {
     IMontiArcScope scope = MontiArcMill.scope();
 
@@ -67,8 +67,8 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     Mockito.when(astComponentType.getBody())
       .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
 
-    VariableComponentTypeSymbol typeSymbol =
-      (VariableComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
+    IVariableArcComponentTypeSymbol typeSymbol =
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
         .setAstNode(astComponentType)
         .build();
@@ -78,7 +78,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     return typeSymbol;
   }
 
-  protected static VariableComponentTypeSymbol createSubcomponentWithVariationPoints(
+  protected static IVariableArcComponentTypeSymbol createSubcomponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints, List<ASTArcArgument> bindings) {
     // Mock ast component used by both
     ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
@@ -97,23 +97,23 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     scope.add(parameter);
     bindings.forEach(e -> e.getExpression().setEnclosingScope(scope));
 
-    VariableComponentTypeSymbol typeSymbol =
-      (VariableComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
+    IVariableArcComponentTypeSymbol typeSymbol =
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
         .setAstNode(astComponentType)
         .build();
-    typeSymbol.addParameter(parameter);
+    typeSymbol.getTypeInfo().addParameter(parameter);
     variationPoints.forEach(typeSymbol::add);
 
     // Parent setup
     IVariableArcScope parentScope = MontiArcMill.scope();
     ComponentInstanceSymbol instanceSymbol =
       MontiArcMill.componentInstanceSymbolBuilder().setName(childComponentName)
-        .setType(new TypeExprOfComponent(typeSymbol)).setArcArguments(bindings).build();
+        .setType(new TypeExprOfComponent(typeSymbol.getTypeInfo())).setArcArguments(bindings).build();
     instanceSymbol.getType().bindParams();
     parentScope.add(instanceSymbol);
 
-    return (VariableComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
+    return (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
       .setSpannedScope(parentScope)
       .setAstNode(astComponentType)
       .build();
@@ -130,8 +130,8 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
     Mockito.when(astComponentType.getBody())
       .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
-    VariableComponentTypeSymbol typeSymbol =
-      (VariableComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
+    IVariableArcComponentTypeSymbol typeSymbol =
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
         .setSpannedScope(MontiArcMill.scope())
         .setAstNode(astComponentType).build();
 
@@ -146,7 +146,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("provideComponentAndExpectedVariationPoints")
-  public void getOriginVariationPoints(@NotNull Supplier<VariableComponentTypeSymbol> typeSymbol,
+  public void getOriginVariationPoints(@NotNull Supplier<IVariableArcComponentTypeSymbol> typeSymbol,
                                        @NotNull Set<Set<VariableArcVariationPoint>> expected) {
     Preconditions.checkNotNull(typeSymbol);
     Preconditions.checkNotNull(expected);
@@ -199,32 +199,32 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     return Stream.of(
       // 1: No variation points -> only empty set
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(Collections.emptyList()),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(Collections.emptyList()),
         Set.of(Collections.emptySet())),
       // 2: Always false variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpFalse)),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpFalse)),
         Set.of(Collections.emptySet())),
       // 3: Always true variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue)),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue)),
         Set.of(Set.of(vpTrue))),
       // 4: Satisfiable variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpA)),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpA)),
         Set.of(Collections.emptySet(), Set.of(vpA))),
       // 5: Combination of satisfiable and always included variation point
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue, vpA)),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpTrue, vpA)),
         Set.of(Set.of(vpTrue), Set.of(vpTrue, vpA))),
       // 6: Always false variation point with always true child variation point
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(
           List.of(vpFalseParent, vpTrueChild)),
         Set.of(Collections.emptySet())),
       // 7: Satisfiable integer condition
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpPIntGreater0)),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(List.of(vpPIntGreater0)),
         Set.of(Collections.emptySet(), Set.of(vpPIntGreater0))),
       // 8: Implicit dependency i>1 always requires i>0
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createComponentWithVariationPoints(
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createComponentWithVariationPoints(
           List.of(vpPIntGreater0, vpPIntGreater1)),
         Set.of(Collections.emptySet(), Set.of(vpPIntGreater0), Set.of(vpPIntGreater0, vpPIntGreater1)))
     );
@@ -232,22 +232,22 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("provideSubcomponentAndExpectedVariationPoints")
-  public void getSubVariationPoints(@NotNull Supplier<VariableComponentTypeSymbol> origin,
+  public void getSubVariationPoints(@NotNull Supplier<IVariableArcComponentTypeSymbol> origin,
                                     @NotNull Set<Set<VariableArcVariationPoint>> expected) {
     Preconditions.checkNotNull(origin);
     Preconditions.checkNotNull(expected);
-    VariableComponentTypeSymbol originSymbol = origin.get();
+    IVariableArcComponentTypeSymbol originSymbol = origin.get();
     Preconditions.checkNotNull(originSymbol);
-    Preconditions.checkState(originSymbol.getSubComponent(childComponentName).isPresent());
+    Preconditions.checkState(originSymbol.getTypeInfo().getSubComponent(childComponentName).isPresent());
     // Given
     VariationPointSolver variationPointSolver = new VariationPointSolver(originSymbol);
 
     // When
     Set<Set<VariableArcVariationPoint>> actual =
       variationPointSolver.getSubComponentVariants(
-        (VariableComponentTypeSymbol) originSymbol.getSubComponent(childComponentName).get().getType().getTypeInfo(),
+        (IVariableArcComponentTypeSymbol) originSymbol.getTypeInfo().getSubComponent(childComponentName).get().getType().getTypeInfo(),
         childComponentName, new HashSet<>(originSymbol.getAllVariationPoints()), null).stream().map(
-        VariantComponentTypeSymbol::getIncludedVariationPoints).collect(Collectors.toSet());
+        VariableArcVariantComponentTypeSymbol::getIncludedVariationPoints).collect(Collectors.toSet());
     variationPointSolver.close();
 
     // Then
@@ -282,27 +282,27 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     return Stream.of(
       // No variation points -> only empty set
       Arguments.of(
-        (Supplier<VariableComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(Collections.emptyList(),
+        (Supplier<IVariableArcComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(Collections.emptyList(),
           Collections.emptyList()),
         Set.of(Collections.emptySet())),
       // Always false variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpFalse),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpFalse),
           Collections.emptyList()),
         Set.of(Collections.emptySet())),
       // Always true variation point
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpTrue),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpTrue),
           Collections.emptyList()),
         Set.of(Set.of(vpTrue))),
       // Subcomponent instantiated with p=false
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpA),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpA),
           Collections.singletonList(falseArgument)),
         Set.of(Collections.emptySet())),
       // Subcomponent instantiated with p=true
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpA),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpA),
           Collections.singletonList(falseArgument)),
         Set.of(Collections.emptySet())),
       // Subcomponent instantiated with p=a
-      Arguments.of((Supplier<VariableComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpA),
+      Arguments.of((Supplier<IVariableArcComponentTypeSymbol>) () -> createSubcomponentWithVariationPoints(List.of(vpA),
           Collections.singletonList(aArgument)),
         Set.of(Collections.emptySet(), Set.of(vpA)))
     );
@@ -313,11 +313,11 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
    */
   protected static class VariationPointSolverTestDelegator extends VariationPointSolver {
 
-    public VariationPointSolverTestDelegator(VariableComponentTypeSymbol origin) {
+    public VariationPointSolverTestDelegator(IVariableArcComponentTypeSymbol origin) {
       super(origin);
     }
 
-    VariableComponentTypeSymbol getOrigin() {
+    IVariableArcComponentTypeSymbol getOrigin() {
       return this.origin;
     }
 

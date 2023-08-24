@@ -4,9 +4,9 @@ package montiarc._auxiliary;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import arcbasis._symboltable.ComponentTypeSymbolBuilder;
 import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import montiarc._symboltable.MontiArcComponentTypeSymbolBuilder;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
-import variablearc._symboltable.VariableArcComponentTypeSymbolBuilder;
 
 public class ArcBasisMillForMontiArc extends ArcBasisMillForMontiArcTOP {
 
@@ -22,6 +22,6 @@ public class ArcBasisMillForMontiArc extends ArcBasisMillForMontiArcTOP {
 
   @Override
   protected ComponentTypeSymbolBuilder _componentTypeSymbolBuilder() {
-    return new VariableArcComponentTypeSymbolBuilder();
+    return new MontiArcComponentTypeSymbolBuilder();
   }
 }

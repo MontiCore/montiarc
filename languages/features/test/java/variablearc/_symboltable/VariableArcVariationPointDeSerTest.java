@@ -49,7 +49,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
   public void shouldDeserializeEmptyVariationPoint() {
     // Given
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
-    VariableComponentTypeSymbol componentTypeSymbol = createSimpleComp();
+    IVariableArcComponentTypeSymbol componentTypeSymbol = createSimpleComp();
 
     // When
     VariableArcVariationPoint variationPoint = deser.deserialize(componentTypeSymbol, JsonParser.parse(JSON_EMPTY_VARIATION_POINT).getAsJsonObject());
@@ -86,7 +86,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
   public void shouldDeserializeNestedVariationPoint() {
     // Given
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
-    VariableComponentTypeSymbol componentTypeSymbol = createSimpleComp();
+    IVariableArcComponentTypeSymbol componentTypeSymbol = createSimpleComp();
 
     // When
     VariableArcVariationPoint variationPoint = deser.deserialize(componentTypeSymbol, JsonParser.parse(JSON_NESTED_VARIATION_POINT).getAsJsonObject());
@@ -134,7 +134,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
   public void shouldDeserializeVariationPointWithSymbol() {
     // Given
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
-    VariableComponentTypeSymbol componentTypeSymbol = createSimpleComp();
+    IVariableArcComponentTypeSymbol componentTypeSymbol = createSimpleComp();
 
     // When
     VariableArcVariationPoint variationPoint = deser.deserialize(componentTypeSymbol, JsonParser.parse(JSON_VARIATION_POINT_WITH_SYMBOL).getAsJsonObject());
@@ -144,17 +144,17 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
-    Assertions.assertEquals(1, componentTypeSymbol.getPorts().size());
+    Assertions.assertEquals(1, componentTypeSymbol.getTypeInfo().getPorts().size());
     Assertions.assertEquals(1, variationPoint.getSymbols().size());
     Assertions.assertAll(
       () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
       () -> Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0)),
-      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getPorts().get(0))
+      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getPorts().get(0))
     );
   }
 
-  protected static VariableComponentTypeSymbol createSimpleComp() {
-    return (VariableComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+  protected static IVariableArcComponentTypeSymbol createSimpleComp() {
+    return (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(VariableArcMill.scope())
       .build();

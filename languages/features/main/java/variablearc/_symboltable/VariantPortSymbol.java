@@ -11,9 +11,9 @@ import java.util.Optional;
  */
 public class VariantPortSymbol extends PortSymbol {
 
-  protected VariantComponentTypeSymbol variantComponentTypeSymbol;
+  protected VariableArcVariantComponentTypeSymbol variantComponentTypeSymbol;
 
-  public VariantPortSymbol(PortSymbol parent, VariantComponentTypeSymbol variantSymbol) {
+  public VariantPortSymbol(PortSymbol parent, VariableArcVariantComponentTypeSymbol variantSymbol) {
     super(parent.getName());
     this.setIncoming(parent.isIncoming());
     this.setOutgoing(parent.isOutgoing());

@@ -9,29 +9,26 @@ import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._ast.ASTArcConstraintDeclaration;
-import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcVarIf;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.expressions.Expression;
 import variablearc.evaluation.expressions.NegatedExpression;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   implements arcbasis._visitor.ArcBasisVisitor2 {
 
-  protected Stack<VariableComponentTypeSymbol> componentStack = new Stack<>();
+  protected Stack<IVariableArcComponentTypeSymbol> componentStack = new Stack<>();
   protected Stack<VariableArcVariationPoint> variationPointStack = new Stack<>();
 
-  protected Stack<VariableComponentTypeSymbol> getComponentStack() {
+  protected Stack<IVariableArcComponentTypeSymbol> getComponentStack() {
     return this.componentStack;
   }
 
-  protected Optional<VariableComponentTypeSymbol> getCurrentComponent() {
+  protected Optional<IVariableArcComponentTypeSymbol> getCurrentComponent() {
     if (!this.getComponentStack().isEmpty()) {
       return Optional.ofNullable(this.getComponentStack().peek());
     }
@@ -42,7 +39,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     this.getComponentStack().pop();
   }
 
-  protected void putOnStack(@Nullable VariableComponentTypeSymbol symbol) {
+  protected void putOnStack(@Nullable IVariableArcComponentTypeSymbol symbol) {
     this.getComponentStack().push(symbol);
   }
 
@@ -93,15 +90,15 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   public void visit(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    this.putOnStack((VariableComponentTypeSymbol) node.getSymbol());
+    this.putOnStack((IVariableArcComponentTypeSymbol) node.getSymbol());
   }
 
   @Override
   public void endVisit(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentComponent().isPresent());
-    Preconditions.checkState(this.getCurrentComponent().get().isPresentAstNode());
-    Preconditions.checkState(this.getCurrentComponent().get().getAstNode().equals(node));
+    Preconditions.checkState(this.getCurrentComponent().get().getTypeInfo().isPresentAstNode());
+    Preconditions.checkState(this.getCurrentComponent().get().getTypeInfo().getAstNode().equals(node));
     this.removeCurrentComponent();
   }
 
@@ -135,6 +132,6 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   public void endVisit(@NotNull ASTArcConstraintDeclaration node) {
     Preconditions.checkNotNull(node);
     if (this.getCurrentComponent().isEmpty()) return;
-    this.getCurrentComponent().get().getConstraints().add(new ExpressionSet(Collections.singletonList(new Expression(node.getExpression()))));
+    this.getCurrentComponent().get().getLocalConstraints().add(new ExpressionSet(Collections.singletonList(new Expression(node.getExpression()))));
   }
 }

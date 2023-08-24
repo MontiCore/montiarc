@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package variablearc._cocos.util;
+package montiarc._cocos.util;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._visitor.ArcBasisHandler;

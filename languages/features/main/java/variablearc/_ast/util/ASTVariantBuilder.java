@@ -6,11 +6,10 @@ import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.SymTypeExpression;
 import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 
 /**
  * A class that can duplicate AST elements or update symbols.
@@ -20,9 +19,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
   protected ArcBasisTraverser traverser;
   protected ASTArcElement result;
-  protected final VariantComponentTypeSymbol enclComponent;
+  protected final VariableArcVariantComponentTypeSymbol enclComponent;
 
-  public ASTVariantBuilder(VariantComponentTypeSymbol enclComponent) {this.enclComponent = enclComponent;}
+  public ASTVariantBuilder(VariableArcVariantComponentTypeSymbol enclComponent) {this.enclComponent = enclComponent;}
 
   @Override
   public ArcBasisTraverser getTraverser() {

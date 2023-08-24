@@ -6,11 +6,6 @@ import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
-import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.BoolSort;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.IntSort;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
@@ -21,9 +16,8 @@ import org.mockito.Mockito;
 import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc._symboltable.VariableArcScopesGenitor;
 import variablearc._symboltable.VariableArcScopesGenitorP2;
-import variablearc._symboltable.VariableComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
@@ -31,10 +25,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
-import java.util.Stack;
 
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.when;
 
 /**
  * Tests for {@link ComponentConverter}
@@ -46,8 +38,8 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     return VariableArcMill.componentInstanceSymbolBuilder().setName(name).setType(typeExpression).build();
   }
 
-  protected static VariableComponentTypeSymbol createComponentTypeSymbolWithVariableConstraint(String varName,
-                                                                                               List<ComponentInstanceSymbol> instanceSymbols) {
+  protected static IVariableArcComponentTypeSymbol createComponentTypeSymbolWithVariableConstraint(String varName,
+                                                                                                   List<ComponentInstanceSymbol> instanceSymbols) {
     ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
     ASTNameExpression expression = getNameExpression(varName);
 
@@ -59,17 +51,17 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
       scope.add(instance);
     }
 
-    VariableComponentTypeSymbol symbol = (VariableComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("C")
       .setSpannedScope(scope)
       .setAstNode(astComponentType)
       .build();
-    symbol.setConstraints(new ExpressionSet(new ArrayList<>(Collections.singletonList(new Expression(expression)))));
+    symbol.setLocalConstraints(new ExpressionSet(new ArrayList<>(Collections.singletonList(new Expression(expression)))));
 
     return symbol;
   }
 
-  protected static VariableComponentTypeSymbol createComponentTypeSymbolWithTrueConstraint(
+  protected static IVariableArcComponentTypeSymbol createComponentTypeSymbolWithTrueConstraint(
     List<ComponentInstanceSymbol> instanceSymbols) {
     ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
     IVariableArcScope scope = VariableArcMill.scope();
@@ -77,12 +69,12 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
       scope.add(instance);
     }
 
-    VariableComponentTypeSymbol symbol = (VariableComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("C")
       .setSpannedScope(scope)
       .setAstNode(astComponentType)
       .build();
-    symbol.setConstraints(new ExpressionSet(new ArrayList<>(Collections.singletonList(new Expression(getTrueExpression())))));
+    symbol.setLocalConstraints(new ExpressionSet(new ArrayList<>(Collections.singletonList(new Expression(getTrueExpression())))));
 
     return symbol;
   }
@@ -103,18 +95,18 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
   public void convertComponent() {
     // Given
     ComponentConverter converter = new ComponentConverter();
-    VariableComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.emptyList());
+    IVariableArcComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.emptyList());
     HashSet<ComponentTypeSymbol> visited = new HashSet<>();
 
     // When
     ExpressionSet exprs = converter.convert(component, visited);
 
     // Then
-    Assertions.assertEquals(1, exprs.getExpressions().size());
-    Assertions.assertIterableEquals(List.of(component), visited);
-    Assertions.assertIterableEquals(Collections.emptyList(), exprs.getNegatedConjunctions());
-    Assertions.assertEquals(Optional.empty(), exprs.getExpressions().get(0).getPrefix());
-    Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(0).getAstExpression()));
+    Assertions.assertEquals(1, exprs.getExpressions().size(), "Expression count differs");
+    Assertions.assertIterableEquals(Collections.emptyList(), visited, "Visited differs");
+    Assertions.assertIterableEquals(Collections.emptyList(), exprs.getNegatedConjunctions(), "Negated expressions are not empty");
+    Assertions.assertEquals(Optional.empty(), exprs.getExpressions().get(0).getPrefix(), "Prefix is not empty");
+    Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(0).getAstExpression()), "Expression is not equal to true");
   }
 
   @Test
@@ -122,15 +114,15 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     // Given
     ComponentConverter converter = new ComponentConverter();
 
-    ComponentInstanceSymbol subcomponent = createInstance("comp1", createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()));
+    ComponentInstanceSymbol subcomponent = createInstance("comp1", createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()).getTypeInfo());
 
-    VariableComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.singletonList(
+    IVariableArcComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.singletonList(
       subcomponent
     ));
     HashSet<ComponentTypeSymbol> visited = new HashSet<>();
 
     VariableArcScopesGenitorP2 scopesGenP2 = new VariableArcScopesGenitorP2();
-    for (ComponentInstanceSymbol componentInstanceSymbol : component.getSubComponents()) {
+    for (ComponentInstanceSymbol componentInstanceSymbol : component.getTypeInfo().getSubComponents()) {
       scopesGenP2.visit(componentInstanceSymbol);
     }
 
@@ -140,8 +132,7 @@ public class ComponentConverterTest extends VariableArcAbstractTest {
     // Then
     Assertions.assertEquals(2, exprs.getExpressions().size());
     Assertions.assertIterableEquals(Collections.emptyList(), exprs.getNegatedConjunctions());
-    Assertions.assertEquals(2, visited.size());
-    Assertions.assertTrue(visited.contains(component));
+    Assertions.assertEquals(1, visited.size());
     Assertions.assertTrue(visited.contains(subcomponent.getType().getTypeInfo()));
     // Assert first expression
     Assertions.assertEquals(Optional.empty(), exprs.getExpressions().get(0).getPrefix());

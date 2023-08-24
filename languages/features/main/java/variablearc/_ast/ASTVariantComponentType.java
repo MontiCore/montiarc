@@ -10,7 +10,7 @@ import arcbasis._symboltable.IArcBasisScope;
 import variablearc.VariableArcMill;
 import variablearc._ast.util.ASTVariantBuilder;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class ASTVariantComponentType extends ASTComponentType {
 
   protected Set<VariableArcVariationPoint> includedVariationPoints;
 
-  protected VariantComponentTypeSymbol variantComponentTypeSymbol;
+  protected VariableArcVariantComponentTypeSymbol variantComponentTypeSymbol;
 
   protected List<ASTArcElement> arcElementList;
 
@@ -34,7 +34,7 @@ public class ASTVariantComponentType extends ASTComponentType {
    * @param parent        The component this variant originates from
    * @param variantSymbol The variant (i.e. configuration) of this component
    */
-  public ASTVariantComponentType(ASTComponentType parent, VariantComponentTypeSymbol variantSymbol) {
+  public ASTVariantComponentType(ASTComponentType parent, VariableArcVariantComponentTypeSymbol variantSymbol) {
     this.parent = parent;
     this.variantComponentTypeSymbol = variantSymbol;
     includedVariationPoints = variantSymbol.getIncludedVariationPoints();
