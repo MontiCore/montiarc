@@ -4,6 +4,7 @@ package montiarc._cocos;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.ArcBasisASTConnectorCoCo;
 import com.google.common.base.Preconditions;
+import modes._cocos.util.IgnoreASTArcModeHandler;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -20,6 +21,7 @@ public class MontiArcCoCoChecker extends MontiArcCoCoCheckerTOP {
     variantTraverser = MontiArcMill.traverser();
     variantTraverser.setArcBasisHandler(new SingleASTVariantComponentTypeHandler());
     variantTraverser.setVariableArcHandler(new IgnoreASTArcVarIfHandler());
+    variantTraverser.setModesHandler(new IgnoreASTArcModeHandler());
 
     getTraverser().add4ArcBasis(new VariantTraverseDispatchVisitor(variantTraverser));
   }

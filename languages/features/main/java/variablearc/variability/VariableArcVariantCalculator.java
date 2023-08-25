@@ -2,7 +2,6 @@
 package variablearc.variability;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -20,30 +19,26 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * VariableArc variant calculator.
+ */
 public class VariableArcVariantCalculator implements IVariantCalculator {
 
-  protected final ComponentTypeSymbol componentTypeSymbol;
+  protected final IVariableArcComponentTypeSymbol componentTypeSymbol;
 
-  public VariableArcVariantCalculator(@NotNull ComponentTypeSymbol componentTypeSymbol) {
+  public VariableArcVariantCalculator(@NotNull IVariableArcComponentTypeSymbol componentTypeSymbol) {
     Preconditions.checkNotNull(componentTypeSymbol);
-    Preconditions.checkArgument(componentTypeSymbol instanceof IVariableArcComponentTypeSymbol);
     this.componentTypeSymbol = componentTypeSymbol;
-  }
-
-  IVariableArcComponentTypeSymbol getAsIVariableArcComponentTypeSymbol() {
-    Preconditions.checkNotNull(componentTypeSymbol);
-    Preconditions.checkArgument(componentTypeSymbol instanceof IVariableArcComponentTypeSymbol);
-    return (IVariableArcComponentTypeSymbol) componentTypeSymbol;
   }
 
   public List<VariableArcVariantComponentTypeSymbol> calculateVariants() {
     try {
       List<VariableArcVariantComponentTypeSymbol> variants = new ArrayList<>();
-      VariationPointSolver vpSolver = new VariationPointSolver(getAsIVariableArcComponentTypeSymbol());
+      VariationPointSolver vpSolver = new VariationPointSolver(componentTypeSymbol);
 
-      if (componentTypeSymbol.isPresentParent() && componentTypeSymbol.getParent() != null &&
-        componentTypeSymbol.getParent().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
-        for (VariableArcVariantComponentTypeSymbol parentVariant : ((IVariableArcComponentTypeSymbol) componentTypeSymbol.getParent().getTypeInfo()).getVariableArcVariants()) {
+      if (componentTypeSymbol.getTypeInfo().isPresentParent() && componentTypeSymbol.getTypeInfo().getParent() != null &&
+        componentTypeSymbol.getTypeInfo().getParent().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
+        for (VariableArcVariantComponentTypeSymbol parentVariant : ((IVariableArcComponentTypeSymbol) componentTypeSymbol.getTypeInfo().getParent().getTypeInfo()).getVariableArcVariants()) {
           calculateVariableArcVariants(variants, vpSolver, parentVariant);
         }
       } else {
@@ -64,16 +59,16 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
       HashMap<ComponentInstanceSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
       // filter out subcomponents not included in this variant
       List<ComponentInstanceSymbol> subcomponents =
-        componentTypeSymbol.getSubComponents().stream()
-          .filter(instance -> getAsIVariableArcComponentTypeSymbol().variationPointsContainSymbol(variationPoints, instance))
+        componentTypeSymbol.getTypeInfo().getSubComponents().stream()
+          .filter(instance -> componentTypeSymbol.variationPointsContainSymbol(variationPoints, instance))
           .filter(ComponentInstanceSymbol::isPresentType) // for robustness
           .collect(
             Collectors.toList());
 
       if (subcomponents.isEmpty()) {
-        variants.add(new VariableArcVariantComponentTypeSymbol(getAsIVariableArcComponentTypeSymbol(), variationPoints,
+        variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
           vpSolver.getConditionsForVariationPoints(variationPoints),
-          parentVariant == null ? null : componentTypeSymbol.getParent().deepClone(parentVariant)));
+          parentVariant == null ? null : componentTypeSymbol.getTypeInfo().getParent().deepClone(parentVariant)));
       } else {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
         for (ComponentInstanceSymbol instance : subcomponents) {
@@ -84,9 +79,9 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
 
         // Expand variants by possible subcomponent variants
         expandCombinations(subComponentVariants).forEach(
-          e -> variants.add(new VariableArcVariantComponentTypeSymbol(getAsIVariableArcComponentTypeSymbol(), variationPoints,
+          e -> variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
             vpSolver.getConditionsForVariationPoints(variationPoints),
-            parentVariant == null ? null : componentTypeSymbol.getParent().deepClone(parentVariant), e))
+            parentVariant == null ? null : componentTypeSymbol.getTypeInfo().getParent().deepClone(parentVariant), e))
         );
       }
     }

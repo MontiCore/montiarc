@@ -17,6 +17,7 @@ dependencies {
   }
 
   api(project(":languages:core"))
+  api(project(":languages:features"))
 
   implementation(libs.apache)
   implementation(libs.guava)

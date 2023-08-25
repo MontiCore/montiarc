@@ -3,6 +3,7 @@ package montiarc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import modes.variability.VariableArcModesVariantCalculator;
 import variablearc._symboltable.ArcFeature2VariableAdapter;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariationPoint;
@@ -20,7 +21,8 @@ public class MontiArcComponentTypeSymbol extends ComponentTypeSymbol implements 
 
   protected ExpressionSet localConstraints;
   protected ExpressionSet constraints;
-  protected List<VariableArcVariantComponentTypeSymbol> variants;
+  protected List<? extends ComponentTypeSymbol> variants;
+  protected List<VariableArcVariantComponentTypeSymbol> variableArcVariants;
   protected List<VariableArcVariationPoint> variationPoints;
 
   /**
@@ -34,10 +36,14 @@ public class MontiArcComponentTypeSymbol extends ComponentTypeSymbol implements 
 
   /**
    * Extension point to implement different variant generators.
+   *
    * @return Variants of this component
    */
   public List<? extends ComponentTypeSymbol> getVariants() {
-    return getVariableArcVariants();
+    if (variants == null) {
+      variants = new VariableArcModesVariantCalculator(this).calculateVariants();
+    }
+    return variants;
   }
 
   @Override
@@ -47,11 +53,11 @@ public class MontiArcComponentTypeSymbol extends ComponentTypeSymbol implements 
 
   @Override
   public List<VariableArcVariantComponentTypeSymbol> getVariableArcVariants() {
-    if (variants == null) {
-      variants = Collections.emptyList();
-      variants = new VariableArcVariantCalculator(this).calculateVariants();
+    if (variableArcVariants == null) {
+      variableArcVariants = Collections.emptyList();
+      variableArcVariants = new VariableArcVariantCalculator(this).calculateVariants();
     }
-    return variants;
+    return variableArcVariants;
   }
 
   @Override
