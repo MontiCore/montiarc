@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 
 /**
@@ -15,8 +16,8 @@ import montiarc.rte.msg.Message;
  */
 public class TimeUnawarePortForward<T> extends TimeUnawareOutPort<T> implements IInPort<T> {
 
-  public TimeUnawarePortForward(String qualifiedName) {
-    super(qualifiedName);
+  public TimeUnawarePortForward(String qualifiedName, IComponent<?, ?> owner) {
+    super(qualifiedName, owner);
   }
 
   /**

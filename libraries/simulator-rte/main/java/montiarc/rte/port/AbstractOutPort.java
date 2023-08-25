@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 
@@ -23,8 +24,8 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
    */
   protected List<IInPort<T>> recipients = new ArrayList<>();
 
-  protected AbstractOutPort(String qualifiedName) {
-    super(qualifiedName);
+  protected AbstractOutPort(String qualifiedName, IComponent<?, ?> owner) {
+    super(qualifiedName, owner);
   }
 
   /**

@@ -2,6 +2,7 @@
 package montiarc;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -31,26 +32,18 @@ public class SyncInverter implements ITimedComponent {
     return List.of(bOut, iOut);
   }
 
-  protected TimeAwareInPort<Boolean> bIn = new TimeAwareInPort<>(getName() + ".bIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  protected TimeAwareInPort<Boolean> bIn = new TimeAwareInPort<>(getName() + ".bIn", this);
 
-      handleMessageOnBIn();
-    }
-  };
+  protected TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn", this);
 
-  protected TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
-
-      handleMessageOnIIn();
-    }
-  };
-
-  protected TimeAwareOutPort<Boolean> bOut = new TimeAwareOutPort<>(getName() + ".bOut");
-  protected TimeAwareOutPort<Integer> iOut = new TimeAwareOutPort<>(getName() + ".iOut");
+  protected TimeAwareOutPort<Boolean> bOut = new TimeAwareOutPort<>(getName() + ".bOut", this);
+  protected TimeAwareOutPort<Integer> iOut = new TimeAwareOutPort<>(getName() + ".iOut", this);
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(bIn.getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnBIn();
+    else if(iIn.getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnIIn();
+  }
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.bIn.isTickBlocked() && this.iIn.isTickBlocked();

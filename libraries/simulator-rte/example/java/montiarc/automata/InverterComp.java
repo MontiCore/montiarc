@@ -51,16 +51,9 @@ public class InverterComp implements InverterContext, ITimedComponent {
     return InverterContext.super.getAllOutPorts();
   }
 
-  protected TimeAwareInPort<Boolean> port_i = new TimeAwareInPort<>(getName() + ".i") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  protected TimeAwareInPort<Boolean> port_i = new TimeAwareInPort<>(getName() + ".i", this);
 
-      handleMessageOnBIn();
-    }
-  };
-
-  protected TimeAwareOutPort<Boolean> port_o = new TimeAwareOutPort<>(getName() + ".o");
+  protected TimeAwareOutPort<Boolean> port_o = new TimeAwareOutPort<>(getName() + ".o", this);
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     this.getAllInPorts().stream().allMatch(ITimeAwareInPort::isTickBlocked);
@@ -77,7 +70,8 @@ public class InverterComp implements InverterContext, ITimedComponent {
     this.port_o().sendTick();
   }
 
-  protected void handleMessageOnBIn() {
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
     handleComputationOnSyncPorts();
   }
 

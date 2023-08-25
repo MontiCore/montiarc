@@ -2,6 +2,7 @@
 package montiarc.composition;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -44,4 +45,7 @@ public class Decomposed implements ITimedComponent {
   public List<TimeAwareOutPort<?>> getAllOutPorts() {
     return List.of();
   }
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) { /* nothing to do here because this is not a dynamic component */ }
 }

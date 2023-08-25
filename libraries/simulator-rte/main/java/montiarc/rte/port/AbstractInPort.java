@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 
 import java.util.ArrayDeque;
@@ -21,8 +22,8 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
 
   protected Queue<Message<T>> buffer = new ArrayDeque<>();
 
-  protected AbstractInPort(String qualifiedName) {
-    super(qualifiedName);
+  protected AbstractInPort(String qualifiedName, IComponent<?, ?> owner) {
+    super(qualifiedName, owner);
   }
 
   /**
@@ -41,10 +42,12 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
   }
 
   /**
-   * This method should call the owning component's behavior associated with messages on this port.
-   * It is intended to be implemented for each port instance individually.
+   * Call the owning component's behavior associated with messages on this port.
+   * {@link IComponent#handleMessage(AbstractInPort)} should then also handle polling of used values form the buffer.
    */
-  protected abstract void handleBuffer();
+  protected final void handleBuffer() {
+    owner.handleMessage(this);
+  }
 
   /**
    * Peek the next message in the buffer.

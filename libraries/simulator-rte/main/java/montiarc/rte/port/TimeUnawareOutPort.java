@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.IgnoreTicksMessageFilter;
 
 /**
@@ -10,7 +11,7 @@ import montiarc.rte.msg.IgnoreTicksMessageFilter;
  */
 public class TimeUnawareOutPort<T> extends AbstractOutPort<T> implements IgnoreTicksMessageFilter<T> {
 
-  public TimeUnawareOutPort(String qualifiedName) {
-    super(qualifiedName);
+  public TimeUnawareOutPort(String qualifiedName, IComponent<?, ?> owner) {
+    super(qualifiedName, owner);
   }
 }

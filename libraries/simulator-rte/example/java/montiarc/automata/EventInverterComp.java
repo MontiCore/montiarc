@@ -2,10 +2,7 @@
 package montiarc.automata;
 
 import montiarc.rte.component.ITimedComponent;
-import montiarc.rte.port.AbstractOutPort;
-import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.port.TimeAwareInPort;
-import montiarc.rte.port.TimeAwareOutPort;
+import montiarc.rte.port.*;
 
 import java.util.List;
 
@@ -63,37 +60,45 @@ public class EventInverterComp implements EventInverterContext, ITimedComponent 
     return EventInverterContext.super.getAllOutPorts();
   }
   
-  protected TimeAwareInPort<Boolean> port_bIn = new TimeAwareInPort<>(getName() + ".i") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
-      
-      if(this.isTickBlocked()) {
-        handleTickEvent();
-        return;
-      }
-      
+  protected TimeAwareInPort<Boolean> port_bIn = new TimeAwareInPort<>(getName() + ".i", this);
+
+  protected void handle_port_bIn() {
+    if(!handleEmptyOrTickBlocked(port_bIn())) {
       getBehavior().msg_bIn();
     }
-  };
+  }
   
-  protected TimeAwareInPort<Integer> port_iIn = new TimeAwareInPort<>(getName() + ".i") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  protected TimeAwareInPort<Integer> port_iIn = new TimeAwareInPort<>(getName() + ".i", this);
   
-      if(this.isTickBlocked()) {
-        handleTickEvent();
-        return;
-      }
-  
+  protected void handle_port_iIn() {
+    if(!handleEmptyOrTickBlocked(port_iIn())) {
       getBehavior().msg_iIn();
     }
-  };
+  }
   
-  protected TimeAwareOutPort<Boolean> port_bOut = new TimeAwareOutPort<>(getName() + ".o");
+  protected TimeAwareOutPort<Boolean> port_bOut = new TimeAwareOutPort<>(getName() + ".o", this);
   
-  protected TimeAwareOutPort<Integer> port_iOut = new TimeAwareOutPort<>(getName() + ".o");
+  protected TimeAwareOutPort<Integer> port_iOut = new TimeAwareOutPort<>(getName() + ".o", this);
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(receivingPort.getQualifiedName().equals(port_bIn().getQualifiedName())) {
+      handle_port_bIn();
+    } else if(receivingPort.getQualifiedName().equals(port_iIn().getQualifiedName())) {
+      handle_port_iIn();
+    }
+  }
+  
+  protected boolean handleEmptyOrTickBlocked(TimeAwareInPort<?> port) {
+    if(port.isBufferEmpty()) return true;
+    
+    if(port.isTickBlocked()) {
+      handleTickEvent();
+      return true;
+    }
+    
+    return false;
+  }
   
   protected boolean areAllInputsTickBlocked() {
     return getAllInPorts().stream().allMatch(ITimeAwareInPort::isTickBlocked);

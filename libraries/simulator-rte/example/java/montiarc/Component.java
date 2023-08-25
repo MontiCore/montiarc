@@ -26,13 +26,7 @@ public class Component implements ITimedComponent {
     return true;
   }
 
-  AbstractInPort<String> incomingPort = new AbstractInPort<>(getName() + ".portName") {
-    @Override
-    protected void handleBuffer() {
-      if (componentCanCompute()) {
-        // trigger the computation
-      }
-    }
+  AbstractInPort<String> incomingPort = new AbstractInPort<>(getName() + ".portName", this) {
 
     @Override
     public boolean messageIsValidOnPort(Message<String> message) {
@@ -54,4 +48,7 @@ public class Component implements ITimedComponent {
   public List<TimeAwareOutPort<?>> getAllOutPorts() {
     return List.of();
   }
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) { /* nothing to implement in this example */}
 }

@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.automata;
 
+import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.msg.Tick;
+import montiarc.rte.port.AbstractInPort;
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.rte.msg.Message;
@@ -25,22 +28,37 @@ class InverterCompTest {
 
   @BeforeEach
   public void beforeEach() {
-    input = new TimeAwareOutPort<>("valueSource");
+    ITimedComponent mockComponent = new ITimedComponent() {
+      @Override
+      public List<ITimeAwareInPort<?>> getAllInPorts() {
+        return null;
+      }
+      
+      @Override
+      public List<TimeAwareOutPort<?>> getAllOutPorts() {
+        return null;
+      }
+      
+      @Override
+      public String getName() {
+        return "MockComponent";
+      }
+      
+      @Override
+      public void handleMessage(AbstractInPort<?> receivingPort) {
+        if(receivingPort == outRecipient) {
+          if(outRecipient.isBufferEmpty()) lastOutMessage = null;
+          else lastOutMessage = outRecipient.pollBuffer();
+        }
+      }
+    };
+    input = new TimeAwareOutPort<>("valueSource", mockComponent);
     inverterComp = new InverterComp("inverter");
     input.connect(inverterComp.port_i);
 
     lastOutMessage = null;
 
-    outRecipient = new TimeAwareInPort<>("gtEq0Recipient") {
-      @Override
-      protected void handleBuffer() {
-        if (buffer.isEmpty()) {
-          lastOutMessage = null;
-        } else {
-          lastOutMessage = buffer.poll();
-        }
-      }
-    };
+    outRecipient = new TimeAwareInPort<>("gtEq0Recipient", mockComponent);
     inverterComp.port_o.connect(outRecipient);
   }
 

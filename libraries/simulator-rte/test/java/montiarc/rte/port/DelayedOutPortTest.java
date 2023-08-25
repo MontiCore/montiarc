@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
+import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import org.junit.jupiter.api.Assertions;
@@ -19,16 +21,32 @@ public class DelayedOutPortTest {
   List<Message<String>> receivedMessages;
 
   void setUpPorts(int delay) {
-    receivedMessages = new ArrayList<>();
-    portUnderTest = new DelayedOutPort<>("portUnderTest", delay);
-    recipient = new TimeAwareInPort<>("recipient") {
+    ITimedComponent mockComponent = new ITimedComponent() {
       @Override
-      protected void handleBuffer() {
-        while (!buffer.isEmpty()) {
-          receivedMessages.add(buffer.poll());
+      public List<ITimeAwareInPort<?>> getAllInPorts() {
+        return null;
+      }
+      
+      @Override
+      public List<TimeAwareOutPort<?>> getAllOutPorts() {
+        return null;
+      }
+      
+      @Override
+      public String getName() {
+        return "MockComponent";
+      }
+      
+      @Override
+      public void handleMessage(AbstractInPort<?> receivingPort) {
+        while(!recipient.isBufferEmpty()) {
+          receivedMessages.add(recipient.pollBuffer());
         }
       }
     };
+    receivedMessages = new ArrayList<>();
+    portUnderTest = new DelayedOutPort<>("portUnderTest", mockComponent, delay);
+    recipient = new TimeAwareInPort<>("recipient", mockComponent);
 
     portUnderTest.connect(recipient);
   }

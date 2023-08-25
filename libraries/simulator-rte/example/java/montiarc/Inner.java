@@ -2,6 +2,7 @@
 package montiarc;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -32,14 +33,12 @@ public class Inner implements ITimedComponent {
     return List.of(sOut);
   }
 
-  TimeAwareInPort<String> sIn = new TimeAwareInPort<>("DELETEME") {
-    @Override
-    protected void handleBuffer() {
+  TimeAwareInPort<String> sIn = new TimeAwareInPort<>("", this);
 
-    }
-  };
-
-  TimeAwareOutPort<String> sOut = new TimeAwareOutPort<>("DELETEME");
+  TimeAwareOutPort<String> sOut = new TimeAwareOutPort<>("", this);
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) { }
 
   // behavior...
 }

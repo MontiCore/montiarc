@@ -2,6 +2,7 @@
 package montiarc;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -44,4 +45,7 @@ public class Setup implements ITimedComponent {
     this.i1.sOut.connect(this.i2.sIn);
     this.sOut = this.i2.sOut;
   }
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) { }
 }

@@ -2,6 +2,7 @@
 package montiarc.composition;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -44,4 +45,7 @@ public class DelayedDecomposed implements ITimedComponent {
     this.delayedSorter.gtEq0.connect(this.gtEq0.iIn);
     this.delayedSorter.lt0.connect(this.lt0.iIn);
   }
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) { /* nothing to do here because this is not a dynamic component */ }
 }

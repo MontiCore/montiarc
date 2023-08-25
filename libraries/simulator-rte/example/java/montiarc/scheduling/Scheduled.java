@@ -2,6 +2,7 @@
 package montiarc.scheduling;
 
 import montiarc.rte.component.IComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.rte.port.TimeAwarePortForward;
 import montiarc.rte.scheduling.ISchedule;
@@ -30,7 +31,10 @@ public class Scheduled implements IComponent<TimeAwarePortForward<?>, TimeAwareO
   ISchedule scheduler;
   StringBuilder trace;
 
-  TimeAwarePortForward<Boolean> trigger = new TimeAwarePortForward<>(getName() + ".trigger");
+  TimeAwarePortForward<Boolean> trigger = new TimeAwarePortForward<>(getName() + ".trigger", this);
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) { /* nothing to do here because this is not a dynamic component */ }
 
   ScheduledInner a, b, c, d, e, f, g, h, i, j, k;
 

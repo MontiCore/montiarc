@@ -2,6 +2,7 @@
 package montiarc.composition;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -31,17 +32,15 @@ public class Sorter implements ITimedComponent {
     return List.of(gtEq0, lt0);
   }
 
-  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn", this);
 
-      handleMessageOnIIn();
-    }
-  };
-
-  TimeAwareOutPort<Integer> gtEq0 = new TimeAwareOutPort<>(getName() + ".gtEq0");
-  TimeAwareOutPort<Integer> lt0 = new TimeAwareOutPort<>(getName() + ".lt0");
+  TimeAwareOutPort<Integer> gtEq0 = new TimeAwareOutPort<>(getName() + ".gtEq0", this);
+  TimeAwareOutPort<Integer> lt0 = new TimeAwareOutPort<>(getName() + ".lt0", this);
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(receivingPort.getQualifiedName().equals(iIn.getQualifiedName())) handleMessageOnIIn();
+  }
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.iIn.isTickBlocked();

@@ -52,43 +52,23 @@ public class VariabilityComp implements VariabilityContext, ITimedComponent {
     return automaton;
   }
   
-  protected TimeAwareInPort<Integer> port_i1 = new TimeAwareInPort<>(getName() + ".i1") {
-    @Override
-    protected void handleBuffer() {
-      if(buffer.isEmpty()) return;
-      
-      handleMessageOnI1();
-    }
-  };
+  protected TimeAwareInPort<Integer> port_i1 = new TimeAwareInPort<>(getName() + ".i1", this);
   
-  protected TimeAwareInPort<Integer> port_i2 = new TimeAwareInPort<>(getName() + ".i2") {
-    @Override
-    protected void handleBuffer() {
-      if(buffer.isEmpty()) return;
-    
-      handleMessageOnI2();
-    }
-  };
+  protected TimeAwareInPort<Integer> port_i2 = new TimeAwareInPort<>(getName() + ".i2", this);
   
-  protected TimeAwareInPort<Integer> port_i3 = new TimeAwareInPort<>(getName() + ".i3") {
-    @Override
-    protected void handleBuffer() {
-      if(buffer.isEmpty()) return;
-    
-      handleMessageOnI3();
-    }
-  };
+  protected TimeAwareInPort<Integer> port_i3 = new TimeAwareInPort<>(getName() + ".i3", this);
   
-  protected TimeAwareInPort<Integer> port_i4 = new TimeAwareInPort<>(getName() + ".i4") {
-    @Override
-    protected void handleBuffer() {
-      if(buffer.isEmpty()) return;
-    
-      handleMessageOnI4();
-    }
-  };
+  protected TimeAwareInPort<Integer> port_i4 = new TimeAwareInPort<>(getName() + ".i4", this);
   
-  protected TimeAwareOutPort<Integer> port_o1 = new TimeAwareOutPort<>(getName() + ".o1");
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if (port_i1_available() && port_i1().getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnI1();
+    else if (port_i2_available() && port_i2().getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnI2();
+    else if (port_i3_available() && port_i3().getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnI3();
+    else if (port_i4_available() && port_i4().getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnI4();
+  }
+  
+  protected TimeAwareOutPort<Integer> port_o1 = new TimeAwareOutPort<>(getName() + ".o1", this);
   
   @Override
   public TimeAwareInPort<Integer> port_i1() {

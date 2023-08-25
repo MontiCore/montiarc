@@ -2,10 +2,7 @@
 package montiarc.composition;
 
 import montiarc.rte.component.ITimedComponent;
-import montiarc.rte.port.DelayedOutPort;
-import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.port.TimeAwareInPort;
-import montiarc.rte.port.TimeAwareOutPort;
+import montiarc.rte.port.*;
 
 import java.util.List;
 
@@ -32,17 +29,15 @@ public class DelayedSorter implements ITimedComponent {
     return List.of(gtEq0, lt0);
   }
 
-  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn", this);
 
-      handleMessageOnIIn();
-    }
-  };
-
-  DelayedOutPort<Integer> gtEq0 = new DelayedOutPort<>(getName() + ".gtEq0", 1); // explicit delay of 1 is not required, only here for clarity
-  DelayedOutPort<Integer> lt0 = new DelayedOutPort<>(getName() + ".lt0", 1); // explicit delay of 1 is not required, only here for clarity
+  DelayedOutPort<Integer> gtEq0 = new DelayedOutPort<>(getName() + ".gtEq0", this, 1); // explicit delay of 1 is not required, only here for clarity
+  DelayedOutPort<Integer> lt0 = new DelayedOutPort<>(getName() + ".lt0", this, 1); // explicit delay of 1 is not required, only here for clarity
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(receivingPort.getQualifiedName().equals(iIn.getQualifiedName())) handleMessageOnIIn();
+  }
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.iIn.isTickBlocked();

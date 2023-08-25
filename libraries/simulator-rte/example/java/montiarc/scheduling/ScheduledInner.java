@@ -2,6 +2,7 @@
 package montiarc.scheduling;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -40,17 +41,15 @@ public class ScheduledInner implements ITimedComponent {
     this.instanceName = instanceName;
   }
 
-  TimeAwareInPort<Boolean> trigger = new TimeAwareInPort<Boolean>(getName() + ".trigger") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  TimeAwareInPort<Boolean> trigger = new TimeAwareInPort<Boolean>(getName() + ".trigger", this);
 
-      handleMessageOnTrigger();
-    }
-  };
+  TimeAwareOutPort<Boolean> output = new TimeAwareOutPort<>(getName() + ".output", this);
 
-  TimeAwareOutPort<Boolean> output = new TimeAwareOutPort<>(getName() + ".output");
-
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(receivingPort.getQualifiedName().equals(trigger.getQualifiedName())) handleMessageOnTrigger();
+  }
+  
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.trigger.isTickBlocked();
   }

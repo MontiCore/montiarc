@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.MessageFilteringStrategy;
 
 /**
@@ -14,8 +15,15 @@ abstract class AbstractBasePort<T> implements MessageFilteringStrategy<T> {
    * The name of this port.
    */
   protected final String qualifiedName;
+  
+  public String getQualifiedName() {
+    return qualifiedName;
+  }
 
-  protected AbstractBasePort(String qualifiedName) {
+  protected final IComponent<?, ?> owner;
+
+  protected AbstractBasePort(String qualifiedName, IComponent<?, ?> owner) {
     this.qualifiedName = qualifiedName;
+    this.owner = owner;
   }
 }

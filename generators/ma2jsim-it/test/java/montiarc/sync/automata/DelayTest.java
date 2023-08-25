@@ -2,10 +2,13 @@
 package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
+import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.AbstractInPort;
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
+import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,6 +21,32 @@ import java.util.List;
 import java.util.stream.Stream;
 
 class DelayTest {
+  
+  protected ITimedComponent getMockComponent(List<Message<OnOff>> actualOutputs) {
+    return new ITimedComponent() {
+      @Override
+      public List<ITimeAwareInPort<?>> getAllInPorts() {
+        return null;
+      }
+      
+      @Override
+      public List<TimeAwareOutPort<?>> getAllOutPorts() {
+        return null;
+      }
+      
+      @Override
+      public String getName() {
+        return "MockComponent";
+      }
+      
+      @Override
+      public void handleMessage(AbstractInPort<?> receivingPort) {
+        while(!receivingPort.isBufferEmpty()) {
+          actualOutputs.add((Message<OnOff>)receivingPort.pollBuffer());
+        }
+      }
+    };
+  }
 
   @ParameterizedTest
   @MethodSource("io")
@@ -30,14 +59,7 @@ class DelayTest {
     DelayComp sut = new DelayCompBuilder().setName("sut").build();
 
     List<Message<OnOff>> actual = new ArrayList<>(outputs.size());
-    AbstractInPort<OnOff> r = new TimeAwareInPort<>("r") {
-      @Override
-      protected void handleBuffer() {
-        while (!buffer.isEmpty()) {
-          actual.add(buffer.poll());
-        }
-      }
-    };
+    AbstractInPort<OnOff> r = new TimeAwareInPort<>("r", getMockComponent(actual));
     sut.port_o().connect(r);
 
     // When

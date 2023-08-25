@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.IInPort;
 import montiarc.rte.port.IOutPort;
 
@@ -14,4 +15,5 @@ public interface IComponent<InPort extends IInPort<?>, OutPort extends IOutPort<
 
   List<OutPort> getAllOutPorts();
 
+  void handleMessage(AbstractInPort<?> receivingPort);
 }

@@ -10,16 +10,7 @@ protected void <@MethodNames.portSetup/>() {
     <#else>
         montiarc.rte.port.Time<#if inPort.getTiming().matches(timing_untimed)>Unaware<#else>Aware</#if>PortForward
     </#if></#assign>
-  this.${prefixes.port()}${inPort.getName()} = new ${dynamicType}<>(getName() + ".${inPort.getName()}")
-    <#if atomic>{
-          @Override
-          protected void handleBuffer() {
-            if (buffer.isEmpty()) return;
-
-            <@MethodNames.handleBufferImplementation inPort/>();
-          }
-        }
-    </#if>;
+  this.${prefixes.port()}${inPort.getName()} = new ${dynamicType}<>(getName() + ".${inPort.getName()}", this);
 </#list>
 
 <#list ast.getSymbol().getAllOutgoingPorts() as outPort>
@@ -30,6 +21,6 @@ protected void <@MethodNames.portSetup/>() {
     <#else>
         <@Util.getStaticPortClass outPort atomic/>
     </#if></#assign>
-  this.${prefixes.port()}${outPort.getName()} = new ${dynamicType}<>(getName() + ".${outPort.getName()}");
+  this.${prefixes.port()}${outPort.getName()} = new ${dynamicType}<>(getName() + ".${outPort.getName()}", this);
 </#list>
 }

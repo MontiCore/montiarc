@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.PassAllMessageFilter;
 
 /**
@@ -10,7 +11,7 @@ import montiarc.rte.msg.PassAllMessageFilter;
  */
 public class TimeAwareOutPort<T> extends AbstractOutPort<T> implements PassAllMessageFilter<T> {
 
-  public TimeAwareOutPort(String qualifiedName) {
-    super(qualifiedName);
+  public TimeAwareOutPort(String qualifiedName, IComponent<?, ?> owner) {
+    super(qualifiedName, owner);
   }
 }

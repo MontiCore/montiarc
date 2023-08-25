@@ -2,6 +2,7 @@
 package montiarc.scheduling;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -42,8 +43,11 @@ public class SchedulerTest {
       public String getName() {
         return "mockSource";
       }
+      
+      @Override
+      public void handleMessage(AbstractInPort<?> receivingPort) { /* Nothing to do here */ }
     };
-    input = new TimeAwareOutPort<>("input");
+    input = new TimeAwareOutPort<>("input", mockSource);
     trace = new StringBuilder();
   }
 

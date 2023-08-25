@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.composition;
 
+import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.msg.Tick;
+import montiarc.rte.port.AbstractInPort;
+import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.rte.msg.Message;
@@ -27,35 +30,44 @@ public class DecomposedTest {
 
   @BeforeEach
   public void beforeEach() {
-    input = new TimeAwareOutPort<>("valueSource");
+    ITimedComponent mockComponent = new ITimedComponent() {
+      @Override
+      public List<ITimeAwareInPort<?>> getAllInPorts() {
+        return null;
+      }
+      
+      @Override
+      public List<TimeAwareOutPort<?>> getAllOutPorts() {
+        return null;
+      }
+      
+      @Override
+      public String getName() {
+        return "MockComponent";
+      }
+      
+      @Override
+      public void handleMessage(AbstractInPort<?> receivingPort) {
+        if(receivingPort == gtEq0Recipient) {
+          if(gtEq0Recipient.isBufferEmpty()) lastGtEq0Message = null;
+          else lastGtEq0Message = gtEq0Recipient.pollBuffer();
+        } else if(receivingPort == lt0Recipient) {
+          if(lt0Recipient.isBufferEmpty()) lastLt0Message = null;
+          else lastLt0Message = lt0Recipient.pollBuffer();
+        }
+      }
+    };
+    input = new TimeAwareOutPort<>("valueSource", mockComponent);
     decomposed = new Decomposed("decomposed");
     input.connect(decomposed.iIn);
 
     lastGtEq0Message = null;
     lastLt0Message = null;
 
-    gtEq0Recipient = new TimeAwareInPort<>("gtEq0Recipient") {
-      @Override
-      protected void handleBuffer() {
-        if (buffer.isEmpty()) {
-          lastGtEq0Message = null;
-        } else {
-          lastGtEq0Message = buffer.poll();
-        }
-      }
-    };
+    gtEq0Recipient = new TimeAwareInPort<>("gtEq0Recipient", mockComponent);
     decomposed.gtEq0.count.connect(gtEq0Recipient);
 
-    lt0Recipient = new TimeAwareInPort<>("lt0Recipient") {
-      @Override
-      protected void handleBuffer() {
-        if (buffer.isEmpty()) {
-          lastLt0Message = null;
-        } else {
-          lastLt0Message = buffer.poll();
-        }
-      }
-    };
+    lt0Recipient = new TimeAwareInPort<>("lt0Recipient", mockComponent);
     decomposed.lt0.count.connect(lt0Recipient);
   }
 

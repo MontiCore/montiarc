@@ -2,6 +2,7 @@
 package montiarc.composition;
 
 import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.rte.port.TimeAwareInPort;
 import montiarc.rte.port.TimeAwareOutPort;
@@ -33,16 +34,14 @@ public class Counter implements ITimedComponent {
 
   Integer cnt = 0;
 
-  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
-
-      handleMessageOnIIn();
-    }
-  };
-
-  TimeAwareOutPort<Integer> count = new TimeAwareOutPort<>(getName() + ".count");
+  TimeAwareInPort<Integer> iIn = new TimeAwareInPort<>(getName() + ".iIn", this);
+  
+  TimeAwareOutPort<Integer> count = new TimeAwareOutPort<>(getName() + ".count", this);
+  
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(receivingPort.getQualifiedName().equals(iIn.getQualifiedName())) handleMessageOnIIn();
+  }
 
   protected boolean areAllInputsTickBlocked() { // this method could be generated for all ports with time-aware input ports
     return this.iIn.isTickBlocked();

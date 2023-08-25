@@ -2,6 +2,7 @@
 package montiarc;
 
 import montiarc.rte.component.IUntimedComponent;
+import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.TimeUnawareInPort;
 import montiarc.rte.port.TimeUnawareOutPort;
 
@@ -30,27 +31,18 @@ public class TimeUnawareEventBasedInverter implements IUntimedComponent {
     return List.of(bOut, iOut);
   }
 
-  protected TimeUnawareInPort<Boolean> bIn = new TimeUnawareInPort<>(getName() + ".bIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  protected TimeUnawareInPort<Boolean> bIn = new TimeUnawareInPort<>(getName() + ".bIn", this);
 
-      handleMessageOnBIn();
-    }
-  };
+  protected TimeUnawareInPort<Integer> iIn = new TimeUnawareInPort<>(getName() + ".iIn", this);
 
-  protected TimeUnawareInPort<Integer> iIn = new TimeUnawareInPort<>(getName() + ".iIn") {
-    @Override
-    protected void handleBuffer() {
-      if (buffer.isEmpty()) return;
+  protected TimeUnawareOutPort<Integer> iOut = new TimeUnawareOutPort<>(getName() + ".iOut", this);
+  protected TimeUnawareOutPort<Boolean> bOut = new TimeUnawareOutPort<>(getName() + ".bOut", this);
 
-      handleMessageOnIIn();
-    }
-  };
-
-  protected TimeUnawareOutPort<Integer> iOut = new TimeUnawareOutPort<>(getName() + ".iOut");
-  protected TimeUnawareOutPort<Boolean> bOut = new TimeUnawareOutPort<>(getName() + ".bOut");
-
+  @Override
+  public void handleMessage(AbstractInPort<?> receivingPort) {
+    if(bIn.getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnBIn();
+    else if(iIn.getQualifiedName().equals(receivingPort.getQualifiedName())) handleMessageOnIIn();
+  }
 
   protected void handleMessageOnBIn() {
     if (this.bIn.isBufferEmpty()) { // sanity check, also required to set up shadowed variables correctly. If port is set up / used correctly, the buffer should never be empty at this point, making this check theoretically obsolete
