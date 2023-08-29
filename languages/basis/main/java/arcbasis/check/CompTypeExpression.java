@@ -148,6 +148,8 @@ public abstract class CompTypeExpression {
 
   public abstract List<SymTypeExpression> getParameterTypes();
 
+  public abstract List<SymTypeExpression> getTypeBindingsAsList();
+
   public CompTypeExpression deepClone() {
     return deepClone(getTypeInfo());
   }

@@ -133,7 +133,7 @@ public class MontiArcCoCos {
     // VariableArc
     checker.addCoCo(new ConstraintNoAssignmentExpr());
     checker.addCoCo(new ConstraintsOmitFieldReferences());
-    checker.addCoCo(new ConstraintsOmitPortReferences());
+    checker.addCoCo(new ConstraintsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ConstraintIsBoolean(tc, tr));
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
@@ -141,7 +141,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new SubcomponentsConstraint());
     checker.addCoCo(new VarIfNoAssignmentExpr());
     checker.addCoCo(new VarIfOmitFieldReferences());
-    checker.addCoCo(new VarIfOmitPortReferences());
+    checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new VarIfIsBoolean(tc, tr));
 
     // Modes

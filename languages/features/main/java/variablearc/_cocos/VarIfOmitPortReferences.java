@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
+import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._cocos.util.ComponentVarIfHandler;
 
@@ -27,6 +28,10 @@ public class VarIfOmitPortReferences implements ArcBasisASTComponentTypeCoCo {
 
   public VarIfOmitPortReferences() {
     this.portRefExtractor = new PortReferenceExtractor4ExpressionBasis();
+  }
+
+  public VarIfOmitPortReferences(@NotNull IPortReferenceInExpressionExtractor portRefExtractor) {
+    this.portRefExtractor = Preconditions.checkNotNull(portRefExtractor);
   }
 
   @Override

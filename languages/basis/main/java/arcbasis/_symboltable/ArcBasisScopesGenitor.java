@@ -16,6 +16,7 @@ import arcbasis._ast.ASTPortDirection;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
+import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -137,6 +138,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected VariableSymbolBuilder create_ArcParameter(@NotNull ASTArcParameter ast) {
     assert (this.getCurrentScope().isPresent());
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
+    builder.setAccessModifier(BasicAccessModifier.PROTECTED);
     builder.setName(ast.getName());
     return builder;
   }
@@ -204,6 +206,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   protected VariableSymbolBuilder create_ArcField(@NotNull ASTArcField ast) {
     Preconditions.checkNotNull(ast);
     VariableSymbolBuilder builder = ArcBasisMill.variableSymbolBuilder();
+    builder.setAccessModifier(BasicAccessModifier.PRIVATE);
     builder.setName(ast.getName());
     return builder;
   }

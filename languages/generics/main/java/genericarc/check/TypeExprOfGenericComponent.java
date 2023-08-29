@@ -159,6 +159,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     return searchedTypeVar.map(typeVarSymbol -> this.getTypeVarBindings().get(typeVarSymbol));
   }
 
+  @Override
   public ImmutableList<SymTypeExpression> getTypeBindingsAsList() {
     return this.typeArguments;
   }

@@ -11,6 +11,7 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
+import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._util.VariableArcTypeDispatcher;
@@ -27,7 +28,11 @@ public class ConstraintsOmitPortReferences implements ArcBasisASTComponentTypeCo
   protected final IPortReferenceInExpressionExtractor portRefExtractor;
 
   public ConstraintsOmitPortReferences() {
-    this.portRefExtractor = new PortReferenceExtractor4ExpressionBasis();
+    this(new PortReferenceExtractor4ExpressionBasis());
+  }
+
+  public ConstraintsOmitPortReferences(@NotNull IPortReferenceInExpressionExtractor portRefExtractor) {
+    this.portRefExtractor = Preconditions.checkNotNull(portRefExtractor);
   }
 
   @Override

@@ -9,6 +9,7 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -58,6 +59,11 @@ public class TypeExprOfComponent extends CompTypeExpression {
   @Override
   public List<SymTypeExpression> getParameterTypes() {
     return this.getTypeInfo().getParameters().stream().map(VariableSymbol::getType).collect(Collectors.toList());
+  }
+
+  @Override
+  public List<SymTypeExpression> getTypeBindingsAsList() {
+    return Collections.emptyList();
   }
 
   @Override

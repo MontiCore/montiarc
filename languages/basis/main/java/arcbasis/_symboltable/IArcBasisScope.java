@@ -18,8 +18,9 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                                  Predicate<VariableSymbol> predicate) {
 
     List<PortSymbol> ports = resolvePortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
+    List<ComponentInstanceSymbol> instances = resolveComponentInstanceLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
 
-    List<VariableSymbol> adapters = new ArrayList<>(ports.size());
+    List<VariableSymbol> adapters = new ArrayList<>(ports.size() + instances.size());
 
     for (PortSymbol port : ports) {
 
@@ -28,6 +29,25 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
 
         // instantiate the adapter
         VariableSymbol adapter = new Port2VariableAdapter(port);
+
+        // filter by modifier and predicate
+        if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
+
+          // add the adapter to the result
+          adapters.add(adapter);
+
+          // add the adapter to the scope
+          this.add(adapter);
+        }
+      }
+    }
+    for (ComponentInstanceSymbol instance : instances) {
+
+      if (getLocalVariableSymbols().stream().filter(v -> v instanceof ComponentInstance2VariableAdapter)
+        .noneMatch(v -> ((ComponentInstance2VariableAdapter) v).getAdaptee().equals(instance))) {
+
+        // instantiate the adapter
+        VariableSymbol adapter = new ComponentInstance2VariableAdapter(instance);
 
         // filter by modifier and predicate
         if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
