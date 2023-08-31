@@ -2,75 +2,68 @@
 package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.AbstractInPort;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.port.TimeAwareInPort;
-import montiarc.rte.port.TimeAwareOutPort;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+@ExtendWith(MockitoExtension.class)
 class DelayTest {
-  
-  protected ITimedComponent getMockComponent(List<Message<OnOff>> actualOutputs) {
-    return new ITimedComponent() {
-      @Override
-      public List<ITimeAwareInPort<?>> getAllInPorts() {
-        return null;
-      }
-      
-      @Override
-      public List<TimeAwareOutPort<?>> getAllOutPorts() {
-        return null;
-      }
-      
-      @Override
-      public String getName() {
-        return "MockComponent";
-      }
-      
-      @Override
-      public void handleMessage(AbstractInPort<?> receivingPort) {
-        while(!receivingPort.isBufferEmpty()) {
-          actualOutputs.add((Message<OnOff>)receivingPort.pollBuffer());
-        }
-      }
-    };
-  }
 
+  /**
+   * capture of the actual output stream on port o
+   */
+  @Captor
+  ArgumentCaptor<Message<OnOff>> actual;
+
+  /**
+   * the target port of output port o
+   */
+  @Mock
+  ITimeAwareInPort<OnOff> port_o;
+
+  /**
+   * @param input the input stream on port i
+   * @param expected the expected output stream on port o
+   */
   @ParameterizedTest
   @MethodSource("io")
-  void testIO(@NotNull List<Message<OnOff>> inputs,
-              @NotNull List<Message<OnOff>> outputs) {
-    Preconditions.checkNotNull(inputs);
-    Preconditions.checkNotNull(outputs);
+  void testIO(@NotNull List<Message<OnOff>> input,
+              @NotNull List<Message<OnOff>> expected) {
+    Preconditions.checkNotNull(input);
+    Preconditions.checkNotNull(expected);
 
     // Given
     DelayComp sut = new DelayCompBuilder().setName("sut").build();
 
-    List<Message<OnOff>> actual = new ArrayList<>(outputs.size());
-    AbstractInPort<OnOff> r = new TimeAwareInPort<>("r", getMockComponent(actual));
-    sut.port_o().connect(r);
+    sut.port_o().connect(this.port_o);
+
+    // when receiving a message, capture that message but do nothing else
+    Mockito.doNothing().when(this.port_o).receive(this.actual.capture());
 
     // When
     sut.init();
 
-    for (Message<OnOff> input : inputs) {
-      sut.port_i().receive(input);
+    for (Message<OnOff> msg : input) {
+      sut.port_i().receive(msg);
     }
 
     // Then
-    Assertions.assertThat(actual).containsExactlyElementsOf(outputs);
+    Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> io() {

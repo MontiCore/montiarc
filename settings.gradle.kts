@@ -78,6 +78,7 @@ dependencyResolutionManagement {
       library("janino", "org.codehaus.janino:janino:3.1.9")
       library("smt", "org.sosy-lab:java-smt:3.12.0")
       library("mockito", "org.mockito:mockito-core:5.3.1")
+      library("mockito-junit", "org.mockito:mockito-junit-jupiter:5.3.1")
       library("z3", "tools.aqua:z3-turnkey:4.11.2")
 
       library("mc-lsp", "de.monticore.language-server:monticore-language-server-runtime:7.6.0-SNAPSHOT")

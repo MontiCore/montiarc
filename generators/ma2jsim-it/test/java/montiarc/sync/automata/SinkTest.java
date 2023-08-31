@@ -18,30 +18,34 @@ import java.util.stream.Stream;
 
 class SinkTest {
 
+  /**
+   * @param input the input stream on port i
+   * @param expected the expected states visited
+   */
   @ParameterizedTest
   @MethodSource("io")
-  void testST(@NotNull List<Message<OnOff>> inputs,
-              @NotNull List<State> states) {
-    Preconditions.checkNotNull(inputs);
-    Preconditions.checkNotNull(states);
+  void testST(@NotNull List<Message<OnOff>> input,
+              @NotNull List<State> expected) {
+    Preconditions.checkNotNull(input);
+    Preconditions.checkNotNull(expected);
 
     // Given
     SinkComp sut = new SinkCompBuilder().setName("sut").build();
 
-    List<State> actual = new ArrayList<>(states.size());
+    List<State> actual = new ArrayList<>(expected.size());
 
     // When
     sut.init();
 
-    for (Message<OnOff> input : inputs) {
-      sut.port_i().receive(input);
+    for (Message<OnOff> msg : input) {
+      sut.port_i().receive(msg);
       sut.port_i().receive(Tick.get());
 
       actual.add(sut.getBehavior().getState());
     }
 
     // Then
-    Assertions.assertThat(actual).containsExactlyElementsOf(states);
+    Assertions.assertThat(actual).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> io() {
