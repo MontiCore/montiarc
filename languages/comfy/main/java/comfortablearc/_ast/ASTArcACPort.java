@@ -4,7 +4,7 @@ package comfortablearc._ast;
 import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class ASTArcACPort extends ASTArcACPortTOP {
@@ -14,19 +14,17 @@ public class ASTArcACPort extends ASTArcACPortTOP {
    * matching if their types and names match.
    */
   @Override
-  public boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target, @NotNull ISymTypeRelations tr) {
+  public boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target) {
     Preconditions.checkNotNull(source);
     Preconditions.checkNotNull(target);
-    Preconditions.checkNotNull(tr);
 
-    return source.getName().equals(target.getName()) && matches(source.getType(), target.getType(), tr);
+    return source.getName().equals(target.getName()) && matches(source.getType(), target.getType());
   }
 
   protected boolean matches(@NotNull SymTypeExpression source,
-                            @NotNull SymTypeExpression target,
-                            @NotNull ISymTypeRelations tr) {
+                            @NotNull SymTypeExpression target) {
 
     return !source.isObscureType() && !target.isObscureType() &&
-      tr.isSubTypeOf(source, target) && tr.isSubTypeOf(source, target);
+        SymTypeRelations.isSubTypeOf(source, target) && SymTypeRelations.isSubTypeOf(source, target);
   }
 }

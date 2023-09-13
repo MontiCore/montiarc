@@ -7,6 +7,7 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypeOfFunction;
 import de.monticore.types.check.SymTypeOfIntersection;
+import de.monticore.types3.util.FunctionRelations;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class MACommonExpressionsTypeVisitor extends CommonExpressionsTypeVisitor
         .collect(Collectors.toSet());
       // filter out all function that do not fit the arguments
       Set<SymTypeOfFunction> callableFuncs = funcs.stream()
-        .filter(f -> getFuncRel().canBeCalledWith(f, args))
+        .filter(f -> FunctionRelations.canBeCalledWith(f, args))
         .collect(Collectors.toSet());
       if (callableFuncs.isEmpty()) {
         Log.error("0xCDABE with " + args.size() + " argument ("
@@ -95,7 +96,7 @@ public class MACommonExpressionsTypeVisitor extends CommonExpressionsTypeVisitor
           .map(f -> f.getWithFixedArity(args.size()))
           .collect(Collectors.toSet());
         Optional<SymTypeOfFunction> mostSpecificFunction =
-          getFuncRel().getMostSpecificFunction(callableFuncs);
+            FunctionRelations.getMostSpecificFunction(callableFuncs);
         if (mostSpecificFunction.isPresent()) {
           this.getType4Ast().setTypeOfExpression(expr.getExpression(), mostSpecificFunction.get());
           type = mostSpecificFunction.get().getType().deepClone();

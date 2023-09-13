@@ -2,7 +2,6 @@
 package montiarc.trafo;
 
 import com.google.common.base.Preconditions;
-import de.monticore.types3.util.SymTypeRelations;
 import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -32,7 +31,7 @@ public class MontiArcTrafos {
 
   public static MontiArcTrafos afterSymTab() {
     return new MontiArcTrafos(
-      new MAAutoConnectTrafo(new SymTypeRelations())
+      new MAAutoConnectTrafo()
     );
   }
 }

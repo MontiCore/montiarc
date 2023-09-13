@@ -9,6 +9,7 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
 import montiarc.MontiArcAbstractTest;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -293,6 +294,8 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
     final String fn = "OOType.sym";
 
     final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    SymTypeRelations.init();
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
@@ -755,6 +758,8 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
 
+    SymTypeRelations.init();
+
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
@@ -943,6 +948,8 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
     final String fn = name + ".sym";
 
     final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    SymTypeRelations.init();
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(

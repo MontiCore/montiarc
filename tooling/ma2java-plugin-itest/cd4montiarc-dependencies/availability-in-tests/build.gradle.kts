@@ -11,6 +11,10 @@ plugins {
 group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"
 version = "7.6.0-SNAPSHOT"
 
+montiarc {
+  internalMontiArcTesting.set(true)
+}
+
 dependencies {
   cd2pojo4montiarc(project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:cd-a"))
 }

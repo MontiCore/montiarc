@@ -48,8 +48,6 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-import de.monticore.types3.ISymTypeRelations;
-import de.monticore.types3.util.SymTypeRelations;
 import genericarc._cocos.ComponentHeritageTypeBound;
 import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
@@ -92,8 +90,7 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker afterSymTab() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
-    ISymTypeRelations tr = new SymTypeRelations();
-    TypeCheck3AsTypeCalculator tc2tc = new TypeCheck3AsTypeCalculator(tc, tr);
+    TypeCheck3AsTypeCalculator tc2tc = new TypeCheck3AsTypeCalculator(tc);
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
@@ -101,21 +98,21 @@ public class MontiArcCoCos {
     checker.addVariantCoCo(new PortUniqueSender());
     checker.addVariantCoCo(new SubPortsConnected());
     checker.addVariantCoCo(new ConnectorPortsExist());
-    checker.addVariantCoCo(new ConnectorTypesFit(tr));
+    checker.addVariantCoCo(new ConnectorTypesFit());
     checker.addVariantCoCo(new ConnectorDirectionsFit());
     checker.addVariantCoCo(new ConnectorTimingsFit());
     checker.addCoCo(new OnlyOneTiming());
     checker.addCoCo(new DelayOutPortOnly());
     checker.addVariantCoCo(new AtomicMaxOneBehavior());
     checker.addVariantCoCo(new FeedbackStrongCausality());
-    checker.addCoCo(new ConfigurationParameterAssignment(tc, tr));
+    checker.addCoCo(new ConfigurationParameterAssignment(tc));
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
-    checker.addCoCo(new ParameterHeritage(tc, tr));
-    checker.addVariantCoCo(new PortHeritageTypeFits(tr));
+    checker.addCoCo(new ParameterHeritage(tc));
+    checker.addVariantCoCo(new PortHeritageTypeFits());
     checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new FieldInitTypeFits(tc, tr));
-    checker.addCoCo(new ParameterDefaultValueTypeFits(tc, tr));
+    checker.addCoCo(new FieldInitTypeFits(tc));
+    checker.addCoCo(new ParameterDefaultValueTypeFits(tc));
     checker.addCoCo(new ParameterDefaultValueOmitsPortRef(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ComponentArgumentsOmitPortRef(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ComponentNameCapitalization());
@@ -134,7 +131,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintNoAssignmentExpr());
     checker.addCoCo(new ConstraintsOmitFieldReferences());
     checker.addCoCo(new ConstraintsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ConstraintIsBoolean(tc, tr));
+    checker.addCoCo(new ConstraintIsBoolean(tc));
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
@@ -142,7 +139,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfNoAssignmentExpr());
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new VarIfIsBoolean(tc, tr));
+    checker.addCoCo(new VarIfIsBoolean(tc));
 
     // Modes
     checker.addCoCo(new MaxOneModeAutomaton());
@@ -165,8 +162,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new NoTickEventInUntimedAutomata());
 
     // MontiArc CoCos
-    checker.addCoCo(new ComponentHeritageTypeBound(tr));
-    checker.addCoCo(new SubcomponentTypeBound(tr));
+    checker.addCoCo(new ComponentHeritageTypeBound());
+    checker.addCoCo(new SubcomponentTypeBound());
     checker.addCoCo(new RootNoInstance());
 
     // ComfortableArc Cocos

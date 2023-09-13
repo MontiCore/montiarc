@@ -11,7 +11,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -31,11 +31,8 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
   protected final IArcTypeCalculator tc;
 
-  protected final ISymTypeRelations tr;
-
-  public ParameterHeritage(@NotNull IArcTypeCalculator tc, @NotNull ISymTypeRelations tr) {
+  public ParameterHeritage(@NotNull IArcTypeCalculator tc) {
     this.tc = Preconditions.checkNotNull(tc);
-    this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
@@ -312,7 +309,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       } else if (parentArgs.get(i).isPresentName()) {
         String argumentKey = parentArgs.get(i).getName();
         int paramIndex = paramIndices.get(argumentKey);
-        if (parentSignature.get(paramIndex).isEmpty() || !tr.isCompatible(parentSignature.get(paramIndex).get(), parentArgsCheck.get(i))) {
+        if (parentSignature.get(paramIndex).isEmpty() || !SymTypeRelations.isCompatible(parentSignature.get(paramIndex).get(), parentArgsCheck.get(i))) {
           ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
 
           Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).printFullName(),
@@ -321,7 +318,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
           );
         }
       } else {
-        if (parentSignature.get(i).isEmpty() || !tr.isCompatible(parentSignature.get(i).get(), parentArgsCheck.get(i))) {
+        if (parentSignature.get(i).isEmpty() || !SymTypeRelations.isCompatible(parentSignature.get(i).get(), parentArgsCheck.get(i))) {
           ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
 
           Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).printFullName(),

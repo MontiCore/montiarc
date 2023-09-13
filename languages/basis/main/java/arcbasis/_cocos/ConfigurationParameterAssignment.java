@@ -12,7 +12,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -42,13 +42,10 @@ import java.util.stream.IntStream;
 public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo {
 
   protected final IArcTypeCalculator tc;
-  protected final ISymTypeRelations tr;
 
-  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc, @NotNull ISymTypeRelations tr) {
+  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc) {
     Preconditions.checkNotNull(tc);
-    Preconditions.checkNotNull(tr);
     this.tc = tc;
-    this.tr = tr;
   }
 
   @Override
@@ -189,7 +186,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         String key = arguments.get(i).getName();
 
         int paramIndex = paramIndices.get(key);
-        if (!tr.isCompatible(paramTypes.get(paramIndex), argTypes.get(i))) {
+        if (!SymTypeRelations.isCompatible(paramTypes.get(paramIndex), argTypes.get(i))) {
           // check non-keyword argument
           ASTExpression argument = arguments.get(i).getExpression();
 
@@ -202,7 +199,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         }
       } else {
         // the non-keyword argument's type is available
-        if (!tr.isCompatible(paramTypes.get(i), argTypes.get(i))) {
+        if (!SymTypeRelations.isCompatible(paramTypes.get(i), argTypes.get(i))) {
           ASTExpression argument = arguments.get(i).getExpression();
 
           Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(

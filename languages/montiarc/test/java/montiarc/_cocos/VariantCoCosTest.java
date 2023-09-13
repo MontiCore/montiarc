@@ -5,8 +5,6 @@ import arcbasis._cocos.*;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types3.ISymTypeRelations;
-import de.monticore.types3.util.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
@@ -494,19 +492,18 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
-    ISymTypeRelations tr = new SymTypeRelations();
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addVariantCoCo(new PortsConnected());
     checker.addVariantCoCo(new PortUniqueSender());
     checker.addVariantCoCo(new SubPortsConnected());
     checker.addVariantCoCo(new ConnectorPortsExist());
-    checker.addVariantCoCo(new ConnectorTypesFit(tr));
+    checker.addVariantCoCo(new ConnectorTypesFit());
     checker.addVariantCoCo(new ConnectorDirectionsFit());
     checker.addVariantCoCo(new ConnectorTimingsFit());
     checker.addVariantCoCo(new AtomicMaxOneBehavior());
     checker.addVariantCoCo(new FeedbackStrongCausality());
-    checker.addVariantCoCo(new PortHeritageTypeFits(tr));
+    checker.addVariantCoCo(new PortHeritageTypeFits());
     checker.addVariantCoCo(new UniqueIdentifier());
 
     // When
@@ -524,19 +521,18 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
-    ISymTypeRelations tr = new SymTypeRelations();
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addVariantCoCo(new PortsConnected());
     checker.addVariantCoCo(new PortUniqueSender());
     checker.addVariantCoCo(new SubPortsConnected());
     checker.addVariantCoCo(new ConnectorPortsExist());
-    checker.addVariantCoCo(new ConnectorTypesFit(tr));
+    checker.addVariantCoCo(new ConnectorTypesFit());
     checker.addVariantCoCo(new ConnectorDirectionsFit());
     checker.addVariantCoCo(new ConnectorTimingsFit());
     checker.addVariantCoCo(new AtomicMaxOneBehavior());
     checker.addVariantCoCo(new FeedbackStrongCausality());
-    checker.addVariantCoCo(new PortHeritageTypeFits(tr));
+    checker.addVariantCoCo(new PortHeritageTypeFits());
     checker.addVariantCoCo(new UniqueIdentifier());
 
     // When

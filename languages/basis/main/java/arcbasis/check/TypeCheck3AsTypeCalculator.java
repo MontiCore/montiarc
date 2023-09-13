@@ -4,7 +4,7 @@ package arcbasis.check;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.TypeCalculator;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -17,12 +17,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
 @Deprecated
 public class TypeCheck3AsTypeCalculator extends TypeCalculator {
 
-  private final ISymTypeRelations tr;
-
-  public TypeCheck3AsTypeCalculator(@NotNull IArcTypeCalculator tc,
-                                    @NotNull ISymTypeRelations tr) {
+  public TypeCheck3AsTypeCalculator(@NotNull IArcTypeCalculator tc) {
     super(tc, tc);
-    this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
@@ -30,7 +26,7 @@ public class TypeCheck3AsTypeCalculator extends TypeCalculator {
                             @NotNull SymTypeExpression right) {
     Preconditions.checkNotNull(left);
     Preconditions.checkNotNull(right);
-    return this.tr.isCompatible(left, right);
+    return SymTypeRelations.isCompatible(left, right);
   }
 
   @Override
@@ -38,6 +34,6 @@ public class TypeCheck3AsTypeCalculator extends TypeCalculator {
                              @NotNull SymTypeExpression superType) {
     Preconditions.checkNotNull(subType);
     Preconditions.checkNotNull(superType);
-    return this.tr.isSubTypeOf(subType, superType);
+    return SymTypeRelations.isSubTypeOf(subType, superType);
   }
 }

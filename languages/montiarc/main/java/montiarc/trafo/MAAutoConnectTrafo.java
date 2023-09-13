@@ -3,7 +3,6 @@ package montiarc.trafo;
 
 import com.google.common.base.Preconditions;
 import comfortablearc.trafo.AutoConnectTrafo;
-import de.monticore.types3.ISymTypeRelations;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
@@ -19,9 +18,7 @@ public class MAAutoConnectTrafo extends AutoConnectTrafo implements UnaryOperato
 
   protected final MontiArcTraverser traverser;
 
-  public MAAutoConnectTrafo(@NotNull ISymTypeRelations tr) {
-    super(Preconditions.checkNotNull(tr));
-
+  public MAAutoConnectTrafo() {
     this.traverser = MontiArcMill.inheritanceTraverser();
     this.traverser.add4ArcBasis(this);
     this.traverser.add4ComfortableArc(this);

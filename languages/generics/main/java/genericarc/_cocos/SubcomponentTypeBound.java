@@ -11,7 +11,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.util.GenericArcError;
@@ -26,12 +26,7 @@ import java.util.Optional;
  */
 public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationCoCo {
 
-  protected final ISymTypeRelations tr;
-
-  public SubcomponentTypeBound(@NotNull ISymTypeRelations tr) {
-    this.tr = Preconditions.checkNotNull(tr);
-  }
-                                                         /**
+  /**
    * Checks that type arguments for bounded type parameters are subtypes of the parameter bounds. Else logs an error.
    *
    * @param compTypeExpr     The instantiating component type expression that contains the type arguments that should be
@@ -51,7 +46,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
         for (SymTypeExpression aBound : typeVar.getSuperTypesList()) {
           SymTypeExpression bound = aBound.deepClone();
           bound.replaceTypeVariables(compTypeExpr.getTypeVarBindings());
-          if (!this.tr.isSubTypeOf(typeVarBinding.get(), bound)) {
+          if (!SymTypeRelations.isSubTypeOf(typeVarBinding.get(), bound)) {
             Log.error(
                 GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
                 astInstantiation.get_SourcePositionStart(), astInstantiation.get_SourcePositionEnd()

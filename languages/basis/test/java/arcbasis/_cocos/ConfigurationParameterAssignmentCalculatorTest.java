@@ -21,7 +21,6 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types3.util.SymTypeRelations;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -86,7 +85,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     this.scopeGenP3.createFromAST(toInstantiate);
 
     // When
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator(), new SymTypeRelations());
+    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator());
     coco.check(compInst.getComponentInstance(0));
 
     // Then

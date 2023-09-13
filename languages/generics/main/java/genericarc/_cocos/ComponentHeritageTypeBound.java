@@ -9,7 +9,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
@@ -25,12 +25,6 @@ import java.util.Optional;
  * of these bounds.
  */
 public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo {
-
-  protected final ISymTypeRelations tr;
-
-  public ComponentHeritageTypeBound(@NotNull ISymTypeRelations tr) {
-    this.tr = Preconditions.checkNotNull(tr);
-  }
 
   private static SourcePosition parentPositionOrElseTypePosition(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
@@ -101,7 +95,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
         for (SymTypeExpression aBound : typeVar.getSuperTypesList()) {
           SymTypeExpression bound = aBound.deepClone();
           bound.replaceTypeVariables(parentExpr.getTypeVarBindings());
-          if (!tr.isCompatible(bound, typeVarBinding.get())) {
+          if (!SymTypeRelations.isCompatible(bound, typeVarBinding.get())) {
             Log.error(
               GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
               parentPositionOrElseTypePosition(node));

@@ -4,7 +4,6 @@ package montiarc._cocos;
 import arcbasis._cocos.PortHeritageTypeFits;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.types3.util.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
@@ -107,7 +106,7 @@ public class PortHeritageTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortHeritageTypeFits(new SymTypeRelations()));
+    checker.addCoCo(new PortHeritageTypeFits());
 
     // When
     checker.checkAll(ast);
@@ -126,7 +125,7 @@ public class PortHeritageTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortHeritageTypeFits(new SymTypeRelations()));
+    checker.addCoCo(new PortHeritageTypeFits());
 
     // When
     checker.checkAll(ast);

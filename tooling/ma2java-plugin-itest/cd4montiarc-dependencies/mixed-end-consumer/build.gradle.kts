@@ -15,6 +15,14 @@ plugins {
 group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"
 version = "7.6.0-SNAPSHOT"
 
+cd2pojo {
+  internalMontiArcTesting.set(true)
+}
+
+montiarc {
+  internalMontiArcTesting.set(true)
+}
+
 tasks.getByName<Test>("test") {
   enabled = false
 }

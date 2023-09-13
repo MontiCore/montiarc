@@ -5,7 +5,7 @@ import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,11 +18,9 @@ public class VarIfIsBoolean implements VariableArcASTArcVarIfCoCo {
 
   protected final IArcTypeCalculator tc;
 
-  protected final ISymTypeRelations tr;
 
-  public VarIfIsBoolean(@NotNull IArcTypeCalculator tc, @NotNull ISymTypeRelations tr) {
+  public VarIfIsBoolean(@NotNull IArcTypeCalculator tc) {
     this.tc = Preconditions.checkNotNull(tc);
-    this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
@@ -32,7 +30,7 @@ public class VarIfIsBoolean implements VariableArcASTArcVarIfCoCo {
     ASTExpression expr = varif.getCondition();
     SymTypeExpression typeOfExpr = this.tc.typeOf(expr);
 
-    if (!this.tr.isBoolean(typeOfExpr)) {
+    if (!SymTypeRelations.isBoolean(typeOfExpr)) {
       Log.error(VariableArcError.IF_STATEMENT_EXPRESSION_WRONG_TYPE.format(typeOfExpr.print()),
         varif.get_SourcePositionStart(), varif.get_SourcePositionEnd()
       );

@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types3.ISymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -22,11 +22,9 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
    */
   protected final IArcTypeCalculator tc;
 
-  protected final ISymTypeRelations tr;
 
-  public ParameterDefaultValueTypeFits(@NotNull IArcTypeCalculator tc, @NotNull ISymTypeRelations tr) {
+  public ParameterDefaultValueTypeFits(@NotNull IArcTypeCalculator tc) {
     this.tc = Preconditions.checkNotNull(tc);
-    this.tr = Preconditions.checkNotNull(tr);
   }
 
   @Override
@@ -52,7 +50,7 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
             + ": Skip execution of CoCo, could not calculate the parameter's type.",
           this.getClass().getCanonicalName()
         );
-      } else if (!tr.isCompatible(paramType, expressionType)) {
+      } else if (!SymTypeRelations.isCompatible(paramType, expressionType)) {
         Log.error(ArcError.PARAM_DEFAULT_TYPE_MISMATCH.format(paramType.printFullName(), expressionType.printFullName()),
           astParam.get_SourcePositionStart(), astParam.get_SourcePositionEnd()
         );

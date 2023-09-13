@@ -4,7 +4,6 @@ package montiarc._cocos;
 import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.types3.util.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
@@ -55,7 +54,7 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterDefaultValueTypeFits(new MontiArcTypeCalculator(), new SymTypeRelations()));
+    checker.addCoCo(new ParameterDefaultValueTypeFits(new MontiArcTypeCalculator()));
 
     // When
     checker.checkAll(ast);
@@ -74,7 +73,7 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterDefaultValueTypeFits(new MontiArcTypeCalculator(), new SymTypeRelations()));
+    checker.addCoCo(new ParameterDefaultValueTypeFits(new MontiArcTypeCalculator()));
 
     // When
     checker.checkAll(ast);
