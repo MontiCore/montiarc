@@ -4,6 +4,7 @@ package montiarc.generator;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.MCFatalError;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._cocos.MontiArcCoCos;
@@ -26,11 +27,11 @@ import java.util.stream.Collectors;
 
 import static montiarc.cocos.IdentifiersAreNoJavaKeywords.*;
 
-public class MontiArcTool extends montiarc.MontiArcTool {
+public class MA2JavaTool extends MontiArcTool {
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
-    MontiArcTool tool = new MontiArcTool();
+    MA2JavaTool tool = new MA2JavaTool();
     tool.init();
     try {
       tool.run(args);

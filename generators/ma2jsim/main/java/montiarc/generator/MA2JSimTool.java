@@ -3,6 +3,7 @@ package montiarc.generator;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.codegen.MA2JSimGen;
 import org.apache.commons.cli.CommandLine;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class MA2JSimTool extends montiarc.MontiArcTool {
+public class MA2JSimTool extends MontiArcTool {
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);

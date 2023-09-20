@@ -26,7 +26,7 @@ java {
 tasks.shadowJar {
   //minimize()
   manifest {
-    attributes["Main-Class"] = "montiarc.generator.MontiArcTool"
+    attributes["Main-Class"] = "montiarc.generator.MA2JavaTool"
   }
   isZip64 = true
   archiveClassifier.set("mc-tool")

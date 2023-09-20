@@ -19,7 +19,7 @@ import org.gradle.jvm.tasks.Jar
 
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 
-const val MA_TOOL_CLASS = "montiarc.generator.MontiArcTool"
+const val MA_TOOL_CLASS = "montiarc.generator.MA2JavaTool"
 
 const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:ma2java"
 const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java"
