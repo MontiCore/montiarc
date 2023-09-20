@@ -10,9 +10,9 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.*
 
 /**
- * A task that generates Java code from Montiarc models.
+ * A task that generates Java code from MontiArc models.
  */
-abstract class MontiarcCompile : JavaExec() {
+abstract class MontiArcCompile : JavaExec() {
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories

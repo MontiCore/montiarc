@@ -31,7 +31,7 @@ const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte"
  * Enables the integration of montiarc models into a project build:
  * Declare the directories in which montiarc models lay, let them be compiled to java
  * and distributed so that others can use these models, too.
- * @see MontiarcCompile
+ * @see MontiArcCompile
  */
 @Suppress("unused")
 class Ma2JavaPlugin : Plugin<Project> {
@@ -62,7 +62,7 @@ class Ma2JavaPlugin : Plugin<Project> {
       }
 
       pluginManager.withPlugin("cd2pojo") {
-        pluginManager.apply(CdOutputAsMACompileInputPlugin::class.java)
+        pluginManager.apply(CDOut2MAInPlugin::class.java)
       }
     }
   }
@@ -124,10 +124,10 @@ class Ma2JavaPlugin : Plugin<Project> {
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * task is added to the java sources of the same SourceSet.
    */
-  private fun createCompileMontiarcTask(sourceSet: SourceSet): TaskProvider<MontiarcCompile> = with (project) {
+  private fun createCompileMontiarcTask(sourceSet: SourceSet): TaskProvider<MontiArcCompile> = with (project) {
     val montiarcSrcDirSet = sourceSet.montiarc.get()
     val taskName = sourceSet.compileMontiarcTaskName
-    val generateTask = tasks.register(taskName, MontiarcCompile::class.java)
+    val generateTask = tasks.register(taskName, MontiArcCompile::class.java)
 
     generateTask.configure { genTask ->
       genTask.description = "Generates java code from the Montiarc models in source set ${sourceSet.name}."
@@ -146,7 +146,7 @@ class Ma2JavaPlugin : Plugin<Project> {
       })
     }
 
-    sourceSet.montiarc.get().compiledBy(generateTask, MontiarcCompile::outputDir)
+    sourceSet.montiarc.get().compiledBy(generateTask, MontiArcCompile::outputDir)
     setTaskOrderAfterMaGenerator(generateTask)
     tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
@@ -154,10 +154,10 @@ class Ma2JavaPlugin : Plugin<Project> {
   }
 
   /**
-   * If [MAExtension.internalMontiArcTesting] is true, then this method schedules the [MontiarcCompile] task to run
+   * If [MAExtension.internalMontiArcTesting] is true, then this method schedules the [MontiArcCompile] task to run
    * after the tests of the generator finished.
    */
-  private fun setTaskOrderAfterMaGenerator(generateTask: TaskProvider<MontiarcCompile>) = with (project) {
+  private fun setTaskOrderAfterMaGenerator(generateTask: TaskProvider<MontiArcCompile>) = with (project) {
     generateTask.configure { genTask ->
       if (maExtension.internalMontiArcTesting.get()) {
         genTask.mustRunAfter(project(INTERNAL_GENERATOR_PROJECT_REF).tasks.withType(Test::class.java))
@@ -178,18 +178,18 @@ class Ma2JavaPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainCompile = tasks.named(mainSourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
+    val mainCompile = tasks.named(mainSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
     // Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.compileMontiarcTaskName, MontiarcCompile::class.java) {
+    tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java) {
       it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
     }
   }
 
   /**
-   * Configures the symbols jar task so that it contains the symbols produced by the [MontiarcCompile] task.
+   * Configures the symbols jar task so that it contains the symbols produced by the [MontiArcCompile] task.
    */
   private fun putCompiledSymbolsIntoJarOf(sourceSet: SourceSet) = with (project) {
-    val compileTask = tasks.named(sourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
+    val compileTask = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
     tasks.named(sourceSet.montiarcSymbolsJarTaskName, Jar::class.java).configure {jar ->
       jar.from(compileTask.get().symbolOutputDir())
     }

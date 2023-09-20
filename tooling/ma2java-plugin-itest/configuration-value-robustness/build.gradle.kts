@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.gradle.ma2java.MontiarcCompile
+import montiarc.gradle.ma2java.MontiArcCompile
 import montiarc.gradle.ma2java.compileMontiarcTaskName
 
 /**
@@ -29,7 +29,7 @@ val alteredConfigValuesSrcSet = sourceSets.create("alteringAndUsingConfigValues"
   montiarc.destinationDirectory.set(layout.buildDirectory.dir("montiarc-for-altered-destination"))
 }
 
-tasks.named<MontiarcCompile>(alteredConfigValuesSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(alteredConfigValuesSrcSet.compileMontiarcTaskName) {
   val srcSet = alteredConfigValuesSrcSet
   hwcPath.setFrom("$projectDir/src/${srcSet.name}/alteredJavaHwc")
   symbolImportDir.setFrom("$projectDir/src/${srcSet.name}/alteredSymbolsDir")
@@ -63,7 +63,7 @@ val multiplePathsSrcSet = sourceSets.create("usingMultiplePathsAsConfigValues") 
   ))
 }
 
-tasks.named<MontiarcCompile>(multiplePathsSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(multiplePathsSrcSet.compileMontiarcTaskName) {
   val srcSet = multiplePathsSrcSet
   hwcPath.setFrom(
     "$projectDir/src/${srcSet.name}/java",
@@ -108,7 +108,7 @@ val mixedPathsExistanceSrcSet = sourceSets.create("usingMultiplePathsMixedExista
   ))
 }
 
-tasks.named<MontiarcCompile>(mixedPathsExistanceSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(mixedPathsExistanceSrcSet.compileMontiarcTaskName) {
   val srcSet = mixedPathsExistanceSrcSet
   hwcPath.setFrom(
     "$projectDir/src/${srcSet.name}/java",
@@ -167,7 +167,7 @@ tasks.check.configure { dependsOn(removingDefaultValuesCheck) }
 // Testing correct behavior if we change configuration values to unused or absent paths where possible
 // For this source set, declaring only an unused model path directory would lead to "NO_SOURCE", disabling testing
 val unusedConfigValuesSrcSet = sourceSets.create("declaringUnusedConfigValues")
-tasks.named<MontiarcCompile>(unusedConfigValuesSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(unusedConfigValuesSrcSet.compileMontiarcTaskName) {
   val srcSet = unusedConfigValuesSrcSet
   hwcPath.setFrom(file("$projectDir/src/${srcSet.name}/unusedJava"))
   symbolImportDir.setFrom(file("$projectDir/src/${srcSet.name}/unusedSymbols"))

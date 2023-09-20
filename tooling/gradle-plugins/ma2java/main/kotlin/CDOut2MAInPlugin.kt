@@ -10,9 +10,9 @@ import montiarc.gradle.cd2pojo.Cd2PojoCompile
 import montiarc.gradle.cd2pojo.compileCd2PojoTaskName
 
 /**
- * Connects the outputs of [Cd2PojoCompile] to the inputs of [MontiarcCompile] (for each [SourceSet]).
+ * Connects the outputs of [Cd2PojoCompile] to the inputs of [MontiArcCompile] (for each [SourceSet]).
  */
-class CdOutputAsMACompileInputPlugin : Plugin<Project> {
+class CDOut2MAInPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
@@ -33,7 +33,7 @@ class CdOutputAsMACompileInputPlugin : Plugin<Project> {
   }
 
   private fun connectCdSymbolsToMontiarc(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
+    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
     val cdCompile = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
 
     maCompile.configure {
@@ -44,7 +44,7 @@ class CdOutputAsMACompileInputPlugin : Plugin<Project> {
   }
 
   private fun createDependencyBetweenCdAndMaCompileTasks(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiarcCompile::class.java)
+    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
     val cdCompile = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
 
     maCompile.configure { it.dependsOn(cdCompile) }
