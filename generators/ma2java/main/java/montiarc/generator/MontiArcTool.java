@@ -3,6 +3,7 @@ package montiarc.generator;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import de.se_rwth.commons.logging.MCFatalError;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._cocos.MontiArcCoCos;
@@ -31,7 +32,15 @@ public class MontiArcTool extends montiarc.MontiArcTool {
     Preconditions.checkNotNull(args);
     MontiArcTool tool = new MontiArcTool();
     tool.init();
-    tool.run(args);
+    try {
+      tool.run(args);
+    } catch (MCFatalError error) {
+      if (Log.isDebugEnabled("")) {
+        throw new Error("Compilation failed; see the compiler error output for details.", error);
+      } else {
+        throw new Error("Compilation failed; see the compiler error output for details.");
+      }
+    }
   }
 
   @Override
