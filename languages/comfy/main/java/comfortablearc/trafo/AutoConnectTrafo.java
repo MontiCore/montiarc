@@ -49,9 +49,11 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
     List<ASTPortAccess> unconnectedTargets = new ArrayList<>(getUnconnectedOuterTargetPorts(this.comps.peek().getSymbol()));
 
     connectableSubComps.stream()
+      .filter(ComponentInstanceSymbol::isPresentType)
       .map(subComp -> getUnconnectedSourcePorts(subComp, this.comps.peek().getSymbol()))
       .forEach(unconnectedSources::addAll);
     connectableSubComps.stream()
+      .filter(ComponentInstanceSymbol::isPresentType)
       .map(subComp -> getUnconnectedTargetPorts(subComp, this.comps.peek().getSymbol()))
       .forEach(unconnectedTargets::addAll);
 
