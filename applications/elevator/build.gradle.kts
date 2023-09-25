@@ -44,5 +44,3 @@ tasks.compileMontiarc {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
 }
-
-tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }
