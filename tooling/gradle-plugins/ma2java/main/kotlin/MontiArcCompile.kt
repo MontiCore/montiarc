@@ -60,6 +60,9 @@ abstract class MontiArcCompile : JavaExec() {
 
     // printInfo()
 
+    // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
+    project.delete(outputDir)
+
     // 1) For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
