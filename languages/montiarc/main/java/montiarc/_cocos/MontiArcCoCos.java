@@ -64,6 +64,7 @@ import montiarc.check.MontiArcTypeCalculator;
 import variablearc._cocos.ConstraintIsBoolean;
 import variablearc._cocos.ConstraintNoAssignmentExpr;
 import variablearc._cocos.ConstraintSatisfied4Comp;
+import variablearc._cocos.ConstraintSmtConvertible;
 import variablearc._cocos.ConstraintsOmitFieldReferences;
 import variablearc._cocos.ConstraintsOmitPortReferences;
 import variablearc._cocos.FeatureNameCapitalization;
@@ -73,6 +74,7 @@ import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfNoAssignmentExpr;
 import variablearc._cocos.VarIfOmitFieldReferences;
 import variablearc._cocos.VarIfOmitPortReferences;
+import variablearc._cocos.VarIfSmtConvertible;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -132,6 +134,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintsOmitFieldReferences());
     checker.addCoCo(new ConstraintsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ConstraintIsBoolean(tc));
+    checker.addCoCo(new ConstraintSmtConvertible());
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
@@ -140,6 +143,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new VarIfIsBoolean(tc));
+    checker.addCoCo(new VarIfSmtConvertible());
 
     // Modes
     checker.addCoCo(new MaxOneModeAutomaton());

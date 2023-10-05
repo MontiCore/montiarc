@@ -31,6 +31,7 @@ public class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
     this.result = new Expr2SMTResult();
     this.sortDerive = new VariableArcDeriveSMTSort(new MontiArcTypeCalculator());
     this.traverser = MontiArcMill.traverser();
+    this.prefix = "";
 
     this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this));
     this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this));
@@ -64,7 +65,8 @@ public class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
   }
 
   @Override
-  public void setPrefix(String prefix) {
+  public void setPrefix(@NotNull String prefix) {
+    Preconditions.checkNotNull(prefix);
     this.prefix = prefix;
   }
 }

@@ -61,20 +61,22 @@ Legend:
 
 # VariableArc CoCos
 
-| in MA | CoCo(s)                        | Language    | Code                                        | Notes                                                      |
-|-------|--------------------------------|-------------|---------------------------------------------|------------------------------------------------------------|
-| ☑     | ConstraintSatisfied4Comp       | VariableArc | 0xC1401                                     |                                                            |
-| ☑     | ConstraintsOmitPortReferences  | VariableArc | 0xC1408                                     |                                                            |
-| ☑     | ConstraintsOmitFieldReferences | VariableArc | 0xC1415                                     |                                                            |
-| ☑     | ConstraintIsBoolean            | VariableArc | 0xC1400                                     |                                                            |
-| ☑     | ConstraintNoAssignmentExpr     | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
-| ☑     | FeatureNameCapitalization      | VariableArc | 0xC1402                                     |                                                            |
-| ☑     | FeatureUsage                   | VariableArc | 0xC1403                                     |                                                            |
-| ☑     | SubcomponentsConstraint        | VariableArc | 0xC1404                                     |                                                            |
-| ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1407                                     |                                                            |
-| ☑     | VarIfOmitFieldReferences       | VariableArc | 0xC1416                                     |                                                            |
-| ☑     | VarIfIsBoolean                 | VariableArc | 0xC1404                                     |                                                            |
-| ☑     | VarIfNoAssignmentExpr          | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |                                                            |
+| in MA | CoCo(s)                        | Language    | Code                                        | Notes |
+|-------|--------------------------------|-------------|---------------------------------------------|-------|
+| ☑     | ConstraintSatisfied4Comp       | VariableArc | 0xC1401                                     |       |
+| ☑     | ConstraintsOmitPortReferences  | VariableArc | 0xC1408                                     |       |
+| ☑     | ConstraintsOmitFieldReferences | VariableArc | 0xC1415                                     |       |
+| ☑     | ConstraintIsBoolean            | VariableArc | 0xC1400                                     |       |
+| ☑     | ConstraintNoAssignmentExpr     | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |       |
+| ☑     | ConstraintSmtConvertible       | VariableArc | 0xC1417                                     |       |
+| ☑     | FeatureNameCapitalization      | VariableArc | 0xC1402                                     |       |
+| ☑     | FeatureUsage                   | VariableArc | 0xC1403                                     |       |
+| ☑     | SubcomponentsConstraint        | VariableArc | 0xC1404                                     |       |
+| ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1407                                     |       |
+| ☑     | VarIfOmitFieldReferences       | VariableArc | 0xC1416                                     |       |
+| ☑     | VarIfIsBoolean                 | VariableArc | 0xC1404                                     |       |
+| ☑     | VarIfNoAssignmentExpr          | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |       |
+| ☑     | VarIfSmtConvertible            | VariableArc | 0xC1417                                     |       |
 
 # Mode Automata
 

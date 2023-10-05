@@ -30,10 +30,10 @@ public interface IDeriveSMTExpr {
   default void setPrefix(@NotNull String prefix) {}
 
   default @NotNull Optional<Expr<?>> toExpr(@NotNull ASTExpression expr) {
-      Preconditions.checkNotNull(expr);
-      getResult().clear();
-      expr.accept(getTraverser());
-      return getResult().getValue();
+    Preconditions.checkNotNull(expr);
+    getResult().clear();
+    expr.accept(getTraverser());
+    return getResult().getValue();
   }
 
   default @NotNull Optional<IntExpr> toInt(@NotNull ASTExpression expr) {

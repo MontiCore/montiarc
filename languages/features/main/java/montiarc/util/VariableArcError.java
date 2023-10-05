@@ -17,7 +17,8 @@ public enum VariableArcError implements Error {
   PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1413", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
   PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1414", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
   FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Variables are an element of the runtime, cannot use field '%s' at design-time"),
-  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Variables are an element of the runtime, cannot use field '%s' at design-time");
+  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Variables are an element of the runtime, cannot use field '%s' at design-time"),
+  EXPRESSION_NOT_SMT_CONVERTIBLE("0xC1417", "Unsupported expression, cannot check '%s'");
 
   private final String errorCode;
   private final String errorMessage;
