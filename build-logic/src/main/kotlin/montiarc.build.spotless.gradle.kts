@@ -6,9 +6,6 @@ plugins {
 }
 
 spotless {
-  // limit format enforcement to just the files changed by this branch
-  ratchetFrom("origin/develop")
-
   java {
     targetExclude(fileTree("$buildDir") { include("**/*.java") })
 
