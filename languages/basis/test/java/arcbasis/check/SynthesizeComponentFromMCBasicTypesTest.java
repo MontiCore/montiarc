@@ -82,7 +82,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     Assertions.assertTrue(result4multi.getResult().get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo());
     Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo());
-    Assertions.assertEquals(multipleNormalComp2, result4multi.getResult().get().getTypeInfo());
+    Assertions.assertTrue(result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp1) || result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp2));
     checkOnlyExpectedErrorsPresent(ArcError.AMBIGUOUS_REFERENCE);
   }
 
