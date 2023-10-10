@@ -16,9 +16,11 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesHandler;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
+import de.se_rwth.commons.logging.Log;
 import genericarc._symboltable.IGenericArcScope;
 import genericarc.check.TypeExprOfGenericComponent;
 import montiarc._symboltable.IMontiArcScope;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -78,8 +80,16 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
     List<ComponentTypeSymbol> compSym = enclScope.resolveComponentTypeMany(compName);
 
     if (compSym.isEmpty()) {
+      Log.error(ArcError.MISSING_COMPONENT.format(mcType.getNameList().stream().reduce("", String::concat)),
+        mcType.get_SourcePositionStart(), mcType.get_SourcePositionEnd()
+      );
       this.resultWrapper.setResultAbsent();
     } else {
+      if (compSym.size() > 1) {
+        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(compSym.get(0).getFullName(), compSym.get(1).getFullName()),
+          mcType.get_SourcePositionStart(), mcType.get_SourcePositionEnd()
+        );
+      }
       List<SymTypeExpression> typeArgExpressions = typeArgumentsToTypes(mcType.getMCTypeArgumentList()).stream()
         .map(typeArg -> {
           SymTypeExpression typeResult = null;

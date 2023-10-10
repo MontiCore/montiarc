@@ -20,6 +20,7 @@ import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -134,6 +135,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
     Assertions.assertEquals(stringSym,
       ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
     );
+    checkOnlyExpectedErrorsPresent();
   }
 
   @Test
@@ -165,6 +167,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
+    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT);
   }
 
   @Test
@@ -198,6 +201,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
+    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT);
   }
 
   @Test
@@ -242,6 +246,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
+    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT);
   }
 
   /**

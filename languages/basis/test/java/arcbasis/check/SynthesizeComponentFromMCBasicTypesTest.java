@@ -8,6 +8,7 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
+import montiarc.util.ArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -31,6 +32,20 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
+    String multipleNormalCompName = "Comp3";
+    ComponentTypeSymbol multipleNormalComp1 = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(multipleNormalCompName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    ArcBasisMill.globalScope().add(multipleNormalComp1);
+    ArcBasisMill.globalScope().addSubScope(multipleNormalComp1.getSpannedScope());
+    ComponentTypeSymbol multipleNormalComp2 = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(multipleNormalCompName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    ArcBasisMill.globalScope().add(multipleNormalComp2);
+    ArcBasisMill.globalScope().addSubScope(multipleNormalComp2.getSpannedScope());
+
     String nameOfQualCompScope = "scoop";
     IArcBasisScope scopeOfQualComp = ArcBasisMill.scope();
     scopeOfQualComp.setName(nameOfQualCompScope);
@@ -41,25 +56,34 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     // Now build the qualified type
     ASTMCQualifiedType astNormalComp = createQualifiedType(normalCompName);
     ASTMCQualifiedType astQualComp = createQualifiedType(nameOfQualCompScope, qualifiedCompName);
+    ASTMCQualifiedType astMultiNormalComp = createQualifiedType(multipleNormalCompName);
     astNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
     astQualComp.setEnclosingScope(ArcBasisMill.globalScope());
+    astMultiNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
 
     SynthCompTypeResult result4normal = new SynthCompTypeResult();
     SynthCompTypeResult result4qual = new SynthCompTypeResult();
+    SynthCompTypeResult result4multi = new SynthCompTypeResult();
     SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
     SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
+    SynthesizeComponentFromMCBasicTypes synth4multi = new SynthesizeComponentFromMCBasicTypes(result4multi);
 
     // When
     synth4normal.handle(astNormalComp);
     synth4qual.handle(astQualComp);
+    synth4multi.handle(astMultiNormalComp);
 
     // Then
     Assertions.assertTrue(result4normal.getResult().isPresent());
     Assertions.assertTrue(result4qual.getResult().isPresent());
+    Assertions.assertTrue(result4multi.getResult().isPresent());
     Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfComponent);
     Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfComponent);
+    Assertions.assertTrue(result4multi.getResult().get() instanceof TypeExprOfComponent);
     Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo());
     Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo());
+    Assertions.assertEquals(multipleNormalComp2, result4multi.getResult().get().getTypeInfo());
+    checkOnlyExpectedErrorsPresent(ArcError.AMBIGUOUS_REFERENCE);
   }
 
   @Test
@@ -82,6 +106,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     // Then
     Assertions.assertFalse(result4normal.getResult().isPresent());
     Assertions.assertFalse(result4qual.getResult().isPresent());
+    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT, ArcError.MISSING_COMPONENT);
   }
 
   @Test
@@ -102,5 +127,6 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
+    checkOnlyExpectedErrorsPresent();
   }
 }
