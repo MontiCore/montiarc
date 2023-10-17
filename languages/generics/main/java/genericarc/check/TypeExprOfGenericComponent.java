@@ -88,25 +88,25 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   @Override
-  public Optional<CompTypeExpression> getParentTypeExpr() {
+  public List<CompTypeExpression> getParentTypeExpr() {
 
     ComponentTypeSymbol rawType = this.getTypeInfo();
-    if (!rawType.isPresentParent()) {
-      return Optional.empty();
+    if (rawType.isEmptyParents()) {
+      return rawType.getParentsList();
     }
 
-    CompTypeExpression unboundParentExpr = rawType.getParent();
+    return rawType.getParentsList().stream().map(unboundParentExpr -> {
     if (unboundParentExpr instanceof TypeExprOfComponent) {
-      return Optional.of(unboundParentExpr);
+      return unboundParentExpr;
     } else if (unboundParentExpr instanceof TypeExprOfGenericComponent) {
-      return Optional.of(((TypeExprOfGenericComponent) unboundParentExpr).bindTypeParameter(this.getTypeVarBindings()));
+      return ((TypeExprOfGenericComponent) unboundParentExpr).bindTypeParameter(this.getTypeVarBindings());
     } else {
       throw new UnsupportedOperationException("Encountered a type expression for components that is not known." +
         String.format(" (We only know '%s' and '%s')",
           TypeExprOfComponent.class.getName(), TypeExprOfGenericComponent.class.getName()
         )
       );
-    }
+    }}).collect(Collectors.toList());
   }
 
   @Override
@@ -122,9 +122,9 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
         .filter(PortSymbol::isTypePresent)
         .map(PortSymbol::getType);
       return unboundPortType.map(this::createBoundTypeExpression);
-    } else if (this.getTypeInfo().isPresentParent()) {
+    } else if (!this.getTypeInfo().isEmptyParents()) {
       // We do not have this port. Now we look if our parent has such a port.
-      return this.getParentTypeExpr().orElseThrow(IllegalStateException::new).getTypeExprOfPort(portName);
+      return this.getParentTypeExpr().stream().map(parent -> parent.getTypeExprOfPort(portName)).filter(Optional::isPresent).map(Optional::get).findAny();
     } else {
       return Optional.empty();
     }

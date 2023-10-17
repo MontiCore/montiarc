@@ -454,7 +454,7 @@ public class ComponentHelperDse {
    * @return The parameters.
    */
   public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
-    return getParamValues(comp.getParent().getParamBindings(), comp.getParent().getTypeInfo());
+    return getParamValues(comp.getParents(0).getParamBindings(), comp.getParents(0).getTypeInfo());
   }
 
   /**

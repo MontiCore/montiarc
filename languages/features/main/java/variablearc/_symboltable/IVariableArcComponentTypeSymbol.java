@@ -3,6 +3,7 @@ package variablearc._symboltable;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
 import de.monticore.symboltable.ISymbol;
@@ -49,9 +50,8 @@ public interface IVariableArcComponentTypeSymbol {
     if (!visited.contains(getTypeInfo())) {
       visited.add(getTypeInfo());
       ExpressionSet conditions = new ComponentConverter().convert(this, visited);
-      if (getTypeInfo().isPresentParent() && getTypeInfo().getParent().getTypeInfo() != null &&
-        getTypeInfo().getParent().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
-        conditions.add(((IVariableArcComponentTypeSymbol) getTypeInfo().getParent().getTypeInfo()).getConstraints(visited));
+      for (CompTypeExpression parent : getTypeInfo().getParentsList()) {
+        conditions.add(((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).getConstraints(visited));
       }
       return conditions;
     }
@@ -75,7 +75,9 @@ public interface IVariableArcComponentTypeSymbol {
    */
   default boolean isRootSymbol(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
-    return getAllVariationPoints().stream().noneMatch(vp -> vp.containsSymbol(symbol)) && (!getTypeInfo().isPresentParent() || ((IVariableArcComponentTypeSymbol) getTypeInfo().getParent().getTypeInfo()).isRootSymbol(symbol));
+    return getAllVariationPoints().stream().noneMatch(vp -> vp.containsSymbol(symbol))
+      && (getTypeInfo().isEmptyParents()
+      || getTypeInfo().getParentsList().stream().allMatch(parent -> ((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(symbol)));
   }
 
   /**

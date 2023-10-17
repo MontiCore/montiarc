@@ -29,6 +29,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -55,13 +56,13 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     // Creating a typeExpr representing Parent<int> that is then set to be the parent of comp
     CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent,
       Lists.newArrayList(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT)));
-    component.setParent(parentTypeExpr);
+    component.setParentsList(Collections.singletonList(parentTypeExpr));
 
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When && Then
-    Assertions.assertTrue(compTypeExpr.getParentTypeExpr().isPresent());
-    Assertions.assertEquals(parentTypeExpr, compTypeExpr.getParentTypeExpr().get());
+    Assertions.assertFalse(compTypeExpr.getParentTypeExpr().isEmpty());
+    Assertions.assertEquals(parentTypeExpr, compTypeExpr.getParentTypeExpr().get(0));
   }
 
   @Test
@@ -71,13 +72,13 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
-    child.setParent(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar)));
+    child.setParentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
 
     SymTypeExpression typeArg = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().orElseThrow());
+    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
@@ -93,13 +94,13 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
-    child.setParent(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar)));
+    child.setParentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
 
     SymTypeExpression typeArg = SymTypeExpressionFactory.createTypeObject(GenericArcAbstractTest.createTypeSymbol("First"));
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().orElseThrow());
+    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
@@ -116,14 +117,14 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
 
     SymTypeVariable typeVar1 = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
     SymTypeVariable typeVar2 = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(1));
-    child.setParent(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar1, typeVar2)));
+    child.setParentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar1, typeVar2))));
 
     SymTypeExpression typeArg1 = SymTypeExpressionFactory.createTypeObject(GenericArcAbstractTest.createTypeSymbol("First"));
     SymTypeExpression typeArg2 = SymTypeExpressionFactory.createTypeObject(GenericArcAbstractTest.createTypeSymbol("Second"));
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg1, typeArg2));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().orElseThrow());
+    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
@@ -141,14 +142,14 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
-    child.setParent(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar)));
+    child.setParentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
 
     TypeVarSymbol symbol = GenericArcMill.typeVarSymbolBuilder().setName("A").build();
     SymTypeExpression typeArg = SymTypeExpressionFactory.createTypeVariable(symbol);
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().orElseThrow());
+    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getParentTypeExpr().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
@@ -231,7 +232,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     SymTypeExpression childTypeVarExpr = SymTypeExpressionFactory.createTypeVariable(childTypeVar);
     CompTypeExpression boundParentTypeExpr =
       new TypeExprOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
-    compDefinition.setParent(boundParentTypeExpr);
+    compDefinition.setParentsList(Collections.singletonList(boundParentTypeExpr));
 
     // create CompTypeExpr representing Comp<int>
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
@@ -311,7 +312,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     SymTypeExpression childTypeVarExpr = SymTypeExpressionFactory.createTypeVariable(childTypeVar);
     CompTypeExpression boundParentTypeExpr =
       new TypeExprOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
-    compDefinition.setParent(boundParentTypeExpr);
+    compDefinition.setParentsList(Collections.singletonList(boundParentTypeExpr));
 
     // create CompTypeExpr representing Comp<int>
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);

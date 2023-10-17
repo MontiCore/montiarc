@@ -42,9 +42,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
     ComponentTypeSymbol component = node.getSymbol();
 
-    if (component.isPresentParent()) {
-      CompTypeExpression parent = component.getParent();
-
+    for (CompTypeExpression parent : component.getParentsList()) {
       checkParentInstantiationArgsAreNotTooMany(component, parent);
       if( checkParentKeywordsMustBeParameters(component, parent) &
         checkParentKeywordArgsLast(component, parent)) {
@@ -68,7 +66,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
     List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
 
     if (parentArgs.size() > paramsOfParentCompType.size()) {
@@ -94,7 +92,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent.getTypeInfo());
 
 
-    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
     List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
 
     long mandatoryParamsAmount = paramsOfParentCompType.stream()
@@ -145,7 +143,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<ASTArcArgument> keywordArgs =  comp.getParentConfiguration().stream()
+    List<ASTArcArgument> keywordArgs =  comp.getParentConfiguration(parent).stream()
       .filter(ASTArcArgument::isPresentName)
       .collect(Collectors.toList());
 
@@ -178,7 +176,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
     Set<String> keywordArguments = new HashSet<>();
     int keywordCounter;
 
@@ -212,7 +210,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
     long posArgsAmount = parentArgs.stream()
       .filter(Predicate.not(ASTArcArgument::isPresentName))
       .count();
@@ -254,7 +252,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     boolean keywordAssignmentPresent=false;
     boolean rightArgumentOrder=true;
 
-    List<ASTArcArgument> instantiationArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> instantiationArgs = comp.getParentConfiguration(parent);
 
     for (ASTArcArgument argument : instantiationArgs) {
       if (argument.isPresentName()){
@@ -283,7 +281,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    List<ASTArcArgument> parentArgs = comp.getParentConfiguration();
+    List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
 
     List<Optional<SymTypeExpression>> parentSignature = parent.getTypeInfo()
       .getParameters().stream()
@@ -310,7 +308,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
         String argumentKey = parentArgs.get(i).getName();
         int paramIndex = paramIndices.get(argumentKey);
         if (parentSignature.get(paramIndex).isEmpty() || !SymTypeRelations.isCompatible(parentSignature.get(paramIndex).get(), parentArgsCheck.get(i))) {
-          ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
+          ASTArcArgument incompatibleArgument = comp.getParentConfiguration(parent).get(i);
 
           Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).printFullName(),
               parentSignature.get(i).map(SymTypeExpression::printFullName).orElse("UNKNOWN")),
@@ -319,7 +317,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
         }
       } else {
         if (parentSignature.get(i).isEmpty() || !SymTypeRelations.isCompatible(parentSignature.get(i).get(), parentArgsCheck.get(i))) {
-          ASTArcArgument incompatibleArgument = comp.getParentConfiguration().get(i);
+          ASTArcArgument incompatibleArgument = comp.getParentConfiguration(parent).get(i);
 
           Log.error(ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH.format(parentArgsCheck.get(i).printFullName(),
               parentSignature.get(i).map(SymTypeExpression::printFullName).orElse("UNKNOWN")),

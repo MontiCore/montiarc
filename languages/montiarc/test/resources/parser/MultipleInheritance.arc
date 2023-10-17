@@ -2,7 +2,7 @@
 package parser;
 
 /*
- * Invalid model. Multiple inheritance is not allowed.
+ * Valid model. Multiple inheritance is allowed.
  */
 component MultipleInheritance extends Foo, Bar {
 }

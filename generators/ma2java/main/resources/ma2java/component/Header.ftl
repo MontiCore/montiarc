@@ -15,8 +15,8 @@ ${tc.signature("isTop")}
 </#macro>
 
 <#macro printExtensions comp>
-  <#if comp.isPresentParent()>
-    extends ${comp.getParent().getTypeInfo().getFullName()}
+  <#if !comp.isEmptyParents()>
+    extends ${comp.getParents(0).getTypeInfo().getFullName()}
   </#if>
 </#macro>
 

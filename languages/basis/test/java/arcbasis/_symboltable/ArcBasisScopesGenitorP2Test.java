@@ -30,6 +30,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -99,15 +100,14 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
 
     ASTComponentHead ast = ArcBasisMill.componentHeadBuilder().build();
     ast.setEnclosingScope(symbol.getSpannedScope());
-    ast.setParentAbsent();
 
     // When
     this.getScopeGenP2().visit(ast);
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertFalse(ast.isPresentParent()),
-      () -> Assertions.assertFalse(symbol.isPresentParent())
+      () -> Assertions.assertTrue(ast.isEmptyArcParents()),
+      () -> Assertions.assertTrue(symbol.isEmptyParents())
     );
   }
 
@@ -134,7 +134,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .build();
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
-      .setParent(createQualifiedType(parentCompName))
+      .setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType(parentCompName)).build()))
       .build();
 
     ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
@@ -153,20 +153,21 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
     comp.setEnclosingScope(ArcBasisMill.globalScope());
     comp.setSpannedScope(child.getSpannedScope());
     head.setEnclosingScope(child.getSpannedScope());
-    head.getParent().setEnclosingScope(child.getSpannedScope());
-    ((ASTMCQualifiedType) head.getParent()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
+    head.getArcParent(0).getType().setEnclosingScope(child.getSpannedScope());
+    ((ASTMCQualifiedType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
     getScopeGenP2().visit(head);
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(child.isPresentParent()),
-      () -> Assertions.assertTrue(head.getParent().getDefiningSymbol().isPresent())
+      () -> Assertions.assertFalse(child.isEmptyParents()),
+      () -> Assertions.assertEquals(1, child.getParentsList().size()),
+      () -> Assertions.assertTrue(head.getArcParent(0).getType().getDefiningSymbol().isPresent())
     );
     Assertions.assertAll(
-      () -> Assertions.assertEquals(parent, child.getParent().getTypeInfo()),
-      () -> Assertions.assertEquals(parent, head.getParent().getDefiningSymbol().get())
+      () -> Assertions.assertEquals(parent, child.getParents(0).getTypeInfo()),
+      () -> Assertions.assertEquals(parent, head.getArcParent(0).getType().getDefiningSymbol().get())
     );
   }
 
@@ -187,7 +188,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .build();
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
-      .setParent(createQualifiedType("ParentComp"))
+      .setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("ParentComp")).build()))
       .build();
 
     ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
@@ -204,16 +205,16 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
     comp.setEnclosingScope(ArcBasisMill.globalScope());
     comp.setSpannedScope(child.getSpannedScope());
     head.setEnclosingScope(child.getSpannedScope());
-    head.getParent().setEnclosingScope(child.getSpannedScope());
-    ((ASTMCQualifiedType) head.getParent()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
+    head.getArcParent(0).getType().setEnclosingScope(child.getSpannedScope());
+    ((ASTMCQualifiedType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
     getScopeGenP2().visit(head);
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertFalse(child.isPresentParent()),
-      () -> Assertions.assertFalse(head.getParent().getDefiningSymbol().isPresent()),
+      () -> Assertions.assertTrue(child.isEmptyParents()),
+      () -> Assertions.assertFalse(head.getArcParent(0).getType().getDefiningSymbol().isPresent()),
       () -> Assertions.assertEquals(1, Log.getErrorCount()),
       () -> Assertions.assertEquals(ArcError.MISSING_COMPONENT.getErrorCode(), Log.getFindings().get(0).getMsg().substring(0, 7))
     );
@@ -246,7 +247,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .build();
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
-      .setParent(createQualifiedType(parentCompName))
+      .setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType(parentCompName)).build()))
       .build();
 
     ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
@@ -267,8 +268,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
     comp.setEnclosingScope(ArcBasisMill.globalScope());
     comp.setSpannedScope(child.getSpannedScope());
     head.setEnclosingScope(child.getSpannedScope());
-    head.getParent().setEnclosingScope(child.getSpannedScope());
-    ((ASTMCQualifiedType) head.getParent()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
+    head.getArcParent(0).getType().setEnclosingScope(child.getSpannedScope());
+    ((ASTMCQualifiedType) head.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(child.getSpannedScope());
 
     // When
     getScopeGenP2().visit(head);

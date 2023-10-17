@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -57,7 +58,7 @@ public class VariableArcResolvingTest extends VariableArcAbstractTest {
         .setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
-      .setParent(new TypeExprOfComponent(parent)).build();
+      .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     ArcFeatureSymbol parentFeature = VariableArcMill.arcFeatureSymbolBuilder()
       .setName("f1").build();
@@ -87,7 +88,7 @@ public class VariableArcResolvingTest extends VariableArcAbstractTest {
         .setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
-      .setParent(new TypeExprOfComponent(parent)).build();
+      .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     ArcFeatureSymbol feature = VariableArcMill.arcFeatureSymbolBuilder()
       .setName("f1").build();

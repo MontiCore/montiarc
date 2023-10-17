@@ -107,7 +107,7 @@ public class ComponentHelper {
    * @return The parameters.
    */
   public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
-    return getParamValues(comp.getParent().getParamBindings(), comp.getParent().getTypeInfo());
+    return getParamValues(comp.getParents(0).getParamBindings(), comp.getParents(0).getTypeInfo());
   }
     /**
      * Calculates the values of the parameters for a given {@link Map} containing the {@link VariableSymbol} and the

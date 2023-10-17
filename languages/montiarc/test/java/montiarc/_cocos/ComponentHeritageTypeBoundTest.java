@@ -78,7 +78,10 @@ public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
     //"component comp15<T extends int> extends a.b.D<T> { }",
     "component comp16<T extends java.lang.Integer> extends a.b.E<T> { }",
     "component Comp17 extends a.b.B { }",
-    "component Comp18 extends a.b.C { }"
+    "component Comp18 extends a.b.C { }",
+    "component Comp19 extends a.b.B, a.b.C { }",
+    "component Comp20 extends a.b.E<java.lang.Integer>, a.b.F<java.lang.String, java.lang.Integer> { }",
+    "component comp21<T, U> extends a.b.B<T>, a.b.C<T, U> { }"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -150,7 +153,11 @@ public class ComponentHeritageTypeBoundTest extends MontiArcAbstractTest {
         GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS,
         GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp13 extends a.b.E<java.lang.Integer, java.lang.Integer> { }",
-        GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS)
+        GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS),
+      arg("component Comp14 extends a.b.A<java.lang.Integer>, a.b.E<java.lang.String, java.lang.Integer> { }",
+        GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS,
+        GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS,
+        GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND)
     );
   }
 }

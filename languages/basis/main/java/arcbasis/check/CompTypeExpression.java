@@ -118,7 +118,7 @@ public abstract class CompTypeExpression {
    * returned CompTypeExpression represents {@code Parent<List<Person>>}. The returned CompTypeExpression is
    * enclosed in an {@code Optional}. The Optional is empty {@code Optional} if the component has no parent component.
    */
-  public abstract Optional<CompTypeExpression> getParentTypeExpr();
+  public abstract List<CompTypeExpression> getParentTypeExpr();
 
   /**
    * Returns the SymTypeExpression of the type of the port specified by {@code portName}. If the port's type depends on

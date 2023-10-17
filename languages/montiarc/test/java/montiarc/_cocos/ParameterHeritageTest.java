@@ -171,7 +171,9 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
     // heritage with two mandatory generic parameters (bind type, pass parameters)
     "component Comp56(int p1, boolean p2) extends a.b.H<int, boolean>(p1, p2) { }",
     // heritage with two mandatory generic parameters (pass type, pass parameters)
-    "component Comp57<U, V>(U p1, V p2) extends a.b.H<U, V>(p1, p2) { }"
+    "component Comp57<U, V>(U p1, V p2) extends a.b.H<U, V>(p1, p2) { }",
+    // heritage with one mandatory generic parameter (bind type, assign value via key) and with two mandatory generic parameters (pass type, pass parameters)
+    "component Comp58<U, V>(U p1, V p2) extends a.b.G<int>(p = 1), a.b.H<U, V>(p1, p2) { }"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -545,12 +547,16 @@ public class ParameterHeritageTest extends MontiArcAbstractTest {
         ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
         ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH),
       // heritage with two mandatory parameters (assign first key to first argument, second key invalid)
-      arg("component Comp42 extends a.b.F(p1 = 4, p4 = 1) { }",
+      arg("component Comp103 extends a.b.F(p1 = 4, p4 = 1) { }",
         ArcError.HERITAGE_COMP_ARG_KEY_INVALID),
         // heritage with two mandatory parameters (assign first key to second argument, second key invalid)
-      arg("component Comp42 extends a.b.F(p2 = false, p4 = 1) { }",
-        ArcError.HERITAGE_COMP_ARG_KEY_INVALID)
-
+      arg("component Comp104 extends a.b.F(p2 = false, p4 = 1) { }",
+        ArcError.HERITAGE_COMP_ARG_KEY_INVALID),
+      // two mandatory arguments (arg assigned twice, key assign second) and two mandatory arguments generic type mismatch
+      arg("component Comp105 extends a.b.F(p2 = 1, 2), a.b.H<int, boolean>(true ,2) { }",
+        ArcError.HERITAGE_COMP_ARG_VALUE_AFTER_KEY,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH,
+        ArcError.HERITAGE_COMP_ARG_TYPE_MISMATCH)
     );
   }
 }

@@ -3,6 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.logging.Log;
@@ -49,15 +50,17 @@ public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(root);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(visited);
-    if (next.isPresentParent() && next.getParent().getTypeInfo().equals(root.getSymbol())) {
-      // log error if the parent is the root of the search
-      Log.error(ArcError.CIRCULAR_INHERITANCE.format(root.getName()),
-        root.getHead().get_SourcePositionStart(), root.getHead().get_SourcePositionEnd()
-      );
-    } else if (next.isPresentParent() && !visited.contains(next.getParent().getTypeInfo())) {
-      // continue if the parent has not been visited yet
-      visited.add(next.getParent().getTypeInfo());
-      this.check(root, next.getParent().getTypeInfo(), visited);
+    for (CompTypeExpression parent : next.getParentsList()) {
+      if (parent.getTypeInfo().equals(root.getSymbol())) {
+        // log error if the parent is the root of the search
+        Log.error(ArcError.CIRCULAR_INHERITANCE.format(root.getName()),
+          root.getHead().get_SourcePositionStart(), root.getHead().get_SourcePositionEnd()
+        );
+      } else if (!visited.contains(parent.getTypeInfo())) {
+        // continue if the parent has not been visited yet
+        visited.add(parent.getTypeInfo());
+        this.check(root, parent.getTypeInfo(), visited);
+      }
     }
   }
 }

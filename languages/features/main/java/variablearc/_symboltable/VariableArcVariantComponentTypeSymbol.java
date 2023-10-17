@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
@@ -12,7 +13,6 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._ast.ASTVariantComponentType;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.expressions.Expression;
@@ -33,10 +33,10 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   protected Map<PortSymbol, VariantPortSymbol> portSymbolMap;
 
   public VariableArcVariantComponentTypeSymbol(@NotNull IVariableArcComponentTypeSymbol type,
-                                                  @NotNull Set<VariableArcVariationPoint> variationPoints,
-                                                  @NotNull ExpressionSet conditions,
-                                                  @Nullable CompTypeExpression parent) {
-    this(type, variationPoints, conditions, parent, Collections.emptyMap());
+                                               @NotNull Set<VariableArcVariationPoint> variationPoints,
+                                               @NotNull ExpressionSet conditions,
+                                               @NotNull List<CompTypeExpression> parents) {
+    this(type, variationPoints, conditions, parents, Collections.emptyMap());
   }
 
   /**
@@ -49,7 +49,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   public VariableArcVariantComponentTypeSymbol(@NotNull IVariableArcComponentTypeSymbol type,
                                                @NotNull Set<VariableArcVariationPoint> variationPoints,
                                                @NotNull ExpressionSet conditions,
-                                               @Nullable CompTypeExpression parent,
+                                               @NotNull List<CompTypeExpression> parents,
                                                @NotNull Map<ComponentInstanceSymbol, VariantComponentInstanceSymbol> subcomponentMap) {
     super(type.getTypeInfo().getName());
 
@@ -57,7 +57,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
     includedVariationPoints = variationPoints;
     this.setAstNodeAbsent();
     this.conditions = conditions.add(type.getConstraints());
-    this.parent = Optional.ofNullable(parent);
+    this.parents = parents;
     this.subcomponentMap = subcomponentMap;
     for (VariantComponentInstanceSymbol instanceSymbol : subcomponentMap.values()) {
       // Adds the required conditions of subcomponents to this component
@@ -83,8 +83,8 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   public boolean containsSymbol(@NotNull ISymbol symbol) {
     return typeSymbol.variationPointsContainSymbol(includedVariationPoints, symbol) ||
-      isPresentParent() && ((VariableArcVariantComponentTypeSymbol) getParent().getTypeInfo()).containsSymbol(symbol) &&
-        !((VariableArcVariantComponentTypeSymbol) getParent().getTypeInfo()).isRootSymbol(symbol);
+      !isEmptyParents() && getParentsList().stream().anyMatch(parent -> ((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).containsSymbol(symbol) &&
+        !((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(symbol));
   }
 
   public boolean isRootSymbol(ISymbol symbol) {
@@ -153,6 +153,11 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   @Override
   public SourcePosition getSourcePosition() {
     return typeSymbol.getTypeInfo().getSourcePosition();
+  }
+
+  @Override
+  public List<ASTArcArgument> getParentConfiguration(CompTypeExpression parent) {
+    return typeSymbol.getTypeInfo().getParentConfiguration(parent);
   }
 
   @Override

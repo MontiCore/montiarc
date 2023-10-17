@@ -52,7 +52,11 @@ public class ComponentHeritageRawTypeTest extends MontiArcAbstractTest {
     "component Comp1 extends a.b.A { }",
     "component Comp2<T> extends a.b.A { }",
     "component Comp3 extends a.b.B<int> { }",
-    "component Comp4<T> extends a.b.B<T> { }"
+    "component Comp4<T> extends a.b.B<T> { }",
+    "component Comp5 extends a.b.A, a.b.A { }",
+    "component Comp6<T> extends a.b.A, a.b.A { }",
+    "component Comp7 extends a.b.B<int>, a.b.B<double> { }",
+    "component Comp8<T> extends a.b.B<T>, a.b.B<int> { }",
   })
   public void shouldNotReportErrors(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -96,6 +100,11 @@ public class ComponentHeritageRawTypeTest extends MontiArcAbstractTest {
       arg("component Comp1 extends a.b.B { }",
         GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
       arg("component Comp2<T> extends a.b.B { }",
+        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
+      arg("component Comp3<T> extends a.b.A, a.b.B { }",
+        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
+      arg("component Comp4 extends a.b.B, a.b.B { }",
+        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE,
         GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
     );
   }

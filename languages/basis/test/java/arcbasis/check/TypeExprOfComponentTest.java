@@ -20,6 +20,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -64,15 +66,15 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
       .build();
     TypeExprOfComponent parentTypeExpr = new TypeExprOfComponent(parent);
 
-    symbolWithDefinitions.setParent(parentTypeExpr);
+    symbolWithDefinitions.setParentsList(Collections.singletonList(parentTypeExpr));
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
     // When
-    Optional<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
+    List<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
 
     // Then
-    Assertions.assertTrue(parentOfTypeExpr.isPresent(), "Parent not present.");
-    Assertions.assertEquals(parentTypeExpr, parentOfTypeExpr.get());
+    Assertions.assertFalse(parentOfTypeExpr.isEmpty(), "Parent not present.");
+    Assertions.assertEquals(parentTypeExpr, parentOfTypeExpr.get(0));
   }
 
   /**
@@ -88,10 +90,10 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
-    Optional<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
+    List<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
 
     // Then
-    Assertions.assertFalse(parentOfTypeExpr.isPresent());
+    Assertions.assertTrue(parentOfTypeExpr.isEmpty());
   }
 
   /**
@@ -146,7 +148,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
 
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
-      .setParent(new TypeExprOfComponent(parent))
+      .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)))
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 

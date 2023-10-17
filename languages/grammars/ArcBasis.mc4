@@ -68,7 +68,7 @@ component grammar ArcBasis extends
   ;
 
   symbolrule ComponentType =
-    parent: arcbasis.check.CompTypeExpression?
+    parents: arcbasis.check.CompTypeExpression*
   ;
 
   /**
@@ -83,7 +83,7 @@ component grammar ArcBasis extends
    */
   ComponentHead =
     ( "(" (ArcParameter || ",")* ")" )?
-    ( "extends" parent:MCType ( "(" parentConfiguration:(ArcArgument || ",")* ")" )? )?
+    ( "extends" (ArcParent || ",")* )?
   ;
 
   /**
@@ -97,6 +97,10 @@ component grammar ArcBasis extends
    */
   ArcParameter implements Variable =
     MCType Name ("=" default:Expression)?
+  ;
+
+  ArcParent =
+    type:MCType ( "(" (ArcArgument || ",")* ")" )?
   ;
 
   /**

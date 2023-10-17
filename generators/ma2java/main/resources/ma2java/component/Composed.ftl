@@ -58,7 +58,7 @@
 
 <#macro printSetUp comp>
   public void setUp() {
-    <#if comp.isPresentParent()>
+    <#if !comp.isEmptyParents()>
       super.setUp();
     </#if>
     <#list comp.getSubComponents() as subcomponent>

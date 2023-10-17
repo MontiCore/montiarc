@@ -35,12 +35,8 @@ public class TypeExprOfComponent extends CompTypeExpression {
   }
 
   @Override
-  public Optional<CompTypeExpression> getParentTypeExpr() {
-    if (this.getTypeInfo().isPresentParent()) {
-      return Optional.of(this.getTypeInfo().getParent());
-    } else {
-      return Optional.empty();
-    }
+  public List<CompTypeExpression> getParentTypeExpr() {
+    return this.getTypeInfo().getParentsList();
   }
 
   @Override

@@ -48,6 +48,8 @@ public class PortHeritageTypeFitsTest extends MontiArcAbstractTest {
     compile("package a.b; component A { }");
     compile("package a.b; component B { port in int i; port out int o; }");
     compile("package a.b; component C<T> { port in T i; port out T o; } ");
+    compile("package a.b; component D { port in int i; }");
+    compile("package a.b; component E { port out int o; }");
   }
 
   @ParameterizedTest
@@ -97,7 +99,12 @@ public class PortHeritageTypeFitsTest extends MontiArcAbstractTest {
     "component Comp11<T> extends a.b.C<T> { " +
       "port in T i;" +
       "port out T o; " +
-      "}"
+      "}",
+    // multi heritage with overriding super ports (outgoing supertype)
+    "component Comp12 extends a.b.D, a.b.E { " +
+      "port in int i; " +
+      "port out long o; " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -168,6 +175,13 @@ public class PortHeritageTypeFitsTest extends MontiArcAbstractTest {
           "port in int i; " +
           "port out byte o; " +
           "}",
+        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH),
+      // multi heritage with incoming and outgoing port type mismatch
+      arg("component Comp6 extends a.b.D, a.b.E { " +
+          "port in double i; " +
+          "port out byte o; " +
+          "}",
+        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH,
         ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH)
     );
   }

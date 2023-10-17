@@ -1,9 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc._cocos;
 
+import arcbasis._ast.ASTArcParent;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.SymTypeExpression;
@@ -26,20 +28,18 @@ import java.util.Optional;
  */
 public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo {
 
-  private static SourcePosition parentPositionOrElseTypePosition(@NotNull ASTComponentType node) {
-    Preconditions.checkNotNull(node);
-    return node.getHead().isPresentParent() ? node.getHead().getParent().get_SourcePositionStart() : node.get_SourcePositionStart();
-  }
-
   @Override
   public void check(@NotNull ASTComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (node.getSymbol().isPresentParent() && node.getSymbol().getParent() instanceof TypeExprOfGenericComponent) {
-      checkTypeArgsAreNotTooFew(node);
-      checkTypeArgsAreNotTooMany(node);
-      checkRespectsGenericTypeBounds(node);
+    for (int i = 0; i < Math.min(node.getHead().getArcParentList().size(), node.getSymbol().getParentsList().size()); i++) {
+      CompTypeExpression parent = node.getSymbol().getParents(i);
+      if (parent instanceof TypeExprOfGenericComponent) {
+        checkTypeArgsAreNotTooFew(node.getHead().getArcParent(i), (TypeExprOfGenericComponent) parent);
+        checkTypeArgsAreNotTooMany(node.getHead().getArcParent(i), (TypeExprOfGenericComponent) parent);
+        checkRespectsGenericTypeBounds(node.getHead().getArcParent(i), (TypeExprOfGenericComponent) parent);
+      }
     }
   }
 
@@ -49,8 +49,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
    *
    * @param node The AST node of the component type whose type arguments should be checked.
    */
-  protected void checkTypeArgsAreNotTooFew(@NotNull ASTComponentType node) {
-    TypeExprOfGenericComponent parentExpr = (TypeExprOfGenericComponent) node.getSymbol().getParent();
+  protected void checkTypeArgsAreNotTooFew(@NotNull ASTArcParent node, @NotNull TypeExprOfGenericComponent parentExpr) {
     ComponentTypeSymbol parentSym = parentExpr.getTypeInfo();
 
     List<TypeVarSymbol> parentSymTypeParameters = parentSym.getTypeParameters();
@@ -69,13 +68,12 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
    *
    * @param node The AST node of the component type whose type arguments should be checked.
    */
-  protected void checkTypeArgsAreNotTooMany(@NotNull ASTComponentType node) {
-    Preconditions.checkArgument(node.getHead().getParent() instanceof ASTMCBasicGenericType);
-    TypeExprOfGenericComponent parentExpr = (TypeExprOfGenericComponent) node.getSymbol().getParent();
+  protected void checkTypeArgsAreNotTooMany(@NotNull ASTArcParent node, @NotNull TypeExprOfGenericComponent parentExpr) {
+    Preconditions.checkArgument(node.getType() instanceof ASTMCBasicGenericType);
     ComponentTypeSymbol parentSym = parentExpr.getTypeInfo();
 
     List<TypeVarSymbol> parentSymTypeParameters = parentSym.getTypeParameters();
-    List<ASTMCTypeArgument> args = ((ASTMCBasicGenericType) node.getHead().getParent()).getMCTypeArgumentList();
+    List<ASTMCTypeArgument> args = ((ASTMCBasicGenericType) node.getType()).getMCTypeArgumentList();
 
     if (parentSymTypeParameters.size() < args.size()) {
       Log.error(
@@ -85,8 +83,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     }
   }
 
-  protected void checkRespectsGenericTypeBounds(@NotNull ASTComponentType node) {
-    TypeExprOfGenericComponent parentExpr = (TypeExprOfGenericComponent) node.getSymbol().getParent();
+  protected void checkRespectsGenericTypeBounds(@NotNull ASTArcParent node, @NotNull TypeExprOfGenericComponent parentExpr) {
     ComponentTypeSymbol parentSym = parentExpr.getTypeInfo();
 
     for (TypeVarSymbol typeVar : parentSym.getTypeParameters()) {
@@ -98,13 +95,13 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
           if (!SymTypeRelations.isCompatible(bound, typeVarBinding.get())) {
             Log.error(
               GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
-              parentPositionOrElseTypePosition(node));
+              node.get_SourcePositionStart(), node.get_SourcePositionEnd());
           }
         }
       } else {
         Log.debug(String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for in " +
                 "parent declaration at '%s' because the binding for that type parameter is not set.", this.getClass().getSimpleName(), typeVar.getName(),
-            parentSym.getName(), parentPositionOrElseTypePosition(node)), "CoCos");
+            parentSym.getName(), node.get_SourcePositionStart(), node.get_SourcePositionEnd()), "CoCos");
       }
     }
 

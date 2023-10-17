@@ -21,7 +21,7 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (node.getSymbol().isPresentParent()) {
+    if (!node.getSymbol().isEmptyParents()) {
       this.checkPorts(node.getSymbol());
     }
   }
@@ -31,7 +31,9 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
 
     // check all ports
     for (PortSymbol port : component.getPorts()) {
-      this.checkPort(port, component.getParent());
+      for (CompTypeExpression parent : component.getParentsList()) {
+        this.checkPort(port, parent);
+      }
     }
   }
 

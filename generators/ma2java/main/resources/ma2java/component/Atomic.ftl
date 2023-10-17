@@ -22,7 +22,7 @@
   @Override
   public void tick() {
     // update outgoing ports
-    <#if comp.isPresentParent()>
+    <#if !comp.isEmptyParents()>
       super.tick();
     </#if>
     <#list comp.getOutgoingPorts() as port>
@@ -33,7 +33,7 @@
 
 <#macro printSetUp comp>
   public void setUp() {
-    <#if comp.isPresentParent()>
+    <#if !comp.isEmptyParents()>
       super.setUp();
     </#if>
     <#list comp.getPorts() as port>

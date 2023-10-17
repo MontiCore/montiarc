@@ -5,7 +5,6 @@ import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
@@ -15,8 +14,11 @@ import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -24,7 +26,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
   protected List<VariableSymbol> parameters;
-  protected List<ASTArcArgument> parentConfiguration;
+  protected Map<CompTypeExpression, List<ASTArcArgument>> parentConfiguration;
 
   /**
    * @param name the name of this component type.
@@ -32,7 +34,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   protected ComponentTypeSymbol(String name) {
     super(name);
     this.parameters = new ArrayList<>();
-    this.parentConfiguration = new ArrayList<>();
+    this.parentConfiguration = new HashMap<>();
   }
 
   @Override
@@ -108,18 +110,18 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   }
 
   /**
-   * @param parent this component type's parent component type.
+   * @param parents this component type's parents component type.
    */
   @Override  // Only to set the @Nullable annotation
-  public void setParent(@Nullable CompTypeExpression parent) {
-    super.setParent(parent);
+  public void setParentsList(@Nullable List<CompTypeExpression> parents) {
+    super.setParentsList(parents);
   }
 
   /**
    * @return a {@code List} of the configuration parameters of this component type.
    */
-  public List<ASTArcArgument> getParentConfiguration() {
-    return this.parentConfiguration;
+  public List<ASTArcArgument> getParentConfiguration(@NotNull CompTypeExpression parent) {
+    return this.parentConfiguration.getOrDefault(parent, Collections.emptyList());
   }
 
   /**
@@ -131,10 +133,15 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @param expressions the symbols to add.
    * @see this#addParameter(VariableSymbol)
    */
-  public void setParentConfigurationExpressions(@NotNull List<ASTArcArgument> expressions) {
+  public void setParentConfigurationExpressions(@NotNull CompTypeExpression parent, @NotNull List<ASTArcArgument> expressions) {
     Preconditions.checkNotNull(expressions);
     Preconditions.checkArgument(!expressions.contains(null));
-    this.parentConfiguration = expressions;
+    this.parentConfiguration.put(parent, expressions);
+  }
+
+  public void setParentConfigurationMap(@NotNull Map<CompTypeExpression, List<ASTArcArgument>> parentConfiguration){
+    Preconditions.checkNotNull(parentConfiguration);
+    this.parentConfiguration = parentConfiguration;
   }
 
   /**
@@ -399,15 +406,18 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     visited.add(this);
 
     List<PortSymbol> result = new ArrayList<>(getPorts());
-    if (this.isPresentParent() && !visited.contains(this.getParent().getTypeInfo())) {
-      List<PortSymbol> inheritedPorts = new ArrayList<>();
-      for (PortSymbol port : this.getParent().getTypeInfo().getAllPorts(visited)) {
-        if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
-          inheritedPorts.add(port);
+    for (CompTypeExpression parent : getParentsList()) {
+      if (!visited.contains(parent.getTypeInfo())) {
+        List<PortSymbol> inheritedPorts = new ArrayList<>();
+        for (PortSymbol port : parent.getTypeInfo().getAllPorts(visited)) {
+          if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
+            inheritedPorts.add(port);
+          }
         }
+        result.addAll(inheritedPorts);
       }
-      result.addAll(inheritedPorts);
     }
+
     return result;
   }
 

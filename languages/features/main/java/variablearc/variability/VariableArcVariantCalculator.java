@@ -36,9 +36,9 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
       List<VariableArcVariantComponentTypeSymbol> variants = new ArrayList<>();
       VariationPointSolver vpSolver = new VariationPointSolver(componentTypeSymbol);
 
-      if (componentTypeSymbol.getTypeInfo().isPresentParent() && componentTypeSymbol.getTypeInfo().getParent() != null &&
-        componentTypeSymbol.getTypeInfo().getParent().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
-        for (VariableArcVariantComponentTypeSymbol parentVariant : ((IVariableArcComponentTypeSymbol) componentTypeSymbol.getTypeInfo().getParent().getTypeInfo()).getVariableArcVariants()) {
+      if (!componentTypeSymbol.getTypeInfo().isEmptyParents() && componentTypeSymbol.getTypeInfo().getParents(0) != null &&
+        componentTypeSymbol.getTypeInfo().getParents(0).getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
+        for (VariableArcVariantComponentTypeSymbol parentVariant : ((IVariableArcComponentTypeSymbol) componentTypeSymbol.getTypeInfo().getParents(0).getTypeInfo()).getVariableArcVariants()) {
           calculateVariableArcVariants(variants, vpSolver, parentVariant);
         }
       } else {
@@ -68,7 +68,7 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
       if (subcomponents.isEmpty()) {
         variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
           vpSolver.getConditionsForVariationPoints(variationPoints),
-          parentVariant == null ? null : componentTypeSymbol.getTypeInfo().getParent().deepClone(parentVariant)));
+          parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getParents(0).deepClone(parentVariant))));
       } else {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
         for (ComponentInstanceSymbol instance : subcomponents) {
@@ -81,7 +81,7 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
         expandCombinations(subComponentVariants).forEach(
           e -> variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
             vpSolver.getConditionsForVariationPoints(variationPoints),
-            parentVariant == null ? null : componentTypeSymbol.getTypeInfo().getParent().deepClone(parentVariant), e))
+            parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getParents(0).deepClone(parentVariant)), e))
         );
       }
     }

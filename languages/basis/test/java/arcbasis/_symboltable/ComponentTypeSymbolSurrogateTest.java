@@ -152,7 +152,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    comp.setParent(new TypeExprOfComponent(parent));
+    comp.setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
     PortSymbol port = addIncomingPortTo(parent, "parentPort");
 
@@ -221,7 +221,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
-    comp.setParent(new TypeExprOfComponent(parent));
+    comp.setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
     PortSymbol port = addIncomingPortTo(parent, "parentPort");
 
@@ -296,10 +296,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
-    comp.setParent(new TypeExprOfComponent(parent));
+    comp.setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
     // When
-    boolean parentIsPresent = surrogate.isPresentParent();
+    boolean parentIsPresent = !surrogate.isEmptyParents();
 
     // Then
     Assertions.assertTrue(parentIsPresent, "No parent present");
@@ -315,10 +315,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
 
     ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
-    comp.setParent(parentExpr);
+    comp.setParentsList(Collections.singletonList(parentExpr));
 
     // When
-    CompTypeExpression parentCalculated = surrogate.getParent();
+    CompTypeExpression parentCalculated = surrogate.getParents(0);
 
     // Then
     Assertions.assertSame(parentExpr, parentCalculated);
@@ -336,10 +336,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
 
     // When
-    surrogate.setParent(parentExpr);
+    surrogate.setParentsList(Collections.singletonList(parentExpr));
 
     // Then
-    Assertions.assertSame(parentExpr, comp.getParent());
+    Assertions.assertSame(parentExpr, comp.getParents(0));
   }
 
   
@@ -351,10 +351,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     List<ASTArcArgument> parentConfig = Collections.singletonList(Mockito.mock(ASTArcArgument.class));
-    comp.setParentConfigurationExpressions(parentConfig);
+    CompTypeExpression parent = Mockito.mock(CompTypeExpression.class);
+    comp.setParentConfigurationExpressions(parent, parentConfig);
 
     // When
-    List<ASTArcArgument> parentConfigCalculated = surrogate.getParentConfiguration();
+    List<ASTArcArgument> parentConfigCalculated = surrogate.getParentConfiguration(parent);
 
     // Then
     Assertions.assertArrayEquals(parentConfig.toArray(), parentConfigCalculated.toArray());
@@ -369,12 +370,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     List<ASTArcArgument> parentConfig = Collections.singletonList(Mockito.mock(ASTArcArgument.class));
+    CompTypeExpression parent = Mockito.mock(CompTypeExpression.class);
 
     // When
-    surrogate.setParentConfigurationExpressions(parentConfig);
+    surrogate.setParentConfigurationExpressions(parent, parentConfig);
 
     // Then
-    Assertions.assertArrayEquals(parentConfig.toArray(), comp.getParentConfiguration().toArray());
+    Assertions.assertArrayEquals(parentConfig.toArray(), comp.getParentConfiguration(parent).toArray());
   }
 
   
@@ -593,7 +595,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
 
     ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
-    comp.setParent(parentExpr);
+    comp.setParentsList(Collections.singletonList(parentExpr));
 
     PortSymbol port = addOutgoingPortTo(parent, "myPort");
 

@@ -7,7 +7,9 @@ public class ComponentTypeSymbolSurrogateBuilder extends ComponentTypeSymbolSurr
   public ComponentTypeSymbolSurrogate build() {
     ComponentTypeSymbolSurrogate symbolReference = new ComponentTypeSymbolSurrogate(name);
     symbolReference.setEnclosingScope(enclosingScope);
-    this.parent.ifPresent(symbolReference::setParent);
+    if (!this.isEmptyParents()) {
+      symbolReference.setParentsList(this.getParentsList());
+    }
     return symbolReference;
   }
 }

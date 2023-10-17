@@ -17,14 +17,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
 
   public static final String PARAMETERS = "parameters";
   public static final String PORTS = "ports";
   public static final String TYPE_PARAMETERS = "typeParameters";
-  public static final String PARENT = "parent";
+  public static final String PARENTS = "parents";
   public static final String INNER_COMPONENTS = "innerComponents";
   public static final String SUBCOMPONENTS = "subcomponents";
   public static final String FIELDS = "fields";
@@ -58,8 +58,8 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     printer.member(de.monticore.symboltable.serialization.JsonDeSers.NAME, toSerialize.getName());
 
     // serialize symbolrule attributes
-    if (toSerialize.isPresentParent()) {
-      serializeParent(Optional.of(toSerialize.getParent()), s2j);
+    if (!toSerialize.isEmptyParents()) {
+      serializeParents(toSerialize.getParentsList(), s2j);
     }
 
     // Don't serialize the spanned scope (because it carries private information)
@@ -96,16 +96,19 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected void serializeParent(@NotNull Optional<CompTypeExpression> parent, @NotNull ArcBasisSymbols2Json s2j) {
-    parent
-      .map(this.getCompTypeExprDeSer()::serializeAsJson)
-      .ifPresent(json -> s2j.getJsonPrinter().memberJson(PARENT, json));
+  protected void serializeParents(@NotNull List<CompTypeExpression> parents, @NotNull ArcBasisSymbols2Json s2j) {
+    JsonPrinter printer = s2j.getJsonPrinter();
+
+    printer.beginArray(PARENTS);
+    parents.stream()
+      .map(this.getCompTypeExprDeSer()::serializeAsJson).forEach(printer::valueJson);
+    printer.endArray();
   }
 
   @Override
-  protected Optional<CompTypeExpression> deserializeParent(@NotNull JsonObject compTypeJson) {
-    return compTypeJson.getObjectMemberOpt(PARENT)
-      .map(this.getCompTypeExprDeSer()::deserialize);
+  protected List<CompTypeExpression> deserializeParents(@NotNull JsonObject compTypeJson) {
+    return compTypeJson.getArrayMemberOpt(PARENTS).orElse(Collections.emptyList()).stream().map(JsonElement::getAsJsonObject)
+      .map(this.getCompTypeExprDeSer()::deserialize).collect(Collectors.toList());
   }
 
   protected void serializeParameters(@NotNull ComponentTypeSymbol paramOwner, @NotNull ArcBasisSymbols2Json s2j) {

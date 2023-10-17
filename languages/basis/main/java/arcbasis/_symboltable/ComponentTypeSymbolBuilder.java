@@ -2,6 +2,7 @@
 package arcbasis._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -9,17 +10,20 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
-  protected List<ASTArcArgument> parentConfiguration;
+  protected Map<CompTypeExpression, List<ASTArcArgument>> parentConfiguration;
 
   public ComponentTypeSymbolBuilder() {
     super();
+    parentConfiguration = new HashMap<>();
   }
 
   @Override
@@ -66,14 +70,14 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public List<ASTArcArgument> getParentConfiguration() {
-    return this.parentConfiguration;
+  public List<ASTArcArgument> getParentConfiguration(@NotNull CompTypeExpression parent) {
+    return this.parentConfiguration.get(parent);
   }
 
-  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull List<ASTArcArgument> parentConfiguration) {
+  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull CompTypeExpression parent, @NotNull List<ASTArcArgument> parentConfiguration) {
     Preconditions.checkNotNull(parentConfiguration);
     Preconditions.checkArgument(!parentConfiguration.contains(null));
-    this.parentConfiguration = parentConfiguration;
+    this.parentConfiguration.put(parent, parentConfiguration);
     return this.realBuilder;
   }
 
@@ -92,15 +96,9 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     if (this.getTypeParameters() != null) {
       this.getTypeParameters().forEach(symbol.getSpannedScope()::add);
     }
-    if (this.getParentConfiguration() != null) {
-      symbol.setParentConfigurationExpressions(this.getParentConfiguration());
-    }
+    symbol.setParentConfigurationMap(this.parentConfiguration);
     symbol.setOuterComponent(this.getOuterComponent());
-    if (this.parent.isPresent()) {
-      symbol.setParent(this.parent.get());
-    } else {
-      symbol.setParentAbsent();
-    }
+    symbol.setParentsList(this.parents);
     return symbol;
   }
 

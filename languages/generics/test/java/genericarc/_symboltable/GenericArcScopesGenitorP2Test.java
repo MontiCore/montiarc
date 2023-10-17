@@ -30,6 +30,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
+import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -153,14 +154,13 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
 
     ASTGenericComponentHead ast = GenericArcMill.genericComponentHeadBuilder().build();
     ast.setEnclosingScope(symbol.getSpannedScope());
-    ast.setParentAbsent();
 
     // When
     this.getScopesGenP2().visit(ast);
 
     // Then
-    Assertions.assertFalse(ast.isPresentParent());
-    Assertions.assertFalse(symbol.isPresentParent());
+    Assertions.assertTrue(ast.isEmptyArcParents());
+    Assertions.assertTrue(symbol.isEmptyParents());
   }
 
   /**
@@ -182,7 +182,7 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
       .build();
 
     ASTGenericComponentHead childCompHead = GenericArcMill.genericComponentHeadBuilder()
-      .setParent(createQualifiedType(parentCompName))
+      .setArcParentsList(Collections.singletonList(GenericArcMill.arcParentBuilder().setType(createQualifiedType(parentCompName)).build()))
       .build();
 
     ASTComponentType astChildComp = GenericArcMill.componentTypeBuilder()
@@ -201,14 +201,14 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
     astChildComp.setEnclosingScope(GenericArcMill.globalScope());
     astChildComp.setSpannedScope(symChildComp.getSpannedScope());
     childCompHead.setEnclosingScope(symChildComp.getSpannedScope());
-    childCompHead.getParent().setEnclosingScope(symChildComp.getSpannedScope());
-    ((ASTMCQualifiedType) childCompHead.getParent()).getMCQualifiedName().setEnclosingScope(symChildComp.getSpannedScope());
+    childCompHead.getArcParent(0).getType().setEnclosingScope(symChildComp.getSpannedScope());
+    ((ASTMCQualifiedType) childCompHead.getArcParent(0).getType()).getMCQualifiedName().setEnclosingScope(symChildComp.getSpannedScope());
 
     // When
     getScopesGenP2().visit(childCompHead);
 
     // Then
-    Assertions.assertEquals(parentComp, symChildComp.getParent().getTypeInfo());
+    Assertions.assertEquals(parentComp, symChildComp.getParents(0).getTypeInfo());
   }
 
   /**

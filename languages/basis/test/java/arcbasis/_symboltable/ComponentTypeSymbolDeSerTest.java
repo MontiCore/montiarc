@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.util.Collections;
+
 /**
  * Holds tests for {@link ComponentTypeSymbolDeSer}.
  */
@@ -27,7 +29,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"parent\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}" +
+      "\"parents\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
       "}";
 
   private static final String JSON_WITH_TYPE_PARAMS =
@@ -104,7 +106,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = createSimpleComp();
     ComponentTypeSymbol parent = createParentComp();
     CompTypeExpression parentType = new TypeExprOfComponent(parent);
-    comp.setParent(parentType);
+    comp.setParentsList(Collections.singletonList(parentType));
 
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
     ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
@@ -223,8 +225,8 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARENT);
 
     // Then
-    Assertions.assertTrue(comp.isPresentParent(), "Parent not present");
-    Assertions.assertEquals("Parent", comp.getParent().printName());
+    Assertions.assertFalse(comp.isEmptyParents(), "Parent not present");
+    Assertions.assertEquals("Parent", comp.getParents(0).printName());
   }
 
   @Test
@@ -236,7 +238,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(SIMPLE_JSON);
 
     // Then
-    Assertions.assertFalse(comp.isPresentParent(), "Parent is present");
+    Assertions.assertTrue(comp.isEmptyParents(), "Parent is present");
   }
 
   @Test

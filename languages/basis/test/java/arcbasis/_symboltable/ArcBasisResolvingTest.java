@@ -20,6 +20,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -368,33 +369,50 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
   }
 
   @Test
-  public void shouldResolveInParentComponent() {
+  public void shouldResolveInParentComponents() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    IArcBasisScope parentScope = ArcBasisMill.scope();
+    IArcBasisScope parent1Scope = ArcBasisMill.scope();
+    IArcBasisScope parent2Scope = ArcBasisMill.scope();
 
-    ComponentTypeSymbol parent =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
+    ComponentTypeSymbol parent1 =
+        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
+    ComponentTypeSymbol parent2 =
+      ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParent(new TypeExprOfComponent(parent)).build();
+        .setParentsList(List.of(new TypeExprOfComponent(parent1), new TypeExprOfComponent(parent2))).build();
 
-    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
+    PortSymbol port1 = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
-    parentScope.add(port);
+    parent1Scope.add(port1);
 
-    VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
+    VariableSymbol variable1 = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
         SymTypeExpression.class)).build();
-    parentScope.add(variable);
+    parent1Scope.add(variable1);
+
+    PortSymbol port2 = ArcBasisMill.portSymbolBuilder().setName("p2")
+      .setType(Mockito.mock(SymTypeExpression.class)).build();
+    parent1Scope.add(port2);
+
+    VariableSymbol variable2 = ArcBasisMill.variableSymbolBuilder().setName("var2").setType(Mockito.mock(
+      SymTypeExpression.class)).build();
+    parent1Scope.add(variable2);
 
     // When
-    Optional<PortSymbol> resolvedPort = scope.resolvePort("p1");
-    Optional<VariableSymbol> resolvedVariable = scope.resolveVariable("var1");
+    Optional<PortSymbol> resolvedPort1 = scope.resolvePort("p1");
+    Optional<VariableSymbol> resolvedVariable1 = scope.resolveVariable("var1");
+    Optional<PortSymbol> resolvedPort2 = scope.resolvePort("p2");
+    Optional<VariableSymbol> resolvedVariable2 = scope.resolveVariable("var2");
 
     // Then
-    Assertions.assertTrue(resolvedPort.isPresent());
-    Assertions.assertEquals(port, resolvedPort.get());
-    Assertions.assertTrue(resolvedVariable.isPresent());
-    Assertions.assertEquals(variable, resolvedVariable.get());
+    Assertions.assertTrue(resolvedPort1.isPresent());
+    Assertions.assertEquals(port1, resolvedPort1.get());
+    Assertions.assertTrue(resolvedVariable1.isPresent());
+    Assertions.assertEquals(variable1, resolvedVariable1.get());
+    Assertions.assertTrue(resolvedPort2.isPresent());
+    Assertions.assertEquals(port2, resolvedPort2.get());
+    Assertions.assertTrue(resolvedVariable2.isPresent());
+    Assertions.assertEquals(variable2, resolvedVariable2.get());
   }
 
   @Test
@@ -406,7 +424,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParent(new TypeExprOfComponent(parent)).build();
+        .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -445,7 +463,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParent(new TypeExprOfComponent(parent)).build();
+        .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();

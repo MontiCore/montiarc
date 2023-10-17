@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 
@@ -86,9 +87,12 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                    Predicate<PortSymbol> predicate) {
     if (!foundSymbols && this.isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && component.get().isPresentParent()) {
-        return component.get().getParent().getTypeInfo().getSpannedScope()
-          .resolvePortMany(false, name, modifier, predicate);
+      if (component.isPresent() && !component.get().isEmptyParents()) {
+        ArrayList<PortSymbol> symbols = new ArrayList<>();
+        for (CompTypeExpression parent : component.get().getParentsList()) {
+          symbols.addAll(parent.getTypeInfo().getSpannedScope().resolvePortMany(false, name, modifier, predicate));
+        }
+        return symbols;
       }
     }
     return new ArrayList<>();
@@ -108,9 +112,13 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                            Predicate<VariableSymbol> predicate) {
     if (!foundSymbols && isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && component.get().isPresentParent()) {
-        return component.get().getParent().getTypeInfo().getSpannedScope()
-          .resolveVariableMany(false, name, modifier, predicate);
+      if (component.isPresent() && !component.get().isEmptyParents()) {
+        ArrayList<VariableSymbol> symbols = new ArrayList<>();
+        for (CompTypeExpression parent : component.get().getParentsList()) {
+         symbols.addAll(parent.getTypeInfo().getSpannedScope()
+            .resolveVariableMany(false, name, modifier, predicate));
+        }
+        return symbols;
       }
     }
     return new ArrayList<>();

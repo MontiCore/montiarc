@@ -2,6 +2,7 @@
 package arcbasis._prettyprint;
 
 import arcbasis._ast.ASTArcBasisNode;
+import arcbasis._ast.ASTArcParent;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTPortDeclaration;
@@ -38,9 +39,20 @@ public class ArcBasisPrettyPrinter extends ArcBasisPrettyPrinterTOP {
       acceptSeparatedList(node.getArcParameterList());
       this.getPrinter().print(")");
     }
-    if (node.isPresentParent()) {
+    if (!node.getArcParentList().isEmpty()) {
       this.getPrinter().print(" extends ");
-      node.getParent().accept(this.getTraverser());
+      acceptSeparatedList(node.getArcParentList());
+    }
+  }
+
+  @Override
+  public void handle(@NotNull ASTArcParent node) {
+    Preconditions.checkNotNull(node);
+    node.getType().accept(this.getTraverser());
+    if (!node.isEmptyArcArguments()) {
+      this.getPrinter().print("(");
+      acceptSeparatedList(node.getArcArgumentList());
+      this.getPrinter().print(")");
     }
   }
 
