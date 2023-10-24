@@ -1,9 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
@@ -54,12 +57,12 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
             conn.get_SourcePositionStart());
           continue;
         }
-        if(symTypeOfSource.get().isPrimitive() && !symTypeOfTarget.get().isPrimitive()) {
+        if (symTypeOfSource.get().isPrimitive() && !symTypeOfTarget.get().isPrimitive()) {
           Log.error(ArcError.CONNECT_PRIMITIVE_TO_OBJECT.format(),
-              conn.get_SourcePositionStart());
-        } else if(!symTypeOfSource.get().isPrimitive() && symTypeOfTarget.get().isPrimitive()) {
+            conn.get_SourcePositionStart());
+        } else if (!symTypeOfSource.get().isPrimitive() && symTypeOfTarget.get().isPrimitive()) {
           Log.error(ArcError.CONNECT_OBJECT_TO_PRIMITIVE.format(),
-              conn.get_SourcePositionStart());
+            conn.get_SourcePositionStart());
         }
       } else {
         logInfoThatCoCoIsNotChecked4TargetPort(target);
@@ -79,6 +82,8 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
       if (astPort.isPresentComponentSymbol() && astPort.getComponentSymbol().isPresentType()) {
         return astPort.getComponentSymbol().getType().getTypeExprOfPort(astPort.getPort());
       }
+    } else if (getEnclosingComponent(astPort).isPresent()) {
+      return getEnclosingComponent(astPort).get().getTypeExprOfPort(astPort.getPort());
     } else if (astPort.isPresentPortSymbol() && astPort.getPortSymbol().isTypePresent()) {
       return Optional.ofNullable(astPort.getPortSymbol().getType());
     }
@@ -91,5 +96,24 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
         "seem to exist or the type of the port does not seem to be set.", targetPort.getQName(),
       targetPort.get_SourcePositionStart()), ConnectorDirectionsFit.class.getSimpleName()
     );
+  }
+
+  /**
+   * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
+   * does not belong to a component type.
+   */
+  protected static Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+    if (portAccess.getEnclosingScope() == null) {
+      return Optional.empty();
+    }
+    if (!portAccess.getEnclosingScope().isPresentSpanningSymbol()) {
+      return Optional.empty();
+    }
+    IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
+    if (symbol instanceof ComponentTypeSymbol) {
+      return Optional.of((ComponentTypeSymbol) symbol);
+    } else {
+      return Optional.empty();
+    }
   }
 }

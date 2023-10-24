@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
+import de.monticore.types.check.SymTypeExpression;
 import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -267,6 +268,24 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     Collection<PortSymbol> portsToConsider
       = searchInherited ? this.getAllPorts() : this.getPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
+  }
+
+  public Optional<SymTypeExpression> getTypeExprOfPort(@NotNull String portName) {
+    Preconditions.checkNotNull(portName);
+    // We first look if the requested port is part of our definition.
+    // If not, we ask our parent if they have such a port.
+    boolean portDefinedByUs = getPort(portName, false).isPresent();
+
+    if (portDefinedByUs) {
+      return getPort(portName, false)
+        .filter(PortSymbol::isTypePresent)
+        .map(PortSymbol::getType);
+    } else if (!getParentsList().isEmpty()) {
+      // We do not have this port. Now we look if our parents have such a port.
+      return this.getParentsList().stream().map(parent -> parent.getTypeExprOfPort(portName)).filter(Optional::isPresent).map(Optional::get).findAny();
+    } else {
+      return Optional.empty();
+    }
   }
 
   /**

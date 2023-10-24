@@ -234,6 +234,11 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
       "} " +
       "Inner<S> sub; " +
       "i -> sub.i; " +
+      "}",
+    // int -> int (inherited generic port)
+    "component Comp29 extends a.b.K<int> { " +
+      "a.b.D sub; " +
+      "i -> sub.i; " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
