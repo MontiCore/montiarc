@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
@@ -30,14 +30,14 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     // check all ports
-    for (PortSymbol port : component.getPorts()) {
+    for (ArcPortSymbol port : component.getPorts()) {
       for (CompTypeExpression parent : component.getParentsList()) {
         this.checkPort(port, parent);
       }
     }
   }
 
-  protected void checkPort(@NotNull PortSymbol port, @NotNull CompTypeExpression parent) {
+  protected void checkPort(@NotNull ArcPortSymbol port, @NotNull CompTypeExpression parent) {
     Preconditions.checkNotNull(port);
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
@@ -58,7 +58,7 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
       }
 
       // check direction fits
-      Optional<PortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName(), true);
+      Optional<ArcPortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName(), true);
       if (inheritedPort.isPresent() && inheritedPort.get().isIncoming() != port.isIncoming()) {
         Log.error(ArcError.HERITAGE_PORT_DIRECTION_MISMATCH.toString(), port.getSourcePosition());
       }

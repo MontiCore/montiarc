@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -9,7 +9,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
 
-public class PortNoReservedKeyword implements ArcBasisASTPortCoCo {
+public class PortNoReservedKeyword implements ArcBasisASTArcPortCoCo {
 
   protected final Collection<String> keywords;
   protected final String language;
@@ -20,7 +20,7 @@ public class PortNoReservedKeyword implements ArcBasisASTPortCoCo {
   }
 
   @Override
-  public void check(@NotNull ASTPort node) {
+  public void check(@NotNull ASTArcPort node) {
     Preconditions.checkNotNull(node);
     String portName = node.getName();
 

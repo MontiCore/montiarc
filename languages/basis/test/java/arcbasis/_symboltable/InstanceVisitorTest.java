@@ -23,7 +23,7 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
       ArcBasisMill.componentTypeSymbolBuilder().setName("C").setSpannedScope(ArcBasisMill.scope()).build();
 
     // When
-    Optional<PortSymbol> port = new InstanceVisitor().asPort(symbol);
+    Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
     Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
 
@@ -37,14 +37,14 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
   @Test
   public void shouldGetPort() {
     // Given
-    ISymbol symbol = ArcBasisMill.portSymbolBuilder().setName("P")
+    ISymbol symbol = ArcBasisMill.arcPortSymbolBuilder().setName("P")
       .setType(Mockito.mock(SymTypeExpression.class))
       .setIncoming(true).build();
 
     // When
     Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
-    Optional<PortSymbol> port = new InstanceVisitor().asPort(symbol);
+    Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
 
     // Then
     Assertions.assertFalse(component.isPresent());
@@ -60,7 +60,7 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
 
     // When
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
-    Optional<PortSymbol> port = new InstanceVisitor().asPort(symbol);
+    Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
     Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
 
     // Then
@@ -77,7 +77,7 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
 
     // When
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
-    Optional<PortSymbol> port = new InstanceVisitor().asPort(symbol);
+    Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
     Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
 
     // Then

@@ -39,7 +39,7 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
     expectedPortList.add(port);
     ASTPortDeclaration ast = this.builder.addPort(port).build();
     List<String> actualPortList = this.getPortsList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    Assertions.assertEquals(expectedPortList.size(), ast.getArcPortList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -50,8 +50,8 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
     expectedPortList.set(index, port);
     ASTPortDeclaration ast = this.builder.setPort(index, port).build();
     List<String> actualPortList = this.getPortsList(ast);
-    Assertions.assertEquals(ast.getPort(index).getName(), port);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    Assertions.assertEquals(ast.getArcPort(index).getName(), port);
+    Assertions.assertEquals(expectedPortList.size(), ast.getArcPortList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -62,8 +62,8 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
     expectedPortList.add(index, port);
     ASTPortDeclaration ast = this.builder.addPort(index, port).build();
     List<String> actualPortList = this.getPortsList(ast);
-    Assertions.assertEquals(ast.getPort(index).getName(), port);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    Assertions.assertEquals(ast.getArcPort(index).getName(), port);
+    Assertions.assertEquals(expectedPortList.size(), ast.getArcPortList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -77,7 +77,7 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
     List<String> expectedPortList = Arrays.asList(ports);
     ASTPortDeclaration ast = this.builder.setPortList(ports).build();
     List<String> actualPortList = this.getPortsList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    Assertions.assertEquals(expectedPortList.size(), ast.getArcPortList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -88,7 +88,7 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
     expectedPortList.addAll(Arrays.asList(ports));
     ASTPortDeclaration ast = this.builder.addAllPorts(ports).build();
     List<String> actualPortList = this.getPortsList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    Assertions.assertEquals(expectedPortList.size(), ast.getArcPortList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -105,7 +105,7 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
     expectedPortList.addAll(index, Arrays.asList(ports));
     ASTPortDeclaration ast = this.builder.addAllPorts(index, ports).build();
     List<String> actualPortList = this.getPortsList(ast);
-    Assertions.assertEquals(expectedPortList.size(), ast.getPortList().size());
+    Assertions.assertEquals(expectedPortList.size(), ast.getArcPortList().size());
     Assertions.assertEquals(expectedPortList, actualPortList);
   }
 
@@ -117,10 +117,10 @@ public class PortDeclarationBuilderTest extends ArcBasisAbstractTest {
   }
 
   protected List<String> getPortsList(ASTPortDeclarationBuilder builder) {
-    return builder.getPortList().stream().map(ASTPort::getName).collect(Collectors.toList());
+    return builder.getArcPortList().stream().map(ASTArcPort::getName).collect(Collectors.toList());
   }
 
   protected List<String> getPortsList(ASTPortDeclaration ast) {
-    return ast.getPortList().stream().map(ASTPort::getName).collect(Collectors.toList());
+    return ast.getArcPortList().stream().map(ASTArcPort::getName).collect(Collectors.toList());
   }
 }

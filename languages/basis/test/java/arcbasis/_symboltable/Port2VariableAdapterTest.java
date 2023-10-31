@@ -25,7 +25,7 @@ public class Port2VariableAdapterTest {
 
   @ParameterizedTest
   @MethodSource("portSymbolProvider")
-  void shouldAdaptFields(@NotNull PortSymbol adaptee) {
+  void shouldAdaptFields(@NotNull ArcPortSymbol adaptee) {
     // Given
     Port2VariableAdapter adapter = new Port2VariableAdapter(adaptee);
 
@@ -50,7 +50,7 @@ public class Port2VariableAdapterTest {
 
   @ParameterizedTest
   @MethodSource("portSymbolProvider")
-  void shouldDeepClone(@NotNull PortSymbol adaptee) {
+  void shouldDeepClone(@NotNull ArcPortSymbol adaptee) {
     // Given
     Port2VariableAdapter adapter = new Port2VariableAdapter(adaptee);
 
@@ -78,11 +78,11 @@ public class Port2VariableAdapterTest {
     );
   }
 
-  protected static Stream<PortSymbol> portSymbolProvider() {
+  protected static Stream<ArcPortSymbol> portSymbolProvider() {
     IArcBasisScope scope = ArcBasisMill.scope();
 
     // incoming port
-    PortSymbol port1 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port1 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("i")
       .setIncoming(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
@@ -90,7 +90,7 @@ public class Port2VariableAdapterTest {
     SymbolService.link(scope, port1);
 
     // outgoing port
-    PortSymbol port2 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port2 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("o")
       .setIncoming(false)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))

@@ -8,7 +8,7 @@ import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.Optional;

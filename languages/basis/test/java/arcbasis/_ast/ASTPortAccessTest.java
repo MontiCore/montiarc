@@ -3,10 +3,10 @@ package arcbasis._ast;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -102,7 +102,7 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.accept(traverser);
 
     //When
-    PortSymbol resolvedPort = portAccess.getPortSymbol();
+    ArcPortSymbol resolvedPort = portAccess.getPortSymbol();
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -139,7 +139,7 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.accept(traverser);
 
     //When
-    PortSymbol resolvedPort = portAccess.getPortSymbol();
+    ArcPortSymbol resolvedPort = portAccess.getPortSymbol();
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -180,28 +180,28 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     ArcBasisMill.globalScope().add(compB);
     ArcBasisMill.globalScope().add(compC);
 
-    PortSymbol port1 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port1 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("i1").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope1.add(port1);
     port1.setEnclosingScope(scope1);
-    PortSymbol port2 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port2 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("i2").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope1.add(port2);
     port2.setEnclosingScope(scope1);
-    PortSymbol port3 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port3 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("o1").setIncoming(false).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope1.add(port3);
     port3.setEnclosingScope(scope1);
 
-    PortSymbol port4 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port4 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("i1").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope2.add(port4);
     port4.setEnclosingScope(scope2);
-    PortSymbol port5 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port5 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("i3").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope2.add(port5);
     port5.setEnclosingScope(scope2);
-    PortSymbol port6 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol port6 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("o2").setIncoming(false).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope2.add(port6);
     port6.setEnclosingScope(scope2);

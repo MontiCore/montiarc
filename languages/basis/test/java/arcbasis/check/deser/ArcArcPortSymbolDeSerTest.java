@@ -3,16 +3,16 @@ package arcbasis.check.deser;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.PortSymbolDeSer;
+import arcbasis._symboltable.ArcPortSymbolDeSer;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
-public class PortSymbolDeSerTest extends ArcBasisAbstractTest {
+public class ArcArcPortSymbolDeSerTest extends ArcBasisAbstractTest {
 
   @ParameterizedTest
   @EnumSource(Timing.class)
@@ -51,7 +51,7 @@ public class PortSymbolDeSerTest extends ArcBasisAbstractTest {
   /**
    * Provides access to the methods for serializing and deserializing timing
    */
-  private static class PortSymbolDeSerForTests extends PortSymbolDeSer {
+  private static class PortSymbolDeSerForTests extends ArcPortSymbolDeSer {
     @Override
     public void serializeTiming(@NotNull Timing timing, @NotNull ArcBasisSymbols2Json s2j) {
       super.serializeTiming(timing, s2j);

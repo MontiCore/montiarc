@@ -158,7 +158,7 @@ public class ComponentTypeSymbolTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     Assertions.assertIterableEquals(ports.entrySet().stream()
         .filter(p -> p.getValue().equals(true)).map(Map.Entry::getKey).collect(Collectors.toList()),
-      symbol.getIncomingPorts().stream().map(PortSymbol::getName).collect(Collectors.toList()));
+      symbol.getIncomingPorts().stream().map(ArcPortSymbol::getName).collect(Collectors.toList()));
   }
 
   @ParameterizedTest
@@ -167,7 +167,7 @@ public class ComponentTypeSymbolTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     Assertions.assertIterableEquals(ports.entrySet().stream()
         .filter(p -> p.getValue().equals(false)).map(Map.Entry::getKey).collect(Collectors.toList()),
-      symbol.getOutgoingPorts().stream().map(PortSymbol::getName).collect(Collectors.toList()));
+      symbol.getOutgoingPorts().stream().map(ArcPortSymbol::getName).collect(Collectors.toList()));
   }
 
   @ParameterizedTest
@@ -218,7 +218,7 @@ public class ComponentTypeSymbolTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(ArcBasisMill.scope()).build();
     for (String port : ports.keySet()) {
-      PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder()
+      ArcPortSymbol portSymbol = ArcBasisMill.arcPortSymbolBuilder()
         .setName(port).setType(mock(SymTypeExpression.class)).setIncoming(ports.get(port)).build();
       compSymbol.getSpannedScope().add(portSymbol);
     }

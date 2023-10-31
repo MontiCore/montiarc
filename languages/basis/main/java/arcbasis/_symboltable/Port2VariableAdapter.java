@@ -10,20 +10,20 @@ import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
- * Adapts {@link PortSymbol}s to {@link VariableSymbol}s, e.g., so that they can
+ * Adapts {@link ArcPortSymbol}s to {@link VariableSymbol}s, e.g., so that they can
  * easily be referred to from expressions.
  */
 public class Port2VariableAdapter extends VariableSymbol {
 
-  protected PortSymbol adaptee;
+  protected ArcPortSymbol adaptee;
 
-  public Port2VariableAdapter(@NotNull PortSymbol adaptee) {
+  public Port2VariableAdapter(@NotNull ArcPortSymbol adaptee) {
     super(Preconditions.checkNotNull(adaptee).getName());
     this.adaptee = adaptee;
     this.accessModifier = BasicAccessModifier.PUBLIC;
   }
 
-  protected PortSymbol getAdaptee() {
+  protected ArcPortSymbol getAdaptee() {
     return adaptee;
   }
 

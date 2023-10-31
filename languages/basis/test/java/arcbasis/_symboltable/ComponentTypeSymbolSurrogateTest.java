@@ -10,12 +10,11 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpression;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -115,13 +114,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getPorts();
+    List<ArcPortSymbol> ports = surrogate.getPorts();
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -131,10 +130,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    Optional<PortSymbol> portOpt = surrogate.getPort("myPort");
+    Optional<ArcPortSymbol> portOpt = surrogate.getPort("myPort");
 
     // Then
     Assertions.assertTrue(portOpt.isPresent(), "Port is not present");
@@ -154,10 +153,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
       .build();
     comp.setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
-    PortSymbol port = addIncomingPortTo(parent, "parentPort");
+    ArcPortSymbol port = addIncomingPortTo(parent, "parentPort");
 
     // When
-    Optional<PortSymbol> portOpt = surrogate.getPort("parentPort", true);
+    Optional<ArcPortSymbol> portOpt = surrogate.getPort("parentPort", true);
 
     // Then
     Assertions.assertTrue(portOpt.isPresent(), "Port is not present");
@@ -171,13 +170,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getIncomingPorts();
+    List<ArcPortSymbol> ports = surrogate.getIncomingPorts();
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -187,13 +186,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getIncomingPorts(BasicAccessModifier.PUBLIC);
+    List<ArcPortSymbol> ports = surrogate.getIncomingPorts(BasicAccessModifier.PUBLIC);
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -203,10 +202,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    Optional<PortSymbol> portOpt = surrogate.getIncomingPort("myPort");
+    Optional<ArcPortSymbol> portOpt = surrogate.getIncomingPort("myPort");
 
     // Then
     Assertions.assertTrue(portOpt.isPresent(), "Port is not present");
@@ -223,10 +222,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     comp.setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
-    PortSymbol port = addIncomingPortTo(parent, "parentPort");
+    ArcPortSymbol port = addIncomingPortTo(parent, "parentPort");
 
     // When
-    Optional<PortSymbol> portOpt = surrogate.getIncomingPort("parentPort", true);
+    Optional<ArcPortSymbol> portOpt = surrogate.getIncomingPort("parentPort", true);
 
     // Then
     Assertions.assertTrue(portOpt.isPresent(), "Port is not present");
@@ -545,13 +544,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addOutgoingPortTo(comp, "myPort");
+    ArcPortSymbol port = addOutgoingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getOutgoingPorts();
+    List<ArcPortSymbol> ports = surrogate.getOutgoingPorts();
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
   @Test
   void getOutgoingPortsByAccessModifierShouldSkipSurrogate() {
@@ -560,13 +559,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addOutgoingPortTo(comp, "myPort");
+    ArcPortSymbol port = addOutgoingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getOutgoingPorts(BasicAccessModifier.PUBLIC);
+    List<ArcPortSymbol> ports = surrogate.getOutgoingPorts(BasicAccessModifier.PUBLIC);
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -576,10 +575,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addOutgoingPortTo(comp, "myPort");
+    ArcPortSymbol port = addOutgoingPortTo(comp, "myPort");
 
     // When
-    Optional<PortSymbol> portOpt = surrogate.getOutgoingPort("myPort");
+    Optional<ArcPortSymbol> portOpt = surrogate.getOutgoingPort("myPort");
 
     // Then
     Assertions.assertTrue(portOpt.isPresent(), "Port is not present");
@@ -597,10 +596,10 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
     comp.setParentsList(Collections.singletonList(parentExpr));
 
-    PortSymbol port = addOutgoingPortTo(parent, "myPort");
+    ArcPortSymbol port = addOutgoingPortTo(parent, "myPort");
 
     // When
-    Optional<PortSymbol> portOpt = surrogate.getOutgoingPort("myPort", true);
+    Optional<ArcPortSymbol> portOpt = surrogate.getOutgoingPort("myPort", true);
 
     // Then
     Assertions.assertTrue(portOpt.isPresent(), "Port is not present");
@@ -615,13 +614,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getPorts(true);
+    List<ArcPortSymbol> ports = surrogate.getPorts(true);
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -631,13 +630,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getAllIncomingPorts();
+    List<ArcPortSymbol> ports = surrogate.getAllIncomingPorts();
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -647,13 +646,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addOutgoingPortTo(comp, "myPort");
+    ArcPortSymbol port = addOutgoingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getOutgoingPorts(BasicAccessModifier.PUBLIC);
+    List<ArcPortSymbol> ports = surrogate.getOutgoingPorts(BasicAccessModifier.PUBLIC);
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -663,13 +662,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addIncomingPortTo(comp, "myPort");
+    ArcPortSymbol port = addIncomingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getAllPorts(true);
+    List<ArcPortSymbol> ports = surrogate.getAllPorts(true);
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -697,13 +696,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = pair.getKey();
     ComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    PortSymbol port = addOutgoingPortTo(comp, "myPort");
+    ArcPortSymbol port = addOutgoingPortTo(comp, "myPort");
 
     // When
-    List<PortSymbol> ports = surrogate.getAllPorts();
+    List<ArcPortSymbol> ports = surrogate.getAllPorts();
 
     // Then
-    Assertions.assertArrayEquals(new PortSymbol[] {port}, ports.toArray());
+    Assertions.assertArrayEquals(new ArcPortSymbol[] {port}, ports.toArray());
   }
 
   @Test
@@ -819,7 +818,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
    * Adds an incoming port symbol to the spanned scope of the component. The port type is only mocked.
    * @return the created Port
    */
-  protected PortSymbol addIncomingPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName) {
+  protected ArcPortSymbol addIncomingPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName) {
     return addPortTo(compType, portName, true);
   }
 
@@ -827,7 +826,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
    * Adds an outgoing port symbol to the spanned scope of the component. The port type is only mocked.
    * @return the created Port
    */
-  protected PortSymbol addOutgoingPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName) {
+  protected ArcPortSymbol addOutgoingPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName) {
     return addPortTo(compType, portName, false);
   }
 
@@ -835,12 +834,12 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
    * Adds a port symbol to the spanned scope of the component. The port type is only mocked.
    * @return the created Port
    */
-  protected PortSymbol addPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName, boolean isIncoming) {
+  protected ArcPortSymbol addPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName, boolean isIncoming) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(portName);
 
-    PortSymbol port = ArcBasisMill
-      .portSymbolBuilder()
+    ArcPortSymbol port = ArcBasisMill
+      .arcPortSymbolBuilder()
       .setName(portName)
       .setIncoming(isIncoming)
       .setType(Mockito.mock(SymTypeExpression.class))

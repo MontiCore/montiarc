@@ -33,6 +33,7 @@ component grammar ArcBasis extends
         de.monticore.UMLStereotype,
         de.monticore.types.MCBasicTypes,
         de.monticore.expressions.ExpressionsBasis,
+        de.monticore.symbols.CompSymbols,
         de.monticore.symbols.OOSymbols              {
 
   /**
@@ -129,7 +130,7 @@ component grammar ArcBasis extends
    * @attribute ports A list of declared port identifiers.
    */
   PortDeclaration =
-    Stereotype? PortDirection MCType (Port || ",")+
+    Stereotype? PortDirection MCType (ArcPort || ",")+
   ;
 
   /**
@@ -144,15 +145,10 @@ component grammar ArcBasis extends
   *
   * @attribute name The name of the port.
   */
-  symbol Port = Name;
+  symbol ArcPort implements Port = Name;
 
-  symbolrule Port =
-    type: de.monticore.types.check.SymTypeExpression
-    incoming: boolean
-    outgoing: boolean
-    timing: montiarc.Timing
+  symbolrule ArcPort =
     delayed: Boolean
-    stronglyCausal: Boolean
   ;
 
   /**
@@ -214,6 +210,6 @@ component grammar ArcBasis extends
    * @attribute component The name of the component the port belongs to.
    * @attribute port the name of the port.
    */
-  PortAccess = (component:Name@ComponentInstance ".")? port:Name@Port ;
+  PortAccess = (component:Name@ComponentInstance ".")? port:Name@ArcPort ;
 
 }

@@ -37,7 +37,7 @@
               "name": "a"
             },
             {
-              "kind": "arcbasis._symboltable.PortSymbol",
+              "kind": "arcbasis._symboltable.ArcPortSymbol",
               "name": "pIn",
               "type": {
                 "kind": "de.monticore.types.check.SymTypePrimitive",
@@ -75,7 +75,7 @@
           ],
           "ports": [
             {
-              "kind": "arcbasis._symboltable.PortSymbol",
+              "kind": "arcbasis._symboltable.ArcPortSymbol",
               "name": "input",
               "type": {
                 "kind": "de.monticore.types.check.SymTypePrimitive",
@@ -109,7 +109,7 @@
               ],
               "ports": [
                 {
-                  "kind": "arcbasis._symboltable.PortSymbol",
+                  "kind": "arcbasis._symboltable.ArcPortSymbol",
                   "name": "input",
                   "type": {
                     "kind": "de.monticore.types.check.SymTypePrimitive",

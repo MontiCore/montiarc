@@ -2,10 +2,10 @@
 package variablearc._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -30,7 +30,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   protected ExpressionSet conditions;
   protected Map<ComponentInstanceSymbol, VariantComponentInstanceSymbol> subcomponentMap;
 
-  protected Map<PortSymbol, VariantPortSymbol> portSymbolMap;
+  protected Map<ArcPortSymbol, VariantPortSymbol> portSymbolMap;
 
   public VariableArcVariantComponentTypeSymbol(@NotNull IVariableArcComponentTypeSymbol type,
                                                @NotNull Set<VariableArcVariationPoint> variationPoints,
@@ -101,26 +101,26 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<PortSymbol> getAllPorts() {
+  public List<ArcPortSymbol> getAllPorts() {
     return typeSymbol.getTypeInfo().getAllPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
   @Override
-  public List<PortSymbol> getPorts() {
+  public List<ArcPortSymbol> getPorts() {
     return typeSymbol.getTypeInfo().getPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
   @Override
-  public Optional<PortSymbol> getPort(@NotNull String name) {
+  public Optional<ArcPortSymbol> getPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolvePortLocallyMany(
+    return this.getSpannedScope().resolveArcPortLocallyMany(
       false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, this::containsSymbol
     ).stream().findFirst().map(this::getVariantPortSymbol);
   }
 
-  protected PortSymbol getVariantPortSymbol(PortSymbol port) {
+  protected ArcPortSymbol getVariantPortSymbol(ArcPortSymbol port) {
     if (!portSymbolMap.containsKey(port)) {
       portSymbolMap.put(port, new VariantPortSymbol(port, this));
     }

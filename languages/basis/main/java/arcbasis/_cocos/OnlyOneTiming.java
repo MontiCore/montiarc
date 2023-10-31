@@ -6,7 +6,7 @@ import de.monticore.umlstereotype._ast.ASTStereoValue;
 import de.monticore.umlstereotype._ast.ASTStereotype;
 import de.monticore.umlstereotype._cocos.UMLStereotypeASTStereotypeCoCo;
 import de.se_rwth.commons.logging.Log;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 

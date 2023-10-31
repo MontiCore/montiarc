@@ -26,7 +26,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
   protected static final String JSON_VARIATION_POINT_WITH_SYMBOL = "{" +
     "\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\"," +
     "\"expression\":\"f1\"," +
-    "\"symbols\":[{\"kind\":\"arcbasis._symboltable.PortSymbol\",\"name\":\"p1\",\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"},\"outgoing\":true,\"timing\":\"untimed\"}]" +
+    "\"symbols\":[{\"kind\":\"arcbasis._symboltable.ArcPortSymbol\",\"name\":\"p1\",\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"},\"outgoing\":true,\"timing\":\"untimed\"}]" +
     "}";
 
   @Test
@@ -120,7 +120,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.empty());
     ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
 
-    variationPoint.add(VariableArcMill.portSymbolBuilder().setName("p1").setOutgoing(true).setType(SymTypeExpressionFactory.createPrimitive("int")).build());
+    variationPoint.add(VariableArcMill.arcPortSymbolBuilder().setName("p1").setOutgoing(true).setType(SymTypeExpressionFactory.createPrimitive("int")).build());
 
     // When
     deser.serialize(variationPoint, arc2json);

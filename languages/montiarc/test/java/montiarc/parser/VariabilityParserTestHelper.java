@@ -30,9 +30,9 @@ public class VariabilityParserTestHelper {
                       Collections.singletonList(
                         MontiArcMill.portDeclarationBuilder()
                           .setPortDirection(MontiArcMill.portDirectionBuilder().setIn(true).build())
-                          .setPortsList(
+                          .setArcPortsList(
                             Collections.singletonList(
-                              MontiArcMill.portBuilder().setName("i").build()
+                              MontiArcMill.arcPortBuilder().setName("i").build()
                             ))
                           .setMCType(MontiArcMill.mCQualifiedTypeBuilder()
                             .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
@@ -51,7 +51,7 @@ public class VariabilityParserTestHelper {
                     Collections.singletonList(
                       MontiArcMill.portDeclarationBuilder()
                         .setPortDirection(MontiArcMill.portDirectionBuilder().setIn(true).build())
-                        .setPortsList(Collections.singletonList(MontiArcMill.portBuilder()
+                        .setArcPortsList(Collections.singletonList(MontiArcMill.arcPortBuilder()
                           .setName("i")
                           .build()))
                         .setMCType(MontiArcMill.mCQualifiedTypeBuilder()

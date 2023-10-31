@@ -12,7 +12,7 @@ import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.util.Helper;
 import montiarc.util.MASimError;

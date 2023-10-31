@@ -208,7 +208,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
    * @param paramOwnerJson the component which owns the parameters, encoded as JSON.
    */
   protected void deserializePorts(@NotNull ComponentTypeSymbol portOwner, @NotNull JsonObject paramOwnerJson) {
-    final String portSerializeKind = PortSymbol.class.getCanonicalName();
+    final String portSerializeKind = ArcPortSymbol.class.getCanonicalName();
 
     List<JsonElement> ports = paramOwnerJson.getArrayMemberOpt(PORTS).orElseGet(Collections::emptyList);
 
@@ -216,7 +216,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
       String portJasonKind = JsonDeSers.getKind(port.getAsJsonObject());
       if (portJasonKind.equals(portSerializeKind)) {
         ISymbolDeSer deSer = ArcBasisMill.globalScope().getSymbolDeSer(portSerializeKind);
-        PortSymbol portSym = (PortSymbol) deSer.deserialize(port.getAsJsonObject());
+        ArcPortSymbol portSym = (ArcPortSymbol) deSer.deserialize(port.getAsJsonObject());
 
         portOwner.getSpannedScope().add(portSym);
 

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc._ast;
 
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public interface ASTArcACMode extends ASTArcACModeTOP {
@@ -11,6 +11,6 @@ public interface ASTArcACMode extends ASTArcACModeTOP {
    * if auto-connect would create a connector from the source to the target
    * given their properties.
    */
-  boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target);
+  boolean matches(@NotNull ArcPortSymbol source, @NotNull ArcPortSymbol target);
 
 }

@@ -10,7 +10,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._ast.ASTPortDirection;
 import com.google.common.base.Preconditions;
@@ -172,10 +172,10 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.setCurrentPortDirection(null);
   }
 
-  protected PortSymbolBuilder create_Port(@NotNull ASTPort ast) {
+  protected ArcPortSymbolBuilder create_Port(@NotNull ASTArcPort ast) {
     Preconditions.checkState(this.getCurrentPortDirection().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
+    ArcPortSymbolBuilder builder = ArcBasisMill.arcPortSymbolBuilder();
     builder.setName(ast.getName());
     builder.setIncoming(this.getCurrentPortDirection().get().isIn());
     builder.setOutgoing(this.getCurrentPortDirection().get().isOut());
@@ -183,12 +183,12 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   @Override
-  public void visit(@NotNull ASTPort node) {
+  public void visit(@NotNull ASTArcPort node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(getCurrentScope().isPresent());
     Preconditions.checkState(getCurrentPortDirection().isPresent());
 
-    PortSymbol port = this.create_Port(node).buildWithoutType();
+    ArcPortSymbol port = this.create_Port(node).buildWithoutType();
     node.setSymbol(port);
     port.setAstNode(node);
     node.setEnclosingScope(this.getCurrentScope().get());

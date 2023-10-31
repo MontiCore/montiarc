@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcprepost._ast;
 
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 
 public class ASTArcPrePost extends ASTArcPrePostTOP {
 

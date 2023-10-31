@@ -4,7 +4,7 @@ package genericarc.check;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
@@ -193,7 +193,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     TypeVarSymbol typeVar = symbolWithDefinitions.getTypeParameters().get(0);
 
     String portName = "port";
-    PortSymbol port = GenericArcMill.portSymbolBuilder()
+    ArcPortSymbol port = GenericArcMill.arcPortSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(typeVar))
       .setIncoming(true)
@@ -219,7 +219,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcAbstractTest {
     ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
     String portName = "porr";
-    PortSymbol port = GenericArcMill.portSymbolBuilder()
+    ArcPortSymbol port = GenericArcMill.arcPortSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(parentTypeVar))
       .setIncoming(true)

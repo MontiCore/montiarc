@@ -3,8 +3,8 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -71,7 +71,7 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
     }
   }
 
-  protected Collection<String> getNames(Collection<PortSymbol> ports) {
-    return ports.stream().map(PortSymbol::getName).collect(Collectors.toList());
+  protected Collection<String> getNames(Collection<ArcPortSymbol> ports) {
+    return ports.stream().map(ArcPortSymbol::getName).collect(Collectors.toList());
   }
 }

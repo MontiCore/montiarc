@@ -46,7 +46,7 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
   }
 
   /**
-   * Creates a {@link ASTPort} to be used by this builder corresponding the the provided
+   * Creates a {@link ASTArcPort} to be used by this builder corresponding the the provided
    * {@code String} argument and adds it to the list of declared ports at the given index. The
    * provided {@code String} argument is expected to be not null and a simple name (no parts
    * separated by dots "."). The index is expected to be zero or greater.
@@ -60,12 +60,12 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(port);
     Preconditions.checkArgument(!port.contains("."));
-    this.setPort(index, this.doCreatePort(port));
+    this.setArcPort(index, this.doCreatePort(port));
     return this.realBuilder;
   }
 
   /**
-   * Creates the list of {@link ASTPort} to be used by this builder corresponding to the provided
+   * Creates the list of {@link ASTArcPort} to be used by this builder corresponding to the provided
    * {@code String} arguments. The provided {@code String} arguments are expected to be not null
    * and a simple names (no parts separated by dots ".").
    *
@@ -74,12 +74,12 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
    */
   public ASTPortDeclarationBuilder setPortList(String... ports) {
     Preconditions.checkNotNull(ports);
-    this.setPortsList(this.doCreatePortList(ports));
+    this.setArcPortsList(this.doCreatePortList(ports));
     return this.realBuilder;
   }
 
   /**
-   * Creates a {@link ASTPort} corresponding to the provided {@code String} argument and
+   * Creates a {@link ASTArcPort} corresponding to the provided {@code String} argument and
    * adds it to the list of ports to be used by this builder. The provided {@code String}
    * argument is expected to be not null and a simple name (no parts separated by dots ".").
    *
@@ -90,12 +90,12 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
   public ASTPortDeclarationBuilder addPort(String port) {
     Preconditions.checkNotNull(port);
     Preconditions.checkArgument(!port.contains("."));
-    this.addPort(this.doCreatePort(port));
+    this.addArcPort(this.doCreatePort(port));
     return this.realBuilder;
   }
 
   /**
-   * Creates a list of {@link ASTPort} corresponding to the provided {@code String} arguments and
+   * Creates a list of {@link ASTArcPort} corresponding to the provided {@code String} arguments and
    * adds it to the list of ports to be used by this builder. The provided {@code String}
    * arguments are expected to be not null and a simple names (no parts separated by dots ".").
    *
@@ -104,12 +104,12 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
    * @see List#addAll(Collection)
    */
   public ASTPortDeclarationBuilder addAllPorts(String... ports) {
-    this.addAllPorts(this.doCreatePortList(ports));
+    this.addAllArcPorts(this.doCreatePortList(ports));
     return this.realBuilder;
   }
 
   /**
-   * Creates a {@link ASTPort} corresponding to the provided {@code String} argument and, at the
+   * Creates a {@link ASTArcPort} corresponding to the provided {@code String} argument and, at the
    * given index, adds it to the list of ports to be used by this builder. The provided {@code String}
    * argument is expected to be not null and a simple name (no parts separated by dots "."). The
    * index is expected to be zero or greater.
@@ -123,12 +123,12 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(port);
     Preconditions.checkArgument(!port.contains("."));
-    this.addPort(index, this.doCreatePort(port));
+    this.addArcPort(index, this.doCreatePort(port));
     return this.realBuilder;
   }
 
   /**
-   * Creates a list of {@link ASTPort} corresponding to the provided {@code String} arguments and,
+   * Creates a list of {@link ASTArcPort} corresponding to the provided {@code String} arguments and,
    * at the given index, adds it to the list of ports to be used by this builder. The provided
    * {@code String} arguments are expected to be not null and a simple names (no parts separated
    * by dots "."). The index is expected to be zero or greater.
@@ -141,16 +141,16 @@ public class ASTPortDeclarationBuilder extends ASTPortDeclarationBuilderTOP {
   public ASTPortDeclarationBuilder addAllPorts(int index, String... ports) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(ports);
-    this.addAllPorts(index, this.doCreatePortList(ports));
+    this.addAllArcPorts(index, this.doCreatePortList(ports));
     return this.realBuilder;
   }
 
-  protected ASTPort doCreatePort(String port) {
-    return ArcBasisMill.portBuilder().setName(port).build();
+  protected ASTArcPort doCreatePort(String port) {
+    return ArcBasisMill.arcPortBuilder().setName(port).build();
   }
 
-  protected List<ASTPort> doCreatePortList(String... ports) {
-    List<ASTPort> portList = new ArrayList<>();
+  protected List<ASTArcPort> doCreatePortList(String... ports) {
+    List<ASTArcPort> portList = new ArrayList<>();
     for (String port : ports) {
       portList.add(this.doCreatePort(port));
     }

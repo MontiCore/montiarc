@@ -5,11 +5,10 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis.check.CompTypeExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -137,7 +136,7 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<PortSymbol> getAllPorts() {
+  public List<ArcPortSymbol> getAllPorts() {
     return checkLazyLoadDelegate() ?
       this.lazyLoadDelegate().getAllPorts() :
       super.getAllPorts();  // Avoid infinite recursion with this case

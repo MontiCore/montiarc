@@ -4,7 +4,7 @@ package variablearc._symboltable;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -103,7 +103,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   }
 
   @Override
-  public void endVisit(@NotNull ASTPort node) {
+  public void endVisit(@NotNull ASTArcPort node) {
     Preconditions.checkNotNull(node.getSymbol());
     Preconditions.checkState(this.getCurrentScope().isPresent());
     if (this.getCurrentVariationPoint().isPresent()) {

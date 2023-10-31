@@ -9,20 +9,16 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableMap;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.tf.odrulegeneration._ast.ASTVariable;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
-import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.generator.MA2JavaFullPrettyPrinter;
 
 import java.util.*;
@@ -49,7 +45,7 @@ public class ComponentHelper {
    * @param portSymbol Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
-  public static String getRealPortTypeString(PortSymbol portSymbol) {
+  public static String getRealPortTypeString(ArcPortSymbol portSymbol) {
     SymTypeExpression portType = portSymbol.getType();
     return portType.isPrimitive() ?
       ((SymTypePrimitive) portType).getBoxedPrimitiveName() :

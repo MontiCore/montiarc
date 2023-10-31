@@ -28,9 +28,9 @@ public class InstanceVisitor implements ArcBasisHandler {
     this.component = node;
   }
 
-  protected PortSymbol port;
+  protected ArcPortSymbol port;
 
-  public Optional<PortSymbol> asPort(@NotNull ISymbol symbol) {
+  public Optional<ArcPortSymbol> asPort(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
     this.port = null;
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
@@ -40,7 +40,7 @@ public class InstanceVisitor implements ArcBasisHandler {
   }
 
   @Override
-  public void handle(PortSymbol node) {
+  public void handle(ArcPortSymbol node) {
     this.port = node;
   }
 

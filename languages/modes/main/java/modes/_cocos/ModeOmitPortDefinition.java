@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._cocos;
 
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import modes._ast.ASTArcMode;
@@ -18,7 +18,7 @@ public class ModeOmitPortDefinition implements ModesASTArcModeCoCo{
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    for (PortSymbol port : node.getSpannedScope().getLocalPortSymbols()) {
+    for (ArcPortSymbol port : node.getSpannedScope().getLocalArcPortSymbols()) {
       Log.error(ModesError.MODE_CONTAINS_PORT_DEFINITION.format(port.getName()), port.getSourcePosition());
     }
   }

@@ -1,21 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._symboltable;
 
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class Port2EventDefAdapter extends SCEventDefSymbol {
   
-  protected PortSymbol adaptee;
+  protected ArcPortSymbol adaptee;
   
-  public Port2EventDefAdapter(@NotNull PortSymbol adaptee) {
+  public Port2EventDefAdapter(@NotNull ArcPortSymbol adaptee) {
     super(Preconditions.checkNotNull(adaptee).getName());
     this.adaptee = adaptee;
   }
   
-  public PortSymbol getAdaptee() {
+  public ArcPortSymbol getAdaptee() {
     return adaptee;
   }
   

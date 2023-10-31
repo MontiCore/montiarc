@@ -12,7 +12,7 @@ import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis.trafo.SeparateCompInstantiationFromTypeDeclTrafo;
 import com.google.common.collect.Lists;
@@ -196,8 +196,8 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
   @Test
   public void shouldCreatePort() {
     this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionBuilder().setIn(true).build());
-    ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
-    PortSymbol symbol = this.getSymTab().create_Port(ast).buildWithoutType();
+    ASTArcPort ast = arcbasis.ArcBasisMill.arcPortBuilder().setName("p").build();
+    ArcPortSymbol symbol = this.getSymTab().create_Port(ast).buildWithoutType();
     Assertions.assertEquals(ast.getName(), symbol.getName());
     Assertions.assertTrue(symbol.isIncoming());
     Assertions.assertFalse(symbol.isOutgoing());
@@ -206,7 +206,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
   @Test
   public void shouldVisitPort() {
     // Given
-    ASTPort ast = arcbasis.ArcBasisMill.portBuilder().setName("p").build();
+    ASTArcPort ast = arcbasis.ArcBasisMill.arcPortBuilder().setName("p").build();
     IArcBasisScope scope = ArcBasisMill.scope();
     this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionBuilder().setIn(true).build());
     this.getSymTab().putOnStack(scope);
@@ -216,8 +216,8 @@ public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertEquals(scope, ast.getEnclosingScope());
-    Assertions.assertFalse(scope.getLocalPortSymbols().isEmpty());
-    Assertions.assertEquals(1, scope.getLocalPortSymbols().size());
+    Assertions.assertFalse(scope.getLocalArcPortSymbols().isEmpty());
+    Assertions.assertEquals(1, scope.getLocalArcPortSymbols().size());
   }
 
   @Test

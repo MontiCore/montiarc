@@ -4,12 +4,12 @@ package arcbasis._symboltable;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionDeSer;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.NoSuchElementException;
 
-public class PortSymbolDeSer extends PortSymbolDeSerTOP {
+public class ArcPortSymbolDeSer extends ArcPortSymbolDeSerTOP {
 
   @Override
   protected void serializeType(@NotNull SymTypeExpression type, @NotNull ArcBasisSymbols2Json s2j) {

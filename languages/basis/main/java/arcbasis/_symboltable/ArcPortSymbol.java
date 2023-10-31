@@ -8,9 +8,9 @@ import arcbasis._ast.ASTPortAccessTOP;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -19,12 +19,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
-public class PortSymbol extends PortSymbolTOP {
+public class ArcPortSymbol extends ArcPortSymbolTOP {
 
   /**
    * @param name the name of this port.
    */
-  protected PortSymbol(String name) {
+  protected ArcPortSymbol(String name) {
     super(name);
   }
 
@@ -35,41 +35,12 @@ public class PortSymbol extends PortSymbolTOP {
    * @param type      the type of this port.
    * @param timing    the timing of this port.
    */
-  protected PortSymbol(String name, boolean incoming, boolean outgoing, SymTypeExpression type, Timing timing) {
+  protected ArcPortSymbol(String name, boolean incoming, boolean outgoing, SymTypeExpression type, Timing timing) {
     super(name);
     this.type = type;
     this.timing = timing;
     this.incoming = incoming;
     this.outgoing = outgoing;
-  }
-
-  public boolean isTypePresent() {
-    return this.type != null;
-  }
-
-  /**
-   * @return the type for the type of this port.
-   */
-  public SymTypeExpression getType() {
-    Preconditions.checkState(this.type != null);
-    return this.type;
-  }
-
-  /**
-   * @param type the type of this port.
-   */
-  public void setType(@NotNull SymTypeExpression type) {
-    Preconditions.checkNotNull(type);
-    this.type = type;
-  }
-
-  /**
-   * @return the type of this port.
-   * @throws java.util.NoSuchElementException if the port type is not found.
-   */
-  public TypeSymbol getTypeInfo() {
-    return this.getType().getTypeInfo() instanceof TypeSymbolSurrogate ?
-      ((TypeSymbolSurrogate) this.getType().getTypeInfo()).lazyLoadDelegate() : this.getType().getTypeInfo();
   }
 
   /**
@@ -81,14 +52,6 @@ public class PortSymbol extends PortSymbolTOP {
       this.timing = this.getHereditaryTiming().orElse(Timing.DEFAULT);
     }
     return this.timing;
-  }
-
-  /**
-   * @param timing the timing of this port.
-   */
-  @Override  // We override only add the @Nullable annotation
-  public void setTiming(@Nullable Timing timing) {
-    this.timing = timing;
   }
 
   @Override
@@ -124,14 +87,14 @@ public class PortSymbol extends PortSymbolTOP {
           // filter out all ports where there is no timing set and the owning component is the same as ours (which would lead to a stack overflow because of unstopped recursion)
           .filter(source -> source.timing != null || source.getComponent().map(comp -> comp != component).orElse(true))
           .findFirst()
-          .map(PortSymbol::getTiming);
+          .map(ArcPortSymbol::getTiming);
     } else if (this.isIncoming()) {
       return component.getAstNode().getConnectorsMatchingSource(this.getName())
           .stream().map(ASTConnectorTOP::getTargetList).flatMap(Collection::stream)
           .filter(ASTPortAccessTOP::isPresentComponent)
           .filter(ASTPortAccess::isPresentPortSymbol)
           .map(ASTPortAccess::getPortSymbol)
-          .map(PortSymbol::getTiming)
+          .map(ArcPortSymbol::getTiming)
           .findFirst();
     } else {
       return Optional.empty();
@@ -240,7 +203,7 @@ public class PortSymbol extends PortSymbolTOP {
    * does not belong to a component type.
    */
   public Optional<ComponentTypeSymbol> getComponent() {
-    if (this.getEnclosingScope() == null) {
+    if (this.enclosingScope == null) {
       return Optional.empty();
     }
     if (!getEnclosingScope().isPresentSpanningSymbol()) {

@@ -2,7 +2,7 @@
 package montiarc.util;
 
 import com.google.common.base.Preconditions;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

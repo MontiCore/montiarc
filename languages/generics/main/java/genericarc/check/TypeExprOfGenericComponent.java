@@ -2,7 +2,7 @@
 package genericarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -119,8 +119,8 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     if (portDefinedByUs) {
       Optional<SymTypeExpression> unboundPortType = this.getTypeInfo()
         .getPort(portName, false)
-        .filter(PortSymbol::isTypePresent)
-        .map(PortSymbol::getType);
+        .filter(ArcPortSymbol::isTypePresent)
+        .map(ArcPortSymbol::getType);
       return unboundPortType.map(this::createBoundTypeExpression);
     } else if (!this.getTypeInfo().isEmptyParents()) {
       // We do not have this port. Now we look if our parent has such a port.

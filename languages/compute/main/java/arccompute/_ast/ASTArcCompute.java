@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccompute._ast;
 
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 
 import java.util.Optional;
 

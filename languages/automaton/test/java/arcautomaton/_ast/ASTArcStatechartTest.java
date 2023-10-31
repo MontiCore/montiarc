@@ -8,7 +8,7 @@ import arcbasis.ArcBasisAbstractTest;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;

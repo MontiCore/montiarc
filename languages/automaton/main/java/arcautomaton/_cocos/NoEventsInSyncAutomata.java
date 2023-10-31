@@ -5,7 +5,7 @@ import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import com.google.common.base.Preconditions;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class NoEventsInSyncAutomata implements ArcAutomatonASTArcStatechartCoCo {

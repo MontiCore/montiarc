@@ -6,7 +6,7 @@ import arcbasis._ast.*;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
@@ -108,7 +108,7 @@ public class ASTVariantBuilder implements ArcBasisHandler {
     Preconditions.checkNotNull(node);
     Timing timing = node.getTiming().orElse(null);
 
-    for (ASTPort port : node.getPortList()) {
+    for (ASTArcPort port : node.getArcPortList()) {
       if (enclComponent.containsSymbol(port.getSymbol())) {
         enclComponent.getPort(port.getName()).ifPresent(p -> p.setTiming(timing));
         if (node.hasDelay()) enclComponent.getPort(port.getName()).ifPresent(p -> p.setDelayed(true));

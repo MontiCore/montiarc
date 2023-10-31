@@ -3,10 +3,10 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.logging.Log;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Test;
@@ -31,8 +31,8 @@ public class DelayOutPortOnlyTest extends ArcBasisAbstractTest {
   })
   public void shouldNotReportPort(boolean in, boolean out, @Nullable Boolean delay) {
     // Given
-    final ASTPort port = ArcBasisMill.portBuilder().setName("port").build();
-    port.setSymbol(ArcBasisMill.portSymbolBuilder()
+    final ASTArcPort port = ArcBasisMill.arcPortBuilder().setName("port").build();
+    port.setSymbol(ArcBasisMill.arcPortSymbolBuilder()
       .setName(port.getName())
       .setType(Mockito.mock(SymTypeExpression.class))
       .setIncoming(in)
@@ -52,8 +52,8 @@ public class DelayOutPortOnlyTest extends ArcBasisAbstractTest {
   @Test
   public void shouldReportInPortHasDelay() {
     // Given
-    final ASTPort port = ArcBasisMill.portBuilder().setName("port").build();
-    port.setSymbol(ArcBasisMill.portSymbolBuilder()
+    final ASTArcPort port = ArcBasisMill.arcPortBuilder().setName("port").build();
+    port.setSymbol(ArcBasisMill.arcPortSymbolBuilder()
       .setName(port.getName())
       .setType(Mockito.mock(SymTypeExpression.class))
       .setIncoming(true)

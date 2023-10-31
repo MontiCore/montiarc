@@ -2,7 +2,7 @@
 package montiarc._symboltable;
 
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcTool;
@@ -34,10 +34,10 @@ public class DelayAndStronglyCausalPropagationTest extends MontiArcAbstractTest 
     IArcBasisScope scope = ast.getComponentType().getSpannedScope();
 
     // Then
-    Optional<PortSymbol> pDirectDelayed = scope.resolvePort("pDirectDelayed"),
-      pChainedDelayed = scope.resolvePort("pChainedDelayed"),
-      pNotDelayed = scope.resolvePort("pNotDelayed"),
-      pNoPathToIn = scope.resolvePort("pNoPathToIn");
+    Optional<ArcPortSymbol> pDirectDelayed = scope.resolveArcPort("pDirectDelayed"),
+      pChainedDelayed = scope.resolveArcPort("pChainedDelayed"),
+      pNotDelayed = scope.resolveArcPort("pNotDelayed"),
+      pNoPathToIn = scope.resolveArcPort("pNoPathToIn");
 
     Assertions.assertTrue(pDirectDelayed.isPresent());
     Assertions.assertTrue(pChainedDelayed.isPresent());

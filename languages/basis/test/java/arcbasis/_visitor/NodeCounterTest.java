@@ -6,10 +6,10 @@ import arcbasis._ast.ASTArcBasisNode;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.DiagramSymbol;
@@ -116,7 +116,7 @@ public class NodeCounterTest {
     TypeVarSymbol typeVarSymbol = ArcBasisMill.typeVarSymbolBuilder()
       .setName("T")
       .build();
-    PortSymbol p1 = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol p1 = ArcBasisMill.arcPortSymbolBuilder()
       .setName("port1")
       .setType(Mockito.mock(SymTypeExpression.class))
       .build();

@@ -16,7 +16,7 @@ import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcFeatureDeclaration;

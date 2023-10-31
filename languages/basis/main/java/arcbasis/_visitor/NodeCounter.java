@@ -2,9 +2,9 @@
 package arcbasis._visitor;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.symbols.basicsymbols._symboltable.DiagramSymbol;
@@ -295,7 +295,7 @@ public class NodeCounter {
     }
 
     @Override
-    public void visit(@NotNull PortSymbol node) {
+    public void visit(@NotNull ArcPortSymbol node) {
       Preconditions.checkNotNull(node);
       numPortSymbols.inc();
     }

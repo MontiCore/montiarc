@@ -62,7 +62,7 @@ public class ArcBasisPrettyPrinter extends ArcBasisPrettyPrinterTOP {
     node.getPortDirection().accept(this.getTraverser());
     node.getMCType().accept(this.getTraverser());
     this.getPrinter().print(" ");
-    acceptSeparatedList(node.getPortList());
+    acceptSeparatedList(node.getArcPortList());
   }
 
   @Override

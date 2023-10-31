@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
 
@@ -14,7 +14,7 @@ public class PortNoReservedKeywordTest extends ArcBasisAbstractTest {
   @Test
   void checkPortNameMatchesKeyword() {
     // Given
-    ASTPort port = ArcBasisMill.portBuilder().setName("keyword").build();
+    ASTArcPort port = ArcBasisMill.arcPortBuilder().setName("keyword").build();
     PortNoReservedKeyword coco = new PortNoReservedKeyword("testLang", Collections.singleton("keyword"));
     ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
@@ -28,7 +28,7 @@ public class PortNoReservedKeywordTest extends ArcBasisAbstractTest {
   @Test
   void checkPortNameIsNoKeyword() {
     // Given
-    ASTPort port = ArcBasisMill.portBuilder().setName("noKeyword").build();
+    ASTArcPort port = ArcBasisMill.arcPortBuilder().setName("noKeyword").build();
     PortNoReservedKeyword coco = new PortNoReservedKeyword("testLang", Collections.singleton("keyword"));
 
     // When

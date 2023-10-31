@@ -18,15 +18,15 @@ import java.util.Collections;
 import static org.mockito.Mockito.mock;
 
 /**
- * Holds tests for the handwritten methods of {@link PortSymbol}.
+ * Holds tests for the handwritten methods of {@link ArcPortSymbol}.
  */
-public class PortSymbolTest extends ArcBasisAbstractTest {
+public class ArcPortSymbolTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldFindComponentType() {
     ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder().setName("p1")
+    ArcPortSymbol portSymbol = ArcBasisMill.arcPortSymbolBuilder().setName("p1")
       .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     compSymbol.getSpannedScope().add(portSymbol);
     Assertions.assertTrue(portSymbol.getComponent().isPresent());
@@ -34,7 +34,7 @@ public class PortSymbolTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldNotFindComponentType() {
-    PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder().setName("p1")
+    ArcPortSymbol portSymbol = ArcBasisMill.arcPortSymbolBuilder().setName("p1")
       .setIncoming(true).setType(mock(SymTypeExpression.class)).build();
     Assertions.assertFalse(portSymbol.getComponent().isPresent());
   }
@@ -68,6 +68,6 @@ public class PortSymbolTest extends ArcBasisAbstractTest {
     scopesGenP2.createFromAST(ast);
     scopesGenP3.createFromAST(ast);
 
-    Assertions.assertFalse(ast.getSpannedScope().getPortSymbols().get("p").get(0).getTypeInfo() instanceof TypeSymbolSurrogate);
+    Assertions.assertFalse(ast.getSpannedScope().getArcPortSymbols().get("p").get(0).getTypeInfo() instanceof TypeSymbolSurrogate);
   }
 }

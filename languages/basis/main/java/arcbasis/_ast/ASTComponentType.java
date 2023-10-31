@@ -2,7 +2,7 @@
 package arcbasis._ast;
 
 import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -49,10 +49,10 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    *
    * @return a {@code List} of all ports declared in port declarations of this component.
    */
-  public List<ASTPort> getPorts() {
+  public List<ASTArcPort> getPorts() {
     return this.getPortDeclarations()
       .stream()
-      .map(ASTPortDeclaration::getPortList)
+      .map(ASTPortDeclaration::getArcPortList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList());
   }
@@ -64,7 +64,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of names of all ports declared in port declarations of this component.
    */
   public List<String> getPortNames() {
-    return this.getPorts().stream().map(ASTPort::getName).collect(Collectors.toList());
+    return this.getPorts().stream().map(ASTArcPort::getName).collect(Collectors.toList());
   }
 
   /**
@@ -152,7 +152,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @param source the source port
    * @return a {@code List} of all connectors with matching source
    */
-  public List<ASTConnector> getConnectorsMatchingSource(@NotNull PortSymbol source) {
+  public List<ASTConnector> getConnectorsMatchingSource(@NotNull ArcPortSymbol source) {
     Preconditions.checkNotNull(source);
     return this.getConnectors().stream()
       .filter(connector -> connector.getSource().isPresentPortSymbol()
@@ -168,7 +168,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @param target the target port
    * @return a {@code List} of all connectors with matching target
    */
-  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull PortSymbol target) {
+  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull ArcPortSymbol target) {
     Preconditions.checkNotNull(target);
     return this.getConnectors().stream()
       .filter(connector -> connector.getTargetList().stream()

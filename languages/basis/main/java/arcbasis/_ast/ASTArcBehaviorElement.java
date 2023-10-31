@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 
 public interface ASTArcBehaviorElement extends ASTArcBehaviorElementTOP {
 

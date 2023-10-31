@@ -6,8 +6,8 @@ import arcautomaton._symboltable.IArcAutomatonScope;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.PortSymbol;
-import arcbasis._symboltable.PortSymbolBuilder;
+import arcbasis._symboltable.ArcPortSymbol;
+import arcbasis._symboltable.ArcPortSymbolBuilder;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
@@ -116,7 +116,7 @@ public class ASTMsgEventTest extends ArcBasisAbstractTest {
     IArcAutomatonScope scope = ArcAutomatonMill.scope();
     
     for(String portName: portNames) {
-      PortSymbol portSymbol = new PortSymbolBuilder()
+      ArcPortSymbol portSymbol = new ArcPortSymbolBuilder()
           .setName(portName)
           .setIncoming(true)
           .setOutgoing(false)

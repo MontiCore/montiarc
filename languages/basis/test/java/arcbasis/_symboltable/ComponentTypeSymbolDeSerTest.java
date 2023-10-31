@@ -65,13 +65,13 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"ports\":[{" +
-      "\"kind\":\"arcbasis._symboltable.PortSymbol\"," +
+      "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
       "\"name\":\"inc\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"incoming\":true," +
       "\"timing\":\"untimed\"" +
       "},{" +
-      "\"kind\":\"arcbasis._symboltable.PortSymbol\"," +
+      "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
       "\"name\":\"outg\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"outgoing\":true," +
@@ -192,12 +192,12 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
   void shouldSerializePorts() {
     // Given
     ComponentTypeSymbol comp = createSimpleComp();
-    PortSymbol portIncoming = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol portIncoming = ArcBasisMill.arcPortSymbolBuilder()
       .setName("inc")
       .setIncoming(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .build();
-    PortSymbol portOutgoing = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol portOutgoing = ArcBasisMill.arcPortSymbolBuilder()
       .setName("outg")
       .setOutgoing(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))

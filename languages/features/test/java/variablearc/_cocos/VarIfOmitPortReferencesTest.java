@@ -4,9 +4,9 @@ package variablearc._cocos;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -70,12 +70,12 @@ public class VarIfOmitPortReferencesTest extends VariableArcAbstractTest {
       ComponentTypeSymbol comp = VariableArcMill.componentTypeSymbolBuilder()
         .setName(compName).setSpannedScope(VariableArcMill.scope()).build();
 
-      PortSymbol inPort = VariableArcMill.portSymbolBuilder()
+      ArcPortSymbol inPort = VariableArcMill.arcPortSymbolBuilder()
         .setName(inPortName).setIncoming(true)
         .setType(Mockito.mock(SymTypeExpression.class)).build();
       comp.getSpannedScope().add(inPort);
 
-      PortSymbol outPort = VariableArcMill.portSymbolBuilder()
+      ArcPortSymbol outPort = VariableArcMill.arcPortSymbolBuilder()
         .setName(outPortName).setIncoming(false)
         .setType(Mockito.mock(SymTypeExpression.class)).build();
       comp.getSpannedScope().add(outPort);
@@ -106,14 +106,14 @@ public class VarIfOmitPortReferencesTest extends VariableArcAbstractTest {
           .setName(INDEPENDENT_COMPONENT_NAME)
           .setSpannedScope(VariableArcMill.scope()).build();
 
-      PortSymbol inPort =
-        VariableArcMill.portSymbolBuilder()
+      ArcPortSymbol inPort =
+        VariableArcMill.arcPortSymbolBuilder()
           .setName(INDEPENDENT_COMPONENT_IN_PORT_NAME).setIncoming(true)
           .setType(Mockito.mock(SymTypeExpression.class)).build();
       independentComp.getSpannedScope().add(inPort);
 
-      PortSymbol outPort =
-        VariableArcMill.portSymbolBuilder()
+      ArcPortSymbol outPort =
+        VariableArcMill.arcPortSymbolBuilder()
           .setName(INDEPENDENT_COMPONENT_OUT_PORT_NAME).setIncoming(false)
           .setType(Mockito.mock(SymTypeExpression.class))
           .build();

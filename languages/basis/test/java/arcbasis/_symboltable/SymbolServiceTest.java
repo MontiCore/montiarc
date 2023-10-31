@@ -163,15 +163,15 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
 
   protected static Stream<Arguments> scopeAndPortSymbolsProvider() {
     return Stream.of(
-      Arguments.of(ArcBasisMill.scope(), new PortSymbol[]{}),
-      Arguments.of(ArcBasisMill.scope(), new PortSymbol[]{
-        ArcBasisMill.portSymbolBuilder().setName("port1").setIncoming(true)
+      Arguments.of(ArcBasisMill.scope(), new ArcPortSymbol[]{}),
+      Arguments.of(ArcBasisMill.scope(), new ArcPortSymbol[]{
+        ArcBasisMill.arcPortSymbolBuilder().setName("port1").setIncoming(true)
           .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build()
       }),
-      Arguments.of(ArcBasisMill.scope(), new PortSymbol[]{
-        ArcBasisMill.portSymbolBuilder().setName("port1").setIncoming(true)
+      Arguments.of(ArcBasisMill.scope(), new ArcPortSymbol[]{
+        ArcBasisMill.arcPortSymbolBuilder().setName("port1").setIncoming(true)
           .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build(),
-        ArcBasisMill.portSymbolBuilder().setName("port2").setIncoming(true)
+        ArcBasisMill.arcPortSymbolBuilder().setName("port2").setIncoming(true)
           .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build()
       })
     );
@@ -179,7 +179,7 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
 
   protected static Stream<Arguments> scopeAndPortSymbolProvider() {
     return Stream.of(
-      Arguments.of(ArcBasisMill.scope(), ArcBasisMill.portSymbolBuilder().setName("port")
+      Arguments.of(ArcBasisMill.scope(), ArcBasisMill.arcPortSymbolBuilder().setName("port")
         .setIncoming(true).setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build())
     );
   }
@@ -599,11 +599,11 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, PortSymbol...)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, ArcPortSymbol...)}
    */
   @ParameterizedTest
   @MethodSource("scopeAndPortSymbolsProvider")
-  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull PortSymbol... ports) {
+  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull ArcPortSymbol... ports) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(ports);
 
@@ -612,10 +612,10 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
+      () -> Assertions.assertTrue(scope.getLocalArcPortSymbols().containsAll(Arrays.asList(ports)),
         "The scope does not contain all expected ports."),
       () -> {
-        for (PortSymbol port : ports) {
+        for (ArcPortSymbol port : ports) {
           Assertions.assertEquals(scope, port.getEnclosingScope(),
             "The port's enclosing scope does not match the expected scope.");
         }
@@ -624,11 +624,11 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, PortSymbol)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, ArcPortSymbol)}
    */
   @ParameterizedTest
   @MethodSource("scopeAndPortSymbolProvider")
-  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull PortSymbol port) {
+  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull ArcPortSymbol port) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(port);
 
@@ -637,7 +637,7 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalPortSymbols().contains(port),
+      () -> Assertions.assertTrue(scope.getLocalArcPortSymbols().contains(port),
         "The scope does not contain the expected port."),
       () -> Assertions.assertEquals(scope, port.getEnclosingScope(),
         "The port's enclosing scope does not match the expected scope.")

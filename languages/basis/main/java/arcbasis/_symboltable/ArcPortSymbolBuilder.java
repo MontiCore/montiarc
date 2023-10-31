@@ -6,31 +6,27 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class PortSymbolBuilder extends PortSymbolBuilderTOP {
+public class ArcPortSymbolBuilder extends ArcPortSymbolBuilderTOP {
 
   @Override
-  public PortSymbolBuilder setName(@NotNull String name) {
+  public ArcPortSymbolBuilder setName(@NotNull String name) {
     Preconditions.checkNotNull(name);
     return super.setName(name);
   }
 
-  public SymTypeExpression getType() {
-    return this.type;
-  }
-
-  public PortSymbolBuilder setType(@NotNull SymTypeExpression type) {
+  public ArcPortSymbolBuilder setType(@NotNull SymTypeExpression type) {
     Preconditions.checkNotNull(type);
     this.type = type;
     return this.realBuilder;
   }
 
   @Override
-  public PortSymbol build() {
+  public ArcPortSymbol build() {
     Preconditions.checkState(this.isValid());
     return super.build();
   }
 
-  public PortSymbol buildWithoutType() {
+  public ArcPortSymbol buildWithoutType() {
     Preconditions.checkState(this.isValidWithoutType());
     this.setType(SymTypeExpressionFactory.createObscureType());
     return this.build();

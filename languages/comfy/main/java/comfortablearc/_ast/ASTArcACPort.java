@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc._ast;
 
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
@@ -14,7 +14,7 @@ public class ASTArcACPort extends ASTArcACPortTOP {
    * matching if their types and names match.
    */
   @Override
-  public boolean matches(@NotNull PortSymbol source, @NotNull PortSymbol target) {
+  public boolean matches(@NotNull ArcPortSymbol source, @NotNull ArcPortSymbol target) {
     Preconditions.checkNotNull(source);
     Preconditions.checkNotNull(target);
 

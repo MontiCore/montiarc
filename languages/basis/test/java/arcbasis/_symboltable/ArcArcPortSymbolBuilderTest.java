@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.mock;
 
 /**
- * Holds tests for the handwritten methods of {@link PortSymbolBuilder}.
+ * Holds tests for the handwritten methods of {@link ArcPortSymbolBuilder}.
  */
-public class PortSymbolBuilderTest extends ArcBasisAbstractTest {
+public class ArcArcPortSymbolBuilderTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldBeValid() {
-    PortSymbolBuilder builder = new PortSymbolBuilder();
+    ArcPortSymbolBuilder builder = new ArcPortSymbolBuilder();
     builder.setName("in1").setType(mock(SymTypeExpression.class))
       .setIncoming(true).build();
     Assertions.assertTrue(builder.isValid());
@@ -25,8 +25,8 @@ public class PortSymbolBuilderTest extends ArcBasisAbstractTest {
 
   @Test
   public void shouldBeInvalid() {
-    PortSymbolBuilder builderWithoutType = new PortSymbolBuilder();
-    PortSymbolBuilder builderWithoutName = new PortSymbolBuilder();
+    ArcPortSymbolBuilder builderWithoutType = new ArcPortSymbolBuilder();
+    ArcPortSymbolBuilder builderWithoutName = new ArcPortSymbolBuilder();
     builderWithoutType.setName("out1").setOutgoing(true);
     builderWithoutName.setType(mock(SymTypeExpression.class)).setIncoming(true);
     Assertions.assertFalse(builderWithoutType.isValid());
@@ -36,7 +36,7 @@ public class PortSymbolBuilderTest extends ArcBasisAbstractTest {
   @Test
   public void shouldBuildWithExpectedType() {
     SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeExpression("int", ArcBasisMill.scope());
-    PortSymbol symbol = ArcBasisMill.portSymbolBuilder()
+    ArcPortSymbol symbol = ArcBasisMill.arcPortSymbolBuilder()
       .setName("in2").setType(typeExpression)
       .setIncoming(true)
       .build();

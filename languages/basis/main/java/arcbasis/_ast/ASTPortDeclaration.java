@@ -2,7 +2,7 @@
 package arcbasis._ast;
 
 import de.monticore.umlstereotype._ast.ASTStereoValue;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 
 import java.util.Optional;
 

@@ -267,10 +267,10 @@ public final class SymbolService {
    * @param scope the scope to set as enclosing scope
    * @param ports the ports to add to the scope
    */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull PortSymbol... ports) {
+  public static void link(@NotNull IArcBasisScope scope, @NotNull ArcPortSymbol... ports) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(ports);
-    for (PortSymbol port: ports) {
+    for (ArcPortSymbol port: ports) {
       link(scope, port);
     }
   }
@@ -281,7 +281,7 @@ public final class SymbolService {
    * @param scope the scope to set as enclosing scope
    * @param port the port to add to the scope
    */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull PortSymbol port) {
+  public static void link(@NotNull IArcBasisScope scope, @NotNull ArcPortSymbol port) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(port);
     scope.add(port);

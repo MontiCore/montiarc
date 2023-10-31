@@ -35,7 +35,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
           .getType()
           .getTypeInfo()
           .getSpannedScope()
-          .resolvePortMany(node.getPort())
+          .resolveArcPortMany(node.getPort())
           .stream()
           .findFirst()
           .ifPresent(node::setPortSymbol);
@@ -43,7 +43,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
       // else the port belongs to this component
     } else {
       node.getEnclosingScope()
-        .resolvePortMany(node.getPort())
+        .resolveArcPortMany(node.getPort())
         .stream()
         .findFirst()
         .ifPresent(node::setPortSymbol);

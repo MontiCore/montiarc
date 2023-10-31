@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton._symboltable;
 
-import arcbasis._symboltable.PortSymbol;
-import arcbasis._symboltable.PortSymbolTOP;
+import arcbasis._symboltable.ArcPortSymbol;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 
@@ -18,11 +17,11 @@ public interface IArcAutomatonScope extends IArcAutomatonScopeTOP {
                                                                      AccessModifier modifier,
                                                                      Predicate<SCEventDefSymbol> predicate) {
   
-    List<PortSymbol> ports = resolvePortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, PortSymbolTOP::isIncoming);
+    List<ArcPortSymbol> ports = resolveArcPortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, ArcPortSymbol::isIncoming);
   
     List<SCEventDefSymbol> adapters = new ArrayList<>(ports.size());
   
-    for (PortSymbol port : ports) {
+    for (ArcPortSymbol port : ports) {
     
       if (getLocalSCEventDefSymbols().stream().filter(v -> v instanceof Port2EventDefAdapter)
           .noneMatch(v -> ((Port2EventDefAdapter) v).getAdaptee().equals(port))) {

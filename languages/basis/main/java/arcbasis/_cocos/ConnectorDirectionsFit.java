@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.PortSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -49,7 +49,7 @@ public class ConnectorDirectionsFit implements ArcBasisASTConnectorCoCo {
    *                              printing the error message).
    */
   protected static void checkDirectionFitsForSourcePort(@NotNull ASTPortAccess astPort,
-                                                        @NotNull PortSymbol portSym,
+                                                        @NotNull ArcPortSymbol portSym,
                                                         @NotNull ASTConnector connectorOfPortAccess) {
     Preconditions.checkNotNull(astPort);
     Preconditions.checkNotNull(portSym);
@@ -75,7 +75,7 @@ public class ConnectorDirectionsFit implements ArcBasisASTConnectorCoCo {
    *                              printing the error message).
    */
   protected static void checkDirectionFitsTargetPort(@NotNull ASTPortAccess astPort,
-                                                     @NotNull PortSymbol portSym,
+                                                     @NotNull ArcPortSymbol portSym,
                                                      @NotNull ASTConnector connectorOfPortAccess) {
     Preconditions.checkNotNull(astPort);
     Preconditions.checkNotNull(portSym);

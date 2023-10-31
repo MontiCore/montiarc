@@ -2,7 +2,7 @@
 package montiarc.cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -85,7 +85,7 @@ public abstract class DseSupportedTypes {
   public static class DseParameters_VariablesTypes implements ArcBasisASTComponentTypeCoCo {
     @Override
     public void check(ASTComponentType componentType) {
-      for (ASTPort port : componentType.getPorts()) {
+      for (ASTArcPort port : componentType.getPorts()) {
         if (!checkUnsupported(port.getSymbol().getType().print())) {
           printError(componentType.getName(), port.getSymbol().getType()
             .print(), port.get_SourcePositionStart(), port.get_SourcePositionEnd());

@@ -121,7 +121,7 @@ public class VariableArcVariationPointDeSer {
     Preconditions.checkNotNull(json);
 
     String symbolKind = JsonDeSers.getKind(json.getAsJsonObject());
-    ISymbolDeSer<?, ?> deSer = ArcBasisMill.globalScope().getSymbolDeSer(symbolKind);
+    ISymbolDeSer<?, ?> deSer = VariableArcMill.globalScope().getSymbolDeSer(symbolKind);
     ISymbol symbol = deSer.deserialize(json.getAsJsonObject());
 
     ScopeAddSymbolVisitor visitor = new ScopeAddSymbolVisitor((IVariableArcScope) component.getTypeInfo().getSpannedScope());

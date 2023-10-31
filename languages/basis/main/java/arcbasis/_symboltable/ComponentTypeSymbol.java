@@ -7,9 +7,9 @@ import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.check.SymTypeExpression;
-import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -232,8 +232,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @return a {@code List} of the ports of this component type.
    */
-  public List<PortSymbol> getPorts() {
-    return this.getSpannedScope().getLocalPortSymbols();
+  public List<ArcPortSymbol> getPorts() {
+    return this.getSpannedScope().getLocalArcPortSymbols();
   }
 
   /**
@@ -245,9 +245,9 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of a port of this component type with the given name or an empty
    * {@code Optional} if no such port exists.
    */
-  public Optional<PortSymbol> getPort(@NotNull String name) {
+  public Optional<ArcPortSymbol> getPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolvePortLocallyMany(
+    return this.getSpannedScope().resolveArcPortLocallyMany(
       false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, x -> true
     ).stream().findFirst();
   }
@@ -263,9 +263,9 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of a port with the given name, or an empty {@code Optional}, if no
    * such port exists.
    */
-  public Optional<PortSymbol> getPort(@NotNull String name, boolean searchInherited) {
+  public Optional<ArcPortSymbol> getPort(@NotNull String name, boolean searchInherited) {
     Preconditions.checkNotNull(name);
-    Collection<PortSymbol> portsToConsider
+    Collection<ArcPortSymbol> portsToConsider
       = searchInherited ? this.getAllPorts() : this.getPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
   }
@@ -278,8 +278,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
     if (portDefinedByUs) {
       return getPort(portName, false)
-        .filter(PortSymbol::isTypePresent)
-        .map(PortSymbol::getType);
+        .filter(ArcPortSymbol::isTypePresent)
+        .map(ArcPortSymbol::getType);
     } else if (!getParentsList().isEmpty()) {
       // We do not have this port. Now we look if our parents have such a port.
       return this.getParentsList().stream().map(parent -> parent.getTypeExprOfPort(portName)).filter(Optional::isPresent).map(Optional::get).findAny();
@@ -293,7 +293,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @return a {@code List} of incoming ports of this component type.
    */
-  public List<PortSymbol> getIncomingPorts() {
+  public List<ArcPortSymbol> getIncomingPorts() {
     return this.getPorts(true);
   }
 
@@ -306,7 +306,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of the incoming ports of this component type that have the given
    * visibility.
    */
-  public List<PortSymbol> getIncomingPorts(@NotNull AccessModifier visibility) {
+  public List<ArcPortSymbol> getIncomingPorts(@NotNull AccessModifier visibility) {
     Preconditions.checkNotNull(visibility);
     return this.getIncomingPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
@@ -321,7 +321,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of an incoming port with the given name or an empty {@code
    * Optional} if no such port exists.
    */
-  public Optional<PortSymbol> getIncomingPort(@NotNull String name) {
+  public Optional<ArcPortSymbol> getIncomingPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
     return this.getIncomingPort(name, false);
   }
@@ -336,9 +336,9 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of an incoming port with the given name or an empty {@code
    * Optional} if no such port exists in the specified search range.
    */
-  public Optional<PortSymbol> getIncomingPort(@NotNull String name, boolean searchInherited) {
+  public Optional<ArcPortSymbol> getIncomingPort(@NotNull String name, boolean searchInherited) {
     Preconditions.checkNotNull(name);
-    Collection<PortSymbol> portsToConsider
+    Collection<ArcPortSymbol> portsToConsider
       = searchInherited ? this.getAllIncomingPorts() : this.getIncomingPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
   }
@@ -348,7 +348,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @return a {@code List} of the outgoing ports of this component type.
    */
-  public List<PortSymbol> getOutgoingPorts() {
+  public List<ArcPortSymbol> getOutgoingPorts() {
     return this.getPorts(false);
   }
 
@@ -361,7 +361,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of the outgoing ports of this component type that have the given
    * visibility.
    */
-  public List<PortSymbol> getOutgoingPorts(@NotNull AccessModifier visibility) {
+  public List<ArcPortSymbol> getOutgoingPorts(@NotNull AccessModifier visibility) {
     Preconditions.checkNotNull(visibility);
     return this.getOutgoingPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
@@ -376,7 +376,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of an outgoing port with the given name or an empty {@code
    * Optional} if no such port exists.
    */
-  public Optional<PortSymbol> getOutgoingPort(@NotNull String name) {
+  public Optional<ArcPortSymbol> getOutgoingPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
     return this.getOutgoingPort(name, false);
   }
@@ -391,9 +391,9 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of an outgoing port with the given name or an empty {@code
    * Optional} if no such port exists in the specified search range.
    */
-  public Optional<PortSymbol> getOutgoingPort(@NotNull String name, boolean searchInherited) {
+  public Optional<ArcPortSymbol> getOutgoingPort(@NotNull String name, boolean searchInherited) {
     Preconditions.checkNotNull(name);
-    Collection<PortSymbol> portsToConsider
+    Collection<ArcPortSymbol> portsToConsider
       = searchInherited ? this.getAllOutgoingPorts() : this.getOutgoingPorts();
     return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
   }
@@ -405,7 +405,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @param isIncoming the direction of the ports.
    * @return a {@code List} of ports of this component type that have the given direction.
    */
-  protected List<PortSymbol> getPorts(boolean isIncoming) {
+  protected List<ArcPortSymbol> getPorts(boolean isIncoming) {
     return this.getPorts().stream().filter(p -> p.isIncoming() == isIncoming)
       .collect(Collectors.toList());
   }
@@ -416,19 +416,19 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @return a {@code List} of all ports of this component type.
    */
-  public List<PortSymbol> getAllPorts() {
+  public List<ArcPortSymbol> getAllPorts() {
     return this.getAllPorts(new HashSet<>());
   }
 
-  protected List<PortSymbol> getAllPorts(@NotNull Collection<ComponentTypeSymbol> visited) {
+  protected List<ArcPortSymbol> getAllPorts(@NotNull Collection<ComponentTypeSymbol> visited) {
     Preconditions.checkNotNull(visited);
     visited.add(this);
 
-    List<PortSymbol> result = new ArrayList<>(getPorts());
+    List<ArcPortSymbol> result = new ArrayList<>(getPorts());
     for (CompTypeExpression parent : getParentsList()) {
       if (!visited.contains(parent.getTypeInfo())) {
-        List<PortSymbol> inheritedPorts = new ArrayList<>();
-        for (PortSymbol port : parent.getTypeInfo().getAllPorts(visited)) {
+        List<ArcPortSymbol> inheritedPorts = new ArrayList<>();
+        for (ArcPortSymbol port : parent.getTypeInfo().getAllPorts(visited)) {
           if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
             inheritedPorts.add(port);
           }
@@ -446,7 +446,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @return a {@code List} of all incoming ports of this component type.
    */
-  public List<PortSymbol> getAllIncomingPorts() {
+  public List<ArcPortSymbol> getAllIncomingPorts() {
     return this.getAllPorts(true);
   }
 
@@ -456,7 +456,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @return a {@code List} of all outgoing ports of this component type.
    */
-  public List<PortSymbol> getAllOutgoingPorts() {
+  public List<ArcPortSymbol> getAllOutgoingPorts() {
     return this.getAllPorts(false);
   }
 
@@ -468,7 +468,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @param isIncoming the direction of the ports.
    * @return a {@code List} of all ports of this component type that have the given direction.
    */
-  protected List<PortSymbol> getAllPorts(boolean isIncoming) {
+  protected List<ArcPortSymbol> getAllPorts(boolean isIncoming) {
     return this.getAllPorts().stream().filter(p -> p.isIncoming() == isIncoming)
       .collect(Collectors.toList());
   }

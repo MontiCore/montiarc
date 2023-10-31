@@ -3,9 +3,9 @@ package montiarc;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
@@ -656,8 +656,8 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     // Then
     ComponentTypeSymbol aCompType = astA.getComponentType().getSymbol();
     ComponentTypeSymbol bCompType = astB.getComponentType().getSymbol();
-    PortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
-    PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
+    ArcPortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
+    ArcPortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
     ComponentInstanceSymbol aInstance = bCompType.getSubComponent("a").orElseThrow();
 
     ASTConnector connector = astB.getComponentType().getConnectors().get(0);

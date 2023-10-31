@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -10,10 +10,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 /**
  * Checks that if a port has a delay, then is an out port.
  */
-public class DelayOutPortOnly implements ArcBasisASTPortCoCo {
+public class DelayOutPortOnly implements ArcBasisASTArcPortCoCo {
 
   @Override
-  public void check(@NotNull ASTPort node) {
+  public void check(@NotNull ASTArcPort node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 

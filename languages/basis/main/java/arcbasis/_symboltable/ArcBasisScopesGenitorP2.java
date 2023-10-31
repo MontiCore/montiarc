@@ -8,7 +8,7 @@ import arcbasis._ast.ASTArcParent;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTPort;
+import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
@@ -20,8 +20,8 @@ import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.SymTypeExpression;
-import montiarc.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -140,7 +140,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
     SymTypeExpression type = this.getTypeCalculator().typeOf(node.getMCType());
     Timing timing = node.getTiming().orElse(null);
 
-    for (ASTPort port : node.getPortList()) {
+    for (ASTArcPort port : node.getArcPortList()) {
       port.getSymbol().setType(type);
       port.getSymbol().setTiming(timing);
       if (node.hasDelay()) port.getSymbol().setDelayed(true);

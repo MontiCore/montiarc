@@ -15,7 +15,7 @@ import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
-import montiarc.Timing;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -410,10 +410,10 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertEquals("a.b.X", ast.getPort(0).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals(t, ast.getPort(0).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(i, ast.getPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(d, ast.getPort(0).getSymbol().getDelayed()),
+      () -> Assertions.assertEquals("a.b.X", ast.getArcPort(0).getSymbol().getType().printFullName()),
+      () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
+      () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
+      () -> Assertions.assertEquals(d, ast.getArcPort(0).getSymbol().getDelayed()),
       () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
     );
   }
@@ -483,14 +483,14 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertEquals("a.b.Y", ast.getPort(0).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals("a.b.Y", ast.getPort(1).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals(t, ast.getPort(0).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(t, ast.getPort(1).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(i, ast.getPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(i, ast.getPort(1).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(d, ast.getPort(0).getSymbol().isDelayed()),
-      () -> Assertions.assertEquals(d, ast.getPort(1).getSymbol().isDelayed()),
+      () -> Assertions.assertEquals("a.b.Y", ast.getArcPort(0).getSymbol().getType().printFullName()),
+      () -> Assertions.assertEquals("a.b.Y", ast.getArcPort(1).getSymbol().getType().printFullName()),
+      () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
+      () -> Assertions.assertEquals(t, ast.getArcPort(1).getSymbol().getTiming()),
+      () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
+      () -> Assertions.assertEquals(i, ast.getArcPort(1).getSymbol().isIncoming()),
+      () -> Assertions.assertEquals(d, ast.getArcPort(0).getSymbol().isDelayed()),
+      () -> Assertions.assertEquals(d, ast.getArcPort(1).getSymbol().isDelayed()),
       () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
     );
   }
@@ -552,10 +552,10 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(ast.getPort(0).getSymbol().getType().isObscureType()),
-      () -> Assertions.assertEquals(t, ast.getPort(0).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(i, ast.getPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(d, ast.getPort(0).getSymbol().isDelayed()),
+      () -> Assertions.assertTrue(ast.getArcPort(0).getSymbol().getType().isObscureType()),
+      () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
+      () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
+      () -> Assertions.assertEquals(d, ast.getArcPort(0).getSymbol().isDelayed()),
       () -> Assertions.assertEquals(1, Log.getFindingsCount(), Log.getFindings().toString())
     );
   }
