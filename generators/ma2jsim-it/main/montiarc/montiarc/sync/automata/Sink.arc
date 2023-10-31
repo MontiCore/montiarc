@@ -4,6 +4,7 @@ package montiarc.sync.automata;
 import montiarc.types.OnOff;
 
 component Sink {
+
   port in OnOff i;
 
   <<sync>> automaton {

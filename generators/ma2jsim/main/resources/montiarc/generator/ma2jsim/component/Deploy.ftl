@@ -6,8 +6,6 @@ ${tc.signature("ast", "isTop")}
     ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-${tc.include("montiarc.generator.Import.ftl", ast.getImportStatementList())}
-
 <#assign comp=ast.getComponentType()/>
 
 public class ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</#if> {

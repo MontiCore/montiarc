@@ -24,7 +24,7 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
    */
   protected List<IInPort<T>> recipients = new ArrayList<>();
 
-  protected AbstractOutPort(String qualifiedName, IComponent<?, ?> owner) {
+  protected AbstractOutPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
 

@@ -22,14 +22,14 @@ public class DelayedOutPort<T> extends TimeAwareOutPort<T> {
   /**
    * Create a new outgoing port with the default delay of 1 tick.
    */
-  public DelayedOutPort(String qualifiedName, IComponent<?, ?> owner) {
+  public DelayedOutPort(String qualifiedName, IComponent owner) {
     this(qualifiedName, owner, 1);
   }
 
   /**
    * Create a new outgoing port with a custom amount of delay (>=1 tick).
    */
-  public DelayedOutPort(String qualifiedName, IComponent<?, ?> owner, int delay) {
+  public DelayedOutPort(String qualifiedName, IComponent owner, int delay) {
     super(qualifiedName, owner);
     if (delay < 1) {
       throw new IllegalArgumentException("A delayed output port must have a delay of at least 1.");

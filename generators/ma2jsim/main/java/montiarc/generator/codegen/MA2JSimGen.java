@@ -209,7 +209,7 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(suffix);
     final String file = Names.getFileName(prefix + comp.getName() + suffix, FILE_EXTENSION);
-    final String dir = Names.getPackageFromPath(comp.getPackageName());
+    final String dir = Names.getPathFromPackage(comp.getPackageName());
     return Paths.get(dir, file);
   }
 

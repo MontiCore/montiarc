@@ -22,7 +22,7 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
 
   protected Queue<Message<T>> buffer = new ArrayDeque<>();
 
-  protected AbstractInPort(String qualifiedName, IComponent<?, ?> owner) {
+  protected AbstractInPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
 

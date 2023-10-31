@@ -5,8 +5,6 @@ ${tc.signature("ast", "isTop")}
     ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-${tc.include("montiarc.generator.Import.ftl", ast.getImportStatementList())}
-
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.ContextInterface.ftl", ast.getComponentType(), helper.asList(isTop))}
 
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.InputInterface.ftl", ast.getComponentType(), helper.asList(isTop))}

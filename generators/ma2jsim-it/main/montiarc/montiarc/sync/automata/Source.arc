@@ -4,6 +4,7 @@ package montiarc.sync.automata;
 import montiarc.types.OnOff;
 
 component Source {
+
   port out OnOff o;
 
   <<sync>> automaton {

@@ -3,10 +3,9 @@
 ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
-<#assign timed = helper.isComponentOutputTimeAware(ast)/>
 interface ${ast.getName()}${suffixes.output()}<#if isTop>${suffixes.top()}</#if> {
 
-  default java.util.List${"<"}montiarc.rte.port.Time<#if timed>Aware<#else>Unaware</#if>OutPort${"<?>>"} getAllOutPorts() {
+  default java.util.List${"<"}montiarc.rte.port.TimeAwareOutPort${"<?>>"} getAllOutPorts() {
     return java.util.List.of(<#list ast.getSymbol().getAllOutgoingPorts() as portSym>${prefixes.port()}${portSym.getName()}()<#sep>, </#sep></#list>);
   }
 

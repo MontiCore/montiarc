@@ -18,5 +18,10 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
   <@MethodNames.portSetup/>();
-  <#if ast.getSymbol().isAtomic()><@MethodNames.behaviorSetup/>();</#if>
+  <#if ast.getSymbol().isAtomic()>
+  <@MethodNames.behaviorSetup/>();
+  <#elseif ast.getSymbol().isDecomposed()>
+  <@MethodNames.subCompSetup/>();
+  <@MethodNames.connectorSetup/>();
+  </#if>
 }

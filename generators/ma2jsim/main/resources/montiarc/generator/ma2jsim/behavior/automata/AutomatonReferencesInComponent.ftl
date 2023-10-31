@@ -4,8 +4,6 @@
 <#assign automaton = helper.getAutomatonBehavior(ast)/>
 <#assign hasAutomaton = automaton.isPresent()/>
 <#assign isEvent = hasAutomaton && helper.isEventBased(automaton.get())/>
-<#assign inTimed = helper.isComponentInputTimeAware(ast)/>
-<#assign outTimed = helper.isComponentOutputTimeAware(ast)/>
 
 protected ${ast.getName()}${suffixes.automaton()} automaton;
 
@@ -22,7 +20,7 @@ protected void <@MethodNames.behaviorSetup/>() {
       .build();
 }
 
-<#if isEvent && inTimed>
+<#if isEvent>
     protected void <@MethodNames.handleTick/>() {
       if(<@MethodNames.inputsTickBlocked/>()) {
         <@MethodNames.dropTickOnAll/>();
@@ -40,16 +38,12 @@ protected void <@MethodNames.behaviorSetup/>() {
           return;
       }
 
-      <#if inTimed>
-          if (<@MethodNames.inputsTickBlocked/>()) {
-          <@MethodNames.dropTickOnAll/>();
-          <#if outTimed>
-              <@MethodNames.sendTickOnAll/>();
-          </#if>
-          <@MethodNames.handleSyncComputation/>();
-          return;
-          }
-      </#if>
+      if (<@MethodNames.inputsTickBlocked/>()) {
+        <@MethodNames.dropTickOnAll/>();
+        <@MethodNames.sendTickOnAll/>();
+        <@MethodNames.handleSyncComputation/>();
+        return;
+      }
 
       if (<@MethodNames.getBehavior/>().canExecuteTransition()) {
         <@MethodNames.getBehavior/>().executeAnyValidTransition();

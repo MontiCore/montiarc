@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.component.IComponent;
 import montiarc.rte.component.ITimedComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
@@ -22,15 +21,6 @@ public class DelayedOutPortTest {
 
   void setUpPorts(int delay) {
     ITimedComponent mockComponent = new ITimedComponent() {
-      @Override
-      public List<ITimeAwareInPort<?>> getAllInPorts() {
-        return null;
-      }
-      
-      @Override
-      public List<TimeAwareOutPort<?>> getAllOutPorts() {
-        return null;
-      }
       
       @Override
       public String getName() {

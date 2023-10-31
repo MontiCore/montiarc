@@ -11,7 +11,7 @@ import montiarc.rte.msg.PassAllMessageFilter;
  */
 public class TimeAwareOutPort<T> extends AbstractOutPort<T> implements PassAllMessageFilter<T> {
 
-  public TimeAwareOutPort(String qualifiedName, IComponent<?, ?> owner) {
+  public TimeAwareOutPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
 }

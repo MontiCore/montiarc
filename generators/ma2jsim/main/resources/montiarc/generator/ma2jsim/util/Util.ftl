@@ -12,11 +12,10 @@
 
 <#macro getStaticPortClass portSym atomic>
     <#assign direction><#if portSym.isIncoming()>In<#else>Out</#if></#assign>
-    <#assign timing><#if portSym.getTiming().matches(timing_untimed)>Unaware<#else>Aware</#if></#assign>
     montiarc.rte.port.
     <#if !atomic>
-        Time${timing}PortForward
+        TimeAwarePortForward
     <#else>
-        Time${timing}${direction}Port
+        TimeAware${direction}Port
     </#if>
 </#macro>

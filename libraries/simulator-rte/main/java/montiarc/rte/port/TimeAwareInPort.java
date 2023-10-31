@@ -14,7 +14,7 @@ import java.util.Objects;
  */
 public class TimeAwareInPort<T> extends AbstractInPort<T> implements ITimeAwareInPort<T>, PassAllMessageFilter<T> {
 
-  public TimeAwareInPort(String qualifiedName, IComponent<?, ?> owner) {
+  public TimeAwareInPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
 

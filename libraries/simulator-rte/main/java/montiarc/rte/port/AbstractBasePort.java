@@ -20,9 +20,9 @@ abstract class AbstractBasePort<T> implements MessageFilteringStrategy<T> {
     return qualifiedName;
   }
 
-  protected final IComponent<?, ?> owner;
+  protected final IComponent owner;
 
-  protected AbstractBasePort(String qualifiedName, IComponent<?, ?> owner) {
+  protected AbstractBasePort(String qualifiedName, IComponent owner) {
     this.qualifiedName = qualifiedName;
     this.owner = owner;
   }

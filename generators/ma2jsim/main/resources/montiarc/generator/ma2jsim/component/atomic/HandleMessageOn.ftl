@@ -1,6 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
-${tc.signature("portSym", "hasAutomaton", "isEvent", "isTimed")}
+${tc.signature("portSym", "hasAutomaton", "isEvent")}
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#assign automaton = helper.getAutomatonBehavior(ast)/>
 protected void handleMessageOn${portSym.getName()?cap_first}() {
@@ -8,12 +8,10 @@ protected void handleMessageOn${portSym.getName()?cap_first}() {
       <#if isEvent>
           if(${prefixes.port()}${portSym.getName()}.isBufferEmpty()) return;
 
-          <#if isTimed>
-              if(${prefixes.port()}${portSym.getName()}.isTickBlocked()) {
-                <@MethodNames.handleTick/>();
-                return;
-              }
-          </#if>
+          if(${prefixes.port()}${portSym.getName()}.isTickBlocked()) {
+            <@MethodNames.handleTick/>();
+            return;
+          }
 
           <@MethodNames.getBehavior/>().msg_${portSym.getName()}();
       <#else>
