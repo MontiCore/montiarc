@@ -1,12 +1,12 @@
 # .github/workflows/prepare_pages.yml
-name: Prepare And Deploy Pages
+name: Prepare and deploy pages
 
 # Preprocess the docs, build a site directory and push its contents to the gh-pages branch
 
 on:
   push:
     branches:
-      - dev
+      - develop
 
 jobs:
   build:

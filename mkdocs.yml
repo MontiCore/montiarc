@@ -16,16 +16,45 @@ site_url: https://monticore.github.io/montiarc/
 repo_url: https://github.com/MontiCore/montiarc/
 edit_uri: ""
 
-extra_css:
-  - 'stylesheets/extra.css'
-
 copyright: '(c) https://github.com/MontiCore/monticore'
 
 markdown_extensions:
+  - def_list
+  - pymdownx.tasklist:
+      custom_checkbox: true
   - pymdownx.highlight
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.snippets
 
 nav:
-  - Home: 'Home.md'
+  - Home: 'index.md'
+  - Beginners Guide: 'BeginnersGuide.md'
+  - Usage:
+      - Getting Started: usage\GettingStarted.md
+      - CD2Java CL Tool: usage\CD2PojoCLTool.md
+      - CD2Java Gradle Plugin: usage\CD2PojoGradlePlugin.md
+      - MontiArc CL Tool: usage\MontiArcCLTool.md
+      - MontiArc Gradle Plugin: usage\MontiArcGradlePlugin.md
+  - Component: 
+      - Overview: 'Component.md'
+      - Decomposition: 'component\Decomposition.md'
+      - Generics: 'component\Generics.md'
+      - Inheritance: 'component\Inheritance.md'
+      - Interfaces: 'component\Interfaces.md'
+      - Paramters: 'component\Parameter.md'
+  - Behavior: 
+      - Overview: 'Behavior.md'
+      - Automata: 'behavior\Automata.md'
+      - Compute: 'behavior\Compute.md'
+      - Operators: 'behavior\Operators.md'
+      - Statements: 'behavior\Statements.md'
+      - Timing: 'behavior\Timing.md'
+      - Variables: 'behavior\Variables.md'
+  - TypeSystem: 
+      - Overview: 'TypeSystem.md'
+      - Class Diagrams: typesystem\ClassDiagrams.md
+      - Java Integration: typesystem\JavaIntegration.md
+      - Primitives: typesystem\Primitives.md 
+  - License: http://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/
+  - Impressum: http://monticore.github.io/monticore/docs/further_docs/Impressum/

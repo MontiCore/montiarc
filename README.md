@@ -10,15 +10,12 @@ The MontiArc Core repository contains everything related to the common basis of 
 
 ## The MontiArc Architecture Description Language
 
-<img src="pics/elevatorExample.PNG" alt="drawing" height="400px"/>
-
 In MontiArc, architectures are described as component and connector systems in which autonomously acting components 
 perform computations. Communication between components is regulated by connectors between the components’ interfaces, 
 which are stable and built up by typed, directed ports. Components are either atomic or composed of connected 
 subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata 
 or via integration of handcrafted code. For composed components, the behavior emerges from the behavior of their subcomponents. 
 
-# Installation
 
 ## Native installation
 
@@ -61,7 +58,7 @@ Executing the build command on a subproject builds everything needed for that
 project and then builds the project. See the [Gradle Website](https://gradle.org/) 
 for more information about the gradle build tool.
 
-# Building and Running Your First Application
+## Building and Running Your First Application
 
 This section guides you through building and executing your first application.
 We will use the example under `application/bumperbot`.
@@ -82,7 +79,7 @@ main class and setting up the build process to generate an executable.
 
 ## Tool Documentation
 
-The [MontiArcTool](languages/montiarc/main/java/montiarc/MontiArcTool.java) offers capabilities for processing MontiArc component models.
+The MontiArcTool offers capabilities for processing MontiArc component models.
 It provides multiple options that can be used as follows:
 
 `java -jar MontiArc.jar [-h] -i <fileName> [-path <p>] [-pp [<file>]] [-s [<file>]]`
@@ -105,7 +102,7 @@ Exemplary usage:
   java -jar MontiArc.jar -mp application/bumperbot/main/resources
 ``` 
 
-The [MA2JavaTool](generators/ma2java/main/java/montiarc/generator/MontiArcTool.java) extends the MontiArcTool with code generating capabilities. It provides the following options in addition to those defined above:
+The MA2JavaTool extends the MontiArcTool with code generating capabilities. It provides the following options in addition to those defined above:
 
 | Option                             | Explanation                                              |
 |------------------------------------|----------------------------------------------------------|
