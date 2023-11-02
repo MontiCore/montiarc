@@ -1,0 +1,31 @@
+site_name: MontiArc
+theme:
+  name: 'material'
+  favicon: 'docs/img/favicon.png'
+  custom_dir: docs/overrides
+  hide:
+    - navigation
+  features:
+    - navigation.tabs
+    - toc.integrate
+    - toc.follow
+  icon:
+    logo: 'fontawesome/solid/desktop'
+
+site_url: https://monticore.github.io/montiarc/
+repo_url: https://github.com/MontiCore/montiarc/
+edit_uri: ""
+
+extra_css:
+  - 'stylesheets/extra.css'
+
+copyright: '(c) https://github.com/MontiCore/monticore'
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.superfences
+  - pymdownx.snippets
+
+nav:
+  - Home: 'Home.md'
