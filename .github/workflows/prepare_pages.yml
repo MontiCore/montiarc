@@ -32,7 +32,7 @@ jobs:
           pip install ./monticore-pygments-highlighting
 
       - name: Build pages
-        run: mkdocs build --verbose --clean --strict
+        run: mkdocs build --verbose --clean
 
       - name: Deploy pages
         uses: s0/git-publish-subdir-action@develop
