@@ -20,11 +20,6 @@ sourceSets["main"].java {
   srcDir("${buildDir}/montiarc/main/java")
 }
 
-java {
-  //withJavadocJar()
-  withSourcesJar()
-}
-
 // All in one tool-jar
 tasks.shadowJar {
   //minimize()

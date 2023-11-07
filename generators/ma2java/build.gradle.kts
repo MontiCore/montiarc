@@ -17,11 +17,6 @@ dependencies {
   testImplementation(libs.mockito)
 }
 
-java {
-  //withJavadocJar()
-  withSourcesJar()
-}
-
 // All in one tool-jar
 tasks.shadowJar {
   //minimize()

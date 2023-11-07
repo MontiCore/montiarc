@@ -24,10 +24,6 @@ dependencies {
   testImplementation(libs.mc.fd)
 }
 
-java {
-  withSourcesJar()
-}
-
 tasks.shadowJar {
   minimize()
   manifest {

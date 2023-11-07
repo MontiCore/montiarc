@@ -14,11 +14,6 @@ dependencies {
   implementation(libs.mc.c2mc)
 }
 
-java {
-  //withJavadocJar()
-  withSourcesJar()
-}
-
 tasks.shadowJar {
   manifest {
     attributes["Main-Class"] = "de.monticore.cd2pojo.CD2PojoTool"
