@@ -159,7 +159,7 @@ Github Mirror:
     - git lfs fetch --all
     - git remote add github git@github.com:MontiCore/montiarc.git
     - git fetch --all
-    - if git rev-parse --quiet --verify github/"$CI_COMMIT_BRANCH" > /dev/null; 
+    - if git rev-parse --quiet --verify github/"$CI_COMMIT_BRANCH" > /develop/null; 
       then git pull --rebase github "$CI_COMMIT_BRANCH";
       fi
     - git push --force github $CI_COMMIT_BRANCH
