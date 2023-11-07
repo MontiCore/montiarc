@@ -36,22 +36,11 @@ The structure is as follows:
 ## Project file tree organization
 Now that we have seen what the content of the file is, we will investigate the role of the file in the file system structure of the project.
 
-{{< tabs "project-structure" >}}
-{{< tab "Linux / MacOS" >}} 
 The file extension is `.arc`.
 The file system path to models must match the packages in which they are defined.
 For our `WindowController` example, the location could look like `my-project/src/montiarc/car/userinteraction/WindowController.arc`.
 For MontiArc, it is only relevant that the last part of the the path matches the whole package hierarchy (namely, `car/userinteraction/WindowController.arc`).
 However, build tools may constrain the rest of the path.
-{{< /tab >}}
-{{< tab "Windows" >}} 
-The file extension is `.arc`.
-The file system path of component files must match the packages in which they are defined.
-For our `WindowController` example, the location could look like `my-project\src\montiarc\car\userinteraction\WindowController.arc`.
-For MontiArc, it is only relevant that the last part of the the path matches the whole package hierarchy (namely, `car\userinteraction\WindowController.arc`).
-However, build tools may constrain the rest of the path.
-{{< /tab >}}
-{{< /tabs >}}
 
 ## Component interfaces
 An important concept of MontiArc is that the internals of a component are hidden to its operating environment and regarding the other direction: that the component is agnostic of its operating environment, so that it can be used in various operational scenarios.
