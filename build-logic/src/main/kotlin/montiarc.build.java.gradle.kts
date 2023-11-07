@@ -7,10 +7,6 @@ plugins {
   id("montiarc.build.spotless")
 }
 
-java {
-  withSourcesJar()
-}
-
 sourceSets {
   main {
     java.setSrcDirs(setOf("main/java"))
