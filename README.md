@@ -1,21 +1,14 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-# MontiArc Core Project
-
-The MontiArc Core repository contains everything related to the common basis of the MontiArc architecture description language. This project is maintained by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
-
-© https://github.com/MontiCore/monticore Contact: [David Schmalzing](https://git.rwth-aachen.de/david.schmalzing)
-
-[se-rwth]: http://www.se-rwth.de
-[mdse]:http://www.se-rwth.de/teams/mdse/
-
-## The MontiArc Architecture Description Language
+# The MontiArc Architecture Description Language
 
 In MontiArc, architectures are described as component and connector systems in which autonomously acting components 
 perform computations. Communication between components is regulated by connectors between the components’ interfaces, 
 which are stable and built up by typed, directed ports. Components are either atomic or composed of connected 
 subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata 
-or via integration of handcrafted code. For composed components, the behavior emerges from the behavior of their subcomponents. 
+or via integration of handcrafted code. For composed components, the behavior emerges from the behavior of their 
+subcomponents. 
 
+© https://github.com/MontiCore/monticore
 
 ## Native installation
 
