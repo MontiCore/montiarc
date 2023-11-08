@@ -31,7 +31,7 @@ public class ComponentHelper {
   protected MA2JavaFullPrettyPrinter prettyPrinter;
 
   public ComponentHelper() {
-    this.prettyPrinter = new MA2JavaFullPrettyPrinter();
+    this.prettyPrinter = new MA2JavaFullPrettyPrinter(false);
   }
 
   protected MA2JavaFullPrettyPrinter getPrettyPrinter() {

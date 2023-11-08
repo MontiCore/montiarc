@@ -14,6 +14,10 @@ public class MA2JavaFullPrettyPrinter extends MontiArcFullPrettyPrinter {
     this(new IndentPrinter());
   }
 
+  public MA2JavaFullPrettyPrinter(boolean printComments) {
+    this(new IndentPrinter(), printComments);
+  }
+
   public MA2JavaFullPrettyPrinter(@NotNull IndentPrinter printer) {
     this(Preconditions.checkNotNull(printer), true);
   }
