@@ -30,6 +30,10 @@ public class AssignmentExpression extends Expression {
     this.variable = variable;
   }
 
+  public VariableSymbol getVariable() {
+    return variable;
+  }
+
   @Override
   public Expression copyWithPrefix(String prefix) {
     return new AssignmentExpression(astExpression, variable, prefix);

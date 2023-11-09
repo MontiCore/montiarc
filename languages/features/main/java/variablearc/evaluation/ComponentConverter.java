@@ -2,9 +2,12 @@
 package variablearc.evaluation;
 
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentHead;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcScope;
@@ -14,6 +17,7 @@ import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -55,16 +59,20 @@ public class ComponentConverter {
 
     ArrayList<Expression> expressions = new ArrayList<>();
 
-    if (componentInstanceSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
-      // Convert parameters
-      for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getSpannedScope()
-        .getLocalVariableSymbols()) {
-        Optional<ASTArcArgument> bindingExpression = componentInstanceSymbol.getType().getParamBindingFor(variable);
+    // Convert parameters
+    for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getParameters()) {
+      Optional<ASTExpression> bindingExpression = componentInstanceSymbol.getType().getParamBindingFor(variable).map(ASTArcArgument::getExpression);
 
-        bindingExpression.ifPresent(
-          astArcArgument -> expressions.add(new AssignmentExpression(astArcArgument.getExpression(), variable, prefix)));
+      // can only use default parameter value if ASTNode exists
+      if (componentInstanceSymbol.getType().getTypeInfo().isPresentAstNode()) {
+        final ASTComponentHead componentHead = componentInstanceSymbol.getType().getTypeInfo().getAstNode().getHead();
+        bindingExpression = bindingExpression.or(() -> componentHead.streamArcParameters().filter(param -> Objects.equals(param.getName(), variable.getName()) && param.isPresentDefault()).findAny().map(ASTArcParameter::getDefault));
       }
+
+      bindingExpression.ifPresent(
+        expr -> expressions.add(new AssignmentExpression(expr, variable, prefix)));
     }
+
     // add constraints
     ExpressionSet expressionSet = new ExpressionSet(expressions);
     expressionSet.add(((IVariableArcComponentTypeSymbol) componentInstanceSymbol.getType().getTypeInfo()).getConstraints(visited)

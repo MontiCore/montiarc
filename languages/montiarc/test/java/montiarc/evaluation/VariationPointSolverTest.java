@@ -2,7 +2,6 @@
 package montiarc.evaluation;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -20,7 +19,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
@@ -63,14 +61,9 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
         .setType(SymTypeExpressionFactory.createPrimitive("int"))
         .build());
 
-    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
-    Mockito.when(astComponentType.getBody())
-      .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
-
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
-        .setAstNode(astComponentType)
         .build();
 
     variationPoints.forEach(typeSymbol::add);
@@ -80,10 +73,6 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
   protected static IVariableArcComponentTypeSymbol createSubcomponentWithVariationPoints(
     List<VariableArcVariationPoint> variationPoints, List<ASTArcArgument> bindings) {
-    // Mock ast component used by both
-    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
-    Mockito.when(astComponentType.getBody())
-      .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
 
     // Child setup
     IVariableArcScope scope = MontiArcMill.scope();
@@ -100,7 +89,6 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
-        .setAstNode(astComponentType)
         .build();
     typeSymbol.getTypeInfo().addParameter(parameter);
     variationPoints.forEach(typeSymbol::add);
@@ -115,7 +103,6 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
     return (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
       .setSpannedScope(parentScope)
-      .setAstNode(astComponentType)
       .build();
   }
 
@@ -127,13 +114,10 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
   @Test
   public void shouldCreateOrigin() {
     // Given
-    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
-    Mockito.when(astComponentType.getBody())
-      .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
         .setSpannedScope(MontiArcMill.scope())
-        .setAstNode(astComponentType).build();
+        .build();
 
     // When
     VariationPointSolverTestDelegator variationPointSolver = new VariationPointSolverTestDelegator(typeSymbol);
