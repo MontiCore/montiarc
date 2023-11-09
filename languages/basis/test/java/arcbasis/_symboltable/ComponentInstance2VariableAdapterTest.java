@@ -5,10 +5,10 @@ import arcbasis.ArcBasisMill;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
@@ -99,5 +99,34 @@ public class ComponentInstance2VariableAdapterTest {
     SymbolService.link(scope, instance2);
 
     return Stream.of(instance1, instance2);
+  }
+
+  @Test
+  void shouldNotThrowErrorIfTypeIsMissing() {
+    // Given
+    IArcBasisScope scope = ArcBasisMill.scope();
+    ComponentInstanceSymbol adaptee = ArcBasisMill.componentInstanceSymbolBuilder()
+      .setName("c1")
+      .build();
+    SymbolService.link(scope, adaptee);
+
+    // When
+    ComponentInstance2VariableAdapter adapter = new ComponentInstance2VariableAdapter(adaptee);
+
+    // Then
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(adaptee.getName(), adapter.getName(),
+        "The adapter's name should match the adaptee's name."),
+      () -> Assertions.assertEquals(adaptee.getFullName(), adapter.getFullName(),
+        "The adapter's full name should match the adaptee's full name."),
+      () -> Assertions.assertTrue(adapter.getType().isObscureType(),
+        "The adapter's type should be obscure."),
+      () -> Assertions.assertEquals(adaptee.getEnclosingScope(), adapter.getEnclosingScope(),
+        "The adapter's enclosing scope should match the adaptee's enclosing scope."),
+      () -> Assertions.assertEquals(adaptee.getSourcePosition(), adapter.getSourcePosition(),
+        "The adapter's source position should match the adaptee's source position."),
+      () -> Assertions.assertEquals(BasicAccessModifier.PRIVATE, adapter.getAccessModifier(),
+        "The adapter should have a public access modifier as ports are the public interface of a component.")
+    );
   }
 }

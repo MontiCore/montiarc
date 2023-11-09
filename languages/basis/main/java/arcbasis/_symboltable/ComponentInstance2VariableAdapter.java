@@ -52,6 +52,7 @@ public class ComponentInstance2VariableAdapter extends VariableSymbol {
 
   @Override
   public SymTypeExpression getType() {
+    if (!adaptee.isPresentType()) return SymTypeExpressionFactory.createObscureType();
     if (adaptee.getType().getTypeBindingsAsList().isEmpty()) {
       return SymTypeExpressionFactory.createTypeObject(new ComponentType2TypeSymbolAdapter(adaptee.getType().getTypeInfo()));
     } else {
