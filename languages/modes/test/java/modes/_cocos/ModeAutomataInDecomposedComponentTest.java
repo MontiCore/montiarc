@@ -5,8 +5,8 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import modes.ModesAbstractTest;
 import modes._ast.ASTModeAutomaton;
 import montiarc.util.ModesError;
@@ -61,7 +61,7 @@ public class ModeAutomataInDecomposedComponentTest extends ModesAbstractTest {
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(compType);
 
     if (!atomic) {
-      compType.getSpannedScope().add(Mockito.mock(ComponentInstanceSymbol.class));
+      compType.getSpannedScope().add(Mockito.mock(SubcomponentSymbol.class));
     }
 
     // When

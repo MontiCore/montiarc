@@ -2,7 +2,6 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -10,14 +9,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
 /**
- * Holds tests for {@link ComponentType2TypeSymbolAdapter}.
+ * Holds tests for {@link Component2TypeSymbolAdapter}.
  */
-public class ComponentType2TypeSymbolAdapterTest {
+public class Component2TypeSymbolAdapterTest {
 
   @BeforeAll
   static void setUp() {
@@ -31,7 +29,7 @@ public class ComponentType2TypeSymbolAdapterTest {
   @MethodSource("componentTypeSymbolProvider")
   void shouldAdaptFields(@NotNull ComponentTypeSymbol adaptee) {
     // Given
-    ComponentType2TypeSymbolAdapter adapter = new ComponentType2TypeSymbolAdapter(adaptee);
+    Component2TypeSymbolAdapter adapter = new Component2TypeSymbolAdapter(adaptee);
 
     // Then
     Assertions.assertAll(

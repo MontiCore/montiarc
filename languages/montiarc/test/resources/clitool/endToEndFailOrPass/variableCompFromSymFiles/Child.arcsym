@@ -33,7 +33,7 @@
           "expression": "p1",
           "symbols": [
             {
-              "kind": "arcbasis._symboltable.ComponentInstanceSymbol",
+              "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
               "name": "a"
             },
             {
@@ -123,7 +123,7 @@
           ],
           "subcomponents": [
             {
-              "kind": "arcbasis._symboltable.ComponentInstanceSymbol",
+              "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
               "name": "b"
             }
           ]

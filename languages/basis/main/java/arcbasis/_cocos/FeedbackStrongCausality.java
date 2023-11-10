@@ -4,8 +4,8 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -24,9 +24,9 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    Set<ComponentInstanceSymbol> visited = new HashSet<>();
+    Set<SubcomponentSymbol> visited = new HashSet<>();
 
-    for (ComponentInstanceSymbol vertex : node.getSymbol().getSubComponents()) {
+    for (SubcomponentSymbol vertex : node.getSymbol().getSubcomponents()) {
       if (!visited.contains(vertex)) {
         this.check(node, vertex, new Stack<>(), visited);
       }
@@ -34,9 +34,9 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
   }
 
   protected void check(@NotNull ASTComponentType graph,
-                       @NotNull ComponentInstanceSymbol next,
-                       @NotNull Stack<ComponentInstanceSymbol> path,
-                       @NotNull Set<ComponentInstanceSymbol> visited) {
+                       @NotNull SubcomponentSymbol next,
+                       @NotNull Stack<SubcomponentSymbol> path,
+                       @NotNull Set<SubcomponentSymbol> visited) {
     Preconditions.checkNotNull(graph);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
@@ -51,8 +51,8 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
 
   protected void check(@NotNull ASTComponentType graph,
                        @NotNull ASTConnector next,
-                       @NotNull Stack<ComponentInstanceSymbol> path,
-                       @NotNull Set<ComponentInstanceSymbol> visited) {
+                       @NotNull Stack<SubcomponentSymbol> path,
+                       @NotNull Set<SubcomponentSymbol> visited) {
     Preconditions.checkNotNull(graph);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
@@ -67,8 +67,8 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
 
   protected void check(@NotNull ASTComponentType graph,
                        @NotNull ASTPortAccess next,
-                       @NotNull Stack<ComponentInstanceSymbol> path,
-                       @NotNull Set<ComponentInstanceSymbol> visited) {
+                       @NotNull Stack<SubcomponentSymbol> path,
+                       @NotNull Set<SubcomponentSymbol> visited) {
     Preconditions.checkNotNull(graph);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);

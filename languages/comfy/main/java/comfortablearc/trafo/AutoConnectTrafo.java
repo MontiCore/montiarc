@@ -5,10 +5,10 @@ import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTArcACMode;
 import comfortablearc._ast.ASTArcAutoConnect;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -40,8 +40,8 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
     Preconditions.checkState(!this.comps.isEmpty());
     Preconditions.checkState(!this.toAdd.isEmpty());
 
-    List<ComponentInstanceSymbol> connectableSubComps = this.comps.peek().getSymbol()
-      .getSubComponents().stream()
+    List<SubcomponentSymbol> connectableSubComps = this.comps.peek().getSymbol()
+      .getSubcomponents().stream()
       .filter(subComp -> !isAFullyConnectedComponent(subComp, this.comps.peek().getSymbol()))
       .collect(Collectors.toList());
 
@@ -49,11 +49,11 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
     List<ASTPortAccess> unconnectedTargets = new ArrayList<>(getUnconnectedOuterTargetPorts(this.comps.peek().getSymbol()));
 
     connectableSubComps.stream()
-      .filter(ComponentInstanceSymbol::isPresentType)
+      .filter(SubcomponentSymbol::isTypePresent)
       .map(subComp -> getUnconnectedSourcePorts(subComp, this.comps.peek().getSymbol()))
       .forEach(unconnectedSources::addAll);
     connectableSubComps.stream()
-      .filter(ComponentInstanceSymbol::isPresentType)
+      .filter(SubcomponentSymbol::isTypePresent)
       .map(subComp -> getUnconnectedTargetPorts(subComp, this.comps.peek().getSymbol()))
       .forEach(unconnectedTargets::addAll);
 

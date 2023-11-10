@@ -4,11 +4,11 @@ package montiarc;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.LogStub;
@@ -626,9 +626,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
     // Then
     Assertions.assertTrue(astB.getEnclosingScope().getSubScopes().get(0)
-      .resolveComponentInstanceLocally("a").isPresent());
+      .resolveSubcomponentLocally("a").isPresent());
     Assertions.assertNotNull(astB.getEnclosingScope().getSubScopes().get(0)
-      .resolveComponentInstanceLocally("a").get().getType());
+      .resolveSubcomponentLocally("a").get().getType());
   }
 
   /**
@@ -656,9 +656,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     // Then
     ComponentTypeSymbol aCompType = astA.getComponentType().getSymbol();
     ComponentTypeSymbol bCompType = astB.getComponentType().getSymbol();
-    ArcPortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
-    ArcPortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
-    ComponentInstanceSymbol aInstance = bCompType.getSubComponent("a").orElseThrow();
+    ArcPortSymbol aInPort = aCompType.getArcPort("inPortA").orElseThrow();
+    ArcPortSymbol bInPort = bCompType.getArcPort("inPortB").orElseThrow();
+    SubcomponentSymbol aInstance = bCompType.getSubcomponents("a").orElseThrow();
 
     ASTConnector connector = astB.getComponentType().getConnectors().get(0);
     ASTPortAccess bAccess = connector.getSource();

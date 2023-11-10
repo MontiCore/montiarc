@@ -1,26 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTComponentInstance;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._ast.ASTSubcomponent;
+import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.List;
 
 /**
  * Represents a configured component instance variant.
  */
-public class VariantComponentInstanceSymbol extends ComponentInstanceSymbol {
+public class VariantSubcomponentSymbol extends SubcomponentSymbol {
 
-  protected ComponentInstanceSymbol parent;
+  protected SubcomponentSymbol parent;
 
-  public VariantComponentInstanceSymbol(@NotNull ComponentInstanceSymbol parent,
-                                        @NotNull CompTypeExpression type) {
+  public VariantSubcomponentSymbol(@NotNull SubcomponentSymbol parent,
+                                        @NotNull CompKindExpression type) {
     super(parent.getName());
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(type);
@@ -29,12 +26,12 @@ public class VariantComponentInstanceSymbol extends ComponentInstanceSymbol {
     this.parent = parent;
   }
   @Override
-  public IArcBasisScope getEnclosingScope() {
+  public ICompSymbolsScope getEnclosingScope() {
     return parent.getEnclosingScope();
   }
 
   @Override
-  public ASTComponentInstance getAstNode() {
+  public ASTSubcomponent getAstNode() {
     return parent.getAstNode();
   }
 

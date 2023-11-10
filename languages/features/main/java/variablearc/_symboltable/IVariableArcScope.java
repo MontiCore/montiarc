@@ -6,6 +6,7 @@ import arcbasis._symboltable.InstanceVisitor;
 import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
+import de.monticore.types.check.CompKindExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,9 @@ public interface IVariableArcScope extends IVariableArcScopeTOP {
                                                                Predicate<ArcFeatureSymbol> predicate) {
     if (!foundSymbols && this.isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && !component.get().isEmptyParents()) {
+      if (component.isPresent() && !component.get().isEmptySuperComponents()) {
         ArrayList<ArcFeatureSymbol> symbols = new ArrayList<>();
-        for (CompTypeExpression parent : component.get().getParentsList()) {
+        for (CompKindExpression parent : component.get().getSuperComponentsList()) {
           symbols.addAll(((IVariableArcScope) parent.getTypeInfo().getSpannedScope())
             .resolveArcFeatureMany(false, name, modifier, predicate));
         }

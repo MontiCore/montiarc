@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos.util;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -73,7 +73,7 @@ public interface IPortReferenceInExpressionExtractor {
     public static Collection<PortReference> ofComponentTypePorts(@NotNull ComponentTypeSymbol comp) {
       Preconditions.checkNotNull(comp);
 
-      return comp.getAllPorts().stream()
+      return comp.getAllArcPorts().stream()
         .map(port -> new PortReference(port.getName()))
         .collect(Collectors.toSet());
     }
@@ -86,8 +86,8 @@ public interface IPortReferenceInExpressionExtractor {
       Preconditions.checkNotNull(comp);
       Collection<PortReference> allSubCompPorts = new HashSet<>();
 
-      for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
-        if (subComp.isPresentType()){
+      for (SubcomponentSymbol subComp : comp.getSubcomponents()) {
+        if (subComp.isTypePresent()){
           Preconditions.checkState(subComp.getType().getTypeInfo() != null);
           subComp.getType().getTypeInfo().getAllPorts().stream()
             .map(port -> new PortReference(subComp.getName(), port.getName()))

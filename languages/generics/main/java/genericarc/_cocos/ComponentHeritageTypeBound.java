@@ -8,6 +8,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
@@ -33,8 +34,8 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    for (int i = 0; i < Math.min(node.getHead().getArcParentList().size(), node.getSymbol().getParentsList().size()); i++) {
-      CompTypeExpression parent = node.getSymbol().getParents(i);
+    for (int i = 0; i < Math.min(node.getHead().getArcParentList().size(), node.getSymbol().getSuperComponentsList().size()); i++) {
+      CompKindExpression parent = node.getSymbol().getSuperComponents(i);
       if (parent instanceof TypeExprOfGenericComponent) {
         checkTypeArgsAreNotTooFew(node.getHead().getArcParent(i), (TypeExprOfGenericComponent) parent);
         checkTypeArgsAreNotTooMany(node.getHead().getArcParent(i), (TypeExprOfGenericComponent) parent);

@@ -3,7 +3,7 @@ package montiarc._auxiliary;
 
 import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import arcbasis._symboltable.ComponentTypeSymbolBuilder;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import montiarc._symboltable.MontiArcComponentTypeSymbolBuilder;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
@@ -16,7 +16,7 @@ public class ArcBasisMillForMontiArc extends ArcBasisMillForMontiArcTOP {
   }
 
   @Override
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+  protected FullCompKindExprDeSer _compTypeExprDeSer() {
     return montiarc.MontiArcMill.compTypeExprDeSer();
   }
 

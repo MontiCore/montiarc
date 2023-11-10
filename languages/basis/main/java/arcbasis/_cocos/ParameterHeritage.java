@@ -10,6 +10,7 @@ import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.SourcePosition;
@@ -42,13 +43,14 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
     ComponentTypeSymbol component = node.getSymbol();
 
-    for (CompTypeExpression parent : component.getParentsList()) {
-      checkParentInstantiationArgsAreNotTooMany(component, parent);
-      if( checkParentKeywordsMustBeParameters(component, parent) &
-        checkParentKeywordArgsLast(component, parent)) {
-        checkParentInstantiationArgsBindAllMandatoryParams(component, parent);
-        if(checkParentArgValuesUnique(component, parent) & checkParentKeywordArgsUnique(component, parent)) {
-          checkParentInstantiationArgsHaveCorrectTypes(component, parent);
+    for (CompKindExpression parent : component.getSuperComponentsList()) {
+      if (!(parent instanceof CompTypeExpression)) continue;
+      checkParentInstantiationArgsAreNotTooMany(component, (CompTypeExpression) parent);
+      if (checkParentKeywordsMustBeParameters(component, (CompTypeExpression) parent) &
+        checkParentKeywordArgsLast(component, (CompTypeExpression) parent)) {
+        checkParentInstantiationArgsBindAllMandatoryParams(component, (CompTypeExpression) parent);
+        if (checkParentArgValuesUnique(component, (CompTypeExpression) parent) & checkParentKeywordArgsUnique(component, (CompTypeExpression) parent)) {
+          checkParentInstantiationArgsHaveCorrectTypes(component, (CompTypeExpression) parent);
         }
       }
     }
@@ -67,7 +69,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent.getTypeInfo());
 
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
-    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
+    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParametersList();
 
     if (parentArgs.size() > paramsOfParentCompType.size()) {
       ASTArcArgument firstIllegalArg = parentArgs.get(paramsOfParentCompType.size());
@@ -93,7 +95,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
 
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
-    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
+    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParametersList();
 
     long mandatoryParamsAmount = paramsOfParentCompType.stream()
         .map(VariableSymbol::getAstNode)
@@ -152,7 +154,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     for (ASTArcArgument argument : keywordArgs){
       String paramName = argument.getName();
 
-      if (parent.getTypeInfo().getParameters().stream()
+      if (parent.getTypeInfo().getParametersList().stream()
         .noneMatch(param -> param.getName().equals(paramName))){
         Log.error(ArcError.HERITAGE_COMP_ARG_KEY_INVALID.format(
             comp.getName()), argument.get_SourcePositionStart(),
@@ -215,7 +217,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       .filter(Predicate.not(ASTArcArgument::isPresentName))
       .count();
 
-    List<String> paramNames = parent.getTypeInfo().getParameters()
+    List<String> paramNames = parent.getTypeInfo().getParametersList()
       .stream().map(VariableSymbol::getName).collect(Collectors.toList());
 
     Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
@@ -284,16 +286,16 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
 
     List<Optional<SymTypeExpression>> parentSignature = parent.getTypeInfo()
-      .getParameters().stream()
+      .getParametersList().stream()
       .map(ISymbol::getName)
-      .map(parent::getParameterType)
+      .map(parent::getTypeOfParameter)
       .collect(Collectors.toList());
 
     List<SymTypeExpression> parentArgsCheck = parentArgs.stream()
       .map(ASTArcArgument::getExpression).map(this.tc::typeOf)
       .collect(Collectors.toList());
 
-    List<String> paramNames = parent.getTypeInfo().getParameters().stream()
+    List<String> paramNames = parent.getTypeInfo().getParametersList().stream()
       .map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));

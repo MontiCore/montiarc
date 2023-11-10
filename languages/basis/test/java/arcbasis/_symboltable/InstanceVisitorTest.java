@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +25,7 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
 
     // When
     Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
-    Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
+    Optional<SubcomponentSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
 
     // Then
@@ -42,7 +43,7 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
       .setIncoming(true).build();
 
     // When
-    Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
+    Optional<SubcomponentSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
     Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
 
@@ -56,12 +57,12 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
   @Test
   public void shouldGetComponentInstance() {
     // Given
-    ISymbol symbol = ArcBasisMill.componentInstanceSymbolBuilder().setName("P").build();
+    ISymbol symbol = ArcBasisMill.subcomponentSymbolBuilder().setName("P").build();
 
     // When
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
     Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
-    Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
+    Optional<SubcomponentSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
 
     // Then
     Assertions.assertFalse(component.isPresent());
@@ -78,7 +79,7 @@ public class InstanceVisitorTest extends ArcBasisAbstractTest {
     // When
     Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(symbol);
     Optional<ArcPortSymbol> port = new InstanceVisitor().asPort(symbol);
-    Optional<ComponentInstanceSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
+    Optional<SubcomponentSymbol> instance = new InstanceVisitor().asSubcomponent(symbol);
 
     // Then
     Assertions.assertFalse(component.isPresent());

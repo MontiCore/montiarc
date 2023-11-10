@@ -8,6 +8,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
@@ -70,7 +71,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
 
     Preconditions.checkArgument(node.streamComponentInstances().allMatch(ASTComponentInstance::isPresentSymbol));
 
-    if (!node.streamComponentInstances().allMatch(inst -> inst.getSymbol().isPresentType())) {
+    if (!node.streamComponentInstances().allMatch(inst -> inst.getSymbol().isTypePresent())) {
       Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.", this.getClass().getSimpleName());
       return;
     }
@@ -80,7 +81,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
         "Some instances of '%s' at '%s' have mismatching '%s's as their types. Your symbol table completion seems to " + "be inconsistent.",
         ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(), CompTypeExpression.class.getSimpleName());
 
-    CompTypeExpression compTypeExpr = node.getComponentInstance(0).getSymbol().getType();
+    CompKindExpression compTypeExpr = node.getComponentInstance(0).getSymbol().getType();
     if (compTypeExpr instanceof TypeExprOfGenericComponent) {
       checkTypeArgsAreNotTooFew((TypeExprOfGenericComponent) compTypeExpr, node);
 

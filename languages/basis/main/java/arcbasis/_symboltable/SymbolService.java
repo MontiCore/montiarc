@@ -7,6 +7,7 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
@@ -240,10 +241,10 @@ public final class SymbolService {
    * @param scope the scope to set as enclosing scope
    * @param components the components to add to the scope
    */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull ComponentInstanceSymbol... components) {
+  public static void link(@NotNull IArcBasisScope scope, @NotNull SubcomponentSymbol... components) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(components);
-    for (ComponentInstanceSymbol component: components) {
+    for (SubcomponentSymbol component: components) {
       link(scope, component);
     }
   }
@@ -254,7 +255,7 @@ public final class SymbolService {
    * @param scope the scope to set as enclosing scope
    * @param component the component to add to the scope
    */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull ComponentInstanceSymbol component) {
+  public static void link(@NotNull IArcBasisScope scope, @NotNull SubcomponentSymbol component) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(component);
     scope.add(component);

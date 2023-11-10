@@ -82,8 +82,8 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
   private static final String JSON_WITH_SUB =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
-      "\"name\":\"Comp\"," +
-      "\"subcomponents\":[{\"kind\":\"arcbasis._symboltable.ComponentInstanceSymbol\",\"name\":\"inst\"}]" +
+      "\"name\":\"Parent\"," +
+      "\"subcomponents\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"type\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Comp\"}}]" +
       "}";
 
   private static final String JSON_WITH_INNER =
@@ -106,7 +106,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = createSimpleComp();
     ComponentTypeSymbol parent = createParentComp();
     CompTypeExpression parentType = new TypeExprOfComponent(parent);
-    comp.setParentsList(Collections.singletonList(parentType));
+    comp.setSuperComponentsList(Collections.singletonList(parentType));
 
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
     ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
@@ -225,8 +225,8 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARENT);
 
     // Then
-    Assertions.assertFalse(comp.isEmptyParents(), "Parent not present");
-    Assertions.assertEquals("Parent", comp.getParents(0).printName());
+    Assertions.assertFalse(comp.isEmptySuperComponents(), "Parent not present");
+    Assertions.assertEquals("Parent", comp.getSuperComponents(0).printName());
   }
 
   @Test
@@ -238,7 +238,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(SIMPLE_JSON);
 
     // Then
-    Assertions.assertTrue(comp.isEmptyParents(), "Parent is present");
+    Assertions.assertTrue(comp.isEmptySuperComponents(), "Parent is present");
   }
 
   @Test
@@ -266,10 +266,10 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARAMS);
 
     // Then
-    Assertions.assertEquals(2, comp.getParameters().size());
+    Assertions.assertEquals(2, comp.getParametersList().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("a", comp.getParameters().get(0).getName()),
-      () -> Assertions.assertEquals("b", comp.getParameters().get(1).getName())
+      () -> Assertions.assertEquals("a", comp.getParametersList().get(0).getName()),
+      () -> Assertions.assertEquals("b", comp.getParametersList().get(1).getName())
     );
   }
 
@@ -282,21 +282,21 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PORTS);
 
     // Then
-    Assertions.assertEquals(2, comp.getPorts().size());
+    Assertions.assertEquals(2, comp.getArcPorts().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("inc", comp.getPorts().get(0).getName()),
-      () -> Assertions.assertEquals("outg", comp.getPorts().get(1).getName())
+      () -> Assertions.assertEquals("inc", comp.getArcPorts().get(0).getName()),
+      () -> Assertions.assertEquals("outg", comp.getArcPorts().get(1).getName())
     );
   }
 
   @Test
   void shouldSerializeSubComponents() {
     // Given
-    ComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createParentComp();
     comp.getSpannedScope().add(
-      ArcBasisMill.componentInstanceSymbolBuilder()
+      ArcBasisMill.subcomponentSymbolBuilder()
         .setName("inst")
-        .setType(Mockito.mock(CompTypeExpression.class))
+        .setType(new TypeExprOfComponent(createSimpleComp()))
         .build()
     );
 
@@ -319,9 +319,9 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_SUB);
 
     // Then
-    Assertions.assertEquals(1, comp.getSubComponents().size());
+    Assertions.assertEquals(1, comp.getSubcomponents().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("inst", comp.getSubComponents().get(0).getName())
+      () -> Assertions.assertEquals("inst", comp.getSubcomponents().get(0).getName())
     );
   }
 

@@ -4,6 +4,7 @@ package arcbasis._symboltable;
 import arcbasis.ArcBasisMill;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -16,9 +17,9 @@ import org.mockito.Mockito;
 import java.util.stream.Stream;
 
 /**
- * Holds tests for {@link ComponentInstance2VariableAdapter}.
+ * Holds tests for {@link Subcomponent2VariableAdapter}.
  */
-public class ComponentInstance2VariableAdapterTest {
+public class Subcomponent2VariableAdapterTest {
 
   @BeforeAll
   static void setUp() {
@@ -29,10 +30,10 @@ public class ComponentInstance2VariableAdapterTest {
   }
 
   @ParameterizedTest
-  @MethodSource("componentInstanceSymbolProvider")
-  void shouldAdaptFields(@NotNull ComponentInstanceSymbol adaptee) {
+  @MethodSource("subcomponentSymbolProvider")
+  void shouldAdaptFields(@NotNull SubcomponentSymbol adaptee) {
     // Given
-    ComponentInstance2VariableAdapter adapter = new ComponentInstance2VariableAdapter(adaptee);
+    Subcomponent2VariableAdapter adapter = new Subcomponent2VariableAdapter(adaptee);
 
     // Then
     Assertions.assertAll(
@@ -40,7 +41,7 @@ public class ComponentInstance2VariableAdapterTest {
         "The adapter's name should match the adaptee's name."),
       () -> Assertions.assertEquals(adaptee.getFullName(), adapter.getFullName(),
         "The adapter's full name should match the adaptee's full name."),
-      () -> Assertions.assertEquals(adaptee.getType().getTypeInfo(), ((ComponentType2TypeSymbolAdapter) adapter.getType().getTypeInfo()).getAdaptee(),
+      () -> Assertions.assertEquals(adaptee.getType().getTypeInfo(), ((Component2TypeSymbolAdapter) adapter.getType().getTypeInfo()).getAdaptee(),
         "The adapter's type should match the adaptee's type."),
       () -> Assertions.assertEquals(adaptee.getEnclosingScope(), adapter.getEnclosingScope(),
         "The adapter's enclosing scope should match the adaptee's enclosing scope."),
@@ -52,13 +53,13 @@ public class ComponentInstance2VariableAdapterTest {
   }
 
   @ParameterizedTest
-  @MethodSource("componentInstanceSymbolProvider")
-  void shouldDeepClone(@NotNull ComponentInstanceSymbol adaptee) {
+  @MethodSource("subcomponentSymbolProvider")
+  void shouldDeepClone(@NotNull SubcomponentSymbol adaptee) {
     // Given
-    ComponentInstance2VariableAdapter adapter = new ComponentInstance2VariableAdapter(adaptee);
+    Subcomponent2VariableAdapter adapter = new Subcomponent2VariableAdapter(adaptee);
 
     // When
-    ComponentInstance2VariableAdapter clone = adapter.deepClone();
+    Subcomponent2VariableAdapter clone = adapter.deepClone();
 
     // Then
     Assertions.assertAll(
@@ -68,7 +69,7 @@ public class ComponentInstance2VariableAdapterTest {
         "The clone's name should match the adapter's name."),
       () -> Assertions.assertEquals(adapter.getFullName(), clone.getFullName(),
         "The clone's full name should match the adapter's full name."),
-      () -> Assertions.assertEquals(((ComponentType2TypeSymbolAdapter) adapter.getType().getTypeInfo()).getAdaptee(), ((ComponentType2TypeSymbolAdapter) clone.getType().getTypeInfo()).getAdaptee(),
+      () -> Assertions.assertEquals(((Component2TypeSymbolAdapter) adapter.getType().getTypeInfo()).getAdaptee(), ((Component2TypeSymbolAdapter) clone.getType().getTypeInfo()).getAdaptee(),
         "The clone's type should match the adapter's type."),
       () -> Assertions.assertEquals(adapter.isIsReadOnly(), clone.isIsReadOnly(),
         "The clone should be read only if the adapter is read only."),
@@ -81,18 +82,18 @@ public class ComponentInstance2VariableAdapterTest {
     );
   }
 
-  protected static Stream<ComponentInstanceSymbol> componentInstanceSymbolProvider() {
+  protected static Stream<SubcomponentSymbol> subcomponentSymbolProvider() {
     IArcBasisScope scope = ArcBasisMill.scope();
 
     // incoming port
-    ComponentInstanceSymbol instance1 = ArcBasisMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol instance1 = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("c1")
       .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
       .build();
     SymbolService.link(scope, instance1);
 
     // outgoing port
-    ComponentInstanceSymbol instance2 = ArcBasisMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol instance2 = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("c2")
       .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
       .build();
@@ -105,13 +106,13 @@ public class ComponentInstance2VariableAdapterTest {
   void shouldNotThrowErrorIfTypeIsMissing() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    ComponentInstanceSymbol adaptee = ArcBasisMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol adaptee = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("c1")
       .build();
     SymbolService.link(scope, adaptee);
 
     // When
-    ComponentInstance2VariableAdapter adapter = new ComponentInstance2VariableAdapter(adaptee);
+    Subcomponent2VariableAdapter adapter = new Subcomponent2VariableAdapter(adaptee);
 
     // Then
     Assertions.assertAll(

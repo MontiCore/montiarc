@@ -22,7 +22,7 @@
   @Override
   public void tick() {
     // update outgoing ports
-    <#if !comp.isEmptyParents()>
+    <#if !comp.isEmptySuperComponents()>
       super.tick();
     </#if>
     <#list comp.getOutgoingPorts() as port>
@@ -33,10 +33,10 @@
 
 <#macro printSetUp comp>
   public void setUp() {
-    <#if !comp.isEmptyParents()>
+    <#if !comp.isEmptySuperComponents()>
       super.setUp();
     </#if>
-    <#list comp.getPorts() as port>
+    <#list comp.getPortsList() as port>
       this.${port.getName()} = new montiarc.rte.timesync.<#if port.isDelayed()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port<>(!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}");
     </#list>
   }

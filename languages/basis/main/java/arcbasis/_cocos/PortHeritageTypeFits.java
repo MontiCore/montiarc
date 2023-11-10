@@ -4,8 +4,9 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
@@ -21,7 +22,7 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (!node.getSymbol().isEmptyParents()) {
+    if (!node.getSymbol().isEmptySuperComponents()) {
       this.checkPorts(node.getSymbol());
     }
   }
@@ -30,19 +31,19 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     // check all ports
-    for (ArcPortSymbol port : component.getPorts()) {
-      for (CompTypeExpression parent : component.getParentsList()) {
+    for (ArcPortSymbol port : component.getArcPorts()) {
+      for (CompKindExpression parent : component.getSuperComponentsList()) {
         this.checkPort(port, parent);
       }
     }
   }
 
-  protected void checkPort(@NotNull ArcPortSymbol port, @NotNull CompTypeExpression parent) {
+  protected void checkPort(@NotNull ArcPortSymbol port, @NotNull CompKindExpression parent) {
     Preconditions.checkNotNull(port);
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());
 
-    Optional<SymTypeExpression> inheritedPortType = parent.getTypeExprOfPort(port.getName());
+    Optional<SymTypeExpression> inheritedPortType = parent.getTypeOfPort(port.getName());
 
     // if the parent has a port with the same name
     if (inheritedPortType.isPresent()) {
@@ -58,7 +59,7 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
       }
 
       // check direction fits
-      Optional<ArcPortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName(), true);
+      Optional<PortSymbol> inheritedPort = parent.getTypeInfo().getPort(port.getName(), true);
       if (inheritedPort.isPresent() && inheritedPort.get().isIncoming() != port.isIncoming()) {
         Log.error(ArcError.HERITAGE_PORT_DIRECTION_MISMATCH.toString(), port.getSourcePosition());
       }

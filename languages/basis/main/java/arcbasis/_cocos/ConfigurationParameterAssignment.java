@@ -4,13 +4,13 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
@@ -53,7 +53,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (!node.getSymbol().isPresentType()) {
+    if (!node.getSymbol().isTypePresent() || !(node.getSymbol().getType() instanceof CompTypeExpression)) {
       Log.debug("Skip coco check, the subcomponent's type is missing.", this.getClass().getCanonicalName());
       return;
     }
@@ -77,17 +77,18 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkArgumentNotTooMany(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
-    List<ASTArcArgument> arguments = subcomponent.getType().getArcArguments();
-    List<VariableSymbol> parameters = subcomponent.getType().getTypeInfo().getParameters();
+    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParametersList();
 
     if (arguments.size() > parameters.size()) {
-      ASTArcArgument firstIllegalArg = subcomponent.getType().getArcArguments().get(parameters.size());
-      ASTArcArgument lastIllegalArg = subcomponent.getType().getArcArguments().get(arguments.size() - 1);
+      ASTArcArgument firstIllegalArg = componentExpression.getArcArguments().get(parameters.size());
+      ASTArcArgument lastIllegalArg = componentExpression.getArcArguments().get(arguments.size() - 1);
 
       Log.error(ArcError.TOO_MANY_ARGUMENTS.format(parameters.size(), arguments.size()),
         firstIllegalArg.get_SourcePositionStart(),
@@ -105,7 +106,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkArgumentsBindAllMandatoryParameters(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
     if (!node.getSymbol().getType().getTypeInfo().isPresentAstNode()) {
@@ -113,10 +114,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       return;
     }
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
-    List<ASTArcArgument> arguments = subcomponent.getType().getArcArguments();
-    List<VariableSymbol> parameters = subcomponent.getType().getTypeInfo().getParameters();
+    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParametersList();
 
     List<String> paramNames = parameters.stream()
       .map(VariableSymbol::getName).collect(Collectors.toList());
@@ -160,14 +162,14 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected void checkInstantiationArgsHaveCorrectTypes(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
-    CompTypeExpression component = subcomponent.getType();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
-    List<ASTArcArgument> arguments = subcomponent.getType().getArcArguments();
-    List<VariableSymbol> parameters = component.getTypeInfo().getParameters();
+    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParametersList();
 
     List<String> paramNames = parameters.stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
@@ -178,7 +180,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       .map(this.tc::typeOf)
       .collect(Collectors.toList());
 
-    List<SymTypeExpression> paramTypes = subcomponent.getType().getParameterTypes();
+    List<SymTypeExpression> paramTypes = componentExpression.getParameterTypes();
 
     for (int i = 0; i < Math.min(argTypes.size(), paramTypes.size()); i++) {
       if (arguments.get(i).isPresentName()) {
@@ -220,11 +222,12 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected boolean checkKeywordArgsUnique(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
-    List<ASTArcArgument> arguments = subcomponent.getType().getArcArguments();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
 
     Set<String> keyArguments = new HashSet<>();
     int keywordCounter;
@@ -257,13 +260,14 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected boolean checkArgValuesUnique(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
-    List<ASTArcArgument> arguments = subcomponent.getType().getArcArguments();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
 
-    List<String> paramNames = subcomponent.getType().getTypeInfo().getParameters()
+    List<String> paramNames = componentExpression.getTypeInfo().getParametersList()
       .stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
@@ -300,15 +304,16 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected boolean checkKeywordArgsLast(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
     boolean keywordAssignmentPresent = false;
     boolean rightArgumentOrder = true;
 
-    List<ASTArcArgument> instantiationArgs = subcomponent.getType().getArcArguments();
+    List<ASTArcArgument> instantiationArgs = componentExpression.getArcArguments();
 
     for (ASTArcArgument argument : instantiationArgs) {
       if (argument.isPresentName()) {
@@ -333,15 +338,16 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   protected boolean checkKeywordsMustBeParameters(@NotNull ASTComponentInstance node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isPresentType());
+    Preconditions.checkArgument(node.getSymbol().isTypePresent());
     Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
 
-    ComponentInstanceSymbol subcomponent = node.getSymbol();
-    ComponentTypeSymbol component = subcomponent.getType().getTypeInfo();
+    SubcomponentSymbol subcomponent = node.getSymbol();
+    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+    ComponentSymbol component = componentExpression.getTypeInfo();
 
     boolean keysAreParams = true;
 
-    for (ASTArcArgument argument : subcomponent.getType().getArcArguments()) {
+    for (ASTArcArgument argument : componentExpression.getArcArguments()) {
       if (argument.isPresentName() && component.getParameter(argument.getName()).isEmpty()) {
         Log.error(ArcError.COMP_ARG_KEY_INVALID.format(node.getName()),
           argument.get_SourcePositionStart(),

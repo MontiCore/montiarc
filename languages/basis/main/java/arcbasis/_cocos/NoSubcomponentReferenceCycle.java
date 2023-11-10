@@ -2,10 +2,11 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -32,7 +33,7 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 
-    Optional<List<ComponentTypeSymbol>> referenceCycle = findRefCycle(comp);
+    Optional<List<ComponentSymbol>> referenceCycle = findRefCycle(comp);
     if (referenceCycle.isPresent()) {
       Log.error(ArcError.SUBCOMPONENT_REFERENCE_CYCLE.format(printCycle(referenceCycle.get())),
         astComp.get_SourcePositionStart(), astComp.get_SourcePositionEnd()
@@ -46,10 +47,10 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
    * @param compArg root element of the recursion
    * @return any cycles where the root-element directly or indirectly instantiates itself
    */
-  protected Optional<List<ComponentTypeSymbol>> findRefCycle(@NotNull ComponentTypeSymbol compArg) {
+  protected Optional<List<ComponentSymbol>> findRefCycle(@NotNull ComponentTypeSymbol compArg) {
     Preconditions.checkNotNull(compArg);
 
-    Deque<ComponentTypeSymbol> stack = new LinkedList<>();
+    Deque<ComponentSymbol> stack = new LinkedList<>();
     stack.push(compArg);
 
     return findRefCycleDepthFirst(stack);
@@ -64,24 +65,24 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
    *              the current end of recursion
    * @return a cyclic instantiation reference, if it is contained in the model
    */
-  protected Optional<List<ComponentTypeSymbol>> findRefCycleDepthFirst(@NotNull Deque<ComponentTypeSymbol> trace) {
+  protected Optional<List<ComponentSymbol>> findRefCycleDepthFirst(@NotNull Deque<ComponentSymbol> trace) {
     Preconditions.checkNotNull(trace);
     Preconditions.checkNotNull(trace.peekLast());
 
-    Collection<ComponentTypeSymbol> instantiatedTypes = trace.peekLast().getSubComponents().stream()
-      .filter(ComponentInstanceSymbol::isPresentType)
-      .map(ComponentInstanceSymbol::getType)
-      .map(CompTypeExpression::getTypeInfo)
+    Collection<ComponentSymbol> instantiatedTypes = trace.peekLast().getSubcomponents().stream()
+      .filter(SubcomponentSymbol::isTypePresent)
+      .map(SubcomponentSymbol::getType)
+      .map(CompKindExpression::getTypeInfo)
       .distinct()
       .collect(Collectors.toList());
 
-    for (ComponentTypeSymbol type : instantiatedTypes) {
+    for (ComponentSymbol type : instantiatedTypes) {
       if (type.equals(trace.peekFirst())) { // check for cycle
-        List<ComponentTypeSymbol> cycle = new ArrayList<>(trace);
+        List<ComponentSymbol> cycle = new ArrayList<>(trace);
         return Optional.of(cycle);
       } else if (!trace.contains(type)) { // else it is also a cycle, but it is dealt with by an other run of this coco
         trace.addLast(type);
-        Optional<List<ComponentTypeSymbol>> cycle = findRefCycleDepthFirst(trace);
+        Optional<List<ComponentSymbol>> cycle = findRefCycleDepthFirst(trace);
         if (cycle.isPresent()) {
           return cycle;
         }
@@ -103,14 +104,14 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
    *              has to be listed once)
    * @return a string where every list entry is named at least twice
    */
-  protected static String printCycle(@NotNull List<ComponentTypeSymbol> cycle) {
+  protected static String printCycle(@NotNull List<ComponentSymbol> cycle) {
     Preconditions.checkNotNull(cycle);
     Preconditions.checkArgument(!cycle.isEmpty());
 
     StringBuilder printer = new StringBuilder();
     for (int i = 0; i < cycle.size(); i++) {
-      ComponentTypeSymbol enclCompType = cycle.get(i);
-      ComponentTypeSymbol subCompType = cycle.get((i + 1) % cycle.size());
+      ComponentSymbol enclCompType = cycle.get(i);
+      ComponentSymbol subCompType = cycle.get((i + 1) % cycle.size());
 
       printer.append("\n'").append(enclCompType.getFullName()).append("' instantiates '").append(subCompType.getFullName()).append("'");
     }

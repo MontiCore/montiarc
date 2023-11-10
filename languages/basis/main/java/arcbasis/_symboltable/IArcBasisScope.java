@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
+import de.monticore.types.check.CompKindExpression;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                                  Predicate<VariableSymbol> predicate) {
 
     List<ArcPortSymbol> ports = resolveArcPortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
-    List<ComponentInstanceSymbol> instances = resolveComponentInstanceLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
+    List<SubcomponentSymbol> instances = resolveSubcomponentLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
 
     List<VariableSymbol> adapters = new ArrayList<>(ports.size() + instances.size());
 
@@ -42,13 +43,13 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
         }
       }
     }
-    for (ComponentInstanceSymbol instance : instances) {
+    for (SubcomponentSymbol instance : instances) {
 
-      if (getLocalVariableSymbols().stream().filter(v -> v instanceof ComponentInstance2VariableAdapter)
-        .noneMatch(v -> ((ComponentInstance2VariableAdapter) v).getAdaptee().equals(instance))) {
+      if (getLocalVariableSymbols().stream().filter(v -> v instanceof Subcomponent2VariableAdapter)
+        .noneMatch(v -> ((Subcomponent2VariableAdapter) v).getAdaptee().equals(instance))) {
 
         // instantiate the adapter
-        VariableSymbol adapter = new ComponentInstance2VariableAdapter(instance);
+        VariableSymbol adapter = new Subcomponent2VariableAdapter(instance);
 
         // filter by modifier and predicate
         if (modifier.includes(adapter.getAccessModifier()) && predicate.test(adapter)) {
@@ -87,10 +88,10 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                       Predicate<ArcPortSymbol> predicate) {
     if (!foundSymbols && this.isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && !component.get().isEmptyParents()) {
+      if (component.isPresent() && !component.get().isEmptySuperComponents()) {
         ArrayList<ArcPortSymbol> symbols = new ArrayList<>();
-        for (CompTypeExpression parent : component.get().getParentsList()) {
-          symbols.addAll(parent.getTypeInfo().getSpannedScope().resolveArcPortMany(false, name, modifier, predicate));
+        for (CompKindExpression parent : component.get().getSuperComponentsList()) {
+          symbols.addAll(((IArcBasisScope) parent.getTypeInfo().getSpannedScope()).resolveArcPortMany(false, name, modifier, predicate));
         }
         return symbols;
       }
@@ -112,9 +113,9 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                            Predicate<VariableSymbol> predicate) {
     if (!foundSymbols && isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
-      if (component.isPresent() && !component.get().isEmptyParents()) {
+      if (component.isPresent() && !component.get().isEmptySuperComponents()) {
         ArrayList<VariableSymbol> symbols = new ArrayList<>();
-        for (CompTypeExpression parent : component.get().getParentsList()) {
+        for (CompKindExpression parent : component.get().getSuperComponentsList()) {
          symbols.addAll(parent.getTypeInfo().getSpannedScope()
             .resolveVariableMany(false, name, modifier, predicate));
         }
@@ -162,22 +163,22 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
   }
 
   @Override
-  default List<ComponentInstanceSymbol> continueComponentInstanceWithEnclosingScope(boolean foundSymbols, String name,
+  default List<SubcomponentSymbol> continueSubcomponentWithEnclosingScope(boolean foundSymbols, String name,
                                                                                     AccessModifier modifier,
-                                                                                    Predicate<ComponentInstanceSymbol> predicate) {
+                                                                                    Predicate<SubcomponentSymbol> predicate) {
     if (checkIfContinueWithEnclosingScope(foundSymbols) && (getEnclosingScope() != null)) {
       if (isPresentSpanningSymbol() && new InstanceVisitor().asComponent(this.getSpanningSymbol()).isPresent()) {
-        return getEnclosingScope().resolveComponentInstanceManyEnclosing(foundSymbols, name, modifier, predicate);
+        return getEnclosingScope().resolveSubcomponentManyEnclosing(foundSymbols, name, modifier, predicate);
       } else {
-        return getEnclosingScope().resolveComponentInstanceMany(foundSymbols, name, modifier, predicate);
+        return getEnclosingScope().resolveSubcomponentMany(foundSymbols, name, modifier, predicate);
       }
     }
     return new ArrayList<>();
   }
 
-  default List<ComponentInstanceSymbol> resolveComponentInstanceManyEnclosing(boolean foundSymbols, String name,
+  default List<SubcomponentSymbol> resolveSubcomponentManyEnclosing(boolean foundSymbols, String name,
                                                                               AccessModifier modifier,
-                                                                              Predicate<ComponentInstanceSymbol> predicate) {
-    return continueComponentInstanceWithEnclosingScope(foundSymbols, name, modifier, predicate);
+                                                                              Predicate<SubcomponentSymbol> predicate) {
+    return continueSubcomponentWithEnclosingScope(foundSymbols, name, modifier, predicate);
   }
 }

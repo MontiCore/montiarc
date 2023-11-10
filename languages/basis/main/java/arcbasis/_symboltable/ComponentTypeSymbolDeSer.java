@@ -2,19 +2,22 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.serialization.ISymbolDeSer;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,7 +32,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   public static final String SUBCOMPONENTS = "subcomponents";
   public static final String FIELDS = "fields";
 
-  private ComposedCompTypeExprDeSer compTypeExprDeSer;
+  private FullCompKindExprDeSer compTypeExprDeSer;
 
   public ComponentTypeSymbolDeSer() {
     this.compTypeExprDeSer = ArcBasisMill.compTypeExprDeSer();
@@ -38,15 +41,15 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   /**
    * @param compTypeExprDeSer the DeSer to use for (de)serializing the parent.
    */
-  public ComponentTypeSymbolDeSer(@NotNull ComposedCompTypeExprDeSer compTypeExprDeSer) {
+  public ComponentTypeSymbolDeSer(@NotNull FullCompKindExprDeSer compTypeExprDeSer) {
     this.compTypeExprDeSer = Preconditions.checkNotNull(compTypeExprDeSer);
   }
 
-  public ComposedCompTypeExprDeSer getCompTypeExprDeSer() {
+  public FullCompKindExprDeSer getCompTypeExprDeSer() {
     return compTypeExprDeSer;
   }
 
-  public void setCompTypeExprDeSer(@NotNull ComposedCompTypeExprDeSer compTypeExprDeSer) {
+  public void setCompTypeExprDeSer(@NotNull FullCompKindExprDeSer compTypeExprDeSer) {
     this.compTypeExprDeSer = Preconditions.checkNotNull(compTypeExprDeSer);
   }
 
@@ -58,8 +61,8 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     printer.member(de.monticore.symboltable.serialization.JsonDeSers.NAME, toSerialize.getName());
 
     // serialize symbolrule attributes
-    if (!toSerialize.isEmptyParents()) {
-      serializeParents(toSerialize.getParentsList(), s2j);
+    if (!toSerialize.isEmptySuperComponents()) {
+      serializeSuperComponents(toSerialize.getSuperComponentsList(), s2j);
     }
 
     // Don't serialize the spanned scope (because it carries private information)
@@ -96,26 +99,53 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected void serializeParents(@NotNull List<CompTypeExpression> parents, @NotNull ArcBasisSymbols2Json s2j) {
+  protected void serializeSuperComponents(List<CompKindExpression> superComponents, ArcBasisSymbols2Json s2j) {
     JsonPrinter printer = s2j.getJsonPrinter();
 
     printer.beginArray(PARENTS);
-    parents.stream()
+    superComponents.stream()
       .map(this.getCompTypeExprDeSer()::serializeAsJson).forEach(printer::valueJson);
     printer.endArray();
   }
 
   @Override
-  protected List<CompTypeExpression> deserializeParents(@NotNull JsonObject compTypeJson) {
+  protected void serializeRefinements(List<CompKindExpression> refinements, ArcBasisSymbols2Json s2j) {
+  }
+
+  @Override
+  protected void serializeParameters(List<VariableSymbol> parameters, ArcBasisSymbols2Json s2j) {
+  }
+
+  @Override
+  protected void serializePorts(List<PortSymbol> ports, ArcBasisSymbols2Json s2j) {
+  }
+
+  @Override
+  protected List<CompKindExpression> deserializeSuperComponents(@NotNull JsonObject compTypeJson) {
     return compTypeJson.getArrayMemberOpt(PARENTS).orElse(Collections.emptyList()).stream().map(JsonElement::getAsJsonObject)
       .map(this.getCompTypeExprDeSer()::deserialize).collect(Collectors.toList());
+  }
+
+  @Override
+  protected List<CompKindExpression> deserializeRefinements(JsonObject symbolJson) {
+    return new ArrayList<>();
+  }
+
+  @Override
+  protected List<VariableSymbol> deserializeParameters(JsonObject symbolJson) {
+    return new ArrayList<>();
+  }
+
+  @Override
+  protected List<PortSymbol> deserializePorts(JsonObject symbolJson) {
+    return null;
   }
 
   protected void serializeParameters(@NotNull ComponentTypeSymbol paramOwner, @NotNull ArcBasisSymbols2Json s2j) {
     JsonPrinter printer = s2j.getJsonPrinter();
 
     printer.beginArray(PARAMETERS);
-    paramOwner.getParameters().forEach(p -> p.accept(s2j.getTraverser()));
+    paramOwner.getParametersList().forEach(p -> p.accept(s2j.getTraverser()));
     printer.endArray();
   }
 
@@ -123,7 +153,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     JsonPrinter printer = s2j.getJsonPrinter();
 
     printer.beginArray(PORTS);
-    portOwner.getPorts().forEach(p -> p.accept(s2j.getTraverser()));
+    portOwner.getArcPorts().forEach(p -> p.accept(s2j.getTraverser()));
     printer.endArray();
   }
 
@@ -153,7 +183,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     JsonPrinter printer = s2j.getJsonPrinter();
 
     printer.beginArray(SUBCOMPONENTS);
-    component.getSubComponents().forEach(p -> p.accept(s2j.getTraverser()));
+    component.getSubcomponents().forEach(p -> p.accept(s2j.getTraverser()));
     printer.endArray();
   }
 
@@ -315,7 +345,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     Preconditions.checkNotNull(component);
     Preconditions.checkNotNull(json);
 
-    final String instanceSerializeKind = ComponentInstanceSymbol.class.getCanonicalName();
+    final String instanceSerializeKind = SubcomponentSymbol.class.getCanonicalName();
 
     List<JsonElement> instances = json.getArrayMemberOpt(SUBCOMPONENTS).orElseGet(Collections::emptyList);
 
@@ -323,7 +353,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
       String instanceJsonKind = JsonDeSers.getKind(instance.getAsJsonObject());
       if (instanceJsonKind.equals(instanceSerializeKind)) {
         ISymbolDeSer deSer = ArcBasisMill.globalScope().getSymbolDeSer(instanceJsonKind);
-        ComponentInstanceSymbol instanceSym = (ComponentInstanceSymbol) deSer.deserialize(instance.getAsJsonObject());
+        SubcomponentSymbol instanceSym = (SubcomponentSymbol) deSer.deserialize(instance.getAsJsonObject());
 
         component.getSpannedScope().add(instanceSym);
 

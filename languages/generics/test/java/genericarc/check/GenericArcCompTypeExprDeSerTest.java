@@ -3,11 +3,11 @@ package genericarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import genericarc.GenericArcAbstractTest;
@@ -39,9 +39,9 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
     SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
-    CompTypeExpression compTypeExpr =
+    CompKindExpression compTypeExpr =
       new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    ComposedCompTypeExprDeSer deser = new GenericArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new GenericArcCompTypeExprDeSer();
 
     // When
     String compAsJson = deser.serializeAsJson(compTypeExpr);
@@ -64,9 +64,9 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
     SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
-    CompTypeExpression compTypeExpr =
+    CompKindExpression compTypeExpr =
       new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    ComposedCompTypeExprDeSer deser = new GenericArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new GenericArcCompTypeExprDeSer();
 
     // When
     String compAsJson = deser.serializeAsJson(compTypeExpr);
@@ -78,7 +78,7 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
   @Test
   void testDeserializeWithPackageName() {
     // Given
-    ComposedCompTypeExprDeSer deser = new GenericArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new GenericArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITH_PACKAGE);
 
     OOTypeSymbol studentSym = createOOTypeSymbol("Student");
@@ -86,7 +86,7 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
     GenericArcMill.globalScope().addSubScope(studentScope);
 
     // When
-    CompTypeExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(serialized);
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);
@@ -99,7 +99,7 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
   @Test
   void testDeserializeWithoutPackageName() {
     // Given
-    ComposedCompTypeExprDeSer deser = new GenericArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new GenericArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITHOUT_PACKAGE);
 
     OOTypeSymbol studentSym = createOOTypeSymbol("Student");
@@ -107,7 +107,7 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
     GenericArcMill.globalScope().addSubScope(studentScope);
 
     // When
-    CompTypeExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(serialized);
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);

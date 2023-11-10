@@ -17,7 +17,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     // then link the port access with the respective subcomponent
     if (node.isPresentComponent()) {
       node.getEnclosingScope()
-        .resolveComponentInstanceMany(node.getComponent())
+        .resolveSubcomponentMany(node.getComponent())
         .stream()
         .findFirst()
         .ifPresent(node::setComponentSymbol);
@@ -27,14 +27,14 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     // then the port belongs to a subcomponent
     if (node.isPresentComponent()) {
       if (node.isPresentComponentSymbol()
-        && node.getComponentSymbol().isPresentType()
+        && node.getComponentSymbol().isTypePresent()
         && node.getComponentSymbol().getType().getTypeInfo() != null
         && node.getComponentSymbol()
-        .getType().getTypeInfo().getEnclosingScope() != null) {
-        node.getComponentSymbol()
+        .getType().getTypeInfo().getSpannedScope() != null) {
+        ((IArcBasisScope) node.getComponentSymbol()
           .getType()
           .getTypeInfo()
-          .getSpannedScope()
+          .getSpannedScope())
           .resolveArcPortMany(node.getPort())
           .stream()
           .findFirst()

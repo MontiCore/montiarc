@@ -3,6 +3,7 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._visitor.ArcBasisTraverser;
+import de.monticore.types.check.CompKindExpression;
 
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class ArcBasisSynthesizeComponent implements ISynthesizeComponent {
   }
 
   @Override
-  public Optional<CompTypeExpression> getResult() {
+  public Optional<CompKindExpression> getResult() {
     return resultWrapper.getResult();
   }
 }

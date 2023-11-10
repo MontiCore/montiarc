@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._symboltable;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.Port2VariableAdapter;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.SourcePosition;
 import modes._ast.ASTVariantComponentType;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -59,9 +59,9 @@ public class ModesVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<ComponentInstanceSymbol> getSubComponents() {
-    List<ComponentInstanceSymbol> subComponents = new ArrayList<>(typeSymbol.getSubComponents());
-    subComponents.addAll(mode.getSpannedScope().getLocalComponentInstanceSymbols());
+  public List<SubcomponentSymbol> getSubcomponents() {
+    List<SubcomponentSymbol> subComponents = new ArrayList<>(typeSymbol.getSubcomponents());
+    subComponents.addAll(mode.getSpannedScope().getLocalSubcomponentSymbols());
     return subComponents;
   }
 

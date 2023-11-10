@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._auxiliary;
 
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import genericarc._symboltable.GenericArcScopesGenitorP2;
 import montiarc.check.MontiArcSynthesizeComponent;
 import montiarc.check.MontiArcTypeCalculator;
@@ -14,7 +14,7 @@ public class GenericArcMillForMontiArc extends GenericArcMillForMontiArcTOP {
   }
 
   @Override
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+  protected FullCompKindExprDeSer _compTypeExprDeSer() {
     return montiarc.MontiArcMill.compTypeExprDeSer();
   }
 }

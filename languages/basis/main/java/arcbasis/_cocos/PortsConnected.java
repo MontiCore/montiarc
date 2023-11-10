@@ -48,7 +48,7 @@ public class PortsConnected implements ArcBasisASTComponentTypeCoCo {
       .collect(Collectors.toSet());
 
     // --------- INCOMING PORTS ----------
-    Collection<ArcPortSymbol> incoming = symbol.getAllIncomingPorts();
+    Collection<ArcPortSymbol> incoming = symbol.getAllIncomingArcPorts();
     for (ArcPortSymbol port : incoming) {
       if (!sources.contains(port.getName()) && !targets.contains(port.getName())) {
         Log.warn(ArcError.IN_PORT_UNUSED.format(port.getName()),
@@ -58,7 +58,7 @@ public class PortsConnected implements ArcBasisASTComponentTypeCoCo {
     }
 
     // --------- OUTGOING PORTS ----------
-    Collection<ArcPortSymbol> outgoing = symbol.getAllOutgoingPorts();
+    Collection<ArcPortSymbol> outgoing = symbol.getAllOutgoingArcPorts();
     for (ArcPortSymbol port : outgoing) {
       if (!sources.contains(port.getName()) && !targets.contains(port.getName())) {
         Log.warn(ArcError.OUT_PORT_UNUSED.format(port.getName()),

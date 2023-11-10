@@ -163,7 +163,7 @@ public class DSEMain${comp.getName()} extends DSEMain{
 <#macro printListerParameter comp>
 	ListerParameter${comp.getName()} parameters = new ListerParameter${comp.getName()}(
 		<#assign x = 3>
-		<#list comp.getParameters() as parameter>
+		<#list comp.getParametersList() as parameter>
 			montiarc.rte.dse.AnnotatedValue.newAnnoValue(
 			<#if compHelperDse.isEnum(parameter)>
 				${parameter.getType().print()?lower_case}.getConst(getEnumIndex(args[${x}], ${parameter.getType().print()?lower_case}) , args[${x}])

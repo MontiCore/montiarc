@@ -1,17 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
-import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcScope;
 import variablearc.evaluation.expressions.AssignmentExpression;
 import variablearc.evaluation.expressions.Expression;
 
@@ -42,8 +42,8 @@ public class ComponentConverter {
     ExpressionSet expressionSet = componentTypeSymbol.getLocalConstraints().copy();
 
     // convert subcomponents
-    for (ComponentInstanceSymbol instanceSymbol : componentTypeSymbol.getTypeInfo().getSubComponents()) {
-      if (instanceSymbol.isPresentType() && !visited.contains(instanceSymbol.getType().getTypeInfo())) {
+    for (SubcomponentSymbol instanceSymbol : componentTypeSymbol.getTypeInfo().getSubcomponents()) {
+      if (instanceSymbol.isTypePresent() && !visited.contains(instanceSymbol.getType().getTypeInfo())) {
         expressionSet.add(convert(instanceSymbol, instanceSymbol.getName(), visited));
       }
     }
@@ -51,32 +51,36 @@ public class ComponentConverter {
     return expressionSet;
   }
 
-  protected ExpressionSet convert(@NotNull ComponentInstanceSymbol componentInstanceSymbol, @NotNull String prefix, @NotNull Collection<ComponentTypeSymbol> visited) {
-    Preconditions.checkNotNull(componentInstanceSymbol);
-    Preconditions.checkArgument(componentInstanceSymbol.isPresentType());
+  protected ExpressionSet convert(@NotNull SubcomponentSymbol subcomponentSymbol, @NotNull String prefix, @NotNull Collection<ComponentTypeSymbol> visited) {
+    Preconditions.checkNotNull(subcomponentSymbol);
+    Preconditions.checkArgument(subcomponentSymbol.isTypePresent());
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(visited);
 
     ArrayList<Expression> expressions = new ArrayList<>();
 
-    // Convert parameters
-    for (VariableSymbol variable : componentInstanceSymbol.getType().getTypeInfo().getParameters()) {
-      Optional<ASTExpression> bindingExpression = componentInstanceSymbol.getType().getParamBindingFor(variable).map(ASTArcArgument::getExpression);
+    if (subcomponentSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
+      // Convert parameters
+      for (VariableSymbol variable : subcomponentSymbol.getType().getTypeInfo().getParametersList()) {
+        Optional<ASTExpression> bindingExpression = subcomponentSymbol.getType().getParamBindingFor(variable);
 
-      // can only use default parameter value if ASTNode exists
-      if (componentInstanceSymbol.getType().getTypeInfo().isPresentAstNode()) {
-        final ASTComponentHead componentHead = componentInstanceSymbol.getType().getTypeInfo().getAstNode().getHead();
-        bindingExpression = bindingExpression.or(() -> componentHead.streamArcParameters().filter(param -> Objects.equals(param.getName(), variable.getName()) && param.isPresentDefault()).findAny().map(ASTArcParameter::getDefault));
+        // can only use default parameter value if ASTNode exists
+        if (subcomponentSymbol.getType().getTypeInfo().isPresentAstNode()) {
+          final ASTComponentHead componentHead = ((ASTComponentType) subcomponentSymbol.getType().getTypeInfo().getAstNode()).getHead();
+          bindingExpression = bindingExpression.or(() -> componentHead.streamArcParameters().filter(param -> Objects.equals(param.getName(), variable.getName()) && param.isPresentDefault()).findAny().map(ASTArcParameter::getDefault));
+        }
+
+        bindingExpression.ifPresent(
+          expr -> expressions.add(new AssignmentExpression(expr, variable, prefix)));
       }
-
-      bindingExpression.ifPresent(
-        expr -> expressions.add(new AssignmentExpression(expr, variable, prefix)));
     }
 
     // add constraints
     ExpressionSet expressionSet = new ExpressionSet(expressions);
-    expressionSet.add(((IVariableArcComponentTypeSymbol) componentInstanceSymbol.getType().getTypeInfo()).getConstraints(visited)
-      .copyAddPrefix(prefix));
+    if (subcomponentSymbol.getType().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
+      expressionSet.add(((IVariableArcComponentTypeSymbol) subcomponentSymbol.getType().getTypeInfo()).getConstraints(visited)
+        .copyAddPrefix(prefix));
+    }
 
     return expressionSet;
   }

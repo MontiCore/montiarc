@@ -4,12 +4,12 @@ package arcbasis._ast;
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -50,7 +50,7 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.accept(traverser);
 
     //When
-    ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
+    SubcomponentSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -76,7 +76,7 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     portAccess.accept(traverser);
 
     //When
-    ComponentInstanceSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
+    SubcomponentSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -206,11 +206,11 @@ public class ASTPortAccessTest extends ArcBasisAbstractTest {
     scope2.add(port6);
     port6.setEnclosingScope(scope2);
 
-    ComponentInstanceSymbol sub1 = ArcBasisMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol sub1 = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("sub1").setType(new TypeExprOfComponent(compB)).build();
     scope1.add(sub1);
     sub1.setEnclosingScope(scope1);
-    ComponentInstanceSymbol sub2 = ArcBasisMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol sub2 = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("sub2").setEnclosingScope(scope1).setType(new TypeExprOfComponent(compC)).build();
     scope1.add(sub2);
     sub2.setEnclosingScope(scope1);

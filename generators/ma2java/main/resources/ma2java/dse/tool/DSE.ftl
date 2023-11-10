@@ -85,7 +85,7 @@ public class DSE${comp.getName()}{
 	public static List<ListerOut${comp.getName()}> runOnce(Pair<List<ListerIn${comp.getName()}>, ListerParameter${comp.getName()}> input){
 
 		${comp.getName()} comp = new ${comp.getName()}(
-			<#list comp.getParameters() as parameter>
+			<#list comp.getParametersList() as parameter>
 				input.getValue().get${parameter.getName()}()
 				<#sep> , </#sep>
 			</#list>
@@ -189,7 +189,7 @@ public class DSE${comp.getName()}{
 
 <#macro printTick comp>
 	<#assign tickStatement = "comp"/>
-	<#list comp.getPorts() as port>
+	<#list comp.getPortsList() as port>
 		<#if port.isDelayed()>
 			<#assign item = tickStatement + "." + port.getName() />
 			<#assign tickStatementList = tickStatementList + [item] />
@@ -200,14 +200,14 @@ public class DSE${comp.getName()}{
 		<#list ast.getSubComponents() as inner>
 		<#assign innerComp = inner.getSymbol().getType().getTypeInfo()>
 			<#assign tickStatements = tickStatement + ".getComponent${inner.getName()?cap_first}()"/>
-			<#list innerComp.getPorts() as port>
+			<#list innerComp.getPortsList() as port>
 				<#if port.isDelayed()>
 					<@printTickDecomposed port tickStatements/>
 				</#if>
 			</#list>
 
 			<#if innerComp.isDecomposed()>
-				<#list innerComp.getSubComponents() as innerComps>
+				<#list innerComp.getSubcomponents() as innerComps>
 				<#assign tickPath = tickStatements + ".getComponent${innerComps.getName()?cap_first}()"/>
 						<@printInnerCompTick innerComps.getType().getTypeInfo() tickPath/>
 				</#list>
@@ -234,14 +234,14 @@ Set<montiarc.rte.timesync.IOutPort> delayedPorts = new HashSet<>();
 </#macro>
 
 <#macro printInnerCompTick (comp varTickStatement)>
-	<#list comp.getPorts() as port>
+	<#list comp.getPortsList() as port>
 		<#if port.isDelayed()>
 			<@printTickDecomposed port varTickStatement/>
 		</#if>
 	</#list>
 
 	<#if comp.isDecomposed()>
-		<#list comp.getSubComponents() as innerComp>
+		<#list comp.getSubcomponents() as innerComp>
 			<#assign tickPaths = varTickStatement + ".getComponent${innerComp.getName()?cap_first}()"/>
 
 			<@printInnerCompTick innerComp.getType().getTypeInfo() tickPaths/>

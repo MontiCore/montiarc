@@ -2,9 +2,6 @@
 package arcbasis._visitor;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.symbols.basicsymbols._symboltable.DiagramSymbol;
@@ -14,6 +11,11 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._visitor.BasicSymbolsInheritanceHandler;
 import de.monticore.symbols.basicsymbols._visitor.BasicSymbolsVisitor2;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.symbols.compsymbols._visitor.CompSymbolsInheritanceHandler;
+import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -143,7 +145,7 @@ public class NodeCounter {
         Preconditions.checkNotNull(numDiagramSymbols)),
       new OOSymbolsVisitor(Preconditions.checkNotNull(numOOTypeSymbols), Preconditions.checkNotNull(numFieldSymbols),
         Preconditions.checkNotNull(numMethodSymbols)),
-      new ArcBasisVisitor(Preconditions.checkNotNull(numPortSymbols),
+      new CompSymbolsVisitor(Preconditions.checkNotNull(numPortSymbols),
         Preconditions.checkNotNull(numComponentSymbols), Preconditions.checkNotNull(numComponentTypeSymbols))
     );
     this.numSymbols = numSymbols;
@@ -162,7 +164,7 @@ public class NodeCounter {
   }
 
   protected NodeCounter(@NotNull IVisitor visitor, @NotNull BasicSymbolsVisitor basicSymbolsVisitor,
-    @NotNull OOSymbolsVisitor ooSymbolsVisitor, @NotNull ArcBasisVisitor arcBasisVisitor) {
+    @NotNull OOSymbolsVisitor ooSymbolsVisitor, @NotNull CompSymbolsVisitor compSymbolsVisitor) {
     this.traverser = ArcBasisMill.traverser();
 
     this.traverser.add4IVisitor(Preconditions.checkNotNull(visitor));
@@ -174,7 +176,8 @@ public class NodeCounter {
     this.traverser.add4OOSymbols(Preconditions.checkNotNull(ooSymbolsVisitor));
 
     this.traverser.setArcBasisHandler(new ArcBasisInheritanceHandler());
-    this.traverser.add4ArcBasis(Preconditions.checkNotNull(arcBasisVisitor));
+    this.traverser.setCompSymbolsHandler(new CompSymbolsInheritanceHandler());
+    this.traverser.add4CompSymbols(Preconditions.checkNotNull(compSymbolsVisitor));
   }
 
   public static class BasicSymbolsVisitor implements BasicSymbolsVisitor2 {
@@ -281,33 +284,33 @@ public class NodeCounter {
     }
   }
 
-  public static class ArcBasisVisitor implements ArcBasisVisitor2 {
+  public static class CompSymbolsVisitor implements CompSymbolsVisitor2 {
 
     protected Wrapper numPortSymbols;
     protected Wrapper numComponentSymbols;
     protected Wrapper numComponentTypeSymbols;
 
-    public ArcBasisVisitor(@NotNull Wrapper numPortSymbols,
-      @NotNull Wrapper numComponentSymbols, @NotNull Wrapper numComponentTypeSymbols) {
+    public CompSymbolsVisitor(@NotNull Wrapper numPortSymbols,
+                           @NotNull Wrapper numComponentSymbols, @NotNull Wrapper numComponentTypeSymbols) {
       this.numPortSymbols = Preconditions.checkNotNull(numPortSymbols);
       this.numComponentSymbols = Preconditions.checkNotNull(numComponentSymbols);
       this.numComponentTypeSymbols = Preconditions.checkNotNull(numComponentTypeSymbols);
     }
 
     @Override
-    public void visit(@NotNull ArcPortSymbol node) {
+    public void visit(@NotNull PortSymbol node) {
       Preconditions.checkNotNull(node);
       numPortSymbols.inc();
     }
 
     @Override
-    public void visit(@NotNull ComponentInstanceSymbol node) {
+    public void visit(@NotNull SubcomponentSymbol node) {
       Preconditions.checkNotNull(node);
       numComponentSymbols.inc();
     }
 
     @Override
-    public void visit(@NotNull ComponentTypeSymbol node) {
+    public void visit(@NotNull ComponentSymbol node) {
       Preconditions.checkNotNull(node);
       numComponentTypeSymbols.inc();
     }

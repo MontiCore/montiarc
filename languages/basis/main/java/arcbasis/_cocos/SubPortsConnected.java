@@ -3,9 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
-import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -42,8 +42,8 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
       .map(ASTConnector::getSourceName)
       .collect(Collectors.toList());
 
-    for (ComponentInstanceSymbol subSymbol : node.getSymbol().getSubComponents()) {
-      if (!subSymbol.isPresentType()) continue;
+    for (SubcomponentSymbol subSymbol : node.getSymbol().getSubcomponents()) {
+      if (!subSymbol.isTypePresent()) continue;
 
       // --------- INCOMING PORTS ----------
       Collection<String> subInputPorts = this.getNames(subSymbol.getType().getTypeInfo().getAllIncomingPorts());
@@ -71,7 +71,7 @@ public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
     }
   }
 
-  protected Collection<String> getNames(Collection<ArcPortSymbol> ports) {
-    return ports.stream().map(ArcPortSymbol::getName).collect(Collectors.toList());
+  protected Collection<String> getNames(Collection<PortSymbol> ports) {
+    return ports.stream().map(PortSymbol::getName).collect(Collectors.toList());
   }
 }

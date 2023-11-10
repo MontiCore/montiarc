@@ -1,24 +1,26 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check.deser;
 
-import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.serialization.JsonDeSers;
-import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.symboltable.serialization.json.JsonElement;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
- * Composed DeSerializator of {@link CompTypeExpression}s for the ArcBasis language.
+ * Composed DeSerializator of {@link CompKindExpression}s for the ArcBasis language.
  */
-public class ArcBasisCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
+public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
   protected TypeExprOfComponentDeSer componentExprDeSer;
 
   public ArcBasisCompTypeExprDeSer() {
     componentExprDeSer = new TypeExprOfComponentDeSer();
   }
 
-  public String serializeAsJson(@NotNull CompTypeExpression toSerialize) {
+  @Override
+  public String serializeAsJson(@NotNull CompKindExpression toSerialize) {
     Preconditions.checkNotNull(toSerialize);
 
     if (toSerialize instanceof TypeExprOfComponent) {
@@ -29,12 +31,12 @@ public class ArcBasisCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
   }
 
   @Override
-  public CompTypeExpression deserialize(@NotNull JsonObject serialized) {
+  public CompKindExpression deserialize(@NotNull JsonElement serialized) {
     Preconditions.checkNotNull(serialized);
 
-    if (JsonDeSers.getKind(serialized).equals(TypeExprOfComponentDeSer.SERIALIZED_KIND)) {
-      return componentExprDeSer.deserialize(serialized);
+    if (JsonDeSers.getKind(serialized.getAsJsonObject()).equals(TypeExprOfComponentDeSer.SERIALIZED_KIND)) {
+      return componentExprDeSer.deserialize(serialized.getAsJsonObject());
     }
-    throw missingDeSerException(serialized);
+    throw missingDeSerException(serialized.getAsJsonObject());
   }
 }

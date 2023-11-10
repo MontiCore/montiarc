@@ -2,10 +2,10 @@
 package montiarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.check.SymTypeOfObject;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
@@ -50,7 +50,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
     MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
 
     // When
-    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompKindExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
@@ -108,7 +108,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
     MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
 
     // When
-    Optional<CompTypeExpression> result = synth.synthesizeFrom(astNormalComp);
+    Optional<CompKindExpression> result = synth.synthesizeFrom(astNormalComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
@@ -134,7 +134,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
     MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
 
     // When
-    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompKindExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertFalse(result.isPresent());

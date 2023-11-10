@@ -1,19 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import arcbasis.check.deser.TypeExprOfComponentDeSer;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.serialization.JsonDeSers;
-import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.symboltable.serialization.json.JsonElement;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import genericarc.check.TypeExprOfGenericComponent;
 import genericarc.check.TypeExprOfGenericComponentDeSer;
 import org.codehaus.commons.nullanalysis.NotNull;
-// import variablearc.check.TypeExprOfVariableComponent;
 
-public class MontiArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
+public class MontiArcCompTypeExprDeSer implements FullCompKindExprDeSer {
 
   protected TypeExprOfComponentDeSer simpleCompExprDeSer;
 
@@ -25,7 +24,7 @@ public class MontiArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
   }
 
   @Override
-  public String serializeAsJson(@NotNull CompTypeExpression toSerialize) {
+  public String serializeAsJson(@NotNull CompKindExpression toSerialize) {
     Preconditions.checkNotNull(toSerialize);
 
     if (toSerialize instanceof TypeExprOfComponent) {
@@ -38,14 +37,14 @@ public class MontiArcCompTypeExprDeSer implements ComposedCompTypeExprDeSer {
   }
 
   @Override
-  public CompTypeExpression deserialize(JsonObject serialized) {
+  public CompKindExpression deserialize(JsonElement serialized) {
     Preconditions.checkNotNull(serialized);
 
-    switch (JsonDeSers.getKind(serialized)) {
-      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return simpleCompExprDeSer.deserialize(serialized);
-      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericCompExprDeSer.deserialize(serialized);
+    switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {
+      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return simpleCompExprDeSer.deserialize(serialized.getAsJsonObject());
+      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericCompExprDeSer.deserialize(serialized.getAsJsonObject());
       default:
-        throw missingDeSerException(serialized);
+        throw missingDeSerException(serialized.getAsJsonObject());
     }
   }
 }

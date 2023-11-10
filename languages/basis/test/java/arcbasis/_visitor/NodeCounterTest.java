@@ -7,7 +7,6 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.CompTypeExpression;
@@ -17,6 +16,7 @@ import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -48,7 +48,7 @@ public class NodeCounterTest {
   public void shouldDetectMissingEnclosingScopeOfSymbol(@NotNull ASTArcBasisNode node, int expNumOfSymbols,
     int expNumOfScopeSpanningSymbols, int expNumOfTypeSymbols, int expNumOfVarSymbols, int expNumOfTypeVarSymbols,
     int expNumOfFunctionSymbols, int expNumOfDiagramSymbols, int expNumOfOOSymbols, int expNumOfFieldSymbols,
-    int expNumOfMethodSymbols, int expNumOfPortSymbols, int expNumOfComponentInstanceSymbols,
+    int expNumOfMethodSymbols, int expNumOfPortSymbols, int expNumOfSubcomponentSymbols,
     int expNumOfComponentTypeSymbols) {
 
     Preconditions.checkNotNull(node);
@@ -84,7 +84,7 @@ public class NodeCounterTest {
       "The number of method symbols does not match the expected number of method symbols.");
     Assertions.assertEquals(expNumOfPortSymbols, delegator.getNumPortSymbols(),
       "The number of visited port symbols does not match the expected number of port symbols.");
-    Assertions.assertEquals(expNumOfComponentInstanceSymbols, delegator.getNumComponentSymbols(),
+    Assertions.assertEquals(expNumOfSubcomponentSymbols, delegator.getNumComponentSymbols(),
       "The number of visited component symbols does not match the expected number of component symbols.");
     Assertions.assertEquals(expNumOfComponentTypeSymbols, delegator.getNumComponentTypeSymbols(),
       "The number of visited component type symbols does not match the expected number of component type symbols.");
@@ -120,7 +120,7 @@ public class NodeCounterTest {
       .setName("port1")
       .setType(Mockito.mock(SymTypeExpression.class))
       .build();
-    ComponentInstanceSymbol c1 = ArcBasisMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol c1 = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("comp1")
       .setType(Mockito.mock(CompTypeExpression.class))
       .build();

@@ -13,8 +13,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
-import variablearc._symboltable.VariableArcScopesGenitorP2;
 
 import java.util.Collection;
 
@@ -38,13 +36,13 @@ public class MontiArcScopesGenitorP2Delegator {
     this.initArcBasis();
     this.initArcAutomaton();
     this.initGenericArc();
-    this.initVariableArc();
     this.initVarDeclarationStatements();
   }
 
   protected void initArcBasis() {
     ArcBasisScopesGenitorP2 scopesGenP2 = ArcBasisMill.scopesGenitorP2();
     this.getTraverser().add4ArcBasis(scopesGenP2);
+    this.getTraverser().add4CompSymbols(scopesGenP2);
     this.getTraverser().setArcBasisHandler(scopesGenP2);
   }
   
@@ -56,13 +54,6 @@ public class MontiArcScopesGenitorP2Delegator {
     GenericArcScopesGenitorP2 scopesGenP2 = GenericArcMill.scopesGenitorP2();
     this.getTraverser().add4GenericArc(scopesGenP2);
     this.getTraverser().setGenericArcHandler(scopesGenP2);
-  }
-
-  protected void initVariableArc() {
-    VariableArcScopesGenitorP2 scopesGenP2 = VariableArcMill.scopesGenitorP2();
-    this.getTraverser().add4ArcBasis(scopesGenP2);
-    this.getTraverser().add4VariableArc(scopesGenP2);
-    this.getTraverser().setVariableArcHandler(scopesGenP2);
   }
 
   protected void initVarDeclarationStatements() {

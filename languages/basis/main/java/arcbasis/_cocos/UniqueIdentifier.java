@@ -96,7 +96,7 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
-    component.getSubComponents().forEach(
+    component.getSubcomponents().forEach(
       inst -> nameOccurrences.put(inst.getName(), optSourcePosOf(inst).orElse(new SourcePosition(-1, -1)))
     );
     return nameOccurrences;
@@ -110,7 +110,7 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
-    component.getPorts().forEach(
+    component.getArcPorts().forEach(
       port -> nameOccurrences.put(port.getName(), optSourcePosOf(port).orElse(new SourcePosition(-1, -1)))
     );
     return nameOccurrences;

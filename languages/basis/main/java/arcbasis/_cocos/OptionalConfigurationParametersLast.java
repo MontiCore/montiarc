@@ -73,7 +73,7 @@ public class OptionalConfigurationParametersLast implements ArcBasisASTComponent
   protected static List<ASTArcParameter> parameterASTsOf(@NotNull ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
 
-    List<VariableSymbol> paramSyms = comp.getParameters();
+    List<VariableSymbol> paramSyms = comp.getParametersList();
 
     paramSyms.forEach(p -> Preconditions.checkArgument(p.isPresentAstNode())
     );

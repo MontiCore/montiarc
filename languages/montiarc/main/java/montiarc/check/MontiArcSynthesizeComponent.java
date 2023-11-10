@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis.check.CompTypeExpression;
 import arcbasis.check.ISynthesizeComponent;
 import arcbasis.check.SynthCompTypeResult;
 import arcbasis.check.SynthesizeComponentFromMCBasicTypes;
+import de.monticore.types.check.CompKindExpression;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 
@@ -12,7 +12,7 @@ import java.util.Optional;
 
 /**
  * A composed visitor for MontiArc that takes component type expressions represented as
- * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompTypeExpression}s from them.
+ * {@link de.monticore.types.mcbasictypes._ast.ASTMCType} and creates {@link CompKindExpression}s from them.
  */
 public class MontiArcSynthesizeComponent implements ISynthesizeComponent {
   protected MontiArcTraverser traverser;
@@ -41,7 +41,7 @@ public class MontiArcSynthesizeComponent implements ISynthesizeComponent {
   }
 
   @Override
-  public Optional<CompTypeExpression>  getResult() {
+  public Optional<CompKindExpression>  getResult() {
     return resultWrapper.getResult();
   }
 }

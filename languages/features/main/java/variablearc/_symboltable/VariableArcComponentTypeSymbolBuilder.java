@@ -33,7 +33,7 @@ public class VariableArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBu
     }
     symbol.setParentConfigurationMap(this.parentConfiguration);
     symbol.setOuterComponent(this.getOuterComponent());
-    symbol.setParentsList(this.parents);
+    symbol.setSuperComponentsList(this.superComponents);
     return symbol;
   }
 }

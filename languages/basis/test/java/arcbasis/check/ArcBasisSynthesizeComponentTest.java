@@ -4,6 +4,7 @@ package arcbasis.check;
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class ArcBasisSynthesizeComponentTest extends ArcBasisAbstractTest {
     ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
-    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompKindExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
@@ -47,7 +48,7 @@ public class ArcBasisSynthesizeComponentTest extends ArcBasisAbstractTest {
     ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
-    Optional<CompTypeExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompKindExpression> result = synth.synthesizeFrom(astComp);
 
     // Then
     Assertions.assertFalse(result.isPresent());

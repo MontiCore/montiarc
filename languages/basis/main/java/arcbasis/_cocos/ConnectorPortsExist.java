@@ -4,8 +4,8 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -56,13 +56,13 @@ public class ConnectorPortsExist implements ArcBasisASTConnectorCoCo {
 
     if (port.isPresentComponent()) {
       // first check the existence of the subcomponent that owns the port
-      Optional<ComponentInstanceSymbol> sub = Optional.ofNullable(port.getComponentSymbol());
+      Optional<SubcomponentSymbol> sub = Optional.ofNullable(port.getComponentSymbol());
       if (sub.isEmpty()) {
         Log.error(ArcError.MISSING_SUBCOMPONENT.format(port.getComponent()),
           port.get_SourcePositionStart(), port.get_SourcePositionEnd());
       } else {
         // now also check whether the subcomponent has a port with the given name
-        if (!sub.get().isPresentType()) { // ignore missing type as this is handled by other cocos
+        if (!sub.get().isTypePresent()) { // ignore missing type as this is handled by other cocos
           return;
         }
         Optional<ArcPortSymbol> portSym = Optional.ofNullable(port.getPortSymbol());

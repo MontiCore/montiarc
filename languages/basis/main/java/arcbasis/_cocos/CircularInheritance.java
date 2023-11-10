@@ -2,10 +2,10 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -45,12 +45,12 @@ public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
    * @param visited the (component) symbols already checked
    */
   protected void check(@NotNull ASTComponentType root,
-                       @NotNull ComponentTypeSymbol next,
+                       @NotNull ComponentSymbol next,
                        @NotNull Collection<ISymbol> visited) {
     Preconditions.checkNotNull(root);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(visited);
-    for (CompTypeExpression parent : next.getParentsList()) {
+    for (CompKindExpression parent : next.getSuperComponentsList()) {
       if (parent.getTypeInfo().equals(root.getSymbol())) {
         // log error if the parent is the root of the search
         Log.error(ArcError.CIRCULAR_INHERITANCE.format(root.getName()),

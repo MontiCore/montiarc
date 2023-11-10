@@ -1,15 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.variability;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariantComponentInstanceSymbol;
+import variablearc._symboltable.VariantSubcomponentSymbol;
 import variablearc.evaluation.VariationPointSolver;
 
 import java.util.ArrayList;
@@ -36,9 +36,9 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
       List<VariableArcVariantComponentTypeSymbol> variants = new ArrayList<>();
       VariationPointSolver vpSolver = new VariationPointSolver(componentTypeSymbol);
 
-      if (!componentTypeSymbol.getTypeInfo().isEmptyParents() && componentTypeSymbol.getTypeInfo().getParents(0) != null &&
-        componentTypeSymbol.getTypeInfo().getParents(0).getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
-        for (VariableArcVariantComponentTypeSymbol parentVariant : ((IVariableArcComponentTypeSymbol) componentTypeSymbol.getTypeInfo().getParents(0).getTypeInfo()).getVariableArcVariants()) {
+      if (!componentTypeSymbol.getTypeInfo().isEmptySuperComponents() && componentTypeSymbol.getTypeInfo().getSuperComponents(0) != null &&
+        componentTypeSymbol.getTypeInfo().getSuperComponents(0).getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
+        for (VariableArcVariantComponentTypeSymbol parentVariant : ((IVariableArcComponentTypeSymbol) componentTypeSymbol.getTypeInfo().getSuperComponents(0).getTypeInfo()).getVariableArcVariants()) {
           calculateVariableArcVariants(variants, vpSolver, parentVariant);
         }
       } else {
@@ -56,32 +56,34 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
     Preconditions.checkNotNull(vpSolver);
     // iterate over all possible variants of this component and expand with subcomponent variants
     for (Set<VariableArcVariationPoint> variationPoints : vpSolver.getCombinations(parentVariant)) {
-      HashMap<ComponentInstanceSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
+      HashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
       // filter out subcomponents not included in this variant
-      List<ComponentInstanceSymbol> subcomponents =
-        componentTypeSymbol.getTypeInfo().getSubComponents().stream()
+      List<SubcomponentSymbol> subcomponents =
+        componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
           .filter(instance -> componentTypeSymbol.variationPointsContainSymbol(variationPoints, instance))
-          .filter(ComponentInstanceSymbol::isPresentType) // for robustness
+          .filter(SubcomponentSymbol::isTypePresent) // for robustness
           .collect(
             Collectors.toList());
 
       if (subcomponents.isEmpty()) {
         variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
           vpSolver.getConditionsForVariationPoints(variationPoints),
-          parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getParents(0).deepClone(parentVariant))));
+          parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getSuperComponents(0).deepClone(parentVariant))));
       } else {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
-        for (ComponentInstanceSymbol instance : subcomponents) {
-          IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) instance.getType().getTypeInfo();
-          subComponentVariants.put(instance, vpSolver.getSubComponentVariants(typeSymbol,
-            instance.getName(), variationPoints, parentVariant));
+        for (SubcomponentSymbol instance : subcomponents) {
+          if (instance.getType().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
+            IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) instance.getType().getTypeInfo();
+            subComponentVariants.put(instance, vpSolver.getSubComponentVariants(typeSymbol,
+              instance.getName(), variationPoints, parentVariant));
+          }
         }
 
         // Expand variants by possible subcomponent variants
         expandCombinations(subComponentVariants).forEach(
           e -> variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
             vpSolver.getConditionsForVariationPoints(variationPoints),
-            parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getParents(0).deepClone(parentVariant)), e))
+            parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getSuperComponents(0).deepClone(parentVariant)), e))
         );
       }
     }
@@ -94,34 +96,34 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
    * @param subComponentVariants maps an instance to all possible variants
    * @return a list of all possible instance variant combinations
    */
-  protected List<HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol>> expandCombinations(
-    @NotNull HashMap<ComponentInstanceSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants
+  protected List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> expandCombinations(
+    @NotNull HashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants
   ) {
     Preconditions.checkNotNull(subComponentVariants);
     // Base case #1: no subcomponents
     if (subComponentVariants.isEmpty()) return Collections.emptyList();
 
 
-    ComponentInstanceSymbol instance = subComponentVariants.keySet().stream().findFirst().get();
+    SubcomponentSymbol instance = subComponentVariants.keySet().stream().findFirst().get();
     List<VariableArcVariantComponentTypeSymbol> variants = subComponentVariants.remove(instance);
     if (subComponentVariants.isEmpty()) {
       // Base case #2: One subcomponent
-      List<HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol>> res = new ArrayList<>();
+      List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> res = new ArrayList<>();
       for (VariableArcVariantComponentTypeSymbol variant : variants) {
-        HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol> pre = new HashMap<>();
-        pre.put(instance, new VariantComponentInstanceSymbol(instance, instance.getType().deepClone(variant)));
+        HashMap<SubcomponentSymbol, VariantSubcomponentSymbol> pre = new HashMap<>();
+        pre.put(instance, new VariantSubcomponentSymbol(instance, instance.getType().deepClone(variant)));
         res.add(pre);
       }
       return res;
     } else {
       // More than 1 subcomponent
-      List<HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol>> prev =
+      List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> prev =
         expandCombinations(subComponentVariants);
-      List<HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol>> res = new ArrayList<>();
+      List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> res = new ArrayList<>();
       for (VariableArcVariantComponentTypeSymbol variant : variants) {
-        for (HashMap<ComponentInstanceSymbol, VariantComponentInstanceSymbol> pre : prev) {
+        for (HashMap<SubcomponentSymbol, VariantSubcomponentSymbol> pre : prev) {
           pre = new HashMap<>(pre);
-          pre.put(instance, new VariantComponentInstanceSymbol(instance,
+          pre.put(instance, new VariantSubcomponentSymbol(instance,
             instance.getType().deepClone(variant)));
           res.add(pre);
         }

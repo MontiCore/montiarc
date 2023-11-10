@@ -5,10 +5,10 @@ import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTArcParent;
+import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
@@ -20,16 +20,19 @@ import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.Optional;
 
-public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandler {
+public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVisitor2, ArcBasisHandler {
 
-  protected CompTypeExpression currentCompInstanceType;
+  protected CompKindExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
   protected IArcTypeCalculator typeCalculator;
   protected ISynthesizeComponent componentSynthesizer;
@@ -44,11 +47,11 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
     this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
 
-  protected Optional<CompTypeExpression> getCurrentCompInstanceType() {
+  protected Optional<CompKindExpression> getCurrentCompInstanceType() {
     return Optional.ofNullable((this.currentCompInstanceType));
   }
 
-  protected void setCurrentCompInstanceType(@Nullable CompTypeExpression currentCompInstanceType) {
+  protected void setCurrentCompInstanceType(@Nullable CompKindExpression currentCompInstanceType) {
     this.currentCompInstanceType = currentCompInstanceType;
   }
 
@@ -80,9 +83,9 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
 
     if (!node.isEmptyArcParents()) {
       ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
-      ImmutableList.Builder<CompTypeExpression> listBuilder = ImmutableList.builder();
+      ImmutableList.Builder<CompKindExpression> listBuilder = ImmutableList.builder();
       for (ASTArcParent astParent : node.getArcParentList()) {
-        Optional<CompTypeExpression> parent = this.getComponentSynthesizer().synthesizeFrom(astParent.getType());
+        Optional<CompKindExpression> parent = this.getComponentSynthesizer().synthesizeFrom(astParent.getType());
         if (parent.isPresent()) {
           astParent.getType().setDefiningSymbol(parent.get().getTypeInfo());
           listBuilder.add(parent.get());
@@ -91,7 +94,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
           }
         }
       }
-      comp.setParentsList(listBuilder.build());
+      comp.setSuperComponentsList(listBuilder.build());
     }
   }
 
@@ -99,7 +102,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
   public void visit(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
 
-    Optional<CompTypeExpression> comp = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
+    Optional<CompKindExpression> comp = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
     if (comp.isPresent()) {
       node.getMCType().setDefiningSymbol(comp.get().getTypeInfo());
       this.setCurrentCompInstanceType(comp.get());
@@ -118,8 +121,8 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
 
     if (this.getCurrentCompInstanceType().isPresent()) {
       node.getSymbol().setType(this.getCurrentCompInstanceType().get().deepClone());
-      if (node.isPresentArcArguments()) {
-        node.getSymbol().getType().addArcArguments(node.getArcArguments().getArcArgumentList());
+      if (node.isPresentArcArguments() && node.getSymbol().getType() instanceof CompTypeExpression) {
+        ((CompTypeExpression) node.getSymbol().getType()).addArcArguments(node.getArcArguments().getArcArgumentList());
       }
     }
   }
@@ -155,6 +158,14 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, ArcBasisHandle
 
     for (ASTArcField field : node.getArcFieldList()) {
       field.getSymbol().setType(type);
+    }
+  }
+
+  @Override
+  public void visit(@NotNull SubcomponentSymbol node) {
+    Preconditions.checkNotNull(node);
+    if (node.isTypePresent()){
+      node.getType().bindParams();
     }
   }
 }

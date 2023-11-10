@@ -3,14 +3,14 @@ package variablearc._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTVariantComponentType;
@@ -28,15 +28,15 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   protected IVariableArcComponentTypeSymbol typeSymbol;
   protected Set<VariableArcVariationPoint> includedVariationPoints;
   protected ExpressionSet conditions;
-  protected Map<ComponentInstanceSymbol, VariantComponentInstanceSymbol> subcomponentMap;
+  protected Map<SubcomponentSymbol, VariantSubcomponentSymbol> subcomponentMap;
 
   protected Map<ArcPortSymbol, VariantPortSymbol> portSymbolMap;
 
   public VariableArcVariantComponentTypeSymbol(@NotNull IVariableArcComponentTypeSymbol type,
                                                @NotNull Set<VariableArcVariationPoint> variationPoints,
                                                @NotNull ExpressionSet conditions,
-                                               @NotNull List<CompTypeExpression> parents) {
-    this(type, variationPoints, conditions, parents, Collections.emptyMap());
+                                               @NotNull List<CompKindExpression> superComponents) {
+    this(type, variationPoints, conditions, superComponents, Collections.emptyMap());
   }
 
   /**
@@ -49,17 +49,17 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   public VariableArcVariantComponentTypeSymbol(@NotNull IVariableArcComponentTypeSymbol type,
                                                @NotNull Set<VariableArcVariationPoint> variationPoints,
                                                @NotNull ExpressionSet conditions,
-                                               @NotNull List<CompTypeExpression> parents,
-                                               @NotNull Map<ComponentInstanceSymbol, VariantComponentInstanceSymbol> subcomponentMap) {
+                                               @NotNull List<CompKindExpression> superComponents,
+                                               @NotNull Map<SubcomponentSymbol, VariantSubcomponentSymbol> subcomponentMap) {
     super(type.getTypeInfo().getName());
 
     typeSymbol = type;
     includedVariationPoints = variationPoints;
     this.setAstNodeAbsent();
     this.conditions = conditions.add(type.getConstraints());
-    this.parents = parents;
+    this.superComponents = superComponents;
     this.subcomponentMap = subcomponentMap;
-    for (VariantComponentInstanceSymbol instanceSymbol : subcomponentMap.values()) {
+    for (VariantSubcomponentSymbol instanceSymbol : subcomponentMap.values()) {
       // Adds the required conditions of subcomponents to this component
       conditions.add(((VariableArcVariantComponentTypeSymbol) instanceSymbol.getType().getTypeInfo()).getConditions()
         .copyAddPrefix(instanceSymbol.getName()));
@@ -83,7 +83,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   public boolean containsSymbol(@NotNull ISymbol symbol) {
     return typeSymbol.variationPointsContainSymbol(includedVariationPoints, symbol) ||
-      !isEmptyParents() && getParentsList().stream().anyMatch(parent -> ((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).containsSymbol(symbol) &&
+      !isEmptySuperComponents() && getSuperComponentsList().stream().anyMatch(parent -> ((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).containsSymbol(symbol) &&
         !((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(symbol));
   }
 
@@ -101,19 +101,19 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<ArcPortSymbol> getAllPorts() {
-    return typeSymbol.getTypeInfo().getAllPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
+  public List<ArcPortSymbol> getAllArcPorts() {
+    return typeSymbol.getTypeInfo().getAllArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
   @Override
-  public List<ArcPortSymbol> getPorts() {
-    return typeSymbol.getTypeInfo().getPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
+  public List<ArcPortSymbol> getArcPorts() {
+    return typeSymbol.getTypeInfo().getArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
   @Override
-  public Optional<ArcPortSymbol> getPort(@NotNull String name) {
+  public Optional<ArcPortSymbol> getArcPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
     return this.getSpannedScope().resolveArcPortLocallyMany(
       false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, this::containsSymbol
@@ -133,10 +133,10 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<ComponentInstanceSymbol> getSubComponents() {
-    return typeSymbol.getTypeInfo().getSubComponents().stream()
+  public List<SubcomponentSymbol> getSubcomponents() {
+    return typeSymbol.getTypeInfo().getSubcomponents().stream()
       .filter(this::containsSymbol)
-      .map(e -> Optional.ofNullable((ComponentInstanceSymbol) subcomponentMap.get(e)).orElse(e))
+      .map(e -> Optional.ofNullable((SubcomponentSymbol) subcomponentMap.get(e)).orElse(e))
       .collect(Collectors.toList());
   }
 
@@ -156,7 +156,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<ASTArcArgument> getParentConfiguration(CompTypeExpression parent) {
+  public List<ASTArcArgument> getParentConfiguration(CompKindExpression parent) {
     return typeSymbol.getTypeInfo().getParentConfiguration(parent);
   }
 

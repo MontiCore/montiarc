@@ -61,15 +61,11 @@ component grammar ArcBasis extends
    * of this component type. Only available for inner components.
    * @attribute body Contains the architectural elements of this component.
    */
-  symbol scope ComponentType implements ArcElement =
+  symbol scope ComponentType implements Component, ArcElement =
     key("component") Name
     head:ComponentHead
     (ComponentInstance || ",")*
     body:ComponentBody
-  ;
-
-  symbolrule ComponentType =
-    parents: arcbasis.check.CompTypeExpression*
   ;
 
   /**
@@ -188,7 +184,7 @@ component grammar ArcBasis extends
    * @attribute name The name of the component instance.
    * @attribute arguments A list of configuration arguments.
    */
-  symbol ComponentInstance = Name ArcArguments?;
+  ComponentInstance implements Subcomponent = Name ArcArguments?;
 
   ArcArguments = "(" ( ArcArgument || ",")* ")";
 
@@ -210,6 +206,6 @@ component grammar ArcBasis extends
    * @attribute component The name of the component the port belongs to.
    * @attribute port the name of the port.
    */
-  PortAccess = (component:Name@ComponentInstance ".")? port:Name@ArcPort ;
+  PortAccess = (component:Name@Subcomponent ".")? port:Name@ArcPort ;
 
 }

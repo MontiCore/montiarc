@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentTypeSymbol;
@@ -79,11 +78,11 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
     Preconditions.checkNotNull(astPort);
 
     if (astPort.isPresentComponent()) {
-      if (astPort.isPresentComponentSymbol() && astPort.getComponentSymbol().isPresentType()) {
-        return astPort.getComponentSymbol().getType().getTypeExprOfPort(astPort.getPort());
+      if (astPort.isPresentComponentSymbol() && astPort.getComponentSymbol().isTypePresent()) {
+        return astPort.getComponentSymbol().getType().getTypeOfPort(astPort.getPort());
       }
     } else if (getEnclosingComponent(astPort).isPresent()) {
-      return getEnclosingComponent(astPort).get().getTypeExprOfPort(astPort.getPort());
+      return getEnclosingComponent(astPort).get().getTypeOfPort(astPort.getPort());
     } else if (astPort.isPresentPortSymbol() && astPort.getPortSymbol().isTypePresent()) {
       return Optional.ofNullable(astPort.getPortSymbol().getType());
     }

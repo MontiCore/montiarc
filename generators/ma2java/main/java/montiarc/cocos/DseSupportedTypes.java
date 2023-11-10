@@ -100,7 +100,7 @@ public abstract class DseSupportedTypes {
         }
       }
       List<VariableSymbol> symbols = componentType.getSymbol().getFields();
-      symbols.removeAll(componentType.getSymbol().getParameters());
+      symbols.removeAll(componentType.getSymbol().getParametersList());
       for (VariableSymbol symbol : symbols) {
 
         if (!checkUnsupportedVariables(symbol.getType().print())) {
@@ -108,7 +108,7 @@ public abstract class DseSupportedTypes {
             .print(), symbol.getSourcePosition());
         }
       }
-      for (VariableSymbol symbol : componentType.getSymbol().getParameters()) {
+      for (VariableSymbol symbol : componentType.getSymbol().getParametersList()) {
 
         if (!checkUnsupported(symbol.getType().print())) {
           printError(componentType.getName(), symbol.getType()

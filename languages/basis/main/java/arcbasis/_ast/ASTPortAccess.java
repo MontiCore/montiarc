@@ -3,8 +3,8 @@ package arcbasis._ast;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -21,7 +21,7 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     }
   }
 
-  public void setComponentSymbol(@Nullable ComponentInstanceSymbol symbol) {
+  public void setComponentSymbol(@Nullable SubcomponentSymbol symbol) {
     componentSymbol = symbol;
   }
 
@@ -31,7 +31,7 @@ public class ASTPortAccess extends ASTPortAccessTOP {
   }
 
   @Override
-  public ComponentInstanceSymbol getComponentSymbol() {
+  public SubcomponentSymbol getComponentSymbol() {
     return componentSymbol;
   }
 
@@ -72,7 +72,7 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     return p;
   }
 
-  public static ASTPortAccess of(@NotNull ComponentInstanceSymbol subComp, @NotNull ArcPortSymbol port) {
+  public static ASTPortAccess of(@NotNull SubcomponentSymbol subComp, @NotNull ArcPortSymbol port) {
     Preconditions.checkNotNull(port);
     ASTPortAccess p = ArcBasisMill.portAccessBuilder()
       .setComponent(subComp.getName())

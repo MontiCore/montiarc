@@ -132,7 +132,7 @@ public class MAStreamHelper {
    * @return ASTComponentType corresponding to the Instance
    */
   public static ASTComponentType getComponentTypeFromInstance(@NotNull ASTComponentInstance instance) {
-    return instance.getSymbol().getType().getTypeInfo().getAstNode();
+    return (ASTComponentType) instance.getSymbol().getType().getTypeInfo().getAstNode();
   }
 
   /**

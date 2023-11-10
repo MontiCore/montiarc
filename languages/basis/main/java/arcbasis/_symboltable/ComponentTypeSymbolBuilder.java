@@ -2,11 +2,10 @@
 package arcbasis._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -19,7 +18,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   protected ComponentTypeSymbol outerComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
-  protected Map<CompTypeExpression, List<ASTArcArgument>> parentConfiguration;
+  protected Map<CompKindExpression, List<ASTArcArgument>> parentConfiguration;
 
   public ComponentTypeSymbolBuilder() {
     super();
@@ -70,11 +69,11 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public List<ASTArcArgument> getParentConfiguration(@NotNull CompTypeExpression parent) {
+  public List<ASTArcArgument> getParentConfiguration(@NotNull CompKindExpression parent) {
     return this.parentConfiguration.get(parent);
   }
 
-  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull CompTypeExpression parent, @NotNull List<ASTArcArgument> parentConfiguration) {
+  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull CompKindExpression parent, @NotNull List<ASTArcArgument> parentConfiguration) {
     Preconditions.checkNotNull(parentConfiguration);
     Preconditions.checkArgument(!parentConfiguration.contains(null));
     this.parentConfiguration.put(parent, parentConfiguration);
@@ -98,12 +97,12 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     }
     symbol.setParentConfigurationMap(this.parentConfiguration);
     symbol.setOuterComponent(this.getOuterComponent());
-    symbol.setParentsList(this.parents);
+    symbol.setSuperComponentsList(this.superComponents);
     return symbol;
   }
 
   @Override
   public boolean isValid() {
-    return getName() != null && getSpannedScope() != null;
+    return getName() != null && spannedScope != null;
   }
 }

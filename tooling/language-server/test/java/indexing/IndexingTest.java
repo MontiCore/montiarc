@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package indexing;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import de.mclsg.lsp.util.AsyncUtilWithSyncExec;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import montiarc._lsp.MontiArcLanguageServerBuilder;
 import org.junit.jupiter.api.Test;
 import util.MockLanguageClient;
@@ -26,9 +26,9 @@ public class IndexingTest {
       assertTrue(subscopeOpt.isPresent());
       var subscope = subscopeOpt.get();
 
-      ComponentInstanceSymbol instanceSymbol = subscope.getSubScopes().get(0).getLocalComponentInstanceSymbols().get(0);
+      SubcomponentSymbol instanceSymbol = subscope.getSubScopes().get(0).getLocalSubcomponentSymbols().get(0);
       assertEquals("b", instanceSymbol.getName());
-      assertTrue(instanceSymbol.isPresentType());
+      assertTrue(instanceSymbol.isTypePresent());
       assertEquals("B", instanceSymbol.getType().getTypeInfo().getName());
     });
 

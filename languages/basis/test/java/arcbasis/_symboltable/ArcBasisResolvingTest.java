@@ -7,6 +7,7 @@ import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpression;
@@ -380,7 +381,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parent2 =
       ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParentsList(List.of(new TypeExprOfComponent(parent1), new TypeExprOfComponent(parent2))).build();
+        .setSuperComponentsList(List.of(new TypeExprOfComponent(parent1), new TypeExprOfComponent(parent2))).build();
 
     ArcPortSymbol port1 = ArcBasisMill.arcPortSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -424,7 +425,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
+        .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     ArcPortSymbol parentPort = ArcBasisMill.arcPortSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -463,14 +464,14 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parent =
         ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
+        .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     ArcPortSymbol port = ArcBasisMill.arcPortSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     enclosingScope.add(port);
 
-    ComponentInstanceSymbol instance =
-        ArcBasisMill.componentInstanceSymbolBuilder().setName("ins1").setType(Mockito.mock(
+    SubcomponentSymbol instance =
+        ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
             CompTypeExpression.class)).build();
     enclosingScope.add(instance);
 
@@ -480,7 +481,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
 
     // When
     Optional<ArcPortSymbol> resolvedPort = scope.resolveArcPort("p1");
-    Optional<ComponentInstanceSymbol> resolvedInstance = scope.resolveComponentInstance("ins1");
+    Optional<SubcomponentSymbol> resolvedInstance = scope.resolveSubcomponent("ins1");
     Optional<VariableSymbol> resolvedVariable = scope.resolveVariable("var1");
 
     // Then
@@ -500,8 +501,8 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
         .setType(Mockito.mock(SymTypeExpression.class)).build();
     enclosingScope.add(port);
 
-    ComponentInstanceSymbol instance =
-        ArcBasisMill.componentInstanceSymbolBuilder().setName("ins1").setType(Mockito.mock(
+    SubcomponentSymbol instance =
+        ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
             CompTypeExpression.class)).build();
     enclosingScope.add(instance);
 
@@ -511,7 +512,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
 
     // When
     Optional<ArcPortSymbol> resolvedPort = scope.resolveArcPort("p1");
-    Optional<ComponentInstanceSymbol> resolvedInstance = scope.resolveComponentInstance("ins1");
+    Optional<SubcomponentSymbol> resolvedInstance = scope.resolveSubcomponent("ins1");
     Optional<VariableSymbol> resolvedVariable = scope.resolveVariable("var1");
 
     // Then

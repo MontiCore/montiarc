@@ -87,7 +87,7 @@ public class MA2JSimGen {
     }
 
     if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getComponentType().getSymbol().getParameters().isEmpty()
+      && ast.getComponentType().getSymbol().getParametersList().isEmpty()
       && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
     }

@@ -2,12 +2,12 @@
 package montiarc.evaluation;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
@@ -19,12 +19,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import variablearc._symboltable.IVariableArcScope;
-import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
-import variablearc.evaluation.expressions.Expression;
+import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc.evaluation.VariationPointSolver;
+import variablearc.evaluation.expressions.Expression;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -41,6 +41,7 @@ import java.util.stream.Stream;
 public class VariationPointSolverTest extends MontiArcAbstractTest {
 
   protected static final String originComponentTypeName = "C";
+  protected static final String childComponentTypeName = "C2";
   protected static final String childComponentName = "child";
 
   protected static IVariableArcComponentTypeSymbol createComponentWithVariationPoints(
@@ -87,7 +88,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     bindings.forEach(e -> e.getExpression().setEnclosingScope(scope));
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(childComponentTypeName)
         .setSpannedScope(scope)
         .build();
     typeSymbol.getTypeInfo().addParameter(parameter);
@@ -95,9 +96,11 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
     // Parent setup
     IVariableArcScope parentScope = MontiArcMill.scope();
-    ComponentInstanceSymbol instanceSymbol =
-      MontiArcMill.componentInstanceSymbolBuilder().setName(childComponentName)
-        .setType(new TypeExprOfComponent(typeSymbol.getTypeInfo())).setArcArguments(bindings).build();
+    TypeExprOfComponent typeExprOfComponent = new TypeExprOfComponent(typeSymbol.getTypeInfo());
+    typeExprOfComponent.addArcArguments(bindings);
+    SubcomponentSymbol instanceSymbol =
+      MontiArcMill.subcomponentSymbolBuilder().setName(childComponentName)
+        .setType(typeExprOfComponent).build();
     instanceSymbol.getType().bindParams();
     parentScope.add(instanceSymbol);
 
@@ -222,14 +225,14 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(expected);
     IVariableArcComponentTypeSymbol originSymbol = origin.get();
     Preconditions.checkNotNull(originSymbol);
-    Preconditions.checkState(originSymbol.getTypeInfo().getSubComponent(childComponentName).isPresent());
+    Preconditions.checkState(originSymbol.getTypeInfo().getSubcomponents(childComponentName).isPresent());
     // Given
     VariationPointSolver variationPointSolver = new VariationPointSolver(originSymbol);
 
     // When
     Set<Set<VariableArcVariationPoint>> actual =
       variationPointSolver.getSubComponentVariants(
-        (IVariableArcComponentTypeSymbol) originSymbol.getTypeInfo().getSubComponent(childComponentName).get().getType().getTypeInfo(),
+        (IVariableArcComponentTypeSymbol) originSymbol.getTypeInfo().getSubcomponents(childComponentName).get().getType().getTypeInfo(),
         childComponentName, new HashSet<>(originSymbol.getAllVariationPoints()), null).stream().map(
         VariableArcVariantComponentTypeSymbol::getIncludedVariationPoints).collect(Collectors.toSet());
     variationPointSolver.close();

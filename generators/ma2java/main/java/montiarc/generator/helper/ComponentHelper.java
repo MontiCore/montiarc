@@ -2,14 +2,14 @@
 package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentInstanceSymbol;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis.check.CompTypeExpression;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
@@ -17,11 +17,21 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
+import montiarc.MontiArcMill;
 import montiarc.generator.MA2JavaFullPrettyPrinter;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  * Helper class used in the template to generate target code of atomic or composed components.
@@ -70,7 +80,7 @@ public class ComponentHelper {
   public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
-    vss.removeAll(comp.getParameters());
+    vss.removeAll(comp.getParametersList());
     return vss;
   }
 
@@ -87,12 +97,12 @@ public class ComponentHelper {
   }
 
   /**
-   * Calculates the values of the parameters of a {@link CompTypeExpression}.
+   * Calculates the values of the parameters of a {@link CompKindExpression}.
    *
-   * @param expr The {@link CompTypeExpression} for which the parameters should be calculated.
+   * @param expr The {@link CompKindExpression} for which the parameters should be calculated.
    * @return The parameters.
    */
-  public Collection<String> getParamValues(CompTypeExpression expr) {
+  public Collection<String> getParamValues(CompKindExpression expr) {
    return getParamValues(expr.getParamBindings(), expr.getTypeInfo());
   }
 
@@ -103,7 +113,7 @@ public class ComponentHelper {
    * @return The parameters.
    */
   public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
-    return getParamValues(comp.getParents(0).getParamBindings(), comp.getParents(0).getTypeInfo());
+    return getParamValues(comp.getSuperComponents(0).getParamBindings(), comp.getSuperComponents(0).getTypeInfo());
   }
     /**
      * Calculates the values of the parameters for a given {@link Map} containing the {@link VariableSymbol} and the
@@ -115,18 +125,18 @@ public class ComponentHelper {
      * the last parameter.
      *
      * @param configArguments The {@link Map} that contains the parameter bindings.
-     * @param comp The {@link ComponentTypeSymbol} for which the parameters should be calculated.
+     * @param comp The {@link ComponentSymbol} for which the parameters should be calculated.
      * @return The parameters.
      */
-  public Collection<String> getParamValues(Map<VariableSymbol, ASTArcArgument> configArguments, ComponentTypeSymbol comp) {
+  public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments, ComponentSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();
 
 
 
     //can only print default parameters if ASTNode exists.
-    if(comp.isPresentAstNode()){
-      final ASTComponentType astNode = comp.getAstNode();
+    if(comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isASTComponentType(comp.getAstNode())){
+      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asASTComponentType(comp.getAstNode());
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -136,9 +146,9 @@ public class ComponentHelper {
           defaultValues.put(parameter.getName(), parameter.getDefault());
         }
       }
-      for (VariableSymbol v : comp.getParameters()){
+      for (VariableSymbol v : comp.getParametersList()){
         if (configArguments.containsKey(v)){
-          final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v).getExpression());
+          final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v));
           outputParameters.add(prettyprint);
         }else{
           final String prettyprint = this.getPrettyPrinter().prettyprint(defaultValues.get(v.getName()));
@@ -146,9 +156,9 @@ public class ComponentHelper {
         }
       }
     }else{
-      for (VariableSymbol v : comp.getParameters()) {
+      for (VariableSymbol v : comp.getParametersList()) {
         Preconditions.checkNotNull(configArguments.get(v));
-        final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v).getExpression());
+        final String prettyprint = this.getPrettyPrinter().prettyprint(configArguments.get(v));
         outputParameters.add(prettyprint);
       }
     }
@@ -163,9 +173,9 @@ public class ComponentHelper {
    * @param instance The instance of which the type should be printed
    * @return The printed subcomponent type
    */
-  public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
+  public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
-    ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
+    ComponentSymbol componentTypeReference = instance.getType().getTypeInfo();
     if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
       componentTypeReference = ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
     }
@@ -185,11 +195,11 @@ public class ComponentHelper {
   /**
    * Helper function used to determine package names.
    */
-  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
-    if (comp.isInnerComponent()) {
+  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentSymbol comp) {
+    if (MontiArcMill.typeDispatcher().isComponentType(comp) && ArcBasisMill.typeDispatcher().asComponentType(comp).isInnerComponent()) {
       //TODO add check for outermost component being TOP-Class or remove this function?
-      String outerPackage = printPackageWithoutKeyWordAndSemicolon(comp.getOuterComponent().get());
-      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + comp.getOuterComponent().get().getName();
+      String outerPackage = printPackageWithoutKeyWordAndSemicolon(ArcBasisMill.typeDispatcher().asComponentType(comp).getOuterComponent().get());
+      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + ArcBasisMill.typeDispatcher().asComponentType(comp).getOuterComponent().get().getName();
     } else {
       return comp.getPackageName();
     }

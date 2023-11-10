@@ -5,6 +5,7 @@ import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -34,26 +35,26 @@ public class TypeExprOfComponent extends CompTypeExpression {
   }
 
   @Override
-  public List<CompTypeExpression> getParentTypeExpr() {
-    return this.getTypeInfo().getParentsList();
+  public List<CompKindExpression> getSuperComponents() {
+    return this.getTypeInfo().getSuperComponentsList();
   }
 
   @Override
-  public Optional<SymTypeExpression> getTypeExprOfPort(@NotNull String portName) {
+  public Optional<SymTypeExpression> getTypeOfPort(@NotNull String portName) {
     Preconditions.checkNotNull(portName);
     return this.getTypeInfo()
-      .getPort(portName, true).map(ArcPortSymbol::getType);
+      .getArcPort(portName, true).map(ArcPortSymbol::getType);
   }
 
   @Override
-  public Optional<SymTypeExpression> getParameterType(@NotNull String name) {
+  public Optional<SymTypeExpression> getTypeOfParameter(@NotNull String name) {
     Preconditions.checkNotNull(name);
     return this.getTypeInfo().getParameter(name).map(VariableSymbol::getType);
   }
 
   @Override
   public List<SymTypeExpression> getParameterTypes() {
-    return this.getTypeInfo().getParameters().stream().map(VariableSymbol::getType).collect(Collectors.toList());
+    return this.getTypeInfo().getParametersList().stream().map(VariableSymbol::getType).collect(Collectors.toList());
   }
 
   @Override

@@ -4,8 +4,8 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.*;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -58,7 +58,7 @@ public class AtomicMaxOneBehaviorTest extends ArcBasisAbstractTest {
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(compType);
 
     if (!atomic) {
-      compType.getSpannedScope().add(Mockito.mock(ComponentInstanceSymbol.class));
+      compType.getSpannedScope().add(Mockito.mock(SubcomponentSymbol.class));
     }
 
     // When

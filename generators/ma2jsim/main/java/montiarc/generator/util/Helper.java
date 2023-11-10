@@ -8,7 +8,6 @@ import arcautomaton._ast.ASTMsgEventTOP;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -16,12 +15,17 @@ import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcFeatureDeclaration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -127,22 +131,22 @@ public class Helper {
   
   public boolean isComponentInputTimeAware(ASTComponentType component) {
     return component.getSymbol()
-        .getAllIncomingPorts().stream().findAny()
+        .getAllIncomingArcPorts().stream().findAny()
         .map(p -> p.getTiming() != Timing.UNTIMED).orElse(false);
   }
   
   public boolean isComponentOutputTimeAware(ASTComponentType component) {
     return component.getSymbol()
-        .getAllOutgoingPorts().stream().findAny()
+        .getAllOutgoingArcPorts().stream().findAny()
         .map(p -> p.getTiming() != Timing.UNTIMED).orElse(false);
   }
   
   public Map<String, ASTExpression> getArgNamesMappedToExpressions(ASTComponentInstance instance) {
     if(!instance.isPresentArcArguments()) return new HashMap<>();
     
-    ComponentTypeSymbol type = instance.getSymbol().getType().getTypeInfo();
+    ComponentSymbol type = instance.getSymbol().getType().getTypeInfo();
     
-    List<String> unsetParams = type.getParameters().stream()
+    List<String> unsetParams = type.getParametersList().stream()
         .map(VariableSymbolTOP::getName).collect(Collectors.toList());
     
     Map<String, ASTExpression> result = new HashMap<>();

@@ -5,8 +5,8 @@ package evaluation.smallModel;
  * small model for the evaluation
  */
 component SmallModel(Integer parameter) {
-  port <<sync>> in Integer mtrNr;
   port <<sync>> in String module;
+  port <<sync>> in Integer mtrNr;
   port <<sync>> out Double voteMDSE;
   port <<sync>> out Double voteSA;
 

@@ -2,9 +2,12 @@
 package montiarc.generator.helper.dse;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTArcPort;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis.check.CompTypeExpression;
@@ -14,22 +17,26 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
+import montiarc.MontiArcMill;
 import montiarc.generator.dse.MA2JavaDseFullPrettyPrinter;
 import montiarc.generator.helper.ComponentHelper;
 
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
-import java.util.HashMap;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -239,7 +246,7 @@ public class ComponentHelperDse {
       list.add(element.getSymbol().getType().print());
     }
 
-    for (VariableSymbol parameter : comp.getSymbol().getParameters()) {
+    for (VariableSymbol parameter : comp.getSymbol().getParametersList()) {
       if (!list.contains(parameter.getType().print())) {
         list.add(parameter.getType().print());
         portsWithOutDuplicates.add(parameter);
@@ -361,7 +368,7 @@ public class ComponentHelperDse {
   public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
-    vss.removeAll(comp.getParameters());
+    vss.removeAll(comp.getParametersList());
     return vss;
   }
 
@@ -383,9 +390,9 @@ public class ComponentHelperDse {
    * @param instance The instance of which the type should be printed
    * @return The printed subcomponent type
    */
-  public static String getSubComponentTypeName(ComponentInstanceSymbol instance) {
+  public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
-    ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
+    ComponentSymbol componentTypeReference = instance.getType().getTypeInfo();
     if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
       componentTypeReference =
         ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
@@ -437,12 +444,12 @@ public class ComponentHelperDse {
   }
 
   /**
-   * Calculates the values of the parameters of a {@link CompTypeExpression}.
+   * Calculates the values of the parameters of a {@link CompKindExpression}.
    *
-   * @param expr The {@link CompTypeExpression} for which the parameters should be calculated.
+   * @param expr The {@link CompKindExpression} for which the parameters should be calculated.
    * @return The parameters.
    */
-  public Collection<String> getParamValues(CompTypeExpression expr) {
+  public Collection<String> getParamValues(CompKindExpression expr) {
     return getParamValues(expr.getParamBindings(), expr.getTypeInfo());
   }
 
@@ -454,7 +461,7 @@ public class ComponentHelperDse {
    * @return The parameters.
    */
   public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
-    return getParamValues(comp.getParents(0).getParamBindings(), comp.getParents(0).getTypeInfo());
+    return getParamValues(comp.getSuperComponents(0).getParamBindings(), comp.getSuperComponents(0).getTypeInfo());
   }
 
   /**
@@ -470,18 +477,18 @@ public class ComponentHelperDse {
    * the last parameter.
    *
    * @param configArguments The {@link Map} that contains the parameter bindings.
-   * @param comp            The {@link ComponentTypeSymbol} for which the parameters should be
+   * @param comp            The {@link ComponentSymbol} for which the parameters should be
    *                        calculated.
    * @return The parameters.
    */
-  public Collection<String> getParamValues(Map<VariableSymbol, ASTArcArgument> configArguments,
-                                           ComponentTypeSymbol comp) {
+  public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments,
+                                           ComponentSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();
 
     //can only print default parameters if ASTNode exists.
-    if (comp.isPresentAstNode()) {
-      final ASTComponentType astNode = comp.getAstNode();
+    if (comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isASTComponentType(comp.getAstNode())) {
+      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asASTComponentType(comp.getAstNode());
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -491,10 +498,10 @@ public class ComponentHelperDse {
           defaultValues.put(parameter.getName(), parameter.getDefault());
         }
       }
-      for (VariableSymbol v : comp.getParameters()) {
+      for (VariableSymbol v : comp.getParametersList()) {
         if (configArguments.containsKey(v)) {
           final String prettyprint = this.getPrettyPrinter()
-            .prettyprint(configArguments.get(v).getExpression());
+            .prettyprint(configArguments.get(v));
           outputParameters.add(prettyprint);
         }
         else {
@@ -505,10 +512,10 @@ public class ComponentHelperDse {
       }
     }
     else {
-      for (VariableSymbol v : comp.getParameters()) {
+      for (VariableSymbol v : comp.getParametersList()) {
         Preconditions.checkNotNull(configArguments.get(v));
         final String prettyprint = this.getPrettyPrinter()
-          .prettyprint(configArguments.get(v).getExpression());
+          .prettyprint(configArguments.get(v));
         outputParameters.add(prettyprint);
       }
     }

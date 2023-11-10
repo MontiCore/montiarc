@@ -5,9 +5,7 @@ import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTConnectorTOP;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._ast.ASTPortAccessTOP;
-import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.types.check.SymTypeExpression;
@@ -170,7 +168,7 @@ public class ArcPortSymbol extends ArcPortSymbolTOP {
         }
 
         boolean sourceIsOnOwningComponent = lastSource.isPresentComponentSymbol()
-          && lastSource.getComponentSymbol().isPresentType()
+          && lastSource.getComponentSymbol().isTypePresent()
           && lastSource.getComponentSymbol().getType().getTypeInfo().equals(owner);
 
         if(!lastSource.isPresentComponentSymbol() || sourceIsOnOwningComponent) {
@@ -180,8 +178,8 @@ public class ArcPortSymbol extends ArcPortSymbolTOP {
           // Therefore, we can assume we can set stronglyCausal = false here
           return false;
         }
-        ComponentInstanceSymbol instance = lastSource.getComponentSymbol();
-        if(!instance.isPresentType()) continue; //Incomplete symboltable. See above.
+        SubcomponentSymbol instance = lastSource.getComponentSymbol();
+        if(!instance.isTypePresent()) continue; //Incomplete symboltable. See above.
         instance.getType().getTypeInfo().getAllIncomingPorts()
           .forEach(incomingPortOfSubcomponent -> owner.getAstNode()
             .getConnectorsMatchingTarget(instance.getName() + "." + incomingPortOfSubcomponent.getName())

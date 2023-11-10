@@ -160,7 +160,7 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
 
     // Then
     Assertions.assertTrue(ast.isEmptyArcParents());
-    Assertions.assertTrue(symbol.isEmptyParents());
+    Assertions.assertTrue(symbol.isEmptySuperComponents());
   }
 
   /**
@@ -208,7 +208,7 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
     getScopesGenP2().visit(childCompHead);
 
     // Then
-    Assertions.assertEquals(parentComp, symChildComp.getParents(0).getTypeInfo());
+    Assertions.assertEquals(parentComp, symChildComp.getSuperComponents(0).getTypeInfo());
   }
 
   /**

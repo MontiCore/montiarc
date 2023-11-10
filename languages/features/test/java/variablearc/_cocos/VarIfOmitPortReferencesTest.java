@@ -5,11 +5,11 @@ import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
@@ -151,15 +151,15 @@ public class VarIfOmitPortReferencesTest extends VariableArcAbstractTest {
     comp.setAstNode(compAst);
 
 
-    ComponentInstanceSymbol independentCompInst =
-      VariableArcMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol independentCompInst =
+      VariableArcMill.subcomponentSymbolBuilder()
         .setName("independentComp")
         .setType(new TypeExprOfComponent(provideIndependentComponent()))
         .build();
     comp.getSpannedScope().add(independentCompInst);
 
-    ComponentInstanceSymbol independentCompInst2 =
-      VariableArcMill.componentInstanceSymbolBuilder()
+    SubcomponentSymbol independentCompInst2 =
+      VariableArcMill.subcomponentSymbolBuilder()
         .setName("independentComp2")
         .setType(new TypeExprOfComponent(provideIndependentComponent()))
         .build();

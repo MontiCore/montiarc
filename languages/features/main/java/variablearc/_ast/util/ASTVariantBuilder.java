@@ -84,17 +84,17 @@ public class ASTVariantBuilder implements ArcBasisHandler {
   @Override
   public void handle(ASTPortAccess node) {
     if (node.isPresentComponent()) {
-      enclComponent.getSubComponent(node.getComponent()).ifPresent(node::setComponentSymbol);
+      enclComponent.getSubcomponents(node.getComponent()).ifPresent(node::setComponentSymbol);
     }
 
     if (node.isPresentComponent()) {
-      if (node.isPresentComponentSymbol() && node.getComponentSymbol().isPresentType() &&
-        node.getComponentSymbol().getType().getTypeInfo() != null
+      if (node.isPresentComponentSymbol() && node.getComponentSymbol().isTypePresent() &&
+        node.getComponentSymbol().getType().getTypeInfo() != null && VariableArcMill.typeDispatcher().isComponentType(node.getComponentSymbol().getType().getTypeInfo())
       ) {
-        node.getComponentSymbol().getType().getTypeInfo().getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+        ArcBasisMill.typeDispatcher().asComponentType(node.getComponentSymbol().getType().getTypeInfo()).getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
       }
     } else {
-      enclComponent.getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+      enclComponent.getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
     }
   }
 
@@ -110,8 +110,8 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
     for (ASTArcPort port : node.getArcPortList()) {
       if (enclComponent.containsSymbol(port.getSymbol())) {
-        enclComponent.getPort(port.getName()).ifPresent(p -> p.setTiming(timing));
-        if (node.hasDelay()) enclComponent.getPort(port.getName()).ifPresent(p -> p.setDelayed(true));
+        enclComponent.getArcPort(port.getName()).ifPresent(p -> p.setTiming(timing));
+        if (node.hasDelay()) enclComponent.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(true));
       }
     }
   }

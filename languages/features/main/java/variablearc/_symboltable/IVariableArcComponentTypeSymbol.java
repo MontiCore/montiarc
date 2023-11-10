@@ -1,25 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
-import com.microsoft.z3.Z3Exception;
 import de.monticore.symboltable.ISymbol;
+import de.monticore.types.check.CompKindExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc.evaluation.ComponentConverter;
 import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.VariationPointSolver;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * A variable version of the {@link ComponentTypeSymbol}
@@ -50,7 +42,7 @@ public interface IVariableArcComponentTypeSymbol {
     if (!visited.contains(getTypeInfo())) {
       visited.add(getTypeInfo());
       ExpressionSet conditions = new ComponentConverter().convert(this, visited);
-      for (CompTypeExpression parent : getTypeInfo().getParentsList()) {
+      for (CompKindExpression parent : getTypeInfo().getSuperComponentsList()) {
         conditions.add(((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).getConstraints(visited));
       }
       return conditions;
@@ -76,8 +68,8 @@ public interface IVariableArcComponentTypeSymbol {
   default boolean isRootSymbol(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
     return getAllVariationPoints().stream().noneMatch(vp -> vp.containsSymbol(symbol))
-      && (getTypeInfo().isEmptyParents()
-      || getTypeInfo().getParentsList().stream().allMatch(parent -> ((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(symbol)));
+      && (getTypeInfo().isEmptySuperComponents()
+      || getTypeInfo().getSuperComponentsList().stream().allMatch(parent -> ((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(symbol)));
   }
 
   /**

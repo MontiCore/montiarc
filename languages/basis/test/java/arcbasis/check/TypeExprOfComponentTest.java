@@ -9,6 +9,7 @@ import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypePrimitive;
@@ -44,7 +45,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link TypeExprOfComponent#getParentTypeExpr()}
+   * Method under test {@link TypeExprOfComponent#getSuperComponents()}
    * @param symbolWithDefinitions Provide a component type symbol in for which a parent is added in this test.
    * @param symbolVersionForTypeExpr Set this to {@code symbolWithDefinitions}, or to a surrogate pointing to that
    *                                 symbol. This object will be used to create The ComponentTypeExpression.
@@ -66,11 +67,11 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
       .build();
     TypeExprOfComponent parentTypeExpr = new TypeExprOfComponent(parent);
 
-    symbolWithDefinitions.setParentsList(Collections.singletonList(parentTypeExpr));
+    symbolWithDefinitions.setSuperComponentsList(Collections.singletonList(parentTypeExpr));
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
     // When
-    List<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
+    List<CompKindExpression> parentOfTypeExpr = compTypeExpr.getSuperComponents();
 
     // Then
     Assertions.assertFalse(parentOfTypeExpr.isEmpty(), "Parent not present.");
@@ -78,7 +79,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link TypeExprOfComponent#getParentTypeExpr()}
+   * Method under test {@link TypeExprOfComponent#getSuperComponents()}
    */
   @Test
   public void getParentShouldReturnOptionalEmpty() {
@@ -90,7 +91,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
-    List<CompTypeExpression> parentOfTypeExpr = compTypeExpr.getParentTypeExpr();
+    List<CompKindExpression> parentOfTypeExpr = compTypeExpr.getSuperComponents();
 
     // Then
     Assertions.assertTrue(parentOfTypeExpr.isEmpty());
@@ -123,7 +124,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
     // When
-    Optional<SymTypeExpression> portsType = compTypeExpr.getTypeExprOfPort(portName);
+    Optional<SymTypeExpression> portsType = compTypeExpr.getTypeOfPort(portName);
 
     // Then
     Assertions.assertTrue(portsType.isPresent(), "Port not present");
@@ -148,14 +149,14 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
 
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
-      .setParentsList(Collections.singletonList(new TypeExprOfComponent(parent)))
+      .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent)))
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
 
     // When
-    Optional<SymTypeExpression> portsType = compTypeExpr.getTypeExprOfPort(portName);
+    Optional<SymTypeExpression> portsType = compTypeExpr.getTypeOfPort(portName);
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
@@ -190,7 +191,7 @@ public class TypeExprOfComponentTest extends ArcBasisAbstractTest {
     TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
 
     // When
-    Optional<SymTypeExpression> paramType = compTypeExpr.getParameterType(paramName);
+    Optional<SymTypeExpression> paramType = compTypeExpr.getTypeOfParameter(paramName);
 
     // Then
     Assertions.assertTrue(paramType.isPresent(), "Param not present");

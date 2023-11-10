@@ -92,8 +92,8 @@ public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTCompon
     for (PortReference portRef : foundPortReferences.keySet()) {
       SourcePosition portRefPosition = foundPortReferences.get(portRef);
 
-      if(portOwner.getPort(portRef.toString(), true).isPresent()
-        && portOwner.getPort(portRef.toString(), true).get().isIncoming()) {
+      if(portOwner.getArcPort(portRef.toString(), true).isPresent()
+        && portOwner.getArcPort(portRef.toString(), true).get().isIncoming()) {
         Log.error(ArcAutomataError.INPUT_PORT_IN_INITIAL_OUT_DECL.format(portRef.toString()), portRefPosition);
       }
     }

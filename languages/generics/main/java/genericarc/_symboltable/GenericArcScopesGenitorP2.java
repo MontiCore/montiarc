@@ -4,13 +4,13 @@ package genericarc._symboltable;
 import arcbasis._ast.ASTArcParent;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
 import genericarc.GenericArcMill;
@@ -74,9 +74,9 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
 
     if (!node.isEmptyArcParents()) {
       ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
-      ImmutableList.Builder<CompTypeExpression> listBuilder = ImmutableList.builder();
+      ImmutableList.Builder<CompKindExpression> listBuilder = ImmutableList.builder();
       for (ASTArcParent astParent : node.getArcParentList()) {
-        Optional<CompTypeExpression> parent = this.getComponentSynthesizer().synthesizeFrom(astParent.getType());
+        Optional<CompKindExpression> parent = this.getComponentSynthesizer().synthesizeFrom(astParent.getType());
         if (parent.isPresent()) {
           astParent.getType().setDefiningSymbol(parent.get().getTypeInfo());
           listBuilder.add(parent.get());
@@ -85,7 +85,7 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
           }
         }
       }
-      comp.setParentsList(listBuilder.build());
+      comp.setSuperComponentsList(listBuilder.build());
     }
   }
 

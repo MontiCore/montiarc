@@ -2,8 +2,8 @@
 package montiarc._symboltable;
 
 import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import variablearc._symboltable.ArcFeatureSymbol;
 
@@ -25,10 +25,10 @@ public class MontiArcArtifactScope extends MontiArcArtifactScopeTOP {
   }
 
   @Override
-  public List<ComponentInstanceSymbol> resolveComponentInstanceManyEnclosing(boolean foundSymbols, String name,
+  public List<SubcomponentSymbol> resolveSubcomponentManyEnclosing(boolean foundSymbols, String name,
                                                                              AccessModifier modifier,
-                                                                             Predicate<ComponentInstanceSymbol> predicate) {
-    return resolveComponentInstanceMany(foundSymbols, name, modifier, predicate);
+                                                                             Predicate<SubcomponentSymbol> predicate) {
+    return resolveSubcomponentMany(foundSymbols, name, modifier, predicate);
   }
 
   @Override

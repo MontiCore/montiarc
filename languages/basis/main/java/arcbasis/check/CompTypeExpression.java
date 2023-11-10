@@ -4,11 +4,15 @@ package arcbasis.check;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents all sorts of component types that component instances can have or that can be parents of other component
@@ -16,9 +20,8 @@ import java.util.*;
  * {@code MyComp<Integer>}. This is not representable by Symbols alone, as generic component types only have unspecific
  * type parameters ({@code MyComp<T>}.
  */
-public abstract class CompTypeExpression {
+public abstract class CompTypeExpression extends CompKindExpression {
 
-  protected final ComponentTypeSymbol compTypeSymbol;
   protected LinkedHashMap<VariableSymbol, ASTArcArgument> parameterBindings;
   protected List<ASTArcArgument> arguments;
 
@@ -49,22 +52,37 @@ public abstract class CompTypeExpression {
     }
   }
 
-  public Optional<ASTArcArgument> getParamBindingFor(@NotNull VariableSymbol var) {
+  public Optional<ASTArcArgument> getParamArcBindingFor(@NotNull VariableSymbol var) {
     Preconditions.checkNotNull(var);
-    return Optional.ofNullable(this.getParamBindings().get(var));
+    return Optional.ofNullable(this.getParamArcBindings().get(var));
   }
 
-  public Map<VariableSymbol, ASTArcArgument> getParamBindings() {
+  public Map<VariableSymbol, ASTArcArgument> getParamArcBindings() {
     Preconditions.checkNotNull(parameterBindings);
     return Collections.unmodifiableMap(parameterBindings);
   }
 
 
-  public List<ASTArcArgument> getParamBindingsAsList() {
+  public List<ASTArcArgument> getParamArcBindingsAsList() {
     Preconditions.checkNotNull(parameterBindings);
     // We know LinkedHashMaps are ordered and thus .values represents the order of the arguments
-    ArrayList bindingsList = new ArrayList(this.getParamBindings().values());
+    ArrayList bindingsList = new ArrayList(this.getParamArcBindings().values());
     return bindingsList;
+  }
+
+  @Override
+  public List<ASTExpression> getArguments() {
+    return getArcArguments().stream().map(ASTArcArgument::getExpression).collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<ASTExpression> getParamBindingFor(VariableSymbol var) {
+    return getParamArcBindingFor(var).map(ASTArcArgument::getExpression);
+  }
+
+  @Override
+  public List<ASTExpression> getParamBindingsAsList() {
+    return getParamArcBindingsAsList().stream().map(ASTArcArgument::getExpression).collect(Collectors.toList());
   }
 
   public void bindParams() {
@@ -73,12 +91,14 @@ public abstract class CompTypeExpression {
     int firstKeywordArgument = 0;
     LinkedHashMap<String, ASTArcArgument> keywordExpressionMap = new LinkedHashMap<>();
     LinkedHashMap<VariableSymbol, ASTArcArgument> parameterBindings = new LinkedHashMap<>();
+    super.parameterBindings = new LinkedHashMap<>();
     // We know LinkedHashMaps are ordered by insertion time. As we rely on the fact that the ordering of the
     // arguments is consistent with the ordering in the map, the following iteration ensures it:
-    for (int i = 0; i < this.getTypeInfo().getParameters().size(); i++) {
+    for (int i = 0; i < this.getTypeInfo().getParametersList().size(); i++) {
       if (i < parameterArguments.size()) // Deal with wrong number of parameters through cocos
         if (!parameterArguments.get(i).isPresentName()) {
-          parameterBindings.put(this.getTypeInfo().getParameters().get(i), parameterArguments.get(i));
+          parameterBindings.put(this.getTypeInfo().getParametersList().get(i), parameterArguments.get(i));
+          super.parameterBindings.put(this.getTypeInfo().getParametersList().get(i), parameterArguments.get(i).getExpression());
           firstKeywordArgument++;
         } else {
           keywordExpressionMap.put(parameterArguments.get(i).getName(), parameterArguments.get(i));
@@ -87,38 +107,31 @@ public abstract class CompTypeExpression {
 
     // iterate over keyword-based arguments (CoCo assures that no position-based argument occurs
     // after the first keyword-based argument)
-    for (int j = firstKeywordArgument; j < this.getTypeInfo().getParameters().size(); j++) {
-      if (keywordExpressionMap.containsKey(this.getTypeInfo().getParameters().get(j).getName()) &&
-        !parameterBindings.containsKey(this.getTypeInfo().getParameters().get(j))) {
-        parameterBindings.put(this.getTypeInfo().getParameters().get(j),
-          keywordExpressionMap.get(this.getTypeInfo().getParameters().get(j).getName()));
+    for (int j = firstKeywordArgument; j < this.getTypeInfo().getParametersList().size(); j++) {
+      if (keywordExpressionMap.containsKey(this.getTypeInfo().getParametersList().get(j).getName()) &&
+        !parameterBindings.containsKey(this.getTypeInfo().getParametersList().get(j))) {
+        parameterBindings.put(this.getTypeInfo().getParametersList().get(j),
+          keywordExpressionMap.get(this.getTypeInfo().getParametersList().get(j).getName()));
+        super.parameterBindings.put(this.getTypeInfo().getParametersList().get(j),
+          keywordExpressionMap.get(this.getTypeInfo().getParametersList().get(j).getName()).getExpression());
       }
     }
 
     this.parameterBindings = parameterBindings;
   }
   protected CompTypeExpression(@NotNull ComponentTypeSymbol compTypeSymbol) {
-    Preconditions.checkNotNull(compTypeSymbol);
-    this.compTypeSymbol = compTypeSymbol;
+    super(Preconditions.checkNotNull(compTypeSymbol));
     this.arguments = new ArrayList<>();
     this.parameterBindings = new LinkedHashMap<>();
   }
 
   public ComponentTypeSymbol getTypeInfo() {
-    return this.compTypeSymbol;
+    return (ComponentTypeSymbol) this.component;
   }
 
   public abstract String printName();
 
   public abstract String printFullName();
-
-  /**
-   * @return The CompTypeExpression that represents this component's parent. E.g., if this component's type
-   * expression is {@code Comp<Person>} and the definition of Comp is {@code Comp<T> extends Parent<List<T>>}, then the
-   * returned CompTypeExpression represents {@code Parent<List<Person>>}. The returned CompTypeExpression is
-   * enclosed in an {@code Optional}. The Optional is empty {@code Optional} if the component has no parent component.
-   */
-  public abstract List<CompTypeExpression> getParentTypeExpr();
 
   /**
    * Returns the SymTypeExpression of the type of the port specified by {@code portName}. If the port's type depends on
@@ -131,7 +144,8 @@ public abstract class CompTypeExpression {
    * @return The {@code SymTypeExpressions} of the port's type enclosed in an {@code Optional}. An empty {@code
    * Optional} if the component has no such port.
    */
-  public abstract Optional<SymTypeExpression> getTypeExprOfPort(@NotNull String portName);
+  @Override
+  public abstract Optional<SymTypeExpression> getTypeOfPort(@NotNull String portName);
 
   /**
    * Returns the SymTypeExpression of the type of the parameter specified by {@code parameterName}. If the parameter's
@@ -144,7 +158,8 @@ public abstract class CompTypeExpression {
    * @return The {@code SymTypeExpressions} of the parameter's type enclosed in an {@code Optional}. An empty {@code
    * Optional} if the component has no such parameter.
    */
-  public abstract Optional<SymTypeExpression> getParameterType(@NotNull String name);
+  @Override
+  public abstract Optional<SymTypeExpression> getTypeOfParameter(@NotNull String name);
 
   public abstract List<SymTypeExpression> getParameterTypes();
 
@@ -156,5 +171,15 @@ public abstract class CompTypeExpression {
 
   public abstract CompTypeExpression deepClone(@NotNull ComponentTypeSymbol compTypeSymbol);
 
+  public CompKindExpression deepClone(@NotNull ComponentSymbol componentSymbol) {
+    return deepClone((ComponentTypeSymbol) componentSymbol);
+  }
+
   public abstract boolean deepEquals(@NotNull CompTypeExpression compSymType);
+
+  @Override
+  public boolean deepEquals(@NotNull CompKindExpression compKindExpression) {
+    if (!(compKindExpression instanceof CompTypeExpression)) return false;
+    return deepEquals((CompTypeExpression) compKindExpression);
+  }
 }

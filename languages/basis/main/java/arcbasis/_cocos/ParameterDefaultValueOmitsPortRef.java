@@ -47,7 +47,7 @@ public class ParameterDefaultValueOmitsPortRef implements arcbasis._cocos.ArcBas
     portReferencesToLookFor.addAll(PortReference.ofComponentTypePorts(comp));
     portReferencesToLookFor.addAll(PortReference.ofSubComponentPorts(comp));
 
-    List<VariableSymbol> params = comp.getParameters();
+    List<VariableSymbol> params = comp.getParametersList();
 
     for (VariableSymbol param : params) {
       Preconditions.checkState(param.isPresentAstNode());

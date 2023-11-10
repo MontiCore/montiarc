@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc;
 
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import genericarc._symboltable.GenericArcScopesGenitorP2;
 import genericarc._symboltable.GenericArcScopesGenitorP2Delegator;
 import genericarc.check.GenericArcCompTypeExprDeSer;
@@ -36,14 +36,14 @@ public class GenericArcMill extends GenericArcMillTOP {
     return new GenericArcScopesGenitorP2Delegator();
   }
 
-  public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
+  public static FullCompKindExprDeSer compTypeExprDeSer() {
     if (millGenericArcCompTypeExprDeSer == null) {
       millGenericArcCompTypeExprDeSer = getMill();
     }
     return millGenericArcCompTypeExprDeSer._compTypeExprDeSer();
   }
 
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+  protected FullCompKindExprDeSer _compTypeExprDeSer() {
     return new GenericArcCompTypeExprDeSer();
   }
 

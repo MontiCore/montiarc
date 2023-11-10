@@ -14,7 +14,7 @@
 <@printTick ast.getSymbol()/>
 
 <#macro printSubcomponents comp>
-  <#assign subComponents = comp.getSubComponents()>
+  <#assign subComponents = comp.getSubcomponents()>
   <#list subComponents as subcomponent>
     <#assign type = compHelper.getSubComponentTypeName(subcomponent)>
     protected ${type} ${subcomponent.getName()};
@@ -28,7 +28,7 @@
 <#macro printGetAllSubcomponents comp>
   protected java.util.List${r"<montiarc.rte.timesync.IComponent>"} getAllSubcomponents() {
     return java.util.Arrays.asList(new montiarc.rte.timesync.IComponent[] {
-    <#list comp.getSubComponents() as subcomponent>
+    <#list comp.getSubcomponents() as subcomponent>
       ${subcomponent.getName()}<#sep>, </#sep>
     </#list>
     });
@@ -58,10 +58,10 @@
 
 <#macro printSetUp comp>
   public void setUp() {
-    <#if !comp.isEmptyParents()>
+    <#if !comp.isEmptySuperComponents()>
       super.setUp();
     </#if>
-    <#list comp.getSubComponents() as subcomponent>
+    <#list comp.getSubcomponents() as subcomponent>
       this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent.getType()) as param>${param}<#sep>, </#sep></#list>);
       this.${subcomponent.getName()}.setInstanceName(!this.getInstanceName().isBlank() ? this.getInstanceName() + ".${subcomponent.getName()}" : "${subcomponent.getName()}");
       this.${subcomponent.getName()}.setUp();
@@ -85,7 +85,7 @@
 <#macro printInit comp>
   @Override
   public void init() {
-    <#list comp.getSubComponents() as subcomponent>
+    <#list comp.getSubcomponents() as subcomponent>
       this.${subcomponent.getName()}.init();
     </#list>
   }
@@ -95,7 +95,7 @@
   @Override
   public void tick() {
     // update subcomponents
-    <#list comp.getSubComponents() as subcomponent>
+    <#list comp.getSubcomponents() as subcomponent>
       <#lt>this.${subcomponent.getName()}.tick();
     </#list>
   }

@@ -36,7 +36,7 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
     ComponentTypeSymbol symbol = node.getSymbol();
 
     // CoCo does not apply to atomic components
-    if (symbol.getSubComponents().isEmpty()) {
+    if (symbol.getSubcomponents().isEmpty()) {
       return;
     }
 

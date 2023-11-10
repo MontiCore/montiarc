@@ -4,9 +4,9 @@ package arcbasis._symboltable;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
-import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -97,14 +97,14 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<ASTArcArgument> getParentConfiguration(@NotNull CompTypeExpression parent) {
+  public List<ASTArcArgument> getParentConfiguration(@NotNull CompKindExpression parent) {
     return checkLazyLoadDelegate() ?
       this.lazyLoadDelegate().getParentConfiguration(parent) :
       super.getParentConfiguration(parent);  // Avoid infinite recursion with this case
   }
 
   @Override
-  public void setParentConfigurationExpressions(@NotNull CompTypeExpression parent, @NotNull List<ASTArcArgument> expressions) {
+  public void setParentConfigurationExpressions(@NotNull CompKindExpression parent, @NotNull List<ASTArcArgument> expressions) {
     if (checkLazyLoadDelegate()) {
       this.lazyLoadDelegate().setParentConfigurationExpressions(parent, expressions);
     } else {
@@ -113,10 +113,10 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<VariableSymbol> getParameters() {
+  public List<VariableSymbol> getParametersList() {
     return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getParameters() :
-      super.getParameters();  // Avoid infinite recursion with this case
+      this.lazyLoadDelegate().getParametersList() :
+      super.getParametersList();  // Avoid infinite recursion with this case
   }
 
   @Override
@@ -136,10 +136,10 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<ArcPortSymbol> getAllPorts() {
+  public List<ArcPortSymbol> getAllArcPorts() {
     return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getAllPorts() :
-      super.getAllPorts();  // Avoid infinite recursion with this case
+      this.lazyLoadDelegate().getAllArcPorts() :
+      super.getAllArcPorts();  // Avoid infinite recursion with this case
   }
 
   @Override

@@ -10,6 +10,7 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
@@ -142,22 +143,22 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
     );
   }
 
-  protected static Stream<Arguments> scopeAndComponentInstanceSymbolsProvider() {
+  protected static Stream<Arguments> scopeAndSubcomponentSymbolsProvider() {
     return Stream.of(
-      Arguments.of(ArcBasisMill.scope(), new ComponentInstanceSymbol[]{}),
-      Arguments.of(ArcBasisMill.scope(), new ComponentInstanceSymbol[]{
-        ArcBasisMill.componentInstanceSymbolBuilder().setName("component1").build()
+      Arguments.of(ArcBasisMill.scope(), new SubcomponentSymbol[]{}),
+      Arguments.of(ArcBasisMill.scope(), new SubcomponentSymbol[]{
+        ArcBasisMill.subcomponentSymbolBuilder().setName("component1").build()
       }),
-      Arguments.of(ArcBasisMill.scope(),new ComponentInstanceSymbol[]{
-        ArcBasisMill.componentInstanceSymbolBuilder().setName("component1").build(),
-        ArcBasisMill.componentInstanceSymbolBuilder().setName("component2").build()
+      Arguments.of(ArcBasisMill.scope(),new SubcomponentSymbol[]{
+        ArcBasisMill.subcomponentSymbolBuilder().setName("component1").build(),
+        ArcBasisMill.subcomponentSymbolBuilder().setName("component2").build()
       })
     );
   }
 
-  protected static Stream<Arguments> scopeAndComponentInstanceSymbolProvider() {
+  protected static Stream<Arguments> scopeAndSubcomponentSymbolProvider() {
     return Stream.of(
-      Arguments.of(ArcBasisMill.scope(), ArcBasisMill.componentInstanceSymbolBuilder().setName("component").build())
+      Arguments.of(ArcBasisMill.scope(), ArcBasisMill.subcomponentSymbolBuilder().setName("component").build())
     );
   }
 
@@ -553,11 +554,11 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, ComponentInstanceSymbol...)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, SubcomponentSymbol...)}
    */
   @ParameterizedTest
-  @MethodSource("scopeAndComponentInstanceSymbolsProvider")
-  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull ComponentInstanceSymbol... components) {
+  @MethodSource("scopeAndSubcomponentSymbolsProvider")
+  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull SubcomponentSymbol... components) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(components);
 
@@ -566,10 +567,10 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalComponentInstanceSymbols().containsAll(Arrays.asList(components)),
+      () -> Assertions.assertTrue(scope.getLocalSubcomponentSymbols().containsAll(Arrays.asList(components)),
         "The scope does not contain all expected components."),
       () -> {
-        for (ComponentInstanceSymbol component : components) {
+        for (SubcomponentSymbol component : components) {
           Assertions.assertEquals(scope, component.getEnclosingScope(),
             "The component's enclosing scope does not match the expected scope.");
         }
@@ -578,11 +579,11 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, ComponentInstanceSymbol)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, SubcomponentSymbol)}
    */
   @ParameterizedTest
-  @MethodSource("scopeAndComponentInstanceSymbolProvider")
-  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull ComponentInstanceSymbol component) {
+  @MethodSource("scopeAndSubcomponentSymbolProvider")
+  public void shouldLink(@NotNull IArcBasisScope scope, @NotNull SubcomponentSymbol component) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(component);
 
@@ -591,7 +592,7 @@ public class SymbolServiceTest extends ArcBasisAbstractTest {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalComponentInstanceSymbols().contains(component),
+      () -> Assertions.assertTrue(scope.getLocalSubcomponentSymbols().contains(component),
         "The scope does not contain the expected component."),
       () -> Assertions.assertEquals(scope, component.getEnclosingScope(),
         "The component's enclosing scope does not match the expected scope.")

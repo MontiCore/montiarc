@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import com.microsoft.z3.Context;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import montiarc._symboltable.MontiArcScopesGenitorP2;
 import montiarc._symboltable.MontiArcScopesGenitorP2Delegator;
 import montiarc._symboltable.MontiArcScopesGenitorP3Delegator;
@@ -66,14 +66,14 @@ public class MontiArcMill extends MontiArcMillTOP {
     return new MontiArcDeriveSMTExpr(context);
   }
 
-  public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
+  public static FullCompKindExprDeSer compTypeExprDeSer() {
     if (millMontiArcCompTypeExprDeSer == null) {
       millMontiArcCompTypeExprDeSer = getMill();
     }
     return millMontiArcCompTypeExprDeSer._compTypeExprDeSer();
   }
 
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+  protected FullCompKindExprDeSer _compTypeExprDeSer() {
     return new MontiArcCompTypeExprDeSer();
   }
 

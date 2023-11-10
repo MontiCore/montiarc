@@ -42,7 +42,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 </#macro>
 
 <#macro printParameters comp>
-  <#list comp.getParameters() as param>
+  <#list comp.getParametersList() as param>
     protected final ${param.getType().print()} ${param.getName()};
   </#list>
 </#macro>
@@ -68,11 +68,11 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 <#macro printConstructor comp isTop>
   <#assign name>${comp.getName()}<#if isTop>TOP</#if></#assign>
   public ${name}(<@printParametersAsList comp/>) {
-    <#if !comp.isEmptyParents()>
-      super(<#list comp.getParentConfiguration(comp.getParents(0)) as parentConfiguration>${compHelper.printExpression(parentConfiguration.getExpression())}<#sep>, </#sep></#list>);
+    <#if !comp.isEmptySuperComponents()>
+      super(<#list comp.getParentConfiguration(comp.getSuperComponents(0)) as parentConfiguration>${compHelper.printExpression(parentConfiguration.getExpression())}<#sep>, </#sep></#list>);
     </#if>
 
-    <#list comp.getParameters() as param>
+    <#list comp.getParametersList() as param>
       this.${param.getName()} = ${param.getName()};
     </#list>
 
@@ -85,7 +85,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 </#macro>
 
 <#macro printParametersAsList comp>
-  <#list comp.getParameters() as param>
+  <#list comp.getParametersList() as param>
       ${param.getType().print()} ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
 </#macro>

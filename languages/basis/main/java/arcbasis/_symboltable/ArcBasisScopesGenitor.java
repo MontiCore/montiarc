@@ -16,6 +16,8 @@ import arcbasis._ast.ASTPortDirection;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbolBuilder;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -229,8 +231,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     node.setEnclosingScope(this.getCurrentScope().get());
   }
 
-  protected ComponentInstanceSymbolBuilder create_ComponentInstance(@NotNull ASTComponentInstance ast) {
-    ComponentInstanceSymbolBuilder builder = ArcBasisMill.componentInstanceSymbolBuilder();
+  protected SubcomponentSymbolBuilder create_ComponentInstance(@NotNull ASTComponentInstance ast) {
+    SubcomponentSymbolBuilder builder = ArcBasisMill.subcomponentSymbolBuilder();
     Preconditions.checkNotNull(ast);
     builder.setName(ast.getName());
     return builder;
@@ -241,7 +243,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
 
-    ComponentInstanceSymbol symbol = create_ComponentInstance(node).build();
+    SubcomponentSymbol symbol = create_ComponentInstance(node).build();
     symbol.setAstNode(node);
     node.setSymbol(symbol);
     node.setEnclosingScope(this.getCurrentScope().get());

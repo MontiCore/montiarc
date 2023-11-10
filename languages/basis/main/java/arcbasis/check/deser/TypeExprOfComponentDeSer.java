@@ -13,7 +13,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 /**
  * (De-)serializes {@link TypeExprOfComponent}s.
  */
-public class TypeExprOfComponentDeSer implements CompTypeExpressionDeSer<TypeExprOfComponent> {
+public class TypeExprOfComponentDeSer implements CompKindExpressionDeSer<TypeExprOfComponent> {
 
   public static final String SERIALIZED_KIND = "arcbasis.check.TypeExprOfComponent";
   public static final String COMP_TYPE_NAME = "componentTypeName";
@@ -21,6 +21,7 @@ public class TypeExprOfComponentDeSer implements CompTypeExpressionDeSer<TypeExp
   @Override
   public String serializeAsJson(@NotNull TypeExprOfComponent toSerialize) {
     Preconditions.checkNotNull(toSerialize);
+    Preconditions.checkNotNull(toSerialize.getTypeInfo());
 
     JsonPrinter printer = new JsonPrinter();
 

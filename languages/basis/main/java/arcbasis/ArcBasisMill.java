@@ -6,7 +6,7 @@ import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import de.monticore.types.check.FullCompKindExprDeSer;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 
@@ -64,14 +64,14 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     return new ArcBasisScopesGenitorP3Delegator();
   }
 
-  public static ComposedCompTypeExprDeSer compTypeExprDeSer() {
+  public static FullCompKindExprDeSer compTypeExprDeSer() {
     if (millArcBasisCompTypeExprDeSer == null) {
       millArcBasisCompTypeExprDeSer = getMill();
     }
     return millArcBasisCompTypeExprDeSer._compTypeExprDeSer();
   }
 
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+  protected FullCompKindExprDeSer _compTypeExprDeSer() {
     return new ArcBasisCompTypeExprDeSer();
   }
 

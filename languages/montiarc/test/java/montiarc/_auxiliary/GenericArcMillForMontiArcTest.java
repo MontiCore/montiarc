@@ -3,9 +3,9 @@ package montiarc._auxiliary;
 
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.ISynthesizeComponent;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import arccore.ArcCoreMill;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import de.monticore.types.check.ISynthesize;
 import genericarc.GenericArcMill;
 import genericarc.check.GenericArcCompTypeExprDeSer;
@@ -81,7 +81,7 @@ public class GenericArcMillForMontiArcTest {
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForCompTypeExprDeSerProvider")
   void shouldProvideCompTypeExprDeSerAsExpected(@NotNull Runnable setup,
-                                                @NotNull Class<ComposedCompTypeExprDeSer> expectedDeSer) {
+                                                @NotNull Class<FullCompKindExprDeSer> expectedDeSer) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expectedDeSer);
 

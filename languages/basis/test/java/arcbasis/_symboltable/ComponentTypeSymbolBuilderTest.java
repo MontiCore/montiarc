@@ -49,15 +49,15 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol parentComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setSpannedScope(Mockito.mock(IArcBasisScope.class)).setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
-      .setSpannedScope(ArcBasisMill.scope()).setParentsList(Collections.singletonList(new TypeExprOfComponent(parentComp))).build();
-    Assertions.assertFalse(childComp.isEmptyParents());
+      .setSpannedScope(ArcBasisMill.scope()).setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parentComp))).build();
+    Assertions.assertFalse(childComp.isEmptySuperComponents());
   }
 
   @Test
   public void shouldNotHaveParent() {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    Assertions.assertTrue(symbol.isEmptyParents());
+    Assertions.assertTrue(symbol.isEmptySuperComponents());
   }
 
   @Test
@@ -82,7 +82,7 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(ArcBasisMill.scope()).setParameters(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
-    Assertions.assertIterableEquals(symbol.getParameters(), parameters);
+    Assertions.assertIterableEquals(parameters, symbol.getParametersList());
   }
 
   static Stream<Arguments> compNameAndParametersProvider() {

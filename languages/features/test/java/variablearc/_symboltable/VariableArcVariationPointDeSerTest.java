@@ -144,12 +144,12 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
-    Assertions.assertEquals(1, componentTypeSymbol.getTypeInfo().getPorts().size());
+    Assertions.assertEquals(1, componentTypeSymbol.getTypeInfo().getArcPorts().size());
     Assertions.assertEquals(1, variationPoint.getSymbols().size());
     Assertions.assertAll(
       () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
       () -> Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0)),
-      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getPorts().get(0))
+      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getArcPorts().get(0))
     );
   }
 

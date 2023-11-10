@@ -5,10 +5,11 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import genericarc.check.TypeExprOfGenericComponent;
@@ -41,7 +42,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     IMontiArcArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
     MontiArcMill.globalScope().addSubScope(scope);
     CompTypeExpression compTypeExpr = new TypeExprOfComponent(myComp);
-    ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
 
     // When
     String compAsJson = deser.serializeAsJson(compTypeExpr);
@@ -62,7 +63,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
     SymbolService.link(MontiArcMill.globalScope(), myComp);
     CompTypeExpression compTypeExpr = new TypeExprOfComponent(myComp);
-    ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
 
     // When
     String compAsJson = deser.serializeAsJson(compTypeExpr);
@@ -94,7 +95,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
     CompTypeExpression compTypeExpr =
       new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
 
     // When
     String compAsJson = deser.serializeAsJson(compTypeExpr);
@@ -105,7 +106,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
   @Test
   void testDeserializeSimpleComp() {
     // Given
-    ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(
       "{" +
         "\"kind\":\"arcbasis.check.TypeExprOfComponent\"," +
@@ -114,7 +115,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     );
 
     // When
-    CompTypeExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(serialized);
 
     // Then
     Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName());
@@ -124,7 +125,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
   @Test
   void testDeserializeSimpleCompWithoutPackageName() {
     // Given
-    ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(
       "{" +
         "\"kind\":\"arcbasis.check.TypeExprOfComponent\"," +
@@ -133,7 +134,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     );
 
     // When
-    CompTypeExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(serialized);
 
     // Then
     Assertions.assertEquals("MyComp", deserializedExpr.printFullName());
@@ -143,7 +144,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
   @Test
   void testDeserializeGenericComp() {
     // Given
-    ComposedCompTypeExprDeSer deser = new MontiArcCompTypeExprDeSer();
+    FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(GENERIC_COMP_JSON);
 
     OOTypeSymbol studentSym = createOOTypeSymbol("Student");
@@ -151,7 +152,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     MontiArcMill.globalScope().addSubScope(studentScope);
 
     // When
-    CompTypeExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(serialized);
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);

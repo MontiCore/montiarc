@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
+import arcbasis._symboltable.TransitiveNameExpressionScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symboltable.ISymbol;
@@ -15,7 +15,6 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc.VariableArcMill;
-import arcbasis._symboltable.TransitiveNameExpressionScopeSetter;
 import variablearc._symboltable.util.ScopeAddSymbolVisitor;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc.evaluation.expressions.Expression;
@@ -127,6 +126,7 @@ public class VariableArcVariationPointDeSer {
     ScopeAddSymbolVisitor visitor = new ScopeAddSymbolVisitor((IVariableArcScope) component.getTypeInfo().getSpannedScope());
     VariableArcTraverser traverser = VariableArcMill.traverser();
     traverser.add4ArcBasis(visitor);
+    traverser.add4CompSymbols(visitor);
 
     symbol.accept(traverser);
 

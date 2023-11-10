@@ -6,9 +6,10 @@ import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -47,9 +48,9 @@ public class ComponentArgumentsOmitPortRef implements ArcBasisASTComponentTypeCo
     portReferencesToLookFor.addAll(IPortReferenceInExpressionExtractor.PortReference.ofComponentTypePorts(comp));
     portReferencesToLookFor.addAll(IPortReferenceInExpressionExtractor.PortReference.ofSubComponentPorts(comp));
 
-    for (ComponentInstanceSymbol subComp : comp.getSubComponents()) {
-      if(subComp.isPresentType()) {
-        for (ASTArcArgument arg : subComp.getType().getArcArguments()) {
+    for (SubcomponentSymbol subComp : comp.getSubcomponents()) {
+      if(subComp.isTypePresent()) {
+        for (ASTArcArgument arg : ((CompTypeExpression) subComp.getType()).getArcArguments()) {
           HashMap<PortReference, SourcePosition> foundPortReferences =
             this.portRefExtractor.findPortReferences(arg.getExpression(), portReferencesToLookFor, ArcBasisMill.traverser());
 

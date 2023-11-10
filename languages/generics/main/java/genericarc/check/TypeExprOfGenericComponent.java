@@ -10,6 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -88,14 +89,14 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   @Override
-  public List<CompTypeExpression> getParentTypeExpr() {
+  public List<CompKindExpression> getSuperComponents() {
 
     ComponentTypeSymbol rawType = this.getTypeInfo();
-    if (rawType.isEmptyParents()) {
-      return rawType.getParentsList();
+    if (rawType.isEmptySuperComponents()) {
+      return rawType.getSuperComponentsList();
     }
 
-    return rawType.getParentsList().stream().map(unboundParentExpr -> {
+    return rawType.getSuperComponentsList().stream().map(unboundParentExpr -> {
     if (unboundParentExpr instanceof TypeExprOfComponent) {
       return unboundParentExpr;
     } else if (unboundParentExpr instanceof TypeExprOfGenericComponent) {
@@ -110,28 +111,28 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   @Override
-  public Optional<SymTypeExpression> getTypeExprOfPort(@NotNull String portName) {
+  public Optional<SymTypeExpression> getTypeOfPort(@NotNull String portName) {
     Preconditions.checkNotNull(portName);
     // We first look if the requested port is part of our definition.
     // If not, we ask our parent if they have such a port.
-    boolean portDefinedByUs = this.getTypeInfo().getPort(portName, false).isPresent();
+    boolean portDefinedByUs = this.getTypeInfo().getArcPort(portName, false).isPresent();
 
     if (portDefinedByUs) {
       Optional<SymTypeExpression> unboundPortType = this.getTypeInfo()
-        .getPort(portName, false)
+        .getArcPort(portName, false)
         .filter(ArcPortSymbol::isTypePresent)
         .map(ArcPortSymbol::getType);
       return unboundPortType.map(this::createBoundTypeExpression);
-    } else if (!this.getTypeInfo().isEmptyParents()) {
+    } else if (!this.getTypeInfo().isEmptySuperComponents()) {
       // We do not have this port. Now we look if our parent has such a port.
-      return this.getParentTypeExpr().stream().map(parent -> parent.getTypeExprOfPort(portName)).filter(Optional::isPresent).map(Optional::get).findAny();
+      return this.getSuperComponents().stream().map(parent -> parent.getTypeOfPort(portName)).filter(Optional::isPresent).map(Optional::get).findAny();
     } else {
       return Optional.empty();
     }
   }
 
   @Override
-  public Optional<SymTypeExpression> getParameterType(@NotNull String name) {
+  public Optional<SymTypeExpression> getTypeOfParameter(@NotNull String name) {
     Preconditions.checkNotNull(name);
 
     return this.getTypeInfo().getParameter(name).map(p -> this.createBoundTypeExpression(p.getType()));
@@ -139,7 +140,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   @Override
   public List<SymTypeExpression> getParameterTypes() {
-    List<SymTypeExpression> unbound = this.getTypeInfo().getParameters()
+    List<SymTypeExpression> unbound = this.getTypeInfo().getParametersList()
       .stream().map(VariableSymbol::getType)
       .collect(Collectors.toList());
 

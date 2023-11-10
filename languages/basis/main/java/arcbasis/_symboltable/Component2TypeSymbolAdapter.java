@@ -5,24 +5,25 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
 
-public class ComponentType2TypeSymbolAdapter extends TypeSymbol {
+public class Component2TypeSymbolAdapter extends TypeSymbol {
 
-  protected ComponentTypeSymbol adaptee;
+  protected ComponentSymbol adaptee;
 
-  public ComponentType2TypeSymbolAdapter(@NotNull ComponentTypeSymbol adaptee) {
+  public Component2TypeSymbolAdapter(@NotNull ComponentSymbol adaptee) {
     super(Preconditions.checkNotNull(adaptee).getName());
     this.adaptee = adaptee;
     this.accessModifier = BasicAccessModifier.PUBLIC;
     this.spannedScope = adaptee.getSpannedScope();
   }
 
-  protected ComponentTypeSymbol getAdaptee() {
+  protected ComponentSymbol getAdaptee() {
     return adaptee;
   }
 

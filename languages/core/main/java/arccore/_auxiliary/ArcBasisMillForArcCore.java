@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccore._auxiliary;
 
-import arcbasis.check.deser.ComposedCompTypeExprDeSer;
+import de.monticore.types.check.FullCompKindExprDeSer;
 import genericarc.check.GenericArcCompTypeExprDeSer;
 
 public class ArcBasisMillForArcCore extends ArcBasisMillForArcCoreTOP {
 
   @Override
-  protected ComposedCompTypeExprDeSer _compTypeExprDeSer() {
+  protected FullCompKindExprDeSer _compTypeExprDeSer() {
     return new GenericArcCompTypeExprDeSer();
   }
 }

@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
-import arcbasis._symboltable.ComponentInstanceSymbol;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.ArithExpr;
 import com.microsoft.z3.BoolExpr;
@@ -33,6 +32,7 @@ import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsHand
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.Names;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcScope;
@@ -87,9 +87,9 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (CommonExpressionsMill.typeDispatcher().isASTNameExpression(node.getExpression())) {
       // Handle only features of subcomponent of form x.f
       String name = CommonExpressionsMill.typeDispatcher().asASTNameExpression(node.getExpression()).getName();
-      Optional<ComponentInstanceSymbol> instanceSymbol =
-        scope.resolveComponentInstanceMany(name).stream().findFirst();
-      if (instanceSymbol.isPresent() && instanceSymbol.get().isPresentType() &&
+      Optional<SubcomponentSymbol> instanceSymbol =
+        scope.resolveSubcomponentMany(name).stream().findFirst();
+      if (instanceSymbol.isPresent() && instanceSymbol.get().isTypePresent() &&
         !((IVariableArcScope) instanceSymbol.get().getType().getTypeInfo().getSpannedScope()).resolveArcFeatureMany(
           node.getName()).isEmpty()) {
         this.getResult().setValue(
