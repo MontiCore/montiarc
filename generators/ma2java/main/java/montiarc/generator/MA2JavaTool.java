@@ -7,7 +7,6 @@ import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc._cocos.MontiArcCoCos;
 import montiarc.cocos.DseSupportedTypes;
 import montiarc.generator.codegen.MontiArcGenerator;
 import org.apache.commons.cli.CommandLine;
@@ -16,16 +15,22 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.*;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentInstanceNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords;
+import static montiarc.cocos.IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords;
 
 public class MA2JavaTool extends MontiArcTool {
 
@@ -119,7 +124,7 @@ public class MA2JavaTool extends MontiArcTool {
   public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new PortNoNamesAreNoJavaKeywords());
     checker.addCoCo(new ParameterNamesAreNoJavaKeywords());
     checker.addCoCo(new TypeParameterNamesAreNoJavaKeywords());
@@ -133,7 +138,7 @@ public class MA2JavaTool extends MontiArcTool {
 
   public void runAdditionalCoCosDse(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
 
     checker.addCoCo(new DseSupportedTypes.DseParameters_VariablesTypes());
 
