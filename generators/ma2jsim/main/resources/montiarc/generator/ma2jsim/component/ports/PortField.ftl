@@ -2,4 +2,4 @@
 <#-- ASTComponentType ast -->
 ${tc.signature("portSym")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-protected <@Util.getStaticPortClass portSym ast.getSymbol().isAtomic()/><<@Util.getTypeString portSym.getType()/>> ${prefixes.port()}${portSym.getName()} = null;
+protected <@Util.getStaticPortClass portSym ast.getSymbol().isAtomic()/><<@Util.getTypeString portSym.getType() true/>> ${prefixes.port()}${portSym.getName()} = null;

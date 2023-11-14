@@ -1,8 +1,13 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 
 <#-- SymTypeExpression type -->
-<#macro getTypeString type>
-    <#if type.isPrimitive()>${type.getBoxedPrimitiveName()}<#elseif type.isTypeVariable()>${type.print()}<#else>${type.printFullName()}</#if>
+<#macro getTypeString type boxPrimitives=false>
+    <#if type.isPrimitive()><#t>
+        <#if boxPrimitives>${type.getBoxedPrimitiveName()}<#t>
+        <#else>${type.getPrimitiveName()}</#if><#t>
+    <#elseif type.isTypeVariable()>${type.print()}<#t>
+    <#else>${type.printFullName()}<#t>
+    </#if>
 </#macro>
 
 <#-- SymTypeExpression type -->
