@@ -3,6 +3,7 @@ package montiarc.rte.port;
 
 import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
+import montiarc.rte.msg.Tick;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -26,17 +27,40 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
     super(qualifiedName, owner);
   }
 
-  /**
-   * Receive a message on this port.
-   * This method should only be called by the {@link AbstractOutPort}
-   * to which this incoming port is registered.
-   *
-   * @param message the message sent by the connected outgoing port
-   */
+
   @Override
-  public void receive(Message<T> message) {
-    if (messageIsValidOnPort(message)) {
-      buffer.add(message);
+  public void receive(Message<? extends T> message) {
+    if (message == Tick.get()) {
+      this.processReceivedTick();
+    } else {
+      this.processReceivedData(message.getData());
+    }
+  }
+
+  /**
+   * Process a received data message on this port.
+   * <br>
+   * Do not call this method to <i>send</i> messages to this port, use {@link #receive(Message)} instead:
+   * {@code receive(Message.of(data))}.
+   *
+   * @param data the received data
+   */
+  protected void processReceivedData(T data) {
+    Message<T> msgObject = Message.of(data);
+    if (messageIsValidOnPort(msgObject)) {
+      buffer.add(msgObject);
+      handleBuffer();
+    }
+  }
+
+  /**
+   * Process a received tick message on this port.
+   * Do not call this method to <i>send</i> messages to this port, use {@link #receive(Message)} instead:
+   * {@code receive(Tick.get())}.
+   */
+  protected void processReceivedTick() {
+    if (messageIsValidOnPort(Tick.get())) {
+      buffer.add(Tick.get());
       handleBuffer();
     }
   }

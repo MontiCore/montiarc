@@ -9,7 +9,7 @@ package montiarc.rte.msg;
 public interface PassAllMessageFilter<T> extends MessageFilteringStrategy<T> {
 
   @Override
-  default boolean messageIsValidOnPort(Message<T> message) {
+  default boolean messageIsValidOnPort(Message<? extends T> message) {
     return true;
   }
 }

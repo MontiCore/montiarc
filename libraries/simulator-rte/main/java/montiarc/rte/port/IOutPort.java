@@ -11,7 +11,7 @@ public interface IOutPort<T> {
    * @param recipient the port to connect to
    * @return true iff the ports connect successfully
    */
-  boolean connect(IInPort<T> recipient);
+  boolean connect(IInPort<? super T> recipient);
 
   /**
    * Disconnects from the given port, removing it as a recipient.
@@ -19,12 +19,10 @@ public interface IOutPort<T> {
    * @param recipient the port to disconnect from
    * @return true if the ports disconnect successfully or if the ports where not connected in the first place
    */
-  boolean disconnect(IInPort<T> recipient);
+  boolean disconnect(IInPort<? super T> recipient);
 
   /**
    * Send out the given data as a message to all registered recipients.
-   * <br>
-   * Do not use this method to send ticks. Instead, use {@link #sendTick()}.
    *
    * @param data the data to send
    */

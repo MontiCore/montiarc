@@ -18,6 +18,6 @@ public interface MessageFilteringStrategy<T> {
    * @param message the message under consideration
    * @return true iff this port should pass the given message
    */
-  boolean messageIsValidOnPort(Message<T> message);
+  boolean messageIsValidOnPort(Message<? extends T> message);
 
 }

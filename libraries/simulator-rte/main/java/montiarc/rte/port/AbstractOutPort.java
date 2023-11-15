@@ -22,7 +22,7 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
    * <br>
    * Implemented as a list rather than a set because this allows for constant iteration (and thus message sending) order.
    */
-  protected List<IInPort<T>> recipients = new ArrayList<>();
+  protected List<IInPort<? super T>> recipients = new ArrayList<>();
 
   protected AbstractOutPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
@@ -35,7 +35,7 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
    * @return true iff the given port is connected to this port when this method finishes
    */
   @Override
-  public boolean connect(IInPort<T> recipient) {
+  public boolean connect(IInPort<? super T> recipient) {
     if (recipient == null) {
       return false;
     } // TODO discuss: abort if recipient is already connected to this or some other (i.e. has isConnected flag set)?
@@ -54,7 +54,7 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
    * @return true iff the given port is not connected to this port when this method finishes
    */
   @Override
-  public boolean disconnect(IInPort<T> recipient) {
+  public boolean disconnect(IInPort<? super T> recipient) {
     return recipients.remove(recipient) || !recipients.contains(recipient);
   }
 

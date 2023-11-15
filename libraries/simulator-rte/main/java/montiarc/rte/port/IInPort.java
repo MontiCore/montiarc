@@ -7,8 +7,8 @@ public interface IInPort<T> {
 
   /**
    * Receive a message on this port.
-   *
+   *    
    * @param message the received message
    */
-  void receive(Message<T> message);
+  void receive(Message<? extends T> message);
 }

@@ -3,6 +3,7 @@ package montiarc.rte.port;
 
 import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
+import montiarc.rte.msg.Tick;
 
 /**
  * This class represents a port-forwarding connector in a MontiArc model (time-aware variant).
@@ -20,16 +21,13 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITim
     super(qualifiedName, owner);
   }
 
-  /**
-   * Receive a message on this port, which is instantly forwarded.
-   * This method should only be called by the {@link IOutPort}
-   * to which this port forward is connected.
-   *
-   * @param message the message sent by the connected outgoing port
-   */
   @Override
-  public void receive(Message<T> message) {
-    this.send(message);
+  public void receive(Message<? extends T> message) {
+    if (message == Tick.get()) {
+      this.sendTick();
+    } else {
+      this.send(message.getData());
+    }
   }
   
   /**

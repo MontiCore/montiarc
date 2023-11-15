@@ -6,4 +6,7 @@ classdiagram types {
   public enum OnOff {
     ON, OFF;
   }
+
+  public class Person { }
+  public class Student extends Person { }
 }
