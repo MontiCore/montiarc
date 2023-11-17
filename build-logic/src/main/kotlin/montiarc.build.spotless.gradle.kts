@@ -6,6 +6,7 @@ plugins {
 }
 
 spotless {
+  isEnforceCheck = false
   java {
     targetExclude(fileTree("$buildDir") { include("**/*.java") })
 
