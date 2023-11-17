@@ -4,6 +4,7 @@ package montiarc.gradle.ma2java
 import montiarc.gradle.montiarc.MAExtension
 import montiarc.gradle.montiarc.MontiarcBasePlugin
 import montiarc.gradle.montiarc.montiarc
+import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
 import montiarc.gradle.montiarc.montiarcSymbolDependencyConfigurationName
 import montiarc.gradle.montiarc.montiarcSymbolsJarTaskName
 import montiarc.gradle.montiarc.cd2Pojo4MaSymbolDependencyConfigName
@@ -26,6 +27,9 @@ const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java"
 
 const val INTERNAL_RTE_PROJECT_REF = ":libraries:majava-rte"
 const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte"
+
+const val INTERNAL_MA_BASE_PROJECT_REF = ":libraries:montiarc-base"
+const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base"
 
 /**
  * Enables the integration of montiarc models into a project build:
@@ -50,7 +54,8 @@ class Ma2JavaPlugin : Plugin<Project> {
       sourceSetsOf(project).all { sourceSet ->
         // Enabling the declaration of model dependencies and prepare their extraction
         createCompileMontiarcTask(sourceSet)
-        addRuntimeEnvironmentDependencyFor(sourceSet)
+        addRuntimeEnvironmentDependencyForApiOf(sourceSet)
+        addMontiArcBaseDependencyFor(sourceSet)
       }
 
       // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
@@ -92,7 +97,7 @@ class Ma2JavaPlugin : Plugin<Project> {
     })
   }
 
-  private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {
+  private fun addRuntimeEnvironmentDependencyForApiOf(sourceSet: SourceSet) = with(project) {
     addRuntimeEnvironmentDependencyFor(sourceSet.implementationConfigurationName)
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
@@ -115,6 +120,23 @@ class Ma2JavaPlugin : Plugin<Project> {
         project(INTERNAL_RTE_PROJECT_REF)
       } else {
         "${MAVEN_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
+      }
+    })
+  }
+
+  /**
+   * Adds the library montiarc.libraries:montiarc-base as montiarc dependency for the source set
+   */
+  private fun addMontiArcBaseDependencyFor(sourceSet: SourceSet) = with(project) {
+    // Depending on what the user wishes, montiarc-base may be drawn from maven (default), or it may be an internal
+    // project dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test
+    // the freshly compiled version of montiarc-base.
+
+    dependencies.addProvider(sourceSet.montiarcDependencyDeclarationConfigName, provider {
+      if (maExtension.internalMontiArcTesting.get()) {
+        project(INTERNAL_MA_BASE_PROJECT_REF)
+      } else {
+        "${MAVEN_MA_BASE_PROJECT_REF}:${GENERATOR_VERSION}"
       }
     })
   }

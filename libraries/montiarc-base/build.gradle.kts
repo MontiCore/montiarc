@@ -13,8 +13,10 @@ sourceSets {
   }
 }
 
-// Configurations
-val generateCD = configurations.create("generateCD")
+// The MontiArc plugin always adds montiarc-base as a dependency to the montiarc configuration.
+// This makes no sense for the montiarc-base project itself. Therefore, we add an exclude rule.
+configurations.montiarc.get()
+  .exclude("montiarc.libraries", "montiarc-base")
 
 dependencies {
   implementation(libs.guava)
@@ -35,6 +37,3 @@ tasks.compileMontiarc {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
 }
-
-// Setting up task dependencies
-tasks.compileJava { dependsOn(tasks.compileMontiarc) }

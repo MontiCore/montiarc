@@ -103,8 +103,8 @@ public class SmallModelTest {
     portVoteSA2.setValue(outVoteSA2);
 
     result.add(Arguments.of(
-        List.of(new ListerInSmallModel(portMtrNr1, portModule1),
-          new ListerInSmallModel(portMtrNr2, portModule2)),
+        List.of(new ListerInSmallModel(portModule1, portMtrNr1),
+          new ListerInSmallModel(portModule2, portMtrNr2)),
         List.of(new ListerOutSmallModel(portVoteMDSE1, portVoteSA1),
           new ListerOutSmallModel(portVoteMDSE2, portVoteSA2)),
         (Function<ListerInSmallModel, ListerOutSmallModel>) (input) -> {
@@ -239,10 +239,11 @@ public class SmallModelTest {
 
     result.add(
       Arguments.of(
-        List.of(new ListerInSmallModel(portMtrNr3, portModule3),
-          new ListerInSmallModel(portMtrNr4, portModule4),
-          new ListerInSmallModel(portMtrNr5, portModule5), new ListerInSmallModel(portMtrNr6,
-            portModule6), new ListerInSmallModel(portMtrNr7, portModule7)),
+        List.of(new ListerInSmallModel(portModule3, portMtrNr3),
+          new ListerInSmallModel(portModule4, portMtrNr4),
+          new ListerInSmallModel(portModule5, portMtrNr5),
+          new ListerInSmallModel(portModule6,portMtrNr6),
+          new ListerInSmallModel(portModule7, portMtrNr7)),
         List.of(new ListerOutSmallModel(portVoteMDSE3, portVoteSA3),
           new ListerOutSmallModel(portVoteMDSE4, portVoteSA4),
           new ListerOutSmallModel(portVoteMDSE5, portVoteSA5),
