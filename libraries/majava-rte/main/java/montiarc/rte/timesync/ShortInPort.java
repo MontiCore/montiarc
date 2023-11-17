@@ -35,6 +35,7 @@ public class ShortInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(short _short) {
     this.value = _short;
+    this.getObservers().forEach(p -> p.update(_short));
     this.synced = true;
   }
 

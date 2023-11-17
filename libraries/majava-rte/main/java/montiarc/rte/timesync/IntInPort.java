@@ -45,6 +45,7 @@ public class IntInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(int _int) {
     this.value = _int;
+    this.getObservers().forEach(p -> p.update(_int));
     this.synced = true;
   }
 

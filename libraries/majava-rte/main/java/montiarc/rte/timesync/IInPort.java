@@ -10,6 +10,13 @@ public interface IInPort<T> extends IPort<T> {
   boolean isSynced();
 
   /**
+   * Connect this to the observing input port
+   *
+   * @param port the observing input port
+   */
+  void connect(IInPort<? super T> port);
+
+  /**
    * Synchronizes this with the observed port with the given msg
    *
    * @param msg the msg sent via the observed output port

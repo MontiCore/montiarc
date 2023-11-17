@@ -55,6 +55,7 @@ public class LongInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(long _long) {
     this.value = _long;
+    this.getObservers().forEach(p -> p.update(_long));
     this.synced = true;
   }
 

@@ -25,6 +25,7 @@ public class ByteInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(byte _byte) {
     this.value = _byte;
+    this.getObservers().forEach(p -> p.update(_byte));
     this.synced = true;
   }
 

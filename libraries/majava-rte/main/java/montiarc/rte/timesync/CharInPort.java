@@ -85,6 +85,7 @@ public class CharInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(char _char) {
     this.value = _char;
+    this.getObservers().forEach(p -> p.update(_char));
     this.synced = true;
   }
 

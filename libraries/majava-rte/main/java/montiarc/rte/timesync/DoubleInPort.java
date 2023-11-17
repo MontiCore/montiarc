@@ -75,6 +75,7 @@ public class DoubleInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(double _double) {
     this.value = _double;
+    this.getObservers().forEach(p -> p.update(_double));
     this.synced = true;
   }
 

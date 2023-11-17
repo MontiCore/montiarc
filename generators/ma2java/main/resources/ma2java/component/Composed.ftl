@@ -61,6 +61,11 @@
     <#if !comp.isEmptySuperComponents()>
       super.setUp();
     </#if>
+    <#list comp.getPortsList() as port>
+      <#if port.isIncoming()>
+        this.${port.getName()} = new <@printInPortType port/>(!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}");
+      </#if>
+    </#list>
     <#list comp.getSubcomponents() as subcomponent>
       this.${subcomponent.getName()} = new ${compHelper.getSubComponentTypeName(subcomponent)}(<#list compHelper.getParamValues(subcomponent.getType()) as param>${param}<#sep>, </#sep></#list>);
       this.${subcomponent.getName()}.setInstanceName(!this.getInstanceName().isBlank() ? this.getInstanceName() + ".${subcomponent.getName()}" : "${subcomponent.getName()}");
@@ -70,7 +75,7 @@
       <#assign source = connector.getSource()>
       <#list connector.getTargetList() as target>
         <#if !source.isPresentComponent() && target.isPresentComponent()>
-          this.${source.getQName()} = ${target.getComponent()}.get${target.getPort()?cap_first}();
+          this.${source.getQName()}.connect(${target.getComponent()}.get${target.getPort()?cap_first}());
         <#elseif source.isPresentComponent() && !target.isPresentComponent()>
           this.${target.getQName()} = ${source.getComponent()}.get${source.getPort()?cap_first}();
         <#elseif source.isPresentComponent() && target.isPresentComponent()>
@@ -99,4 +104,13 @@
       <#lt>this.${subcomponent.getName()}.tick();
     </#list>
   }
+</#macro>
+
+<#macro printInPortType port>
+  montiarc.rte.timesync.
+  <#if port.getType().isPrimitive()>
+    ${port.getType().print()?cap_first}InPort
+  <#else>
+    InPort<>
+  </#if>
 </#macro>

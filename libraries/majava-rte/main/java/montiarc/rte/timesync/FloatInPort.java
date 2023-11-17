@@ -65,6 +65,7 @@ public class FloatInPort extends NumericInPort implements INumericInPort {
   @Override
   public void update(float _float) {
     this.value = _float;
+    this.getObservers().forEach(p -> p.update(_float));
     this.synced = true;
   }
 

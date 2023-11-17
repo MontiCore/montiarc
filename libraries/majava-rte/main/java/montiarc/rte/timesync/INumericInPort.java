@@ -57,4 +57,11 @@ public interface INumericInPort extends IPrimitivePort {
    * @param _char the msg sent via the observed output port
    */
   void update(char _char);
+
+  /**
+   * Connect this to the observing input port
+   *
+   * @param port the observing input port
+   */
+  void connect(INumericInPort port);
 }
