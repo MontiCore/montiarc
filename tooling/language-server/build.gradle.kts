@@ -3,20 +3,19 @@ plugins {
   id("montiarc.build.language-server")
 }
 
+val cd4aLib = libs.mc.cd4a
 dependencies {
   grammar(libs.mc.grammar) {
     capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar(libs.mc.cd4a){
-    capabilities { requireCapability("de.monticore.lang:cd4analysis-grammars") }
-  }
+  grammar(cd4aLib.get().module.group, cd4aLib.get().module.name, cd4aLib.get().versionConstraint.requiredVersion, classifier = "grammars")
   grammar(project(path = ":languages", configuration = "grammars"))
   grammar(libs.mc.sc) {
     capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
   }
   implementation(project(":languages:montiarc"))
   implementation(libs.mc.lsp)
-  implementation(libs.mc.cd4a)
+  implementation(cd4aLib)
   implementation(libs.mc.c2mc)
 }
 
