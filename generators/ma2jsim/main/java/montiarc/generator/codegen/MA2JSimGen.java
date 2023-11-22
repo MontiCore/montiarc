@@ -30,11 +30,13 @@ public class MA2JSimGen {
   protected GeneratorEngine engine;
   protected GeneratorSetup setup;
   protected Formatter formatter;
+  protected Helper helper;
 
   public MA2JSimGen(@NotNull GeneratorSetup setup) {
     this.setup = Preconditions.checkNotNull(setup);
     this.engine = new GeneratorEngine(this.setup);
     this.formatter = new Formatter();
+    this.helper = (Helper) setup.getGlex().getGlobalVar("helper");
   }
 
   public MA2JSimGen(@NotNull Path targetDir) {
@@ -129,9 +131,11 @@ public class MA2JSimGen {
   protected void generateBehaviorClasses(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
-    generateBehaviorImplementation(ast);
-    generateBehaviorBuilder(ast);
-    generateStatesClass(ast);
+    if (helper.getAutomatonBehavior(ast.getComponentType()).isPresent()) {
+      generateBehaviorImplementation(ast);
+      generateBehaviorBuilder(ast);
+      generateStatesClass(ast);
+    }
   }
 
   protected void generateBehaviorImplementation(@NotNull ASTMACompilationUnit ast) {

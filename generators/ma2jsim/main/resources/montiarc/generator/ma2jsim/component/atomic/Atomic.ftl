@@ -23,4 +23,6 @@ protected void <@MethodNames.sendTickOnAll/>() {
 
 <#if hasAutomaton>
     ${tc.include("montiarc.generator.ma2jsim.behavior.automata.AutomatonReferencesInComponent.ftl")}
+<#else>
+    ${tc.include("montiarc.generator.ma2jsim.behavior.NoBehaviorReferencesInComponent.ftl")}
 </#if>

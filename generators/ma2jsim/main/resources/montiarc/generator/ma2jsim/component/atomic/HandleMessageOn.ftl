@@ -17,5 +17,7 @@ protected void handleMessageOn${portSym.getName()?cap_first}() {
       <#else>
           <@MethodNames.handleSyncComputation/>();
       </#if>
+  <#else>
+      <@MethodNames.handleSyncComputation/>();
   </#if>
 }
