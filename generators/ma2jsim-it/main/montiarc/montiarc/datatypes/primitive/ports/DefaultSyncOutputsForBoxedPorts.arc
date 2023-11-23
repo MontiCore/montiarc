@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.datatypes.primitive.ports;
 
+// Should compile (by assigning correct default values to the ports)
 component DefaultSyncOutputsForBoxedPorts {
   port out Byte outByte,
        out Short outShort,

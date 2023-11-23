@@ -10,6 +10,6 @@ interface ${ast.getName()}${suffixes.input()}<#if isTop>${suffixes.top()}</#if> 
   }
 
   <#list ast.getSymbol().getAllIncomingPorts() as portSym>
-    <@Util.getStaticPortClass portSym ast.getSymbol().isAtomic()/><<@Util.getTypeString portSym.getType() true/>> ${prefixes.port()}${portSym.getName()}();
+    <@Util.getStaticPortClass portSym ast.getSymbol().isAtomic()/><<@Util.getPortTypeString portSym.getType()/>> ${prefixes.port()}${portSym.getName()}();
   </#list>
 }

@@ -14,9 +14,12 @@ import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
 import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypePrimitive;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcFeatureDeclaration;
@@ -194,5 +197,42 @@ public class Helper {
             .findFirst()
         ).map(ASTAnteAction::getMCBlockStatementList)
         .orElse(new ArrayList<>());
+  }
+
+  public boolean isUnboxedChar(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.CHAR.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  public boolean isUnboxedByte(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.BYTE.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  public boolean isUnboxedShort(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.SHORT.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  public boolean isUnboxedInt(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.INT.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  public boolean isUnboxedLong(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.LONG.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  public boolean isUnboxedFloat(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.FLOAT.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  public boolean isUnboxedDouble(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.DOUBLE.equals(type.asPrimitive().getPrimitiveName());
+  }
+
+  /**
+   * Determines whether the type is a numeric primitive, but nor {@code char}.
+   * <br>
+   * I.e. whether the type is a {@code byte}, {@code short}, {@code int}, {@code long}, {@code float}, or {@code double}
+   */
+  public boolean isNumber(SymTypePrimitive type) {
+    return type.isNumericType() && !this.isUnboxedChar(type);
   }
 }

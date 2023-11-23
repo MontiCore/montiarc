@@ -20,23 +20,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CalculationsTest {
 
   /* Captures of the actual output streams on the different ports */
-  @Captor ArgumentCaptor<Message<Byte>> actualByte;
-  @Captor ArgumentCaptor<Message<Short>> actualShort;
-  @Captor ArgumentCaptor<Message<Integer>> actualInt;
-  @Captor ArgumentCaptor<Message<Long>> actualLong;
-  @Captor ArgumentCaptor<Message<Float>> actualFloat;
-  @Captor ArgumentCaptor<Message<Double>> actualDouble;
-  @Captor ArgumentCaptor<Message<Character>> actualChar;
+  @Captor ArgumentCaptor<Message<Number>> actualByte;
+  @Captor ArgumentCaptor<Message<Number>> actualShort;
+  @Captor ArgumentCaptor<Message<Number>> actualInt;
+  @Captor ArgumentCaptor<Message<Number>> actualLong;
+  @Captor ArgumentCaptor<Message<Number>> actualFloat;
+  @Captor ArgumentCaptor<Message<Number>> actualDouble;
+  @Captor ArgumentCaptor<Message<Number>> actualChar;
   @Captor ArgumentCaptor<Message<Boolean>> actualBoolean;
 
   /* Mocks for the target ports */
-  @Mock ITimeAwareInPort<Byte> port_byte;
-  @Mock ITimeAwareInPort<Short> port_short;
-  @Mock ITimeAwareInPort<Integer> port_int;
-  @Mock ITimeAwareInPort<Long> port_long;
-  @Mock ITimeAwareInPort<Float> port_float;
-  @Mock ITimeAwareInPort<Double> port_double;
-  @Mock ITimeAwareInPort<Character> port_char;
+  @Mock ITimeAwareInPort<Number> port_byte;
+  @Mock ITimeAwareInPort<Number> port_short;
+  @Mock ITimeAwareInPort<Number> port_int;
+  @Mock ITimeAwareInPort<Number> port_long;
+  @Mock ITimeAwareInPort<Number> port_float;
+  @Mock ITimeAwareInPort<Number> port_double;
+  @Mock ITimeAwareInPort<Number> port_char;
   @Mock ITimeAwareInPort<Boolean> port_boolean;
 
   private static <T> Message<T> msg(T data) {
@@ -46,30 +46,32 @@ class CalculationsTest {
   @Test
   void testCorrectnessOfCalculations() {
     // Test data
-    List<Message<Byte>> byteInput       = List.of(msg((byte) 1), Tick.get(), msg((byte) -2), Tick.get(), msg((byte) 0));
-    List<Message<Byte>> expectedByteOut = List.of(msg((byte) 1), Tick.get(), msg((byte) -2), Tick.get(), msg((byte) 0));
+    List<Message<Number>> byteInput =
+      List.of(msg((byte) 1), Tick.get(), msg((byte) -2), Tick.get(), msg((byte) 0));
+    List<Message<Number>> expectedByteOut =
+      List.of(msg((byte) 1), Tick.get(), msg((byte) -2), Tick.get(), msg((byte) 0));
 
-    List<Message<Short>> shortInput =
+    List<Message<Number>> shortInput =
       List.of(msg((short) 1), Tick.get(), msg((short) -2), Tick.get(), msg((short) 0));
-    List<Message<Short>> expectedShortOut =
+    List<Message<Number>> expectedShortOut =
       List.of(msg((short) 1), Tick.get(), msg((short) -2), Tick.get(), msg((short) 0));
 
-    List<Message<Integer>> intInput          = List.of(msg(1), Tick.get(), msg(-2), Tick.get(), msg(0));
-    List<Message<Integer>> expectedIntOutput = List.of(msg(-1), Tick.get(), msg(2), Tick.get(), msg(0));
+    List<Message<Number>> intInput          = List.of(msg(1), Tick.get(), msg(-2), Tick.get(), msg(0));
+    List<Message<Number>> expectedIntOutput = List.of(msg(-1), Tick.get(), msg(2), Tick.get(), msg(0));
 
-    List<Message<Long>> longInput          = List.of(msg(1L), Tick.get(), msg(-2L), Tick.get(), msg(0L));
-    List<Message<Long>> expectedLongOutput = List.of(msg(-1L), Tick.get(), msg(2L), Tick.get(), msg(0L));
+    List<Message<Number>> longInput          = List.of(msg(1L), Tick.get(), msg(-2L), Tick.get(), msg(0L));
+    List<Message<Number>> expectedLongOutput = List.of(msg(-1L), Tick.get(), msg(2L), Tick.get(), msg(0L));
 
-    List<Message<Float>> floatInput          = List.of(msg(1.0f), Tick.get(), msg(-2.0f), Tick.get(), msg(0.0f));
-    List<Message<Float>> expectedFloatOutput = List.of(msg(-1.0f), Tick.get(), msg(2.0f), Tick.get(), msg(-0.0f));
+    List<Message<Number>> floatInput          = List.of(msg(1.0f), Tick.get(), msg(-2.0f), Tick.get(), msg(0.0f));
+    List<Message<Number>> expectedFloatOutput = List.of(msg(-1.0f), Tick.get(), msg(2.0f), Tick.get(), msg(-0.0f));
 
-    List<Message<Double>> doubleInput          = List.of(msg(1.0), Tick.get(), msg(-2.0), Tick.get(), msg(0.0));
-    List<Message<Double>> expectedDoubleOutput = List.of(msg(-1.0), Tick.get(), msg(2.0), Tick.get(), msg(-0.0));
+    List<Message<Number>> doubleInput          = List.of(msg(1.0), Tick.get(), msg(-2.0), Tick.get(), msg(0.0));
+    List<Message<Number>> expectedDoubleOutput = List.of(msg(-1.0), Tick.get(), msg(2.0), Tick.get(), msg(-0.0));
 
-    List<Message<Character>> charInput =
-      List.of(msg((char) 1), Tick.get(), msg((char) -2), Tick.get(), msg((char) 0));
-    List<Message<Character>> expectedCharOut =
-      List.of(msg((char) 1), Tick.get(), msg((char) -2), Tick.get(), msg((char) 0));
+    List<Message<Number>> charInput =
+      List.of(msg((int) 'a'), Tick.get(), msg((int) '-'), Tick.get(), msg((int) '0'));
+    List<Message<Number>> expectedCharOut =
+      List.of(msg((int) 'a'), Tick.get(), msg((int) '-'), Tick.get(), msg((int) '0'));
 
     List<Message<Boolean>> boolInput       = List.of(msg(true), Tick.get(), msg(false), Tick.get(), msg(false));
     List<Message<Boolean>> expectedBoolOut = List.of(msg(false), Tick.get(), msg(true), Tick.get(), msg(true));

@@ -3,7 +3,7 @@
 ${tc.signature("portSym", "atomic")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 @Override
-public <@Util.getStaticPortClass portSym atomic/><<@Util.getTypeString portSym.getType() true/>>
+public <@Util.getStaticPortClass portSym atomic/><<@Util.getPortTypeString portSym.getType()/>>
   ${prefixes.port()}${portSym.getName()}() {
   return this.${prefixes.port()}${portSym.getName()};
 }
