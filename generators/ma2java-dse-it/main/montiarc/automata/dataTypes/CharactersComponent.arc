@@ -5,10 +5,10 @@ package dataTypes;
  * Simple atomic component for testing characters
  */
 component CharactersComponent {
-  port <<sync>> in Character in;
-  port <<sync>> out Character out;
+  port in Character in;
+  port out Character out;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [in == 'c'] /{

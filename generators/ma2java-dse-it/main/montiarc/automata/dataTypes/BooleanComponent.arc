@@ -5,10 +5,10 @@ package dataTypes;
  *  Simple atomic component for testing booleans
  */
 component BooleanComponent {
-  port <<sync>> in Boolean in;
-  port <<sync>> out Boolean out;
+  port in Boolean in;
+  port out Boolean out;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle /{

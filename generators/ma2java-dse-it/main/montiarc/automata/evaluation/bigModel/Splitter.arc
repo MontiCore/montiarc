@@ -3,10 +3,10 @@ package evaluation.bigModel;
 
 component Splitter(Integer parameter) {
 
-  port <<sync>> in Integer ins,
-       <<sync>> out Boolean o1, o2, o3, o4;
+  port in Integer ins,
+       out Boolean o1, o2, o3, o4;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [ins == 1 && ins < parameter]/{

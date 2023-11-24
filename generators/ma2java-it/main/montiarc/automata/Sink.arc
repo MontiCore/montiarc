@@ -10,12 +10,12 @@ import Types.OnOff;
  */
 component Sink {
 
-  port <<sync>> in OnOff i;
+  port in OnOff i;
 
   /**
    * The automaton transition between states based on the input received.
    */
-  automaton {
+  <<sync>> automaton {
     initial state A;
     state B;
 

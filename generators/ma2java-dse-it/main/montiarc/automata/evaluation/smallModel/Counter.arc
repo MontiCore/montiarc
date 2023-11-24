@@ -5,12 +5,12 @@ package evaluation.smallModel;
  * small model for the evaluation
  */
 component Counter {
-  port <<sync>> in Double factor;
-  port <<sync,delayed>> out Double out;
+  port in Double factor;
+  port <<delayed>> out Double out;
 
   Double counter = 0.0;
 
-  automaton{
+  <<sync>> automaton{
     initial {out = 0.0;} state Idle;
 
     Idle -> Idle /{

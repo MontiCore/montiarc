@@ -5,17 +5,17 @@ import elevator.Commands.DoorCMD;
 
 component Door {
 
-  port <<sync>> in DoorCMD cmd;
-  port <<sync>> in Boolean isOpen;
-  port <<sync>> in Boolean isClosed;
-  port <<sync>> in Boolean isObstacle;
-  port <<sync>> out Boolean open;
-  port <<sync>> out Boolean close;
-  port <<sync, delayed>> out Boolean closed;
+  port  in DoorCMD cmd;
+  port  in Boolean isOpen;
+  port  in Boolean isClosed;
+  port  in Boolean isObstacle;
+  port  out Boolean open;
+  port  out Boolean close;
+  port <<delayed>> out Boolean closed;
 
   int timer = 5;
 
-  automaton {
+  <<sync>> automaton {
     initial { closed = false; } state Wait;
 
     Wait -> Wait [timer > 0] / {

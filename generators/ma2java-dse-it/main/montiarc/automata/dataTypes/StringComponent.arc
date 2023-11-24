@@ -5,10 +5,10 @@ package dataTypes;
  *  Simple atomic component for testing strings
  */
 component StringComponent {
-  port <<sync>> in String in;
-  port <<sync>> out String out;
+  port in String in;
+  port out String out;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [in == "helloWorld"]/{

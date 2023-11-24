@@ -5,12 +5,12 @@ package dataTypes;
  *  Simple atomic component for testing floats
  */
 component FloatComponent {
-  port <<sync>> in Float in;
-  port <<sync>> out Float out;
+  port in Float in;
+  port out Float out;
 
   Float floater = 42.4f;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [in /2 == 3.2f]/{

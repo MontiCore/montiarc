@@ -3,12 +3,12 @@ package evaluation.bigModel;
 
 component FloorControl {
 
-  port <<sync>> in Boolean btn,
-       <<sync>> out Boolean light;
-  port <<sync>> in Boolean clear,
-       <<sync>> out Boolean req;
+  port in Boolean btn,
+       out Boolean light;
+  port in Boolean clear,
+       out Boolean req;
 
-  automaton {
+  <<sync>> automaton {
     initial state LightOff;
 
     LightOff -> LightOff [!btn || clear] / {

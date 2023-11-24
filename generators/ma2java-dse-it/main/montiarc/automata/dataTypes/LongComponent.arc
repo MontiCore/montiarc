@@ -5,10 +5,10 @@ package dataTypes;
  *  Simple atomic component for testing long
  */
 component LongComponent(Long parameter) {
-  port <<sync>> in Long in;
-  port <<sync>> out Long out;
+  port in Long in;
+  port out Long out;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [in /2 == 3]/{

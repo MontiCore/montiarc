@@ -2,9 +2,9 @@
 package montiarc.ma2jsim.test;
 
 component Source {
-  port <<sync>> out Integer o;
+  port out Integer o;
 
-  automaton {
+  <<sync>> automaton {
     initial {
       o = 0;
     } state S;

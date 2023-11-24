@@ -5,10 +5,10 @@ package evaluation.smallModel;
  * small model for the evaluation
  */
 component DistinctionModel(Integer parameter) {
-  port <<sync>> in Integer mtrNr;
-  port <<sync>> out Double factor;
+  port in Integer mtrNr;
+  port out Double factor;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [mtrNr < parameter] /{

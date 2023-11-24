@@ -15,13 +15,13 @@ component VTransitions {
   Direction v3 = v1;
   Direction v4 = v2;
 
-  port <<sync>> in Direction i;
-  port <<sync>> out Direction o1, o2;
+  port in Direction i;
+  port out Direction o1, o2;
 
   /**
    * An automaton may read from and write to component variables.
    */
-  automaton {
+  <<sync>> automaton {
     // initial action, emit RIGHT
     initial state S;
 

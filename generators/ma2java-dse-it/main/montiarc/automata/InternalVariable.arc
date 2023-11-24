@@ -5,12 +5,12 @@ package automata;
  * Simple atomic component with one internal variable. The output is the current state of the internal variable.
  */
 component InternalVariable {
-  port <<sync>> in Integer in;
-  port <<sync>> out Integer out;
+  port in Integer in;
+  port out Integer out;
 
   Integer intern = 0;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle /{

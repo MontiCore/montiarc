@@ -5,15 +5,15 @@ import bumperbot.Datatypes.*;
 
 component BumpControl {
   port
-    <<sync>> in Integer distance,
-    <<sync>> in TimerSignal signal,
-    <<sync>> out TimerCmd timer,
-    <<sync>> out MotorCmd right,
-    <<sync>> out MotorCmd left,
-    <<sync>> out Integer speed,
-    <<sync>> out String log;
+     in Integer distance,
+     in TimerSignal signal,
+     out TimerCmd timer,
+     out MotorCmd right,
+     out MotorCmd left,
+     out Integer speed,
+     out String log;
 
-  automaton {
+  <<sync>> automaton {
     initial {
       right = MotorCmd.STOP;
       left = MotorCmd.STOP;

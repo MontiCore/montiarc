@@ -5,19 +5,19 @@ package evaluation.smallModel;
  * small model for the evaluation
  */
 component EvaluationModelSemDiff {
-  port <<sync>> in Double factor;
-  port <<sync>> in String module;
+  port in Double factor;
+  port in String module;
 
-  port <<sync>> out Double mdseCounter;
-  port <<sync>> out Double saCounter;
+  port out Double mdseCounter;
+  port out Double saCounter;
 
-  port <<sync>> in Double mdseCounted;
-  port <<sync>> in Double saCounted;
+  port in Double mdseCounted;
+  port in Double saCounted;
 
-  port <<sync>> out Double voteMDSE;
-  port <<sync>> out Double voteSA;
+  port  out Double voteMDSE;
+  port  out Double voteSA;
 
-  automaton{
+  <<sync>> automaton{
     initial state mdse;
     state sa;
     state nonModule;

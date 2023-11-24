@@ -5,12 +5,12 @@ package dataTypes;
  *  Simple atomic component for testing doubles
  */
 component DoubleComponentParameter(Double parameter) {
-  port <<sync>> in double in;
-  port <<sync>> out double out;
+  port in double in;
+  port out double out;
 
   Double doubler = 10.2;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle [in /2 == 3.2]/{

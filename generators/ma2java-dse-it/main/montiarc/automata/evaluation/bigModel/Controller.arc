@@ -7,12 +7,12 @@ import evaluation.Commands.Direction;
 
 component Controller {
 
-  port <<sync>> in Boolean req1, req2, req3, req4,
-       <<sync>> in Boolean at1, at2, at3, at4,
-       <<sync>> in Boolean isClosed,
-       <<sync>> out DoorCMD door,
-       <<sync>> out LiftCMD lift,
-       <<sync, delayed>> out Integer clear;
+  port in Boolean req1, req2, req3, req4,
+       in Boolean at1, at2, at3, at4,
+       in Boolean isClosed,
+       out DoorCMD door,
+       out LiftCMD lift,
+       <<delayed>> out Integer clear;
 
   Direction directions = Direction.NA;
   int current = 0;
@@ -20,7 +20,7 @@ component Controller {
   Float timer = 5.0f;
   boolean stopNext = false;
 
-  automaton {
+  <<sync>> automaton {
     initial { clear = 0; } state Init {
 
       initial state WaitTimer;

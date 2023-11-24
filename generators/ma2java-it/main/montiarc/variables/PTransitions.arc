@@ -12,12 +12,12 @@ component PTransitions(Direction p1,
                        Direction p3,
                        Direction p4) {
 
-  port <<sync>> out Direction o1, o2;
+  port out Direction o1, o2;
 
   /**
    * The automaton sends the provided parameter as message.
    */
-  automaton {
+  <<sync>> automaton {
     initial state A;
     state B;
 

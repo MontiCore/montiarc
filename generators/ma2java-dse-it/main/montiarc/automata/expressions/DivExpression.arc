@@ -5,10 +5,10 @@ package expressions;
  * Simple atomic component, the output is the input divided by two
  */
 component DivExpression {
-  port <<sync>> in Integer in;
-  port <<sync>> out Integer out;
+  port in Integer in;
+  port out Integer out;
 
-  automaton{
+  <<sync>> automaton{
     initial state Idle;
 
     Idle -> Idle /{

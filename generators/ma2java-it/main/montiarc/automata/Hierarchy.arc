@@ -5,10 +5,10 @@ package automata;
  * The component's behavior is defined by an hierarchical automaton.
  */
 component Hierarchy {
-  port <<sync>> out String oPath;
+  port out String oPath;
   String path = "";
 
-  automaton {
+  <<sync>> automaton {
     initial {
       path = path + "aIni";
     } state A {

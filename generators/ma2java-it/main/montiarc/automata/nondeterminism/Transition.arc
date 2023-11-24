@@ -6,10 +6,10 @@ package automata.nondeterminism;
  */
 component Transition {
 
-  port <<sync>> in int i;
-  port <<sync>> out int o;
+  port in int i;
+  port out int o;
 
-  automaton {
+  <<sync>> automaton {
     initial state start;
     state s1;
     state s2;
