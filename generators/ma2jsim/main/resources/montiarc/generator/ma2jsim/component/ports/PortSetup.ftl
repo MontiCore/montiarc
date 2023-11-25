@@ -16,8 +16,6 @@ protected void <@MethodNames.portSetup/>() {
 <#list ast.getSymbol().getAllOutgoingPorts() as outPort>
     <#assign dynamicType><#if !atomic>
         montiarc.rte.port.Time<#if outPort.getTiming().matches(timing_untimed)>Unaware<#else>Aware</#if>PortForward
-    <#elseif outPort.isDelayed()>
-        montiarc.rte.port.DelayedOutPort
     <#else>
         <@Util.getStaticPortClass outPort atomic/>
     </#if></#assign>

@@ -9,7 +9,8 @@ public void init() {
         <#items as initStatement>
             ${prettyPrinter.prettyprint(initStatement)}
         </#items>
-        ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendShadowedOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts(), true])}
+        ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendShadowedOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
+        ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendInitialTicksOnDelayedPorts.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
     <#else>
         /* Could not determine init action from any of the automaton's initial states */
     </#list>

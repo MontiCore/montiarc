@@ -21,4 +21,6 @@
 
 <#macro dropTickOnAll>dropTickOnAllInputs</#macro>
 
+<#macro sendTick>sendTick</#macro>
+
 <#macro sendTickOnAll>sendTickOnAllOutputs</#macro>
