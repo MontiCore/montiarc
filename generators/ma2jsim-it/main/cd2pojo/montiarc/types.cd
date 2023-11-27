@@ -7,6 +7,10 @@ classdiagram types {
     ON, OFF;
   }
 
+  public enum NumberSign {
+    POSITIVE, NEGATIVE, ZERO;
+  }
+
   public class Person { }
   public class Student extends Person { }
 }

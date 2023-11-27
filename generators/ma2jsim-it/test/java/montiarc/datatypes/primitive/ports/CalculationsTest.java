@@ -2,7 +2,6 @@
 package montiarc.datatypes.primitive.ports;
 
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
+import static montiarc.MsgFactory.msg;
+import static montiarc.MsgFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class CalculationsTest {
@@ -39,42 +40,38 @@ class CalculationsTest {
   @Mock ITimeAwareInPort<Number> port_char;
   @Mock ITimeAwareInPort<Boolean> port_boolean;
 
-  private static <T> Message<T> msg(T data) {
-    return Message.of(data);
-  }
-
   @Test
   void testCorrectnessOfCalculations() {
     // Test data
     List<Message<Number>> byteInput =
-      List.of(msg((byte) 1), Tick.get(), msg((byte) -2), Tick.get(), msg((byte) 0));
+      List.of(msg((byte) 1), tk(), msg((byte) -2), tk(), msg((byte) 0));
     List<Message<Number>> expectedByteOut =
-      List.of(msg((byte) 1), Tick.get(), msg((byte) -2), Tick.get(), msg((byte) 0));
+      List.of(msg((byte) 1), tk(), msg((byte) -2), tk(), msg((byte) 0));
 
     List<Message<Number>> shortInput =
-      List.of(msg((short) 1), Tick.get(), msg((short) -2), Tick.get(), msg((short) 0));
+      List.of(msg((short) 1), tk(), msg((short) -2), tk(), msg((short) 0));
     List<Message<Number>> expectedShortOut =
-      List.of(msg((short) 1), Tick.get(), msg((short) -2), Tick.get(), msg((short) 0));
+      List.of(msg((short) 1), tk(), msg((short) -2), tk(), msg((short) 0));
 
-    List<Message<Number>> intInput          = List.of(msg(1), Tick.get(), msg(-2), Tick.get(), msg(0));
-    List<Message<Number>> expectedIntOutput = List.of(msg(-1), Tick.get(), msg(2), Tick.get(), msg(0));
+    List<Message<Number>> intInput          = List.of(msg(1), tk(), msg(-2), tk(), msg(0));
+    List<Message<Number>> expectedIntOutput = List.of(msg(-1), tk(), msg(2), tk(), msg(0));
 
-    List<Message<Number>> longInput          = List.of(msg(1L), Tick.get(), msg(-2L), Tick.get(), msg(0L));
-    List<Message<Number>> expectedLongOutput = List.of(msg(-1L), Tick.get(), msg(2L), Tick.get(), msg(0L));
+    List<Message<Number>> longInput          = List.of(msg(1L), tk(), msg(-2L), tk(), msg(0L));
+    List<Message<Number>> expectedLongOutput = List.of(msg(-1L), tk(), msg(2L), tk(), msg(0L));
 
-    List<Message<Number>> floatInput          = List.of(msg(1.0f), Tick.get(), msg(-2.0f), Tick.get(), msg(0.0f));
-    List<Message<Number>> expectedFloatOutput = List.of(msg(-1.0f), Tick.get(), msg(2.0f), Tick.get(), msg(-0.0f));
+    List<Message<Number>> floatInput          = List.of(msg(1.0f), tk(), msg(-2.0f), tk(), msg(0.0f));
+    List<Message<Number>> expectedFloatOutput = List.of(msg(-1.0f), tk(), msg(2.0f), tk(), msg(-0.0f));
 
-    List<Message<Number>> doubleInput          = List.of(msg(1.0), Tick.get(), msg(-2.0), Tick.get(), msg(0.0));
-    List<Message<Number>> expectedDoubleOutput = List.of(msg(-1.0), Tick.get(), msg(2.0), Tick.get(), msg(-0.0));
+    List<Message<Number>> doubleInput          = List.of(msg(1.0), tk(), msg(-2.0), tk(), msg(0.0));
+    List<Message<Number>> expectedDoubleOutput = List.of(msg(-1.0), tk(), msg(2.0), tk(), msg(-0.0));
 
     List<Message<Number>> charInput =
-      List.of(msg((int) 'a'), Tick.get(), msg((int) '-'), Tick.get(), msg((int) '0'));
+      List.of(msg((int) 'a'), tk(), msg((int) '-'), tk(), msg((int) '0'));
     List<Message<Number>> expectedCharOut =
-      List.of(msg((int) 'a'), Tick.get(), msg((int) '-'), Tick.get(), msg((int) '0'));
+      List.of(msg((int) 'a'), tk(), msg((int) '-'), tk(), msg((int) '0'));
 
-    List<Message<Boolean>> boolInput       = List.of(msg(true), Tick.get(), msg(false), Tick.get(), msg(false));
-    List<Message<Boolean>> expectedBoolOut = List.of(msg(false), Tick.get(), msg(true), Tick.get(), msg(true));
+    List<Message<Boolean>> boolInput       = List.of(msg(true), tk(), msg(false), tk(), msg(false));
+    List<Message<Boolean>> expectedBoolOut = List.of(msg(false), tk(), msg(true), tk(), msg(true));
 
     // Given
     CalculationsComp sut = new CalculationsCompBuilder().setName("sut").build();

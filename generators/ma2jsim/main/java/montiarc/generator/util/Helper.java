@@ -17,6 +17,7 @@ import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
 import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
@@ -126,6 +127,14 @@ public class Helper {
         .map(bdy -> (ASTMsgEvent) bdy.getSCEvent())
         .filter(event -> !ArcAutomatonMill.TICK.equals(event.getName()))
         .map(ASTMsgEventTOP::getName);
+  }
+
+  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTComponentType comp) {
+    List<String> triggeringPorts = getTransitionsForPortEvents(sc).keySet().stream()
+        .map(String::toLowerCase).collect(Collectors.toList());
+    return comp.getSymbol().getAllIncomingPorts().stream()
+        .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
+        .collect(Collectors.toList());
   }
   
   public boolean isEventBased(ASTArcStatechart sc) {
