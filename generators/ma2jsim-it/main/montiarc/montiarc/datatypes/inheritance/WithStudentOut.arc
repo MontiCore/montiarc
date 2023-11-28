@@ -8,6 +8,8 @@ component WithStudentOut {
 
   <<sync>> automaton {
     initial state S;
-    S -> S / { };
+    S -> S / {
+      student = Student.Student();
+    };
   }
 }
