@@ -30,3 +30,17 @@
         TimeAware${direction}Port
     </#if>
 </#macro>
+
+<#macro printTypeParameters astComponentType printBounds=true>
+    <#if helper.isGenericComponent(astComponentType)>
+        <#list astComponentType.getHead().getArcTypeParameterList()>
+            ${"<"}
+            <#items as param><@printTypeParameter param printBounds/><#sep>, </#sep></#items>
+            ${">"}
+        </#list>
+    </#if>
+</#macro>
+
+<#macro printTypeParameter arcTypeParameter printBounds>
+${arcTypeParameter.getName()}<#if printBounds><#list arcTypeParameter.getUpperBoundList()> extends <#items as bound>${bound.printType()}<#sep> & </#sep></#items></#list></#if>
+</#macro>

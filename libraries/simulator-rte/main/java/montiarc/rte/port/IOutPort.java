@@ -3,7 +3,7 @@ package montiarc.rte.port;
 
 import montiarc.rte.msg.Message;
 
-public interface IOutPort<T> {
+public interface IOutPort<T> extends IPort {
 
   /**
    * Connects to the given port, registering it as a recipient.

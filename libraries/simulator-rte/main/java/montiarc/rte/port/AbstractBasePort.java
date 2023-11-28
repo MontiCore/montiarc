@@ -9,13 +9,14 @@ import montiarc.rte.msg.MessageFilteringStrategy;
  *
  * @param <T> the type that can be sent/received via this port
  */
-abstract class AbstractBasePort<T> implements MessageFilteringStrategy<T> {
+abstract class AbstractBasePort<T> implements IPort, MessageFilteringStrategy<T> {
 
   /**
    * The name of this port.
    */
   protected final String qualifiedName;
   
+  @Override
   public String getQualifiedName() {
     return qualifiedName;
   }

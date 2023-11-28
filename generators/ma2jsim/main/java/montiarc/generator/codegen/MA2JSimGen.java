@@ -13,6 +13,7 @@ import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import modes._ast.ASTModeAutomaton;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.util.Helper;
 import montiarc.util.MASimError;
@@ -86,6 +87,10 @@ public class MA2JSimGen {
 
     if (ast.getComponentType().getSymbol().isAtomic()) {
       generateBehaviorClasses(ast);
+    }
+    
+    if(ast.getComponentType().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findAny().isPresent()) {
+      generateModeAutomaton(ast);
     }
 
     if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
@@ -168,6 +173,17 @@ public class MA2JSimGen {
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
+    generate(template, ast, "", suffix, existsHwc);
+  }
+  
+  protected void generateModeAutomaton(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    
+    final String template = "montiarc.generator.ma2jsim.dynamics.modeAutomaton.ModeAutomatonFile.ftl";
+    String suffix = Suffixes.MODE_AUTOMATON;
+    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    if (existsHwc) suffix += Suffixes.TOP;
+    
     generate(template, ast, "", suffix, existsHwc);
   }
 

@@ -44,4 +44,9 @@ public abstract class SyncAutomaton<Context> extends Automaton<Context> {
   protected Collection<Transition> getValidTransitions() {
     return this.transitions.stream().filter(tr -> tr.isEnabled(getState())).collect(Collectors.toList());
   }
+  
+  @Override
+  public void tick() {
+    executeAnyValidTransition();
+  }
 }

@@ -19,6 +19,8 @@ public class Suffixes {
   public final static String CONTEXT = "Context";
   public final static String AUTOMATON = "Automaton";
   public final static String STATES = "States";
+  public final static String MODE_AUTOMATON = "ModeAutomaton";
+  public final static String MODES = "Modes";
   
   public String top() { return TOP; }
   public String component() { return COMPONENT; }
@@ -28,4 +30,6 @@ public class Suffixes {
   public String context() { return CONTEXT; }
   public String automaton() { return AUTOMATON; }
   public String states() { return STATES; }
+  public String modeAutomaton() { return MODE_AUTOMATON; }
+  public String modes() { return MODES; }
 }

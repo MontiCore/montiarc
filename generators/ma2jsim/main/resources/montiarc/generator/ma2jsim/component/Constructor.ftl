@@ -2,7 +2,6 @@
 <#-- ASTComponentType ast-->
 ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
-<#-- TODO: does not handle features -->
 protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
   String name<#list ast.getHead().getArcParameterList()>,
     <#items as param>${param.getMCType().printType()} ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
@@ -19,9 +18,9 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
   </#list>
   <@MethodNames.portSetup/>();
   <#if ast.getSymbol().isAtomic()>
-  <@MethodNames.behaviorSetup/>();
+    <@MethodNames.behaviorSetup/>();
   <#elseif ast.getSymbol().isDecomposed()>
-  <@MethodNames.subCompSetup/>();
-  <@MethodNames.connectorSetup/>();
+    <@MethodNames.subCompSetup/>();
+    <@MethodNames.connectorSetup/>();
   </#if>
 }

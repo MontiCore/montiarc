@@ -1,17 +1,18 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign automaton = helper.getAutomatonBehavior(ast)/>
 <#assign hasAutomaton = automaton.isPresent()/>
 <#assign isEvent = hasAutomaton && helper.isEventBased(automaton.get())/>
 
-protected ${ast.getName()}${suffixes.automaton()} automaton;
+protected ${ast.getName()}${suffixes.automaton()}<@Util.printTypeParameters ast false/> automaton;
 
 @Override
-public ${ast.getName()}${suffixes.automaton()} <@MethodNames.getBehavior/>() { return automaton; }
+public ${ast.getName()}${suffixes.automaton()}<@Util.printTypeParameters ast false/> <@MethodNames.getBehavior/>() { return automaton; }
 
 protected void <@MethodNames.behaviorSetup/>() {
-    this.automaton = new ${ast.getName()}${suffixes.automaton()}${suffixes.builder()}(this)
+    this.automaton = new ${ast.getName()}${suffixes.automaton()}${suffixes.builder()}<@Util.printTypeParameters ast false/>(this)
     <#if !isEvent>
         .addDefaultTransitions()
     </#if>
@@ -20,38 +21,17 @@ protected void <@MethodNames.behaviorSetup/>() {
       .build();
 }
 
-<#if isEvent>
-    protected void <@MethodNames.handleTick/>() {
-      if(<@MethodNames.inputsTickBlocked/>()) {
-        <@MethodNames.dropTickOnAll/>();
-        <@MethodNames.getBehavior/>().tick();
-        <@MethodNames.sendTickOnAll/>();
-        getAllInPorts().forEach(montiarc.rte.port.ITimeAwareInPort::continueAfterDroppedTick);
-      }
-    }
-<#elseif !isEvent>
+<#if !isEvent>
     protected void <@MethodNames.handleSyncComputation/>() {
-      if(getAllInPorts().stream()
-        .filter(p -> p instanceof montiarc.rte.port.AbstractInPort)
-        .map(p -> (montiarc.rte.port.AbstractInPort<?>) p)
-        .anyMatch(montiarc.rte.port.AbstractInPort::isBufferEmpty)) {
-          return;
-      }
-
-      if (<@MethodNames.inputsTickBlocked/>()) {
-        <@MethodNames.dropTickOnAll/>();
-        <@MethodNames.sendTickOnAll/>();
-        <@MethodNames.handleSyncComputation/>();
-        return;
-      }
-
-      if (<@MethodNames.getBehavior/>().canExecuteTransition()) {
-        <@MethodNames.getBehavior/>().executeAnyValidTransition();
-      } else {
-        getAllInPorts().stream()
-          .filter(p -> p instanceof montiarc.rte.port.AbstractInPort)
-          .map(p -> (montiarc.rte.port.AbstractInPort<?>) p)
-          .forEach(montiarc.rte.port.AbstractInPort::pollBuffer);
+      if(getAllInPorts().stream().allMatch(montiarc.rte.port.IInPort::hasBufferedTick)) {
+        <@MethodNames.getBehavior/>().tick();
+        getAllInPorts().forEach(inP -> {
+          while(inP.hasBufferedTick() && !inP.isTickBlocked()) de.se_rwth.commons.logging.Log.warn(
+            "Component " + this.getName() +
+            " has received more than one data message in a single time slice on port " + inP.getQualifiedName() +
+            ". Dropped data: " + inP.pollBuffer());
+        });
+        <@MethodNames.handleTick/>();
       }
     }
 </#if>

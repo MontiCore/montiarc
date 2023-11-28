@@ -7,6 +7,8 @@
 
 <#macro subCompSetup>setupSubComponents</#macro>
 
+<#macro dynSubCompSetup>setupDynamicSubComponents</#macro>
+
 <#macro connectorSetup>setupDefaultConnectors</#macro>
 
 <#macro behaviorSetup>setupBehavior</#macro>
@@ -24,3 +26,11 @@
 <#macro sendTick>sendTick</#macro>
 
 <#macro sendTickOnAll>sendTickOnAllOutputs</#macro>
+
+<#macro modes>modes</#macro>
+
+<#macro handleModeAutomaton>handleModeAutomaton</#macro>
+
+<#macro getModeAutomaton>getModeAutomaton</#macro>
+
+<#macro receiveTick>receiveTick</#macro>

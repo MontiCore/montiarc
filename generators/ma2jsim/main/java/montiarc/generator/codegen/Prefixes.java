@@ -22,8 +22,9 @@ public class Prefixes {
   public final static String STATE = "state_";
   public final static String TRANSITION = "transition_";
   public final static String MESSAGE = "msg_";
-  public final String TICK = "tick_";
+  public final static String TICK = "tick_";
   public final static String NO_STIMULUS = "noStimulus_";
+  public final static String MODE = "mode_";
   
   public String deploy() { return DEPLOY; }
   public String port() { return PORT; }
@@ -38,4 +39,5 @@ public class Prefixes {
   public String message() { return MESSAGE; }
   public String tick() { return TICK; }
   public String noStimulus() { return NO_STIMULUS; }
+  public String mode() { return MODE; }
 }

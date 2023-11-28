@@ -8,14 +8,14 @@ protected void <@MethodNames.portSetup/>() {
     <#assign dynamicType><#if atomic>
         <@Util.getStaticPortClass inPort atomic/>
     <#else>
-        montiarc.rte.port.Time<#if inPort.getTiming().matches(timing_untimed)>Unaware<#else>Aware</#if>PortForward
+        montiarc.rte.port.TimeAwarePortForward
     </#if></#assign>
   this.${prefixes.port()}${inPort.getName()} = new ${dynamicType}<>(getName() + ".${inPort.getName()}", this);
 </#list>
 
 <#list ast.getSymbol().getAllOutgoingPorts() as outPort>
     <#assign dynamicType><#if !atomic>
-        montiarc.rte.port.Time<#if outPort.getTiming().matches(timing_untimed)>Unaware<#else>Aware</#if>PortForward
+        montiarc.rte.port.TimeAwarePortForward
     <#else>
         <@Util.getStaticPortClass outPort atomic/>
     </#if></#assign>

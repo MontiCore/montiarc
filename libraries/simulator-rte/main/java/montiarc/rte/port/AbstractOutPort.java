@@ -38,7 +38,7 @@ public abstract class AbstractOutPort<T> extends AbstractBasePort<T> implements 
   public boolean connect(IInPort<? super T> recipient) {
     if (recipient == null) {
       return false;
-    } // TODO discuss: abort if recipient is already connected to this or some other (i.e. has isConnected flag set)?
+    }
 
     if (!recipients.contains(recipient)) {
       recipients.add(recipient);

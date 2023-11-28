@@ -68,14 +68,6 @@ class MediumTest {
 
   static Stream<Arguments> io() {
     return Stream.of(
-      Arguments.of(
-        List.of(new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON))
-      ),
-      Arguments.of(
-        List.of(new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF))
-      ),
       /*
       Arguments.of(
         List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
@@ -107,28 +99,28 @@ class MediumTest {
         List.of(new Message<>(OnOff.OFF), Tick.get())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON))
+        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
+        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
+        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get()),
+        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
+        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get()),
+        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
+        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get())
       ),
       /*
       Arguments.of(
@@ -165,8 +157,8 @@ class MediumTest {
       ),
       */
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get()),
+        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get())
       ),
       Arguments.of(
         List.of(Tick.get(), Tick.get()),

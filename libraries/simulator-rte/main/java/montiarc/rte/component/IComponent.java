@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
-import montiarc.rte.port.AbstractInPort;
+import montiarc.rte.port.IInPort;
 
 public interface IComponent {
 
   String getName();
 
-  void handleMessage(AbstractInPort<?> receivingPort);
+  void handleMessage(IInPort<?> receivingPort);
 }

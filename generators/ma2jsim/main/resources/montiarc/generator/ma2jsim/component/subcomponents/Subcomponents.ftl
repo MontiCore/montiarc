@@ -11,4 +11,8 @@ protected void <@MethodNames.subCompSetup/>() {
 <#list ast.getSubComponents() as astComponentInstantiation>
   ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.SubcomponentSetup.ftl", astComponentInstantiation)}
 </#list>
+
+<#if helper.getModeAutomaton(ast).isPresent()>
+  <@MethodNames.dynSubCompSetup/>();
+</#if>
 }

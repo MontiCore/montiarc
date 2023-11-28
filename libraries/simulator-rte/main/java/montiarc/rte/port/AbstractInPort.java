@@ -27,7 +27,13 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
     super(qualifiedName, owner);
   }
 
-
+  /**
+   * Receive a message on this port.
+   * This method should only be called by the {@link AbstractOutPort}
+   * to which this incoming port is registered.
+   *
+   * @param message the message sent by the connected outgoing port
+   */
   @Override
   public void receive(Message<? extends T> message) {
     if (message == Tick.get()) {
@@ -67,7 +73,7 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
 
   /**
    * Call the owning component's behavior associated with messages on this port.
-   * {@link IComponent#handleMessage(AbstractInPort)} should then also handle polling of used values form the buffer.
+   * {@link IComponent#handleMessage(IInPort)} should then also handle polling of used values form the buffer.
    */
   protected final void handleBuffer() {
     owner.handleMessage(this);
@@ -78,6 +84,7 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
    *
    * @return the next message in the buffer
    */
+  @Override
   public Message<T> peekBuffer() {
     return buffer.peek();
   }
@@ -87,6 +94,7 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
    *
    * @return the next message in the buffer
    */
+  @Override
   public Message<T> pollBuffer() {
     return buffer.poll();
   }
@@ -96,7 +104,18 @@ public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements I
    *
    * @return true if the buffer is empty
    */
+  @Override
   public boolean isBufferEmpty() {
     return buffer.isEmpty();
+  }
+  
+  /**
+   * Check whether the buffer holds at least one tick.
+   *
+   * @return true if the buffer contains a tick
+   */
+  @Override
+  public boolean hasBufferedTick() {
+    return buffer.contains(Tick.get());
   }
 }

@@ -21,24 +21,24 @@ public abstract class SyncAutomatonBuilder<C, A extends Automaton<C>> extends Au
     this(null);
   }
 
-  public abstract AutomatonBuilder<C, A> addDefaultTransitions();
+  public abstract SyncAutomatonBuilder<C, A> addDefaultTransitions();
 
-  public AutomatonBuilder<C, A> addTransitions(List<Transition> transitions) {
+  public SyncAutomatonBuilder<C, A> addTransitions(List<Transition> transitions) {
     this.getTrans().addAll(transitions);
     return this;
   }
 
-  public AutomatonBuilder<C, A> setTransition(int index, Transition transition) {
+  public SyncAutomatonBuilder<C, A> setTransition(int index, Transition transition) {
     this.getTrans().set(index, transition);
     return this;
   }
 
-  public AutomatonBuilder<C, A> addTransition(Transition transition) {
+  public SyncAutomatonBuilder<C, A> addTransition(Transition transition) {
     this.getTrans().add(transition);
     return this;
   }
 
-  public AutomatonBuilder<C, A> addTransition(int index, Transition transition) {
+  public SyncAutomatonBuilder<C, A> addTransition(int index, Transition transition) {
     this.getTrans().add(index, transition);
     return this;
   }

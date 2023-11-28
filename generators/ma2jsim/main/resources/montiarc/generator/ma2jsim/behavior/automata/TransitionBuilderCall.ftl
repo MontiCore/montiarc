@@ -8,6 +8,7 @@ new montiarc.rte.automaton.TransitionBuilder()
 .setGuard(() ->
 <#if body.isPresent() && body.get().isPresentPre()>
     {
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/PreventEmptyPorts.ftl", [shadowedInPorts, "false"])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [shadowedInPorts, false])}
     return ${prettyPrinter.prettyprint(body.get().getPre())};
     }

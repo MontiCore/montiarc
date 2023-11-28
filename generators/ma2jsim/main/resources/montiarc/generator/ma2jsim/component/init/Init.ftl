@@ -9,4 +9,7 @@ public void init() {
   <#else>
       <#list ast.getSubComponents() as sub>${prefixes.subcomp()}${sub.getName()}().init();</#list>
   </#if>
+  <#if helper.getModeAutomaton(ast).isPresent()>
+      modeAutomaton.init();
+  </#if>
 }

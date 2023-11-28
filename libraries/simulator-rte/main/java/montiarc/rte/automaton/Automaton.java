@@ -1,27 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
+import montiarc.rte.behavior.AbstractBehavior;
+
 import java.util.Collection;
 
-public abstract class Automaton<C> {
+public abstract class Automaton<C> extends AbstractBehavior<C> {
 
-  protected C context;
   protected State state;
   protected Collection<State> states;
 
   public Automaton(C context, Collection<State> states, State initial) {
-    this.context = context;
+    super(context);
     this.state = initial;
     this.states = states;
   }
   
-  /**
-   * @return the context (i.e., owning component) of the state machine
-   */
-  protected C getContext() {
-    return this.context;
-  }
-
   /**
    * @return the state space of the state machine
    */

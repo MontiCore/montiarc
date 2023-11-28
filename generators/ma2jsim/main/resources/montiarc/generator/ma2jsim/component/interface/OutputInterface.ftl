@@ -3,7 +3,7 @@
 ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
-interface ${ast.getName()}${suffixes.output()}<#if isTop>${suffixes.top()}</#if> {
+interface ${ast.getName()}${suffixes.output()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/> {
 
   default java.util.List${"<"}montiarc.rte.port.TimeAwareOutPort${"<?>>"} getAllOutPorts() {
     return java.util.List.of(<#list ast.getSymbol().getAllOutgoingPorts() as portSym>${prefixes.port()}${portSym.getName()}()<#sep>, </#sep></#list>);

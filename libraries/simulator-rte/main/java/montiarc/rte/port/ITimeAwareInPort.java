@@ -1,6 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.msg.Tick;
+
+import java.util.Objects;
+
 public interface ITimeAwareInPort<T> extends IInPort<T> {
   
   /**
@@ -8,12 +12,18 @@ public interface ITimeAwareInPort<T> extends IInPort<T> {
    *
    * @return true if the next buffered message is a tick
    */
-  boolean isTickBlocked();
+  default boolean isTickBlocked() {
+    return Objects.equals(this.peekBuffer(), Tick.get());
+  }
   
   /**
    * Remove the next buffered message if it is a tick
    */
-  void dropBlockingTick();
+  default void dropBlockingTick() {
+    if (this.isTickBlocked()) {
+      this.pollBuffer();
+    }
+  }
   
   /**
    * Continue consuming messages that may have been queued

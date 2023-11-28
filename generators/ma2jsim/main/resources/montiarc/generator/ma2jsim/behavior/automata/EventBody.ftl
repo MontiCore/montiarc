@@ -4,7 +4,7 @@ ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign compAutomatonClass>${ast.getName()}${suffixes.automaton()}<#if isTop>TOP</#if></#assign>
-<#assign contextClass>${ast.getName()}${suffixes.context()}</#assign>
+<#assign contextClass>${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/></#assign>
 <#assign contextObj>${ast.getName()?uncap_first}${suffixes.context()}</#assign>
 
 protected ${compAutomatonClass} (
@@ -15,9 +15,6 @@ protected ${compAutomatonClass} (
 }
 
 <#assign automaton = helper.getAutomatonBehavior(ast).get()/>
-<#assign isEvent = helper.isEventBased(automaton)/>
-<#assign inTimed = helper.isComponentInputTimeAware(ast)/>
-<#assign outTimed = helper.isComponentOutputTimeAware(ast)/>
 
 <#-- Creating transition objects for tick-triggered transitions -->
 <#assign transitionsForTickEvent = helper.getTransitionsForTickEvent(automaton)/>
@@ -27,6 +24,7 @@ protected ${compAutomatonClass} (
 </#list>
 
 <#-- Generate method that executes tick-triggered transitions on tick events (if enabled). -->
+@Override
 public void tick() {
   <#list transitionsForTickEvent as tr>
       if(${prefixes.transition()}${prefixes.tick()}${tr?counter}.isEnabled(state)) {

@@ -7,4 +7,3 @@ ${tc.include("montiarc.generator.ma2jsim.component.ports.OutPortGetters.ftl")}
   ${tc.includeArgs("montiarc.generator.ma2jsim.component.ports.PortField.ftl", [portSym])}
 </#list>
 ${tc.include("montiarc.generator.ma2jsim.component.ports.PortSetup.ftl")}
-${tc.include("montiarc.generator.ma2jsim.component.ports.HandleMessage.ftl")}

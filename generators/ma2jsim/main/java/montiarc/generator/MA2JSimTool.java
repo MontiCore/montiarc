@@ -55,19 +55,19 @@ public class MA2JSimTool extends MontiArcTool {
 
     if(cl.hasOption("output")) {
       Log.info("Generate java", "MontiArcTool");
-      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""), cl.hasOption("symbolic"));
+      this.generate(asts, cl.getOptionValue("output"), Optional.ofNullable(cl.getOptionValue("hwc")).orElse(""));
     }
   }
 
-  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc, boolean symbolic) {
+  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String target, @NotNull String hwc) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(!target.isEmpty());
-    asts.forEach(ast -> this.generate(ast, target, hwc, symbolic));
+    asts.forEach(ast -> this.generate(ast, target, hwc));
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc, boolean symbolic) {
+  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);

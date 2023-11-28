@@ -2,6 +2,7 @@
 <#-- ASTComponentInstance ast -->
 this.${prefixes.subcomp()}${ast.getName()} = new ${ast.getSymbol().getType().printFullName()}${suffixes.component()}${suffixes.builder()}() <#-- TODO this does not include features -->
     .setName("${ast.getName()}")
+    .setScheduler(this.getScheduler())
     <#list helper.getArgNamesMappedToExpressions(ast) as name, expression>
         .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
     </#list>
