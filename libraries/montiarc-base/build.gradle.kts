@@ -19,10 +19,7 @@ configurations.montiarc.get()
   .exclude("montiarc.libraries", "montiarc-base")
 
 dependencies {
-  implementation(libs.guava)
-  implementation(libs.janino)
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
+  testImplementation(libs.guava)
 }
 
 montiarc {
