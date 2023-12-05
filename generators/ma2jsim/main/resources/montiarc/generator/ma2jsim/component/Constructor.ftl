@@ -1,10 +1,11 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast-->
 ${tc.signature("isTop")}
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
   String name<#list ast.getHead().getArcParameterList()>,
-    <#items as param>${param.getMCType().printType()} ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
+    <#items as param><@Util.getTypeString param.getSymbol().getType()/> ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
   </#list><#list helper.getFeatures(ast)>,
   <#items as feature>Boolean ${prefixes.feature()}${feature.getName()}<#sep>, </#items>
   </#list>

@@ -1,9 +1,10 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 ${tc.signature("className")}
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#list ast.getHead().getArcParameterList() as param>
     <#assign fieldName>${prefixes.parameter()}${param.getName()}</#assign>
-    protected ${param.getMCType().printType()} ${fieldName} =
+    protected <@Util.getTypeString param.getSymbol().getType()/> ${fieldName} =
     <#if param.isPresentDefault()>
         ${prettyPrinter.prettyprint(param.getDefault())}
     <#else>
@@ -16,10 +17,10 @@ ${tc.signature("className")}
         </#if> // implicit default value added
     </#if>;
 
-    public ${className} ${prefixes.setterMethod()}${fieldName}(${param.getMCType().printType()} ${fieldName}) {
+    public ${className} ${prefixes.setterMethod()}${fieldName}(<@Util.getTypeString param.getSymbol().getType()/> ${fieldName}) {
       this.${fieldName} = ${fieldName};
       return this;
     }
 
-    public ${param.getMCType().printType()} ${prefixes.getterMethod()}${fieldName}() { return this.${fieldName}; }
+    public <@Util.getTypeString param.getSymbol().getType()/> ${prefixes.getterMethod()}${fieldName}() { return this.${fieldName}; }
 </#list>

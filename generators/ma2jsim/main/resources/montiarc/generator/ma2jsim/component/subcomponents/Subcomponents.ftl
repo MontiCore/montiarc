@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#list ast.getSubComponents() as astComponentInstantiation>
   ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.SubcomponentField.ftl", astComponentInstantiation)}
@@ -8,6 +9,12 @@
 </#list>
 
 protected void <@MethodNames.subCompSetup/>() {
+<#-- Shadow parameters -->
+<#list ast.getHead().getArcParameterList() as param>
+    <@Util.getTypeString param.getSymbol().getType()/> ${param.getName()} =
+  this.${prefixes.parameter()}${param.getName()}();
+</#list>
+
 <#list ast.getSubComponents() as astComponentInstantiation>
   ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.SubcomponentSetup.ftl", astComponentInstantiation)}
 </#list>

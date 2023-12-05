@@ -3,6 +3,7 @@
 public void init() {
 <#if ast.getSymbol().isAtomic()>
     <#list helper.getAutomatonInitAction(ast)>
+        ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
         ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
         <#items as initStatement>
             ${prettyPrinter.prettyprint(initStatement)}
