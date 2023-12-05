@@ -7,5 +7,7 @@ public interface ${ast.getName()}${suffixes.context()}<#if isTop>${suffixes.top(
           ${ast.getName()}${suffixes.output()} <@Util.printTypeParameters ast false/> {
   <#if helper.getAutomatonBehavior(ast).isPresent()>
     ${ast.getName()}${suffixes.automaton()}<@Util.printTypeParameters ast false/> getBehavior();
+  <#elseif helper.getComputeBehavior(ast).isPresent()>
+    ${ast.getName()}${suffixes.compute()}<@Util.printTypeParameters ast false/> getBehavior();
   </#if>
 }

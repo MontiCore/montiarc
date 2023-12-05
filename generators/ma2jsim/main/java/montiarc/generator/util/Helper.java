@@ -6,6 +6,8 @@ import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._ast.ASTMsgEventTOP;
 import arcbasis._ast.*;
+import arccompute._ast.ASTArcCompute;
+import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -45,6 +47,24 @@ public class Helper {
     Preconditions.checkNotNull(component);
     
     return component.getBody().streamArcElementsOfType(ASTArcStatechart.class).findFirst();
+  }
+
+  public Optional<ASTArcCompute> getComputeBehavior(ASTComponentType component) {
+    Preconditions.checkNotNull(component);
+
+    return component.getBody().getArcElementList().stream()
+      .filter(el -> el instanceof ASTArcCompute)
+      .map(el -> (ASTArcCompute) el)
+      .findFirst();
+  }
+
+  public Optional<ASTArcInit> getComputeInit(ASTComponentType component) {
+    Preconditions.checkNotNull(component);
+
+    return component.getBody().getArcElementList().stream()
+      .filter(el -> el instanceof ASTArcInit)
+      .map(el -> (ASTArcInit) el)
+      .findFirst();
   }
   
   /**

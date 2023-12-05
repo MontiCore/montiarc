@@ -3,7 +3,7 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 public void init() {
   <#if ast.getSymbol().isAtomic()>
-    <#if helper.getAutomatonBehavior(ast).isPresent()>
+    <#if helper.getAutomatonBehavior(ast).isPresent() || helper.getComputeBehavior(ast).isPresent()>
       <@MethodNames.getBehavior/>().init();
     </#if>
   <#else>

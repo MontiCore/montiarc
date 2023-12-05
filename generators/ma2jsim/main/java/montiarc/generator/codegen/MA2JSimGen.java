@@ -136,8 +136,8 @@ public class MA2JSimGen {
   protected void generateBehaviorClasses(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
+    generateBehaviorImplementation(ast);
     if (helper.getAutomatonBehavior(ast.getComponentType()).isPresent()) {
-      generateBehaviorImplementation(ast);
       generateBehaviorBuilder(ast);
       generateStatesClass(ast);
     }
@@ -147,7 +147,10 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(ast);
 
     final String template = "montiarc.generator.ma2jsim.behavior.Behavior.ftl";
-    String suffix = Suffixes.AUTOMATON;
+    String suffix = null;
+    if (helper.getAutomatonBehavior(ast.getComponentType()).isPresent()) suffix = Suffixes.AUTOMATON;
+    if (helper.getComputeBehavior(ast.getComponentType()).isPresent()) suffix = Suffixes.COMPUTE;
+    if (suffix == null) return;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 

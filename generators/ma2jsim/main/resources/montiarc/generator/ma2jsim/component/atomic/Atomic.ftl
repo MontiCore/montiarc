@@ -11,6 +11,8 @@
 
 <#if hasAutomaton>
     ${tc.include("montiarc.generator.ma2jsim.behavior.automata.AutomatonReferencesInComponent.ftl")}
+<#elseif helper.getComputeBehavior(ast).isPresent()>
+    ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.ComputeReferencesInComponent.ftl")}
 <#else>
     ${tc.include("montiarc.generator.ma2jsim.behavior.NoBehaviorReferencesInComponent.ftl")}
 </#if>
