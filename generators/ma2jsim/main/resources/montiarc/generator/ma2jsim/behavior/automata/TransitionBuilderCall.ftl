@@ -10,6 +10,7 @@ new montiarc.rte.automaton.TransitionBuilder()
     {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/PreventEmptyPorts.ftl", [shadowedInPorts, "false"])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [shadowedInPorts, false])}
     return ${prettyPrinter.prettyprint(body.get().getPre())};
     }
@@ -20,10 +21,12 @@ new montiarc.rte.automaton.TransitionBuilder()
 .setAction(() -> {
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [shadowedInPorts, true])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
+  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   <#if body.isPresent() && body.get().isPresentTransitionAction()>
   ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
   </#if>
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendShadowedOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
+  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
 })
 .build()

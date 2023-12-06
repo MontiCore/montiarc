@@ -22,8 +22,9 @@ public class Suffixes {
   public final static String MODE_AUTOMATON = "ModeAutomaton";
   public final static String MODES = "Modes";
   public final static String COMPUTE = "Compute";
+  public final static String FIELDS = "Fields";
   public final static String PARAMETERS = "Parameters";
-  
+
   public String top() { return TOP; }
   public String component() { return COMPONENT; }
   public String builder() { return BUILDER; }
@@ -35,5 +36,6 @@ public class Suffixes {
   public String modeAutomaton() { return MODE_AUTOMATON; }
   public String modes() { return MODES; }
   public String compute() { return COMPUTE; }
+  public String fields() { return FIELDS; }
   public String parameters() { return PARAMETERS; }
 }
