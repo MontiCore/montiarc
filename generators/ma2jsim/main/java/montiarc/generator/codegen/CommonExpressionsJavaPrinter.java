@@ -8,10 +8,15 @@ import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._prettyprint.CommonExpressionsPrettyPrinter;
 import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeOfFunction;
+import montiarc.MontiArcMill;
+import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
+
+import java.util.Optional;
 
 public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
 
@@ -25,7 +30,7 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
   @Override
   public void handle(@NotNull ASTCallExpression node) {
     Preconditions.checkNotNull(node);
-    if(this.isPrintComments()) {
+    if (this.isPrintComments()) {
       CommentPrettyPrinter.printPreComments(node, getPrinter());
     }
 
@@ -44,7 +49,30 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
       node.getExpression().accept(getTraverser());
     }
     node.getArguments().accept(getTraverser());
-    if(this.isPrintComments()) {
+    if (this.isPrintComments()) {
+      CommentPrettyPrinter.printPostComments(node, getPrinter());
+    }
+  }
+
+  @Override
+  public void handle(@NotNull ASTFieldAccessExpression node) {
+    Preconditions.checkNotNull(node);
+    if (this.isPrintComments()) {
+      CommentPrettyPrinter.printPreComments(node, getPrinter());
+    }
+
+    Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(MontiArcMill.prettyPrint(node.getExpression(), false));
+    if (type.isPresent() && MontiArcMill.typeDispatcher().isOOType(type.get())) {
+      getPrinter().print(type.get().getFullName());
+    } else {
+      node.getExpression().accept(getTraverser());
+    }
+
+    getPrinter().stripTrailing();
+    getPrinter().print(".");
+    getPrinter().print(node.getName() + " ");
+
+    if (this.isPrintComments()) {
       CommentPrettyPrinter.printPostComments(node, getPrinter());
     }
   }

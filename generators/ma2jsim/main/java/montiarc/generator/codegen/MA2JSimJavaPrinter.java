@@ -24,5 +24,13 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.setCommonExpressionsHandler(commonExpressionsJavaPrinter);
     this.traverser.getCommonExpressionsVisitorList().clear();
     this.traverser.add4CommonExpressions(commonExpressionsJavaPrinter);
+    ExpressionsBasisJavaPrinter expressionsBasisJavaPrinter = new ExpressionsBasisJavaPrinter(printer, printComments);
+    this.traverser.setExpressionsBasisHandler(expressionsBasisJavaPrinter);
+    this.traverser.getExpressionsBasisVisitorList().clear();
+    this.traverser.add4ExpressionsBasis(expressionsBasisJavaPrinter);
+    MCBasicTypesJavaPrinter mcBasicTypesJavaPrinter = new MCBasicTypesJavaPrinter(printer, printComments);
+    this.traverser.setMCBasicTypesHandler(mcBasicTypesJavaPrinter);
+    this.traverser.getMCBasicTypesVisitorList().clear();
+    this.traverser.add4MCBasicTypes(mcBasicTypesJavaPrinter);
   }
 }

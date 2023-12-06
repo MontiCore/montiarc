@@ -13,4 +13,17 @@ classdiagram types {
 
   public class Person { }
   public class Student extends Person { }
+
+  public abstract class AbstractMethodProvider {
+    public static int staticField;
+    public int field;
+
+    public static void staticEmpty();
+    public abstract void abstractEmpty();
+    public void empty();
+  }
+  public class MethodProvider extends AbstractMethodProvider {
+    public static void staticChildEmpty();
+    public void abstractEmpty();
+  }
 }

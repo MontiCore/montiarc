@@ -5,8 +5,6 @@ ${tc.signature("ast", "isTop")}
     ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-${tc.include("montiarc.generator.Import.ftl", ast.getImportStatementList())}
-
 <#assign comp = ast.getComponentType()/>
 <#assign automaton = helper.getAutomatonBehavior(comp).get()/>
 public abstract class ${comp.getName()}${suffixes.states()}<#if isTop>${suffixes.top()}</#if> {
