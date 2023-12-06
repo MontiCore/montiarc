@@ -43,13 +43,13 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printParameters comp>
   <#list comp.getParametersList() as param>
-    protected final ${param.getType().print()} ${param.getName()};
+    protected final <@getTypeString param.getType()/> ${param.getName()};
   </#list>
 </#macro>
 
 <#macro printVariables comp>
   <#list compHelper.getComponentVariables(comp) as variable>
-    protected ${variable.getType().print()} ${variable.getName()};
+    protected <@getTypeString variable.getType()/> ${variable.getName()};
   </#list>
 </#macro>
 
@@ -86,6 +86,15 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 
 <#macro printParametersAsList comp>
   <#list comp.getParametersList() as param>
-      ${param.getType().print()} ${param.getName()}<#t><#sep>, </#sep><#t>
+      <@getTypeString param.getType()/> ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
+</#macro>
+
+<#macro getTypeString type boxPrimitives=false>
+    <#if type.isPrimitive()><#t>
+        <#if boxPrimitives>${type.getBoxedPrimitiveName()}<#t>
+        <#else>${type.getPrimitiveName()}</#if><#t>
+    <#elseif type.isTypeVariable()>${type.print()}<#t>
+    <#else>${type.printFullName()}<#t>
+    </#if>
 </#macro>
