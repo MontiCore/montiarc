@@ -82,7 +82,7 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(ArcBasisMill.scope()).setParameters(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
-    Assertions.assertIterableEquals(parameters, symbol.getParametersList());
+    Assertions.assertIterableEquals(parameters, symbol.getParameters());
   }
 
   static Stream<Arguments> compNameAndParametersProvider() {

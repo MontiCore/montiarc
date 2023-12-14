@@ -391,7 +391,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     VariableSymbol param = addParameterTo(comp, "myParam");
 
     // When
-    List<VariableSymbol> params = surrogate.getParametersList();
+    List<VariableSymbol> params = surrogate.getParameters();
 
     // Then
     Assertions.assertArrayEquals(new VariableSymbol[] {param}, params.toArray());
@@ -432,7 +432,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     surrogate.addParameter(param);
 
     // Then
-    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParametersList().toArray());
+    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameters().toArray());
   }
 
 
@@ -454,7 +454,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     surrogate.addParameters(Collections.singletonList(param));
 
     // Then
-    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParametersList().toArray());
+    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameters().toArray());
   }
 
   @Test

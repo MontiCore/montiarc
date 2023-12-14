@@ -61,7 +61,7 @@ public interface IFieldReferenceInExpressionExtractor {
       Preconditions.checkNotNull(comp);
 
       return comp.getFields().stream()
-        .filter(e -> !comp.getParametersList().contains(e))
+        .filter(e -> !comp.getParameters().contains(e))
         .filter(e -> !(e instanceof ArcFeature2VariableAdapter))
         .map(field -> new FieldReference(field.getName()))
         .collect(Collectors.toSet());

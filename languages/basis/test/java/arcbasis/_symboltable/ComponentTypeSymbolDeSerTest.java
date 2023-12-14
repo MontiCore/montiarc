@@ -266,10 +266,10 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARAMS);
 
     // Then
-    Assertions.assertEquals(2, comp.getParametersList().size());
+    Assertions.assertEquals(2, comp.getParameters().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("a", comp.getParametersList().get(0).getName()),
-      () -> Assertions.assertEquals("b", comp.getParametersList().get(1).getName())
+      () -> Assertions.assertEquals("a", comp.getParameters().get(0).getName()),
+      () -> Assertions.assertEquals("b", comp.getParameters().get(1).getName())
     );
   }
 

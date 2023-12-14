@@ -246,7 +246,7 @@ public class ComponentHelperDse {
       list.add(element.getSymbol().getType().print());
     }
 
-    for (VariableSymbol parameter : comp.getSymbol().getParametersList()) {
+    for (VariableSymbol parameter : comp.getSymbol().getParameters()) {
       if (!list.contains(parameter.getType().print())) {
         list.add(parameter.getType().print());
         portsWithOutDuplicates.add(parameter);
@@ -368,7 +368,7 @@ public class ComponentHelperDse {
   public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
-    vss.removeAll(comp.getParametersList());
+    vss.removeAll(comp.getParameters());
     return vss;
   }
 
@@ -498,7 +498,7 @@ public class ComponentHelperDse {
           defaultValues.put(parameter.getName(), parameter.getDefault());
         }
       }
-      for (VariableSymbol v : comp.getParametersList()) {
+      for (VariableSymbol v : comp.getParameters()) {
         if (configArguments.containsKey(v)) {
           final String prettyprint = this.getPrettyPrinter()
             .prettyprint(configArguments.get(v));
@@ -512,7 +512,7 @@ public class ComponentHelperDse {
       }
     }
     else {
-      for (VariableSymbol v : comp.getParametersList()) {
+      for (VariableSymbol v : comp.getParameters()) {
         Preconditions.checkNotNull(configArguments.get(v));
         final String prettyprint = this.getPrettyPrinter()
           .prettyprint(configArguments.get(v));

@@ -69,7 +69,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(parent.getTypeInfo());
 
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
-    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParametersList();
+    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
 
     if (parentArgs.size() > paramsOfParentCompType.size()) {
       ASTArcArgument firstIllegalArg = parentArgs.get(paramsOfParentCompType.size());
@@ -95,7 +95,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
 
 
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
-    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParametersList();
+    List<VariableSymbol> paramsOfParentCompType = parent.getTypeInfo().getParameters();
 
     long mandatoryParamsAmount = paramsOfParentCompType.stream()
         .map(VariableSymbol::getAstNode)
@@ -154,7 +154,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     for (ASTArcArgument argument : keywordArgs){
       String paramName = argument.getName();
 
-      if (parent.getTypeInfo().getParametersList().stream()
+      if (parent.getTypeInfo().getParameters().stream()
         .noneMatch(param -> param.getName().equals(paramName))){
         Log.error(ArcError.HERITAGE_COMP_ARG_KEY_INVALID.format(
             comp.getName()), argument.get_SourcePositionStart(),
@@ -217,7 +217,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       .filter(Predicate.not(ASTArcArgument::isPresentName))
       .count();
 
-    List<String> paramNames = parent.getTypeInfo().getParametersList()
+    List<String> paramNames = parent.getTypeInfo().getParameters()
       .stream().map(VariableSymbol::getName).collect(Collectors.toList());
 
     Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
@@ -286,7 +286,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
     List<ASTArcArgument> parentArgs = comp.getParentConfiguration(parent);
 
     List<Optional<SymTypeExpression>> parentSignature = parent.getTypeInfo()
-      .getParametersList().stream()
+      .getParameters().stream()
       .map(ISymbol::getName)
       .map(parent::getTypeOfParameter)
       .collect(Collectors.toList());
@@ -295,7 +295,7 @@ public class ParameterHeritage implements ArcBasisASTComponentTypeCoCo {
       .map(ASTArcArgument::getExpression).map(this.tc::typeOf)
       .collect(Collectors.toList());
 
-    List<String> paramNames = parent.getTypeInfo().getParametersList().stream()
+    List<String> paramNames = parent.getTypeInfo().getParameters().stream()
       .map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String,Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));

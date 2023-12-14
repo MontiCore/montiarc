@@ -140,7 +140,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   @Override
   public List<SymTypeExpression> getParameterTypes() {
-    List<SymTypeExpression> unbound = this.getTypeInfo().getParametersList()
+    List<SymTypeExpression> unbound = this.getTypeInfo().getParameters()
       .stream().map(VariableSymbol::getType)
       .collect(Collectors.toList());
 

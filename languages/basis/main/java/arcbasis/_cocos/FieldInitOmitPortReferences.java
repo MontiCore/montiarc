@@ -50,7 +50,7 @@ public class FieldInitOmitPortReferences implements ArcBasisASTComponentTypeCoCo
     portReferencesToLookFor.addAll(PortReference.ofSubComponentPorts(comp));
 
     List<VariableSymbol> fields = new ArrayList<>(comp.getFields());
-    fields.removeAll(comp.getParametersList()); // ComponentTypeSymbol::getFields also returns parameters
+    fields.removeAll(comp.getParameters()); // ComponentTypeSymbol::getFields also returns parameters
 
 
     for (VariableSymbol field : fields) {

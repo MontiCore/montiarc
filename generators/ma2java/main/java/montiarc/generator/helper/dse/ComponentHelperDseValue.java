@@ -64,7 +64,7 @@ public class ComponentHelperDseValue {
   public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
-    vss.removeAll(comp.getParametersList());
+    vss.removeAll(comp.getParameters());
     return vss;
   }
 
@@ -194,7 +194,7 @@ public class ComponentHelperDseValue {
           defaultValues.put(parameter.getName(), parameter.getDefault());
         }
       }
-      for (VariableSymbol v : comp.getParametersList()) {
+      for (VariableSymbol v : comp.getParameters()) {
         if (configArguments.containsKey(v)) {
           final String prettyprint = this.getPrettyPrinter()
             .prettyprint(configArguments.get(v));
@@ -208,7 +208,7 @@ public class ComponentHelperDseValue {
       }
     }
     else {
-      for (VariableSymbol v : comp.getParametersList()) {
+      for (VariableSymbol v : comp.getParameters()) {
         Preconditions.checkNotNull(configArguments.get(v));
         final String prettyprint = this.getPrettyPrinter()
           .prettyprint(configArguments.get(v));

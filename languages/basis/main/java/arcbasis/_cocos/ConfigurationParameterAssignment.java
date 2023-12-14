@@ -84,7 +84,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
-    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParametersList();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
 
     if (arguments.size() > parameters.size()) {
       ASTArcArgument firstIllegalArg = componentExpression.getArcArguments().get(parameters.size());
@@ -118,7 +118,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
-    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParametersList();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
 
     List<String> paramNames = parameters.stream()
       .map(VariableSymbol::getName).collect(Collectors.toList());
@@ -169,7 +169,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
-    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParametersList();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
 
     List<String> paramNames = parameters.stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
@@ -267,7 +267,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
 
-    List<String> paramNames = componentExpression.getTypeInfo().getParametersList()
+    List<String> paramNames = componentExpression.getTypeInfo().getParameters()
       .stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));

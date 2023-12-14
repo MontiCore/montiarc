@@ -101,9 +101,9 @@ public boolean equals(Object ob){
 	<#elseif lister == "ListerOut" || lister == "ListerExprOut">
 		<#return comp.getAllOutgoingPorts()>
 	<#elseif lister == "ListerParameter">
-		<#return comp.getParametersList()>
+		<#return comp.getParameters()>
 	<#else>
-		<#return comp.getParametersList()>
+		<#return comp.getParameters()>
 	</#if>
 </#function>
 
@@ -141,7 +141,7 @@ public boolean equals(Object ob){
 		@Override
 		public String getEntries() {
 			return "[" +
-				<#list comp.getParametersList() as port>
+				<#list comp.getParameters() as port>
 					"<" + ${port.getName()}.getExpr().toString() + ", " + ${port.getName()}.getValue().toString() + ">"
 					<#sep> + "|" + </#sep>
 				</#list>

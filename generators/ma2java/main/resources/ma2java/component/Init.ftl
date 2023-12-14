@@ -13,7 +13,7 @@ ${tc.signature("comp")}
     // set result
     <@printSetOutput comp/>
     // provide initial value for delay ports
-    <#list comp.getPortsList() as port>
+    <#list comp.getPorts() as port>
       <#if port.isDelayed()>this.${port.getName()}.tick();</#if>
     </#list>
   }

@@ -113,10 +113,10 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<VariableSymbol> getParametersList() {
+  public List<VariableSymbol> getParameters() {
     return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getParametersList() :
-      super.getParametersList();  // Avoid infinite recursion with this case
+      this.lazyLoadDelegate().getParameters() :
+      super.getParameters();  // Avoid infinite recursion with this case
   }
 
   @Override

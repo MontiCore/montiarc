@@ -34,7 +34,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    */
   protected ComponentTypeSymbol(String name) {
     super(name);
-    this.parameters = new ArrayList<>();
     this.parentConfiguration = new HashMap<>();
   }
 
@@ -138,20 +137,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   }
 
   /**
-   * Adds the given configuration parameter to the configuration parameters of this component
-   * type. Throws an {@link IllegalArgumentException} if the given symbol is {@code null}.
-   * Warning!!: The VariableSymbol, with which this method is called, must already be part of the spanned scope of this
-   * component!
-   *
-   * @param parameter the symbol to add.
-   */
-  public void addParameter(@NotNull VariableSymbol parameter) {
-    Preconditions.checkNotNull(parameter);
-    Preconditions.checkArgument(this.getSpannedScope().getLocalVariableSymbols().contains(parameter));
-    this.parameters.add(parameter);
-  }
-
-  /**
    * Adds the elements of a {@code Collection} of {@code VariableSymbol} of component configuration
    * parameters to the configuration parameters of this component type. Throws an
    * {@link IllegalArgumentException} if the given {@code Collection} is {@code null} or contains an
@@ -166,10 +151,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     for (VariableSymbol parameter : parameters) {
       this.addParameter(parameter);
     }
-  }
-
-  public boolean hasParameters() {
-    return !this.getParametersList().isEmpty();
   }
 
   /**
@@ -206,7 +187,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   }
 
   @Override
-  public List<PortSymbol> getPortsList() {
+  public List<PortSymbol> getPorts() {
     return (List<PortSymbol>) (List<? extends PortSymbol>) getArcPorts();
   }
 

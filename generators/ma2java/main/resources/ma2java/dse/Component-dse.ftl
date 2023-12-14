@@ -46,7 +46,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 </#macro>
 
 <#macro printParameters comp>
-  <#list comp.getParametersList() as param>
+  <#list comp.getParameters() as param>
     protected final montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(param)}>,<@printType param/>> ${param.getName()};
   </#list>
 </#macro>
@@ -79,7 +79,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
     // Context for Solver
     Context ctx = montiarc.rte.dse.TestController.getCtx();
 
-    <#list comp.getParametersList() as param>
+    <#list comp.getParameters() as param>
       this.${param.getName()} = ${param.getName()};
       montiarc.rte.log.Log.trace("${param.getName()} Expr:" +  ${param.getName()}.getExpr() + " ${param.getName()} Value: " +  ${param.getName()}.getValue());
     </#list>
@@ -94,7 +94,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 </#macro>
 
 <#macro printParametersAsList comp>
-  <#list comp.getParametersList() as param>
+  <#list comp.getParameters() as param>
     montiarc.rte.dse.AnnotatedValue<Expr<${compHelperDse.getPortTypeSort(param)}>,<@printType param/>> ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
 </#macro>

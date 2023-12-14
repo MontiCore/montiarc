@@ -127,7 +127,7 @@ public class MontiArcGenerator {
     formatFile(code, outPath, template, ast.getComponentType());
 
     if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getComponentType().getSymbol().getParametersList().isEmpty()
+      && ast.getComponentType().getSymbol().getParameters().isEmpty()
       && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast.getComponentType());
     }

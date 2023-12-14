@@ -36,7 +36,7 @@
     <#if !comp.isEmptySuperComponents()>
       super.setUp();
     </#if>
-    <#list comp.getPortsList() as port>
+    <#list comp.getPorts() as port>
       this.${port.getName()} = new montiarc.rte.timesync.<#if port.isDelayed()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port<>(!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}");
     </#list>
   }

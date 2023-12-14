@@ -61,7 +61,7 @@ public class ComponentConverter {
 
     if (subcomponentSymbol.getType().getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
       // Convert parameters
-      for (VariableSymbol variable : subcomponentSymbol.getType().getTypeInfo().getParametersList()) {
+      for (VariableSymbol variable : subcomponentSymbol.getType().getTypeInfo().getParameters()) {
         Optional<ASTExpression> bindingExpression = subcomponentSymbol.getType().getParamBindingFor(variable);
 
         // can only use default parameter value if ASTNode exists

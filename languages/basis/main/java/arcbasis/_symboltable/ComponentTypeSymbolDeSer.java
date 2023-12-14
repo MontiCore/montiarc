@@ -113,14 +113,6 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected void serializeParameters(List<VariableSymbol> parameters, ArcBasisSymbols2Json s2j) {
-  }
-
-  @Override
-  protected void serializePorts(List<PortSymbol> ports, ArcBasisSymbols2Json s2j) {
-  }
-
-  @Override
   protected List<CompKindExpression> deserializeSuperComponents(@NotNull JsonObject compTypeJson) {
     return compTypeJson.getArrayMemberOpt(PARENTS).orElse(Collections.emptyList()).stream().map(JsonElement::getAsJsonObject)
       .map(this.getCompTypeExprDeSer()::deserialize).collect(Collectors.toList());
@@ -131,21 +123,11 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     return new ArrayList<>();
   }
 
-  @Override
-  protected List<VariableSymbol> deserializeParameters(JsonObject symbolJson) {
-    return new ArrayList<>();
-  }
-
-  @Override
-  protected List<PortSymbol> deserializePorts(JsonObject symbolJson) {
-    return null;
-  }
-
   protected void serializeParameters(@NotNull ComponentTypeSymbol paramOwner, @NotNull ArcBasisSymbols2Json s2j) {
     JsonPrinter printer = s2j.getJsonPrinter();
 
     printer.beginArray(PARAMETERS);
-    paramOwner.getParametersList().forEach(p -> p.accept(s2j.getTraverser()));
+    paramOwner.getParameters().forEach(p -> p.accept(s2j.getTraverser()));
     printer.endArray();
   }
 

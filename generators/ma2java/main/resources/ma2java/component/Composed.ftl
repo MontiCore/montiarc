@@ -61,7 +61,7 @@
     <#if !comp.isEmptySuperComponents()>
       super.setUp();
     </#if>
-    <#list comp.getPortsList() as port>
+    <#list comp.getPorts() as port>
       <#if port.isIncoming()>
         this.${port.getName()} = new <@printInPortType port/>(!this.getInstanceName().isBlank() ? this.getInstanceName() + "." + "${port.getName()}" : "${port.getName()}");
       </#if>

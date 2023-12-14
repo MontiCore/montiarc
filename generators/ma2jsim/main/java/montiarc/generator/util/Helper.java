@@ -266,7 +266,7 @@ public class Helper {
     
     ComponentSymbol type = instance.getSymbol().getType().getTypeInfo();
     
-    List<String> unsetParams = type.getParametersList().stream()
+    List<String> unsetParams = type.getParameters().stream()
         .map(VariableSymbolTOP::getName).collect(Collectors.toList());
     
     Map<String, ASTExpression> result = new HashMap<>();
