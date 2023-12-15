@@ -35,14 +35,12 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     String multipleNormalCompName = "Comp3";
     ComponentTypeSymbol multipleNormalComp1 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(multipleNormalCompName)
-      .setFullName("A") // Workaround since the hash depends on full name and resolve only returns symbols with different hashes
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     ArcBasisMill.globalScope().add(multipleNormalComp1);
     ArcBasisMill.globalScope().addSubScope(multipleNormalComp1.getSpannedScope());
     ComponentTypeSymbol multipleNormalComp2 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(multipleNormalCompName)
-      .setFullName("B") // Workaround since the hash depends on full name and resolve only returns symbols with different hashes
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     ArcBasisMill.globalScope().add(multipleNormalComp2);

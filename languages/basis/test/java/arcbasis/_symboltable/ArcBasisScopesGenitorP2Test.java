@@ -243,12 +243,10 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
     String parentCompName = "ParentComp";
     ComponentTypeSymbol ref1 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(parentCompName)
-      .setFullName("A") // Workaround since the hash depends on full name and resolve only returns symbols with different hashes
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
     ComponentTypeSymbol ref2 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(parentCompName)
-      .setFullName("B") // Workaround since the hash depends on full name and resolve only returns symbols with different hashes
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
 
