@@ -4,8 +4,7 @@ ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign compute = helper.getComputeBehavior(ast).get()/>
 
-public <#if isTop>abstract</#if> class ${ast.getName()}${suffixes.compute()}<#if isTop>TOP</#if> extends
-montiarc.rte.behavior.AbstractBehavior${"<"}${ast.getName()}${suffixes.context()}${">"} {
+${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", ast, [isTop])} {
 
   protected ${ast.getName()}${suffixes.compute()}<#if isTop>TOP</#if> (
   ${ast.getName()}${suffixes.context()} ${ast.getName()?uncap_first}${suffixes.context()}) {

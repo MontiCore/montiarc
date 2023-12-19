@@ -16,9 +16,11 @@
     </#if>
 </#macro>
 
-<#-- SymTypeExpression type -->
-<#macro getCompTypeString type>
-    ${type.printFullName()}
+<#-- CompTypeExpression type -->
+<#macro getCompTypeString type suffix="">
+    <#if type.getTypeBindingsAsList()?has_content>
+        ${type.getTypeInfo().getFullName()}${suffix}<<#list type.getTypeBindingsAsList() as arg>${arg.printFullName()}<#sep>, </#sep></#list>>
+    <#else>${type.printFullName()}${suffix}</#if>
 </#macro>
 
 <#macro getStaticPortClass portSym atomic>

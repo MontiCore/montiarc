@@ -1,6 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentInstance ast -->
-this.${prefixes.subcomp()}${ast.getName()} = new ${ast.getSymbol().getType().printFullName()}${suffixes.component()}${suffixes.builder()}() <#-- TODO this does not include features -->
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
+this.${prefixes.subcomp()}${ast.getName()} = new <@Util.getCompTypeString ast.getSymbol().getType() "${suffixes.component()}${suffixes.builder()}"/>() <#-- TODO this does not include features -->
     .setName("${ast.getName()}")
     .setScheduler(this.getScheduler())
     <#list helper.getArgNamesMappedToExpressions(ast) as name, expression>

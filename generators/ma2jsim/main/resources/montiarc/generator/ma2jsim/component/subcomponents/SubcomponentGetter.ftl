@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentInstance ast -->
-protected ${ast.getSymbol().getType().printFullName()}${suffixes.component()} ${prefixes.subcomp()}${ast.getName()}() {
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
+protected <@Util.getCompTypeString ast.getSymbol().getType() suffixes.component()/> ${prefixes.subcomp()}${ast.getName()}() {
     return this.${prefixes.subcomp()}${ast.getName()};
 }
