@@ -26,7 +26,6 @@ new montiarc.rte.automaton.TransitionBuilder()
   <#if body.isPresent() && body.get().isPresentTransitionAction()>
   ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
   </#if>
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendShadowedOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
 })
 .build()

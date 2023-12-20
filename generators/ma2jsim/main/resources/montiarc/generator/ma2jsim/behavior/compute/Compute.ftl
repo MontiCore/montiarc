@@ -16,7 +16,6 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", ast, 
   <#if helper.getComputeInit(ast).isPresent()>
     ${prettyPrinter.prettyprint(helper.getComputeInit(ast).get().getMCBlockStatement())}
   </#if>
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendShadowedOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendInitialTicksOnDelayedPorts.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   }
 
@@ -25,7 +24,6 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", ast, 
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [ast.getSymbol().getAllIncomingPorts(), true])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   ${prettyPrinter.prettyprint(compute.getMCBlockStatement())}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendShadowedOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   }
 
 }
