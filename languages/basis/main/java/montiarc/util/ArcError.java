@@ -69,7 +69,14 @@ public enum ArcError implements Error {
   HERITAGE_COMP_ARG_KEY_INVALID("0xC1162", "Unexpected key argument '%s'"),
   HERITAGE_COMP_ARG_VALUE_AFTER_KEY("0xC1163", "Positional assignments after key argument"),
   CONNECT_PRIMITIVE_TO_OBJECT("0xC1164", "Boxing not supported for connectors: Cannot connect primitive type port to object type port."),
-  CONNECT_OBJECT_TO_PRIMITIVE("0xC1165", "Unboxing not supported for connectors: Cannot connect object type port to primitive type port.");
+  CONNECT_OBJECT_TO_PRIMITIVE("0xC1165", "Unboxing not supported for connectors: Cannot connect object type port to primitive type port."),
+  PORT_NAMED_TICK("0xC1166", "Port cant be named Tick"),
+  COMPONENT_NAMED_TICK("0xC1168", "Component cant be named Tick"),
+  COMPONENTINSTANCE_NAMED_TICK("0xC1169", "Subcomponent cant be named Tick"),
+  PARAMETER_NAMED_TICK("0xC1170", "Parameters cant be named %s"),
+  FIELD_NAMED_TICK("0xC1171", "Fields cant be named %s"),
+  TYPEPARAMETERS_NAMED_TICK("0xC1172", "Type Parameters cant be named %s"),
+  FEATURE_NAMED_TICK("0xC1173", "Type Parameters cant be named %s");
 
   private final String errorCode;
   private final String errorMessage;

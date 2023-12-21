@@ -6,7 +6,9 @@ import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
 import arcautomaton._cocos.NoTickEventInUntimedAutomata;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.ComponentArgumentsOmitPortRef;
+import arcbasis._cocos.ComponentInstantiationNamedTick;
 import arcbasis._cocos.ComponentNameCapitalization;
+import arcbasis._cocos.ComponentNamedTick;
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
@@ -17,6 +19,7 @@ import arcbasis._cocos.FeedbackStrongCausality;
 import arcbasis._cocos.FieldInitOmitPortReferences;
 import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
+import arcbasis._cocos.FieldNamedTick;
 import arcbasis._cocos.NoSubcomponentReferenceCycle;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.OnlyOneTiming;
@@ -26,8 +29,10 @@ import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import arcbasis._cocos.ParameterHeritage;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.CompArgNoAssignmentExpr;
+import arcbasis._cocos.ParameterNamedTick;
 import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortNameCapitalization;
+import arcbasis._cocos.PortNamedTick;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
@@ -53,6 +58,7 @@ import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.SubcomponentTypeBound;
 import genericarc._cocos.ComponentHeritageRawType;
 import genericarc._cocos.SubcomponentRawType;
+import genericarc._cocos.TypeParameterNamedTick;
 import modes._cocos.MaxOneModeAutomaton;
 import modes._cocos.ModeAutomatonContainsNoStates;
 import modes._cocos.ModeAutomataInDecomposedComponent;
@@ -68,6 +74,7 @@ import variablearc._cocos.ConstraintSmtConvertible;
 import variablearc._cocos.ConstraintsOmitFieldReferences;
 import variablearc._cocos.ConstraintsOmitPortReferences;
 import variablearc._cocos.FeatureNameCapitalization;
+import variablearc._cocos.FeatureNamedTick;
 import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.SubcomponentsConstraint;
 import variablearc._cocos.VarIfIsBoolean;
@@ -123,11 +130,17 @@ public class MontiArcCoCos {
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
     checker.addVariantCoCo(new UniqueIdentifier());
+    checker.addCoCo(new ComponentNamedTick());
+    checker.addCoCo(new ComponentInstantiationNamedTick());
+    checker.addCoCo(new FieldNamedTick());
+    checker.addCoCo(new ParameterNamedTick());
+    checker.addCoCo(new PortNamedTick());
 
     // GenericArc CoCos
     checker.addCoCo(new TypeParameterCapitalization());
     checker.addCoCo(new ComponentHeritageRawType());
     checker.addCoCo(new SubcomponentRawType());
+    checker.addCoCo(new TypeParameterNamedTick());
 
     // VariableArc
     checker.addCoCo(new ConstraintNoAssignmentExpr());
@@ -144,6 +157,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new VarIfIsBoolean(tc));
     checker.addCoCo(new VarIfSmtConvertible());
+    checker.addCoCo(new FeatureNamedTick());
 
     // Modes
     checker.addCoCo(new MaxOneModeAutomaton());
