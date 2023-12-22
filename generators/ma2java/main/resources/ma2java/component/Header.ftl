@@ -2,7 +2,7 @@
 ${tc.signature("isTop")}
 
 <@printClass ast.getName() isTop/>
-<@printTypeParameters comp = ast.getSymbol()/>
+<@printTypeParameters ast = ast/>
 <@printExtensions comp = ast.getSymbol()/>
  implements montiarc.rte.timesync.IComponent
 
@@ -20,10 +20,13 @@ ${tc.signature("isTop")}
   </#if>
 </#macro>
 
-<#macro printTypeParameters comp>
-  <#if comp.hasTypeParameter()>
-    <<#list comp.getTypeParameters() as typeParameter>
-      ${typeParameter.getName()}<#sep>, </#sep>
+<#macro printTypeParameters ast>
+  <#if ast.getSymbol().hasTypeParameter()>
+    <<#list ast.getHead().getArcTypeParameterList() as typeParameter>${typeParameter.getName()}
+      <#if !typeParameter.isEmptyUpperBound()> extends
+        <#list typeParameter.getUpperBoundList() as boundEntry> ${boundEntry.printType()}</#list>
+      </#if>
+      <#sep>, </#sep>
     </#list>>
   </#if>
 </#macro>
