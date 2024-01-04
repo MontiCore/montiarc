@@ -1054,6 +1054,15 @@ public class TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aDouble = aBoolean ? aLong : aDouble", // ? applicable to long, double, result is double
     "aDouble = aBoolean ? aFloat : aDouble", // ? applicable to float, double, result is double
     "aDouble = aBoolean ? aDouble : aDouble", // ? applicable to double, double, result is double
+    "anInt = 1 << 2", // expected int provided int
+    "anInt = 1 >> 2", // expected int provided int
+    "anInt = 1 >>> 2", // expected int provided int
+    "anInt = 1 & 2", // expected int provided int
+    "anInt = 1 ^ 2", // expected int provided int
+    "anInt = 1 | 2", // expected int provided int
+    "aBoolean = true & true", // expected boolean provided boolean
+    "aBoolean = true ^ true", // expected boolean provided boolean
+    "aBoolean = true | true", // expected boolean provided boolean
   })
   public void testValidExpression(@NotNull String expr) throws IOException {
     Preconditions.checkNotNull(expr);
@@ -1964,6 +1973,12 @@ public class TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     "aBoolean = aBoolean ? aByte : aBoolean, 0xA0179", // expected boolean but provided (byte, boolean)
     "aBoolean = aBoolean ? aBoolean : aByte, 0xA0179", // expected boolean but provided (boolean, byte)
     "aBoolean = aBoolean ? aByte : aByte, 0xA0179", // expected boolean but provided (byte, byte)
+    "true << 2, 0xC0201", // not applicable to (boolean, int)
+    "true >> 2, 0xC0201", // not applicable to (boolean, int)
+    "true >>> 2, 0xC0201", // not applicable to (boolean, int)
+    "true & 2, 0xC0203", // not applicable to (boolean, int)
+    "true ^ 2, 0xC0203", // not applicable to (boolean, int)
+    "true | 2, 0xC0203", // not applicable to (boolean, int)
   })
   public void testInvalidExpression(@NotNull String expr,
                                     @NotNull String error) throws IOException {
