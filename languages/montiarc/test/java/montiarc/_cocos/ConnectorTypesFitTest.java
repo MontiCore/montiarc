@@ -239,7 +239,13 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
     "component Comp29 extends a.b.K<int> { " +
       "a.b.D sub; " +
       "i -> sub.i; " +
-      "}"
+      "}",
+    // T -> T (with upper bound for T)
+    "component Comp30<T extends int> { " +
+      "port in T i; " +
+      "a.b.K<T> sub; " +
+      "i -> sub.i; " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
