@@ -19,9 +19,6 @@ dependencies {
   grammar(libs.mc.grammar) {
     capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
   }
-  grammar (libs.mc.ocl) {
-    capabilities { requireCapability("de.monticore.lang:ocl-grammars") }
-  }
 
   api(project(":languages:generics"))
   api(project(":languages:syscl-basis"))
