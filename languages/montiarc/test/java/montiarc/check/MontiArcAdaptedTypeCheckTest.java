@@ -49,7 +49,10 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
   }
 
   protected void initSymbols() {
-    scope = compile("component A(int p1) {" +
+    compile("component Super<T> {" +
+      "port in T pGenInh; " +
+      "}");
+    scope = compile("component A<K extends java.lang.Integer>(int p1) extends Super<K> {" +
       "feature f; " +
       "port out int pOut; " +
       "int field = 1; " +
@@ -72,6 +75,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     "sub", // Subcomponent
     "sub.fSub", // Sub-feature
     "sub.pIn == 1", // Sub-port
+    "field = pGenInh" // Inherited generic port
   })
   public void testValidExpression(@NotNull String expr) throws IOException {
     Preconditions.checkNotNull(expr);

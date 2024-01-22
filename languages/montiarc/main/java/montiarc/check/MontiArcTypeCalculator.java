@@ -3,6 +3,7 @@ package montiarc.check;
 
 import arcbasis.check.AbstractArcTypeCalculator;
 import arcbasis.check.ArcBasisTypeCalculator;
+import arcbasis.check.ArcBasisWithinScopeBasicSymbolsResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsTraverser;
 import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsTypeVisitor;
@@ -57,6 +58,7 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
     Preconditions.checkNotNull(t);
     MACommonExpressionsTypeVisitor visitor = new MACommonExpressionsTypeVisitor();
     visitor.setWithinTypeBasicSymbolsResolver(new MAOOWithinTypeBasicSymbolsResolver());
+    visitor.setWithinScopeResolver(new ArcBasisWithinScopeBasicSymbolsResolver());
     t.add4CommonExpressions(visitor);
     t.setCommonExpressionsHandler(visitor);
   }

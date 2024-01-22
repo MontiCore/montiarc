@@ -1,16 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 public class Component2TypeSymbolAdapter extends TypeSymbol {
 
@@ -21,6 +22,15 @@ public class Component2TypeSymbolAdapter extends TypeSymbol {
     this.adaptee = adaptee;
     this.accessModifier = BasicAccessModifier.PUBLIC;
     this.spannedScope = adaptee.getSpannedScope();
+    this.superTypes = adaptee.getSuperComponentsList().stream().map(c -> {
+      if (((CompTypeExpression) c).getTypeBindingsAsList().isEmpty()) {
+        return SymTypeExpressionFactory.createTypeObject(new Component2TypeSymbolAdapter(c.getTypeInfo()));
+      } else {
+        return SymTypeExpressionFactory.createGenerics(
+          new Component2TypeSymbolAdapter(c.getTypeInfo()), ((CompTypeExpression) c).getTypeBindingsAsList()
+        );
+      }
+    }).collect(Collectors.toList());
   }
 
   protected ComponentSymbol getAdaptee() {
@@ -57,10 +67,5 @@ public class Component2TypeSymbolAdapter extends TypeSymbol {
   @Override
   public SourcePosition getSourcePosition() {
     return this.getAdaptee().getSourcePosition();
-  }
-
-  @Override
-  public List<TypeVarSymbol> getTypeParameterList() {
-    return super.getTypeParameterList();
   }
 }

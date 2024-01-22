@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.check.TypeExprOfComponent;
+import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -55,11 +55,11 @@ public class Subcomponent2VariableAdapter extends VariableSymbol {
   @Override
   public SymTypeExpression getType() {
     if (!adaptee.isTypePresent()) return SymTypeExpressionFactory.createObscureType();
-    if (((TypeExprOfComponent) adaptee.getType()).getTypeBindingsAsList().isEmpty()) {
+    if (((CompTypeExpression) adaptee.getType()).getTypeBindingsAsList().isEmpty()) {
       return SymTypeExpressionFactory.createTypeObject(new Component2TypeSymbolAdapter(adaptee.getType().getTypeInfo()));
     } else {
       return SymTypeExpressionFactory.createGenerics(
-        new Component2TypeSymbolAdapter(adaptee.getType().getTypeInfo()), ((TypeExprOfComponent) adaptee.getType()).getTypeBindingsAsList()
+        new Component2TypeSymbolAdapter(adaptee.getType().getTypeInfo()), ((CompTypeExpression) adaptee.getType()).getTypeBindingsAsList()
       );
     }
   }

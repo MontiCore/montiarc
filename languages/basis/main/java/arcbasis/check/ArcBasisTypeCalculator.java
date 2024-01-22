@@ -9,7 +9,6 @@ import de.monticore.expressions.expressionsbasis.types3.ExpressionBasisTypeVisit
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
 import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
-import de.monticore.types3.Type4Ast;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -36,6 +35,7 @@ public class ArcBasisTypeCalculator extends AbstractArcTypeCalculator {
   public static void initExpressionBasisTypeVisitor(@NotNull ExpressionsBasisTraverser traverse) {
     Preconditions.checkNotNull(traverse);
     ExpressionBasisTypeVisitor visitor = new ExpressionBasisTypeVisitor();
+    visitor.setWithinScopeResolver(new ArcBasisWithinScopeBasicSymbolsResolver());
     traverse.add4ExpressionsBasis(visitor);
   }
 
