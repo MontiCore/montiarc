@@ -11,6 +11,7 @@ import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.se_rwth.commons.Names;
+import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
@@ -115,7 +116,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     Path p1 = Path.of("some", "where");
     Path p2 = Path.of("foo", "bar");
     Path p3 = Path.of("another", "model", "path");
-    String[] stringArgs = new String[] {"--modelpath", p1 + File.pathSeparator + p2, p3.toString()};
+    String[] stringArgs = new String[]{"--modelpath", p1 + File.pathSeparator + p2, p3.toString()};
 
     MontiArcTool tool = new MontiArcTool();
     Options options = new Options();
@@ -224,15 +225,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     Assertions.assertThrows(expected, () -> tool.runTasks(cli));
   }
 
-  protected static Stream<Arguments> runTasksExceptionProvider() throws ParseException {
-    MontiArcTool mArcCLI = new MontiArcTool();
-    Options options = mArcCLI.initOptions();
-    String[] args = new String[]{"-mp", "invalid/model/path"};
-    CommandLineParser cliParser = new DefaultParser();
-    CommandLine cli = cliParser.parse(options, args);
+  protected static Stream<Arguments> runTasksExceptionProvider() {
     return Stream.of(
-      Arguments.of(null, NullPointerException.class),
-      Arguments.of(cli, IllegalArgumentException.class)
+      Arguments.of(null, NullPointerException.class)
     );
   }
 
@@ -288,14 +283,13 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
    */
   @ParameterizedTest
   @MethodSource("parseDirectoriesExpectedExceptionProvider")
-  public void parseDirectoriesShouldThrowException(@Nullable String fileExt,
-                                                   @Nullable Collection<Path> directories,
-                                                   @NotNull Class<Exception> expected) {
+  public void parseDirectoriesShouldGiveWarnings(@Nullable String fileExt,
+                                                 @Nullable Collection<Path> directories,
+                                                 @NotNull Class<Exception> expected) {
     Preconditions.checkNotNull(expected);
 
     // Given
     MontiArcTool tool = new MontiArcTool();
-
     // When && Then
     Assertions.assertThrows(expected, () -> tool.parse(fileExt, directories));
   }
@@ -312,6 +306,34 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
       Arguments.of(null, tool.createModelPath(cli).getEntries(), NullPointerException.class),
       Arguments.of("", tool.createModelPath(cli).getEntries(), IllegalArgumentException.class),
       Arguments.of(".arc", null, NullPointerException.class)
+    );
+  }
+
+  @ParameterizedTest
+  @MethodSource("nonExistentDirectories")
+  public void parseNonExistentDirectoryShouldGiveWarning(@Nullable String fileExt,
+                                                         @Nullable Collection<Path> directories) {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When
+    tool.parse(fileExt, directories);
+
+    // Then
+    Assertions.assertEquals(1, Log.getFindingsCount());
+    Assertions.assertEquals(0, Log.getErrorCount());
+  }
+
+  protected static Stream<Arguments> nonExistentDirectories() throws ParseException {
+    MontiArcTool tool = new MontiArcTool();
+    Options options = tool.initOptions();
+    String subTestDir = "non/existent";
+    String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, subTestDir).toString();
+    String[] args = new String[]{"-mp", modelPath};
+    CommandLineParser cliParser = new DefaultParser();
+    CommandLine cli = cliParser.parse(options, args);
+    return Stream.of(
+      Arguments.of(".arc", tool.createModelPath(cli).getEntries())
     );
   }
 
@@ -345,32 +367,38 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
    */
   @ParameterizedTest
   @MethodSource("parseDirectoryExpectedExceptionProvider")
-  public void parseDirectoryShouldThrowException(@Nullable String fileExt,
-                                                 @Nullable Path directory,
-                                                 @NotNull Class<Exception> expected) {
+  public void parseDirectoryShouldGiveWarning(@Nullable String fileExt,
+                                              @Nullable Path directory,
+                                              @NotNull Class<Exception> expected) {
     Preconditions.checkNotNull(expected);
 
     // Given
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
+    //tool.parse(fileExt, directory);
     Assertions.assertThrows(expected, () -> tool.parse(fileExt, directory));
+    //Assertions.assertEquals(Log.getErrorCount(),0);
+  }
+
+  @Test
+  public void parseDirectoryShouldGiveWarnings() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    tool.parse(".arc", Paths.get(""));
+    Assertions.assertEquals(Log.getErrorCount(), 0);
+
   }
 
   protected static Stream<Arguments> parseDirectoryExpectedExceptionProvider() {
-
     String subPackageDir = "validFileStructureMock/validPackageMock";
     Path mockModelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, subPackageDir);
-    Path mockComponentPath = mockModelPath.resolve("ValidMockComponent.arc");
 
     return Stream.of(
       Arguments.of(null, mockModelPath.toAbsolutePath(), NullPointerException.class),
-      Arguments.of("", mockModelPath, IllegalArgumentException.class),
-      Arguments.of(".arc", null, NullPointerException.class),
-      Arguments.of(".arc", Paths.get("invalid/model/path").toAbsolutePath(),
-        IllegalArgumentException.class),
-      Arguments.of(".arc", mockComponentPath.toAbsolutePath(),
-        IllegalArgumentException.class)
+      Arguments.of("", mockModelPath, IllegalArgumentException.class)
     );
   }
 
@@ -477,7 +505,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
     // Then
     Assertions.assertEquals(asts.size(), scopes.size());
-    for (ASTMACompilationUnit ast: asts) {
+    for (ASTMACompilationUnit ast : asts) {
       Assertions.assertNotNull(ast.getEnclosingScope());
       Assertions.assertTrue(scopes.contains((IMontiArcArtifactScope) ast.getEnclosingScope()));
     }
@@ -494,10 +522,10 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     Path modelLocation = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, qualifiedModelName);
     Optional<ASTMACompilationUnit> ast = tool.parse(modelLocation);
     Preconditions.checkState(ast.isPresent());
-    
+
     // When
     IMontiArcArtifactScope scope = tool.createSymbolTable(ast.get());
-    
+
     // Then
     Assertions.assertEquals(scope, ast.get().getEnclosingScope());
   }
@@ -796,7 +824,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     Options options = tool.initOptions();
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
-    
+
     // When && Then
     Assertions.assertDoesNotThrow(() -> tool.runTasks(innerComponents, cli));
     Assertions.assertTrue(serializeFile.exists());
@@ -947,7 +975,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     // Then
     List<ImportStatement> imports = ((IMontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
     Assertions.assertTrue(imports.stream()
-        .anyMatch(i -> i.getStatement().equals("java.lang") && i.isStar()), "Import to java.lang.* should be present.");
+      .anyMatch(i -> i.getStatement().equals("java.lang") && i.isStar()), "Import to java.lang.* should be present.");
   }
 
   @ParameterizedTest
@@ -961,7 +989,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     String path = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEndFailOrPass").toString();
     String modelPath = Paths.get(path, packageName).toString();
     MontiArcTool tool = new MontiArcTool();
-    String[] args = new String[] {"--modelpath", modelPath, "-path", path};
+    String[] args = new String[]{"--modelpath", modelPath, "-path", path};
 
     // When
     tool.run(args);
@@ -981,7 +1009,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
     // Given
     String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEndFailOrPass", packageName).toString();
-    String[] args = new String[] {"--modelpath", modelPath};
+    String[] args = new String[]{"--modelpath", modelPath};
     MontiArcTool tool = new MontiArcTool();
 
     // When
