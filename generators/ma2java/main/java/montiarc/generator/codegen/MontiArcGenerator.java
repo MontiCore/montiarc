@@ -33,7 +33,7 @@ public class MontiArcGenerator {
   /**
    * This addendum, appended to a component name, makes the name of the java code that represents the component.
    */
-  protected final static String COMPONENT_ADDENDUM = "";
+  protected static final String COMPONENT_ADDENDUM = "";
   protected static String FILE_EXTENSION = ".java";
   protected GeneratorEngine engine;
   protected GeneratorSetup engineSetup;
@@ -194,8 +194,8 @@ public class MontiArcGenerator {
   protected boolean existsHandWrittenCodeFor(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(addendum);
-    return GeneratorEngine.existsHandwrittenClass(this.getEngineSetup().getHandcodedPath(),
-      comp.getFullName() + addendum);
+
+    return existsHandWrittenCodeFor(comp, "", addendum);
   }
 
   protected boolean existsHandWrittenCodeFor(
@@ -203,10 +203,13 @@ public class MontiArcGenerator {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(addendum);
-    return GeneratorEngine.existsHandwrittenClass(
-      this.getEngineSetup().getHandcodedPath(),
-      comp.getPackageName() + "." + prefix + comp.getName() + addendum
-    );
+
+    String simpleHwcName = prefix + comp.getName() + addendum;
+    String fullHwcName = comp.getPackageName().equals("") ?
+      simpleHwcName
+      : comp.getPackageName() + "." + simpleHwcName;
+
+    return GeneratorEngine.existsHandwrittenClass(this.getEngineSetup().getHandcodedPath(), fullHwcName);
   }
 
   /**

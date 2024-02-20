@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import assignments.*;
+import automata.assignments.*;
 
 /**
  * Simple composite component where the input of the component is transferred directly to the output.

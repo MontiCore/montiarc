@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package assignments;
+package automata.assignments;
 
 /**
  * Simple atomic component where the output is assigned a variable

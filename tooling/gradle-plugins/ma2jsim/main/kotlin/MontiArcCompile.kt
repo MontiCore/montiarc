@@ -50,6 +50,10 @@ abstract class MontiArcCompile : JavaExec() {
     return this.outputDir.dir("symbols")
   }
 
+  fun reportsOutputDir(): Provider<Directory> {
+    return this.outputDir.dir("reports")
+  }
+
   @TaskAction
   override fun exec() {
 
@@ -64,6 +68,7 @@ abstract class MontiArcCompile : JavaExec() {
     args("--modelpath", cleanModelPath.asPath)
     args("--output", this.javaOutputDir().get().asFile.path)
     args("--symboltable", this.symbolOutputDir().get().asFile.path)
+    args("--report", this.reportsOutputDir().get().asFile.path)
 
     if(useClass2Mc.get()) { args("--class2mc"); }
 
@@ -105,6 +110,7 @@ abstract class MontiArcCompile : JavaExec() {
     symbolImportDir.filter { it.exists() }.forEach { println("  $it") }
 
     println("OutDir: " + outputDir.get())
+    println("Reports out dir: " + reportsOutputDir().get())
 
     println("MainClass:" + mainClass.get())
     println("ClassPath:")

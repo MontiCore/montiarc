@@ -3,8 +3,8 @@ package montiarc;
 
 import arcautomaton.ArcAutomatonMill;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ImmutableList;
 import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.Names;
@@ -12,6 +12,8 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.report.IncCheckUtil;
+import montiarc.report.UpToDateResults;
 import montiarc.trafo.MontiArcTrafos;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
@@ -30,12 +32,18 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class MontiArcTool extends MontiArcToolTOP {
+
+  public static final String SYMBOLS_REPORT_DIR = "symbols-inc-data";
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
@@ -122,7 +130,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(ast);
     ast.addImportStatement(MontiArcMill.mCImportStatementBuilder()
       .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
-        .setPartsList(ImmutableList.of("java", "lang"))
+        .setPartsList(List.of("java", "lang"))
         .build())
       .setStar(true)
       .build());
@@ -170,7 +178,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     if (cl.hasOption("symboltable")) {
       Log.info("Print symbol table", "MontiArcTool");
-      this.storeSymbols(scopes, cl.getOptionValue("symboltable"));
+      this.storeSymbols(scopes, cl);
     }
   }
 
@@ -321,11 +329,66 @@ public class MontiArcTool extends MontiArcToolTOP {
     super.print(content, path);
   }
 
-  public void storeSymbols(@NotNull Collection<IMontiArcArtifactScope> scopes, @NotNull String path) {
+  /**
+   * @param cl At least the option "symboltable" must be set.
+   */
+  public void storeSymbols(@NotNull Collection<IMontiArcArtifactScope> scopes, @NotNull CommandLine cl) {
+    // The majority of this method deals about the reporting of the tooling execution.
     Preconditions.checkNotNull(scopes);
-    Preconditions.checkNotNull(path);
-    Preconditions.checkArgument(!path.isEmpty());
-    scopes.forEach(scope -> this.storeSymbols(scope, path));
+    Preconditions.checkNotNull(cl);
+    Preconditions.checkArgument(cl.hasOption("symboltable"));
+
+    String symbolTargetDir = cl.getOptionValue("symboltable");
+    String reportDir = Optional.ofNullable(cl.getOptionValue("report")).orElse("");
+    String[] modelpath = Optional.ofNullable(cl.getOptionValues("modelpath")).orElse(new String[]{});
+    String concatModelPath = String.join(File.pathSeparator, modelpath);
+
+    Collection<IMontiArcArtifactScope> scopes4NewSerialization;
+    Map<IMontiArcArtifactScope, ASTMACompilationUnit> scopeToAst;
+
+    boolean writeReports = !reportDir.isEmpty() && modelpath.length > 0;
+    if (writeReports) {
+      IncCheckUtil.Config incCheckConfig =
+        new IncCheckUtil.Config(concatModelPath, symbolTargetDir, reportDir, SYMBOLS_REPORT_DIR, "");
+      IncCheckUtil.configureIncCheckReporting(incCheckConfig);
+
+      scopeToAst = extractCompUnitsFrom(scopes);
+
+      Map<String, ASTMACompilationUnit> astByQName = IncCheckUtil.resolveAstByQName(scopeToAst.values());
+      UpToDateResults upToDateInfo = IncCheckUtil.calcUpToDateData(astByQName, incCheckConfig);
+
+      IncCheckUtil.removeOutdatedGenerationResults(upToDateInfo, incCheckConfig);
+      scopes4NewSerialization =
+        IncCheckUtil.calcReportedModelsForNewGeneration(upToDateInfo, astByQName)
+          .stream()
+          .map(a -> a.getComponentType().getEnclosingScope())
+          .map(s -> (IMontiArcArtifactScope) s)
+          .collect(Collectors.toList());
+    } else {
+      scopes4NewSerialization = scopes;
+      scopeToAst = new HashMap<>(0);
+    }
+
+    MCPath modelPaths = new MCPath(splitPathEntries(modelpath));
+
+    for (IMontiArcArtifactScope scope : scopes4NewSerialization) {
+      Optional<ASTMACompilationUnit> ast = Optional.ofNullable(scopeToAst.get(scope));
+
+      Optional<Path> modelLocation = ast.flatMap(a -> IncCheckUtil.findModelLocation(modelPaths, a));
+      boolean writeReport4ThisModel = writeReports && modelLocation.isPresent();  // implies ast.isPresent
+
+      // Init reporting for current ast
+      if (writeReport4ThisModel) {
+        IncCheckUtil.setIncCheckReportingOn(ast.orElseThrow(), modelLocation.get());
+      }
+
+      // In all cases
+      this.storeSymbols(scope, symbolTargetDir);
+
+      if (writeReport4ThisModel) {
+        Reporting.flush(ast.orElseThrow());
+      }
+    }
   }
 
   @Override
@@ -432,6 +495,14 @@ public class MontiArcTool extends MontiArcToolTOP {
       .desc("Serializes and prints the symbol table to stdout or the specified output directory (optional).")
       .build());
 
+    // reports about the tooling execution
+    options.addOption(org.apache.commons.cli.Option.builder("r")
+      .longOpt("report")
+      .argName("dir")
+      .hasArg()
+      .desc("Prints reports of the tooling execution to the specified directory.")
+      .build());
+
     // symbol paths
     options.addOption(Option.builder("path")
       .hasArgs()
@@ -446,6 +517,36 @@ public class MontiArcTool extends MontiArcToolTOP {
       .build());
 
     return options;
+  }
+
+  /**
+   * For scopes whose astNode is an instance of {@link ASTMACompilationUnit}, returns a map of the scope to its astNode.
+   * Other scopes are ignored and not included in the result.
+   */
+  protected Map<IMontiArcArtifactScope, ASTMACompilationUnit> extractCompUnitsFrom(
+    @NotNull Collection<IMontiArcArtifactScope> scopes) throws IllegalStateException {
+    Preconditions.checkNotNull(scopes);
+
+    if (scopes.stream().map(IMontiArcArtifactScope::getAstNode).anyMatch(a -> !(a instanceof ASTMACompilationUnit))) {
+      Log.debug(
+        String.format("MontiArcTool only works with ASTMACompilationUnit instances, but also found asts of type %s.",
+          scopes.stream()
+            .map(IMontiArcArtifactScope::getAstNode)
+            .filter(a -> !(a instanceof ASTMACompilationUnit))
+            .map(Object::getClass)
+            .map(Class::getSimpleName)
+            .collect(Collectors.joining(", "))
+          ),
+          "MontiArcTool"
+      );
+    }
+
+    return scopes.stream()
+      .filter(s -> s.getAstNode() instanceof ASTMACompilationUnit)
+      .collect(Collectors.toMap(
+        Function.identity(),
+        s -> (ASTMACompilationUnit) s.getAstNode()
+      ));
   }
 
   /**
@@ -468,5 +569,15 @@ public class MontiArcTool extends MontiArcToolTOP {
       .map(this::splitPathEntries)
       .flatMap(Arrays::stream)
       .toArray(String[]::new);
+  }
+
+  /**
+   * Like {@link #splitPathEntries(String)}, but returns a {@code List<Path>} instead.
+   */
+  @NotNull
+  protected List<Path> splitPathEntriesToList(@NotNull String composedPath) {
+    return Arrays.stream(splitPathEntries(composedPath))
+      .map(Path::of)
+      .collect(Collectors.toList());
   }
 }

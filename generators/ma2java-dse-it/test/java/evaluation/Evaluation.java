@@ -2,8 +2,8 @@
 package evaluation;
 
 import com.microsoft.z3.*;
-import evaluation.bigModel.*;
-import evaluation.smallModel.*;
+import automata.evaluation.bigModel.*;
+import automata.evaluation.smallModel.*;
 import montiarc.rte.dse.*;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;

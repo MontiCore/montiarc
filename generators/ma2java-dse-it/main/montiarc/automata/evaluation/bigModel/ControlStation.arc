@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package evaluation.bigModel;
+package automata.evaluation.bigModel;
 
 component ControlStation(Integer parameter) {
 

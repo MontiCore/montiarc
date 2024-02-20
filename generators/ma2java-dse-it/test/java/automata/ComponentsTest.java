@@ -1,17 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import assignments.AssignmentLiteral;
-import assignments.AssignmentName;
+import automata.assignments.AssignmentLiteral;
+import automata.assignments.AssignmentName;
 import automata.Datatypes.MotorCmd;
 import automata.Datatypes.TimerSignal;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.*;
-import dataTypes.*;
-import expressions.DivExpression;
-import expressions.MinusExpression;
-import expressions.MultExpression;
-import expressions.PlusExpression;
+import automata.dataTypes.*;
+import automata.expressions.DivExpression;
+import automata.expressions.MinusExpression;
+import automata.expressions.MultExpression;
+import automata.expressions.PlusExpression;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.MockTestController;
 import montiarc.rte.dse.TestController;

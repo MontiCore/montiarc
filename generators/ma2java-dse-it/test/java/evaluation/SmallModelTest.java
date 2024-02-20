@@ -3,9 +3,9 @@ package evaluation;
 
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.*;
-import evaluation.smallModel.ListerInSmallModel;
-import evaluation.smallModel.ListerOutSmallModel;
-import evaluation.smallModel.SmallModel;
+import automata.evaluation.smallModel.ListerInSmallModel;
+import automata.evaluation.smallModel.ListerOutSmallModel;
+import automata.evaluation.smallModel.SmallModel;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.MockTestController;
 import montiarc.rte.timesync.IInPort;

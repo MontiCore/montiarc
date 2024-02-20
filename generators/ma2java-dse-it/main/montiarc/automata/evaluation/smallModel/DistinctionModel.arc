@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package evaluation.smallModel;
+package automata.evaluation.smallModel;
 
 /**
  * small model for the evaluation

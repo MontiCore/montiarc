@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package expressions;
+package automata.expressions;
 
 /**
  * Simple atomic component, the output is the input divided by two

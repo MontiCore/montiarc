@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package dataTypes;
+package automata.dataTypes;
 
 /**
  * Simple atomic component for testing characters
