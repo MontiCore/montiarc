@@ -39,7 +39,8 @@ public class ASTVariantBuilder implements ArcBasisHandler {
    * @param node the element the builder deals with
    * @return either {@param node} or a duplicated version of it
    */
-  public ASTArcElement duplicate(ASTArcElement node) {
+  public ASTArcElement duplicate(@NotNull ASTArcElement node) {
+    Preconditions.checkNotNull(node);
     result = node;
     traverser = VariableArcMill.traverser();
     traverser.setArcBasisHandler(this);
@@ -54,6 +55,7 @@ public class ASTVariantBuilder implements ArcBasisHandler {
    */
   @Override
   public void handle(@NotNull ASTConnector node) {
+    Preconditions.checkNotNull(node);
     if (node == result) {
       ASTConnector result = ArcBasisMill.connectorBuilder().setSource(node.getSourceName())
         .setTargetList(node.getTargetsNames().toArray(String[]::new)).build();
@@ -82,7 +84,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
    * @param node the port access to be updated
    */
   @Override
-  public void handle(ASTPortAccess node) {
+  public void handle(@NotNull ASTPortAccess node) {
+    Preconditions.checkNotNull(node);
+    node.setEnclosingScope(enclComponent.getSpannedScope());
     if (node.isPresentComponent()) {
       enclComponent.getSubcomponents(node.getComponent()).ifPresent(node::setComponentSymbol);
     }

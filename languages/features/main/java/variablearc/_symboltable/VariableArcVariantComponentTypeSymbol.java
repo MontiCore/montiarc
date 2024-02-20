@@ -5,6 +5,7 @@ import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.Port2VariableAdapter;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -82,9 +83,13 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   public boolean containsSymbol(@NotNull ISymbol symbol) {
+    if (symbol instanceof Port2VariableAdapter) {
+      symbol = ((Port2VariableAdapter) symbol).getAdaptee();
+    }
+    ISymbol finalSymbol = symbol;
     return typeSymbol.variationPointsContainSymbol(includedVariationPoints, symbol) ||
-      !isEmptySuperComponents() && getSuperComponentsList().stream().anyMatch(parent -> ((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).containsSymbol(symbol) &&
-        !((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(symbol));
+      !isEmptySuperComponents() && getSuperComponentsList().stream().anyMatch(parent -> ((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).containsSymbol(finalSymbol) &&
+        !((VariableArcVariantComponentTypeSymbol) parent.getTypeInfo()).isRootSymbol(finalSymbol));
   }
 
   public boolean isRootSymbol(ISymbol symbol) {

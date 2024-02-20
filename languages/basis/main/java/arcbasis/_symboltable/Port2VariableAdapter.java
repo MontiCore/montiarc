@@ -23,7 +23,7 @@ public class Port2VariableAdapter extends VariableSymbol {
     this.accessModifier = BasicAccessModifier.PUBLIC;
   }
 
-  protected ArcPortSymbol getAdaptee() {
+  public ArcPortSymbol getAdaptee() {
     return adaptee;
   }
 

@@ -74,7 +74,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
    * return the type. When we can not find the port symbol or when we do not find the component instance of the port
    * access or the type of that instance or if we do not find the type of the port then we return an empty Optional.
    */
-  protected static Optional<SymTypeExpression> getTypeOfPortIfPresent(@NotNull ASTPortAccess astPort) {
+  protected Optional<SymTypeExpression> getTypeOfPortIfPresent(@NotNull ASTPortAccess astPort) {
     Preconditions.checkNotNull(astPort);
 
     if (astPort.isPresentComponent()) {
@@ -101,7 +101,8 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
    * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
    * does not belong to a component type.
    */
-  protected static Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+    Preconditions.checkNotNull(portAccess);
     if (portAccess.getEnclosingScope() == null) {
       return Optional.empty();
     }

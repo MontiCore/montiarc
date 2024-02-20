@@ -1,9 +1,24 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.*;
+import arcbasis._cocos.AtomicMaxOneBehavior;
+import arcbasis._cocos.ConnectorDirectionsFit;
+import arcbasis._cocos.ConnectorPortsExist;
+import arcbasis._cocos.ConnectorTimingsFit;
+import arcbasis._cocos.FeedbackStrongCausality;
+import arcbasis._cocos.PortHeritageTypeFits;
+import arcbasis._cocos.PortUniqueSender;
+import arcbasis._cocos.PortsConnected;
+import arcbasis._cocos.SubPortsConnected;
+import arcbasis._cocos.UniqueIdentifier;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
+import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
+import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
+import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
+import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
+import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
@@ -63,7 +78,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component M { feature ff; varif (ff) { port in int i; } }");
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } }");
     compile("package a.b; component O { feature ff; port out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
-    compile("package a.b; component P<A,B> { feature ff; varif (ff) { port <<sync>> out A o; } else { port <<sync>> out B o; } }");
+    compile("package a.b; component P<A,B> { feature ff; varif (ff) { port out A o; } else { port out B o; } }");
   }
 
   @ParameterizedTest
@@ -455,7 +470,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "}",
     // out port forward, subcomponent with variable generic interface type (selected feature)
     "component Comp46<T> { " +
-      "port <<sync>> out T o; " +
+      "port out T o; " +
       "a.b.P<T, java.lang.Integer> sub; " +
       "sub.o -> o; " +
       "constraint(sub.ff); " +
@@ -463,8 +478,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     // out port forward, subcomponent with variable generic interface type
     "component Comp47<A, B> { " +
       "feature f; " +
-      "varif (f) { port <<sync>> out A o; } " +
-      "else { port <<sync>> out B o; } " +
+      "varif (f) { port out A o; } " +
+      "else { port out B o; } " +
       "a.b.P<A, B> sub; " +
       "sub.o -> o; " +
       "constraint(sub.ff == f); " +
@@ -486,6 +501,27 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "sub.o -> io;" +
       "} " +
       "}",
+    // inherited generic port that switches between int and boolean
+    "component Comp50 extends a.b.P<int, boolean> { " +
+      "varif (ff) { " +
+      "a.b.B sub; " +
+      "} else {" +
+      "a.b.F sub; " +
+      "} " +
+      "sub.o -> o; " +
+      "}",
+    // atomic component with port that switches types
+    "component Comp51 { " +
+      "feature ff; " +
+      "varif (ff) { " +
+      "port out int p; " +
+      "} else { " +
+      "port out double p; " +
+      "} " +
+      "compute {" +
+      "p = 5; " +
+      "}" +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -494,17 +530,24 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addVariantCoCo(new PortsConnected());
-    checker.addVariantCoCo(new PortUniqueSender());
-    checker.addVariantCoCo(new SubPortsConnected());
-    checker.addVariantCoCo(new ConnectorPortsExist());
-    checker.addVariantCoCo(new ConnectorTypesFit());
-    checker.addVariantCoCo(new ConnectorDirectionsFit());
-    checker.addVariantCoCo(new ConnectorTimingsFit());
-    checker.addVariantCoCo(new AtomicMaxOneBehavior());
-    checker.addVariantCoCo(new FeedbackStrongCausality());
-    checker.addVariantCoCo(new PortHeritageTypeFits());
-    checker.addVariantCoCo(new UniqueIdentifier());
+    checker.addVariantCoCo(PortsConnected.class);
+    checker.addVariantCoCo(PortUniqueSender.class);
+    checker.addVariantCoCo(SubPortsConnected.class);
+    checker.addVariantCoCo(ConnectorPortsExist.class);
+    checker.addVariantCoCo(variablearc._cocos.arcbasis.ConnectorTypesFit.class);
+    checker.addVariantCoCo(ConnectorDirectionsFit.class);
+    checker.addVariantCoCo(ConnectorTimingsFit.class);
+    checker.addVariantCoCo(AtomicMaxOneBehavior.class);
+    checker.addVariantCoCo(FeedbackStrongCausality.class);
+    checker.addVariantCoCo(PortHeritageTypeFits.class);
+    checker.addVariantCoCo(UniqueIdentifier.class);
+
+    checker.addVariantCoCo(ExpressionStatementIsValid.class);
+    checker.addVariantCoCo(VarDeclarationInitializationHasCorrectType.class);
+    checker.addVariantCoCo(ForConditionHasBooleanType.class);
+    checker.addVariantCoCo(ForEachIsValid.class);
+    checker.addVariantCoCo(IfConditionHasBooleanType.class);
+    checker.addVariantCoCo(SwitchStatementValid.class);
 
     // When
     checker.checkAll(ast);
@@ -523,25 +566,30 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addVariantCoCo(new PortsConnected());
-    checker.addVariantCoCo(new PortUniqueSender());
-    checker.addVariantCoCo(new SubPortsConnected());
-    checker.addVariantCoCo(new ConnectorPortsExist());
-    checker.addVariantCoCo(new ConnectorTypesFit());
-    checker.addVariantCoCo(new ConnectorDirectionsFit());
-    checker.addVariantCoCo(new ConnectorTimingsFit());
-    checker.addVariantCoCo(new AtomicMaxOneBehavior());
-    checker.addVariantCoCo(new FeedbackStrongCausality());
-    checker.addVariantCoCo(new PortHeritageTypeFits());
-    checker.addVariantCoCo(new UniqueIdentifier());
+    checker.addVariantCoCo(PortsConnected.class);
+    checker.addVariantCoCo(PortUniqueSender.class);
+    checker.addVariantCoCo(SubPortsConnected.class);
+    checker.addVariantCoCo(ConnectorPortsExist.class);
+    checker.addVariantCoCo(variablearc._cocos.arcbasis.ConnectorTypesFit.class);
+    checker.addVariantCoCo(ConnectorDirectionsFit.class);
+    checker.addVariantCoCo(ConnectorTimingsFit.class);
+    checker.addVariantCoCo(AtomicMaxOneBehavior.class);
+    checker.addVariantCoCo(FeedbackStrongCausality.class);
+    checker.addVariantCoCo(PortHeritageTypeFits.class);
+    checker.addVariantCoCo(UniqueIdentifier.class);
+
+    checker.addVariantCoCo(ExpressionStatementIsValid.class);
+    checker.addVariantCoCo(VarDeclarationInitializationHasCorrectType.class);
+    checker.addVariantCoCo(ForConditionHasBooleanType.class);
+    checker.addVariantCoCo(ForEachIsValid.class);
+    checker.addVariantCoCo(IfConditionHasBooleanType.class);
+    checker.addVariantCoCo(SwitchStatementValid.class);
 
     // When
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    checkOnlyExpectedErrorsPresent(errors);
   }
 
   protected static Stream<Arguments> invalidModels() {
@@ -1151,7 +1199,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       // out port forward, subcomponent with variable generic interface type (deselected feature)
       arg(
         "component Comp64<T> { " +
-          "port <<sync>> out T o; " +
+          "port out T o; " +
           "a.b.P<T, java.lang.Integer> sub; " +
           "sub.o -> o; " +
           "constraint(!sub.ff); " +
@@ -1172,7 +1220,39 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "io -> sub.i;" +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH
+      ),
+      // atomic component with port that switches existence
+      arg("component Comp67 { " +
+          "feature ff; " +
+          "varif (ff) { " +
+          "port out int p; " +
+          "} " +
+          "compute {" +
+          "p = 5; " +
+          "} " +
+          "}",
+        new InternalError("0xFD118")
       )
     );
+  }
+
+  static class InternalError implements Error {
+
+    protected String errorCode;
+
+    public InternalError(@NotNull String errorCode) {
+      Preconditions.checkNotNull(errorCode);
+      this.errorCode = errorCode;
+    }
+
+    @Override
+    public String getErrorCode() {
+      return errorCode;
+    }
+
+    @Override
+    public String printErrorMessage() {
+      return "";
+    }
   }
 }

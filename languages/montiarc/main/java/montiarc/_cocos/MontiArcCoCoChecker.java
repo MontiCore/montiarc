@@ -1,29 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import arcbasis._cocos.ArcBasisASTConnectorCoCo;
 import com.google.common.base.Preconditions;
-import modes._cocos.util.IgnoreASTArcModeHandler;
-import montiarc.MontiArcMill;
-import montiarc._visitor.MontiArcTraverser;
-import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._cocos.util.IgnoreASTArcVarIfHandler;
-import montiarc._cocos.util.SingleASTVariantComponentTypeHandler;
+import de.monticore.visitor.IVisitor;
 import montiarc._cocos.util.VariantTraverseDispatchVisitor;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MontiArcCoCoChecker extends MontiArcCoCoCheckerTOP {
 
-  protected MontiArcTraverser variantTraverser;
+  protected VariantTraverseDispatchVisitor variantVisitor;
 
   public MontiArcCoCoChecker() {
     super();
-    variantTraverser = MontiArcMill.traverser();
-    variantTraverser.setArcBasisHandler(new SingleASTVariantComponentTypeHandler());
-    variantTraverser.setVariableArcHandler(new IgnoreASTArcVarIfHandler());
-    variantTraverser.setModesHandler(new IgnoreASTArcModeHandler());
-
-    getTraverser().add4ArcBasis(new VariantTraverseDispatchVisitor(variantTraverser));
+    variantVisitor = new VariantTraverseDispatchVisitor();
+    getTraverser().add4ArcBasis(variantVisitor);
   }
 
   /**
@@ -31,20 +21,9 @@ public class MontiArcCoCoChecker extends MontiArcCoCoCheckerTOP {
    *
    * @param coco that will be checked
    */
-  public void addVariantCoCo(@NotNull ArcBasisASTComponentTypeCoCo coco) {
+  public void addVariantCoCo(@NotNull Class<? extends IVisitor> coco) {
     Preconditions.checkNotNull(coco);
 
-    variantTraverser.add4ArcBasis(coco);
-  }
-
-  /**
-   * Adds a CoCo that is checked on all Variants of a component
-   *
-   * @param coco that will be checked
-   */
-  public void addVariantCoCo(@NotNull ArcBasisASTConnectorCoCo coco) {
-    Preconditions.checkNotNull(coco);
-
-    variantTraverser.add4ArcBasis(coco);
+    variantVisitor.addVisitor(coco);
   }
 }
