@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import java.util.Collections;
 import java.util.List;
 
-public class ASTVaraintComponentTypeTest extends ModesAbstractTest {
+public class ASTVariantComponentTypeTest extends ModesAbstractTest {
 
   @Test
   public void shouldNotBuildASTVariant() {

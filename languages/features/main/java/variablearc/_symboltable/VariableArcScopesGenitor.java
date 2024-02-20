@@ -1,13 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTConnector;
-import arcbasis._ast.ASTArcPort;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcVarIf;
 import variablearc.evaluation.ExpressionSet;
@@ -15,6 +16,7 @@ import variablearc.evaluation.expressions.Expression;
 import variablearc.evaluation.expressions.NegatedExpression;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -72,15 +74,20 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   public void traverse(@NotNull ASTArcVarIf node) {
     node.getCondition().accept(this.getTraverser());
 
-    putOnStack(new VariableArcVariationPoint(new Expression(node.getCondition()), this.getCurrentVariationPoint().orElse(null)));
+    putOnStack(new VariableArcVariationPoint(
+      new Expression(node.getCondition()),
+      this.getCurrentVariationPoint().orElse(null),
+      VariableArcMill.typeDispatcher().isASTComponentBody(node.getThen()) ? VariableArcMill.typeDispatcher().asASTComponentBody(node.getThen()).getArcElementList() : List.of(node.getThen())
+    ));
     node.getThen().accept(this.getTraverser());
     removeCurrentVariationPoint();
 
     if (node.isPresentOtherwise()) {
       putOnStack(new VariableArcVariationPoint(
         new NegatedExpression(node.getCondition()),
-        this.getCurrentVariationPoint().orElse(null))
-      );
+        this.getCurrentVariationPoint().orElse(null),
+        VariableArcMill.typeDispatcher().isASTComponentBody(node.getOtherwise()) ? VariableArcMill.typeDispatcher().asASTComponentBody(node.getOtherwise()).getArcElementList() : List.of(node.getOtherwise())
+      ));
       node.getOtherwise().accept(this.getTraverser());
       removeCurrentVariationPoint();
     }
@@ -121,10 +128,10 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   }
 
   @Override
-  public void endVisit(@NotNull ASTConnector node) {
-    Preconditions.checkNotNull(node);
+  public void endVisit(@NotNull ASTArcField node) {
+    Preconditions.checkNotNull(node.getSymbol());
     if (this.getCurrentVariationPoint().isPresent()) {
-      this.getCurrentVariationPoint().get().add(node);
+      this.getCurrentVariationPoint().get().add(node.getSymbol());
     }
   }
 

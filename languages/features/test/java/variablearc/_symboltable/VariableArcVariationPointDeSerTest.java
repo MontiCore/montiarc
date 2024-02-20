@@ -55,7 +55,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     VariableArcVariationPoint variationPoint = deser.deserialize(componentTypeSymbol, JsonParser.parse(JSON_EMPTY_VARIATION_POINT).getAsJsonObject());
 
     // Then
-    Assertions.assertEquals(0, variationPoint.getElements().size());
+    Assertions.assertEquals(0, variationPoint.getArcElements().size());
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
@@ -92,7 +92,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     VariableArcVariationPoint variationPoint = deser.deserialize(componentTypeSymbol, JsonParser.parse(JSON_NESTED_VARIATION_POINT).getAsJsonObject());
 
     // Then
-    Assertions.assertEquals(0, variationPoint.getElements().size());
+    Assertions.assertEquals(0, variationPoint.getArcElements().size());
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(2, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
@@ -101,7 +101,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     VariableArcVariationPoint childVariationPoint = variationPoint.getChildVariationPoints().get(0);
 
     Assertions.assertEquals(childVariationPoint, componentTypeSymbol.getAllVariationPoints().get(1));
-    Assertions.assertEquals(0, childVariationPoint.getElements().size());
+    Assertions.assertEquals(0, childVariationPoint.getArcElements().size());
     Assertions.assertEquals(2, childVariationPoint.getAllConditions().size());
     Assertions.assertAll(
       () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
@@ -140,7 +140,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
     VariableArcVariationPoint variationPoint = deser.deserialize(componentTypeSymbol, JsonParser.parse(JSON_VARIATION_POINT_WITH_SYMBOL).getAsJsonObject());
 
     // Then
-    Assertions.assertEquals(0, variationPoint.getElements().size());
+    Assertions.assertEquals(0, variationPoint.getArcElements().size());
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));

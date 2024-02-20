@@ -27,7 +27,6 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -522,6 +521,24 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "p = 5; " +
       "}" +
       "}",
+    // Switches between behaviors
+    "component Comp52 { " +
+      "feature f; " +
+      "varif (f) { " +
+      "compute { } " +
+      "} else { " +
+      "compute { } " +
+      "} " +
+      "}",
+    // Switches between field initial values
+    "component Comp53 { " +
+      "feature f; " +
+      "varif (f) { " +
+      "int i = 0; " +
+      "} else { " +
+      "int i = 5; " +
+      "} " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -553,7 +570,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    checkOnlyExpectedErrorsPresent();
   }
 
   @ParameterizedTest
@@ -1232,7 +1249,38 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "} " +
           "}",
         new InternalError("0xFD118")
-      )
+      ),
+      // Multiple behaviors if feature is selected
+      arg("component Comp68 { " +
+          "feature f; " +
+          "varif (f) { " +
+          "compute { } " +
+          "} " +
+          "compute { } " +
+          "}",
+        ArcError.MULTIPLE_BEHAVIOR),
+      // Multiple behaviors if both features are selected
+      arg("component Comp69 { " +
+          "feature f1, f2; " +
+          "varif (f1) { " +
+          "compute { } " +
+          "} " +
+          "varif (f2) { " +
+          "compute { } " +
+          "} " +
+          "}",
+        ArcError.MULTIPLE_BEHAVIOR),
+      // Multiple fields if both features are selected
+      arg("component Comp70 { " +
+          "feature f1, f2; " +
+          "varif (f1) { " +
+          "int i = 0; " +
+          "} " +
+          "varif (f2) { " +
+          "int i = 1; " +
+          "} " +
+          "}",
+        ArcError.UNIQUE_IDENTIFIER_NAMES)
     );
   }
 

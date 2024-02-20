@@ -43,7 +43,7 @@ public class ASTVariantComponentType extends ASTComponentType {
 
     arcElementList = new ArrayList<>(parent.getBody().getArcElementList());
     arcElementList.addAll(
-      includedVariationPoints.stream().flatMap(vp -> vp.getElements().stream()).collect(Collectors.toList()));
+      includedVariationPoints.stream().flatMap(vp -> vp.getArcElements().stream()).collect(Collectors.toList()));
     ASTVariantBuilder builder = new ASTVariantBuilder(variantComponentTypeSymbol);
     arcElementList = arcElementList.stream().map(builder::duplicate).collect(Collectors.toList());
   }

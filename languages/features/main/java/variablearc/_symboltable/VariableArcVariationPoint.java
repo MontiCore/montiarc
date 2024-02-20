@@ -32,14 +32,20 @@ public class VariableArcVariationPoint {
     this(condition, null);
   }
 
+  public VariableArcVariationPoint(@NotNull Expression condition, @Nullable VariableArcVariationPoint dependsOn) {
+    this(condition, dependsOn, Collections.emptyList());
+  }
+
   public VariableArcVariationPoint(@NotNull Expression condition,
-                                   @Nullable VariableArcVariationPoint dependsOn) {
+                                   @Nullable VariableArcVariationPoint dependsOn,
+                                   @NotNull List<ASTArcElement> elements) {
     Preconditions.checkNotNull(condition);
+    Preconditions.checkNotNull(elements);
 
     this.condition = condition;
     this.dependsOn = dependsOn;
     this.symbols = new ArrayList<>();
-    this.elements = new ArrayList<>();
+    this.elements = elements;
     this.childVariationPoints = new ArrayList<>();
     if (dependsOn != null) {
       dependsOn.addChild(this);
@@ -68,7 +74,7 @@ public class VariableArcVariationPoint {
     }
   }
 
-  public List<ASTArcElement> getElements() {
+  public List<ASTArcElement> getArcElements() {
     return elements;
   }
 
@@ -81,13 +87,9 @@ public class VariableArcVariationPoint {
     return symbols.contains(symbol);
   }
 
-  public boolean containsElement(@NotNull ASTArcElement element) {
-    Preconditions.checkNotNull(element);
-    return elements.contains(element);
-  }
-
   /**
    * Adds a child variation point
+   *
    * @param variationPoint a variation point that depends on this
    */
   public void addChild(@NotNull VariableArcVariationPoint variationPoint) {
@@ -100,10 +102,5 @@ public class VariableArcVariationPoint {
   public void add(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
     this.symbols.add(symbol);
-  }
-
-  public void add(@NotNull ASTArcElement element) {
-    Preconditions.checkNotNull(element);
-    this.elements.add(element);
   }
 }
