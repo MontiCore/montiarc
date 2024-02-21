@@ -18,10 +18,20 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
   <@MethodNames.portSetup/>();
-  <#if ast.getSymbol().isAtomic()>
-    <@MethodNames.behaviorSetup/>();
-  <#elseif ast.getSymbol().isDecomposed()>
-    <@MethodNames.subCompSetup/>();
-    <@MethodNames.connectorSetup/>();
-  </#if>
+
+${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
+
+<#list helper.getVariants(ast) as variant>
+  if (${helper.printCondition(variant)}) {
+    <#if variant.isAtomic()>
+        <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
+    <#elseif variant.isDecomposed()>
+        <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}();
+        <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}();
+    </#if>
+  }
+  <#sep> else </#sep>
+</#list>
+else throw new java.lang.RuntimeException(
+"Component ${ast.getName()} is not correctly configured, no variant selected");
 }

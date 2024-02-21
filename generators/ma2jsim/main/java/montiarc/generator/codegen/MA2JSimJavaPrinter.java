@@ -1,12 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.evaluation.expressions.Expression;
+
+import java.util.Iterator;
+import java.util.List;
 
 public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
 
@@ -14,11 +20,15 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this(new IndentPrinter());
   }
 
-  public MA2JSimJavaPrinter(@NotNull IndentPrinter printer) {
-    this(new MontiArcTypeCalculator(), Preconditions.checkNotNull(printer), true);
+  public MA2JSimJavaPrinter(@Nullable ComponentTypeSymbol currentVariant) {
+    this(new MontiArcTypeCalculator(), new IndentPrinter(), true, currentVariant);
   }
 
-  public MA2JSimJavaPrinter(@NotNull IArcTypeCalculator tc, @NotNull IndentPrinter printer, boolean printComments) {
+  public MA2JSimJavaPrinter(@NotNull IndentPrinter printer) {
+    this(new MontiArcTypeCalculator(), Preconditions.checkNotNull(printer), true, null);
+  }
+
+  public MA2JSimJavaPrinter(@NotNull IArcTypeCalculator tc, @NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
     super(Preconditions.checkNotNull(printer), printComments);
 
     CommonExpressionsJavaPrinter commonExpressionsJavaPrinter = new CommonExpressionsJavaPrinter(tc, printer, printComments);
@@ -37,9 +47,20 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.add4MCBasicTypes(mcBasicTypesJavaPrinter);
 
     AssignmentExpressionsMA2JSimPrinter assignmentExpressionsPrinter =
-      new AssignmentExpressionsMA2JSimPrinter(printer, printComments);
+      new AssignmentExpressionsMA2JSimPrinter(printer, printComments, currentVariant);
     this.traverser.setAssignmentExpressionsHandler(assignmentExpressionsPrinter);
     this.traverser.getAssignmentExpressionsVisitorList().clear();
     this.traverser.add4AssignmentExpressions(assignmentExpressionsPrinter);
+  }
+
+  public String prettyprint(List<Expression> expressions) {
+    StringBuilder prettyprinted = new StringBuilder();
+    Iterator<Expression> iterator = expressions.iterator();
+    while (iterator.hasNext()) {
+      Expression expression = iterator.next();
+      prettyprinted.append(expression.print()); // Todo use this pretty printer
+      if (iterator.hasNext()) prettyprinted.append("&&");
+    }
+    return prettyprinted.toString();
   }
 }

@@ -8,7 +8,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
-import variablearc._symboltable.VariableArcVariationPoint;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbolBuilder;
 import variablearc._symboltable.VariantSubcomponentSymbol;
 import variablearc.evaluation.VariationPointSolver;
 
@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -55,35 +54,38 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
   protected void calculateVariableArcVariants(@NotNull List<VariableArcVariantComponentTypeSymbol> variants, @NotNull VariationPointSolver vpSolver, @Nullable VariableArcVariantComponentTypeSymbol parentVariant) throws Z3Exception {
     Preconditions.checkNotNull(vpSolver);
     // iterate over all possible variants of this component and expand with subcomponent variants
-    for (Set<VariableArcVariationPoint> variationPoints : vpSolver.getCombinations(parentVariant)) {
+    for (VariableArcVariantComponentTypeSymbolBuilder variantBuilder : vpSolver.getCombinations(parentVariant)) {
       HashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
       // filter out subcomponents not included in this variant
       List<SubcomponentSymbol> subcomponents =
         componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
-          .filter(instance -> componentTypeSymbol.variationPointsContainSymbol(variationPoints, instance))
+          .filter(instance -> componentTypeSymbol.variationPointsContainSymbol(variantBuilder.getIncludedVariationPoints(), instance))
           .filter(SubcomponentSymbol::isTypePresent) // for robustness
           .collect(
             Collectors.toList());
 
       if (subcomponents.isEmpty()) {
-        variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
-          vpSolver.getConditionsForVariationPoints(variationPoints),
-          parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getSuperComponents(0).deepClone(parentVariant))));
+        variants.add(variantBuilder
+          .setSuperComponents(parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getSuperComponents(0).deepClone(parentVariant)))
+          .build()
+        );
       } else {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
         for (SubcomponentSymbol instance : subcomponents) {
           if (instance.getType().getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
             IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) instance.getType().getTypeInfo();
             subComponentVariants.put(instance, vpSolver.getSubComponentVariants(typeSymbol,
-              instance.getName(), variationPoints, parentVariant));
+              instance.getName(), variantBuilder.getIncludedVariationPoints(), parentVariant));
           }
         }
 
         // Expand variants by possible subcomponent variants
         expandCombinations(subComponentVariants).forEach(
-          e -> variants.add(new VariableArcVariantComponentTypeSymbol(componentTypeSymbol, variationPoints,
-            vpSolver.getConditionsForVariationPoints(variationPoints),
-            parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getSuperComponents(0).deepClone(parentVariant)), e))
+          e -> variants.add(variantBuilder
+            .setSuperComponents(parentVariant == null ? Collections.emptyList() : Collections.singletonList(componentTypeSymbol.getTypeInfo().getSuperComponents(0).deepClone(parentVariant)))
+            .setSubcomponentMap(e)
+            .build()
+          )
         );
       }
     }

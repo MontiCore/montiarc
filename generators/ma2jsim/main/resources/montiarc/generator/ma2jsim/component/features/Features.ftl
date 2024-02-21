@@ -1,9 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 <#list helper.getFeatures(ast) as feature>
-    protected final Boolean ${prefixes.feature()}${feature.getName()};
+    ${tc.include("montiarc.generator.ma2jsim.component.features.FeatureField.ftl", feature)}
 
-    public Boolean ${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}() {
-      return this.${prefixes.feature()}${feature.getName()};
-    }
+    ${tc.include("montiarc.generator.ma2jsim.component.features.FeatureGetter.ftl", feature)}
 </#list>

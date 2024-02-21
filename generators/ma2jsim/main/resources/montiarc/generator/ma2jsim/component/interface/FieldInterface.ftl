@@ -5,8 +5,8 @@ ${tc.signature("isTop")}
 
 interface ${ast.getName()}${suffixes.fields()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/>{
 
-  <#list ast.getFields() as field>
-    <@Util.getTypeString field.getSymbol().getType()/> ${prefixes.field()}${field.getName()}();
-    void ${prefixes.setterMethod()}${prefixes.field()}${field.getName()}(<@Util.getTypeString field.getSymbol().getType()/> value);
+  <#list ast.getSymbol().getFields() as field>
+    <@Util.getTypeString field.getType()/> ${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)}();
+    void ${prefixes.setterMethod()}${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)}(<@Util.getTypeString field.getType()/> value);
   </#list>
 }

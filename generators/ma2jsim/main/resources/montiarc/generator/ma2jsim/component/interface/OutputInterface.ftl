@@ -6,10 +6,10 @@ ${tc.signature("isTop")}
 interface ${ast.getName()}${suffixes.output()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/> {
 
   default java.util.List${"<"}montiarc.rte.port.TimeAwareOutPort${"<?>>"} getAllOutPorts() {
-    return java.util.List.of(<#list ast.getSymbol().getAllOutgoingPorts() as portSym>${prefixes.port()}${portSym.getName()}()<#sep>, </#sep></#list>);
+    return java.util.List.of(<#list ast.getSymbol().getAllOutgoingPorts() as portSym>${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(ast, portSym)}()<#sep>, </#sep></#list>);
   }
 
   <#list ast.getSymbol().getAllOutgoingPorts() as portSym>
-    <@Util.getStaticPortClass portSym ast.getSymbol().isAtomic()/><<@Util.getPortTypeString portSym.getType()/>> ${prefixes.port()}${portSym.getName()}();
+    <@Util.getStaticPortClass portSym ast.getSymbol().isAtomic()/><<@Util.getPortTypeString portSym.getType()/>> ${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(ast, portSym)}();
   </#list>
 }

@@ -159,6 +159,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   public List<VariableSymbol> getFields() {
     return this.getSpannedScope().getLocalVariableSymbols().stream()
       .filter(f -> !(f instanceof Port2VariableAdapter))
+      .filter(f -> !(f instanceof Subcomponent2VariableAdapter))
       .collect(Collectors.toList());
   }
 

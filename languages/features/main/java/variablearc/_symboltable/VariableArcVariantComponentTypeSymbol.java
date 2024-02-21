@@ -33,12 +33,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   protected Map<ArcPortSymbol, VariantPortSymbol> portSymbolMap;
 
-  public VariableArcVariantComponentTypeSymbol(@NotNull IVariableArcComponentTypeSymbol type,
-                                               @NotNull Set<VariableArcVariationPoint> variationPoints,
-                                               @NotNull ExpressionSet conditions,
-                                               @NotNull List<CompKindExpression> superComponents) {
-    this(type, variationPoints, conditions, superComponents, Collections.emptyMap());
-  }
+  protected Map<ArcFeatureSymbol, Boolean> featureSymbolBooleanMap;
 
   /**
    * Creates a new component variant type symbol.
@@ -51,20 +46,17 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
                                                @NotNull Set<VariableArcVariationPoint> variationPoints,
                                                @NotNull ExpressionSet conditions,
                                                @NotNull List<CompKindExpression> superComponents,
-                                               @NotNull Map<SubcomponentSymbol, VariantSubcomponentSymbol> subcomponentMap) {
+                                               @NotNull Map<SubcomponentSymbol, VariantSubcomponentSymbol> subcomponentMap,
+                                               @NotNull Map<ArcFeatureSymbol, Boolean> featureSymbolBooleanMap) {
     super(type.getTypeInfo().getName());
 
     typeSymbol = type;
     includedVariationPoints = variationPoints;
     this.setAstNodeAbsent();
-    this.conditions = conditions.add(type.getConstraints());
+    this.conditions = conditions;
     this.superComponents = superComponents;
     this.subcomponentMap = subcomponentMap;
-    for (VariantSubcomponentSymbol instanceSymbol : subcomponentMap.values()) {
-      // Adds the required conditions of subcomponents to this component
-      conditions.add(((VariableArcVariantComponentTypeSymbol) instanceSymbol.getType().getTypeInfo()).getConditions()
-        .copyAddPrefix(instanceSymbol.getName()));
-    }
+    this.featureSymbolBooleanMap = featureSymbolBooleanMap;
     portSymbolMap = new HashMap<>();
 
     if (typeSymbol.getTypeInfo().isPresentAstNode()) {
@@ -79,10 +71,26 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
    * @return All conditions that need to hold for this variant to be selected (including subcomponent conditions)
    */
   public ExpressionSet getConditions() {
+    ExpressionSet conditions = this.conditions.copy().add(typeSymbol.getConstraints());
+    for (VariantSubcomponentSymbol instanceSymbol : subcomponentMap.values()) {
+      // Adds the required conditions of subcomponents to this component
+      conditions.add(((VariableArcVariantComponentTypeSymbol) instanceSymbol.getType().getTypeInfo()).getConditions()
+        .copyAddPrefix(instanceSymbol.getName()));
+    }
+    return conditions;
+  }
+
+  /**
+   * @return Local conditions that need to hold for this variant to be selected (excluding subcomponent conditions and constraints)
+   */
+  public ExpressionSet getLocalConditions() {
     return conditions;
   }
 
   public boolean containsSymbol(@NotNull ISymbol symbol) {
+    if (symbol instanceof VariantPortSymbol) {
+      symbol = ((VariantPortSymbol) symbol).getOriginal();
+    }
     if (symbol instanceof Port2VariableAdapter) {
       symbol = ((Port2VariableAdapter) symbol).getAdaptee();
     }
@@ -100,6 +108,10 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
     return includedVariationPoints;
   }
 
+  public IVariableArcComponentTypeSymbol getTypeSymbol() {
+    return typeSymbol;
+  }
+
   @Override
   public List<VariableSymbol> getFields() {
     return typeSymbol.getTypeInfo().getFields().stream().filter(this::containsSymbol).collect(Collectors.toList());
@@ -107,7 +119,7 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   @Override
   public List<ArcPortSymbol> getAllArcPorts() {
-    return typeSymbol.getTypeInfo().getAllArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
+    return super.getAllArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
       .collect(Collectors.toList());
   }
 
@@ -126,6 +138,9 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   protected ArcPortSymbol getVariantPortSymbol(ArcPortSymbol port) {
+    if (port instanceof VariantPortSymbol) {
+      return port;
+    }
     if (!portSymbolMap.containsKey(port)) {
       portSymbolMap.put(port, new VariantPortSymbol(port, this));
     }
@@ -166,7 +181,16 @@ public class VariableArcVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
+  public String getFullName() {
+    return typeSymbol.getTypeInfo().getFullName();
+  }
+
+  @Override
   public String toString() {
     return "Variant (" + getIncludedVariationPoints().stream().map(VariableArcVariationPoint::getCondition).map(Expression::print).reduce((a, b) -> a + ", " + b).orElse("") + ")";
+  }
+
+  public Map<ArcFeatureSymbol, Boolean> getFeatureSymbolBooleanMap() {
+    return featureSymbolBooleanMap;
   }
 }

@@ -15,3 +15,5 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.OutputInterface
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.ParameterInterface.ftl", ast.getComponentType(), [isTop])}
 
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.FieldInterface.ftl", ast.getComponentType(), [isTop])}
+
+${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.FeatureInterface.ftl", ast.getComponentType(), [isTop])}

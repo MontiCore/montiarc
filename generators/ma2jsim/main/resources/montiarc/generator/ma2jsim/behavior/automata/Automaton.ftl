@@ -1,16 +1,20 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTComponentType ast -->
-${tc.signature("isTop")}
+<#-- ASTMACompilationUnit ast -->
+${tc.signature("ast", "isTop", "variant")}
+/* (c) https://github.com/MontiCore/monticore */
+<#if ast.isPresentPackage()>
+    ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
+</#if>
 
-<#assign automaton = helper.getAutomatonBehavior(ast).get()/>
+<#assign automaton = helper.getAutomatonBehavior(variant.getAstNode()).get() />
 <#assign isEvent = helper.isEventBased(automaton)/>
 
-${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.Header.ftl", ast, [isTop])}
+${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.Header.ftl", variant.getAstNode(), [isTop, automaton])}
 {
 <#if isEvent>
-  ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.EventBody.ftl", ast, [isTop])}
+  ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.EventBody.ftl", variant.getAstNode(), [isTop, automaton])}
 <#else>
-  ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.SyncBody.ftl", ast, [isTop])}
+  ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.SyncBody.ftl", variant.getAstNode(), [isTop])}
 </#if>
-  ${tc.include("montiarc/generator/ma2jsim/behavior/automata/Init.ftl")}
+  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/Init.ftl", variant.getAstNode(), [automaton])}
 }

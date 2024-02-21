@@ -3,12 +3,12 @@
 ${tc.signature("className")}
 <#list helper.getFeatures(ast) as feature>
     <#assign fieldName>${prefixes.feature()}${feature.getName()}</#assign>
-    protected Boolean ${fieldName} = false;
+    protected boolean ${fieldName} = false;
 
-    public ${className} ${prefixes.setterMethod()}${fieldName}(Boolean ${fieldName}) {
-    this.${fieldName} = ${fieldName};
-    return this;
+    public ${className} ${prefixes.setterMethod()}${fieldName}(boolean ${fieldName}) {
+        this.${fieldName} = ${fieldName};
+        return this;
     }
 
-    public Boolean ${prefixes.getterMethod()}${fieldName}() { return this.${fieldName}; }
+    public boolean ${prefixes.getterMethod()}${fieldName}() { return this.${fieldName}; }
 </#list>

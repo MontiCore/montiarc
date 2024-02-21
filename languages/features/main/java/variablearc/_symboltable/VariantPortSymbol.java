@@ -11,10 +11,13 @@ import java.util.Optional;
  */
 public class VariantPortSymbol extends ArcPortSymbol {
 
+  protected ArcPortSymbol parent;
+
   protected VariableArcVariantComponentTypeSymbol variantComponentTypeSymbol;
 
   public VariantPortSymbol(ArcPortSymbol parent, VariableArcVariantComponentTypeSymbol variantSymbol) {
     super(parent.getName());
+    this.parent = parent;
     this.setIncoming(parent.isIncoming());
     this.setOutgoing(parent.isOutgoing());
     this.setType(parent.getType());
@@ -24,13 +27,17 @@ public class VariantPortSymbol extends ArcPortSymbol {
       this.setAstNode(parent.getAstNode());
     }
 
-    if (!variantSymbol.isPresentAstNode()) { // workaround for not being able to recalculate the timings without the AST
+    if (!parent.isPresentAstNode()) { // workaround for not being able to recalculate the timings without the AST
       this.setTiming(parent.getTiming());
       this.setDelayed(parent.getDelayed());
       this.setStronglyCausal(parent.getStronglyCausal());
     }
 
     variantComponentTypeSymbol = variantSymbol;
+  }
+
+  public ArcPortSymbol getOriginal() {
+    return parent;
   }
 
   @Override

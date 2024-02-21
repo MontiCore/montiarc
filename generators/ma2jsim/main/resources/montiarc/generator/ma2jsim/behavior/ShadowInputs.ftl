@@ -1,11 +1,11 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- AST IGNORED -->
+<#-- ASTComponentType ast -->
 ${tc.signature("portSymbols", "pollBuffer")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#list portSymbols as port>
   final <@Util.getTypeString port.getType()/> ${port.getName()} = <@unboxChar port/>
-  (<#if pollBuffer>context.${prefixes.port()}${port.getName()}().isTickBlocked() ? ${helper.getNullLikeValue(port.getType())} : </#if>
-    context.${prefixes.port()}${port.getName()}().<#if pollBuffer>poll<#else>peek</#if>Buffer().getData()<@unboxNumbers port/>);
+  (<#if pollBuffer>context.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}().isTickBlocked() ? ${helper.getNullLikeValue(port.getType())} : </#if>
+    context.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}().<#if pollBuffer>poll<#else>peek</#if>Buffer().getData()<@unboxNumbers port/>);
 </#list>
 
 <#macro unboxChar port>

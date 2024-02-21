@@ -29,7 +29,9 @@ import static java.util.Map.entry;
  * Tests the inc-check mechanics of the generation of the MA2JSimTool.
  */
 class MA2JSimToolIncrementalityTest {
-  @TempDir Path tempDir;
+
+  @TempDir
+  Path tempDir;
   WatchService fileWatcher;
   Path modelDir;
   Path hwcDir;
@@ -65,7 +67,7 @@ class MA2JSimToolIncrementalityTest {
   }
 
   private void invokeTool() {
-    MA2JSimTool.main(new String[] {
+    MA2JSimTool.main(new String[]{
       "--modelpath", modelDir.toString(),
       "--handwritten-code", hwcDir.toString(),
       "--output", javaOutDir.toString(),
@@ -78,7 +80,7 @@ class MA2JSimToolIncrementalityTest {
     // Given
     createBasicProjectStructure();
     addAutomatonModel("Foo", modelDir);
-    addAtomicDeployModel("Bar",  modelDir);
+    addAtomicDeployModel("Bar", modelDir);
 
     // When
     invokeTool();
@@ -91,11 +93,13 @@ class MA2JSimToolIncrementalityTest {
       entry("FooAutomaton.java", List.of(ENTRY_CREATE)),
       entry("FooAutomatonBuilder.java", List.of(ENTRY_CREATE)),
       entry("FooStates.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       entry("DeployBar.java", List.of(ENTRY_CREATE)),
       entry("BarComp.java", List.of(ENTRY_CREATE)),
       entry("BarCompBuilder.java", List.of(ENTRY_CREATE)),
-      entry("BarContext.java", List.of(ENTRY_CREATE))
+      entry("BarContext.java", List.of(ENTRY_CREATE)),
+      entry("BarEvents.java", List.of(ENTRY_CREATE))
     ));
   }
 
@@ -117,12 +121,13 @@ class MA2JSimToolIncrementalityTest {
       "FooContext.java", List.of(ENTRY_CREATE),
       "FooAutomaton.java", List.of(ENTRY_CREATE),
       "FooAutomatonBuilder.java", List.of(ENTRY_CREATE),
-      "FooStates.java", List.of(ENTRY_CREATE)
+      "FooStates.java", List.of(ENTRY_CREATE),
+      "FooEvents.java", List.of(ENTRY_CREATE)
     ));
   }
 
   @Test
-  void testAddedFile() throws IOException, InterruptedException{
+  void testAddedFile() throws IOException, InterruptedException {
     // Given
     createBasicProjectStructure();
     addAutomatonModel("Foo", modelDir);
@@ -141,6 +146,7 @@ class MA2JSimToolIncrementalityTest {
       entry("FooAutomaton.java", List.of(ENTRY_CREATE)),
       entry("FooAutomatonBuilder.java", List.of(ENTRY_CREATE)),
       entry("FooStates.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       // Expect only one create event from the second run
       entry("AddedComp.java", List.of(ENTRY_CREATE)),
@@ -148,7 +154,8 @@ class MA2JSimToolIncrementalityTest {
       entry("AddedContext.java", List.of(ENTRY_CREATE)),
       entry("AddedAutomaton.java", List.of(ENTRY_CREATE)),
       entry("AddedAutomatonBuilder.java", List.of(ENTRY_CREATE)),
-      entry("AddedStates.java", List.of(ENTRY_CREATE))
+      entry("AddedStates.java", List.of(ENTRY_CREATE)),
+      entry("AddedEvents.java", List.of(ENTRY_CREATE))
     ));
   }
 
@@ -173,6 +180,7 @@ class MA2JSimToolIncrementalityTest {
       entry("FooAutomaton.java", List.of(ENTRY_CREATE)),
       entry("FooAutomatonBuilder.java", List.of(ENTRY_CREATE)),
       entry("FooStates.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       // Should be deleted
       entry("CompToRemoveComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
@@ -180,7 +188,8 @@ class MA2JSimToolIncrementalityTest {
       entry("CompToRemoveContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
       entry("CompToRemoveAutomaton.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
       entry("CompToRemoveAutomatonBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
-      entry("CompToRemoveStates.java", List.of(ENTRY_CREATE, ENTRY_DELETE))
+      entry("CompToRemoveStates.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
+      entry("CompToRemoveEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE))
     ));
   }
 
@@ -207,12 +216,14 @@ class MA2JSimToolIncrementalityTest {
       entry("FooAutomaton.java", List.of(ENTRY_CREATE)),
       entry("FooAutomatonBuilder.java", List.of(ENTRY_CREATE)),
       entry("FooStates.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       // Should be updated + it is not deployed anymore -> delete deploy file
       entry("DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
       entry("CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
       entry("CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
-      entry("CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
+      entry("CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -229,19 +240,21 @@ class MA2JSimToolIncrementalityTest {
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
+    assertFileEventsToBeExactly(fileWatcher, Map.ofEntries(
       // Should stay unaffected
-      "DeployFoo.java", List.of(ENTRY_CREATE),
-      "FooComp.java", List.of(ENTRY_CREATE),
-      "FooCompBuilder.java", List.of(ENTRY_CREATE),
-      "FooContext.java", List.of(ENTRY_CREATE),
+      entry("DeployFoo.java", List.of(ENTRY_CREATE)),
+      entry("FooComp.java", List.of(ENTRY_CREATE)),
+      entry("FooCompBuilder.java", List.of(ENTRY_CREATE)),
+      entry("FooContext.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       // Should regenerate everything, but for the deploy class, delete the old and generate a TOP class
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "DeployCompToUpdateTOP.java", List.of(ENTRY_CREATE),
-      "CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
+      entry("DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
+      entry("DeployCompToUpdateTOP.java", List.of(ENTRY_CREATE)),
+      entry("CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -259,19 +272,21 @@ class MA2JSimToolIncrementalityTest {
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
+    assertFileEventsToBeExactly(fileWatcher, Map.ofEntries(
       // Should stay unaffected
-      "DeployFoo.java", List.of(ENTRY_CREATE),
-      "FooComp.java", List.of(ENTRY_CREATE),
-      "FooCompBuilder.java", List.of(ENTRY_CREATE),
-      "FooContext.java", List.of(ENTRY_CREATE),
+      entry("DeployFoo.java", List.of(ENTRY_CREATE)),
+      entry("FooComp.java", List.of(ENTRY_CREATE)),
+      entry("FooCompBuilder.java", List.of(ENTRY_CREATE)),
+      entry("FooContext.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       // Should regenerate everything, but for the deploy class, delete the TOP class and generate a normal one
-      "DeployCompToUpdateTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE),
-      "CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
+      entry("DeployCompToUpdateTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
+      entry("DeployCompToUpdate.java", List.of(ENTRY_CREATE)),
+      entry("CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -294,12 +309,14 @@ class MA2JSimToolIncrementalityTest {
       "FooComp.java", List.of(ENTRY_CREATE),
       "FooCompBuilder.java", List.of(ENTRY_CREATE),
       "FooContext.java", List.of(ENTRY_CREATE),
+      "FooEvents.java", List.of(ENTRY_CREATE),
 
       // Should regenerate everything
       "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
       "CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
       "CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
+      "CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
+      "CompToUpdateEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
     ));
   }
 
@@ -332,12 +349,14 @@ class MA2JSimToolIncrementalityTest {
       "FooComp.java", List.of(ENTRY_CREATE),
       "FooCompBuilder.java", List.of(ENTRY_CREATE),
       "FooContext.java", List.of(ENTRY_CREATE),
+      "FooEvents.java", List.of(ENTRY_CREATE),
 
       // Should be deleted and regenerated (as content changed). Moreover, Deploy should be removed
       "DeployModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
       "ModifiedComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
       "ModifiedCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ModifiedContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
+      "ModifiedContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
+      "ModifiedEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
     ));
   }
 
@@ -357,19 +376,21 @@ class MA2JSimToolIncrementalityTest {
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
+    assertFileEventsToBeExactly(fileWatcher, Map.ofEntries(
       // Should remain unaffected:
-      "DeployFoo.java", List.of(ENTRY_CREATE),
-      "FooComp.java", List.of(ENTRY_CREATE),
-      "FooCompBuilder.java", List.of(ENTRY_CREATE),
-      "FooContext.java", List.of(ENTRY_CREATE),
+      entry("DeployFoo.java", List.of(ENTRY_CREATE)),
+      entry("FooComp.java", List.of(ENTRY_CREATE)),
+      entry("FooCompBuilder.java", List.of(ENTRY_CREATE)),
+      entry("FooContext.java", List.of(ENTRY_CREATE)),
+      entry("FooEvents.java", List.of(ENTRY_CREATE)),
 
       // Should be deleted and regenerated (as hwc status changed). Moreover, TOP has to be respected
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "CompToUpdateCompTOP.java", List.of(ENTRY_CREATE),
-      "CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
+      entry("DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
+      entry("CompToUpdateCompTOP.java", List.of(ENTRY_CREATE)),
+      entry("CompToUpdateCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("CompToUpdateEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -405,19 +426,22 @@ class MA2JSimToolIncrementalityTest {
       entry("HasUnchangedHwcComp.java", List.of(ENTRY_CREATE)),
       entry("HasUnchangedHwcCompBuilder.java", List.of(ENTRY_CREATE)),
       entry("HasUnchangedHwcContext.java", List.of(ENTRY_CREATE)),
-      
+      entry("HasUnchangedHwcEvents.java", List.of(ENTRY_CREATE)),
+
       // Should remain unaffected:
       entry("DeployHasMovingHwc.java", List.of(ENTRY_CREATE)),
       entry("HasMovingHwcCompTOP.java", List.of(ENTRY_CREATE)),
       entry("HasMovingHwcCompBuilder.java", List.of(ENTRY_CREATE)),
       entry("HasMovingHwcContext.java", List.of(ENTRY_CREATE)),
+      entry("HasMovingHwcEvents.java", List.of(ENTRY_CREATE)),
 
       // Changed due to change in hwc state:
       entry("DeployWillGetNewHwc.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
       entry("WillGetNewHwcComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
       entry("WillGetNewHwcCompTOP.java", List.of(ENTRY_CREATE)),
       entry("WillGetNewHwcCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
-      entry("WillGetNewHwcContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
+      entry("WillGetNewHwcContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("WillGetNewHwcEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -455,18 +479,21 @@ class MA2JSimToolIncrementalityTest {
       entry("UnchangedComp.java", List.of(ENTRY_CREATE)),
       entry("UnchangedCompBuilder.java", List.of(ENTRY_CREATE)),
       entry("UnchangedContext.java", List.of(ENTRY_CREATE)),
+      entry("UnchangedEvents.java", List.of(ENTRY_CREATE)),
 
       // Should remain unaffected:
       entry("DeployUnchangedButMoved.java", List.of(ENTRY_CREATE)),
       entry("UnchangedButMovedComp.java", List.of(ENTRY_CREATE)),
       entry("UnchangedButMovedCompBuilder.java", List.of(ENTRY_CREATE)),
       entry("UnchangedButMovedContext.java", List.of(ENTRY_CREATE)),
+      entry("UnchangedButMovedEvents.java", List.of(ENTRY_CREATE)),
 
       // Changed -> regeneration necessary. Moreover remove deploy class (as new model has ports)
       entry("DeployChangedAndMoved.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
       entry("ChangedAndMovedComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
       entry("ChangedAndMovedCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
-      entry("ChangedAndMovedContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
+      entry("ChangedAndMovedContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("ChangedAndMovedEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -490,10 +517,12 @@ class MA2JSimToolIncrementalityTest {
       entry("NoPackageComp.java", List.of(ENTRY_CREATE)),
       entry("NoPackageCompBuilder.java", List.of(ENTRY_CREATE)),
       entry("NoPackageContext.java", List.of(ENTRY_CREATE)),
+      entry("NoPackageEvents.java", List.of(ENTRY_CREATE)),
 
       entry("NoPackageModifiedComp.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
       entry("NoPackageModifiedCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
-      entry("NoPackageModifiedContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
+      entry("NoPackageModifiedContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("NoPackageModifiedEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -508,7 +537,7 @@ class MA2JSimToolIncrementalityTest {
     invokeTool();
 
     // When invoking the tool without hwc dir
-    MA2JSimTool.main(new String[] {
+    MA2JSimTool.main(new String[]{
       "--modelpath", modelDir.toString(),
       "--output", javaOutDir.toString(),
       "--report", reportOutDir.toString()
@@ -521,13 +550,15 @@ class MA2JSimToolIncrementalityTest {
       entry("WithoutHwcComp.java", List.of(ENTRY_CREATE)),
       entry("WithoutHwcCompBuilder.java", List.of(ENTRY_CREATE)),
       entry("WithoutHwcContext.java", List.of(ENTRY_CREATE)),
+      entry("WithoutHwcEvents.java", List.of(ENTRY_CREATE)),
 
       // Should change due to changed hwc state
       entry("DeployWithHwc.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
       entry("WithHwcCompTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE)),
       entry("WithHwcComp.java", List.of(ENTRY_CREATE)),
       entry("WithHwcCompBuilder.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
-      entry("WithHwcContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
+      entry("WithHwcContext.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)),
+      entry("WithHwcEvents.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE))
     ));
   }
 
@@ -542,8 +573,9 @@ class MA2JSimToolIncrementalityTest {
         Map.Entry::getValue
       )));
   }
+
   private void assertFileEventsToBeExactlyByPath(WatchService fileWatch,
-                                           Map<Path, List<WatchEvent.Kind<?>>> expectedEvents
+                                                 Map<Path, List<WatchEvent.Kind<?>>> expectedEvents
   ) throws InterruptedException {
     // First get actual events from the file watcher and insert them into the multi-map
     Map<Path, List<WatchEvent.Kind<?>>> actualEvents = new HashMap<>();
@@ -584,7 +616,7 @@ class MA2JSimToolIncrementalityTest {
         "port in int i;" +
         "port in int o;" +
         "<<timed>> automaton {" +
-          "initial state S1;" +
+        "initial state S1;" +
         "}" +
         "}",
       usedPackage, modelName);

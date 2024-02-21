@@ -22,6 +22,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbolBuilder;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc.evaluation.VariationPointSolver;
 import variablearc.evaluation.expressions.Expression;
@@ -141,7 +142,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     VariationPointSolver variationPointSolver = new VariationPointSolver(typeSymbol.get());
 
     // When
-    Set<Set<VariableArcVariationPoint>> actual = variationPointSolver.getCombinations(null);
+    Set<Set<VariableArcVariationPoint>> actual = variationPointSolver.getCombinations(null).stream().map(VariableArcVariantComponentTypeSymbolBuilder::getIncludedVariationPoints).collect(Collectors.toSet());
     variationPointSolver.close();
 
     // Then

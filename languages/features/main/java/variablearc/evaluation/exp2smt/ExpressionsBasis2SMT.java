@@ -54,7 +54,7 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
     Preconditions.checkNotNull(node);
     Optional<Sort> sort = this.getExpr2Sort().toSort(this.getContext(), node);
     if (sort.isPresent()) {
-      this.getResult().setValue(this.getContext().mkConst(getPrefix() + "." + node.getName(), sort.get()));
+      this.getResult().setValue(this.getContext().mkConst((getPrefix().isEmpty() ? "" : getPrefix() + ".") + node.getName(), sort.get()));
     } else {
       this.getResult().clear();
     }

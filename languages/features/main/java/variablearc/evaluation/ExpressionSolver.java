@@ -9,7 +9,6 @@ import com.microsoft.z3.Status;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
-import variablearc.evaluation.expressions.Expression;
 
 import java.util.Optional;
 import java.util.stream.Stream;

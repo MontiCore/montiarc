@@ -9,4 +9,10 @@ public interface IBehavior {
    * Untimed behavior simply implements an empty method.
    */
   void tick();
+
+  /**
+   * Initialize behavior.
+   * If no initialization is necessary implement an empty body.
+   */
+  void init();
 }

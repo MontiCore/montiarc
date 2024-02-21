@@ -24,6 +24,8 @@ public class Suffixes {
   public final static String COMPUTE = "Compute";
   public final static String FIELDS = "Fields";
   public final static String PARAMETERS = "Parameters";
+  public final static String FEATURES = "Features";
+  public final static String EVENTS = "Events";
 
   public String top() { return TOP; }
   public String component() { return COMPONENT; }
@@ -38,4 +40,6 @@ public class Suffixes {
   public String compute() { return COMPUTE; }
   public String fields() { return FIELDS; }
   public String parameters() { return PARAMETERS; }
+  public String features() { return FEATURES; }
+  public String events() { return EVENTS; }
 }

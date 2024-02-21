@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTArcField ast -->
+<#-- ASTComponentType ast-->
+${tc.signature("field")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
-protected <@Util.getTypeString ast.getSymbol().getType()/> ${prefixes.field()}${ast.getName()} = ${prettyPrinter.prettyprint(ast.getInitial())};
+protected <@Util.getTypeString field.getType()/> ${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)} = ${prettyPrinter.prettyprint(helper.getInitialForVariable(field))};

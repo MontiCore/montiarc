@@ -25,6 +25,11 @@ public class VariantSubcomponentSymbol extends SubcomponentSymbol {
     this.setType(type);
     this.parent = parent;
   }
+
+  public SubcomponentSymbol getOriginal() {
+    return parent;
+  }
+
   @Override
   public ICompSymbolsScope getEnclosingScope() {
     return parent.getEnclosingScope();

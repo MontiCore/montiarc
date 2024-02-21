@@ -1,7 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- AST IGNORED -->
+<#-- ASTComponentType ast -->
 ${tc.signature("fields")}
 <#list fields as field>
     <#if !field.getSymbol().getType().isPrimitive()>if(${field.getName()} != null)</#if>
-  context.${prefixes.setterMethod()}${prefixes.field()}${field.getName()}(${field.getName()});
+  context.${prefixes.setterMethod()}${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field.getSymbol())}(${field.getName()});
 </#list>

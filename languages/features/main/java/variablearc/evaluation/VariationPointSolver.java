@@ -4,14 +4,27 @@ package variablearc.evaluation;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Status;
+import com.microsoft.z3.enumerations.Z3_lbool;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc._symboltable.VariableArcVariationPoint;
+import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc._symboltable.IVariableArcScope;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbolBuilder;
+import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc.evaluation.expressions.Expression;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -36,17 +49,32 @@ public class VariationPointSolver {
    *
    * @return Set of immutable sets of variation points
    */
-  public Set<Set<VariableArcVariationPoint>> getCombinations(@Nullable VariableArcVariantComponentTypeSymbol parentVariant) {
+  public Set<VariableArcVariantComponentTypeSymbolBuilder> getCombinations(@Nullable VariableArcVariantComponentTypeSymbol parentVariant) {
 
-    Set<Set<VariableArcVariationPoint>> res =
-      new HashSet<>(Sets.powerSet(ImmutableSet.copyOf(origin.getAllVariationPoints())));
-    res.removeIf(
-      includedVPs -> {
-        ExpressionSet expressions = getConditionsForVariationPoints(includedVPs);
-        expressions.add(origin.getConstraints());
-        if (parentVariant != null) expressions.add(parentVariant.getConditions());
-        return !expressionSolver.solve(expressions).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS);
-      });
+    Set<VariableArcVariantComponentTypeSymbolBuilder> res = new HashSet<>();
+    for (Set<VariableArcVariationPoint> includedVPs : Sets.powerSet(ImmutableSet.copyOf(origin.getAllVariationPoints()))) {
+      ExpressionSet expressions = getConditionsForVariationPoints(includedVPs);
+      expressions.add(origin.getConstraints());
+      if (parentVariant != null) {
+        expressions.add(parentVariant.getConditions());
+      }
+
+      Optional<Solver> smtSolver = expressionSolver.getSolver(expressions);
+      if (smtSolver.map(Solver::check).map(status -> status == Status.SATISFIABLE || (INCLUDE_INCONVERTIBLE_VARIATIONS && status == Status.UNKNOWN)).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS)) {
+        HashMap<ArcFeatureSymbol, Boolean> featureSymbolBooleanMap = new HashMap<>();
+        Optional<Model> model = smtSolver.map(Solver::getModel);
+        for (ArcFeatureSymbol feature : ((IVariableArcScope) origin.getTypeInfo().getSpannedScope()).getLocalArcFeatureSymbols()) {
+          featureSymbolBooleanMap.put(feature, model.map(m -> m.getConstInterp(expressionSolver.getContext().mkBoolConst(feature.getName()))).map(v -> v.getBoolValue() == Z3_lbool.Z3_L_TRUE).orElse(true));
+        }
+
+        res.add(new VariableArcVariantComponentTypeSymbolBuilder()
+          .setTypeSymbol(origin)
+          .setIncludedVariationPoints(includedVPs)
+          .setConditions(getConditionsForVariationPoints(includedVPs))
+          .setFeatureSymbolBooleanMap(featureSymbolBooleanMap)
+        );
+      }
+    }
     return res;
   }
 
@@ -57,7 +85,7 @@ public class VariationPointSolver {
    * @param type                The type of the subcomponent.
    * @param prefix              the "path" to the subcomponent (i.e. child1.comp).
    * @param originConfiguration provided configuration for the origin component.
-   * @return Set of immutable sets of variation points.
+   * @return List of immutable sets of variation points.
    */
   public List<VariableArcVariantComponentTypeSymbol> getSubComponentVariants(@NotNull IVariableArcComponentTypeSymbol type,
                                                                              @NotNull String prefix,

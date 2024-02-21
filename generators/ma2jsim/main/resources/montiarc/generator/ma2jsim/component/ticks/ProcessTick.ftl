@@ -2,20 +2,17 @@
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#assign isAtomic = ast.getSymbol().isAtomic()/>
-<#assign isEventAutomaton = helper.getAutomatonBehavior(ast).isPresent()
-                         && helper.isEventBased(helper.getAutomatonBehavior(ast).get())/>
 <#assign hasModeAutomaton = helper.getModeAutomaton(ast).isPresent()/>
 
 protected void <@MethodNames.handleTick/>() {
   if(!<@MethodNames.inputsTickBlocked/>()) return;
   <#if isAtomic>
-      <#if isEventAutomaton>
-          <@MethodNames.getBehavior/>().tick();
-      </#if>
+      if (!isSync) <@MethodNames.getBehavior/>().tick();
       <@MethodNames.dropTickOnAll/>();
       <@MethodNames.sendTickOnAll/>();
-      <#if !isEventAutomaton>if(getAllInPorts().stream().allMatch(montiarc.rte.port.ITimeAwareInPort::hasBufferedTick))</#if>
-      getAllInPorts().forEach(montiarc.rte.port.ITimeAwareInPort::continueAfterDroppedTick);
+      if(!isSync || getAllInPorts().stream().allMatch(montiarc.rte.port.ITimeAwareInPort::hasBufferedTick)) {
+        getAllInPorts().forEach(montiarc.rte.port.ITimeAwareInPort::continueAfterDroppedTick);
+      }
   <#else>
       <#if hasModeAutomaton>
           <@MethodNames.getModeAutomaton/>().tick();

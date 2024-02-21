@@ -1,12 +1,15 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
-protected void <@MethodNames.connectorSetup/>() {
-    <#list ast.getConnectors() as conn>
-        <#assign sourcePort><#if conn.getSource().isPresentComponent()>${prefixes.subcomp()}${conn.getSource().getComponent()}().</#if>${prefixes.port()}${conn.getSource().getPort()}()</#assign>
-      <#list conn.getTargetList() as target>
-          <#assign targetPort><#if target.isPresentComponent()>${prefixes.subcomp()}${target.getComponent()}().</#if>${prefixes.port()}${target.getPort()}()</#assign>
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
+<#list helper.getVariants(ast) as variant>
+protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() {
+<#list variant.getAstNode().getConnectors() as conn>
+    <#assign sourcePort><#if conn.getSource().isPresentComponent()>${prefixes.subcomp()}${conn.getSource().getComponent()}${helper.subcomponentVariantSuffix(ast, conn.getSource().getComponentSymbol())}().</#if>${prefixes.port()}${conn.getSource().getPort()}<#if conn.getSource().isPresentComponent()>${helper.portVariantSuffix(conn.getSource().getComponentSymbol(), conn.getSource().getPortSymbol())}<#else>${helper.portVariantSuffix(ast, conn.getSource().getPortSymbol())}</#if>()</#assign>
+    <#list conn.getTargetList() as target>
+        <#assign targetPort><#if target.isPresentComponent()>${prefixes.subcomp()}${target.getComponent()}${helper.subcomponentVariantSuffix(ast, target.getComponentSymbol())}().</#if>${prefixes.port()}${target.getPort()}<#if target.isPresentComponent()>${helper.portVariantSuffix(target.getComponentSymbol(), target.getPortSymbol())}<#else>${helper.portVariantSuffix(ast, target.getPortSymbol())}</#if>()</#assign>
         ${sourcePort}.connect(${targetPort});
-      </#list>
     </#list>
+</#list>
 }
+</#list>

@@ -1,13 +1,17 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTComponentType ast -->
-${tc.signature("isTop")}
+${tc.signature("ast", "isTop", "variant")}
+/* (c) https://github.com/MontiCore/monticore */
+<#if ast.isPresentPackage()>
+    ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
+</#if>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
+<#assign ast = variant.getAstNode() />
+<#assign automaton = helper.getAutomatonBehavior(ast).get() />
 <#assign ubGenerics><@Util.printTypeParameters ast false/></#assign>
-<#assign automaton = helper.getAutomatonBehavior(ast).get()/>
 <#assign isEvent = helper.isEventBased(automaton)/>
 <#assign MODIFIER><#if isTop>abstract<#else></#if></#assign>
-<#assign CLASS>${ast.getName()}${suffixes.automaton()}${suffixes.builder()}<#if isTop>TOP</#if></#assign>
-<#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"}${ast.getName()}${suffixes.context()}${ubGenerics}, ${ast.getName()}${suffixes.automaton()}${ubGenerics}${">"}</#assign>
+<#assign CLASS>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${suffixes.builder()}<#if isTop>TOP</#if></#assign>
+<#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"}${ast.getName()}${suffixes.context()}${ubGenerics}, ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}${">"}</#assign>
 <#assign CONTEXT>${ast.getName()}${suffixes.context()}${ubGenerics}</#assign>
 
 public ${MODIFIER} class ${CLASS}<@Util.printTypeParameters ast/> extends ${SUPER} {
@@ -28,7 +32,7 @@ public ${CLASS}() { super(); }
 @Override
 public ${SUPER} addDefaultStates() { <#-- TODO replace super with concrete type? -->
   this.addStates(java.util.List.of(
-    <#list helper.streamToList(automaton.streamStates()) as state>${ast.getName()}${suffixes.states()}.${prefixes.state()}${state.getName()}<#sep>, </#sep></#list>
+    <#list helper.streamToList(automaton.streamStates()) as state>${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}<#sep>, </#sep></#list>
   ));
   return this;
 }
@@ -37,7 +41,7 @@ public ${SUPER} addDefaultStates() { <#-- TODO replace super with concrete type?
 @Override
 public ${SUPER} addDefaultTransitions() {
 <#list helper.getTransitionsWithoutEvent(automaton) as transition>
-  this.addTransition(${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [transition, ast.getSymbol().getAllIncomingPorts()])});
+  this.addTransition(${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", ast, [automaton, transition, ast.getSymbol().getAllIncomingPorts()])});
 </#list>
   return this;
 }
@@ -45,16 +49,16 @@ public ${SUPER} addDefaultTransitions() {
 
 @Override
 public ${SUPER} setDefaultInitial() {
-  this.setInitial(${ast.getName()}${suffixes.states()}.${prefixes.state()}${helper.streamToList(automaton.streamInitialStates())?first.getName()});
+  this.setInitial(${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${helper.streamToList(automaton.streamInitialStates())?first.getName()});
   return this;
 }
 
 <#if !isTop>
-public ${ast.getName()}${suffixes.automaton()}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
+public ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
   java.util.List${"<"}montiarc.rte.automaton.State${">"} states,
   <#if !isEvent>java.util.List${"<"}montiarc.rte.automaton.Transition${">"} transitions,</#if>
   montiarc.rte.automaton.State initial) {
-    return new ${ast.getName()}${suffixes.automaton()}${ubGenerics}(context, states, <#if !isEvent>transitions, </#if>initial);
+    return new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}(context, states, <#if !isEvent>transitions, </#if>initial);
 }
 </#if>
 }

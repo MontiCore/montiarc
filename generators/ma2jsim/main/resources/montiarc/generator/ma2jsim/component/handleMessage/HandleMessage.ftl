@@ -4,7 +4,6 @@
 
 @Override
 public void handleMessage(montiarc.rte.port.IInPort<?> receivingPort) {
-<#if helper.getModeAutomaton(ast).isPresent()><@MethodNames.handleModeAutomaton/>(receivingPort);</#if>
 <#if ast.getSymbol().isAtomic()>
     ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.AtomicMethodBody.ftl")}
 <#else>
