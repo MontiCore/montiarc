@@ -1,52 +1,37 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.google.common.base.Preconditions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.ArrayList;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests the inc-check mechanics of the serialization of symbols of the MontiArcTool.
  */
 class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
 
-  @TempDir Path tempDir;
-  WatchService fileWatcher;
+  @TempDir
+  Path tempDir;
+
   Path modelDir;
+
   Path symbolsOutDir;
+
   Path reportOutDir;
 
   String usedPackage = "pack.age";
+
   Path usedPackageAsPath = Path.of("pack", "age");
-
-  private static final WatchEvent.Kind<?>[] eventsToMonitor = {
-    ENTRY_CREATE, ENTRY_DELETE
-  };
-
-  @BeforeEach
-  void setUpFileWatcher() throws IOException {
-    fileWatcher = FileSystems.getDefault().newWatchService();
-  }
-
-  @AfterEach
-  void tearDownFileWatcher() throws IOException {
-    fileWatcher.close();
-  }
 
   private void createBasicProjectStructure() throws IOException {
     modelDir = Files.createDirectory(tempDir.resolve("models"));
@@ -54,7 +39,6 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     reportOutDir = Files.createDirectory(tempDir.resolve("out-report"));
 
     Files.createDirectories(symbolsOutDir.resolve(usedPackageAsPath));
-    symbolsOutDir.resolve(usedPackageAsPath).register(fileWatcher, eventsToMonitor);
   }
 
   private void invokeTool() {
@@ -66,7 +50,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
   }
 
   @Test
-  void testStoreSymbolsCreatesFiles() throws IOException, InterruptedException {
+  void testStoreSymbolsCreatesFiles() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel( "Foo", modelDir);
@@ -76,72 +60,88 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE),
-      "Bar.arcsym", List.of(ENTRY_CREATE)
-    ));
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile()).exists();
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Bar.arcsym").toFile()).exists();
   }
 
   @Test
-  void testNoModification() throws IOException, InterruptedException {
+  void testNoModification() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel("Foo", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
 
     // When
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE)  // Only one create event from the first run
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
   }
 
   @Test
-  void testAddedFile() throws IOException, InterruptedException{
+  void testAddedFile() throws IOException {
     // Given
     createBasicProjectStructure();
     addModel("Foo", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
+
+    Preconditions.checkState(!symbolsOutDir.resolve(usedPackageAsPath).resolve("AddedComp.arcsym").toFile().exists());
 
     // When
     addModel("AddedComp", modelDir);
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE),  // Only one create event from the first run
-      "AddedComp.arcsym", List.of(ENTRY_CREATE)  // Create during second run
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
+    
+    // Should generate files for new the new input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("AddedComp.arcsym").toFile()).exists();
   }
 
   @Test
-  void testRemoval() throws IOException, InterruptedException {
+  void testRemoval() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel("Foo", modelDir);
     addModel("CompToRemove", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
+
+    Preconditions.checkState(symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToRemove.arcsym").toFile().exists());
+
     // When
     Files.delete(modelDir.resolve(usedPackageAsPath).resolve("CompToRemove.arc"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE),  // Should stay
-      "CompToRemove.arcsym", List.of(ENTRY_CREATE, ENTRY_DELETE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
+
+    // Should delete generated files of the missing input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToRemove.arcsym").toFile()).doesNotExist();
   }
 
   @Test
-  void testUpdate() throws IOException, InterruptedException {
+  void testUpdate() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel("Foo", modelDir);
     addModel("CompToUpdate", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
+    lastModified.put("CompToUpdate.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym").toFile().lastModified());
 
     // When
     Files.writeString(modelDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arc"),
@@ -150,38 +150,48 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE),  // Should stay
-      "CompToUpdate.arcsym", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
+
+    // Should regenerate files of modified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdate.arcsym"));
   }
 
   @Test
-  void testRemovalOfGeneratedFile() throws IOException, InterruptedException {
+  void testRemovalOfGeneratedFile() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel("Foo", modelDir);
     addModel("CompToUpdate", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
+    lastModified.put("CompToUpdate.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym").toFile().lastModified());
+
     // When
     Files.delete(symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE),  // Should stay
-      "CompToUpdate.arcsym", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
+
+    // Should regenerate files of modified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdate.arcsym"));
   }
 
   @Test
-  void testMovingOfModelDir() throws IOException, InterruptedException {
+  void testMovingOfModelDir() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel("Foo", modelDir);
     addModel("Modified", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
+    lastModified.put("Modified.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Modified.arcsym").toFile().lastModified());
 
     // When
     Path newModelDir = Files.createDirectory(tempDir.resolve("new-models"));
@@ -198,15 +208,16 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.arcsym", List.of(ENTRY_CREATE),  // Should not re-generate
-      "Modified.arcsym", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
+
+    // Should regenerate files of modified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Modified.arcsym").toFile().lastModified()).isNotEqualTo(lastModified.get("Modified.arcsym"));
   }
 
   @Test
   @Disabled
-  void testMultipleModelPaths() throws IOException, InterruptedException {
+  void testMultipleModelPaths() throws IOException  {
     // Given
     createBasicProjectStructure();
     addModel("Unchanged", modelDir);
@@ -214,96 +225,61 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     addModel("ChangedAndMoved", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Unchanged.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Unchanged.arcsym").toFile().lastModified());
+    lastModified.put("UnchangedButMoved.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arcsym").toFile().lastModified());
+    lastModified.put("ChangedAndMoved.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arcsym").toFile().lastModified());
+
     // When adding a new model path, moving a model, and changing another one
     Path oldModelDir = modelDir;
     Path newModelDir = Files.createDirectory(tempDir.resolve("new-models"));
-    modelDir = Path.of(oldModelDir.toString() + File.pathSeparator + newModelDir.toString());
+    modelDir = Path.of(oldModelDir.toString() + File.pathSeparator + newModelDir);
 
     Files.createDirectories(newModelDir.resolve(usedPackageAsPath));
-    Files.writeString(newModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"),
-      "package " + usedPackage + "; component ChangedAndMoved { port out int i; }"
-    );
-    Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
-
     Files.copy(
       oldModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc"),
       newModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc")
     );
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc"));
+
+    Files.writeString(newModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"),
+        "package " + usedPackage + "; component ChangedAndMoved { port out int i; }"
+    );
+    Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Unchanged.arcsym", List.of(ENTRY_CREATE),  // Not changed by second run
-      "UnchangedButMoved.arcsym", List.of(ENTRY_CREATE),  // Not changed by second run
-      "ChangedAndMoved.arcsym", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Unchanged.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Unchanged.arcsym"));
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("UnchangedButMoved.arcsym"));
+
+    // Should regenerate files of modified input model
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arcsym").toFile().lastModified()).isNotEqualTo(lastModified.get("ChangedAndMoved.arcsym"));
   }
 
   @Test
-  void testNoPackage() throws IOException, InterruptedException {
+  void testNoPackage() throws IOException  {
     // Given
     createBasicProjectStructure();
-    WatchService packageLessWatcher = FileSystems.getDefault().newWatchService();
-    symbolsOutDir.register(packageLessWatcher, eventsToMonitor);
-
     Files.writeString(modelDir.resolve("NoPackage.arc"), "component NoPackage { port in int i; }");
     Files.writeString(modelDir.resolve("NoPackageModified.arc"), "component NoPackageModified { port in int i; }");
     invokeTool();
+
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("NoPackage.arcsym", symbolsOutDir.resolve("NoPackage.arcsym").toFile().lastModified());
+    lastModified.put("NoPackageModified.arcsym", symbolsOutDir.resolve("NoPackageModified.arcsym").toFile().lastModified());
 
     // When
     Files.writeString(modelDir.resolve("NoPackageModified.arc"), "component NoPackageModified { port out int i; }");
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(packageLessWatcher, Map.of(
-      "NoPackage.arcsym", List.of(ENTRY_CREATE),
-      "NoPackageModified.arcsym", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
-  }
+    // Should not modify generated files for the unmodified input model
+    assertThat(symbolsOutDir.resolve("NoPackage.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("NoPackage.arcsym"));
 
-  // target is moved
-
-  private void assertFileEventsToBeExactly(WatchService fileWatch,
-                                           Map<String, List<WatchEvent.Kind<?>>> expectedEvents
-  ) throws InterruptedException {
-    this.assertFileEventsToBeExactlyByPath(fileWatch,
-      expectedEvents.entrySet().stream().collect(Collectors.toMap(
-        entry -> Path.of(entry.getKey()),
-        Map.Entry::getValue
-      )));
-  }
-  private void assertFileEventsToBeExactlyByPath(WatchService fileWatch,
-                                                 Map<Path, List<WatchEvent.Kind<?>>> expectedEvents
-  ) throws InterruptedException {
-    // First get actual events
-    Map<Path, List<WatchEvent.Kind<?>>> actualEvents = new HashMap<>();
-
-    WatchKey key = fileWatch.take();
-    for (WatchEvent<?> event : key.pollEvents()) {
-      if (Path.class.isAssignableFrom(event.kind().type())) {
-        Path fileOfEvent = (Path) event.context();
-
-        if (!actualEvents.containsKey(event.context())) {
-          actualEvents.put(fileOfEvent, new ArrayList<>());
-        }
-
-        actualEvents.get(fileOfEvent).add(event.kind());
-
-      } else {
-        throw new IllegalStateException("Unexpected event type: " + event.kind().type());
-      }
-    }
-
-    // Compare actual events to expected events
-    Assertions.assertThat(actualEvents.keySet())
-      .as("Actually changed files")
-      .containsExactlyInAnyOrderElementsOf(expectedEvents.keySet());
-
-    Assertions.assertThat(expectedEvents.entrySet()).allSatisfy(
-      entry -> Assertions.assertThat(actualEvents.get(entry.getKey()))
-        .as("File " + entry.getKey() + " events")
-        .containsExactlyElementsOf(entry.getValue()));
+    // Should regenerate files of modified input model
+    assertThat(symbolsOutDir.resolve("NoPackageModified.arcsym").toFile().lastModified()).isNotEqualTo(lastModified.get("NoPackageModified.arcsym"));
   }
 
   private void addModel(String modelName, Path modelDirToUse) throws IOException {

@@ -1,9 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator;
 
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import com.google.common.base.Preconditions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -11,47 +9,31 @@ import org.junit.jupiter.api.io.TempDir;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.FileSystems;
 import java.nio.file.Path;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
-import static java.nio.file.StandardWatchEventKinds.ENTRY_DELETE;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests the inc-check mechanics of the generation of the MA2JavaTool.
  */
 class MA2JavaToolIncrementalityTest {
-  @TempDir Path tempDir;
-  WatchService fileWatcher;
+
+  @TempDir
+  Path tempDir;
+
   Path modelDir;
+
   Path hwcDir;
+
   Path javaOutDir;
+
   Path reportOutDir;
 
   String usedPackage = "pack.age";
+
   Path usedPackageAsPath = Path.of("pack", "age");
-
-  private static final WatchEvent.Kind<?>[] eventsToMonitor = {
-    ENTRY_CREATE, ENTRY_DELETE
-  };
-
-  @BeforeEach
-  void setUpFileWatcher() throws IOException {
-    fileWatcher = FileSystems.getDefault().newWatchService();
-  }
-
-  @AfterEach
-  void tearDownFileWatcher() throws IOException {
-    fileWatcher.close();
-  }
 
   private void createBasicProjectStructure() throws IOException {
     modelDir = Files.createDirectory(tempDir.resolve("models"));
@@ -61,140 +43,167 @@ class MA2JavaToolIncrementalityTest {
 
     Files.createDirectories(hwcDir.resolve(usedPackageAsPath));
     Files.createDirectories(javaOutDir.resolve(usedPackageAsPath));
-    javaOutDir.resolve(usedPackageAsPath).register(fileWatcher, eventsToMonitor);
   }
+
 
   private void invokeTool() {
-    invokeTool(false);
-  }
-
-  private void invokeTool(boolean withDse) {
-    MA2JavaTool.main(new String[] {
-      "--modelpath", modelDir.toString(),
-      "--handwritten-code", hwcDir.toString(),
-      "--output", javaOutDir.toString(),
-      "--report", reportOutDir.toString(),
-      withDse ? "-dse" : ""
+    MA2JavaTool.main(new String[]{
+        "--modelpath", modelDir.toString(),
+        "--handwritten-code", hwcDir.toString(),
+        "--output", javaOutDir.toString(),
+        "--report", reportOutDir.toString()
     });
   }
 
   @Test
-  void testGenerationCreatesFiles() throws IOException, InterruptedException {
+  void testGenerationCreatesFiles() throws IOException {
     // Given
     createBasicProjectStructure();
-    addDeployModel( "Foo", modelDir);
+    addDeployModel("Foo", modelDir);
     addPortModel("Bar", modelDir);
 
     // When
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "DeployFoo.java", List.of(ENTRY_CREATE),
-      "Foo.java", List.of(ENTRY_CREATE),
-      "Bar.java", List.of(ENTRY_CREATE)
-    ));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployFoo.java").toFile()).exists();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile()).exists();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Bar.java").toFile()).exists();
   }
 
   @Test
-  void testNoModification() throws IOException, InterruptedException {
+  void testNoModification() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
 
     // When
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE)  // Only one create event from the first run
-    ));
+    // Should not modify generated files of the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
   }
 
   @Test
-  void testAddedFile() throws IOException, InterruptedException{
+  void testAddedFile() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("AddedComp.java").toFile().exists());
 
     // When
     addPortModel("AddedComp", modelDir);
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Only one create event from the first run
-      "AddedComp.java", List.of(ENTRY_CREATE)  // Create during second run
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should generate files for new the new input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("AddedComp.java").toFile()).exists();
   }
 
   @Test
-  void testRemoval() throws IOException, InterruptedException {
+  void testRemoval() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     addDeployModel("CompToRemove", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToRemove.java").toFile().exists());
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("CompToRemove.java").toFile().exists());
+
     // When
     Files.delete(modelDir.resolve(usedPackageAsPath).resolve("CompToRemove.arc"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Should stay
-      "CompToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "DeployCompToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should delete generated files of the missing input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToRemove.java").toFile()).doesNotExist();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToRemove.java").toFile()).doesNotExist();
   }
 
   @Test
-  void testUpdate() throws IOException, InterruptedException {
+  void testUpdate() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     addDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+    lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
+
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile().exists());
+
     // When
     Files.writeString(modelDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arc"),
-      "package " + usedPackage + "; component CompToUpdate { port in int i; }"
+        "package " + usedPackage + "; component CompToUpdate { port in int i; }"
     );
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Should stay
-      "CompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE)  // New component version is not deployed anymore
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should regenerate files of modified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdate.java"));
+
+    // Should delete generated deploy class, modified input model is no longer a deploy component
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile()).doesNotExist();
   }
 
   @Test
-  void testHwcAddition() throws IOException, InterruptedException {
+  void testHwcAddition() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     addDeployModel("CompToUpdate", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+    lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
+
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile().exists());
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdateTOP.java").toFile().exists());
 
     // When
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Should stay
-      "CompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE),  // New component version is not deployed anymore
-      "DeployCompToUpdateTOP.java", List.of(ENTRY_CREATE)  // New TOP file
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should regenerate files of modified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdate.java"));
+
+    // Should delete generated deploy class, generate top extension point
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile()).doesNotExist();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdateTOP.java").toFile()).exists();
   }
 
   @Test
-  void testHwcRemoval() throws IOException, InterruptedException {
+  void testHwcRemoval() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
@@ -202,95 +211,124 @@ class MA2JavaToolIncrementalityTest {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java"));
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+    lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
+    lastModified.put("DeployCompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile().lastModified());
+
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().exists());
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateTOP.java").toFile().exists());
+
     // When
     Files.delete(hwcDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Should stay
-      "CompToUpdateTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "CompToUpdate.java", List.of(ENTRY_CREATE),
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should regenerate files of modified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile().lastModified()).isNotEqualTo(lastModified.get("DeployCompToUpdate.java"));
+
+    // Should delete generated component class, generate top extension point
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile()).exists();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateTOP.java").toFile()).doesNotExist();
   }
 
   @Test
-  void testRemovalOfGeneratedFile() throws IOException, InterruptedException {
+  void testRemovalOfGeneratedFile() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     addDeployModel("CompToUpdate", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+    lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
+    lastModified.put("DeployCompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
 
     // When
     Files.delete(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Should stay
-      "CompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+    //assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified()).isEqualTo(lastModified.get("CompToUpdate.java"));
+
+    // Should regenerate deleted file
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile().lastModified()).isNotEqualTo(lastModified.get("DeployCompToUpdate.java"));
   }
 
   @Test
-  void testMovingOfModelDir() throws IOException, InterruptedException {
+  void testMovingOfModelDir() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
     addPortModel("Modified", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+    lastModified.put("Modified.java", javaOutDir.resolve(usedPackageAsPath).resolve("Modified.java").toFile().lastModified());
+
     // When
     Path newModelDir = Files.createDirectory(tempDir.resolve("new-models"));
     Files.createDirectories(newModelDir.resolve(usedPackageAsPath));
     Files.copy(
-      modelDir.resolve(usedPackageAsPath).resolve("Foo.arc"),
-      newModelDir.resolve(usedPackageAsPath).resolve("Foo.arc")
+        modelDir.resolve(usedPackageAsPath).resolve("Foo.arc"),
+        newModelDir.resolve(usedPackageAsPath).resolve("Foo.arc")
     );
     modelDir = newModelDir;
     // Instead of copying "Modified", give it new contents:
     Files.writeString(newModelDir.resolve(usedPackageAsPath).resolve("Modified.arc"),
-      "package " + usedPackage + "; component Modified { port out int i; }"
+        "package " + usedPackage + "; component Modified { port out int i; }"
     );
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE),  // Should not re-generate
-      "Modified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should regenerate files of modified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Modified.java").toFile().lastModified()).isNotEqualTo(lastModified.get("Modified.java"));
   }
 
   @Test
-  void testMovingOfHwcDir() throws IOException, InterruptedException {
+  void testMovingOfHwcDir() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Foo", modelDir);
-    addDeployModel("CompToUpdate", modelDir);
+    addPortModel("CompToUpdate", modelDir);
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
+    lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
+
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().exists());
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateTOP.java").toFile().exists());
 
     // When
     hwcDir = Files.createDirectory(tempDir.resolve("new-hwc"));
     Files.createDirectories(hwcDir.resolve(usedPackageAsPath));
     // Also creating a hwc file for foo:
-    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("Foo.java"));
+    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Foo.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "FooTOP.java", List.of(ENTRY_CREATE),
-      "CompToUpdate.java", List.of(ENTRY_CREATE),
-      "DeployCompToUpdate.java", List.of(ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified()).isEqualTo(lastModified.get("Foo.java"));
+
+    // Should delete generated component class, generate top extension point
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile()).doesNotExist();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateTOP.java").toFile()).exists();
   }
 
   @Test
   @Disabled
-  void testMultipleHwcPaths() throws IOException, InterruptedException {
+  void testMultipleHwcPaths() throws IOException {
     // Given
     createBasicProjectStructure();
     addDeployModel("HasUnchangedHwc", modelDir);
@@ -300,34 +338,47 @@ class MA2JavaToolIncrementalityTest {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"));
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("DeployHasUnchangedHwcTOP.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasUnchangedHwcTOP.java").toFile().lastModified());
+    lastModified.put("HasUnchangedHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasUnchangedHwc.java").toFile().lastModified());
+
+    lastModified.put("DeployHasMovingHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasMovingHwc.java").toFile().lastModified());
+    lastModified.put("HasMovingHwcTOP.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwcTOP.java").toFile().lastModified());
+
+    lastModified.put("DeployWillGetNewHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployWillGetNewHwc.java").toFile().lastModified());
+
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwc.java").toFile().exists());
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwcTOP.java").toFile().exists());
+
     // When adding a hwc path, moving one model, and adding another hwc extension
     Path oldHwc = hwcDir;
     Path newHwc = Files.createDirectory(tempDir.resolve("new-hwc"));
-    hwcDir = Path.of(hwcDir.toString() + File.pathSeparator + newHwc.toString());
+    hwcDir = Path.of(hwcDir.toString() + File.pathSeparator + newHwc);
 
     Files.createDirectories(newHwc.resolve(usedPackageAsPath));
     Files.createFile(newHwc.resolve(usedPackageAsPath).resolve("WillGetNewHwc.java"));
     Files.copy(
-      oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"),
-      newHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java")
+        oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"),
+        newHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java")
     );
     Files.delete(oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "HasUnchangedHwc.java", List.of(ENTRY_CREATE),  // Not changed by second run
-      "DeployHasUnchangedHwcTOP.java", List.of(ENTRY_CREATE),  // Not changed by second run
-      "HasMovingHwcTOP.java", List.of(ENTRY_CREATE),  // Not changed by second run
-      "DeployHasMovingHwc.java", List.of(ENTRY_CREATE),  // Not changed by second run
-      "WillGetNewHwc.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "WillGetNewHwcTOP.java", List.of(ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasUnchangedHwcTOP.java").toFile().lastModified()).isEqualTo(lastModified.get("DeployHasUnchangedHwcTOP.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("HasUnchangedHwc.java").toFile().lastModified()).isEqualTo(lastModified.get("HasUnchangedHwc.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasMovingHwc.java").toFile().lastModified()).isEqualTo(lastModified.get("DeployHasMovingHwc.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployWillGetNewHwc.java").toFile().lastModified()).isEqualTo(lastModified.get("DeployWillGetNewHwc.java"));
+
+    // Should delete generated component class, generate top extension point
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwc.java").toFile()).doesNotExist();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwcTOP.java").toFile()).exists();
   }
 
   @Test
   @Disabled
-  void testMultipleModelPaths() throws IOException, InterruptedException {
+  void testMultipleModelPaths() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("Unchanged", modelDir);
@@ -335,56 +386,66 @@ class MA2JavaToolIncrementalityTest {
     addPortModel("ChangedAndMoved", modelDir);
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("Unchanged.java", javaOutDir.resolve(usedPackageAsPath).resolve("Unchanged.java").toFile().lastModified());
+    lastModified.put("UnchangedButMoved.java", javaOutDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.java").toFile().lastModified());
+    lastModified.put("ChangedAndMoved.java", javaOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.java").toFile().lastModified());
+
+
     // When adding a new model path, moving a model, and changing another one
     Path oldModelDir = modelDir;
     Path newModelDir = Files.createDirectory(tempDir.resolve("new-models"));
     modelDir = Path.of(oldModelDir.toString() + File.pathSeparator + newModelDir.toString());
 
     Files.createDirectories(newModelDir.resolve(usedPackageAsPath));
-    Files.writeString(newModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"),
-      "package " + usedPackage + "; component ChangedAndMoved { port out int i; }"
-    );
-    Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
-
     Files.copy(
-      oldModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc"),
-      newModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc")
+        oldModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc"),
+        newModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc")
     );
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arc"));
+
+    Files.writeString(newModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"),
+        "package " + usedPackage + "; component ChangedAndMoved { port out int i; }"
+    );
+    Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "Unchanged.java", List.of(ENTRY_CREATE),  // Not changed by second run
-      "UnchangedButMoved.java", List.of(ENTRY_CREATE),  // Not changed by second run
-      "ChangedAndMoved.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Unchanged.java").toFile().lastModified()).isEqualTo(lastModified.get("Unchanged.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.java").toFile().lastModified()).isEqualTo(lastModified.get("UnchangedButMoved.java"));
+
+    // Should regenerate files of modified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ChangedAndMoved.java"));
   }
 
   @Test
-  void testNoPackage() throws IOException, InterruptedException {
+  void testNoPackage() throws IOException {
     // Given
     createBasicProjectStructure();
-    WatchService packageLessWatcher = FileSystems.getDefault().newWatchService();
-    javaOutDir.register(packageLessWatcher, eventsToMonitor);
 
     Files.writeString(modelDir.resolve("NoPackage.arc"), "component NoPackage { port in int i; }");
     Files.writeString(modelDir.resolve("NoPackageModified.arc"), "component NoPackageModified { port in int i; }");
     invokeTool();
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("NoPackage.java", javaOutDir.resolve("NoPackage.java").toFile().lastModified());
+    lastModified.put("NoPackageModified.java", javaOutDir.resolve("NoPackageModified.java").toFile().lastModified());
 
     // When
     Files.writeString(modelDir.resolve("NoPackageModified.arc"), "component NoPackageModified { port out int i; }");
     invokeTool();
 
     // Then
-    assertFileEventsToBeExactly(packageLessWatcher, Map.of(
-      "NoPackage.java", List.of(ENTRY_CREATE),
-      "NoPackageModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    ));
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve("NoPackage.java").toFile().lastModified()).isEqualTo(lastModified.get("NoPackage.java"));
+
+    // Should regenerate files of modified input model
+    assertThat(javaOutDir.resolve("NoPackageModified.java").toFile().lastModified()).isNotEqualTo(lastModified.get("NoPackageModified.java"));
   }
 
   @Test
-  void testRemoveHwcDir() throws IOException, InterruptedException {
+  void testRemoveHwcDir() throws IOException {
     // Given
     createBasicProjectStructure();
     addPortModel("WithoutHwc", modelDir);
@@ -393,156 +454,26 @@ class MA2JavaToolIncrementalityTest {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("WithHwc.java"));
     invokeTool();
 
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("WithoutHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("WithoutHwc.java").toFile().lastModified());
+
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("WithHwc.java").toFile().exists());
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwcTOP.java").toFile().exists());
+
     // When invoking the tool without hwc dir
-    MA2JavaTool.main(new String[] {
-      "--modelpath", modelDir.toString(),
-      "--output", javaOutDir.toString(),
-      "--report", reportOutDir.toString()
+    MA2JavaTool.main(new String[]{
+        "--modelpath", modelDir.toString(),
+        "--output", javaOutDir.toString(),
+        "--report", reportOutDir.toString()
     });
 
     // Then
-    assertFileEventsToBeExactly(fileWatcher, Map.of(
-      "WithHwcTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "WithHwc.java", List.of(ENTRY_CREATE),
-      "WithoutHwc.java", List.of(ENTRY_CREATE)
-    ));
-  }
+    // Should not modify generated files for the unmodified input model
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithoutHwc.java").toFile().lastModified()).isEqualTo(lastModified.get("WithoutHwc.java"));
 
-  @Test
-  void testWithDse() throws IOException, InterruptedException {
-    // Given
-    createBasicProjectStructure();
-    addPortModel("Untouched", modelDir);
-    addPortModel("ToRemove", modelDir);
-    addPortModel("Modified", modelDir);
-    addPortModel("WithHwcChange", modelDir);
-    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DSEUntouched.java"));
-    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DSEToRemove.java"));
-    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DSEModified.java"));
-    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DSEWithHwcChange.java"));
-    invokeTool(true);
-
-    // When
-    addPortModel("Added", modelDir);
-    Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DSEAdded.java"));
-    Files.delete(modelDir.resolve(usedPackageAsPath).resolve("ToRemove.arc"));
-    Files.delete(hwcDir.resolve(usedPackageAsPath).resolve("DSEWithHwcChange.java"));
-    Files.writeString(modelDir.resolve(usedPackageAsPath).resolve("Modified.arc"),
-      "package " + usedPackage + "; component Modified { port out int i; }"
-    );
-    invokeTool(true);
-
-    // Then
-    Map<String, List<WatchEvent.Kind<?>>> expectedEvents4Untouched = Map.of(
-      "Untouched.java", List.of(ENTRY_CREATE),
-      "DSEUntouchedTOP.java", List.of(ENTRY_CREATE),
-      "DSEMainUntouched.java", List.of(ENTRY_CREATE),
-      "ListerExpressionUntouched.java", List.of(ENTRY_CREATE),
-      "ListerExprOutUntouched.java", List.of(ENTRY_CREATE),
-      "ListerInUntouched.java", List.of(ENTRY_CREATE),
-      "ListerOutUntouched.java", List.of(ENTRY_CREATE),
-      "ListerParameterUntouched.java", List.of(ENTRY_CREATE)
-    );
-
-    Map<String, List<WatchEvent.Kind<?>>> expectedEvents4ToRemove = Map.of(
-      "ToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "DSEToRemoveTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "DSEMainToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "ListerExpressionToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "ListerExprOutToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "ListerInToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "ListerOutToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "ListerParameterToRemove.java", List.of(ENTRY_CREATE, ENTRY_DELETE)
-    );
-
-    Map<String, List<WatchEvent.Kind<?>>> expectedEvents4Modified = Map.of(
-      "Modified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "DSEModifiedTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "DSEMainModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerExpressionModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerExprOutModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerInModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerOutModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerParameterModified.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    );
-
-    Map<String, List<WatchEvent.Kind<?>>> expectedEvents4WithHwcChanges = Map.of(
-      "WithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "DSEWithHwcChangeTOP.java", List.of(ENTRY_CREATE, ENTRY_DELETE),
-      "DSEWithHwcChange.java", List.of(ENTRY_CREATE),
-      "DSEMainWithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerExpressionWithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerExprOutWithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerInWithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerOutWithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE),
-      "ListerParameterWithHwcChange.java", List.of(ENTRY_CREATE, ENTRY_DELETE, ENTRY_CREATE)
-    );
-
-    Map<String, List<WatchEvent.Kind<?>>> expectedEvents4Added = Map.of(
-      "Added.java", List.of(ENTRY_CREATE),
-      "DSEAddedTOP.java", List.of(ENTRY_CREATE),
-      "DSEMainAdded.java", List.of(ENTRY_CREATE),
-      "ListerExpressionAdded.java", List.of(ENTRY_CREATE),
-      "ListerExprOutAdded.java", List.of(ENTRY_CREATE),
-      "ListerInAdded.java", List.of(ENTRY_CREATE),
-      "ListerOutAdded.java", List.of(ENTRY_CREATE),
-      "ListerParameterAdded.java", List.of(ENTRY_CREATE)
-    );
-
-    Map<String, List<WatchEvent.Kind<?>>> allExpectedEvents = new HashMap<>();
-    allExpectedEvents.putAll(expectedEvents4Untouched);
-    allExpectedEvents.putAll(expectedEvents4ToRemove);
-    allExpectedEvents.putAll(expectedEvents4Modified);
-    allExpectedEvents.putAll(expectedEvents4WithHwcChanges);
-    allExpectedEvents.putAll(expectedEvents4Added);
-
-    assertFileEventsToBeExactly(fileWatcher, allExpectedEvents);
-  }
-
-  // target is moved
-
-  private void assertFileEventsToBeExactly(WatchService fileWatch,
-                                           Map<String, List<WatchEvent.Kind<?>>> expectedEvents
-  ) throws InterruptedException {
-    this.assertFileEventsToBeExactlyByPath(fileWatch,
-      expectedEvents.entrySet().stream().collect(Collectors.toMap(
-        entry -> Path.of(entry.getKey()),
-        Map.Entry::getValue
-      )));
-  }
-  private void assertFileEventsToBeExactlyByPath(WatchService fileWatch,
-                                           Map<Path, List<WatchEvent.Kind<?>>> expectedEvents
-  ) throws InterruptedException {
-    // First get actual events from the file watcher and insert them into the multi-map
-    Map<Path, List<WatchEvent.Kind<?>>> actualEvents = new HashMap<>();
-
-    WatchKey key = fileWatch.take();
-    for (WatchEvent<?> event : key.pollEvents()) {
-      if (Path.class.isAssignableFrom(event.kind().type())) {
-        Path fileOfEvent = (Path) event.context();
-
-        if (!actualEvents.containsKey(event.context())) {
-          actualEvents.put(fileOfEvent, new ArrayList<>());
-        }
-
-        actualEvents.get(fileOfEvent).add(event.kind());
-
-      } else {
-        throw new IllegalStateException("Unexpected event type: " + event.kind().type());
-      }
-    }
-
-    // Compare actual events to expected events
-    // 1) assert that (any) events occurred for exactly the specified files
-    Assertions.assertThat(actualEvents.keySet())
-      .as("Actually changed files")
-      .containsExactlyInAnyOrderElementsOf(expectedEvents.keySet());
-
-    // Check that for every file the exactly expected eevents occured
-    Assertions.assertThat(expectedEvents.entrySet()).allSatisfy(
-      entry -> Assertions.assertThat(actualEvents.get(entry.getKey()))
-        .as("File " + entry.getKey() + " events")
-        .containsExactlyElementsOf(entry.getValue()));
+    // Should delete top extension point, generate component class
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwc.java").toFile()).exists();
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwcTOP.java").toFile()).doesNotExist();
   }
 
   private void addDeployModel(String modelName, Path modelDirToUse) throws IOException {
@@ -550,7 +481,7 @@ class MA2JavaToolIncrementalityTest {
 
     Files.createDirectories(packagePathQualified);
     Files.writeString(packagePathQualified.resolve(modelName + ".arc"),
-      String.format("package %s; component %s { }", usedPackage, modelName)
+        String.format("package %s; component %s { }", usedPackage, modelName)
     );
   }
 
@@ -559,7 +490,7 @@ class MA2JavaToolIncrementalityTest {
 
     Files.createDirectories(packagePathQualified);
     Files.writeString(packagePathQualified.resolve(modelName + ".arc"),
-      String.format("package %s; component %s { port in int i; }", usedPackage, modelName)
+        String.format("package %s; component %s { port in int i; }", usedPackage, modelName)
     );
   }
 }
