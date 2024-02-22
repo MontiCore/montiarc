@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-classdiagram Datatypes {
+classdiagram Types {
 
   public enum MotorCmd {
     FORWARD,

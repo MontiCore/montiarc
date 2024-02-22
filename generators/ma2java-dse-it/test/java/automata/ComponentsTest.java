@@ -3,8 +3,8 @@ package automata;
 
 import automata.assignments.AssignmentLiteral;
 import automata.assignments.AssignmentName;
-import automata.Datatypes.MotorCmd;
-import automata.Datatypes.TimerSignal;
+import automata.Types.MotorCmd;
+import automata.Types.TimerSignal;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.*;
 import automata.dataTypes.*;

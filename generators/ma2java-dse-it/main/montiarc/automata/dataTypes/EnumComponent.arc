@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata.dataTypes;
 
-import automata.Datatypes.*;
+import automata.Types.*;
 
 /**
  * Simple atomic component for testing enums
