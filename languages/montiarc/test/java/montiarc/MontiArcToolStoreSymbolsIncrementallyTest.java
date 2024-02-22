@@ -2,7 +2,6 @@
 package montiarc;
 
 import com.google.common.base.Preconditions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -101,7 +100,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     // Then
     // Should not modify generated files for the unmodified input model
     assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isEqualTo(lastModified.get("Foo.arcsym"));
-    
+
     // Should generate files for new the new input model
     assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("AddedComp.arcsym").toFile()).exists();
   }
@@ -216,7 +215,6 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
   }
 
   @Test
-  @Disabled
   void testMultipleModelPaths() throws IOException  {
     // Given
     createBasicProjectStructure();
@@ -233,7 +231,6 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     // When adding a new model path, moving a model, and changing another one
     Path oldModelDir = modelDir;
     Path newModelDir = Files.createDirectory(tempDir.resolve("new-models"));
-    modelDir = Path.of(oldModelDir.toString() + File.pathSeparator + newModelDir);
 
     Files.createDirectories(newModelDir.resolve(usedPackageAsPath));
     Files.copy(
@@ -246,7 +243,12 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
         "package " + usedPackage + "; component ChangedAndMoved { port out int i; }"
     );
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
-    invokeTool();
+
+    MontiArcTool.main(new String[] {
+        "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
+        "--symboltable", symbolsOutDir.toString(),
+        "--report", reportOutDir.toString()
+    });
 
     // Then
     // Should not modify generated files for the unmodified input model

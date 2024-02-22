@@ -2,7 +2,6 @@
 package montiarc.generator;
 
 import com.google.common.base.Preconditions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -327,7 +326,6 @@ class MA2JavaToolIncrementalityTest {
   }
 
   @Test
-  @Disabled
   void testMultipleHwcPaths() throws IOException {
     // Given
     createBasicProjectStructure();
@@ -343,17 +341,15 @@ class MA2JavaToolIncrementalityTest {
     lastModified.put("HasUnchangedHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasUnchangedHwc.java").toFile().lastModified());
 
     lastModified.put("DeployHasMovingHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasMovingHwc.java").toFile().lastModified());
-    lastModified.put("HasMovingHwcTOP.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwcTOP.java").toFile().lastModified());
 
     lastModified.put("DeployWillGetNewHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployWillGetNewHwc.java").toFile().lastModified());
 
-    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwc.java").toFile().exists());
-    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwcTOP.java").toFile().exists());
+    Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwc.java").toFile().exists());
+    Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("HasMovingHwcTOP.java").toFile().exists());
 
     // When adding a hwc path, moving one model, and adding another hwc extension
     Path oldHwc = hwcDir;
     Path newHwc = Files.createDirectory(tempDir.resolve("new-hwc"));
-    hwcDir = Path.of(hwcDir.toString() + File.pathSeparator + newHwc);
 
     Files.createDirectories(newHwc.resolve(usedPackageAsPath));
     Files.createFile(newHwc.resolve(usedPackageAsPath).resolve("WillGetNewHwc.java"));
@@ -362,7 +358,13 @@ class MA2JavaToolIncrementalityTest {
         newHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java")
     );
     Files.delete(oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"));
-    invokeTool();
+
+    MA2JavaTool.main(new String[] {
+      "--modelpath", modelDir.toString(),
+      "--handwritten-code", oldHwc + File.pathSeparator + newHwc,
+      "--output", javaOutDir.toString(),
+      "--report", reportOutDir.toString()
+    });
 
     // Then
     // Should not modify generated files for the unmodified input model
@@ -377,7 +379,6 @@ class MA2JavaToolIncrementalityTest {
   }
 
   @Test
-  @Disabled
   void testMultipleModelPaths() throws IOException {
     // Given
     createBasicProjectStructure();
@@ -395,7 +396,6 @@ class MA2JavaToolIncrementalityTest {
     // When adding a new model path, moving a model, and changing another one
     Path oldModelDir = modelDir;
     Path newModelDir = Files.createDirectory(tempDir.resolve("new-models"));
-    modelDir = Path.of(oldModelDir.toString() + File.pathSeparator + newModelDir.toString());
 
     Files.createDirectories(newModelDir.resolve(usedPackageAsPath));
     Files.copy(
@@ -408,7 +408,13 @@ class MA2JavaToolIncrementalityTest {
         "package " + usedPackage + "; component ChangedAndMoved { port out int i; }"
     );
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
-    invokeTool();
+
+    MA2JavaTool.main(new String[] {
+        "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
+        "--handwritten-code", hwcDir.toString(),
+        "--output", javaOutDir.toString(),
+        "--report", reportOutDir.toString()
+    });
 
     // Then
     // Should not modify generated files for the unmodified input model
