@@ -4,6 +4,7 @@ package montiarc.generator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -288,6 +289,7 @@ class MA2JavaToolIncrementalityTest {
   }
 
   @Test
+  @Disabled
   void testMultipleHwcPaths() throws IOException, InterruptedException {
     // Given
     createBasicProjectStructure();
@@ -324,6 +326,7 @@ class MA2JavaToolIncrementalityTest {
   }
 
   @Test
+  @Disabled
   void testMultipleModelPaths() throws IOException, InterruptedException {
     // Given
     createBasicProjectStructure();

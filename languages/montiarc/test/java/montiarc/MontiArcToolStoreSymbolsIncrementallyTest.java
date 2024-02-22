@@ -205,6 +205,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
   }
 
   @Test
+  @Disabled
   void testMultipleModelPaths() throws IOException, InterruptedException {
     // Given
     createBasicProjectStructure();

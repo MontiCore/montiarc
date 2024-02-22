@@ -17,7 +17,6 @@ import java.nio.file.Path;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.UnaryOperator;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -27,35 +26,35 @@ public final class IncCheckUtil {
   private IncCheckUtil() {}
 
   public static final class Config {
-    private final String modelpath;
+    private final List<String> modelpath;
     private final String targetDir;
     private final String reportingBaseDir;
     private final String concreteReportingSubDir;
-    private final String hwc;
+    private final List<String> hwc;
 
     /**
-     * @param reportingBaseDir may an empty string if no reporting is desired {@code ""}
-     * @param concreteReportingSubDir conventional subdirectory of {@code reportingBaseDir}. Has to be present
-     * @param hwc may be an empty String {@code ""} if no handwritten code path is available
+     * @param concreteReportingSubDir conventional subdirectory of {@code reportingBaseDir}
+     * @param hwcs may be an empty String list if no handwritten code path is available
      */
     public Config (
-      @NotNull String modelpath,
+      @NotNull List<String> modelpath,
       @NotNull String targetDir,
       @NotNull String reportingBaseDir,
       @NotNull String concreteReportingSubDir,
-      @NotNull String hwc) {
+      @NotNull List<String> hwcs) {
 
-      this.modelpath = Preconditions.checkNotNull(modelpath);
+      this.modelpath = List.copyOf(Preconditions.checkNotNull(modelpath));
       this.targetDir = Preconditions.checkNotNull(targetDir);
       this.reportingBaseDir = Preconditions.checkNotNull(reportingBaseDir);
       this.concreteReportingSubDir = Preconditions.checkNotNull(concreteReportingSubDir);
-      this.hwc = Preconditions.checkNotNull(hwc);
+      this.hwc = List.copyOf(Preconditions.checkNotNull(hwcs));
 
       Preconditions.checkArgument(!modelpath.isEmpty());
       Preconditions.checkArgument(!targetDir.isEmpty());
     }
 
-    public String getModelpath() {
+    /** Collection is unmodifiable */
+    public List<String> getModelpaths() {
       return modelpath;
     }
 
@@ -71,7 +70,8 @@ public final class IncCheckUtil {
       return concreteReportingSubDir;
     }
 
-    public String getHwc() {
+    /** Collection is unmodifiable */
+    public List<String> getHwcs() {
       return hwc;
     }
   }
@@ -82,8 +82,8 @@ public final class IncCheckUtil {
   public static void configureIncCheckReporting(@NotNull Config config) {
     Preconditions.checkNotNull(config);
     UnaryOperator<Path> reportPathTransformer = new RelativizeIncCheckPaths(
-      Path.of(config.getModelpath()),
-      config.getHwc().isEmpty() ? Optional.empty() : Optional.of(Path.of(config.getHwc())),
+      config.getModelpaths().stream().map(Path::of).collect(Collectors.toList()),
+      config.getHwcs().stream().map(Path::of).collect(Collectors.toList()),
       Path.of(config.getTargetDir())
     );
 
@@ -116,8 +116,8 @@ public final class IncCheckUtil {
 
     Map<String, IncCheckData> incCheckDataByQName = deserializeIncCheckData(config);
     UpToDateCalculator upToDateCalc = new UpToDateCalculator(
-      splitPathEntriesToList(config.getModelpath()),
-      config.getHwc().isEmpty() ? Collections.emptyList() : splitPathEntriesToList(config.getHwc()),
+      config.getModelpaths().stream().map(Path::of).collect(Collectors.toList()),
+      config.getHwcs().stream().map(Path::of).collect(Collectors.toList()),
       Path.of(config.getTargetDir())
     );
     return upToDateCalc.checkUpToDateness(astByQName, incCheckDataByQName);
@@ -254,25 +254,5 @@ public final class IncCheckUtil {
         Log.warn(String.format("Could not delete generated outdated file '%s': %s", fileLocation, e.getMessage()));
       }
     }
-  }
-
-  /**
-   * Like {@link #splitPathEntries(String)}, but returns a {@code List<Path>} instead.
-   */
-  private static @NotNull List<Path> splitPathEntriesToList(@NotNull String composedPath) {
-    return Arrays.stream(splitPathEntries(composedPath))
-      .map(Path::of)
-      .collect(Collectors.toList());
-  }
-
-  /**
-   * Splits composedPath on their {@link File#pathSeparator}, e.g. {@code some/path:another/path} on Unix would return
-   * {@code {some/path, another/path}} and {@code some\path;other\path} on Windows would return
-   * {@code {some\path, other\path}}
-   */
-  private static @NotNull String[] splitPathEntries(@NotNull String composedPath) {
-    Preconditions.checkNotNull(composedPath);
-
-    return composedPath.split(Pattern.quote(File.pathSeparator));
   }
 }

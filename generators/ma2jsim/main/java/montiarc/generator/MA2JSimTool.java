@@ -14,12 +14,13 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class MA2JSimTool extends MontiArcTool {
 
@@ -74,17 +75,16 @@ public class MA2JSimTool extends MontiArcTool {
     Preconditions.checkArgument(cl.hasOption("output"));
 
     String target = cl.getOptionValue("output");
-    String[] modelpath = Optional.ofNullable(cl.getOptionValues("modelpath")).orElse(new String[]{});
-    String reportDir = Optional.ofNullable(cl.getOptionValue("report")).orElse("");
-    String hwc = Optional.ofNullable(cl.getOptionValue("hwc")).orElse("");
-    String concatModelPath = String.join(File.pathSeparator, modelpath);
+    List<String> modelpaths = getAllModelDirsFrom(cl);
+    Optional<String> reportDir = Optional.ofNullable(cl.getOptionValue("report"));
+    List<String> hwc = getAllHwcDirsFrom(cl);
 
     Collection<ASTMACompilationUnit> models4NewGeneration;
 
-    boolean writeReports = !reportDir.isEmpty();
+    boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
     if (writeReports) {
       IncCheckUtil.Config incCheckConfig =
-        new IncCheckUtil.Config(concatModelPath, target, reportDir, MA2JSIM_INC_CHECK_REPORT_DIR, hwc);
+        new IncCheckUtil.Config(modelpaths, target, reportDir.get(), MA2JSIM_INC_CHECK_REPORT_DIR, hwc);
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
       Map<String, ASTMACompilationUnit> astByQName = IncCheckUtil.resolveAstByQName(asts);
@@ -96,7 +96,7 @@ public class MA2JSimTool extends MontiArcTool {
       models4NewGeneration = asts;
     }
 
-    MCPath modelPaths = new MCPath(splitPathEntries(modelpath));
+    MCPath modelPaths = new MCPath(modelpaths.toArray(new String[0]));
 
     for (ASTMACompilationUnit ast : models4NewGeneration) {
       Optional<Path> modelLocation = IncCheckUtil.findModelLocation(modelPaths, ast);
@@ -118,13 +118,15 @@ public class MA2JSimTool extends MontiArcTool {
 
 
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String hwc) {
+  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull List<String> hwc) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
-    MA2JSimGen generator = new MA2JSimGen(Paths.get(target), splitPathEntriesToList(hwc));
+
+    List<Path> hwcsAsPaths = hwc.stream().map(Paths::get).collect(Collectors.toList());
+    MA2JSimGen generator = new MA2JSimGen(Paths.get(target), hwcsAsPaths);
     generator.generate(ast);
   }
 

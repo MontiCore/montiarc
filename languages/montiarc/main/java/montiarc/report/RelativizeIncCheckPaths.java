@@ -38,15 +38,6 @@ public class RelativizeIncCheckPaths implements UnaryOperator<Path> {
   protected final Collection<Path> hwcPaths;
   protected final Path outPath;
 
-
-  public RelativizeIncCheckPaths(@NotNull Path modelPath, @NotNull Optional<Path> hwcPath, @NotNull Path outPath) {
-    this(
-      List.of(Preconditions.checkNotNull(modelPath)),
-      Preconditions.checkNotNull(hwcPath).stream().collect(Collectors.toList()),
-      Preconditions.checkNotNull(outPath)
-    );
-  }
-
   public RelativizeIncCheckPaths(@NotNull Collection<Path> modelPaths,
                                  @NotNull Collection<Path> hwcPaths,
                                  @NotNull Path outPath) {

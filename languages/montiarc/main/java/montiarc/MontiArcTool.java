@@ -113,9 +113,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(cl);
 
     if (cl.hasOption("modelpath")) {
-      // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
-      // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
-      return new MCPath(splitPathEntries(cl.getOptionValues("modelpath")));
+      return new MCPath(this.getAllModelDirsFrom(cl).toArray(new String[0]));
     } else {
       return new MCPath();
     }
@@ -339,17 +337,16 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkArgument(cl.hasOption("symboltable"));
 
     String symbolTargetDir = cl.getOptionValue("symboltable");
-    String reportDir = Optional.ofNullable(cl.getOptionValue("report")).orElse("");
-    String[] modelpath = Optional.ofNullable(cl.getOptionValues("modelpath")).orElse(new String[]{});
-    String concatModelPath = String.join(File.pathSeparator, modelpath);
+    Optional<String> reportDir = Optional.ofNullable(cl.getOptionValue("report"));
+    List<String> modelpaths = this.getAllModelDirsFrom(cl);
 
     Collection<IMontiArcArtifactScope> scopes4NewSerialization;
     Map<IMontiArcArtifactScope, ASTMACompilationUnit> scopeToAst;
 
-    boolean writeReports = !reportDir.isEmpty() && modelpath.length > 0;
+    boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
     if (writeReports) {
-      IncCheckUtil.Config incCheckConfig =
-        new IncCheckUtil.Config(concatModelPath, symbolTargetDir, reportDir, SYMBOLS_REPORT_DIR, "");
+      IncCheckUtil.Config incCheckConfig = new IncCheckUtil.Config(
+        modelpaths, symbolTargetDir, reportDir.get(), SYMBOLS_REPORT_DIR, Collections.emptyList());
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
       scopeToAst = extractCompUnitsFrom(scopes);
@@ -369,7 +366,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       scopeToAst = new HashMap<>(0);
     }
 
-    MCPath modelPaths = new MCPath(splitPathEntries(modelpath));
+    MCPath modelPaths = new MCPath(modelpaths.toArray(new String[0]));
 
     for (IMontiArcArtifactScope scope : scopes4NewSerialization) {
       Optional<ASTMACompilationUnit> ast = Optional.ofNullable(scopeToAst.get(scope));
@@ -403,7 +400,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   protected void initGlobalScope(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
     if (cl.hasOption("path")) {
-      this.initGlobalScope(cl.getOptionValues("path"));
+      this.initGlobalScope(getAllSymbolImportDirsFrom(cl));
     } else {
       this.initGlobalScope();
     }
@@ -550,6 +547,54 @@ public class MontiArcTool extends MontiArcToolTOP {
   }
 
   /**
+   * Extracts all model paths as separate strings from the given command line.
+   * <br>
+   * E.g. the model path argument may be the Array {"\first\path", "\second\path;third\path"} on Windows or
+   * {"first/path", "second/path:third/path"} on Unix.
+   * This method will decompose composed paths and return them as separate strings. The other paths are unaffected.
+   * Thus, this method would yield for the above example:
+   * {"\first\path", "\second\path", "third\path"} on Windows and {"first/path", "second/path", "third/path"} on Unix.
+   */
+  protected List<String> getAllModelDirsFrom(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    return cl.hasOption("modelpath") ?
+      splitPathEntriesToList(cl.getOptionValues("modelpath")) :
+      Collections.emptyList();
+  }
+
+  /**
+   * Extracts all hwc paths as separate strings from the given command line.
+   * <br>
+   * E.g. the hwc path argument may be the Array {"\first\path", "\second\path;third\path"} on Windows or
+   * {"first/path", "second/path:third/path"} on Unix.
+   * This method will decompose composed paths and return them as separate strings. The other paths are unaffected.
+   * Thus, this method would yield for the above example:
+   * {"\first\path", "\second\path", "third\path"} on Windows and {"first/path", "second/path", "third/path"} on Unix.
+   */
+  protected List<String> getAllHwcDirsFrom(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    return cl.hasOption("handwritten-code") ?
+      splitPathEntriesToList(cl.getOptionValues("handwritten-code")) :
+      Collections.emptyList();
+  }
+
+  /**
+   * Extracts all symbol import dir paths as separate strings from the given command line.
+   * <br>
+   * E.g. the symbol import path argument may be the Array {"\first\path", "\second\path;third\path"} on Windows or
+   * {"first/path", "second/path:third/path"} on Unix.
+   * This method will decompose composed paths and return them as separate strings. The other paths are unaffected.
+   * Thus, this method would yield for the above example:
+   * {"\first\path", "\second\path", "third\path"} on Windows and {"first/path", "second/path", "third/path"} on Unix.
+   */
+  protected String[] getAllSymbolImportDirsFrom(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    return cl.hasOption("path") ?
+      splitPathEntries(cl.getOptionValues("path")) :
+      new String[0];
+  }
+
+  /**
    * Splits composedPath on their {@link File#pathSeparator}, e.g. {@code some/path:another/path} on Unix would return
    * {@code {some/path, another/path}} and {@code some\path;other\path} on Windows would return
    * {@code {some\path, other\path}}
@@ -571,13 +616,18 @@ public class MontiArcTool extends MontiArcToolTOP {
       .toArray(String[]::new);
   }
 
+
   /**
-   * Like {@link #splitPathEntries(String)}, but returns a {@code List<Path>} instead.
+   * Like {@link #splitPathEntries(String[])}, but returns a {@code List<String>} instead.
    */
-  @NotNull
-  protected List<Path> splitPathEntriesToList(@NotNull String composedPath) {
-    return Arrays.stream(splitPathEntries(composedPath))
-      .map(Path::of)
-      .collect(Collectors.toList());
+  protected final @NotNull List<String> splitPathEntriesToList(@NotNull String[] composedPath) {
+    return Arrays.asList(splitPathEntries(composedPath));
+  }
+
+  /**
+   * Like {@link #splitPathEntries(String)}, but returns a {@code List<String>} instead.
+   */
+  protected final @NotNull List<String> splitPathEntriesToList(@NotNull String composedPath) {
+    return Arrays.asList(splitPathEntries(composedPath));
   }
 }

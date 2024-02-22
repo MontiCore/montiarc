@@ -17,7 +17,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -102,18 +101,17 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkArgument(cl.hasOption("output"));
 
     String target = cl.getOptionValue("output");
-    String[] modelpath = Optional.ofNullable(cl.getOptionValues("modelpath")).orElse(new String[]{});
-    String reportDir =  Optional.ofNullable(cl.getOptionValue("report")).orElse("");
-    String hwc = Optional.ofNullable(cl.getOptionValue("hwc")).orElse("");
+    List<String> modelpaths = getAllModelDirsFrom(cl);
+    Optional<String> reportDir =  Optional.ofNullable(cl.getOptionValue("report"));
+    List<String> hwcs = getAllHwcDirsFrom(cl);
     boolean dse = cl.hasOption("dse");
-    String concatModelPath = String.join(File.pathSeparator, modelpath);
 
     Collection<ASTMACompilationUnit> models4NewGeneration;
 
-    boolean writeReports = !reportDir.isEmpty();
+    boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
     if(writeReports) {
       IncCheckUtil.Config incCheckConfig =
-        new IncCheckUtil.Config(concatModelPath, target, reportDir, MA2JAVA_INC_CHECK_REPORT_DIR, hwc);
+        new IncCheckUtil.Config(modelpaths, target, reportDir.get(), MA2JAVA_INC_CHECK_REPORT_DIR, hwcs);
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
       Map<String, ASTMACompilationUnit> astByQName = IncCheckUtil.resolveAstByQName(asts);
@@ -126,7 +124,7 @@ public class MA2JavaTool extends MontiArcTool {
     }
 
     // Pre-calculate some variable values that will be used for every processed model
-    MCPath modelPaths = new MCPath(splitPathEntries(modelpath));
+    MCPath modelPaths = new MCPath(modelpaths.toArray(new String[0]));
     List<String> componentNames = asts.stream().map(a -> a.getComponentType().getName()).collect(Collectors.toList());
     List<String> imports = asts.stream()
       .map(a -> a.getComponentType().getSymbol().getPackageName())
@@ -144,9 +142,9 @@ public class MA2JavaTool extends MontiArcTool {
       }
 
       // In all cases:
-      this.generate(ast, target, hwc, dse);
+      this.generate(ast, target, hwcs, dse);
       if (dse) {
-        this.generateDseOnlyFiles(ast, target, hwc, componentNames, imports);
+        this.generateDseOnlyFiles(ast, target, hwcs, componentNames, imports);
       }
 
       if (writeReport4ThisModel) {
@@ -157,28 +155,32 @@ public class MA2JavaTool extends MontiArcTool {
 
   public void generateDseOnlyFiles(@NotNull ASTMACompilationUnit ast,
                        @NotNull String target,
-                       @NotNull String hwc,
+                       @NotNull List<String> hwcs,
                        @NotNull List<String> componentNames,
                        @NotNull List<String> imports) {
 
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
-    Preconditions.checkNotNull(hwc);
+    Preconditions.checkNotNull(hwcs);
+    Preconditions.checkNotNull(componentNames);
+    Preconditions.checkNotNull(imports);
     Preconditions.checkArgument(!target.isEmpty());
 
-    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), splitPathEntriesToList(hwc));
+    List<Path> hwcsAsPath = hwcs.stream().map(Paths::get).collect(Collectors.toList());
+    MontiArcGenerator generator = new MontiArcGenerator(Path.of(target), hwcsAsPath);
     generator.generateMain(ast, componentNames, new ArrayList<>(imports));
   }
 
   public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target,
-                       @NotNull String hwc, boolean dse) {
+                       @NotNull List<String> hwcs, boolean dse) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
-    Preconditions.checkNotNull(hwc);
-    Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
+    Preconditions.checkNotNull(hwcs);
     Preconditions.checkArgument(!target.isEmpty());
+    Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
 
-    MontiArcGenerator generator = new MontiArcGenerator(Paths.get(target), splitPathEntriesToList(hwc));
+    List<Path> hwcsAsPath = hwcs.stream().map(Paths::get).collect(Collectors.toList());
+    MontiArcGenerator generator = new MontiArcGenerator(Path.of(target), hwcsAsPath);
     generator.generate(ast, dse);
   }
 
