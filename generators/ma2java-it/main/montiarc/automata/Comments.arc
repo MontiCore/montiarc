@@ -36,7 +36,7 @@ Comments // line comment after component name
   ; // line comment after variable declaration statement
 
   // line comment before automaton
-  automaton // line comment after automaton keyword
+  <<sync>> automaton // line comment after automaton keyword
   { // line comment after automaton opening bracket
 
     // line comment before first state declaration

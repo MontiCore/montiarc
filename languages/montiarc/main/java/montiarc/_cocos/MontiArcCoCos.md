@@ -111,6 +111,7 @@ Legend:
 | ☒     | SCFileExtension\[is.sc\]                 | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                               |
 | ☒     | SCNameIsArtifactName                     | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                               |
 | ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                                           |
+| ☒     | NoTickEventInUntimedAutomata             | ArcAutomaton       | Checks for no tick events in an untimed automata                                                                                                                   |0xC1309|
 
 ## ComfortableArc Cocos
 

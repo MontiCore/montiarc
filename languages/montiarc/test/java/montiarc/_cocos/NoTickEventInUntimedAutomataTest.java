@@ -2,6 +2,7 @@
 package montiarc._cocos;
 
 import arcautomaton.ArcAutomatonMill;
+import arcautomaton._cocos.NoEventsInSyncAutomata;
 import arcautomaton._cocos.NoTickEventInUntimedAutomata;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -35,7 +36,8 @@ public class NoTickEventInUntimedAutomataTest extends MontiArcAbstractTest {
   }
 
   @Override
-  public void setUp() {}
+  public void setUp() {
+  }
 
   @AfterEach
   public void tearDown() {
@@ -52,6 +54,7 @@ public class NoTickEventInUntimedAutomataTest extends MontiArcAbstractTest {
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new NoTickEventInUntimedAutomata());
+    checker.addCoCo(new NoEventsInSyncAutomata());
 
     // When
     checker.checkAll(ast);
@@ -71,6 +74,7 @@ public class NoTickEventInUntimedAutomataTest extends MontiArcAbstractTest {
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new NoTickEventInUntimedAutomata());
+    checker.addCoCo(new NoEventsInSyncAutomata());
 
     // When
     checker.checkAll(ast);
@@ -86,62 +90,132 @@ public class NoTickEventInUntimedAutomataTest extends MontiArcAbstractTest {
     return Stream.of(
       Arguments.arguments(
         "component Comp1 {" +
-          "port in int i, out int o;" +
-          "<<timed>> automaton {" +
-          "initial state S;" +
-          "S -> S;" +
-          "S -> S Tick;" +
-          "S -> S i;" +
-          "}" +
+          "  port in int i, out int o;" +
+          "  <<timed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S;" +
+          "    S -> S Tick;" +
+          "    S -> S i;" +
+          "  }" +
           "}"),
       Arguments.arguments(
         "component Comp2 {" +
-          "port in int i, out int o;" +
-          "<<sync>> automaton {" +
-          "initial state S;" +
-          "S -> S;" +
-          "S -> S Tick;" +
-          "S -> S i;" +
-          "}" +
+          "  port in int i, out int o;" +
+          "  <<sync>> automaton {" +
+          "    initial state S;" +
+          "    S -> S;" +
+          "  }" +
           "}"),
       Arguments.arguments(
         "component Comp3 {" +
-          "port in int i, out int o;" +
-          "<<untimed>> automaton {" +
-          "initial state S;" +
-          "S -> S;" +
-          "S -> S i;" +
-          "}" +
-          "}")
+          "  port in int i, out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S i;" +
+          "  }" +
+          "}"),
+      Arguments.arguments(
+        "component Comp4 {" +
+          "port in int i;" +
+          "  port out int o;" +
+          "  <<sync>> automaton {" +
+          "    initial state S;" +
+          "    S -> S / { o = i; };" +
+          "  }" +
+          "}"
+      ),
+      Arguments.arguments(
+        "component Comp5 {" +
+          "  port in int i;" +
+          "  port out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S i / { o = i; };" +
+          "  }" +
+          "}"),
+      Arguments.arguments(
+        "component Comp6 {" +
+          "  port in int i;" +
+          "  port out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S i / { o = i; };" +
+          "    S -> S i;" +
+          "  }" +
+          "}"
+      )
     );
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg(
-        "component Comp1 {" +
-          "port in int i, out int o;" +
-          "<<untimed>> automaton {" +
-          "initial state S;" +
-          "S -> S;" +
-          "S -> S Tick;" +
-          "S -> S i;" +
-          "}" +
-          "}",
-        ArcAutomataError.TICK_EVENT_IN_UNTIMED_AUTOMATON),
-      arg(
-        "component Comp2 {" +
-          "port in int i, out int o;" +
-          "<<untimed>> automaton {" +
-          "initial state S;" +
-          "S -> S;" +
-          "S -> S Tick;" +
-          "S -> S Tick;" +
-          "S -> S i;" +
-          "}" +
+      arg("component Comp1 {" +
+          "  port in int i, out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S;" +
+          "    S -> S Tick;" +
+          "  }" +
           "}",
         ArcAutomataError.TICK_EVENT_IN_UNTIMED_AUTOMATON,
-        ArcAutomataError.TICK_EVENT_IN_UNTIMED_AUTOMATON)
-    );
+        ArcAutomataError.NO_EVENT_IN_UNTIMED_AUTOMATON),
+      arg("component Comp2 {" +
+          "  port in int i, out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S;" +
+          "    S -> S Tick;" +
+          "    S -> S Tick;" +
+          "  }" +
+          "}",
+        ArcAutomataError.TICK_EVENT_IN_UNTIMED_AUTOMATON,
+        ArcAutomataError.TICK_EVENT_IN_UNTIMED_AUTOMATON,
+        ArcAutomataError.NO_EVENT_IN_UNTIMED_AUTOMATON),
+      arg("component Comp3 {" +
+          "  port in int i;" +
+          "  port out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S / { o = i; };" +
+          "  }" +
+          "}",
+        ArcAutomataError.NO_EVENT_IN_UNTIMED_AUTOMATON),
+      arg("component Comp4 {" +
+          "  port in int i, out int o;" +
+          "  <<untimed>> automaton {" +
+          "    initial state S;" +
+          "    S -> S Tick ;" +
+          "  }" +
+          "}",
+        ArcAutomataError.TICK_EVENT_IN_UNTIMED_AUTOMATON),
+      arg("component Comp5{" +
+          "  port in int i;" +
+          "  port out int o;" +
+          "  <<sync>> automaton {" +
+          "    initial state S;" +
+          "    S -> S i / { o = i; }; " +
+          "  }" +
+          "}",
+        ArcAutomataError.EVENT_IN_SYNC_AUTOMATON),
+      arg("component Comp6{" +
+          "  port in int i;" +
+          "  port out int o;" +
+          "  <<sync>> automaton {" +
+          "    initial state S;" +
+          "    S -> S Tick / { o = i; }; " +
+          "  }" +
+          "}",
+        ArcAutomataError.EVENT_IN_SYNC_AUTOMATON),
+      arg("component Comp6{" +
+          "  port in int i;" +
+          "  port out int o;" +
+          "  <<sync>> automaton {" +
+          "    initial state S;" +
+          "    S -> S i / { o = i; }; " +
+          "    S -> S Tick / { o = i; }; " +
+          "  }" +
+          "}",
+        ArcAutomataError.EVENT_IN_SYNC_AUTOMATON,
+        ArcAutomataError.EVENT_IN_SYNC_AUTOMATON));
   }
 }

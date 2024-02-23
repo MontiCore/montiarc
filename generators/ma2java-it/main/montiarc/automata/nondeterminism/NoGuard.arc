@@ -10,7 +10,7 @@ component NoGuard {
   /**
    * Automaton with ambiguous transitions.
    */
-  automaton {
+  <<sync>> automaton {
     initial state A;
     state B;
     state C;

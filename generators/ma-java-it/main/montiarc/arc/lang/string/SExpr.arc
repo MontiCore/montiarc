@@ -8,7 +8,7 @@ component SExpr {
   String v1 = "";
   java.lang.String v2 = "";
 
-  automaton {
+  <<sync>> automaton {
      initial state s;
      s -> s / { o = i; };
      s -> s / { o = ""; };

@@ -11,6 +11,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class NoTickEventInUntimedAutomata implements ArcAutomatonASTArcStatechartCoCo {
 
   protected NoTickEventVisitor noTickEvent = new NoTickEventVisitor();
+  protected NoEventInUntimedVisitor noEvent = new NoEventInUntimedVisitor();
 
   protected NoTickEventVisitor getNoTickEvent() {
     return this.noTickEvent;
@@ -20,6 +21,7 @@ public class NoTickEventInUntimedAutomata implements ArcAutomatonASTArcStatechar
     Preconditions.checkNotNull(node);
     if (node.getTiming().matches(Timing.UNTIMED)) {
       ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
+      traverser.add4SCTransitions4Code(this.noEvent);
       traverser.add4ArcAutomaton(this.getNoTickEvent());
       traverser.traverse(node);
     }
