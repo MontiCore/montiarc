@@ -3,10 +3,12 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
+import de.monticore.scstatehierarchy.NoSubstatesHandler;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._visitor.MontiArcTraverser;
 import montiarc.util.Error;
 import montiarc.util.SCError;
 import org.assertj.core.api.Assertions;
@@ -64,7 +66,9 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new AtLeastOneInitialState(MontiArcMill.inheritanceTraverser()));
+    MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
+    checker.addCoCo(new AtLeastOneInitialState(traverser));
 
     // When
     checker.checkAll(ast);
@@ -83,7 +87,9 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new AtLeastOneInitialState(MontiArcMill.inheritanceTraverser()));
+    MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
+    checker.addCoCo(new AtLeastOneInitialState(traverser));
 
     // When
     checker.checkAll(ast);
@@ -147,6 +153,15 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
           "mode automaton { " +
           "initial mode s { } " +
           "} "+
+          "}",
+        SCError.NO_INITIAL_STATE),
+      // automaton no initial state, but inner initial state
+      arg("component Comp8 { " +
+          "automaton { "  +
+          "state s { "+
+          "initial state inners;" +
+          "};" +
+          "}" +
           "}",
         SCError.NO_INITIAL_STATE)
     );

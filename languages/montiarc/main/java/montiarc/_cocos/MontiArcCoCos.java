@@ -43,6 +43,7 @@ import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
+import de.monticore.scstatehierarchy.NoSubstatesHandler;
 import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
@@ -64,6 +65,7 @@ import modes._cocos.ModeOmitPortDefinition;
 import modes._cocos.StatechartContainsNoMode;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
+import montiarc._visitor.MontiArcTraverser;
 import montiarc.check.MontiArcTypeCalculator;
 import variablearc._cocos.ConstraintIsBoolean;
 import variablearc._cocos.ConstraintNoAssignmentExpr;
@@ -167,12 +169,16 @@ public class MontiArcCoCos {
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
     checker.addCoCo(new TransitionPreconditionsAreBoolean(tc));
-    checker.addCoCo(new AtLeastOneInitialState(MontiArcMill.inheritanceTraverser()));
+    MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
+    checker.addCoCo(new AtLeastOneInitialState(traverser));
     checker.addCoCo(new AnteBlocksOnlyForInitialStates());
 
     // ArcAutomaton CoCos
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
-    checker.addCoCo(new MaxOneInitialState(MontiArcMill.inheritanceTraverser()));
+    traverser = MontiArcMill.inheritanceTraverser();
+    traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
+    checker.addCoCo(new MaxOneInitialState(traverser));
     checker.addCoCo(new NoEventsInSyncAutomata());
     checker.addCoCo(new NoTickEventInUntimedAutomata());
 

@@ -3,10 +3,12 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
+import de.monticore.scstatehierarchy.NoSubstatesHandler;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._visitor.MontiArcTraverser;
 import montiarc.util.Error;
 import montiarc.util.SCError;
 import org.assertj.core.api.Assertions;
@@ -91,7 +93,9 @@ public class MaxOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new MaxOneInitialState());
+    MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
+    checker.addCoCo(new MaxOneInitialState(traverser));
 
     // When
     checker.checkAll(ast);
@@ -110,7 +114,9 @@ public class MaxOneInitialStateTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new MaxOneInitialState(MontiArcMill.inheritanceTraverser()));
+    MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
+    checker.addCoCo(new MaxOneInitialState(traverser));
 
     // When
     checker.checkAll(ast);
