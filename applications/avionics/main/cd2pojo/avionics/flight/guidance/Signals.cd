@@ -1,0 +1,29 @@
+package avionics.flight.guidance;
+
+classdiagram Signals {
+
+  public enum CMD {
+    NoService,
+    NONE;
+
+    public CMD calc(Coordinates pos);
+
+  }
+
+  public class FlightData {
+
+  }
+
+  public enum Power {
+    ON, OFF;
+  }
+
+  public class SatelliteSignal {
+
+  }
+
+  public class Coordinates {
+    public boolean lowPrec;
+  }
+
+}

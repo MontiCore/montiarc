@@ -46,6 +46,7 @@ include(":generators:ma2jsim-it")
 include(":generators:ma-java-it")
 include(":applications:bumperbot")
 include(":applications:elevator")
+//include(":applications:avionics")
 include(":tooling:language-server")
 includeBuild("tooling/gradle-plugins")
 
