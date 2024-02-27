@@ -100,6 +100,7 @@ public class VariationPointSolver {
     res.removeIf(
       variant -> {
         ExpressionSet expressions = variant.getConditions().copyAddPrefix(prefix);
+        if (expressions.isEmpty()) return false;
         expressions.add(getConditionsForVariationPoints(originConfiguration));
         expressions.add(origin.getConstraints());
         if (originParentVariant != null) expressions.add(originParentVariant.getConditions());
