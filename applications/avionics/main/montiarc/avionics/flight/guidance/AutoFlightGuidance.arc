@@ -30,7 +30,7 @@ component AutoFlightGuidance {
 
       Operational -> Operational / {gc = cmd.calc(pos);};
       Operational -> NonCriticalModeFailure [pos.lowPrec] / {gc = cmd.calc(pos);};
-      Operational -> CriticalModeFailure [pow == Power.OFF] / {gc = CMD.NoService;};
+      Operational -> CriticalModeFailure [pow == Power.OFF] / {gc = CMD.NONE;};
 
       NonCriticalModeFailure -> NonCriticalModeFailure / {gc = cmd.calc(pos);};
       NonCriticalModeFailure -> Operational [!pos.lowPrec] / {gc = cmd.calc(pos);};
