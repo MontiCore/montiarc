@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static montiarc.MsgFactory.msg;
+import static montiarc.MsgFactory.tk;
 
 @ExtendWith(MockitoExtension.class)
 class ParameterForwardTest {
@@ -62,7 +63,7 @@ class ParameterForwardTest {
 
     // When
     sut.init();
-    sut.receiveTick();
+    sut.handleTickEvent();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);
@@ -72,15 +73,15 @@ class ParameterForwardTest {
     return Stream.of(
       Arguments.of(
         null,
-        List.of(msg(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         OnOff.OFF,
-        List.of(msg(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         OnOff.ON,
-        List.of(msg(OnOff.ON))
+        List.of(msg(OnOff.ON), tk())
       )
     );
   }

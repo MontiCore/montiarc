@@ -4,16 +4,37 @@
 <#assign isAtomic = ast.getSymbol().isAtomic()/>
 <#assign hasModeAutomaton = helper.getModeAutomaton(ast).isPresent()/>
 
-protected void <@MethodNames.handleTick/>() {
-  if(!<@MethodNames.inputsTickBlocked/>()) return;
+public void <@MethodNames.handleTick/>() {
   <#if isAtomic>
-      if (!isSync) <@MethodNames.getBehavior/>().tick();
+      if (isSync && <@MethodNames.getBehavior/>() != null && getAllInPorts().stream().allMatch(montiarc.rte.port.IInPort::hasBufferedTick)) {
+        <@MethodNames.getBehavior/>().tick();
+        getAllInPorts().forEach(inP -> {
+          while (inP.hasBufferedTick() && !inP.isTickBlocked())
+            de.se_rwth.commons.logging.Log.warn(
+              "Component " + this.getName() +
+                " has received more than one data message in a single time slice on port " + inP.getQualifiedName() +
+                ". Dropped data: " + inP.pollBuffer());
+        });
+      }
+
+      if (<@MethodNames.getBehavior/>() == null) {
+        <#-- No behavior behavior -->
+        getAllInPorts().forEach(inP -> {
+          while (inP.hasBufferedTick() && !inP.isTickBlocked()) inP.pollBuffer();
+        });
+      }
+
+
+      if(!<@MethodNames.inputsTickBlocked/>()) return;
+
+      if(!this.isSync && <@MethodNames.getBehavior/>() != null) <@MethodNames.getBehavior/>().tick();
       <@MethodNames.dropTickOnAll/>();
       <@MethodNames.sendTickOnAll/>();
       if(!isSync || getAllInPorts().stream().allMatch(montiarc.rte.port.ITimeAwareInPort::hasBufferedTick)) {
         getAllInPorts().forEach(montiarc.rte.port.ITimeAwareInPort::continueAfterDroppedTick);
       }
   <#else>
+      if(!<@MethodNames.inputsTickBlocked/>()) return;
       <#if hasModeAutomaton>
           <@MethodNames.getModeAutomaton/>().tick();
       </#if>
@@ -22,7 +43,7 @@ protected void <@MethodNames.handleTick/>() {
         .map(p -> (montiarc.rte.port.TimeAwarePortForward<?>) p)
         .forEach(montiarc.rte.port.TimeAwarePortForward::forward);
       <#list helper.getSubcomponentsWithoutInPorts(ast) as sub>
-          ${prefixes.subcomp()}${sub.getName()}().<@MethodNames.receiveTick/>();
+          ${prefixes.subcomp()}${sub.getName()}().<@MethodNames.handleTick/>();
       </#list>
       getAllInPorts().stream()
         .filter(p -> p instanceof montiarc.rte.port.TimeAwarePortForward)

@@ -32,5 +32,3 @@
 <#macro handleModeAutomaton>handleModeAutomaton</#macro>
 
 <#macro getModeAutomaton>getModeAutomaton</#macro>
-
-<#macro receiveTick>receiveTick</#macro>

@@ -59,7 +59,7 @@ class ParameterTest {
 
     // When
     sut.init();
-    sut.handleComputationOnSyncPorts();
+    sut.handleTickEvent();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

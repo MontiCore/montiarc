@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.sync.variability;
+package montiarc.timed.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,32 +24,30 @@ import static montiarc.MsgFactory.msg;
 import static montiarc.MsgFactory.tk;
 
 @ExtendWith(MockitoExtension.class)
-class FieldSourceTest {
+class SourceEncapsulationTest {
 
   /**
    * capture of the actual output stream on port o
    */
   @Captor
-  ArgumentCaptor<Message<Number>> actual;
+  ArgumentCaptor<Message<OnOff>> actual;
 
   /**
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<Number> port_o;
+  ITimeAwareInPort<OnOff> port_o;
 
   /**
-   * @param highPrecision the configuration of the sut
-   * @param expected      the expected output stream on port o
+   * @param expected  the expected output stream on port o
    */
   @ParameterizedTest
-  @MethodSource("ioDelayed")
-  void testIODelayed(@NotNull boolean highPrecision,
-                     @NotNull List<Message<Number>> expected) {
+  @MethodSource("io")
+  void testIO(@NotNull List<Message<OnOff>> expected) {
     Preconditions.checkNotNull(expected);
 
     // Given
-    FieldSourceComp sut = new FieldSourceCompBuilder().setName("sut").set_feature_highPrecision(highPrecision).build();
+    SourceEncapsulationComp sut = new SourceEncapsulationCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -57,24 +56,16 @@ class FieldSourceTest {
 
     // When
     sut.init();
-
-    for (int i = 0; i < 3; i++) {
-      sut.handleTickEvent();
-    }
+    sut.handleTickEvent();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);
   }
 
-  static Stream<Arguments> ioDelayed() {
+  static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        false,
-        List.of(msg(2.0), tk(), msg(3.0), tk(), msg(4.0), tk())
-      ),
-      Arguments.of(
-        true,
-        List.of(msg(2.5), tk(), msg(3.5), tk(), msg(4.5), tk())
+        List.of(msg(OnOff.ON), tk())
       )
     );
   }
