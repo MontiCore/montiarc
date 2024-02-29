@@ -11,9 +11,11 @@ import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import modes._ast.ASTModeAutomaton;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.util.Helper;
 import montiarc.util.MASimError;
@@ -91,6 +93,13 @@ public class MA2JSimGen {
       generateBehaviorClasses(ast);
     }
 
+    ASTMCQualifiedName innerComponentPackage = ast.isPresentPackage() ? ast.getPackage().deepClone() : MontiArcMill.mCQualifiedNameBuilder().build();
+    innerComponentPackage.addParts(ast.getComponentType().getName());
+    for (ComponentTypeSymbol innerComp : ast.getComponentType().getSymbol().getInnerComponents()) {
+      innerComp.setPackageName(ast.getComponentType().getSymbol().getFullName());
+      generate(MontiArcMill.mACompilationUnitBuilder().setComponentType(innerComp.getAstNode()).setPackage(innerComponentPackage).build());
+    }
+
     if (ast.getComponentType().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findAny().isPresent()) {
       generateModeAutomaton(ast);
     }
@@ -138,7 +147,7 @@ public class MA2JSimGen {
   protected void generateBehaviorInterface(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
-    final String template = "montiarc.generator.ma2jsim.behavior.interface.BehaviorInterfaceFile.ftl";
+    final String template = "montiarc.generator.ma2jsim.behavior.interface.EventBehaviorInterfaceFile.ftl";
     String suffix = Suffixes.EVENTS;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
@@ -171,7 +180,7 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
-    final String template = "montiarc.generator.ma2jsim.behavior.automata.Automaton.ftl";
+    final String template = "montiarc.generator.ma2jsim.behavior.automata.AutomatonFile.ftl";
     suffix = Suffixes.AUTOMATON + suffix;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
@@ -184,7 +193,7 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
-    final String template = "montiarc.generator.ma2jsim.behavior.compute.Compute.ftl";
+    final String template = "montiarc.generator.ma2jsim.behavior.compute.ComputeFile.ftl";
     suffix = Suffixes.COMPUTE + suffix;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
@@ -197,7 +206,7 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
-    final String template = "montiarc.generator.ma2jsim.behavior.automata.AutomatonBuilder.ftl";
+    final String template = "montiarc.generator.ma2jsim.behavior.automata.AutomatonBuilderFile.ftl";
     suffix = Suffixes.AUTOMATON + suffix + Suffixes.BUILDER;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;

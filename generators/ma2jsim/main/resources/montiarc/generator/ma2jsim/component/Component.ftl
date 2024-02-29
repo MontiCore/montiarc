@@ -38,4 +38,5 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
   </#if>
 
   ${tc.include("montiarc.generator.ma2jsim.component.init.Init.ftl")}
+
 }

@@ -1,15 +1,12 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-${tc.signature("ast", "isTop", "variant")}
-/* (c) https://github.com/MontiCore/monticore */
-<#if ast.isPresentPackage()>
-    ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
-</#if>
+<#-- ASTComponentType ast -->
+${tc.signature("isTop", "variant")}
+
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-<#assign ast = variant.getAstNode() />
 <#assign automaton = helper.getAutomatonBehavior(ast).get() />
 <#assign ubGenerics><@Util.printTypeParameters ast false/></#assign>
 <#assign isEvent = helper.isEventBased(automaton)/>
-<#assign MODIFIER><#if isTop>abstract<#else></#if></#assign>
+<#assign MODIFIER><#if isTop>abstract</#if></#assign>
 <#assign CLASS>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${suffixes.builder()}<#if isTop>TOP</#if></#assign>
 <#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"}${ast.getName()}${suffixes.context()}${ubGenerics}, ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}${">"}</#assign>
 <#assign CONTEXT>${ast.getName()}${suffixes.context()}${ubGenerics}</#assign>
@@ -41,7 +38,7 @@ public ${SUPER} addDefaultStates() { <#-- TODO replace super with concrete type?
 @Override
 public ${SUPER} addDefaultTransitions() {
 <#list helper.getTransitionsWithoutEvent(automaton) as transition>
-  this.addTransition(${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", ast, [automaton, transition, ast.getSymbol().getAllIncomingPorts()])});
+  this.addTransition(${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, ast.getSymbol().getAllIncomingPorts()])});
 </#list>
   return this;
 }
