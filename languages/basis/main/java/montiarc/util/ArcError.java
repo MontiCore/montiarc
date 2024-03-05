@@ -76,7 +76,8 @@ public enum ArcError implements Error {
   PARAMETER_NAMED_TICK("0xC1170", "Parameters cant be named %s"),
   FIELD_NAMED_TICK("0xC1171", "Fields cant be named %s"),
   TYPEPARAMETERS_NAMED_TICK("0xC1172", "Type Parameters cant be named %s"),
-  FEATURE_NAMED_TICK("0xC1173", "Type Parameters cant be named %s");
+  FEATURE_NAMED_TICK("0xC1173", "Type Parameters cant be named %s"),
+  CONNECTORS_IN_ATOMIC("0xC1174","Connectors cannot be used inside atomic components");
 
   private final String errorCode;
   private final String errorMessage;

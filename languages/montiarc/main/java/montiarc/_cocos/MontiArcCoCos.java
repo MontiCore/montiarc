@@ -5,6 +5,7 @@ import arcautomaton._cocos.NoEventsInSyncAutomata;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
 import arcautomaton._cocos.NoTickEventInUntimedAutomata;
 import arcbasis._cocos.AtomicMaxOneBehavior;
+import arcbasis._cocos.AtomicNoConnector;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.CompArgNoAssignmentExpr;
 import arcbasis._cocos.ComponentArgumentsOmitPortRef;
@@ -111,6 +112,7 @@ public class MontiArcCoCos {
     checker.addVariantCoCo(ConnectorTimingsFit.class);
     checker.addCoCo(new OnlyOneTiming());
     checker.addCoCo(new DelayOutPortOnly());
+    checker.addVariantCoCo(AtomicNoConnector.class);
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addCoCo(new ConfigurationParameterAssignment(tc));

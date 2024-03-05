@@ -2,6 +2,7 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.AtomicMaxOneBehavior;
+import arcbasis._cocos.AtomicNoConnector;
 import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
 import arcbasis._cocos.ConnectorTimingsFit;
@@ -34,6 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import variablearc._cocos.arcbasis.ConnectorTypesFit;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -551,9 +553,10 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     checker.addVariantCoCo(PortUniqueSender.class);
     checker.addVariantCoCo(SubPortsConnected.class);
     checker.addVariantCoCo(ConnectorPortsExist.class);
-    checker.addVariantCoCo(variablearc._cocos.arcbasis.ConnectorTypesFit.class);
+    checker.addVariantCoCo(ConnectorTypesFit.class);
     checker.addVariantCoCo(ConnectorDirectionsFit.class);
     checker.addVariantCoCo(ConnectorTimingsFit.class);
+    checker.addVariantCoCo(AtomicNoConnector.class);
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addVariantCoCo(PortHeritageTypeFits.class);
@@ -587,9 +590,10 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     checker.addVariantCoCo(PortUniqueSender.class);
     checker.addVariantCoCo(SubPortsConnected.class);
     checker.addVariantCoCo(ConnectorPortsExist.class);
-    checker.addVariantCoCo(variablearc._cocos.arcbasis.ConnectorTypesFit.class);
+    checker.addVariantCoCo(ConnectorTypesFit.class);
     checker.addVariantCoCo(ConnectorDirectionsFit.class);
     checker.addVariantCoCo(ConnectorTimingsFit.class);
+    checker.addVariantCoCo(AtomicNoConnector.class);
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addVariantCoCo(PortHeritageTypeFits.class);
@@ -1280,7 +1284,24 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "int i = 1; " +
           "} " +
           "}",
-        ArcError.UNIQUE_IDENTIFIER_NAMES)
+        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      // component that switches between atomic and decomposed with connector
+      arg("component Comp71 { " +
+          "feature f;" +
+          "port in int i;" +
+          "port out int o;" +
+          "varif (f) {" +
+          "port in int i2;" +
+          "a.b.C sub;" +
+          "i -> sub.i1;" +
+          "i2 -> sub.i2;" +
+          "sub.o -> o;" +
+          "} else {" +
+          "i -> o;" +
+          "}" +
+          "}",
+        ArcError.CONNECTORS_IN_ATOMIC
+      )
     );
   }
 
