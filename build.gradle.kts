@@ -13,7 +13,7 @@ dependencies {
   jacocoAggregation(project(":languages:montiarc"))
 }
 
-reporting.reports.create("jacocoAggregatedTestReport", JacocoCoverageReport::class) {
+reporting.reports.register("jacocoAggregatedTestReport", JacocoCoverageReport::class) {
   testType.set(TestSuiteType.UNIT_TEST)
 }
 
