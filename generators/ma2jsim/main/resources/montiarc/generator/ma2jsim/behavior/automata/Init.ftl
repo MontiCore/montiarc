@@ -3,7 +3,6 @@
 ${tc.signature("automaton")}
 @Override
 public void init() {
-<#if ast.getSymbol().isAtomic()>
     <#list helper.getAutomatonInitAction(automaton)>
         ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
         ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
@@ -17,5 +16,4 @@ public void init() {
     <#else>
         /* Could not determine init action from any of the automaton's initial states */
     </#list>
-</#if>
 }

@@ -88,10 +88,8 @@ public class MA2JSimGen {
     generateComponentInstanceBuilder(ast);
     generateContextInterface(ast);
 
-    if (ast.getComponentType().getSymbol().isAtomic()) {
-      generateBehaviorInterface(ast);
-      generateBehaviorClasses(ast);
-    }
+    generateBehaviorInterface(ast);
+    generateBehaviorClasses(ast);
 
     ASTMCQualifiedName innerComponentPackage = ast.isPresentPackage() ? ast.getPackage().deepClone() : MontiArcMill.mCQualifiedNameBuilder().build();
     innerComponentPackage.addParts(ast.getComponentType().getName());
@@ -160,15 +158,17 @@ public class MA2JSimGen {
 
     List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariants(ast.getComponentType());
     for (VariableArcVariantComponentTypeSymbol variant : variants) {
-      // set variant pretty printer
-      this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter(variant));
-      if (helper.getAutomatonBehavior(variant.getAstNode()).isPresent()) {
-        final String suffix = helper.variantSuffix(variant);
-        generateAutomatonImplementation(ast, suffix, variant);
-        generateAutomatonBuilder(ast, suffix, variant);
-        generateStatesClass(ast, suffix, variant);
-      } else if (helper.getComputeBehavior(variant.getAstNode()).isPresent()) {
-        generateComputeImplementation(ast, helper.variantSuffix(variant), variant);
+      if (variant.isAtomic()) {
+        // set variant pretty printer
+        this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter(variant));
+        if (helper.getAutomatonBehavior(variant.getAstNode()).isPresent()) {
+          final String suffix = helper.variantSuffix(variant);
+          generateAutomatonImplementation(ast, suffix, variant);
+          generateAutomatonBuilder(ast, suffix, variant);
+          generateStatesClass(ast, suffix, variant);
+        } else if (helper.getComputeBehavior(variant.getAstNode()).isPresent()) {
+          generateComputeImplementation(ast, helper.variantSuffix(variant), variant);
+        }
       }
     }
     // reset prettyPrinter

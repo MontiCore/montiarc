@@ -3,6 +3,7 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#list helper.getVariants(ast) as variant>
+<#if variant.isAtomic()>
     <#assign automaton = helper.getAutomatonBehavior(variant.getAstNode())/>
     <#assign hasAutomaton = automaton.isPresent()/>
     <#assign compute = helper.getComputeBehavior(variant.getAstNode())/>
@@ -22,4 +23,5 @@
       this.behavior = new ${ast.getName()}${suffixes.compute()}${helper.variantSuffix(variant)}<@Util.printTypeParameters ast false/>(this);
     </#if>
   }
+</#if>
 </#list>

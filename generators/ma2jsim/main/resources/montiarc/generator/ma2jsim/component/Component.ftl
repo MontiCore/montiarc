@@ -9,6 +9,8 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
   @Override
   public String getName() { return name; }
 
+  protected boolean isAtomic;
+
   ${tc.include("montiarc.generator.ma2jsim.component.schedule.SchedulerInComponent.ftl")}
 
   ${tc.include("montiarc.generator.ma2jsim.component.parameters.Parameters.ftl")}
@@ -25,13 +27,11 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.HandleMessage.ftl")}
 
-  <#if ast.getSymbol().isAtomic()>
-    ${tc.include("montiarc.generator.ma2jsim.component.atomic.Atomic.ftl")}
-  <#else>
-    ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.Subcomponents.ftl")}
+  ${tc.include("montiarc.generator.ma2jsim.component.atomic.Atomic.ftl")}
 
-    ${tc.include("montiarc.generator.ma2jsim.component.Connectors.ftl")}
-  </#if>
+  ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.Subcomponents.ftl")}
+
+  ${tc.include("montiarc.generator.ma2jsim.component.Connectors.ftl")}
 
   <#if helper.getModeAutomaton(ast).isPresent()>
     ${tc.include("montiarc.generator.ma2jsim.dynamics.componentReferences.DynamicReferencesInComponent.ftl")}

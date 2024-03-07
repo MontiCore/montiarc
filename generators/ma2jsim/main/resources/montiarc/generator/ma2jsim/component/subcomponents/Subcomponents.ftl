@@ -7,4 +7,5 @@
   ${tc.includeArgs("montiarc.generator.ma2jsim.component.subcomponents.SubcomponentGetter.ftl", [subcomponent])}
 </#list>
 
+${tc.include("montiarc.generator.ma2jsim.component.subcomponents.SubcomponentAllGetter.ftl")}
 ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.SubcomponentSetup.ftl")}

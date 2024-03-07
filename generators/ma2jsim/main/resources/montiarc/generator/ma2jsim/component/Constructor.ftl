@@ -17,12 +17,13 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
   <#list helper.getFeatures(ast) as feature>
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
-  <@MethodNames.portSetup/>();
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 <#list helper.getVariants(ast) as variant>
   if (${helper.printCondition(variant)}) {
+    this.isAtomic = ${variant.isAtomic()?c};
+    <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
     <#if variant.isAtomic()>
         <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
     <#elseif variant.isDecomposed()>

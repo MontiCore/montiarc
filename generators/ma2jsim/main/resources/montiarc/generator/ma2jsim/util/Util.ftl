@@ -33,6 +33,14 @@
     </#if>
 </#macro>
 
+<#macro getStaticPortInterface portSym>
+    <#if portSym.isIncoming()>
+    montiarc.rte.port.ITimeAwareInPort
+    <#else>
+    montiarc.rte.port.TimeAwareOutPort
+    </#if>
+</#macro>
+
 <#macro printTypeParameters astComponentType printBounds=true>
     <#if helper.isGenericComponent(astComponentType)>
         <#list astComponentType.getHead().getArcTypeParameterList()>

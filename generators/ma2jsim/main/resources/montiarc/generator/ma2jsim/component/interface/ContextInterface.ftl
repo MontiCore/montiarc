@@ -8,7 +8,5 @@ public interface ${ast.getName()}${suffixes.context()}<#if isTop>${suffixes.top(
           ${ast.getName()}${suffixes.parameters()} <@Util.printTypeParameters ast false/>,
           ${ast.getName()}${suffixes.fields()} <@Util.printTypeParameters ast false/>,
           ${ast.getName()}${suffixes.features()} <@Util.printTypeParameters ast false/> {
-  <#if ast.getSymbol().isAtomic()>
     montiarc.rte.behavior.IBehavior getBehavior();
-  </#if>
 }

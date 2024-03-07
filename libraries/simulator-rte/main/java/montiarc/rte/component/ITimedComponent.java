@@ -3,4 +3,6 @@ package montiarc.rte.component;
 
 public interface ITimedComponent extends IComponent {
 
+  void init();
+
 }

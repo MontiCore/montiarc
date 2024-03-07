@@ -3,6 +3,7 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#list helper.getVariants(ast) as variant>
+<#if !variant.isAtomic()>
 protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}() {
     ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
@@ -19,4 +20,5 @@ protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}() {
         .build();
     </#list>
 }
+</#if>
 </#list>

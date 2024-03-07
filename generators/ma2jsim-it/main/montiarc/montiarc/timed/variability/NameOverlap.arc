@@ -11,6 +11,7 @@ component NameOverlap {
   varif (onOff) {
     port in OnOff i;
     port out OnOff o;
+    OnOff var = OnOff.OFF;
 
     Medium sub;
     i -> sub.i;
@@ -18,6 +19,7 @@ component NameOverlap {
   } else {
     port in Integer i;
     port out Integer o;
+    Integer var = 0;
 
     GenericMedium<Integer> sub();
     i -> sub.i;

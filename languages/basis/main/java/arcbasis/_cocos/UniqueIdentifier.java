@@ -60,6 +60,7 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
     Multimap<String, SourcePosition> subCompNameOccurrences = getSubComponentNameOccurrences(component);
     Multimap<String, SourcePosition> portNameOccurrences = getPortNameOccurrences(component);
     Multimap<String, SourcePosition> fieldNameOccurrences = getFieldNameOccurrences(component);
+    Multimap<String, SourcePosition> parameterNameOccurrences = getParameterNameOccurrences(component);
     Multimap<String, SourcePosition> typeParamNameOccurrences = getTypeParameterNameOccurrences(component);
 
     // merge above
@@ -68,6 +69,7 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
     subCompNameOccurrences.forEach(allNameOccurrences::put);
     portNameOccurrences.forEach(allNameOccurrences::put);
     fieldNameOccurrences.forEach(allNameOccurrences::put);
+    parameterNameOccurrences.forEach(allNameOccurrences::put);
     typeParamNameOccurrences.forEach(allNameOccurrences::put);
 
     return allNameOccurrences;
@@ -117,7 +119,7 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
   }
 
   /**
-   * Collects all identifier names of fields and configuration parameters of a component type and registers the source
+   * Collects all identifier names of fields of a component type and registers the source
    * code positions where they occur.
    */
   protected Multimap<String, SourcePosition> getFieldNameOccurrences(@NotNull ComponentTypeSymbol component) {
@@ -125,6 +127,20 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
     component.getFields().forEach(
+      field -> nameOccurrences.put(field.getName(), optSourcePosOf(field).orElse(new SourcePosition(-1, -1)))
+    );
+    return nameOccurrences;
+  }
+
+  /**
+   * Collects all identifier names of configuration parameters of a component type and registers the source
+   * code positions where they occur.
+   */
+  protected Multimap<String, SourcePosition> getParameterNameOccurrences(@NotNull ComponentTypeSymbol component) {
+    Preconditions.checkNotNull(component);
+
+    Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
+    component.getParameters().forEach(
       field -> nameOccurrences.put(field.getName(), optSourcePosOf(field).orElse(new SourcePosition(-1, -1)))
     );
     return nameOccurrences;

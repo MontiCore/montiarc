@@ -9,7 +9,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
     <#assign existenceConditions = helper.getExistenceCondition(ast, inPort)/>
     if(<#if existenceConditions?has_content>${prettyPrinter.prettyprint(existenceConditions)} &&</#if> receivingPort.getQualifiedName().equals(${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}().getQualifiedName())) {
       if (${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}().isBufferEmpty()) return;
-      else <@MethodNames.handleBufferImplementation inPort/>();
+      else <@MethodNames.handleBufferImplementation inPort/>${helper.portVariantSuffix(ast, inPort)}();
     }
     <#sep> else </#sep>
 </#list>
