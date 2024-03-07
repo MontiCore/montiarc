@@ -15,7 +15,7 @@ public abstract class Automaton<C> extends AbstractBehavior<C> {
     this.state = initial;
     this.states = states;
   }
-  
+
   /**
    * @return the state space of the state machine
    */
@@ -29,9 +29,10 @@ public abstract class Automaton<C> extends AbstractBehavior<C> {
   public State getState() {
     return this.state;
   }
-  
+
   /**
    * Update the current state. To be used exclusively by transitions.
+   *
    * @param state the new state
    */
   protected void setState(State state) {

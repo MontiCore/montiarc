@@ -59,7 +59,7 @@ public abstract class AutomatonBuilder<C, A extends Automaton<C>> {
   }
 
   public AutomatonBuilder<C, A> setInitial(State initial) {
-    this.initial = initial;
+    this.initial = initial.getInitialSubstate();
     return this;
   }
   

@@ -9,7 +9,7 @@ ${tc.signature("comp")}
 
 <@printExitStates ast/>
 
-<#list autHelper.getAutomatonStates(ast) as state>
+<#list ast.getStates() as state>
 
   <@printTransitionFrom state comp ast/>
 
@@ -27,7 +27,7 @@ ${tc.signature("comp")}
 
 <#macro printStateEnum automaton>
   protected enum States {
-    <#list autHelper.getAutomatonStates(automaton) as state>
+    <#list automaton.getStates() as state>
       ${state.getName()}(<#if autHelper.hasSuperState(automaton, state)>${autHelper.getSuperState(automaton, state).getName()}</#if>)<#sep> , </#sep>
     </#list>;
 
@@ -64,7 +64,7 @@ ${tc.signature("comp")}
     </#list>
     // transition from the current state
     switch (${identifier.getCurrentStateName()}) {
-      <#list autHelper.getAutomatonStates(automaton) as state>
+      <#list automaton.getStates() as state>
         case ${state.getName()}:
           transitionFrom${state.getName()}();
           break;
@@ -241,7 +241,7 @@ ${tc.signature("comp")}
 <#macro printExitStates automaton>
   protected void exit(States from, States to) {
     switch (from) {
-      <#list autHelper.getAutomatonStates(automaton) as state>
+      <#list automaton.getStates() as state>
         case ${state.getName()} :
           exit${state.getName()}();
           break;

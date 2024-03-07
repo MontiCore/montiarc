@@ -16,7 +16,12 @@ import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.scbasis.SCBasisMill;
+import de.monticore.scbasis._ast.ASTSCEmptyBody;
+import de.monticore.scbasis._ast.ASTSCState;
+import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -454,5 +459,23 @@ public class Helper {
   public String fieldVariantSuffix(ASTComponentType comp, VariableSymbol field) {
     List<VariableSymbol> fields = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolveVariableMany(field.getName()));
     return fields.size() <= 1 ? "" : Integer.toString(fields.indexOf(field));
+  }
+
+  public List<ASTSCStateElement> returnSubstates(ASTSCState State){
+    SCBasisMill.init();
+    if(SCBasisMill.typeDispatcher().isASTSCEmptyBody(((ASTSCState)State).getSCSBody()))
+      return new ArrayList<ASTSCStateElement>();
+    List<ASTSCStateElement> list = new ArrayList<>();
+    for(ASTSCStateElement s: (((ASTSCHierarchyBody)((ASTSCState)State).getSCSBody()).getSCStateElementList())){
+      if(SCBasisMill.typeDispatcher().isASTSCState(s))
+        list.add(s);
+    }
+    Collections.reverse(list);
+    return list;
+  }
+  public List<ASTSCState> getStates(ASTComponentType component) {
+    Preconditions.checkNotNull(component);
+
+    return this.getAutomatonBehavior(component).get().getStates();
   }
 }

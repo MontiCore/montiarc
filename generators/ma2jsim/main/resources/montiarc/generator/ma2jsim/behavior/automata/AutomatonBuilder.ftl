@@ -11,6 +11,7 @@ ${tc.signature("isTop", "variant")}
 <#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"}${ast.getName()}${suffixes.context()}${ubGenerics}, ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}${">"}</#assign>
 <#assign CONTEXT>${ast.getName()}${suffixes.context()}${ubGenerics}</#assign>
 
+import montiarc.rte.automaton.Automaton;
 public ${MODIFIER} class ${CLASS}<@Util.printTypeParameters ast/> extends ${SUPER} {
 
 <#-- Constructors -->
@@ -43,10 +44,10 @@ public ${SUPER} addDefaultTransitions() {
   return this;
 }
 </#if>
-
+<#assign initSubstate= automaton.listInitialStates()>
 @Override
 public ${SUPER} setDefaultInitial() {
-  this.setInitial(${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${helper.streamToList(automaton.streamInitialStates())?first.getName()});
+  this.setInitial(${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${automaton.listInitialStates()?first.getName()}.getInitialSubstate());
   return this;
 }
 

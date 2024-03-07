@@ -4,14 +4,22 @@ package arcautomaton._ast;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcautomaton._visitor.SCTransitionsCollector;
+import arcbasis._ast.ASTComponentType;
+import de.monticore.scbasis._ast.ASTSCEmptyBody;
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
+import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
+import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ASTArcStatechart extends ASTArcStatechartTOP {
@@ -42,6 +50,14 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
   public Stream<ASTSCState> streamStates() {
     return getSpannedScope().getLocalSCStateSymbols().stream().map(SCStateSymbol::getAstNode);
   }
+  public List<ASTSCState> getStates() {
+    List<ASTSCState> list = new ArrayList<>();
+    for(SCStateSymbol state: getSpannedScope().getLocalSCStateSymbols()){
+      list.add(state.getAstNode());
+    }
+    return list;
+  }
+
 
   /**
    * @return a stream containing all initial states of this statechart. Note that if one initial state is declared
@@ -51,6 +67,9 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     return streamStates().filter(s -> s.getSCModifier().isInitial());
   }
 
+  public List<ASTSCState> listInitialStates(){
+    return streamStates().filter(s -> s.getSCModifier().isInitial()).collect(Collectors.toList());
+  }
   /**
    * @return a stream containing all initial outer states of this statechart. Note that if one initial state is declared
    * multiple times (probably by mistake) then all its declarations are contained in the stream.
@@ -80,4 +99,41 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
       return this.timing;
     }
   }
+  public ASTSCState findCommonSuperstate(ASTSCState current, ASTSCState destination){
+    List<ASTSCState> pathCurrent = findPath(current);
+    List<ASTSCState> pathDestination = findPath(destination);
+    ASTSCState commonSuperstate = null;
+    Collections.reverse(pathDestination);
+
+    for (ASTSCState value : pathCurrent) {
+      for (ASTSCState item : pathDestination) {
+        if (value.getName().equals(item.getName())) {
+          commonSuperstate = value;
+        }
+      }
+    }
+    return commonSuperstate;
+  }
+  public List<ASTSCState> findPath(ASTSCState state){
+    List<ASTSCState> path = new ArrayList<>();
+    path.add(state);
+    for(ASTSCState s: getStates()){
+      if(s.getSCSBody() instanceof ASTSCEmptyBody)
+        continue;
+      for(ASTSCStateElement body: ((ASTSCHierarchyBody) s.getSCSBody()).getSCStateElementList()){
+        if(((ASTSCState)body).getName().equals(state.getName()))
+          path.addAll(findPath(s));
+      }
+    }
+    return path;
+  }
+  public List<ASTSCState> gettrimlist(ASTSCState curr, ASTSCState common){
+    List<ASTSCState> path = findPath(curr);
+    Collections.reverse(path);
+    if(common != null){
+      path = path.subList(path.indexOf(common)+1, path.size());
+    }
+    return path;
+  }
+
 }

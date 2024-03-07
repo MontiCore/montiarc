@@ -1,5 +1,4 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTMACompilationUnit ast -->
 ${tc.signature("ast", "isTop", "variant")}
 /* (c) https://github.com/MontiCore/monticore */
 <#if ast.isPresentPackage()>

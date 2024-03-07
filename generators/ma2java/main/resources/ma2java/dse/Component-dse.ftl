@@ -144,7 +144,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 			List<montiarc.rte.dse.StateInfo> info = new ArrayList(){{
 				<#if compHelper.getAutomatonBehavior(ast).isPresent()>
 					<#assign automaton = compHelper.getAutomatonBehavior(ast).get()>
-					<#if autHelper.getAutomatonStates(automaton)?size != 0>
+					<#if automaton.getStates()?size != 0>
 						add(montiarc.rte.dse.StateInfo.newStateInfo(currentState, result, instanceName));
 					</#if>
 				</#if>

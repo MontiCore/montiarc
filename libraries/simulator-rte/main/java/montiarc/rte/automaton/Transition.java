@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
+import java.util.List;
+
 /**
  * Represents a transition in a state machine.
  */
@@ -10,6 +12,7 @@ public class Transition {
   State target;
   Guard guard;
   Action action;
+  State current;
 
   protected Transition(State source,
                        State target,
@@ -38,16 +41,13 @@ public class Transition {
   }
 
   public boolean isEnabled(State current) {
-    return this.getSource().equals(current) && this.getGuard().check();
+    this.current = current;
+    return (this.getSource().equals(current) || this.getSource().isSubState(current) ) && this.getGuard().check();
   }
 
   public void execute(Automaton<?> context) {
-    this.getSource().exit();
+    this.action.execute();
 
-    this.getAction().execute();
-
-    this.getTarget().enter();
-    
-    context.setState(this.getTarget());
+    context.setState(this.getTarget().getInitialSubstate());
   }
 }

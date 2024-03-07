@@ -4,6 +4,7 @@ ${tc.signature("isTop", "variant")}
 
 <#assign automaton = helper.getAutomatonBehavior(ast).get() />
 <#assign isEvent = helper.isEventBased(automaton)/>
+import montiarc.rte.automaton.Automaton;
 
 ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.Header.ftl", [isTop, automaton])}
 {

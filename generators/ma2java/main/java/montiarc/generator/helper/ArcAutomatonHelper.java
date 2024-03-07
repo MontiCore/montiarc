@@ -27,12 +27,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArcAutomatonHelper {
-
-  public List<ASTSCState> getAutomatonStates(@NotNull ASTArcStatechart automaton) {
-    Preconditions.checkNotNull(automaton);
-    return automaton.streamStates().collect(Collectors.toList());
-  }
-
   public ASTSCTransition getFirstTransitionWithoutGuardFrom(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState srcState) {
     Preconditions.checkNotNull(automaton);
     Preconditions.checkNotNull(srcState);
