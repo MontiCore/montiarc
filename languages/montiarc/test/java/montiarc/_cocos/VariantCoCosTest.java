@@ -14,6 +14,7 @@ import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.UniqueIdentifier;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
@@ -541,6 +542,23 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "int i = 5; " +
       "} " +
       "}",
+    // Switches between automaton behaviors with preconditions
+    "component Comp54 { " +
+      "feature f;" +
+      "varif (f) {" +
+      "port in int i;" +
+      "<<sync>> automaton {" +
+      "initial state A;" +
+      "A -> A [i > 1];" +
+      "}" +
+      "} else {" +
+      "port in boolean i;" +
+      "<<sync>> automaton {" +
+      "initial state A;" +
+      "A -> A [i];" +
+      "}" +
+      "}" +
+      "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -561,6 +579,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addVariantCoCo(PortHeritageTypeFits.class);
     checker.addVariantCoCo(UniqueIdentifier.class);
+
+    checker.addVariantCoCo(TransitionPreconditionsAreBoolean.class);
 
     checker.addVariantCoCo(ExpressionStatementIsValid.class);
     checker.addVariantCoCo(VarDeclarationInitializationHasCorrectType.class);
@@ -598,6 +618,8 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addVariantCoCo(PortHeritageTypeFits.class);
     checker.addVariantCoCo(UniqueIdentifier.class);
+
+    checker.addVariantCoCo(TransitionPreconditionsAreBoolean.class);
 
     checker.addVariantCoCo(ExpressionStatementIsValid.class);
     checker.addVariantCoCo(VarDeclarationInitializationHasCorrectType.class);
@@ -1301,6 +1323,27 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}" +
           "}",
         ArcError.CONNECTORS_IN_ATOMIC
+      ),
+      // Switches between automaton behaviors with preconditions
+      arg(
+        "component Comp72 { " +
+          "feature f;" +
+          "varif(f){" +
+          "port in int i;" +
+          "<<sync>> automaton {" +
+          "initial state B;" +
+          "B -> B [i];" +
+          "}" +
+          "} else {" +
+          "port in boolean i;" +
+          "<<sync>> automaton {" +
+          "initial state A;" +
+          "A -> A [i == \"a\"];" +
+          "}" +
+          "}" +
+          "}",
+        new InternalError("0xB0166"), // equal not applicable
+        new InternalError("0xCC111") // int not boolean
       )
     );
   }

@@ -170,7 +170,7 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
-    checker.addCoCo(new TransitionPreconditionsAreBoolean(tc));
+    checker.addVariantCoCo(TransitionPreconditionsAreBoolean.class);
     MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new AtLeastOneInitialState(traverser));

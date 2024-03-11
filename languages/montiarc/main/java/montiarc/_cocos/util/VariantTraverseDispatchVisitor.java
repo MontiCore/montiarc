@@ -6,6 +6,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis.check.TypeCheck3AsTypeCalculator;
 import com.google.common.base.Preconditions;
+import de.monticore.sctransitions4code._visitor.SCTransitions4CodeVisitor2;
 import de.monticore.statements.mccommonstatements._visitor.MCCommonStatementsVisitor2;
 import de.monticore.statements.mcvardeclarationstatements._visitor.MCVarDeclarationStatementsVisitor2;
 import de.monticore.types.check.IDerive;
@@ -94,6 +95,8 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
           traverser.add4MCCommonStatements((MCCommonStatementsVisitor2) coco);
         } else if (coco instanceof MCVarDeclarationStatementsVisitor2) {
           traverser.add4MCVarDeclarationStatements((MCVarDeclarationStatementsVisitor2) coco);
+        } else if (coco instanceof SCTransitions4CodeVisitor2) {
+          traverser.add4SCTransitions4Code((SCTransitions4CodeVisitor2) coco);
         }
       } catch (Exception ignored) {
       }
