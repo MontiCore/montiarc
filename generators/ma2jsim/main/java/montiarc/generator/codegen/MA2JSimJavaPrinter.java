@@ -9,7 +9,11 @@ import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
+import variablearc.evaluation.ExpressionSet;
+import variablearc.evaluation.expressions.AssignmentExpression;
 import variablearc.evaluation.expressions.Expression;
+import variablearc.evaluation.expressions.NegatedExpression;
 
 import java.util.Iterator;
 import java.util.List;
@@ -58,9 +62,43 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     Iterator<Expression> iterator = expressions.iterator();
     while (iterator.hasNext()) {
       Expression expression = iterator.next();
-      prettyprinted.append(expression.print()); // Todo use this pretty printer
+      prettyprinted.append("(").append(prettyprint(expression)).append(")");
       if (iterator.hasNext()) prettyprinted.append("&&");
     }
     return prettyprinted.toString();
+  }
+
+  public String prettyprintCondition(VariableArcVariantComponentTypeSymbol variant) {
+    ExpressionSet conditions = variant.getLocalConditions();
+    StringBuilder prettyprinted = new StringBuilder();
+    if (!conditions.getExpressions().isEmpty()) {
+      prettyprinted.append(prettyprint(conditions.getExpressions()));
+    }
+
+    Iterator<String> iterator = conditions.getNegatedConjunctions().stream().map(this::prettyprint).iterator();
+    if (!conditions.getExpressions().isEmpty() && iterator.hasNext()) {
+      prettyprinted.append(" && ");
+    }
+    if (iterator.hasNext()) {
+      prettyprinted.append("!(");
+      while (iterator.hasNext()) {
+        String expression = iterator.next();
+        prettyprinted.append("(").append(expression).append(")");
+        if (iterator.hasNext()) prettyprinted.append("||");
+      }
+      prettyprinted.append(")");
+    }
+
+    return prettyprinted.toString().isEmpty() ? "true" : prettyprinted.toString();
+  }
+
+  public String prettyprint(Expression expression) {
+    if (expression instanceof AssignmentExpression) {
+      return ((AssignmentExpression) expression).getVariable().getName() + " = " + this.prettyprint(expression.getAstExpression());
+    } else if (expression instanceof NegatedExpression) {
+      return "!(" + this.prettyprint(expression.getAstExpression()) + ")";
+    }
+
+    return this.prettyprint(expression.getAstExpression());
   }
 }

@@ -1,10 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
+import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.ArithExpr;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
+import com.microsoft.z3.EnumSort;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntExpr;
 import com.microsoft.z3.Sort;
@@ -42,11 +44,14 @@ import java.util.Optional;
 public class CommonExpressions2SMT implements CommonExpressionsHandler {
 
   protected final IDeriveSMTExpr deriveSMTExpr;
+  protected final IArcTypeCalculator tc;
   protected CommonExpressionsTraverser traverser;
 
-  public CommonExpressions2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
+  public CommonExpressions2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr, @NotNull IArcTypeCalculator tc) {
     Preconditions.checkNotNull(deriveSMTExpr);
+    Preconditions.checkNotNull(tc);
     this.deriveSMTExpr = deriveSMTExpr;
+    this.tc = tc;
   }
 
   @Override
@@ -83,6 +88,8 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     Preconditions.checkNotNull(node);
     String prefix = this.deriveSMTExpr.getPrefix().isEmpty() ? "" : this.deriveSMTExpr.getPrefix() + ".";
 
+    getResult().clear();
+
     IVariableArcScope scope = (IVariableArcScope) node.getEnclosingScope();
     if (CommonExpressionsMill.typeDispatcher().isASTNameExpression(node.getExpression())) {
       // Handle only features of subcomponent of form x.f
@@ -94,18 +101,35 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
           node.getName()).isEmpty()) {
         this.getResult().setValue(
           this.getContext().mkBoolConst(prefix + name + "." + node.getName()));
-      } else {
-        getResult().clear();
       }
-    } else {
+    }
+    if (getResult().getValue().isEmpty()) {
       // Handle all other field access expressions of form a.X...X.b.c
       Optional<Sort> sort = this.getExpr2Sort().toSort(this.getContext(), node);
       if (sort.isPresent()) {
-        this.getResult().setValue(this.getContext().mkConst(prefix + getExprAsQName(node), sort.get()));
+        if (sort.get() instanceof EnumSort<?> && getEnumIndex(node.getName(), (EnumSort<?>) sort.get()) >= 0) {
+          // Handle enum constants
+          EnumSort<?> enumSort = (EnumSort<?>) sort.get();
+          this.getResult().setValue(enumSort.getConst(getEnumIndex(node.getName(), enumSort)));
+        } else {
+          this.getResult().setValue(this.getContext().mkConst(prefix + getExprAsQName(node), sort.get()));
+        }
       } else {
         this.getResult().clear();
       }
     }
+  }
+
+  protected Integer getEnumIndex(String name, EnumSort<?> sort) {
+    int result = -1;
+    Expr<? extends EnumSort<?>>[] enumSort = sort.getConsts();
+
+    for (int i = 0; i < enumSort.length; i++) {
+      if (name.equals(String.valueOf(enumSort[i]))) {
+        result = i;
+      }
+    }
+    return result;
   }
 
   protected Optional<String> getExprAsQName(ASTExpression expr) {

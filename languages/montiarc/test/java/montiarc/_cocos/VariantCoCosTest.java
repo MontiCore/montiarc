@@ -22,6 +22,8 @@ import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanTyp
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
@@ -53,6 +55,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     setUpComponents();
+    setUpEnum();
   }
 
   @Override
@@ -81,6 +84,13 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } }");
     compile("package a.b; component O { feature ff; port out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
     compile("package a.b; component P<A,B> { feature ff; varif (ff) { port out A o; } else { port out B o; } }");
+  }
+
+  protected static void setUpEnum() {
+    OOTypeSymbol onOffEnumType = MontiArcMill.oOTypeSymbolBuilder().setIsEnum(true).setName("OnOff").setIsPublic(true).setSpannedScope(MontiArcMill.scope()).build();
+    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("ON").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
+    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("OFF").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
+    MontiArcMill.globalScope().add(onOffEnumType);
   }
 
   @ParameterizedTest
@@ -536,10 +546,14 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     // Switches between field initial values
     "component Comp53 { " +
       "feature f; " +
+      "port out int o; " +
       "varif (f) { " +
       "int i = 0; " +
       "} else { " +
       "int i = 5; " +
+      "} " +
+      "compute { " +
+      "  o = i; " +
       "} " +
       "}",
     // Switches between automaton behaviors with preconditions
@@ -558,6 +572,32 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
       "A -> A [i];" +
       "}" +
       "}" +
+      "}",
+    // Switches between field types
+    "component Comp54 { " +
+      "feature f; " +
+      "port out double o; " +
+      "varif (f) { " +
+      "  double i = 2.5; " +
+      "} else {" +
+      "  int i = 2; " +
+      "} " +
+      "compute { " +
+      "  o = i; " +
+      "} " +
+      "}",
+    // Enum constants map to different values
+    "component Comp55(OnOff onOff) { " +
+      "varif(onOff == OnOff.OFF) {" +
+      "  automaton {" +
+      "    initial state S;" +
+      "  }" +
+      "} " +
+      "varif(onOff == OnOff.ON) {" +
+      "  automaton {" +
+      "    initial state S;" +
+      "  }" +
+      "} " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -1344,7 +1384,21 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         new InternalError("0xB0166"), // equal not applicable
         new InternalError("0xCC111") // int not boolean
-      )
+      ),
+      // Enum constants map to same value
+      arg("component Comp55(OnOff onOff) { " +
+        "varif(onOff == OnOff.OFF) {" +
+        "  automaton {" +
+        "    initial state S;" +
+        "  }" +
+        "} " +
+        "varif(onOff == OnOff.OFF) {" +
+        "  automaton {" +
+        "    initial state S;" +
+        "  }" +
+        "} " +
+        "}",
+        ArcError.MULTIPLE_BEHAVIOR)
     );
   }
 

@@ -49,7 +49,6 @@ import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariantPortSymbol;
 import variablearc._symboltable.VariantSubcomponentSymbol;
-import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
@@ -413,14 +412,6 @@ public class Helper {
       return ((MontiArcComponentTypeSymbol) ast.getSymbol()).getVariableArcVariants();
     }
     return Collections.emptyList();
-  }
-
-  public String printCondition(VariableArcVariantComponentTypeSymbol variant) {
-    ExpressionSet conditions = variant.getLocalConditions();
-    return conditions.getExpressions().stream().map(Expression::print).map(s -> "(" + s + ")").reduce((a, b) -> a + "&&" + b).orElse("true")
-      + "&& !(" +
-      conditions.getNegatedConjunctions().stream().map((l) -> l.stream().map(Expression::print).reduce((a, b) -> "(" + a + ") && (" + b + ")").orElse("false")).reduce((a, b) -> "(" + a + ") && (" + b + ")").orElse("false")
-      + ")";
   }
 
   public Map<ArcFeatureSymbol, Boolean> getFeaturesMappedToBool(VariantSubcomponentSymbol subcomponent) {

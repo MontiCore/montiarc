@@ -24,13 +24,14 @@ public class VariableArcDeriveSMTExpr implements IDeriveSMTExpr {
 
   public VariableArcDeriveSMTExpr(@NotNull Context context) {
     Preconditions.checkNotNull(context);
+    VariableArcTypeCalculator tc = new VariableArcTypeCalculator();
     this.context = context;
     this.result = new Expr2SMTResult();
-    this.sortDerive = new VariableArcDeriveSMTSort(new VariableArcTypeCalculator());
+    this.sortDerive = new VariableArcDeriveSMTSort(tc);
     this.traverser = VariableArcMill.traverser();
     this.prefix = "";
 
-    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this));
+    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this, tc));
     this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this));
   }
 

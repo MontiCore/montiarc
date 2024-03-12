@@ -27,15 +27,16 @@ public class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
 
   public MontiArcDeriveSMTExpr(@NotNull Context context) {
     Preconditions.checkNotNull(context);
+    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     this.context = context;
     this.result = new Expr2SMTResult();
-    this.sortDerive = new VariableArcDeriveSMTSort(new MontiArcTypeCalculator());
+    this.sortDerive = new VariableArcDeriveSMTSort(tc);
     this.traverser = MontiArcMill.traverser();
     this.prefix = "";
 
-    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this));
+    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this, tc));
     this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this));
-    this.traverser.setCommonExpressionsHandler(new CommonExpressions2SMT(this));
+    this.traverser.setCommonExpressionsHandler(new CommonExpressions2SMT(this, tc));
     this.traverser.setBitExpressionsHandler(new BitExpressions2SMT(this));
   }
 

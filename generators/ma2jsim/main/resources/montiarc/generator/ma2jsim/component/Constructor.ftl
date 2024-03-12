@@ -21,7 +21,7 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 <#list helper.getVariants(ast) as variant>
-  if (${helper.printCondition(variant)}) {
+  if (${prettyPrinter.prettyprintCondition(variant)}) {
     this.isAtomic = ${variant.isAtomic()?c};
     <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
     <#if variant.isAtomic()>
