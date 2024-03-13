@@ -4,6 +4,7 @@ package montiarc.timed.automata.transition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -46,7 +47,7 @@ class TickTriggerTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    TickTriggerComp sut = new TickTriggerCompBuilder().setName("sut").build();
+    TickTriggerComp sut = new TickTriggerCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 

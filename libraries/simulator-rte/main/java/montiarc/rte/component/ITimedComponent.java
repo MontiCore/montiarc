@@ -5,4 +5,6 @@ public interface ITimedComponent extends IComponent {
 
   void init();
 
+  void handleTick();
+
 }

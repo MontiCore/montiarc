@@ -4,6 +4,7 @@ package montiarc.timed.automata;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -51,7 +52,7 @@ class Send2MessagesTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    Send2MessagesComp sut = new Send2MessagesCompBuilder().setName("sut").build();
+    Send2MessagesComp sut = new Send2MessagesCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 

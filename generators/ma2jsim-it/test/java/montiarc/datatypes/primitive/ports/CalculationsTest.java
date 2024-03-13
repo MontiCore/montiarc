@@ -3,6 +3,7 @@ package montiarc.datatypes.primitive.ports;
 
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -74,7 +75,7 @@ class CalculationsTest {
     List<Message<Boolean>> expectedBoolOut = List.of(msg(false), tk(), msg(true), tk(), msg(true), tk());
 
     // Given
-    CalculationsComp sut = new CalculationsCompBuilder().setName("sut").build();
+    CalculationsComp sut = new CalculationsCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
     sut.port_outByte().connect(this.port_byte);
     sut.port_outShort().connect(this.port_short);
     sut.port_outInt().connect(this.port_int);

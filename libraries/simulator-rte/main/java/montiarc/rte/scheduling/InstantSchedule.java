@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
+import montiarc.rte.component.IComponent;
+
 /**
  * Scheduler implementation acting like there is no scheduler.
  * <br>
@@ -18,7 +20,21 @@ public class InstantSchedule implements ISchedule {
    * @param computation the computation to be scheduled by this
    */
   @Override
-  public void registerComputation(Computation computation) {
+  public void registerComputation(IComputation computation) {
     computation.run();
+  }
+
+  @Override
+  public void register(IComponent component) {
+  }
+
+  @Override
+  public void run() {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  public void run(int ticks) {
+    throw new UnsupportedOperationException();
   }
 }

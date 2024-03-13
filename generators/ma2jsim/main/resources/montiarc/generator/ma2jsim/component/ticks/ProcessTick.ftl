@@ -3,9 +3,10 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#assign hasModeAutomaton = helper.getModeAutomaton(ast).isPresent()/>
 
+@Override
 public void <@MethodNames.handleTick/>() {
   if (this.isAtomic) {
-      if (isSync && <@MethodNames.getBehavior/>() != null && getAllInPorts().stream().allMatch(montiarc.rte.port.IInPort::hasBufferedTick)) {
+      if (isSync && <@MethodNames.getBehavior/>() != null && <@MethodNames.inputsTickBuffered/>()) {
         <@MethodNames.getBehavior/>().tick();
         getAllInPorts().forEach(inP -> {
           while (inP.hasBufferedTick() && !inP.isTickBlocked())
@@ -24,16 +25,16 @@ public void <@MethodNames.handleTick/>() {
       }
 
 
-      if(!<@MethodNames.inputsTickBlocked/>()) return;
+      if(!<@MethodNames.inputsTickBlocked/>()) throw new java.lang.RuntimeException("Component " + getName() + " is trying to tick even though some inputs are not tick blocked.");
 
       if(!this.isSync && <@MethodNames.getBehavior/>() != null) <@MethodNames.getBehavior/>().tick();
       <@MethodNames.dropTickOnAll/>();
       <@MethodNames.sendTickOnAll/>();
-      if(!isSync || getAllInPorts().stream().allMatch(montiarc.rte.port.ITimeAwareInPort::hasBufferedTick)) {
+      if(!isSync || <@MethodNames.inputsTickBuffered/>()) {
         getAllInPorts().forEach(montiarc.rte.port.ITimeAwareInPort::continueAfterDroppedTick);
       }
   } else {
-      if(!<@MethodNames.inputsTickBlocked/>()) return;
+      if(!<@MethodNames.inputsTickBlocked/>()) throw new java.lang.RuntimeException("Component " + getName() + " is trying to tick even though some inputs are not tick blocked.");
       <#if hasModeAutomaton>
           <@MethodNames.getModeAutomaton/>().tick();
       </#if>
@@ -41,9 +42,6 @@ public void <@MethodNames.handleTick/>() {
         .filter(p -> p instanceof montiarc.rte.port.TimeAwarePortForward)
         .map(p -> (montiarc.rte.port.TimeAwarePortForward<?>) p)
         .forEach(montiarc.rte.port.TimeAwarePortForward::forward);
-      <#list helper.getSubcomponentsWithoutInPorts(ast) as sub>
-          ${prefixes.subcomp()}${sub.getName()}${helper.subcomponentVariantSuffix(ast, sub.getSymbol())}().<@MethodNames.handleTick/>();
-      </#list>
       getAllInPorts().stream()
         .filter(p -> p instanceof montiarc.rte.port.TimeAwarePortForward)
         .map(p -> (montiarc.rte.port.TimeAwarePortForward<?>) p)
@@ -51,4 +49,5 @@ public void <@MethodNames.handleTick/>() {
           while(!fwd.isBufferEmpty() && !fwd.isTickBlocked()) fwd.forward();
         });
   }
+  if (this.getAllInPorts().isEmpty()) this.scheduleTick();
 }

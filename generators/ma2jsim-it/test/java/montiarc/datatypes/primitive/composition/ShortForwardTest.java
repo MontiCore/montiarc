@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,7 +44,7 @@ class ShortForwardTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    ShortForwardComp sut = new ShortForwardCompBuilder().setName("sut").build();
+    ShortForwardComp sut = new ShortForwardCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
     sut.port_pOut().connect(this.port_pOut);
 
     // when receiving a message, capture that message but do nothing else

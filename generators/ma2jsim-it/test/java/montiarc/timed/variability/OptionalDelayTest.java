@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -51,7 +52,7 @@ class OptionalDelayTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    OptionalDelayComp sut = new OptionalDelayCompBuilder().setName("sut").set_feature_delayed(true).build();
+    OptionalDelayComp sut = new OptionalDelayCompBuilder().setScheduler(new InstantSchedule()).setName("sut").set_feature_delayed(true).build();
 
     sut.port_o0().connect(this.port_o);
 
@@ -138,7 +139,7 @@ class OptionalDelayTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    OptionalDelayComp sut = new OptionalDelayCompBuilder().setName("sut").set_feature_delayed(false).build();
+    OptionalDelayComp sut = new OptionalDelayCompBuilder().setScheduler(new InstantSchedule()).setName("sut").set_feature_delayed(false).build();
 
     sut.port_o1().connect(this.port_o);
 

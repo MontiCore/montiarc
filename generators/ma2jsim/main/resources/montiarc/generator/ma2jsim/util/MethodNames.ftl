@@ -13,13 +13,13 @@
 
 <#macro behaviorSetup>setupBehavior</#macro>
 
-<#macro handleTick>handleTickEvent</#macro>
+<#macro handleTick>handleTick</#macro>
 
 <#macro getBehavior>getBehavior</#macro>
 
-<#macro handleSyncComputation>handleComputationOnSyncPorts</#macro>
-
 <#macro inputsTickBlocked>areAllInputsTickBlocked</#macro>
+
+<#macro inputsTickBuffered>areAllInputsTickBuffered</#macro>
 
 <#macro dropTickOnAll>dropTickOnAllInputs</#macro>
 

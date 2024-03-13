@@ -17,7 +17,6 @@ import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.scbasis.SCBasisMill;
-import de.monticore.scbasis._ast.ASTSCEmptyBody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -324,15 +323,6 @@ public class Helper {
 
   public List<?> getNonPrimitiveParameters(@NotNull ASTComponentType ast) {
     return ast.getHead().streamArcParameters().filter(param -> !param.getSymbol().getType().isPrimitive()).collect(Collectors.toList());
-  }
-
-  public List<ASTComponentInstance> getSubcomponentsWithoutInPorts(@NotNull ASTComponentType ast) {
-    return ast.getSubComponents().stream()
-      .filter(ASTComponentInstance::isPresentSymbol)
-      .filter(inst -> inst.getSymbol().isTypePresent())
-      .filter(inst -> inst.getSymbol().getType().getTypeInfo().getAllIncomingPorts().isEmpty())
-      .collect(Collectors.toList());
-
   }
 
   public boolean isGenericComponent(ASTComponentType astComponentType) {

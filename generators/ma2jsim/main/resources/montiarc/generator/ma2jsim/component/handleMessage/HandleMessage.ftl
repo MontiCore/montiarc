@@ -4,11 +4,11 @@
 
 @Override
 public void handleMessage(montiarc.rte.port.IInPort<?> receivingPort) {
-if (this.isAtomic) {
+  if (this.isAtomic) {
     ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.AtomicMethodBody.ftl")}
-} else {
+  } else {
     ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.DecomposedMethodBody.ftl")}
-}
+  }
 }
 
 ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.HandlePortForward.ftl")}

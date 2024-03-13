@@ -1,7 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 ${tc.signature("className")}
-protected montiarc.rte.scheduling.ISchedule scheduler = null;
+protected montiarc.rte.scheduling.ISchedule scheduler = new montiarc.rte.scheduling.FifoSchedule();
 
 public montiarc.rte.scheduling.ISchedule getScheduler() {
   return this.scheduler;

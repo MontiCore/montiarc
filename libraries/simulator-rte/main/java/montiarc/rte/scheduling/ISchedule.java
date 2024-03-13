@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
+import montiarc.rte.component.IComponent;
+
 /**
  * This interface defines the main interaction point(s) with a scheduler used in a MontiArc simulation.
  * <br>
@@ -16,6 +18,27 @@ public interface ISchedule {
    *
    * @param computation the computation to be scheduled by this
    */
-  void registerComputation(Computation computation);
+  void registerComputation(IComputation computation);
+
+  /**
+   * Register the given component to be part of the scheduler.
+   *
+   * @param component the component
+   */
+  void register(IComponent component);
+
+
+  /**
+   * Run the simulation
+   */
+  void run();
+
+  /**
+   * Run the simulation for a specific number of ticks.
+   * Calling this multiple times will continue the previous simulation.
+   *
+   * @param ticks the number of ticks the simulation should run
+   */
+  void run(int ticks);
 
 }

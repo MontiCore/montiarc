@@ -7,5 +7,5 @@ protected void handlePortForward(montiarc.rte.port.TimeAwarePortForward<?> fwd) 
     fwd.forward();
     return;
   }
-  if(fwd.isTickBlocked()) <@MethodNames.handleTick/>();
+  if(<@MethodNames.inputsTickBlocked/>()) this.scheduleTick();
 }

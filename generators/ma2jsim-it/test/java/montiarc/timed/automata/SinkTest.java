@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.automaton.State;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
+import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -30,7 +31,7 @@ class SinkTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    SinkComp sut = new SinkCompBuilder().setName("sut").build();
+    SinkComp sut = new SinkCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
 
     List<State> actual = new ArrayList<>(expected.size());
 

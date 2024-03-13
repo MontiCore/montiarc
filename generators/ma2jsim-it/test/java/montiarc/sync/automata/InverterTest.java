@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -48,7 +49,7 @@ class InverterTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    InverterComp sut = new InverterCompBuilder().setName("sut").build();
+    InverterComp sut = new InverterCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 

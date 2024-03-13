@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -66,7 +67,7 @@ class Medium2x2Test {
     Preconditions.checkNotNull(expected_o2);
 
     // Given
-    Medium2x2Comp sut = new Medium2x2CompBuilder().setName("sut").build();
+    Medium2x2Comp sut = new Medium2x2CompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
 
     sut.port_o1().connect(this.port_o1);
     sut.port_o2().connect(this.port_o2);

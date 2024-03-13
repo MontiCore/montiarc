@@ -6,6 +6,10 @@ protected boolean <@MethodNames.inputsTickBlocked/>() {
   return this.getAllInPorts().stream().allMatch(montiarc.rte.port.ITimeAwareInPort::isTickBlocked);
 }
 
+protected boolean <@MethodNames.inputsTickBuffered/>() {
+  return this.getAllInPorts().stream().allMatch(montiarc.rte.port.IInPort::hasBufferedTick);
+}
+
 protected void <@MethodNames.dropTickOnAll/>() {
   this.getAllInPorts().forEach(montiarc.rte.port.ITimeAwareInPort::dropBlockingTick);
 }

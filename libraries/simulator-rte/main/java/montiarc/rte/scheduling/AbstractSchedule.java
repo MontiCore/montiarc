@@ -1,6 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
+import montiarc.rte.component.IComponent;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -12,13 +17,24 @@ import java.util.Optional;
  */
 public abstract class AbstractSchedule implements ISchedule {
 
+  protected boolean runningScheduler = false;
   protected boolean runningComputation = false;
+  protected Map<IComponent, Long> timeSlot = new HashMap<>();
+  protected long runUntilTick = -1;
 
   @Override
-  public void registerComputation(Computation computation) {
+  public void registerComputation(IComputation computation) {
+    if (computation instanceof TickComputation && getComputationsFor(computation.getOwner()).stream().anyMatch(TickComputation.class::isInstance)) {
+      return; // Tick already scheduled for component
+    }
     addComputationToCollection(computation);
 
     triggerNextComputation();
+  }
+
+  @Override
+  public void register(IComponent component) {
+    timeSlot.put(component, 0L);
   }
 
   /**
@@ -28,27 +44,61 @@ public abstract class AbstractSchedule implements ISchedule {
    * the next set of computations without registering another computation.
    */
   public void triggerNextComputation() {
-    if (runningComputation) {
+    if (!runningScheduler || runningComputation) {
       return;
     }
 
-    Optional<Computation> nextComputation = getNextComputation();
+    Optional<IComputation> nextComputation = getNextComputation();
 
     nextComputation.ifPresent(this::executeComputation);
   }
 
-  protected void executeComputation(Computation computation) {
+  protected void executeComputation(IComputation computation) {
     this.runningComputation = true;
     computation.run();
     this.runningComputation = false;
 
-    Optional<Computation> nextComputation = getNextComputation();
+    // track ticks
+    if (computation instanceof TickComputation) {
+      timeSlot.put(computation.getOwner(), timeSlot.getOrDefault(computation.getOwner(), 0L) + 1);
+      if (runUntilTick <= currentTick()) {
+        runningScheduler = false;
+        return;
+      }
+    }
+
+    Optional<IComputation> nextComputation = getNextComputation();
 
     nextComputation.ifPresent(this::executeComputation);
   }
 
-  protected abstract void addComputationToCollection(Computation computation);
+  protected abstract void addComputationToCollection(IComputation computation);
 
-  protected abstract Optional<Computation> getNextComputation();
+  protected abstract Optional<IComputation> getNextComputation();
 
+  protected abstract List<IComputation> getComputationsFor(IComponent component);
+
+  protected boolean canSchedule(IComputation computation) {
+    return timeSlot.getOrDefault(computation.getOwner(), 0L) <= currentTick();
+  }
+
+  protected long currentTick() {
+    return timeSlot.values().stream().reduce(Long.MAX_VALUE, Math::min);
+  }
+
+  @Override
+  public void run() {
+    runningScheduler = true;
+    runUntilTick = -1;
+    triggerNextComputation();
+  }
+
+  @Override
+  public void run(int ticks) {
+    if (ticks < 1) return;
+    runningScheduler = true;
+    runUntilTick = currentTick() + ticks;
+    triggerNextComputation();
+    runningScheduler = false;
+  }
 }

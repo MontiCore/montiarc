@@ -7,12 +7,11 @@ public ${ast.getName()}${suffixes.component()}<@Util.printTypeParameters ast fal
   );
 
   ${ast.getName()}${suffixes.component()}<@Util.printTypeParameters ast false/> component = new ${ast.getName()}${suffixes.component()}<@Util.printTypeParameters ast false/>(
-    getName()
+    getName(),
+    getScheduler()
     <#list ast.getHead().getArcParameterList()>, <#items as param>${prefixes.getterMethod()}${prefixes.parameter()}${param.getName()}()<#sep>, </#sep></#items></#list>
     <#list helper.getFeatures(ast)>, <#items as feature>${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}()<#sep>, </#sep></#items></#list>
   );
-
-  if(getScheduler() != null) component.setScheduler(this.getScheduler());
 
   return component;
 }

@@ -104,6 +104,7 @@ public class MA2JSimGen {
 
     if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
       && ast.getComponentType().getSymbol().getParameters().isEmpty()
+      && helper.getVariants(ast.getComponentType()).size() <= 1
       && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
     }
@@ -250,7 +251,7 @@ public class MA2JSimGen {
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc);
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getComponentType()).stream().findFirst().orElse(null));
   }
 
   protected void generate(@NotNull String template, @NotNull ASTMACompilationUnit ast,

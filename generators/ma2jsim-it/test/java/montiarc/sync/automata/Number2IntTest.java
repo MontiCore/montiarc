@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.scheduling.InstantSchedule;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +48,7 @@ class Number2IntTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    Number2IntComp<Number> sut = new Number2IntCompBuilder<>().setName("sut").build();
+    Number2IntComp<Number> sut = new Number2IntCompBuilder<>().setScheduler(new InstantSchedule()).setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 

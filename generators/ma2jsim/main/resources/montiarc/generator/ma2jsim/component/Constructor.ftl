@@ -4,13 +4,18 @@ ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
-  String name<#list ast.getHead().getArcParameterList()>,
+  String name,
+  montiarc.rte.scheduling.ISchedule scheduler
+  <#list ast.getHead().getArcParameterList()>,
     <#items as param><@Util.getTypeString param.getSymbol().getType()/> ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
-  </#list><#list helper.getFeatures(ast)>,
-  <#items as feature>Boolean ${prefixes.feature()}${feature.getName()}<#sep>, </#items>
+  </#list>
+  <#list helper.getFeatures(ast)>,
+    <#items as feature>Boolean ${prefixes.feature()}${feature.getName()}<#sep>, </#items>
   </#list>
 ) {
   this.name = name;
+  this.scheduler = scheduler;
+  this.scheduler.register(this);
   <#list ast.getHead().getArcParameterList() as param>
     this.${prefixes.parameter()}${param.getName()} = ${prefixes.parameter()}${param.getName()};
   </#list>

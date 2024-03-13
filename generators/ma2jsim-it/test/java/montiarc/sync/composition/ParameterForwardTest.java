@@ -63,7 +63,7 @@ class ParameterForwardTest {
 
     // When
     sut.init();
-    sut.handleTickEvent();
+    sut.getScheduler().run(1);
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);
