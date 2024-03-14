@@ -11,9 +11,11 @@ import com.google.common.base.Preconditions;
 import modes.ModesMill;
 import modes._symboltable.ModesVariantComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc._ast.util.ASTVariantBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represent a specific modes variant of a {@link ASTComponentType}
@@ -39,6 +41,8 @@ public class ASTVariantComponentType extends ASTComponentType {
 
     arcElementList = new ArrayList<>(parent.getBody().getArcElementList());
     arcElementList.addAll(variantSymbol.getMode().getAstNode().getBody().getArcElementList());
+    ASTVariantBuilder builder = new ASTVariantBuilder(variantSymbol);
+    arcElementList = arcElementList.stream().map(builder::duplicate).collect(Collectors.toList());
   }
 
   @Override

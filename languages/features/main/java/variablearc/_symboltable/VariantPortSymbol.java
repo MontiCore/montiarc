@@ -13,9 +13,9 @@ public class VariantPortSymbol extends ArcPortSymbol {
 
   protected ArcPortSymbol parent;
 
-  protected VariableArcVariantComponentTypeSymbol variantComponentTypeSymbol;
+  protected ComponentTypeSymbol component;
 
-  public VariantPortSymbol(ArcPortSymbol parent, VariableArcVariantComponentTypeSymbol variantSymbol) {
+  public VariantPortSymbol(ArcPortSymbol parent, ComponentTypeSymbol component) {
     super(parent.getName());
     this.parent = parent;
     this.setIncoming(parent.isIncoming());
@@ -33,7 +33,7 @@ public class VariantPortSymbol extends ArcPortSymbol {
       this.setStronglyCausal(parent.getStronglyCausal());
     }
 
-    variantComponentTypeSymbol = variantSymbol;
+    this.component = component;
   }
 
   public ArcPortSymbol getOriginal() {
@@ -42,6 +42,6 @@ public class VariantPortSymbol extends ArcPortSymbol {
 
   @Override
   public Optional<ComponentTypeSymbol> getComponent() {
-    return Optional.of(variantComponentTypeSymbol);
+    return Optional.of(component);
   }
 }

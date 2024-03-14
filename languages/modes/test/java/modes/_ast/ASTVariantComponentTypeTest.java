@@ -66,7 +66,7 @@ public class ASTVariantComponentTypeTest extends ModesAbstractTest {
     List<ASTConnector> returnedConnectors = variant.getAstNode().getConnectors();
 
     // Then
-    Assertions.assertIterableEquals(Collections.singletonList(connector), returnedConnectors);
+    Assertions.assertEquals(1, returnedConnectors.size());
   }
 
 }

@@ -2,14 +2,18 @@
 package variablearc._ast.util;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcElement;
+import arcbasis._ast.ASTArcPort;
+import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPortAccess;
+import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
-import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
+import variablearc._symboltable.VariantComponentTypeSymbol;
 
 /**
  * A class that can duplicate AST elements or update symbols.
@@ -19,9 +23,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
   protected ArcBasisTraverser traverser;
   protected ASTArcElement result;
-  protected final VariableArcVariantComponentTypeSymbol enclComponent;
+  protected final VariantComponentTypeSymbol variant;
 
-  public ASTVariantBuilder(VariableArcVariantComponentTypeSymbol enclComponent) {this.enclComponent = enclComponent;}
+  public ASTVariantBuilder(VariantComponentTypeSymbol variant) {this.variant = variant;}
 
   @Override
   public ArcBasisTraverser getTraverser() {
@@ -86,9 +90,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
   @Override
   public void handle(@NotNull ASTPortAccess node) {
     Preconditions.checkNotNull(node);
-    node.setEnclosingScope(enclComponent.getSpannedScope());
+    node.setEnclosingScope(variant.getSpannedScope());
     if (node.isPresentComponent()) {
-      enclComponent.getSubcomponents(node.getComponent()).ifPresent(node::setComponentSymbol);
+      variant.getSubcomponents(node.getComponent()).ifPresent(node::setComponentSymbol);
     }
 
     if (node.isPresentComponent()) {
@@ -98,7 +102,7 @@ public class ASTVariantBuilder implements ArcBasisHandler {
         ArcBasisMill.typeDispatcher().asComponentType(node.getComponentSymbol().getType().getTypeInfo()).getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
       }
     } else {
-      enclComponent.getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+      variant.getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
     }
   }
 
@@ -113,9 +117,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
     Timing timing = node.getTiming().orElse(null);
 
     for (ASTArcPort port : node.getArcPortList()) {
-      if (enclComponent.containsSymbol(port.getSymbol())) {
-        enclComponent.getArcPort(port.getName()).ifPresent(p -> p.setTiming(timing));
-        if (node.hasDelay()) enclComponent.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(true));
+      if (variant.containsSymbol(port.getSymbol())) {
+        variant.getArcPort(port.getName()).ifPresent(p -> p.setTiming(timing));
+        if (node.hasDelay()) variant.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(true));
       }
     }
   }

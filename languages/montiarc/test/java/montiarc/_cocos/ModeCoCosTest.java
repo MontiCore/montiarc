@@ -68,6 +68,7 @@ public class ModeCoCosTest extends MontiArcAbstractTest {
     compile("package a.b; component B { port out int o; }");
     compile("package a.b; component C { port in int i1, i2; port out int o; }");
     compile("package a.b; component D { port out boolean o; }");
+    compile("package a.b; component E { port out int o, in int i; <<sync>> compute {o = i;}}");
   }
 
   @ParameterizedTest
@@ -120,6 +121,21 @@ public class ModeCoCosTest extends MontiArcAbstractTest {
       "} " +
       "} " +
       "}",
+    // calculate port timing for each mode variant
+    "component Comp6 {" +
+      "port in int i, out int o;" +
+      "a.b.E always1;" +
+      "a.b.E always2;" +
+      "i -> always1.i;" +
+      "always1.o -> always2.i;" +
+      "<<sync>> mode automaton {" +
+      "initial mode Normal {" +
+      "a.b.E modeComp;" +
+      "always2.o -> modeComp.i;" +
+      "modeComp.o -> o;" +
+      "}" +
+      "}" +
+      "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);

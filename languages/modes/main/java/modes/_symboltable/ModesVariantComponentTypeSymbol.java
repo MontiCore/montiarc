@@ -2,15 +2,14 @@
 package modes._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.Port2VariableAdapter;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import de.se_rwth.commons.SourcePosition;
+import de.monticore.symboltable.ISymbol;
 import modes._ast.ASTVariantComponentType;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc._symboltable.VariantComponentTypeSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,17 +18,15 @@ import java.util.stream.Collectors;
 /**
  * Represents a configured component type variant. Includes all symbols found in the mode.
  */
-public class ModesVariantComponentTypeSymbol extends ComponentTypeSymbol {
+public class ModesVariantComponentTypeSymbol extends VariantComponentTypeSymbol {
 
-  protected ComponentTypeSymbol typeSymbol;
   protected ArcModeSymbol mode;
 
-  public ModesVariantComponentTypeSymbol(@NotNull ComponentTypeSymbol type, @NotNull ArcModeSymbol mode) {
-    super(type.getName());
-    Preconditions.checkNotNull(type);
+  public ModesVariantComponentTypeSymbol(@NotNull ComponentTypeSymbol typeSymbol, @NotNull ArcModeSymbol mode) {
+    super(typeSymbol);
+    Preconditions.checkNotNull(typeSymbol);
     Preconditions.checkNotNull(mode);
 
-    typeSymbol = type;
     this.mode = mode;
 
     if (typeSymbol.isPresentAstNode() && mode.isPresentAstNode()) {
@@ -46,7 +43,7 @@ public class ModesVariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   @Override
   public List<VariableSymbol> getFields() {
-    List<VariableSymbol> fields = new ArrayList<>(typeSymbol.getFields());
+    List<VariableSymbol> fields = new ArrayList<>(super.getFields());
     fields.addAll(mode.getSpannedScope().getLocalVariableSymbols().stream()
       .filter(f -> !(f instanceof Port2VariableAdapter))
       .collect(Collectors.toList()));
@@ -54,34 +51,19 @@ public class ModesVariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<TypeVarSymbol> getTypeParameters() {
-    return typeSymbol.getTypeParameters();
-  }
-
-  @Override
   public List<SubcomponentSymbol> getSubcomponents() {
-    List<SubcomponentSymbol> subComponents = new ArrayList<>(typeSymbol.getSubcomponents());
+    List<SubcomponentSymbol> subComponents = new ArrayList<>(super.getSubcomponents());
     subComponents.addAll(mode.getSpannedScope().getLocalSubcomponentSymbols());
     return subComponents;
   }
 
   @Override
-  public IArcBasisScope getSpannedScope() {
-    return typeSymbol.getSpannedScope();
-  }
-
-  @Override
-  public IArcBasisScope getEnclosingScope() {
-    return typeSymbol.getEnclosingScope();
-  }
-
-  @Override
-  public SourcePosition getSourcePosition() {
-    return typeSymbol.getSourcePosition();
-  }
-
-  @Override
   public String toString() {
     return "Mode (" + mode.getName() + ")";
+  }
+
+  @Override
+  public boolean containsSymbol(ISymbol symbol) {
+    return true;
   }
 }
