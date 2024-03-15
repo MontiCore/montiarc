@@ -60,40 +60,4 @@ grammar MontiArc extends
     ComponentType
   ;
 
-  /**
-   * ASTArcTiming sets the timing of a component.
-   * * timing untimed: means that there is no explicit timing available;
-   *          instead messages are processed on an event driven basis
-   *          upon arrival; as usual: certain non-deterministic 
-   *          effects may occur.
-   *
-   * In all other variants, there is a globally available clock that
-   * measures time slices of equal distance
-   * (see Focus (Broy/Stoelen 2001) for the formal theoretical underpinning)
-   *
-   *  timing instant: means that each input is processed immediately
-   *         and the result is produced to the out ports directly.
-   *  timing sync: means that each in each time slice exactly one input
-   *         per port is processed and one output pre port is produced.
-   *
-   * Please note that the communication paradigms "instant" and "sync" 
-   * as defined here do not introduce any delay. Delay is assumed to
-   * happen in components, e.g. in strongly causal components, in order
-   * to allow feedback loops.
-   * (This however is mainly a problem in simulation, not in an
-   *  ordinary code generation.)
-   * 
-   * Therefore, the ArcTiming is defined in an extensible form.
-   */
-  ArcTiming implements ArcElement <110> =
-    key("timing") ArcTimeMode ";"
-  ;
-
-  interface ArcTimeMode;
-
-  ArcInstant implements ArcTimeMode = key("instant");
-
-  ArcSync implements ArcTimeMode = key("sync");
-
-  ArcUntimed implements ArcTimeMode = key("untimed");
 }

@@ -4,7 +4,6 @@ package montiarc.parser;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
-import montiarc._ast.ASTArcTiming;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 import montiarc.util.Error;
@@ -100,18 +99,6 @@ public class ParserTest extends MontiArcAbstractTest {
       parse(path.toString(), false).orElse(null);
     Assertions.assertNotNull(parsedUnit, path.toAbsolutePath().toString());
     Assertions.assertTrue(unit.deepEquals(parsedUnit), path.toAbsolutePath().toString());
-  }
-
-  @Test
-  public void shouldParseTimingAsCorrectNode() {
-    String fileName = "ComponentWithTiming.arc";
-    ASTMACompilationUnit ast =
-      parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElse(null);
-    Assertions.assertNotNull(ast);
-    Assertions.assertEquals(3, ast.getComponentType().getBody().getArcElementList().size());
-    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(0) instanceof ASTArcTiming);
-    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(1) instanceof ASTArcTiming);
-    Assertions.assertTrue(ast.getComponentType().getBody().getArcElement(2) instanceof ASTArcTiming);
   }
 
   static Stream<Arguments> filenameAndErrorCodeProvider() {
