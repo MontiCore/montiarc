@@ -1,0 +1,26 @@
+{
+  "name" : "ComponentWithComponent",
+  "package" : "symboltable",
+  "symbols" : [
+    {
+    "kind" : "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
+    "name" : "ComponentWithComponent",
+    "innerComponents": [
+            {
+              "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
+              "name": "A"
+            }
+          ],
+    "subcomponents": [
+      {
+        "kind": "de.monticore.symbols.compsymbols._symboltable.SubComponentSymbol",
+        "name": "a",
+        "type": {
+          "kind": "de.monticore.types.CompKindExpression",
+          "componentTypeName": "Component.A"
+        }
+      }
+    ]
+    }
+  ]
+}

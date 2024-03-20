@@ -1,0 +1,20 @@
+{
+  "name" : "ComponentWithField",
+  "package" : "symboltable",
+  "symbols" : [
+    {
+      "kind" : "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
+      "name" : "ComponentWithField",
+      "fields": [
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "j",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        }
+      ]
+    }
+  ]
+}

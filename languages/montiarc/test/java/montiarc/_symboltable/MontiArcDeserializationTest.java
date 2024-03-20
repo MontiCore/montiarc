@@ -1,11 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
+import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -20,6 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -989,6 +992,190 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
       () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
       () -> assertThat(symbol.getName()).isEqualTo(name),
       () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
+    );
+  }
+
+  @Test
+  public void shouldLoadComponent() {
+    // Given
+    final String name = "Component";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
+    );
+  }
+
+  @Test
+  public void shouldLoadComponentWithPort() {
+    // Given
+    final String name = "ComponentWithPort";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getPorts().size()).isEqualTo(1)
+    );
+  }
+
+  @Test
+  @Disabled
+  public void shouldLoadComponentWithField() {
+    // Given
+    final String name = "ComponentWithField";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getEnclosingScope().resolveComponent("j").isPresent()).isTrue()
+    );
+  }
+
+  @Test
+  @Disabled
+  public void shouldLoadComponentWithComponent() {
+    // Given
+    final String name = "ComponentWithComponent";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getEnclosingScope().resolveComponent("j").isPresent()).isTrue()
+    );
+  }
+
+  @Test
+  public void shouldLoadComponentTypeWithField() {
+    // Given
+    final String name = "ComponentTypeWithField";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
+
+    // THen
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getFields().size()).isEqualTo(1)
+    );
+  }
+
+  @Test
+  public void shouldLoadComponentTypeWithComponentType() {
+    // Given
+    final String name = "ComponentTypeWithComponentType";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getSubcomponents().size()).isEqualTo(1)
+    );
+  }
+
+  @Test
+  public void shouldLoadComponentType() {
+    // Given
+    final String name = "ComponentType";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
+    );
+  }
+
+  @Test
+  public void shouldLoadComponentTypeWithPort() {
+    // Given
+    final String name = "ComponentTypeWithPort";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // WHen
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getAllArcPorts().size()).isEqualTo(1)
     );
   }
 }

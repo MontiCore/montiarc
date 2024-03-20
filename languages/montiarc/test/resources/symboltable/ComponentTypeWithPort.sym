@@ -1,0 +1,22 @@
+{
+  "name" : "ComponentTypeWithPort.sym",
+  "package" : "symboltable",
+  "symbols" : [
+    {
+      "kind" : "arcbasis._symboltable.ComponentTypeSymbol",
+      "name" : "ComponentTypeWithPort",
+      "ports" : [
+        {
+        "kind" : "arcbasis._symboltable.ArcPortSymbol",
+        "name" : "i",
+        "type" : {
+           "kind" : "de.monticore.types.check.SymTypePrimitive",
+           "primitiveName" : "int"
+        },
+        "incoming" : true,
+        "timing" : "untimed"
+        }
+      ]
+    }
+  ]
+}
