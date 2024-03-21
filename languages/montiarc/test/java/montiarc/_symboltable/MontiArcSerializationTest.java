@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class MontiArcSerializationTest extends MontiArcAbstractTest {
 
@@ -51,7 +52,7 @@ public class MontiArcSerializationTest extends MontiArcAbstractTest {
       "package a.b;" +
         "component Comp { " +
         "port in int i;" +
-      "}"
+        "}"
     ).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
@@ -82,7 +83,7 @@ public class MontiArcSerializationTest extends MontiArcAbstractTest {
       "package a.b;" +
         "component Comp { " +
         "port out int o;" +
-      "}"
+        "}"
     ).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
@@ -114,7 +115,7 @@ public class MontiArcSerializationTest extends MontiArcAbstractTest {
         "component Comp { " +
         "port in int i;" +
         "port out int o;" +
-      "}"
+        "}"
     ).orElseThrow();
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
@@ -148,4 +149,85 @@ public class MontiArcSerializationTest extends MontiArcAbstractTest {
       .getMember("primitiveName").getAsJsonString().getValue()).isEqualTo("int");
   }
 
+  @Test
+  public void shouldSerializeComponentType() throws IOException {
+    // Given
+    final ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(
+      "package a.b;" +
+        "component Comp {" +
+        "}").orElseThrow();
+
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+
+    // When
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());
+
+    // Then
+    final JsonObject json = JsonParser.parseJsonObject(s);
+    assertAll(
+      () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+        .getMember("kind").getAsJsonString().getValue())
+        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
+    );
+  }
+
+  @Test
+  public void shouldSerializeComponentTypeWithField() throws IOException {
+    // Given
+    final ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(
+      "package a.b;" +
+        "component Comp {" +
+        "int i = 0;" +
+        "}").orElseThrow();
+
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+
+    // When
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());
+
+    // Then
+    final JsonObject json = JsonParser.parseJsonObject(s);
+    assertAll(
+      () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+        .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
+    );
+  }
+
+  @Test
+  public void shouldSerializeComponentTypeWithInnerComponent() throws IOException {
+    // Given
+    final ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(
+      "package a.b;" +
+        "component Comp {" +
+        "component Inner { }" +
+        "}").orElseThrow();
+
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+
+    // When
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());
+
+    // Then
+    final JsonObject json = JsonParser.parseJsonObject(s);
+    assertAll(
+      () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+        .getMember("innerComponents").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
+        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName()),
+      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+        .getMember("innerComponents").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
+        .isEqualTo(ast.getComponentType().getInnerComponents().get(0).getName())
+    );
+  }
 }
