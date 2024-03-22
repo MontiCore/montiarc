@@ -1386,19 +1386,35 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
         new InternalError("0xCC111") // int not boolean
       ),
       // Enum constants map to same value
-      arg("component Comp55(OnOff onOff) { " +
-        "varif(onOff == OnOff.OFF) {" +
-        "  automaton {" +
-        "    initial state S;" +
-        "  }" +
-        "} " +
-        "varif(onOff == OnOff.OFF) {" +
-        "  automaton {" +
-        "    initial state S;" +
-        "  }" +
-        "} " +
-        "}",
-        ArcError.MULTIPLE_BEHAVIOR)
+      arg("component Comp73(OnOff onOff) { " +
+          "varif(onOff == OnOff.OFF) {" +
+          "  automaton {" +
+          "    initial state S;" +
+          "  }" +
+          "} " +
+          "varif(onOff == OnOff.OFF) {" +
+          "  automaton {" +
+          "    initial state S;" +
+          "  }" +
+          "} " +
+          "}",
+        ArcError.MULTIPLE_BEHAVIOR),
+      // Multiple identifier if feature is selected
+      arg("component Comp74(boolean i) { " +
+          "feature f1; " +
+          "varif (f1) { " +
+          "int i = 0; " +
+          "} " +
+          "}",
+        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      // Multiple identifier if feature is selected
+      arg("component Comp74(boolean i) { " +
+          "feature f1; " +
+          "varif (f1) { " +
+          "port in int i; " +
+          "} " +
+          "}",
+        ArcError.UNIQUE_IDENTIFIER_NAMES)
     );
   }
 

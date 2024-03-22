@@ -174,13 +174,16 @@ public class UniqueIdentifierTest extends MontiArcAbstractTest {
         ArcError.UNIQUE_IDENTIFIER_NAMES),
       // duplicate type-parameter
       arg("component Comp7<T, T> { }",
-        ArcError.UNIQUE_IDENTIFIER_NAMES)
+        ArcError.UNIQUE_IDENTIFIER_NAMES),
       // duplicate feature
       //arg("component Comp8 { " +
       //   "feature f; " +
       //    "feature f; " +
       //    "}",
-      //  ArcError.UNIQUE_IDENTIFIER_NAMES)
+      //  ArcError.UNIQUE_IDENTIFIER_NAMES),
+      // duplicate parameter in inner component
+      arg("component Comp8() { component Inner(int i, double i, boolean i){ } }",
+        ArcError.UNIQUE_IDENTIFIER_NAMES)
     );
   }
 }
