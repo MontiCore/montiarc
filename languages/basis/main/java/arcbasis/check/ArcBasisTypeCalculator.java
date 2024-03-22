@@ -42,6 +42,8 @@ public class ArcBasisTypeCalculator extends AbstractArcTypeCalculator {
   public static void initMCBasicTypesTypeVisitor(@NotNull MCBasicTypesTraverser traverse) {
     Preconditions.checkNotNull(traverse);
     MCBasicTypesTypeVisitor visitor = new MCBasicTypesTypeVisitor();
+    visitor.setWithinScopeResolver(new ArcBasisWithinScopeBasicSymbolsResolver());
+    visitor.setWithinTypeResolver(new ArcBasisWithinTypeBasicSymbolsResolver());
     traverse.add4MCBasicTypes(visitor);
   }
 }
