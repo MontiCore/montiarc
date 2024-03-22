@@ -2,84 +2,51 @@
 package variablearc._ast;
 
 import arcbasis._ast.ASTArcElement;
-import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.IArcBasisScope;
+import com.google.common.base.Preconditions;
+import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._ast.util.ASTVariantBuilder;
-import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
+import variablearc._symboltable.VariantComponentTypeSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Represent a specific variant of a {@link ASTComponentType}
+ * An abstract AST component variant implementation.
+ * Can be used as a starting point for implementing custom variants (e.g. {@link ASTVariableArcVariantComponentType}).
  */
-public class ASTVariantComponentType extends ASTComponentType {
+public abstract class ASTVariantComponentType extends ASTComponentType {
 
   protected ASTComponentType parent;
 
-  protected Set<VariableArcVariationPoint> includedVariationPoints;
-
-  protected VariableArcVariantComponentTypeSymbol variantComponentTypeSymbol;
-
-  protected List<ASTArcElement> arcElementList;
-
   /**
-   * @param parent        The component this variant originates from
-   * @param variantSymbol The variant (i.e. configuration) of this component
+   * @param parent                   The component this variant originates from
+   * @param variantSymbol            The variant (i.e. configuration) of this component
+   * @param additionalArcElementList Additional ASTArcElements added by this variant to the top level
    */
-  public ASTVariantComponentType(ASTComponentType parent, VariableArcVariantComponentTypeSymbol variantSymbol) {
+  public ASTVariantComponentType(@NotNull ASTComponentType parent, @NotNull VariantComponentTypeSymbol variantSymbol, @NotNull List<ASTArcElement> additionalArcElementList) {
+    Preconditions.checkNotNull(parent);
+    Preconditions.checkNotNull(variantSymbol);
+    Preconditions.checkNotNull(additionalArcElementList);
+
     this.parent = parent;
-    this.variantComponentTypeSymbol = variantSymbol;
-    includedVariationPoints = variantSymbol.getIncludedVariationPoints();
+    this.name = parent.getName();
+    this.enclosingScope = parent.getEnclosingScope();
+    this.spannedScope = parent.getSpannedScope();
+    this.symbol = Optional.of(variantSymbol);
+    this.componentInstances = parent.getComponentInstanceList();
+    this.head = parent.getHead();
     set_SourcePositionStart(parent.get_SourcePositionStart());
     set_SourcePositionEnd(parent.get_SourcePositionEnd());
 
-    arcElementList = new ArrayList<>(parent.getBody().getArcElementList());
-    arcElementList.addAll(
-      includedVariationPoints.stream().flatMap(vp -> vp.getArcElements().stream()).collect(Collectors.toList()));
-    ASTVariantBuilder builder = new ASTVariantBuilder(variantComponentTypeSymbol);
+    List<ASTArcElement> arcElementList = new ArrayList<>(parent.getBody().getArcElementList());
+    arcElementList.addAll(additionalArcElementList);
+    ASTVariantBuilder builder = new ASTVariantBuilder(variantSymbol);
     arcElementList = arcElementList.stream().map(builder::duplicate).collect(Collectors.toList());
+    this.body = VariableArcMill.componentBodyBuilder().setArcElementsList(arcElementList).build();
   }
 
-  @Override
-  protected List<ASTArcElement> getArcElementList() {
-    return arcElementList;
-  }
-
-  @Override
-  public String getName() {
-    return parent.getName();
-  }
-
-  @Override
-  public ASTComponentHead getHead() {
-    return parent.getHead();
-  }
-
-  @Override
-  public ASTComponentBody getBody() {
-    return VariableArcMill.componentBodyBuilder().setArcElementsList(getArcElementList()).build();
-  }
-
-  @Override
-  public boolean isPresentSymbol() {
-    return variantComponentTypeSymbol != null;
-  }
-
-  @Override
-  public ComponentTypeSymbol getSymbol() {
-    return variantComponentTypeSymbol;
-  }
-
-  @Override
-  public IArcBasisScope getSpannedScope() {
-    return parent.getSpannedScope();
-  }
 }

@@ -66,6 +66,8 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
+        .setEnclosingScope(MontiArcMill.scope())
+        .setEnclosingScope(MontiArcMill.scope())
         .build();
 
     variationPoints.forEach(typeSymbol::add);
@@ -91,6 +93,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(childComponentTypeName)
         .setSpannedScope(scope)
+        .setEnclosingScope(MontiArcMill.scope())
         .build();
     typeSymbol.getTypeInfo().addParameter(parameter);
     variationPoints.forEach(typeSymbol::add);
@@ -107,6 +110,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
 
     return (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
       .setSpannedScope(parentScope)
+      .setEnclosingScope(MontiArcMill.scope())
       .build();
   }
 
@@ -121,6 +125,7 @@ public class VariationPointSolverTest extends MontiArcAbstractTest {
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
         .setSpannedScope(MontiArcMill.scope())
+        .setEnclosingScope(MontiArcMill.scope())
         .build();
 
     // When

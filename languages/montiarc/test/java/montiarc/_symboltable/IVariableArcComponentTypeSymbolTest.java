@@ -65,6 +65,7 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcAbstractTest {
     IVariableArcComponentTypeSymbol typeSymbol =
       (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(componentTypeName)
         .setSpannedScope(scope)
+        .setEnclosingScope(MontiArcMill.scope())
         .setAstNode(astComponentType)
         .build();
 

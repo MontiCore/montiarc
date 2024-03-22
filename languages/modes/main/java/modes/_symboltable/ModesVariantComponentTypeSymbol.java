@@ -7,7 +7,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
-import modes._ast.ASTVariantComponentType;
+import modes._ast.ASTModeVariantComponentType;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.VariantComponentTypeSymbol;
 
@@ -31,7 +31,7 @@ public class ModesVariantComponentTypeSymbol extends VariantComponentTypeSymbol 
 
     if (typeSymbol.isPresentAstNode() && mode.isPresentAstNode()) {
       // Shadow the AST structure
-      this.setAstNode(new ASTVariantComponentType(typeSymbol.getAstNode(), this));
+      this.setAstNode(new ASTModeVariantComponentType(typeSymbol.getAstNode(), this));
     } else {
       this.setAstNodeAbsent();
     }

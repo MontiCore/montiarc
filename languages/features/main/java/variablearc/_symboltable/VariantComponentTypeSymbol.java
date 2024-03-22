@@ -4,9 +4,7 @@ package variablearc._symboltable;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
@@ -34,6 +32,15 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
     Preconditions.checkNotNull(typeSymbol);
     this.typeSymbol = typeSymbol;
     this.portSymbolMap = new HashMap<>();
+    this.parameters = typeSymbol.getParameters();
+    this.superComponents = typeSymbol.getSuperComponentsList();
+    this.accessModifier = typeSymbol.getAccessModifier();
+    this.fullName = typeSymbol.getFullName();
+    this.packageName = typeSymbol.getPackageName();
+    this.refinements = typeSymbol.getRefinementsList();
+    this.outerComponent = typeSymbol.getOuterComponent().orElse(null);
+    this.spannedScope = typeSymbol.getSpannedScope();
+    this.enclosingScope = typeSymbol.getEnclosingScope();
     this.setAstNodeAbsent();
   }
 
@@ -41,9 +48,7 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   @Override
   public List<SubcomponentSymbol> getSubcomponents() {
-    return typeSymbol.getSubcomponents().stream()
-      .filter(this::containsSymbol)
-      .collect(Collectors.toList());
+    return typeSymbol.getSubcomponents().stream().filter(this::containsSymbol).collect(Collectors.toList());
   }
 
   @Override
@@ -53,22 +58,18 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   @Override
   public List<ArcPortSymbol> getAllArcPorts() {
-    return typeSymbol.getAllArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
-      .collect(Collectors.toList());
+    return typeSymbol.getAllArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol).collect(Collectors.toList());
   }
 
   @Override
   public List<ArcPortSymbol> getArcPorts() {
-    return typeSymbol.getArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol)
-      .collect(Collectors.toList());
+    return typeSymbol.getArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol).collect(Collectors.toList());
   }
 
   @Override
   public Optional<ArcPortSymbol> getArcPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolveArcPortLocallyMany(
-      false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, this::containsSymbol
-    ).stream().findFirst().map(this::getVariantPortSymbol);
+    return this.getSpannedScope().resolveArcPortLocallyMany(false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, this::containsSymbol).stream().findFirst().map(this::getVariantPortSymbol);
   }
 
   protected ArcPortSymbol getVariantPortSymbol(ArcPortSymbol port) {
@@ -76,21 +77,6 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
       portSymbolMap.put(port, new VariantPortSymbol(port, this));
     }
     return portSymbolMap.get(port);
-  }
-
-  @Override
-  public List<TypeVarSymbol> getTypeParameters() {
-    return typeSymbol.getTypeParameters();
-  }
-
-  @Override
-  public IArcBasisScope getSpannedScope() {
-    return typeSymbol.getSpannedScope();
-  }
-
-  @Override
-  public IArcBasisScope getEnclosingScope() {
-    return typeSymbol.getEnclosingScope();
   }
 
   @Override

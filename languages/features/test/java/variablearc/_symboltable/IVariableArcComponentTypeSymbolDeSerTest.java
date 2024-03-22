@@ -18,7 +18,6 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSetDeSer;
 import variablearc.evaluation.expressions.Expression;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
@@ -149,6 +148,7 @@ public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcAbstrac
 
     // When
     IVariableArcComponentTypeSymbol comp = (IVariableArcComponentTypeSymbol) deser.deserialize(JSON_WITH_VARIATION_POINTS_AND_VARIANTS);
+    ((ComponentTypeSymbol) comp).setEnclosingScope(VariableArcMill.globalScope()); // Is set by scope deserialization which is not used here
 
     // Then
     Assertions.assertEquals(3, comp.getAllVariationPoints().size());
@@ -166,6 +166,7 @@ public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcAbstrac
     IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(VariableArcMill.scope())
+      .setEnclosingScope(VariableArcMill.globalScope())
       .build();
     return symbol;
   }

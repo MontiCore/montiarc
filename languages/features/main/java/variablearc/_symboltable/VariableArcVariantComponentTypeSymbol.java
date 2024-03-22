@@ -6,7 +6,7 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.CompKindExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTVariantComponentType;
+import variablearc._ast.ASTVariableArcVariantComponentType;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.expressions.Expression;
 
@@ -52,7 +52,7 @@ public class VariableArcVariantComponentTypeSymbol extends VariantComponentTypeS
 
     if (this.typeSymbol.getTypeInfo().isPresentAstNode()) {
       // Shadow the AST structure
-      this.setAstNode(new ASTVariantComponentType(this.typeSymbol.getTypeInfo().getAstNode(), this));
+      this.setAstNode(new ASTVariableArcVariantComponentType(this.typeSymbol.getTypeInfo().getAstNode(), this));
     } else {
       this.setAstNodeAbsent();
     }

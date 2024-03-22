@@ -15,14 +15,14 @@ import org.mockito.Mockito;
 import java.util.Collections;
 import java.util.List;
 
-public class ASTVariantComponentTypeTest extends ModesAbstractTest {
+public class ASTModeVariantComponentTypeTest extends ModesAbstractTest {
 
   @Test
   public void shouldNotBuildASTVariant() {
     // Given
     ArcModeSymbol mode = ModesMill.arcModeSymbolBuilder().setName("m1").setSpannedScope(ModesMill.scope()).build();
     ASTComponentType astComponentType = ModesMill.componentTypeBuilder().setName("C").setHead(Mockito.mock(ASTComponentHead.class)).setBody(ModesMill.componentBodyBuilder().build()).build();
-    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setAstNode(astComponentType).setSpannedScope(ModesMill.scope()).build(), mode);
+    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setAstNode(astComponentType).setEnclosingScope(ModesMill.scope()).setSpannedScope(ModesMill.scope()).build(), mode);
 
     // Then
     Assertions.assertFalse(variant.isPresentAstNode());
@@ -33,7 +33,7 @@ public class ASTVariantComponentTypeTest extends ModesAbstractTest {
     // Given
     ASTArcMode astMode = ModesMill.arcModeBuilder().setName("m1").setBody(ModesMill.componentBodyBuilder().build()).build();
     ArcModeSymbol mode = ModesMill.arcModeSymbolBuilder().setName("m1").setSpannedScope(ModesMill.scope()).setAstNode(astMode).build();
-    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setSpannedScope(ModesMill.scope()).build(), mode);
+    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setEnclosingScope(ModesMill.scope()).setSpannedScope(ModesMill.scope()).build(), mode);
 
     // Then
     Assertions.assertFalse(variant.isPresentAstNode());
@@ -45,12 +45,12 @@ public class ASTVariantComponentTypeTest extends ModesAbstractTest {
     ASTArcMode astMode = ModesMill.arcModeBuilder().setName("m1").setBody(ModesMill.componentBodyBuilder().build()).build();
     ArcModeSymbol mode = ModesMill.arcModeSymbolBuilder().setName("m1").setSpannedScope(ModesMill.scope()).setAstNode(astMode).build();
     ASTComponentType astComponentType = ModesMill.componentTypeBuilder().setName("C").setHead(Mockito.mock(ASTComponentHead.class)).setBody(ModesMill.componentBodyBuilder().build()).build();
-    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setAstNode(astComponentType).setSpannedScope(ModesMill.scope()).build(), mode);
+    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setAstNode(astComponentType).setEnclosingScope(ModesMill.scope()).setSpannedScope(ModesMill.scope()).build(), mode);
 
     // Then
     Assertions.assertTrue(variant.isPresentAstNode());
     Assertions.assertNotNull(variant.getAstNode());
-    Assertions.assertTrue(variant.getAstNode() instanceof ASTVariantComponentType);
+    Assertions.assertInstanceOf(ASTModeVariantComponentType.class, variant.getAstNode());
   }
 
   @Test
@@ -60,7 +60,7 @@ public class ASTVariantComponentTypeTest extends ModesAbstractTest {
     ASTArcMode astMode = ModesMill.arcModeBuilder().setName("m1").setBody(ModesMill.componentBodyBuilder().setArcElementsList(Collections.singletonList(connector)).build()).build();
     ArcModeSymbol mode = ModesMill.arcModeSymbolBuilder().setName("m1").setSpannedScope(ModesMill.scope()).setAstNode(astMode).build();
     ASTComponentType astComponentType = ModesMill.componentTypeBuilder().setName("C").setHead(Mockito.mock(ASTComponentHead.class)).setBody(ModesMill.componentBodyBuilder().build()).build();
-    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setAstNode(astComponentType).setSpannedScope(ModesMill.scope()).build(), mode);
+    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setAstNode(astComponentType).setEnclosingScope(ModesMill.scope()).setSpannedScope(ModesMill.scope()).build(), mode);
 
     // When
     List<ASTConnector> returnedConnectors = variant.getAstNode().getConnectors();
