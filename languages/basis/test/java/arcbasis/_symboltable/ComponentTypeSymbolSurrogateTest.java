@@ -3,7 +3,6 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -342,44 +341,6 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisAbstractTest {
     // Then
     Assertions.assertSame(parentExpr, comp.getSuperComponents(0));
   }
-
-  
-  @Test
-  void getParentConfigurationShouldSkipSurrogate() {
-    // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
-
-    List<ASTArcArgument> parentConfig = Collections.singletonList(Mockito.mock(ASTArcArgument.class));
-    CompTypeExpression parent = Mockito.mock(CompTypeExpression.class);
-    comp.setParentConfigurationExpressions(parent, parentConfig);
-
-    // When
-    List<ASTArcArgument> parentConfigCalculated = surrogate.getParentConfiguration(parent);
-
-    // Then
-    Assertions.assertArrayEquals(parentConfig.toArray(), parentConfigCalculated.toArray());
-  }
-
-  
-  @Test
-  void setParentConfigurationExpressionsShouldSkipSurrogate() {
-    // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
-
-    List<ASTArcArgument> parentConfig = Collections.singletonList(Mockito.mock(ASTArcArgument.class));
-    CompTypeExpression parent = Mockito.mock(CompTypeExpression.class);
-
-    // When
-    surrogate.setParentConfigurationExpressions(parent, parentConfig);
-
-    // Then
-    Assertions.assertArrayEquals(parentConfig.toArray(), comp.getParentConfiguration(parent).toArray());
-  }
-
   
   @Test
   void getParametersShouldSkipSurrogate() {

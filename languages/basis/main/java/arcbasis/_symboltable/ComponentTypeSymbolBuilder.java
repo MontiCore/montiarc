@@ -1,28 +1,22 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis._ast.ASTArcArgument;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.CompKindExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
   protected List<VariableSymbol> parameters;
   protected List<TypeVarSymbol> typeParameters;
-  protected Map<CompKindExpression, List<ASTArcArgument>> parentConfiguration;
 
   public ComponentTypeSymbolBuilder() {
     super();
-    parentConfiguration = new HashMap<>();
   }
 
   @Override
@@ -69,17 +63,6 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.realBuilder;
   }
 
-  public List<ASTArcArgument> getParentConfiguration(@NotNull CompKindExpression parent) {
-    return this.parentConfiguration.get(parent);
-  }
-
-  public ComponentTypeSymbolBuilder setParentConfiguration(@NotNull CompKindExpression parent, @NotNull List<ASTArcArgument> parentConfiguration) {
-    Preconditions.checkNotNull(parentConfiguration);
-    Preconditions.checkArgument(!parentConfiguration.contains(null));
-    this.parentConfiguration.put(parent, parentConfiguration);
-    return this.realBuilder;
-  }
-
   @Override
   public ComponentTypeSymbol build() {
     if (!isValid()) {
@@ -95,7 +78,6 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     if (this.getTypeParameters() != null) {
       this.getTypeParameters().forEach(symbol.getSpannedScope()::add);
     }
-    symbol.setParentConfigurationMap(this.parentConfiguration);
     symbol.setOuterComponent(this.getOuterComponent());
     symbol.setSuperComponentsList(this.superComponents);
     return symbol;

@@ -62,12 +62,10 @@ public abstract class CompTypeExpression extends CompKindExpression {
     return Collections.unmodifiableMap(parameterBindings);
   }
 
-
   public List<ASTArcArgument> getParamArcBindingsAsList() {
     Preconditions.checkNotNull(parameterBindings);
     // We know LinkedHashMaps are ordered and thus .values represents the order of the arguments
-    ArrayList bindingsList = new ArrayList(this.getParamArcBindings().values());
-    return bindingsList;
+    return new ArrayList<>(this.getParamArcBindings().values());
   }
 
   @Override
@@ -119,6 +117,7 @@ public abstract class CompTypeExpression extends CompKindExpression {
 
     this.parameterBindings = parameterBindings;
   }
+
   protected CompTypeExpression(@NotNull ComponentTypeSymbol compTypeSymbol) {
     super(Preconditions.checkNotNull(compTypeSymbol));
     this.arguments = new ArrayList<>();

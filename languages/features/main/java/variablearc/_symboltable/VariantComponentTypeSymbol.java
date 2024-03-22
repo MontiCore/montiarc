@@ -1,14 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._ast.ASTArcArgument;
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
-import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -82,11 +80,6 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
   @Override
   public SourcePosition getSourcePosition() {
     return typeSymbol.getSourcePosition();
-  }
-
-  @Override
-  public List<ASTArcArgument> getParentConfiguration(CompKindExpression parent) {
-    return typeSymbol.getParentConfiguration(parent);
   }
 
   @Override

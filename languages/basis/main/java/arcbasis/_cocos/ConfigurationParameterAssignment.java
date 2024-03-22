@@ -4,15 +4,18 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
-import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
+import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -38,14 +41,33 @@ import java.util.stream.IntStream;
  * * [typecheck]: The configuration parameters must be assignable from the
  * specified value bindings.
  * <p>
+ * The CoCo can also be applied to super and refinement component configurations.
+ * <p>
  */
-public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo {
+public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTComponentTypeCoCo {
 
   protected final IArcTypeCalculator tc;
 
   public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc) {
     Preconditions.checkNotNull(tc);
     this.tc = tc;
+  }
+
+  @Override
+  public void check(@NotNull ASTComponentType node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkArgument(node.isPresentSymbol());
+
+    ComponentTypeSymbol component = node.getSymbol();
+
+    for (CompKindExpression parent : component.getSuperComponentsList()) {
+      if (!(parent instanceof CompTypeExpression)) continue;
+      check((CompTypeExpression) parent, node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+    }
+    for (CompKindExpression refines : component.getRefinementsList()) {
+      if (!(refines instanceof CompTypeExpression)) continue;
+      check((CompTypeExpression) refines, node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+    }
   }
 
   @Override
@@ -58,12 +80,20 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       return;
     }
 
-    this.checkArgumentNotTooMany(node);
+    check((CompTypeExpression) node.getSymbol().getType(), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+  }
 
-    if (this.checkKeywordsMustBeParameters(node) & this.checkKeywordArgsLast(node)) {
-      this.checkArgumentsBindAllMandatoryParameters(node);
-      if (this.checkArgValuesUnique(node) & this.checkKeywordArgsUnique(node)) {
-        this.checkInstantiationArgsHaveCorrectTypes(node);
+  protected void check(@NotNull CompTypeExpression componentExpression, @NotNull SourcePosition sourcePositionStart, @NotNull SourcePosition sourcePositionEnd) {
+    Preconditions.checkNotNull(componentExpression);
+    Preconditions.checkNotNull(sourcePositionStart);
+    Preconditions.checkNotNull(sourcePositionEnd);
+
+    this.checkArgumentNotTooMany(componentExpression);
+
+    if (this.checkKeywordsMustBeParameters(componentExpression) & this.checkKeywordArgsLast(componentExpression)) {
+      this.checkArgumentsBindAllMandatoryParameters(componentExpression, sourcePositionStart, sourcePositionEnd);
+      if (this.checkArgValuesUnique(componentExpression) & this.checkKeywordArgsUnique(componentExpression)) {
+        this.checkInstantiationArgsHaveCorrectTypes(componentExpression);
       }
     }
   }
@@ -72,16 +102,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * Checks that the number of arguments provided to the subcomponent's
    * instantiation is at most the number of the constructor's parameters.
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected void checkArgumentNotTooMany(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
-
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+  protected void checkArgumentNotTooMany(@NotNull CompTypeExpression componentExpression) {
+    Preconditions.checkNotNull(componentExpression);
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
@@ -101,21 +125,17 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * Checks that enough arguments are provided to bind all mandatory parameters
    * of the component's constructor.
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected void checkArgumentsBindAllMandatoryParameters(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
+  protected void checkArgumentsBindAllMandatoryParameters(@NotNull CompTypeExpression componentExpression, @NotNull SourcePosition sourcePositionStart, @NotNull SourcePosition sourcePositionEnd) {
+    Preconditions.checkNotNull(componentExpression);
+    Preconditions.checkNotNull(sourcePositionStart);
+    Preconditions.checkNotNull(sourcePositionEnd);
 
-    if (!node.getSymbol().getType().getTypeInfo().isPresentAstNode()) {
+    if (!componentExpression.getTypeInfo().isPresentAstNode()) {
       Log.debug("Skip coco check, we currently do not support this check for library components", this.getClass().getCanonicalName());
       return;
     }
-
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
@@ -147,8 +167,8 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     if (mandatoryParamsAmount + defaultAssignedByKey > arguments.size()) {
       Log.error(ArcError.TOO_FEW_ARGUMENTS.format(mandatoryParamsAmount, arguments.size()),
-        node.get_SourcePositionStart(),
-        node.get_SourcePositionEnd()
+        sourcePositionStart,
+        sourcePositionEnd
       );
     }
   }
@@ -157,16 +177,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * Checks that all arguments of the subcomponent's instantiation uphold
    * the type signature of the component's constructor.
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected void checkInstantiationArgsHaveCorrectTypes(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
-
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+  protected void checkInstantiationArgsHaveCorrectTypes(@NotNull CompTypeExpression componentExpression) {
+    Preconditions.checkNotNull(componentExpression);
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
@@ -217,16 +231,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   /**
    * Checks that keyword parameter is used only once in the subcomponent's instantiation
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected boolean checkKeywordArgsUnique(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
+  protected boolean checkKeywordArgsUnique(@NotNull CompTypeExpression componentExpression) {
+    Preconditions.checkNotNull(componentExpression);
 
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
 
     Set<String> keyArguments = new HashSet<>();
@@ -238,9 +247,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         keywordCounter = keyArguments.size();
         keyArguments.add(argument.getName());
         if (keywordCounter == keyArguments.size()) {
-          Log.error(ArcError.KEY_NOT_UNIQUE.format(
-              argument.getName(), subcomponent.getName()
-            ),
+          Log.error(ArcError.KEY_NOT_UNIQUE.format(argument.getName()),
             argument.get_SourcePositionStart(),
             argument.get_SourcePositionEnd()
           );
@@ -255,16 +262,11 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
   /**
    * Checks that keyword-based parent arguments do not overwrite position based parameter values.
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected boolean checkArgValuesUnique(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
+  protected boolean checkArgValuesUnique(@NotNull CompTypeExpression componentExpression) {
+    Preconditions.checkNotNull(componentExpression);
 
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
 
     List<String> paramNames = componentExpression.getTypeInfo().getParameters()
@@ -299,16 +301,10 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * Checks that keyword arguments of the subcomponent's instantiation come
    * after positional arguments.
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected boolean checkKeywordArgsLast(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
-
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+  protected boolean checkKeywordArgsLast(@NotNull CompTypeExpression componentExpression) {
+    Preconditions.checkNotNull(componentExpression);
 
     boolean keywordAssignmentPresent = false;
     boolean rightArgumentOrder = true;
@@ -319,7 +315,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       if (argument.isPresentName()) {
         keywordAssignmentPresent = true;
       } else if (keywordAssignmentPresent) {
-        Log.error(ArcError.COMP_ARG_VALUE_AFTER_KEY.format(subcomponent.getName()),
+        Log.error(ArcError.COMP_ARG_VALUE_AFTER_KEY.format(),
           argument.get_SourcePositionStart(),
           argument.get_SourcePositionEnd()
         );
@@ -333,23 +329,17 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    * Checks that all keys of keyword arguments of the subcomponent's
    * instantiation are parameters of the component's constructor.
    *
-   * @param node the subcomponent to check
+   * @param componentExpression the component expression to check
    */
-  protected boolean checkKeywordsMustBeParameters(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node);
-    Preconditions.checkArgument(node.isPresentSymbol());
-    Preconditions.checkArgument(node.getSymbol().isTypePresent());
-    Preconditions.checkNotNull(node.getSymbol().getType().getTypeInfo());
-
-    SubcomponentSymbol subcomponent = node.getSymbol();
-    CompTypeExpression componentExpression = (CompTypeExpression) subcomponent.getType();
+  protected boolean checkKeywordsMustBeParameters(@NotNull CompTypeExpression componentExpression) {
+    Preconditions.checkNotNull(componentExpression);
     ComponentSymbol component = componentExpression.getTypeInfo();
 
     boolean keysAreParams = true;
 
     for (ASTArcArgument argument : componentExpression.getArcArguments()) {
       if (argument.isPresentName() && component.getParameter(argument.getName()).isEmpty()) {
-        Log.error(ArcError.COMP_ARG_KEY_INVALID.format(node.getName()),
+        Log.error(ArcError.COMP_ARG_KEY_INVALID.format(argument.getName()),
           argument.get_SourcePositionStart(),
           argument.get_SourcePositionEnd()
         );

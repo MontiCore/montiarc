@@ -89,8 +89,9 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
         if (parent.isPresent()) {
           astParent.getType().setDefiningSymbol(parent.get().getTypeInfo());
           listBuilder.add(parent.get());
-          if (!astParent.isEmptyArcArguments()) {
-            comp.setParentConfigurationExpressions(parent.get(), astParent.getArcArgumentList());
+          if (!astParent.isEmptyArcArguments() && parent.get() instanceof CompTypeExpression) {
+            ((CompTypeExpression) parent.get()).addArcArguments(astParent.getArcArgumentList());
+            parent.get().bindParams();
           }
         }
       }
@@ -123,6 +124,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
       node.getSymbol().setType(this.getCurrentCompInstanceType().get().deepClone());
       if (node.isPresentArcArguments() && node.getSymbol().getType() instanceof CompTypeExpression) {
         ((CompTypeExpression) node.getSymbol().getType()).addArcArguments(node.getArcArguments().getArcArgumentList());
+        node.getSymbol().getType().bindParams();
       }
     }
   }

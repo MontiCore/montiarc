@@ -31,7 +31,6 @@ public class MontiArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBuild
     if (this.getTypeParameters() != null) {
       this.getTypeParameters().forEach(symbol.getSpannedScope()::add);
     }
-    symbol.setParentConfigurationMap(this.parentConfiguration);
     symbol.setOuterComponent(this.getOuterComponent());
     symbol.setSuperComponentsList(this.superComponents);
     return symbol;

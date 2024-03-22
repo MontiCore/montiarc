@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -16,25 +15,20 @@ import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected Map<CompKindExpression, List<ASTArcArgument>> parentConfiguration;
 
   /**
    * @param name the name of this component type.
    */
   protected ComponentTypeSymbol(String name) {
     super(name);
-    this.parentConfiguration = new HashMap<>();
   }
 
   @Override
@@ -107,33 +101,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
   public void setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
     Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
-  }
-
-  /**
-   * @return a {@code List} of the configuration parameters of this component type.
-   */
-  public List<ASTArcArgument> getParentConfiguration(@NotNull CompKindExpression parent) {
-    return this.parentConfiguration.getOrDefault(parent, Collections.emptyList());
-  }
-
-  /**
-   * Adds the elements of a {@code Collection} of {@code VariableSymbol} of component configuration
-   * parameters to the configuration parameters of this component type. Throws an
-   * {@link IllegalArgumentException} if the given {@code Collection} is {@code null} or contains an
-   * element that is {@code null}.
-   *
-   * @param expressions the symbols to add.
-   * @see this#addParameter(VariableSymbol)
-   */
-  public void setParentConfigurationExpressions(@NotNull CompKindExpression parent, @NotNull List<ASTArcArgument> expressions) {
-    Preconditions.checkNotNull(expressions);
-    Preconditions.checkArgument(!expressions.contains(null));
-    this.parentConfiguration.put(parent, expressions);
-  }
-
-  public void setParentConfigurationMap(@NotNull Map<CompKindExpression, List<ASTArcArgument>> parentConfiguration){
-    Preconditions.checkNotNull(parentConfiguration);
-    this.parentConfiguration = parentConfiguration;
   }
 
   /**

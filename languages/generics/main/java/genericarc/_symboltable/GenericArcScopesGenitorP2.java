@@ -4,6 +4,7 @@ package genericarc._symboltable;
 import arcbasis._ast.ASTArcParent;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisSynthesizeComponent;
+import arcbasis.check.CompTypeExpression;
 import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
@@ -80,8 +81,9 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
         if (parent.isPresent()) {
           astParent.getType().setDefiningSymbol(parent.get().getTypeInfo());
           listBuilder.add(parent.get());
-          if (!astParent.isEmptyArcArguments()) {
-            comp.setParentConfigurationExpressions(parent.get(), astParent.getArcArgumentList());
+          if (!astParent.isEmptyArcArguments() && parent.get() instanceof CompTypeExpression) {
+            ((CompTypeExpression) parent.get()).addArcArguments(astParent.getArcArgumentList());
+            parent.get().bindParams();
           }
         }
       }

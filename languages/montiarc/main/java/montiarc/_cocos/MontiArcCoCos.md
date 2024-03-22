@@ -27,7 +27,6 @@ Legend:
 | ☑     | ☒           | ConfigurationParameterAssignment    | ArcBasis | 0xC1119, 0xC1120, 0xC1121, 0xC1122, 0xC1123, 0xC1124, 0xC1125 |
 | ☑     | ☒           | OptionalConfigurationParametersLast | ArcBasis | 0xC1126                                                       |
 | ☑     | ☒           | NoSubcomponentReferenceCycle        | ArcBasis | 0xC1127                                                       |
-| ☑     | ☒           | ParameterHeritage                   | ArcBasis | 0xC1128, 0xC1129, 0xC1130, 0xC1131                            |
 | ☑     | ☑           | PortHeritageTypeFits                | ArcBasis | 0xC1132, 0xC1133, 0xC1134                                     |
 | ☑     | ☒           | FieldInitOmitPortReferences         | ArcBasis | 0xC1135                                                       |
 | ☑     | ☒           | FieldInitTypeFits                   | ArcBasis | 0xC1137                                                       |

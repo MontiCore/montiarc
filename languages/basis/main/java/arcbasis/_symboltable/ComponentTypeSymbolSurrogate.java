@@ -2,13 +2,11 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcBehaviorElement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.CompKindExpression;
-import de.se_rwth.commons.logging.Log;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -93,22 +91,6 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
       this.lazyLoadDelegate().setOuterComponent(outerComponent);
     } else {
       super.setOuterComponent(outerComponent);  // Avoid infinite recursion with this case
-    }
-  }
-
-  @Override
-  public List<ASTArcArgument> getParentConfiguration(@NotNull CompKindExpression parent) {
-    return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getParentConfiguration(parent) :
-      super.getParentConfiguration(parent);  // Avoid infinite recursion with this case
-  }
-
-  @Override
-  public void setParentConfigurationExpressions(@NotNull CompKindExpression parent, @NotNull List<ASTArcArgument> expressions) {
-    if (checkLazyLoadDelegate()) {
-      this.lazyLoadDelegate().setParentConfigurationExpressions(parent, expressions);
-    } else {
-      super.setParentConfigurationExpressions(parent, expressions);  // Avoid infinite recursion with this case
     }
   }
 
