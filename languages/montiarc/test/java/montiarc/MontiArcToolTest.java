@@ -1016,7 +1016,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     tool.run(args);
 
     // Then
-    this.checkExpectedErrorsPresent(errors);
+    this.checkOnlyExpectedErrorsPresent(errors);
   }
 
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
@@ -1037,7 +1037,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
       Arguments.of("MissingPortType9.arc", new Error[]{MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH}),
       Arguments.of("MissingPortType10.arc", new Error[]{MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH}),
       //Arguments.of("MissingPortType11.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType12.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH})
+      Arguments.of("MissingPortType12.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH}),
       //Arguments.of("MissingPortType13.arc", new Error[]{MCError.CANT_FIND_SYMBOL, SCError.PRECONDITION_NOT_BOOLEAN}),
       //Arguments.of("MissingPortType14.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
       //Arguments.of("MissingPortType15.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
@@ -1045,12 +1045,12 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
       //Arguments.of("NameClashParamParam.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       //Arguments.of("NameClashParamPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       //Arguments.of("NameClashParamVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      //Arguments.of("NameClashPortPort1.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      //Arguments.of("NameClashPortPort2.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      //Arguments.of("NameClashPortVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
+      Arguments.of("NameClashPortPort1.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
+      Arguments.of("NameClashPortPort2.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
+      Arguments.of("NameClashPortVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       //Arguments.of("NameClashTypeParam.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      //Arguments.of("NameClashVarVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      //Arguments.of("NameClashVarPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES})
+      Arguments.of("NameClashVarPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
+      Arguments.of("NameClashVarVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES})
     );
   }
 }

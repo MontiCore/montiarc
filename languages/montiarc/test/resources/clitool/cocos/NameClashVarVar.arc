@@ -5,7 +5,7 @@
  * same scope. The tool should report an error for v being defined multiple
  * times inside the same scope but no subsequent errors.
  */
-component NameClashVar {
+component NameClashVarVar {
 
   port in int i;
   port out int o;
