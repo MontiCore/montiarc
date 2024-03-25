@@ -183,7 +183,7 @@ public class MontiArcCoCos {
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new MaxOneInitialState(traverser));
     checker.addCoCo(new NoEventsInSyncAutomata());
-    checker.addCoCo(new NoTickEventInUntimedAutomata());
+    //checker.addCoCo(new NoTickEventInUntimedAutomata());
 
     // MontiArc CoCos
     checker.addCoCo(new ComponentHeritageTypeBound());
