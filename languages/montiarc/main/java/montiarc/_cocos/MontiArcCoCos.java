@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import arcautomaton._cocos.NoEventsInSyncAutomata;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcautomaton._cocos.NoTickEventInUntimedAutomata;
 import arcbasis._cocos.ArcBasisASTComponentInstanceCoCo;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
@@ -38,7 +37,6 @@ import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
-import arcbasis._cocos.UniqueIdentifier;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
@@ -131,7 +129,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
-    checker.addVariantCoCo(UniqueIdentifier.class);
+    checker.addVariantCoCo(variablearc._cocos.arcbasis.UniqueIdentifier.class);
     checker.addCoCo(new ComponentNamedTick());
     checker.addCoCo(new ComponentInstantiationNamedTick());
     checker.addCoCo(new FieldNamedTick());

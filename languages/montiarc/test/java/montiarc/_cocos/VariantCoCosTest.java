@@ -11,7 +11,6 @@ import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
-import arcbasis._cocos.UniqueIdentifier;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
@@ -39,6 +38,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.arcbasis.ConnectorTypesFit;
+import variablearc._cocos.arcbasis.UniqueIdentifier;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -1408,12 +1408,20 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "}",
         ArcError.UNIQUE_IDENTIFIER_NAMES),
       // Multiple identifier if feature is selected
-      arg("component Comp74(boolean i) { " +
+      arg("component Comp75(boolean i) { " +
           "feature f1; " +
           "varif (f1) { " +
           "port in int i; " +
           "} " +
           "}",
+        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      // Multiple identifier feature should not throw exception
+      arg("component Comp76 { " +
+          "feature f; " +
+          "feature f; " +
+          "varif (f) { } " +
+          "}",
+        ArcError.UNIQUE_IDENTIFIER_NAMES,
         ArcError.UNIQUE_IDENTIFIER_NAMES)
     );
   }

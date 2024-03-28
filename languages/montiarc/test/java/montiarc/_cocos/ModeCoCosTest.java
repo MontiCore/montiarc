@@ -10,7 +10,6 @@ import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
-import arcbasis._cocos.UniqueIdentifier;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
@@ -154,7 +153,7 @@ public class ModeCoCosTest extends MontiArcAbstractTest {
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addVariantCoCo(PortHeritageTypeFits.class);
-    checker.addVariantCoCo(UniqueIdentifier.class);
+    checker.addVariantCoCo(variablearc._cocos.arcbasis.UniqueIdentifier.class);
 
     checker.addVariantCoCo(TransitionPreconditionsAreBoolean.class);
 
@@ -192,7 +191,7 @@ public class ModeCoCosTest extends MontiArcAbstractTest {
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addVariantCoCo(PortHeritageTypeFits.class);
-    checker.addVariantCoCo(UniqueIdentifier.class);
+    checker.addVariantCoCo(variablearc._cocos.arcbasis.UniqueIdentifier.class);
 
     checker.addVariantCoCo(TransitionPreconditionsAreBoolean.class);
 
