@@ -3,6 +3,15 @@ ${tc.signature("comp")}
 
 @Override
 public void compute() {
+
+  // log input values
+  <#list comp.getIncomingPorts() as port>
+    montiarc.rte.log.Log.trace(
+      "Value of input port ${port.getName()} = "
+      + this.get${port.getName()?cap_first}().getValue()
+    );
+  </#list>
+
   // inputs
   <@printLocalInputVariables comp/>
 
@@ -16,6 +25,14 @@ public void compute() {
   <@printSetOutput comp/>
 
   <@printSynchronize comp/>
+
+   // log output values
+  <#list comp.getOutgoingPorts() as port>
+    montiarc.rte.log.Log.trace(
+      "Value of output port ${port.getName()} = "
+      + this.get${port.getName()?cap_first}().getValue()
+    );
+  </#list>
 }
 
 <#macro printLocalInputVariables comp>
