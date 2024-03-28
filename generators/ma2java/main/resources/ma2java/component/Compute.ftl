@@ -3,7 +3,7 @@ ${tc.signature("comp")}
 
 @Override
 public void compute() {
-
+  montiarc.rte.log.Log.comment("Computing component " + this.getInstanceName());
   // log input values
   <#list comp.getIncomingPorts() as port>
     montiarc.rte.log.Log.trace(
