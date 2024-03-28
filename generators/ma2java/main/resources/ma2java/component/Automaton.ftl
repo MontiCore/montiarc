@@ -49,7 +49,7 @@ ${tc.signature("comp")}
 
 <#macro printCompute automaton comp>
   public void compute() {
-    montiarc.rte.log.Log.comment("Computing component " + this.getInstanceName() + "");
+    montiarc.rte.log.Log.comment("Computing component " + this.getInstanceName());
     // log state @ pre
     montiarc.rte.log.Log.trace(
       "State@pre = "
