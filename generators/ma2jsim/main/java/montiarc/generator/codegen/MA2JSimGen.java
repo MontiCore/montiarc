@@ -99,6 +99,7 @@ public class MA2JSimGen {
     }
 
     if (ast.getComponentType().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findAny().isPresent()) {
+      generateContextInterfaceForModeAutomaton(ast);
       generateModeAutomaton(ast);
     }
 
@@ -231,8 +232,19 @@ public class MA2JSimGen {
   protected void generateModeAutomaton(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
-    final String template = "montiarc.generator.ma2jsim.dynamics.modeAutomaton.ModeAutomatonFile.ftl";
+    final String template = "montiarc.generator.ma2jsim.component.modes.ModeAutomatonFile.ftl";
     String suffix = Suffixes.MODE_AUTOMATON;
+    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    if (existsHwc) suffix += Suffixes.TOP;
+
+    generate(template, ast, "", suffix, existsHwc);
+  }
+
+  protected void generateContextInterfaceForModeAutomaton(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+
+    final String template = "montiarc.generator.ma2jsim.component.interface.for_modes.ContextForModesFile.ftl";
+    String suffix = Suffixes.CONTEXT_FOR_MODES;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 

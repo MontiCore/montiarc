@@ -1,0 +1,118 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.rte.port;
+
+import montiarc.rte.component.IComponent;
+import montiarc.rte.msg.Message;
+import montiarc.rte.msg.Tick;
+
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Queue;
+
+public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implements SyncAwareInPort<T> {
+
+  protected Queue<Message<T>> buffer = new ArrayDeque<>();
+
+  public TimeAwarePortForComposition(String qualifiedName, IComponent owner) {
+    super(qualifiedName, owner);
+  }
+
+  /**
+   * Receive a message on this port, which is buffered for forwarding.
+   * This method should only be called by the {@link IOutPort}
+   * to which this port forward is connected.
+   *
+   * @param message the message sent by the connected outgoing port
+   */
+  @Override
+  public void receive(Message<? extends T> message) {
+    if (message == Tick.get()) {
+      this.processReceivedTick();
+    } else {
+      this.processReceivedData(message.getData());
+    }
+  }
+
+  /**
+   * Process a received data message on this port.
+   * <br>
+   * Do not call this method to <i>send</i> messages to this port, use {@link #receive(Message)} instead:
+   * {@code receive(Message.of(data))}.
+   *
+   * @param data the received data
+   */
+  protected void processReceivedData(T data) {
+    Message<T> msgObject = Message.of(data);
+    if (messageIsValidOnPort(msgObject)) {
+      buffer.add(msgObject);
+      owner.handleMessage(this);
+    }
+  }
+
+  /**
+   * Process a received tick message on this port.
+   * Do not call this method to <i>send</i> messages to this port, use {@link #receive(Message)} instead:
+   * {@code receive(Tick.get())}.
+   */
+  protected void processReceivedTick() {
+    if (messageIsValidOnPort(Tick.get())) {
+      buffer.add(Tick.get());
+      owner.handleMessage(this);
+    }
+  }
+
+  @Override
+  public Message<T> peekBuffer() {
+    return buffer.peek();
+  }
+
+  @Override
+  public Message<T> pollBuffer() {
+    return buffer.poll();
+  }
+
+  @Override
+  public boolean isBufferEmpty() {
+    return buffer.isEmpty();
+  }
+
+  @Override
+  public boolean hasBufferedTick() {
+    return buffer.contains(Tick.get());
+  }
+
+  @Override
+  public void continueAfterDroppedTick() {
+    Iterator<Message<T>> iterator = buffer.iterator();
+    while(iterator.hasNext() && !Objects.equals(iterator.next(), Tick.get())) {
+      this.owner.handleMessage(this);
+    }
+    if (this.hasBufferedTick()) {
+      this.owner.handleMessage(this);
+    }
+  }
+
+  public Queue<Message<T>> getBuffer() {
+    return new ArrayDeque<>(this.buffer);
+  }
+
+  public void forward() {
+    this.send(buffer.poll());
+  }
+
+  @Override
+  public void dropMessagesIgnoredBySync() {
+    Iterator<Message<T>> iterator = buffer.iterator();
+    int msgsBeforeTick = 0;
+    while (iterator.hasNext() && iterator.next() != Tick.get()) {
+       msgsBeforeTick++;
+    }
+
+    // we drop all messages before the tick - 1 (the last one should remain)
+    // If there was no tick, we drop all messages except for the last one
+    for (int i = msgsBeforeTick; i > 1; i--) {
+      buffer.poll();
+    }
+  }
+}

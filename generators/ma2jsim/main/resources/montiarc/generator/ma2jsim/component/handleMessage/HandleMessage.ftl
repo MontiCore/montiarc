@@ -4,11 +4,23 @@
 
 @Override
 public void handleMessage(montiarc.rte.port.IInPort<?> receivingPort) {
-  if (this.isAtomic) {
-    ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.AtomicMethodBody.ftl")}
-  } else {
-    ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.DecomposedMethodBody.ftl")}
+  ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
+
+  <#list ast.getSymbol().getAllIncomingPorts() as inPort>
+    <#assign existenceConditions = helper.getExistenceCondition(ast, inPort)/>
+
+    if(<#if existenceConditions?has_content>${prettyPrinter.prettyprint(existenceConditions)} &&</#if> receivingPort.getQualifiedName().equals(${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}().getQualifiedName())) {
+      <@MethodNames.handleBufferImplementation inPort/>${helper.portVariantSuffix(ast, inPort)}();
+    } <#sep> else </#sep>
+  </#list>
+
+  // For output ports of compositions: forward the message
+  if (!isAtomic) {
+    <#list ast.getSymbol().getAllOutgoingPorts() as outPort>
+    <#assign existenceConditions = helper.getExistenceCondition(ast, outPort)/>
+      if(<#if existenceConditions?has_content>${prettyPrinter.prettyprint(existenceConditions)} &&</#if> receivingPort.getQualifiedName().equals(${prefixes.port()}${outPort.getName()}${helper.portVariantSuffix(ast, outPort)}().getQualifiedName())) {
+        ((montiarc.rte.port.TimeAwarePortForComposition) ${prefixes.port()}${outPort.getName()}${helper.portVariantSuffix(ast, outPort)}()).forward();
+      } <#sep> else </#sep>
+    </#list>
   }
 }
-
-${tc.include("montiarc.generator.ma2jsim.component.handleMessage.HandlePortForward.ftl")}

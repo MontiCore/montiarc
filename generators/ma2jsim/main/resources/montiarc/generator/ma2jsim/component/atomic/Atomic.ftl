@@ -4,7 +4,7 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#list ast.getSymbol().getAllIncomingPorts() as portSym>
-    ${tc.includeArgs("montiarc.generator.ma2jsim.component.atomic.HandleMessageOn.ftl", [portSym])}
+    ${tc.includeArgs("montiarc.generator.ma2jsim.component.handleMessage.HandleMessageOn.ftl", [portSym])}
 </#list>
 
 protected montiarc.rte.behavior.IBehavior behavior;

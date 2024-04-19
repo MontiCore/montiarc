@@ -6,6 +6,7 @@ import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._ast.ASTMsgEventTOP;
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentInstantiationTOP;
@@ -120,6 +121,12 @@ public class Helper {
     return result;
   }
 
+  public List<ASTSCTransition> filterTransitionsForSourceMode(List<ASTSCTransition> transitions, String srcMode) {
+    return transitions.stream()
+      .filter(tr -> tr.getSourceName().equals(srcMode))
+      .collect(Collectors.toList());
+  }
+
   /**
    * Get all transitions from the given statechart that are triggered by a tick event.
    *
@@ -144,6 +151,22 @@ public class Helper {
         result.add(tr);
     });
     return result;
+  }
+
+  public List<ASTSCTransition> getTransitionsForTickEventFromState(ASTModeAutomaton modeAutomaton, ASTArcMode srcMode) {
+    Preconditions.checkArgument(srcMode.isPresentSymbol());
+    return getTransitionsForTickEvent(modeAutomaton).stream()
+      .filter(tr -> tr.getSourceNameSymbol().equals(srcMode.getSymbol()))
+      .collect(Collectors.toList());
+  }
+
+  public Optional<ASTExpression> getGuard(ASTSCTransition transition) {
+    if (transition.getSCTBody() instanceof ASTTransitionBody) {
+      ASTTransitionBody body = (ASTTransitionBody) transition.getSCTBody();
+      return body.isPresentPre() ? Optional.of(body.getPre()) : Optional.empty();
+    } else {
+      return Optional.empty();
+    }
   }
 
   /**
@@ -195,6 +218,14 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
+  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTModeAutomaton sc, ASTComponentType comp) {
+    List<String> triggeringPorts = getTransitionsForPortEvents(sc).keySet().stream()
+      .map(String::toLowerCase).collect(Collectors.toList());
+    return comp.getSymbol().getAllIncomingPorts().stream()
+      .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
+      .collect(Collectors.toList());
+  }
+
   public boolean isEventBased(ASTArcStatechart sc) {
     return !sc.getTiming().matches(Timing.TIMED_SYNC);
   }
@@ -223,7 +254,11 @@ public class Helper {
   }
 
   public Optional<ASTModeAutomaton> getModeAutomaton(ASTComponentType ast) {
-    return ast.getBody().streamArcElementsOfType(ASTModeAutomaton.class).findFirst();
+    return getModeAutomaton(ast.getBody());
+  }
+
+  public Optional<ASTModeAutomaton> getModeAutomaton(ASTComponentBody ast) {
+    return ast.streamArcElementsOfType(ASTModeAutomaton.class).findFirst();
   }
 
   public List<ASTArcMode> getModes(ASTModeAutomaton ast) {
@@ -244,14 +279,23 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
+  public List<ASTComponentInstance> getInstancesFromMode(ASTArcMode ast) {
+    return ast.getBody().getElementsOfType(ASTComponentInstantiation.class).stream()
+      .flatMap(ASTComponentInstantiationTOP::streamComponentInstances)
+      .collect(Collectors.toList());
+  }
+
+  public List<SubcomponentSymbol> getInstanceSymbolsFromMode(ASTArcMode ast) {
+    return getInstancesFromMode(ast).stream()
+      .map(ASTComponentInstance::getSymbol)
+      .collect(Collectors.toList());
+  }
+
   public Map<ASTArcMode, List<ASTComponentInstance>> getInstancesFromModes(ASTModeAutomaton ast) {
     return getModes(ast).stream().collect(
       Collectors.toMap(
         Function.identity(),
-        mode -> mode.getBody()
-          .getElementsOfType(ASTComponentInstantiation.class).stream()
-          .flatMap(ASTComponentInstantiationTOP::streamComponentInstances)
-          .collect(Collectors.toList())
+        this::getInstancesFromMode
       )
     );
   }

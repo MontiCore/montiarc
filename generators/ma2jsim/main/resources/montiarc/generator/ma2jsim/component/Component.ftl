@@ -27,6 +27,8 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.HandleMessage.ftl")}
 
+  ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.HandleTickExecution.ftl")}
+
   ${tc.include("montiarc.generator.ma2jsim.component.atomic.Atomic.ftl")}
 
   ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.Subcomponents.ftl")}
@@ -34,7 +36,11 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
   ${tc.include("montiarc.generator.ma2jsim.component.Connectors.ftl")}
 
   <#if helper.getModeAutomaton(ast).isPresent()>
-    ${tc.include("montiarc.generator.ma2jsim.dynamics.componentReferences.DynamicReferencesInComponent.ftl")}
+    ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeComponentMembers.ftl")}
+    ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeSubcomponents.ftl")}
+    ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeSetup.ftl")}
+    ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeInit.ftl")}
+    ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeTeardown.ftl")}
   </#if>
 
   ${tc.include("montiarc.generator.ma2jsim.component.init.Init.ftl")}

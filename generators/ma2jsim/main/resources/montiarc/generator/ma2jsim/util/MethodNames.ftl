@@ -32,3 +32,11 @@
 <#macro handleModeAutomaton>handleModeAutomaton</#macro>
 
 <#macro getModeAutomaton>getModeAutomaton</#macro>
+<#-- ArcModeSymbol mode -->
+<#macro modeSetup mode>setupMode_${mode.getName()}</#macro>
+
+<#-- ArcModeSymbol mode -->
+<#macro modeTeardown mode>teardownMode_${mode.getName()}</#macro>
+
+<#-- ArcModeSymbol mode -->
+<#macro modeInit mode>initMode_${mode.getName()}</#macro>

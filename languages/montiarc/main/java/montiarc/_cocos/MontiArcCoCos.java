@@ -162,7 +162,7 @@ public class MontiArcCoCos {
     // Modes
     checker.addCoCo(new MaxOneModeAutomaton());
     checker.addCoCo(new ModeAutomatonContainsNoStates());
-    checker.addCoCo(new ModeAutomataInDecomposedComponent());
+    //checker.addCoCo(new ModeAutomataInDecomposedComponent());
     checker.addCoCo(new ModeOmitPortDefinition());
     checker.addCoCo(new StatechartContainsNoMode());
 

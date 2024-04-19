@@ -9,14 +9,14 @@ protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() 
 <#list variant.getAstNode().getConnectors() as conn>
     <#assign sourcePort>
         <#if conn.getSource().isPresentComponent()>${prefixes.subcomp()}${conn.getSource().getComponent()}${helper.subcomponentVariantSuffix(ast, conn.getSource().getComponentSymbol())}().
-        <#else>(<@Util.getStaticPortClass conn.getSource().getPortSymbol() false/>)
+        <#else>(montiarc.rte.port.IOutPort)
         </#if>
         ${prefixes.port()}${conn.getSource().getPort()}<#if conn.getSource().isPresentComponent()>${helper.portVariantSuffix(conn.getSource().getComponentSymbol(), conn.getSource().getPortSymbol())}<#else>${helper.portVariantSuffix(ast, conn.getSource().getPortSymbol())}</#if>()
     </#assign>
     <#list conn.getTargetList() as target>
         <#assign targetPort>
             <#if target.isPresentComponent()>${prefixes.subcomp()}${target.getComponent()}${helper.subcomponentVariantSuffix(ast, target.getComponentSymbol())}().
-            <#else>(<@Util.getStaticPortClass target.getPortSymbol() false/>)
+            <#else>(montiarc.rte.port.IInPort)
             </#if>
             ${prefixes.port()}${target.getPort()}<#if target.isPresentComponent()>${helper.portVariantSuffix(target.getComponentSymbol(), target.getPortSymbol())}<#else>${helper.portVariantSuffix(ast, target.getPortSymbol())}</#if>()
         </#assign>

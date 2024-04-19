@@ -23,16 +23,6 @@
     <#else>${type.printFullName()}${suffix}</#if>
 </#macro>
 
-<#macro getStaticPortClass portSym atomic>
-    <#assign direction><#if portSym.isIncoming()>In<#else>Out</#if></#assign>
-    montiarc.rte.port.
-    <#if !atomic>
-        TimeAwarePortForward
-    <#else>
-        TimeAware${direction}Port
-    </#if>
-</#macro>
-
 <#macro getStaticPortInterface portSym>
     <#if portSym.isIncoming()>
     montiarc.rte.port.ITimeAwareInPort

@@ -22,12 +22,16 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
   <#list helper.getFeatures(ast) as feature>
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
+  <#if helper.getModeAutomaton(ast).isPresent()>
+    this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this);
+    this.isModeAutomatonSync = ${(!helper.isEventBased(helper.getModeAutomaton(ast).get()))?c};
+  </#if>
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 <#list helper.getVariants(ast) as variant>
   if (${prettyPrinter.prettyprintCondition(variant)}) {
-    this.isAtomic = ${variant.isAtomic()?c};
+    this.isAtomic = ${(variant.isAtomic() && !helper.getModeAutomaton(ast).isPresent())?c};
     <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
     <#if variant.isAtomic()>
         <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
@@ -40,4 +44,9 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 </#list>
 else throw new java.lang.RuntimeException(
 "Component ${ast.getName()} is not correctly configured, no variant selected");
+
+<#if helper.getModeAutomaton(ast).isPresent()>
+  this.modeAutomaton.setup();
+</#if>
+
 }

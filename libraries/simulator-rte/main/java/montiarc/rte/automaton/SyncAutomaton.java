@@ -23,30 +23,18 @@ public abstract class SyncAutomaton<Context> extends Automaton<Context> {
     return this.transitions;
   }
 
-  /**
-   * Check whether there is a transition from the current state whose guard condition is fulfilled.
-   * This method should operate on the automaton owner.
-   *
-   * @return true if there is a transition that can currently be executed
-   */
-  public boolean canExecuteTransition() {
-    return !getValidTransitions().isEmpty();
-  }
-
-  /**
-   * Executes a transition which is currently valid.
-   * This method should operate on the automaton owner.
-   */
-  public void executeAnyValidTransition() {
-    getValidTransitions().stream().findFirst().ifPresent(tr -> tr.execute(this));
-  }
-
   protected Collection<Transition> getValidTransitions() {
     return this.transitions.stream().filter(tr -> tr.isEnabled(getState())).collect(Collectors.toList());
   }
   
   @Override
   public void tick() {
-    executeAnyValidTransition();
+    getValidTransitions().stream().findFirst().ifPresentOrElse(
+      tr -> tr.execute(this),
+      this::executeDefaultAction
+    );
   }
+
+  /** The action executed if there is no valid transition to take */
+  protected abstract void executeDefaultAction();
 }
