@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
-
 import montiarc.build.Language.Companion.configureMCTask
+import montiarc.build.VersionInjection.Companion.registerVersionInjectionForUpToDateChecks
 
 plugins {
   id("montiarc.build.language")
@@ -37,3 +37,11 @@ dependencies {
 }
 
 configureMCTask("MontiArc.mc4")
+
+// Inject generator version information into java code for up to date checks
+registerVersionInjectionForUpToDateChecks(
+  taskName = "injectGeneratorVersion",
+  genDir = "${project.buildDir}/generated-resources/main",
+  subfolder = "montiarc",
+  fileName = "MontiArcToolVersion.txt",
+)

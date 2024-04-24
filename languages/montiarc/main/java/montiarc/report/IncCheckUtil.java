@@ -26,28 +26,39 @@ public final class IncCheckUtil {
   private IncCheckUtil() {}
 
   public static final class Config {
+    /** model paths of the current tool execution */
     private final List<String> modelpath;
+    /** target dir of the current tool execution */
     private final String targetDir;
+    /** reporting base dir of the current tool execution */
     private final String reportingBaseDir;
+    /** concrete reporting sub directory of the current tool execution */
     private final String concreteReportingSubDir;
+    /** hwc path of the current tool execution */
     private final List<String> hwc;
+    /** tool version of the current tool execution */
+    private final String toolVersion;
 
     /**
      * @param concreteReportingSubDir conventional subdirectory of {@code reportingBaseDir}
      * @param hwcs may be an empty String list if no handwritten code path is available
+     * @param toolVersion may be an empty string if no version info should be used
      */
     public Config (
       @NotNull List<String> modelpath,
       @NotNull String targetDir,
       @NotNull String reportingBaseDir,
       @NotNull String concreteReportingSubDir,
-      @NotNull List<String> hwcs) {
+      @NotNull List<String> hwcs,
+      @NotNull String toolVersion
+    ) {
 
       this.modelpath = List.copyOf(Preconditions.checkNotNull(modelpath));
       this.targetDir = Preconditions.checkNotNull(targetDir);
       this.reportingBaseDir = Preconditions.checkNotNull(reportingBaseDir);
       this.concreteReportingSubDir = Preconditions.checkNotNull(concreteReportingSubDir);
       this.hwc = List.copyOf(Preconditions.checkNotNull(hwcs));
+      this.toolVersion = Preconditions.checkNotNull(toolVersion);
 
       Preconditions.checkArgument(!modelpath.isEmpty());
       Preconditions.checkArgument(!targetDir.isEmpty());
@@ -74,6 +85,10 @@ public final class IncCheckUtil {
     public List<String> getHwcs() {
       return hwc;
     }
+
+    public String getToolVersion() {
+      return toolVersion;
+    }
   }
 
   /**
@@ -89,7 +104,8 @@ public final class IncCheckUtil {
 
     ReportManager.ReportManagerFactory reporterFactory = new IncCheckReports(
       config.getReportingBaseDir() + File.separator + config.getConcreteReportingSubDir(),
-      reportPathTransformer
+      reportPathTransformer,
+      config.getToolVersion()
     );
 
     Reporting.init(config.getReportingBaseDir(), config.getConcreteReportingSubDir(), reporterFactory);
@@ -118,7 +134,8 @@ public final class IncCheckUtil {
     UpToDateCalculator upToDateCalc = new UpToDateCalculator(
       config.getModelpaths().stream().map(Path::of).collect(Collectors.toList()),
       config.getHwcs().stream().map(Path::of).collect(Collectors.toList()),
-      Path.of(config.getTargetDir())
+      Path.of(config.getTargetDir()),
+      config.getToolVersion()
     );
     return upToDateCalc.checkUpToDateness(astByQName, incCheckDataByQName);
   }

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.build.VersionInjection.Companion.registerVersionInjection
+import montiarc.build.VersionInjection.Companion.registerVersionInjectionForPlugins
 
 plugins {
   id("montiarc.build.plugins")
@@ -29,7 +29,7 @@ sourceSets {
   }
 }
 
-registerVersionInjection(
+registerVersionInjectionForPlugins(
   taskName = "injectGeneratorVersion",
   genDir = genDir4GeneratorVersionInjection,
   packageName = "montiarc.gradle.ma2java",

@@ -8,6 +8,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.codegen.MA2JSimGen;
+import montiarc.report.VersionFileDeserializer;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import org.apache.commons.cli.CommandLine;
@@ -20,11 +21,25 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class MA2JSimTool extends MontiArcTool {
 
   public static final String MA2JSIM_INC_CHECK_REPORT_DIR = "ma2jsim-inc-data";
+  public static final String MA2JSIM_INC_CHECK_VERSION_PATH = "montiarc/generator/Ma2JsimToolVersion.txt";
+
+  /*
+   * We do not use MontiarcTool#version because when there are only code changes in the generator,
+   * but not the original tool, then MontiarcTool#version will not change. By employing a new
+   * version field here, we can capture changes in the generator.
+   */
+  private Supplier<String> ma2jsimVersionSupplier =
+    new VersionFileDeserializer(MA2JSIM_INC_CHECK_VERSION_PATH)::loadVersion;
+
+  public void setMa2JavaVersionSupplier(@NotNull Supplier<String> versionSupplier) {
+    this.ma2jsimVersionSupplier = Preconditions.checkNotNull(versionSupplier);
+  }
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
@@ -83,8 +98,9 @@ public class MA2JSimTool extends MontiArcTool {
 
     boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
     if (writeReports) {
-      IncCheckUtil.Config incCheckConfig =
-        new IncCheckUtil.Config(modelpaths, target, reportDir.get(), MA2JSIM_INC_CHECK_REPORT_DIR, hwc);
+      IncCheckUtil.Config incCheckConfig = new IncCheckUtil.Config(
+        modelpaths, target, reportDir.get(), MA2JSIM_INC_CHECK_REPORT_DIR, hwc, ma2jsimVersionSupplier.get()
+      );
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
       Map<String, ASTMACompilationUnit> astByQName = IncCheckUtil.resolveAstByQName(asts);

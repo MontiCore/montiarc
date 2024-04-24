@@ -25,6 +25,7 @@ public final class IncCheckData {
   private final Set<Path> absentHwcFiles;
   private final Set<Path> outFiles;
   private final Path incCheckFile;
+  private final String versionInfo;
 
   /** 32 hexa digits = md5 hash */
   private final Pattern isHexaMd5Hash = Pattern.compile("[0-9a-f]{32}");
@@ -34,13 +35,15 @@ public final class IncCheckData {
                       @NotNull Set<Path> usedHwcFiles,
                       @NotNull Set<Path> absentHwcFiles,
                       @NotNull Set<Path> outFiles,
-                      @NotNull Path incCheckFile) throws DataFormatException {
+                      @NotNull Path incCheckFile,
+                      @NotNull String versionInfo) throws DataFormatException {
     this.modelFile = checkValidPath(modelFile);
     this.modelHash = checkHash(modelHash);
     this.usedHwcFiles = Set.copyOf(checkValidPaths(usedHwcFiles));
     this.absentHwcFiles = Set.copyOf(checkValidPaths(absentHwcFiles));
     this.outFiles = Set.copyOf(checkValidPaths(outFiles));
     this.incCheckFile = checkValidPath(incCheckFile);
+    this.versionInfo = Preconditions.checkNotNull(versionInfo);
   }
 
   private Set<Path> checkValidPaths(@NotNull Set<Path> paths) throws DataFormatException {
@@ -95,5 +98,9 @@ public final class IncCheckData {
 
   public Path getIncCheckFile() {
     return incCheckFile;
+  }
+
+  public String getVersionInfo() {
+    return versionInfo;
   }
 }

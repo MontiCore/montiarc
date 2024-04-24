@@ -2,6 +2,7 @@
 package montiarc;
 
 import com.google.common.base.Preconditions;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -41,11 +42,32 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
   }
 
   private void invokeTool() {
-    MontiArcTool.main(new String[] {
-      "--modelpath", modelDir.toString(),
-      "--symboltable", symbolsOutDir.toString(),
-      "--report", reportOutDir.toString()
-    });
+    this.invokeToolWithVersion("1.0.0");
+  }
+
+  private void invokeTollWithArgs(@NotNull String[] args) {
+    this.invokeToolWithArgsAndVersion(args, "1.0.0");
+  }
+
+  private void invokeToolWithArgsAndVersion(@NotNull String[] args, @NotNull String version) {
+    Preconditions.checkNotNull(args);
+    Preconditions.checkNotNull(version);
+
+    MontiArcTool tool = new MontiArcTool();
+    tool.init();
+    tool.setMa2JavaVersionSupplier(() -> version);
+    tool.run(args);
+  }
+
+  private void invokeToolWithVersion(@NotNull String version) {
+    this.invokeToolWithArgsAndVersion(
+      new String[]{
+        "--modelpath", modelDir.toString(),
+        "--symboltable", symbolsOutDir.toString(),
+        "--report", reportOutDir.toString()
+      },
+      version
+    );
   }
 
   @Test
@@ -244,7 +266,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     );
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
 
-    MontiArcTool.main(new String[] {
+    invokeTollWithArgs(new String[] {
         "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
         "--symboltable", symbolsOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -282,6 +304,27 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
 
     // Should regenerate files of modified input model
     assertThat(symbolsOutDir.resolve("NoPackageModified.arcsym").toFile().lastModified()).isNotEqualTo(lastModified.get("NoPackageModified.arcsym"));
+  }
+
+  @Test
+  void testVersionChange() throws IOException  {
+    // Given
+    createBasicProjectStructure();
+    addModel("Foo", modelDir);
+    invokeToolWithVersion("1.0.0");
+
+    long lastModified = symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified();
+
+
+    // When
+    Files.writeString(modelDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arc"),
+      "package " + usedPackage + "; component CompToUpdate { port out int i; }"
+    );
+    invokeToolWithVersion("1.0.1");
+
+    // Then
+    // Should regenerate files
+    assertThat(symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified()).isNotEqualTo(lastModified);
   }
 
   private void addModel(String modelName, Path modelDirToUse) throws IOException {

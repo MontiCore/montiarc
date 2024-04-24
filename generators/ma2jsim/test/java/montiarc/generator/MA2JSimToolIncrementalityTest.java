@@ -2,6 +2,7 @@
 package montiarc.generator;
 
 import com.google.common.base.Preconditions;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -51,6 +52,32 @@ class MA2JSimToolIncrementalityTest {
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
     });
+  }
+
+  private void invokeToolWithArgs(@NotNull String[] args) {
+    this.invokeToolWithArgsAndVersion(args, "1.0.0");
+  }
+
+  private void invokeToolWithArgsAndVersion(@NotNull String[] args, @NotNull String version) {
+    Preconditions.checkNotNull(args);
+    Preconditions.checkNotNull(version);
+
+    MA2JSimTool tool = new MA2JSimTool();
+    tool.init();
+    tool.setMa2JavaVersionSupplier(() -> version);
+    tool.run(args);
+  }
+
+  private void invokeToolWithVersion(@NotNull String version) {
+    this.invokeToolWithArgsAndVersion(
+      new String[]{
+        "--modelpath", modelDir.toString(),
+        "--handwritten-code", hwcDir.toString(),
+        "--output", javaOutDir.toString(),
+        "--report", reportOutDir.toString()
+      },
+      version
+    );
   }
 
   @Test
@@ -726,6 +753,36 @@ class MA2JSimToolIncrementalityTest {
     // Should delete top extension point, generate component class
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwcComp.java").toFile()).exists();
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwcCompTOP.java").toFile()).doesNotExist();
+  }
+
+  @Test
+  void testVersionChange() throws IOException {
+    // Given
+    createBasicProjectStructure();
+    addAutomatonModel("Foo", modelDir);
+    invokeToolWithVersion("1.0.0");
+
+    Map<String, Long> lastModified = new HashMap<>();
+    lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
+    lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
+    lastModified.put("FooContext.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified());
+    lastModified.put("FooAutomaton.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooAutomaton.java").toFile().lastModified());
+    lastModified.put("FooAutomatonBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooAutomatonBuilder.java").toFile().lastModified());
+    lastModified.put("FooStates.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooStates.java").toFile().lastModified());
+    lastModified.put("FooEvents.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooEvents.java").toFile().lastModified());
+
+    // When
+    invokeToolWithVersion("1.0.1");
+
+    // Then
+    // Should regenerate files
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooComp.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooCompBuilder.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooContext.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooAutomaton.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooAutomaton.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooAutomatonBuilder.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooAutomatonBuilder.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooStates.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooStates.java"));
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("FooEvents.java").toFile().lastModified()).isNotEqualTo(lastModified.get("FooEvents.java"));
   }
 
   private void addAutomatonModel(String modelName, Path modelDirToUse) throws IOException {

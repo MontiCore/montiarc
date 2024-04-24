@@ -20,16 +20,26 @@ import java.util.Set;
  */
 public final class UpToDateCalculator {
 
+  /** model paths of the current tool run */
   private final Collection<Path> modelpath;
+  /** hwc paths of the current tool run */
   private final Collection<Path> hwc;
+  /** target path of the current tool run */
   private final Path target;
+  /** tool version of the current tool run */
+  private final String version;
 
+  /**
+   * @param version may be an empty string if one does not want to supply version information
+   */
   public UpToDateCalculator(@NotNull Collection<Path> modelpath,
                             @NotNull Collection<Path> hwc,
-                            @NotNull Path target) {
+                            @NotNull Path target,
+                            @NotNull String version) {
     this.modelpath = Preconditions.checkNotNull(modelpath);
     this.hwc = Preconditions.checkNotNull(hwc);
     this.target = Preconditions.checkNotNull(target);
+    this.version = Preconditions.checkNotNull(version);
   }
 
   /**
@@ -120,6 +130,11 @@ public final class UpToDateCalculator {
       if (!target.resolve(expectedOutFile).toFile().isFile()) {
         return true;
       }
+    }
+
+    String oldVersion = incData.getVersionInfo();
+    if (!oldVersion.equals(version)) {
+      return true;
     }
 
     return false;

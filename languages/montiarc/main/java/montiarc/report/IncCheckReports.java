@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.report;
 
+import com.google.common.base.Preconditions;
 import de.monticore.generating.templateengine.reporting.commons.ReportManager;
+import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.nio.file.Path;
 import java.util.function.Function;
@@ -17,9 +19,14 @@ public class IncCheckReports implements ReportManager.ReportManagerFactory {
   /** Transforms paths before they are written to the inc gen file*/
   private final Function<Path, Path> reportPathOutput;
 
-  public IncCheckReports(String outputDir, UnaryOperator<Path> reportPathOutput) {
-    this.outputDir = outputDir;
-    this.reportPathOutput = reportPathOutput;
+  private final String toolVersion;
+
+  public IncCheckReports(@NotNull String outputDir,
+                         @NotNull UnaryOperator<Path> reportPathOutput,
+                         @NotNull String toolVersion) {
+    this.outputDir = Preconditions.checkNotNull(outputDir);
+    this.reportPathOutput = Preconditions.checkNotNull(reportPathOutput);
+    this.toolVersion = Preconditions.checkNotNull(toolVersion);
   }
 
   @Override
@@ -28,7 +35,7 @@ public class IncCheckReports implements ReportManager.ReportManagerFactory {
     ReportManager reporter = new ReportManager(outputDir);
 
     IncCheckGenerationReporter incGenGradleReporter =
-      new IncCheckGenerationReporter(outputDir, reportPathOutput, modelName);
+      new IncCheckGenerationReporter(outputDir, reportPathOutput, modelName, toolVersion);
 
     reporter.addReportEventHandler(incGenGradleReporter);
     return reporter;

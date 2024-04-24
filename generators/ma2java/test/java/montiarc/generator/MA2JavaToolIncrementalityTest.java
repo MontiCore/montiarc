@@ -2,6 +2,8 @@
 package montiarc.generator;
 
 import com.google.common.base.Preconditions;
+import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -44,14 +46,38 @@ class MA2JavaToolIncrementalityTest {
     Files.createDirectories(javaOutDir.resolve(usedPackageAsPath));
   }
 
-
   private void invokeTool() {
-    MA2JavaTool.main(new String[]{
+    invokeToolWithVersion("1.0.0");
+  }
+
+  private void invokeTollWithArgs(@NotNull String[] args) {
+    this.invokeToolWithArgsAndVersion(args, "1.0.0");
+  }
+
+  private void invokeToolWithArgsAndVersion(@NotNull String[] args, @NotNull String version) {
+    Preconditions.checkNotNull(args);
+    Preconditions.checkNotNull(version);
+
+    MA2JavaTool tool = new MA2JavaTool();
+    tool.init();
+    tool.setMa2JavaVersionSupplier(() -> version);
+    try {
+      tool.run(args);
+    } catch (Exception e) {
+      Assertions.fail(e);
+    }
+  }
+
+  private void invokeToolWithVersion(@NotNull String version) {
+    this.invokeToolWithArgsAndVersion(
+      new String[]{
         "--modelpath", modelDir.toString(),
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
-    });
+      },
+      version
+    );
   }
 
   @Test
@@ -359,7 +385,7 @@ class MA2JavaToolIncrementalityTest {
     );
     Files.delete(oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"));
 
-    MA2JavaTool.main(new String[] {
+    invokeTollWithArgs(new String[] {
       "--modelpath", modelDir.toString(),
       "--handwritten-code", oldHwc + File.pathSeparator + newHwc,
       "--output", javaOutDir.toString(),
@@ -409,7 +435,7 @@ class MA2JavaToolIncrementalityTest {
     );
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
 
-    MA2JavaTool.main(new String[] {
+    invokeTollWithArgs(new String[] {
         "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
@@ -467,7 +493,7 @@ class MA2JavaToolIncrementalityTest {
     Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwcTOP.java").toFile().exists());
 
     // When invoking the tool without hwc dir
-    MA2JavaTool.main(new String[]{
+    invokeTollWithArgs(new String[]{
         "--modelpath", modelDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -480,6 +506,24 @@ class MA2JavaToolIncrementalityTest {
     // Should delete top extension point, generate component class
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwc.java").toFile()).exists();
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("WithHwcTOP.java").toFile()).doesNotExist();
+  }
+
+  @Test
+  void testChangedVersion() throws IOException {
+    // Given
+    createBasicProjectStructure();
+    addPortModel("Foo", modelDir);
+    invokeToolWithVersion("1.0.0");
+
+    long lastModified = javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified();
+
+    // When
+    invokeToolWithVersion("1.0.1");
+
+    // Then
+    // Should regenerate files
+    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified())
+      .isNotEqualTo(lastModified);
   }
 
   private void addDeployModel(String modelName, Path modelDirToUse) throws IOException {

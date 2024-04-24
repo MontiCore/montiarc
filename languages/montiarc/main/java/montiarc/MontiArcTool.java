@@ -12,6 +12,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.report.VersionFileDeserializer;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import montiarc.trafo.MontiArcTrafos;
@@ -37,6 +38,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -44,6 +46,14 @@ import java.util.stream.Stream;
 public class MontiArcTool extends MontiArcToolTOP {
 
   public static final String SYMBOLS_REPORT_DIR = "symbols-inc-data";
+  public static final String MONITARC_INC_CHECK_VERSION_PATH = "montiarc/MontiArcToolVersion.txt";
+
+  private Supplier<String> versionSupplier =
+    new VersionFileDeserializer(MONITARC_INC_CHECK_VERSION_PATH)::loadVersion;
+
+  public void setMa2JavaVersionSupplier(@NotNull Supplier<String> versionSupplier) {
+    this.versionSupplier = Preconditions.checkNotNull(versionSupplier);
+  }
 
   public static void main(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
@@ -346,7 +356,8 @@ public class MontiArcTool extends MontiArcToolTOP {
     boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
     if (writeReports) {
       IncCheckUtil.Config incCheckConfig = new IncCheckUtil.Config(
-        modelpaths, symbolTargetDir, reportDir.get(), SYMBOLS_REPORT_DIR, Collections.emptyList());
+        modelpaths, symbolTargetDir, reportDir.get(), SYMBOLS_REPORT_DIR, Collections.emptyList(), versionSupplier.get()
+      );
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
       scopeToAst = extractCompUnitsFrom(scopes);

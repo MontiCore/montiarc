@@ -15,6 +15,8 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.DataFormatException;
 
+import static montiarc.report.IncCheckGenerationReporter.VER_PREFIX;
+
 /**
  * Parses Files created by {@link de.monticore.generating.templateengine.reporting.reporter.IncGenGradleReporter}
  * for .arc files and deserializes them into {@link IncCheckData}.
@@ -26,6 +28,7 @@ public final class IncCheckDataParser {
   private final Set<Path> usedHwcFiles;
   private final Set<Path> absentHwcFiles;
   private final Set<Path> outFiles;
+  private String versionInfo;
 
   private static final String ARC_PREFIX = "arc:";
   private static final String HWC_PREFIX = "hwc:";
@@ -36,6 +39,7 @@ public final class IncCheckDataParser {
     this.usedHwcFiles = new HashSet<>();
     this.absentHwcFiles = new HashSet<>();
     this.outFiles = new HashSet<>();
+    this.versionInfo = "";
   }
 
   /**
@@ -60,7 +64,7 @@ public final class IncCheckDataParser {
     }
 
     try {
-      return new IncCheckData(modelFile, modelHash, usedHwcFiles, absentHwcFiles, outFiles, incCheckFile);
+      return new IncCheckData(modelFile, modelHash, usedHwcFiles, absentHwcFiles, outFiles, incCheckFile, versionInfo);
     } catch (DataFormatException e) {
       ParseException rethrown = new ParseException(e.getMessage(), 0);
       rethrown.initCause(e);
@@ -75,6 +79,7 @@ public final class IncCheckDataParser {
       case HWC_PREFIX: processHwcFile(line); break;
       case GEN_PREFIX: processAbsentHwcFile(line); break;
       case OUT_PREFIX: processOutgoingFile(line); break;
+      case VER_PREFIX: processVersionInfo(line); break;
       default: break;
     }
   }
@@ -117,6 +122,11 @@ public final class IncCheckDataParser {
 
     String cleanLine = line.substring(OUT_PREFIX.length());
     outFiles.add(Path.of(cleanLine));
+  }
+
+  private void processVersionInfo(String line) throws ParseException {
+    verifyLineHasPrefix(line, VER_PREFIX);
+    versionInfo = line.substring(VER_PREFIX.length());
   }
 
   private void verifyLineHasPrefix(String line, String linePrefix) throws ParseException {
