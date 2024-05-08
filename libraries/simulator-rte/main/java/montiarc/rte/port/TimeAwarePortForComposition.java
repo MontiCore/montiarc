@@ -6,13 +6,14 @@ import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 
 import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.Objects;
-import java.util.Queue;
+
 
 public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implements SyncAwareInPort<T> {
 
-  protected Queue<Message<T>> buffer = new ArrayDeque<>();
+  protected Deque<Message<T>> buffer = new ArrayDeque<>();
 
   public TimeAwarePortForComposition(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
@@ -68,8 +69,18 @@ public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implemen
   }
 
   @Override
+  public Message<T> peekLastBuffer(){
+    return buffer.peekLast();
+  }
+
+  @Override
   public Message<T> pollBuffer() {
     return buffer.poll();
+  }
+
+  @Override
+  public Message<T>pollLastBuffer(){
+    return buffer.pollLast();
   }
 
   @Override
@@ -93,7 +104,7 @@ public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implemen
     }
   }
 
-  public Queue<Message<T>> getBuffer() {
+  public Deque<Message<T>> getBuffer() {
     return new ArrayDeque<>(this.buffer);
   }
 

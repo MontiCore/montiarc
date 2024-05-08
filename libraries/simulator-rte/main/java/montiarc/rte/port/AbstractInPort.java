@@ -6,7 +6,8 @@ import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 
 import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.Deque;
+
 
 /**
  * An incoming port of a MontiArc component.
@@ -21,7 +22,7 @@ import java.util.Queue;
  */
 public abstract class AbstractInPort<T> extends AbstractBasePort<T> implements IInPort<T> {
 
-  protected Queue<Message<T>> buffer = new ArrayDeque<>();
+  protected Deque<Message<T>> buffer = new ArrayDeque<>();
 
   protected AbstractInPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);

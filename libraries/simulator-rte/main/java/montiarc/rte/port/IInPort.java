@@ -39,4 +39,8 @@ public interface IInPort<T> extends IPort {
    * @return true if the buffer contains a tick
    */
   boolean hasBufferedTick();
+
+  Message<T> peekLastBuffer();
+
+  Message<T> pollLastBuffer();
 }

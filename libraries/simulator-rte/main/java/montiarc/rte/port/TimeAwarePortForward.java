@@ -124,4 +124,14 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITim
   public boolean hasBufferedTick() {
     return buffer.contains(Tick.get());
   }
+
+  @Override
+  public Message<T> peekLastBuffer() {
+    return null;
+  }
+
+  @Override
+  public Message<T> pollLastBuffer() {
+    return null;
+  }
 }

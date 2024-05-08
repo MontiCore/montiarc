@@ -32,4 +32,14 @@ public class TimeAwareInPort<T> extends AbstractInPort<T> implements ITimeAwareI
       handleBuffer();
     }
   }
+
+  @Override
+  public Message<T> peekLastBuffer() {
+    return buffer.peekLast();
+  }
+
+  @Override
+  public Message<T> pollLastBuffer() {
+    return buffer.pollLast();
+  }
 }
