@@ -183,8 +183,8 @@ public class ComponentHelperDseValue {
     List<String> outputParameters = new ArrayList<>();
 
     //can only print default parameters if ASTNode exists.
-    if (comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isASTComponentType(comp.getAstNode())) {
-      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asASTComponentType(comp.getAstNode());
+    if (comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTComponentType(comp.getAstNode())) {
+      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTComponentType(comp.getAstNode());
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 

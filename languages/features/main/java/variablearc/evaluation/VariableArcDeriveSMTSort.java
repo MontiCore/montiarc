@@ -52,10 +52,10 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
         case BasicSymbolsMill.DOUBLE:
           return Optional.of(context.getRealSort());
       }
-    } else if (typeExpression.isObjectType() && typeExpression.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOType(
-      typeExpression.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOType(typeExpression.asObjectType().getTypeInfo()).isIsEnum()) {
+    } else if (typeExpression.isObjectType() && typeExpression.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOSymbolsOOType(
+      typeExpression.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOSymbolsOOType(typeExpression.asObjectType().getTypeInfo()).isIsEnum()) {
       // Case Enums
-      String[] s = VariableArcMill.typeDispatcher().asOOType(typeExpression.asObjectType().getTypeInfo()).getSpannedScope().getLocalFieldSymbols().stream().map(FieldSymbol::getName).toArray(String[]::new);
+      String[] s = VariableArcMill.typeDispatcher().asOOSymbolsOOType(typeExpression.asObjectType().getTypeInfo()).getSpannedScope().getLocalFieldSymbols().stream().map(FieldSymbol::getName).toArray(String[]::new);
       return Optional.of(context.mkEnumSort(typeExpression.asObjectType().getTypeInfo().getFullName(), s));
     }
 

@@ -77,7 +77,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     putOnStack(new VariableArcVariationPoint(
       new Expression(node.getCondition()),
       this.getCurrentVariationPoint().orElse(null),
-      VariableArcMill.typeDispatcher().isASTComponentBody(node.getThen()) ? VariableArcMill.typeDispatcher().asASTComponentBody(node.getThen()).getArcElementList() : List.of(node.getThen())
+      VariableArcMill.typeDispatcher().isArcBasisASTComponentBody(node.getThen()) ? VariableArcMill.typeDispatcher().asArcBasisASTComponentBody(node.getThen()).getArcElementList() : List.of(node.getThen())
     ));
     node.getThen().accept(this.getTraverser());
     removeCurrentVariationPoint();
@@ -86,7 +86,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
       putOnStack(new VariableArcVariationPoint(
         new NegatedExpression(node.getCondition()),
         this.getCurrentVariationPoint().orElse(null),
-        VariableArcMill.typeDispatcher().isASTComponentBody(node.getOtherwise()) ? VariableArcMill.typeDispatcher().asASTComponentBody(node.getOtherwise()).getArcElementList() : List.of(node.getOtherwise())
+        VariableArcMill.typeDispatcher().isArcBasisASTComponentBody(node.getOtherwise()) ? VariableArcMill.typeDispatcher().asArcBasisASTComponentBody(node.getOtherwise()).getArcElementList() : List.of(node.getOtherwise())
       ));
       node.getOtherwise().accept(this.getTraverser());
       removeCurrentVariationPoint();

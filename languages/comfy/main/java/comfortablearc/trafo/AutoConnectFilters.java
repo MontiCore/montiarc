@@ -64,9 +64,9 @@ public final class AutoConnectFilters {
     Preconditions.checkNotNull(comp);
     Preconditions.checkArgument(comp.getSubcomponents().contains(subComp));
     Preconditions.checkState(comp.isPresentAstNode());
-    Preconditions.checkState(ComfortableArcMill.typeDispatcher().isComponentType(subComp.getType().getTypeInfo()));
+    Preconditions.checkState(ComfortableArcMill.typeDispatcher().isArcBasisComponentType(subComp.getType().getTypeInfo()));
 
-    return ArcBasisMill.typeDispatcher().asComponentType(subComp.getType().getTypeInfo()).getOutgoingArcPorts().stream()
+    return ArcBasisMill.typeDispatcher().asArcBasisComponentType(subComp.getType().getTypeInfo()).getOutgoingArcPorts().stream()
       .filter(p -> comp.getAstNode().getConnectors().stream()
         .noneMatch(c -> c.getSource().isPresentPortSymbol() && c.getSource().getPortSymbol().equals(p)))
       .map(p -> ASTPortAccess.of(subComp, p))
@@ -79,9 +79,9 @@ public final class AutoConnectFilters {
     Preconditions.checkNotNull(comp);
     Preconditions.checkArgument(comp.getSubcomponents().contains(subComp));
     Preconditions.checkState(comp.isPresentAstNode());
-    Preconditions.checkState(ComfortableArcMill.typeDispatcher().isComponentType(subComp.getType().getTypeInfo()));
+    Preconditions.checkState(ComfortableArcMill.typeDispatcher().isArcBasisComponentType(subComp.getType().getTypeInfo()));
 
-    return ArcBasisMill.typeDispatcher().asComponentType(subComp.getType().getTypeInfo()).getIncomingArcPorts().stream()
+    return ArcBasisMill.typeDispatcher().asArcBasisComponentType(subComp.getType().getTypeInfo()).getIncomingArcPorts().stream()
       .filter(p -> comp.getAstNode().getConnectors().stream()
         .noneMatch(c -> c.getTargetList().stream()
           .noneMatch(t -> t.isPresentPortSymbol() && t.getPortSymbol().equals(p))))

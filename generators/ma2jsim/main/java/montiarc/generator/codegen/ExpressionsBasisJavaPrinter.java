@@ -28,15 +28,14 @@ public class ExpressionsBasisJavaPrinter extends ExpressionsBasisPrettyPrinter {
 
     Optional<VariableSymbol> symbol = ((IMontiArcScope) node.getEnclosingScope()).resolveVariableMany(node.getName()).stream().findAny();
     Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveTypeMany(node.getName()).stream().findAny();
-    if (symbol.isPresent() && MontiArcMill.typeDispatcher().isField(symbol.get()) && ((FieldSymbol) symbol.get()).isIsStatic()) {
+    if (symbol.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsField(symbol.get()) && ((FieldSymbol) symbol.get()).isIsStatic()) {
       getPrinter().print(symbol.get().getFullName());
-    } else if (type.isPresent() && MontiArcMill.typeDispatcher().isOOType(type.get())) {
+    } else if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
       getPrinter().print(type.get().getFullName());
     } else {
       getPrinter().print(node.getName() + " ");
     }
-
-
+    
     if (this.isPrintComments()) {
       CommentPrettyPrinter.printPostComments(node, getPrinter());
     }

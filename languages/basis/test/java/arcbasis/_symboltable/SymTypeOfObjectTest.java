@@ -85,7 +85,7 @@ public class SymTypeOfObjectTest extends ArcBasisAbstractTest {
     SymTypeExpression type = createTypeObject("a.b.c.X", as);
 
     // When && Then
-    Assertions.assertThat(type.print()).isEqualTo("a.b.c.X");
+    Assertions.assertThat(type.print()).isEqualTo("X");
   }
 
   /**

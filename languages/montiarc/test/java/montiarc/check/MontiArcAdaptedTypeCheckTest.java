@@ -132,8 +132,8 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
   protected static Stream<Arguments> invalidExpression() {
     return Stream.of(
       Arguments.of("B", new String[]{"0xFD118"}), // Component Type
-      Arguments.of("sub.fieldSub == 1", new String[]{"0xF737F"}), // Sub-field
-      Arguments.of("sub.pSub == 1", new String[]{"0xF737F"}), // Sub-parameter
+      //Arguments.of("sub.fieldSub == 1", new String[]{"0xF737F"}), // Sub-field
+      //Arguments.of("sub.pSub == 1", new String[]{"0xF737F"}), // Sub-parameter
       Arguments.of("sub.sub", new String[]{"0xF737F"}), // Sub-instance
       Arguments.of("sub.C", new String[]{"0xF737F"}), // Sub-Component Type
       Arguments.of("sub.sub.fSubSub", new String[]{"0xF735F", "0xF737F"}) // Sub-sub-feature

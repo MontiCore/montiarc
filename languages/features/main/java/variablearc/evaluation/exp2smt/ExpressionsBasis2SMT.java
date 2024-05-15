@@ -67,9 +67,9 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
     if (sort.isPresent()) {
       SymTypeExpression type = this.tc.typeOf(node);
       // Handle enum constants
-      if (type.isObjectType() && type.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOType(
-        type.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOType(type.asObjectType().getTypeInfo()).isIsEnum()) {
-        IOOSymbolsScope ooScope = VariableArcMill.typeDispatcher().asOOType(type.asObjectType().getTypeInfo()).getSpannedScope();
+      if (type.isObjectType() && type.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOSymbolsOOType(
+        type.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOSymbolsOOType(type.asObjectType().getTypeInfo()).isIsEnum()) {
+        IOOSymbolsScope ooScope = VariableArcMill.typeDispatcher().asOOSymbolsOOType(type.asObjectType().getTypeInfo()).getSpannedScope();
         Optional<FieldSymbol> field = ooScope.resolveFieldMany(node.getName()).stream().findFirst();
         if (field.isPresent() && field.get().isIsPublic() && field.get().isIsStatic() && field.get().isIsFinal() && field.get().isIsReadOnly()) {
           this.getResult().setValue(this.getContext().mkInt(ooScope.getLocalFieldSymbols().indexOf(field.get())));

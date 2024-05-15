@@ -4,8 +4,6 @@ package variablearc._cocos;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
-import montiarc.util.NameCapitalizationHelper;
-import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeature;
 

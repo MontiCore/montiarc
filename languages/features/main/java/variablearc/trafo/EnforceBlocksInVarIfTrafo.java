@@ -41,12 +41,12 @@ public class EnforceBlocksInVarIfTrafo implements VariableArcVisitor2 {
   public void visit(@NotNull ASTArcVarIf varIf) {
     Preconditions.checkNotNull(varIf);
 
-    if (!(VariableArcMill.typeDispatcher().isASTComponentBody(varIf.getThen()))) {
+    if (!(VariableArcMill.typeDispatcher().isArcBasisASTComponentBody(varIf.getThen()))) {
       ASTArcElement wrappedThen = wrapInBlock(varIf.getThen());
       varIf.setThen(wrappedThen);
     }
 
-    if (varIf.isPresentOtherwise() && !(VariableArcMill.typeDispatcher().isASTComponentBody(varIf.getOtherwise()))) {
+    if (varIf.isPresentOtherwise() && !(VariableArcMill.typeDispatcher().isArcBasisASTComponentBody(varIf.getOtherwise()))) {
       ASTArcElement wrappedOtherwise = wrapInBlock(varIf.getOtherwise());
       varIf.setOtherwise(wrappedOtherwise);
     }

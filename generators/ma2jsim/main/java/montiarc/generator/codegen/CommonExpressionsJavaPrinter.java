@@ -62,7 +62,7 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
     }
 
     Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(MontiArcMill.prettyPrint(node.getExpression(), false));
-    if (type.isPresent() && MontiArcMill.typeDispatcher().isOOType(type.get())) {
+    if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
       getPrinter().print(type.get().getFullName());
     } else {
       node.getExpression().accept(getTraverser());

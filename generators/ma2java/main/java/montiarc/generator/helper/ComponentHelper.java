@@ -135,8 +135,8 @@ public class ComponentHelper {
 
 
     //can only print default parameters if ASTNode exists.
-    if(comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isASTComponentType(comp.getAstNode())){
-      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asASTComponentType(comp.getAstNode());
+    if(comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTComponentType(comp.getAstNode())){
+      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTComponentType(comp.getAstNode());
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -196,10 +196,10 @@ public class ComponentHelper {
    * Helper function used to determine package names.
    */
   public static String printPackageWithoutKeyWordAndSemicolon(final ComponentSymbol comp) {
-    if (MontiArcMill.typeDispatcher().isComponentType(comp) && ArcBasisMill.typeDispatcher().asComponentType(comp).isInnerComponent()) {
+    if (MontiArcMill.typeDispatcher().isArcBasisComponentType(comp) && ArcBasisMill.typeDispatcher().asArcBasisComponentType(comp).isInnerComponent()) {
       //TODO add check for outermost component being TOP-Class or remove this function?
-      String outerPackage = printPackageWithoutKeyWordAndSemicolon(ArcBasisMill.typeDispatcher().asComponentType(comp).getOuterComponent().get());
-      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + ArcBasisMill.typeDispatcher().asComponentType(comp).getOuterComponent().get().getName();
+      String outerPackage = printPackageWithoutKeyWordAndSemicolon(ArcBasisMill.typeDispatcher().asArcBasisComponentType(comp).getOuterComponent().get());
+      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + ArcBasisMill.typeDispatcher().asArcBasisComponentType(comp).getOuterComponent().get().getName();
     } else {
       return comp.getPackageName();
     }

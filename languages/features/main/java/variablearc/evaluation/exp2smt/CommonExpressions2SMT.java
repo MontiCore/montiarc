@@ -91,9 +91,9 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     getResult().clear();
 
     IVariableArcScope scope = (IVariableArcScope) node.getEnclosingScope();
-    if (CommonExpressionsMill.typeDispatcher().isASTNameExpression(node.getExpression())) {
+    if (CommonExpressionsMill.typeDispatcher().isExpressionsBasisASTNameExpression(node.getExpression())) {
       // Handle only features of subcomponent of form x.f
-      String name = CommonExpressionsMill.typeDispatcher().asASTNameExpression(node.getExpression()).getName();
+      String name = CommonExpressionsMill.typeDispatcher().asExpressionsBasisASTNameExpression(node.getExpression()).getName();
       Optional<SubcomponentSymbol> instanceSymbol =
         scope.resolveSubcomponentMany(name).stream().findFirst();
       if (instanceSymbol.isPresent() && instanceSymbol.get().isTypePresent() &&
@@ -133,11 +133,11 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   }
 
   protected Optional<String> getExprAsQName(ASTExpression expr) {
-    if (CommonExpressionsMill.typeDispatcher().isASTNameExpression(expr)) {
-      ASTNameExpression nameExpr = CommonExpressionsMill.typeDispatcher().asASTNameExpression(expr);
+    if (CommonExpressionsMill.typeDispatcher().isExpressionsBasisASTNameExpression(expr)) {
+      ASTNameExpression nameExpr = CommonExpressionsMill.typeDispatcher().asExpressionsBasisASTNameExpression(expr);
       return Optional.of(nameExpr.getName());
-    } else if (CommonExpressionsMill.typeDispatcher().isASTFieldAccessExpression(expr)) {
-      ASTFieldAccessExpression fieldAccessExpression = CommonExpressionsMill.typeDispatcher().asASTFieldAccessExpression(expr);
+    } else if (CommonExpressionsMill.typeDispatcher().isCommonExpressionsASTFieldAccessExpression(expr)) {
+      ASTFieldAccessExpression fieldAccessExpression = CommonExpressionsMill.typeDispatcher().asCommonExpressionsASTFieldAccessExpression(expr);
       return getExprAsQName(fieldAccessExpression.getExpression())
         .map(qualifier ->
           Names.getQualifiedName(qualifier, fieldAccessExpression.getName())

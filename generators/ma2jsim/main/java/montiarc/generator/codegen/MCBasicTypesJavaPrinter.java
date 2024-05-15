@@ -21,7 +21,7 @@ public class MCBasicTypesJavaPrinter extends MCBasicTypesPrettyPrinter {
   public void handle(ASTMCQualifiedName node) {
     if (!node.isQualified()) {
       Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(node.getBaseName());
-      if (type.isPresent() && MontiArcMill.typeDispatcher().isOOType(type.get())) {
+      if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
         getPrinter().print(type.get().getFullName() + " ");
         return;
       }

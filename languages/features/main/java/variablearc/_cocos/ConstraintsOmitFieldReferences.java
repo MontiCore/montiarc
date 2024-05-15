@@ -9,11 +9,10 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import variablearc.VariableArcMill;
-import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._cocos.util.FieldReferenceExtractor4ExpressionBasis;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor.FieldReference;
-import variablearc._util.VariableArcTypeDispatcher;
+import variablearc._util.IVariableArcTypeDispatcher;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,11 +37,11 @@ public class ConstraintsOmitFieldReferences implements ArcBasisASTComponentTypeC
     ComponentTypeSymbol comp = astComp.getSymbol();
 
     HashSet<FieldReference> portReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
-    VariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();
+    IVariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();
 
     astComp.getBody().getArcElementList().stream()
-      .filter(typeDispatcher::isASTArcConstraintDeclaration)
-      .map(typeDispatcher::asASTArcConstraintDeclaration)
+      .filter(typeDispatcher::isVariableArcASTArcConstraintDeclaration)
+      .map(typeDispatcher::asVariableArcASTArcConstraintDeclaration)
       .forEach((constraint) -> {
         Preconditions.checkNotNull(constraint);
         HashMap<FieldReference, SourcePosition> foundPortReferences =

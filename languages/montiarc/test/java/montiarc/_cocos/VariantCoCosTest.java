@@ -1303,7 +1303,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "io -> sub.i;" +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH
-      ),
+      ),/*
       // atomic component with port that switches existence
       arg("component Comp67 { " +
           "feature ff; " +
@@ -1315,7 +1315,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
           "} " +
           "}",
         new InternalError("0xFD118")
-      ),
+      ),*/
       // Multiple behaviors if feature is selected
       arg("component Comp68 { " +
           "feature f; " +

@@ -374,8 +374,8 @@ public class Helper {
   }
 
   public ASTExpression getInitialForVariable(VariableSymbol variableSymbol) {
-    if (variableSymbol.isPresentAstNode() && MontiArcMill.typeDispatcher().isASTArcField(variableSymbol.getAstNode()))
-      return MontiArcMill.typeDispatcher().asASTArcField(variableSymbol.getAstNode()).getInitial();
+    if (variableSymbol.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTArcField(variableSymbol.getAstNode()))
+      return MontiArcMill.typeDispatcher().asArcBasisASTArcField(variableSymbol.getAstNode()).getInitial();
     return MontiArcMill.literalExpressionBuilder().setLiteral(MontiArcMill.nullLiteralBuilder().build()).build();
   }
 
@@ -438,7 +438,7 @@ public class Helper {
   }
 
   public List<ASTConnector> getVariationPointConnectors(@NotNull VariableArcVariationPoint vp) {
-    return vp.getArcElements().stream().filter(e -> MontiArcMill.typeDispatcher().isASTConnector(e)).map(e -> MontiArcMill.typeDispatcher().asASTConnector(e)).collect(Collectors.toList());
+    return vp.getArcElements().stream().filter(e -> MontiArcMill.typeDispatcher().isArcBasisASTConnector(e)).map(e -> MontiArcMill.typeDispatcher().asArcBasisASTConnector(e)).collect(Collectors.toList());
   }
 
   public List<VariableArcVariantComponentTypeSymbol> getVariants(@NotNull ASTComponentType ast) {
@@ -488,11 +488,11 @@ public class Helper {
 
   public List<ASTSCStateElement> returnSubstates(ASTSCState State){
     SCBasisMill.init();
-    if(SCBasisMill.typeDispatcher().isASTSCEmptyBody(((ASTSCState)State).getSCSBody()))
+    if(SCBasisMill.typeDispatcher().isSCBasisASTSCEmptyBody(((ASTSCState)State).getSCSBody()))
       return new ArrayList<ASTSCStateElement>();
     List<ASTSCStateElement> list = new ArrayList<>();
     for(ASTSCStateElement s: (((ASTSCHierarchyBody)((ASTSCState)State).getSCSBody()).getSCStateElementList())){
-      if(SCBasisMill.typeDispatcher().isASTSCState(s))
+      if(SCBasisMill.typeDispatcher().isSCBasisASTSCState(s))
         list.add(s);
     }
     Collections.reverse(list);
