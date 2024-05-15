@@ -1,10 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.build.BuildConstants
 
-// We declare the project version here in order to be able to sync it among all composite build parts.
-val commonVersion = "7.6.0-SNAPSHOT"
-
-version = commonVersion
+// We declare the project version here to synchronise it with all composite builds.
+version = BuildConstants.VERSION
 
 subprojects {
-  version = commonVersion
+  version = BuildConstants.VERSION
 }

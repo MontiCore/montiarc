@@ -1,4 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.build.BuildConstants
 import montiarc.gradle.montiarc.cd2pojo4MaDeclarationConfigName
 import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
 
@@ -12,7 +13,7 @@ plugins {
 }
 
 group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"
-version = "7.6.0-SNAPSHOT"
+version = BuildConstants.VERSION
 
 montiarc {
   internalMontiArcTesting.set(true)
