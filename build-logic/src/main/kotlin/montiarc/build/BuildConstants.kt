@@ -2,5 +2,5 @@
 package montiarc.build
 
 object BuildConstants {
-  const val VERSION = "7.6.0"
+  const val VERSION = "7.7.0-SNAPSHOT"
 }
