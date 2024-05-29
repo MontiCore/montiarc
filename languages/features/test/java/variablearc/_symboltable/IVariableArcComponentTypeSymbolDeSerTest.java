@@ -31,7 +31,7 @@ public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcAbstrac
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"features\":[{\"kind\":\"variablearc._symboltable.ArcFeatureSymbol\",\"name\":\"f1\"}]" +
+      "\"features\":[{\"kind\":\"variablearc._symboltable.ArcFeatureSymbol\",\"name\":\"f1\",\"fullName\":\"Comp.f1\"}]" +
       "}";
 
   protected static final String JSON_WITH_CONSTRAINTS =

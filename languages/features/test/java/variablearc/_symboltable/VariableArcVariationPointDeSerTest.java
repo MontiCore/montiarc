@@ -26,7 +26,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest 
   protected static final String JSON_VARIATION_POINT_WITH_SYMBOL = "{" +
     "\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\"," +
     "\"expression\":\"f1\"," +
-    "\"symbols\":[{\"kind\":\"arcbasis._symboltable.ArcPortSymbol\",\"name\":\"p1\",\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"},\"outgoing\":true,\"timing\":\"untimed\"}]" +
+    "\"symbols\":[{\"kind\":\"arcbasis._symboltable.ArcPortSymbol\",\"name\":\"p1\",\"fullName\":\"p1\",\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"},\"outgoing\":true,\"timing\":\"untimed\"}]" +
     "}";
 
   @Test

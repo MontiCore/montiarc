@@ -38,10 +38,12 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
       "\"name\":\"Comp\"," +
       "\"typeParameters\":[{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol\"," +
-      "\"name\":\"A\"" +
+      "\"name\":\"A\"," +
+      "\"fullName\":\"Comp.A\"" +
       "},{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol\"," +
-      "\"name\":\"B\"" +
+      "\"name\":\"B\"," +
+      "\"fullName\":\"Comp.B\"" +
       "}]" +
       "}";
 
@@ -52,10 +54,12 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
       "\"parameters\":[{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\"," +
       "\"name\":\"a\"," +
+      "\"fullName\":\"Comp.a\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}" +
       "},{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\"," +
       "\"name\":\"b\"," +
+      "\"fullName\":\"Comp.b\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}" +
       "}]" +
       "}";
@@ -67,12 +71,14 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
       "\"ports\":[{" +
       "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
       "\"name\":\"inc\"," +
+      "\"fullName\":\"Comp.inc\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"incoming\":true," +
       "\"timing\":\"untimed\"" +
       "},{" +
       "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
       "\"name\":\"outg\"," +
+      "\"fullName\":\"Comp.outg\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"outgoing\":true," +
       "\"timing\":\"untimed\"" +
@@ -83,7 +89,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Parent\"," +
-      "\"subcomponents\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"type\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Comp\"}}]" +
+      "\"subcomponents\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"fullName\":\"Parent.inst\",\"type\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Comp\"}}]" +
       "}";
 
   private static final String JSON_WITH_INNER =
@@ -97,7 +103,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"fields\":[{\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\",\"name\":\"inst\",\"type\":null}]" +
+      "\"fields\":[{\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\",\"type\":null}]" +
       "}";
 
   @Test
