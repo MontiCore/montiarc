@@ -7,6 +7,7 @@ public java.util.List${"<"}montiarc.rte.port.ITimeAwareInPort${"<?>>"} getAllInP
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 final java.util.ArrayList${"<"}montiarc.rte.port.ITimeAwareInPort${"<?>>"} __allInPortList__ = new java.util.ArrayList<>();
+  __allInPortList__.add(getTickPort());
 <#list ast.getSymbol().getAllIncomingPorts() as portSym>
   <#assign existenceConditions = helper.getExistenceCondition(ast, portSym)/>
   <#if existenceConditions?has_content>if(${prettyPrinter.prettyprint(existenceConditions)}) {</#if>

@@ -2,25 +2,35 @@
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 
+<#assign modeAutomatonOpt = helper.getModeAutomaton(ast)/>
+
 @Override
-public void handleMessage(montiarc.rte.port.IInPort<?> receivingPort) {
-  ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
+public void handleMessage(montiarc.rte.port.IInPort<?> p) {
+  <#if modeAutomatonOpt.isPresent() && helper.isEventBased(modeAutomatonOpt.get())>
+  <#list ast.getSymbol().getAllIncomingPorts() as inPort>
+  <#assign portName>${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
+    if (p == ${portName}) {
+      getModeAutomaton().${prefixes.message()}${inPort.getName()}();
+    }
+  </#list>
+  </#if>
+
+  if (!isAtomic) {
+    ((montiarc.rte.port.TimeAwarePortForComposition) p).forward();
+  } else if (<@MethodNames.getBehavior/>() == null) {
+    p.pollBuffer();
+  }
 
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-    <#assign existenceConditions = helper.getExistenceCondition(ast, inPort)/>
-
-    if(<#if existenceConditions?has_content>${prettyPrinter.prettyprint(existenceConditions)} &&</#if> receivingPort.getQualifiedName().equals(${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}().getQualifiedName())) {
-      <@MethodNames.handleBufferImplementation inPort/>${helper.portVariantSuffix(ast, inPort)}();
-    } <#sep> else </#sep>
+    <#assign portName>${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
+    else if (p == ${portName}) {
+      if (isAtomic) {
+        if (<@MethodNames.getBehavior/>() != null) {
+          ((${ast.getName()}${suffixes.events()}) <@MethodNames.getBehavior/>()).${prefixes.message()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}();
+        } else { ${portName}.pollBuffer(); } <#-- TODO: move pollBuffer logic out of behavior and into scheduler? -->
+      } else {
+        ((montiarc.rte.port.TimeAwarePortForComposition<?>) ${portName}()).forward();
+      }
+    }
   </#list>
-
-  // For output ports of compositions: forward the message
-  if (!isAtomic) {
-    <#list ast.getSymbol().getAllOutgoingPorts() as outPort>
-    <#assign existenceConditions = helper.getExistenceCondition(ast, outPort)/>
-      if(<#if existenceConditions?has_content>${prettyPrinter.prettyprint(existenceConditions)} &&</#if> receivingPort.getQualifiedName().equals(${prefixes.port()}${outPort.getName()}${helper.portVariantSuffix(ast, outPort)}().getQualifiedName())) {
-        ((montiarc.rte.port.TimeAwarePortForComposition) ${prefixes.port()}${outPort.getName()}${helper.portVariantSuffix(ast, outPort)}()).forward();
-      } <#sep> else </#sep>
-    </#list>
-  }
 }

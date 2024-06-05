@@ -27,4 +27,9 @@ abstract class AbstractBasePort<T> implements IPort, MessageFilteringStrategy<T>
     this.qualifiedName = qualifiedName;
     this.owner = owner;
   }
+
+  @Override
+  public IComponent getOwner() {
+    return this.owner;
+  }
 }

@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -67,7 +66,7 @@ public class ParallelCompositionTest {
     Preconditions.checkNotNull(expected_o2);
 
     // Given
-    ParallelCompositionComp sut = new ParallelCompositionCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    ParallelCompositionComp sut = new ParallelCompositionCompBuilder().setName("sut").build();
 
     sut.port_o1().connect(this.port_o1);
     sut.port_o2().connect(this.port_o2);
@@ -86,6 +85,8 @@ public class ParallelCompositionTest {
     for (Message<OnOff> msg : input_i2) {
       sut.port_i2().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual_o1.getAllValues()).containsExactlyElementsOf(expected_o1);

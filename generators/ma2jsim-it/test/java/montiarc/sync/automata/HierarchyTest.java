@@ -4,7 +4,6 @@ package montiarc.sync.automata;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,7 +49,7 @@ class HierarchyTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    HierarchyComp sut = new HierarchyCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    HierarchyComp sut = new HierarchyCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -63,6 +62,8 @@ class HierarchyTest {
     for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

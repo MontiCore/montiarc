@@ -71,7 +71,7 @@ public class DeployTest {
 
     // When
     sut.init();
-    sut.scheduler.run(3);
+    sut.run(3);
 
     // Then
     Assertions.assertThat(this.actual1.getAllValues()).as("parallel.o1").containsExactlyElementsOf(expected1);

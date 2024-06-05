@@ -5,8 +5,8 @@
 <#assign hasModeAutomaton = modeAutomatonOpt.isPresent()/>
 
 @Override
-public void <@MethodNames.handleTick/>() {
-  if ((isAtomic && isSync) <#if modeAutomatonOpt.isPresent()>|| isModeAutomatonSync</#if>) {
+public void handleTick() {
+  if (isSync) {
     handleSyncedTickExecution();
   } else {
     handleEventTickExecution();

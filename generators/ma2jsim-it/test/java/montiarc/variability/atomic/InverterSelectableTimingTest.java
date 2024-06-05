@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -50,7 +49,7 @@ class InverterSelectableTimingTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    InverterSelectableTimingComp sut = new InverterSelectableTimingCompBuilder().setScheduler(new InstantSchedule()).set_feature_sync(sync).setName("sut").build();
+    InverterSelectableTimingComp sut = new InverterSelectableTimingCompBuilder().set_feature_sync(sync).setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -63,6 +62,8 @@ class InverterSelectableTimingTest {
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

@@ -1,7 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 
 <#-- ArcPortSymbol port -->
-<#macro handleBufferImplementation port>handleMessageOn${port.getName()?cap_first}</#macro>
+<#macro handleBufferImplementation port>handleMessage${port.getName()?cap_first}</#macro>
 
 <#macro portSetup>setupPorts</#macro>
 

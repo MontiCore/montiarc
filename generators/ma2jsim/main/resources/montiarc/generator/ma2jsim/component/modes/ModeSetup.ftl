@@ -44,4 +44,9 @@
       ((montiarc.rte.port.IOutPort) ${sourcePort}).connect((montiarc.rte.port.IInPort) ${targetPort});
     </#list>
   </#list>
+
+  <#-- also setup simulator-specific tick connectors -->
+  <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
+    ((montiarc.rte.port.IOutPort) this.getTickPort()).connect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
+  </#list>
 </#macro>

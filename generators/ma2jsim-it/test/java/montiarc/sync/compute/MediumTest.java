@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -49,7 +48,7 @@ class MediumTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    MediumComp sut = new MediumCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    MediumComp sut = new MediumCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -62,6 +61,8 @@ class MediumTest {
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

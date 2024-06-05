@@ -23,6 +23,6 @@ public class ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</
 
     DEPLOY_${comp.getName()}.init();
 
-    DEPLOY_${comp.getName()}.getScheduler().run();
+    DEPLOY_${comp.getName()}.run();
   }
 }

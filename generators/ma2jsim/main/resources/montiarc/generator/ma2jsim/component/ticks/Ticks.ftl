@@ -3,4 +3,4 @@
 
 ${tc.include("montiarc.generator.ma2jsim.component.ticks.GeneralMethods.ftl")}
 
-${tc.include("montiarc.generator.ma2jsim.component.ticks.ProcessTick.ftl")}
+${tc.include("montiarc.generator.ma2jsim.component.ticks.HandleTick.ftl")}

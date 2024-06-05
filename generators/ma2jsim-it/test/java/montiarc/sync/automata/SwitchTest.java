@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -52,7 +51,7 @@ class SwitchTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    SwitchComp sut = new SwitchCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    SwitchComp sut = new SwitchCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -66,6 +65,8 @@ class SwitchTest {
       sut.port_i1().receive(input_i1.get(i));
       sut.port_i2().receive(input_i2.get(i));
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

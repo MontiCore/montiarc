@@ -99,6 +99,7 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
           traverser.add4SCTransitions4Code((SCTransitions4CodeVisitor2) coco);
         }
       } catch (Exception ignored) {
+        Log.warn("Could not add " + c.getSimpleName() + " to traverser for " + variant.getName());
       }
     }
 

@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.automaton.State;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -15,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class SinkTest {
@@ -31,7 +31,7 @@ class SinkTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    SinkComp sut = new SinkCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    SinkComp sut = new SinkCompBuilder().setName("sut").build();
 
     List<State> actual = new ArrayList<>(expected.size());
 
@@ -41,12 +41,18 @@ class SinkTest {
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
       sut.port_i().receive(Tick.get());
+      sut.run(1);
 
       actual.add(((SinkAutomaton) sut.getBehavior()).getState());
     }
 
     // Then
-    Assertions.assertThat(actual).containsExactlyElementsOf(expected);
+    Assertions.assertThat(actual)
+      .withFailMessage("Should be [%s] but was [%s]",
+        expected.stream().map(State::name).collect(Collectors.joining(", ")),
+        actual.stream().map(State::name).collect(Collectors.joining(", "))
+      )
+    .containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> io() {

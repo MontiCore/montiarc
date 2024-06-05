@@ -3,7 +3,6 @@ package montiarc.scheduler;
 
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.TimeAwarePortForComposition;
-import montiarc.rte.scheduling.FifoSchedule;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -11,12 +10,14 @@ class TimeAwarePortForCompositionTest {
   @Test
   void testBuffer(){
     // Given
-    SchedulerComp comp = new SchedulerCompBuilder().setScheduler(new FifoSchedule()).setName("test").build();
-    TimeAwarePortForComposition<Integer> buffer = new TimeAwarePortForComposition<>("test", comp);
+    SchedulerComp comp = new SchedulerCompBuilder().setName("test").build();
+    TimeAwarePortForComposition<Integer> buffer = new TimeAwarePortForComposition<>("test", comp, comp.scheduler);
     // When
     for(int i = 0; i < 10; i ++){
       buffer.receive(new Message<>(i));
     }
+
+    comp.run();
 
     // Then
     Assertions.assertThat(buffer.pollBuffer().getData()).isEqualTo(0);

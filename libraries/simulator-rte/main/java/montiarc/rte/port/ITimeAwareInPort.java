@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Tick;
 
 import java.util.Objects;
@@ -24,10 +25,4 @@ public interface ITimeAwareInPort<T> extends IInPort<T> {
       this.pollBuffer();
     }
   }
-  
-  /**
-   * Continue consuming messages that may have been queued
-   * because a tick could not be dropped.
-   */
-  void continueAfterDroppedTick();
 }

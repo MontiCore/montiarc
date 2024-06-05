@@ -4,7 +4,6 @@ package montiarc.core;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Disabled;
@@ -51,7 +50,6 @@ class ParamBool5Test {
   void testCtorSetsField(boolean p) {
     // When
     ParamBool5Comp sut = new ParamBool5CompBuilder()
-      .setScheduler(new InstantSchedule())
       .set_param_p(p)
       .setName("sut").build();
 
@@ -73,7 +71,6 @@ class ParamBool5Test {
 
     // Given
     ParamBool5Comp sut = new ParamBool5CompBuilder()
-      .setScheduler(new InstantSchedule())
       .set_param_p(p)
       .setName("sut").build();
 
@@ -88,6 +85,8 @@ class ParamBool5Test {
     for (Message<Boolean> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

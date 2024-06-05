@@ -57,7 +57,7 @@ class FieldSourceTest {
 
     // When
     sut.init();
-    sut.getScheduler().run(3);
+    sut.run(3);
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

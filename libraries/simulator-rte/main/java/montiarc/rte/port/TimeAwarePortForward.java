@@ -5,9 +5,6 @@ import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
-
 /**
  * This class represents a port-forwarding connector in a MontiArc model (time-aware variant).
  * <br>
@@ -20,8 +17,6 @@ import java.util.Queue;
  */
 public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITimeAwareInPort<T> {
 
-  protected Queue<Message<T>> buffer = new ArrayDeque<>();
-  
   public TimeAwarePortForward(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
@@ -36,52 +31,12 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITim
   @Override
   public void receive(Message<? extends T> message) {
     if (message == Tick.get()) {
-      this.processReceivedTick();
+      this.sendTick();
     } else {
-      this.processReceivedData(message.getData());
+      this.send(message.getData());
     }
   }
-  
-  /**
-   * Process a received data message on this port.
-   * <br>
-   * Do not call this method to <i>send</i> messages to this port, use {@link #receive(Message)} instead:
-   * {@code receive(Message.of(data))}.
-   *
-   * @param data the received data
-   */
-  protected void processReceivedData(T data) {
-    Message<T> msgObject = Message.of(data);
-    if (messageIsValidOnPort(msgObject)) {
-      buffer.add(msgObject);
-      owner.handleMessage(this);
-    }
-  }
-  
-  /**
-   * Process a received tick message on this port.
-   * Do not call this method to <i>send</i> messages to this port, use {@link #receive(Message)} instead:
-   * {@code receive(Tick.get())}.
-   */
-  protected void processReceivedTick() {
-    if (messageIsValidOnPort(Tick.get())) {
-      buffer.add(Tick.get());
-      owner.handleMessage(this);
-    }
-  }
-  
-  /**
-   * Forward the next message from the buffer.
-   */
-  public void forward() {
-    this.send(buffer.poll());
-  }
-  
-  /**
-   * Since port forwards only act when {@link #forward} is called, this does nothing.
-   */
-  @Override
-  public void continueAfterDroppedTick() { }
+
   
   /**
    * Peek the next message in the buffer.
@@ -90,19 +45,19 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITim
    */
   @Override
   public Message<T> peekBuffer() {
-    return buffer.peek();
+    throw new UnsupportedOperationException("Forwarding port has no buffer");
   }
   
   /**
    * Port forwards' buffers should not be polled directly.
    * Therefore, this method throws an exception.
-   * Rather, {@link #forward()} should be used to process messages.
+   * Rather, {@link ()} should be used to process messages.
    *
    * @return null
    */
   @Override
   public Message<T> pollBuffer() {
-    throw new UnsupportedOperationException("Port forward buffer cannot be polled directly. Use 'forward' method.");
+    throw new UnsupportedOperationException("Forwarding port has no buffer");
   }
   
   /**
@@ -112,7 +67,7 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITim
    */
   @Override
   public boolean isBufferEmpty() {
-    return buffer.isEmpty();
+    throw new UnsupportedOperationException("Forwarding port has no buffer");
   }
   
   /**
@@ -122,16 +77,16 @@ public class TimeAwarePortForward<T> extends TimeAwareOutPort<T> implements ITim
    */
   @Override
   public boolean hasBufferedTick() {
-    return buffer.contains(Tick.get());
+    throw new UnsupportedOperationException("Forwarding port has no buffer");
   }
 
   @Override
   public Message<T> peekLastBuffer() {
-    return null;
+    throw new UnsupportedOperationException("Forwarding port has no buffer");
   }
 
   @Override
   public Message<T> pollLastBuffer() {
-    return null;
+    throw new UnsupportedOperationException("Forwarding port has no buffer");
   }
 }

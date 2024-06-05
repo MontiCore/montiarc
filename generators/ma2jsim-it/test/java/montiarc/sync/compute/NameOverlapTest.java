@@ -54,7 +54,7 @@ class NameOverlapTest {
 
     // When
     sut.init();
-    sut.getScheduler().run((int) expected.stream().filter(msg -> !msg.equals(Tick.get())).count());
+    sut.run((int) expected.stream().filter(msg -> !msg.equals(Tick.get())).count());
 
     // Then
     Assertions.assertThat(this.actual0.getAllValues()).containsExactlyElementsOf(expected);
@@ -103,7 +103,7 @@ class NameOverlapTest {
 
     // When
     sut.init();
-    sut.getScheduler().run((int) expected.stream().filter(msg -> !msg.equals(Tick.get())).count());
+    sut.run((int) expected.stream().filter(msg -> !msg.equals(Tick.get())).count());
 
     // Then
     Assertions.assertThat(this.actual1.getAllValues()).containsExactlyElementsOf(expected);

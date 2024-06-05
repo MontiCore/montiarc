@@ -10,6 +10,7 @@
   @Override
   public void <@MethodNames.modeTeardown mode.getSymbol()/>() {
     <@teardownConnectors mode/>
+    <@unregisterSubsFromSchedulers mode/>
     <@teardownSubs mode/>
   }
 </#list>
@@ -25,6 +26,11 @@
       ((montiarc.rte.port.IOutPort) ${sourcePort}).disconnect((montiarc.rte.port.IInPort) ${targetPort});
     </#list>
   </#list>
+
+  <#-- also teardown simulator-specific tick connectors -->
+  <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
+    ((montiarc.rte.port.IOutPort) this.getTickPort()).disconnect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
+  </#list>
 </#macro>
 
 <#-- ASTArcMode mode -->
@@ -35,5 +41,11 @@
     <#assign subSymbol = sub.getSymbol()>
   <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
     ${subCompName} = null;
+  </#list>
+</#macro>
+
+<#macro unregisterSubsFromSchedulers mode>
+  <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
+    ${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().unregisterFromScheduler();
   </#list>
 </#macro>

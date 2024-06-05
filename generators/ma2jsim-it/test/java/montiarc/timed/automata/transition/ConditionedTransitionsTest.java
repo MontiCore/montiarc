@@ -4,7 +4,6 @@ package montiarc.timed.automata.transition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.NumberSign;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -48,7 +47,7 @@ class ConditionedTransitionsTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    ConditionedTransitionsComp sut = new ConditionedTransitionsCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    ConditionedTransitionsComp sut = new ConditionedTransitionsCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -61,6 +60,8 @@ class ConditionedTransitionsTest {
     for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

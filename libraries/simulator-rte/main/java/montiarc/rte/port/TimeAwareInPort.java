@@ -20,18 +20,6 @@ public class TimeAwareInPort<T> extends AbstractInPort<T> implements ITimeAwareI
   public TimeAwareInPort(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
-  
-  /**
-   * Continue consuming messages that may have been queued
-   * because a tick could not be dropped.
-   */
-  @Override
-  public void continueAfterDroppedTick() {
-    Iterator<Message<T>> iterator = buffer.iterator();
-    while(iterator.hasNext() && !Objects.equals(iterator.next(), Tick.get())) {
-      handleBuffer();
-    }
-  }
 
   @Override
   public Message<T> peekLastBuffer() {

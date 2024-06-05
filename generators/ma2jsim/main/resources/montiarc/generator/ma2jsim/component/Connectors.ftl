@@ -23,6 +23,10 @@ protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() 
         (${sourcePort}).connect(${targetPort});
     </#list>
 </#list>
+
+<#list variant.getSubcomponents() as subcomp>
+  ((montiarc.rte.port.IOutPort) this.getTickPort()).connect(${prefixes.subcomp()}${subcomp.getName()}${helper.subcomponentVariantSuffix(ast, subcomp)}().getTickPort());
+</#list>
 }
 </#if>
 </#list>

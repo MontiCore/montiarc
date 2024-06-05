@@ -4,7 +4,6 @@ package montiarc.timed.automata.transition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -57,7 +56,7 @@ class IgnoresInPortTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    IgnoresInPortComp sut = new IgnoresInPortCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    IgnoresInPortComp sut = new IgnoresInPortCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -69,6 +68,8 @@ class IgnoresInPortTest {
 
     input_i1.forEach(sut.port_i1()::receive);
     input_i2.forEach(sut.port_i2()::receive);
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

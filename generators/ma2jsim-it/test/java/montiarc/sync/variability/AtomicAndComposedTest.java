@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -51,7 +50,7 @@ class AtomicAndComposedTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    AtomicAndComposedComp sut = new AtomicAndComposedCompBuilder().setScheduler(new InstantSchedule()).setName("sut").set_feature_atomic(atomic).build();
+    AtomicAndComposedComp sut = new AtomicAndComposedCompBuilder().setName("sut").set_feature_atomic(atomic).build();
 
     sut.port_o().connect(this.port_o);
 
@@ -64,6 +63,8 @@ class AtomicAndComposedTest {
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

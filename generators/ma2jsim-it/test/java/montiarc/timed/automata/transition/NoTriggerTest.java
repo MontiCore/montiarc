@@ -4,7 +4,6 @@ package montiarc.timed.automata.transition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -46,7 +45,7 @@ class NoTriggerTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    NoTriggerComp sut = new NoTriggerCompBuilder().setScheduler(new InstantSchedule()).setName("sut").build();
+    NoTriggerComp sut = new NoTriggerCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -59,6 +58,8 @@ class NoTriggerTest {
     for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);

@@ -3,7 +3,6 @@ package montiarc.core;
 
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -55,7 +54,6 @@ class ParamsBool2Test {
   void testCtorSetsField(boolean p1, boolean p2) {
     // When
     ParamsBool2Comp sut = new ParamsBool2CompBuilder()
-      .setScheduler(new InstantSchedule())
       .set_param_p1(p1)
       .set_param_p2(p2)
       .setName("sut").build();

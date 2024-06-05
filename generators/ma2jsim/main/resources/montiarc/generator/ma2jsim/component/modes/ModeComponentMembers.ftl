@@ -6,8 +6,10 @@
 <#assign modeAutomatonClass>${ast.getName()}${suffixes.modeAutomaton()}</#assign>
 
 protected ${modeAutomatonClass} modeAutomaton;
-protected boolean isModeAutomatonSync;
 
 ${modeAutomatonClass} getModeAutomaton() {
   return this.modeAutomaton;
 }
+
+@Override
+public boolean hasModeAutomaton() { return true; }

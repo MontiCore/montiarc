@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.scheduling.InstantSchedule;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -49,7 +48,7 @@ class NameOverlapTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    NameOverlapComp sut = new NameOverlapCompBuilder().setScheduler(new InstantSchedule()).setName("sut").set_feature_onOff(true).build();
+    NameOverlapComp sut = new NameOverlapCompBuilder().setName("sut").set_feature_onOff(true).build();
 
     sut.port_o0().connect(this.port_o0);
 
@@ -62,6 +61,8 @@ class NameOverlapTest {
     for (Message<OnOff> msg : input) {
       sut.port_i0().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual0.getAllValues()).containsExactlyElementsOf(expected);
@@ -123,7 +124,7 @@ class NameOverlapTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    NameOverlapComp sut = new NameOverlapCompBuilder().setScheduler(new InstantSchedule()).setName("sut").set_feature_onOff(false).build();
+    NameOverlapComp sut = new NameOverlapCompBuilder().setName("sut").set_feature_onOff(false).build();
 
     sut.port_o1().connect(this.port_o1);
 
@@ -136,6 +137,8 @@ class NameOverlapTest {
     for (Message<Integer> msg : input) {
       sut.port_i1().receive(msg);
     }
+
+    sut.run();
 
     // Then
     Assertions.assertThat(this.actual1.getAllValues()).containsExactlyElementsOf(expected);

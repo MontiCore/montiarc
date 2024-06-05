@@ -5,12 +5,11 @@
 public void init() {
   if (this.isAtomic) {
       if (<@MethodNames.getBehavior/>() != null)
-        this.schedule(<@MethodNames.getBehavior/>()::init);
+        this.getBehavior().init();
   } else {
       this.getAllSubcomponents().forEach(montiarc.rte.component.ITimedComponent::init);
   }
   <#if helper.getModeAutomaton(ast).isPresent()>
       modeAutomaton.init();
   </#if>
-  if (this.getAllInPorts().isEmpty()) this.scheduleTick();
 }

@@ -3,7 +3,6 @@ package montiarc.timed.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.ITimeAwareInPort;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
@@ -20,6 +19,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.MsgFactory.msg;
+import static montiarc.MsgFactory.tk;
+import static montiarc.types.OnOff.OFF;
 
 @ExtendWith(MockitoExtension.class)
 public class DeployTest {
@@ -71,7 +74,7 @@ public class DeployTest {
 
     // When
     sut.init();
-    sut.scheduler.run(3);
+    sut.run(3);
 
     // Then
     Assertions.assertThat(this.actual1.getAllValues()).as("parallel.o1").containsExactlyElementsOf(expected1);
@@ -81,8 +84,8 @@ public class DeployTest {
   static Stream<Arguments> expected() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get())
+        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF)),
+        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk())
       ));
   }
 }

@@ -1,14 +1,18 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-protected montiarc.rte.scheduling.ISchedule scheduler;
+protected montiarc.rte.scheduling.TimeAwareScheduler scheduler;
 
-protected montiarc.rte.scheduling.ISchedule getScheduler() {
+protected montiarc.rte.scheduling.TimeAwareScheduler getScheduler() {
   return this.scheduler;
 }
 
-private void schedule(java.lang.Runnable action) {
-  getScheduler().registerComputation(new montiarc.rte.scheduling.Computation(this, action));
+public void run() {
+  this.scheduler.run(this);
 }
 
-private void scheduleTick() {
-  getScheduler().registerComputation(new montiarc.rte.scheduling.TickComputation(this));
+public void run(int ticks) {
+  this.scheduler.run(this, ticks);
+}
+
+public void unregisterFromScheduler() {
+  this.scheduler.unregister(this);
 }
