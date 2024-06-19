@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
@@ -9,11 +10,9 @@ public abstract class SyncAutomaton<Context> extends Automaton<Context> {
   protected Collection<Transition> transitions;
 
   public SyncAutomaton(Context context,
-                       Collection<State> states,
-                       Collection<Transition> transitions,
                        State initial) {
-    super(context, states, initial);
-    this.transitions = transitions;
+    super(context, initial);
+    transitions = new ArrayList<>();
   }
 
   /**

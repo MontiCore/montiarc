@@ -1,0 +1,81 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.rte.automaton;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class StateBuilder {
+
+  protected String name;
+  protected Action initAction;
+  protected Action entryAction;
+  protected Action exitAction;
+  protected List<State> substates = new ArrayList<>();
+  protected List<State> initialSubstates = new ArrayList<>();
+
+  public List<State> getInitialSubstates() {
+    return initialSubstates;
+  }
+
+  public StateBuilder setInitialSubstates(List<State> initialSubstates) {
+    this.initialSubstates = initialSubstates;
+    return this;
+  }
+
+  public List<State> getSubstates() {
+    return substates;
+  }
+
+  public StateBuilder setSubstates(List<State> substates) {
+    this.substates = substates;
+    return this;
+  }
+
+  public Action getExitAction() {
+    return exitAction;
+  }
+
+  public StateBuilder setExitAction(Action exitAction) {
+    this.exitAction = exitAction;
+    return this;
+  }
+
+  public Action getEntryAction() {
+    return entryAction;
+  }
+
+  public StateBuilder setEntryAction(Action entryAction) {
+    this.entryAction = entryAction;
+    return this;
+  }
+
+  public Action getInitAction() {
+    return initAction;
+  }
+
+  public StateBuilder setInitAction(Action entryAction) {
+    this.initAction = entryAction;
+    return this;
+  }
+
+  public String getName() {
+    return name;
+  }
+
+  public StateBuilder setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public boolean isValid() {
+    return this.getName() != null
+      && this.getSubstates() != null
+      && this.getInitialSubstates() != null;
+  }
+
+  public State build() {
+    if (!isValid()) throw new IllegalStateException();
+
+    return new State(this.getName(), this.getSubstates(), this.getInitialSubstates(), this.getInitAction(), this.getEntryAction(), this.getExitAction());
+  }
+}

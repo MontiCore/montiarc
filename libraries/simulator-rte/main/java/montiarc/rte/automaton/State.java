@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,77 +8,90 @@ import java.util.List;
  */
 public class State {
 
-  public State(String name) {
-    this.name = name;
-    this.subStates = new ArrayList<>();
-  }
+  protected String name;
+  protected List<State> substates;
+  protected List<State> initialSubstates;
+  protected Action initAction;
+  protected Action entryAction;
+  protected Action exitAction;
 
-  public State(String name, List<State> subStates, List<State> initialSubstates){
+  public State(String name, List<State> substates, List<State> initialSubstates, Action initAction, Action entryAction, Action exitAction) {
     this.name = name;
-    this.subStates = subStates;
-    if(initialSubstates.isEmpty()) {
-      this.initialSubstates = subStates;
-    }else {
+    this.substates = substates;
+    this.initAction = initAction;
+    this.entryAction = entryAction;
+    this.exitAction = exitAction;
+    if (initialSubstates.isEmpty()) {
+      this.initialSubstates = substates;
+    } else {
       this.initialSubstates = initialSubstates;
     }
   }
-
-  public State(String name, List<State> subStates){
-    this.name = name;
-    this.subStates = subStates;
-  }
-
-  String name;
-
-  List<State> subStates = new ArrayList<>();
-
-  List<State> initialSubstates = new ArrayList<>();
 
   public String name() {
     return this.name;
   }
 
-  public void enter() { }
-  public void enterWithSub(){
+  public void init() {
+    if (initAction != null) this.initAction.execute();
     enter();
-    if(!initialSubstates.isEmpty())
+  }
+
+  public void initWithSub() {
+    init();
+    if (!initialSubstates.isEmpty())
+      getInitialSubstate().initWithSub();
+  }
+
+  public void enter() {
+    if (this.entryAction != null) this.entryAction.execute();
+  }
+
+  public void enterWithSub() {
+    enter();
+    if (!initialSubstates.isEmpty())
       getInitialSubstate().enterWithSub();
   }
 
-  public void exit() { }
-
-  public void exitSub(){
-    if(!initialSubstates.isEmpty())
-      getInitialSubstate().enterWithSub();
-    this.exit();
+  public void exit() {
+    if (this.exitAction != null) this.exitAction.execute();
   }
 
-  public void doAction(){}
+  public void exitSub(State source) {
+    if (source == this || isSubstate(source)) {
+      if (source != this) getSubstates().forEach(s -> s.exitSub(source));
+      this.exit();
+    }
+  }
+
+  public void doAction() {
+  }
 
   @Override
   public boolean equals(Object obj) {
     return this == obj;
   }
 
-  public List<State> getSubStates(){
-    return subStates;
+  public List<State> getSubstates() {
+    return substates;
   }
 
   public List<State> getInitialSubstates() {
     return initialSubstates;
   }
+
   public State getInitialSubstate() {
-    if(initialSubstates.isEmpty())
+    if (initialSubstates.isEmpty())
       return this;
     return initialSubstates.get(0).getInitialSubstate();
   }
 
-  public boolean isSubState(State current){
-    if(this.getSubStates().contains(current)){
+  public boolean isSubstate(State current) {
+    if (this.getSubstates().contains(current)) {
       return true;
-    }else{
-      for(State s: subStates){
-        if (s.isSubState(current))
+    } else {
+      for (State s : substates) {
+        if (s.isSubstate(current))
           return true;
       }
     }

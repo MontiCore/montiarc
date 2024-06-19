@@ -2,7 +2,6 @@
 package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.automaton.State;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.types.OnOff;
@@ -14,7 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 class SinkTest {
@@ -26,14 +24,14 @@ class SinkTest {
   @ParameterizedTest
   @MethodSource("io")
   void testST(@NotNull List<Message<OnOff>> input,
-              @NotNull List<State> expected) {
+              @NotNull List<String> expected) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(expected);
 
     // Given
     SinkComp sut = new SinkCompBuilder().setName("sut").build();
 
-    List<State> actual = new ArrayList<>(expected.size());
+    List<String> actual = new ArrayList<>(expected.size());
 
     // When
     sut.init();
@@ -43,14 +41,14 @@ class SinkTest {
       sut.port_i().receive(Tick.get());
       sut.run(1);
 
-      actual.add(((SinkAutomaton) sut.getBehavior()).getState());
+      actual.add(((SinkAutomaton) sut.getBehavior()).getState().name());
     }
 
     // Then
     Assertions.assertThat(actual)
       .withFailMessage("Should be [%s] but was [%s]",
-        expected.stream().map(State::name).collect(Collectors.joining(", ")),
-        actual.stream().map(State::name).collect(Collectors.joining(", "))
+        String.join(", ", expected),
+        String.join(", ", actual)
       )
     .containsExactlyElementsOf(expected);
   }
@@ -60,37 +58,37 @@ class SinkTest {
       // 1
       Arguments.of(
         List.of(new Message<>(OnOff.ON)),
-        List.of(SinkStates.state_On)
+        List.of("On")
       ),
       // 2
       Arguments.of(
         List.of(new Message<>(OnOff.OFF)),
-        List.of(SinkStates.state_Off)
+        List.of("Off")
       ),
       // 3
       Arguments.of(
         List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
-        List.of(SinkStates.state_On, SinkStates.state_On)
+        List.of("On", "On")
       ),
       // 4
       Arguments.of(
         List.of(new Message<>(OnOff.ON), new Message<>(OnOff.OFF)),
-        List.of(SinkStates.state_On, SinkStates.state_Off)
+        List.of("On", "Off")
       ),
       // 5
       Arguments.of(
         List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.ON)),
-        List.of(SinkStates.state_Off, SinkStates.state_On)
+        List.of("Off", "On")
       ),
       // 6
       Arguments.of(
         List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.OFF)),
-        List.of(SinkStates.state_Off, SinkStates.state_Off)
+        List.of("Off", "Off")
       ),
       // 7
       Arguments.of(
         List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
-        List.of(SinkStates.state_On, SinkStates.state_On, SinkStates.state_On)
+        List.of("On", "On", "On")
       ));
   }
 }

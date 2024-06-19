@@ -17,12 +17,10 @@ import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.scbasis.SCBasisMill;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
-import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -241,16 +239,6 @@ public class Helper {
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst().orElse(Timing.DEFAULT);
-  }
-
-  public List<ASTMCBlockStatement> getAutomatonInitAction(ASTArcStatechart ast) {
-    return ast.streamInitialStates()
-      .filter(init -> init.getSCSAnte() instanceof ASTAnteAction)
-      .map(init -> (ASTAnteAction) init.getSCSAnte())
-      .filter(anteAction -> anteAction.sizeMCBlockStatements() > 0)
-      .findFirst()
-      .map(ASTAnteAction::getMCBlockStatementList)
-      .orElse(new ArrayList<>());
   }
 
   public Optional<ASTModeAutomaton> getModeAutomaton(ASTComponentType ast) {
@@ -486,21 +474,55 @@ public class Helper {
     return fields.size() <= 1 ? "" : Integer.toString(fields.indexOf(field));
   }
 
-  public List<ASTSCStateElement> returnSubstates(ASTSCState State){
-    SCBasisMill.init();
-    if(SCBasisMill.typeDispatcher().isSCBasisASTSCEmptyBody(((ASTSCState)State).getSCSBody()))
-      return new ArrayList<ASTSCStateElement>();
-    List<ASTSCStateElement> list = new ArrayList<>();
-    for(ASTSCStateElement s: (((ASTSCHierarchyBody)((ASTSCState)State).getSCSBody()).getSCStateElementList())){
-      if(SCBasisMill.typeDispatcher().isSCBasisASTSCState(s))
-        list.add(s);
+  public List<ASTSCState> getSubstates(ASTSCState state) {
+    if (MontiArcMill.typeDispatcher().isSCBasisASTSCEmptyBody(state.getSCSBody()))
+      return new ArrayList<>();
+
+    List<ASTSCState> list = new ArrayList<>();
+    for (ASTSCStateElement s : (((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList())) {
+      if (MontiArcMill.typeDispatcher().isSCBasisASTSCState(s))
+        list.add(MontiArcMill.typeDispatcher().asSCBasisASTSCState(s));
     }
-    Collections.reverse(list);
     return list;
   }
+
+  public List<ASTSCStateElement> getInitialSubstates(ASTSCState state) {
+    return getSubstates(state).stream().filter(s -> s.getSCModifier().isInitial()).collect(Collectors.toList());
+  }
+
   public List<ASTSCState> getStates(ASTComponentType component) {
     Preconditions.checkNotNull(component);
 
     return this.getAutomatonBehavior(component).get().getStates();
+  }
+
+  public Optional<ASTMCBlockStatement> getEntryAction(ASTSCState state) {
+    if (!MontiArcMill.typeDispatcher().isSCStateHierarchyASTSCHierarchyBody(state.getSCSBody()))
+      return Optional.empty();
+
+    for (ASTSCStateElement s : (MontiArcMill.typeDispatcher().asSCStateHierarchyASTSCHierarchyBody(state.getSCSBody()).getSCStateElementList())) {
+      if (MontiArcMill.typeDispatcher().isSCActionsASTSCEntryAction(s) && MontiArcMill.typeDispatcher().isSCTransitions4CodeASTTransitionAction(MontiArcMill.typeDispatcher().asSCActionsASTSCEntryAction(s).getSCABody()))
+        return Optional.of(MontiArcMill.typeDispatcher().asSCTransitions4CodeASTTransitionAction(MontiArcMill.typeDispatcher().asSCActionsASTSCEntryAction(s).getSCABody()).getMCBlockStatement());
+    }
+    return Optional.empty();
+  }
+
+  public Optional<ASTMCBlockStatement> getExitAction(ASTSCState state) {
+    if (!MontiArcMill.typeDispatcher().isSCStateHierarchyASTSCHierarchyBody(state.getSCSBody()))
+      return Optional.empty();
+
+    for (ASTSCStateElement s : (MontiArcMill.typeDispatcher().asSCStateHierarchyASTSCHierarchyBody(state.getSCSBody()).getSCStateElementList())) {
+      if (MontiArcMill.typeDispatcher().isSCActionsASTSCExitAction(s) && MontiArcMill.typeDispatcher().isSCTransitions4CodeASTTransitionAction(MontiArcMill.typeDispatcher().asSCActionsASTSCExitAction(s).getSCABody()))
+        return Optional.of(MontiArcMill.typeDispatcher().asSCTransitions4CodeASTTransitionAction(MontiArcMill.typeDispatcher().asSCActionsASTSCExitAction(s).getSCABody()).getMCBlockStatement());
+    }
+    return Optional.empty();
+  }
+
+  public List<ASTMCBlockStatement> getInitAction(ASTSCState state) {
+    if (!MontiArcMill.typeDispatcher().isSCTransitions4CodeASTAnteAction(state.getSCSAnte())
+      || MontiArcMill.typeDispatcher().asSCTransitions4CodeASTAnteAction(state.getSCSAnte()).isEmptyMCBlockStatements())
+      return Collections.emptyList();
+
+    return MontiArcMill.typeDispatcher().asSCTransitions4CodeASTAnteAction(state.getSCSAnte()).getMCBlockStatementList();
   }
 }

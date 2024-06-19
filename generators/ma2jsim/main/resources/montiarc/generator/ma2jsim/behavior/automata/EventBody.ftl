@@ -7,19 +7,34 @@ ${tc.signature("isTop", "automaton")}
 <#assign contextClass>${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/></#assign>
 <#assign contextObj>${ast.getName()?uncap_first}${suffixes.context()}</#assign>
 
-protected ${compAutomatonClass} (
-  ${contextClass} ${contextObj},
-  java.util.List${"<"}montiarc.rte.automaton.State${">"} states,
-  montiarc.rte.automaton.State initial) {
-    super(${contextObj}, states, initial);
-}
+protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states;
 
 <#-- Creating transition objects for tick-triggered transitions -->
 <#assign transitionsForTickEvent = helper.getTransitionsForTickEvent(automaton)/>
 <#list transitionsForTickEvent as transition>
-  protected montiarc.rte.automaton.Transition ${prefixes.transition()}tick_${transition?counter} =
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, []])};
+protected montiarc.rte.automaton.Transition ${prefixes.transition()}tick_${transition?counter};
 </#list>
+
+protected ${compAutomatonClass} (
+  ${contextClass} ${contextObj},
+  ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states,
+  montiarc.rte.automaton.State initial) {
+    super(${contextObj}, initial);
+    this.states = states;
+  <#-- Create transitions on tick events (if enabled). -->
+  <#list transitionsForTickEvent as transition>
+    ${prefixes.transition()}tick_${transition?counter} =
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, []])};
+  </#list>
+  <#-- Create transition objects for message-triggered transitions. -->
+  <#list helper.getTransitionsForPortEvents(automaton) as portName, transitions>
+    <#list transitions as transition>
+    <#-- Transition objects -->
+    ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter} =
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, [helper.getASTTransitionBody(transition).get().getSCEvent().getEventSymbol().getAdaptee()]])}; <#-- This long chain of calls assumes that this transition body has an event trigger and that it is an adapted port symbol - the helper method that created the map we're currently iterating over should assure that this is true -->
+    </#list>
+  </#list>
+}
 
 <#-- Generate method that executes tick-triggered transitions on tick events (if enabled). -->
 @Override
@@ -37,8 +52,7 @@ public void tick() {
 <#list helper.getTransitionsForPortEvents(automaton) as portName, transitions>
   <#list transitions as transition>
     <#-- Transition objects -->
-    protected montiarc.rte.automaton.Transition ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter} =
-    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, [helper.getASTTransitionBody(transition).get().getSCEvent().getEventSymbol().getAdaptee()]])}; <#-- This long chain of calls assumes that this transition body has an event trigger and that it is an adapted port symbol - the helper method that created the map we're currently iterating over should assure that this is true -->
+    protected montiarc.rte.automaton.Transition ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter};
   </#list>
 
   <#-- Methods for the triggering input port, to execute matching transitions. -->

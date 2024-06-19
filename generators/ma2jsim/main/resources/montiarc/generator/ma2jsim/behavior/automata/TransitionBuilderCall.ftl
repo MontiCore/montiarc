@@ -3,8 +3,8 @@
 ${tc.signature("automaton", "transition", "shadowedInPorts")}
 <#assign body = helper.getASTTransitionBody(transition)/>
 new montiarc.rte.automaton.TransitionBuilder()
-.setSource(${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${transition.getSourceName()})
-.setTarget(${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${transition.getTargetName()})
+.setSource(states.${prefixes.state()}${transition.getSourceName()})
+.setTarget(states.${prefixes.state()}${transition.getTargetName()})
 .setGuard(() ->
 <#if body.isPresent() && body.get().isPresentPre()>
     {
@@ -20,53 +20,61 @@ new montiarc.rte.automaton.TransitionBuilder()
 </#if>
 )
 .setAction(() -> {
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [shadowedInPorts, true])}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
-
-
-  <#assign commonSuperState = automaton.findCommonSuperstate(transition.getSourceNameDefinition(), transition.getTargetNameDefinition())!>
-    <#-- Common superstate exists-->
-    <#if commonSuperState != "">
-      <#list automaton.gettrimlist(transition.getSourceNameDefinition(), commonSuperState) as state >
-        <#if state?is_first>
-          ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.exitSub();
-        <#else>
-          ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.exit();
-        </#if>
-      </#list>
-        <#if body.isPresent() && body.get().isPresentTransitionAction()>
-          ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
-        </#if>
-          ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${commonSuperState.getName()}.doAction();
-      <#list automaton.gettrimlist(transition.getTargetNameDefinition(), commonSuperState) as state >
-        <#if state?is_last>
-          ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.enterWithSub();
-        <#else>
-          ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.enter();
-        </#if>
-      </#list>
-    <#else> <#-- No common superstate -->
-    <#list automaton.findPath(transition.getSourceNameDefinition())as state>
+  <#assign commonSuperstate = automaton.findCommonSuperstate(transition.getSourceNameDefinition(), transition.getTargetNameDefinition())!>
+  <#-- Common superstate exists-->
+  <#if commonSuperstate != "">
+    <#list automaton.gettrimlist(transition.getSourceNameDefinition(), commonSuperstate) as state >
       <#if state?is_first>
-        ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.exitSub();
+        states.${prefixes.state()}${state.getName()}.exitSub(state);
       <#else>
-        ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.exit();
+        states.${prefixes.state()}${state.getName()}.exit();
       </#if>
     </#list>
-      <#if body.isPresent() && body.get().isPresentTransitionAction()>
-        ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
+
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [shadowedInPorts, true])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
+    <#if body.isPresent() && body.get().isPresentTransitionAction()>
+      ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
+    </#if>
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
+
+    states.${prefixes.state()}${commonSuperstate.getName()}.doAction();
+    <#list automaton.gettrimlist(transition.getTargetNameDefinition(), commonSuperstate) as state >
+      <#if state?is_last>
+        states.${prefixes.state()}${state.getName()}.enterWithSub();
+      <#else>
+        states.${prefixes.state()}${state.getName()}.enter();
       </#if>
+    </#list>
+  <#else> <#-- No common superstate -->
+    <#list automaton.findPath(transition.getSourceNameDefinition()) as state>
+      <#if state?is_first>
+        states.${prefixes.state()}${state.getName()}.exitSub(state);
+      <#else>
+        states.${prefixes.state()}${state.getName()}.exit();
+      </#if>
+    </#list>
+
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [shadowedInPorts, true])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
+    <#if body.isPresent() && body.get().isPresentTransitionAction()>
+      ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
+    </#if>
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
+
     <#list automaton.findPath(transition.getTargetNameDefinition())?reverse as state>
       <#if state?is_last>
-        ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.enterWithSub();
+        states.${prefixes.state()}${state.getName()}.enterWithSub();
       <#else>
-        ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}.enter();
+        states.${prefixes.state()}${state.getName()}.enter();
       </#if>
     </#list>
-    </#if>
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
+  </#if>
 })
 .build()

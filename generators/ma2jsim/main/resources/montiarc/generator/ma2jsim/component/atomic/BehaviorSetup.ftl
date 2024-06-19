@@ -15,9 +15,6 @@
     this.isSync = ${(!isEvent)?c};
     <#if hasAutomaton>
       this.behavior = new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(variant)}${suffixes.builder()}<@Util.printTypeParameters ast false/>(this)
-        <#if !isEvent>
-          .addDefaultTransitions()
-        </#if>
       .addDefaultStates()
       .setDefaultInitial()
       .build();

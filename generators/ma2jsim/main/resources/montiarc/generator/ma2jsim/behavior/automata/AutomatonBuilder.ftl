@@ -14,49 +14,39 @@ ${tc.signature("isTop", "variant")}
 import montiarc.rte.automaton.Automaton;
 public ${MODIFIER} class ${CLASS}<@Util.printTypeParameters ast/> extends ${SUPER} {
 
-<#-- Constructors -->
-public ${CLASS}(${CONTEXT} context,
-    java.util.List${"<"}montiarc.rte.automaton.State${">"} states<#if !isEvent>,
-    java.util.List${"<"}montiarc.rte.automaton.Transition${">"} transitions
-  </#if>) {
-  super(context, states<#if !isEvent>, transitions</#if>);
-}
-
+<#-- Constructor -->
 public ${CLASS}(${CONTEXT} context) { super(context); }
 
-public ${CLASS}() { super(); }
+protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states;
 
 <#-- Methods -->
 @Override
 public ${SUPER} addDefaultStates() { <#-- TODO replace super with concrete type? -->
-  this.addStates(java.util.List.of(
-    <#list helper.streamToList(automaton.streamStates()) as state>${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${state.getName()}<#sep>, </#sep></#list>
-  ));
+  states = new ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}(context);
   return this;
 }
 
-<#if !isEvent>
-@Override
-public ${SUPER} addDefaultTransitions() {
-<#list helper.getTransitionsWithoutEvent(automaton) as transition>
-  this.addTransition(${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, ast.getSymbol().getAllIncomingPorts()])});
-</#list>
-  return this;
-}
-</#if>
 <#assign initSubstate= automaton.listInitialStates()>
 @Override
 public ${SUPER} setDefaultInitial() {
-  this.setInitial(${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}.${prefixes.state()}${automaton.listInitialStates()?first.getName()}.getInitialSubstate());
+  this.setInitial(states.${prefixes.state()}${automaton.listInitialStates()?first.getName()});
   return this;
 }
 
 <#if !isTop>
 public ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
-  java.util.List${"<"}montiarc.rte.automaton.State${">"} states,
-  <#if !isEvent>java.util.List${"<"}montiarc.rte.automaton.Transition${">"} transitions,</#if>
+  ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states,
   montiarc.rte.automaton.State initial) {
-    return new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}(context, states, <#if !isEvent>transitions, </#if>initial);
+    return new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}(context, states, initial);
 }
+<#else>
+public abstract ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
+  ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states,
+  montiarc.rte.automaton.State initial);
 </#if>
+
+public ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
+  montiarc.rte.automaton.State initial) {
+    return buildActual(context, states, initial);
+  }
 }
