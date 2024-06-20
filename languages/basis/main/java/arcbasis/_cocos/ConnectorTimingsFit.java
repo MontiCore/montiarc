@@ -22,7 +22,7 @@ public class ConnectorTimingsFit implements ArcBasisASTConnectorCoCo {
 
     for (ASTPortAccess target : node.getTargetList()) {
       if (target.isPresentPortSymbol() &&
-        !source.getPortSymbol().getTiming().matches(target.getPortSymbol().getTiming())) {
+        !source.getPortSymbol().getTiming().compatible(target.getPortSymbol().getTiming())) {
         Log.error(ArcError.CONNECTOR_TIMING_MISMATCH.format(
             target.getPortSymbol().getTiming().getName(),
             source.getPortSymbol().getTiming().getName()
