@@ -8,12 +8,7 @@
 
 <#-- SymTypeExpression type -->
 <#macro getTypeString type boxPrimitives=false>
-    <#if type.isPrimitive()><#t>
-        <#if boxPrimitives>${type.getBoxedPrimitiveName()}<#t>
-        <#else>${type.getPrimitiveName()}</#if><#t>
-    <#elseif type.isTypeVariable()>${type.print()}<#t>
-    <#else>${type.printFullName()}<#t>
-    </#if>
+  ${prettyPrinter.prettyprint(type, boxPrimitives)}
 </#macro>
 
 <#-- CompTypeExpression type -->
@@ -33,7 +28,7 @@
 
 <#macro printTypeParameters astComponentType printBounds=true>
     <#if helper.isGenericComponent(astComponentType)>
-        <#list astComponentType.getHead().getArcTypeParameterList()>
+        <#list astComponentType.getSymbol().getTypeParameters()>
             ${"<"}
             <#items as param><@printTypeParameter param printBounds/><#sep>, </#sep></#items>
             ${">"}
@@ -41,6 +36,7 @@
     </#if>
 </#macro>
 
+<#-- TypeVarSymbol arcTypeParameter -->
 <#macro printTypeParameter arcTypeParameter printBounds>
-${arcTypeParameter.getName()}<#if printBounds><#list arcTypeParameter.getUpperBoundList()> extends <#items as bound>${bound.printType()}<#sep> & </#sep></#items></#list></#if>
+${arcTypeParameter.getName()}<#if printBounds><#list arcTypeParameter.getSuperTypesList()> extends <#items as bound><@getTypeString bound true/><#sep> & </#sep></#items></#list></#if>
 </#macro>

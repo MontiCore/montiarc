@@ -5,6 +5,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
+import de.monticore.types.check.SymTypeExpression;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -49,6 +50,16 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.setMCBasicTypesHandler(mcBasicTypesJavaPrinter);
     this.traverser.getMCBasicTypesVisitorList().clear();
     this.traverser.add4MCBasicTypes(mcBasicTypesJavaPrinter);
+
+    MCSimpleGenericTypesJavaPrinter mcSimpleGenericTypesJavaPrinter = new MCSimpleGenericTypesJavaPrinter(printer, printComments);
+    this.traverser.setMCSimpleGenericTypesHandler(mcSimpleGenericTypesJavaPrinter);
+    this.traverser.getMCSimpleGenericTypesVisitorList().clear();
+    this.traverser.add4MCSimpleGenericTypes(mcSimpleGenericTypesJavaPrinter);
+
+    MCCollectionTypesJavaPrinter mcCollectionTypesJavaPrinter = new MCCollectionTypesJavaPrinter(printer, printComments);
+    this.traverser.setMCCollectionTypesHandler(mcCollectionTypesJavaPrinter);
+    this.traverser.getMCCollectionTypesVisitorList().clear();
+    this.traverser.add4MCCollectionTypes(mcCollectionTypesJavaPrinter);
 
     AssignmentExpressionsMA2JSimPrinter assignmentExpressionsPrinter =
       new AssignmentExpressionsMA2JSimPrinter(printer, printComments, currentVariant);
@@ -100,5 +111,30 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     }
 
     return this.prettyprint(expression.getAstExpression());
+  }
+
+  public String prettyprint(SymTypeExpression expression, boolean boxPrimitives) {
+    if (expression.isPrimitive()) {
+      if (boxPrimitives) {
+        return expression.asPrimitive().getBoxedPrimitiveName();
+      } else {
+        return expression.asPrimitive().getPrimitiveName();
+      }
+    }
+    if (expression.isTypeVariable()) {
+      return expression.print();
+    }
+    if (expression.isGenericType()) {
+      StringBuilder r = new StringBuilder(expression.asGenericType().getTypeConstructorFullName()).append('<');
+      for (int i = 0; i < expression.asGenericType().getArgumentList().size(); i++) {
+        r.append(prettyprint(expression.asGenericType().getArgument(i), boxPrimitives));
+        if (i < expression.asGenericType().getArgumentList().size() - 1) {
+          r.append(',');
+        }
+      }
+      return r.append('>').toString();
+    }
+
+    return expression.printFullName();
   }
 }

@@ -28,6 +28,10 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
+<#list ast.getSymbol().getFields() as field>
+  ${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)} = ${prettyPrinter.prettyprint(helper.getInitialForVariable(field))};
+</#list>
+
 <#list helper.getVariants(ast) as variant>
   if (${prettyPrinter.prettyprintCondition(variant)}) {
     this.isAtomic = ${(variant.isAtomic() && !helper.getModeAutomaton(ast).isPresent())?c};
