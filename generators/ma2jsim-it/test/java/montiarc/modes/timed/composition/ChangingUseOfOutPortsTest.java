@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.modes.timed;
+package montiarc.modes.timed.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
@@ -29,7 +29,8 @@ import static montiarc.types.OnOff.ON;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class SimpleTransitionTest {
+class ChangingUseOfOutPortsTest {
+
   /**
    * capture of the actual output stream on port o
    */
@@ -42,10 +43,6 @@ class SimpleTransitionTest {
   @Mock
   ITimeAwareInPort<OnOff> port_o;
 
-  /**
-   * @param input    the input stream on port i
-   * @param expected the expected output stream on port o
-   */
   @ParameterizedTest
   @MethodSource("io")
   void testIO(@NotNull List<Message<OnOff>> input,
@@ -54,7 +51,7 @@ class SimpleTransitionTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    SimpleTransitionComp sut = new SimpleTransitionCompBuilder().setName("sut").build();
+    ChangingUseOfOutPortsComp sut = new ChangingUseOfOutPortsCompBuilder().setName("sut").build();
 
     sut.port_o().connect(this.port_o);
 
@@ -64,9 +61,7 @@ class SimpleTransitionTest {
     // When
     sut.init();
 
-    for (Message<OnOff> msg : input) {
-      sut.port_i().receive(msg);
-    }
+    input.forEach(sut.port_i::receive);
 
     sut.run();
 
@@ -90,15 +85,15 @@ class SimpleTransitionTest {
       ),
       Arguments.of(
         List.of(msg(ON)),
-        List.of(msg(OFF))
+        List.of(msg(ON))
       ),
       Arguments.of(
         List.of(msg(ON), tk()),
-        List.of(msg(OFF), tk())
+        List.of(msg(ON), tk())
       ),
       Arguments.of(
-        List.of(msg(ON), tk(), msg(ON), msg(OFF)),
-        List.of(msg(OFF), tk(), msg(OFF), msg(OFF))
+        List.of(msg(ON), tk(), msg(OFF), tk(), msg(ON), msg(OFF)),
+        List.of(msg(ON), tk(),           tk(), msg(ON)          )
       )
     );
   }

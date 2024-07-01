@@ -13,6 +13,7 @@ import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
@@ -51,10 +52,12 @@ import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -286,6 +289,33 @@ public class Helper {
         this::getInstancesFromMode
       )
     );
+  }
+
+  public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ComponentTypeSymbol comp) {
+    Set<String> targets = comp.getAstNode().getConnectors().stream()
+      .map(ASTConnector::getTargetsNames)
+      .flatMap(Collection::stream)
+      .collect(Collectors.toSet());
+
+    return comp.getAllOutgoingPorts().stream()
+      .filter(p -> !targets.contains(p.getName()))
+      .collect(Collectors.toList());
+  }
+
+  public List<PortSymbol> getUnconnectedOutPortsIncludingMode(ComponentTypeSymbol comp, ASTArcMode mode) {
+    Set<String> classicalTargets = comp.getAstNode().getConnectors().stream()
+      .map(ASTConnector::getTargetsNames)
+      .flatMap(Collection::stream)
+      .collect(Collectors.toSet());
+
+    Set<String> modeConnectorTargets = mode.getBody().streamArcElementsOfType(ASTConnector.class)
+      .map(ASTConnector::getTargetsNames)
+      .flatMap(Collection::stream)
+      .collect(Collectors.toSet());
+
+    return comp.getAllOutgoingPorts().stream()
+      .filter(p -> !classicalTargets.contains(p.getName()) && !modeConnectorTargets.contains(p.getName()))
+      .collect(Collectors.toList());
   }
 
   public List<ASTConnector> getConnectors(ASTArcMode ast) {

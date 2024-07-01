@@ -11,6 +11,9 @@
   public void <@MethodNames.modeSetup mode.getSymbol()/>() {
     <@createSubs mode/>
     <@createConnectors mode/>
+
+    // Update other properties
+    <@updateUnconnectedOutputs mode ast/>
   }
 </#list>
 
@@ -49,4 +52,14 @@
   <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
     ((montiarc.rte.port.IOutPort) this.getTickPort()).connect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
   </#list>
+</#macro>
+
+<#-- ASTArcMode mode, ASTComponentType compAst -->
+<#macro updateUnconnectedOutputs mode compAst>
+  this.unconnectedOutputs = java.util.Set.of(
+    <#list helper.getUnconnectedOutPortsIncludingMode(compAst.getSymbol(), mode) as port>
+      ${prefixes.port()}${port.getName()}${helper.portVariantSuffix(compAst, port)}()
+    <#sep>,
+    </#list>
+  );
 </#macro>

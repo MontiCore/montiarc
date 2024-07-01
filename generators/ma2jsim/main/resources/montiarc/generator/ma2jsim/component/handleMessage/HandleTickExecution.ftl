@@ -30,6 +30,7 @@ protected void handleSyncedTickExecution() {
       }
       ((montiarc.rte.port.TimeAwarePortForComposition<?>) inP).forward();
     }
+    this.<@MethodNames.sendTickOnAllUnconnectedOutputs/>();
   }
 }
 
@@ -49,5 +50,6 @@ protected void handleEventTickExecution() {
     getAllInPorts().stream()
       .map(montiarc.rte.port.TimeAwarePortForComposition.class::cast)
       .forEach(montiarc.rte.port.TimeAwarePortForComposition::forward);
+    this.<@MethodNames.sendTickOnAllUnconnectedOutputs/>();
   }
 }

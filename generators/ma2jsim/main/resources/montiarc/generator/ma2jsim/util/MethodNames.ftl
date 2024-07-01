@@ -29,6 +29,10 @@
 
 <#macro modes>modes</#macro>
 
+<#macro setupUnconnectedOutPorts>setupUnusedOutPorts</#macro>
+
+<#macro sendTickOnAllUnconnectedOutputs>sendTickOnAllUnconnectedOutputs</#macro>
+
 <#macro handleModeAutomaton>handleModeAutomaton</#macro>
 
 <#macro getModeAutomaton>getModeAutomaton</#macro>

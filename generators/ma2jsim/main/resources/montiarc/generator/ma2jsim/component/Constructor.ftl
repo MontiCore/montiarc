@@ -42,6 +42,9 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
         <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}();
         <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}();
     </#if>
+    <#if !helper.getModeAutomaton(ast).isPresent()>
+      <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}();
+    </#if>
   }
   <#sep> else </#sep>
 </#list>

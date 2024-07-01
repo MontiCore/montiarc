@@ -17,3 +17,7 @@ protected void <@MethodNames.dropTickOnAll/>() {
 protected void <@MethodNames.sendTickOnAll/>() {
   this.getAllOutPorts().forEach(montiarc.rte.port.AbstractOutPort::sendTick);
 }
+
+protected void <@MethodNames.sendTickOnAllUnconnectedOutputs/>() {
+  this.unconnectedOutputs.forEach(montiarc.rte.port.IOutPort::sendTick);
+}

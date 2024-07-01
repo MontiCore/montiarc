@@ -7,4 +7,5 @@ ${tc.include("montiarc.generator.ma2jsim.component.ports.OutPortGetters.ftl")}
 </#list>
 ${tc.include("montiarc.generator.ma2jsim.component.ports.TickPort.ftl")}
 ${tc.include("montiarc.generator.ma2jsim.component.ports.PortSetup.ftl")}
+${tc.include("montiarc.generator.ma2jsim.component.ports.UnconnectedOutPortSetup.ftl")}
 ${tc.include("montiarc.generator.ma2jsim.component.ports.PortAllGetter.ftl")}
