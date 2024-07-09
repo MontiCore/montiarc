@@ -275,8 +275,8 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   public void setUpTrafoBuilderType() {
     IOOSymbolsScope buildScope = OOSymbolsMillForMontiArc.scope();
     List<SymTypeExpression> trafoArgs = Arrays.asList(
-      SymTypeExpressionFactory.createTypeVariable("Student", this.getScope()),
-      SymTypeExpressionFactory.createTypeVariable("Teacher", this.getScope()));
+      SymTypeExpressionFactory.createTypeObject("Student", this.getScope()),
+      SymTypeExpressionFactory.createTypeObject("Teacher", this.getScope()));
     FunctionSymbol build = MontiArcMill.functionSymbolBuilder().setName("build")
       .setAccessModifier(AccessModifier.ALL_INCLUSION)
       .setType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), trafoArgs))

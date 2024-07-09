@@ -136,7 +136,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
       //Arguments.of("sub.pSub == 1", new String[]{"0xF737F"}), // Sub-parameter
       Arguments.of("sub.sub", new String[]{"0xF737F"}), // Sub-instance
       Arguments.of("sub.C", new String[]{"0xF737F"}), // Sub-Component Type
-      Arguments.of("sub.sub.fSubSub", new String[]{"0xF735F", "0xF737F"}) // Sub-sub-feature
+      Arguments.of("sub.sub.fSubSub", new String[]{"0xF737F"}) // Sub-sub-feature
     );
   }
 }
