@@ -6,10 +6,11 @@ import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.ArcBasisWithinScopeBasicSymbolsResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsTraverser;
-import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsTypeVisitor;
+import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsCTTIVisitor;
 import de.monticore.expressions.bitexpressions._visitor.BitExpressionsTraverser;
 import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
+import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsTraverser;
 import de.monticore.literals.mccommonliterals.types3.MCCommonLiteralsTypeVisitor;
 import de.monticore.types.check.SymTypeExpression;
@@ -17,8 +18,10 @@ import de.monticore.types.mccollectiontypes._visitor.MCCollectionTypesTraverser;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
 import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
+import de.monticore.types3.Type4Ast;
+import de.monticore.types3.TypeCalculator3;
+import de.monticore.types3.generics.context.InferenceContext4Ast;
 import montiarc.MontiArcMill;
-import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -28,14 +31,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
 
   public MontiArcTypeCalculator() {
-    this(init(MontiArcMill.traverser()));
+    this(init(new TypeCalculator3(MontiArcMill.traverser(), new Type4Ast(), new InferenceContext4Ast())));
   }
 
-  protected MontiArcTypeCalculator(@NotNull MontiArcTraverser t) {
+  protected MontiArcTypeCalculator(@NotNull TypeCalculator3 t) {
     super(t);
   }
 
-  protected static MontiArcTraverser init(@NotNull MontiArcTraverser t) {
+  protected static TypeCalculator3 init(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
     initMCCommonLiteralsTypeVisitor(t);
     ArcBasisTypeCalculator.initExpressionBasisTypeVisitor(t);
@@ -48,42 +51,61 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
     return t;
   }
 
-  public static void initMCCommonLiteralsTypeVisitor(@NotNull MCCommonLiteralsTraverser t) {
+  public static void initMCCommonLiteralsTypeVisitor(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
+    MCCommonLiteralsTraverser traverser = (MCCommonLiteralsTraverser) t.getTypeTraverser();
     MCCommonLiteralsTypeVisitor visitor = new MCCommonLiteralsTypeVisitor();
-    t.add4MCCommonLiterals(visitor);
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    traverser.add4MCCommonLiterals(visitor);
   }
 
-  public static void initCommonExpressionsTypeVisitor(@NotNull CommonExpressionsTraverser t) {
+  public static void initCommonExpressionsTypeVisitor(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
-    MACommonExpressionsTypeVisitor visitor = new MACommonExpressionsTypeVisitor();
+    CommonExpressionsTraverser traverser = (CommonExpressionsTraverser) t.getTypeTraverser();
+    CommonExpressionsCTTIVisitor visitor = new CommonExpressionsCTTIVisitor();
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
     visitor.setWithinTypeBasicSymbolsResolver(new MAOOWithinTypeBasicSymbolsResolver());
     visitor.setWithinScopeResolver(new ArcBasisWithinScopeBasicSymbolsResolver());
-    t.add4CommonExpressions(visitor);
-    t.setCommonExpressionsHandler(visitor);
+    traverser.add4CommonExpressions(visitor);
+    traverser.setCommonExpressionsHandler(visitor);
   }
 
-  public static void initAssignmentExpressionsTypeVisitor(@NotNull AssignmentExpressionsTraverser t) {
+  public static void initAssignmentExpressionsTypeVisitor(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
-    AssignmentExpressionsTypeVisitor visitor = new AssignmentExpressionsTypeVisitor();
-    t.add4AssignmentExpressions(visitor);
+    AssignmentExpressionsTraverser traverser = (AssignmentExpressionsTraverser) t.getTypeTraverser();
+    AssignmentExpressionsCTTIVisitor visitor = new AssignmentExpressionsCTTIVisitor();
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    traverser.add4AssignmentExpressions(visitor);
+    traverser.setAssignmentExpressionsHandler(visitor);
   }
 
-  public static void initBitExpressionsTypeVisitor(@NotNull BitExpressionsTraverser t) {
+  public static void initBitExpressionsTypeVisitor(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
+    BitExpressionsTraverser traverser = (BitExpressionsTraverser) t.getTypeTraverser();
     BitExpressionsTypeVisitor visitor = new BitExpressionsTypeVisitor();
-    t.add4BitExpressions(visitor);
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    traverser.add4BitExpressions(visitor);
   }
 
-  public static void initMCCollectionTypesTypeVisitor(@NotNull MCCollectionTypesTraverser t) {
+  public static void initMCCollectionTypesTypeVisitor(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
+    MCCollectionTypesTraverser traverser = (MCCollectionTypesTraverser) t.getTypeTraverser();
     MCCollectionTypesTypeVisitor visitor = new MCCollectionTypesTypeVisitor();
-    t.add4MCCollectionTypes(visitor);
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    traverser.add4MCCollectionTypes(visitor);
   }
 
-  public static void initMCSimpleGenericTypesTypeVisitor(@NotNull MCSimpleGenericTypesTraverser t) {
+  public static void initMCSimpleGenericTypesTypeVisitor(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
+    MCSimpleGenericTypesTraverser traverser = (MCSimpleGenericTypesTraverser) t.getTypeTraverser();
     MCSimpleGenericTypesTypeVisitor visitor = new MCSimpleGenericTypesTypeVisitor();
-    t.add4MCSimpleGenericTypes(visitor);
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    traverser.add4MCSimpleGenericTypes(visitor);
   }
 }

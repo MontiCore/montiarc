@@ -16,6 +16,8 @@ public interface IArcTypeCalculator extends IDerive, ISynthesize {
 
   SymTypeExpression typeOf(@NotNull ASTExpression node);
 
+  SymTypeExpression typeOf(@NotNull ASTExpression node, @NotNull SymTypeExpression targetType);
+
   SymTypeExpression typeOf(@NotNull ASTMCType node);
 
   SymTypeExpression typeOf(@NotNull ASTLiteral node);

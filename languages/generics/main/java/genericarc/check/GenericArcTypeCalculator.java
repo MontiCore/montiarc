@@ -5,6 +5,9 @@ import arcbasis.check.AbstractArcTypeCalculator;
 import arcbasis.check.ArcBasisTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.Type4Ast;
+import de.monticore.types3.TypeCalculator3;
+import de.monticore.types3.generics.context.InferenceContext4Ast;
 import genericarc.GenericArcMill;
 import genericarc._visitor.GenericArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -16,14 +19,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class GenericArcTypeCalculator extends AbstractArcTypeCalculator {
 
   public GenericArcTypeCalculator() {
-    this(init(GenericArcMill.traverser()));
+    this(init(new TypeCalculator3(GenericArcMill.traverser(), new Type4Ast(), new InferenceContext4Ast())));
   }
 
-  protected GenericArcTypeCalculator(@NotNull GenericArcTraverser t) {
+  protected GenericArcTypeCalculator(@NotNull TypeCalculator3 t) {
     super(t);
   }
 
-  public static GenericArcTraverser init(@NotNull GenericArcTraverser t) {
+  public static TypeCalculator3 init(@NotNull TypeCalculator3 t) {
     Preconditions.checkNotNull(t);
     Preconditions.checkNotNull(t);
     ArcBasisTypeCalculator.initExpressionBasisTypeVisitor(t);

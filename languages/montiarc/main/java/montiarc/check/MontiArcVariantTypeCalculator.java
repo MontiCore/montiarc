@@ -4,9 +4,13 @@ package montiarc.check;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
+import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
-import de.monticore.expressions.expressionsbasis.types3.ExpressionBasisTypeVisitor;
+import de.monticore.expressions.expressionsbasis.types3.ExpressionBasisCTTIVisitor;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.Type4Ast;
+import de.monticore.types3.TypeCalculator3;
+import de.monticore.types3.generics.context.InferenceContext4Ast;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -19,39 +23,47 @@ import variablearc.check.VariableArcVariantWithinScopeBasicSymbolsResolver;
 public class MontiArcVariantTypeCalculator extends MontiArcTypeCalculator {
 
   public MontiArcVariantTypeCalculator(@NotNull ComponentTypeSymbol variant) {
-    this(init(MontiArcMill.traverser(), variant));
+    this(init(new TypeCalculator3(MontiArcMill.traverser(), new Type4Ast(), new InferenceContext4Ast()), variant));
   }
 
-  protected MontiArcVariantTypeCalculator(@NotNull MontiArcTraverser t) {
+  protected MontiArcVariantTypeCalculator(@NotNull TypeCalculator3 t) {
     super(t);
   }
 
-  protected static MontiArcTraverser init(@NotNull MontiArcTraverser t, @NotNull ComponentTypeSymbol variant) {
+  protected static TypeCalculator3 init(@NotNull TypeCalculator3 t, @NotNull ComponentTypeSymbol variant) {
     Preconditions.checkNotNull(t);
     Preconditions.checkNotNull(variant);
     MontiArcTypeCalculator.init(t);
-    t.getExpressionsBasisVisitorList().clear();
+    MontiArcTraverser traverser = (MontiArcTraverser) t.getTypeTraverser();
+    traverser.getExpressionsBasisVisitorList().clear();
     initExpressionBasisTypeVisitor(t, variant);
-    t.getCommonExpressionsVisitorList().clear();
+    traverser.getCommonExpressionsVisitorList().clear();
     initCommonExpressionsTypeVisitor(t, variant);
     return t;
   }
 
-  public static void initExpressionBasisTypeVisitor(@NotNull ExpressionsBasisTraverser traverse, @NotNull ComponentTypeSymbol variant) {
-    Preconditions.checkNotNull(traverse);
-    Preconditions.checkNotNull(variant);
-    ExpressionBasisTypeVisitor visitor = new ExpressionBasisTypeVisitor();
-    visitor.setWithinScopeResolver(new VariableArcVariantWithinScopeBasicSymbolsResolver(variant));
-    traverse.add4ExpressionsBasis(visitor);
-  }
-
-  public static void initCommonExpressionsTypeVisitor(@NotNull CommonExpressionsTraverser t, @NotNull ComponentTypeSymbol variant) {
+  public static void initExpressionBasisTypeVisitor(@NotNull TypeCalculator3 t, @NotNull ComponentTypeSymbol variant) {
     Preconditions.checkNotNull(t);
     Preconditions.checkNotNull(variant);
-    MACommonExpressionsTypeVisitor visitor = new MACommonExpressionsTypeVisitor();
+    ExpressionsBasisTraverser traverser = (ExpressionsBasisTraverser) t.getTypeTraverser();
+    ExpressionBasisCTTIVisitor visitor = new ExpressionBasisCTTIVisitor();
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    visitor.setWithinScopeResolver(new VariableArcVariantWithinScopeBasicSymbolsResolver(variant));
+    traverser.add4ExpressionsBasis(visitor);
+    traverser.setExpressionsBasisHandler(visitor);
+  }
+
+  public static void initCommonExpressionsTypeVisitor(@NotNull TypeCalculator3 t, @NotNull ComponentTypeSymbol variant) {
+    Preconditions.checkNotNull(t);
+    Preconditions.checkNotNull(variant);
+    CommonExpressionsTraverser traverser = (CommonExpressionsTraverser) t.getTypeTraverser();
+    CommonExpressionsCTTIVisitor visitor = new CommonExpressionsCTTIVisitor();
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
     visitor.setWithinTypeBasicSymbolsResolver(new MAOOWithinTypeBasicSymbolsResolver());
     visitor.setWithinScopeResolver(new VariableArcVariantWithinScopeBasicSymbolsResolver(variant));
-    t.add4CommonExpressions(visitor);
-    t.setCommonExpressionsHandler(visitor);
+    traverser.add4CommonExpressions(visitor);
+    traverser.setCommonExpressionsHandler(visitor);
   }
 }

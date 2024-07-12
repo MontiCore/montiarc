@@ -5,145 +5,71 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.TypeCheckResult;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCReturnType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types3.AbstractTypeVisitor;
-import de.monticore.visitor.ITraverser;
-import de.se_rwth.commons.logging.Log;
+import de.monticore.types3.TypeCalculator3;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * Abstract implementation of a visitor that calculates a
  * {@link SymTypeExpression} (type) for expressions in language components of
  * the MontiArc language family. Can be extended for other types of expressions
- * by providing a corresponding traverser ({@link ITraverser}) and adding
+ * by adding
  * the visitors implementing {@link de.monticore.types3.AbstractTypeVisitor}.
  */
 public abstract class AbstractArcTypeCalculator implements IArcTypeCalculator {
 
-  private final ITraverser travers;
+  private final TypeCalculator3 typeCalculator;
 
-  protected AbstractArcTypeCalculator(@NotNull ITraverser travers) {
-    Preconditions.checkNotNull(travers);
-    this.travers = travers;
+  protected AbstractArcTypeCalculator(@NotNull TypeCalculator3 tc) {
+    Preconditions.checkNotNull(tc);
+    this.typeCalculator = tc;
   }
 
   @Override
   public SymTypeExpression typeOf(@NotNull ASTExpression node) {
     Preconditions.checkNotNull(node);
+    return typeCalculator.typeOf(node);
+  }
 
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfExpression(node)) {
-      node.accept(this.travers);
-    }
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfExpression(node)) {
-      Log.debug(node.get_SourcePositionStart()
-          + ": Internal error, could not evaluate the expression's type. ",
-        this.getClass().getCanonicalName()
-      );
-      return SymTypeExpressionFactory.createObscureType();
-    }
-
-    return AbstractTypeVisitor.tmpMap.getTypeOfExpression(node);
+  @Override
+  public SymTypeExpression typeOf(@NotNull ASTExpression node, @NotNull SymTypeExpression targetType) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkNotNull(targetType);
+    return typeCalculator.typeOf(node, targetType);
   }
 
   @Override
   public SymTypeExpression typeOf(@NotNull ASTLiteral node) {
     Preconditions.checkNotNull(node);
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfExpression(node)) {
-      node.accept(this.travers);
-    }
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfExpression(node)) {
-      Log.debug(node.get_SourcePositionStart()
-          + ": Internal error, could not evaluate the declaration's type. ",
-        this.getClass().getCanonicalName()
-      );
-      return SymTypeExpressionFactory.createObscureType();
-    }
-
-    return AbstractTypeVisitor.tmpMap.getTypeOfExpression(node);
+    return typeCalculator.typeOf(node);
   }
 
   @Override
   public SymTypeExpression typeOf(@NotNull ASTMCType node) {
     Preconditions.checkNotNull(node);
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      node.accept(this.travers);
-    }
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      Log.debug(node.get_SourcePositionStart()
-          + ": Internal error, could not evaluate the declaration's type.",
-        this.getClass().getCanonicalName()
-      );
-      return SymTypeExpressionFactory.createObscureType();
-    }
-
-    return AbstractTypeVisitor.tmpMap.getTypeOfTypeIdentifier(node);
+    return typeCalculator.symTypeFromAST(node);
   }
 
   @Override
   public SymTypeExpression typeOf(@NotNull ASTMCReturnType node) {
     Preconditions.checkNotNull(node);
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      node.accept(this.travers);
-    }
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      Log.debug(node.get_SourcePositionStart()
-          + ": Internal error, could not evaluate the declaration's type. ",
-        this.getClass().getCanonicalName()
-      );
-      return SymTypeExpressionFactory.createObscureType();
-    }
-
-    return AbstractTypeVisitor.tmpMap.getTypeOfTypeIdentifier(node);
+    return typeCalculator.symTypeFromAST(node);
   }
 
   @Override
   public SymTypeExpression typeOf(@NotNull ASTMCPrimitiveType node) {
     Preconditions.checkNotNull(node);
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      node.accept(this.travers);
-    }
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      Log.debug(node.get_SourcePositionStart()
-          + ": Internal error, could not evaluate the declaration's type. ",
-        this.getClass().getCanonicalName()
-      );
-      return SymTypeExpressionFactory.createObscureType();
-    }
-
-    return AbstractTypeVisitor.tmpMap.getTypeOfTypeIdentifier(node);
+    return typeCalculator.symTypeFromAST(node);
   }
 
   @Override
   public SymTypeExpression typeOf(@NotNull ASTMCQualifiedName node) {
     Preconditions.checkNotNull(node);
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      node.accept(this.travers);
-    }
-
-    if (!AbstractTypeVisitor.tmpMap.hasTypeOfTypeIdentifier(node)) {
-      Log.debug(node.get_SourcePositionStart()
-          + ": Internal error, could not evaluate the declaration's type. ",
-        this.getClass().getCanonicalName()
-      );
-      return SymTypeExpressionFactory.createObscureType();
-    }
-
-    return AbstractTypeVisitor.tmpMap.getTypeOfTypeIdentifier(node);
+    return typeCalculator.symTypeFromAST(node);
   }
 
   @Override
