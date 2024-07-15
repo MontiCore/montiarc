@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package conformance.automaton2smt.concrete;
+
+classdiagram Datatypes {
+
+  public enum Input {
+    GET_VALUE,
+    LOGOUT,
+    INCREASE_VALUE;
+  }
+
+  public enum Output {
+    ERROR;
+  }
+
+}

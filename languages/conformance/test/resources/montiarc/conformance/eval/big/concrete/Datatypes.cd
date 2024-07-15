@@ -1,0 +1,30 @@
+/* (c) https://github.com/MontiCore/monticore */
+package conformance.eval.big.concrete;
+
+classdiagram Datatypes {
+
+  public enum Input {
+    LOG_IN_BTN,
+    LOG_OUT_BTN,
+    REGISTER_BTN,
+    VIEW_PROFILE_BTN,
+    SEARCH_BTN,
+    CART_BTN,
+    DASHBOARD_BTN,
+    EDIT_PROFILE_BTN,
+    ENTER_TEXT_BTN,
+    CHOOSE_PRODUCT_BTN,
+    ADD_TO_CART_BTN,
+    CHECKOUT_BTN,
+    CONTINUE_BTN,
+    CONFIRMATION_BTN,
+    CONNECT_BTN;
+  }
+
+  public enum Output {
+    ERROR,
+    ACTION_DONE,
+    PAGE_SWITCHED;
+  }
+
+}

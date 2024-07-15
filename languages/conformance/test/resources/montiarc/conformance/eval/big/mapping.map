@@ -1,0 +1,42 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+mapping AutomataMapping {
+
+  stateMap {
+    state == Start ==> state == LoggedOut;
+    state == Connecting ==> state == LoggedOut;
+    state == Registering ==> state == LoggedOut;
+    state == OnDashboard ==> state == LoggedIn;
+    state == OnProfile ==> state == LoggedIn;
+    state == OnProduct ==> state == LoggedIn;
+    state == OnSearchResult ==> state == LoggedIn;
+    state == Searching ==> state == LoggedIn;
+    state == InCart ==> state == LoggedIn;
+    state == Confirming ==> state == LoggedIn;
+    state == CheckingOut ==> state == LoggedIn;
+  }
+
+  inputMap {
+    input == Input.LOG_IN_BTN ==> input == Input.LOGIN;
+    input == Input.LOG_OUT_BTN ==> input == Input.LOGOUT;
+    input == Input.SEARCH_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.VIEW_PROFILE_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.CART_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.DASHBOARD_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.ENTER_TEXT_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.EDIT_PROFILE_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.ADD_TO_CART_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.CHECKOUT_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.CONTINUE_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.CHOOSE_PRODUCT_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.CONFIRMATION_BTN ==> input == Input.POST_LOGIN_ACTION;
+    input == Input.REGISTER_BTN ==> input == Input.PRE_LOGIN_ACTION;
+   input == Input.CONNECT_BTN ==> input == Input.PRE_LOGIN_ACTION;
+  }
+
+  outputMap {
+    output == [Output.ERROR] ==> output == [Output.ERROR];
+    output == [Output.ACTION_DONE] ==> output == [Output.RESPONSE];
+    output == [] ==> output == [];
+  }
+}

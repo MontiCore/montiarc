@@ -1,0 +1,22 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+mapping AutomataMapping {
+
+  stateMap {
+    state == Known && (counter > 0 || counter <= 0) ==> state == LoggedIn;
+    Concrete.state == Anon ==> Reference.state == NotLoggedIn;
+  }
+
+  outputMap {
+    output ==[Output.ERROR] && (counter > 0 || counter <= 0) ==> output == [Output.ERROR];
+    value != [] ==> output == [Output.RESPONSE, Output.RESPONSE];
+    output == [] && value == []==> output ==[];
+  }
+
+  inputMap {
+    input == Input.GET_VALUE ==> input == Input.ACTION ;
+    input == Input.LOGOUT ==> input == Input.LOGOUT;
+    input == Input.INCREASE_VALUE ==> input == Input.ACTION;
+    password == "correct" ==> input == Input.LOGIN;
+  }
+}

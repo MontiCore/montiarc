@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+package demo;
+
+classdiagram Concrete {
+
+  public enum Input {
+    GET_VALUE,
+    INCREASE_VALUE,
+    LOGOUT,
+    PASSWORD;
+  }
+
+  public enum Output {
+    ERROR,
+    DONE;
+  }
+
+}

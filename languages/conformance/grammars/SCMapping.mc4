@@ -1,0 +1,35 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+/**
+ * This grammar defined a basic way to map elements of two statecharts in
+ * montiArc components.
+ *
+ * Elements like ports and states, etc. can be mapped using expressions.
+ *
+ * e.g. "state == Known && (counter > 0) ==> state == LoggedIn"
+ *
+ * The above mapping rule specify that the state "LoggedIn" of the second statechart correspond to the
+ * state "Known" of the first one when the global variable "counter" has a positive value.
+ */
+
+import de.monticore.expressions.*;
+import de.monticore.literals.*;
+import de.monticore.types.*;
+
+grammar SCMapping extends CommonExpressions, 	MCCommonLiterals{
+
+symbol scope SCMapping = "mapping" name:Name "{"(MappingElement)* "}";
+
+interface MappingElement ;
+
+MappingRule = (concrete:Expression "==>" reference:Expression ";");
+
+StateRules implements MappingElement = "stateMap" "{" MappingRule* "}";
+
+InputRules implements MappingElement = "inputMap" "{" MappingRule* "}";
+
+OutputRules implements MappingElement = "outputMap" "{" MappingRule* "}";
+
+SeqExpression implements Expression<100> = "[" (Expression || ",")* "]";
+
+}

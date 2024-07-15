@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+mapping AutomataMapping {
+
+  stateMap {
+    /*1*/stat == /*2*/LoggedIn && counter ==0 ==> /*3,4*/Concrete.state == /*5*/Known;
+  }
+
+  outputMap {
+    /*6*/noPort ==[/*7*/Output.PAPA] ==> /*8*/noPort == [/*9,10*/Input.ERROR];
+    output == [/*11*/Output.RESPONSE] ==> /*12*/value != [] ;
+  }
+
+  inputMap {
+    /*13*/output == /*14*/Input.GET ==> /*15*/noOutput == /*16,17*/Output.RESPONSE ;
+  }
+
+}

@@ -1,0 +1,19 @@
+/* (c) https://github.com/MontiCore/monticore */
+package mceffect.steamboiler;
+
+SteamBoiler {
+  check potential effect: waterIn => waterOut;
+  check no effect: waterIn => status;
+  check no effect: heat => waterOut;
+}
+
+WaterTank {check mandatory effect: waterIn => waterOut;}
+
+Heater {
+  check mandatory effect: waterIn => waterOut;
+  check potential effect: heat => waterOut;
+}
+
+Controller {
+  check mandatory effect: waterLevel => signal;
+}

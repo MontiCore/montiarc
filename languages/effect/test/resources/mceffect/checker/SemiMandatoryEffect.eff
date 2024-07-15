@@ -1,0 +1,18 @@
+/* (c) https://github.com/MontiCore/monticore */
+package mceffect.checker;
+
+Main {
+  check mandatory effect: i1 => o1;
+  check mandatory effect: i2 => o2;
+}
+
+A {
+  check potential effect: i1 => o1;
+  check mandatory effect: i2 => o2;
+}
+
+B {
+  check mandatory effect: i1 => o1;
+  check mandatory effect: i2 => o2;
+}
+

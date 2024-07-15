@@ -1,0 +1,17 @@
+/* (c) https://github.com/MontiCore/monticore */
+package conformance.eval.mini.concrete;
+
+classdiagram Datatypes {
+
+  public enum Input {
+    INCREASE_VALUE,
+    LOGOUT,
+    PASSWORD;
+  }
+
+  public enum Output {
+    ERROR,
+    DONE;
+  }
+
+}

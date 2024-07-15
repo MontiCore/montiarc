@@ -1,0 +1,17 @@
+/* (c) https://github.com/MontiCore/monticore */
+package conformance.eval.mini.reference;
+
+classdiagram Datatypes {
+
+  public enum Input {
+    LOGIN,
+    LOGOUT,
+    ACTION;
+  }
+
+  public enum Output {
+    RESPONSE,
+    ERROR;
+  }
+
+}

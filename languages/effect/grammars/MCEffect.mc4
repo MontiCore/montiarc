@@ -1,0 +1,19 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+import de.monticore.types.*;
+
+grammar MCEffect extends MCBasicTypes {
+
+ start MCEffect ;
+
+ MCEffect = MCPackageDeclaration? MCImportStatement* ComponentEffect* ;
+
+ ComponentEffect = MCQualifiedName& "{" EffectRuleDeclaration* "}";
+
+ EffectRuleDeclaration = ([isCheck:"check"]| [isEnsure:"ensure"]) EffectKind "effect" ((":" EffectRule)| "{" EffectRule* "}");
+
+ EffectRule = from:Name& "=>" to:Name& ";" ;
+
+ enum EffectKind = NO:"no" | POTENTIAL:"potential" | MANDATORY:"mandatory" ;
+
+}
