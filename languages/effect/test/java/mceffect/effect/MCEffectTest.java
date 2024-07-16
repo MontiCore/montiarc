@@ -49,7 +49,6 @@ public class MCEffectTest extends EffectAbstractTest {
   }
 
   @Test
-  @Disabled("Tagging is problematic, the Tags are not found...")
   public void taggingEffectStorageTest() {
     // See the setup() for Loading the Tags
     PortSymbol waterIn = MontiArcMill.globalScope().resolvePort("mceffect.steamboiler.WaterTank.waterIn").get();
@@ -57,8 +56,8 @@ public class MCEffectTest extends EffectAbstractTest {
     Assertions.assertFalse(tagger.getTags(waterIn).isEmpty());
 
     // Todo: Enable this, and implement the ToDo in TaggingEffectStorage
-    //TaggingEffectStorage storage = new TaggingEffectStorage(tagger);
-    // checkEffects(storage);
+    TaggingEffectStorage storage = new TaggingEffectStorage(tagger);
+    checkEffects(storage);
   }
 
   private void checkEffects(EffectStorage storage) {
