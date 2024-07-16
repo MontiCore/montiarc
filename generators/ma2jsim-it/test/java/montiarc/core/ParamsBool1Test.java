@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.MsgFactory.msg;
+import static montiarc.rte.msg.MessageFactory.msg;
 
 @ExtendWith(MockitoExtension.class)
 class ParamsBool1Test {

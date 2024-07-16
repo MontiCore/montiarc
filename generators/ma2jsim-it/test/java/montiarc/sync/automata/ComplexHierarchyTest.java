@@ -2,7 +2,7 @@
 package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
-import montiarc.MsgFactory;
+import montiarc.rte.msg.MessageFactory;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
 import org.assertj.core.api.Assertions;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static montiarc.MsgFactory.tk;
+import static montiarc.rte.msg.MessageFactory.tk;
 
 @ExtendWith(MockitoExtension.class)
 public class ComplexHierarchyTest {
@@ -97,7 +97,7 @@ public class ComplexHierarchyTest {
   protected static List<Message<String>> stringToMessages(String... s) {
     ArrayList<Message<String>> messages = new ArrayList<>();
     for (int i = 0; i < s.length; i++) {
-      messages.addAll(Arrays.stream(s[i].split("->")).map(MsgFactory::msg).collect(Collectors.toList()));
+      messages.addAll(Arrays.stream(s[i].split("->")).map(MessageFactory::msg).collect(Collectors.toList()));
       if (i > 0) messages.add(tk());
     }
     return messages;

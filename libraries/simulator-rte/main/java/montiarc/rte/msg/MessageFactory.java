@@ -1,11 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc;
+package montiarc.rte.msg;
 
-import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
-
-public final class MsgFactory {
-  private MsgFactory() { }
+public final class MessageFactory {
+  
+  private MessageFactory() { }
 
   /**
    * Short form for {@code Message.of(value)}

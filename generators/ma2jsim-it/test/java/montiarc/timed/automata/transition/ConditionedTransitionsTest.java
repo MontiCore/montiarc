@@ -20,8 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.MsgFactory.msg;
-import static montiarc.MsgFactory.tk;
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.NumberSign.POSITIVE;
 import static montiarc.types.NumberSign.NEGATIVE;
 import static montiarc.types.NumberSign.ZERO;

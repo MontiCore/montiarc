@@ -22,8 +22,8 @@ import org.mockito.quality.Strictness;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static montiarc.MsgFactory.msg;
-import static montiarc.MsgFactory.tk;
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.OnOff.OFF;
 import static montiarc.types.OnOff.ON;
 
