@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.scmapping;
-;
+
 import de.se_rwth.commons.logging.Log;
 import java.io.File;
 
