@@ -13,6 +13,8 @@ import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTrav
 import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
 import de.monticore.literals.mccommonliterals._visitor.MCCommonLiteralsTraverser;
 import de.monticore.literals.mccommonliterals.types3.MCCommonLiteralsTypeVisitor;
+import de.monticore.ocl.setexpressions._visitor.SetExpressionsTraverser;
+import de.monticore.ocl.setexpressions.types3.SetExpressionsTypeVisitor;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._visitor.MCCollectionTypesTraverser;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
@@ -48,6 +50,7 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
     ArcBasisTypeCalculator.initMCBasicTypesTypeVisitor(t);
     initMCCollectionTypesTypeVisitor(t);
     initMCSimpleGenericTypesTypeVisitor(t);
+    initSetExpressionsTypeVisitor(t);
     return t;
   }
 
@@ -107,5 +110,14 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
     visitor.setType4Ast(t.getType4Ast());
     visitor.setContext4Ast(t.getCtx4Ast());
     traverser.add4MCSimpleGenericTypes(visitor);
+  }
+
+  public static void initSetExpressionsTypeVisitor(@NotNull TypeCalculator3 t) {
+    Preconditions.checkNotNull(t);
+    SetExpressionsTraverser traverser = (SetExpressionsTraverser) t.getTypeTraverser();
+    SetExpressionsTypeVisitor visitor = new SetExpressionsTypeVisitor();
+    visitor.setType4Ast(t.getType4Ast());
+    visitor.setContext4Ast(t.getCtx4Ast());
+    traverser.add4SetExpressions(visitor);
   }
 }

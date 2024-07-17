@@ -44,6 +44,7 @@ grammar MontiArc extends
             de.monticore.statements.MCCommonStatements,
             de.monticore.statements.MCVarDeclarationStatements,
             de.monticore.SCDoActions,
+            de.monticore.ocl.SetExpressions,
             ArcCompute,
             ArcCore,
             Modes,

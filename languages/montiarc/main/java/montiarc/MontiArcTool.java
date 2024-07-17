@@ -7,6 +7,7 @@ import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -420,6 +421,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void initGlobalScope() {
     MontiArcMill.globalScope().clear();
     MontiArcMill.globalScope().init();
+    MCCollectionSymTypeRelations.init();
   }
 
   public void initGlobalScope(@NotNull String... entries) {

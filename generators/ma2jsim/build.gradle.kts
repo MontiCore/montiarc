@@ -12,6 +12,7 @@ dependencies {
   implementation(libs.format)
   implementation(libs.guava)
   implementation(libs.janino)
+  implementation(libs.mc.ocl)
 
   testImplementation(project(":generators:cd2pojo"))
   testImplementation(libs.mockito)

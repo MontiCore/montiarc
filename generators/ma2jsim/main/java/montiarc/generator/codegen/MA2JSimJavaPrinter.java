@@ -4,6 +4,8 @@ package montiarc.generator.codegen;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
+import de.monticore.ocl.codegen.util.VariableNaming;
+import de.monticore.ocl.codegen.visitors.SetExpressionsPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
@@ -66,6 +68,11 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.setAssignmentExpressionsHandler(assignmentExpressionsPrinter);
     this.traverser.getAssignmentExpressionsVisitorList().clear();
     this.traverser.add4AssignmentExpressions(assignmentExpressionsPrinter);
+
+    SetExpressionsPrinter setExpressionsPrinter = new SetExpressionsPrinter(printer, new VariableNaming(), new MontiArcTypeCalculator(), new MontiArcTypeCalculator());
+    this.traverser.setSetExpressionsHandler(setExpressionsPrinter);
+    this.traverser.getSetExpressionsVisitorList().clear();
+    this.traverser.add4SetExpressions(setExpressionsPrinter);
   }
 
   public String prettyprint(List<Expression> expressions) {
