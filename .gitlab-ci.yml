@@ -11,7 +11,7 @@ stages:
   - mirror
       
 Build:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: build
   allow_failure: false
   artifacts:
@@ -30,7 +30,7 @@ Build:
 
 Verify Formatting:
   stage: test
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   dependencies:
     - Build
   needs: ["Build"]
@@ -39,7 +39,7 @@ Verify Formatting:
     - gradle spotlessCheck
 
 Package:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: post-build
   dependencies:
     - Build
@@ -70,7 +70,7 @@ Package:
     when: always
 
 Unit Test:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   allow_failure: false
   <<: *unit_test_definition
 
@@ -100,7 +100,7 @@ Test Coverage:
         path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: post-test
   dependencies:
     - Build #download artifacts from build
@@ -138,7 +138,7 @@ Pages:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.4.2-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
