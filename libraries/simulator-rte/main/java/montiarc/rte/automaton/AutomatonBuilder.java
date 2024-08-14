@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-public abstract class AutomatonBuilder<C, A extends Automaton<C>> {
+public abstract class AutomatonBuilder<C, I, A extends Automaton<C, I>> {
 
   protected C context;
   protected State initial;
@@ -10,7 +10,7 @@ public abstract class AutomatonBuilder<C, A extends Automaton<C>> {
     this.context = context;
   }
 
-  public AutomatonBuilder<C, A> setContext(C context) {
+  public AutomatonBuilder<C, I, A> setContext(C context) {
     this.context = context;
     return this;
   }
@@ -19,14 +19,14 @@ public abstract class AutomatonBuilder<C, A extends Automaton<C>> {
     return this.context;
   }
 
-  public abstract AutomatonBuilder<C, A> addDefaultStates();
+  public abstract AutomatonBuilder<C, I, A> addDefaultStates();
 
-  public AutomatonBuilder<C, A> setInitial(State initial) {
+  public AutomatonBuilder<C, I, A> setInitial(State initial) {
     this.initial = initial;
     return this;
   }
 
-  public abstract AutomatonBuilder<C, A> setDefaultInitial();
+  public abstract AutomatonBuilder<C, I, A> setDefaultInitial();
 
   protected State getInitial() {
     return this.initial;

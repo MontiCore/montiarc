@@ -4,23 +4,22 @@ package montiarc.rte.port;
 import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.scheduling.TimeAwareScheduler;
+import montiarc.rte.scheduling.Scheduler;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
-import java.util.Objects;
 
 
 public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implements SyncAwareInPort<T> {
 
   protected Deque<Message<T>> buffer = new ArrayDeque<>();
-  protected TimeAwareScheduler scheduler;
+  protected Scheduler scheduler;
 
   public TimeAwarePortForComposition(String qualifiedName, IComponent owner) {
     super(qualifiedName, owner);
   }
-  public TimeAwarePortForComposition(String qualifiedName, IComponent owner, TimeAwareScheduler scheduler) {
+  public TimeAwarePortForComposition(String qualifiedName, IComponent owner, Scheduler scheduler) {
     this(qualifiedName, owner);
     this.scheduler = scheduler;
   }
@@ -103,8 +102,8 @@ public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implemen
     return new ArrayDeque<>(this.buffer);
   }
 
-  public void forward() {
-    this.send(buffer.poll());
+  public void forwardWithoutRemoval() {
+    this.send(buffer.peek());
   }
 
   @Override

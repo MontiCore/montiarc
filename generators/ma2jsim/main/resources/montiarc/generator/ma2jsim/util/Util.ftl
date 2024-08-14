@@ -40,3 +40,19 @@
 <#macro printTypeParameter arcTypeParameter printBounds>
 ${arcTypeParameter.getName()}<#if printBounds><#list arcTypeParameter.getSuperTypesList()> extends <#items as bound><@getTypeString bound true/><#sep> & </#sep></#items></#list></#if>
 </#macro>
+
+<#-- SymTypeExpression type -->
+<#macro unboxNumbersSuffix type>
+    <#if helper.isUnboxedChar(type)>.intValue()
+    <#elseif helper.isUnboxedByte(type)>.byteValue()
+    <#elseif helper.isUnboxedShort(type)>.shortValue()
+    <#elseif helper.isUnboxedInt(type)>.intValue()
+    <#elseif helper.isUnboxedLong(type)>.longValue()
+    <#elseif helper.isUnboxedFloat(type)>.floatValue()
+    <#elseif helper.isUnboxedDouble(type)>.doubleValue()</#if><#t>
+</#macro>
+
+<#-- SymTypeExpression type -->
+<#macro unboxChar type>
+    <#if helper.isUnboxedChar(type)>(char)</#if><#t>
+</#macro>

@@ -25,7 +25,7 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.OnOff.OFF;
 
 @ExtendWith(MockitoExtension.class)
-public class DeployTest {
+class DeployTest {
 
   /**
    * capture of the actual output stream on port o

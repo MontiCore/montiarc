@@ -7,13 +7,13 @@
   <#assign portSym = portAccess.getPortSymbol()>
   <#assign portMethodName>${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(enclosingComp, portSym)}</#assign>
   <#assign modeSubComps = helper.getInstanceSymbolsFromMode(enclosingMode)>
-  <#if !portAccess.isPresentComponent()>  <#-- port is part of enclosing comp -->
+  <#if !portAccess.isPresentComponent()>  <#-- Port is part of enclosing comp -->
       ${portMethodName}()
   <#else>
     <#assign portOwner = portAccess.getComponentSymbol()>
     <#assign portOwnerName = portOwner.getName()>
     <#assign portOwnerVariantSuffix = helper.subcomponentVariantSuffix(enclosingComp, portAccess.getComponentSymbol())>
-    <#if modeSubComps?seq_contains(portOwner)>  <#-- port is part of mode defined component -->
+    <#if modeSubComps?seq_contains(portOwner)>  <#-- Port is part of mode defined component -->
       <#assign portOwnerName>${prefixes.subcomp()}${enclosingMode.getName()}_${portOwnerName}${portOwnerVariantSuffix}</#assign>
       ${portOwnerName}().${portMethodName}()
     <#else>

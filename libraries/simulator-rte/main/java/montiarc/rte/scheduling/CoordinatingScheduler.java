@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.ITimeAwareInPort;
 
@@ -15,16 +15,16 @@ import java.util.stream.Collectors;
  * Defers to individual {@link ComponentScheduler}s for
  * individual component processing
  */
-public class CoordinatingScheduler implements TimeAwareScheduler {
+public class CoordinatingScheduler implements Scheduler {
 
-  private final Map<ITimedComponent, ComponentScheduler> compToScheduler;
+  private final Map<IComponent, ComponentScheduler> compToScheduler;
 
   public CoordinatingScheduler() {
     this.compToScheduler = new HashMap<>();
   }
 
   @Override
-  public void register(ITimedComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync) {
+  public void register(IComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync) {
     if (component.hasModeAutomaton()) {
       this.compToScheduler.put(component, new ModeComponentScheduler(component, inPorts, isSync, this));
     } else {
@@ -33,7 +33,7 @@ public class CoordinatingScheduler implements TimeAwareScheduler {
   }
 
   @Override
-  public void unregister(ITimedComponent component) {
+  public void unregister(IComponent component) {
     this.compToScheduler.remove(component);
   }
 
@@ -51,8 +51,14 @@ public class CoordinatingScheduler implements TimeAwareScheduler {
     this.compToScheduler.get(port.getOwner()).requestSchedulingOfNewTick(port);
   }
 
+  private Collection<ComponentScheduler> getActiveSchedulers() {
+    return this.compToScheduler.values().stream()
+      .filter(ComponentScheduler::isReadyToExecute)
+      .collect(Collectors.toList());
+  }
+
   @Override
-  public void run(ITimedComponent component) {
+  public void run(IComponent component) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
@@ -63,48 +69,34 @@ public class CoordinatingScheduler implements TimeAwareScheduler {
       scheduler.triggerComponentTickPort();
     }
 
-    Collection<ComponentScheduler> activeSchedulers =
-      compToScheduler.values().stream()
-        .filter(ComponentScheduler::isReadyToExecute)
-        .collect(Collectors.toList());
-
+    Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
     while (!activeSchedulers.isEmpty()) {
-      activeSchedulers.forEach(ComponentScheduler::executeNextSchedule);
+      for (ComponentScheduler s : activeSchedulers) {
+        s.executeNextSchedule();
+      }
 
-      activeSchedulers =
-        compToScheduler.values().stream()
-          .filter(ComponentScheduler::isReadyToExecute)
-          .collect(Collectors.toList());
-
+      activeSchedulers = getActiveSchedulers();
       if (activeSchedulers.isEmpty()) {
         scheduler.triggerComponentTickPort();
-        activeSchedulers =
-          compToScheduler.values().stream()
-            .filter(ComponentScheduler::isReadyToExecute)
-            .collect(Collectors.toList());
+        activeSchedulers = getActiveSchedulers();
       }
     }
   }
 
-  public void run(ITimedComponent component, int ticks) {
+  public void run(IComponent component, int ticks) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
 
     compToScheduler.get(component).triggerComponentTickPort(ticks);
 
-    Collection<ComponentScheduler> activeSchedulers =
-      compToScheduler.values().stream()
-      .filter(ComponentScheduler::isReadyToExecute)
-      .collect(Collectors.toList());
+    Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
 
     while (!activeSchedulers.isEmpty()) {
-      activeSchedulers.forEach(ComponentScheduler::executeNextSchedule);
-
-      activeSchedulers =
-        compToScheduler.values().stream()
-          .filter(ComponentScheduler::isReadyToExecute)
-          .collect(Collectors.toList());
+      for (ComponentScheduler s : activeSchedulers) {
+        s.executeNextSchedule();
+      }
+      activeSchedulers = getActiveSchedulers();
     }
   }
 
@@ -112,8 +104,8 @@ public class CoordinatingScheduler implements TimeAwareScheduler {
     return this.compToScheduler.values().stream().anyMatch(ComponentScheduler::isReadyToExecute);
   }
 
-  boolean isASubCompScheduled(ITimedComponent comp) {
-    Collection<? extends ITimedComponent> directSubs = comp.getAllSubcomponents();
+  boolean isASubCompScheduled(IComponent comp) {
+    Collection<? extends IComponent> directSubs = comp.getAllSubcomponents();
 
     return
       directSubs.stream().map(this.compToScheduler::get)

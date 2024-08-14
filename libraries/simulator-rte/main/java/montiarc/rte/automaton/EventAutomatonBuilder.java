@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-public abstract class EventAutomatonBuilder<C, A extends Automaton<C>> extends AutomatonBuilder<C, A> {
+public abstract class EventAutomatonBuilder<C, I, A extends Automaton<C, I>> extends AutomatonBuilder<C, I, A> {
 
   public EventAutomatonBuilder(C context) {
     super(context);

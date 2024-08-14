@@ -1,12 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-public abstract class EventAutomaton<C> extends Automaton<C> {
+/**
+ * @param <C> the type of the owning component
+ * @param <I> the Sync message type of the behavior.
+ *           Its objects conclude the values of the input ports at the time of a tick.
+ *           This type must also be bound for event behaviors as part of the 150% modeling that
+ *           the generator currently implements in order to model variability.
+ */
+public abstract class EventAutomaton<C, I> extends Automaton<C, I> {
   
-  public EventAutomaton(C context,
+  protected EventAutomaton(C context,
                         State initial) {
     super(context, initial);
   }
-  
-  public abstract void tick();
 }

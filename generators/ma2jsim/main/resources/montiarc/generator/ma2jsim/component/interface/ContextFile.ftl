@@ -8,8 +8,6 @@ ${tc.signature("ast", "isTop")}
 
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.ContextInterface.ftl", ast.getComponentType(), [isTop])}
 
-${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.InputInterface.ftl", ast.getComponentType(), [isTop])}
-
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.OutputInterface.ftl", ast.getComponentType(), [isTop])}
 
 ${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.ParameterInterface.ftl", ast.getComponentType(), [isTop])}

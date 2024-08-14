@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.component.IComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.IInPort;
@@ -15,22 +15,23 @@ import java.util.Set;
 
 public class ComponentScheduler {
 
-  protected final ITimedComponent component;
+  protected final IComponent component;
   protected final Set<IInPort<?>> allInPorts;
-  @Deprecated protected final boolean isSyncComp;
+  protected final boolean isSyncComp;
 
   protected final Deque<ITimeAwareInPort<?>> scheduledPorts;
   protected boolean isTickScheduled;
+  protected boolean isExecuting;
 
 
-  public ComponentScheduler(ITimedComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync) {
+  public ComponentScheduler(IComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync) {
     this.component = component;
     this.allInPorts = Set.copyOf(inPorts);
     this.isSyncComp = isSync;
 
     this.scheduledPorts = new ArrayDeque<>(this.allInPorts.size());
     this.isTickScheduled = false;
-
+    this.isExecuting = false;
   }
 
   public void requestScheduling(ITimeAwareInPort<?> port, Object newMsg) {
@@ -46,6 +47,10 @@ public class ComponentScheduler {
 
 
   public void requestScheduling(ITimeAwareInPort<?> port) {
+    if (this.isExecuting) {
+      return;  // After execution has finished, the scheduler will schedule the port by itself if there is a new message
+    }
+
     if (isSyncComp) {
       requestSyncedScheduling();
     } else {
@@ -57,8 +62,9 @@ public class ComponentScheduler {
     if (isTickScheduled) {
       return;
     } else if (allPortsHaveBufferedTick()) {
-      allInPorts.stream().map(SyncAwareInPort.class::cast)
-        .forEach(SyncAwareInPort::dropMessagesIgnoredBySync);
+      for (IInPort<?> p : allInPorts) {
+        ((SyncAwareInPort<?>) p).dropMessagesIgnoredBySync();  // Remove the processed tick
+      }
       isTickScheduled = true;
     }
   }
@@ -76,6 +82,11 @@ public class ComponentScheduler {
   }
 
   public void executeNextSchedule() {
+    if (isExecuting) {
+      throw new IllegalStateException("Triggering the execution of a component that has not finished the already " +
+        "running execution is not allowed.");
+    }
+
     if (!scheduledPorts.isEmpty()) {
       executePortSchedule(scheduledPorts.getFirst());
     } else if (isTickScheduled) {
@@ -88,8 +99,11 @@ public class ComponentScheduler {
       throw new IllegalStateException("Can not execute unscheduled port.");
     }
 
+    isExecuting = true;
     scheduledPorts.remove(port);
     component.handleMessage(port);
+    port.pollBuffer();  // Remove processed message from port buffer
+    isExecuting = false;
 
     if (!port.isBufferEmpty()) {
       this.requestScheduling(port);
@@ -101,13 +115,24 @@ public class ComponentScheduler {
       throw new IllegalStateException("Can not execute unscheduled tick.");
     }
 
+    isExecuting = true;
     isTickScheduled = false;
     component.handleTick();
+    // remove messages in front of tick and then the tick
+    for (IInPort<?> p : allInPorts) {
+      while ((!p.isBufferEmpty()) && (p.peekBuffer() != Tick.get())) {
+        p.pollBuffer();  // Remove all data messages
+      }
+      p.pollBuffer();  // Remove the processed tick
+    }
+    isExecuting = false;
 
-    allInPorts.stream()
-      .filter(p -> !p.isBufferEmpty())
-      .map(ITimeAwareInPort.class::cast)
-      .forEach(this::requestScheduling);
+    // Put ports that had messages buffered behind the tick into the scheduling queue again
+    for (IInPort<?> p : allInPorts) {
+      if (!p.isBufferEmpty()) {
+        this.requestScheduling((ITimeAwareInPort<?>) p);
+      }
+    }
   }
 
   void triggerComponentTickPort() {
@@ -130,15 +155,12 @@ public class ComponentScheduler {
     }
   }
 
-  public void runIfPossible(int ticks) {
+  public void run(int ticks) {
     if (ticks < 0) {
       this.run();
     }
 
-    for (int i = 0; i < ticks; i++) {
-      if (!isReadyToExecute()) {
-        break;
-      }
+    for (int i = 0; i < ticks && isReadyToExecute(); i++) {
       executeNextSchedule();
     }
   }

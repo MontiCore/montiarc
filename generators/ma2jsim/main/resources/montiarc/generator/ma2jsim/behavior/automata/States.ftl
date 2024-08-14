@@ -34,7 +34,7 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
     ))
   </#list>
   <#list helper.getInitAction(state)>
-  .setInitAction(() -> {
+  .setInitAction((in) -> {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
@@ -46,8 +46,7 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
   })
   </#list>
   <#if helper.getEntryAction(state).isPresent()>
-  .setEntryAction(() -> {
-    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [ast.getSymbol().getAllIncomingPorts(), true])}
+  .setEntryAction((in) -> {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
@@ -57,8 +56,7 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
   })
   </#if>
   <#if helper.getExitAction(state).isPresent()>
-  .setExitAction(() -> {
-    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowInputs.ftl", [ast.getSymbol().getAllIncomingPorts(), true])}
+  .setExitAction((in) -> {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}

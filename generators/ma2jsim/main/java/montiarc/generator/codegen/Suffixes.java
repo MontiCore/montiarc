@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
+@SuppressWarnings("unused")
 public class Suffixes {
   
   protected Suffixes() {}
@@ -27,6 +28,9 @@ public class Suffixes {
   public final static String PARAMETERS = "Parameters";
   public final static String FEATURES = "Features";
   public final static String EVENTS = "Events";
+  public final static String SYNC_MSG = "SyncMsg";
+  public final static String MSG_GUARD = "MsgGuard";
+  public final static String MSG_Action = "MsgAction";
 
   public String top() { return TOP; }
   public String component() { return COMPONENT; }
@@ -44,4 +48,7 @@ public class Suffixes {
   public String parameters() { return PARAMETERS; }
   public String features() { return FEATURES; }
   public String events() { return EVENTS; }
+  public String syncMsg() { return SYNC_MSG; }
+  public String msgGuard() { return MSG_GUARD; }
+  public String msgAction() { return MSG_Action; }
 }

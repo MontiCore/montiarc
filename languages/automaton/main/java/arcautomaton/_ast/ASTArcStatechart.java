@@ -117,6 +117,10 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     return commonSuperstate;
   }
 
+  /**
+   * Returns all super states to which {@code state} belongs to, including {@code state} itself. <br>
+   * The order in the list starts from {@code state} and moves up all ancestors until the root state.
+   */
   public List<ASTSCState> findPath(ASTSCState state) {
     List<ASTSCState> path = new ArrayList<>();
     path.add(state);
@@ -131,11 +135,22 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     return path;
   }
 
-  public List<ASTSCState> gettrimlist(ASTSCState curr, ASTSCState common) {
-    List<ASTSCState> path = findPath(curr);
+  /**
+   * Given that {@code ancestor} is an ancestor of {@code baseState}, this method returns the states that are in between
+   * {@code ancestor} and {@code baseState} in the state hierarchy. <br>
+   * {code ancestor} is not included in the returned list, but {@code baseState} is.
+   * The <i>order</i> starts from the first child state of {@code ancestor} and moves downwards the state hierarchy,
+   * until it reaches {@code baseState}.
+   *
+   * @param ancestor In the special case that ancestor is {@code null}, the method returns all states ancestors of
+   *                 {@code baseState} in the state hierarchy in the order from the most outer state to
+   *                 {@code baseState}.
+   */
+  public List<ASTSCState> getAncestorsInbetween(ASTSCState baseState, ASTSCState ancestor) {
+    List<ASTSCState> path = findPath(baseState);
     Collections.reverse(path);
-    if (common != null) {
-      path = path.subList(path.indexOf(common) + 1, path.size());
+    if (ancestor != null) {
+      path = path.subList(path.indexOf(ancestor) + 1, path.size());
     }
     return path;
   }

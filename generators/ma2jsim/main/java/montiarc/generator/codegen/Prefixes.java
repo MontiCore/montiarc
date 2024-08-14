@@ -13,6 +13,7 @@ public class Prefixes {
   
   public final static String DEPLOY = "Deploy";
   public final static String PORT = "port_";
+  public final static String PORT_VALUE_OF = "portValueOf_";
   public final static String PARAMETER = "param_";
   public final static String FIELD = "field_";
   public final static String FEATURE = "feature_";
@@ -28,6 +29,7 @@ public class Prefixes {
   
   public String deploy() { return DEPLOY; }
   public String port() { return PORT; }
+  public String portValueOf() { return PORT_VALUE_OF; }
   public String parameter() { return PARAMETER; }
   public String field() { return FIELD; }
   public String feature() { return FEATURE; }

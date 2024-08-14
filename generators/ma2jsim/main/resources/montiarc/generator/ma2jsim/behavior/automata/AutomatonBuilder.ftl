@@ -8,10 +8,11 @@ ${tc.signature("isTop", "variant")}
 <#assign isEvent = helper.isEventBased(automaton)/>
 <#assign MODIFIER><#if isTop>abstract</#if></#assign>
 <#assign CLASS>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${suffixes.builder()}<#if isTop>TOP</#if></#assign>
-<#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"}${ast.getName()}${suffixes.context()}${ubGenerics}, ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}${">"}</#assign>
 <#assign CONTEXT>${ast.getName()}${suffixes.context()}${ubGenerics}</#assign>
+<#assign SYNC_MSG>${ast.getName()}${suffixes.syncMsg()}${ubGenerics}</#assign>
+<#assign BEHAVIOR>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}</#assign>
+<#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"} ${CONTEXT}, ${SYNC_MSG}, ${BEHAVIOR} ${">"}</#assign>
 
-import montiarc.rte.automaton.Automaton;
 public ${MODIFIER} class ${CLASS}<@Util.printTypeParameters ast/> extends ${SUPER} {
 
 <#-- Constructor -->
@@ -21,7 +22,7 @@ protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymb
 
 <#-- Methods -->
 @Override
-public ${SUPER} addDefaultStates() { <#-- TODO replace super with concrete type? -->
+public ${SUPER} addDefaultStates() {
   states = new ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}(context);
   return this;
 }

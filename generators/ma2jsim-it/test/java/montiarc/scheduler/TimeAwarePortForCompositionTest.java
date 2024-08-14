@@ -11,7 +11,7 @@ class TimeAwarePortForCompositionTest {
   void testBuffer(){
     // Given
     SchedulerComp comp = new SchedulerCompBuilder().setName("test").build();
-    TimeAwarePortForComposition<Integer> buffer = new TimeAwarePortForComposition<>("test", comp, comp.scheduler);
+    TimeAwarePortForComposition<Integer> buffer = new TimeAwarePortForComposition<>("test", comp, comp.getScheduler());
     // When
     for(int i = 0; i < 10; i ++){
       buffer.receive(new Message<>(i));

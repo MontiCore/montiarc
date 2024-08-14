@@ -3,7 +3,14 @@ package montiarc.rte.automaton;
 
 import montiarc.rte.behavior.AbstractBehavior;
 
-public abstract class Automaton<C> extends AbstractBehavior<C> {
+/**
+ * @param <C> the type of the owning component
+ * @param <I> the Sync message type of the behavior.
+ *           Its objects conclude the values of the input ports at the time of a tick.
+ *           This type must also be bound for event behaviors as part of the 150% modeling that
+ *           the generator currently implements in order to model variability.
+ */
+public abstract class Automaton<C, I> extends AbstractBehavior<C, I> {
 
   protected State state;
 

@@ -3,19 +3,18 @@ package montiarc.rte.automaton;
 
 /**
  * Represents a transition in a state machine.
+ * @param <T> the type of the message that triggers the transition. Use {@link NoInput} for transitions without argument.
  */
-public class Transition {
-
-  State source;
-  State target;
-  Guard guard;
-  Action action;
-  State current;
+public class Transition<T> {
+  final State source;
+  final State target;
+  final Guard<T> guard;
+  final Action<T> action;
 
   protected Transition(State source,
                        State target,
-                       Guard guard,
-                       Action action) {
+                       Guard<T> guard,
+                       Action<T> action) {
     this.source = source;
     this.target = target;
     this.guard = guard;
@@ -30,21 +29,21 @@ public class Transition {
     return this.target;
   }
 
-  protected Guard getGuard() {
+  protected Guard<T> getGuard() {
     return this.guard;
   }
 
-  protected Action getAction() {
+  protected Action<T> getAction() {
     return this.action;
   }
 
-  public boolean isEnabled(State current) {
-    this.current = current;
-    return (this.getSource().equals(current) || this.getSource().isSubstate(current)) && this.getGuard().check();
+  public boolean isEnabled(State current, T msg) {
+    return (this.getSource().equals(current) || this.getSource().isSubstate(current))
+      && this.getGuard().check(msg);
   }
 
-  public void execute(Automaton<?> context) {
-    this.action.execute();
+  public void execute(Automaton<?, ?> context, T msg) {
+    this.action.execute(msg);
 
     context.setState(this.getTarget().getInitialSubstate());
   }

@@ -87,4 +87,7 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
     return typeSymbol.getFullName();
   }
 
+  public ComponentTypeSymbol getAdaptee() {
+    return this.typeSymbol;
+  }
 }

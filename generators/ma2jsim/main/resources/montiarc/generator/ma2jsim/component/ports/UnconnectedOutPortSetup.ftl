@@ -5,7 +5,6 @@
 
 <#assign modeAutomatonOpt = helper.getModeAutomaton(ast)/>
 
-protected java.util.Set${"<"}montiarc.rte.port.IOutPort${">"} unconnectedOutputs;
 <#if !modeAutomatonOpt.isPresent()>
   <#list helper.getVariants(ast) as variant>
     protected void <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}() {

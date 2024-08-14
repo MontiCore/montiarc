@@ -7,9 +7,9 @@ import java.util.List;
 public class StateBuilder {
 
   protected String name;
-  protected Action initAction;
-  protected Action entryAction;
-  protected Action exitAction;
+  protected Action<NoInput> initAction;
+  protected Action<NoInput> entryAction;
+  protected Action<NoInput> exitAction;
   protected List<State> substates = new ArrayList<>();
   protected List<State> initialSubstates = new ArrayList<>();
 
@@ -31,29 +31,29 @@ public class StateBuilder {
     return this;
   }
 
-  public Action getExitAction() {
+  public Action<NoInput> getExitAction() {
     return exitAction;
   }
 
-  public StateBuilder setExitAction(Action exitAction) {
+  public StateBuilder setExitAction(Action<NoInput> exitAction) {
     this.exitAction = exitAction;
     return this;
   }
 
-  public Action getEntryAction() {
+  public Action<NoInput> getEntryAction() {
     return entryAction;
   }
 
-  public StateBuilder setEntryAction(Action entryAction) {
+  public StateBuilder setEntryAction(Action<NoInput> entryAction) {
     this.entryAction = entryAction;
     return this;
   }
 
-  public Action getInitAction() {
+  public Action<NoInput> getInitAction() {
     return initAction;
   }
 
-  public StateBuilder setInitAction(Action entryAction) {
+  public StateBuilder setInitAction(Action<NoInput> entryAction) {
     this.initAction = entryAction;
     return this;
   }

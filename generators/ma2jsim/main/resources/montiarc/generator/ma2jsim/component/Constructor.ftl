@@ -6,7 +6,7 @@ ${tc.signature("isTop")}
 
 protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
   String name,
-  montiarc.rte.scheduling.TimeAwareScheduler scheduler
+  montiarc.rte.scheduling.Scheduler scheduler
   <#list ast.getHead().getArcParameterList()>,
     <#items as param><@Util.getTypeString param.getSymbol().getType()/> ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
   </#list>
@@ -14,8 +14,8 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
     <#items as feature>Boolean ${prefixes.feature()}${feature.getName()}<#sep>, </#items>
   </#list>
 ) {
-  this.name = name;
-  this.scheduler = scheduler;
+  super(name, scheduler);
+
   <#list ast.getHead().getArcParameterList() as param>
     this.${prefixes.parameter()}${param.getName()} = ${prefixes.parameter()}${param.getName()};
   </#list>
@@ -26,6 +26,8 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
     this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this);
   </#if>
 
+  this.variantID = determineVariant();
+
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 <#list ast.getSymbol().getFields() as field>
@@ -33,7 +35,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 </#list>
 
 <#list helper.getVariants(ast) as variant>
-  if (${prettyPrinter.prettyprintCondition(variant)}) {
+  if (this.variantID.equals("${helper.variantSuffix(variant)}")) {
     this.isAtomic = ${(variant.isAtomic() && !helper.getModeAutomaton(ast).isPresent())?c};
     <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
     <#if variant.isAtomic()>

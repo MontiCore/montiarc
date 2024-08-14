@@ -48,7 +48,7 @@
     </#list>
   </#list>
 
-  <#-- also setup simulator-specific tick connectors -->
+  <#-- Also setup simulator-specific tick connectors -->
   <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
     ((montiarc.rte.port.IOutPort) this.getTickPort()).connect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
   </#list>

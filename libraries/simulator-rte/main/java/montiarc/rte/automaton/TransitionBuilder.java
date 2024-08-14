@@ -1,14 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-public class TransitionBuilder {
+/**
+ * @param <T> the type of the message that triggers the transition. Use {@link NoInput} for transitions without argument
+ */
+public class TransitionBuilder<T> {
 
   State source;
   State target;
-  Guard guard;
-  Action action;
+  Guard<T> guard;
+  Action<T> action;
 
-  public TransitionBuilder setSource(State source) {
+  public TransitionBuilder<T> setSource(State source) {
     this.source = source;
     return this;
   }
@@ -17,7 +20,7 @@ public class TransitionBuilder {
     return this.source;
   }
 
-  public TransitionBuilder setTarget(State target) {
+  public TransitionBuilder<T> setTarget(State target) {
     this.target = target;
     return this;
   }
@@ -26,21 +29,21 @@ public class TransitionBuilder {
     return this.target;
   }
 
-  public TransitionBuilder setGuard(Guard guard) {
+  public TransitionBuilder<T> setGuard(Guard<T> guard) {
     this.guard = guard;
     return this;
   }
 
-  protected Guard getGuard() {
+  protected Guard<T> getGuard() {
     return this.guard;
   }
 
-  public TransitionBuilder setAction(Action action) {
+  public TransitionBuilder<T> setAction(Action<T> action) {
     this.action = action;
     return this;
   }
 
-  protected Action getAction() {
+  protected Action<T> getAction() {
     return this.action;
   }
 
@@ -51,18 +54,18 @@ public class TransitionBuilder {
       && this.getAction() != null;
   }
 
-  public Transition build() {
+  public Transition<T> build() {
 
     State source = this.getSource();
     State target = this.getTarget();
-    Guard guard = this.getGuard();
-    Action action = this.getAction();
+    Guard<T> guard = this.getGuard();
+    Action<T> action = this.getAction();
 
     if (source == null) throw new IllegalStateException();
     if (target == null) throw new IllegalStateException();
     if (guard == null) throw new IllegalStateException();
     if (action == null) throw new IllegalStateException();
 
-    return new Transition(source, target, guard, action);
+    return new Transition<>(source, target, guard, action);
   }
 }

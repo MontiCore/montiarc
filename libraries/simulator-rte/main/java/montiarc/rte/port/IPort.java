@@ -7,5 +7,5 @@ public interface IPort {
   
   String getQualifiedName();
 
-  default IComponent getOwner() { return null; }
+  IComponent getOwner();
 }

@@ -11,11 +11,16 @@ public class State {
   protected String name;
   protected List<State> substates;
   protected List<State> initialSubstates;
-  protected Action initAction;
-  protected Action entryAction;
-  protected Action exitAction;
+  protected Action<NoInput> initAction;
+  protected Action<NoInput> entryAction;
+  protected Action<NoInput> exitAction;
 
-  public State(String name, List<State> substates, List<State> initialSubstates, Action initAction, Action entryAction, Action exitAction) {
+  public State(String name,
+               List<State> substates,
+               List<State> initialSubstates,
+               Action<NoInput> initAction,
+               Action<NoInput> entryAction,
+               Action<NoInput> exitAction) {
     this.name = name;
     this.substates = substates;
     this.initAction = initAction;
@@ -33,7 +38,7 @@ public class State {
   }
 
   public void init() {
-    if (initAction != null) this.initAction.execute();
+    if (initAction != null) this.initAction.execute(null);
     enter();
   }
 
@@ -44,7 +49,7 @@ public class State {
   }
 
   public void enter() {
-    if (this.entryAction != null) this.entryAction.execute();
+    if (this.entryAction != null) this.entryAction.execute(null);
   }
 
   public void enterWithSub() {
@@ -54,7 +59,7 @@ public class State {
   }
 
   public void exit() {
-    if (this.exitAction != null) this.exitAction.execute();
+    if (this.exitAction != null) this.exitAction.execute(null);
   }
 
   public void exitSub(State source) {

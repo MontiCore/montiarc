@@ -3,18 +3,20 @@ package montiarc.rte.behavior;
 
 /**
  * Base class for behavior implementations.
- * Makes two major assumptions:
- * <ol>
- *   <li>Every instance of a behavior implementation belongs to a component instance, reflected in the field {@link #context}.</li>
- *   <li>Every behavior implementation should be able to react to a tick event.</li>
- * </ol>
+ * Makes the assumption that every instance of a behavior implementation belongs to a component instance,
+ * reflected in the field {@link #context}.
+ *
  * @param <C> the type of the owning component
+ * @param <I> the Sync message type of the behavior.
+ *           Its objects conclude the values of the input ports at the time of a tick.
+ *           This type must also be bound for event behaviors as part of the 150% modeling that
+ *           the generator currently implements in order to model variability.
  */
-public abstract class AbstractBehavior<C> implements IBehavior {
+public abstract class AbstractBehavior<C, I> implements IBehavior<I> {
   
   protected C context;
   
-  public AbstractBehavior(C context) {
+  protected AbstractBehavior(C context) {
     this.context = context;
   }
   

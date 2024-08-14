@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @ExtendWith(MockitoExtension.class)
-public class DeployTest {
+class DeployTest {
 
   /**
    * capture of the actual output stream on port o

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.ITimedComponent;
+import montiarc.rte.component.IComponent;
 import montiarc.rte.port.ITimeAwareInPort;
 
 import java.util.Collection;
@@ -9,7 +9,7 @@ import java.util.Collection;
 public final class ModeComponentScheduler extends ComponentScheduler {
   private final CoordinatingScheduler coordinator;
 
-  public ModeComponentScheduler(ITimedComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync, CoordinatingScheduler coordinator) {
+  public ModeComponentScheduler(IComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync, CoordinatingScheduler coordinator) {
     super(component, inPorts, isSync);
     this.coordinator = coordinator;
   }

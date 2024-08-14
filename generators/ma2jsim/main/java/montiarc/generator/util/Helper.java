@@ -4,7 +4,7 @@ package montiarc.generator.util;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
-import arcautomaton._ast.ASTMsgEventTOP;
+import arcautomaton._symboltable.Port2EventDefAdapter;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
@@ -62,6 +62,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@SuppressWarnings("unused")
 public class Helper {
 
   public List<Object> asList(Object... args) {
@@ -97,20 +98,20 @@ public class Helper {
    * @param sc the statechart from which transitions should be extracted
    * @return event-triggered transitions grouped by triggering port
    */
-  public Map<String, List<ASTSCTransition>> getTransitionsForPortEvents(ASTArcStatechart sc) {
+  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTArcStatechart sc) {
     return getTransitionsMappedToPortTriggers(sc.streamTransitions());
   }
 
-  public Map<String, List<ASTSCTransition>> getTransitionsForPortEvents(ASTModeAutomaton modeAutomaton) {
+  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTModeAutomaton modeAutomaton) {
     return getTransitionsMappedToPortTriggers(getTransitions(modeAutomaton).stream());
   }
 
-  protected Map<String, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(Stream<ASTSCTransition> transitions) {
-    Map<String, List<ASTSCTransition>> result = new HashMap<>();
+  protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(Stream<ASTSCTransition> transitions) {
+    Map<PortSymbol, List<ASTSCTransition>> result = new HashMap<>();
     transitions.forEach(tr -> {
       Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
       if (body.isEmpty()) return;
-      Optional<String> trigger = getTriggeringPortName(body.get());
+      Optional<PortSymbol> trigger = getTriggeringPortName(body.get());
       if (trigger.isEmpty()) return;
       if (result.containsKey(trigger.get())) result.get(trigger.get()).add(tr);
       else {
@@ -202,17 +203,20 @@ public class Helper {
     return Optional.empty();
   }
 
-  public Optional<String> getTriggeringPortName(ASTTransitionBody body) {
+  public Optional<PortSymbol> getTriggeringPortName(ASTTransitionBody body) {
     return Optional.of(body)
       .filter(ASTTransitionBody::isPresentSCEvent)
       .filter(bdy -> bdy.getSCEvent() instanceof ASTMsgEvent)
       .map(bdy -> (ASTMsgEvent) bdy.getSCEvent())
       .filter(event -> !ArcAutomatonMill.TICK.equals(event.getName()))
-      .map(ASTMsgEventTOP::getName);
+      .map(ASTMsgEvent::getEventSymbol)
+      .filter(sym -> sym instanceof Port2EventDefAdapter)
+      .map(sym -> ((Port2EventDefAdapter) sym).getAdaptee());
   }
 
   public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTComponentType comp) {
     List<String> triggeringPorts = getTransitionsForPortEvents(sc).keySet().stream()
+      .map(ISymbol::getName)
       .map(String::toLowerCase).collect(Collectors.toList());
     return comp.getSymbol().getAllIncomingPorts().stream()
       .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
@@ -221,6 +225,7 @@ public class Helper {
 
   public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTModeAutomaton sc, ASTComponentType comp) {
     List<String> triggeringPorts = getTransitionsForPortEvents(sc).keySet().stream()
+      .map(ISymbol::getName)
       .map(String::toLowerCase).collect(Collectors.toList());
     return comp.getSymbol().getAllIncomingPorts().stream()
       .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
@@ -401,6 +406,9 @@ public class Helper {
     if (type.isPrimitive()) {
       if (BasicSymbolsMill.BOOLEAN.equals(type.asPrimitive().getPrimitiveName()))
         return "false";
+      if (BasicSymbolsMill.CHAR.equals(type.asPrimitive().getPrimitiveName())) {
+        return "(char) 0";
+      }
       else return "0";
     } else return "null";
 

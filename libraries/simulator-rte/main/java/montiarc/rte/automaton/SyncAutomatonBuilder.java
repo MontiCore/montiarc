@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
-public abstract class SyncAutomatonBuilder<C, A extends Automaton<C>> extends AutomatonBuilder<C, A> {
+public abstract class SyncAutomatonBuilder<C, I, A extends Automaton<C, I>> extends AutomatonBuilder<C, I, A> {
 
   public SyncAutomatonBuilder(C context) {
     super(context);

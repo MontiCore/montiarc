@@ -1,36 +1,32 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign modeAutomatonOpt = helper.getModeAutomaton(ast)/>
 
+<#if modeAutomatonOpt.isPresent() && helper.isEventBased(modeAutomatonOpt.get())>
 @Override
-public void handleMessage(montiarc.rte.port.IInPort<?> p) {
-  <#if modeAutomatonOpt.isPresent() && helper.isEventBased(modeAutomatonOpt.get())>
+public void handleMessageWithModeAutomaton(montiarc.rte.port.IInPort<?> p) {
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-  <#assign portName>${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
-    if (p == ${portName}) {
-      getModeAutomaton().${prefixes.message()}${inPort.getName()}();
+    <#assign portNameWithSuffix>${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
+    <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
+    if (p == ${prefixes.port()}${portNameWithSuffix}) {
+      getModeAutomaton().${prefixes.message()}${inPort.getName()}(${prefixes.portValueOf()}${portNameWithSuffix}());
     }
   </#list>
-  </#if>
+}
+</#if>
 
-  if (!isAtomic) {
-    ((montiarc.rte.port.TimeAwarePortForComposition) p).forward();
-  } else if (<@MethodNames.getBehavior/>() == null) {
-    p.pollBuffer();
-  }
+@Override
+public void handleMessageWithBehavior(montiarc.rte.port.IInPort<?> p) {
+  if (this.getBehavior() == null) throw new IllegalStateException();
 
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-    <#assign portName>${prefixes.port()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
-    else if (p == ${portName}) {
-      if (isAtomic) {
-        if (<@MethodNames.getBehavior/>() != null) {
-          ((${ast.getName()}${suffixes.events()}) <@MethodNames.getBehavior/>()).${prefixes.message()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}();
-        } else { ${portName}.pollBuffer(); } <#-- TODO: move pollBuffer logic out of behavior and into scheduler? -->
-      } else {
-        ((montiarc.rte.port.TimeAwarePortForComposition<?>) ${portName}()).forward();
-      }
+    <#assign portNameWithSuffix>${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
+    <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
+    if (p == ${prefixes.port()}${portNameWithSuffix}) {
+      this.getBehavior().${prefixes.message()}${portNameWithSuffix}(${prefixes.portValueOf()}${portNameWithSuffix}());
     }
   </#list>
 }

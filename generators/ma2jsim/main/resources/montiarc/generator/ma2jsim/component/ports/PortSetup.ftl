@@ -14,7 +14,5 @@
     <#list ast.getSymbol().getAllOutgoingPorts() as port>
       this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.TimeAwarePortForward<>(getName() + ".${port.getName()}", this);
     </#list>
-
-    this.tickPort = new montiarc.rte.port.TimeAwarePortForComposition<>(getName() + ".#tick", this, scheduler);
   }
 </#list>
