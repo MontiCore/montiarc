@@ -3,20 +3,25 @@
 <#-- SubcomponentSymbol subcomponentSym, String modeName (may be empty: "") -->
 ${tc.signature("subcomponentSym", "modeName")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-<#assign existenceConditions = helper.getExistenceCondition(ast, subcomponentSym)/>
+
 <#assign subCompType><@Util.getCompTypeString subcomponentSym.getType() suffixes.component()/></#assign>
 <#assign modeNamePart>${modeName}<#if modeName?has_content>_</#if></#assign>
 <#assign subCompName>${prefixes.subcomp()}${modeNamePart}${subcomponentSym.getName()}${helper.subcomponentVariantSuffix(ast, subcomponentSym)}</#assign>
 
+<#assign variants = helper.getVariants(ast)>
+<#assign hasOnlyOneVariant = variants?size == 1>
+
 protected ${subCompType} ${subCompName}() {
-<#if existenceConditions?has_content>
-    ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
-    if(${prettyPrinter.prettyprint(existenceConditions)}) {
-</#if>
-return this.${subCompName};
-<#if existenceConditions?has_content>
-    } else throw new java.lang.RuntimeException(
-    "Subcomponent ${subcomponentSym.getName()} is not available in component " + getName()
-    + " under the given feature configuration.");
-</#if>
+  <#if hasOnlyOneVariant>
+    return this.${subCompName};
+  <#else>
+    if (java.util.Set.of(
+        <#list helper.getVariantsWithSubcomponent(ast, subcomponentSym) as v> ${helper.variantSuffix(v)} <sep>, </#list>
+      ).contains(this.variantID)) {
+      return this.${subCompName};
+    } else {
+      assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+      return null;
+    }
+  </#if>
 }

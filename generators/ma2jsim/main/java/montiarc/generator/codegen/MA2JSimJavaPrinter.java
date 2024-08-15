@@ -21,6 +21,7 @@ import variablearc.evaluation.expressions.NegatedExpression;
 import java.util.Iterator;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
 
   public MA2JSimJavaPrinter() {

@@ -2,9 +2,7 @@
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 public ${ast.getName()}${suffixes.component()}<@Util.printTypeParameters ast false/> build() {
-  if(!isValid()) throw new java.lang.IllegalStateException(
-    "Illegal builder configuration for component " + ((name == null || name.isBlank())? "ERR: no name given" : name)
-  );
+  assert isValid() : "Illegal builder configuration for component " + ((name == null || name.isBlank())? "ERR: no name given" : name);
 
   ${ast.getName()}${suffixes.component()}<@Util.printTypeParameters ast false/> component = new ${ast.getName()}${suffixes.component()}<@Util.printTypeParameters ast false/>(
     getName(),

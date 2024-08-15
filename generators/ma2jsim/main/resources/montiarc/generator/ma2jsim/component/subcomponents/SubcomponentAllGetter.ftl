@@ -3,29 +3,49 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign modeAutomatonOpt = helper.getModeAutomaton(ast)>
+<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
 
 public java.util.List${"<"}montiarc.rte.component.Component${">"} getAllSubcomponents() {
-${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
+  final java.util.ArrayList${"<"}montiarc.rte.component.Component${">"} allSubcomponentList = new java.util.ArrayList<>();
 
-  final java.util.ArrayList${"<"}montiarc.rte.component.Component${">"} __allSubcomponentList__ = new java.util.ArrayList<>();
-<#list ast.getSymbol().getSubcomponents() as subcomponent>
-  <#assign existenceConditions = helper.getExistenceCondition(ast, subcomponent)/>
-  <#if existenceConditions?has_content>if(${prettyPrinter.prettyprint(existenceConditions)}) {</#if>
-  __allSubcomponentList__.add(${prefixes.subcomp()}${subcomponent.getName()}${helper.subcomponentVariantSuffix(ast, subcomponent)}());
-  <#if existenceConditions?has_content>}</#if>
-</#list>
-
-  <#if modeAutomatonOpt.isPresent()>
-  <#list helper.getModes(modeAutomatonOpt.get()) as mode>
-    <#list helper.getInstancesFromMode(mode) as sub>
-    <#assign subSymbol = sub.getSymbol()>
-    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
-    if (${subCompName}() != null) {
-      __allSubcomponentList__.add(${subCompName}());
-    }
+  <#if hasOnlyOneVariant>
+    <#list ast.getSymbol().getSubcomponents() as subcomponent>
+      allSubcomponentList.add(<@subCompAccessor subcomponent/>);
     </#list>
-  </#list>
+  <#else>
+    switch (this.variantID) {
+      <#list helper.getVariants(ast) as variant>
+        case ${helper.variantSuffix(variant)}:
+        <#list variant.getSubcomponents() as subcomponent>
+          allSubcomponentList.add(<@subCompAccessor subcomponent/>);
+        </#list>
+          break;
+      </#list>
+      default: assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+    }
   </#if>
 
-  return __allSubcomponentList__;
+  <#if modeAutomatonOpt.isPresent()>
+  switch (this.modeAutomaton.currentMode) {
+    <#list helper.getModes(modeAutomatonOpt.get()) as mode>
+      case ${mode.getName()}:
+        <#list helper.getInstancesFromMode(mode) as modeSub>
+          allSubcomponentList.add(<@modeSubCompAccessor modeSub.getSymbol() mode/>);
+        </#list>
+        break;
+    </#list>
+  }
+  </#if>
+
+  return allSubcomponentList;
 }
+
+<#macro subCompAccessor subSymbol>
+  <#assign variantSuffix = helper.subcomponentVariantSuffix(ast, subSymbol)>
+  this.${prefixes.subcomp()}${subSymbol.getName()}${variantSuffix}()
+</#macro>
+
+<#macro modeSubCompAccessor subSymbol mode>
+  <#assign variantSuffix = helper.subcomponentVariantSuffix(ast, subSymbol)>
+  this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${variantSuffix}()
+</#macro>

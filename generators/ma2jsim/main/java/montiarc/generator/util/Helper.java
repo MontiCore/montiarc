@@ -54,6 +54,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -411,7 +412,24 @@ public class Helper {
       }
       else return "0";
     } else return "null";
+  }
 
+  /**
+   * Same as {@link this#getNullLikeValue(SymTypeExpression)}, but also explicitly casts 0's to bytes and shorts
+   * (i.e.: narrowing operations).
+   */
+  public String getNarrowedNullLikeValue(SymTypeExpression type) {
+    if (type.isPrimitive()) {
+      if (BasicSymbolsMill.BYTE.equals(type.asPrimitive().getPrimitiveName())) {
+        return "(byte) 0";
+      } else if (BasicSymbolsMill.SHORT.equals(type.asPrimitive().getPrimitiveName())) {
+        return "(short) 0";
+      } else if (BasicSymbolsMill.CHAR.equals(type.asPrimitive().getPrimitiveName())) {
+        return "(char) 0";
+      } else if (BasicSymbolsMill.BOOLEAN.equals(type.asPrimitive().getPrimitiveName())) {
+        return "false";
+      } else return "0";
+    } else return "null";
   }
 
   public boolean isUnboxedChar(SymTypeExpression type) {
@@ -510,6 +528,44 @@ public class Helper {
   public String fieldVariantSuffix(ASTComponentType comp, VariableSymbol field) {
     List<VariableSymbol> fields = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolveVariableMany(field.getName()));
     return fields.size() <= 1 ? "" : Integer.toString(fields.indexOf(field));
+  }
+
+  public List<VariableArcVariantComponentTypeSymbol> getVariantsWithPort(ASTComponentType comp, PortSymbol port) {
+    List<VariableArcVariantComponentTypeSymbol> variants = getVariants(comp);
+    List<VariableArcVariantComponentTypeSymbol> varsWithPort = new ArrayList<>(variants.size());
+
+    for (var variant : variants) {
+      Collection<PortSymbol> allVariantPorts = new HashSet<>();
+      allVariantPorts.addAll(variant.getAllIncomingPorts());
+      allVariantPorts.addAll(variant.getAllOutgoingPorts());
+
+      for (var variantPort : allVariantPorts) {
+        if (variantPort == port ||
+          (variantPort instanceof VariantPortSymbol && ((VariantPortSymbol) variantPort).getOriginal() == port)
+        ) {
+          varsWithPort.add(variant);
+        }
+      }
+    }
+
+    return varsWithPort;
+  }
+
+  public List<VariableArcVariantComponentTypeSymbol> getVariantsWithSubcomponent(ASTComponentType comp, SubcomponentSymbol sub) {
+    List<VariableArcVariantComponentTypeSymbol> variants = getVariants(comp);
+    List<VariableArcVariantComponentTypeSymbol> varsWithSub = new ArrayList<>(variants.size());
+
+    for (var variant : variants) {
+      for (var variantSub : variant.getSubcomponents()) {
+        if (variantSub == sub ||
+          (variantSub instanceof VariantSubcomponentSymbol && ((VariantSubcomponentSymbol) variantSub).getOriginal() == sub)
+        ) {
+          varsWithSub.add(variant);
+        }
+      }
+    }
+
+    return varsWithSub;
   }
 
   public List<ASTSCState> getSubstates(ASTSCState state) {

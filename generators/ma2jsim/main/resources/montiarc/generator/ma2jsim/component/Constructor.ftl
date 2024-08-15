@@ -4,6 +4,8 @@ ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 
+<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
+
 protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
   String name,
   montiarc.rte.scheduling.Scheduler scheduler
@@ -26,7 +28,9 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
     this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this);
   </#if>
 
+<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariants(ast)[0]) == "true")>
   this.variantID = determineVariant();
+</#if>
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
@@ -34,24 +38,19 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
   ${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)} = ${prettyPrinter.prettyprint(helper.getInitialForVariable(field))};
 </#list>
 
-<#list helper.getVariants(ast) as variant>
-  if (this.variantID.equals("${helper.variantSuffix(variant)}")) {
-    this.isAtomic = ${(variant.isAtomic() && !helper.getModeAutomaton(ast).isPresent())?c};
-    <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
-    <#if variant.isAtomic()>
-        <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
-    <#elseif variant.isDecomposed()>
-        <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}();
-        <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}();
-    </#if>
-    <#if !helper.getModeAutomaton(ast).isPresent()>
-      <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}();
-    </#if>
-  }
-  <#sep> else </#sep>
-</#list>
-else throw new java.lang.RuntimeException(
-"Component ${ast.getName()} is not correctly configured, no variant selected");
+  <#if hasOnlyOneVariant>
+    <@variantSetup helper.getVariants(ast)[0]/>
+  <#else>
+    switch (this.variantID){
+      <#list helper.getVariants(ast) as variant>
+      case ${helper.variantSuffix(variant)} :
+        <@variantSetup variant/>
+        break;
+      </#list>
+      default:
+        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+    }
+  </#if>
 
 <#if helper.getModeAutomaton(ast).isPresent()>
   this.modeAutomaton.setup();
@@ -60,3 +59,17 @@ else throw new java.lang.RuntimeException(
 this.scheduler.register(this, this.getAllInPorts(), isSync);
 
 }
+
+<#macro variantSetup variant>
+  this.isAtomic = ${(variant.isAtomic() && !helper.getModeAutomaton(ast).isPresent())?c};
+  <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
+  <#if variant.isAtomic()>
+    <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
+  <#elseif variant.isDecomposed()>
+    <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}();
+    <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}();
+  </#if>
+  <#if !helper.getModeAutomaton(ast).isPresent()>
+    <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}();
+  </#if>
+</#macro>

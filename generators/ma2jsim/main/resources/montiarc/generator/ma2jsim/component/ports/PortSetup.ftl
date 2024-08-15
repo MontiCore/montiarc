@@ -8,10 +8,10 @@
   protected void <@MethodNames.portSetup/>${helper.variantSuffix(variant)}() {
     ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
-    <#list ast.getSymbol().getAllIncomingPorts() as port>
+    <#list variant.getAllIncomingPorts() as port>
       this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.ScheduledPort<>(getName() + ".${port.getName()}", this, scheduler);
     </#list>
-    <#list ast.getSymbol().getAllOutgoingPorts() as port>
+    <#list variant.getAllOutgoingPorts() as port>
       this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.PortForward<>(getName() + ".${port.getName()}", this);
     </#list>
   }

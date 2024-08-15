@@ -1,19 +1,29 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
-
-<#assign SYNC_MSG = ast.getName() + suffixes.syncMsg()/>
+<#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
+<#assign SYNC_MSG>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
+<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
 
 @Override
 protected ${SYNC_MSG} buildSyncMessage() {
-  <#list helper.getVariants(ast) as variant>
-  if (this.variantID.equals("${helper.variantSuffix(variant)}")) {
-    return doBuildSyncMessage${helper.variantSuffix(variant)}();
-  }
-  <#sep> else </#sep>
-  </#list>
-  else {
-    throw new java.lang.IllegalStateException("Component ${ast.getName()} is not correctly configured, no variant selected");
-  }
+  <#if hasOnlyOneVariant>
+    return doBuildSyncMessage();
+  <#else>
+    switch (this.variantID) {
+      <#list helper.getVariants(ast) as variant>
+        case ${helper.variantSuffix(variant)}:
+          return doBuildSyncMessage${helper.variantSuffix(variant)}();
+      </#list>
+      default:
+        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+        return new ${SYNC_MSG}(
+          <#list ast.getSymbol().getAllIncomingPorts() as inPort>
+            ${helper.getNarrowedNullLikeValue(inPort.getType())}
+            <#sep>, </#sep>
+          </#list>
+      );
+    }
+  </#if>
 }
 
 <#list helper.getVariants(ast) as variant>
@@ -28,7 +38,7 @@ protected ${SYNC_MSG} buildSyncMessage() {
               -- of a component. Therefore, we have to call the constructor with values for non-existing ports, too
               -- (regarding the given variant).
               -->
-            ${helper.getNullLikeValue(inPort.getType())}
+            ${helper.getNarrowedNullLikeValue(inPort.getType())}
           </#if>
         <#sep>, </#sep>
         </#list>
