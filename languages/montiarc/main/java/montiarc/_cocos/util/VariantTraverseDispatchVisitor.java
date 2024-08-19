@@ -77,6 +77,10 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
         IVisitor coco = null;
         // Select a fitting constructor for the coco
         try {
+          coco = c.getDeclaredConstructor().newInstance();
+        } catch (Exception ignored) {
+        }
+        if (coco == null) try {
           coco = c.getDeclaredConstructor(IDerive.class).newInstance(tc);
         } catch (Exception ignored) {
         }
@@ -84,11 +88,8 @@ public class VariantTraverseDispatchVisitor implements ArcBasisVisitor2 {
           coco = c.getDeclaredConstructor(TypeCalculator.class).newInstance(tc2tc);
         } catch (Exception ignored) {
         }
-        if (coco == null) try {
+        if (coco == null)
           coco = c.getDeclaredConstructor(ComponentTypeSymbol.class).newInstance(variant);
-        } catch (Exception ignored) {
-        }
-        if (coco == null) coco = c.getDeclaredConstructor().newInstance();
         if (coco instanceof ArcBasisVisitor2) {
           traverser.add4ArcBasis((ArcBasisVisitor2) coco);
         } else if (coco instanceof MCCommonStatementsVisitor2) {

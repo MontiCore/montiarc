@@ -67,7 +67,7 @@ public class FieldInitTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator()));
+    checker.addCoCo(new FieldInitTypeFits());
 
     // When
     checker.checkAll(ast);
@@ -86,7 +86,7 @@ public class FieldInitTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new FieldInitTypeFits(new MontiArcTypeCalculator()));
+    checker.addCoCo(new FieldInitTypeFits());
 
     // When
     checker.checkAll(ast);

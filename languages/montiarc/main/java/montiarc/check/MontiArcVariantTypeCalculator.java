@@ -11,6 +11,7 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.TypeCalculator3;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
+import de.monticore.types3.util.MapBasedTypeCheck3;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -39,6 +40,9 @@ public class MontiArcVariantTypeCalculator extends MontiArcTypeCalculator {
     initExpressionBasisTypeVisitor(t, variant);
     traverser.getCommonExpressionsVisitorList().clear();
     initCommonExpressionsTypeVisitor(t, variant);
+    // initialize the global delegate
+    new MapBasedTypeCheck3(t.getTypeTraverser(), t.getType4Ast(), t.getCtx4Ast())
+        .setThisAsDelegate();
     return t;
   }
 

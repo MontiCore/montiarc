@@ -11,6 +11,7 @@ import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.TypeCalculator3;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
+import de.monticore.types3.util.MapBasedTypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -31,6 +32,9 @@ public class ArcBasisTypeCalculator extends AbstractArcTypeCalculator {
     Preconditions.checkNotNull(tc);
     initExpressionBasisTypeVisitor(tc);
     initMCBasicTypesTypeVisitor(tc);
+    // initialize the global delegate
+    new MapBasedTypeCheck3(tc.getTypeTraverser(), tc.getType4Ast(), tc.getCtx4Ast())
+        .setThisAsDelegate();
     return tc;
   }
 

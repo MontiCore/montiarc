@@ -8,6 +8,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -16,15 +17,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * [RRW14a] T2: Initial values of variables must conform to their types.
  */
 public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
-
-  /**
-   * Used to extract the type to which initialization expressions of fields evaluate.
-   */
-  protected final IArcTypeCalculator tc;
-
-  public FieldInitTypeFits(@NotNull IArcTypeCalculator tc) {
-    this.tc = Preconditions.checkNotNull(tc);
-  }
 
   @Override
   public void check(@NotNull ASTArcField astField) {
@@ -41,7 +33,7 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
     SymTypeExpression fieldType = fieldSym.getType();
 
     ASTExpression initExpr = astField.getInitial();
-    SymTypeExpression expressionType = this.tc.typeOf(initExpr);
+    SymTypeExpression expressionType = TypeCheck3.typeOf(initExpr, fieldType);
 
     if (expressionType.isObscureType()) {
       Log.debug(astField.get_SourcePositionStart()

@@ -10,6 +10,7 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.TypeCalculator3;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
+import de.monticore.types3.util.MapBasedTypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -30,6 +31,9 @@ public class ComfortableArcTypeCalculator extends AbstractArcTypeCalculator {
     Preconditions.checkNotNull(t);
     ArcBasisTypeCalculator.initExpressionBasisTypeVisitor(t);
     ArcBasisTypeCalculator.initMCBasicTypesTypeVisitor(t);
+    // initialize the global delegate
+    new MapBasedTypeCheck3(t.getTypeTraverser(), t.getType4Ast(), t.getCtx4Ast())
+        .setThisAsDelegate();
     return t;
   }
 }

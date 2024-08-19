@@ -23,6 +23,7 @@ import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVi
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.TypeCalculator3;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
+import de.monticore.types3.util.MapBasedTypeCheck3;
 import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -51,6 +52,9 @@ public class MontiArcTypeCalculator extends AbstractArcTypeCalculator {
     initMCCollectionTypesTypeVisitor(t);
     initMCSimpleGenericTypesTypeVisitor(t);
     initSetExpressionsTypeVisitor(t);
+    // initialize the global delegate
+    new MapBasedTypeCheck3(t.getTypeTraverser(), t.getType4Ast(), t.getCtx4Ast())
+        .setThisAsDelegate();
     return t;
   }
 

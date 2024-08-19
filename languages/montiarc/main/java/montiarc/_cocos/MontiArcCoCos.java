@@ -120,7 +120,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new NoSubcomponentReferenceCycle());
     checker.addVariantCoCo(PortHeritageTypeFits.class);
     checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new FieldInitTypeFits(tc));
+    checker.addCoCo(new FieldInitTypeFits());
     checker.addCoCo(new ParameterDefaultValueTypeFits(tc));
     checker.addCoCo(new ParameterDefaultValueOmitsPortRef(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ComponentArgumentsOmitPortRef(new PortReferenceExtractor4CommonExpressions()));

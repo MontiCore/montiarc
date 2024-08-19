@@ -59,7 +59,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator());
+    FieldInitTypeFits coco = new FieldInitTypeFits();
     coco.check(field);
 
     Assertions.assertEquals(0, Log.getErrorCount(), Log.getFindings().toString());
@@ -82,7 +82,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator());
+    FieldInitTypeFits coco = new FieldInitTypeFits();
     coco.check(field);
 
     Assertions.assertEquals(0, Log.getErrorCount());
@@ -105,7 +105,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest 
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    FieldInitTypeFits coco = new FieldInitTypeFits(new ArcBasisTypeCalculator());
+    FieldInitTypeFits coco = new FieldInitTypeFits();
     coco.check(field);
 
     this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INIT_TYPE_MISMATCH);
