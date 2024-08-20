@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.build.Language.Companion.configureMCTask
 
 
 
@@ -12,12 +11,8 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-    grammar(libs.mc.grammar) {
-        capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
-    }
-    grammar(libs.mc.sc) {
-        capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
-    }
+    grammar(libs.mc.grammar)
+    grammar(libs.mc.sc)
 
     api(project(":languages:montiarc"))
     api(project(":languages:basis"))
@@ -35,8 +30,6 @@ dependencies {
     implementation(libs.mc.cd4a)
     implementation(libs.mc.ocl.ocl2smt)
     implementation(variantOf(libs.mc.cd4a) {classifier("cd2smt")})
-
-    configureMCTask("../effect/grammars/MCEffect.mc4")
 }
 
 tasks.shadowJar {

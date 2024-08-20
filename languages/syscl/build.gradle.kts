@@ -1,29 +1,22 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-import montiarc.build.Language.Companion.configureMCTask
-
 plugins {
   id("montiarc.build.language")
 }
 
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
-configurations {
-  grammar {
-    isCanBeResolved=true
-    isCanBeConsumed=true
-  }
-}
-
 dependencies {
-  grammar(libs.mc.grammar) {
-    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
-  }
+  grammar(libs.mc.grammar)
+  grammar(project(":languages:ag"))
+  grammar(project(":languages:generics"))
+  grammar(project(":languages:prepost"))
+  grammar(project(":languages:syscl-basis"))
 
-  api(project(":languages:generics"))
-  api(project(":languages:syscl-basis"))
   api(project(":languages:ag"))
+  api(project(":languages:generics"))
   api(project(":languages:prepost"))
+  api(project(":languages:syscl-basis"))
 
   testImplementation((project(":languages:basis"))) {
     capabilities {
@@ -36,8 +29,6 @@ dependencies {
   implementation(libs.janino)
   implementation(libs.mc.ocl)
 }
-
-configureMCTask("SysCL.mc4")
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

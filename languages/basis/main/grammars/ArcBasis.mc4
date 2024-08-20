@@ -11,8 +11,7 @@
  * This grammar is part of the MontiArc language definition,
  * which are organized according to this extension hierarchy:
  * * ArcBasis.mc4
- * * -- ComfortableArc.mc4
- * * -- GenericArc.mc4
+ * * -- ComfortableArc.mc4 * * -- GenericArc.mc4
  *
  * * ArcCore.mc4 composes
  *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4

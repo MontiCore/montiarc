@@ -243,7 +243,7 @@ everything is understood as class.
 [MontiArcParser]: ./montiarc/main/java/montiarc/_parser/MontiArcParser.java
 [MontiArcFullPrettyPrinter]: ./montiarc/main/java/montiarc/_visitor/MontiArcFullPrettyPrinter.java
 
-[MontiArcGrammar]: ./grammars/MontiArc.mc4
+[MontiArcGrammar]: montiarc/main/grammars/MontiArc.mc4
 
 ## Further Information
 

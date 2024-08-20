@@ -1,7 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-import montiarc.build.Language.Companion.configureMCTask
-
 plugins {
   id("montiarc.build.language")
 }
@@ -9,9 +7,8 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar(libs.mc.grammar) {
-    capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
-  }
+  grammar(libs.mc.grammar)
+  grammar(project(":languages:basis"))
 
   api(project(":languages:basis"))
 
@@ -27,8 +24,6 @@ dependencies {
 
   testImplementation(libs.mockito)
 }
-
-configureMCTask("ComfortableArc.mc4")
 
 java.registerFeature("tests") {
   usingSourceSet(sourceSets.getByName("test"))

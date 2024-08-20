@@ -1,7 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
 
-import montiarc.build.Language.Companion.configureMCTask
-
 plugins {
     id("montiarc.build.language")
     id("montiarc.build.java-library")
@@ -12,12 +10,8 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-    grammar(libs.mc.grammar) {
-        capabilities { requireCapability("de.monticore:monticore-grammar-grammars") }
-    }
-    grammar(libs.mc.sc) {
-        capabilities { requireCapability("de.monticore.lang:statecharts-grammars") }
-    }
+    grammar(libs.mc.grammar)
+    grammar(libs.mc.sc)
 
     api(project(":languages:montiarc"))
     api(project(":languages:basis"))
@@ -53,5 +47,3 @@ tasks.register<JavaExec>("runDemo") {
         "--map", modelDir+"Mapping.map"
     )
 }
-
-configureMCTask("../conformance/grammars/SCMapping.mc4")
