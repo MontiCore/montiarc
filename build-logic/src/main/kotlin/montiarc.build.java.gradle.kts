@@ -10,10 +10,12 @@ plugins {
 sourceSets {
   main {
     java.setSrcDirs(setOf("main/java"))
+    java.exclude("*.mc4")
     resources.setSrcDirs(setOf("main/resources"))
   }
   test {
     java.setSrcDirs(setOf("test/java"))
+    java.exclude("*.mc4")
     resources.setSrcDirs(setOf("test/resources"))
   }
 }

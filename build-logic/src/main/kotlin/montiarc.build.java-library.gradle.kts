@@ -6,3 +6,7 @@ plugins {
   id("montiarc.build.java")
   id("montiarc.build.publish-java")
 }
+
+java {
+  withSourcesJar()
+}
