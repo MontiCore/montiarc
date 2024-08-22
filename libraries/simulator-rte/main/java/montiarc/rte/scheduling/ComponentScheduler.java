@@ -1,12 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.IComponent;
+import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.IInPort;
-import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.port.SyncAwareInPort;
+import montiarc.rte.port.InPort;
 
 import java.util.ArrayDeque;
 import java.util.Collection;
@@ -15,16 +13,16 @@ import java.util.Set;
 
 public class ComponentScheduler {
 
-  protected final IComponent component;
-  protected final Set<IInPort<?>> allInPorts;
+  protected final Component component;
+  protected final Set<InPort<?>> allInPorts;
   protected final boolean isSyncComp;
 
-  protected final Deque<ITimeAwareInPort<?>> scheduledPorts;
+  protected final Deque<InPort<?>> scheduledPorts;
   protected boolean isTickScheduled;
   protected boolean isExecuting;
 
 
-  public ComponentScheduler(IComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync) {
+  public ComponentScheduler(Component component, Collection<? extends InPort<?>> inPorts, boolean isSync) {
     this.component = component;
     this.allInPorts = Set.copyOf(inPorts);
     this.isSyncComp = isSync;
@@ -34,19 +32,19 @@ public class ComponentScheduler {
     this.isExecuting = false;
   }
 
-  public void requestScheduling(ITimeAwareInPort<?> port, Object newMsg) {
+  public void requestScheduling(InPort<?> port, Object newMsg) {
     if (newMsg instanceof Message) {
       throw new IllegalArgumentException("Requested message object should be unwrapped and not instance of the rte class 'Message'");
     }
     requestScheduling(port);
   }
 
-  public void requestSchedulingOfNewTick(ITimeAwareInPort<?> port) {
+  public void requestSchedulingOfNewTick(InPort<?> port) {
     requestScheduling(port);
   }
 
 
-  public void requestScheduling(ITimeAwareInPort<?> port) {
+  public void requestScheduling(InPort<?> port) {
     if (this.isExecuting) {
       return;  // After execution has finished, the scheduler will schedule the port by itself if there is a new message
     }
@@ -62,14 +60,14 @@ public class ComponentScheduler {
     if (isTickScheduled) {
       return;
     } else if (allPortsHaveBufferedTick()) {
-      for (IInPort<?> p : allInPorts) {
-        ((SyncAwareInPort<?>) p).dropMessagesIgnoredBySync();  // Remove the processed tick
+      for (InPort<?> p : allInPorts) {
+        p.dropMessagesIgnoredBySync();  // Remove the processed tick
       }
       isTickScheduled = true;
     }
   }
 
-  protected void requestTimedScheduling(ITimeAwareInPort<?> port) {
+  protected void requestTimedScheduling(InPort<?> port) {
     if (scheduledPorts.contains(port) || isTickScheduled || port.isBufferEmpty()) {
       return;
     }
@@ -94,7 +92,7 @@ public class ComponentScheduler {
     }
   }
 
-  private void executePortSchedule(ITimeAwareInPort<?> port) {
+  private void executePortSchedule(InPort<?> port) {
     if (!scheduledPorts.contains(port)) {
       throw new IllegalStateException("Can not execute unscheduled port.");
     }
@@ -119,7 +117,7 @@ public class ComponentScheduler {
     isTickScheduled = false;
     component.handleTick();
     // remove messages in front of tick and then the tick
-    for (IInPort<?> p : allInPorts) {
+    for (InPort<?> p : allInPorts) {
       while ((!p.isBufferEmpty()) && (p.peekBuffer() != Tick.get())) {
         p.pollBuffer();  // Remove all data messages
       }
@@ -128,9 +126,9 @@ public class ComponentScheduler {
     isExecuting = false;
 
     // Put ports that had messages buffered behind the tick into the scheduling queue again
-    for (IInPort<?> p : allInPorts) {
+    for (InPort<?> p : allInPorts) {
       if (!p.isBufferEmpty()) {
-        this.requestScheduling((ITimeAwareInPort<?>) p);
+        this.requestScheduling(p);
       }
     }
   }
@@ -166,10 +164,10 @@ public class ComponentScheduler {
   }
 
   private boolean allPortsHaveBufferedTick() {
-    return allInPorts.stream().allMatch(IInPort::hasBufferedTick);
+    return allInPorts.stream().allMatch(InPort::hasBufferedTick);
   }
 
   private boolean allPortsAreTickBlocked() {
-    return allInPorts.stream().allMatch(p -> ((ITimeAwareInPort<?>) p).isTickBlocked());
+    return allInPorts.stream().allMatch(InPort::isTickBlocked);
   }
 }

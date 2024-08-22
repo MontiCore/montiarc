@@ -44,13 +44,13 @@
     <#assign sourcePort><@ModeUtil.calcPortAccessor connector.getSource() mode ast/></#assign>
     <#list connector.getTargetList() as target>
       <#assign targetPort><@ModeUtil.calcPortAccessor target mode ast/></#assign>
-      ((montiarc.rte.port.IOutPort) ${sourcePort}).connect((montiarc.rte.port.IInPort) ${targetPort});
+      ${sourcePort}.connect(${targetPort});
     </#list>
   </#list>
 
   <#-- Also setup simulator-specific tick connectors -->
   <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
-    ((montiarc.rte.port.IOutPort) this.getTickPort()).connect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
+    tickPort.connect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
   </#list>
 </#macro>
 

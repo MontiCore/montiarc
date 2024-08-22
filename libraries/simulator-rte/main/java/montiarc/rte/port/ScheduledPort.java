@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import montiarc.rte.component.IComponent;
+import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.scheduling.Scheduler;
@@ -10,23 +10,25 @@ import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.Iterator;
 
-
-public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implements SyncAwareInPort<T> {
+/**
+ * An incoming port of a MontiArc component that can receive messages and ticks and participates in scheduling.
+ */
+public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T> {
 
   protected Deque<Message<T>> buffer = new ArrayDeque<>();
   protected Scheduler scheduler;
 
-  public TimeAwarePortForComposition(String qualifiedName, IComponent owner) {
+  public ScheduledPort(String qualifiedName, Component owner) {
     super(qualifiedName, owner);
   }
-  public TimeAwarePortForComposition(String qualifiedName, IComponent owner, Scheduler scheduler) {
+  public ScheduledPort(String qualifiedName, Component owner, Scheduler scheduler) {
     this(qualifiedName, owner);
     this.scheduler = scheduler;
   }
 
   /**
    * Receive a message on this port, which is buffered for forwarding.
-   * This method should only be called by the {@link IOutPort}
+   * This method should only be called by the {@link OutPort}
    * to which this port forward is connected.
    *
    * @param message the message sent by the connected outgoing port
@@ -50,10 +52,8 @@ public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implemen
    */
   protected void processReceivedData(T data) {
     Message<T> msgObject = Message.of(data);
-    if (messageIsValidOnPort(msgObject)) {
-      buffer.add(msgObject);
-      scheduler.requestScheduling(this, data);
-    }
+    buffer.add(msgObject);
+    scheduler.requestScheduling(this, data);
   }
 
   /**
@@ -62,10 +62,8 @@ public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implemen
    * {@code receive(Tick.get())}.
    */
   protected void processReceivedTick() {
-    if (messageIsValidOnPort(Tick.get())) {
-      buffer.add(Tick.get());
-      scheduler.requestSchedulingOfNewTick(this);
-    }
+    buffer.add(Tick.get());
+    scheduler.requestSchedulingOfNewTick(this);
   }
 
   @Override
@@ -102,6 +100,7 @@ public class TimeAwarePortForComposition<T> extends TimeAwareOutPort<T> implemen
     return new ArrayDeque<>(this.buffer);
   }
 
+  @Override
   public void forwardWithoutRemoval() {
     this.send(buffer.peek());
   }

@@ -3,7 +3,7 @@ package montiarc.timed.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -43,13 +43,13 @@ class DeployTest {
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<OnOff> port_1;
+  InPort<OnOff> port_1;
 
   /**
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<OnOff> port_2;
+  InPort<OnOff> port_2;
 
   /**
    * @param expected1 the input stream on port i

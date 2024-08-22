@@ -5,7 +5,7 @@ package montiarc.rte.behavior;
  *
  * @param <T> Sync message type. Its objects conclude the values of the input ports at the time of a tick.
  */
-public interface IBehavior<T> {
+public interface Behavior<T> {
 
   /**
    * Initialize behavior.

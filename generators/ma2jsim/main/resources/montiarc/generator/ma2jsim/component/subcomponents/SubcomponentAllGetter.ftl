@@ -4,10 +4,10 @@
 
 <#assign modeAutomatonOpt = helper.getModeAutomaton(ast)>
 
-public java.util.List${"<"}montiarc.rte.component.IComponent${">"} getAllSubcomponents() {
+public java.util.List${"<"}montiarc.rte.component.Component${">"} getAllSubcomponents() {
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
-  final java.util.ArrayList${"<"}montiarc.rte.component.IComponent${">"} __allSubcomponentList__ = new java.util.ArrayList<>();
+  final java.util.ArrayList${"<"}montiarc.rte.component.Component${">"} __allSubcomponentList__ = new java.util.ArrayList<>();
 <#list ast.getSymbol().getSubcomponents() as subcomponent>
   <#assign existenceConditions = helper.getExistenceCondition(ast, subcomponent)/>
   <#if existenceConditions?has_content>if(${prettyPrinter.prettyprint(existenceConditions)}) {</#if>

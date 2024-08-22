@@ -5,20 +5,21 @@
 <#-- ASTPortAccess portAccess, ASTArcMode enclosingMode, ASTComponentType enclosingComp -->
 <#macro calcPortAccessor portAccess enclosingMode enclosingComp>
   <#assign portSym = portAccess.getPortSymbol()>
-  <#assign portMethodName>${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(enclosingComp, portSym)}</#assign>
+  <#assign portAccessorName>${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(enclosingComp, portSym)}</#assign>
   <#assign modeSubComps = helper.getInstanceSymbolsFromMode(enclosingMode)>
   <#if !portAccess.isPresentComponent()>  <#-- Port is part of enclosing comp -->
-      ${portMethodName}()
+    <#-- We directly access the field because we need to know that the port is an InOutPort -->
+    ${portAccessorName}
   <#else>
     <#assign portOwner = portAccess.getComponentSymbol()>
     <#assign portOwnerName = portOwner.getName()>
     <#assign portOwnerVariantSuffix = helper.subcomponentVariantSuffix(enclosingComp, portAccess.getComponentSymbol())>
     <#if modeSubComps?seq_contains(portOwner)>  <#-- Port is part of mode defined component -->
       <#assign portOwnerName>${prefixes.subcomp()}${enclosingMode.getName()}_${portOwnerName}${portOwnerVariantSuffix}</#assign>
-      ${portOwnerName}().${portMethodName}()
+      ${portOwnerName}().${portAccessorName}()
     <#else>
       <#assign portOwnerName>${prefixes.subcomp()}${portOwnerName}${portOwnerVariantSuffix}</#assign>
-      ${portOwnerName}().${portMethodName}()
+      ${portOwnerName}().${portAccessorName}()
     </#if>
   </#if>
 </#macro>

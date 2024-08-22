@@ -1,19 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.IComponent;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.component.Component;
+import montiarc.rte.port.InPort;
 
 import java.util.Collection;
 
 public interface Scheduler {
-  void register(IComponent c, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync);
+  void register(Component c, Collection<? extends InPort<?>> inPorts, boolean isSync);
   /** If the component is registered with this scheduler, then it is unregistered. */
-  void unregister(IComponent c);
+  void unregister(Component c);
 
-  void requestScheduling(ITimeAwareInPort<?> port, Object newMsg);
-  void requestSchedulingOfNewTick(ITimeAwareInPort<?> port);
+  void requestScheduling(InPort<?> port, Object newMsg);
+  void requestSchedulingOfNewTick(InPort<?> port);
 
-  void run(IComponent component);
-  void run(IComponent component, int ticks);
+  void run(Component component);
+  void run(Component component, int ticks);
 }

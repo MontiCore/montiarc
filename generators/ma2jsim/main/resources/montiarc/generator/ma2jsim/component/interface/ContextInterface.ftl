@@ -6,6 +6,4 @@ public interface ${ast.getName()}${suffixes.context()}<#if isTop>${suffixes.top(
   extends ${ast.getName()}${suffixes.output()} <@Util.printTypeParameters ast false/>,
           ${ast.getName()}${suffixes.parameters()} <@Util.printTypeParameters ast false/>,
           ${ast.getName()}${suffixes.fields()} <@Util.printTypeParameters ast false/>,
-          ${ast.getName()}${suffixes.features()} <@Util.printTypeParameters ast false/> {
-    montiarc.rte.behavior.IBehavior getBehavior();
-}
+          ${ast.getName()}${suffixes.features()} <@Util.printTypeParameters ast false/> { }

@@ -2,7 +2,7 @@
 package montiarc.core;
 
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -25,7 +25,7 @@ class ParamBool2Test {
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<Boolean> port_o;
+  InPort<Boolean> port_o;
 
   /**
    * @param p the argument for parameter p

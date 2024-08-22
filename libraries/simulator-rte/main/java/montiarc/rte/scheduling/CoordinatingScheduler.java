@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.IComponent;
+import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -17,14 +17,14 @@ import java.util.stream.Collectors;
  */
 public class CoordinatingScheduler implements Scheduler {
 
-  private final Map<IComponent, ComponentScheduler> compToScheduler;
+  private final Map<Component, ComponentScheduler> compToScheduler;
 
   public CoordinatingScheduler() {
     this.compToScheduler = new HashMap<>();
   }
 
   @Override
-  public void register(IComponent component, Collection<ITimeAwareInPort<?>> inPorts, boolean isSync) {
+  public void register(Component component, Collection<? extends InPort<?>> inPorts, boolean isSync) {
     if (component.hasModeAutomaton()) {
       this.compToScheduler.put(component, new ModeComponentScheduler(component, inPorts, isSync, this));
     } else {
@@ -33,12 +33,12 @@ public class CoordinatingScheduler implements Scheduler {
   }
 
   @Override
-  public void unregister(IComponent component) {
+  public void unregister(Component component) {
     this.compToScheduler.remove(component);
   }
 
   @Override
-  public void requestScheduling(ITimeAwareInPort<?> port, Object newMsg) {
+  public void requestScheduling(InPort<?> port, Object newMsg) {
     if (newMsg instanceof Message) {
       throw new IllegalArgumentException("Requested message object should be unwrapped and not instance of the rte class 'Message'");
     }
@@ -47,7 +47,7 @@ public class CoordinatingScheduler implements Scheduler {
   }
 
   @Override
-  public void requestSchedulingOfNewTick(ITimeAwareInPort<?> port) {
+  public void requestSchedulingOfNewTick(InPort<?> port) {
     this.compToScheduler.get(port.getOwner()).requestSchedulingOfNewTick(port);
   }
 
@@ -58,7 +58,7 @@ public class CoordinatingScheduler implements Scheduler {
   }
 
   @Override
-  public void run(IComponent component) {
+  public void run(Component component) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
@@ -83,7 +83,7 @@ public class CoordinatingScheduler implements Scheduler {
     }
   }
 
-  public void run(IComponent component, int ticks) {
+  public void run(Component component, int ticks) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
@@ -104,8 +104,8 @@ public class CoordinatingScheduler implements Scheduler {
     return this.compToScheduler.values().stream().anyMatch(ComponentScheduler::isReadyToExecute);
   }
 
-  boolean isASubCompScheduled(IComponent comp) {
-    Collection<? extends IComponent> directSubs = comp.getAllSubcomponents();
+  boolean isASubCompScheduled(Component comp) {
+    Collection<? extends Component> directSubs = comp.getAllSubcomponents();
 
     return
       directSubs.stream().map(this.compToScheduler::get)

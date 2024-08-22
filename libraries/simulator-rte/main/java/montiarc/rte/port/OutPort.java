@@ -3,7 +3,11 @@ package montiarc.rte.port;
 
 import montiarc.rte.msg.Message;
 
-public interface IOutPort<T> extends IPort {
+/**
+ * A port that can send messages and thereby is the source of connectors.
+ * @param <T>
+ */
+public interface OutPort<T> extends Port {
 
   /**
    * Connects to the given port, registering it as a recipient.
@@ -11,7 +15,7 @@ public interface IOutPort<T> extends IPort {
    * @param recipient the port to connect to
    * @return true iff the ports connect successfully
    */
-  boolean connect(IInPort<? super T> recipient);
+  boolean connect(InPort<? super T> recipient);
 
   /**
    * Disconnects from the given port, removing it as a recipient.
@@ -19,7 +23,7 @@ public interface IOutPort<T> extends IPort {
    * @param recipient the port to disconnect from
    * @return true if the ports disconnect successfully or if the ports where not connected in the first place
    */
-  boolean disconnect(IInPort<? super T> recipient);
+  boolean disconnect(InPort<? super T> recipient);
 
   /**
    * Send out the given data as a message to all registered recipients.

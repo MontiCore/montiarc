@@ -4,7 +4,7 @@ package montiarc.sync.compute;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -34,7 +34,7 @@ class NameOverlapTest {
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<OnOff> port_o0;
+  InPort<OnOff> port_o0;
 
   /**
    * @param expected the expected output stream on port o
@@ -83,7 +83,7 @@ class NameOverlapTest {
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<Integer> port_o1;
+  InPort<Integer> port_o1;
 
   /**
    * @param expected the expected output stream on port o

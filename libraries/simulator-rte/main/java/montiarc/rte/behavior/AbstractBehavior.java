@@ -12,7 +12,7 @@ package montiarc.rte.behavior;
  *           This type must also be bound for event behaviors as part of the 150% modeling that
  *           the generator currently implements in order to model variability.
  */
-public abstract class AbstractBehavior<C, I> implements IBehavior<I> {
+public abstract class AbstractBehavior<C, I> implements Behavior<I> {
   
   protected C context;
   

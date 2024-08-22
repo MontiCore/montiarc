@@ -4,8 +4,8 @@ package montiarc.timed.composition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.ITimeAwareInPort;
-import montiarc.rte.port.TimeAwarePortForComposition;
+import montiarc.rte.port.InPort;
+import montiarc.rte.port.ScheduledPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class UnusedInPortsTest {
    * the target port of output port o1
    */
   @Mock
-  ITimeAwareInPort<Boolean> port_o1;
+  InPort<Boolean> port_o1;
 
   /**
    * capture of the actual output stream on port o2
@@ -46,7 +46,7 @@ class UnusedInPortsTest {
    * the target port of output port o2
    */
   @Mock
-  ITimeAwareInPort<Boolean> port_o2;
+  InPort<Boolean> port_o2;
 
   /**
    * @param i1 the input stream on port i1
@@ -89,8 +89,8 @@ class UnusedInPortsTest {
     sut.run();
 
     // Then
-    Assertions.assertThat(((TimeAwarePortForComposition<Boolean>) sut.port_i1()).getBuffer()).isEmpty();
-    Assertions.assertThat(((TimeAwarePortForComposition<Boolean>) sut.port_i2()).getBuffer()).isEmpty();
+    Assertions.assertThat(((ScheduledPort<Boolean>) sut.port_i1()).getBuffer()).isEmpty();
+    Assertions.assertThat(((ScheduledPort<Boolean>) sut.port_i2()).getBuffer()).isEmpty();
     Assertions.assertThat(this.actual_o1.getAllValues()).containsExactlyElementsOf(o1);
     Assertions.assertThat(this.actual_o2.getAllValues()).containsExactlyElementsOf(o2);
   }

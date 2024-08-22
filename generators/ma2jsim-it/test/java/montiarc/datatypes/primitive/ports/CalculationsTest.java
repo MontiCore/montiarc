@@ -2,7 +2,7 @@
 package montiarc.datatypes.primitive.ports;
 
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,14 +31,14 @@ class CalculationsTest {
   @Captor ArgumentCaptor<Message<Boolean>> actualBoolean;
 
   /* Mocks for the target ports */
-  @Mock ITimeAwareInPort<Number> port_byte;
-  @Mock ITimeAwareInPort<Number> port_short;
-  @Mock ITimeAwareInPort<Number> port_int;
-  @Mock ITimeAwareInPort<Number> port_long;
-  @Mock ITimeAwareInPort<Number> port_float;
-  @Mock ITimeAwareInPort<Number> port_double;
-  @Mock ITimeAwareInPort<Number> port_char;
-  @Mock ITimeAwareInPort<Boolean> port_boolean;
+  @Mock InPort<Number> port_byte;
+  @Mock InPort<Number> port_short;
+  @Mock InPort<Number> port_int;
+  @Mock InPort<Number> port_long;
+  @Mock InPort<Number> port_float;
+  @Mock InPort<Number> port_double;
+  @Mock InPort<Number> port_char;
+  @Mock InPort<Boolean> port_boolean;
 
   @Test
   void testCorrectnessOfCalculations() {

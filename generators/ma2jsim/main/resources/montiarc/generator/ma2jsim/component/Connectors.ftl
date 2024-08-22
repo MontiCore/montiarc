@@ -7,26 +7,35 @@
 <#if !variant.isAtomic()>
 protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() {
 <#list variant.getAstNode().getConnectors() as conn>
-    <#assign sourcePort>
-        <#if conn.getSource().isPresentComponent()>${prefixes.subcomp()}${conn.getSource().getComponent()}${helper.subcomponentVariantSuffix(ast, conn.getSource().getComponentSymbol())}().
-        <#else>(montiarc.rte.port.IOutPort)
-        </#if>
-        ${prefixes.port()}${conn.getSource().getPort()}<#if conn.getSource().isPresentComponent()>${helper.portVariantSuffix(conn.getSource().getComponentSymbol(), conn.getSource().getPortSymbol())}<#else>${helper.portVariantSuffix(ast, conn.getSource().getPortSymbol())}</#if>()
-    </#assign>
     <#list conn.getTargetList() as target>
-        <#assign targetPort>
-            <#if target.isPresentComponent()>${prefixes.subcomp()}${target.getComponent()}${helper.subcomponentVariantSuffix(ast, target.getComponentSymbol())}().
-            <#else>(montiarc.rte.port.IInPort)
-            </#if>
-            ${prefixes.port()}${target.getPort()}<#if target.isPresentComponent()>${helper.portVariantSuffix(target.getComponentSymbol(), target.getPortSymbol())}<#else>${helper.portVariantSuffix(ast, target.getPortSymbol())}</#if>()
-        </#assign>
-        (${sourcePort}).connect(${targetPort});
+        <@portAccessorOf conn.getSource()/>.connect(<@portAccessorOf target/>);
     </#list>
 </#list>
 
 <#list variant.getSubcomponents() as subcomp>
-  this.getTickPort().connect(${prefixes.subcomp()}${subcomp.getName()}${helper.subcomponentVariantSuffix(ast, subcomp)}().getTickPort());
+  this.tickPort.connect(${prefixes.subcomp()}${subcomp.getName()}${helper.subcomponentVariantSuffix(ast, subcomp)}().getTickPort());
 </#list>
 }
 </#if>
 </#list>
+
+<#-- connectorEndPoint may be the source of a connector, or one of its targets -->
+<#macro portAccessorOf connectorEndPoint>
+  <#assign IsSubcompTheOwner = connectorEndPoint.isPresentComponent()>
+
+  <#assign variantSuffix = IsSubcompTheOwner?then(
+    helper.portVariantSuffix(connectorEndPoint.getComponentSymbol(), connectorEndPoint.getPortSymbol()),
+    helper.portVariantSuffix(ast, connectorEndPoint.getPortSymbol())
+  )>
+
+  <#if IsSubcompTheOwner>
+    <#assign owningComp = connectorEndPoint.getComponentSymbol()>
+    <#assign compAccessor = prefixes.subcomp() + connectorEndPoint.getComponent() + helper.subcomponentVariantSuffix(ast, owningComp) + "()">
+    ${compAccessor}.${prefixes.port()}${connectorEndPoint.getPort()}${variantSuffix}()
+
+  <#else>
+    <#-- We directly access the field because we need to know that the port is an InOutPort -->
+    ${prefixes.port()}${connectorEndPoint.getPort()}${variantSuffix}
+
+  </#if>
+</#macro>

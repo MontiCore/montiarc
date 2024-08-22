@@ -14,4 +14,4 @@ public <#if isTop> abstract </#if> class ${compName}<@Util.printTypeParameters a
   implements
     ${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/>,
     <#if hasModeAutomaton> ${ast.getName()}${suffixes.contextForModes()}<@Util.printTypeParameters ast false/>, </#if>
-    montiarc.rte.component.IComponent
+    montiarc.rte.component.Component

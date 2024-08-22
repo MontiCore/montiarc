@@ -3,7 +3,7 @@ package montiarc.core;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,7 +34,7 @@ class ParamsBool3Test {
    * the target port of output port o1
    */
   @Mock
-  ITimeAwareInPort<Boolean> port_o1;
+  InPort<Boolean> port_o1;
 
   /**
    * capture of the actual output stream on port o2
@@ -46,7 +46,7 @@ class ParamsBool3Test {
    * the target port of output port o2
    */
   @Mock
-  ITimeAwareInPort<Boolean> port_o2;
+  InPort<Boolean> port_o2;
 
   /**
    * @param p1 the argument for parameter p1

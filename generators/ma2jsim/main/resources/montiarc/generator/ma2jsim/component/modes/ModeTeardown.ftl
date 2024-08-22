@@ -23,13 +23,13 @@
     <#assign sourcePort><@ModeUtil.calcPortAccessor connector.getSource() mode ast/></#assign>
     <#list connector.getTargetList() as target>
       <#assign targetPort><@ModeUtil.calcPortAccessor target mode ast/></#assign>
-      ((montiarc.rte.port.IOutPort) ${sourcePort}).disconnect((montiarc.rte.port.IInPort) ${targetPort});
+      ${sourcePort}.disconnect(${targetPort});
     </#list>
   </#list>
 
   <#-- also teardown simulator-specific tick connectors -->
   <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
-    ((montiarc.rte.port.IOutPort) this.getTickPort()).disconnect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
+    this.tickPort.disconnect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
   </#list>
 </#macro>
 

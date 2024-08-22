@@ -2,16 +2,16 @@
 package montiarc.scheduler;
 
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.TimeAwarePortForComposition;
+import montiarc.rte.port.ScheduledPort;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-class TimeAwarePortForCompositionTest {
+class ScheduledPortTest {
   @Test
   void testBuffer(){
     // Given
     SchedulerComp comp = new SchedulerCompBuilder().setName("test").build();
-    TimeAwarePortForComposition<Integer> buffer = new TimeAwarePortForComposition<>("test", comp, comp.getScheduler());
+    ScheduledPort<Integer> buffer = new ScheduledPort<>("test", comp, comp.getScheduler());
     // When
     for(int i = 0; i < 10; i ++){
       buffer.receive(new Message<>(i));

@@ -9,10 +9,10 @@
     ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
     <#list ast.getSymbol().getAllIncomingPorts() as port>
-      this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.TimeAwarePortForComposition<>(getName() + ".${port.getName()}", this, scheduler);
+      this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.ScheduledPort<>(getName() + ".${port.getName()}", this, scheduler);
     </#list>
     <#list ast.getSymbol().getAllOutgoingPorts() as port>
-      this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.TimeAwarePortForward<>(getName() + ".${port.getName()}", this);
+      this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} = new montiarc.rte.port.PortForward<>(getName() + ".${port.getName()}", this);
     </#list>
   }
 </#list>

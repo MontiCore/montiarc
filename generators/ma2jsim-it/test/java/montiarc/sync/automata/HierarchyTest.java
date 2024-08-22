@@ -3,7 +3,7 @@ package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,7 +35,7 @@ class HierarchyTest {
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<String> port_o;
+  InPort<String> port_o;
 
   /**
    * @param input the input stream on port i

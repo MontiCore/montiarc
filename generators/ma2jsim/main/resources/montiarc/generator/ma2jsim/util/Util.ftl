@@ -20,9 +20,9 @@
 
 <#macro getStaticPortInterface portSym>
     <#if portSym.isIncoming()>
-    montiarc.rte.port.ITimeAwareInPort
+    montiarc.rte.port.InPort
     <#else>
-    montiarc.rte.port.TimeAwareOutPort
+    montiarc.rte.port.OutPort
     </#if>
 </#macro>
 

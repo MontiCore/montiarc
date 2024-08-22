@@ -1,13 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
-import montiarc.rte.behavior.IBehavior;
-import montiarc.rte.port.IInPort;
-import montiarc.rte.port.IOutPort;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.behavior.Behavior;
+import montiarc.rte.port.NoMsgType;
+import montiarc.rte.port.InPort;
+import montiarc.rte.port.OutPort;
 import montiarc.rte.port.TickPort;
-import montiarc.rte.port.TimeAwareOutPort;
-import montiarc.rte.port.TimeAwarePortForComposition;
+import montiarc.rte.port.InOutPort;
 import montiarc.rte.scheduling.Scheduler;
 
 import java.util.List;
@@ -15,9 +14,9 @@ import java.util.Set;
 
 /**
  * Provides basic implementation for timed components, especially including message handling:
- * {@link #handleTick()}, {@link #handleMessage(IInPort)} and {@link #handleSyncedTickExecution()}.
+ * {@link #handleTick()}, {@link #handleMessage(InPort)} and {@link #handleSyncedTickExecution()}.
  * <br>
- * Timed components should provide logic for the method {@link #handleMessageWithBehavior(IInPort)} to call the
+ * Timed components should provide logic for the method {@link #handleMessageWithBehavior(InPort)} to call the
  * behavior for the respective port event.
  * <br>
  * Synced components should provide logic for the method {@link #buildSyncMessage()}, creating a synced input object of
@@ -29,11 +28,11 @@ import java.util.Set;
  *            (containing a message for every port at the time of a synced tick)
  * @param <B> the class defining the interface of the behavior (accepting tick and message events)
  */
-public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IComponent {
+public abstract class AbstractComponent<I, B extends Behavior<I>> implements Component {
 
   protected final String name;
-  protected final TickPort tickPort;
-  protected Set<IOutPort<?>> unconnectedOutputs;
+  protected final InOutPort<NoMsgType> tickPort;
+  protected Set<OutPort<?>> unconnectedOutputs;
   protected final Scheduler scheduler;
 
   protected boolean isAtomic;
@@ -52,7 +51,7 @@ public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IC
   }
 
   @Override
-  public TickPort getTickPort() {
+  public InPort<NoMsgType> getTickPort() {
     return this.tickPort;
   }
 
@@ -76,17 +75,17 @@ public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IC
     this.scheduler.unregister(this);
   }
 
-  public abstract List<ITimeAwareInPort<?>> getAllInPorts();
-  public abstract List<TimeAwareOutPort<?>> getAllOutPorts();
+  protected abstract List<InOutPort<?>> getAllInPorts();
+  public abstract List<OutPort<?>> getAllOutPorts();
 
   protected void sendTickOnAllOutputs() {
-    for (IOutPort<?> outP : this.getAllOutPorts()) {
+    for (OutPort<?> outP : this.getAllOutPorts()) {
       outP.sendTick();
     }
   }
 
   protected void sendTickOnAllUnconnectedOutputs() {
-    for (IOutPort<?> outP : this.unconnectedOutputs) {
+    for (OutPort<?> outP : this.unconnectedOutputs) {
       outP.sendTick();
     }
   }
@@ -99,7 +98,7 @@ public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IC
         behavior.init();
       }
     } else {
-      for (IComponent comp : this.getAllSubcomponents()) {
+      for (Component comp : this.getAllSubcomponents()) {
         comp.init();
       }
     }
@@ -115,15 +114,15 @@ public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IC
   }
 
   @Override
-  public void handleMessage(IInPort<?> p) {
+  public void handleMessage(InPort<?> p) {
     if (!isAtomic) {
-      ((montiarc.rte.port.TimeAwarePortForComposition<?>) p).forwardWithoutRemoval();
+      ((montiarc.rte.port.InOutPort<?>) p).forwardWithoutRemoval();
     } else if (behavior != null) {
       handleMessageWithBehavior(p);
     }
   }
 
-  protected abstract void handleMessageWithBehavior(IInPort<?> p);
+  protected abstract void handleMessageWithBehavior(InPort<?> p);
 
   protected abstract I buildSyncMessage();
 
@@ -135,12 +134,12 @@ public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IC
       }
       sendTickOnAllOutputs();
     } else {
-      for (montiarc.rte.port.ITimeAwareInPort<?> inP : getAllInPorts()) {
+      for (InOutPort<?> inPort : getAllInPorts()) {
         // Forward the sync message (if existent) and send a tick afterwards
-        if (!inP.isTickBlocked()) {
-          ((TimeAwarePortForComposition<?>) inP).forwardWithoutRemoval();  // TODO no downcasting would be better
+        if (!inPort.isTickBlocked()) {
+          inPort.forwardWithoutRemoval();
         }
-        ((montiarc.rte.port.IOutPort<?>) inP).sendTick();
+        inPort.sendTick();
       }
       this.sendTickOnAllUnconnectedOutputs();
     }
@@ -154,8 +153,8 @@ public abstract class AbstractComponent<I, B extends IBehavior<I>> implements IC
       }
       sendTickOnAllOutputs();
     } else {
-      for (ITimeAwareInPort<?> inP : this.getAllInPorts()) {
-        ((TimeAwarePortForComposition<?>) inP).forwardWithoutRemoval();
+      for (InOutPort<?> inPort : this.getAllInPorts()) {
+        inPort.forwardWithoutRemoval();
       }
       this.sendTickOnAllUnconnectedOutputs();
     }

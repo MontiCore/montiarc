@@ -1,19 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
-import montiarc.rte.port.IInPort;
-import montiarc.rte.port.TickPort;
+import montiarc.rte.port.InPort;
+import montiarc.rte.port.NoMsgType;
 
 import java.util.List;
 
 
-public interface IComponent {
+public interface Component {
 
   String getName();
 
   default boolean hasModeAutomaton() { return false; }
 
-  List<? extends IComponent> getAllSubcomponents();
+  List<? extends Component> getAllSubcomponents();
 
   void init();
 
@@ -24,9 +24,9 @@ public interface IComponent {
    */
   void handleTick();
 
-  void handleMessage(IInPort<?> p);
+  void handleMessage(InPort<?> p);
   /**
    * Simulation-internal port that is used to control the time progress of components.
    */
-  TickPort getTickPort();
+  InPort<NoMsgType> getTickPort();
 }

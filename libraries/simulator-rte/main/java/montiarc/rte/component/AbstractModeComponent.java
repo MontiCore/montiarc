@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
-import montiarc.rte.behavior.IBehavior;
-import montiarc.rte.port.IInPort;
+import montiarc.rte.behavior.Behavior;
+import montiarc.rte.port.InPort;
 import montiarc.rte.scheduling.Scheduler;
 
 
@@ -13,7 +13,7 @@ import montiarc.rte.scheduling.Scheduler;
  * @param <B> the class defining the interface of the behavior (accepting tick and message events)
  * @param <ModeC> the class of the mode automaton
  */
-public abstract class AbstractModeComponent<I, B extends IBehavior<I>, ModeC extends IBehavior<I>> extends AbstractComponent<I, B> {
+public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC extends Behavior<I>> extends AbstractComponent<I, B> {
 
   protected ModeC modeAutomaton;
 
@@ -35,7 +35,7 @@ public abstract class AbstractModeComponent<I, B extends IBehavior<I>, ModeC ext
   }
 
   @Override
-  public void handleMessage(IInPort<?> p) {
+  public void handleMessage(InPort<?> p) {
     this.handleMessageWithModeAutomaton(p);
     super.handleMessage(p);
   }
@@ -43,7 +43,7 @@ public abstract class AbstractModeComponent<I, B extends IBehavior<I>, ModeC ext
   /**
    * To be overwritten by timed components, calling the mode automaton reaction to the message on port <i>p</i>
    */
-  protected void handleMessageWithModeAutomaton(montiarc.rte.port.IInPort<?> p) {
+  protected void handleMessageWithModeAutomaton(InPort<?> p) {
     // Empty default behavior for synced components that don't react to message triggers
   }
 

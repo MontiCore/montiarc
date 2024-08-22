@@ -3,7 +3,7 @@ package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -36,7 +36,7 @@ class DelayTest {
    * the target port of output port o
    */
   @Mock
-  ITimeAwareInPort<OnOff> port_o;
+  InPort<OnOff> port_o;
 
   /**
    * @param input the input stream on port i

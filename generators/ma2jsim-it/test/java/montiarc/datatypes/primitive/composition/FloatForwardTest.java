@@ -4,7 +4,7 @@ package montiarc.datatypes.primitive.composition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.ITimeAwareInPort;
+import montiarc.rte.port.InPort;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class FloatForwardTest {
 
 
   /** The target port of output port o1 */
-  @Mock ITimeAwareInPort<Number> port_pOut;
+  @Mock InPort<Number> port_pOut;
 
   /**
    * @param input    the input stream on port pIn
