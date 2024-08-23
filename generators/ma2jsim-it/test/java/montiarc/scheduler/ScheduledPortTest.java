@@ -7,6 +7,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 class ScheduledPortTest {
+
   @Test
   void testBuffer(){
     // Given
@@ -24,6 +25,5 @@ class ScheduledPortTest {
     Assertions.assertThat(buffer.peekBuffer().getData()).isEqualTo(1);
     Assertions.assertThat(buffer.pollLastBuffer().getData()).isEqualTo(9);
     Assertions.assertThat(buffer.peekLastBuffer().getData()).isEqualTo(8);
-
   }
 }

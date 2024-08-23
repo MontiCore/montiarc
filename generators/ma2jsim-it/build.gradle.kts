@@ -22,8 +22,6 @@ dependencies {
   implementation(libs.se.utilities)
   implementation(libs.guava)
   implementation(libs.janino)
-  testImplementation(libs.mockito)
-  testImplementation(libs.mockito.junit)
 }
 
 cd2pojo {

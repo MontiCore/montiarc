@@ -3,38 +3,19 @@ package montiarc.core;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.InPort;
+import montiarc.rte.port.PortObserver;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static montiarc.rte.msg.MessageFactory.msg;
 
-@ExtendWith(MockitoExtension.class)
 class ParamBool1Test {
-
-  /**
-   * capture of the actual output stream on port o
-   */
-  @Captor
-  ArgumentCaptor<Message<Boolean>> actual;
-
-  /**
-   * the target port of output port o
-   */
-  @Mock
-  InPort<Boolean> port_o;
 
   /**
    * @param p the argument for parameter p
@@ -52,11 +33,9 @@ class ParamBool1Test {
     ParamBool1Comp sut = new ParamBool1CompBuilder()
       .set_param_p(p)
       .setName("sut").build();
+    PortObserver<Boolean> port_o = new PortObserver<>();
 
-    sut.port_o().connect(this.port_o);
-
-    // when receiving a message, capture that message but do nothing else
-    Mockito.doNothing().when(this.port_o).receive(this.actual.capture());
+    sut.port_o().connect(port_o);
 
     // When
     sut.init();
@@ -65,10 +44,10 @@ class ParamBool1Test {
       sut.port_i().receive(msg);
     }
 
-    sut.run(1);
+    sut.run();
 
     // Then
-    Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);
+    Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> io() {

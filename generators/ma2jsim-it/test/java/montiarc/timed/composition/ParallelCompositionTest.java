@@ -4,49 +4,18 @@ package montiarc.timed.composition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.InPort;
+import montiarc.rte.port.PortObserver;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-@ExtendWith(MockitoExtension.class)
 public class ParallelCompositionTest {
-
-  /**
-   * capture of the actual output stream on port o1
-   */
-  @Captor
-  ArgumentCaptor<Message<OnOff>> actual_o1;
-
-  /**
-   * capture of the actual output stream on port o2
-   */
-  @Captor
-  ArgumentCaptor<Message<OnOff>> actual_o2;
-
-  /**
-   * the target port of output port o1
-   */
-  @Mock
-  InPort<OnOff> port_o1;
-
-  /**
-   * the target port of output port o2
-   */
-  @Mock
-  InPort<OnOff> port_o2;
 
   /**
    * @param input_i1    the input stream on port i1
@@ -67,14 +36,11 @@ public class ParallelCompositionTest {
 
     // Given
     ParallelCompositionComp sut = new ParallelCompositionCompBuilder().setName("sut").build();
+    PortObserver<OnOff> port_o1 = new PortObserver<>();
+    PortObserver<OnOff> port_o2 = new PortObserver<>();
 
-    sut.port_o1().connect(this.port_o1);
-    sut.port_o2().connect(this.port_o2);
-
-    // when receiving a message, capture that message but do nothing else
-    Mockito.lenient().doNothing().when(this.port_o1).receive(this.actual_o1.capture());
-    Mockito.lenient().doNothing().when(this.port_o2).receive(this.actual_o2.capture());
-
+    sut.port_o1().connect(port_o1);
+    sut.port_o2().connect(port_o2);
     // When
     sut.init();
 
@@ -89,8 +55,8 @@ public class ParallelCompositionTest {
     sut.run();
 
     // Then
-    Assertions.assertThat(this.actual_o1.getAllValues()).containsExactlyElementsOf(expected_o1);
-    Assertions.assertThat(this.actual_o2.getAllValues()).containsExactlyElementsOf(expected_o2);
+    Assertions.assertThat(port_o1.getObservedMessages()).containsExactlyElementsOf(expected_o1);
+    Assertions.assertThat(port_o2.getObservedMessages()).containsExactlyElementsOf(expected_o2);
   }
 
   static Stream<Arguments> io() {

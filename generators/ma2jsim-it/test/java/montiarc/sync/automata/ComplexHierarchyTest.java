@@ -2,20 +2,14 @@
 package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
-import montiarc.rte.msg.MessageFactory;
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.InPort;
+import montiarc.rte.msg.MessageFactory;
+import montiarc.rte.port.PortObserver;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,20 +19,7 @@ import java.util.stream.Stream;
 
 import static montiarc.rte.msg.MessageFactory.tk;
 
-@ExtendWith(MockitoExtension.class)
 public class ComplexHierarchyTest {
-
-  /**
-   * capture of the actual output stream on port o
-   */
-  @Captor
-  ArgumentCaptor<Message<String>> actual;
-
-  /**
-   * the target port of output port o
-   */
-  @Mock
-  InPort<String> port_o;
 
   /**
    * @param ticks    the input stream on port i
@@ -52,18 +33,16 @@ public class ComplexHierarchyTest {
 
     // Given
     ComplexHierarchyComp sut = new ComplexHierarchyCompBuilder().setName("sut").build();
+    PortObserver<String> port_o = new PortObserver<>();
 
-    sut.port_o().connect(this.port_o);
-
-    // when receiving a message, capture that message but do nothing else
-    Mockito.doNothing().when(this.port_o).receive(this.actual.capture());
+    sut.port_o().connect(port_o);
 
     // When
     sut.init();
     sut.run(ticks);
 
     // Then
-    Assertions.assertThat(this.actual.getAllValues()).containsExactlyElementsOf(expected);
+    Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
   }
 
   /**

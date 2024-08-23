@@ -2,43 +2,17 @@
 package montiarc.datatypes.primitive.ports;
 
 import montiarc.rte.msg.Message;
-import montiarc.rte.port.InPort;
+import montiarc.rte.port.PortObserver;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
-@ExtendWith(MockitoExtension.class)
+
 class CalculationsTest {
-
-  /* Captures of the actual output streams on the different ports */
-  @Captor ArgumentCaptor<Message<Number>> actualByte;
-  @Captor ArgumentCaptor<Message<Number>> actualShort;
-  @Captor ArgumentCaptor<Message<Number>> actualInt;
-  @Captor ArgumentCaptor<Message<Number>> actualLong;
-  @Captor ArgumentCaptor<Message<Number>> actualFloat;
-  @Captor ArgumentCaptor<Message<Number>> actualDouble;
-  @Captor ArgumentCaptor<Message<Number>> actualChar;
-  @Captor ArgumentCaptor<Message<Boolean>> actualBoolean;
-
-  /* Mocks for the target ports */
-  @Mock InPort<Number> port_byte;
-  @Mock InPort<Number> port_short;
-  @Mock InPort<Number> port_int;
-  @Mock InPort<Number> port_long;
-  @Mock InPort<Number> port_float;
-  @Mock InPort<Number> port_double;
-  @Mock InPort<Number> port_char;
-  @Mock InPort<Boolean> port_boolean;
 
   @Test
   void testCorrectnessOfCalculations() {
@@ -73,26 +47,25 @@ class CalculationsTest {
     List<Message<Boolean>> boolInput       = List.of(msg(true), tk(), msg(false), tk(), msg(false), tk());
     List<Message<Boolean>> expectedBoolOut = List.of(msg(false), tk(), msg(true), tk(), msg(true), tk());
 
+    PortObserver<Number> port_byte = new PortObserver<>();
+    PortObserver<Number> port_short = new PortObserver<>();
+    PortObserver<Number> port_int = new PortObserver<>();
+    PortObserver<Number> port_long = new PortObserver<>();
+    PortObserver<Number> port_float = new PortObserver<>();
+    PortObserver<Number> port_double = new PortObserver<>();
+    PortObserver<Number> port_char = new PortObserver<>();
+    PortObserver<Boolean> port_boolean = new PortObserver<>();
+
     // Given
     CalculationsComp sut = new CalculationsCompBuilder().setName("sut").build();
-    sut.port_outByte().connect(this.port_byte);
-    sut.port_outShort().connect(this.port_short);
-    sut.port_outInt().connect(this.port_int);
-    sut.port_outLong().connect(this.port_long);
-    sut.port_outFloat().connect(this.port_float);
-    sut.port_outDouble().connect(this.port_double);
-    sut.port_outChar().connect(this.port_char);
-    sut.port_outBoolean().connect(this.port_boolean);
-
-    // when receiving a message, capture that message but do nothing else
-    Mockito.doNothing().when(this.port_byte).receive(this.actualByte.capture());
-    Mockito.doNothing().when(this.port_short).receive(this.actualShort.capture());
-    Mockito.doNothing().when(this.port_int).receive(this.actualInt.capture());
-    Mockito.doNothing().when(this.port_long).receive(this.actualLong.capture());
-    Mockito.doNothing().when(this.port_float).receive(this.actualFloat.capture());
-    Mockito.doNothing().when(this.port_double).receive(this.actualDouble.capture());
-    Mockito.doNothing().when(this.port_char).receive(this.actualChar.capture());
-    Mockito.doNothing().when(this.port_boolean).receive(this.actualBoolean.capture());
+    sut.port_outByte().connect(port_byte);
+    sut.port_outShort().connect(port_short);
+    sut.port_outInt().connect(port_int);
+    sut.port_outLong().connect(port_long);
+    sut.port_outFloat().connect(port_float);
+    sut.port_outDouble().connect(port_double);
+    sut.port_outChar().connect(port_char);
+    sut.port_outBoolean().connect(port_boolean);
 
     // When
     sut.init();
@@ -111,14 +84,14 @@ class CalculationsTest {
 
     // Then
     Assertions.assertAll(
-      () -> assertThat(this.actualByte.getAllValues()).as("bytes").containsExactlyElementsOf(expectedByteOut),
-      () -> assertThat(this.actualShort.getAllValues()).as("shorts").containsExactlyElementsOf(expectedShortOut),
-      () -> assertThat(this.actualInt.getAllValues()).as("ints").containsExactlyElementsOf(expectedIntOutput),
-      () -> assertThat(this.actualLong.getAllValues()).as("longs").containsExactlyElementsOf(expectedLongOutput),
-      () -> assertThat(this.actualFloat.getAllValues()).as("floats").containsExactlyElementsOf(expectedFloatOutput),
-      () -> assertThat(this.actualDouble.getAllValues()).as("doubles").containsExactlyElementsOf(expectedDoubleOutput),
-      () -> assertThat(this.actualChar.getAllValues()).as("chars").containsExactlyElementsOf(expectedCharOut),
-      () -> assertThat(this.actualBoolean.getAllValues()).as("bools").containsExactlyElementsOf(expectedBoolOut)
+      () -> assertThat(port_byte.getObservedMessages()).as("bytes").containsExactlyElementsOf(expectedByteOut),
+      () -> assertThat(port_short.getObservedMessages()).as("shorts").containsExactlyElementsOf(expectedShortOut),
+      () -> assertThat(port_int.getObservedMessages()).as("ints").containsExactlyElementsOf(expectedIntOutput),
+      () -> assertThat(port_long.getObservedMessages()).as("longs").containsExactlyElementsOf(expectedLongOutput),
+      () -> assertThat(port_float.getObservedMessages()).as("floats").containsExactlyElementsOf(expectedFloatOutput),
+      () -> assertThat(port_double.getObservedMessages()).as("doubles").containsExactlyElementsOf(expectedDoubleOutput),
+      () -> assertThat(port_char.getObservedMessages()).as("chars").containsExactlyElementsOf(expectedCharOut),
+      () -> assertThat(port_boolean.getObservedMessages()).as("booleans").containsExactlyElementsOf(expectedBoolOut)
     );
   }
 }

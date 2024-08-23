@@ -31,6 +31,9 @@ class SinkTest {
     // Given
     SinkComp sut = new SinkCompBuilder().setName("sut").build();
 
+    // When
+    sut.init();
+
     List<String> actual = new ArrayList<>(expected.size());
 
     // When
@@ -45,12 +48,10 @@ class SinkTest {
     }
 
     // Then
-    Assertions.assertThat(actual)
-      .withFailMessage("Should be [%s] but was [%s]",
-        String.join(", ", expected),
-        String.join(", ", actual)
-      )
-    .containsExactlyElementsOf(expected);
+    Assertions.assertThat(actual).containsExactlyElementsOf(expected);
+
+    // Then
+    Assertions.assertThat(actual).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> io() {

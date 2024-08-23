@@ -4,37 +4,18 @@ package montiarc.timed.variability;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
-import montiarc.rte.port.InPort;
+import montiarc.rte.port.PortObserver;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.stream.Stream;
 
-@ExtendWith(MockitoExtension.class)
 class NameOverlapTest {
-
-  /**
-   * capture of the actual output stream on port o
-   */
-  @Captor
-  ArgumentCaptor<Message<OnOff>> actual0;
-
-  /**
-   * the target port of output port o
-   */
-  @Mock
-  InPort<OnOff> port_o0;
 
   /**
    * @param input the input stream on port i
@@ -49,11 +30,9 @@ class NameOverlapTest {
 
     // Given
     NameOverlapComp sut = new NameOverlapCompBuilder().setName("sut").set_feature_onOff(true).build();
+    PortObserver<OnOff> port_o = new PortObserver<>();
 
-    sut.port_o0().connect(this.port_o0);
-
-    // when receiving a message, capture that message but do nothing else
-    Mockito.doNothing().when(this.port_o0).receive(this.actual0.capture());
+    sut.port_o0().connect(port_o);
 
     // When
     sut.init();
@@ -65,7 +44,7 @@ class NameOverlapTest {
     sut.run();
 
     // Then
-    Assertions.assertThat(this.actual0.getAllValues()).containsExactlyElementsOf(expected);
+    Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> io() {
@@ -101,18 +80,6 @@ class NameOverlapTest {
   }
 
   /**
-   * capture of the actual output stream on port o
-   */
-  @Captor
-  ArgumentCaptor<Message<Integer>> actual1;
-
-  /**
-   * the target port of output port o
-   */
-  @Mock
-  InPort<Integer> port_o1;
-
-  /**
    * @param input the input stream on port i
    * @param expected the expected output stream on port o
    */
@@ -125,11 +92,9 @@ class NameOverlapTest {
 
     // Given
     NameOverlapComp sut = new NameOverlapCompBuilder().setName("sut").set_feature_onOff(false).build();
+    PortObserver<Number> port_o = new PortObserver<>();
 
-    sut.port_o1().connect(this.port_o1);
-
-    // when receiving a message, capture that message but do nothing else
-    Mockito.doNothing().when(this.port_o1).receive(this.actual1.capture());
+    sut.port_o1().connect(port_o);
 
     // When
     sut.init();
@@ -141,7 +106,7 @@ class NameOverlapTest {
     sut.run();
 
     // Then
-    Assertions.assertThat(this.actual1.getAllValues()).containsExactlyElementsOf(expected);
+    Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> ioInt() {
