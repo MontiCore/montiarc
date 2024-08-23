@@ -1,13 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang.math;
 
+import montiarc.rte.port.PortObserver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class MinTest {
 
@@ -15,17 +19,25 @@ public class MinTest {
   @MethodSource("minIntegerTestProvider")
   public void testBehavior(int a, int b, int r) {
     // Given
-    MinI min = new MinI();
-    min.setUp();
-    min.init();
-    min.getA().update(a);
-    min.getB().update(b);
+    MinIComp sut = new MinICompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
 
     // When
-    min.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
-    assertThat(min.getR().getValue()).isEqualTo(r);
+    assertAll(
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r)
+    );
   }
 
   protected static Stream<Arguments> minIntegerTestProvider() {
@@ -62,17 +74,25 @@ public class MinTest {
   @MethodSource("minLongTestProvider")
   public void testBehavior(long a, long b, long r) {
     // Given
-    MinL min = new MinL();
-    min.setUp();
-    min.init();
-    min.getA().update(a);
-    min.getB().update(b);
+    MinLComp sut = new MinLCompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
 
     // When
-    min.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
-    assertThat(min.getR().getValue()).isEqualTo(r);
+    assertAll(
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r)
+    );
   }
 
   protected static Stream<Arguments> minLongTestProvider() {

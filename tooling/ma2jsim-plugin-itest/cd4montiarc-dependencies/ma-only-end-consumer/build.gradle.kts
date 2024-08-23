@@ -8,7 +8,7 @@ plugins {
   id("montiarc.build.project-version")
 
   id("java")
-  id("montiarc")
+  id("montiarc-jsim")
   // This project tests MontiArc plugin application without cd2pojo
 }
 

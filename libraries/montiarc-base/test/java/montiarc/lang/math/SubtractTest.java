@@ -1,12 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang.math;
 
+import montiarc.rte.port.PortObserver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -16,19 +19,27 @@ public class SubtractTest {
   @MethodSource("subtractIntegerTestProvider")
   public void testBehavior(int a, int b, int r, boolean of) {
     // Given
-    SubtractI subtract = new SubtractI();
-    subtract.setUp();
-    subtract.init();
-    subtract.getA().update(a);
-    subtract.getB().update(b);
+    SubtractIComp sut = new SubtractICompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+    PortObserver<Boolean> port_of = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
+    sut.port_of().connect(port_of);
 
     // When
-    subtract.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
     assertAll(
-      () -> assertThat(subtract.getR().getValue()).isEqualTo(r),
-      () -> assertThat(subtract.getOf().getValue()).isEqualTo(of)
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r),
+      () -> assertThat(port_of.getObservedValues()).containsExactly(of)
     );
   }
 
@@ -66,19 +77,27 @@ public class SubtractTest {
   @MethodSource("subtractLongTestProvider")
   public void testBehavior(long a, long b, long r, boolean of) {
     // Given
-    SubtractL subtract = new SubtractL();
-    subtract.setUp();
-    subtract.init();
-    subtract.getA().update(a);
-    subtract.getB().update(b);
+    SubtractLComp sut = new SubtractLCompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+    PortObserver<Boolean> port_of = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
+    sut.port_of().connect(port_of);
 
     // When
-    subtract.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
     assertAll(
-      () -> assertThat(subtract.getR().getValue()).isEqualTo(r),
-      () -> assertThat(subtract.getOf().getValue()).isEqualTo(of)
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r),
+      () -> assertThat(port_of.getObservedValues()).containsExactly(of)
     );
   }
 

@@ -12,7 +12,7 @@ plugins {
   id("montiarc.build.project-version")
 
   id("java")
-  id("montiarc")
+  id("montiarc-jsim")
 }
 
 group = "montiarc.tooling.ma2java-plugin-itest"

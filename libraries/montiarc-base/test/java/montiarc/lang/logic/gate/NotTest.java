@@ -2,14 +2,21 @@
 package montiarc.lang.logic.gate;
 
 import com.google.common.base.Preconditions;
+import montiarc.rte.msg.Message;
+import montiarc.rte.port.PortObserver;
 import org.assertj.core.api.Assertions;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 
 public class NotTest {
 
@@ -22,76 +29,100 @@ public class NotTest {
   })
   public void testBehavior(boolean a, boolean q) {
     // Given
-    Not not = new Not();
-    not.setUp();
+    NotComp sut = new NotCompBuilder().setName("sut").build();
+    PortObserver<Boolean> port_q = new PortObserver<>();
 
-    not.init();
+    sut.port_q().connect(port_q);
 
     // When
-    not.getA().update(a);
-    not.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+
+    sut.run();
 
     // Then
-    Assertions.assertThat(not.getQ().getValue()).isEqualTo(q);
+    Assertions.assertThat(port_q.getObservedValues()).containsExactly(q);
   }
 
   @Order(2)
   @ParameterizedTest
   @MethodSource("histories")
-  public void testBehavior(boolean[] a, boolean[] q) {
-    Preconditions.checkArgument(a.length > 0);
-    Preconditions.checkArgument(q.length > 0);
-    Preconditions.checkArgument(q.length == a.length);
+  public void testBehavior(@NotNull List<Message<Boolean>> a,
+                           @NotNull List<Message<Boolean>> q) {
+    Preconditions.checkNotNull(a);
+    Preconditions.checkNotNull(q);
 
     // Given
-    Not not = new Not();
-    not.setUp();
+    NotComp sut = new NotCompBuilder().setName("sut").build();
+    PortObserver<Boolean> actual_q = new PortObserver<>();
 
-    not.init();
-
-    boolean[] actual = new boolean[q.length];
+    sut.port_q().connect(actual_q);
 
     // When
-    for (int i = 0; i < a.length; i++) {
-      not.getA().update(a[i]);
+    sut.init();
 
-      not.compute();
-
-      actual[i] = not.getQ().getValue();
-
-      not.getQ().tick();
+    for (Message<Boolean> msg : a) {
+      sut.port_a().receive(msg);
     }
 
+    sut.run();
+
     // Then
-    Assertions.assertThat(actual).containsExactly(q);
+    Assertions.assertThat(actual_q.getObservedMessages()).containsExactlyElementsOf(q);
   }
 
   public static Stream<Arguments> histories() {
     return Stream.of(
       // 1
-      Arguments.of(new boolean[]{true, true}, new boolean[]{false, false}),
+      Arguments.of(
+        List.of(msg(true), tk(), msg(true), tk()), 
+        List.of(msg(false), tk(), msg(false), tk())),
       // 2
-      Arguments.of(new boolean[]{true, false}, new boolean[]{false, true}),
+      Arguments.of(
+        List.of(msg(true), tk(), msg(false), tk()), 
+        List.of(msg(false), tk(), msg(true), tk())),
       // 3
-      Arguments.of(new boolean[]{false, true}, new boolean[]{true, false}),
+      Arguments.of(
+        List.of(msg(false), tk(), msg(true), tk()), 
+        List.of(msg(true), tk(), msg(false), tk())),
       // 4
-      Arguments.of(new boolean[]{false, false}, new boolean[]{true, true}),
+      Arguments.of(
+        List.of(msg(false), tk(), msg(false), tk()), 
+        List.of(msg(true), tk(), msg(true), tk())),
       // 5
-      Arguments.of(new boolean[]{true, true, true}, new boolean[]{false, false, false}),
+      Arguments.of(
+        List.of(msg(true), tk(), msg(true), tk(), msg(true), tk()), 
+        List.of(msg(false), tk(), msg(false), tk(), msg(false), tk())),
       // 6
-      Arguments.of(new boolean[]{true, true, false}, new boolean[]{false, false, true}),
+      Arguments.of(
+        List.of(msg(true), tk(), msg(true), tk(), msg(false), tk()), 
+        List.of(msg(false), tk(), msg(false), tk(), msg(true), tk())),
       // 7
-      Arguments.of(new boolean[]{true, false, true}, new boolean[]{false, true, false}),
+      Arguments.of(
+        List.of(msg(true), tk(), msg(false), tk(), msg(true), tk()), 
+        List.of(msg(false), tk(), msg(true), tk(), msg(false), tk())),
       // 8
-      Arguments.of(new boolean[]{true, false, false}, new boolean[]{false, true, true}),
+      Arguments.of(
+        List.of(msg(true), tk(), msg(false), tk(), msg(false), tk()), 
+        List.of(msg(false), tk(), msg(true), tk(), msg(true), tk())),
       // 9
-      Arguments.of(new boolean[]{false, true, true}, new boolean[]{true, false, false}),
+      Arguments.of(
+        List.of(msg(false), tk(), msg(true), tk(), msg(true), tk()), 
+        List.of(msg(true), tk(), msg(false), tk(), msg(false), tk())),
       // 10
-      Arguments.of(new boolean[]{false, true, false}, new boolean[]{true, false, true}),
+      Arguments.of(
+        List.of(msg(false), tk(), msg(true), tk(), msg(false), tk()), 
+        List.of(msg(true), tk(), msg(false), tk(), msg(true), tk())),
       // 11
-      Arguments.of(new boolean[]{false, false, true}, new boolean[]{true, true, false}),
+      Arguments.of(
+        List.of(msg(false), tk(), msg(false), tk(), msg(true), tk()), 
+        List.of(msg(true), tk(), msg(true), tk(), msg(false), tk())),
       // 12
-      Arguments.of(new boolean[]{false, false, false}, new boolean[]{true, true, true})
+      Arguments.of(
+        List.of(msg(false), tk(), msg(false), tk(), msg(false), tk()), 
+        List.of(msg(true), tk(), msg(true), tk(), msg(true), tk()))
     );
   }
 }

@@ -1,13 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang.math;
 
+import montiarc.rte.port.PortObserver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class DivideTest {
 
@@ -15,17 +19,25 @@ public class DivideTest {
   @MethodSource("divideIntegerTestProvider")
   public void testBehavior(int a, int b, int r) {
     // Given
-    DivideI divide = new DivideI();
-    divide.setUp();
-    divide.init();
-    divide.getA().update(a);
-    divide.getB().update(b);
+    DivideIComp sut = new DivideICompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
 
     // When
-    divide.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
-    assertThat(divide.getR().getValue()).isEqualTo(r);
+    assertAll(
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r)
+    );
   }
 
   protected static Stream<Arguments> divideIntegerTestProvider() {
@@ -62,17 +74,25 @@ public class DivideTest {
   @MethodSource("divideLongTestProvider")
   public void testBehavior(long a, long b, long r) {
     // Given
-    DivideL divide = new DivideL();
-    divide.setUp();
-    divide.init();
-    divide.getA().update(a);
-    divide.getB().update(b);
+    DivideLComp sut = new DivideLCompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
 
     // When
-    divide.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
-    assertThat(divide.getR().getValue()).isEqualTo(r);
+    assertAll(
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r)
+    );
   }
 
   protected static Stream<Arguments> divideLongTestProvider() {

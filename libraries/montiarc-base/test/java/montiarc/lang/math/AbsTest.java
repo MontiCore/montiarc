@@ -1,12 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang.math;
 
+import montiarc.rte.port.PortObserver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
@@ -16,18 +19,25 @@ public class AbsTest {
   @MethodSource("absIntegerTestProvider")
   public void testBehavior(int a, int r, boolean of) {
     // Given
-    AbsI abs = new AbsI();
-    abs.setUp();
-    abs.init();
-    abs.getA().update(a);
+    AbsIComp sut = new AbsICompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+    PortObserver<Boolean> port_of = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
+    sut.port_of().connect(port_of);
 
     // When
-    abs.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+
+    sut.run();
 
     // Then
     assertAll(
-      () -> assertThat(abs.getR().getValue()).isEqualTo(r),
-      () -> assertThat(abs.getOf().getValue()).isEqualTo(of)
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r),
+      () -> assertThat(port_of.getObservedValues()).containsExactly(of)
     );
   }
 
@@ -45,24 +55,30 @@ public class AbsTest {
   @MethodSource("absLongTestProvider")
   public void testBehavior(long a, long r, boolean of) {
     // Given
-    AbsL abs = new AbsL();
-    abs.setUp();
-    abs.init();
-    abs.getA().update(a);
+    AbsLComp sut = new AbsLCompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+    PortObserver<Boolean> port_of = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
+    sut.port_of().connect(port_of);
 
     // When
-    abs.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+
+    sut.run();
 
     // Then
     assertAll(
-      () -> assertThat(abs.getR().getValue()).isEqualTo(r),
-      () -> assertThat(abs.getOf().getValue()).isEqualTo(of)
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r),
+      () -> assertThat(port_of.getObservedValues()).containsExactly(of)
     );
   }
 
   protected static Stream<Arguments> absLongTestProvider() {
     return Stream.of(
-
       Arguments.of(0, 0, false),
       Arguments.of(1, 1, false),
       Arguments.of(-1, 1, false),

@@ -4,7 +4,7 @@ plugins {
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 
-  id("montiarc")  // Implicitly applies java-base
+  id("montiarc-jsim")  // Implicitly applies java-base
 }
 
 group = "montiarc.tooling.ma2java-plugin-itest"

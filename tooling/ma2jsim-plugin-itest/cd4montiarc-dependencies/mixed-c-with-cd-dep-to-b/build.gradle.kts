@@ -8,7 +8,7 @@ plugins {
 
   id("java-library")
   id("cd2pojo")
-  id("montiarc")
+  id("montiarc-jsim")
 }
 
 group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"

@@ -1,13 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang.math;
 
+import montiarc.rte.port.PortObserver;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class MaxTest {
 
@@ -15,17 +19,25 @@ public class MaxTest {
   @MethodSource("maxIntegerTestProvider")
   public void testBehavior(int a, int b, int r) {
     // Given
-    MaxI max = new MaxI();
-    max.setUp();
-    max.init();
-    max.getA().update(a);
-    max.getB().update(b);
+    MaxIComp sut = new MaxICompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
 
     // When
-    max.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
-    assertThat(max.getR().getValue()).isEqualTo(r);
+    assertAll(
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r)
+    );
   }
 
   protected static Stream<Arguments> maxIntegerTestProvider() {
@@ -62,17 +74,25 @@ public class MaxTest {
   @MethodSource("maxLongTestProvider")
   public void testBehavior(long a, long b, long r) {
     // Given
-    MaxL max = new MaxL();
-    max.setUp();
-    max.init();
-    max.getA().update(a);
-    max.getB().update(b);
+    MaxLComp sut = new MaxLCompBuilder().setName("sut").build();
+    PortObserver<Number> port_r = new PortObserver<>();
+
+    sut.port_r().connect(port_r);
 
     // When
-    max.compute();
+    sut.init();
+
+    sut.port_a().receive(msg(a));
+    sut.port_a().receive(tk());
+    sut.port_b().receive(msg(b));
+    sut.port_b().receive(tk());
+
+    sut.run();
 
     // Then
-    assertThat(max.getR().getValue()).isEqualTo(r);
+    assertAll(
+      () -> assertThat(port_r.getObservedValues()).containsExactly(r)
+    );
   }
 
   protected static Stream<Arguments> maxLongTestProvider() {
