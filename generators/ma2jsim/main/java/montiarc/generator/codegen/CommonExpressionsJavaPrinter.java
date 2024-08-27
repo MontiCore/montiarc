@@ -34,6 +34,10 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
       CommentPrettyPrinter.printPreComments(node, getPrinter());
     }
 
+    // Use the full information of the function call (the arguments)
+    // to better calculate the type of the actual function inside.
+    // This is why the TC is called on the CallExpression first.
+    this.tc.typeOf(node);
     SymTypeExpression expr = this.tc.typeOf(node.getExpression());
     if (expr.isFunctionType()
       && expr instanceof SymTypeOfFunction
