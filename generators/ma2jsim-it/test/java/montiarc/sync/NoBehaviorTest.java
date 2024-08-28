@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
 public class NoBehaviorTest {
@@ -51,27 +52,27 @@ public class NoBehaviorTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
         List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
         List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
         List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
         List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
         List.of(tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
         List.of(tk(), tk())
       ));
   }

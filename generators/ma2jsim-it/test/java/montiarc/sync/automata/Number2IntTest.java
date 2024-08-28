@@ -13,6 +13,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
 class Number2IntTest {
@@ -50,20 +51,20 @@ class Number2IntTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(0), tk()),
-        List.of(new Message<>(0), tk())
+        List.of(msg(0), tk()),
+        List.of(msg(0), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(1.5), tk()),
-        List.of(new Message<>(1), tk())
+        List.of(msg(1.5), tk()),
+        List.of(msg(1), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(1.5), tk(), new Message<>(-1), tk()),
-        List.of(new Message<>(1), tk(), new Message<>(-1), tk())
+        List.of(msg(1.5), tk(), msg(-1), tk()),
+        List.of(msg(1), tk(), msg(-1), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(1F), tk(), new Message<>(3.333333), tk(), new Message<>(-1.6F), tk()),
-        List.of(new Message<>(1), tk(), new Message<>(3), tk(), new Message<>(-1), tk())
+        List.of(msg(1F), tk(), msg(3.333333), tk(), msg(-1.6F), tk()),
+        List.of(msg(1), tk(), msg(3), tk(), msg(-1), tk())
       ));
   }
 }

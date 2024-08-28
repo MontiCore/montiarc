@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
 class SinkTest {
@@ -59,37 +60,37 @@ class SinkTest {
     return Stream.of(
       // 1
       Arguments.of(
-        List.of(new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.ON)),
         List.of("On")
       ),
       // 2
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF)),
+        List.of(msg(OnOff.OFF)),
         List.of("Off")
       ),
       // 3
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.ON), msg(OnOff.ON)),
         List.of("On", "On")
       ),
       // 4
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.OFF)),
+        List.of(msg(OnOff.ON), msg(OnOff.OFF)),
         List.of("On", "Off")
       ),
       // 5
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.OFF), msg(OnOff.ON)),
         List.of("Off", "On")
       ),
       // 6
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), msg(OnOff.OFF)),
         List.of("Off", "Off")
       ),
       // 7
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
+        List.of(msg(OnOff.ON), msg(OnOff.ON), msg(OnOff.ON)),
         List.of("On", "On", "On")
       ));
   }

@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
 public class EncapsulationTest {
@@ -51,156 +52,156 @@ public class EncapsulationTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON))
+        List.of(msg(OnOff.ON)),
+        List.of(msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.ON), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.ON), msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.OFF), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.OFF), msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(tk()),
         List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk()),
-        List.of(new Message<>(OnOff.ON), tk())
+        List.of(msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk()),
-        List.of(new Message<>(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON), tk()),
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.ON), tk())
+        List.of(msg(OnOff.ON), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.ON), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.OFF), tk()),
-        List.of(new Message<>(OnOff.ON), new Message<>(OnOff.OFF), tk())
+        List.of(msg(OnOff.ON), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.ON), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.ON), tk()),
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.ON), tk())
+        List.of(msg(OnOff.OFF), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.OFF), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.OFF), tk()),
-        List.of(new Message<>(OnOff.OFF), new Message<>(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.OFF), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.ON)),
-        List.of(tk(), new Message<>(OnOff.ON))
+        List.of(tk(), msg(OnOff.ON)),
+        List.of(tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.OFF)),
-        List.of(tk(), new Message<>(OnOff.OFF))
+        List.of(tk(), msg(OnOff.OFF)),
+        List.of(tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.ON), new Message<>(OnOff.ON)),
-        List.of(tk(), new Message<>(OnOff.ON), new Message<>(OnOff.ON))
+        List.of(tk(), msg(OnOff.ON), msg(OnOff.ON)),
+        List.of(tk(), msg(OnOff.ON), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.ON), new Message<>(OnOff.OFF)),
-        List.of(tk(), new Message<>(OnOff.ON), new Message<>(OnOff.OFF))
+        List.of(tk(), msg(OnOff.ON), msg(OnOff.OFF)),
+        List.of(tk(), msg(OnOff.ON), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.OFF), new Message<>(OnOff.ON)),
-        List.of(tk(), new Message<>(OnOff.OFF), new Message<>(OnOff.ON))
+        List.of(tk(), msg(OnOff.OFF), msg(OnOff.ON)),
+        List.of(tk(), msg(OnOff.OFF), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.OFF), new Message<>(OnOff.OFF)),
-        List.of(tk(), new Message<>(OnOff.OFF), new Message<>(OnOff.OFF))
+        List.of(tk(), msg(OnOff.OFF), msg(OnOff.OFF)),
+        List.of(tk(), msg(OnOff.OFF), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(tk(), tk()),
         List.of(tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), tk()),
-        List.of(new Message<>(OnOff.ON), tk(), tk())
+        List.of(msg(OnOff.ON), tk(), tk()),
+        List.of(msg(OnOff.ON), tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), tk()),
-        List.of(new Message<>(OnOff.OFF), tk(), tk())
+        List.of(msg(OnOff.OFF), tk(), tk()),
+        List.of(msg(OnOff.OFF), tk(), tk())
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.ON), tk()),
-        List.of(tk(), new Message<>(OnOff.ON), tk())
+        List.of(tk(), msg(OnOff.ON), tk()),
+        List.of(tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(tk(), new Message<>(OnOff.OFF), tk()),
-        List.of(tk(), new Message<>(OnOff.OFF), tk())
+        List.of(tk(), msg(OnOff.OFF), tk()),
+        List.of(tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(tk(), tk(), new Message<>(OnOff.ON)),
-        List.of(tk(), tk(), new Message<>(OnOff.ON))
+        List.of(tk(), tk(), msg(OnOff.ON)),
+        List.of(tk(), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
-        List.of(tk(), tk(), new Message<>(OnOff.OFF))
+        List.of(tk(), tk(), msg(OnOff.OFF)),
+        List.of(tk(), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       ));
   }
 }

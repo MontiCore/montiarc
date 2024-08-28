@@ -14,6 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
 class NameOverlapTest {
@@ -43,13 +44,13 @@ class NameOverlapTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ));
   }
 
@@ -79,13 +80,13 @@ class NameOverlapTest {
   static Stream<Arguments> ioInt() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(0), tk())
+        List.of(msg(0), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(0), tk(), new Message<>(0), tk())
+        List.of(msg(0), tk(), msg(0), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(0), tk(), new Message<>(0), tk(), new Message<>(0), tk())
+        List.of(msg(0), tk(), msg(0), tk(), msg(0), tk())
       ));
   }
 }

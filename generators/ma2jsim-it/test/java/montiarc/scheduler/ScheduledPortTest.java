@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.scheduler;
 
-import montiarc.rte.msg.Message;
 import montiarc.rte.port.ScheduledPort;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static montiarc.rte.msg.MessageFactory.msg;
 
 class ScheduledPortTest {
 
@@ -15,7 +16,7 @@ class ScheduledPortTest {
     ScheduledPort<Integer> buffer = new ScheduledPort<>("test", comp, comp.getScheduler());
     // When
     for(int i = 0; i < 10; i ++){
-      buffer.receive(new Message<>(i));
+      buffer.receive(msg(i));
     }
 
     comp.run();
