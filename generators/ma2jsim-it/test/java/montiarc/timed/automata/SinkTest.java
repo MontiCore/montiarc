@@ -3,7 +3,6 @@ package montiarc.timed.automata;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -14,6 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 class SinkTest {
 
@@ -38,7 +39,7 @@ class SinkTest {
 
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
-      sut.port_i().receive(Tick.get());
+      sut.port_i().receive(tk());
       sut.run(1);
 
       actual.add(((SinkAutomaton) sut.getBehavior()).getState().name());

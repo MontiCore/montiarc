@@ -3,7 +3,6 @@ package montiarc.timed.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
@@ -14,6 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 public class ParallelCompositionTest {
 
@@ -110,424 +111,424 @@ public class ParallelCompositionTest {
         List.of(new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get()),
-        List.of(Tick.get()),
-        List.of(Tick.get()),
-        List.of(Tick.get())
+        List.of(tk()),
+        List.of(tk()),
+        List.of(tk()),
+        List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get())
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(tk()),
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(tk())
       ),
       Arguments.of(
-        List.of(Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get())
+        List.of(tk()),
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(tk()),
+        List.of(new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get())
+        List.of(tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(tk()),
+        List.of(new Message<>(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get())
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.ON), tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.OFF), tk()),
+        List.of(new Message<>(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get())
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk()),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get())
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk()),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk())
       ),
       Arguments.of(
-        List.of(Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk()),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk()),
+        List.of(tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk()),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk()),
+        List.of(tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get())
+        List.of(tk(), tk()),
+        List.of(tk(), tk()),
+        List.of(tk(), tk()),
+        List.of(tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get())
+        List.of(new Message<>(OnOff.ON), tk(), tk()),
+        List.of(new Message<>(OnOff.ON), tk(), tk()),
+        List.of(new Message<>(OnOff.ON), tk(), tk()),
+        List.of(new Message<>(OnOff.OFF), tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get())
+        List.of(new Message<>(OnOff.ON), tk(), tk()),
+        List.of(new Message<>(OnOff.OFF), tk(), tk()),
+        List.of(new Message<>(OnOff.ON), tk(), tk()),
+        List.of(new Message<>(OnOff.ON), tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk(), tk()),
+        List.of(new Message<>(OnOff.ON), tk(), tk()),
+        List.of(new Message<>(OnOff.OFF), tk(), tk()),
+        List.of(new Message<>(OnOff.OFF), tk(), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), Tick.get()),
-        List.of(new Message<>(OnOff.ON), Tick.get(), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk(), tk()),
+        List.of(new Message<>(OnOff.OFF), tk(), tk()),
+        List.of(new Message<>(OnOff.OFF), tk(), tk()),
+        List.of(new Message<>(OnOff.ON), tk(), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get())
+        List.of(tk(), new Message<>(OnOff.ON), tk()),
+        List.of(tk(), new Message<>(OnOff.ON), tk()),
+        List.of(tk(), new Message<>(OnOff.ON), tk()),
+        List.of(tk(), new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get())
+        List.of(tk(), new Message<>(OnOff.ON), tk()),
+        List.of(tk(), new Message<>(OnOff.OFF), tk()),
+        List.of(tk(), new Message<>(OnOff.ON), tk()),
+        List.of(tk(), new Message<>(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get())
+        List.of(tk(), new Message<>(OnOff.OFF), tk()),
+        List.of(tk(), new Message<>(OnOff.ON), tk()),
+        List.of(tk(), new Message<>(OnOff.OFF), tk()),
+        List.of(tk(), new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.OFF), Tick.get()),
-        List.of(Tick.get(), new Message<>(OnOff.ON), Tick.get())
+        List.of(tk(), new Message<>(OnOff.OFF), tk()),
+        List.of(tk(), new Message<>(OnOff.OFF), tk()),
+        List.of(tk(), new Message<>(OnOff.OFF), tk()),
+        List.of(tk(), new Message<>(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(tk(), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk(), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), tk(), new Message<>(OnOff.ON)),
+        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(Tick.get(), Tick.get(), new Message<>(OnOff.ON))
+        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), tk(), new Message<>(OnOff.OFF)),
+        List.of(tk(), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ));
   }
 }

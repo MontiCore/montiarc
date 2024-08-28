@@ -3,7 +3,6 @@ package montiarc.sync.compute;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
@@ -14,6 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 class NameOverlapTest {
 
@@ -33,7 +34,7 @@ class NameOverlapTest {
 
     // When
     sut.init();
-    sut.run((int) expected.stream().filter(msg -> !msg.equals(Tick.get())).count());
+    sut.run((int) expected.stream().filter(msg -> !msg.equals(tk())).count());
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
@@ -42,13 +43,13 @@ class NameOverlapTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF), Tick.get())
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF), tk())
       ));
   }
 
@@ -69,7 +70,7 @@ class NameOverlapTest {
     // When
     sut.init();
 
-    sut.run((int) expected.stream().filter(msg -> !msg.equals(Tick.get())).count());
+    sut.run((int) expected.stream().filter(msg -> !msg.equals(tk())).count());
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
@@ -78,13 +79,13 @@ class NameOverlapTest {
   static Stream<Arguments> ioInt() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(0), Tick.get())
+        List.of(new Message<>(0), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(0), Tick.get(), new Message<>(0), Tick.get())
+        List.of(new Message<>(0), tk(), new Message<>(0), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(0), Tick.get(), new Message<>(0), Tick.get(), new Message<>(0), Tick.get())
+        List.of(new Message<>(0), tk(), new Message<>(0), tk(), new Message<>(0), tk())
       ));
   }
 }

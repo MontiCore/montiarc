@@ -3,7 +3,6 @@ package montiarc.timed.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.port.ScheduledPort;
 import org.assertj.core.api.Assertions;
@@ -14,6 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 class UnusedPortsTest {
 
@@ -71,22 +72,22 @@ class UnusedPortsTest {
         List.of()
       ),
       Arguments.of(
-        List.of(Tick.get()),
-        List.of(Tick.get()),
-        List.of(Tick.get()),
-        List.of(Tick.get())
+        List.of(tk()),
+        List.of(tk()),
+        List.of(tk()),
+        List.of(tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get())
+        List.of(tk(), tk()),
+        List.of(tk(), tk()),
+        List.of(tk(), tk()),
+        List.of(tk(), tk())
       ),
       Arguments.of(
-        List.of(Tick.get(), Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get(), Tick.get()),
-        List.of(Tick.get(), Tick.get(), Tick.get())
+        List.of(tk(), tk(), tk()),
+        List.of(tk(), tk(), tk()),
+        List.of(tk(), tk(), tk()),
+        List.of(tk(), tk(), tk())
       )
     );
   }

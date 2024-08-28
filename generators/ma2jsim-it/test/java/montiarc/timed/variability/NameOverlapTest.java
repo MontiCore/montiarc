@@ -3,7 +3,6 @@ package montiarc.timed.variability;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
@@ -14,6 +13,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 class NameOverlapTest {
 
@@ -58,24 +59,24 @@ class NameOverlapTest {
         List.of(new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.ON))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF)),
-        List.of(new Message<>(OnOff.OFF), Tick.get(), new Message<>(OnOff.OFF))
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF)),
+        List.of(new Message<>(OnOff.OFF), tk(), new Message<>(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON)),
-        List.of(new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON), Tick.get(), new Message<>(OnOff.ON))
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON)),
+        List.of(new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON), tk(), new Message<>(OnOff.ON))
       ));
   }
 
@@ -116,12 +117,12 @@ class NameOverlapTest {
         List.of(new Message<>(0))
       ),
       Arguments.of(
-        List.of(new Message<>(0), Tick.get(), new Message<>(1)),
-        List.of(new Message<>(0), Tick.get(), new Message<>(1))
+        List.of(new Message<>(0), tk(), new Message<>(1)),
+        List.of(new Message<>(0), tk(), new Message<>(1))
       ),
       Arguments.of(
-        List.of(new Message<>(-1), Tick.get(), new Message<>(5), Tick.get(), new Message<>(100)),
-        List.of(new Message<>(-1), Tick.get(), new Message<>(5), Tick.get(), new Message<>(100))
+        List.of(new Message<>(-1), tk(), new Message<>(5), tk(), new Message<>(100)),
+        List.of(new Message<>(-1), tk(), new Message<>(5), tk(), new Message<>(100))
       ));
   }
 }

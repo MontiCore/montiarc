@@ -3,7 +3,6 @@ package montiarc.sync.automata;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -13,6 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 class Number2IntTest {
 
@@ -49,20 +50,20 @@ class Number2IntTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(new Message<>(0), Tick.get()),
-        List.of(new Message<>(0), Tick.get())
+        List.of(new Message<>(0), tk()),
+        List.of(new Message<>(0), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(1.5), Tick.get()),
-        List.of(new Message<>(1), Tick.get())
+        List.of(new Message<>(1.5), tk()),
+        List.of(new Message<>(1), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(1.5), Tick.get(), new Message<>(-1), Tick.get()),
-        List.of(new Message<>(1), Tick.get(), new Message<>(-1), Tick.get())
+        List.of(new Message<>(1.5), tk(), new Message<>(-1), tk()),
+        List.of(new Message<>(1), tk(), new Message<>(-1), tk())
       ),
       Arguments.of(
-        List.of(new Message<>(1F), Tick.get(), new Message<>(3.333333), Tick.get(), new Message<>(-1.6F), Tick.get()),
-        List.of(new Message<>(1), Tick.get(), new Message<>(3), Tick.get(), new Message<>(-1), Tick.get())
+        List.of(new Message<>(1F), tk(), new Message<>(3.333333), tk(), new Message<>(-1.6F), tk()),
+        List.of(new Message<>(1), tk(), new Message<>(3), tk(), new Message<>(-1), tk())
       ));
   }
 }

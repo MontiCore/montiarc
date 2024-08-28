@@ -3,7 +3,6 @@ package montiarc.timed.variability;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
@@ -148,24 +147,24 @@ class OptionalDelayTest {
         List.of(msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), Tick.get(), msg(OnOff.ON)),
-        List.of(msg(OnOff.ON), Tick.get(), msg(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), Tick.get(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.ON), Tick.get(), msg(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(msg(OnOff.OFF), Tick.get(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), Tick.get(), msg(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
-        List.of(msg(OnOff.OFF), Tick.get(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), Tick.get(), msg(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), Tick.get(), msg(OnOff.ON), Tick.get(), msg(OnOff.ON)),
-        List.of(msg(OnOff.ON), Tick.get(), msg(OnOff.ON), Tick.get(), msg(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
       ));
   }
 }

@@ -3,7 +3,6 @@ package montiarc.datatypes.primitive.composition;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.PortObserver;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -13,6 +12,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.stream.Stream;
+
+import static montiarc.rte.msg.MessageFactory.tk;
 
 class IntForwardTest {
 
@@ -38,7 +39,7 @@ class IntForwardTest {
 
     for (int msg : input) {
       sut.port_pIn().receive(Message.of(msg));
-      sut.port_pIn().receive(Tick.get());
+      sut.port_pIn().receive(tk());
     }
 
     sut.run();
