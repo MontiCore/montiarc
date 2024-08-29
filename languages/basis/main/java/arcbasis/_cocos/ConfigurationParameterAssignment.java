@@ -202,7 +202,9 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         String key = arguments.get(i).getName();
 
         int paramIndex = paramIndices.get(key);
-        if (!SymTypeRelations.isCompatible(paramTypes.get(paramIndex), argTypes.get(i))) {
+        if (!paramTypes.get(paramIndex).isObscureType()
+          && !argTypes.get(i).isObscureType()
+          && !SymTypeRelations.isCompatible(paramTypes.get(paramIndex), argTypes.get(i))) {
           // check non-keyword argument
           ASTExpression argument = arguments.get(i).getExpression();
 
@@ -215,7 +217,9 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
         }
       } else {
         // the non-keyword argument's type is available
-        if (!SymTypeRelations.isCompatible(paramTypes.get(i), argTypes.get(i))) {
+        if (!paramTypes.get(i).isObscureType()
+          && !argTypes.get(i).isObscureType()
+          && !SymTypeRelations.isCompatible(paramTypes.get(i), argTypes.get(i))) {
           ASTExpression argument = arguments.get(i).getExpression();
 
           Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
@@ -295,7 +299,6 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     return isUnique;
   }
-
 
   /**
    * Checks that keyword arguments of the subcomponent's instantiation come
