@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import arcautomaton._cocos.NoEventsInSyncAutomata;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcbasis._cocos.ArcBasisASTComponentInstanceCoCo;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
@@ -59,7 +58,6 @@ import genericarc._cocos.SubcomponentTypeBound;
 import genericarc._cocos.TypeParameterCapitalization;
 import genericarc._cocos.TypeParameterNamedTick;
 import modes._cocos.MaxOneModeAutomaton;
-import modes._cocos.ModeAutomataInDecomposedComponent;
 import modes._cocos.ModeAutomatonContainsNoStates;
 import modes._cocos.ModeOmitPortDefinition;
 import modes._cocos.StatechartContainsNoMode;
@@ -115,7 +113,6 @@ public class MontiArcCoCos {
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
     checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment(tc));
-    checker.addCoCo((ArcBasisASTComponentInstanceCoCo) new ConfigurationParameterAssignment(tc));
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
     checker.addVariantCoCo(PortHeritageTypeFits.class);
