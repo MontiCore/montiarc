@@ -246,6 +246,36 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
       "a.b.K<T> sub; " +
       "i -> sub.i; " +
       "}",
+    // java.lang.Boolean -> boolean
+    "component Comp19 { " +
+      "port in java.lang.Boolean i; " +
+      "a.b.B sub; " +
+      "i -> sub.i; " +
+      "}",
+    // boolean -> java.lang.Boolean
+    "component Comp20 { " +
+      "port out java.lang.Boolean o; " +
+      "a.b.C sub; " +
+      "sub.o -> o; " +
+      "}",
+    // java.lang.Integer -> int (in port forward)
+    "component Comp21 { " +
+      "port in java.lang.Integer i; " +
+      "a.b.D sub; " +
+      "i -> sub.i; " +
+      "}",
+    // int -> java.lang.Integer (out port forward)
+    "component Comp22 { " +
+      "port out java.lang.Integer o; " +
+      "a.b.E sub; " +
+      "sub.o -> o; " +
+      "}",
+    // int -> java.lang.Integer (in port forward)
+    "component Comp23 { " +
+      "port in int i; " +
+      "a.b.F sub; " +
+      "i -> sub.i; " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -417,42 +447,7 @@ public class ConnectorTypesFitTest extends MontiArcAbstractTest {
           "Inner sub; " +
           "i -> sub.i; " +
           "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH),
-      // java.lang.Boolean -> boolean
-      arg("component Comp19 { " +
-          "port in java.lang.Boolean i; " +
-          "a.b.B sub; " +
-          "i -> sub.i; " +
-          "}",
-          ArcError.CONNECT_OBJECT_TO_PRIMITIVE),
-      // boolean -> java.lang.Boolean
-      arg("component Comp20 { " +
-          "port out java.lang.Boolean o; " +
-          "a.b.C sub; " +
-          "sub.o -> o; " +
-          "}",
-          ArcError.CONNECT_PRIMITIVE_TO_OBJECT),
-      // java.lang.Integer -> int (in port forward)
-      arg("component Comp21 { " +
-          "port in java.lang.Integer i; " +
-          "a.b.D sub; " +
-          "i -> sub.i; " +
-          "}",
-          ArcError.CONNECT_OBJECT_TO_PRIMITIVE),
-      // int -> java.lang.Integer (out port forward)
-      arg("component Comp22 { " +
-          "port out java.lang.Integer o; " +
-          "a.b.E sub; " +
-          "sub.o -> o; " +
-          "}",
-          ArcError.CONNECT_PRIMITIVE_TO_OBJECT),
-      // int -> java.lang.Integer (in port forward)
-      arg("component Comp23 { " +
-          "port in int i; " +
-          "a.b.F sub; " +
-          "i -> sub.i; " +
-          "}",
-          ArcError.CONNECT_PRIMITIVE_TO_OBJECT)
+        ArcError.CONNECTOR_TYPE_MISMATCH)
     );
   }
 }

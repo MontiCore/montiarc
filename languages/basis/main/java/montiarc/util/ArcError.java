@@ -61,8 +61,6 @@ public enum ArcError implements Error {
   INVALID_CONTEXT_INC_SUFFIX("0xC1157", "Invalid syntax, no increment in this context"),
   INVALID_CONTEXT_DEC_SUFFIX("0xC1158", "Invalid syntax, no decrement in this context"),
   KEY_NOT_UNIQUE("0xC1159", "Cannot use key '%s' multiple times to set parameters."),
-  CONNECT_PRIMITIVE_TO_OBJECT("0xC1164", "Boxing not supported for connectors: Cannot connect primitive type port to object type port."),
-  CONNECT_OBJECT_TO_PRIMITIVE("0xC1165", "Unboxing not supported for connectors: Cannot connect object type port to primitive type port."),
   PORT_NAMED_TICK("0xC1166", "Port cant be named Tick"),
   COMPONENT_NAMED_TICK("0xC1168", "Component cant be named Tick"),
   COMPONENTINSTANCE_NAMED_TICK("0xC1169", "Subcomponent cant be named Tick"),
