@@ -13,11 +13,11 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class DivideTest {
+class DivideTest {
 
   @ParameterizedTest
   @MethodSource("divideIntegerTestProvider")
-  public void testBehavior(int a, int b, int r) {
+  void test(int a, int b, int r) {
     // Given
     DivideIComp sut = new DivideICompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -40,7 +40,7 @@ public class DivideTest {
     );
   }
 
-  protected static Stream<Arguments> divideIntegerTestProvider() {
+  static Stream<Arguments> divideIntegerTestProvider() {
     return Stream.of(
       // Arguments.of(0, 0, NAN, false),
       Arguments.of(0, 1, 0, false),
@@ -72,7 +72,7 @@ public class DivideTest {
 
   @ParameterizedTest
   @MethodSource("divideLongTestProvider")
-  public void testBehavior(long a, long b, long r) {
+  void test(long a, long b, long r) {
     // Given
     DivideLComp sut = new DivideLCompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -95,7 +95,7 @@ public class DivideTest {
     );
   }
 
-  protected static Stream<Arguments> divideLongTestProvider() {
+  static Stream<Arguments> divideLongTestProvider() {
     return Stream.of(
       // Arguments.of(0, 0, NAN, false),
       Arguments.of(0, 1, 0, false),

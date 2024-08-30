@@ -13,11 +13,11 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class AddTest {
+class AddTest {
 
   @ParameterizedTest
   @MethodSource("addIntegerTestProvider")
-  public void testBehavior(int a, int b, int r, boolean of) {
+  void test(int a, int b, int r, boolean of) {
     // Given
     AddIComp sut = new AddICompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -43,7 +43,7 @@ public class AddTest {
     );
   }
 
-  protected static Stream<Arguments> addIntegerTestProvider() {
+  static Stream<Arguments> addIntegerTestProvider() {
     return Stream.of(
       Arguments.of(0, 0, 0, false),
       Arguments.of(0, 1, 1, false),
@@ -75,7 +75,7 @@ public class AddTest {
 
   @ParameterizedTest
   @MethodSource("addLongTestProvider")
-  public void testBehavior(long a, long b, long r, boolean of) {
+  void test(long a, long b, long r, boolean of) {
     // Given
     AddLComp sut = new AddLCompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -101,7 +101,7 @@ public class AddTest {
     );
   }
 
-  protected static Stream<Arguments> addLongTestProvider() {
+  static Stream<Arguments> addLongTestProvider() {
     return Stream.of(
       Arguments.of(0, 0, 0, false),
       Arguments.of(0, 1, 1, false),

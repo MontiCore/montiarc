@@ -34,11 +34,14 @@ tasks.compileCd2pojo {
   useClass2Mc.set(true)
 }
 
+tasks.compileTestCd2pojo {
+  useClass2Mc.set(true)
+}
+
 tasks.compileMontiarc {
   useClass2Mc.set(true)
+}
 
-  val enableAttachDebugger = false
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
+tasks.compileTestMontiarc {
+  useClass2Mc.set(true)
 }

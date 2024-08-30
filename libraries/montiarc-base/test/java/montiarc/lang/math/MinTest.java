@@ -13,11 +13,11 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class MinTest {
+class MinTest {
 
   @ParameterizedTest
   @MethodSource("minIntegerTestProvider")
-  public void testBehavior(int a, int b, int r) {
+  void test(int a, int b, int r) {
     // Given
     MinIComp sut = new MinICompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -40,7 +40,7 @@ public class MinTest {
     );
   }
 
-  protected static Stream<Arguments> minIntegerTestProvider() {
+  static Stream<Arguments> minIntegerTestProvider() {
     return Stream.of(
       Arguments.of(0, 0, 0),
       Arguments.of(0, 1, 0),
@@ -72,7 +72,7 @@ public class MinTest {
 
   @ParameterizedTest
   @MethodSource("minLongTestProvider")
-  public void testBehavior(long a, long b, long r) {
+  void test(long a, long b, long r) {
     // Given
     MinLComp sut = new MinLCompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -95,7 +95,7 @@ public class MinTest {
     );
   }
 
-  protected static Stream<Arguments> minLongTestProvider() {
+  static Stream<Arguments> minLongTestProvider() {
     return Stream.of(
       Arguments.of(0, 0, 0),
       Arguments.of(0, 1, 0),

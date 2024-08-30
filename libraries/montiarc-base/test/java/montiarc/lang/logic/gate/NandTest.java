@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
-public class NandTest {
+class NandTest {
 
   @Order(1)
   @ParameterizedTest
@@ -29,7 +29,7 @@ public class NandTest {
     "false, true, true",
     "false, false, true"
   })
-  public void testBehavior(boolean a, boolean b, boolean q) {
+  void test(boolean a, boolean b, boolean q) {
     // Given
     NandComp sut = new NandCompBuilder().setName("sut").build();
     PortObserver<Boolean> port_q = new PortObserver<>();
@@ -53,7 +53,7 @@ public class NandTest {
   @Order(2)
   @ParameterizedTest
   @MethodSource("histories")
-  public void testBehavior(@NotNull List<Message<Boolean>> a,
+  void test(@NotNull List<Message<Boolean>> a,
                            @NotNull List<Message<Boolean>> b,
                            @NotNull List<Message<Boolean>> q) {
     Preconditions.checkNotNull(a);
@@ -83,7 +83,7 @@ public class NandTest {
     Assertions.assertThat(port_q.getObservedMessages()).containsExactlyElementsOf(q);
   }
 
-  public static Stream<Arguments> histories() {
+  static Stream<Arguments> histories() {
     return Stream.of(
       // 1
       Arguments.of(

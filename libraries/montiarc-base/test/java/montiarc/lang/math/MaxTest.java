@@ -13,11 +13,11 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class MaxTest {
+class MaxTest {
 
   @ParameterizedTest
   @MethodSource("maxIntegerTestProvider")
-  public void testBehavior(int a, int b, int r) {
+  void test(int a, int b, int r) {
     // Given
     MaxIComp sut = new MaxICompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -40,7 +40,7 @@ public class MaxTest {
     );
   }
 
-  protected static Stream<Arguments> maxIntegerTestProvider() {
+  static Stream<Arguments> maxIntegerTestProvider() {
     return Stream.of(
       Arguments.of(0, 0, 0),
       Arguments.of(0, 1, 1),
@@ -72,7 +72,7 @@ public class MaxTest {
 
   @ParameterizedTest
   @MethodSource("maxLongTestProvider")
-  public void testBehavior(long a, long b, long r) {
+  void test(long a, long b, long r) {
     // Given
     MaxLComp sut = new MaxLCompBuilder().setName("sut").build();
     PortObserver<Number> port_r = new PortObserver<>();
@@ -95,7 +95,7 @@ public class MaxTest {
     );
   }
 
-  protected static Stream<Arguments> maxLongTestProvider() {
+  static Stream<Arguments> maxLongTestProvider() {
     return Stream.of(
       Arguments.of(0, 0, 0),
       Arguments.of(0, 1, 1),

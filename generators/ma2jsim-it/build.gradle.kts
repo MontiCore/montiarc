@@ -15,6 +15,14 @@ sourceSets {
       setSrcDirs(setOf("$projectDir/main/montiarc"))
     }
   }
+  test {
+    cd2pojo {
+      setSrcDirs(setOf("$projectDir/test/cd2pojo"))
+    }
+    montiarc {
+      setSrcDirs(setOf("$projectDir/test/montiarc"))
+    }
+  }
 }
 
 dependencies {
@@ -36,6 +44,10 @@ tasks.compileCd2pojo {
   useClass2Mc.set(true)
 }
 
+tasks.compileTestCd2pojo {
+  useClass2Mc.set(true)
+}
+
 tasks.compileMontiarc {
   useClass2Mc.set(true)
 
@@ -43,6 +55,10 @@ tasks.compileMontiarc {
   if(enableAttachDebugger) {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
+}
+
+tasks.compileTestMontiarc {
+  useClass2Mc.set(true)
 }
 
 tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }

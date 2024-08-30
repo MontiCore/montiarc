@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
-public class NotTest {
+class NotTest {
 
   @Order(1)
   @ParameterizedTest
@@ -27,7 +27,7 @@ public class NotTest {
     "true, false",
     "false, true"
   })
-  public void testBehavior(boolean a, boolean q) {
+  void test(boolean a, boolean q) {
     // Given
     NotComp sut = new NotCompBuilder().setName("sut").build();
     PortObserver<Boolean> port_q = new PortObserver<>();
@@ -49,7 +49,7 @@ public class NotTest {
   @Order(2)
   @ParameterizedTest
   @MethodSource("histories")
-  public void testBehavior(@NotNull List<Message<Boolean>> a,
+  void test(@NotNull List<Message<Boolean>> a,
                            @NotNull List<Message<Boolean>> q) {
     Preconditions.checkNotNull(a);
     Preconditions.checkNotNull(q);
@@ -73,7 +73,7 @@ public class NotTest {
     Assertions.assertThat(actual_q.getObservedMessages()).containsExactlyElementsOf(q);
   }
 
-  public static Stream<Arguments> histories() {
+  static Stream<Arguments> histories() {
     return Stream.of(
       // 1
       Arguments.of(

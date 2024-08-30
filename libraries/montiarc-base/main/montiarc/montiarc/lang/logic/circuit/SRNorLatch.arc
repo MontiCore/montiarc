@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang.logic.circuit;
 
-import montiarc.lang.logic.Delay;
+import montiarc.lang.TSDelay;
 import montiarc.lang.logic.gate.Nor;
 
 component SRNorLatch {
@@ -23,7 +23,7 @@ component SRNorLatch {
   norS.q -> q0;
   norR.q -> q1;
 
-  Delay delayS, delayR;
+  TSDelay<Boolean> delayS(false), delayR(false);
 
   norS.q -> delayS.i;
   norR.q -> delayR.i;
