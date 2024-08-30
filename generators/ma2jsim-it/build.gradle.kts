@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
-  id("montiarc.build.integration-test")
-  id("montiarc-jsim")
   id("cd2pojo")
+  id("montiarc-jsim")
+  id("montiarc.build.integration-test")
 }
 
 sourceSets {
@@ -40,18 +40,27 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 
+val enableAttachDebugger = false
+
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
+
+  if(enableAttachDebugger) {
+    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
+  }
 }
 
 tasks.compileTestCd2pojo {
   useClass2Mc.set(true)
+
+  if(enableAttachDebugger) {
+    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
+  }
 }
 
 tasks.compileMontiarc {
   useClass2Mc.set(true)
 
-  val enableAttachDebugger = false
   if(enableAttachDebugger) {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
@@ -59,6 +68,8 @@ tasks.compileMontiarc {
 
 tasks.compileTestMontiarc {
   useClass2Mc.set(true)
-}
 
-tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }
+  if(enableAttachDebugger) {
+    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
+  }
+}
