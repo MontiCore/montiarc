@@ -1,0 +1,122 @@
+/* (c) https://github.com/MontiCore/monticore */
+package factory;
+
+import java.util.Date;
+import java.util.List;
+
+classdiagram Factory {
+
+  public class Order {
+    int orderId;
+    OrderStatus status;
+    Date orderDate;
+    Date deliveryDate;
+  }
+
+  public enum OrderStatus {
+    REQUESTED,
+    IN_PROGRESS,
+    DONE;
+  }
+
+  public class OrderItem {
+    int itemId;
+    int quantity;
+    ProductSpec spec;
+    Configuration config;
+  }
+
+  public class Configuration {
+    CADModel cadModel;
+    Material material;
+    List<Processing> processingSteps;
+  }
+
+  public class CADModel {}
+
+  public class Material {
+    String unit;
+    float amount;
+    MaterialType materialType;
+  }
+
+  public enum MaterialType {
+    ALUMINUM,
+    STEEL,
+    STAINLESS_STEEL,
+    COPPER,
+    BRASS,
+    TITANIUM,
+    PLASTIC;
+  }
+
+  public enum Processing {
+    HEATING,
+    ROLLING,
+    BENDING,
+    DRILLING,
+    MILLING,
+    PUNCHING;
+  }
+
+  public class Customer {
+    int customerId;
+    String name;
+    String billingAddress;
+    String deliveryAddress;
+  }
+
+  public class OrderHistory {
+    Customer customer;
+  }
+
+  public enum MachineStatus {
+    PROCESSING,
+    STOP,
+    ERROR;
+  }
+
+  public class ConstructionPart {
+    int partId;
+    OrderItem item;
+    List<Processing> missingProcessingSteps;
+  }
+
+  public class PurchaseOrder {
+    int materialOrderId;
+    Date orderDate;
+    Date deliveryDate;
+  }
+
+  public class PurchaseOrderItem {
+    int itemNumber;
+    Material material;
+  }
+
+  public class Money {
+    double amount;
+  }
+
+  public class Invoice {
+    int invoiceId;
+    Date entryDate;
+    Date dueDate;
+    Money total;
+  }
+
+  public class ProductSpec {
+    String name;
+    String description;
+    Money price;
+  }
+
+  public class Offer {
+    ProductSpec productSpec;
+    int quantity;
+    Money total;
+  }
+
+  association [1] Order <-> OrderItem [1..*];
+  association [1] OrderHistory <-> Order [*];
+  association [1] PurchaseOrder <-> PurchaseOrderItem [1..*];
+}
