@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2jsim
 
+import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -82,6 +83,10 @@ abstract class MontiArcCompile : JavaExec() {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
     } else {
       super.exec()
+
+      if (executionResult.get().exitValue == -1) {
+        throw GradleException("There are compile errors.")
+      }
     }
   }
 

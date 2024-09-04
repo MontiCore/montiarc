@@ -160,6 +160,7 @@ class Ma2JavaPlugin : Plugin<Project> {
         sourceSet.allJava.sourceDirectories.files
         .filter { !it.startsWith(buildDir)}
       })
+      genTask.setIgnoreExitValue(true)
     }
 
     sourceSet.montiarc.get().compiledBy(generateTask, MontiArcCompile::outputDir)
