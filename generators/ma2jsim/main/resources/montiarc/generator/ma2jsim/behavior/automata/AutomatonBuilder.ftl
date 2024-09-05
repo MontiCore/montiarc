@@ -37,17 +37,17 @@ public ${SUPER} setDefaultInitial() {
 <#if !isTop>
 public ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
   ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states,
-  montiarc.rte.automaton.State initial) {
-    return new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}(context, states, initial);
+  montiarc.rte.automaton.State initial, String name) {
+    return new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}(context, states, initial, name);
 }
 <#else>
 public abstract ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
   ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())} states,
-  montiarc.rte.automaton.State initial);
+  montiarc.rte.automaton.State initial, String name);
 </#if>
 
 public ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics} buildActual(${ast.getName()}${suffixes.context()}${ubGenerics} context,
-  montiarc.rte.automaton.State initial) {
-    return buildActual(context, states, initial);
+montiarc.rte.automaton.State initial, String name) {
+    return buildActual(context, states, initial, name);
   }
 }

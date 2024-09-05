@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
+import montiarc.rte.logging.Aspects;
+import montiarc.rte.logging.DataFormatter;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 
@@ -79,6 +82,7 @@ public class AbstractOutPort<T>  implements OutPort<T> {
    */
   @Override
   public void send(T data) {
+    Log.info(DataFormatter.format(data), this.getQualifiedName() + "#" + Aspects.SEND_MSG);
     send(new Message<>(data));
   }
 
@@ -99,6 +103,7 @@ public class AbstractOutPort<T>  implements OutPort<T> {
    */
   @Override
   public void sendTick() {
+    Log.info("TK", this.getQualifiedName() + "#" + Aspects.SEND_MSG);
     this.send(Tick.get());
   }
 }

@@ -3,6 +3,7 @@
 ${tc.signature("isTop")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
+<#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
 
@@ -58,6 +59,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 this.scheduler.register(this, this.getAllInPorts(), isSync);
 
+<@logInstantiation/>
 }
 
 <#macro variantSetup variant>
@@ -72,4 +74,33 @@ this.scheduler.register(this, this.getAllInPorts(), isSync);
   <#if !helper.getModeAutomaton(ast).isPresent()>
     <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}();
   </#if>
+</#macro>
+
+<#macro logInstantiation>
+<#assign hasParams = ast.getHead().getArcParameterList()?size != 0>
+<#assign hasFeatures = helper.getFeatures(ast)?size != 0>
+<#assign hasFields = ast.getSymbol().getFields()?size != 0>
+
+<@Log.info log_aspects.createComponent(), "this.getName()">
+  "${ast.getSymbol().getFullName()} with"
+  <#if hasParams || hasFeatures || hasFields>
+    + " {"
+    <#list ast.getHead().getArcParameterList() as param>
+      + "${param.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.parameter()}${param.getName()})<#sep> + ", "
+    </#list>
+    <#if hasParams && (hasFeatures || hasFields)> + ", "</#if>  <#-- Separator between parameters and following stuff -->
+    <#list helper.getFeatures(ast) as feature>
+      + "${feature.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.feature()}${feature.getName()})<#sep> + ", "
+    </#list>
+    <#if hasFeatures && hasFields> + ", " </#if>
+    <#list ast.getSymbol().getFields() as field>
+      + "${field.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)})<#sep> + ", "
+    </#list>
+    + "};"
+  </#if>
+  <#if !hasOnlyOneVariant>
+    + " variant hash = " + this.variantID + ";"
+  </#if>
+  + " scheduler type = " + this.scheduler.getClass().getSimpleName() + ";"
+</@Log.info>
 </#macro>

@@ -2,11 +2,13 @@
 package montiarc.scheduler;
 
 import montiarc.rte.port.ScheduledPort;
+import montiarc.rte.tests.JSimTest;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static montiarc.rte.msg.MessageFactory.msg;
 
+@JSimTest
 class ScheduledPortTest {
 
   @Test

@@ -11,8 +11,8 @@ protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymb
 protected ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}<#if isTop>${suffixes.top()}</#if> (
   ${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/> ${ast.getName()?uncap_first}${suffixes.context()},
   ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}<@Util.printTypeParameters ast false/> states,
-  montiarc.rte.automaton.State initial) {
-    super(${ast.getName()?uncap_first}${suffixes.context()}, initial);
+  montiarc.rte.automaton.State initial, String name) {
+    super(${ast.getName()?uncap_first}${suffixes.context()}, initial, name);
     this.states = states;
     <#-- Create transitions on tick -->
     this.transitions.addAll(java.util.Arrays.asList(

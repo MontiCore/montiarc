@@ -4,6 +4,7 @@ package montiarc.sync.automata.transition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import montiarc.types.NumberSign;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -20,6 +21,7 @@ import static montiarc.types.NumberSign.NEGATIVE;
 import static montiarc.types.NumberSign.POSITIVE;
 import static montiarc.types.NumberSign.ZERO;
 
+@JSimTest
 class ConditionedTransitionsTest {
 
   /**

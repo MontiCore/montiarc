@@ -18,6 +18,7 @@ import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.util.Helper;
+import montiarc.util.LogAspects;
 import montiarc.util.MASimError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
@@ -62,6 +63,7 @@ public class MA2JSimGen {
     GlobalExtensionManagement glex = new GlobalExtensionManagement();
     glex.setGlobalValue("suffixes", Suffixes.getInstance());
     glex.setGlobalValue("prefixes", Prefixes.getInstance());
+    glex.setGlobalValue("log_aspects", LogAspects.getInstance());
     glex.setGlobalValue("helper", new Helper());
     glex.setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
     glex.setGlobalValue("timing_untimed", Timing.UNTIMED);

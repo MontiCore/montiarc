@@ -34,6 +34,7 @@ configurations.montiarc.get()
 dependencies {
   testImplementation(libs.guava)
   testImplementation(libs.janino)
+  testImplementation(project(":libraries:simulator-test-rte"))
 }
 
 cd2pojo {

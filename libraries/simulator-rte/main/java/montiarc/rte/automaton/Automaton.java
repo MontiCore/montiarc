@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
+import de.se_rwth.commons.logging.Log;
 import montiarc.rte.behavior.AbstractBehavior;
+import montiarc.rte.logging.Aspects;
 
 /**
  * @param <C> the type of the owning component
@@ -14,9 +16,12 @@ public abstract class Automaton<C, I> extends AbstractBehavior<C, I> {
 
   protected State state;
 
-  public Automaton(C context, State initial) {
+  protected String name;
+
+  public Automaton(C context, State initial, String name) {
     super(context);
     this.state = initial;
+    this.name = name;
   }
 
   /**
@@ -27,11 +32,20 @@ public abstract class Automaton<C, I> extends AbstractBehavior<C, I> {
   }
 
   /**
+   * @return the name of this state machine
+   */
+  public String getName() {
+    return this.name;
+  }
+
+  /**
    * Update the current state. To be used exclusively by transitions.
    *
    * @param state the new state
    */
   protected void setState(State state) {
+    Log.info(state.name(), this.getName() + "#" + Aspects.ENTER_STATE);
+
     this.state = state;
   }
 }

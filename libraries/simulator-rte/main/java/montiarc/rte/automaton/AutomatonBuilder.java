@@ -5,6 +5,7 @@ public abstract class AutomatonBuilder<C, I, A extends Automaton<C, I>> {
 
   protected C context;
   protected State initial;
+  protected String name;
 
   public AutomatonBuilder(C context) {
     this.context = context;
@@ -28,13 +29,23 @@ public abstract class AutomatonBuilder<C, I, A extends Automaton<C, I>> {
 
   public abstract AutomatonBuilder<C, I, A> setDefaultInitial();
 
+  public AutomatonBuilder<C, I, A> setName(String name) {
+    this.name = name;
+    return this;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
   protected State getInitial() {
     return this.initial;
   }
 
   public boolean isValid() {
     return this.getContext() != null
-      && this.getInitial() != null;
+      && this.getInitial() != null
+      && this.getName() != null;
   }
 
   public abstract A build();

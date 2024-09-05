@@ -4,6 +4,7 @@ package montiarc.timed.automata.transition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -19,6 +20,7 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.OnOff.OFF;
 import static montiarc.types.OnOff.ON;
 
+@JSimTest
 class TickTriggerTest {
 
   /**

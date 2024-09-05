@@ -3,6 +3,7 @@ package montiarc.lang;
 
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,6 +16,7 @@ import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@JSimTest
 class DelayFloatTest {
 
   @ParameterizedTest

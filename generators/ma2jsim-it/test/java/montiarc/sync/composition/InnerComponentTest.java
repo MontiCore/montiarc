@@ -4,6 +4,7 @@ package montiarc.sync.composition;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -17,7 +18,8 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
-public class InnerComponentTest {
+@JSimTest
+class InnerComponentTest {
 
   /**
    * @param input    the input stream on port i

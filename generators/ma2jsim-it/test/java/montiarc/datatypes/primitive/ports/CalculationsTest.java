@@ -3,6 +3,7 @@ package montiarc.datatypes.primitive.ports;
 
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,7 @@ import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@JSimTest
 class CalculationsTest {
 
   @Test

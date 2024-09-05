@@ -1,6 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.automaton;
 
+import de.se_rwth.commons.logging.Log;
+import montiarc.rte.logging.Aspects;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.stream.Collectors;
@@ -17,8 +20,9 @@ public abstract class SyncAutomaton<C, I> extends Automaton<C, I> {
   protected Collection<Transition<I>> transitions;
 
   protected SyncAutomaton(C context,
-                          State initial) {
-    super(context, initial);
+                          State initial,
+                          String name) {
+    super(context, initial, name);
     transitions = new ArrayList<>();
   }
 
@@ -37,6 +41,7 @@ public abstract class SyncAutomaton<C, I> extends Automaton<C, I> {
   
   @Override
   public void tick(I syncedInputs) {
+    Log.info("Tk", this.getName() + "#" + Aspects.RECEIVE_EVENT);
     getValidTransitions(syncedInputs).stream().findFirst().ifPresent(tr -> tr.execute(this, syncedInputs));
   }
 }

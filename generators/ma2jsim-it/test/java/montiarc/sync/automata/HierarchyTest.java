@@ -4,6 +4,7 @@ package montiarc.sync.automata;
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,6 +17,7 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
+@JSimTest
 class HierarchyTest {
 
   /**

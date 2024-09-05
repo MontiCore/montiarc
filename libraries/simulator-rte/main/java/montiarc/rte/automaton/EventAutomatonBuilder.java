@@ -12,12 +12,14 @@ public abstract class EventAutomatonBuilder<C, I, A extends Automaton<C, I>> ext
 
     C context = this.getContext();
     State initial = this.getInitial();
+    String name = this.getName();
 
     if (context == null) throw new IllegalStateException();
     if (initial == null) throw new IllegalStateException();
+    if (name == null) throw new IllegalStateException();
 
-    return buildActual(context, initial);
+    return buildActual(context, initial, name);
   }
 
-  protected abstract A buildActual(C context, State initial);
+  protected abstract A buildActual(C context, State initial, String name);
 }

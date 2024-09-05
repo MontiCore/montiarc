@@ -6,6 +6,7 @@ import montiarc.lang.logic.gate.NotComp;
 import montiarc.lang.logic.gate.NotCompBuilder;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Order;
@@ -20,6 +21,7 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 
+@JSimTest
 class NotTest {
 
   @Order(1)

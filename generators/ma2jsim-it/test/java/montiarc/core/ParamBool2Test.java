@@ -1,10 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.core;
 
+import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@JSimTest
 class ParamBool2Test {
 
   /**

@@ -2,6 +2,7 @@
 package montiarc.lang.math;
 
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -13,6 +14,7 @@ import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
+@JSimTest
 class MultiplyTest {
 
   @ParameterizedTest

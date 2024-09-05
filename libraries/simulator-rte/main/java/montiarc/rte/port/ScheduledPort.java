@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
+import montiarc.rte.logging.Aspects;
+import montiarc.rte.logging.DataFormatter;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.scheduling.Scheduler;
@@ -51,6 +54,7 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T>
    * @param data the received data
    */
   protected void processReceivedData(T data) {
+    Log.info(DataFormatter.format(data), this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
     Message<T> msgObject = Message.of(data);
     buffer.add(msgObject);
     scheduler.requestScheduling(this, data);
@@ -62,6 +66,7 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T>
    * {@code receive(Tick.get())}.
    */
   protected void processReceivedTick() {
+    Log.info("TK", this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
     buffer.add(Tick.get());
     scheduler.requestSchedulingOfNewTick(this);
   }

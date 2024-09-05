@@ -17,6 +17,7 @@
       this.behavior = new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(variant)}${suffixes.builder()}<@Util.printTypeParameters ast false/>(this)
       .addDefaultStates()
       .setDefaultInitial()
+      .setName(this.getName())
       .build();
     <#elseif hasCompute>
       this.behavior = new ${ast.getName()}${suffixes.compute()}${helper.variantSuffix(variant)}<@Util.printTypeParameters ast false/>(this);

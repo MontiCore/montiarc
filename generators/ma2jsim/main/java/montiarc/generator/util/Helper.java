@@ -31,6 +31,7 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
@@ -534,12 +535,12 @@ public class Helper {
     List<VariableArcVariantComponentTypeSymbol> variants = getVariants(comp);
     List<VariableArcVariantComponentTypeSymbol> varsWithPort = new ArrayList<>(variants.size());
 
-    for (var variant : variants) {
+    for (VariableArcVariantComponentTypeSymbol variant : variants) {
       Collection<PortSymbol> allVariantPorts = new HashSet<>();
       allVariantPorts.addAll(variant.getAllIncomingPorts());
       allVariantPorts.addAll(variant.getAllOutgoingPorts());
 
-      for (var variantPort : allVariantPorts) {
+      for (PortSymbol variantPort : allVariantPorts) {
         if (variantPort == port ||
           (variantPort instanceof VariantPortSymbol && ((VariantPortSymbol) variantPort).getOriginal() == port)
         ) {
@@ -555,8 +556,8 @@ public class Helper {
     List<VariableArcVariantComponentTypeSymbol> variants = getVariants(comp);
     List<VariableArcVariantComponentTypeSymbol> varsWithSub = new ArrayList<>(variants.size());
 
-    for (var variant : variants) {
-      for (var variantSub : variant.getSubcomponents()) {
+    for (VariableArcVariantComponentTypeSymbol variant : variants) {
+      for (SubcomponentSymbol variantSub : variant.getSubcomponents()) {
         if (variantSub == sub ||
           (variantSub instanceof VariantSubcomponentSymbol && ((VariantSubcomponentSymbol) variantSub).getOriginal() == sub)
         ) {
