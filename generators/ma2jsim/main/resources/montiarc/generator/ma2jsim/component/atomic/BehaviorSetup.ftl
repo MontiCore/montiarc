@@ -20,7 +20,7 @@
       .setName(this.getName())
       .build();
     <#elseif hasCompute>
-      this.behavior = new ${ast.getName()}${suffixes.compute()}${helper.variantSuffix(variant)}<@Util.printTypeParameters ast false/>(this);
+      this.behavior = new ${ast.getName()}${suffixes.compute()}${helper.variantSuffix(variant)}<@Util.printTypeParameters ast false/>(this, this.getName());
     </#if>
   }
 </#if>

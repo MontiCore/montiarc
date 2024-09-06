@@ -7,8 +7,8 @@ ${tc.signature("isTop" "variant")}
 ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [isTop, compute])} {
 
   protected ${ast.getName()}${suffixes.compute()}${helper.variantSuffix(variant)}<#if isTop>TOP</#if> (
-  ${ast.getName()}${suffixes.context()} ${ast.getName()?uncap_first}${suffixes.context()}) {
-  super(${ast.getName()?uncap_first}${suffixes.context()});
+  ${ast.getName()}${suffixes.context()} ${ast.getName()?uncap_first}${suffixes.context()}, String name) {
+  super(${ast.getName()?uncap_first}${suffixes.context()}, name);
   }
 
   @Override
@@ -30,6 +30,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [isTo
 
   @Override
   public void tick(${syncMsgClass} msg) {
+    de.se_rwth.commons.logging.Log.info("Tk", this.getName() + "#" + montiarc.rte.logging.Aspects.RECEIVE_EVENT);
     realTick(<#list inPorts as inPort> msg.${inPort.getName()}<#sep>,</#list>);
   }
 

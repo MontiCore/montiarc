@@ -15,9 +15,16 @@ package montiarc.rte.behavior;
 public abstract class AbstractBehavior<C, I> implements Behavior<I> {
   
   protected C context;
+
+  protected String name;
+
+  public String getName() {
+    return this.name;
+  }
   
-  protected AbstractBehavior(C context) {
+  protected AbstractBehavior(C context, String name) {
     this.context = context;
+    this.name = name;
   }
   
   /**

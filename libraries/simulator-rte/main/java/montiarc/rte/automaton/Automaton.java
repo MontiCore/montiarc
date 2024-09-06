@@ -16,12 +16,9 @@ public abstract class Automaton<C, I> extends AbstractBehavior<C, I> {
 
   protected State state;
 
-  protected String name;
-
   public Automaton(C context, State initial, String name) {
-    super(context);
+    super(context, name);
     this.state = initial;
-    this.name = name;
   }
 
   /**
@@ -29,13 +26,6 @@ public abstract class Automaton<C, I> extends AbstractBehavior<C, I> {
    */
   public State getState() {
     return this.state;
-  }
-
-  /**
-   * @return the name of this state machine
-   */
-  public String getName() {
-    return this.name;
   }
 
   /**
