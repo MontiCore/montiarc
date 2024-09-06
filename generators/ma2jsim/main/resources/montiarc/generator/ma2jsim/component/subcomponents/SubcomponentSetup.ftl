@@ -9,7 +9,7 @@ protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}() {
 
     <#list variant.getSubcomponents() as subcomponent>
         this.${prefixes.subcomp()}${subcomponent.getName()}${helper.subcomponentVariantSuffix(ast, subcomponent)} = new <@Util.getCompTypeString subcomponent.getType() "${suffixes.component()}${suffixes.builder()}"/>()
-        .setName("${subcomponent.getName()}")
+        .setName(this.getName() + "." + "${subcomponent.getName()}")
         .setScheduler(this.getScheduler())
         <#list helper.getArgNamesMappedToExpressions(subcomponent.getAstNode()) as name, expression>
             .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
