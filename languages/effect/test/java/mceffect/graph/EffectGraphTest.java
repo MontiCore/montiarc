@@ -18,7 +18,7 @@ public class EffectGraphTest extends EffectAbstractTest {
   @BeforeEach
   public void setup() {
     MCEffectTool.initMills();
-    new MontiArcTool().run(new String[] {"-mp", modelPath});
+    new MontiArcTool().run(new String[] {"-i", modelPath});
   }
 
   @Test

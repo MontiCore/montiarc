@@ -55,7 +55,7 @@ public class MontiArcParser extends MontiArcParserTOP {
         setError(true);
       }
       if (!Names.getPackageFromPath(fPkg).endsWith(mPkg)) {
-        Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER.toString(), mPkg, fPkg),
+        Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), mPkg, fPkg),
           ast.get().isPresentPackage() ?
             ast.get().getPackage().get_SourcePositionStart() :
             ast.get().getComponentType().get_SourcePositionStart()

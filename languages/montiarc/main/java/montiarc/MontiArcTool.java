@@ -13,10 +13,11 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
-import montiarc.report.VersionFileDeserializer;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
+import montiarc.report.VersionFileDeserializer;
 import montiarc.trafo.MontiArcTrafos;
+import montiarc.util.ArcError;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -86,8 +87,8 @@ public class MontiArcTool extends MontiArcToolTOP {
         return;
       }
 
-      // if neither --modelpath nor --i: print help and stop
-      if (!cl.hasOption("modelpath")) {
+      // if --i is missing: print help
+      if (!cl.hasOption("i")) {
         this.printHelp(options);
         return;
       }
@@ -106,10 +107,26 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   protected void runTasks(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
-
     Log.info("Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
-    Collection<ASTMACompilationUnit> asts = this.parse(".arc", this.createModelPath(cl).getEntries());
+
+    List<Path> paths = List.copyOf(this.createModelPath(cl).getEntries());
+
+    for (int i = 0; i < paths.size(); i++) {
+      for (int j = i + 1; j < paths.size(); j++) {
+        if (paths.get(i).startsWith(paths.get(j).toString() + File.separator)) {
+          Log.error(MontiArcError.SUPERIMPOSED_MODELPATH.format(paths.get(j).toString(), paths.get(i).toString()));
+        } else if (paths.get(j).startsWith(paths.get(i).toString() + File.separator)) {
+          Log.error(MontiArcError.SUPERIMPOSED_MODELPATH.format(paths.get(i).toString(), paths.get(j).toString()));
+        }
+      }
+    }
+
+    Log.enableFailQuick(true);
+    Log.enableFailQuick(false);
+
+    Collection<ASTMACompilationUnit> asts = this.parse(".arc", paths);
+
     this.runAfterParserCoCos(asts);
     Log.enableFailQuick(true);
 
@@ -123,7 +140,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   protected MCPath createModelPath(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
 
-    if (cl.hasOption("modelpath")) {
+    if (cl.hasOption("i")) {
       return new MCPath(this.getAllModelDirsFrom(cl).toArray(new String[0]));
     } else {
       return new MCPath();
@@ -202,12 +219,9 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(fileExt);
     Preconditions.checkNotNull(directory);
     Preconditions.checkArgument(!fileExt.isEmpty());
-    if(!directory.toFile().exists()) {
+    if (!directory.toFile().exists()) {
       Log.warn("Directory does not exist: " + directory);
       return Collections.emptyList();
-    }
-    if(directory.toFile().isFile()) {
-      parse(directory);
     }
     try (Stream<Path> paths = Files.walk(directory)) {
       return paths.filter(Files::isRegularFile)
@@ -350,7 +364,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     String symbolTargetDir = cl.getOptionValue("symboltable");
     Optional<String> reportDir = Optional.ofNullable(cl.getOptionValue("report"));
     List<String> modelpaths = this.getAllModelDirsFrom(cl);
-
     Collection<IMontiArcArtifactScope> scopes4NewSerialization;
     Map<IMontiArcArtifactScope, ASTMACompilationUnit> scopeToAst;
 
@@ -430,7 +443,15 @@ public class MontiArcTool extends MontiArcToolTOP {
     // `new MCPath(String...)` fails if *one* of the Paths that we pass is composed of multiple paths with a path
     // separator in between, e.g.: foo/bar:goo/rar on Linux. Therefore, we manually separate these paths first.
     String[] paths = splitPathEntries(entries);
-
+    for (int i = 0; i < paths.length; i++) {
+      for (int j = i + 1; j < paths.length; j++) {
+        if (paths[i].startsWith(paths[j] + File.separator)) {
+          Log.error(MontiArcError.SUPERIMPOSED_SYMPATH.format(paths[j], paths[i]));
+        } else if (paths[j].startsWith(paths[i] + File.separator)) {
+          Log.error(MontiArcError.SUPERIMPOSED_SYMPATH.format(paths[i], paths[j]));
+        }
+      }
+    }
     this.initGlobalScope(Arrays.stream(paths).map(Paths::get).collect(Collectors.toList()));
   }
 
@@ -449,7 +470,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void initializeBasicTypes() {
     BasicSymbolsMill.initializePrimitives();
   }
-  
+
   public void initializeTickEvent() {
     ArcAutomatonMill.initializeTick();
   }
@@ -469,56 +490,13 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
-    options.addOption(Option.builder("mp")
-      .longOpt("modelpath")
-      .argName("dirlist")
-      .hasArgs()
-      .desc("Sets the artifact path for the input component models, space separated.")
-      .build());
+    options = super.addStandardOptions(options);
 
-    //help
-    options.addOption(Option.builder("h")
-      .longOpt("help")
-      .desc("Prints this help dialog.")
-      .build());
-
-    //version
-    options.addOption(Option.builder("v")
-      .longOpt("version")
-      .desc("Prints version information.")
-      .build());
-
-    // pretty print
-    options.addOption(Option.builder("pp")
-      .longOpt("prettyprint")
-      .argName("dir")
-      .optionalArg(true)
-      .numberOfArgs(1)
-      .desc("Prints the ASTs to stdout or the specified directory (optional).")
-      .build());
-
-    // store symbol table
-    options.addOption(Option.builder("s")
-      .longOpt("symboltable")
-      .argName("dir")
-      .hasArg()
-      .desc("Serializes and prints the symbol table to stdout or the specified output directory (optional).")
-      .build());
-
-    // reports about the tooling execution
-    options.addOption(org.apache.commons.cli.Option.builder("r")
-      .longOpt("report")
-      .argName("dir")
-      .hasArg()
-      .desc("Prints reports of the tooling execution to the specified directory.")
-      .build());
-
-    // symbol paths
-    options.addOption(Option.builder("path")
-      .hasArgs()
-      .argName("dirlist")
-      .desc("Sets the artifact path for imported symbols, space separated.")
-      .build());
+    // We accept multiple inputs
+    Option i = options.getOption("i");
+    i.setArgName("files");
+    i.setArgs(Option.UNLIMITED_VALUES);
+    i.setDescription("Reads the source files (mandatory) and parses their contents");
 
     // class2mc
     options.addOption(Option.builder("c2mc")
@@ -546,8 +524,8 @@ public class MontiArcTool extends MontiArcToolTOP {
             .map(Object::getClass)
             .map(Class::getSimpleName)
             .collect(Collectors.joining(", "))
-          ),
-          "MontiArcTool"
+        ),
+        "MontiArcTool"
       );
     }
 
@@ -570,8 +548,8 @@ public class MontiArcTool extends MontiArcToolTOP {
    */
   protected List<String> getAllModelDirsFrom(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
-    return cl.hasOption("modelpath") ?
-      splitPathEntriesToList(cl.getOptionValues("modelpath")) :
+    return cl.hasOption("i") ?
+      splitPathEntriesToList(cl.getOptionValues("i")) :
       Collections.emptyList();
   }
 
@@ -634,13 +612,6 @@ public class MontiArcTool extends MontiArcToolTOP {
    * Like {@link #splitPathEntries(String[])}, but returns a {@code List<String>} instead.
    */
   protected final @NotNull List<String> splitPathEntriesToList(@NotNull String[] composedPath) {
-    return Arrays.asList(splitPathEntries(composedPath));
-  }
-
-  /**
-   * Like {@link #splitPathEntries(String)}, but returns a {@code List<String>} instead.
-   */
-  protected final @NotNull List<String> splitPathEntriesToList(@NotNull String composedPath) {
     return Arrays.asList(splitPathEntries(composedPath));
   }
 }

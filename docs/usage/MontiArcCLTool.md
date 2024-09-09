@@ -3,14 +3,14 @@ The MA2JavaTool offers capabilities for processing MontiArc component
 models via the command line.
 It provides multiple options that can be used as follows:
 ```bash
-java -jar MA2JavaTool.jar [-h] -mp <dirlist> [-path <p>] [-pp [<file>]] [-s [<file>]] [-o <dir>]
+java -jar MA2JavaTool.jar [-h] -i <dirlist> [-path <p>] [-pp [<file>]] [-s [<file>]] [-o <dir>]
 ```
 
 where the arguments are:
 
 | Option                       | Explanation                                                                                                                                                                      |
 |------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `-mp, --modelpath <dirlist>` | Sets the directories in which the MontiArc models are.                                                                                                                           |
+| `-i, --input <dirlist>` | Sets the directories in which the MontiArc models are.                                                                                                                           |
 | `-o, --output <dir>`         | Sets the target path for the generated files (optional).                                                                                                                         |
 | `-hwc <dir>`                 | Sets the artifact path for handwritten code customizations(optional).                                                                                                            |
 | `-path <dirlist>`            | Sets the artifact path for imported symbols (of other MontiArc or class diagram models) (optional).                                                                              |
@@ -25,7 +25,7 @@ Exemplary usage:
 On Linux/MacOS:
 ```bash
 java -jar MA2JavaTool.jar \
-  --modelpath src/montiarc \
+  --input src/montiarc \
   -hwc src/java \
   --output target/montiarc/java \
   --symboltable target/montiarc/symbols \
@@ -34,7 +34,7 @@ java -jar MA2JavaTool.jar \
 On Windows:
 ```cmd
 java -jar MA2JavaTool.jar ^
-  --modelpath src\montiarc ^
+  --input src\montiarc ^
   -hwc src\java ^
   --output target\montiarc\java ^
   --symboltable target\montiarc\symbols ^

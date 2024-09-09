@@ -79,20 +79,20 @@ It provides multiple options that can be used as follows:
 
 where the arguments are:
 
-| Option                            | Explanation                                                                                    |
-|-----------------------------------|------------------------------------------------------------------------------------------------|
-| `-h, --help`                      | Prints the help dialog.                                                                        |
-| `-v, --version`                   | Prints version information.                                                                    |
-| `-mp, --modelpath <dirlist>`      | Sets the artifact path for the input component models, space separated.                        |
-| `-path <dirlist>`                 | Sets the artifact path for imported symbols, space separated.                                  |
-| `-pp, --prettyprint <dir>`        | Prints the AST of the component models to stdout or the specified directory (optional).        |
-| `-s, --symboltable <dir>`         | Serializes and prints the symbol table to stdout or the specified output directory (optional). |
+| Option                     | Explanation                                                                                    |
+|----------------------------|------------------------------------------------------------------------------------------------|
+| `-h, --help`               | Prints the help dialog.                                                                        |
+| `-v, --version`            | Prints version information.                                                                    |
+| `-i, --input <dirlist>`    | Sets the artifact path of the source files, space separated.                                   |
+| `-path <dirlist>`          | Sets the artifact path for imported symbols, space separated.                                  |
+| `-pp, --prettyprint <dir>` | Prints the AST of the component models to stdout or the specified directory (optional).        |
+| `-s, --symboltable <dir>`  | Serializes and prints the symbol table to stdout or the specified output directory (optional). |
 
 Exemplary usage:
 
 ```
   java -jar MontiArc.jar -h
-  java -jar MontiArc.jar -mp application/bumperbot/main/resources
+  java -jar MontiArc.jar -i application/bumperbot/main/resources
 ``` 
 
 The MA2JavaTool extends the MontiArcTool with code generating capabilities. It provides the following options in addition to those defined above:

@@ -9,7 +9,6 @@ import montiarc._parser.MontiArcParser;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -106,7 +105,7 @@ public class ParserTest extends MontiArcAbstractTest {
       Arguments.of("ComponentAndFileNameDiffer.arc",
         new Error[]{MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER}),
       Arguments.of("PackageAndLocationDiffer.arc",
-        new Error[]{MontiArcError.COMPONENT_AND_FILE_PACKAGE_DIFFER}));
+        new Error[]{MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER}));
   }
 
   static Stream<Arguments> filenameAndASTProvider() {

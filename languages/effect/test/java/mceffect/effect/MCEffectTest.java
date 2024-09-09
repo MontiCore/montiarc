@@ -31,7 +31,7 @@ public class MCEffectTest extends EffectAbstractTest {
     Assertions.assertTrue(tagUnit.isPresent());
 
     MCEffectTool.initMills();
-    new MontiArcTool().run(new String[] {"-mp", modelPath});
+    new MontiArcTool().run(new String[] {"-i", modelPath});
   }
 
   @Test

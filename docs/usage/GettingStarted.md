@@ -298,7 +298,7 @@ You can find comprehensive information about the MontiArc plugin under [MontiArc
 The main command line options are:
 | Option                       | Explanation                                              |
 |------------------------------|----------------------------------------------------------|
-| `-mp, --modelpath <dirlist>` | Declare the directory in which your MontiArc models are. |
+| `-i, --input <dirlist>` | Declare the directory in which your MontiArc models are. |
 | `-o, --output <dir>`         | Sets the target path for the generated files (optional). |
 
 To exemplify the usage, lets consider the following example:
@@ -312,7 +312,7 @@ component MyComp { }
 Now execute the CLI tool:
 ```bash
 # Being in the 'demo' directory
-java -jar TODONAME --modelpath src/montiarc --output build/montiarc/java
+java -jar TODONAME --input src/montiarc --output build/montiarc/java
 ```
 Check that this generates the java class `MyComp` at `demo/build/montiarc/java/com/example/MyComp.java`.
 
@@ -363,7 +363,7 @@ We can now use the `-path` option of the MontiArc generator to specify directori
 Try to execute the generator:
 ```bash
 # Being in the 'demo' directory
-java -jar TODONAME --modelpath src/montiarc -path build/cd2pojo/symbols --output build/montiarc/java
+java -jar TODONAME --input src/montiarc -path build/cd2pojo/symbols --output build/montiarc/java
 ```
 Verify that no error occurs.
 
@@ -385,7 +385,7 @@ component MyComp(String initialStatus) { }
 Now execute the generator and verify that no error occurs:
 ```bash
 # Being in the 'demo' directory
-java -jar TODONAME --modelpath src/montiarc --class2mc --output build/montiarc/java
+java -jar TODONAME --input src/montiarc --class2mc --output build/montiarc/java
 ```
 
 Note that the class diagram generator also has an `-c2mc / class2mc` option to enable the use of java types in class diagram models.

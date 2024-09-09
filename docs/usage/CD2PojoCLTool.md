@@ -2,7 +2,7 @@
 The CD2PojoTool offers capabilities for processing class diagram models that later should be used within MontiArc models.
 It provides multiple options that can be used as follows:
 ```bash
-java -jar CD2PojoTool.jar [-h] -mp <dirlist> [-path <p>] [-pp [<file>]] [-s [<file>]] [-o <dir>]
+java -jar CD2PojoTool.jar [-h] -i <dirlist> [-path <p>] [-pp [<file>]] [-s [<file>]] [-o <dir>]
 ```
 
 where the arguments are:

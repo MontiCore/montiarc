@@ -66,7 +66,7 @@ abstract class MontiArcCompile : JavaExec() {
     val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
     // 2) Build args for the montiarc generator
-    args("--modelpath", cleanModelPath.asPath)
+    args("--input", cleanModelPath.asPath)
     args("--output", this.javaOutputDir().get().asFile.path)
     args("--symboltable", this.symbolOutputDir().get().asFile.path)
     args("--report", this.reportsOutputDir().get().asFile.path)

@@ -15,7 +15,7 @@ public class MA2JSimTest {
   @Test
   public void test() {
     String[] args = new String[] {
-      "-mp", input.toAbsolutePath().toString(),
+      "-i", input.toAbsolutePath().toString(),
       "--o", output.toAbsolutePath().toString(),
       "-hwc", hwcPath.toAbsolutePath().toString(),
       "-c2mc"

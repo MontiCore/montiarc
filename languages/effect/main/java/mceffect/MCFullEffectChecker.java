@@ -33,7 +33,7 @@ public class MCFullEffectChecker {
         s -> MontiArcMill.globalScope().resolveComponentType(s);
 
     // parse components
-    new MontiArcTool().run(new String[] {"-mp", mp});
+    new MontiArcTool().run(new String[] {"-i", mp});
 
     // parse and effect
     Set<ASTMCEffect> effectSet = new HashSet<>();

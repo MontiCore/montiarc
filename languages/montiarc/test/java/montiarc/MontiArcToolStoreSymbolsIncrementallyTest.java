@@ -62,7 +62,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
   private void invokeToolWithVersion(@NotNull String version) {
     this.invokeToolWithArgsAndVersion(
       new String[]{
-        "--modelpath", modelDir.toString(),
+        "--input", modelDir.toString(),
         "--symboltable", symbolsOutDir.toString(),
         "--report", reportOutDir.toString()
       },
@@ -267,7 +267,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
 
     invokeTollWithArgs(new String[] {
-        "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
+        "--input", oldModelDir + File.pathSeparator + newModelDir,
         "--symboltable", symbolsOutDir.toString(),
         "--report", reportOutDir.toString()
     });

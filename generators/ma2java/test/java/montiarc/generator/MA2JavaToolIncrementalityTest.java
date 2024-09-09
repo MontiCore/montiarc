@@ -71,7 +71,7 @@ class MA2JavaToolIncrementalityTest {
   private void invokeToolWithVersion(@NotNull String version) {
     this.invokeToolWithArgsAndVersion(
       new String[]{
-        "--modelpath", modelDir.toString(),
+        "--input", modelDir.toString(),
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -386,7 +386,7 @@ class MA2JavaToolIncrementalityTest {
     Files.delete(oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"));
 
     invokeTollWithArgs(new String[] {
-      "--modelpath", modelDir.toString(),
+      "--input", modelDir.toString(),
       "--handwritten-code", oldHwc + File.pathSeparator + newHwc,
       "--output", javaOutDir.toString(),
       "--report", reportOutDir.toString()
@@ -436,7 +436,7 @@ class MA2JavaToolIncrementalityTest {
     Files.delete(oldModelDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arc"));
 
     invokeTollWithArgs(new String[] {
-        "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
+        "--input", oldModelDir + File.pathSeparator + newModelDir,
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -494,7 +494,7 @@ class MA2JavaToolIncrementalityTest {
 
     // When invoking the tool without hwc dir
     invokeTollWithArgs(new String[]{
-        "--modelpath", modelDir.toString(),
+        "--input", modelDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
     });

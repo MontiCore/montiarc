@@ -47,7 +47,7 @@ class MA2JSimToolIncrementalityTest {
 
   private void invokeTool() {
     MA2JSimTool.main(new String[]{
-        "--modelpath", modelDir.toString(),
+        "--input", modelDir.toString(),
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -71,7 +71,7 @@ class MA2JSimToolIncrementalityTest {
   private void invokeToolWithVersion(@NotNull String version) {
     this.invokeToolWithArgsAndVersion(
       new String[]{
-        "--modelpath", modelDir.toString(),
+        "--input", modelDir.toString(),
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -562,7 +562,7 @@ class MA2JSimToolIncrementalityTest {
     Files.delete(oldHwc.resolve(usedPackageAsPath).resolve("HasMovingHwcComp.java"));
 
     MA2JSimTool.main(new String[]{
-      "--modelpath", modelDir.toString(),
+      "--input", modelDir.toString(),
       "--handwritten-code", oldHwc + File.pathSeparator + newHwc,
       "--output", javaOutDir.toString(),
       "--report", reportOutDir.toString()
@@ -638,7 +638,7 @@ class MA2JSimToolIncrementalityTest {
     );
 
     MA2JSimTool.main(new String[]{
-        "--modelpath", oldModelDir + File.pathSeparator + newModelDir,
+        "--input", oldModelDir + File.pathSeparator + newModelDir,
         "--handwritten-code", hwcDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
@@ -732,7 +732,7 @@ class MA2JSimToolIncrementalityTest {
 
     // When invoking the tool without hwc dir
     MA2JSimTool.main(new String[]{
-        "--modelpath", modelDir.toString(),
+        "--input", modelDir.toString(),
         "--output", javaOutDir.toString(),
         "--report", reportOutDir.toString()
     });

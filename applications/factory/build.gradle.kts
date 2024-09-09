@@ -24,6 +24,14 @@ sourceSets {
   }
 }
 
+cd2pojo {
+  internalMontiArcTesting.set(true)
+}
+
+montiarc {
+  internalMontiArcTesting.set(true)
+}
+
 val enableAttachDebugger = false
 
 tasks.compileCd2pojo {
