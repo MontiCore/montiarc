@@ -17,7 +17,6 @@ import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import montiarc.report.VersionFileDeserializer;
 import montiarc.trafo.MontiArcTrafos;
-import montiarc.util.ArcError;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -87,7 +86,7 @@ public class MontiArcTool extends MontiArcToolTOP {
         return;
       }
 
-      // if --i is missing: print help
+      // if --input is missing: print help
       if (!cl.hasOption("i")) {
         this.printHelp(options);
         return;
