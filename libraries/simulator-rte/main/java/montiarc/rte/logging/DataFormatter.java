@@ -8,6 +8,9 @@ import montiarc.rte.msg.Tick;
 public class DataFormatter {
   private DataFormatter() {}
 
+  /** "√" */
+  public static final String TK = "√";
+
   /**
    * Formats
    * <list>
@@ -29,7 +32,7 @@ public class DataFormatter {
     } else if (data instanceof String) {
       return "\"" + data + "\"";
     } else if (data instanceof Tick) {
-      return "√";
+      return TK;
     } else if (data instanceof Message) {
       return format(((Message<?>) data).getData());
     } else {

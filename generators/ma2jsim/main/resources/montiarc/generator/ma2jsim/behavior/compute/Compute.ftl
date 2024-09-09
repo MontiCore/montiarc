@@ -30,7 +30,6 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [isTo
 
   @Override
   public void tick(${syncMsgClass} msg) {
-    de.se_rwth.commons.logging.Log.info("Tk", this.getName() + "#" + montiarc.rte.logging.Aspects.RECEIVE_EVENT);
     realTick(<#list inPorts as inPort> msg.${inPort.getName()}<#sep>,</#list>);
   }
 

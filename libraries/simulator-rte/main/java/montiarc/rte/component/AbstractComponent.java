@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
+import de.se_rwth.commons.logging.Log;
 import montiarc.rte.behavior.Behavior;
+import montiarc.rte.logging.Aspects;
+import montiarc.rte.logging.DataFormatter;
 import montiarc.rte.port.NoMsgType;
 import montiarc.rte.port.InPort;
 import montiarc.rte.port.OutPort;
@@ -77,6 +80,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
   protected abstract List<InOutPort<?>> getAllInPorts();
   public abstract List<OutPort<?>> getAllOutPorts();
+  protected abstract Object portValueOf(InPort<?> p);
 
   protected void sendTickOnAllOutputs() {
     for (OutPort<?> outP : this.getAllOutPorts()) {
@@ -106,6 +110,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
   @Override
   public void handleTick() {
+    Log.info(DataFormatter.TK, this.getName() + "#" + Aspects.RECEIVE_EVENT);
     if (isSync) {
       handleSyncedTickExecution();
     } else {
@@ -114,7 +119,12 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   }
 
   @Override
-  public void handleMessage(InPort<?> p) {
+  public final void handleMessage(InPort<?> p) {
+    Log.info(DataFormatter.format(portValueOf(p)), this.getName() + "#" + Aspects.RECEIVE_EVENT);
+    this.processMessage(p);
+  }
+
+  protected void processMessage(InPort<?> p) {
     if (!isAtomic) {
       ((montiarc.rte.port.InOutPort<?>) p).forwardWithoutRemoval();
     } else if (behavior != null) {

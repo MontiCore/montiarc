@@ -20,7 +20,9 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.BuildSyncMessage.ftl")}
 
-  ${tc.include("montiarc.generator.ma2jsim.component.ports.GetValueOfPort.ftl")}
+  ${tc.include("montiarc.generator.ma2jsim.component.ports.GetValueOfAnyPort.ftl")}
+
+  ${tc.include("montiarc.generator.ma2jsim.component.ports.GetValueOfSpecificPort.ftl")}
 
   ${tc.include("montiarc.generator.ma2jsim.component.atomic.Atomic.ftl")}
 

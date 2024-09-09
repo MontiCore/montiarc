@@ -27,7 +27,6 @@ public void handleMessageWithBehavior(montiarc.rte.port.InPort<?> p) {
     <#assign portNameWithSuffix>${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
     <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
     if (p == ${prefixes.port()}${portNameWithSuffix}) {
-      de.se_rwth.commons.logging.Log.info(montiarc.rte.logging.DataFormatter.format(${prefixes.portValueOf()}${portNameWithSuffix}()), p.getQualifiedName() + "#" + "${log_aspects.receiveEvent()}");
       this.getBehavior().${prefixes.message()}${portNameWithSuffix}(${prefixes.portValueOf()}${portNameWithSuffix}());
     }
   </#list>

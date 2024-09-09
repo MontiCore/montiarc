@@ -41,7 +41,6 @@ protected ${compAutomatonClass} (
 <#-- Generate method that executes tick-triggered transitions on tick events (if enabled). -->
 @Override
 public void tick(${syncMsgClass} nullMsg) {
-  de.se_rwth.commons.logging.Log.info("Tk", this.getName() + "#" + montiarc.rte.logging.Aspects.RECEIVE_EVENT);
   <#list transitionsForTickEvent as tr>
       if(${prefixes.transition()}${prefixes.tick()}${tr?counter}.isEnabled(state, null)) {
         ${prefixes.transition()}${prefixes.tick()}${tr?counter}.execute(this, null);

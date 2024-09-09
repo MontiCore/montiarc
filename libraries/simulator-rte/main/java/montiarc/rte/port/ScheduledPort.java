@@ -66,7 +66,7 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T>
    * {@code receive(Tick.get())}.
    */
   protected void processReceivedTick() {
-    Log.info("TK", this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
+    Log.info(DataFormatter.TK, this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
     buffer.add(Tick.get());
     scheduler.requestSchedulingOfNewTick(this);
   }
