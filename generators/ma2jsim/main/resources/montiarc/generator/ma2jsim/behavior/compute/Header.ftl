@@ -1,6 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
-${tc.signature("isTop", "compute")}
+${tc.signature("compute")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign ubGenerics><@Util.printTypeParameters ast false/></#assign>

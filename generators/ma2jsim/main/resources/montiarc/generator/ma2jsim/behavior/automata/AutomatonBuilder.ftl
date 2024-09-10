@@ -1,6 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
-${tc.signature("isTop", "variant")}
+${tc.signature("variant")}
 
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign automaton = helper.getAutomatonBehavior(ast).get() />

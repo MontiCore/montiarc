@@ -1,8 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
-${tc.signature("isTop")}
 
-${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
+${tc.include("montiarc.generator.ma2jsim.component.Header.ftl")} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.parameters.Parameters.ftl")}
 
@@ -14,7 +13,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.component.Header.ftl", [isTop])} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.ports.Ports.ftl")}
 
-  ${tc.includeArgs("montiarc.generator.ma2jsim.component.Constructor.ftl", [isTop])}
+  ${tc.include("montiarc.generator.ma2jsim.component.Constructor.ftl")}
 
   ${tc.include("montiarc.generator.ma2jsim.component.handleMessage.HandleMessage.ftl")}
 

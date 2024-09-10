@@ -289,13 +289,11 @@ public class MA2JSimGen {
       getFileAsPath(ast.getComponentType().getSymbol(), prefix, suffix).toString()
     );
 
-    templateArguments = java.util.Arrays.copyOf(templateArguments, templateArguments.length + 2);
-    System.arraycopy(templateArguments, 0, templateArguments, 2, templateArguments.length - 2);
-    templateArguments[0] = ast;
-    templateArguments[1] = existsHwc;
-    String code = getEngine().generateNoA(template, templateArguments).toString();
-    Optional<String> formattedCode = Optional.empty();
+    this.setup.getGlex().setGlobalValue("isTop", existsHwc);
+    String code = getEngine().generate(template, ast, templateArguments).toString();
+    this.setup.getGlex().setGlobalValue("isTop", null);  // Reset
 
+    Optional<String> formattedCode = Optional.empty();
     try {
       formattedCode = Optional.of(this.getFormatter().formatSource(code));
     } catch (FormatterException e) {

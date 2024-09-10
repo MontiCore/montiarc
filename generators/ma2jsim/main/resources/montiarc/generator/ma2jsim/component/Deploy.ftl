@@ -1,5 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-${tc.signature("ast", "isTop", "variant")}
+<#-- Assumed variables: ASTMACompilationUnit ast, boolean isTop -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 
 /* (c) https://github.com/MontiCore/monticore */

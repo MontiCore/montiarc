@@ -1,6 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTMACompilationUnit ast -->
-${tc.signature("ast", "isTop")}
+<#-- Assumed variables: ASTMACompilationUnit ast, boolean isTop -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 /* (c) https://github.com/MontiCore/monticore */
@@ -16,4 +15,4 @@ public interface ${comp.getName()}${suffixes.contextForModes()}<#if isTop>${suff
           ${comp.getName()}${suffixes.modes()} <@Util.printTypeParameters comp false/> {
   }
 
-${tc.includeArgs("montiarc.generator.ma2jsim.component.interface.ModeInterface.ftl", ast.getComponentType(), [isTop])}
+${tc.include("montiarc.generator.ma2jsim.component.interface.ModeInterface.ftl", ast.getComponentType())}
