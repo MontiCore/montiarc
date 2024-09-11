@@ -25,7 +25,7 @@ protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
   <#if helper.getModeAutomaton(ast).isPresent()>
-    this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this);
+    this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this, name);
   </#if>
 
 <#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariants(ast)[0]) == "true")>

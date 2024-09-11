@@ -37,6 +37,10 @@ public class LogAspects {
     return Aspects.ENTER_STATE;
   }
 
+  public String modeChange() {
+    return Aspects.MODE_CHANGE;
+  }
+
   public String receiveEvent() {
     return Aspects.RECEIVE_EVENT;
   }

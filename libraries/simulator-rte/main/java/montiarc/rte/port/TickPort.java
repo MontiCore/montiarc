@@ -15,6 +15,6 @@ public class TickPort extends ScheduledPort<NoMsgType> {
   }
   
   public TickPort(Component owner, Scheduler scheduler) {
-    super(".#tick", owner, scheduler);
+    super(owner.getName() + ".>tick", owner, scheduler);
   }
 }

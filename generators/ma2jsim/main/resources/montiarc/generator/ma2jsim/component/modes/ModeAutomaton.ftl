@@ -2,6 +2,7 @@
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
+<#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
 <#assign modeAutomatonClass>${ast.getName()}${suffixes.modeAutomaton()}<#if isTop>${suffixes.top()}</#if></#assign>
@@ -18,8 +19,11 @@
 
   protected Mode currentMode;
 
-  ${modeAutomatonClass}(${modeContextType} context) {
+  protected String compName;
+
+  ${modeAutomatonClass}(${modeContextType} context, String compName) {
      this.context = context;
+     this.compName = compName;
   }
 
   ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeEnum.ftl")}
@@ -28,6 +32,7 @@
   void setup() {
     // set initial state
     this.currentMode = Mode.${initMode.getName()};
+    <@Log.info log_aspects.modeChange() "this.compName"> "->" + Mode.${initMode.getName()} </@Log.info>
 
     // instantiate sub components
     this.context.<@MethodNames.modeSetup initMode.getSymbol()/>();

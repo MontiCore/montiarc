@@ -15,5 +15,7 @@ public class Aspects {
 
   public static final String ENTER_STATE = "enter_state";
 
+  public static final String MODE_CHANGE = "mode_change";
+
   public static final String RECEIVE_EVENT = "event";
 }

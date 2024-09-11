@@ -18,7 +18,7 @@
   -->
 
 <#-- For explication about how this macro works, see the beginning of the file -->
-<#macro info aspect qualCompInstanceNameSupplier throwable=""> <#-- TODO: communicate supplier -->
+<#macro info aspect qualCompInstanceNameSupplier throwable="">
   <@log "info" throwable "${qualCompInstanceNameSupplier} + \"#${aspect}\"">
     <#-- When <@info...>content</@info...> is called, the content will be placed into #nested,
         which by itself is the argument fro the <#nested> tag of the <@log> macro -->

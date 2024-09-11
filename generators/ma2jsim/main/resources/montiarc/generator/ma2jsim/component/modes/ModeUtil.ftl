@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
+<#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#-- Calculates the java expression to get the port object of the port access -->
 <#-- ASTPortAccess portAccess, ASTArcMode enclosingMode, ASTComponentType enclosingComp -->
@@ -33,6 +34,10 @@
       <#assign guardPrinted><#if guardExpre.isPresent()>${prettyPrinter.prettyprint(guardExpre.get())} <#else>true</#if></#assign>
 
       if (${guardPrinted}) {
+        <@Log.info log_aspects.modeChange() "this.compName">
+          Mode.${transition.getSourceName()} + "->" + Mode.${transition.getTargetName()}
+        </@Log.info>
+
         this.currentMode = Mode.${transition.getTargetName()};
         this.context.<@MethodNames.modeTeardown transition.getSourceNameSymbol()/>();
         this.context.<@MethodNames.modeSetup transition.getTargetNameSymbol()/>();
