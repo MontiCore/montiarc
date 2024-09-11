@@ -290,7 +290,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkArgument(file.toFile().exists());
     Preconditions.checkArgument(file.toFile().isFile());
     try {
-      return MontiArcMill.parser().parse(file);
+      return MontiArcMill.parser().parse(file.toString());
     } catch (IOException e) {
       Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), file), e);
     }

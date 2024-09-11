@@ -3,16 +3,12 @@ package montiarc._parser;
 
 import com.google.common.base.Preconditions;
 import com.google.common.io.Files;
-import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Optional;
 
 /**
@@ -61,14 +57,6 @@ public class MontiArcParser extends MontiArcParserTOP {
   @Override
   public Optional<ASTMACompilationUnit> parse(@NotNull String file) throws IOException {
     Preconditions.checkNotNull(file);
-    return this.parse(Paths.get(file));
-  }
-
-  public Optional<ASTMACompilationUnit> parse(@NotNull Path file) throws IOException {
-    Preconditions.checkNotNull(file);
-    Preconditions.checkArgument(file.toFile().exists());
-    Preconditions.checkArgument(file.toFile().isFile());
-
-    return parseMACompilationUnit(file.toString());
+    return this.parseMACompilationUnit(file);
   }
 }
