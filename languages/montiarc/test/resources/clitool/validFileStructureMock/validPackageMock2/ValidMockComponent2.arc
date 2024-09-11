@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package validFileStructureMock.validPackageMock2;
+package validPackageMock2;
 
 /**
  * Valid model. The content of this model does not matter. It solely has the purpose to provide a valid directory

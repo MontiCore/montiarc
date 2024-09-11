@@ -146,7 +146,7 @@ public class MAExtractionHelper<T extends Formula> {
       else
         asts = new ArrayList<>();
     } else {
-      asts = tool.parse(".arc", path);
+      asts = tool.parse("arc", path);
     }
 
     tool.runAfterParsingTrafos(asts);

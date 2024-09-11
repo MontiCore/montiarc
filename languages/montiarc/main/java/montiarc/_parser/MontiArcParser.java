@@ -45,20 +45,9 @@ public class MontiArcParser extends MontiArcParserTOP {
     if (ast.isPresent()) {
       String fRoot = Files.getNameWithoutExtension(file);
       String mName = ast.get().getComponentType().getName();
-      String fPkg = Names.getPathFromFilename(file);
-      String mPkg = Names.constructQualifiedName(ast.get().isPresentPackage() ?
-        ast.get().getPackage().getPartsList() : new ArrayList<>());
       if (!mName.equals(fRoot)) {
         Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), mName, fRoot),
           ast.get().getComponentType().get_SourcePositionStart()
-        );
-        setError(true);
-      }
-      if (!Names.getPackageFromPath(fPkg).endsWith(mPkg)) {
-        Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), mPkg, fPkg),
-          ast.get().isPresentPackage() ?
-            ast.get().getPackage().get_SourcePositionStart() :
-            ast.get().getComponentType().get_SourcePositionStart()
         );
         setError(true);
       }

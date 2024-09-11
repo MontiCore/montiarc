@@ -24,13 +24,14 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,7 +43,6 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class MontiArcTool extends MontiArcToolTOP {
 
@@ -124,7 +124,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.enableFailQuick(true);
     Log.enableFailQuick(false);
 
-    Collection<ASTMACompilationUnit> asts = this.parse(".arc", paths);
+    Collection<ASTMACompilationUnit> asts = this.parse("arc", paths);
 
     this.runAfterParserCoCos(asts);
     Log.enableFailQuick(true);
@@ -207,29 +207,82 @@ public class MontiArcTool extends MontiArcToolTOP {
     }
   }
 
-  public Collection<ASTMACompilationUnit> parse(@NotNull String fileExt, @NotNull Collection<Path> directories) {
+  public Collection<ASTMACompilationUnit> parse(@NotNull String fileExt,
+                                                @NotNull Collection<Path> paths) {
     Preconditions.checkNotNull(fileExt);
-    Preconditions.checkNotNull(directories);
+    Preconditions.checkNotNull(paths);
     Preconditions.checkArgument(!fileExt.isEmpty());
-    return directories.stream().flatMap(directory -> this.parse(fileExt, directory).stream()).collect(Collectors.toList());
+
+    List<ASTMACompilationUnit> asts = new ArrayList<>();
+    for (Path path : paths) {
+      asts.addAll(this.parse(fileExt, path));
+    }
+    return Collections.unmodifiableList(asts);
   }
 
-  public Collection<ASTMACompilationUnit> parse(@NotNull String fileExt, @NotNull Path directory) {
+  public Collection<ASTMACompilationUnit> parse(@NotNull String fileExt,
+                                                @NotNull Path path) {
     Preconditions.checkNotNull(fileExt);
-    Preconditions.checkNotNull(directory);
+    Preconditions.checkNotNull(path);
     Preconditions.checkArgument(!fileExt.isEmpty());
-    if (!directory.toFile().exists()) {
-      Log.warn("Directory does not exist: " + directory);
+
+    File filepath = path.toFile();
+
+    if (!filepath.exists()) {
+      Log.warn("Directory does not exist: " + path);
       return Collections.emptyList();
     }
-    try (Stream<Path> paths = Files.walk(directory)) {
-      return paths.filter(Files::isRegularFile)
-        .filter(file -> file.getFileName().toString().endsWith(fileExt)).map(this::parse)
-        .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
-    } catch (IOException e) {
-      Log.error(String.format(MontiArcError.TOOL_FILE_WALK_IOEXCEPTION.toString(), directory), e);
+
+    Collection<ASTMACompilationUnit> asts = new ArrayList<>();
+    if (filepath.isFile()) {
+      this.parse(filepath, filepath).ifPresent(asts::add);
+    } else if (filepath.isDirectory()) {
+      for (File file : FileUtils.listFiles(filepath, new String[]{fileExt}, true)) {
+        this.parse(filepath, file).ifPresent(asts::add);
+      }
     }
-    return Collections.emptySet();
+
+    return Collections.unmodifiableCollection(asts);
+  }
+
+  /**
+   * Parses the file as a montiarc component model and checks its name and
+   * package against the filename and relative filepath.
+   *
+   * @param root the file root used to determine the relative filepath
+   * @param file the file to parse
+   * @return an {@code Optional} of the file's AST if the file parsed without errors
+   */
+  Optional<ASTMACompilationUnit> parse(@NotNull File root,
+                                       @NotNull File file) {
+
+    Optional<ASTMACompilationUnit> ast = this.parse(file.toPath());
+
+    if (ast.isPresent()) {
+      final String pkg = ast.get().isPresentPackage() ? ast.get().getPackage().getQName() : "";
+      if (root.isDirectory()) {
+        final String rfp = Names.getPackageFromPath(root.toPath().relativize(file.toPath().getParent()).toString());
+        if (!pkg.equals(rfp)) {
+          // If the root is a directory the package should match the relative file path
+          Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), pkg, rfp),
+            ast.get().isPresentPackage() ?
+              ast.get().getPackage().get_SourcePositionStart() :
+              ast.get().getComponentType().get_SourcePositionStart()
+          );
+        }
+      } else if (root.isFile()) {
+        final String rfp = Names.getPackageFromPath(root.toPath().getParent().toString());
+        if (!rfp.endsWith(pkg)) {
+          // If the root is the file itself than the package should be a suffix of the file path
+          Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), pkg, rfp),
+            ast.get().isPresentPackage() ?
+              ast.get().getPackage().get_SourcePositionStart() :
+              ast.get().getComponentType().get_SourcePositionStart()
+          );
+        }
+      }
+    }
+    return ast;
   }
 
   public Optional<ASTMACompilationUnit> parse(@NotNull Path file) {

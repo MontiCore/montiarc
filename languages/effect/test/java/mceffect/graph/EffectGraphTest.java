@@ -18,15 +18,15 @@ public class EffectGraphTest extends EffectAbstractTest {
   @BeforeEach
   public void setup() {
     MCEffectTool.initMills();
-    new MontiArcTool().run(new String[] {"-i", modelPath});
+    new MontiArcTool().run(new String[] {"-i", modelPath + "demo1/"});
   }
 
   @Test
   public void testEffectGraph() {
     // Given
-    ASTMCEffect effect = parseEffect(modelPath + "steamboiler/SteamBoiler.eff");
+    ASTMCEffect effect = parseEffect(modelPath  + "demo1/" + "steamboiler/SteamBoiler.eff");
     Optional<ComponentTypeSymbol> compSymbol =
-        compResolver.apply("mceffect.steamboiler.SteamBoiler");
+        compResolver.apply("steamboiler.SteamBoiler");
     Assertions.assertTrue(compSymbol.isPresent());
     Assertions.assertNotNull(effect);
 

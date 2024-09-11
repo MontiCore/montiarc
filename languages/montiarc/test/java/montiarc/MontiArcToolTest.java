@@ -35,7 +35,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 import java.io.IOException;
@@ -350,16 +349,16 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     String[] args = new String[]{"-i", modelPath};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
-    tool.parse(".arc", tool.createModelPath(cli).getEntries());
+    tool.parse("arc", tool.createModelPath(cli).getEntries());
 
     // When
-    Collection<ASTMACompilationUnit> asts = tool.parse(".arc", tool.createModelPath(cli).getEntries());
+    Collection<ASTMACompilationUnit> asts = tool.parse("arc", tool.createModelPath(cli).getEntries());
 
     //Then
     Assertions.assertTrue(asts.stream()
-      .anyMatch(ast -> ast.getPackage().getQName().equals("validFileStructureMock.validPackageMock")));
+      .anyMatch(ast -> ast.getPackage().getQName().equals("validPackageMock")));
     Assertions.assertTrue(asts.stream()
-      .anyMatch(ast -> ast.getPackage().getQName().equals("validFileStructureMock.validPackageMock2")));
+      .anyMatch(ast -> ast.getPackage().getQName().equals("validPackageMock2")));
   }
 
   /**
@@ -387,7 +386,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    tool.parse(".arc", Paths.get(""));
+    tool.parse("arc", Paths.get(""));
     Assertions.assertEquals(Log.getErrorCount(), 0);
 
   }
@@ -409,12 +408,12 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   public void shouldParseDirectory() {
     // Given
     MontiArcTool tool = new MontiArcTool();
-    String subTestDir = "validFileStructureMock/validPackageMock";
+    String subTestDir = "validFileStructureMock";
     String modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, subTestDir).toAbsolutePath().toString();
 
     // When && Then
-    Assertions.assertTrue(tool.parse(".arc", Paths.get(modelPath).toAbsolutePath()).stream()
-      .anyMatch(ast -> ast.getPackage().getQName().equals("validFileStructureMock.validPackageMock")));
+    Assertions.assertTrue(tool.parse("arc", Paths.get(modelPath).toAbsolutePath()).stream()
+      .anyMatch(ast -> ast.getPackage().getQName().equals("validPackageMock")));
   }
 
   /**
@@ -495,9 +494,9 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   public void shouldCreateSymbolTableCollection() {
     // Given
     MontiArcTool tool = new MontiArcTool();
-    String subTestDir = "validFileStructureMock/";
+    String subTestDir = "validFileStructureMock";
     Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, subTestDir);
-    Collection<ASTMACompilationUnit> asts = tool.parse(".arc", modelPath);
+    Collection<ASTMACompilationUnit> asts = tool.parse("arc", modelPath);
     Preconditions.checkState(!asts.isEmpty());
 
     // When
@@ -773,7 +772,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     String pakkage = "validFileStructureMock";
     Path packagePath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, pakkage);
     Collection<ASTMACompilationUnit> asts =
-      tool.parse(".arc", packagePath.toAbsolutePath());
+      tool.parse("arc", packagePath.toAbsolutePath());
     String[] args = new String[]{"-pp", RELATIVE_MODEL_PATH + "/" + "file.arc", "-s", RELATIVE_MODEL_PATH};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
@@ -793,12 +792,12 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     // Given
     Path modelPath = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "validFileStructureMock");
     String ppTargetDir = tempDir.toAbsolutePath().toString();
-    Path expectedPpFile1 = Paths.get(ppTargetDir, Names.getPathFromQualifiedName("validFileStructureMock.validPackageMock"), "ValidMockComponent.arc");
-    Path expectedPpFile2 = Paths.get(ppTargetDir, Names.getPathFromQualifiedName("validFileStructureMock.validPackageMock2"), "ValidMockComponent2.arc");
+    Path expectedPpFile1 = Paths.get(ppTargetDir, Names.getPathFromQualifiedName("validPackageMock"), "ValidMockComponent.arc");
+    Path expectedPpFile2 = Paths.get(ppTargetDir, Names.getPathFromQualifiedName("validPackageMock2"), "ValidMockComponent2.arc");
 
     MontiArcTool tool = new MontiArcTool();
     Options options = tool.initOptions();
-    Collection<ASTMACompilationUnit> innerComponents = tool.parse(".arc", modelPath.toAbsolutePath());
+    Collection<ASTMACompilationUnit> innerComponents = tool.parse("arc", modelPath.toAbsolutePath());
     String[] args = new String[]{"-pp", ppTargetDir};
     CommandLineParser cliParser = new DefaultParser();
     CommandLine cli = cliParser.parse(options, args);
@@ -819,7 +818,7 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
     File serializeFile = tempDir.resolve("WithInnerComponents.arcsym").toFile();
 
     MontiArcTool tool = new MontiArcTool();
-    Collection<ASTMACompilationUnit> innerComponents = tool.parse(".arc", Paths.get(parsePath).toAbsolutePath());
+    Collection<ASTMACompilationUnit> innerComponents = tool.parse("arc", Paths.get(parsePath).toAbsolutePath());
     String[] args = new String[]{"-s", tempDir.toAbsolutePath().toString()};
     Options options = tool.initOptions();
     CommandLineParser cliParser = new DefaultParser();
@@ -979,30 +978,6 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    "compTypesFromSymFiles", "connectedSubComponents", "importFromSubPackage", "ooTypesFromSymFiles", "variableCompFromSymFiles"
-  })
-  void validModelsShouldPassEndToEnd(@NotNull String packageName) {
-    Preconditions.checkNotNull(packageName);
-
-    // Given
-    String path = Paths.get(RELATIVE_MODEL_PATH, TEST_DIR, "endToEnd").toString();
-    String modelPath = Paths.get(path, packageName).toString();
-    MontiArcTool tool = new MontiArcTool();
-    String[] args = new String[]{"--input", modelPath, "-path", path};
-
-    // When
-    tool.run(args);
-
-    // Then
-    this.checkOnlyExpectedErrorsPresent();
-    Assertions.assertFalse(
-      MontiArcMill.globalScope().getSubScopes().isEmpty(),
-      "It seams that no model was processed in this test (GlobalScope has no sub scopes)."
-    );
-  }
-
-  @ParameterizedTest
   @MethodSource("invalidModelAndErrorProvider")
   void invalidModelsShouldFailEndToEnd(@NotNull String model, @NotNull Error[] errors) {
     Preconditions.checkNotNull(model);
@@ -1055,43 +1030,57 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("argAndErrorProvider")
-  public void shouldReportInvalidArguments(@NotNull String[] args, @NotNull Error[] err) {
+  public void shouldDetectInvalidFilePath(@NotNull String[] args, @NotNull Error[] err) {
     // Given
     MontiArcTool tool = new MontiArcTool();
+
     // When
     tool.run(args);
+
     // Then
     this.checkOnlyExpectedErrorsPresent(err);
   }
 
   protected static Stream<Arguments> argAndErrorProvider() {
-    final String PATH = Path.of(RELATIVE_MODEL_PATH, TEST_DIR, "path").toString();
+    final String PATH = Path.of(RELATIVE_MODEL_PATH, TEST_DIR, "filepath").toString();
 
     return Stream.of(
       // 1
       Arguments.of(
-        new String[]{"-i", PATH + "/path1", PATH + "/path1"},
+        new String[]{
+          "-i", PATH + "/p", PATH + "/p"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH
         }
       ),
       // 2
       Arguments.of(
-        new String[]{"-i", PATH + "/path1", PATH + "/path1/sub1"},
+        new String[]{
+          "-i", PATH + "/p",
+          PATH + "/p/path"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH
         }
       ),
       // 3
       Arguments.of(
-        new String[]{"-i", PATH + "/path1/sub1", PATH + "/path1"},
+        new String[]{
+          "-i", PATH + "/p/s",
+          PATH + "/p"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH
         }
       ),
       // 4
       Arguments.of(
-        new String[]{"-i", PATH + "/path1", PATH + "/path1/sub1", PATH + "/path1/sub2"},
+        new String[]{
+          "-i", PATH + "/p",
+          PATH + "/p/path",
+          PATH + "/p/path2"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH,
           MontiArcError.SUPERIMPOSED_MODELPATH
@@ -1099,95 +1088,151 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
       ),
       // 5
       Arguments.of(
-        new String[]{"-i", PATH + "/path1", PATH + "/path1/sub1/Comp1.arc"},
+        new String[]{
+          "-i", PATH + "/p",
+          PATH + "/p/path/sub1/Comp1.arc"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH
         }
       ),
       // 6
       Arguments.of(
-        new String[]{"-i", PATH + "/path1/sub1/Comp1.arc", PATH + "/path1"},
+        new String[]{
+          "-i",
+          PATH + "/p/path/sub1/Comp1.arc",
+          PATH + "/p"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH
         }
       ),
       // 7
       Arguments.of(
-        new String[]{"-i", PATH + "/path1/sub1/Comp1.arc", PATH + "/path1/sub1/Comp1.arc"},
+        new String[]{
+          "-i",
+          PATH + "/p/path/sub1/Comp1.arc",
+          PATH + "/p/path/sub1/Comp1.arc"
+        },
         new Error[]{
           MontiArcError.SUPERIMPOSED_MODELPATH
         }
       ),
       // 8
       Arguments.of(
-        new String[]{"-i", PATH + "/path2"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer"
+        },
         new Error[]{
           MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 9
       Arguments.of(
-        new String[]{"-i", PATH + "/path3"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer2"
+        },
         new Error[]{
           MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 10
       Arguments.of(
-        new String[]{"-i", PATH + "/path2", PATH + "/path3"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer3"
+        },
         new Error[]{
-          MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER,
           MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 11
       Arguments.of(
-        new String[]{"-i", PATH + "/path4"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer", PATH + "/pkgAndPathDiffer2"
+        },
         new Error[]{
+          MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER,
           MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
-      ),/*
+      ),
       // 12
       Arguments.of(
-        new String[]{"-i", PATH + "/path5"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer/path/sub1/Comp1.arc"
+        },
         new Error[]{
           MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
-      ),*/
+      ),
       // 13
       Arguments.of(
-        new String[]{"-i", PATH + "/path6"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer2/path/sub1/Comp2.arc"
+        },
         new Error[]{
           MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 14
       Arguments.of(
-        new String[]{"-i", PATH + "/path7"},
+        new String[]{
+          "-i", PATH + "/pkgAndPathDiffer3/path/sub2/Comp1.arc"
+        },
         new Error[]{
-          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
+          MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 15
       Arguments.of(
-        new String[]{"-i", PATH + "/path8"},
+        new String[]{
+          "-i", PATH + "/pkgAndSubpathDiffer"
+        },
         new Error[]{
-          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
+          MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 16
       Arguments.of(
-        new String[]{"-i", PATH + "/path7", PATH + "/path8"},
+        new String[]{
+          "-i", PATH + "/pkgAndSubpathDiffer2"
+        },
         new Error[]{
-          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER,
-          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
+          MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER
         }
       ),
       // 17
       Arguments.of(
-        new String[]{"-i", PATH + "/path9"},
+        new String[]{
+          "-i", PATH + "/nameAndFileDiffer"
+        },
         new Error[]{
-          MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER,
+          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
+        }
+      ),
+      // 18
+      Arguments.of(
+        new String[]{
+          "-i", PATH + "/nameAndFileDiffer2"
+        },
+        new Error[]{
+          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
+        }
+      ),
+      // 19
+      Arguments.of(
+        new String[]{
+          "-i", PATH + "/nameAndFileDiffer/path/sub1/Comp1.arc"
+        },
+        new Error[]{
+          MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
+        }
+      ),
+      // 20
+      Arguments.of(
+        new String[]{
+          "-i", PATH + "/nameAndFileDiffer2/path/sub2/Comp1.arc"
+        },
+        new Error[]{
           MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER
         }
       )
@@ -1195,38 +1240,26 @@ public class MontiArcToolTest extends MontiArcAbstractTest {
   }
 
   @ParameterizedTest
-  @MethodSource("validArgProvider")
-  public void shouldProcessValidArguments(@NotNull String[] args) {
+  @MethodSource("argProvider")
+  public void shouldSucceed(@NotNull String[] args) {
     // Given
     MontiArcTool tool = new MontiArcTool();
+
     // When
     tool.run(args);
+
     // Then
-    this.checkOnlyExpectedErrorsPresent();
+    Assertions.assertTrue(Log.getFindings().isEmpty(), Log.getFindings().toString());
   }
 
-  protected static Stream<Arguments> validArgProvider() {
-    final String PATH1 = Path.of(RELATIVE_MODEL_PATH, TEST_DIR, "path", "sub1").toString();
-    final String PATH2 = Path.of(RELATIVE_MODEL_PATH, TEST_DIR, "path", "sub2").toString();
-    final String PATH3 = Path.of(RELATIVE_MODEL_PATH, TEST_DIR, "path", "sub3").toString();
-
-    final String P1COMP1 = Path.of(PATH1, "Comp1.arc").toString();
-    final String P1COMP2 = Path.of(PATH1, "Comp2.arc").toString();
-    final String P1COMP3 = Path.of(PATH1, "Comp3.arc").toString();
-    final String P2COMP1 = Path.of(PATH2, "Comp1.arc").toString();
-    final String P2COMP2 = Path.of(PATH2, "Comp2.arc").toString();
-    final String P3COMP1 = Path.of(PATH3, "Comp1.arc").toString();
+  protected static Stream<Arguments> argProvider() {
+    final String PATH = Path.of(RELATIVE_MODEL_PATH, TEST_DIR, "filepath").toString();
 
     return Stream.of(
-      Arguments.of((Object) new String[]{"-i", P1COMP1}),
-      Arguments.of((Object) new String[]{"-i", P1COMP2}),
-      Arguments.of((Object) new String[]{"-i", P1COMP3}),
-      Arguments.of((Object) new String[]{"-i", P2COMP1}),
-      Arguments.of((Object) new String[]{"-i", P2COMP2}),
-      Arguments.of((Object) new String[]{"-i", P3COMP1}),
-      Arguments.of((Object) new String[]{"-i", PATH3}),
-      Arguments.of((Object) new String[]{"-i", PATH3, P1COMP1}),
-      Arguments.of((Object) new String[]{"-i", P1COMP1, P1COMP2, P1COMP3, P2COMP1, P2COMP2, P3COMP1})
+      Arguments.of((Object) new String[]{"-i", PATH + "/pkgAndPathMatch"}),
+      Arguments.of((Object) new String[]{"-i", PATH + "/pkgAndPathMatch/path/sub1/Comp1.arc"}),
+      Arguments.of((Object) new String[]{"-i", PATH + "/pkgAndSubpathMatch/path/sub1/Comp1.arc"}),
+      Arguments.of((Object) new String[]{"-i", PATH + "/pkgAndSubpathMatch/path/sub2/Comp1.arc"})
     );
   }
 }

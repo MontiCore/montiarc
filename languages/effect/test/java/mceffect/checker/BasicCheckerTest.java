@@ -9,10 +9,10 @@ public class BasicCheckerTest extends AbstractCheckerTest {
   @Test
   public void testBasicEffectChecker() {
     // Given
-    String main = "mceffect.checker.B";
+    String main = "checker.B";
 
     // When
-    init("BasicEffect.eff", main);
+    init("checker/BasicEffect.eff", main);
 
     // Then
     checkEffect(0, EffectCheckResult.Status.UNKNOWN, false);

@@ -4,12 +4,12 @@ package mceffect.checker;
 import org.junit.jupiter.api.Test;
 
 public class CheckerTest extends AbstractCheckerTest {
-  private final String main = "mceffect.checker.Main";
+  private final String main = "checker.Main";
 
   @Test
   public void testNoEffectChecker() {
     // Given
-    String effect = "NoEffect.eff";
+    String effect = "checker/NoEffect.eff";
 
     // When
     init(effect, main);
@@ -22,7 +22,7 @@ public class CheckerTest extends AbstractCheckerTest {
   @Test
   public void testPotentialEffectChecker() {
     // Given
-    String effect = "PotentialEffect.eff";
+    String effect = "checker/PotentialEffect.eff";
 
     // When
     init(effect, main);
@@ -35,7 +35,7 @@ public class CheckerTest extends AbstractCheckerTest {
   @Test
   public void testSemiMandatoryEffectChecker() {
     // Given
-    String effect = "SemiMandatoryEffect.eff";
+    String effect = "checker/SemiMandatoryEffect.eff";
 
     // When
     init(effect, main);

@@ -1,8 +1,0 @@
-/* (c) https://github.com/MontiCore/monticore */
-
-package mceffect.checker;
-
-B {
-  check potential effect: i1 => o1;
-  check no effect: i1 => o2;
-}

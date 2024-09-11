@@ -9,6 +9,7 @@ import montiarc._parser.MontiArcParser;
 import montiarc.util.Error;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,6 +29,7 @@ public class ParserTest extends MontiArcAbstractTest {
 
   static public Optional<ASTMACompilationUnit> parse(String relativeFilePath,
       boolean expParserErrors) {
+
     MontiArcParser parser = MontiArcMill.parser();
     Optional<ASTMACompilationUnit> optAst;
     try {
@@ -70,13 +72,16 @@ public class ParserTest extends MontiArcAbstractTest {
     parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false);
   }
 
-  @ParameterizedTest
-  @MethodSource("filenameAndErrorCodeProvider")
-  public void shouldParseWithSpecifiedErrorsOnly(String fileName,
-    Error... expErrors) {
-    Path path = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName);
+  @Test
+  public void shouldParseWithSpecifiedErrorsOnly() {
+    // Given
+    Path path = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, "ComponentAndFileNameDiffer.arc");
+
+    // When
     parse(path.toString(), true);
-    this.checkOnlyExpectedErrorsPresent(expErrors, path.toAbsolutePath());
+
+    // Then
+    this.checkOnlyExpectedErrorsPresent(new Error[]{MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER}, path);
   }
 
   @ParameterizedTest
@@ -98,14 +103,6 @@ public class ParserTest extends MontiArcAbstractTest {
       parse(path.toString(), false).orElse(null);
     Assertions.assertNotNull(parsedUnit, path.toAbsolutePath().toString());
     Assertions.assertTrue(unit.deepEquals(parsedUnit), path.toAbsolutePath().toString());
-  }
-
-  static Stream<Arguments> filenameAndErrorCodeProvider() {
-    return Stream.of(
-      Arguments.of("ComponentAndFileNameDiffer.arc",
-        new Error[]{MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER}),
-      Arguments.of("PackageAndLocationDiffer.arc",
-        new Error[]{MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER}));
   }
 
   static Stream<Arguments> filenameAndASTProvider() {

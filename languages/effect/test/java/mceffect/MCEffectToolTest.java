@@ -4,12 +4,13 @@ package mceffect;
 import org.junit.jupiter.api.Test;
 
 public class MCEffectToolTest extends EffectAbstractTest {
+
   @Test
   public void TestMCEffectTool() {
     //Given
     String[] args =
         new String[] {
-          "-mp", modelPath + "checker/", "-mc", "mceffect.checker.B", "-e", "BasicEffect.eff"
+          "-mp", modelPath + "demo2/", "-mc", "checker.B", "-e", "checker/BasicEffect.eff"
         };
 
     // When & Then
@@ -22,11 +23,11 @@ public class MCEffectToolTest extends EffectAbstractTest {
     String[] args =
         new String[] {
           "-mp",
-          "test/resources/mceffect/demo/steamboiler/",
+          "test/resources/mceffect/demo1/",
           "-mc",
-          "demo.steamboiler.SteamBoiler",
+          "steamboiler.SteamBoiler",
           "-e",
-          "SteamBoiler.eff",
+          "steamboiler/SteamBoiler.eff",
         };
 
     // When & Then

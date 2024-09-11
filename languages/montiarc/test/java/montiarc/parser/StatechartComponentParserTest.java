@@ -27,8 +27,6 @@ public class StatechartComponentParserTest extends MontiArcAbstractTest {
   @ParameterizedTest
   @ValueSource(strings ={"ConfusedTransition.arc",
                          "DeclareStatesWithoutStatechart.arc",
-                         "EmptyGuard.arc",
-                         "EmptyReaction.arc",
                          "InvalidAction.arc",
                          "MissedSlash.arc",
                          "MissedSlashButGuard.arc",

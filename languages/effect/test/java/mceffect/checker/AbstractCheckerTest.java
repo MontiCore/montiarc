@@ -28,8 +28,8 @@ public abstract class AbstractCheckerTest extends EffectAbstractTest {
   }
 
   public void init(String effectFile, String mainComp) {
-    new MontiArcTool().run(new String[] {"-i", modelPath + "checker"});
-    ASTMCEffect effect = parseEffect(modelPath + "/checker/" + effectFile);
+    new MontiArcTool().run(new String[] {"-i", modelPath + "demo2/"});
+    ASTMCEffect effect = parseEffect(modelPath + "/demo2/" + effectFile);
 
     storage = new SimpleEffectStorage(effect, compResolver, portResolver);
     this.mainComp = compResolver.apply(mainComp).orElse(null);
