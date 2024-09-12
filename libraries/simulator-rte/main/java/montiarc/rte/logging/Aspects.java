@@ -24,4 +24,6 @@ public class Aspects {
   public static final String MODE_CHANGE = "mode_change";
 
   public static final String RECEIVE_EVENT = "event";
+
+  public static final String FIELD_VALUE = "field";
 }

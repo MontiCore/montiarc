@@ -56,4 +56,8 @@ public class LogAspects {
   public String receiveEvent() {
     return Aspects.RECEIVE_EVENT;
   }
+
+  public String fieldValue() {
+    return Aspects.FIELD_VALUE;
+  }
 }
