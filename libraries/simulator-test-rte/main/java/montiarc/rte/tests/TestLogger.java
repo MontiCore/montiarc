@@ -32,7 +32,7 @@ public class TestLogger extends Log {
     TestLogger l = new TestLogger();
     l.isTRACE = true;
     l.isDEBUG = false;
-    l.isINFO = false;
+    l.isINFO = true;
     l.logHooks = new ArrayList<>();
     l.errorHook = new DefaultErrorHook();
     Log.setLog(l);

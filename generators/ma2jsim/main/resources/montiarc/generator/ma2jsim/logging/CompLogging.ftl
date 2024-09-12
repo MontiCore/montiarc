@@ -28,14 +28,14 @@
 
 <#-- For explication about how this macro works, see the beginning of the file -->
 <#macro trace aspect qualCompInstanceNameSupplier throwable="">
-  <@log "trace" throwable "${qualCompInstanceNameSupplier}" + "\"#${aspect}\"">
+  <@log "trace" throwable "${qualCompInstanceNameSupplier} + \"#${aspect}\"">
     <#nested>  <#-- represents the msg content-->
   </@log>
 </#macro>
 
 <#-- For explication about how this macro works, see the beginning of the file -->
 <#macro debug aspect qualCompInstanceNameSupplier throwable="">
-  <@log "debug" throwable "${qualCompInstanceNameSupplier}" + "\"#${aspect}\"">
+  <@log "debug" throwable "${qualCompInstanceNameSupplier} + \"#${aspect}\"">
     <#nested>  <#-- represents the msg content-->
   </@log>
 </#macro>

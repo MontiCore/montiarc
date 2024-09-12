@@ -21,6 +21,18 @@ public class LogAspects {
     return Aspects.CREATE_COMP;
   }
 
+  public String removeComponent() {
+    return Aspects.REMOVE_COMP;
+  }
+
+  public String createConnector() {
+    return Aspects.CREATE_CONNECTOR;
+  }
+
+  public String removeConnector() {
+    return Aspects.REMOVE_CONNECTOR;
+  }
+
   public String createObject() {
     return Aspects.CREATE_OBJECT;
   }

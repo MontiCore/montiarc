@@ -34,9 +34,7 @@
       <#assign guardPrinted><#if guardExpre.isPresent()>${prettyPrinter.prettyprint(guardExpre.get())} <#else>true</#if></#assign>
 
       if (${guardPrinted}) {
-        <@Log.info log_aspects.modeChange() "this.compName">
-          Mode.${transition.getSourceName()} + "->" + Mode.${transition.getTargetName()}
-        </@Log.info>
+        <@logTransition transition/>
 
         this.currentMode = Mode.${transition.getTargetName()};
         this.context.<@MethodNames.modeTeardown transition.getSourceNameSymbol()/>();
@@ -47,3 +45,48 @@
     </#list>
   </#if>
 </#macro>
+
+
+
+<#-- Logging related stuff -->
+
+<#macro logTransition transition>
+<#assign source = transition.getSourceNameSymbol().getAstNode()>
+<#assign target = transition.getTargetNameSymbol().getAstNode()>
+<#assign removedSubs = helper.getInstancesFromMode(source)>
+<#assign removedConnectors = helper.getConnectors(source)>
+<#assign addedSubs = helper.getInstancesFromMode(target)>
+<#assign addedConnectors = helper.getConnectors(target)>
+
+<@Log.info log_aspects.modeChange() "this.compName">
+    "${source.getName()} -> ${target.getName()};"
+
+  <#if removedSubs?size != 0 || removedConnectors?size != 0>
+    + " Removing"
+    <#if removedSubs?size != 0>
+      + " subs = {<#list removedSubs as s>${s.getName()}<#sep>, </#list>}"
+    </#if>
+    <#if removedConnectors?size != 0>
+      + " connectors = {<#list removedConnectors as c>${c.getSourceName()} -> <@formatStringList c.getTargetsNames()/><#sep>, </#list>}"
+    </#if>
+    + ";"
+  </#if>
+  <#if addedSubs?size != 0 || addedConnectors?size != 0>
+    + <@printAddedModeElements addedSubs addedConnectors/>
+  </#if>
+</@Log.info>
+</#macro>
+
+<#macro printAddedModeElements addedSubs addedConnectors>
+  " Adding"
+  <#if addedSubs?size != 0>
+    + " subs = {<#list addedSubs as s>${s.getName()}<#sep>, </#list>}"
+  </#if>
+  <#if addedConnectors?size != 0>
+    + " connectors = {<#list addedConnectors as c>${c.getSourceName()} -> <@formatStringList c.getTargetsNames()/><#sep>, </#list>}"
+  </#if>
+  + ";"
+</#macro>
+
+<#-- Put [square brackets] around list content, if content size != 1-->
+<#macro formatStringList list><#if list?size != 1>[</#if>${list?join(", ")}<#if list?size != 1>]</#if></#macro>

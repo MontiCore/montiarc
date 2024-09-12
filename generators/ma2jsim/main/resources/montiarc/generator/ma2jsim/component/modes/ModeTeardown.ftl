@@ -3,6 +3,7 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
+<#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
 <#assign modes = helper.getModes(modeAutomaton)>
@@ -24,6 +25,7 @@
     <#list connector.getTargetList() as target>
       <#assign targetPort><@ModeUtil.calcPortAccessor target mode ast/></#assign>
       ${sourcePort}.disconnect(${targetPort});
+      <@Log.trace log_aspects.removeConnector() "getName()">"${connector.getSourceName()} -> ${target.getQName()}"</@Log.trace>
     </#list>
   </#list>
 
@@ -35,12 +37,12 @@
 
 <#-- ASTArcMode mode -->
 <#macro teardownSubs mode>
-
   // Tear down sub components
   <#list helper.getInstancesFromMode(mode) as sub>
     <#assign subSymbol = sub.getSymbol()>
-  <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
+    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
     ${subCompName} = null;
+    <@Log.trace log_aspects.removeComponent() "getName()">"${subSymbol.getName()}"</@Log.trace>
   </#list>
 </#macro>
 

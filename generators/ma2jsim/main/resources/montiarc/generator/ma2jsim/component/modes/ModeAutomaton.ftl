@@ -2,6 +2,7 @@
 <#-- ASTComponentType ast -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
+<#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
@@ -32,7 +33,7 @@
   void setup() {
     // set initial state
     this.currentMode = Mode.${initMode.getName()};
-    <@Log.info log_aspects.modeChange() "this.compName"> "->" + Mode.${initMode.getName()} </@Log.info>
+    <@logInitialMode initMode/>
 
     // instantiate sub components
     this.context.<@MethodNames.modeSetup initMode.getSymbol()/>();
@@ -50,3 +51,14 @@
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/sync/UnsupportedEventBehaviorMembers.ftl", [false])}
   </#if>
 }
+
+<#macro logInitialMode mode>
+  <#assign addedSubs = helper.getInstancesFromMode(mode)>
+  <#assign addedConnectors = helper.getConnectors(mode)>
+  <@Log.info log_aspects.modeChange() "this.compName">
+      "-> ${initMode.getName()};"
+    <#if addedSubs?size != 0 || addedConnectors?size != 0>
+      + <@ModeUtil.printAddedModeElements addedSubs addedConnectors/>
+    </#if>
+  </@Log.info>
+</#macro>

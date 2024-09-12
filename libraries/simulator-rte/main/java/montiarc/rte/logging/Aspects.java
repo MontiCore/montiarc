@@ -9,6 +9,12 @@ public class Aspects {
 
   public static final String CREATE_COMP = "create_comp";
 
+  public static final String REMOVE_COMP = "remove_comp";
+
+  public static final String CREATE_CONNECTOR = "create_connector";
+
+  public static final String REMOVE_CONNECTOR = "remove_connector";
+
   public static final String SEND_MSG = "send";
 
   public static final String RECEIVE_MSG = "receive";
