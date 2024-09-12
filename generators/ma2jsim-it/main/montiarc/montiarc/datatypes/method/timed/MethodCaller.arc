@@ -1,16 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.datatypes.method;
+package montiarc.datatypes.method.timed;
 
 import montiarc.types.AbstractMethodProvider;
+import montiarc.types.AmbiguousMethodProvider;
 import montiarc.types.MethodProvider;
 
 component MethodCaller {
-  port out int number;
+  port in int number;
 
-  <<sync>> automaton {
+  <<timed>> automaton {
     initial state A;
 
-    A -> A / {
+    A -> A number / {
       // --- Static methods ---
       AbstractMethodProvider.staticEmpty();
       montiarc.types.AbstractMethodProvider.staticEmpty();
@@ -46,6 +47,9 @@ component MethodCaller {
       // --- Assignment ---
       provider.field = AbstractMethodProvider.staticField;
       montiarc.types.AbstractMethodProvider.staticField = provider.field;
+
+      //  --- Ambiguous method call  ---
+      AmbiguousMethodProvider.call(number, 1);
     };
   }
 }

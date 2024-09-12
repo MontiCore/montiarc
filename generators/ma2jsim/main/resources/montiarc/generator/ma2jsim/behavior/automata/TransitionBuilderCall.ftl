@@ -23,13 +23,6 @@ ${tc.signature("automaton", "transition", "noInputsForActions", "useSyncMsg", "i
   <#else><#list inPorts as inPort>${inPort.getName()}<#sep>, </#list> </#if>
 </#assign>
 
-<#assign guardSignature>
-  <#if useSyncMsg>(${ast.getName()}${suffixes.msgGuard()}<@Util.printTypeParameters ast false/>)</#if> (${lambdaArgs})
-</#assign>
-<#assign actionSignature>
-  <#if useSyncMsg>(${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParameters ast false/>)</#if> (${lambdaArgs})
-</#assign>
-
 <#assign transitionMsgType>
   <#if noInputsForActions> montiarc.rte.automaton.NoInput
   <#elseif useSyncMsg>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/>
@@ -39,11 +32,12 @@ ${tc.signature("automaton", "transition", "noInputsForActions", "useSyncMsg", "i
 new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   .setSource(states.${prefixes.state()}${transition.getSourceName()})
   .setTarget(states.${prefixes.state()}${transition.getTargetName()})
-  .setGuard(<@guard guardSignature/>)
-  .setAction(<@action actionSignature/>)
+  .setGuard(<@guard/>)
+  .setAction(<@action/>)
   .build()
 
-<#macro guard signature> ${signature} ->
+<#macro guard>
+  <@guardCast/> (${lambdaArgs}) ->
   <#if body.isPresent() && body.get().isPresentPre()>
     {
       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
@@ -56,8 +50,8 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   </#if>
 </#macro>
 
-<#macro action signature>
-  ${signature} -> {
+<#macro action>
+  <@actionCast/> (${lambdaArgs}) -> {
   <#-- Calculate whether there the current state is in a state hierarchy that also contains the target state -->
   <#assign commonSuperstate = automaton.findCommonSuperstate(transition.getSourceNameDefinition(), transition.getTargetNameDefinition())!>
   <#assign haveCommonSuperstate = commonSuperstate != "">
@@ -104,4 +98,36 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
     </#if>
   </#list>
 }
+</#macro>
+
+<#macro guardCast>
+  <#if useSyncMsg>(${ast.getName()}${suffixes.msgGuard()}<@Util.printTypeParameters ast false/>)
+  <#elseif !noInputsForActions>
+    <#assign port = inPorts[0]>
+    <#assign type = port.getType()>
+    <#if helper.isUnboxedChar(type)>(montiarc.rte.automaton.guards.CharGuard)
+    <#elseif helper.isUnboxedBoolean(type)>(montiarc.rte.automaton.guards.BooleanGuard)
+    <#elseif helper.isUnboxedByte(type)>(montiarc.rte.automaton.guards.ByteGuard)
+    <#elseif helper.isUnboxedShort(type)>(montiarc.rte.automaton.guards.ShortGuard)
+    <#elseif helper.isUnboxedInt(type)>(montiarc.rte.automaton.guards.IntGuard)
+    <#elseif helper.isUnboxedLong(type)>(montiarc.rte.automaton.guards.LongGuard)
+    <#elseif helper.isUnboxedFloat(type)>(montiarc.rte.automaton.guards.FloatGuard)
+    <#elseif helper.isUnboxedDouble(type)>(montiarc.rte.automaton.guards.DoubleGuard)</#if>
+  </#if>
+</#macro>
+
+<#macro actionCast>
+  <#if useSyncMsg>(${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParameters ast false/>)
+  <#elseif !noInputsForActions>
+    <#assign port = inPorts[0]>
+    <#assign type = port.getType()>
+    <#if helper.isUnboxedChar(type)>(montiarc.rte.automaton.actions.CharAction)
+    <#elseif helper.isUnboxedBoolean(type)>(montiarc.rte.automaton.actions.BooleanAction)
+    <#elseif helper.isUnboxedByte(type)>(montiarc.rte.automaton.actions.ByteAction)
+    <#elseif helper.isUnboxedShort(type)>(montiarc.rte.automaton.actions.ShortAction)
+    <#elseif helper.isUnboxedInt(type)>(montiarc.rte.automaton.actions.IntAction)
+    <#elseif helper.isUnboxedLong(type)>(montiarc.rte.automaton.actions.LongAction)
+    <#elseif helper.isUnboxedFloat(type)>(montiarc.rte.automaton.actions.FloatAction)
+    <#elseif helper.isUnboxedDouble(type)>(montiarc.rte.automaton.actions.DoubleAction)</#if>
+  </#if>
 </#macro>

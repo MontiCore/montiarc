@@ -433,6 +433,10 @@ public class Helper {
     } else return "null";
   }
 
+  public boolean isUnboxedBoolean(SymTypeExpression type) {
+    return type.isPrimitive() && BasicSymbolsMill.BOOLEAN.equals(type.asPrimitive().getPrimitiveName());
+  }
+
   public boolean isUnboxedChar(SymTypeExpression type) {
     return type.isPrimitive() && BasicSymbolsMill.CHAR.equals(type.asPrimitive().getPrimitiveName());
   }

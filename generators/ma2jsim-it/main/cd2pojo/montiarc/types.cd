@@ -26,4 +26,8 @@ classdiagram types {
     public static void staticChildEmpty();
     public void abstractEmpty();
   }
+  public class AmbiguousMethodProvider {
+    public static void call(int i, int j);
+    public static void call(Object o, Object p);
+  }
 }
