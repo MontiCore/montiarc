@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.se.logging)
-  implementation(libs.junit.api)
+  implementation(project(":libraries:simulator-rte"))
+  api(libs.se.logging)
+  api(libs.junit.api)
 }

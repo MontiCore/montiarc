@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.tests;
+package montiarc.rte.tests.logging;
 
 import de.se_rwth.commons.logging.DefaultErrorHook;
 import de.se_rwth.commons.logging.Log;
