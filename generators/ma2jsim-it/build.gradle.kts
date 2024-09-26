@@ -30,8 +30,6 @@ dependencies {
   implementation(libs.se.utilities)
   implementation(libs.guava)
   implementation(libs.janino)
-
-  testImplementation(project(":libraries:simulator-test-rte"))
 }
 
 cd2pojo {

@@ -22,8 +22,13 @@ const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2jsim"
 const val INTERNAL_RTE_PROJECT_REF = ":libraries:simulator-rte"
 const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte"
 
+const val INTERNAL_TEST_RTE_PROJECT_REF = ":libraries:simulator-test-rte"
+const val MAVEN_TEST_RTE_PROJECT_REF = "montiarc.libraries:simulator-test-rte"
+
 const val INTERNAL_MA_BASE_PROJECT_REF = ":libraries:montiarc-base"
 const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base"
+
+const val MA2JSIM_LOGGING_ENV_VAR = "MA2JSIM_LOGGING_BASE_PATH"
 
 /**
  * Enables the integration of montiarc models into a project build:
@@ -58,6 +63,12 @@ class Ma2JavaPlugin : Plugin<Project> {
 
         val mainSourceSet = sourceSetsOf(project).getByName(SourceSet.MAIN_SOURCE_SET_NAME)
         putCompiledSymbolsIntoJarOf(mainSourceSet)
+
+        val testSourceSet = sourceSetsOf(project).getByName(SourceSet.TEST_SOURCE_SET_NAME)
+        addTestRteDependencyFor(testSourceSet)
+
+        // Also special treatment for the test task
+        addLoggingEnvVarToTestTask()
       }
 
       pluginManager.withPlugin("cd2pojo") {
@@ -106,14 +117,31 @@ class Ma2JavaPlugin : Plugin<Project> {
   }
 
   private fun addRuntimeEnvironmentDependencyFor(configName: String) = with (project) {
-    // Depending on what the user wishes, majava-rte may be drawn from maven (default), or it may be an internal project
+    // Depending on what the user wishes, ma2jsim-rte may be drawn from maven (default), or it may be an internal project
     // dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test the
-    // freshly compiled version of majava-rte.
+    // freshly compiled version of ma2jsim-rte.
     dependencies.addProvider(configName, provider {
       if (maExtension.internalMontiArcTesting.get()) {
         project(INTERNAL_RTE_PROJECT_REF)
       } else {
         "${MAVEN_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
+      }
+    })
+  }
+
+  /**
+   * Adds the library montiarc.libraries:montiarc-test-rte as implementation dependency for the source set
+   */
+  private fun addTestRteDependencyFor(sourceSet: SourceSet) = with (project) {
+    val configName = sourceSet.implementationConfigurationName
+    // Depending on what the user wishes, ma2jsim-test-rte may be drawn from maven (default), or it may be an internal project
+    // dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test the
+    // freshly compiled version of ma2jsim-test-rte.
+    dependencies.addProvider(configName, provider {
+      if (maExtension.internalMontiArcTesting.get()) {
+        project(INTERNAL_TEST_RTE_PROJECT_REF)
+      } else {
+        "${MAVEN_TEST_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
       }
     })
   }
@@ -199,6 +227,14 @@ class Ma2JavaPlugin : Plugin<Project> {
     // Puts main's symbols on the symbol path of test
     tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java) {
       it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
+    }
+  }
+
+  private fun addLoggingEnvVarToTestTask() = with (project) {
+    val logDir = "$buildDir/montiarc/test/logs"
+    tasks.withType(Test::class.java).forEach {
+      it.environment(MA2JSIM_LOGGING_ENV_VAR, logDir)
+      it.outputs.dir(logDir)
     }
   }
 
