@@ -102,8 +102,8 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
   }
 
   public ASTSCState findCommonSuperstate(ASTSCState current, ASTSCState destination) {
-    List<ASTSCState> pathCurrent = findPath(current);
-    List<ASTSCState> pathDestination = findPath(destination);
+    List<ASTSCState> pathCurrent = getAncestors(current);
+    List<ASTSCState> pathDestination = getAncestors(destination);
     ASTSCState commonSuperstate = null;
     Collections.reverse(pathDestination);
 
@@ -121,7 +121,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    * Returns all super states to which {@code state} belongs to, including {@code state} itself. <br>
    * The order in the list starts from {@code state} and moves up all ancestors until the root state.
    */
-  public List<ASTSCState> findPath(ASTSCState state) {
+  public List<ASTSCState> getAncestors(ASTSCState state) {
     List<ASTSCState> path = new ArrayList<>();
     path.add(state);
     for (ASTSCState s : getStates()) {
@@ -129,7 +129,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
         continue;
       for (ASTSCStateElement body : ((ASTSCHierarchyBody) s.getSCSBody()).getSCStateElementList()) {
         if (ArcAutomatonMill.typeDispatcher().isSCBasisASTSCState(body) && ArcAutomatonMill.typeDispatcher().asSCBasisASTSCState(body).getName().equals(state.getName()))
-          path.addAll(findPath(s));
+          path.addAll(getAncestors(s));
       }
     }
     return path;
@@ -138,7 +138,8 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
   /**
    * Given that {@code ancestor} is an ancestor of {@code baseState}, this method returns the states that are in between
    * {@code ancestor} and {@code baseState} in the state hierarchy. <br>
-   * {code ancestor} is not included in the returned list, but {@code baseState} is.
+   * {code ancestor} is not included in the returned list, but {@code baseState} is
+   * (except if {@code ancestor == baseState}, then ancestor is in the list).
    * The <i>order</i> starts from the first child state of {@code ancestor} and moves downwards the state hierarchy,
    * until it reaches {@code baseState}.
    *
@@ -147,9 +148,9 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    *                 {@code baseState}.
    */
   public List<ASTSCState> getAncestorsInbetween(ASTSCState baseState, ASTSCState ancestor) {
-    List<ASTSCState> path = findPath(baseState);
+    List<ASTSCState> path = getAncestors(baseState);
     Collections.reverse(path);
-    if (ancestor != null) {
+    if (ancestor != null && ancestor != baseState) {
       path = path.subList(path.indexOf(ancestor) + 1, path.size());
     }
     return path;

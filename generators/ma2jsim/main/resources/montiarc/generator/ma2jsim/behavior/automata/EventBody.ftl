@@ -46,6 +46,8 @@ public void tick(${syncMsgClass} nullMsg) {
         ${prefixes.transition()}${prefixes.tick()}${tr?counter}.execute(this, null);
       }<#sep> else </#sep>
   </#list>
+
+  this.getState().doAction();
 }
 
 <#-- Create transition objects for message-triggered transitions.

@@ -52,7 +52,7 @@ class ComplexHierarchyTest {
    * automaton should produce for the given input.
    */
   protected static Stream<Arguments> io() {
-    String path0 = "aIni->aEn->a1Ini->a1En";
+    String path0 = "aIni->aEn->a1En";
     String path1 = "a1Ex->aEx->aToB->bEn";
     String path2 = "bEx->bToC->cEn->c1En";
     String path3 = "c1Ex->c1ToC2->c2En";

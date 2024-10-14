@@ -59,7 +59,7 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   <#-- 1. Execute exit actions -->
   <#assign statesToExit = haveCommonSuperstate?then(
     automaton.getAncestorsInbetween(transition.getSourceNameDefinition(), commonSuperstate),
-    automaton.findPath(transition.getSourceNameDefinition())
+    automaton.getAncestors(transition.getSourceNameDefinition())
   )>
   <#list statesToExit as state>
     <#if state?is_first>
@@ -79,16 +79,10 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
   </#if>
 
-
-  <#-- 3. Do action (if a common superstate is not left -->
-  <#if haveCommonSuperstate>
-    this.states.${prefixes.state()}${commonSuperstate.getName()}.doAction();
-  </#if>
-
-  <#-- 4. Enter actions -->
+  <#-- 3. Enter actions -->
   <#assign statesToEnter = haveCommonSuperstate?then(
     automaton.getAncestorsInbetween(transition.getTargetNameDefinition(), commonSuperstate),
-    automaton.findPath(transition.getTargetNameDefinition())?reverse
+    automaton.getAncestors(transition.getTargetNameDefinition())?reverse
   )>
   <#list statesToEnter as state>
     <#if state?is_last>

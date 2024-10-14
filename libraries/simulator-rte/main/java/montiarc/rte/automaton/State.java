@@ -14,18 +14,22 @@ public class State {
   protected Action<NoInput> initAction;
   protected Action<NoInput> entryAction;
   protected Action<NoInput> exitAction;
+  protected Action<NoInput> doAction;
 
   public State(String name,
                List<State> substates,
                List<State> initialSubstates,
                Action<NoInput> initAction,
                Action<NoInput> entryAction,
-               Action<NoInput> exitAction) {
+               Action<NoInput> exitAction,
+               Action<NoInput> doAction) {
     this.name = name;
     this.substates = substates;
     this.initAction = initAction;
     this.entryAction = entryAction;
     this.exitAction = exitAction;
+    this.doAction = doAction;
+
     if (initialSubstates.isEmpty()) {
       this.initialSubstates = substates;
     } else {
@@ -39,37 +43,42 @@ public class State {
 
   public void init() {
     if (initAction != null) this.initAction.execute(null);
-    enter();
   }
 
-  public void initWithSub() {
-    init();
-    if (!initialSubstates.isEmpty())
-      getInitialSubstate().initWithSub();
-  }
-
+  /** Executes the entry action of exactly this state (and no sub states) */
   public void enter() {
     if (this.entryAction != null) this.entryAction.execute(null);
   }
 
+  /** Executes the entry action of this state and after that of all sub states */
   public void enterWithSub() {
     enter();
     if (!initialSubstates.isEmpty())
       getInitialSubstate().enterWithSub();
   }
 
+  /** Executes the exit action of exactly this state (and no sub state) */
   public void exit() {
     if (this.exitAction != null) this.exitAction.execute(null);
   }
 
+  /**
+   * Given that {@code source} is in this state or one of its sub states, all exit action from {@code source} up to this
+   * state are executed.
+   */
   public void exitSub(State source) {
-    if (source == this || isSubstate(source)) {
-      if (source != this) getSubstates().forEach(s -> s.exitSub(source));
+    if (isSubstate(source)) {
+      getSubstates().forEach(s -> s.exitSub(source));
+      this.exit();
+    } else if (source == this) {
       this.exit();
     }
   }
 
   public void doAction() {
+    if (this.doAction != null) {
+      this.doAction.execute(null);
+    }
   }
 
   @Override

@@ -97,21 +97,21 @@ Legend:
 
 ## Automaton CoCos
 
-| in MA | CoCo(s)                                  | Language           | Notes                                                                                                                                                              |
-|-------|------------------------------------------|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ☑     | UniqueStates                             | SCBasis            |                                                                                                                                                                    |
-| ☑     | TransitionSourceAndTargetExist           | SCBasis            |                                                                                                                                                                    |
-| ☑     | AtLeastOneInitialState                   | SCBasis            |                                                                                                                                                                    |
-| ☑     | MaxOneInitialState                       | SCBasis            | Checks that there is only one top-level state per automaton. (This coco does not check sub states.)                                                                |
-| ☑     | NoInputPortsInInitialOutputDecl          | ArcAutomaton       |                                                                                                                                                                    |
-| ☑     | TransitionPreconditionsAreBoolean        | SCTransitions4Code |                                                                                                                                                                    |
-| ☑     | AnteBlocksOnlyForInitialStates           | SCTransitions4Code | Checks that AnteBlocks in state declarations occur only for initial states, as they declare actions initially performed at component instantiation.                |
-| ☑     | Unsupported automaton modeling elements: | MontiArc           | Entry & exit actions, finale states, stereotypes. With stereotypes present, we only warn the user. With all other unsupported modelling elements, we throw errors. |
-| ☒     | PackageCorrespondsToFolders              | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                               |
-| ☒     | SCFileExtension\[is.sc\]                 | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                               |
-| ☒     | SCNameIsArtifactName                     | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                               |
-| ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                                           |
-| ☒     | NoTickEventInUntimedAutomata             | ArcAutomaton       | Checks for no tick events in an untimed automata                                                                                                                   |0xC1309|
+| in MA | CoCo(s)                                  | Language           | Notes                                                                                                                                               |
+|-------|------------------------------------------|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| ☑     | UniqueStates                             | SCBasis            |                                                                                                                                                     |
+| ☑     | TransitionSourceAndTargetExist           | SCBasis            |                                                                                                                                                     |
+| ☑     | AtLeastOneInitialState                   | SCBasis            |                                                                                                                                                     |
+| ☑     | MaxOneInitialState                       | SCBasis            | Checks that there is only one top-level state per automaton. (This coco does not check sub states.)                                                 |
+| ☑     | NoInputPortsInInitialOutputDecl          | ArcAutomaton       |                                                                                                                                                     |
+| ☑     | TransitionPreconditionsAreBoolean        | SCTransitions4Code |                                                                                                                                                     |
+| ☑     | AnteBlocksOnlyForInitialStates           | SCTransitions4Code | Checks that AnteBlocks in state declarations occur only for initial states, as they declare actions initially performed at component instantiation. |
+| ☑     | Unsupported automaton modeling elements: | MontiArc           | Finale states                                                                                                                                       |
+| ☒     | PackageCorrespondsToFolders              | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                |
+| ☒     | SCFileExtension\[is.sc\]                 | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                |
+| ☒     | SCNameIsArtifactName                     | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                |
+| ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                            |
+| ☒     | NoTickEventInUntimedAutomata             | ArcAutomaton       | Checks for no tick events in an untimed automata                                                                                                    |0xC1309|
 
 ## ComfortableArc Cocos
 

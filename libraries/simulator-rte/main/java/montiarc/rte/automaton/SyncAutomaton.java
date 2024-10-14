@@ -38,7 +38,7 @@ public abstract class SyncAutomaton<C, I> extends Automaton<C, I> {
   
   @Override
   public void tick(I syncedInputs) {
-
     getValidTransitions(syncedInputs).stream().findFirst().ifPresent(tr -> tr.execute(this, syncedInputs));
+    getState().doAction();
   }
 }

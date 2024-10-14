@@ -10,6 +10,7 @@ public class StateBuilder {
   protected Action<NoInput> initAction;
   protected Action<NoInput> entryAction;
   protected Action<NoInput> exitAction;
+  protected Action<NoInput> doAction;
   protected List<State> substates = new ArrayList<>();
   protected List<State> initialSubstates = new ArrayList<>();
 
@@ -28,6 +29,15 @@ public class StateBuilder {
 
   public StateBuilder setSubstates(List<State> substates) {
     this.substates = substates;
+    return this;
+  }
+
+  public Action<NoInput> getDoAction() {
+    return doAction;
+  }
+
+  public StateBuilder setDoAction(Action<NoInput> doAction) {
+    this.doAction = doAction;
     return this;
   }
 
@@ -76,6 +86,14 @@ public class StateBuilder {
   public State build() {
     if (!isValid()) throw new IllegalStateException();
 
-    return new State(this.getName(), this.getSubstates(), this.getInitialSubstates(), this.getInitAction(), this.getEntryAction(), this.getExitAction());
+    return new State(
+      this.getName(),
+      this.getSubstates(),
+      this.getInitialSubstates(),
+      this.getInitAction(),
+      this.getEntryAction(),
+      this.getExitAction(),
+      this.getDoAction()
+    );
   }
 }
