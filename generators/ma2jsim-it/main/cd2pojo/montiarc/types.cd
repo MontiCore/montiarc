@@ -11,8 +11,14 @@ classdiagram types {
     POSITIVE, NEGATIVE, ZERO;
   }
 
-  public class Person { }
-  public class Student extends Person { }
+  public class Person {
+    public int age;
+    public String name;
+  }
+  public class Student extends Person {
+    public String university;
+    public int matriculationNumber;
+  }
 
   public abstract class AbstractMethodProvider {
     public static int staticField;

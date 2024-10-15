@@ -65,7 +65,13 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
       CommentPrettyPrinter.printPreComments(node, getPrinter());
     }
 
-    Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(MontiArcMill.prettyPrint(node.getExpression(), false));
+    String innerExpr = MontiArcMill.prettyPrint(node.getExpression(), false);
+    Optional<TypeSymbol> type = Optional.empty();
+    // is it feasible to assume that the inner expression is actually a type?
+    // regex checks for names connected by dots with optional whitespace
+    if (innerExpr.matches("^([a-zA-Z\\d_$]+(\\s*\\.\\s*[a-zA-Z\\d_$]+)*)$")) {
+      type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(innerExpr);
+    }
     if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
       getPrinter().print(type.get().getFullName());
     } else {
