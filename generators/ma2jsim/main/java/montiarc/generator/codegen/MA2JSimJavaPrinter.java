@@ -74,6 +74,11 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.setSetExpressionsHandler(setExpressionsPrinter);
     this.traverser.getSetExpressionsVisitorList().clear();
     this.traverser.add4SetExpressions(setExpressionsPrinter);
+
+    MCCommonStatementsJavaPrinter mcCommonStatementsPrinter = new MCCommonStatementsJavaPrinter(printer, printComments);
+    this.traverser.setMCCommonStatementsHandler(mcCommonStatementsPrinter);
+    this.traverser.getMCCommonStatementsVisitorList().clear();
+    this.traverser.add4MCCommonStatements(mcCommonStatementsPrinter);
   }
 
   public String prettyprint(List<Expression> expressions) {
