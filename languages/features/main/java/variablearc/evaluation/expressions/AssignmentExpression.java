@@ -9,8 +9,6 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc.VariableArcMill;
-import variablearc.check.VariableArcTypeCalculator;
-import variablearc.evaluation.VariableArcDeriveSMTSort;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.util.Arrays;
@@ -44,7 +42,7 @@ public class AssignmentExpression extends Expression {
     String parentPrefix = Arrays.stream(prefixes).limit(prefixes.length - 1).reduce((a, b) -> a + "." + b).orElse("");
     converter.setPrefix(parentPrefix);
     Optional<Expr<?>> nameExpression =
-      (new VariableArcDeriveSMTSort(new VariableArcTypeCalculator())).toSort(context, variable.getType())
+      converter.getSortDerive().toSort(context, variable.getType())
         .map(s -> context.mkConst(prefix + "." + variable.getName(), s));
     Optional<Expr<?>> bindingExpression = converter.toExpr(getAstExpression());
 
