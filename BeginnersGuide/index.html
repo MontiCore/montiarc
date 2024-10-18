@@ -1,0 +1,1808 @@
+<!-- (c) https://github.com/MontiCore/monticore -->
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://monticore.github.io/montiarc/BeginnersGuide/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../usage/GettingStarted/">
+      
+      
+      <link rel="icon" href="../docs/img/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.5.41">
+    
+    
+      
+        <title>Beginners Guide - MontiArc</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.0253249f.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  
+  <!-- Matomo -->
+  <script>
+    var _paq = window._paq = window._paq || [];
+    /* tracker methods like "setCustomDimension" should be called before "trackPageView" */
+    _paq.push(['disableCookies']);
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    (function() {
+      var u="https://stats.fh-aachen.de/";
+      _paq.push(['setTrackerUrl', u+'piwik.php']);
+      _paq.push(['setSiteId', '35']);
+      var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+      g.async=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    })();
+  </script>
+  <!-- End Matomo Code -->
+
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#basic-model-structure" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="MontiArc" class="md-header__button md-logo" aria-label="MontiArc" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 0C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h176l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32h256c17.7 0 32-14.3 32-32s-14.3-32-32-32h-69.3L336 416h176c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zm448 64v224H64V64z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            MontiArc
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Beginners Guide
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/MontiCore/montiarc/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+    
+  
+  Beginners Guide
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../usage/GettingStarted/" class="md-tabs__link">
+          
+  
+  Usage
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Component/" class="md-tabs__link">
+          
+  
+  Component
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../Behavior/" class="md-tabs__link">
+          
+  
+  Behavior
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../TypeSystem/" class="md-tabs__link">
+          
+  
+  TypeSystem
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="http://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/" class="md-tabs__link">
+        
+  
+    
+  
+  License
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M64 0C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h176l-10.7 32H160c-17.7 0-32 14.3-32 32s14.3 32 32 32h256c17.7 0 32-14.3 32-32s-14.3-32-32-32h-69.3L336 416h176c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64zm448 64v224H64V64z"/></svg>
+
+    </a>
+    MontiArc
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/MontiCore/montiarc/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.6.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Beginners Guide
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Beginners Guide
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#basic-model-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      Basic model structure
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#project-file-tree-organization" class="md-nav__link">
+    <span class="md-ellipsis">
+      Project file tree organization
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#component-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Component interfaces
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Component interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#example-for-component-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      Example for component interfaces
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#defining-component-behavior-with-automatons" class="md-nav__link">
+    <span class="md-ellipsis">
+      Defining component behavior with automatons
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Defining component behavior with automatons">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-behavior-we-want-to-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      The behavior we want to model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-montiarc-model-implemented-with-an-automaton" class="md-nav__link">
+    <span class="md-ellipsis">
+      The MontiArc model implemented with an automaton
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#state-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      State definitions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transition-definitions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Transition definitions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interacting-with-the-environment-port-values" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interacting with the environment: port values
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#composing-different-systems-to-a-whole" class="md-nav__link">
+    <span class="md-ellipsis">
+      Composing different systems to a whole
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Composing different systems to a whole">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-overall-system-we-want-to-model" class="md-nav__link">
+    <span class="md-ellipsis">
+      The overall system we want to model
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-composition-of-the-sub-systems" class="md-nav__link">
+    <span class="md-ellipsis">
+      The composition of the sub systems
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#component-instantiations" class="md-nav__link">
+    <span class="md-ellipsis">
+      Component instantiations
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connectors
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectors-among-external-and-internal-ports" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connectors among external and internal ports
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Conclusion
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    <span class="md-ellipsis">
+      References
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Usage
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Usage
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/GettingStarted/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Getting Started
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/CD2PojoCLTool/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CD2Java CL Tool
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/CD2PojoGradlePlugin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    CD2Java Gradle Plugin
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/MontiArcCLTool/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MontiArc CL Tool
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../usage/MontiArcGradlePlugin/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    MontiArc Gradle Plugin
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Component
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            Component
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Component/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../component/Decomposition/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Decomposition
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../component/Generics/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Generics
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../component/Inheritance/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Inheritance
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../component/Interfaces/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Interfaces
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../component/Parameter/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Parameters
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Behavior
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            Behavior
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Behavior/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../behavior/Automata/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Automata
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../behavior/Compute/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Compute
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../behavior/Operators/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Operators
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../behavior/Statements/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Statements
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../behavior/Timing/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Timing
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../behavior/Variables/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Variables
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    TypeSystem
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            TypeSystem
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../TypeSystem/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Overview
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../typesystem/ClassDiagrams/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Class Diagrams
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../typesystem/JavaIntegration/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Java Integration
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../typesystem/Primitives/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Primitives
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="http://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    License
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  <h1>Beginners Guide</h1>
+
+<!-- (c) https://github.com/MontiCore/monticore -->
+
+<p>This guide introduces you to modeling with MontiArc.
+It is especially suited, if you have not worked with MontiArc before.
+If you just want to review concepts, then look at the dedicated pages.
+To follow along, also make sure to read Getting Started.
+It introduces you to available tooling that enables you to verify the correctness of written models.</p>
+<h2 id="basic-model-structure">Basic model structure</h2>
+<p>Let's start by looking at how to write models:
+MontiArc models are written in plain text.
+The content of a model file generally looks like the following:</p>
+<p><div class="highlight"><pre><span></span><code>package car.userinteraction;
+
+import car.userinteraction.window.WindowPosition;
+
+component WindowController {
+  // Component content
+}
+</code></pre></div>
+The structure is as follows:
+1. Models are organized in <em>package structures</em>.
+   Elements defined in the same package are usually visible to each other.
+   The first declaration of a model defines in which package the model lays.
+2. To use model elements that are defined in other packages, <em>import statements</em> are used.
+   In the example, we import the <code>WindowPosition</code> type.
+   We will see later what this means and for what it is used.
+3. Every model file contains one top-level <em>component type</em> definition.
+   The definition starts with the keyword <code>component</code>. 
+   It is followed by the <em>name</em> that is mandatory so that we can refer to the component from other locations within our models.
+4. The last syntactic element of the example is a simple comment, declared using double slashes <code>//</code>.
+   Everything that follows within the same line will be ignored by MontiArc.</p>
+<h2 id="project-file-tree-organization">Project file tree organization</h2>
+<p>Now that we have seen what the content of the file is, we will investigate the role of the file in the file system structure of the project.</p>
+<p>The file extension is <code>.arc</code>.
+The file system path to models must match the packages in which they are defined.
+For our <code>WindowController</code> example, the location could look like <code>my-project/src/montiarc/car/userinteraction/WindowController.arc</code>.
+For MontiArc, it is only relevant that the last part of the the path matches the whole package hierarchy (namely, <code>car/userinteraction/WindowController.arc</code>).
+However, build tools may constrain the rest of the path.</p>
+<h2 id="component-interfaces">Component interfaces</h2>
+<p>An important concept of MontiArc is that the internals of a component are hidden to its operating environment and regarding the other direction: that the component is agnostic of its operating environment, so that it can be used in various operational scenarios.
+However, somehow the component has to interact with the environment.
+<em>Ports</em> are used for that role.
+Their concept includes the following aspects:</p>
+<!--They appear in models in the following way:-->
+<ul>
+<li>They have predefined directions: Either they are <em>incoming</em> or <em>outgoing</em>.
+   If a port is incoming, then the owning component uses the port to <em>receive</em> data from its environment.
+   On the other hand, if the port is outgoing, then the owning component uses the port to <em>send</em> data to its environment.</li>
+<li>Ports are <em>typed</em>.
+  The types of a ports constrains <em>what</em> data can be received / sent through them.
+  Example port types are <code>int</code>, <code>boolean</code>, or <code>WindowPosition</code> (from the example above).
+  We will look at which types can be used later.</li>
+<li><em>Names</em> are assigned to each port so that we can later refer to them and the information flowing through them.</li>
+</ul>
+<h3 id="example-for-component-interfaces">Example for component interfaces</h3>
+<p>Let us now look at how we can declare ports for components.
+As an example, let us assume that we are developing a window motor control system for a car.
+It gets three different kinds of information from its environment:
+* Whether a window <em>button</em> is pressed and in which direction,
+* Whether a <em>finger</em> has been detected within in the gap of the window,
+* The <em>position</em> of the window.
+   The controller uses this information to stop the window motor when it has been fully closed or opened to avoid damage to the glass.</p>
+<p>Based on this information, the window control system should send <em>out</em> a concrete <em>motor control command</em> to the motor.</p>
+<p>We can model this environment interaction in MontiArc like this:
+<div class="highlight"><pre><span></span><code>// Package declaration and imports ...
+
+component WindowController {
+  port in WindowPosition position,
+       in WindowButtonMoveEvent buttonEvent,
+       in FingerProtectionOrder fingerProtectionOrder,
+       out WindowMoveAction winMoveAction;
+}
+</code></pre></div>
+The declaration of the component's ports is started with the <code>port</code> keyword.
+It is followed by a comma-separated list that contains the declaration of the individual ports.
+Every such declaration has the form <code>&lt;direction&gt; &lt;port-type&gt; &lt;port-name&gt;</code>.
+Note the semicolon ending the port declaration.
+It is also allowed to split the declaration of all ports into separate statements:
+<div class="highlight"><pre><span></span><code>// Package declaration and imports ...
+
+component WindowController {
+  port in WindowPosition position;
+  port in WindowButtonMoveEvent buttonEvent;
+
+  port in FingerProtectionOrder fingerProtectionOrder,
+       out WindowMoveAction winMoveAction;
+}
+</code></pre></div>
+You may use these different options to structure your component model and group ports into  groups of related functionality.
+The last example is a bad one in that sense, as the <code>fingerProtectionOrder</code> port is grouped with the <code>winMoveAction</code> port where no direct coherence exists (at least not a stronger one than with the other ports).</p>
+<h2 id="defining-component-behavior-with-automatons">Defining component behavior with automatons</h2>
+<p>After having looked at the API of a component to its environment, let's explore how we can define how the component internally works: let's define some behavior.</p>
+<h3 id="the-behavior-we-want-to-model">The behavior we want to model</h3>
+<p>We will work again with the example of the <code>WindowController</code> for which we have already defined the component interface.
+We want to use this information to implement the following behavior:
+* If the window button is pressed in the "up" direction, the window shall completely close.
+  One press of the "up" button should suffice.
+  It is not mandatory that the button is held during the whole process.
+* The process is the same for the opposite direction, opening the window completely once the button is pressed in the "down" direction.
+* The user can cancel the opening / closing process by pressing the window button in the direction that is opposite to the window movement ("down" while closing and "up" while opening).
+* When a finger has been detected in an open window gap, than the closing window movement must stop.
+  The system returns to normal operation only after receiving the signal that the finger left the window gap and consequently receiving a window "down" movement signal from the window button.
+* To order the window motor to move, a movement signal shall be sent <em>constantly</em> during the movement period.
+* When stopping the window movement, the window motor should <em>once</em> receive the information to stop the movement.</p>
+<p>Before looking at the behavior implementation of the <code>WindowController</code>, lets look at the port types so that we know how to utilize them in our automaton.
+We use class-diagram models to define the used types as enumerations.
+You don't have to understand the class-diagram syntax completely, but it should give you an intuitive understanding of the enum types that we will later use.
+<div class="highlight"><pre><span></span><code>// Model com/example/window.cd
+package com.example;
+
+classdiagram window {
+
+  public enum WindowPosition {
+    OPEN, CLOSED, INBETWEEN;
+  }
+
+  public enum WindowButtonMoveEvent {
+    UP_PRESSED, DOWN_PRESSED;
+  }
+
+  public enum WindowMoveAction {
+    MOVE_UP, MOVE_DOWN, STOP_MOVEMENT;
+  }
+}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>// Model com/example/fingerprotection.cd
+package com.example;
+
+classdiagram fingerprotection {
+  public enum FingerProtectionOrder {
+    PROTECT, PROTECTION_OFF;
+  }
+}
+</code></pre></div></p>
+<h3 id="the-montiarc-model-implemented-with-an-automaton">The MontiArc model implemented with an automaton</h3>
+<p><div class="highlight"><pre><span></span><code>package com.example.window;
+
+// Types within class diagram &quot;window&quot; are in a sub-package called window.
+// As the &quot;window&quot; class diagram is in the package &quot;com.example&quot;, its inner types are
+// in the package com.example.window, and thereby in the same package as the WindowController.
+// Hence, we do not need to import its types. We only need to import the types from the
+// fingerprotection class diagram:
+import com.example.fingerprotection.FingerProtectionOrder;
+
+component WindowController {
+
+  // In this example we distinguish between &quot;continuous&quot; and &quot;event&quot; values.
+  // With &quot;continuous&quot; we mean that we expect that there is always a value at the given port.
+  // With &quot;event&quot; we mean that there is only sometimes a value at that port.
+  //   If an event value is not present at a port, then expressions like PORT_NAME == ...
+  //   will always evaluate to false.
+
+  port in WindowPosition position,  // Continuous value
+       in WindowButtonMoveEvent buttonEvent,  // Event value
+       in FingerProtectionOrder fingerProtectionOrder,  // Event value
+       out WindowMoveAction winMoveAction;  // Continuous values during movement, event value when stopping
+
+  automaton {
+    initial state Closed;
+    state Intermediate;
+    state Open;
+    state Blocked;
+    state UnblockingOnDownSignal;
+
+    state Opening {
+      entry / winMoveAction = WindowMoveAction.MOVE_DOWN;
+      do / winMoveAction = WindowMoveAction.MOVE_DOWN;
+      exit / winMoveAction = WindowMoveAction.STOP_MOVEMENT;
+    };
+
+    state Closing {
+      entry / winMoveAction = WindowMoveAction.MOVE_UP;
+      do / winMoveAction = WindowMoveAction.MOVE_UP;
+      exit / winMoveAction = WindowMoveAction.STOP_MOVEMENT;
+    };
+
+
+    // Blocking the movement in case of a detected finger
+    Open -&gt; Blocked [fingerProtectionOrder == FingerProtectionOrder.PROTECT];
+    Intermediate -&gt; Blocked [fingerProtectionOrder == FingerProtectionOrder.PROTECT];
+    Closing -&gt; Blocked [fingerProtectionOrder == FingerProtectionOrder.PROTECT];
+
+    // Transitioning from closed to open
+    Closed -&gt; Opening [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED];
+    Opening -&gt; Open [position == WindowPosition.OPEN];
+
+    // Transitioning from opened to closed
+    Open -&gt; Closing [buttonEvent == WindowButtonMoveEvent.UP_PRESSED];
+    Closing -&gt; Closed [position == WindowPosition.CLOSED];
+
+    // Interrupting the window movement
+    Closing -&gt; Intermediate [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED];
+    Opening -&gt; Intermediate [buttonEvent == WindowButtonMoveEvent.UP_PRESSED];
+
+    // Resuming the window movement
+    Intermediate -&gt; Opening [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED];
+    Intermediate -&gt; Closing [buttonEvent == WindowButtonMoveEvent.UP_PRESSED];
+
+    // Recovering from finger protection
+    Blocked -&gt; UnblockingOnDownSignal [
+      fingerProtectionOrder == FingerProtectionOrder.PROTECTION_OFF
+    ];
+    UnblockingOnDownSignal -&gt; Open [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED
+                                    &amp;&amp; position == WindowPosition.OPEN];
+    UnblockingOnDownSignal -&gt; Intermediate [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED
+                                            &amp;&amp; position != WindowPosition.OPEN];
+  }
+}
+</code></pre></div>
+We see that the definition of the automaton is part of the component body, next to the port definitions.
+It is started with the keyword <code>automaton</code> and its content is defined in a body (<code>{ ... }</code>).
+The body within the braces contains two major elements: <em>state</em> and <em>transition</em> definitions.</p>
+<h3 id="state-definitions">State definitions</h3>
+<p>They follow the syntax <code>state &lt;state-name&gt; ;</code>.
+Furthermore, the state definition can contain the following elements:
+* Putting <code>initial</code> before the stat declaration marks a state as the one that the component will start in once instantiated.
+In our case, the component starts, assuming that the window is closed.
+* We can define actions that are executed
+  1) once the state is entered (<em>entry</em> actions),
+  2) once it is left (<em>exit</em> actions), and
+  3) always when no other transition is taken by the state machine (<em>do</em> actions)</p>
+<p>These actions are defined within a state body, enclosed by {curly braces} following the state name.
+  The defined actions are formulated as statements, following <code>entry /</code>, <code>exit /</code>, and <code>do /</code>.
+  If multiple actions should be executed, then they are wrapped in {curly braces}, creating a statement block. Example:
+  <div class="highlight"><pre><span></span><code>entry / {
+  foo();
+  bar();
+}
+</code></pre></div>
+  In our case, we defined all logic that controls the <code>windowMoveAction</code> using entry / exit / and do actions: When entering and remaining in the <code>Opening</code> / <code>Closing</code> state, the window move action is always sent accordingly.
+  Moreover, when exiting these states, the information that the window movement should stop is sent once.</p>
+<h3 id="transition-definitions">Transition definitions</h3>
+<p>They follow the syntax <code>&lt;source-state&gt; -&gt; &lt;target-state&gt; [ &lt;condition&gt; ] (/ &lt;action&gt;;)</code>, even if we have not seen the <code>/ &lt;action&gt;</code> syntax in the example.
+Important elements of the syntax are:
+* Within square brackets, one can define the condition under which the transition is triggered.
+  In our case, we constrain the values of input ports.
+* One can also define actions that should be executed when the transition is triggered.
+  While in the example above we defined all the behavior using entry-, do-, and exit-actions, we could alternatively use transition actions the following way:
+  <div class="highlight"><pre><span></span><code>// excerpt within automaton { ... }:
+Closed -&gt; Opening [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED] / {
+  winMoveAction = WindowMoveAction.MOVE_DOWN;
+};
+// Self-loop for sending continuous signals
+Opening -&gt; Opening [buttonEvent != WindowButtonMoveEvent.UP_PRESSED] / {
+  winMoveAction = WindowMoveAction.MOVE_DOWN;
+}
+Opening -&gt; Open [position == WindowPosition.OPEN] / {
+  winMoveAction = WindowMoveAction.STOP_MOVEMENT;
+};
+</code></pre></div>
+  However, in our example, this has the disadvantage that every transition that ends in the <code>Opening</code> state must also set the <code>winMoveAction</code> to <code>MOVE_DOWN</code> and that every transition exiting the <code>Opening</code> state must set the <code>winMoveAction</code> to <code>STOP_MOVEMENT</code>.
+  As this is more verbose, we decided to use the entry-, do-, and exit-actions in our example.
+  Still it is important to know both concepts, as the transition actions can express behavior that entry-, do- and exit-actions can not.</p>
+<h3 id="interacting-with-the-environment-port-values">Interacting with the environment: port values</h3>
+<p>Moreover, we can generally see that
+* Values of incoming ports can be read by using their name in an expression, e.g.: <code>buttonEvent == WindowButtonMoveEvent.UP_PRESSED</code>.
+  In this sense they behave like read-only variables, always with the most recent port value.
+* Values of outgoing ports can be set by using their name in an assignment expression, e.g.: <code>winMoveAction = WindowMoveAction.MOVE_UP</code>.
+  In this sense they behave like write-only variables.
+  Reading form them is not allowed.</p>
+<p>There are also other methods to define the behavior of components.
+You can read more about this at [Behavior].</p>
+<h2 id="composing-different-systems-to-a-whole">Composing different systems to a whole</h2>
+<p>Up until now, we have only seen components isolated from their environment.
+But MontiArc is a <em>component and connector</em> architecture description language.
+These languages connect different components together in order to build a whole new system.
+In MontiArc, this composed system results in a new component.
+This means that when developing a complex architecture, individual sub systems can be developed independently as components.
+When it is time to integrate the different sub systems, one just connects the different components that represent the sub systems and thereby derives the overall system.
+As every component is agnostic of its environment, reusing them is also facilitated.</p>
+<h3 id="the-overall-system-we-want-to-model">The overall system we want to model</h3>
+<p>Let's see how such a composition can be defined in MontiArc!
+To this end, let's extend the window control example that we already introduced.
+To complete the window system, we also need the following components:
+* A <em>human machine interface</em> that captures information about the state of the window buttons.
+  A car may have multiple buttons to control the same window (directly at the window, at the drivers seat, and in a remote controller).
+  This human machine interfaces aggregates all the state of all potential control sources and sends out a single control source to the window controller.
+  <div class="highlight"><pre><span></span><code>package com.example.hmi;
+
+import com.example.window.WindowButtonMoveEvent;
+
+component HumanMachineInterface {
+  port out WindowButtonMoveEvent winButtonEvent;
+
+  // The component behavior implementation is not relevant to us.
+  // The same holds for the other components.
+}
+</code></pre></div>
+* A <em>finger protection sensor</em> that recognizes whether a finger is in the gap of a window
+  <div class="highlight"><pre><span></span><code>package com.example.fingerprotection;
+
+component FingerProtectionSensor {
+  port out FingerProtectionOrder order;
+}
+</code></pre></div>
+* A <em>window position sensor</em> that recognizes the current state of the window (open, closed, or in between)
+  <div class="highlight"><pre><span></span><code>package com.example.window;
+
+component WindowPositionSensor {
+  port out WindowPosition winPosition;
+}
+</code></pre></div>
+* A <em>window motor</em> that, when prompted, moves the window
+  <div class="highlight"><pre><span></span><code>package com.example.window;
+
+component WindowMotor {
+  port in WindowMoveAction moveOrder;
+}
+</code></pre></div>
+* A <em>status LED icon</em> in the cockpit of the car that gives the user feedback by indicating whether current window movement takes place and in which direction
+  <div class="highlight"><pre><span></span><code>package com.example.window;
+
+component WindowStatusLED {
+  port in WindowMoveAction moveOrder;
+}
+</code></pre></div></p>
+<h3 id="the-composition-of-the-sub-systems">The composition of the sub systems</h3>
+<p>Connecting these systems to the <code>WindowController</code>, creating the overall <code>WindowSystem</code> looks like the following:
+<div class="highlight"><pre><span></span><code>package com.example.window;
+
+import com.example.fingerprotection.FingerProtectionSensor;
+import com.example.hmi.HumanMachineInterface;
+
+component WindowSystem {
+  WindowController controller;
+
+  WindowPositionSensor winPositionSensor;
+  HumanMachineInterface hmi;
+  FingerProtectionSensor fingerSensor;
+
+  winPositionSensor.winPosition -&gt; controller.position;
+  hmi.winButtonEvent -&gt; controller.buttonEvent;
+  fingerSensor.order -&gt; controller.fingerProtectionOrder;
+
+  WindowMotor motor;
+  WindowStatusLED led;
+
+  controller.winMoveAction -&gt; motor.moveOrder;
+  controller.winMoveAction -&gt; led.moveOrder;
+}
+</code></pre></div></p>
+<p>The two syntactic elements that we see are <em>instantiations</em> of components that we defined earlier and <em>connectors</em> between ports of the component instances.</p>
+<h3 id="component-instantiations">Component instantiations</h3>
+<p>When we want to use components that we defined before, we are <em>instantiating</em> them in an object-oriented sense:
+When we defined components such as <code>WindowController</code> or <code>WindowMotor</code> before, we actually defined <em>component types</em>, blueprints that do not exhibit behavior, but only define it.
+When we are using components, e.g. as parts of a bigger component, we are instantiating component types.
+Such an instantiation follows the syntax <code>&lt;component-type-name&gt; &lt;instance-name&gt; ;</code>.
+We are using the instance names later to establish connections among their ports.
+In accordance with object-orientation, component instances are independent from each other, even if they are of the same type.
+E.g., a car may have multiple <code>WindowSystem</code>s operating independently from each other:
+<div class="highlight"><pre><span></span><code>component Car {
+  WindowSystem winFrontLeft;
+  WindowSystem winFrontRight;
+  WindowSystem winBackLeft, winBackRight;
+}
+</code></pre></div>
+This example also highlights that multiple instances of the same type can be declared within a single statement, comma-separated.</p>
+<p>Note that components types that are defined within the same package can be used without further ado.
+If one wants to use component types from other packages, one has to import them at the beginning of a model.
+This is exemplified by the <code>WindowSystem</code> importing <code>HumanMachineInterface</code> and <code>FingerProtectionSensor</code>.</p>
+<h3 id="connectors">Connectors</h3>
+<p>After having declared the component instances that one wants to use, one connects their ports with <em>connectors</em> through which information flows.
+The syntax of of a connector declaration is <code>&lt;source-instance-name&gt;.&lt;port-name&gt; -&gt; &lt;target-instance-name&gt;.&lt;port-name&gt; ;</code>.
+Information that the source component sends through a port travels through the attached connector and becomes the input of the declared port of the target component.
+For example, take the declaration <code>fingerSensor.order -&gt; controller.fingerProtectionOrder;</code> within <code>WindowSystem</code>:
+The finger detection sensor has some internal logic that at some point detects a finger in the window gap. It then sends the instruction through its outgoing <code>order</code>-port that the window shall be locked.
+This information (a port value of <code>FingerProtectionOrder.PROTECT</code>) becomes the new current value at the <code>fingerProtectionOrder</code>-port of the window controller.
+This information can then be used in the behavior implementation of the window controller.</p>
+<p>If one connects component instances, then there are some restrictions on what ports can be connected:
+* The source port of the connection must be an <em>outgoing</em> port;
+* The target port of the connection must be an <em>incoming</em> port;
+* The target port's type must be of the same type or a super-type of the source port's type.
+  This is important to guarantee that only data with the correct type is arriving at the target port.
+* An incoming port of any component instance can only be connected to exactly one source port.
+  On the other side, an outgoing port can be connected to multiple target ports.
+  We can see this in the composition of the <code>WindowSystem</code>:
+  <div class="highlight"><pre><span></span><code>controller.winMoveAction -&gt; motor.moveOrder;
+controller.winMoveAction -&gt; led.moveOrder;
+</code></pre></div>
+  The <code>winMoveAction</code>-Port of the window controller is connected to both the window motor, as well as a reporting window-movement status LED.</p>
+<h3 id="connectors-among-external-and-internal-ports">Connectors among external and internal ports</h3>
+<p>The <code>WindowSystem</code> that we have investigated is an isolated system:
+It is a composition without ports to the outside.
+However this is not a constraint: Decomposed components can also have ports to the outside.
+E.g., when deploying multiple window systems in a car, the LEDs that indicate window movement of the individual windows may be bundled into a central display in the cockpit that is not part of the window system itself anymore.
+Such a change to the window system could look like the following:
+<div class="highlight"><pre><span></span><code>package com.example.window;
+
+import com.example.fingerprotection.FingerProtectionSensor;
+import com.example.hmi.HumanMachineInterface;
+
+component WindowSystem {
+  // The information
+  port out WindowMoveAction currentMovement;
+
+  WindowController controller;
+
+  // No more LED component in the WindowSystem!
+
+  WindowPositionSensor winPositionSensor;
+  HumanMachineInterface hmi;
+  FingerProtectionSensor fingerSensor;
+
+  winPositionSensor.winPosition -&gt; controller.position;
+  hmi.winButtonEvent -&gt; controller.buttonEvent;
+  fingerSensor.order -&gt; controller.fingerProtectionOrder;
+
+  WindowMotor motor;
+  controller.winMoveAction -&gt; motor.moveOrder;
+
+  // There isn&#39;t any connection to the led anymore,
+  // but to the outgoing &#39;currentMovement&#39; port instead:
+  controller.winMoveAction -&gt; currentMovement; 
+}
+</code></pre></div></p>
+<p>The embedding of such a window system into a car could look like the following:
+<div class="highlight"><pre><span></span><code>component Car {
+  WindowSystem winFrontLeft, winFrontRight, winBackLeft, winBackRight;
+  CockpitDisplay display;
+
+  winFrontLeft.currentMovement -&gt; display.winFrontLeftMovement;
+  winFrontRight.currentMovement -&gt; display.winFrontRightMovement;
+  winBackLeft.currentMovement -&gt; display.winBackLeftMovement;
+  winBackRight.currentMovement -&gt; display.winBackRightMovement;
+
+  // More car stuff
+}
+</code></pre></div></p>
+<p>The changes we made to the <code>WindowSystem</code> are
+* We have a new outgoing port <code>currentMovement</code>
+* A connector from the controller port that dictates the window movement to the <code>currentMovement</code> port.
+  As the <code>currentMovement</code> port is owned by the component type (<code>WindowSystem</code>) but not any sub component, we do not reference it with a preceding instance name within the connector declaration: <code>controller.winMoveAction -&gt; currentMovement</code>.</p>
+<p>There are new directional constraints when "outer" ports of component types are part of a connector:
+* Incoming ports of component types may only play a role as source ports in connectors, connecting to
+  * incoming ports of component instances or
+  * outgoing ports of component types;
+* Outgoing ports of component types may only play a role as target ports in connectors, connecting to
+  * outgoing ports of component instances, or
+  * incoming ports of component types.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>This is the end of the beginner's guide.
+We have seen how to define components and their interfaces through which they interact with their environment.
+Then we have seen, how we can define behavior of components using automatons.
+At the end, we have seen how we can compose components to bigger systems which themselves turn out to be components!
+If you want to learn more, there look at other ways to define behavior, or advanced ways in the definition of component types, such as configuring them during initialization with type or value parameters. </p>
+<h2 id="references">References</h2>
+<p>The running example of the window control system is based on the following case study:\
+Lity, S., Lachmann, R., Lochau, M., &amp; Schaefer, I. (2013). Delta-oriented software product line test models-the body comfort system case study. <em>Technical report, TU Braunschweig</em>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      (c) https://github.com/MontiCore/monticore
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "toc.integrate", "toc.follow"], "search": "../assets/javascripts/workers/search.6ce7567c.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.83f73b43.min.js"></script>
+      
+    
+  </body>
+</html>
