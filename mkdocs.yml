@@ -42,7 +42,7 @@ nav:
       - Generics: 'component/Generics.md'
       - Inheritance: 'component/Inheritance.md'
       - Interfaces: 'component/Interfaces.md'
-      - Paramters: 'component/Parameter.md'
+      - Parameters: 'component/Parameter.md'
   - Behavior: 
       - Overview: 'Behavior.md'
       - Automata: 'behavior/Automata.md'
