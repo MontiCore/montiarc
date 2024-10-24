@@ -23,7 +23,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.Header.ftl")} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.ports.GetValueOfSpecificPort.ftl")}
 
-  ${tc.include("montiarc.generator.ma2jsim.component.atomic.Atomic.ftl")}
+  ${tc.include("montiarc.generator.ma2jsim.component.BehaviorSetup.ftl")}
 
   ${tc.include("montiarc.generator.ma2jsim.component.subcomponents.Subcomponents.ftl")}
 

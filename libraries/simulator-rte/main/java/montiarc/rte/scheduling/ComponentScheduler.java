@@ -61,7 +61,7 @@ public class ComponentScheduler {
       return;
     } else if (allPortsHaveBufferedTick()) {
       for (InPort<?> p : allInPorts) {
-        p.dropMessagesIgnoredBySync();  // Remove the processed tick
+        p.dropMessagesIgnoredBySync();
       }
       isTickScheduled = true;
     }

@@ -87,7 +87,7 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T>
   }
 
   @Override
-  public Message<T>pollLastBuffer(){
+  public Message<T> pollLastBuffer(){
     return buffer.pollLast();
   }
 

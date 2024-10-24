@@ -16,7 +16,7 @@ import java.util.List;
  *
  * @param <T> the type that can be sent via this port
  */
-public class AbstractOutPort<T>  implements OutPort<T> {
+public class AbstractOutPort<T> implements OutPort<T> {
 
   protected final String qualifiedName;
   protected final Component owner;
