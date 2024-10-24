@@ -118,6 +118,14 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T>
        msgsBeforeTick++;
     }
 
+    if (msgsBeforeTick > 1) {
+      Log.warn("Component " + this.getOwner().getName()
+        + "has received " + msgsBeforeTick + " data message in a single time slice "
+        + "on synced port " + this.getQualifiedName() + "."
+        + " Only the last message will be processed."
+      );
+    }
+
     // we drop all messages before the tick - 1 (the last one should remain)
     // If there was no tick, we drop all messages except for the last one
     for (int i = msgsBeforeTick; i > 1; i--) {
