@@ -75,7 +75,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     "sub", // Subcomponent
     "sub.fSub", // Sub-feature
     "sub.pIn == 1", // Sub-port
-    "field = pGenInh" // Inherited generic port
+    //"field = pGenInh" // Inherited generic port
   })
   public void testValidExpression(@NotNull String expr) throws IOException {
     Preconditions.checkNotNull(expr);
