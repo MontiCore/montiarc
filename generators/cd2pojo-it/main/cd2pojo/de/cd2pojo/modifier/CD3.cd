@@ -1,0 +1,27 @@
+/* (c) https://github.com/MontiCore/monticore */
+package de.cd2pojo.modifier;
+
+import de.cd2pojo.modifier.CD1.IPackage;
+import de.cd2pojo.modifier.CD1.CPackage;
+import de.cd2pojo.modifier.CD1.EPackage;
+
+/**
+ * Interface I, class C, and enum E are visible even though they have default
+ * (package) visibility as they are defined in the same package although in
+ * another classdiagram.
+ */
+classdiagram CD3 {
+
+  class C3 {
+    IPackage iPackage;
+    CPackage cPackage;
+    EPackage ePackage;
+  }
+
+  class C4 {
+    IPackage a1;
+    public IPackage a2;
+    protected IPackage a3;
+    private IPackage a4;
+  }
+}
