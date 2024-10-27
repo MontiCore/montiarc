@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package de.cd2pojo.modifier;
+
+/**
+ * Interfaces, classes, and enums may be package private and should be mapped
+ * to valid java code.
+ */
+classdiagram CD1 {
+
+  interface IPackage;
+
+  class CPackage;
+
+  enum EPackage;
+
+}
