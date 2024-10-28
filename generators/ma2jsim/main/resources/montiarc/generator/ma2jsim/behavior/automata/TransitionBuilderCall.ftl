@@ -51,23 +51,28 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
 </#macro>
 
 <#macro action>
+  <#assign source = transition.getSourceNameDefinition()>
+  <#assign target = transition.getTargetNameDefinition()>
   <@actionCast/> (${lambdaArgs}) -> {
   <#-- Calculate whether there the current state is in a state hierarchy that also contains the target state -->
-  <#assign commonSuperstate = automaton.findCommonSuperstate(transition.getSourceNameDefinition(), transition.getTargetNameDefinition())!>
+  <#assign commonSuperstate = automaton.findCommonSuperstate(source, target)!>
   <#assign haveCommonSuperstate = commonSuperstate != "">
 
   <#-- 1. Execute exit actions -->
-  <#assign statesToExit = haveCommonSuperstate?then(
-    automaton.getAncestorsInbetween(transition.getSourceNameDefinition(), commonSuperstate),
-    automaton.getAncestors(transition.getSourceNameDefinition())
-  )>
-  <#list statesToExit as state>
-    <#if state?is_first>
-        this.states.${prefixes.state()}${state.getName()}.exitSub(state);
-    <#else>
-        this.states.${prefixes.state()}${state.getName()}.exit();
-    </#if>
-  </#list>
+  <#if !haveCommonSuperstate>
+      <#-- The root in the source state's hierarchy -->
+      <#assign stateToExit = automaton.getAncestors(source)?last>
+  <#elseif commonSuperstate == source || commonSuperstate == target>
+      <#-- Transition sources and targets must always be left -->
+      <#assign stateToExit = commonSuperstate>
+  <#else>
+      <#-- Source and target have a common ancestor (that is not the source),
+        -- so all relatives between source and the common ancestor (excluding it) must be left.
+        -- -> select the relative which is a direct child of the common ancestor
+        -->
+      <#assign stateToExit = automaton.getAncestorsInbetween(source, commonSuperstate)?first<#-- 1. Child of common superstate-->>
+  </#if>
+  this.states.${prefixes.state()}${stateToExit.getName()}.exitSub(state);
 
   <#-- 2. Actual transition action -->
   <#if body.isPresent() && body.get().isPresentTransitionAction()>
@@ -80,9 +85,16 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   </#if>
 
   <#-- 3. Enter actions -->
+  <#if haveCommonSuperstate
+    && commonSuperstate == source
+    && commonSuperstate != target  <#-- On the target we always call .enterWithSub(), also if it is the superstate. -->
+  >
+    this.states.${prefixes.state()}${commonSuperstate.getName()}.enter();
+  </#if>
+
   <#assign statesToEnter = haveCommonSuperstate?then(
-    automaton.getAncestorsInbetween(transition.getTargetNameDefinition(), commonSuperstate),
-    automaton.getAncestors(transition.getTargetNameDefinition())?reverse
+    automaton.getAncestorsInbetween(target, commonSuperstate),
+    automaton.getAncestors(target)?reverse
   )>
   <#list statesToEnter as state>
     <#if state?is_last>

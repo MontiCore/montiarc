@@ -47,7 +47,7 @@ public void tick(${syncMsgClass} nullMsg) {
       }<#sep> else </#sep>
   </#list>
 
-  this.getState().doAction();
+  this.getState().doActionWithSuper();
 }
 
 <#-- Create transition objects for message-triggered transitions.

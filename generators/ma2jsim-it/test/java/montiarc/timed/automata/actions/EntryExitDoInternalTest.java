@@ -53,7 +53,7 @@ class EntryExitDoInternalTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(msg("noop"), tk(), tk(), tk()),
+        List.of(msg("noop"), msg("noop"), tk(), tk(), msg("noop"), msg("noop"), tk()),
         List.of(msg("Enter A"),                              // <- Initial state entered
                 msg("Do A"), tk(),                           // <- Action of first time frame
                 msg("Do A"), tk(),  // <- Action of second time frame

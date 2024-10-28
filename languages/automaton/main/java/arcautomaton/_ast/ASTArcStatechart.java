@@ -101,19 +101,26 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     }
   }
 
-  public ASTSCState findCommonSuperstate(ASTSCState current, ASTSCState destination) {
-    List<ASTSCState> pathCurrent = getAncestors(current);
-    List<ASTSCState> pathDestination = getAncestors(destination);
-    ASTSCState commonSuperstate = null;
-    Collections.reverse(pathDestination);
+  public ASTSCState findCommonSuperstate(ASTSCState state1, ASTSCState state2) {
+    List<ASTSCState> path1 = getAncestors(state1);
+    List<ASTSCState> path2 = getAncestors(state2);
 
-    for (ASTSCState value : pathCurrent) {
-      for (ASTSCState item : pathDestination) {
-        if (value.getName().equals(item.getName())) {
-          commonSuperstate = value;
-        }
+    // Reverse so that the root state is at the beginning
+    Collections.reverse(path1);
+    Collections.reverse(path2);
+
+    ASTSCState commonSuperstate = null;
+
+    int searchDepth = Math.min(path1.size(), path2.size());
+    for (int i = 0; i < searchDepth; i++) {
+      if (path1.get(i) == path2.get(i)) {
+        commonSuperstate = path1.get(i);
+      } else {
+        // When there are no more matches, we have found the common superstate
+        break;
       }
     }
+
     return commonSuperstate;
   }
 
@@ -139,7 +146,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    * Given that {@code ancestor} is an ancestor of {@code baseState}, this method returns the states that are in between
    * {@code ancestor} and {@code baseState} in the state hierarchy. <br>
    * {code ancestor} is not included in the returned list, but {@code baseState} is
-   * (except if {@code ancestor == baseState}, then ancestor is in the list).
+   * (if {@code ancestor == baseState}, then ancestor is in the list).
    * The <i>order</i> starts from the first child state of {@code ancestor} and moves downwards the state hierarchy,
    * until it reaches {@code baseState}.
    *
@@ -148,6 +155,12 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
    *                 {@code baseState}.
    */
   public List<ASTSCState> getAncestorsInbetween(ASTSCState baseState, ASTSCState ancestor) {
+    if (baseState == ancestor) {
+      List<ASTSCState> list = new ArrayList<>();
+      list.add(baseState);
+      return list;
+    }
+
     List<ASTSCState> path = getAncestors(baseState);
     Collections.reverse(path);
     if (ancestor != null && ancestor != baseState) {
