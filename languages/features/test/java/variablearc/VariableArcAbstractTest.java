@@ -2,11 +2,13 @@
 package variablearc;
 
 import arcbasis.ArcBasisAbstractTest;
+import arcbasis.check.ArcBasisTypeCheck;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import variablearc.check.VariableArcTypeCheck;
 
 import java.util.Arrays;
 
@@ -19,6 +21,7 @@ public class VariableArcAbstractTest extends ArcBasisAbstractTest {
     VariableArcMill.globalScope().clear();
     VariableArcMill.reset();
     VariableArcMill.init();
+    VariableArcTypeCheck.init();
     VariableArcAbstractTest.addBasicTypes2Scope();
   }
 

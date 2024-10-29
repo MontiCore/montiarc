@@ -6,14 +6,11 @@ import arcbasis.check.ISynthesizeComponent;
 import arccore.ArcCoreMill;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.FullCompKindExprDeSer;
-import de.monticore.types.check.ISynthesize;
 import genericarc.GenericArcMill;
 import genericarc.check.GenericArcCompTypeExprDeSer;
-import genericarc.check.GenericArcTypeCalculator;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcCompTypeExprDeSer;
 import montiarc.check.MontiArcSynthesizeComponent;
-import montiarc.check.MontiArcTypeCalculator;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Named;
@@ -27,30 +24,29 @@ public class GenericArcMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForSymTabCompleterProvider() {
     return Stream.of(
-      Arguments.of(genericArcMillSetup(), ArcBasisSynthesizeComponent.class, GenericArcTypeCalculator.class),
-      Arguments.of(arcCoreMillSetup(), ArcBasisSynthesizeComponent.class, GenericArcTypeCalculator.class),
-      Arguments.of(montiArcMillSetup(), MontiArcSynthesizeComponent.class, MontiArcTypeCalculator.class)
+      Arguments.of(genericArcMillSetup(), ArcBasisSynthesizeComponent.class),
+      Arguments.of(arcCoreMillSetup(), ArcBasisSynthesizeComponent.class),
+      Arguments.of(montiArcMillSetup(), MontiArcSynthesizeComponent.class)
     );
   }
 
   /**
-   * Ensures that the scopes genitor p2 is initialized with the expected type printer and component synthesizer
-   * with respect to the initialized mill. That is, the mill should provide a scopes genitor p2 that is initialized
-   * with a {@link ArcBasisSynthesizeComponent} when using the {@link GenericArcMill}, respectively provide a scopes 
-   * genitor p2 that is initialized with a {@link MontiArcSynthesizeComponent} when using the {@link MontiArcMill}.
+   * Ensures that the scopes genitor p2 is initialized with the expected type
+   * printer and component synthesizer with respect to the initialized mill.
+   * That is, the mill should provide a scopes genitor p2 that is initialized
+   * with a {@link ArcBasisSynthesizeComponent} when using the {@link GenericArcMill},
+   * respectively provide a scopes genitor p2 that is initialized with a
+   * {@link MontiArcSynthesizeComponent} when using the {@link MontiArcMill}.
    *
    * @param setup                   The setup to execute, e.g., initialize the respective mill.
    * @param expectedCompSynthesizer The expected class of the component synthesizer of the scopes genitor p2.
-   * @param expectedTypeSynthesizer The expected class of the type synthesizer of the scopes genitor p2.
    */
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForSymTabCompleterProvider")
   public void shouldProvideCompleterAsExpected(@NotNull Runnable setup,
-                                               @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer,
-                                               @NotNull Class<ISynthesize> expectedTypeSynthesizer) {
+                                               @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expectedCompSynthesizer);
-    Preconditions.checkNotNull(expectedTypeSynthesizer);
 
     // When
     setup.run();
@@ -58,9 +54,7 @@ public class GenericArcMillForMontiArcTest {
     // Then
     Assertions.assertAll(
       () -> Assertions.assertEquals(expectedCompSynthesizer,
-        GenericArcMill.scopesGenitorP2().getComponentSynthesizer().getClass()),
-      () -> Assertions.assertEquals(expectedTypeSynthesizer,
-        GenericArcMill.scopesGenitorP2().getTypeCalculator().getClass())
+        GenericArcMill.scopesGenitorP2().getComponentSynthesizer().getClass())
     );
   }
 

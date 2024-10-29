@@ -3,6 +3,7 @@ package montiarc.conformance;
 
 import arcbasis._ast.ASTComponentType;
 import com.microsoft.z3.Context;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import montiarc.conformance.util.AutomataLoader;
 import montiarc.conformance.util.AutomataUtils;
@@ -45,11 +46,10 @@ public class AutomatonAbstractTest {
 
     CD4CodeMill.reset();
     CD4CodeMill.init();
-    CD4CodeMill.globalScope().clear();
 
     MontiArcMill.reset();
     MontiArcMill.init();
-    MontiArcMill.globalScope().clear();
+    MontiArcTypeCheck.init();
   }
 
   protected void loadModels(File refAutFile, File refCdFile, File conAutFile, File conCDFile) {

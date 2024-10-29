@@ -1,37 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator;
 
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._prettyprint.CommonExpressionsPrettyPrinter;
-import de.monticore.expressions.commonexpressions.types3.CommonExpressionsTypeVisitor;
 import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
-import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeOfFunction;
-import de.monticore.types.check.SymTypeOfIntersection;
-import montiarc.MontiArcMill;
-import montiarc._util.MontiArcTypeDispatcher;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
 
 public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
 
-  IArcTypeCalculator tc;
-
-  public CommonExpressionsJavaPrinter(@NotNull IArcTypeCalculator tc,
-                                      @NotNull IndentPrinter printer,
-                                      boolean printComments) {
-    this(printer, printComments);
-    this.tc = Preconditions.checkNotNull(tc);
-  }
 
   CommonExpressionsJavaPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     super(Preconditions.checkNotNull(printer), printComments);
@@ -47,8 +30,8 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
     // Use the full information of the function call (the arguments)
     // to better calculate the type of the actual function inside.
     // This is why the TC is called on the CallExpression first.
-    this.tc.typeOf(node);
-    SymTypeExpression expr = this.tc.typeOf(node.getExpression());
+    TypeCheck3.typeOf(node);
+    SymTypeExpression expr = TypeCheck3.typeOf(node.getExpression());
     if (expr.isFunctionType()
       && expr instanceof SymTypeOfFunction
       && ((SymTypeOfFunction) expr).getSymbol() instanceof MethodSymbol

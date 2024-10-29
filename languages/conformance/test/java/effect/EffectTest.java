@@ -5,6 +5,7 @@ import static montiarc.conformance.util.AutomataLoader.loadModels;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.microsoft.z3.*;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.conformance.AutomataConfChecker;
 import montiarc.conformance.automaton2smt.smtAutomaton.ChaosComplete;
 import montiarc.conformance.automaton2smt.smtAutomaton.ICompleteSMTAut;
@@ -34,11 +35,10 @@ public class EffectTest {
   public void initMills() {
     CD4CodeMill.reset();
     CD4CodeMill.init();
-    CD4CodeMill.globalScope().clear();
 
     MontiArcMill.reset();
     MontiArcMill.init();
-    MontiArcMill.globalScope().clear();
+    MontiArcTypeCheck.init();
   }
 
   @Test

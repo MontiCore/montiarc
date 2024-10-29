@@ -3,11 +3,10 @@ package variablearc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisWithinScopeBasicSymbolsResolver;
-import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -15,17 +14,17 @@ import java.util.function.Predicate;
  */
 public class VariableArcVariantWithinScopeBasicSymbolsResolver extends ArcBasisWithinScopeBasicSymbolsResolver {
 
-  protected ComponentTypeSymbol currentVariant;
-
-  public VariableArcVariantWithinScopeBasicSymbolsResolver(@NotNull ComponentTypeSymbol currentVariant) {
+  public VariableArcVariantWithinScopeBasicSymbolsResolver() {
     super();
-    Preconditions.checkNotNull(currentVariant);
-    this.currentVariant = currentVariant;
   }
 
   @Override
   protected Predicate<VariableSymbol> getVariablePredicate() {
-    if (!(currentVariant instanceof VariableArcVariantComponentTypeSymbol)) return super.getVariablePredicate();
-    return ((VariableArcVariantComponentTypeSymbol) currentVariant)::containsSymbol;
+    Optional<ComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
+    if (variant.isEmpty() || !(variant.get() instanceof VariableArcVariantComponentTypeSymbol)) {
+      return super.getVariablePredicate();
+    } else {
+      return ((VariableArcVariantComponentTypeSymbol) variant.get())::containsSymbol;
+    }
   }
 }

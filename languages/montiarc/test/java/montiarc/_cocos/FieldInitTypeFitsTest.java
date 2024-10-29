@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;

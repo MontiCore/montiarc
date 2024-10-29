@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
@@ -12,6 +11,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeOfFunction;
+import de.monticore.types3.TypeCheck3;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -20,11 +20,8 @@ import java.util.Optional;
 
 public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter {
 
-  IArcTypeCalculator tc;
-
-  public CommonExpressionsJavaPrinter(@NotNull IArcTypeCalculator tc, @NotNull IndentPrinter printer, boolean printComments) {
+  public CommonExpressionsJavaPrinter(@NotNull IndentPrinter printer, boolean printComments) {
     super(printer, printComments);
-    this.tc = Preconditions.checkNotNull(tc);
   }
 
   @Override
@@ -37,8 +34,8 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
     // Use the full information of the function call (the arguments)
     // to better calculate the type of the actual function inside.
     // This is why the TC is called on the CallExpression first.
-    this.tc.typeOf(node);
-    SymTypeExpression expr = this.tc.typeOf(node.getExpression());
+    TypeCheck3.typeOf(node);
+    SymTypeExpression expr = TypeCheck3.typeOf(node.getExpression());
     if (expr.isFunctionType()
       && expr instanceof SymTypeOfFunction
       && ((SymTypeOfFunction) expr).getSymbol() instanceof MethodSymbol

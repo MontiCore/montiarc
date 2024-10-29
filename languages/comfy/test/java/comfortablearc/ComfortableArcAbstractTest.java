@@ -2,6 +2,7 @@
 package comfortablearc;
 
 import arcbasis.ArcBasisAbstractTest;
+import arcbasis.check.ArcBasisTypeCheck;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -14,6 +15,7 @@ public class ComfortableArcAbstractTest extends ArcBasisAbstractTest {
     ComfortableArcMill.globalScope().clear();
     ComfortableArcMill.reset();
     ComfortableArcMill.init();
+    ArcBasisTypeCheck.init();
     ComfortableArcAbstractTest.addBasicTypes2Scope();
   }
 }

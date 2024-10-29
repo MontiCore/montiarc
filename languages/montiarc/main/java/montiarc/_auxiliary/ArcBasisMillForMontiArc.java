@@ -6,13 +6,12 @@ import arcbasis._symboltable.ComponentTypeSymbolBuilder;
 import de.monticore.types.check.FullCompKindExprDeSer;
 import montiarc._symboltable.MontiArcComponentTypeSymbolBuilder;
 import montiarc.check.MontiArcSynthesizeComponent;
-import montiarc.check.MontiArcTypeCalculator;
 
 public class ArcBasisMillForMontiArc extends ArcBasisMillForMontiArcTOP {
 
   @Override
   protected ArcBasisScopesGenitorP2 _scopesGenitorP2() {
-    return new ArcBasisScopesGenitorP2(new MontiArcSynthesizeComponent(), new MontiArcTypeCalculator());
+    return new ArcBasisScopesGenitorP2(new MontiArcSynthesizeComponent());
   }
 
   @Override

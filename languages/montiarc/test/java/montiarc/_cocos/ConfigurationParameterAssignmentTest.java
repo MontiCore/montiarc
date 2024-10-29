@@ -12,7 +12,6 @@ import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
@@ -137,7 +136,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentInstanceCoCo) new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
+    checker.addCoCo((ArcBasisASTComponentInstanceCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);
@@ -272,7 +271,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
+    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);
@@ -291,7 +290,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentInstanceCoCo) new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
+    checker.addCoCo((ArcBasisASTComponentInstanceCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);
@@ -403,7 +402,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment(new MontiArcTypeCalculator()));
+    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);

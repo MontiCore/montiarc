@@ -11,7 +11,7 @@ import genericarc._symboltable.GenericArcScopesGenitorP2;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.check.MontiArcTypeCalculator;
+import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
@@ -57,8 +57,7 @@ public class MontiArcScopesGenitorP2Delegator {
   }
 
   protected void initVarDeclarationStatements() {
-    MCVarDeclarationStatementsSTCompleteTypes scopesGenP2 =
-      new MCVarDeclarationStatementsSTCompleteTypes(new MontiArcTypeCalculator());
+    MCVarDeclarationStatementsSTCompleteTypes scopesGenP2 = new MCVarDeclarationStatementsSTCompleteTypes();
     this.getTraverser().add4MCVarDeclarationStatements(scopesGenP2);
   }
 

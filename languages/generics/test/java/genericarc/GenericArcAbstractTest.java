@@ -4,6 +4,7 @@ package genericarc;
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.SymbolService;
+import arcbasis.check.ArcBasisTypeCheck;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -19,6 +20,7 @@ public class GenericArcAbstractTest extends ArcBasisAbstractTest {
     GenericArcMill.globalScope().clear();
     GenericArcMill.reset();
     GenericArcMill.init();
+    ArcBasisTypeCheck.init();
     GenericArcAbstractTest.addBasicTypes2Scope();
   }
 

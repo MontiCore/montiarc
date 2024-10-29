@@ -136,7 +136,6 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
 
     //Then
     Assertions.assertNotNull(scopesGenP2.getComponentSynthesizer());
-    Assertions.assertNotNull(scopesGenP2.getTypeCalculator());
   }
 
   /**

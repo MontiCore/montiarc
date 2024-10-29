@@ -13,6 +13,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import montiarc.report.VersionFileDeserializer;
@@ -61,6 +62,12 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcTool tool = new MontiArcTool();
     tool.init();
     tool.run(args);
+  }
+
+  @Override
+  public void init() {
+    super.init();
+    MontiArcTypeCheck.init();
   }
 
   @Override

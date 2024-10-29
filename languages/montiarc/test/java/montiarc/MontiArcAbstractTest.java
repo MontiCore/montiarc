@@ -13,6 +13,7 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.trafo.MontiArcTrafos;
 import montiarc.util.AbstractTest;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -29,6 +30,7 @@ public abstract class MontiArcAbstractTest extends AbstractTest {
     MontiArcMill.globalScope().clear();
     MontiArcMill.reset();
     MontiArcMill.init();
+    MontiArcTypeCheck.init();
     addBasicTypes2Scope();
   }
 

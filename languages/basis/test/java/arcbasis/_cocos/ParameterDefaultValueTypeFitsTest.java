@@ -7,7 +7,6 @@ import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.ArcBasisTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
@@ -83,7 +82,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator());
+    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits();
 
     //When
     coco.check(param);
@@ -106,7 +105,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator());
+    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits();
 
     //When
     coco.check(param);
@@ -129,7 +128,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator());
+    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits();
 
     //When
     coco.check(param);
@@ -152,7 +151,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator());
+    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits();
 
     //When
     coco.check(param);
@@ -175,7 +174,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
 
-    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits(new ArcBasisTypeCalculator());
+    ParameterDefaultValueTypeFits coco = new ParameterDefaultValueTypeFits();
 
     //When
     coco.check(param);

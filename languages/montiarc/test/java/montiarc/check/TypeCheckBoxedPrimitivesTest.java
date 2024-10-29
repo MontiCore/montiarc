@@ -9,6 +9,7 @@ import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
@@ -36,8 +37,6 @@ import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
 /**
  * This class provides tests for validating the correctness of encapsulating
  * primitives in boxing types.
- * <p>
- * The class under test is {@link MontiArcTypeCalculator}.
  */
 public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
 
@@ -428,7 +427,6 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(expr);
     Preconditions.checkArgument(!expr.isBlank());
 
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -438,7 +436,7 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    tc.deriveType(ast).getResult();
+    TypeCheck3.typeOf(ast);
 
     // Then
     Assertions.assertThat(Log.getFindings())
@@ -596,7 +594,6 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     Preconditions.checkArgument(!expr.isBlank());
     Preconditions.checkArgument(!error.isBlank());
 
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -606,7 +603,7 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    tc.deriveType(ast).getResult();
+    TypeCheck3.typeOf(ast);
 
     // Then
     Assertions.assertThat(Log.getFindings())

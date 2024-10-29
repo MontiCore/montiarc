@@ -64,7 +64,6 @@ import modes._cocos.StatechartContainsNoMode;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.check.MontiArcTypeCalculator;
 import variablearc._cocos.ConstraintIsBoolean;
 import variablearc._cocos.ConstraintNoAssignmentExpr;
 import variablearc._cocos.ConstraintSatisfied4Comp;
@@ -96,7 +95,6 @@ public class MontiArcCoCos {
 
   public static MontiArcCoCoChecker afterSymTab() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
@@ -112,13 +110,13 @@ public class MontiArcCoCos {
     checker.addVariantCoCo(AtomicNoConnector.class);
     checker.addVariantCoCo(AtomicMaxOneBehavior.class);
     checker.addVariantCoCo(FeedbackStrongCausality.class);
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment(tc));
+    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
     checker.addVariantCoCo(PortHeritageTypeFits.class);
     checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldInitTypeFits());
-    checker.addCoCo(new ParameterDefaultValueTypeFits(tc));
+    checker.addCoCo(new ParameterDefaultValueTypeFits());
     checker.addCoCo(new ParameterDefaultValueOmitsPortRef(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ComponentArgumentsOmitPortRef(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ComponentNameCapitalization());
@@ -143,7 +141,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintNoAssignmentExpr());
     checker.addCoCo(new ConstraintsOmitFieldReferences());
     checker.addCoCo(new ConstraintsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ConstraintIsBoolean(tc));
+    checker.addCoCo(new ConstraintIsBoolean());
     checker.addCoCo(new ConstraintSmtConvertible());
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
@@ -152,7 +150,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new VarIfNoAssignmentExpr());
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new VarIfIsBoolean(tc));
+    checker.addCoCo(new VarIfIsBoolean());
     checker.addCoCo(new VarIfSmtConvertible());
     checker.addCoCo(new FeatureNamedTick());
 

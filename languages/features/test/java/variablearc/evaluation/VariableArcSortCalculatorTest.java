@@ -3,7 +3,6 @@ package variablearc.evaluation;
 
 import com.microsoft.z3.BoolSort;
 import com.microsoft.z3.Context;
-import com.microsoft.z3.FPSort;
 import com.microsoft.z3.IntSort;
 import com.microsoft.z3.RealSort;
 import com.microsoft.z3.Sort;
@@ -13,7 +12,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import variablearc.VariableArcAbstractTest;
-import variablearc.check.VariableArcTypeCalculator;
 
 import java.util.Optional;
 
@@ -36,7 +34,7 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
   public void shouldDeriveBool() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(new VariableArcTypeCalculator());
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
 
     // When
     Optional<Sort> sort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN));
@@ -50,7 +48,7 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
   public void shouldDeriveInt() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(new VariableArcTypeCalculator());
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
 
     // When
     Optional<Sort> sortByte = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BYTE));
@@ -78,7 +76,7 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
   public void shouldDeriveFloat() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(new VariableArcTypeCalculator());
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
 
     // When
     Optional<Sort> sort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.FLOAT));
@@ -92,7 +90,7 @@ public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
   public void shouldDeriveDouble() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(new VariableArcTypeCalculator());
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
 
     // When
     Optional<Sort> sort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.DOUBLE));

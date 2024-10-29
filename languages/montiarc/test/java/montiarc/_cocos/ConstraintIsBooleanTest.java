@@ -4,7 +4,6 @@ package montiarc._cocos;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
-import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -45,7 +44,7 @@ public class ConstraintIsBooleanTest extends MontiArcAbstractTest {
   public void testConstraintType(ASTArcConstraintDeclaration constraint,
                                  Error[] errorList) {
     // Given
-    ConstraintIsBoolean coco = new ConstraintIsBoolean(new MontiArcTypeCalculator());
+    ConstraintIsBoolean coco = new ConstraintIsBoolean();
 
     // When
     coco.check(constraint);

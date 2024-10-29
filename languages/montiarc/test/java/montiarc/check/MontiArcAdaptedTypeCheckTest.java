@@ -6,6 +6,7 @@ import arcbasis._symboltable.TransitiveScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
@@ -24,8 +25,6 @@ import java.util.stream.Stream;
 /**
  * This class provides tests for validating the correctness of type checking of
  * adapted MontiArc symbols.
- * <p>
- * The class under test is {@link MontiArcTypeCalculator}.
  */
 public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
 
@@ -81,7 +80,6 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(expr);
     Preconditions.checkArgument(!expr.isBlank());
 
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -91,7 +89,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    tc.deriveType(ast).getResult();
+    TypeCheck3.typeOf(ast);
 
     // Then
     Assertions.assertThat(Log.getFindings())
@@ -108,7 +106,6 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     Preconditions.checkArgument(!expr.isBlank());
     Preconditions.checkArgument(errors.length > 0);
 
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -118,7 +115,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    tc.deriveType(ast).getResult();
+    TypeCheck3.typeOf(ast);
 
     // Then
     Assertions.assertThat(Log.getFindings())

@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Sort;
@@ -10,6 +9,7 @@ import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTSort;
@@ -18,18 +18,14 @@ import java.util.Optional;
 
 public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
 
-  private final IArcTypeCalculator tc;
-
-  public VariableArcDeriveSMTSort(@NotNull IArcTypeCalculator tc) {
-    this.tc = tc;
-  }
+  public VariableArcDeriveSMTSort() { }
 
   @Override
   public Optional<Sort> toSort(@NotNull Context context, @NotNull ASTExpression nameExpression) {
     Preconditions.checkNotNull(context);
     Preconditions.checkNotNull(nameExpression);
     Preconditions.checkNotNull(nameExpression.getEnclosingScope());
-    SymTypeExpression typeOfExpr = this.tc.typeOf(nameExpression);
+    SymTypeExpression typeOfExpr = TypeCheck3.typeOf(nameExpression);
 
     return toSort(context, typeOfExpr);
   }

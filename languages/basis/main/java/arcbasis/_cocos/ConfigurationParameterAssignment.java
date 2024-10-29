@@ -7,7 +7,6 @@ import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -15,6 +14,7 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -46,12 +46,7 @@ import java.util.stream.IntStream;
  */
 public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTComponentTypeCoCo {
 
-  protected final IArcTypeCalculator tc;
-
-  public ConfigurationParameterAssignment(@NotNull IArcTypeCalculator tc) {
-    Preconditions.checkNotNull(tc);
-    this.tc = tc;
-  }
+  public ConfigurationParameterAssignment() { }
 
   @Override
   public void check(@NotNull ASTComponentType node) {
@@ -191,7 +186,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     List<SymTypeExpression> argTypes = arguments.stream()
       .map(ASTArcArgument::getExpression)
-      .map(this.tc::typeOf)
+      .map(TypeCheck3::typeOf)
       .collect(Collectors.toList());
 
     List<SymTypeExpression> paramTypes = componentExpression.getParameterTypes();

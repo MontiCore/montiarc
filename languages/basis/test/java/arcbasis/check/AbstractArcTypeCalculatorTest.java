@@ -15,6 +15,7 @@ import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolSurrogate;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -25,15 +26,8 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-/**
- * Abstract class for test subclasses of {@link IArcTypeCalculator}.
- * <p>
- * Override {@link this#getTypeCalculator()} with method that returns the type
- * calculator under test.
- */
 public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest {
 
-  protected IArcTypeCalculator typeCalculator;
   protected IArcBasisScope scope;
   protected TransitiveScopeSetter scopeSetter;
 
@@ -44,8 +38,6 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
   protected static Stream<Arguments> expressionProviderForObjectFields() {
     return Stream.of(Arguments.of("s", "Student"));
   }
-
-  protected abstract IArcTypeCalculator getTypeCalculator();
 
   protected abstract IArcBasisScope getScope();
 
@@ -103,7 +95,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
     this.getScopeSetter().setScope(expression, this.getScope());
 
     //When
-    SymTypeExpression result = this.getTypeCalculator().typeOf(expression);
+    SymTypeExpression result = TypeCheck3.typeOf(expression);
 
     //Then
     Assertions.assertFalse(result.isObscureType());
@@ -129,7 +121,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
   }
 
   /**
-   * Class under test {@link ArcBasisTypeCalculator}.
+   * Class under test {@link ArcBasisTypeCheck}.
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForPrimitiveFields")
@@ -140,7 +132,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
   }
 
   /**
-   * Class under test {@link ArcBasisTypeCalculator}.
+   * Class under test {@link ArcBasisTypeCheck}.
    */
   @ParameterizedTest
   @MethodSource("expressionProviderForObjectFields")
@@ -151,7 +143,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
   }
 
   /**
-   * Class under test {@link ArcBasisTypeCalculator}.
+   * Class under test {@link ArcBasisTypeCheck}.
    */
   @Test
   void ShouldNotCalculateResult() {
@@ -160,7 +152,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest
     expr.setEnclosingScope(this.getScope());
 
     //When
-    SymTypeExpression result = this.getTypeCalculator().typeOf(expr);
+    SymTypeExpression result = TypeCheck3.typeOf(expr);
 
     //Then
     Assertions.assertTrue(result.isObscureType());

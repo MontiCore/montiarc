@@ -7,11 +7,11 @@ import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 
 /**
- * Holds test for methods of {@link ArcBasisTypeCalculator}.
+ * Holds test for methods of {@link ArcBasisTypeCheck}.
  *
  * @see AbstractArcTypeCalculatorTest for basic tests methods.
  */
-public class ArcBasisTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
+public class ArcBasisTypeCheckTest extends AbstractArcTypeCalculatorTest {
 
   @Override
   @BeforeEach
@@ -20,16 +20,9 @@ public class ArcBasisTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     ArcBasisMill.globalScope().clear();
     ArcBasisMill.reset();
     ArcBasisMill.init();
+    ArcBasisTypeCheck.init();
     addBasicTypes2Scope();
     this.setUpScope();
-  }
-
-  @Override
-  protected IArcTypeCalculator getTypeCalculator() {
-    if (this.typeCalculator == null) {
-      this.typeCalculator = new ArcBasisTypeCalculator();
-    }
-    return this.typeCalculator;
   }
 
   @Override

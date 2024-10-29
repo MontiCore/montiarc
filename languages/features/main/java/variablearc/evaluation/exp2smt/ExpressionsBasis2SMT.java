@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Sort;
@@ -11,6 +10,7 @@ import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraver
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 
@@ -20,14 +20,11 @@ import java.util.Optional;
 public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
 
   protected final IDeriveSMTExpr deriveSMTExpr;
-  protected final IArcTypeCalculator tc;
   protected ExpressionsBasisTraverser traverser;
 
-  public ExpressionsBasis2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr, @NotNull IArcTypeCalculator tc) {
+  public ExpressionsBasis2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
     Preconditions.checkNotNull(deriveSMTExpr);
-    Preconditions.checkNotNull(tc);
     this.deriveSMTExpr = deriveSMTExpr;
-    this.tc = tc;
   }
 
   @Override
@@ -65,7 +62,7 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
     this.getResult().clear();
 
     if (sort.isPresent()) {
-      SymTypeExpression type = this.tc.typeOf(node);
+      SymTypeExpression type = TypeCheck3.typeOf(node);
       // Handle enum constants
       if (type.isObjectType() && type.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOSymbolsOOType(
         type.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOSymbolsOOType(type.asObjectType().getTypeInfo()).isIsEnum()) {

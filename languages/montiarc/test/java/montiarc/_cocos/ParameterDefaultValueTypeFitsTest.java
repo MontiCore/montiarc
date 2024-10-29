@@ -8,7 +8,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.assertj.core.api.Assertions;
@@ -54,7 +53,7 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterDefaultValueTypeFits(new MontiArcTypeCalculator()));
+    checker.addCoCo(new ParameterDefaultValueTypeFits());
 
     // When
     checker.checkAll(ast);
@@ -73,7 +72,7 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ParameterDefaultValueTypeFits(new MontiArcTypeCalculator()));
+    checker.addCoCo(new ParameterDefaultValueTypeFits());
 
     // When
     checker.checkAll(ast);

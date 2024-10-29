@@ -9,6 +9,7 @@ import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -33,6 +34,7 @@ public class IdentifiersAreNoJavaKeywordsTest {
     LogStub.init();
     MontiArcMill.reset();
     MontiArcMill.init();
+    MontiArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
   }
   

@@ -6,6 +6,7 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
+import arcbasis.check.ArcBasisTypeCheck;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -25,6 +26,7 @@ public abstract class ArcBasisAbstractTest extends AbstractTest {
     ArcBasisMill.globalScope().clear();
     ArcBasisMill.reset();
     ArcBasisMill.init();
+    ArcBasisTypeCheck.init();
     addBasicTypes2Scope();
   }
 

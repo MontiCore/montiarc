@@ -14,9 +14,7 @@ import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.ArcBasisTypeCalculator;
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -25,6 +23,7 @@ import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -34,17 +33,14 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
 
   protected CompKindExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
-  protected IArcTypeCalculator typeCalculator;
   protected ISynthesizeComponent componentSynthesizer;
 
   public ArcBasisScopesGenitorP2() {
-    this(new ArcBasisSynthesizeComponent(), new ArcBasisTypeCalculator());
+    this(new ArcBasisSynthesizeComponent());
   }
 
-  public ArcBasisScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer,
-                                 @NotNull IArcTypeCalculator typeCalculator) {
+  public ArcBasisScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer) {
     this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
-    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
 
   protected Optional<CompKindExpression> getCurrentCompInstanceType() {
@@ -64,10 +60,6 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
   public void setTraverser(@NotNull ArcBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
     this.traverser = traverser;
-  }
-
-  public IArcTypeCalculator getTypeCalculator() {
-    return this.typeCalculator;
   }
 
   public ISynthesizeComponent getComponentSynthesizer() {
@@ -135,14 +127,14 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     Preconditions.checkNotNull(node.getMCType());
     Preconditions.checkState(node.isPresentSymbol());
 
-    node.getSymbol().setType(this.getTypeCalculator().typeOf(node.getMCType()));
+    node.getSymbol().setType(TypeCheck3.symTypeFromAST(node.getMCType()));
   }
 
   @Override
   public void visit(@NotNull ASTPortDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    SymTypeExpression type = this.getTypeCalculator().typeOf(node.getMCType());
+    SymTypeExpression type = TypeCheck3.symTypeFromAST(node.getMCType());
     Timing timing = node.getTiming().orElse(null);
 
     for (ASTArcPort port : node.getArcPortList()) {
@@ -156,7 +148,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
   public void visit(@NotNull ASTArcFieldDeclaration node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
-    SymTypeExpression type = this.getTypeCalculator().typeOf(node.getMCType());
+    SymTypeExpression type = TypeCheck3.symTypeFromAST(node.getMCType());
 
     for (ASTArcField field : node.getArcFieldList()) {
       field.getSymbol().setType(type);

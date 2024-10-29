@@ -2,14 +2,13 @@
 package montiarc.generator.codegen;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.ocl.codegen.util.VariableNaming;
 import de.monticore.ocl.codegen.visitors.SetExpressionsPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
-import montiarc.check.MontiArcTypeCalculator;
+import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
@@ -29,17 +28,17 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
   }
 
   public MA2JSimJavaPrinter(@Nullable ComponentTypeSymbol currentVariant) {
-    this(new MontiArcTypeCalculator(), new IndentPrinter(), true, currentVariant);
+    this(new IndentPrinter(), true, currentVariant);
   }
 
   public MA2JSimJavaPrinter(@NotNull IndentPrinter printer) {
-    this(new MontiArcTypeCalculator(), Preconditions.checkNotNull(printer), true, null);
+    this(Preconditions.checkNotNull(printer), true, null);
   }
 
-  public MA2JSimJavaPrinter(@NotNull IArcTypeCalculator tc, @NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
+  public MA2JSimJavaPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
     super(Preconditions.checkNotNull(printer), printComments);
 
-    CommonExpressionsJavaPrinter commonExpressionsJavaPrinter = new CommonExpressionsJavaPrinter(tc, printer, printComments);
+    CommonExpressionsJavaPrinter commonExpressionsJavaPrinter = new CommonExpressionsJavaPrinter(printer, printComments);
     this.traverser.setCommonExpressionsHandler(commonExpressionsJavaPrinter);
     this.traverser.getCommonExpressionsVisitorList().clear();
     this.traverser.add4CommonExpressions(commonExpressionsJavaPrinter);
@@ -70,7 +69,7 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.getAssignmentExpressionsVisitorList().clear();
     this.traverser.add4AssignmentExpressions(assignmentExpressionsPrinter);
 
-    SetExpressionsPrinter setExpressionsPrinter = new SetExpressionsPrinter(printer, new VariableNaming(), new MontiArcTypeCalculator(), new MontiArcTypeCalculator());
+    SetExpressionsPrinter setExpressionsPrinter = new SetExpressionsPrinter(printer, new VariableNaming());
     this.traverser.setSetExpressionsHandler(setExpressionsPrinter);
     this.traverser.getSetExpressionsVisitorList().clear();
     this.traverser.add4SetExpressions(setExpressionsPrinter);

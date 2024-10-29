@@ -28,6 +28,7 @@ import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -51,6 +52,7 @@ public class VariantCoCosTest extends MontiArcAbstractTest {
     Log.enableFailQuick(false);
     MontiArcMill.reset();
     MontiArcMill.init();
+    MontiArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());

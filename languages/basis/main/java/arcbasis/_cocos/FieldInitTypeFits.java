@@ -2,7 +2,6 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcField;
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;

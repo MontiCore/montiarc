@@ -5,9 +5,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
-import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
 import montiarc.util.SCError;
 import org.assertj.core.api.Assertions;
@@ -86,7 +84,7 @@ public class TransitionPreconditionIsBooleanTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new TransitionPreconditionsAreBoolean());
 
     // When
     checker.checkAll(ast);
@@ -105,7 +103,7 @@ public class TransitionPreconditionIsBooleanTest extends MontiArcAbstractTest {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new TransitionPreconditionsAreBoolean(new MontiArcTypeCalculator()));
+    checker.addCoCo(new TransitionPreconditionsAreBoolean());
 
     // When
     checker.checkAll(ast);

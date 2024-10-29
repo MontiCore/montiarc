@@ -7,8 +7,7 @@ import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.ArcBasisTypeCalculator;
-import arcbasis.check.ArcBasisTypeCalculatorTest;
+import arcbasis.check.ArcBasisTypeCheckTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
@@ -24,7 +23,7 @@ import org.mockito.Mockito;
 /**
  * Tests {@link FieldInitTypeFits}
  */
-public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCalculatorTest {
+public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
 
   @Override
   public void setUpFields() {

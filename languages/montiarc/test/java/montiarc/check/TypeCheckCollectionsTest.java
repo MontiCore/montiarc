@@ -11,6 +11,7 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
@@ -803,7 +804,6 @@ public class TypeCheckCollectionsTest extends MontiArcAbstractTest {
     Preconditions.checkNotNull(expr);
     Preconditions.checkArgument(!expr.isBlank());
 
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -813,7 +813,7 @@ public class TypeCheckCollectionsTest extends MontiArcAbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    tc.deriveType(ast).getResult();
+    TypeCheck3.typeOf(ast);
 
     // Then
     Assertions.assertThat(Log.getFindings())
@@ -1458,7 +1458,6 @@ public class TypeCheckCollectionsTest extends MontiArcAbstractTest {
     Preconditions.checkArgument(!expr.isBlank());
     Preconditions.checkArgument(!error.isBlank());
 
-    MontiArcTypeCalculator tc = new MontiArcTypeCalculator();
     TransitiveScopeSetter scopeSetter = new TransitiveScopeSetter();
 
     // Given
@@ -1468,7 +1467,7 @@ public class TypeCheckCollectionsTest extends MontiArcAbstractTest {
     scopeSetter.setScope(ast, this.scope);
 
     // When
-    tc.deriveType(ast).getResult();
+    TypeCheck3.typeOf(ast);
 
     // Then
     Assertions.assertThat(Log.getFindings())

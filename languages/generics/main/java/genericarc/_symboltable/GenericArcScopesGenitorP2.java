@@ -5,7 +5,6 @@ import arcbasis._ast.ASTArcParent;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -13,6 +12,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import genericarc.GenericArcMill;
 import genericarc._ast.ASTArcTypeParameter;
@@ -20,7 +20,6 @@ import genericarc._ast.ASTGenericComponentHead;
 import genericarc._visitor.GenericArcHandler;
 import genericarc._visitor.GenericArcTraverser;
 import genericarc._visitor.GenericArcVisitor2;
-import genericarc.check.GenericArcTypeCalculator;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -30,16 +29,13 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
 
   protected GenericArcTraverser traverser;
   protected ISynthesizeComponent componentSynthesizer;
-  protected IArcTypeCalculator typeCalculator;
 
   public GenericArcScopesGenitorP2() {
-    this(new ArcBasisSynthesizeComponent(), new GenericArcTypeCalculator());
+    this(new ArcBasisSynthesizeComponent());
   }
 
-  public GenericArcScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer,
-                                   @NotNull IArcTypeCalculator typeCalculator) {
+  public GenericArcScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer) {
     this.componentSynthesizer = Preconditions.checkNotNull(componentSynthesizer);
-    this.typeCalculator = Preconditions.checkNotNull(typeCalculator);
   }
 
   @Override
@@ -60,10 +56,6 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
   public void setComponentSynthesizer(@NotNull ISynthesizeComponent componentSynthesizer) {
     Preconditions.checkNotNull(componentSynthesizer);
     this.componentSynthesizer = componentSynthesizer;
-  }
-
-  public IArcTypeCalculator getTypeCalculator() {
-    return this.typeCalculator;
   }
 
   @Override
@@ -100,7 +92,7 @@ public class GenericArcScopesGenitorP2 implements GenericArcVisitor2, GenericArc
 
     for (ASTMCType upperBound : typeParam.getUpperBoundList()) {
       try {
-        typeParamSym.addSuperTypes(this.getTypeCalculator().typeOf(upperBound));
+        typeParamSym.addSuperTypes(TypeCheck3.symTypeFromAST(upperBound));
       }  catch (ResolvedSeveralEntriesForSymbolException e) {
         Log.error(ArcError.AMBIGUOUS_REFERENCE.format(GenericArcMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
       }

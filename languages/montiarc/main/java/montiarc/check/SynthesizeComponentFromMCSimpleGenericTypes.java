@@ -3,7 +3,6 @@ package montiarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.IArcTypeCalculator;
 import arcbasis.check.SynthCompTypeResult;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
@@ -16,6 +15,7 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesHandler;
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
+import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import genericarc._symboltable.IGenericArcScope;
 import genericarc.check.TypeExprOfGenericComponent;
@@ -41,22 +41,10 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
    */
   protected SynthCompTypeResult resultWrapper;
 
-  /**
-   * Used to create {@link SymTypeExpression}s for the ast-representation of the generic component type's type.
-   */
-  protected IArcTypeCalculator typeCalculator;
-
   public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper) {
-    this(resultWrapper, new MontiArcTypeCalculator());
-  }
-
-  public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper,
-                                                     @NotNull IArcTypeCalculator typeCalculator) {
     Preconditions.checkNotNull(resultWrapper);
-    Preconditions.checkNotNull(typeCalculator);
 
     this.resultWrapper = resultWrapper;
-    this.typeCalculator = typeCalculator;
   }
 
   @Override
@@ -94,7 +82,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
         .map(typeArg -> {
           SymTypeExpression typeResult = null;
           try {
-            typeResult = typeCalculator.typeOf(typeArg);
+            typeResult = TypeCheck3.symTypeFromAST(typeArg);
           }  catch (ResolvedSeveralEntriesForSymbolException ignored) { }
           return typeResult;
         })

@@ -13,8 +13,8 @@ import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
 import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
-import arcbasis.check.ArcBasisTypeCalculator;
-import arcbasis.check.ArcBasisTypeCalculatorTest;
+import arcbasis.check.ArcBasisTypeCheck;
+import arcbasis.check.ArcBasisTypeCheckTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
 /**
  * Tests {@link  ConfigurationParameterAssignment}
  */
-public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCalculatorTest {
+public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTest {
 
   protected ArcBasisScopesGenitorDelegator scopeGen;
   protected ArcBasisScopesGenitorP2Delegator scopeGenP2;
@@ -85,7 +85,7 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     this.scopeGenP3.createFromAST(toInstantiate);
 
     // When
-    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment(new ArcBasisTypeCalculator());
+    ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     coco.check(compInst.getComponentInstance(0));
 
     // Then

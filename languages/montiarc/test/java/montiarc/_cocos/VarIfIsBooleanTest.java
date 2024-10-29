@@ -5,7 +5,6 @@ import arcbasis._ast.ASTArcElement;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
-import montiarc.check.MontiArcTypeCalculator;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -51,7 +50,7 @@ public class VarIfIsBooleanTest extends MontiArcAbstractTest {
   public void testVarIfType(ASTArcVarIf constraint,
                             Error[] errorList) {
     // Given
-    VarIfIsBoolean coco = new VarIfIsBoolean(new MontiArcTypeCalculator());
+    VarIfIsBoolean coco = new VarIfIsBoolean();
 
     // When
     coco.check(constraint);

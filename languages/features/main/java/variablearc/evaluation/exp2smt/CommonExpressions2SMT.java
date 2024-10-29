@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
-import arcbasis.check.IArcTypeCalculator;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.ArithExpr;
 import com.microsoft.z3.BoolExpr;
@@ -44,14 +43,11 @@ import java.util.Optional;
 public class CommonExpressions2SMT implements CommonExpressionsHandler {
 
   protected final IDeriveSMTExpr deriveSMTExpr;
-  protected final IArcTypeCalculator tc;
   protected CommonExpressionsTraverser traverser;
 
-  public CommonExpressions2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr, @NotNull IArcTypeCalculator tc) {
+  public CommonExpressions2SMT(@NotNull IDeriveSMTExpr deriveSMTExpr) {
     Preconditions.checkNotNull(deriveSMTExpr);
-    Preconditions.checkNotNull(tc);
     this.deriveSMTExpr = deriveSMTExpr;
-    this.tc = tc;
   }
 
   @Override

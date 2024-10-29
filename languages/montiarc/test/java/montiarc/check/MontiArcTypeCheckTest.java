@@ -36,7 +36,33 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
+public class MontiArcTypeCheckTest extends AbstractArcTypeCalculatorTest {
+
+  @Override
+  @BeforeEach
+  public void setUp() {
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.reset();
+    MontiArcMill.init();
+    MontiArcTypeCheck.init();
+    addBasicTypes2Scope();
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    this.setUpScope();
+  }
+
+  @Override
+  protected void setUpScope() {
+    super.setUpScope();
+    this.setUpMessageType();
+    this.setUpMsgFields();
+    this.setUpGenericTypes();
+    this.setUpGenericFields();
+    this.setUpTrafoBuilderType();
+    this.setUpTrafoBuilderFields();
+    this.setUpPrimitiveFields();
+    this.setUpTypeAndInstanceWithMethods();
+  }
 
   protected MontiArcParser parser;
 
@@ -190,31 +216,6 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
       Arguments.of("invalidM(invalid1, invalid2)", new String[]{"invalidM"}),
       Arguments.of("invalidCallee.invalidM(invalid1, invalid2)", new String[]{"invalidCallee"})
     );
-  }
-
-  @Override
-  @BeforeEach
-  public void setUp() {
-    MontiArcMill.globalScope().clear();
-    MontiArcMill.reset();
-    MontiArcMill.init();
-    addBasicTypes2Scope();
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    this.setUpScope();
-  }
-
-  @Override
-  protected void setUpScope() {
-    super.setUpScope();
-    this.setUpMessageType();
-    this.setUpMsgFields();
-    this.setUpGenericTypes();
-    this.setUpGenericFields();
-    this.setUpTrafoBuilderType();
-    this.setUpTrafoBuilderFields();
-    this.setUpPrimitiveFields();
-    this.setUpTypeAndInstanceWithMethods();
   }
 
   public void setUpGenericTypes() {
@@ -470,11 +471,11 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     Preconditions.checkNotNull(expression);
 
     // Given
-    ASTExpression ast = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
-    this.getScopeSetter().setScope(ast, this.getScope());
+    ASTExpression expr = MontiArcMill.parser().parse_StringExpression(expression).orElseThrow();
+    this.getScopeSetter().setScope(expr, this.getScope());
 
     // When
-    SymTypeExpression result = TypeCheck3.typeOf(ast);
+    SymTypeExpression result = TypeCheck3.typeOf(expr);
 
     // Then
     Assertions.assertNotNull(result);
@@ -495,7 +496,8 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
     // Then
     Assertions.assertNotNull(result);
-    Assertions.assertTrue(result.isObscureType(), "Unexpected type " + result.print());
+    Assertions.assertTrue(result.isObscureType(), "Unexpected type " + result.print()
+    );
   }
 
   /**
@@ -520,7 +522,8 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
 
     // Then
     Assertions.assertNotNull(result);
-    Assertions.assertTrue(result.isObscureType(), "Unexpected type " + result.print());
+    Assertions.assertTrue(result.isObscureType(), "Unexpected type " + result.print()
+    );
   }
 
   @Override

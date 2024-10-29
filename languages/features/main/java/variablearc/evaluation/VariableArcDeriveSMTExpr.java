@@ -7,7 +7,6 @@ import de.monticore.visitor.ITraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
-import variablearc.check.VariableArcTypeCalculator;
 import variablearc.evaluation.exp2smt.Expr2SMTResult;
 import variablearc.evaluation.exp2smt.ExpressionsBasis2SMT;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
@@ -24,14 +23,13 @@ public class VariableArcDeriveSMTExpr implements IDeriveSMTExpr {
 
   public VariableArcDeriveSMTExpr(@NotNull Context context) {
     Preconditions.checkNotNull(context);
-    VariableArcTypeCalculator tc = new VariableArcTypeCalculator();
     this.context = context;
     this.result = new Expr2SMTResult();
-    this.sortDerive = new VariableArcDeriveSMTSort(tc);
+    this.sortDerive = new VariableArcDeriveSMTSort();
     this.traverser = VariableArcMill.traverser();
     this.prefix = "";
 
-    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this, tc));
+    this.traverser.setExpressionsBasisHandler(new ExpressionsBasis2SMT(this));
     this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this));
   }
 

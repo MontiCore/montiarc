@@ -54,10 +54,6 @@ class MA2JSimToolIncrementalityTest {
     });
   }
 
-  private void invokeToolWithArgs(@NotNull String[] args) {
-    this.invokeToolWithArgsAndVersion(args, "1.0.0");
-  }
-
   private void invokeToolWithArgsAndVersion(@NotNull String[] args, @NotNull String version) {
     Preconditions.checkNotNull(args);
     Preconditions.checkNotNull(version);
