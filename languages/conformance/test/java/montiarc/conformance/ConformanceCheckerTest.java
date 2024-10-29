@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import de.se_rwth.commons.logging.Log;
 import java.io.File;
 
+import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.conformance.AutomataConfChecker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ class ConformanceCheckerTest extends AutomatonAbstractTest {
   @BeforeEach
   public void setup() {
     Log.init();
+    Log.setErrorHook(() -> {throw new MCFatalError("Error");});
     initMills();
   }
 

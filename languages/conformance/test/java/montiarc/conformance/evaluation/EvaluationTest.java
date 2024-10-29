@@ -4,6 +4,7 @@ package montiarc.conformance.evaluation;
 
 import static montiarc.conformance.util.AutomataLoader.loadMapping;
 
+import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.conformance.AutomataConfChecker;
 import de.se_rwth.commons.logging.Log;
 import java.io.File;
@@ -21,6 +22,7 @@ class EvaluationTest extends AutomatonAbstractTest {
   @BeforeEach
   public void setup() {
     Log.init();
+    Log.setErrorHook(() -> {throw new MCFatalError("Error");});
     initMills();
   }
 

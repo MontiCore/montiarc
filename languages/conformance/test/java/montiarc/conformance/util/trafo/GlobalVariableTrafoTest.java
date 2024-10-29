@@ -3,6 +3,7 @@ package montiarc.conformance.util.trafo;
 
 import arcbasis._ast.ASTComponentType;
 import com.microsoft.z3.*;
+import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.conformance.AutomatonAbstractTest;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import montiarc.conformance.util.AutomataLoader;
@@ -33,6 +34,7 @@ public class GlobalVariableTrafoTest extends AutomatonAbstractTest {
   @BeforeEach
   public void setup() {
     Log.init();
+    Log.setErrorHook(() -> {throw new MCFatalError("Error");});
     initMills();
    // Given
     File autFile = new File(RELATIVE_MODEL_PATH + "util/trafo/Trafo.arc");

@@ -5,6 +5,7 @@ import static montiarc.conformance.util.AutomataLoader.loadModels;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import com.microsoft.z3.*;
+import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.check.MontiArcTypeCheck;
 import montiarc.conformance.AutomataConfChecker;
 import montiarc.conformance.automaton2smt.smtAutomaton.ChaosComplete;
@@ -29,6 +30,7 @@ public class EffectTest {
   @BeforeEach
   public void setup() {
     Log.init();
+    Log.setErrorHook(() -> {throw new MCFatalError("Error");});
     initMills();
   }
 

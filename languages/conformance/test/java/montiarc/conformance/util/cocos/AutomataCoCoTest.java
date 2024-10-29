@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util.cocos;
 
+import de.se_rwth.commons.logging.LogStub;
 import montiarc.conformance.AutomatonAbstractTest;
 import montiarc.conformance.util.AutomataLoader;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
@@ -17,8 +18,7 @@ public class AutomataCoCoTest extends AutomatonAbstractTest {
 
   @BeforeEach
   public void setup() {
-    Log.init();
-    Log.enableFailQuick(false);
+    LogStub.init();
     initMills();
   }
 

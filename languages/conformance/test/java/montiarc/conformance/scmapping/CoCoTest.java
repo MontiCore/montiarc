@@ -4,6 +4,7 @@ package montiarc.conformance.scmapping;
 import de.se_rwth.commons.logging.Log;
 import java.io.File;
 
+import de.se_rwth.commons.logging.LogStub;
 import montiarc.conformance.AutomatonAbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,8 +18,7 @@ public class CoCoTest extends AutomatonAbstractTest {
 
   @BeforeEach
   public void setup() {
-    Log.init();
-    Log.enableFailQuick(false);
+    LogStub.init();
     initMills();
     File conAutFile = new File(RELATIVE_MODEL_PATH + "automaton2smt/concrete/Concrete.arc");
     File conCDFile = new File(RELATIVE_MODEL_PATH + "automaton2smt/concrete/Datatypes.cd");
