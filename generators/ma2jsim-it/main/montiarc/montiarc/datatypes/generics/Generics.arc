@@ -18,8 +18,8 @@ component Generics<T, U extends Person>(T parameter, List<U> listParameter, List
   <<sync>> automaton {
     initial state S;
     S -> S / {
-      //T variable = field;
-      //List<U> listVariable = listField;
+      T variable = field;
+      List<U> listVariable = listField;
       List<Person> boundListVariable = boundListField;
     };
   }

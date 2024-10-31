@@ -5,13 +5,13 @@ import arcautomaton.ArcAutomatonMill;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import com.google.common.base.Preconditions;
-import de.monticore.statements.mcvardeclarationstatements._symboltable.MCVarDeclarationStatementsSTCompleteTypes;
+import de.monticore.statements.mccommonstatements._symboltable.MCCommonStatementsSymTabCompletion;
+import de.monticore.statements.mcvardeclarationstatements._symboltable.MCVarDeclarationStatementsSymTabCompletion;
 import genericarc.GenericArcMill;
 import genericarc._symboltable.GenericArcScopesGenitorP2;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
@@ -36,7 +36,8 @@ public class MontiArcScopesGenitorP2Delegator {
     this.initArcBasis();
     this.initArcAutomaton();
     this.initGenericArc();
-    this.initVarDeclarationStatements();
+    this.initMCCommonStatements();
+    this.initMCVarDeclarationStatements();
   }
 
   protected void initArcBasis() {
@@ -56,9 +57,12 @@ public class MontiArcScopesGenitorP2Delegator {
     this.getTraverser().setGenericArcHandler(scopesGenP2);
   }
 
-  protected void initVarDeclarationStatements() {
-    MCVarDeclarationStatementsSTCompleteTypes scopesGenP2 = new MCVarDeclarationStatementsSTCompleteTypes();
-    this.getTraverser().add4MCVarDeclarationStatements(scopesGenP2);
+  protected void initMCCommonStatements() {
+    this.getTraverser().add4MCCommonStatements(new MCCommonStatementsSymTabCompletion());
+  }
+
+  protected void initMCVarDeclarationStatements() {
+    this.getTraverser().add4MCVarDeclarationStatements(new MCVarDeclarationStatementsSymTabCompletion());
   }
 
   public void createFromAST(@NotNull ASTMACompilationUnit rootNode) {
