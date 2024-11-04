@@ -2,11 +2,11 @@
 package montiarc.cocos;
 
 import arcautomaton._cocos.StateNameIsNoReservedKeyword;
-import arcbasis._cocos.SubcomponentNoReservedKeyword;
 import arcbasis._cocos.ComponentNoReservedKeyword;
 import arcbasis._cocos.FieldNameIsNoReservedKeyword;
 import arcbasis._cocos.ParameterNoReservedKeyword;
 import arcbasis._cocos.PortNoReservedKeyword;
+import arcbasis._cocos.SubcomponentNoReservedKeyword;
 import genericarc._cocos.TypeParamNameIsNoReservedKeyword;
 
 import java.util.Set;

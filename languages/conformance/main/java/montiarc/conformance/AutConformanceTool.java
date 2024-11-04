@@ -1,19 +1,24 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance;
 
-import montiarc.conformance.util.AutomataLoader;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.se_rwth.commons.logging.Log;
-import java.io.File;
-import java.util.Arrays;
-import java.util.Optional;
-
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
-import org.apache.commons.cli.*;
+import montiarc.conformance.util.AutomataLoader;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.HelpFormatter;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.apache.commons.lang3.tuple.Pair;
 import scmapping.mapping2smt.AutomataMapping;
 import scmapping.mapping2smt.MCMapping;
+
+import java.io.File;
+import java.util.Arrays;
+import java.util.Optional;
 
 public class AutConformanceTool extends MontiArcTool {
 

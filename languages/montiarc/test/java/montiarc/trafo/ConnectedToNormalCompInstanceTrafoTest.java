@@ -1,7 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.trafo;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.ConnectorPortsExist;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTConnectedComponentInstance;

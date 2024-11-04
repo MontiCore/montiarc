@@ -3,10 +3,11 @@ package mceffect.checker;
 
 
 import de.se_rwth.commons.logging.Log;
-import java.util.ArrayList;
-import java.util.List;
 import mceffect.effect.Effect;
 import mceffect.graph.EffectGraph;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FullEffectChecker implements EffectChecker {
 

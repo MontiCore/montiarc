@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.ArcError;
-import montiarc.util.GenericArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class TypeParameterNamedTick implements GenericArcASTArcTypeParameterCoCo {

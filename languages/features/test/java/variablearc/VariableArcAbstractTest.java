@@ -2,7 +2,6 @@
 package variablearc;
 
 import arcbasis.ArcBasisAbstractTest;
-import arcbasis.check.ArcBasisTypeCheck;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.se_rwth.commons.logging.Log;

@@ -3,7 +3,6 @@ package mceffect.graph;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import mceffect.EffectAbstractTest;
-import java.util.Optional;
 import mceffect.MCEffectTool;
 import mceffect._ast.ASTMCEffect;
 import mceffect.effect.EffectStorage;
@@ -12,6 +11,8 @@ import montiarc.MontiArcTool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 public class EffectGraphTest extends EffectAbstractTest {
 

@@ -2,19 +2,20 @@
 package scmapping._cocos;
 
 
-import static montiarc.conformance.util.AutomataUtils.print;
-import static scmapping.util.MappingUtil.printPosition;
-
 import arcbasis._ast.ASTComponentType;
-import montiarc.conformance.util.AutomataUtils;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
 import de.monticore.expressions.commonexpressions._cocos.CommonExpressionsASTNotEqualsExpressionCoCo;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.se_rwth.commons.logging.Log;
+import montiarc.conformance.util.AutomataUtils;
+import scmapping.util.MappingUtil;
+
 import java.util.ArrayList;
 import java.util.List;
-import scmapping.util.MappingUtil;
+
+import static montiarc.conformance.util.AutomataUtils.print;
+import static scmapping.util.MappingUtil.printPosition;
 
 public class ValueRightInNotEqualExpressionsCoCo
     implements CommonExpressionsASTNotEqualsExpressionCoCo {

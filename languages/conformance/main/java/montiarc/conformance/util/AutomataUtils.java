@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcField;
+import arcbasis._ast.ASTArcPort;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.Port2VariableAdapter;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
@@ -12,11 +14,14 @@ import de.monticore.scbasis._ast.ASTStatechart;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import java.util.*;
-import java.util.stream.Collectors;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import scmapping.util.MappingUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class AutomataUtils {
 

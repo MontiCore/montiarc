@@ -1,5 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 val TARGET_JVM_VERSION: Int = 11

@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
+
 import arcbasis._cocos.ComponentInstantiationNamedTick;
 import arcbasis._cocos.ComponentNamedTick;
+import arcbasis._cocos.FieldNamedTick;
 import arcbasis._cocos.ParameterNamedTick;
 import arcbasis._cocos.PortNamedTick;
-import arcbasis._cocos.FieldNamedTick;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import genericarc._cocos.TypeParameterNamedTick;
@@ -18,6 +19,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import variablearc._cocos.FeatureNamedTick;
+
 import java.util.stream.Stream;
 
 public class NameTickTest extends MontiArcAbstractTest {

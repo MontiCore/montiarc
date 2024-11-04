@@ -1,9 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping.mapping2smt;
 
-import com.microsoft.z3.*;
-import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
-import de.monticore.expressions.commonexpressions._ast.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Sort;
+import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
+import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.ocl2smt.ocl2smt.expr2smt.ExprKind;
@@ -17,13 +21,18 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.se_rwth.commons.logging.Log;
-import java.util.Optional;
 import montiarc.MontiArcMill;
+import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
 import scmapping._ast.ASTSeqExpression;
 import scmapping.util.MappingUtil;
 import scmapping.util.SCZ3TypeFactory;
 
-import static montiarc.conformance.util.SymbolTableUtil.*;
+import java.util.Optional;
+
+import static montiarc.conformance.util.SymbolTableUtil.resolveEnumConst;
+import static montiarc.conformance.util.SymbolTableUtil.resolveGlobalVar;
+import static montiarc.conformance.util.SymbolTableUtil.resolvePort;
+import static montiarc.conformance.util.SymbolTableUtil.resolveState;
 
 public class MapExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
 

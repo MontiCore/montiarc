@@ -3,7 +3,10 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcBehaviorElement;
+import arcbasis._ast.ASTComponentHead;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import montiarc.util.ArcError;

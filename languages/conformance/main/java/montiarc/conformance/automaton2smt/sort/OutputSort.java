@@ -2,17 +2,27 @@
 package montiarc.conformance.automaton2smt.sort;
 
 import arcbasis._ast.ASTComponentType;
-
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Constructor;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.DatatypeSort;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.FuncDecl;
+import com.microsoft.z3.SeqSort;
+import com.microsoft.z3.Sort;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import montiarc.conformance.automaton2smt.cd.CD2SMT;
 import montiarc.conformance.util.AutomataUtils;
 import montiarc.conformance.util.SMTAutomataUtils;
 import montiarc.conformance.util.VoidSymbol;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class OutputSort implements SMTSort<VoidSymbol, PortSymbol> {

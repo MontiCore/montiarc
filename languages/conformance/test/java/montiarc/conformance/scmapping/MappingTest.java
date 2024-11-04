@@ -1,23 +1,33 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.scmapping;
 
-import static montiarc.conformance.util.AutomataLoader.loadMapping;
-
-import com.microsoft.z3.*;
-import montiarc.conformance.AutomatonAbstractTest;
-import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Sort;
+import com.microsoft.z3.Status;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;
-import java.io.File;
-import java.util.*;
+import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import scmapping.mapping2smt.AutomataMapping;
 import scmapping.mapping2smt.MCMapping;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static montiarc.conformance.util.AutomataLoader.loadMapping;
 
 class MappingTest extends AutomatonAbstractTest {
   public String modelDir = "test/resources/montiarc/conformance/";

@@ -1,11 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package evaluation;
 
-import com.google.common.base.Preconditions;
-import com.microsoft.z3.*;
 import automata.evaluation.smallModel.ListerInSmallModel;
 import automata.evaluation.smallModel.ListerOutSmallModel;
 import automata.evaluation.smallModel.SmallModel;
+import com.google.common.base.Preconditions;
+import com.microsoft.z3.CharSort;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.IntSort;
+import com.microsoft.z3.RealSort;
+import com.microsoft.z3.SeqSort;
+import com.microsoft.z3.Sort;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.MockTestController;
 import montiarc.rte.timesync.IInPort;

@@ -2,24 +2,28 @@
 package montiarc.conformance.util.trafo;
 
 import arcbasis._ast.ASTComponentType;
-import com.microsoft.z3.*;
-import de.se_rwth.commons.logging.MCFatalError;
-import montiarc.conformance.AutomatonAbstractTest;
-import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
-import montiarc.conformance.util.AutomataLoader;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Status;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
-
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
-import java.io.File;
+import de.se_rwth.commons.logging.MCFatalError;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
+import montiarc.conformance.util.AutomataLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.io.File;
 
 public class GlobalVariableTrafoTest extends AutomatonAbstractTest {
   private final Context ctx = new Context();

@@ -7,7 +7,6 @@ import de.monticore.cd4analysis._symboltable.ICD4AnalysisScope;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
 import de.monticore.cd4code._visitor.CD4CodeTraverser;
-import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.Names;

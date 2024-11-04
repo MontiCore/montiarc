@@ -2,16 +2,15 @@
 package mceffect;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-
-import java.io.IOException;
-import java.util.Optional;
-import java.util.function.Function;
-
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import mceffect._ast.ASTMCEffect;
 import mceffect._parser.MCEffectParser;
 import montiarc.MontiArcMill;
 import org.junit.jupiter.api.Assertions;
+
+import java.io.IOException;
+import java.util.Optional;
+import java.util.function.Function;
 
 public class EffectAbstractTest {
   protected final String modelPath = "test/resources/mceffect/";

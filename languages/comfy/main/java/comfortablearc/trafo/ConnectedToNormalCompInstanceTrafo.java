@@ -1,7 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc.trafo;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTComponentBody;
+import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTComponentInstanceBuilder;
+import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTConnector;
 import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis.trafo.SourcePositionUtil;
 import com.google.common.base.Preconditions;

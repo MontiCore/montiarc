@@ -3,10 +3,6 @@ package montiarc.conformance;
 
 import arcbasis._ast.ASTComponentType;
 import com.microsoft.z3.Context;
-import montiarc.check.MontiArcTypeCheck;
-import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
-import montiarc.conformance.util.AutomataLoader;
-import montiarc.conformance.util.AutomataUtils;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -14,15 +10,19 @@ import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
+import montiarc.check.MontiArcTypeCheck;
+import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
+import montiarc.conformance.util.AutomataLoader;
+import montiarc.conformance.util.AutomataUtils;
+import org.apache.commons.lang3.tuple.Pair;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import montiarc.MontiArcMill;
-import montiarc._ast.ASTMACompilationUnit;
-import org.apache.commons.lang3.tuple.Pair;
-import org.junit.jupiter.api.Assertions;
 
 public class AutomatonAbstractTest {
 

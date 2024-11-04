@@ -1,19 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping._cocos;
 
-import static montiarc.conformance.util.AutomataUtils.getOutPorts;
-
 import arcbasis._ast.ASTComponentType;
-import montiarc.conformance.util.AutomataUtils;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
-import java.util.ArrayList;
-import java.util.List;
+import montiarc.conformance.util.AutomataUtils;
 import scmapping.SCMappingMill;
 import scmapping._ast.ASTMappingRule;
 import scmapping._ast.ASTSCMapping;
 import scmapping._visitor.SCMappingTraverser;
 import scmapping._visitor.ValidName;
 import scmapping.util.MappingUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static montiarc.conformance.util.AutomataUtils.getOutPorts;
 
 public class ValidNamesInRulesCoCo implements SCMappingASTSCMappingCoCo {
 

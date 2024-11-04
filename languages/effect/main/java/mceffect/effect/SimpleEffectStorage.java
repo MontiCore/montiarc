@@ -5,12 +5,22 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
-import java.io.File;
-import java.util.*;
-import java.util.function.Function;
-import mceffect._ast.*;
+import mceffect._ast.ASTComponentEffect;
+import mceffect._ast.ASTEffectKind;
+import mceffect._ast.ASTEffectRule;
+import mceffect._ast.ASTEffectRuleDeclaration;
+import mceffect._ast.ASTMCEffect;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 
 public class SimpleEffectStorage implements EffectStorage {
 

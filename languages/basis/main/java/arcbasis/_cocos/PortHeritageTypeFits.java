@@ -2,8 +2,8 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ArcPortSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.types.check.CompKindExpression;

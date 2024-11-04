@@ -1,7 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping.mapping2smt;
 
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.FuncDecl;
+import com.microsoft.z3.Sort;
+import com.microsoft.z3.Symbol;
 import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
 
 public class SMTStringMapping implements AutomataMapping {

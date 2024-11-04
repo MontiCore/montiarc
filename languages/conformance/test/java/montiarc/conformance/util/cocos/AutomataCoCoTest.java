@@ -1,17 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util.cocos;
 
-import de.se_rwth.commons.logging.LogStub;
-import montiarc.conformance.AutomatonAbstractTest;
-import montiarc.conformance.util.AutomataLoader;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.se_rwth.commons.logging.Log;
-import java.io.File;
+import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.util.AutomataLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 public class AutomataCoCoTest extends AutomatonAbstractTest {
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/";

@@ -1,12 +1,27 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.dse.strategies;
 
-import com.microsoft.z3.*;
-import montiarc.rte.dse.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Status;
+import montiarc.rte.dse.ControllerI;
+import montiarc.rte.dse.EvaluationControllerI;
+import montiarc.rte.dse.PathCondition;
+import montiarc.rte.dse.ResultI;
+import montiarc.rte.dse.StatesList;
+import montiarc.rte.dse.TestController;
 import montiarc.rte.log.LogException;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 

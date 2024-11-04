@@ -6,7 +6,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 

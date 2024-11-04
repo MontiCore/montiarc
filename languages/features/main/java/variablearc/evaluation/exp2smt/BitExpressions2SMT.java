@@ -2,7 +2,6 @@
 package variablearc.evaluation.exp2smt;
 
 import com.google.common.base.Preconditions;
-import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.IntExpr;
 import de.monticore.expressions.bitexpressions._ast.ASTBinaryAndExpression;
@@ -11,7 +10,6 @@ import de.monticore.expressions.bitexpressions._ast.ASTBinaryXorExpression;
 import de.monticore.expressions.bitexpressions._ast.ASTLeftShiftExpression;
 import de.monticore.expressions.bitexpressions._ast.ASTLogicalRightShiftExpression;
 import de.monticore.expressions.bitexpressions._ast.ASTRightShiftExpression;
-import de.monticore.expressions.bitexpressions._ast.ASTShiftExpression;
 import de.monticore.expressions.bitexpressions._visitor.BitExpressionsHandler;
 import de.monticore.expressions.bitexpressions._visitor.BitExpressionsTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;

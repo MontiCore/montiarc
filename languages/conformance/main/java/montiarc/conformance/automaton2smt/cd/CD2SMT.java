@@ -1,19 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.cd;
 
-import static montiarc.conformance.util.SMTAutomataUtils.mkConstructor;
-
 import com.microsoft.z3.Constructor;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.Sort;
-import montiarc.conformance.util.SMTAutomataUtils;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnum;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnumConstant;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
-import java.util.*;
+import montiarc.conformance.util.SMTAutomataUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
+
+import static montiarc.conformance.util.SMTAutomataUtils.mkConstructor;
 
 public class CD2SMT {
   private final Context ctx;

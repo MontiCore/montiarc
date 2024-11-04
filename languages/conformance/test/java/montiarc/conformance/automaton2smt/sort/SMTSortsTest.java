@@ -1,20 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.sort;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import com.microsoft.z3.*;
+import com.microsoft.z3.Context;
 import montiarc.conformance.AutomatonAbstractTest;
 import montiarc.conformance.automaton2smt.cd.CD2SMT;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SMTSortsTest extends AutomatonAbstractTest {
   protected Context ctx;

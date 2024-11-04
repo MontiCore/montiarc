@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions.AssignmentExpressionsMill;
 import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcVarIf;
 
 /**

@@ -5,8 +5,8 @@ import arcbasis._ast.ASTComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
-import montiarc.conformance.util.AutomataUtils;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import montiarc.conformance.util.AutomataUtils;
 
 import java.util.ArrayList;
 import java.util.List;

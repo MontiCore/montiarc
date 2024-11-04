@@ -1,19 +1,26 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Sort;
+import com.microsoft.z3.Status;
+import de.monticore.scbasis._ast.ASTSCTransition;
 import montiarc.conformance.AutomatonAbstractTest;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
-import de.monticore.scbasis._ast.ASTSCTransition;
-import java.io.File;
-import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+
+import java.io.File;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SMTAutomatonTest extends AutomatonAbstractTest {
   protected Context ctx;

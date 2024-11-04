@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.graph;
 
-import java.util.Optional;
-
 import mceffect.effect.Effect;
 import mceffect.effect.EffectKind;
 import org.jgrapht.graph.DefaultEdge;
+
+import java.util.Optional;
 
 public class EffectEdge extends DefaultEdge {
   protected Optional<Effect> effect;

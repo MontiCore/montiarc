@@ -7,9 +7,10 @@ import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisi
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.se_rwth.commons.logging.Log;
+import scmapping.util.MappingUtil;
+
 import java.util.List;
 import java.util.stream.Collectors;
-import scmapping.util.MappingUtil;
 
 public class ValidName implements ExpressionsBasisVisitor2, CommonExpressionsVisitor2 {
   private final List<String> validNames;

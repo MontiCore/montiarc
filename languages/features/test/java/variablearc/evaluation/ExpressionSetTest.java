@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
-import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -10,7 +9,6 @@ import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.expressions.Expression;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;

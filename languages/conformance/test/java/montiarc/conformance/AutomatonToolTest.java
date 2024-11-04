@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance;
 
-import montiarc.conformance.AutConformanceTool;
 import org.junit.jupiter.api.Test;
 
 public class AutomatonToolTest extends AutomatonAbstractTest {

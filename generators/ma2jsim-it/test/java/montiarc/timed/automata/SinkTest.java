@@ -3,8 +3,8 @@ package montiarc.timed.automata;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
-import montiarc.types.OnOff;
 import montiarc.rte.tests.JSimTest;
+import montiarc.types.OnOff;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;

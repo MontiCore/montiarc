@@ -1,9 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.dse;
 
-import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-
 import java.util.Set;
 
 public interface EvaluationControllerI {

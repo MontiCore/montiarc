@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import de.monticore.umlstereotype._ast.ASTStereoValue;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.umlstereotype._ast.ASTStereoValue;
 
 import java.util.Optional;
 

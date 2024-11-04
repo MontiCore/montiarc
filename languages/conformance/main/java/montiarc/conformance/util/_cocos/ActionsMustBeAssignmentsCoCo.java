@@ -1,9 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util._cocos;
 
-import static scmapping.util.MappingUtil.printPosition;
-import static montiarc.conformance.util.AutomataUtils.print;
-
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTTransitionActionCoCo;
@@ -11,6 +8,9 @@ import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;
 import de.monticore.statements.mccommonstatements._ast.ASTMCJavaBlock;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.se_rwth.commons.logging.Log;
+
+import static montiarc.conformance.util.AutomataUtils.print;
+import static scmapping.util.MappingUtil.printPosition;
 
 public class ActionsMustBeAssignmentsCoCo implements SCTransitions4CodeASTTransitionActionCoCo {
   private final String errorMessage =

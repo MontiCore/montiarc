@@ -2,9 +2,8 @@
 package mceffect.checker;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import mceffect.EffectAbstractTest;
 import de.se_rwth.commons.logging.Log;
-import java.util.List;
+import mceffect.EffectAbstractTest;
 import mceffect.MCEffectTool;
 import mceffect._ast.ASTMCEffect;
 import mceffect.effect.Effect;
@@ -14,6 +13,8 @@ import mceffect.graph.EffectGraph;
 import montiarc.MontiArcTool;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+
+import java.util.List;
 
 public abstract class AbstractCheckerTest extends EffectAbstractTest {
 

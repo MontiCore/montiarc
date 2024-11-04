@@ -2,14 +2,14 @@
 package montiarc.conformance.scmapping;
 
 import de.se_rwth.commons.logging.Log;
-import java.io.File;
-
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.conformance.AutomatonAbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import scmapping._ast.ASTSCMapping;
+
+import java.io.File;
 
 import static montiarc.conformance.util.AutomataLoader.loadMapping;
 

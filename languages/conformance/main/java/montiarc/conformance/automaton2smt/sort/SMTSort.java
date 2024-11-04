@@ -1,8 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.sort;
 
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.DatatypeSort;
+import com.microsoft.z3.Expr;
 import de.monticore.symboltable.ISymbol;
+
 import java.util.Map;
 
 /***

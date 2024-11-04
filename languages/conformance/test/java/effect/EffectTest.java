@@ -1,30 +1,36 @@
 /* (c) https://github.com/MontiCore/monticore */
 package effect;
 
-import static montiarc.conformance.util.AutomataLoader.loadModels;
-import static org.junit.jupiter.api.Assertions.fail;
-
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.IntExpr;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Status;
+import de.monticore.cd4code.CD4CodeMill;
+import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.MCFatalError;
+import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcTypeCheck;
 import montiarc.conformance.AutomataConfChecker;
 import montiarc.conformance.automaton2smt.smtAutomaton.ChaosComplete;
 import montiarc.conformance.automaton2smt.smtAutomaton.ICompleteSMTAut;
 import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
-import de.monticore.cd4code.CD4CodeMill;
-import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
-
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.se_rwth.commons.logging.Log;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Path;
-import montiarc.MontiArcMill;
-import montiarc._ast.ASTMACompilationUnit;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+
+import static montiarc.conformance.util.AutomataLoader.loadModels;
+import static org.junit.jupiter.api.Assertions.fail;
 
 public class EffectTest {
   @BeforeEach

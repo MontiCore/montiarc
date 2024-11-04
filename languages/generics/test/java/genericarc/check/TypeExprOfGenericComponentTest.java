@@ -2,9 +2,9 @@
 package genericarc.check;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;

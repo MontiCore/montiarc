@@ -13,7 +13,6 @@ import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
 import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
-import arcbasis.check.ArcBasisTypeCheck;
 import arcbasis.check.ArcBasisTypeCheckTest;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;

@@ -3,7 +3,6 @@ package variablearc._symboltable;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.InstanceVisitor;
-import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.check.CompKindExpression;

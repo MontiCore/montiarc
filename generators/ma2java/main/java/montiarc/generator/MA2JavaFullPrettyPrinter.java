@@ -4,7 +4,6 @@ package montiarc.generator;
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
-import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MA2JavaFullPrettyPrinter extends MontiArcFullPrettyPrinter {

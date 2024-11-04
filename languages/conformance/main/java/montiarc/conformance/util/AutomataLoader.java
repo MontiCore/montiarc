@@ -3,10 +3,6 @@ package montiarc.conformance.util;
 
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
-import montiarc.conformance.util._cocos.ActionsMustBeAssignmentsCoCo;
-import montiarc.conformance.util._cocos.AtLeastOneInAndOutPort;
-import montiarc.conformance.util._cocos.UniqueVarAssignmentInTransActions;
-import montiarc.conformance.util.trafo.GlobalVariableTrafo;
 import de.monticore.cd._symboltable.BuiltInTypes;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
@@ -19,10 +15,6 @@ import de.monticore.cd4code.cocos.CD4CodeCoCosDelegator;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.types.mcbasictypes.MCBasicTypesMill;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
@@ -30,6 +22,10 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._parser.MontiArcParser;
 import montiarc._symboltable.MontiArcSymbols2Json;
+import montiarc.conformance.util._cocos.ActionsMustBeAssignmentsCoCo;
+import montiarc.conformance.util._cocos.AtLeastOneInAndOutPort;
+import montiarc.conformance.util._cocos.UniqueVarAssignmentInTransActions;
+import montiarc.conformance.util.trafo.GlobalVariableTrafo;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import scmapping.SCMappingTool;
@@ -38,6 +34,14 @@ import scmapping._cocos.SCMappingCoCoChecker;
 import scmapping._cocos.ValidNamesInRulesCoCo;
 import scmapping._cocos.ValueRightInEqualExpressionsCoCo;
 import scmapping._cocos.ValueRightInNotEqualExpressionsCoCo;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
 
 public class AutomataLoader {
 

@@ -2,20 +2,13 @@
 package montiarc.conformance.automaton2smt.smtAutomaton;
 
 
-
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.Port2VariableAdapter;
-import com.microsoft.z3.*;
-import montiarc.conformance.automaton2smt.cd.CD2SMT;
-import montiarc.conformance.automaton2smt.sort.InputSort;
-import montiarc.conformance.automaton2smt.sort.OutputSort;
-import montiarc.conformance.automaton2smt.sort.SMTSort;
-import montiarc.conformance.automaton2smt.sort.StateSort;
-import montiarc.conformance.expression2smt.AutExpression2smt;
-import montiarc.conformance.util.AutomataUtils;
-import montiarc.conformance.util.SMTAutomataUtils;
-import montiarc.conformance.util.SymbolTableUtil;
-import montiarc.conformance.util.VoidSymbol;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.DatatypeSort;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Sort;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnum;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
@@ -29,12 +22,23 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.logging.Log;
-import java.util.*;
-import java.util.function.Function;
-
+import montiarc.conformance.automaton2smt.cd.CD2SMT;
+import montiarc.conformance.automaton2smt.sort.InputSort;
+import montiarc.conformance.automaton2smt.sort.OutputSort;
+import montiarc.conformance.automaton2smt.sort.SMTSort;
+import montiarc.conformance.automaton2smt.sort.StateSort;
+import montiarc.conformance.expression2smt.AutExpression2smt;
+import montiarc.conformance.util.AutomataUtils;
+import montiarc.conformance.util.SMTAutomataUtils;
+import montiarc.conformance.util.SymbolTableUtil;
+import montiarc.conformance.util.VoidSymbol;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import scmapping.util.SCZ3TypeFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Function;
 
 public class SMTAutomaton implements ISMTAutomaton {
   protected Z3ExprFactory eFactory;

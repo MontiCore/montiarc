@@ -2,7 +2,6 @@
 package scmapping.util;
 
 import arcbasis._ast.ASTComponentType;
-import montiarc.conformance.util.AutomataUtils;
 import de.monticore.ast.ASTNode;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnum;
@@ -10,13 +9,15 @@ import de.monticore.cdinterfaceandenum._ast.ASTCDEnumTOP;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
 import de.se_rwth.commons.SourcePosition;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
+import montiarc.conformance.util.AutomataUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
-import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 
 public class MappingUtil {
   public static List<String> getEnumConstants(ASTCDCompilationUnit cd, String enumName) {

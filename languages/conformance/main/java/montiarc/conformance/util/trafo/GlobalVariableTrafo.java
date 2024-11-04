@@ -15,11 +15,17 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mccommonstatements.MCCommonStatementsMill;
 import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;
 import de.monticore.statements.mccommonstatements._ast.ASTMCJavaBlock;
-import java.util.*;
-import java.util.stream.Collectors;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class GlobalVariableTrafo {
   /**

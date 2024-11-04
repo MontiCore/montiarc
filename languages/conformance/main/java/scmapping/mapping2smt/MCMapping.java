@@ -1,13 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping.mapping2smt;
 
-import com.microsoft.z3.*;
-import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.FuncDecl;
 import de.monticore.ocl2smt.ocl2smt.expr2smt.expr2z3.Z3ExprFactory;
-import java.util.*;
+import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
 import scmapping._ast.ASTMappingRule;
 import scmapping._ast.ASTSCMapping;
 import scmapping.util.SCZ3TypeFactory;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class MCMapping implements AutomataMapping {
   protected MapExpression2smt refExprConv;

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.ArcPortSymbol;
+import arcbasis._symboltable.IArcBasisScope;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcTool;

@@ -6,8 +6,8 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import modes.variability.VariableArcModesVariantCalculator;
 import variablearc._symboltable.ArcFeature2VariableAdapter;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
+import variablearc._symboltable.VariableArcVariationPoint;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.variability.VariableArcVariantCalculator;
 

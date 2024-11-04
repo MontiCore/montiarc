@@ -5,8 +5,6 @@ package montiarc.conformance.expression2smt;
 import arcbasis._symboltable.Port2VariableAdapter;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
-import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
-import montiarc.conformance.util.SymbolTableUtil;
 import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
@@ -24,12 +22,14 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.logging.Log;
-import java.util.HashMap;
-import java.util.Optional;
-
+import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import montiarc.conformance.util.AutomataUtils;
+import montiarc.conformance.util.SymbolTableUtil;
 import scmapping.util.MappingUtil;
 import scmapping.util.SCZ3TypeFactory;
+
+import java.util.HashMap;
+import java.util.Optional;
 
 public class AutExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
   protected SMTAutomaton smtAut;

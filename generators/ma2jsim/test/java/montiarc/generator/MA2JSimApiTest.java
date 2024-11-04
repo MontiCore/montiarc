@@ -2,7 +2,6 @@
 package montiarc.generator;
 
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcTypeCheck;
@@ -11,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MA2JSimApiTest {

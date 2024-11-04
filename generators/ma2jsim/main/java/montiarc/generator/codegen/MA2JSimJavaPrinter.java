@@ -8,7 +8,6 @@ import de.monticore.ocl.codegen.visitors.SetExpressionsPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.check.SymTypeExpression;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
-import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;

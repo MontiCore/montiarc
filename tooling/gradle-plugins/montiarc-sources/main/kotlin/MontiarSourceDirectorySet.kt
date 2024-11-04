@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.montiarc
 
+import java.util.Optional
+import javax.inject.Inject
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.tasks.SourceSet
-import java.util.Optional
-import javax.inject.Inject
 
 /**
  * [SourceDirectorySet] for Montiarc sources

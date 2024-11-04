@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.build
 
+import java.nio.file.Files
+import java.nio.file.Path
+import java.time.ZonedDateTime
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.Copy
 import org.gradle.kotlin.dsl.register
-import java.nio.file.Files
-import java.nio.file.Path
-import java.time.ZonedDateTime
 
 class VersionInjection {
   companion object{

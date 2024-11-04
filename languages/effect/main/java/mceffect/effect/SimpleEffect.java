@@ -2,7 +2,6 @@
 package mceffect.effect;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.SourcePosition;
 

@@ -2,20 +2,26 @@
 package montiarc.conformance;
 
 import arcbasis._ast.ASTComponentType;
-import com.microsoft.z3.*;
-import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
-import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
-import montiarc.conformance.util.AutomataUtils;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Sort;
+import com.microsoft.z3.Status;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
+import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
+import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
+import montiarc.conformance.util.AutomataUtils;
+import scmapping.mapping2smt.AutomataMapping;
+import scmapping.mapping2smt.IDMapping;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import montiarc.MontiArcMill;
-import scmapping.mapping2smt.AutomataMapping;
-import scmapping.mapping2smt.IDMapping;
 
 public class AutomataConfChecker {
 

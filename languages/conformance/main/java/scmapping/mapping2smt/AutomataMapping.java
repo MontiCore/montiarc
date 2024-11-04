@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping.mapping2smt;
 
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
 import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
 
 public interface AutomataMapping {

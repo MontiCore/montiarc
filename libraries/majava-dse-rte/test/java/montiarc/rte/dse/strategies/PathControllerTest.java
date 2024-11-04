@@ -1,7 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.dse.strategies;
 
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.IntSort;
+import com.microsoft.z3.Solver;
 import dse.DSE;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.PathCondition;

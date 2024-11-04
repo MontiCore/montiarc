@@ -4,12 +4,12 @@ package mceffect.effect;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.layout.mxGraphLayout;
 import com.mxgraph.swing.mxGraphComponent;
-import java.awt.*;
-import javax.swing.*;
 import mceffect.graph.EffectEdge;
 import mceffect.graph.EffectNode;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphXAdapter;
+
+import javax.swing.*;
 
 public class Utils {
   public static void visualize(Graph<EffectNode, EffectEdge> graph) {

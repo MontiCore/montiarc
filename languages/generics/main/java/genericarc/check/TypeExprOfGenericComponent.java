@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ArcPortSymbol;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;

@@ -4,7 +4,6 @@ package montiarc._cocos;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 

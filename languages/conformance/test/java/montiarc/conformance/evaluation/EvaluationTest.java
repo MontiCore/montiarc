@@ -2,19 +2,19 @@
 package montiarc.conformance.evaluation;
 
 
-import static montiarc.conformance.util.AutomataLoader.loadMapping;
-
+import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.conformance.AutomataConfChecker;
-import de.se_rwth.commons.logging.Log;
-import java.io.File;
-
 import montiarc.conformance.AutomatonAbstractTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import scmapping.mapping2smt.AutomataMapping;
 import scmapping.mapping2smt.MCMapping;
+
+import java.io.File;
+
+import static montiarc.conformance.util.AutomataLoader.loadMapping;
 
 class EvaluationTest extends AutomatonAbstractTest {
   public String modelDir = "test/resources/montiarc/conformance/eval/";

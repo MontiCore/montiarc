@@ -3,11 +3,10 @@ package montiarc.gradle.ma2java
 
 import montiarc.gradle.montiarc.MAExtension
 import montiarc.gradle.montiarc.MontiarcBasePlugin
+import montiarc.gradle.montiarc.cd2Pojo4MaSymbolDependencyConfigName
 import montiarc.gradle.montiarc.montiarc
-import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
 import montiarc.gradle.montiarc.montiarcSymbolDependencyConfigurationName
 import montiarc.gradle.montiarc.montiarcSymbolsJarTaskName
-import montiarc.gradle.montiarc.cd2Pojo4MaSymbolDependencyConfigName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.SourceDirectorySet

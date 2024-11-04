@@ -8,12 +8,13 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
-import java.util.List;
 import mceffect.effect.Effect;
 import mceffect.effect.EffectStorage;
 import org.jgrapht.GraphPath;
 import org.jgrapht.alg.shortestpath.AllDirectedPaths;
 import org.jgrapht.graph.SimpleDirectedGraph;
+
+import java.util.List;
 
 public class EffectGraph {
 

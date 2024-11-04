@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
-import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import montiarc.util.SCError;

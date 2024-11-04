@@ -2,12 +2,12 @@
 package variablearc.evaluation;
 
 import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.TransitiveNameExpressionScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symboltable.serialization.JsonPrinter;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.symboltable.serialization.json.JsonObject;
-import arcbasis._symboltable.TransitiveNameExpressionScopeSetter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.expressions.Expression;
 

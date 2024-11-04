@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.graph;
 
-import arcbasis._ast.ASTComponentType;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
+
 import java.util.HashMap;
 import java.util.Map;
 

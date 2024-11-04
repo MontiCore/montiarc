@@ -1,16 +1,22 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.checker;
 
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Model;
+import com.microsoft.z3.Solver;
+import com.microsoft.z3.Status;
+import mceffect.effect.Effect;
+import mceffect.effect.EffectKind;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.conformance.AutomataConfChecker;
 import montiarc.conformance.automaton2smt.smtAutomaton.ChaosComplete;
 import montiarc.conformance.automaton2smt.smtAutomaton.ICompleteSMTAut;
 import montiarc.conformance.automaton2smt.smtAutomaton.ISMTAutomaton;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
+
 import java.util.Map;
-import mceffect.effect.Effect;
-import mceffect.effect.EffectKind;
-import montiarc._ast.ASTMACompilationUnit;
 
 public class BasicEffectChecker implements EffectChecker {
 

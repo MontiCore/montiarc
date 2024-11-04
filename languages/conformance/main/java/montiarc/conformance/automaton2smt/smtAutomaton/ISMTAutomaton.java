@@ -2,13 +2,16 @@
 package montiarc.conformance.automaton2smt.smtAutomaton;
 
 import arcbasis._ast.ASTComponentType;
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.Sort;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnum;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;
+
 import java.util.Map;
 
 public interface ISMTAutomaton {

@@ -4,9 +4,6 @@ package montiarc.rte.dse;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 
-import java.util.List;
-import java.util.Set;
-
 public interface TestControllerI extends TransitionSelectorI {
 
   /**

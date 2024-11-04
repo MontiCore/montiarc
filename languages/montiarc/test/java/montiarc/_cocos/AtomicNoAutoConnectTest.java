@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcAbstractTest;
-import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ComfortableArcError;
 import montiarc.util.Error;

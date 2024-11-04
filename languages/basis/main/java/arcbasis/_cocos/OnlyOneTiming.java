@@ -2,11 +2,11 @@
 package arcbasis._cocos;
 
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.umlstereotype._ast.ASTStereoValue;
 import de.monticore.umlstereotype._ast.ASTStereotype;
 import de.monticore.umlstereotype._cocos.UMLStereotypeASTStereotypeCoCo;
 import de.se_rwth.commons.logging.Log;
-import de.monticore.symbols.compsymbols._symboltable.Timing;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 

@@ -4,11 +4,6 @@ package mceffect;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
-import java.util.function.Function;
 import mceffect._ast.ASTMCEffect;
 import mceffect._parser.MCEffectParser;
 import mceffect.checker.EffectCheckResult;
@@ -20,6 +15,12 @@ import mceffect.effect.Utils;
 import mceffect.graph.EffectGraph;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
+
+import java.io.IOException;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.function.Function;
 
 public class MCFullEffectChecker {
 

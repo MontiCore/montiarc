@@ -1,17 +1,32 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import automata.assignments.AssignmentLiteral;
-import automata.assignments.AssignmentName;
 import automata.Types.MotorCmd;
 import automata.Types.TimerSignal;
-import com.google.common.base.Preconditions;
-import com.microsoft.z3.*;
-import automata.dataTypes.*;
+import automata.assignments.AssignmentLiteral;
+import automata.assignments.AssignmentName;
+import automata.dataTypes.BooleanComponent;
+import automata.dataTypes.CharactersComponent;
+import automata.dataTypes.DoubleComponent;
+import automata.dataTypes.DoubleComponentParameter;
+import automata.dataTypes.EnumComponent;
+import automata.dataTypes.FloatComponent;
+import automata.dataTypes.LongComponent;
+import automata.dataTypes.StringComponent;
 import automata.expressions.DivExpression;
 import automata.expressions.MinusExpression;
 import automata.expressions.MultExpression;
 import automata.expressions.PlusExpression;
+import com.google.common.base.Preconditions;
+import com.microsoft.z3.BoolSort;
+import com.microsoft.z3.CharSort;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.EnumSort;
+import com.microsoft.z3.Expr;
+import com.microsoft.z3.IntSort;
+import com.microsoft.z3.RealSort;
+import com.microsoft.z3.SeqSort;
+import com.microsoft.z3.Sort;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.MockTestController;
 import montiarc.rte.dse.TestController;

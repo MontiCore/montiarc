@@ -3,7 +3,6 @@ package montiarc.rte.dse;
 
 import com.microsoft.z3.Model;
 
-import java.util.Set;
 import java.util.function.Function;
 
 public interface ControllerI<In, Out> extends TestControllerI {

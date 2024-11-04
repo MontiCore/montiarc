@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.cd2pojo
 
+import java.util.Optional
+import javax.inject.Inject
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
 import org.gradle.api.tasks.SourceSet
-import java.util.Optional
-import javax.inject.Inject
 
 /**
  * [SourceDirectorySet] for class diagram sources, used for cd2pojo

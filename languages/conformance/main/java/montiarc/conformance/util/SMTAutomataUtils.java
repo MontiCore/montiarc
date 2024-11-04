@@ -1,15 +1,22 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util;
 
-import com.microsoft.z3.*;
-import montiarc.conformance.automaton2smt.cd.CD2SMT;
+import com.microsoft.z3.Constructor;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.DatatypeSort;
+import com.microsoft.z3.Sort;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnum;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
+import montiarc.conformance.automaton2smt.cd.CD2SMT;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 public class SMTAutomataUtils {
   public static String CON_SUFFIX = "_con";

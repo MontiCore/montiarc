@@ -2,6 +2,7 @@
 package mceffect.effect;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
+
 import java.util.List;
 
 public interface EffectStorage {

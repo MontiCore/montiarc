@@ -3,10 +3,11 @@ package mceffect._parser;
 
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import mceffect._ast.ASTMCEffect;
+
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
-import mceffect._ast.ASTMCEffect;
 
 public class MCEffectParser extends MCEffectParserTOP {
   boolean _checkFileAndPackageName = false;

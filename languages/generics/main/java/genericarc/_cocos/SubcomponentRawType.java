@@ -8,7 +8,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.GenericArcError;
-import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * A generic component may be used in raw form, i.e., without providing

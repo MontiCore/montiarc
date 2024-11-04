@@ -5,11 +5,11 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.rte.behavior.Behavior;
 import montiarc.rte.logging.Aspects;
 import montiarc.rte.logging.DataFormatter;
-import montiarc.rte.port.NoMsgType;
+import montiarc.rte.port.InOutPort;
 import montiarc.rte.port.InPort;
+import montiarc.rte.port.NoMsgType;
 import montiarc.rte.port.OutPort;
 import montiarc.rte.port.TickPort;
-import montiarc.rte.port.InOutPort;
 import montiarc.rte.scheduling.Scheduler;
 
 import java.util.List;

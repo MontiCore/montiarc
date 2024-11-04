@@ -13,6 +13,7 @@ import de.monticore.ocl2smt.ocl2smt.expr2smt.expr2z3.Z3TypeFactory;
 import de.monticore.ocl2smt.ocl2smt.expr2smt.typeAdapter.TypeAdapter;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.logging.Log;
+
 import java.util.Optional;
 import java.util.function.Function;
 

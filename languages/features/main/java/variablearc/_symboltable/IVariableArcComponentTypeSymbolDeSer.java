@@ -17,7 +17,6 @@ import variablearc.evaluation.ExpressionSetDeSer;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 public interface IVariableArcComponentTypeSymbolDeSer {
 
