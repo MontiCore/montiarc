@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import montiarc.ATestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -8,7 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 /**
  * Tests that Error code pattern {@link Error} works as intended.
  */
-public class ErrorCodeTest extends AbstractTest {
+public class ErrorCodeTest extends ATestBase {
 
   @ParameterizedTest
   @ValueSource(strings = { "0xC1000", "0xC1001", "0xC0100"})

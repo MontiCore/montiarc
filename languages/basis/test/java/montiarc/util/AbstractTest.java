@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Deprecated
 public abstract class AbstractTest {
 
   protected static final String RELATIVE_MODEL_PATH = "test/resources";

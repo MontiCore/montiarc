@@ -3,6 +3,7 @@ package montiarc.util;
 
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import montiarc.ATestBase;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -10,7 +11,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TimingTest {
+public class TimingTest extends ATestBase {
 
   @ParameterizedTest
   @EnumSource(Timing.class)
