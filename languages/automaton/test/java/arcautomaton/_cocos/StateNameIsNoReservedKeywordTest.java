@@ -2,18 +2,21 @@
 package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
-import arcbasis.ArcBasisAbstractTest;
+import arcautomaton.ArcAutomatonTestBase;
 import de.monticore.scbasis._ast.ASTSCModifier;
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCSBody;
 import de.monticore.scbasis._ast.ASTSCState;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Collections;
 
-public class StateNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class StateNameIsNoReservedKeywordTest extends ArcAutomatonTestBase {
 
   @Test
   public void checkPortNameMatchesKeyword() {
@@ -26,13 +29,13 @@ public class StateNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
       .build();
     StateNameIsNoReservedKeyword coco =
       new StateNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
-    ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
     // When
     coco.check(state);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedError);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.RESTRICTED_IDENTIFIER));
   }
 
   @Test
@@ -51,6 +54,6 @@ public class StateNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
     coco.check(state);
 
     // Then
-    checkOnlyExpectedErrorsPresent();
+    assertThat(Log.getFindings()).isEmpty();
   }
 }

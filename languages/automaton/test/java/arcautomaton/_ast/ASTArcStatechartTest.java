@@ -2,15 +2,13 @@
 package arcautomaton._ast;
 
 import arcautomaton.ArcAutomatonMill;
+import arcautomaton.ArcAutomatonTestBase;
 import arcautomaton._symboltable.ArcAutomatonScopesGenitor;
 import arcautomaton._symboltable.TestScopesGenitorDelegator;
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
-import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 
@@ -19,17 +17,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link ArcAutomatonScopesGenitor} is the class under test.
  */
-public class ASTArcStatechartTest extends ArcBasisAbstractTest {
-
-  @Override
-  @BeforeEach
-  public void setUp() {
-    Log.clearFindings();
-    ArcAutomatonMill.globalScope().clear();
-    ArcAutomatonMill.reset();
-    ArcAutomatonMill.init();
-    addBasicTypes2Scope();
-  }
+public class ASTArcStatechartTest extends ArcAutomatonTestBase {
 
   @ParameterizedTest
   @EnumSource(Timing.class)
