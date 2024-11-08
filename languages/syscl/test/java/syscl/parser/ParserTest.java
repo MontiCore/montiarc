@@ -2,11 +2,10 @@
 package syscl.parser;
 
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.AbstractTest;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import syscl.SysCLMill;
+import syscl.SysCLTestBase;
 import syscl._ast.ASTSysCLCompilationUnit;
 import syscl._parser.SysCLParser;
 
@@ -17,15 +16,7 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class ParserTest extends AbstractTest {
-
-  @BeforeEach
-  public void setUp() {
-    Log.clearFindings();
-    SysCLMill.globalScope().clear();
-    SysCLMill.reset();
-    SysCLMill.init();
-  }
+public class ParserTest extends SysCLTestBase {
 
   protected static final String PACKAGE = "parser";
 
@@ -46,7 +37,7 @@ public class ParserTest extends AbstractTest {
     SysCLParser parser = SysCLMill.parser();
     Optional<ASTSysCLCompilationUnit> optAst;
     try {
-      optAst = parser.parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString());
+      optAst = parser.parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString());
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
