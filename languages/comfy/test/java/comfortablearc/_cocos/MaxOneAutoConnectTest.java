@@ -3,9 +3,10 @@ package comfortablearc._cocos;
 
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentBodyBuilder;
-import comfortablearc.ComfortableArcAbstractTest;
 import comfortablearc.ComfortableArcMill;
+import comfortablearc.ComfortableArcTestBase;
 import comfortablearc._ast.ASTArcAutoConnect;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.ComfortableArcError;
 import montiarc.util.Error;
 import org.junit.jupiter.api.Test;
@@ -18,8 +19,9 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 
 import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class MaxOneAutoConnectTest extends ComfortableArcAbstractTest {
+public class MaxOneAutoConnectTest extends ComfortableArcTestBase {
 
   @Test
   void shouldAllowNoAutoconnect() {
@@ -31,7 +33,7 @@ public class MaxOneAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(/* none */);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
@@ -45,7 +47,7 @@ public class MaxOneAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(/* none */);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
@@ -59,7 +61,8 @@ public class MaxOneAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(expectedErrors));
   }
 
   protected static Stream<Arguments> multipleAutoconnectProvider() {

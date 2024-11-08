@@ -3,10 +3,11 @@ package comfortablearc._cocos;
 
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstantiation;
-import comfortablearc.ComfortableArcAbstractTest;
 import comfortablearc.ComfortableArcMill;
+import comfortablearc.ComfortableArcTestBase;
 import comfortablearc._ast.ASTArcACMode;
 import comfortablearc._ast.ASTArcAutoConnect;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.ComfortableArcError;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +18,9 @@ import org.mockito.Mockito;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
-public class AtomicNoAutoConnectTest extends ComfortableArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class AtomicNoAutoConnectTest extends ComfortableArcTestBase {
 
   @Test
   void shouldAllowNoAutoConnectInAtomicComponent() {
@@ -29,7 +32,7 @@ public class AtomicNoAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(/* none */);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test
@@ -45,7 +48,7 @@ public class AtomicNoAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(/* none */);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
@@ -63,7 +66,7 @@ public class AtomicNoAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(/* none */);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
@@ -80,7 +83,11 @@ public class AtomicNoAutoConnectTest extends ComfortableArcAbstractTest {
     coco.check(body);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT
+      )
+    );
   }
 
   static Stream<Arguments> provideDifferentAutoConnectVariations() {

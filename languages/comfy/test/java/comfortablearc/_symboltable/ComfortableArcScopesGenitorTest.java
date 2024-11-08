@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc._symboltable;
 
-import comfortablearc.ComfortableArcAbstractTest;
 import comfortablearc.ComfortableArcMill;
+import comfortablearc.ComfortableArcTestBase;
 import comfortablearc._ast.ASTConnectedComponentInstance;
 import comfortablearc._ast.ASTFullyConnectedComponentInstantiation;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Holds tests for the handwritten methods of {@link ComfortableArcScopesGenitor}.
  */
-public class ComfortableArcScopesGenitorTest extends ComfortableArcAbstractTest {
+public class ComfortableArcScopesGenitorTest extends ComfortableArcTestBase {
 
   @Test
   public void shouldVisitAsComponentInstantiation() {

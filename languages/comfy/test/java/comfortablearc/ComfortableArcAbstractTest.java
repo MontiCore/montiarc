@@ -6,6 +6,7 @@ import arcbasis.check.ArcBasisTypeCheck;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 
+@Deprecated
 public class ComfortableArcAbstractTest extends ArcBasisAbstractTest {
 
   @Override
