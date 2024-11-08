@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
+import variablearc.VariableArcTestBase;
 import variablearc.evaluation.expressions.Expression;
 
-public class VariableArcVariationPointTest extends VariableArcAbstractTest {
+public class VariableArcVariationPointTest extends VariableArcTestBase {
 
   protected VariableArcVariationPoint variationPoint;
 

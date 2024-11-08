@@ -17,17 +17,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcConstraintDeclaration;
 
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link ConstraintsOmitPortReferences}
  */
-public class ConstraintsOmitPortReferencesTest extends VariableArcAbstractTest {
+public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
 
   protected final static String INDEPENDENT_COMPONENT_NAME = "IndependentComp";
   protected final static String INDEPENDENT_COMPONENT_IN_PORT_NAME = "someIndependentInPort";
@@ -215,6 +217,12 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcAbstractTest {
     this.coco.check(comp.getAstNode());
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL, VariableArcError.PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          VariableArcError.PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL,
+          VariableArcError.PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL
+        )
+      );
   }
 }

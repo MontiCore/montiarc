@@ -18,8 +18,8 @@ import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc.evaluation.expressions.AssignmentExpression;
@@ -34,7 +34,7 @@ import java.util.Optional;
 /**
  * Tests for {@link ComponentConverter}
  */
-public class ComponentConverterTest extends VariableArcAbstractTest {
+public class ComponentConverterTest extends VariableArcTestBase {
 
   protected static SubcomponentSymbol createInstance(String name, ComponentTypeSymbol component) {
     CompTypeExpression typeExpression = new TypeExprOfComponent(component);

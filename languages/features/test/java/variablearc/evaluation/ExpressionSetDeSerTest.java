@@ -4,8 +4,8 @@ package variablearc.evaluation;
 import de.monticore.symboltable.serialization.JsonParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc.evaluation.expressions.Expression;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Tests for {@link ExpressionSetDeSer}
  */
-public class ExpressionSetDeSerTest extends VariableArcAbstractTest {
+public class ExpressionSetDeSerTest extends VariableArcTestBase {
 
   protected static final String JSON_SIMPLE_EXPRESSION_SET =
     "{" +

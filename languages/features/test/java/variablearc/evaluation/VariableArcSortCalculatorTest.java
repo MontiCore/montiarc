@@ -11,7 +11,7 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
+import variablearc.VariableArcTestBase;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.when;
 /**
  * Tests for {@link VariableArcDeriveSMTSort}
  */
-public class VariableArcSortCalculatorTest extends VariableArcAbstractTest {
+public class VariableArcSortCalculatorTest extends VariableArcTestBase {
 
   protected static Context createContext() {
     Context context = Mockito.mock(Context.class);

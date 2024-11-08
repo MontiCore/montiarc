@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.Collections;
@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 /**
  * Tests for {@link ExpressionSet}
  */
-public class ExpressionSetTest extends VariableArcAbstractTest {
+public class ExpressionSetTest extends VariableArcTestBase {
 
   public static Stream<Arguments> expressionSetAndExpectedPrintProvider() {
     return Stream.of(

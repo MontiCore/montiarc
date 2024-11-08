@@ -14,14 +14,16 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcVarIf;
 
 import java.util.Collections;
 import java.util.List;
 
-public class VarIfOmitFieldReferencesTest extends VariableArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class VarIfOmitFieldReferencesTest extends VariableArcTestBase {
 
   protected static String featureName = "someFeature";
 
@@ -112,6 +114,11 @@ public class VarIfOmitFieldReferencesTest extends VariableArcAbstractTest {
     new VarIfOmitFieldReferences().check(comp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          VariableArcError.FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL
+        )
+      );
   }
 }

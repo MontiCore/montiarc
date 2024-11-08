@@ -6,8 +6,8 @@ import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.Optional;
@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Tests for {@link VariableArcVariationPointDeSer}
  */
-public class VariableArcVariationPointDeSerTest extends VariableArcAbstractTest {
+public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
 
   protected static final String JSON_EMPTY_VARIATION_POINT = "{\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\",\"expression\":\"f1\"}";
   protected static final String JSON_NESTED_VARIATION_POINT = "{" +

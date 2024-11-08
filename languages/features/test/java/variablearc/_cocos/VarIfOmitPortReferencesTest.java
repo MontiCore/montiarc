@@ -18,17 +18,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcVarIf;
 
 import java.util.Arrays;
 import java.util.Collections;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link VarIfOmitPortReferences}
  */
-public class VarIfOmitPortReferencesTest extends VariableArcAbstractTest {
+public class VarIfOmitPortReferencesTest extends VariableArcTestBase {
 
   protected final static String INDEPENDENT_COMPONENT_NAME = "IndependentComp";
   protected final static String INDEPENDENT_COMPONENT_IN_PORT_NAME = "someIndependentInPort";
@@ -220,6 +222,12 @@ public class VarIfOmitPortReferencesTest extends VariableArcAbstractTest {
     this.coco.check(comp.getAstNode());
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL, VariableArcError.PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          VariableArcError.PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL,
+          VariableArcError.PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL
+        )
+      );
   }
 }

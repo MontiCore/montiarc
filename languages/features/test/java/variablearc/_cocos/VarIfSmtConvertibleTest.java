@@ -8,20 +8,24 @@ import montiarc.util.VariableArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcVarIf;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link VarIfSmtConvertible}
  */
-public class VarIfSmtConvertibleTest extends VariableArcAbstractTest {
+public class VarIfSmtConvertibleTest extends VariableArcTestBase {
 
   @Test
   public void shouldConvertToSMT() {
     // Given
     ASTArcVarIf varIf = VariableArcMill.arcVarIfBuilder()
-      .setCondition(VariableArcMill.literalExpressionBuilder().setLiteral(VariableArcMill.booleanLiteralBuilder().setSource(ASTConstantsMCCommonLiterals.TRUE).build()).build())
+      .setCondition(VariableArcMill.literalExpressionBuilder()
+        .setLiteral(VariableArcMill.booleanLiteralBuilder()
+          .setSource(ASTConstantsMCCommonLiterals.TRUE).build()).build())
       .setThen(Mockito.mock(ASTArcElement.class))
       .build();
 
@@ -44,6 +48,7 @@ public class VarIfSmtConvertibleTest extends VariableArcAbstractTest {
     new VarIfSmtConvertible().check(varIf);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE));
   }
 }

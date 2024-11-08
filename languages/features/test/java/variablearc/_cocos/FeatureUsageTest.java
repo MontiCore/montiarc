@@ -10,14 +10,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class FeatureUsageTest extends VariableArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class FeatureUsageTest extends VariableArcTestBase {
 
   protected static Stream<Arguments> provideComponentAndError() {
     return Stream.of(
@@ -91,6 +93,7 @@ public class FeatureUsageTest extends VariableArcAbstractTest {
     coco.check(component);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(errorList);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errorList));
   }
 }

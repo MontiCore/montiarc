@@ -12,8 +12,8 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSetDeSer;
 import variablearc.evaluation.expressions.Expression;
@@ -25,7 +25,7 @@ import java.util.function.Function;
 /**
  * Tests for {@link IVariableArcComponentTypeSymbolDeSer}
  */
-public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcAbstractTest {
+public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcTestBase {
 
   protected static final String JSON_WITH_ARC_FEATURES =
     "{" +

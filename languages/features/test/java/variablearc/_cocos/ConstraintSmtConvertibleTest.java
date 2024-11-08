@@ -6,14 +6,16 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcConstraintDeclaration;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests for {@link ConstraintSmtConvertible}
  */
-public class ConstraintSmtConvertibleTest extends VariableArcAbstractTest {
+public class ConstraintSmtConvertibleTest extends VariableArcTestBase {
 
   @Test
   public void shouldConvertToSMT() {
@@ -40,6 +42,9 @@ public class ConstraintSmtConvertibleTest extends VariableArcAbstractTest {
     new ConstraintSmtConvertible().check(constraint);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE)
+      );
   }
 }

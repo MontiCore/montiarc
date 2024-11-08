@@ -11,6 +11,7 @@ import variablearc.check.VariableArcTypeCheck;
 
 import java.util.Arrays;
 
+@Deprecated
 public class VariableArcAbstractTest extends ArcBasisAbstractTest {
 
   @BeforeEach

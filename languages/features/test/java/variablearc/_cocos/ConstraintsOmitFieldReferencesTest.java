@@ -14,13 +14,15 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcConstraintDeclaration;
 
 import java.util.List;
 
-public class ConstraintsOmitFieldReferencesTest extends VariableArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ConstraintsOmitFieldReferencesTest extends VariableArcTestBase {
 
   protected static String featureName = "someFeature";
 
@@ -118,6 +120,9 @@ public class ConstraintsOmitFieldReferencesTest extends VariableArcAbstractTest 
     new ConstraintsOmitFieldReferences().check(comp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(VariableArcError.FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(VariableArcError.FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL)
+      );
   }
 }

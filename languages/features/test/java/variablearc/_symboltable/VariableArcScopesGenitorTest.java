@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import variablearc.VariableArcAbstractTest;
 import variablearc.VariableArcMill;
+import variablearc.VariableArcTestBase;
 import variablearc._ast.ASTArcVarIf;
 
 /**
  * Holds tests for the handwritten methods of {@link VariableArcScopesGenitor}.
  */
-public class VariableArcScopesGenitorTest extends VariableArcAbstractTest {
+public class VariableArcScopesGenitorTest extends VariableArcTestBase {
 
   protected VariableArcScopesGenitorTestDelegator symTab;
 
