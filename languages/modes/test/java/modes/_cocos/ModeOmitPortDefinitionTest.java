@@ -5,6 +5,7 @@ import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
 import modes.ModesAbstractTest;
 import modes.ModesMill;
+import modes.ModesTestBase;
 import modes._ast.ASTArcMode;
 import montiarc.util.ModesError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -15,10 +16,12 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link ModeOmitPortDefinition}
  */
-public class ModeOmitPortDefinitionTest extends ModesAbstractTest {
+public class ModeOmitPortDefinitionTest extends ModesTestBase {
 
   protected static Stream<Arguments> numberOfPortSymbolsWithErrorProvider() {
     return Stream.of(
@@ -51,6 +54,7 @@ public class ModeOmitPortDefinitionTest extends ModesAbstractTest {
     coco.check(mode);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(expectedErrors));
   }
 }

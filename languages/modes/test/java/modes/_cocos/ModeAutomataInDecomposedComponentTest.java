@@ -7,7 +7,7 @@ import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import modes.ModesAbstractTest;
+import modes.ModesTestBase;
 import modes._ast.ASTModeAutomaton;
 import montiarc.util.ModesError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,10 +18,12 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link ModeAutomataInDecomposedComponent}
  */
-public class ModeAutomataInDecomposedComponentTest extends ModesAbstractTest {
+public class ModeAutomataInDecomposedComponentTest extends ModesTestBase {
 
   protected static Stream<Arguments> numberOfModeAutomataWithErrorProvider() {
     return Stream.of(
@@ -69,6 +71,7 @@ public class ModeAutomataInDecomposedComponentTest extends ModesAbstractTest {
     coco.check(compType);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(expectedErrors));
   }
 }

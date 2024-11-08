@@ -4,8 +4,8 @@ package modes._symboltable;
 
 import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import modes.ModesAbstractTest;
 import modes.ModesMill;
+import modes.ModesTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,7 +13,7 @@ import org.mockito.Mockito;
 import java.util.Collections;
 import java.util.List;
 
-public class ModesVariantComponentTypeSymbolTest extends ModesAbstractTest {
+public class ModesVariantComponentTypeSymbolTest extends ModesTestBase {
 
   @Test
   public void shouldAddComponentInstanceSymbols() {

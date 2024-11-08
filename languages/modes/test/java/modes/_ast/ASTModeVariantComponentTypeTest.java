@@ -4,8 +4,8 @@ package modes._ast;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
-import modes.ModesAbstractTest;
 import modes.ModesMill;
+import modes.ModesTestBase;
 import modes._symboltable.ArcModeSymbol;
 import modes._symboltable.ModesVariantComponentTypeSymbol;
 import org.junit.jupiter.api.Assertions;
@@ -15,7 +15,7 @@ import org.mockito.Mockito;
 import java.util.Collections;
 import java.util.List;
 
-public class ASTModeVariantComponentTypeTest extends ModesAbstractTest {
+public class ASTModeVariantComponentTypeTest extends ModesTestBase {
 
   @Test
   public void shouldNotBuildASTVariant() {

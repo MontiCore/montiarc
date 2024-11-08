@@ -2,8 +2,8 @@
 package modes._cocos;
 
 import com.google.common.base.Preconditions;
-import modes.ModesAbstractTest;
 import modes.ModesMill;
+import modes.ModesTestBase;
 import modes._ast.ASTModeAutomaton;
 import montiarc.util.ModesError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -13,10 +13,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link ModeAutomatonContainsNoStates}
  */
-public class ModeAutomatonContainsNoStatesTest extends ModesAbstractTest {
+public class ModeAutomatonContainsNoStatesTest extends ModesTestBase {
 
   protected static Stream<Arguments> numberOfModesAndStatesWithErrorProvider() {
     return Stream.of(
@@ -55,6 +57,7 @@ public class ModeAutomatonContainsNoStatesTest extends ModesAbstractTest {
     coco.check(modeAutomaton);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(expectedErrors));
   }
 }
