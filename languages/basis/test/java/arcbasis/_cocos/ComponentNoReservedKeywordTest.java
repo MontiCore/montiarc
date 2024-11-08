@@ -1,18 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.Collections;
 
-public class ComponentNoReservedKeywordTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ComponentNoReservedKeywordTest extends ArcBasisTestBase {
 
   @Test
   public void checkPortNameMatchesKeyword() {
@@ -24,13 +27,13 @@ public class ComponentNoReservedKeywordTest extends ArcBasisAbstractTest {
       .build();
     ComponentNoReservedKeyword coco =
       new ComponentNoReservedKeyword("testLang", Collections.singleton("keyword"));
-    ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
     // When
     coco.check(cType);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedError);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.RESTRICTED_IDENTIFIER));
   }
 
   @Test
@@ -48,6 +51,6 @@ public class ComponentNoReservedKeywordTest extends ArcBasisAbstractTest {
     coco.check(cType);
 
     // Then
-    checkOnlyExpectedErrorsPresent();
+    assertThat(Log.getFindings()).isEmpty();
   }
 }

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
@@ -15,7 +15,7 @@ import java.util.Optional;
 /**
  * Holds tests for the handwritten methods of {@link InstanceVisitor}.
  */
-public class InstanceVisitorTest extends ArcBasisAbstractTest {
+public class InstanceVisitorTest extends ArcBasisTestBase {
 
   @Test
   public void shouldGetComponentType() {

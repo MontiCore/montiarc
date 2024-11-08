@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.monticore.types.check.SymTypeExpression;
@@ -18,15 +18,9 @@ import static de.monticore.types.check.SymTypeExpressionFactory.createTypeObject
 /**
  * Holds tests for {@link SymTypeOfObject}.
  */
-public class SymTypeOfObjectTest extends ArcBasisAbstractTest {
+public class SymTypeOfObjectTest extends ArcBasisTestBase {
 
   @BeforeEach
-  @Override
-  public void setUp() {
-    super.setUp();
-    this.setUpTypes();
-  }
-
   public void setUpTypes() {
     // create scope a.b.c
     IArcBasisArtifactScope as = ArcBasisMill.artifactScope();

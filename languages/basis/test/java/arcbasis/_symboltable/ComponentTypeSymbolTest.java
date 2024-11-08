@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -28,7 +28,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Holds tests for the handwritten methods of {@link ComponentTypeSymbol}.
  */
-public class ComponentTypeSymbolTest extends ArcBasisAbstractTest {
+public class ComponentTypeSymbolTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("innerComponentNamesProvider")

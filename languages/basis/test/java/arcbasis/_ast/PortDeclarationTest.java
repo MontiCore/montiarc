@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import org.mockito.Mockito;
 /**
  * Holds test for the handwritten methods of {@link ASTPortDeclaration}.
  */
-public class PortDeclarationTest extends ArcBasisAbstractTest {
+public class PortDeclarationTest extends ArcBasisTestBase {
 
   @Test
   public void shouldReturnExpectedDirection() {

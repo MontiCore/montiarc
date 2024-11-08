@@ -23,6 +23,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class UniqueIdentifierGenericArcTest extends UniqueIdentifierTest {
 
   @ParameterizedTest
@@ -49,7 +51,8 @@ public class UniqueIdentifierGenericArcTest extends UniqueIdentifierTest {
     UniqueIdentifierTest.coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.UNIQUE_IDENTIFIER_NAMES));
   }
 
   @Test
@@ -75,7 +78,8 @@ public class UniqueIdentifierGenericArcTest extends UniqueIdentifierTest {
     UniqueIdentifierTest.coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes((ArcError.UNIQUE_IDENTIFIER_NAMES)));
   }
 
   @Test
@@ -99,7 +103,8 @@ public class UniqueIdentifierGenericArcTest extends UniqueIdentifierTest {
     UniqueIdentifierTest.coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.UNIQUE_IDENTIFIER_NAMES));
   }
 
   @Test

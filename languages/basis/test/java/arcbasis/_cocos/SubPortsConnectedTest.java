@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
@@ -21,10 +21,12 @@ import org.mockito.Mockito;
 import java.util.HashMap;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Holds tests for the handwritten methods of {@link SubPortsConnected}
  */
-public class SubPortsConnectedTest extends ArcBasisAbstractTest {
+public class SubPortsConnectedTest extends ArcBasisTestBase {
 
   HashMap<String, ASTComponentType> components;
 
@@ -42,7 +44,8 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
     coco.check(ast);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(errors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   @BeforeEach
@@ -85,7 +88,11 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(createQualifiedType("A"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
           .setComponentInstanceList("sub1")
           .build())
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("sub1.i1",
@@ -109,7 +116,11 @@ public class SubPortsConnectedTest extends ArcBasisAbstractTest {
             .build())
           .build())
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
-          .setMCType(createQualifiedType("A"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
           .setComponentInstanceList("sub1")
           .build())
         .addArcElement(

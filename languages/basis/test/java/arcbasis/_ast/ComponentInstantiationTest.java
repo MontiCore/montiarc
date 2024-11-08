@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 /**
  * Holds test for the handwritten methods of {@link ASTComponentInstantiation}.
  */
-public class ComponentInstantiationTest extends ArcBasisAbstractTest {
+public class ComponentInstantiationTest extends ArcBasisTestBase {
 
   ASTComponentInstantiation astCompInstantiation;
 

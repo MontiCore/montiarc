@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
@@ -15,10 +15,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests {@link OptionalConfigurationParametersLast}
  */
-public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTest {
+public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
 
   protected static final String INT_FIELD_NAME = "anInt";
 
@@ -61,11 +63,19 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParameter(0, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .addArcParameter(1, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .build())
       .build();
@@ -90,20 +100,36 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParameter(0, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .addArcParameter(1, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .addArcParameter(2, ArcBasisMill.arcParameterBuilder()
           .setName("optInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .addArcParameter(3, ArcBasisMill.arcParameterBuilder()
           .setName("optInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .build())
@@ -129,12 +155,20 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParameter(0, ArcBasisMill.arcParameterBuilder()
           .setName("optInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .addArcParameter(1, ArcBasisMill.arcParameterBuilder()
           .setName("optInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .build())
@@ -160,16 +194,28 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParameter(0, ArcBasisMill.arcParameterBuilder()
           .setName("optInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .addArcParameter(1, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .addArcParameter(2, ArcBasisMill.arcParameterBuilder()
           .setName("optInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .build())
@@ -183,9 +229,8 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
     coco.check(comp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(
-      ArcError.OPTIONAL_PARAMS_LAST
-    );
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.OPTIONAL_PARAMS_LAST));
   }
 
   @Test
@@ -197,16 +242,28 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParameter(0, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .addArcParameter(1, ArcBasisMill.arcParameterBuilder()
           .setName("optInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .addArcParameter(2, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .build())
       .build();
@@ -219,9 +276,8 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
     coco.check(comp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(
-      ArcError.OPTIONAL_PARAMS_LAST
-    );
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.OPTIONAL_PARAMS_LAST));
   }
 
   @Test
@@ -233,21 +289,37 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParameter(0, ArcBasisMill.arcParameterBuilder()
           .setName("optInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .addArcParameter(1, ArcBasisMill.arcParameterBuilder()
           .setName("optInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .setDefault(ArcBasisMill.nameExpressionBuilder().setName(INT_FIELD_NAME).build())
           .build())
         .addArcParameter(2, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt1")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .addArcParameter(3, ArcBasisMill.arcParameterBuilder()
           .setName("mandatoryInt2")
-          .setMCType(createQualifiedType("int"))
+          .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("int")
+              .build())
+            .build())
           .build())
         .build())
       .build();
@@ -260,8 +332,12 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisAbstractTes
     coco.check(comp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(
-      ArcError.OPTIONAL_PARAMS_LAST, ArcError.OPTIONAL_PARAMS_LAST
-    );
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          ArcError.OPTIONAL_PARAMS_LAST,
+          ArcError.OPTIONAL_PARAMS_LAST
+        )
+      );
   }
 }

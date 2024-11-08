@@ -1,18 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
 
   @Test
   public void shouldHandleMCQualifiedType() {
@@ -54,9 +57,22 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     ArcBasisMill.globalScope().addSubScope(scopeOfQualComp);
 
     // Now build the qualified type
-    ASTMCQualifiedType astNormalComp = createQualifiedType(normalCompName);
-    ASTMCQualifiedType astQualComp = createQualifiedType(nameOfQualCompScope, qualifiedCompName);
-    ASTMCQualifiedType astMultiNormalComp = createQualifiedType(multipleNormalCompName);
+    ASTMCQualifiedType astNormalComp = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts(normalCompName)
+        .build())
+      .build();
+    ASTMCQualifiedType astQualComp = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts(nameOfQualCompScope)
+        .addParts(qualifiedCompName)
+        .build())
+      .build();
+    ASTMCQualifiedType astMultiNormalComp = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts(multipleNormalCompName)
+        .build())
+      .build();
     astNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
     astQualComp.setEnclosingScope(ArcBasisMill.globalScope());
     astMultiNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
@@ -83,14 +99,25 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo());
     Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo());
     Assertions.assertTrue(result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp1) || result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp2));
-    checkOnlyExpectedErrorsPresent(ArcError.AMBIGUOUS_REFERENCE);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE));
   }
 
   @Test
   public void shouldNotHandleMCQualifiedType() {
     // Given
-    ASTMCQualifiedType astNormalComp = createQualifiedType("Foo");
-    ASTMCQualifiedType astQualComp = createQualifiedType("qual", "Foo");
+    ASTMCQualifiedType astNormalComp = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts("Foo")
+        .build())
+      .build();
+    ASTMCQualifiedType astQualComp =
+      ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("qual")
+          .addParts("Foo")
+          .build())
+        .build();
     astNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
     astQualComp.setEnclosingScope(ArcBasisMill.globalScope());
 
@@ -106,7 +133,13 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
     // Then
     Assertions.assertFalse(result4normal.getResult().isPresent());
     Assertions.assertFalse(result4qual.getResult().isPresent());
-    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT, ArcError.MISSING_COMPONENT);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          ArcError.MISSING_COMPONENT,
+          ArcError.MISSING_COMPONENT
+        )
+      );
   }
 
   @Test
@@ -127,6 +160,6 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisAbstractTes
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
-    checkOnlyExpectedErrorsPresent();
+    assertThat(Log.getFindings()).isEmpty();
   }
 }

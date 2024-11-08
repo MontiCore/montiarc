@@ -2,11 +2,10 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
-import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -15,15 +14,7 @@ import java.util.stream.Stream;
 /**
  * Holds tests for {@link Component2TypeSymbolAdapter}.
  */
-public class Component2TypeSymbolAdapterTest {
-
-  @BeforeAll
-  static void setUp() {
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.reset();
-    ArcBasisMill.init();
-    BasicSymbolsMill.initializePrimitives();
-  }
+public class Component2TypeSymbolAdapterTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("componentTypeSymbolProvider")

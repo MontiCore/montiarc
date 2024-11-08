@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcPort;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.SymTypeExpression;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link DelayOutPortOnly} is the class and context-condition under test.
  */
-public class DelayOutPortOnlyTest extends ArcBasisAbstractTest {
+public class DelayOutPortOnlyTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @CsvSource(value = {
@@ -67,6 +67,8 @@ public class DelayOutPortOnlyTest extends ArcBasisAbstractTest {
     coco.check(port);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.IN_PORT_DELAYED);
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(
+      getErrorCodes(ArcError.IN_PORT_DELAYED)
+    );
   }
 }

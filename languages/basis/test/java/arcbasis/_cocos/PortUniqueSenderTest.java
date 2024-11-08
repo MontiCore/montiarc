@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import montiarc.util.ArcError;
@@ -13,17 +13,20 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Holds tests for the handwritten methods of {@link PortUniqueSender}.
  */
-public class PortUniqueSenderTest extends ArcBasisAbstractTest {
+public class PortUniqueSenderTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
   public void shouldDetectMultipleConnectedTarget(ASTComponentType ast, ArcError[] errors) {
     PortUniqueSender coco = new PortUniqueSender();
     coco.check(ast);
-    this.checkOnlyExpectedErrorsPresent(errors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {

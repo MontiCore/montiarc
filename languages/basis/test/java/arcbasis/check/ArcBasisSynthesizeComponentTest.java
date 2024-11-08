@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class ArcBasisSynthesizeComponentTest extends ArcBasisAbstractTest {
+public class ArcBasisSynthesizeComponentTest extends ArcBasisTestBase {
 
   @Test
   public void shouldSynthesizeFromMCQualifiedType() {
@@ -25,7 +25,11 @@ public class ArcBasisSynthesizeComponentTest extends ArcBasisAbstractTest {
     ArcBasisMill.globalScope().addSubScope(compSym.getSpannedScope());
 
     // Now build the qualified type
-    ASTMCQualifiedType astComp = createQualifiedType(compName);
+    ASTMCQualifiedType astComp = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts(compName)
+        .build())
+      .build();
     astComp.setEnclosingScope(ArcBasisMill.globalScope());
 
     ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
@@ -42,7 +46,11 @@ public class ArcBasisSynthesizeComponentTest extends ArcBasisAbstractTest {
   @Test
   public void shouldNotSynthesizeFromUnresolvableType() {
     // Now build the qualified type
-    ASTMCQualifiedType astComp = createQualifiedType("Unresolvable");
+    ASTMCQualifiedType astComp = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts("Unresolvable")
+        .build())
+      .build();
     astComp.setEnclosingScope(ArcBasisMill.globalScope());
 
     ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();

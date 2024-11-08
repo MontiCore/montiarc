@@ -2,37 +2,28 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis.check.TypeExprOfComponent;
-import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
-import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
-
-import java.util.stream.Stream;
 
 /**
  * Holds tests for {@link Subcomponent2VariableAdapter}.
  */
-public class Subcomponent2VariableAdapterTest {
+public class Subcomponent2VariableAdapterTest extends ArcBasisTestBase {
 
-  @BeforeAll
-  static void setUp() {
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.reset();
-    ArcBasisMill.init();
-    BasicSymbolsMill.initializePrimitives();
-  }
-
-  @ParameterizedTest
-  @MethodSource("subcomponentSymbolProvider")
-  void shouldAdaptFields(@NotNull SubcomponentSymbol adaptee) {
+  @Test
+  void shouldAdaptFields() {
     // Given
+    SubcomponentSymbol adaptee = ArcBasisMill.subcomponentSymbolBuilder()
+      .setName("sub")
+      .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
+      .build();
+    SymbolService.link(ArcBasisMill.scope(), adaptee);
+
     Subcomponent2VariableAdapter adapter = new Subcomponent2VariableAdapter(adaptee);
 
     // Then
@@ -52,10 +43,15 @@ public class Subcomponent2VariableAdapterTest {
     );
   }
 
-  @ParameterizedTest
-  @MethodSource("subcomponentSymbolProvider")
-  void shouldDeepClone(@NotNull SubcomponentSymbol adaptee) {
+  @Test
+  void shouldDeepClone() {
     // Given
+    SubcomponentSymbol adaptee = ArcBasisMill.subcomponentSymbolBuilder()
+      .setName("sub")
+      .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
+      .build();
+    SymbolService.link(ArcBasisMill.scope(), adaptee);
+
     Subcomponent2VariableAdapter adapter = new Subcomponent2VariableAdapter(adaptee);
 
     // When
@@ -82,34 +78,13 @@ public class Subcomponent2VariableAdapterTest {
     );
   }
 
-  protected static Stream<SubcomponentSymbol> subcomponentSymbolProvider() {
-    IArcBasisScope scope = ArcBasisMill.scope();
-
-    // incoming port
-    SubcomponentSymbol instance1 = ArcBasisMill.subcomponentSymbolBuilder()
-      .setName("c1")
-      .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
-      .build();
-    SymbolService.link(scope, instance1);
-
-    // outgoing port
-    SubcomponentSymbol instance2 = ArcBasisMill.subcomponentSymbolBuilder()
-      .setName("c2")
-      .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
-      .build();
-    SymbolService.link(scope, instance2);
-
-    return Stream.of(instance1, instance2);
-  }
-
   @Test
   void shouldNotThrowErrorIfTypeIsMissing() {
     // Given
-    IArcBasisScope scope = ArcBasisMill.scope();
     SubcomponentSymbol adaptee = ArcBasisMill.subcomponentSymbolBuilder()
-      .setName("c1")
+      .setName("sub")
       .build();
-    SymbolService.link(scope, adaptee);
+    SymbolService.link(ArcBasisMill.scope(), adaptee);
 
     // When
     Subcomponent2VariableAdapter adapter = new Subcomponent2VariableAdapter(adaptee);

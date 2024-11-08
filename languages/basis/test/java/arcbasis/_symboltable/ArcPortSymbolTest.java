@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInterface;
 import arcbasis._ast.ASTComponentType;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Holds tests for the handwritten methods of {@link ArcPortSymbol}.
  */
-public class ArcPortSymbolTest extends ArcBasisAbstractTest {
+public class ArcPortSymbolTest extends ArcBasisTestBase {
 
   @Test
   public void shouldFindComponentType() {

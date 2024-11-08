@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
 
+
 public class ModesAbstractTest extends ArcBasisAbstractTest {
 
   @BeforeEach

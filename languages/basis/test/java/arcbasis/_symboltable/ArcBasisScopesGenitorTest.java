@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
@@ -32,7 +32,7 @@ import java.util.Arrays;
 /**
  * Holds tests for the handwritten methods of {@link ArcBasisScopesGenitor}.
  */
-public class ArcBasisScopesGenitorTest extends ArcBasisAbstractTest {
+public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
 
   protected ArcBasisScopesGenitorTestDelegator symTab;
 

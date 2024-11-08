@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
@@ -38,13 +38,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class UniqueIdentifierTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class UniqueIdentifierTest extends ArcBasisTestBase {
 
   protected static UniqueIdentifier coco;
 
   @BeforeEach
   public void setUp() {
-    super.setUp();
     setCoco();
   }
 
@@ -127,7 +128,8 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(expectedError);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(expectedError));
   }
 
   @ParameterizedTest
@@ -157,7 +159,8 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.UNIQUE_IDENTIFIER_NAMES));
   }
 
   @Test
@@ -184,7 +187,8 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
     coco.check(enclosingComp);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.UNIQUE_IDENTIFIER_NAMES);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.UNIQUE_IDENTIFIER_NAMES));
   }
 
   @Test
@@ -239,7 +243,11 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
     Preconditions.checkNotNull(name);
 
     return ArcBasisMill.componentInstantiationBuilder()
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .addInstance(name)
       .build();
   }
@@ -252,7 +260,11 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
       .setIncoming(true)
       .setPortDirection(Mockito.mock(ASTPortDirection.class))
       .addPort(name)
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .build();
 
     return ArcBasisMill.componentInterfaceBuilder()
@@ -270,7 +282,11 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
       .build();
 
     return ArcBasisMill.arcFieldDeclarationBuilder()
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .addArcField(field)
       .build();
   }
@@ -282,7 +298,11 @@ public class UniqueIdentifierTest extends ArcBasisAbstractTest {
     return ArcBasisMill.arcParameterBuilder()
       .setName(name)
       .setDefault(Mockito.mock(ASTExpression.class))
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .build();
   }
 

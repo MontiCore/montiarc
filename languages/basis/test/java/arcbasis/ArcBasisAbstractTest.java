@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.Arrays;
 
+@Deprecated
 public abstract class ArcBasisAbstractTest extends AbstractTest {
 
   @BeforeEach

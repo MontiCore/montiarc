@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
+public class ArcBasisResolvingTest extends ArcBasisTestBase {
 
   protected IArcBasisScope scope;
 
@@ -59,9 +59,7 @@ public class ArcBasisResolvingTest extends ArcBasisAbstractTest {
   }
 
   @BeforeEach
-  @Override
   public void setUp() {
-    super.setUp();
     this.setUpType();
   }
 

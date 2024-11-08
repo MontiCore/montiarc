@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
+import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -15,14 +16,17 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
-public class PortsConnectedTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class PortsConnectedTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
   public void shouldDetectWronglyConnectedPorts(ASTComponentType ast, ArcError[] errors) {
     PortsConnected coco = new PortsConnected();
     coco.check(ast);
-    this.checkOnlyExpectedErrorsPresent(errors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {

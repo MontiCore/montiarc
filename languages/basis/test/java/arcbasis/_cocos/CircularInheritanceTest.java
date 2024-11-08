@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -15,13 +15,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.Collections;
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Holds tests for the handwritten methods of {@link CircularInheritance}.
  */
-public class CircularInheritanceTest extends ArcBasisAbstractTest {
+public class CircularInheritanceTest extends ArcBasisTestBase {
 
   /**
    * If a component directly extends itself, then the context-condition should
@@ -32,7 +31,15 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     // Given
     ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
+          .build())
+        .build())
       .build();
 
     ArcBasisMill.scopesGenitorDelegator().createFromAST(ast);
@@ -45,7 +52,9 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     coco.check(ast);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(
+      getErrorCodes(ArcError.CIRCULAR_INHERITANCE)
+    );
   }
 
   /**
@@ -57,11 +66,27 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     // Given
     ASTComponentType a = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("B")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("B")
+              .build())
+            .build())
+          .build())
+        .build())
       .build();
     ASTComponentType b = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
+          .build())
+        .build())
       .build();
 
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
@@ -80,7 +105,9 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     coco.check(a);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(
+      getErrorCodes(ArcError.CIRCULAR_INHERITANCE)
+    );
   }
 
   /**
@@ -92,13 +119,34 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     // Given
     ASTComponentType a = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(List.of(
-        ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build(),
-        ArcBasisMill.arcParentBuilder().setType(createQualifiedType("B")).build())).build())
-      .build();
+      .setHead(ArcBasisMill.componentHeadBuilder()
+          .addArcParent(ArcBasisMill.arcParentBuilder()
+            .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+              .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+                .addParts("A")
+                .build())
+              .build())
+              .build())
+          .addArcParent(ArcBasisMill.arcParentBuilder()
+            .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+              .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+                .addParts("B")
+                .build())
+              .build())
+            .build())
+            .build())
+        .build();
     ASTComponentType b = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+          .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+            .addParts("A")
+            .build())
+          .build())
+          .build())
+        .build())
       .build();
 
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
@@ -117,7 +165,13 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     coco.check(a);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE, ArcError.CIRCULAR_INHERITANCE});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          ArcError.CIRCULAR_INHERITANCE,
+          ArcError.CIRCULAR_INHERITANCE
+        )
+      );
   }
 
   /**
@@ -130,11 +184,27 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     // Given
     ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
+          .build())
+        .build())
       .build();
     ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
+          .build())
+        .build())
       .build();
 
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();
@@ -153,7 +223,10 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
     coco.check(parent);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new ArcError[]{ArcError.CIRCULAR_INHERITANCE});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(ArcError.CIRCULAR_INHERITANCE)
+      );
   }
 
   /**
@@ -169,7 +242,15 @@ public class CircularInheritanceTest extends ArcBasisAbstractTest {
       .build();
     ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
-      .setHead(ArcBasisMill.componentHeadBuilder().setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("A")).build())).build())
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParent(ArcBasisMill.arcParentBuilder()
+          .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+            .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+              .addParts("A")
+              .build())
+            .build())
+          .build())
+        .build())
       .build();
 
     ArcBasisScopesGenitorDelegator stg = ArcBasisMill.scopesGenitorDelegator();

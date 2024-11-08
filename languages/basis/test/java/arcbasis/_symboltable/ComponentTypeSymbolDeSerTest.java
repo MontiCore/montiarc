@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -17,7 +17,7 @@ import java.util.Collections;
 /**
  * Holds tests for {@link ComponentTypeSymbolDeSer}.
  */
-public class ComponentTypeSymbolDeSerTest extends ArcBasisAbstractTest {
+public class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
   private static final String SIMPLE_JSON =
     "{" +

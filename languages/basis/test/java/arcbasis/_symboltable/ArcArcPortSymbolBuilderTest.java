@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Holds tests for the handwritten methods of {@link ArcPortSymbolBuilder}.
  */
-public class ArcArcPortSymbolBuilderTest extends ArcBasisAbstractTest {
+public class ArcArcPortSymbolBuilderTest extends ArcBasisTestBase {
 
   @Test
   public void shouldBeValid() {

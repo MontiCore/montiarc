@@ -1,8 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check.deser;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
@@ -14,14 +15,33 @@ import de.monticore.types.check.FullCompKindExprDeSer;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class ArcBasisCompTypeExprDeSerTest extends ArcBasisAbstractTest {
+public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
+
   @Test
   public void testSerializeAsJsonWithPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    IArcBasisArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(ast.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    ast.setSymbol(sym);
+    ast.setSpannedScope(sym.getSpannedScope());
+    sym.setAstNode(ast);
+
+    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
+    scope.setPackageName("foo.bar");
+
+    SymbolService.link(scope, sym);
+
     ArcBasisMill.globalScope().addSubScope(scope);
-    CompKindExpression compTypeExpr = new TypeExprOfComponent(myComp);
+    CompKindExpression compTypeExpr = new TypeExprOfComponent(sym);
     FullCompKindExprDeSer deser = new ArcBasisCompTypeExprDeSer();
 
     // When
@@ -40,9 +60,23 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisAbstractTest {
   @Test
   public void testSerializeAsJsonWithoutPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    SymbolService.link(ArcBasisMill.globalScope(), myComp);
-    CompKindExpression compTypeExpr = new TypeExprOfComponent(myComp);
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(ast.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    ast.setSymbol(sym);
+    ast.setSpannedScope(sym.getSpannedScope());
+    sym.setAstNode(ast);
+
+    SymbolService.link(ArcBasisMill.globalScope(), sym);
+    CompKindExpression compTypeExpr = new TypeExprOfComponent(sym);
     FullCompKindExprDeSer deser = new ArcBasisCompTypeExprDeSer();
 
     // When

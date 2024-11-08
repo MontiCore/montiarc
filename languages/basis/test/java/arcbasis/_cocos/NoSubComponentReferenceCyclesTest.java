@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
@@ -22,10 +22,12 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Holds tests for the handwritten methods of {@link NoSubcomponentReferenceCycle}.
  */
-public class NoSubComponentReferenceCyclesTest extends ArcBasisAbstractTest {
+public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
 
   protected final static String DUMMY_WITHOUT_CYCLE_NAME = "DummyWithoutCycle";
   protected final static String DUMMY_WITH_CYCLE_NAME = "DummyWithCycle";
@@ -780,6 +782,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisAbstractTest {
     coco.check(astComp);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(expectedErrors));
   }
 }

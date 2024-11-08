@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 /**
  * Holds the tests for {@link ASTPortAccess}.
  */
-public class ASTPortAccessTest extends ArcBasisAbstractTest {
+public class ASTPortAccessTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"sub1", "sub2"})

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * {@link OnlyOneTiming} is the class and context-condition under test.
  */
-public class OnlyOneTimingTest extends ArcBasisAbstractTest {
+public class OnlyOneTimingTest extends ArcBasisTestBase {
 
   /**
    * If the port has no stereo values,
@@ -167,7 +167,8 @@ public class OnlyOneTimingTest extends ArcBasisAbstractTest {
     coco.check(st);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.MULTIPLE_TIMING_ANNOTATIONS);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MULTIPLE_TIMING_ANNOTATIONS));
   }
 
   public static Stream<Arguments> provideTwoTimingStereoValues() {
@@ -209,7 +210,8 @@ public class OnlyOneTimingTest extends ArcBasisAbstractTest {
     coco.check(st);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.MULTIPLE_TIMING_ANNOTATIONS);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MULTIPLE_TIMING_ANNOTATIONS));
   }
 
   public static Stream<Arguments> provideThreeTimingStereoValues() {

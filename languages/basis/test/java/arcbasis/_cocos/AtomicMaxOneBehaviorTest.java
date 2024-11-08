@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
@@ -18,10 +18,12 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link AtomicMaxOneBehavior}
  */
-public class AtomicMaxOneBehaviorTest extends ArcBasisAbstractTest {
+public class AtomicMaxOneBehaviorTest extends ArcBasisTestBase {
 
   protected static Stream<Arguments> numberOfBehaviorsWithErrorProvider() {
     return Stream.of(
@@ -69,6 +71,6 @@ public class AtomicMaxOneBehaviorTest extends ArcBasisAbstractTest {
     coco.check(compType);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(expectedErrors));
   }
 }

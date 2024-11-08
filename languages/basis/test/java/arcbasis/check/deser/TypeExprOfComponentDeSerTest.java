@@ -1,8 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check.deser;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
@@ -12,15 +13,33 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class TypeExprOfComponentDeSerTest extends ArcBasisAbstractTest {
+public class TypeExprOfComponentDeSerTest extends ArcBasisTestBase {
 
   @Test
   public void testSerializeAsJsonWithPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    IArcBasisArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(ast.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    ast.setSymbol(sym);
+    ast.setSpannedScope(sym.getSpannedScope());
+    sym.setAstNode(ast);
+
+    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
+    scope.setPackageName("foo.bar");
+
+    SymbolService.link(scope, sym);
+
     ArcBasisMill.globalScope().addSubScope(scope);
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(myComp);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(sym);
     TypeExprOfComponentDeSer deser = new TypeExprOfComponentDeSer();
 
     // When
@@ -39,9 +58,23 @@ public class TypeExprOfComponentDeSerTest extends ArcBasisAbstractTest {
   @Test
   public void testSerializeAsJsonWithoutPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    SymbolService.link(ArcBasisMill.globalScope(), myComp);
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(myComp);
+    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(ast.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    ast.setSymbol(sym);
+    ast.setSpannedScope(sym.getSpannedScope());
+    sym.setAstNode(ast);
+
+    SymbolService.link(ArcBasisMill.globalScope(), sym);
+    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(sym);
     TypeExprOfComponentDeSer deser = new TypeExprOfComponentDeSer();
 
     // When

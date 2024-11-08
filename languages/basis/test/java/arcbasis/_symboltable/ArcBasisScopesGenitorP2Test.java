@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
@@ -39,16 +39,17 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Holds tests for {@link ArcBasisScopesGenitorP2}.
  */
-public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
+public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
   protected ArcBasisScopesGenitorP2 scopeGenP2;
 
@@ -61,9 +62,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
   }
 
   @BeforeEach
-  @Override
   public void setUp() {
-    super.setUp();
     this.setUpCompleter();
   }
 
@@ -144,7 +143,13 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .build();
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
-      .setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType(parentCompName)).build()))
+      .addArcParent(ArcBasisMill.arcParentBuilder()
+        .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+          .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+            .addParts(parentCompName)
+            .build())
+          .build())
+        .build())
       .build();
 
     ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
@@ -198,7 +203,13 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .build();
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
-      .setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType("ParentComp")).build()))
+      .addArcParent(ArcBasisMill.arcParentBuilder()
+        .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+          .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+            .addParts("ParentComp")
+            .build())
+          .build())
+        .build())
       .build();
 
     ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
@@ -257,7 +268,13 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .build();
 
     ASTComponentHead head = ArcBasisMill.componentHeadBuilder()
-      .setArcParentsList(Collections.singletonList(ArcBasisMill.arcParentBuilder().setType(createQualifiedType(parentCompName)).build()))
+      .addArcParent(ArcBasisMill.arcParentBuilder()
+        .setType(ArcBasisMill.mCQualifiedTypeBuilder()
+          .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+            .addParts(parentCompName)
+            .build())
+          .build())
+        .build())
       .build();
 
     ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
@@ -285,7 +302,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
     getScopeGenP2().visit(head);
 
     // Then
-    checkOnlyExpectedErrorsPresent(ArcError.AMBIGUOUS_REFERENCE);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE));
   }
 
   /**
@@ -805,7 +823,11 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisAbstractTest {
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    ASTMCType astCompType = createQualifiedType(compName);
+    ASTMCType astCompType = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+        .addParts(compName)
+        .build())
+      .build();
     ASTComponentInstantiation instantiation = ArcBasisMill.componentInstantiationBuilder()
       .setMCType(astCompType)
       .addInstance("inst1")

@@ -2,31 +2,41 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
+import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.SymTypePrimitive;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.Mockito;
 
-import java.util.stream.Stream;
-
-public class Port2VariableAdapterTest {
-
-  @BeforeAll
-  static void setUp() {
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.reset();
-    ArcBasisMill.init();
-    BasicSymbolsMill.initializePrimitives();
-  }
+public class Port2VariableAdapterTest extends ArcBasisTestBase {
 
   @ParameterizedTest
-  @MethodSource("portSymbolProvider")
-  void shouldAdaptFields(@NotNull ArcPortSymbol adaptee) {
+  @CsvSource({
+    // name, in, out
+    "in, true, false",
+    "out, false, true",
+    "inout, true, true"
+  })
+  void shouldAdaptFields(@NotNull String name, boolean in, boolean out) {
+    Preconditions.checkNotNull(name);
+
     // Given
+    ArcPortSymbol adaptee = ArcBasisMill.arcPortSymbolBuilder()
+      .setName(name)
+      .setIncoming(in)
+      .setOutgoing(out)
+      .setType(SymTypeExpressionFactory
+        .createPrimitive(BasicSymbolsMill.BOOLEAN))
+      .build();
+    SymbolService.link(ArcBasisMill.scope(), adaptee);
+
     Port2VariableAdapter adapter = new Port2VariableAdapter(adaptee);
 
     // Then
@@ -49,9 +59,25 @@ public class Port2VariableAdapterTest {
   }
 
   @ParameterizedTest
-  @MethodSource("portSymbolProvider")
-  void shouldDeepClone(@NotNull ArcPortSymbol adaptee) {
+  @CsvSource({
+    // name, in, out
+    "in, true, false",
+    "out, false, true",
+    "inout, true, true"
+  })
+  void shouldDeepClone(@NotNull String name, boolean in, boolean out) {
+    Preconditions.checkNotNull(name);
+
     // Given
+    ArcPortSymbol adaptee = ArcBasisMill.arcPortSymbolBuilder()
+      .setName(name)
+      .setIncoming(in)
+      .setOutgoing(out)
+      .setType(SymTypeExpressionFactory
+        .createPrimitive(BasicSymbolsMill.BOOLEAN))
+      .build();
+    SymbolService.link(ArcBasisMill.scope(), adaptee);
+
     Port2VariableAdapter adapter = new Port2VariableAdapter(adaptee);
 
     // When
@@ -76,27 +102,5 @@ public class Port2VariableAdapterTest {
       () -> Assertions.assertEquals(adapter.getAccessModifier(), clone.getAccessModifier(),
         "The clone's access modifier should match the adapter's access modifier.")
     );
-  }
-
-  protected static Stream<ArcPortSymbol> portSymbolProvider() {
-    IArcBasisScope scope = ArcBasisMill.scope();
-
-    // incoming port
-    ArcPortSymbol port1 = ArcBasisMill.arcPortSymbolBuilder()
-      .setName("i")
-      .setIncoming(true)
-      .setType(SymTypeExpressionFactory.createPrimitive("int"))
-      .build();
-    SymbolService.link(scope, port1);
-
-    // outgoing port
-    ArcPortSymbol port2 = ArcBasisMill.arcPortSymbolBuilder()
-      .setName("o")
-      .setIncoming(false)
-      .setType(SymTypeExpressionFactory.createPrimitive("int"))
-      .build();
-    SymbolService.link(scope, port2);
-
-    return Stream.of(port1, port2);
   }
 }

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
@@ -22,10 +22,12 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests {@link ParameterDefaultValueTypeFits}
  */
-public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
+public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
 
   private static final String INT_VAR_NAME = "anInt";
   private static final String BOOL_VAR_NAME = "aBool";
@@ -34,10 +36,8 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
   private static final String FOO_TYPE_NAME = "FooType";
   private static final String BAR_TYPE_NAME = "BarType";
 
-  @Override
   @BeforeEach
   public void setUp() {
-    super.setUp();
     this.addFieldsToScope();
     this.addTypesToScope();
   }
@@ -74,7 +74,11 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     //Given
     ASTArcParameter param = ArcBasisMill.arcParameterBuilder()
       .setName("fooField")
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .build();
 
     ASTComponentType enclComp = encloseParamInCompType(param);
@@ -142,7 +146,11 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     //Given
     ASTArcParameter param = ArcBasisMill.arcParameterBuilder()
       .setName("fooField")
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .setDefault(doBuildNameExpressionInGlobalScope(DOUBLE_VAR_NAME))
       .build();
 
@@ -157,7 +165,8 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
     coco.check(param);
 
     //Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.PARAM_DEFAULT_TYPE_MISMATCH);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.PARAM_DEFAULT_TYPE_MISMATCH));
   }
 
   @Test
@@ -165,7 +174,11 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisAbstractTest {
   public void shouldFindTypeReference() {
     ASTArcParameter param = ArcBasisMill.arcParameterBuilder()
       .setName("fooField")
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
+        .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+          .addParts("int")
+          .build())
+        .build())
       .setDefault(doBuildNameExpressionInGlobalScope(FOO_TYPE_NAME))
       .build();
 

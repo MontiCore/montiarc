@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -16,7 +16,7 @@ import static org.mockito.Mockito.mock;
 /**
  * Holds tests for the handwritten methods {@link SubcomponentSymbol}.
  */
-public class SubcomponentSymbolTest extends ArcBasisAbstractTest {
+public class SubcomponentSymbolTest extends ArcBasisTestBase {
 
   @Test
   public void shouldAddArguments() {
