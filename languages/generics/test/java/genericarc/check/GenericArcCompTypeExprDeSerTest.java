@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc.check;
 
+import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.SymbolService;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -10,8 +12,8 @@ import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import genericarc.GenericArcAbstractTest;
 import genericarc.GenericArcMill;
+import genericarc.GenericArcTestBase;
 import genericarc._symboltable.IGenericArcArtifactScope;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -21,22 +23,63 @@ import java.util.List;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITHOUT_PACKAGE;
 import static genericarc.check.TypeExprOfGenericComponentDeSerTest.JSON_WITH_PACKAGE;
 
-public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
+public class GenericArcCompTypeExprDeSerTest extends GenericArcTestBase {
 
   @Test
   void testSerializeAsJsonWithPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    addTypeParamsToComp(myComp, "A", "B", "Foo", "Bar");
+    ASTComponentType myCompAST = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
 
-    IGenericArcArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
-    GenericArcMill.globalScope().addSubScope(scope);
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(myCompAST.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
 
-    OOTypeSymbol studentSym = createOOTypeSymbol("Student");
-    IGenericArcArtifactScope studentScope = wrapInArtifactScope("noo.boo", studentSym);
-    GenericArcMill.globalScope().addSubScope(studentScope);
+    myCompAST.setSymbol(myComp);
+    myCompAST.setSpannedScope(myComp.getSpannedScope());
+    myComp.setAstNode(myCompAST);
 
-    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("A")
+      .build());
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("B")
+      .build());
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("Foo")
+      .build());
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("Bar")
+      .build());
+
+    IGenericArcArtifactScope as = GenericArcMill.artifactScope();
+    as.setPackageName("foo.bar");
+
+    SymbolService.link(as, myComp);
+
+    GenericArcMill.globalScope().addSubScope(as);
+
+    OOTypeSymbol student = GenericArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(GenericArcMill.scope())
+      .build();
+
+    IGenericArcArtifactScope as2 = GenericArcMill.artifactScope();
+    as2.setPackageName("noo.boo");
+
+    SymbolService.link(as2, student);
+
+    GenericArcMill.globalScope().addSubScope(as2);
+
+    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(student);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
     CompKindExpression compTypeExpr =
@@ -53,15 +96,53 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
   @Test
   void testSerializeAsJsonWithoutPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    addTypeParamsToComp(myComp, "A", "B", "Foo", "Bar");
+    ASTComponentType myCompAST = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(myCompAST.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    myCompAST.setSymbol(myComp);
+    myCompAST.setSpannedScope(myComp.getSpannedScope());
+    myComp.setAstNode(myCompAST);
+
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("A")
+      .build());
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("B")
+      .build());
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("Foo")
+      .build());
+    myCompAST.getSpannedScope().add(GenericArcMill
+      .typeVarSymbolBuilder()
+      .setName("Bar")
+      .build());
+
     SymbolService.link(GenericArcMill.globalScope(), myComp);
 
-    OOTypeSymbol studentSym = createOOTypeSymbol("Student");
-    IGenericArcArtifactScope studentScope = wrapInArtifactScope("noo.boo", studentSym);
-    GenericArcMill.globalScope().addSubScope(studentScope);
+    OOTypeSymbol student = GenericArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(GenericArcMill.scope())
+      .build();
 
-    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
+    IGenericArcArtifactScope as2 = GenericArcMill.artifactScope();
+    as2.setPackageName("noo.boo");
+
+    SymbolService.link(as2, student);
+
+    GenericArcMill.globalScope().addSubScope(as2);
+
+    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(student);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
     CompKindExpression compTypeExpr =
@@ -81,9 +162,17 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
     FullCompKindExprDeSer deser = new GenericArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITH_PACKAGE);
 
-    OOTypeSymbol studentSym = createOOTypeSymbol("Student");
-    IGenericArcArtifactScope studentScope = wrapInArtifactScope("noo.boo", studentSym);
-    GenericArcMill.globalScope().addSubScope(studentScope);
+    OOTypeSymbol student = GenericArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(GenericArcMill.scope())
+      .build();
+
+    IGenericArcArtifactScope as = GenericArcMill.artifactScope();
+    as.setPackageName("noo.boo");
+
+    SymbolService.link(as, student);
+
+    GenericArcMill.globalScope().addSubScope(as);
 
     // When
     CompKindExpression deserializedExpr = deser.deserialize(serialized);
@@ -102,9 +191,17 @@ public class GenericArcCompTypeExprDeSerTest extends GenericArcAbstractTest {
     FullCompKindExprDeSer deser = new GenericArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITHOUT_PACKAGE);
 
-    OOTypeSymbol studentSym = createOOTypeSymbol("Student");
-    IGenericArcArtifactScope studentScope = wrapInArtifactScope("noo.boo", studentSym);
-    GenericArcMill.globalScope().addSubScope(studentScope);
+    OOTypeSymbol student = GenericArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(GenericArcMill.scope())
+      .build();
+
+    IGenericArcArtifactScope as = GenericArcMill.artifactScope();
+    as.setPackageName("noo.boo");
+
+    SymbolService.link(as, student);
+
+    GenericArcMill.globalScope().addSubScope(as);
 
     // When
     CompKindExpression deserializedExpr = deser.deserialize(serialized);

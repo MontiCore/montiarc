@@ -14,8 +14,8 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import genericarc.GenericArcAbstractTest;
 import genericarc.GenericArcMill;
+import genericarc.GenericArcTestBase;
 import genericarc._ast.ASTArcTypeParameter;
 import genericarc._ast.ASTGenericComponentHead;
 import genericarc._visitor.GenericArcTraverser;
@@ -30,11 +30,10 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
-import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
+public class GenericArcScopesGenitorP2Test extends GenericArcTestBase {
 
   protected GenericArcScopesGenitorP2 scopesGenP2;
 
@@ -69,9 +68,7 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
   }
 
   @BeforeEach
-  @Override
   public void setUp() {
-    super.setUp();
     this.setUpCompleter();
   }
 
@@ -181,7 +178,13 @@ public class GenericArcScopesGenitorP2Test extends GenericArcAbstractTest {
       .build();
 
     ASTGenericComponentHead childCompHead = GenericArcMill.genericComponentHeadBuilder()
-      .setArcParentsList(Collections.singletonList(GenericArcMill.arcParentBuilder().setType(createQualifiedType(parentCompName)).build()))
+      .addArcParent(GenericArcMill.arcParentBuilder()
+        .setType(GenericArcMill.mCQualifiedTypeBuilder()
+          .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
+            .addParts(parentCompName)
+            .build())
+          .build())
+        .build())
       .build();
 
     ASTComponentType astChildComp = GenericArcMill.componentTypeBuilder()

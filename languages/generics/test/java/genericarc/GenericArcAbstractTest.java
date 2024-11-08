@@ -12,6 +12,7 @@ import genericarc._symboltable.IGenericArcArtifactScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 
+@Deprecated
 public class GenericArcAbstractTest extends ArcBasisAbstractTest {
 
   @BeforeEach

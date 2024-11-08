@@ -1,15 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package genericarc._cocos;
 
-import arcbasis.ArcBasisAbstractTest;
+import de.se_rwth.commons.logging.Log;
 import genericarc.GenericArcMill;
+import genericarc.GenericArcTestBase;
 import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 
-public class TypeParamNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class TypeParamNameIsNoReservedKeywordTest extends GenericArcTestBase {
 
   @Test
   void checkPortNameMatchesKeyword() {
@@ -17,13 +20,13 @@ public class TypeParamNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
     ASTArcTypeParameter typeParam = GenericArcMill.arcTypeParameterBuilder().setName("keyword").build();
     TypeParamNameIsNoReservedKeyword coco =
       new TypeParamNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
-    ArcError expectedError = ArcError.RESTRICTED_IDENTIFIER;
 
     // When
     coco.check(typeParam);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedError);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.RESTRICTED_IDENTIFIER));
   }
 
   @Test
@@ -37,6 +40,6 @@ public class TypeParamNameIsNoReservedKeywordTest extends ArcBasisAbstractTest {
     coco.check(typeParam);
 
     // Then
-    checkOnlyExpectedErrorsPresent();
+    assertThat(Log.getFindings()).isEmpty();
   }
 }
