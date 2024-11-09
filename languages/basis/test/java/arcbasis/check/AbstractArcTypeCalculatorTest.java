@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis.ArcBasisAbstractTest;
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Collections;
 import java.util.stream.Stream;
 
-public abstract class AbstractArcTypeCalculatorTest extends ArcBasisAbstractTest {
+public abstract class AbstractArcTypeCalculatorTest extends ArcBasisTestBase {
 
   protected IArcBasisScope scope;
   protected TransitiveScopeSetter scopeSetter;

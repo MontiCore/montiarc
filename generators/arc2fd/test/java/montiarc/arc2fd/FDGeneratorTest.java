@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd;
 
-import arcbasis.ArcBasisAbstractTest;
+import arcbasis.ArcBasisTestBase;
 import com.google.common.base.Preconditions;
 import de.monticore.featurediagram.FeatureDiagramTool;
 import de.se_rwth.commons.logging.Log;
@@ -19,7 +19,7 @@ import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class FDGeneratorTest extends ArcBasisAbstractTest {
+public class FDGeneratorTest extends ArcBasisTestBase {
 
   protected static final String FD_FILE_EXTENSION = ".fd";
   protected static final String TEST_RESOURCE_PATH = "test/resources/";

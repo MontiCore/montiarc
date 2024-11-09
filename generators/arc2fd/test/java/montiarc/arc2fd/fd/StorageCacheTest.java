@@ -1,9 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.fd;
 
-import arcbasis.ArcBasisAbstractTest;
+import arcbasis.ArcBasisTestBase;
 import montiarc.arc2fd.smt.FDRelation;
-import montiarc.util.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class StorageCacheTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class StorageCacheTest extends ArcBasisTestBase {
+
   StorageCache<BooleanFormula> storageCache;
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
@@ -114,7 +116,10 @@ public class StorageCacheTest extends ArcBasisAbstractTest {
     // When && Then
     // Merge two empty storages
     emptyStorage.mergeWithStorage(emptyStorage);
-    this.checkExpectedErrorsPresent(new Error[]{FDConstructionError.TRY_TO_MERGE_TWO_EMPTY_STORAGES});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        FDConstructionError.TRY_TO_MERGE_TWO_EMPTY_STORAGES)
+      );
 
     // When && Then
     // Merge non-empty storage with an empty one

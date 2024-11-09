@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.smt;
 
-import arcbasis.ArcBasisAbstractTest;
-import montiarc.util.Error;
+import arcbasis.ArcBasisTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SMT2FDVisitorTest extends ArcBasisTestBase {
+
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
 
@@ -27,7 +29,6 @@ public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
 
   // Store relevant formulas for comparison
   BooleanFormula a, b, c, d, e, f, o, root, complexFormula;
-
 
   @BeforeEach
   public void setUpContext() throws InvalidConfigurationException {
@@ -66,27 +67,49 @@ public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
         simpleOr, requires, excludes);
   }
 
+  /**
+   * Method under test
+   * {@link SMT2FDVisitor#process(BooleanFormula, BooleanFormula)}
+   */
+  @Test
+  public void process1() {
+    // Output error if formula is null
+    smt2fdVisitor.process(null, null);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        SMTProcessingError.SMT2FD_PROCESSING_NO_FORMULA)
+      );
+  }
 
   /**
    * Method under test
    * {@link SMT2FDVisitor#process(BooleanFormula, BooleanFormula)}
    */
   @Test
-  public void process() {
-    // Output error if formula is null
-    smt2fdVisitor.process(null, null);
-    this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.SMT2FD_PROCESSING_NO_FORMULA});
+  public void process2() {
     // Error if the root is null
     smt2fdVisitor.process(a, null);
-    this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.ROOT_IS_NULL});
-
-    // Error if formula is not in CNF
-    BooleanFormula noCNFFormula = bmgr.or(bmgr.or(a, c), bmgr.and(a,
-        bmgr.or(b, c)));
-    smt2fdVisitor.process(noCNFFormula, root);
-    this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.SMT2FD_VISITOR_NO_CNF});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        SMTProcessingError.ROOT_IS_NULL)
+      );
   }
 
+  /**
+   * Method under test
+   * {@link SMT2FDVisitor#process(BooleanFormula, BooleanFormula)}
+   */
+  @Test
+  public void process3() {
+    // Error if formula is not in CNF
+    BooleanFormula noCNFFormula = bmgr.or(bmgr.or(a, c), bmgr.and(a,
+      bmgr.or(b, c)));
+    smt2fdVisitor.process(noCNFFormula, root);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        SMTProcessingError.SMT2FD_VISITOR_NO_CNF)
+      );
+  }
 
   /**
    * Method under test {@link SMT2FDVisitor#getAllRemainingConjunctions()}
@@ -157,12 +180,11 @@ public class SMT2FDVisitorTest extends ArcBasisAbstractTest {
         smt2fdVisitor.getSimpleOrs().getRelationsHashMap());
   }
 
-
   /**
    * Method under test {@link SMT2FDVisitor#getXors()}
    */
   @Test
-  public void testXors() {
+  public void test3Xors() {
     // EASY CASE
     // Given
     BooleanFormula trivialCase = bmgr.and(bmgr.or(a, b), bmgr.or(bmgr.not(a),

@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.smt;
 
-import arcbasis.ArcBasisAbstractTest;
-import montiarc.util.Error;
+import arcbasis.ArcBasisTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,10 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-public class CNFConverterTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class CNFConverterTest extends ArcBasisTestBase {
+
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   CNFConverter cnfConverter;
@@ -55,7 +57,10 @@ public class CNFConverterTest extends ArcBasisAbstractTest {
   @Test
   public void convertNullToCNF() {
     this.cnfConverter.convertToCNF(null);
-    this.checkExpectedErrorsPresent(new Error[]{SMTProcessingError.CNF_CONVERSION_NO_FORMULA_FOUND});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        SMTProcessingError.CNF_CONVERSION_NO_FORMULA_FOUND)
+      );
   }
 
   /**

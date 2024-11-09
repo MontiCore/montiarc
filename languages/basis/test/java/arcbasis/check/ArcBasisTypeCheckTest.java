@@ -13,15 +13,8 @@ import org.junit.jupiter.api.BeforeEach;
  */
 public class ArcBasisTypeCheckTest extends AbstractArcTypeCalculatorTest {
 
-  @Override
   @BeforeEach
   public void setUp() {
-    Log.clearFindings();
-    ArcBasisMill.globalScope().clear();
-    ArcBasisMill.reset();
-    ArcBasisMill.init();
-    ArcBasisTypeCheck.init();
-    addBasicTypes2Scope();
     this.setUpScope();
   }
 

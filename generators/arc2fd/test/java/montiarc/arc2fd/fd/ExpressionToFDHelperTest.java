@@ -1,10 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.fd;
 
-import arcbasis.ArcBasisAbstractTest;
+import arcbasis.ArcBasisTestBase;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import montiarc.MontiArcMill;
-import montiarc.util.Error;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,10 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class ExpressionToFDHelperTest extends ArcBasisAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ExpressionToFDHelperTest extends ArcBasisTestBase {
+
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
   ExpressionToFDHelper<BooleanFormula> expressionToFDHelper;
@@ -81,7 +83,10 @@ public class ExpressionToFDHelperTest extends ArcBasisAbstractTest {
     // CHECK a && !a EXPRESSION (=> "unsat" & empty storage!)
     storage = expressionToFDHelper.convertASTExpressionToFD(a_and_not_a, root
         , variableRemapping);
-    this.checkExpectedErrorsPresent(new Error[]{FDConstructionError.FORMULA_IS_UNSAT});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        FDConstructionError.FORMULA_IS_UNSAT)
+      );
     Assertions.assertTrue(storage.isEmpty());
   }
 
@@ -106,6 +111,9 @@ public class ExpressionToFDHelperTest extends ArcBasisAbstractTest {
     Assertions.assertFalse(this.expressionToFDHelper.isUnsat(andFormula));
 
     this.expressionToFDHelper.isUnsat(unsatFormula);
-    this.checkExpectedErrorsPresent(new Error[]{FDConstructionError.FORMULA_IS_UNSAT});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        FDConstructionError.FORMULA_IS_UNSAT)
+      );
   }
 }

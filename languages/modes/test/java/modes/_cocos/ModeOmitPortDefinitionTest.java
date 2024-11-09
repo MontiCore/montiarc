@@ -3,7 +3,6 @@ package modes._cocos;
 
 import arcbasis._symboltable.ArcPortSymbol;
 import com.google.common.base.Preconditions;
-import modes.ModesAbstractTest;
 import modes.ModesMill;
 import modes.ModesTestBase;
 import modes._ast.ASTArcMode;

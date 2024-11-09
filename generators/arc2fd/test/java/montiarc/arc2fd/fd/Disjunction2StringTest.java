@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.fd;
 
-import arcbasis.ArcBasisAbstractTest;
-import montiarc.util.Error;
+import arcbasis.ArcBasisTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,8 +17,11 @@ import org.sosy_lab.java_smt.api.SolverContext;
 
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 // extends AbstractTest
-public class Disjunction2StringTest extends ArcBasisAbstractTest {
+public class Disjunction2StringTest extends ArcBasisTestBase {
+
   FormulaManager fmgr;
   BooleanFormulaManager bmgr;
 
@@ -29,7 +31,6 @@ public class Disjunction2StringTest extends ArcBasisAbstractTest {
   BooleanFormula orFormula;
   BooleanFormula andFormula;
   BooleanFormula noCNFFormula;
-
 
   @BeforeEach
   public void setUpContext() throws InvalidConfigurationException {
@@ -52,7 +53,6 @@ public class Disjunction2StringTest extends ArcBasisAbstractTest {
     this.noCNFFormula = bmgr.or(this.orFormula, this.andFormula);
   }
 
-
   /**
    * Method under test {@link Disjunction2String#convertAllToStrings(Set)}
    */
@@ -74,7 +74,11 @@ public class Disjunction2StringTest extends ArcBasisAbstractTest {
 
     // Ensure that the formula must be in CNF & without conjunctions
     this.d2s.convertAllToStrings(formulasToFail);
-    this.checkExpectedErrorsPresent(new Error[]{FDConstructionError.NO_CONJUNCTIONS_ALLOWED});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        FDConstructionError.NO_CONJUNCTIONS_ALLOWED,
+        FDConstructionError.NO_CONJUNCTIONS_ALLOWED)
+      );
 
     // Also ensure, that we're only allowed to convert disjunctions and not
     // conjunctions!
@@ -98,7 +102,10 @@ public class Disjunction2StringTest extends ArcBasisAbstractTest {
 
     // Ensure that Disjunction2String doesn't work with ANDs (conjunctions)
     this.d2s.convertFormulaToString(andFormula);
-    this.checkExpectedErrorsPresent(new Error[]{FDConstructionError.NO_CONJUNCTIONS_ALLOWED});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        FDConstructionError.NO_CONJUNCTIONS_ALLOWED)
+      );
 
     // Then
     Set<String> realStrings =
@@ -133,6 +140,9 @@ public class Disjunction2StringTest extends ArcBasisAbstractTest {
     Assertions.assertDoesNotThrow(() -> this.d2s.visit(orFormula));
 
     this.d2s.visit(andFormula);
-    this.checkExpectedErrorsPresent(new Error[]{FDConstructionError.NO_CONJUNCTIONS_ALLOWED});
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        FDConstructionError.NO_CONJUNCTIONS_ALLOWED)
+      );
   }
 }

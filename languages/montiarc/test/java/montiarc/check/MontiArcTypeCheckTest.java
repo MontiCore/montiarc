@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
+import arcautomaton.ArcAutomatonMill;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
@@ -9,6 +10,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -26,6 +28,7 @@ import montiarc._auxiliary.OOSymbolsMillForMontiArc;
 import montiarc._parser.MontiArcParser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -38,14 +41,17 @@ import java.util.stream.Stream;
 
 public class MontiArcTypeCheckTest extends AbstractArcTypeCalculatorTest {
 
-  @Override
-  @BeforeEach
-  public void setUp() {
-    MontiArcMill.globalScope().clear();
-    MontiArcMill.reset();
+  @BeforeAll
+  protected static void initMill() {
     MontiArcMill.init();
+    MontiArcMill.globalScope().clear();
+  }
+
+  @BeforeEach
+  protected void init() {
     MontiArcTypeCheck.init();
-    addBasicTypes2Scope();
+    BasicSymbolsMill.initializePrimitives();
+    ArcAutomatonMill.initializeTick();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     this.setUpScope();

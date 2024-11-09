@@ -29,6 +29,8 @@ import org.mockito.Mockito;
 
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests {@link  ConfigurationParameterAssignment}
  */
@@ -66,11 +68,11 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
   public void shouldCheckParameterBindings(@NotNull String testName,
                                     @NotNull ASTComponentType toInstantiate,
                                     @NotNull ASTArcArguments instantiationArgs,
-                                    @NotNull ArcError... expectedErrors) {
+                                    @NotNull ArcError... errors) {
     Preconditions.checkNotNull(testName);
     Preconditions.checkNotNull(toInstantiate);
     Preconditions.checkNotNull(instantiationArgs);
-    Preconditions.checkNotNull(expectedErrors);
+    Preconditions.checkNotNull(errors);
 
     // Given
     this.scopeGen.createFromAST(toInstantiate);
@@ -88,7 +90,8 @@ public class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisType
     coco.check(compInst.getComponentInstance(0));
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> provideArgsAndExpectedErrors() {

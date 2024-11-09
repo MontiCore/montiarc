@@ -20,6 +20,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests {@link FieldInitTypeFits}
  */
@@ -95,7 +97,9 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
       .build();
 
     ASTArcFieldDeclaration fieldDecl = ArcBasisMill.arcFieldDeclarationBuilder()
-      .setMCType(createQualifiedType("int"))
+      .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder()
+        .setPrimitive(ASTConstantsMCBasicTypes.INT)
+        .build())
       .addArcField(field)
       .build();
 
@@ -107,7 +111,8 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
     FieldInitTypeFits coco = new FieldInitTypeFits();
     coco.check(field);
 
-    this.checkOnlyExpectedErrorsPresent(ArcError.FIELD_INIT_TYPE_MISMATCH);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.FIELD_INIT_TYPE_MISMATCH));
   }
 
   protected ASTComponentType encloseFieldInCompType(@NotNull ASTArcFieldDeclaration field) {
