@@ -4,8 +4,8 @@ package montiarc._symboltable;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import org.mockito.Mockito;
 /**
  * The class under test is {@link MontiArcScopesGenitor}.
  */
-public class MontiArcScopesGenitorTest extends MontiArcAbstractTest {
+public class MontiArcScopesGenitorTest extends MontiArcTestBase {
 
   /**
    * The method under test is {@link MontiArcScopesGenitor#visit(ASTMACompilationUnit)}

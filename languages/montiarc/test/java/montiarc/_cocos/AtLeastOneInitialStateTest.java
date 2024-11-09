@@ -5,13 +5,12 @@ import com.google.common.base.Preconditions;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scstatehierarchy.NoSubstatesHandler;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
 import montiarc.util.Error;
 import montiarc.util.SCError;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,10 +20,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * The class under test is {@link AtLeastOneInitialState}.
  */
-public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
+public class AtLeastOneInitialStateTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -74,7 +75,7 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -95,9 +96,9 @@ public class AtLeastOneInitialStateTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes()).as(Log.getFindings().toString())
+      .containsExactlyInAnyOrder(this.getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

@@ -6,8 +6,8 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.SymTypePrimitive;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import org.junit.jupiter.api.Test;
 
@@ -16,7 +16,7 @@ import java.io.IOException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class MontiArcSerializationTest extends MontiArcAbstractTest {
+public class MontiArcSerializationTest extends MontiArcTestBase {
 
   @Test
   public void shouldSerializeArtifactScope() throws IOException {

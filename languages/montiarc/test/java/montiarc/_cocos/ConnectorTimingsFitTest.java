@@ -4,8 +4,8 @@ package montiarc._cocos;
 import arcbasis._cocos.ConnectorTimingsFit;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * The class under test is {@link ConnectorTimingsFit}.
  */
-public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
+public class ConnectorTimingsFitTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -466,6 +466,7 @@ public class ConnectorTimingsFitTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(ArcError.CONNECTOR_TIMING_MISMATCH);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.CONNECTOR_TIMING_MISMATCH));
   }
 }

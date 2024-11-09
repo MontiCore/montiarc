@@ -9,8 +9,8 @@ import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -18,7 +18,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-class MAReplaceAbsentTriggersByTicksTest extends MontiArcAbstractTest {
+class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
+
   @Test
   void shouldAddTickToUntriggeredEventTransition() throws IOException {
     // Given

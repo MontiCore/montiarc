@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class VariabilityParserTestHelper {
+
   static ASTMACompilationUnitBuilder getVariabilitySyntaxArcASTUnit() {
     return MontiArcMill.mACompilationUnitBuilder()
       .setPackage(MontiArcMill.mCQualifiedNameBuilder().setPartsList(List.of("parser")).build())

@@ -7,8 +7,8 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._ast.ASTMontiArcNode;
@@ -29,7 +29,7 @@ import java.util.Optional;
  * Tests whether symbols are created for variables declared by
  * {@link de.monticore.statements.mcvardeclarationstatements._ast.ASTLocalVariableDeclaration}
  */
-public class LocalVarDeclarationTest extends MontiArcAbstractTest {
+public class LocalVarDeclarationTest extends MontiArcTestBase {
 
   protected static final String TEST_MODEL_PATH = "symboltable/localvardeclarations/";
 
@@ -44,7 +44,7 @@ public class LocalVarDeclarationTest extends MontiArcAbstractTest {
     tool.initializeClass2MC();
 
     // When
-    ASTMACompilationUnit ast = tool.parse(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH, model))
+    ASTMACompilationUnit ast = tool.parse(Paths.get(TEST_RESOURCE, TEST_MODEL_PATH, model))
       .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
@@ -77,7 +77,7 @@ public class LocalVarDeclarationTest extends MontiArcAbstractTest {
     tool.initializeClass2MC();
 
     // When
-    ASTMACompilationUnit ast = tool.parse(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH, model))
+    ASTMACompilationUnit ast = tool.parse(Paths.get(TEST_RESOURCE, TEST_MODEL_PATH, model))
       .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);

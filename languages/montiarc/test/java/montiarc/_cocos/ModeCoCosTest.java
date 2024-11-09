@@ -11,7 +11,6 @@ import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
@@ -19,18 +18,13 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
-import de.se_rwth.commons.logging.LogStub;
-import montiarc.MontiArcAbstractTest;
-import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -39,30 +33,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class ModeCoCosTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-  @BeforeAll
-  public static void init() {
-    LogStub.init();
-    Log.enableFailQuick(false);
-    MontiArcMill.reset();
-    MontiArcMill.init();
-    BasicSymbolsMill.initializePrimitives();
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setUpComponents();
-  }
+public class ModeCoCosTest extends MontiArcTestBase {
 
-  @Override
-  public void setUp() {
-  }
-
-  @AfterEach
-  public void tearDown() {
-    Log.clearFindings();
-  }
-
-  protected static void setUpComponents() {
+  @BeforeEach
+  protected void setUpComponents() {
     compile("package a.b; component A { port in int i; }");
     compile("package a.b; component B { port out int o; }");
     compile("package a.b; component C { port in int i1, i2; port out int o; }");
@@ -168,7 +144,7 @@ public class ModeCoCosTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -206,9 +182,9 @@ public class ModeCoCosTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

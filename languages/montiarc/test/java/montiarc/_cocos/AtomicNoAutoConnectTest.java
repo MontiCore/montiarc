@@ -4,11 +4,10 @@ package montiarc._cocos;
 import com.google.common.base.Preconditions;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ComfortableArcError;
 import montiarc.util.Error;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,15 +18,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * The class under test is {@link AtomicNoAutoConnect}.
  */
-public class AtomicNoAutoConnectTest extends MontiArcAbstractTest {
+public class AtomicNoAutoConnectTest extends MontiArcTestBase {
 
   @BeforeEach
-  @Override
   public void setUp() {
-    super.setUp();
     compile("component A { }");
   }
 
@@ -82,7 +81,7 @@ public class AtomicNoAutoConnectTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -101,9 +100,9 @@ public class AtomicNoAutoConnectTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

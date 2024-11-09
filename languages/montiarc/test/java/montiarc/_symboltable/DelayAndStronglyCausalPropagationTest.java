@@ -4,7 +4,7 @@ package montiarc._symboltable;
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import org.junit.jupiter.api.Assertions;
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class DelayAndStronglyCausalPropagationTest extends MontiArcAbstractTest {
+public class DelayAndStronglyCausalPropagationTest extends MontiArcTestBase {
 
   protected static final String TEST_MODEL_PATH = "symboltable/completion/";
 
@@ -24,7 +24,7 @@ public class DelayAndStronglyCausalPropagationTest extends MontiArcAbstractTest 
     tool.initializeClass2MC();
 
     // When
-    ASTMACompilationUnit ast = tool.parse(Paths.get(RELATIVE_MODEL_PATH, TEST_MODEL_PATH, "timing/PropagateTiming.arc"))
+    ASTMACompilationUnit ast = tool.parse(Paths.get(TEST_RESOURCE, TEST_MODEL_PATH, "timing/PropagateTiming.arc"))
         .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);

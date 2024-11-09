@@ -11,11 +11,9 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
-import org.assertj.core.api.Assertions;
+import montiarc.MontiArcTestBase;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -33,33 +31,27 @@ import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.INT;
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.LONG;
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.SHORT;
 import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * This class provides tests for validating the correctness of encapsulating
  * primitives in boxing types.
  */
-public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
+public class TypeCheckBoxedPrimitivesTest extends MontiArcTestBase {
 
   /**
    * The enclosing scope of the symbols of the test setup
    */
   protected IArcBasisScope scope;
 
-  @BeforeAll
-  public static void log() {
-    Log.enableFailQuick(false);
-  }
-
   @BeforeEach
-  @Override
-  public void setUp() {
-    super.setUp();
+  protected void initSymbols() {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    this.initSymbols();
+    setUpSymbols();
   }
 
-  protected void initSymbols() {
+  protected void setUpSymbols() {
     this.scope = MontiArcMill.scope();
     MontiArcMill.globalScope().addSubScope(this.scope);
     this.scope.setEnclosingScope(MontiArcMill.globalScope());
@@ -439,7 +431,7 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     TypeCheck3.typeOf(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings())
+    assertThat(Log.getFindings())
       .as("Expression " + expr + " should be valid, there shouldn't be any findings.")
       .isEmpty();
   }
@@ -606,11 +598,9 @@ public class TypeCheckBoxedPrimitivesTest extends MontiArcAbstractTest {
     TypeCheck3.typeOf(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings())
+    assertThat(Log.getFindings())
       .as("Expression " + expr + " should be invalid, there should be findings.")
       .isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Expression " + expr + " is invalid, the findings should contain exactly the expected error.")
-      .containsExactly(error);
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(error);
   }
 }

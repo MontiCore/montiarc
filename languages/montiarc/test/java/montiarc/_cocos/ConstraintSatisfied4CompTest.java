@@ -3,18 +3,14 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
-import de.se_rwth.commons.logging.LogStub;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -24,33 +20,21 @@ import variablearc._cocos.ConstraintSatisfied4Comp;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * The class under test is {@link ConstraintSatisfied4Comp}.
  */
-public class ConstraintSatisfied4CompTest extends MontiArcAbstractTest {
+public class ConstraintSatisfied4CompTest extends MontiArcTestBase {
 
-  @BeforeAll
-  public static void init() {
-    LogStub.init();
-    Log.enableFailQuick(false);
-    MontiArcMill.reset();
-    MontiArcMill.init();
-    BasicSymbolsMill.initializePrimitives();
+  @BeforeEach
+  protected void initSymbols() {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     setUpComponents();
   }
 
-  @Override
-  public void setUp() {
-  }
-
-  @AfterEach
-  public void tearDown() {
-    Log.clearFindings();
-  }
-
-  protected static void setUpComponents() {
+  protected void setUpComponents() {
     compile("package a.b; component A { feature ff; constraint(ff); }");
     compile("package a.b; component B extends a.b.A { }");
     compile("package a.b; component C { feature ff; a.b.B b; constraint(ff == b.ff); }");
@@ -115,7 +99,7 @@ public class ConstraintSatisfied4CompTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -134,9 +118,9 @@ public class ConstraintSatisfied4CompTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

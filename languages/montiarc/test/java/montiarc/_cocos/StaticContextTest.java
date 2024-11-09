@@ -10,14 +10,13 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.util.ArcAutomataError;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -28,12 +27,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class StaticContextTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class StaticContextTest extends MontiArcTestBase {
 
   @BeforeEach
-  @Override
   public void setUp() {
-    super.setUp();
     IMontiArcArtifactScope as1 = MontiArcMill.artifactScope();
     OOTypeSymbol type1 = MontiArcMill.oOTypeSymbolBuilder()
       .setName("T")
@@ -122,7 +121,7 @@ public class StaticContextTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -143,9 +142,9 @@ public class StaticContextTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

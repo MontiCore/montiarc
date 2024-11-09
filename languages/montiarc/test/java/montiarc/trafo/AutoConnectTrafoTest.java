@@ -5,13 +5,12 @@ import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +22,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Stream;
 
-public class AutoConnectTrafoTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class AutoConnectTrafoTest extends MontiArcTestBase {
 
   static Stream<Arguments> validModels() {
     return Stream.of(
@@ -207,8 +208,8 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     SoftAssertions.assertSoftly(a -> {
       a.assertThat(after.size()).as("Checking number of new connectors").isEqualTo(expected);
       a.assertThat(after).as("Should retain connectors").containsAll(before);
-      a.assertThat(this.collectErrorCodes(Log.getFindings())).as("Checking Error log").isEmpty();
     });
+    assertThat(Log.getFindings()).isEmpty();
 
   }
 
@@ -258,9 +259,8 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     trafo.apply(ast);
     checker.checkAll(ast);
 
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Checking Error log")
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   @ValueSource(strings = {"type", "port"})
@@ -289,7 +289,7 @@ public class AutoConnectTrafoTest extends MontiArcAbstractTest {
     trafo.apply(ast);
 
     // Then
-    Assertions.assertThat(ast.getComponentType().getConnectors())
+    assertThat(ast.getComponentType().getConnectors())
       .as("Checking connectors within component")
       .isEmpty();
   }

@@ -4,7 +4,7 @@ package montiarc._cocos;
 import arcautomaton._cocos.StateNameIsNoReservedKeyword;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
@@ -19,10 +19,12 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * The class under test is {@link StateNameIsNoReservedKeyword}.
  */
-public class StateNameIsNoReservedKeywordTest extends MontiArcAbstractTest {
+public class StateNameIsNoReservedKeywordTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -48,7 +50,7 @@ public class StateNameIsNoReservedKeywordTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -67,9 +69,9 @@ public class StateNameIsNoReservedKeywordTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(errors.length);
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(errors.length);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

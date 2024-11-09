@@ -13,10 +13,10 @@ import de.monticore.expressions.commonexpressions._ast.ASTPlusExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._parser.MontiArcParser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -28,14 +28,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class ExpressionRootFinderTest {
+public class ExpressionRootFinderTest extends MontiArcTestBase {
 
   private static final MontiArcParser PARSER = new MontiArcParser();
-
-  @BeforeAll
-  public static void setUp(){
-    MontiArcMill.init();
-  }
 
   @ParameterizedTest
   @MethodSource(value = "provideTestCases")

@@ -3,13 +3,12 @@ package montiarc._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,12 +26,7 @@ import java.util.stream.Stream;
  * That is, checks that all scopes, symbols and ast nodes have an enclosing
  * scope, and that all spanning symbols and ast nodes have a spanned scope.
  */
-public class SymbolTableTest extends MontiArcAbstractTest {
-
-  @BeforeAll
-  public static void init() {
-    Log.enableFailQuick(false);
-  }
+public class SymbolTableTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("componentProvider")

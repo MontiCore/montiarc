@@ -3,7 +3,8 @@ package montiarc._cocos;
 
 import arcbasis._cocos.AtomicNoConnector;
 import com.google.common.base.Preconditions;
-import montiarc.MontiArcAbstractTest;
+import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
@@ -16,10 +17,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * The class under test is {@link AtomicNoConnector}.
  */
-public class AtomicNoConnectorTest extends MontiArcAbstractTest {
+public class AtomicNoConnectorTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -46,7 +49,7 @@ public class AtomicNoConnectorTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    checkOnlyExpectedErrorsPresent();
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
@@ -65,7 +68,8 @@ public class AtomicNoConnectorTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    checkOnlyExpectedErrorsPresent(errors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

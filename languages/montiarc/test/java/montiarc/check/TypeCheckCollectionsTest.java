@@ -5,6 +5,7 @@ import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
 import arcbasis._symboltable.TransitiveScopeSetter;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
@@ -13,11 +14,10 @@ import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -37,31 +37,27 @@ import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.SHORT;
 import static de.monticore.types.check.SymTypeExpressionFactory.createFromSymbol;
 import static de.monticore.types.check.SymTypeExpressionFactory.createGenerics;
 import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * This class provides tests for type checking expressions over collection
  * types like Set and List.
  */
-public class TypeCheckCollectionsTest extends MontiArcAbstractTest {
+public class TypeCheckCollectionsTest extends MontiArcTestBase {
 
   /**
    * The enclosing scope of the symbols of the test setup
    */
   protected IArcBasisScope scope;
 
-  @BeforeAll
-  public static void log() {
-    Log.enableFailQuick(false);
-  }
-
   @BeforeEach
-  @Override
-  public void setUp() {
-    super.setUp();
-    this.initSymbols();
+  protected void initSymbols() {
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    setUpSymbols();
   }
 
-  protected void initSymbols() {
+  protected void setUpSymbols() {
     // Enable collection types
     MCCollectionSymTypeRelations.init();
 
@@ -1473,8 +1469,6 @@ public class TypeCheckCollectionsTest extends MontiArcAbstractTest {
     Assertions.assertThat(Log.getFindings())
       .as("Expression " + expr + " should be invalid, there should be findings.")
       .isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Expression " + expr + " is invalid, the findings should contain exactly the expected error.")
-      .containsExactly(error);
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(error);
   }
 }

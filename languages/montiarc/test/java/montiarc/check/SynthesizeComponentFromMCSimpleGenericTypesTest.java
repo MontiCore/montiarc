@@ -16,9 +16,10 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
+import de.se_rwth.commons.logging.Log;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -29,7 +30,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
-public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTestBase {
 
   @Test
   public void shouldHandleMCBasicGenericType() {
@@ -71,8 +74,17 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Now we build generic ast types Comp<String, List<String>> and scoop.Comp<scoop.List<scoop.String>, scoop.String>
     // That lay a) in the scope where the symbols lay and b) in the global scope.
-    ASTMCQualifiedType astString = createQualifiedType(stringName);
-    ASTMCQualifiedType astQualString = createQualifiedType(nameOfCompScope, stringName);
+    ASTMCQualifiedType astString = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts(stringName)
+        .build())
+      .build();
+    ASTMCQualifiedType astQualString = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts(nameOfCompScope)
+        .addParts(stringName)
+        .build())
+        .build();
     astString.setEnclosingScope(scopeOfComp);
     astString.getMCQualifiedName().setEnclosingScope(scopeOfComp);
     astQualString.setEnclosingScope(MontiArcMill.globalScope());
@@ -135,7 +147,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
     Assertions.assertEquals(stringSym,
       ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
     );
-    checkOnlyExpectedErrorsPresent();
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test
@@ -149,7 +161,11 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
     MontiArcMill.globalScope().add(stringSym);
     MontiArcMill.globalScope().addSubScope(stringSym.getSpannedScope());
 
-    ASTMCQualifiedType astString = createQualifiedType(stringName);
+    ASTMCQualifiedType astString = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts(stringName)
+        .build())
+      .build();
     astString.setEnclosingScope(MontiArcMill.globalScope());
     astString.getMCQualifiedName().setEnclosingScope(MontiArcMill.globalScope());
 
@@ -167,7 +183,8 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
-    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MISSING_COMPONENT));
   }
 
   @Test
@@ -183,7 +200,11 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
     MontiArcMill.globalScope().add(compSym);
     MontiArcMill.globalScope().addSubScope(compSym.getSpannedScope());
 
-    ASTMCQualifiedType astString = createQualifiedType("String");
+    ASTMCQualifiedType astString = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts("String")
+        .build())
+      .build();
     astString.setEnclosingScope(MontiArcMill.globalScope());
     astString.getMCQualifiedName().setEnclosingScope(MontiArcMill.globalScope());
 
@@ -201,7 +222,8 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
-    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MISSING_COMPONENT));
   }
 
   @Test
@@ -226,7 +248,11 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
     MontiArcMill.globalScope().add(listSym);
     MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
 
-    ASTMCQualifiedType astString = createQualifiedType("String");
+    ASTMCQualifiedType astString = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts("String")
+        .build())
+      .build();
     astString.setEnclosingScope(MontiArcMill.globalScope());
     astString.getMCQualifiedName().setEnclosingScope(MontiArcMill.globalScope());
 
@@ -246,7 +272,8 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcAbs
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
-    checkOnlyExpectedErrorsPresent(ArcError.MISSING_COMPONENT);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MISSING_COMPONENT));
   }
 
   /**

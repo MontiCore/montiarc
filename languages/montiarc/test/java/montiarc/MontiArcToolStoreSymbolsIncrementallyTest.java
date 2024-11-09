@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests the inc-check mechanics of the serialization of symbols of the MontiArcTool.
  */
-class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcAbstractTest {
+class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
 
   @TempDir
   Path tempDir;

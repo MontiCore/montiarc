@@ -8,11 +8,9 @@ import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
-import org.assertj.core.api.Assertions;
+import montiarc.MontiArcTestBase;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,32 +20,27 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * This class provides tests for validating the correctness of type checking of
  * adapted MontiArc symbols.
  */
-public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
+public class MontiArcAdaptedTypeCheckTest extends MontiArcTestBase {
 
   /**
    * The enclosing scope of the symbols of the test setup
    */
   protected IArcBasisScope scope;
 
-  @BeforeAll
-  public static void log() {
-    Log.enableFailQuick(false);
-  }
-
   @BeforeEach
-  @Override
-  public void setUp() {
-    super.setUp();
+  protected void initSymbols() {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    this.initSymbols();
+    setUpComponents();
   }
 
-  protected void initSymbols() {
+  protected void setUpComponents() {
     compile("component Super<T> {" +
       "port in T pGenInh; " +
       "}");
@@ -92,7 +85,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     TypeCheck3.typeOf(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings())
+    assertThat(Log.getFindings())
       .as("Expression " + expr + " should be valid, there shouldn't be any findings.")
       .isEmpty();
   }
@@ -118,12 +111,11 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcAbstractTest {
     TypeCheck3.typeOf(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings())
+    assertThat(Log.getFindings())
       .as("Expression " + expr + " should be invalid, there should be findings.")
       .isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Expression " + expr + " is invalid, the findings should contain exactly the expected error.")
-      .containsExactly(errors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(errors);
   }
 
   protected static Stream<Arguments> invalidExpression() {

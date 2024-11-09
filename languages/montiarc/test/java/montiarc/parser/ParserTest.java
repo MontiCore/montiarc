@@ -2,11 +2,10 @@
 package montiarc.parser;
 
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
-import montiarc.util.Error;
 import montiarc.util.MontiArcError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ParserTest extends MontiArcAbstractTest {
+public class ParserTest extends MontiArcTestBase {
 
   protected static final String PACKAGE = "parser";
 
@@ -69,25 +68,28 @@ public class ParserTest extends MontiArcAbstractTest {
   @ParameterizedTest
   @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc", "ModeAutomataSyntax.arc", "MultipleInheritance.arc"})
   public void shouldParseWithoutError(String fileName) {
-    parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false);
+    parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString(), false);
   }
 
   @Test
   public void shouldParseWithSpecifiedErrorsOnly() {
     // Given
-    Path path = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, "ComponentAndFileNameDiffer.arc");
+    Path path = Paths.get(TEST_RESOURCE, PACKAGE, "ComponentAndFileNameDiffer.arc");
 
     // When
     parse(path.toString(), true);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(new Error[]{MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER}, path);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER)
+      );
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc", "ModeAutomataSyntax.arc", "MultipleInheritance.arc"})
   public void shouldPrintWithoutError(String fileName) {
-    ASTMACompilationUnit unit = parse(Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName).toString(), false).orElseThrow();
+    ASTMACompilationUnit unit = parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString(), false).orElseThrow();
     String s = MontiArcMill.prettyPrint(unit, true);
     ASTMACompilationUnit similarUnit = parse_String(s,false).orElse(null);
     if(!unit.deepEquals(similarUnit)){
@@ -98,7 +100,7 @@ public class ParserTest extends MontiArcAbstractTest {
   @ParameterizedTest
   @MethodSource("filenameAndASTProvider")
   public void shouldParseWithoutErrorAndBeEqualTo(String fileName, ASTMACompilationUnit unit) {
-    Path path = Paths.get(RELATIVE_MODEL_PATH, PACKAGE, fileName);
+    Path path = Paths.get(TEST_RESOURCE, PACKAGE, fileName);
     ASTMACompilationUnit parsedUnit =
       parse(path.toString(), false).orElse(null);
     Assertions.assertNotNull(parsedUnit, path.toAbsolutePath().toString());

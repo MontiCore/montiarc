@@ -5,13 +5,12 @@ import arcautomaton._ast.ASTArcStatechart;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import modes._cocos.StatechartContainsNoMode;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc.util.Error;
 import montiarc.util.ModesError;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -20,10 +19,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 /**
  * Tests for {@link StatechartContainsNoMode}
  */
-public class StatechartContainsNoModeTest extends MontiArcAbstractTest {
+public class StatechartContainsNoModeTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> numberOfModesAndStatesWithErrorProvider() {
     return Stream.of(
@@ -42,10 +43,10 @@ public class StatechartContainsNoModeTest extends MontiArcAbstractTest {
 
   @ParameterizedTest
   @MethodSource("numberOfModesAndStatesWithErrorProvider")
-  public void testCocoWithNModeAutomata(int numberOfStates, int numberOfModes, @NotNull ModesError... expectedErrors) {
+  public void testCocoWithNModeAutomata(int numberOfStates, int numberOfModes, @NotNull ModesError... errors) {
     Preconditions.checkArgument(numberOfModes >= 0);
     Preconditions.checkArgument(numberOfStates >= 0);
-    Preconditions.checkNotNull(expectedErrors);
+    Preconditions.checkNotNull(errors);
 
     // Given
     ASTArcStatechart statechart = MontiArcMill.arcStatechartBuilder().build();
@@ -62,7 +63,8 @@ public class StatechartContainsNoModeTest extends MontiArcAbstractTest {
     coco.check(statechart);
 
     // Then
-    checkOnlyExpectedErrorsPresent(expectedErrors);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   @ParameterizedTest
@@ -81,9 +83,9 @@ public class StatechartContainsNoModeTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

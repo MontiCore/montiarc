@@ -2,8 +2,8 @@
 package montiarc._cocos;
 
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,7 +14,9 @@ import variablearc._cocos.ConstraintIsBoolean;
 
 import java.util.stream.Stream;
 
-public class ConstraintIsBooleanTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class ConstraintIsBooleanTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> provideConstraintAndError() {
     return Stream.of(
@@ -42,7 +44,7 @@ public class ConstraintIsBooleanTest extends MontiArcAbstractTest {
   @ParameterizedTest
   @MethodSource("provideConstraintAndError")
   public void testConstraintType(ASTArcConstraintDeclaration constraint,
-                                 Error[] errorList) {
+                                 Error[] errors) {
     // Given
     ConstraintIsBoolean coco = new ConstraintIsBoolean();
 
@@ -50,6 +52,7 @@ public class ConstraintIsBooleanTest extends MontiArcAbstractTest {
     coco.check(constraint);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(errorList);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 }

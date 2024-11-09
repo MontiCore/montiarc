@@ -9,11 +9,10 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -30,32 +29,20 @@ import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.INT;
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.LONG;
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.SHORT;
 import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * This class provides tests for validating the correctness of type checking of
  * primitives in expressions.
- * <p>
- * The class under test is {@link MontiArcTypeCalculator}.
  */
-public class TypeCheckPrimitivesTest extends MontiArcAbstractTest {
+public class TypeCheckPrimitivesTest extends MontiArcTestBase {
 
   /**
    * The enclosing scope of the symbols of the test setup
    */
   protected IArcBasisScope scope;
 
-  @BeforeAll
-  public static void log() {
-    Log.enableFailQuick(false);
-  }
-
   @BeforeEach
-  @Override
-  public void setUp() {
-    super.setUp();
-    this.initSymbols();
-  }
-
   protected void initSymbols() {
     this.scope = MontiArcMill.scope();
     MontiArcMill.globalScope().addSubScope(this.scope);
@@ -2002,8 +1989,6 @@ public class TypeCheckPrimitivesTest extends MontiArcAbstractTest {
     Assertions.assertThat(Log.getFindings())
       .as("Expression " + expr + " should be invalid, there should be findings.")
       .isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Expression " + expr + " is invalid, the findings should contain exactly the expected error.")
-      .containsExactly(error);
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(error);
   }
 }

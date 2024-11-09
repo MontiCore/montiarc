@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -65,6 +66,7 @@ public abstract class ATestBase {
     return Log.getFindings().stream()
       .map(Finding::getMsg)
       .map(msg -> msg.substring(0, 7))
+      .filter(Pattern.compile("0x[0-9a-fA-F]{5}").asPredicate())
       .toArray(String[]::new);
   }
 

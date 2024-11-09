@@ -9,8 +9,8 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc.evaluation.util.ASTExpressionSetEnclosingScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -33,7 +33,7 @@ import java.util.stream.Stream;
  * Tests for {@link IVariableArcComponentTypeSymbol}
  * Focuses on giving back the correct number of Variants (including subcomponent expansion)
  */
-public class IVariableArcComponentTypeSymbolTest extends MontiArcAbstractTest {
+public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
 
   protected static IVariableArcComponentTypeSymbol createComponentWithVariationPoints(List<VariableArcVariationPoint> variationPoints) {
   return createComponentWithVariationPoints("C", variationPoints);

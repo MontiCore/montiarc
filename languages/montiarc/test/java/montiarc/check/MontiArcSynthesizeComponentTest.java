@@ -17,8 +17,8 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
+public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
 
   @Test
   public void shouldSynthesizeFromMCQualifiedType() {
@@ -44,7 +44,11 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
     MontiArcMill.globalScope().addSubScope(compSym.getSpannedScope());
 
     // Now build the qualified type
-    ASTMCQualifiedType astComp = createQualifiedType(compName);
+    ASTMCQualifiedType astComp = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts(compName)
+        .build())
+      .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
     MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
@@ -92,7 +96,11 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
     MontiArcMill.globalScope().addSubScope(listSym.getSpannedScope());
 
     // Now we build generic ast types Comp<String, List<String>> that lay in the global scope.
-    ASTMCQualifiedType astString = createQualifiedType(stringName);
+    ASTMCQualifiedType astString = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts(stringName)
+        .build())
+      .build();
     astString.setEnclosingScope(MontiArcMill.globalScope());
     astString.getMCQualifiedName().setEnclosingScope(MontiArcMill.globalScope());
     ASTMCType astListOfString = createGenericType(ImmutableList.of(listName), MontiArcMill.globalScope(), astString);
@@ -128,7 +136,11 @@ public class MontiArcSynthesizeComponentTest extends MontiArcAbstractTest {
   @Test
   public void shouldNotSynthesizeFromUnresolvableType() {
     // Now build the qualified type
-    ASTMCQualifiedType astComp = createQualifiedType("Unresolvable");
+    ASTMCQualifiedType astComp = MontiArcMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .addParts("Unresolvable")
+        .build())
+      .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
     MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();

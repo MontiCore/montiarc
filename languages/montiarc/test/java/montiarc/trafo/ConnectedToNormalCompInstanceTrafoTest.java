@@ -10,13 +10,12 @@ import arcbasis._cocos.ConnectorPortsExist;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTConnectedComponentInstance;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.ArcError;
 import montiarc.util.ComfortableArcError;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
@@ -32,7 +31,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ConnectedToNormalCompInstanceTrafoTest extends MontiArcTestBase {
 
   static Stream<Arguments> validModels() {
     return Stream.of(
@@ -135,8 +136,8 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
       a.assertThat(connectorsAfter.size()).as("Number of connectors").isEqualTo(expectedConnectors);
       a.assertThat(instantiancesAfter.size()).as("Number of instances").isEqualTo(expectedInstances);
       a.assertThat(connectedComps).as("Untransformed asts").isEmpty();
-      a.assertThat(this.collectErrorCodes(Log.getFindings())).as("Checking Error log").isEmpty();
     });
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test
@@ -161,10 +162,10 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
 
     // Then
     ASTConnector connector = ast.getComponentType().getConnectors().get(0);
-    Assertions.assertThat(connector.getSource().isPresentComponent())
+    assertThat(connector.getSource().isPresentComponent())
       .as("Checking whether port is of an instance")
       .isTrue();
-    Assertions.assertThat(connector.getSource().getComponent())
+    assertThat(connector.getSource().getComponent())
       .as("Port's component's name")
       .isEqualTo("inner");
   }
@@ -195,9 +196,13 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Checking Error log")
-      .containsExactlyElementsOf(this.collectErrorCodes(new ArcError[] {ArcError.MISSING_PORT, ArcError.MISSING_PORT}));
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(
+        getErrorCodes(
+          ArcError.MISSING_PORT,
+          ArcError.MISSING_PORT
+        )
+      );
   }
 
   @Test
@@ -223,11 +228,10 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     // Then
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings()))
-      .as("Checking Error log")
-      .containsExactlyElementsOf(this.collectErrorCodes(new ComfortableArcError[] {
-        ComfortableArcError.CONNECTED_COMPONENT_CONNECTOR_SRC_HAS_COMP_NAME
-      }));
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(
+        ComfortableArcError.CONNECTED_COMPONENT_CONNECTOR_SRC_HAS_COMP_NAME)
+      );
   }
   @ParameterizedTest
   @ValueSource(strings = {"{ Inner inner [x -> a;]; }", "Inner inner [x -> a;];"})
@@ -263,8 +267,8 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcAbstractTest {
       a.assertThat(connectorsWithin(arcIfContent)).as("Number of connectors").hasSize(1);
       a.assertThat(instancesWithin(arcIfContent)).as("Number of instances").hasSize(1);
       a.assertThat(connectedCompsWithin(arcIfContent)).as("Untransformed asts").isEmpty();
-      a.assertThat(this.collectErrorCodes(Log.getFindings())).as("Checking Error log").isEmpty();
     });
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   private List<ASTConnector> connectorsWithin(ASTComponentBody body) {

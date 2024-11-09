@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
+import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
@@ -12,16 +15,16 @@ import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import genericarc._symboltable.IGenericArcArtifactScope;
 import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
-import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.MontiArcTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
+public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
 
   public static final String GENERIC_COMP_JSON =
     "{" +
@@ -38,8 +41,26 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
   @Test
   void testSerializeSimpleCompAsJson() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    IMontiArcArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
+    ASTComponentType cTypeAST = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(cTypeAST.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    cTypeAST.setSymbol(myComp);
+    cTypeAST.setSpannedScope(myComp.getSpannedScope());
+    myComp.setAstNode(cTypeAST);
+
+    IArcBasisArtifactScope scope = ArcBasisMill.artifactScope();
+    scope.setPackageName("foo.bar");
+
+    SymbolService.link(scope, myComp);
+    
     MontiArcMill.globalScope().addSubScope(scope);
     CompTypeExpression compTypeExpr = new TypeExprOfComponent(myComp);
     FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
@@ -60,7 +81,21 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
   @Test
   void testSerializeSimpleCompAsJsonWithoutPackage() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
+    ASTComponentType cTypeAST = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
+
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(cTypeAST.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    cTypeAST.setSymbol(myComp);
+    cTypeAST.setSpannedScope(myComp.getSpannedScope());
+    myComp.setAstNode(cTypeAST);
+    
     SymbolService.link(MontiArcMill.globalScope(), myComp);
     CompTypeExpression compTypeExpr = new TypeExprOfComponent(myComp);
     FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
@@ -81,17 +116,58 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
   @Test
   void testSerializeGenericCompAsJson() {
     // Given
-    ComponentTypeSymbol myComp = createComponentTypeWithSymbol("MyComp").getSymbol();
-    addTypeParamsToComp(myComp, "A", "B", "Foo", "Bar");
+    ASTComponentType myCompAST = ArcBasisMill.componentTypeBuilder()
+      .setName("MyComp")
+      .setHead(ArcBasisMill.componentHeadBuilder().build())
+      .setBody(ArcBasisMill.componentBodyBuilder().build())
+      .build();
 
-    IMontiArcArtifactScope scope = wrapInArtifactScope("foo.bar", myComp);
-    MontiArcMill.globalScope().addSubScope(scope);
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(myCompAST.getName())
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
 
-    OOTypeSymbol studentSym = createOOTypeSymbol("Student");
-    IMontiArcArtifactScope studentScope = wrapInArtifactScope("noo.boo", studentSym);
-    MontiArcMill.globalScope().addSubScope(studentScope);
+    myCompAST.setSymbol(myComp);
+    myCompAST.setSpannedScope(myComp.getSpannedScope());
+    myComp.setAstNode(myCompAST);
 
-    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(studentSym);
+    myCompAST.getSpannedScope().add(MontiArcMill
+      .typeVarSymbolBuilder()
+      .setName("A")
+      .build());
+    myCompAST.getSpannedScope().add(MontiArcMill
+      .typeVarSymbolBuilder()
+      .setName("B")
+      .build());
+    myCompAST.getSpannedScope().add(MontiArcMill
+      .typeVarSymbolBuilder()
+      .setName("Foo")
+      .build());
+    myCompAST.getSpannedScope().add(MontiArcMill
+      .typeVarSymbolBuilder()
+      .setName("Bar")
+      .build());
+
+    IGenericArcArtifactScope as = MontiArcMill.artifactScope();
+    as.setPackageName("foo.bar");
+
+    SymbolService.link(as, myComp);
+
+    MontiArcMill.globalScope().addSubScope(as);
+
+    OOTypeSymbol student = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+
+    IGenericArcArtifactScope as2 = MontiArcMill.artifactScope();
+    as2.setPackageName("noo.boo");
+
+    SymbolService.link(as2, student);
+
+    MontiArcMill.globalScope().addSubScope(as2);
+
+    SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(student);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
     CompTypeExpression compTypeExpr =
       new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
@@ -147,10 +223,18 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcAbstractTest {
     FullCompKindExprDeSer deser = new MontiArcCompTypeExprDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(GENERIC_COMP_JSON);
 
-    OOTypeSymbol studentSym = createOOTypeSymbol("Student");
-    IMontiArcArtifactScope studentScope = wrapInArtifactScope("noo.boo", studentSym);
-    MontiArcMill.globalScope().addSubScope(studentScope);
+    OOTypeSymbol student = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Student")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
 
+    IGenericArcArtifactScope as = MontiArcMill.artifactScope();
+    as.setPackageName("noo.boo");
+
+    SymbolService.link(as, student);
+
+    MontiArcMill.globalScope().addSubScope(as);
+    
     // When
     CompKindExpression deserializedExpr = deser.deserialize(serialized);
 

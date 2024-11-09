@@ -21,8 +21,8 @@ import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;
 import de.monticore.statements.mccommonstatements._ast.ASTMCJavaBlock;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._parser.MontiArcParser;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -35,7 +35,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Optional;
 
-public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
+public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
 
   private static final String MODELS = "parser/statecharts/valid";
 
@@ -53,7 +53,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
 
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS, file).toString());
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS, file).toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When
@@ -69,7 +69,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printEmptyStateChart() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS,
       "A_EmptyStateChart.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
@@ -88,7 +88,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printJustSomeStates() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS,
       "B_JustSomeStates.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
@@ -125,7 +125,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printStatesAndTransitions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS,
       "C_StatesAndTransitions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
@@ -178,7 +178,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printGuardedTransitions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS,
       "D_GuardedTransitions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
@@ -237,7 +237,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printTransitionsWithReactions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS,
       "E_TransitionsWithReactions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
@@ -334,7 +334,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printStateWithBody() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS,
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS,
       "F_StateWithBody.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
@@ -373,7 +373,7 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcAbstractTest {
   public void printActions() throws IOException {
     // Given
     MontiArcParser parser = MontiArcMill.parser();
-    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(RELATIVE_MODEL_PATH, MODELS, "G_Actions.arc").toString());
+    Optional<ASTMACompilationUnit> origAST = parser.parse(Paths.get(TEST_RESOURCE, MODELS, "G_Actions.arc").toString());
     Preconditions.checkState(origAST.isPresent());
 
     // When

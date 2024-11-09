@@ -4,10 +4,9 @@ package montiarc._symboltable;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -16,14 +15,7 @@ import java.util.Optional;
 /**
  * Holds tests that check whether types adapted via the {@link de.monticore.class2mc.OOClass2MCResolver} can be resolved
  */
-public class Class2MCResolvingTest extends MontiArcAbstractTest {
-
-  @BeforeEach
-  @Override
-  public void setUp() {
-    MontiArcMill.globalScope().clear();
-    MontiArcMill.init();
-  }
+public class Class2MCResolvingTest extends MontiArcTestBase {
 
   @Test
   public void shouldFindAdaptedTypes() {

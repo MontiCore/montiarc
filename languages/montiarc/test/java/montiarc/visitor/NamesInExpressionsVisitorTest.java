@@ -4,8 +4,8 @@ package montiarc.visitor;
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._parser.MontiArcParser;
 import montiarc._visitor.MontiArcTraverser;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 
 import static arcautomaton._visitor.NamesInExpressionsVisitor.VarAccessKind;
 
-public class NamesInExpressionsVisitorTest extends MontiArcAbstractTest {
+public class NamesInExpressionsVisitorTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("expressionAndVariableNamesProvider")

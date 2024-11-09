@@ -5,8 +5,8 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.api.SoftAssertions;
@@ -22,7 +22,7 @@ import variablearc._ast.ASTArcVarIf;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcAbstractTest {
+class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
 
   static Stream<Arguments> validModels() {
     return Stream.of(

@@ -13,7 +13,7 @@ import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
@@ -28,7 +28,7 @@ import java.nio.file.Paths;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
-public class MontiArcDeserializationTest extends MontiArcAbstractTest {
+public class MontiArcDeserializationTest extends MontiArcTestBase {
 
   protected static final String PACKAGE = "symboltable";
 
@@ -54,7 +54,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -78,7 +78,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -100,7 +100,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -123,7 +123,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -147,7 +147,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -170,7 +170,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -194,7 +194,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -217,7 +217,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
@@ -257,7 +257,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -302,7 +302,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(index));
 
@@ -335,7 +335,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -360,7 +360,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -386,7 +386,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -411,7 +411,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -437,7 +437,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -462,7 +462,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -488,7 +488,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -513,7 +513,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -539,7 +539,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -564,7 +564,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
@@ -599,7 +599,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
@@ -623,7 +623,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
@@ -644,7 +644,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
@@ -666,7 +666,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
@@ -689,7 +689,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
@@ -721,7 +721,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
@@ -765,7 +765,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(index));
 
@@ -793,7 +793,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
@@ -815,7 +815,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
@@ -838,7 +838,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
@@ -863,7 +863,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final VariableSymbol symbol = Preconditions.checkNotNull(scope.getLocalVariableSymbols().get(0));
 
@@ -891,7 +891,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final VariableSymbol symbol = Preconditions.checkNotNull(scope.getLocalVariableSymbols().get(index));
 
@@ -911,7 +911,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FieldSymbol symbol = Preconditions.checkNotNull(scope.getLocalFieldSymbols().get(0));
 
@@ -956,7 +956,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final FieldSymbol symbol = Preconditions.checkNotNull(scope.getLocalFieldSymbols().get(index));
 
@@ -983,7 +983,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final SCStateSymbol symbol = Preconditions.checkNotNull(scope.getLocalSCStateSymbols().get(0));
 
@@ -1005,7 +1005,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
 
@@ -1027,7 +1027,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
 
@@ -1051,7 +1051,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
 
@@ -1075,7 +1075,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
 
@@ -1098,7 +1098,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
@@ -1121,7 +1121,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
@@ -1144,7 +1144,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // When
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Paths.get(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
@@ -1166,7 +1166,7 @@ public class MontiArcDeserializationTest extends MontiArcAbstractTest {
 
     // WHen
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
-      s2j.load(Path.of(RELATIVE_MODEL_PATH, Names.getPathFromPackage(PACKAGE), fn).toString())
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 

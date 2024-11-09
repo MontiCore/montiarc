@@ -22,6 +22,7 @@ import org.junit.jupiter.api.BeforeEach;
 import java.io.IOException;
 import java.util.Arrays;
 
+@Deprecated
 public abstract class MontiArcAbstractTest extends AbstractTest {
 
   @BeforeEach

@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.parser;
 
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Paths;
 
-public class StatechartComponentParserTest extends MontiArcAbstractTest {
+public class StatechartComponentParserTest extends MontiArcTestBase {
   private static final String VALID_MODELS = "parser/statecharts/valid";
   private static final String FALSE_MODELS = "parser/statecharts/invalid";
 
@@ -21,7 +21,7 @@ public class StatechartComponentParserTest extends MontiArcAbstractTest {
                           "G_Actions.arc",
                           "H_Hierarchy.arc"})
   public void shouldParseValidStateCharts(String fileName) {
-    ParserTest.parse(Paths.get(RELATIVE_MODEL_PATH, VALID_MODELS, fileName).toString(), false);
+    ParserTest.parse(Paths.get(TEST_RESOURCE, VALID_MODELS, fileName).toString(), false);
   }
 
   @ParameterizedTest
@@ -32,6 +32,6 @@ public class StatechartComponentParserTest extends MontiArcAbstractTest {
                          "MissedSlashButGuard.arc",
                          "PortsInStatechart.arc"})
   public void shouldParseWithErrors(String fileName) {
-    ParserTest.parse(Paths.get(RELATIVE_MODEL_PATH, FALSE_MODELS, fileName).toString(), true);
+    ParserTest.parse(Paths.get(TEST_RESOURCE, FALSE_MODELS, fileName).toString(), true);
   }
 }

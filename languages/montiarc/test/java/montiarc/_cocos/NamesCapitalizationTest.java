@@ -9,13 +9,12 @@ import arcbasis._cocos.SubcomponentNameCapitalization;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import genericarc._cocos.TypeParameterCapitalization;
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import montiarc.util.GenericArcError;
 import montiarc.util.VariableArcError;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -26,7 +25,9 @@ import variablearc._cocos.FeatureNameCapitalization;
 import java.io.IOException;
 import java.util.stream.Stream;
 
-public class NamesCapitalizationTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class NamesCapitalizationTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -124,7 +125,7 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
   }
 
   @ParameterizedTest
@@ -149,9 +150,9 @@ public class NamesCapitalizationTest extends MontiArcAbstractTest {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    Assertions.assertThat(this.collectErrorCodes(Log.getFindings())).as(Log.getFindings().toString())
-      .containsExactlyElementsOf(this.collectErrorCodes(errors));
+    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

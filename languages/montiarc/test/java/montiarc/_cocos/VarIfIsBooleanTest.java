@@ -3,7 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTArcElement;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
-import montiarc.MontiArcAbstractTest;
+import montiarc.MontiArcTestBase;
 import montiarc.MontiArcMill;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
@@ -16,7 +16,9 @@ import variablearc._cocos.VarIfIsBoolean;
 
 import java.util.stream.Stream;
 
-public class VarIfIsBooleanTest extends MontiArcAbstractTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class VarIfIsBooleanTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> provideVarIfAndError() {
     return Stream.of(
@@ -48,7 +50,7 @@ public class VarIfIsBooleanTest extends MontiArcAbstractTest {
   @ParameterizedTest
   @MethodSource("provideVarIfAndError")
   public void testVarIfType(ASTArcVarIf constraint,
-                            Error[] errorList) {
+                            Error[] errors) {
     // Given
     VarIfIsBoolean coco = new VarIfIsBoolean();
 
@@ -56,6 +58,7 @@ public class VarIfIsBooleanTest extends MontiArcAbstractTest {
     coco.check(constraint);
 
     // Then
-    this.checkOnlyExpectedErrorsPresent(errorList);
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 }

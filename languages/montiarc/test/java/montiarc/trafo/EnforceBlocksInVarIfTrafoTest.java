@@ -3,8 +3,8 @@ package montiarc.trafo;
 
 import arcbasis._ast.ASTArcElement;
 import com.google.common.base.Preconditions;
-import montiarc.MontiArcAbstractTest;
 import montiarc.MontiArcMill;
+import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class EnforceBlocksInVarIfTrafoTest extends MontiArcAbstractTest {
+public class EnforceBlocksInVarIfTrafoTest extends MontiArcTestBase {
 
   static Stream<Arguments> validModels() {
     return Stream.of(
