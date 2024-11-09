@@ -10,6 +10,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Arrays;
 
@@ -60,14 +61,72 @@ public abstract class ATestBase {
     ArcBasisMill.globalScope().clear();
   }
 
-  protected String[] getLoggedErrorCodes() {
+  public static String[] getLoggedErrorCodes() {
     return Log.getFindings().stream()
       .map(Finding::getMsg)
       .map(msg -> msg.substring(0, 7))
       .toArray(String[]::new);
   }
 
-  protected String[] getErrorCodes(@NotNull Error... e) {
+  public static String[] getErrorCodes(@NotNull Error... e) {
     return Arrays.stream(e).map(Error::getErrorCode).toArray(String[]::new);
+  }
+
+  /**
+   * Factory method creating {@code Arguments} of the given {@code objects}
+   * that can be used as result of a method source of a parameterized test.
+   *
+   * <p>This method is an <em>alias</em> and shorthand notation for
+   * {@link Arguments#of} and {@link Arguments#arguments}.
+   *
+   * @return an instance of {@link Arguments} of the given objects
+   */
+  public static Arguments arg(Object... objects) {
+    return Arguments.of(objects);
+  }
+
+  /**
+   * Factory method creating {@code Arguments} of the given {@code objects}
+   * and {@code errors}s that can be used as result of a method source of a
+   * parameterized test.
+   *
+   * <p>This method is an <em>alias</em> and shorthand notation for
+   * {@link Arguments#of} and {@link Arguments#arguments}.
+   *
+   * @return an instance of {@link Arguments} of the given arguments
+   */
+  public static Arguments arg(Object obj, Error... errors) {
+    return Arguments.of(obj, errors);
+  }
+
+  /**
+   * @see ATestBase#arg(Object, Error...)
+   */
+  public static Arguments arg(Object obj1, Object obj2, Error... errors) {
+    return Arguments.of(obj1, obj2, errors);
+  }
+
+  /**
+   * @see ATestBase#arg(Object, Error...)
+   */
+  public static Arguments arg(Object obj1, Object obj2,
+                                 Object obj3, Error... errors) {
+    return Arguments.of(obj1, obj2, obj3, errors);
+  }
+
+  /**
+   * @see ATestBase#arg(Object, Error...)
+   */
+  public static Arguments arg(Object obj1, Object obj2, Object obj3,
+                                 Object obj4, Error... errors) {
+    return Arguments.of(obj1, obj2, obj3, obj4, errors);
+  }
+
+  /**
+   * @see ATestBase#arg(Object, Error...)
+   */
+  public static Arguments arg(Object obj1, Object obj2, Object obj3,
+                                 Object obj4, Object obj5, Error... errors) {
+    return Arguments.of(obj1, obj2, obj3, obj4, obj5, errors);
   }
 }
