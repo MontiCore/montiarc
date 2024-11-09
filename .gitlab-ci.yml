@@ -131,12 +131,11 @@ Pages:
     paths:
       - public
 
-
 # Mirrors this repository to GitHub.
 #
 # The mirror will always be at either HEAD or HEAD+1 (depending on whether cleanup is necessary).
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
-Github Mirror:
+.Github Mirror:
   stage: mirror
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   variables:
