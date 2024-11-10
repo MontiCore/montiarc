@@ -5,6 +5,7 @@ import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.check.VariableArcTypeCheck;
 
 import java.util.Optional;
 
@@ -13,16 +14,17 @@ import java.util.Optional;
  */
 public class ConnectorTypesFit extends arcbasis._cocos.ConnectorTypesFit {
 
-  protected ComponentTypeSymbol enclosingComponent;
-
-  public ConnectorTypesFit(@NotNull ComponentTypeSymbol enclosingComponent) {
-    Preconditions.checkNotNull(enclosingComponent);
-    this.enclosingComponent = enclosingComponent;
+  public ConnectorTypesFit() {
+    super();
   }
 
   @Override
   protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
-    return Optional.of(enclosingComponent);
+    if (VariableArcTypeCheck.getCurrentVariant().isPresent()) {
+      return VariableArcTypeCheck.getCurrentVariant();
+    } else {
+      return super.getEnclosingComponent(portAccess);
+    }
   }
 }

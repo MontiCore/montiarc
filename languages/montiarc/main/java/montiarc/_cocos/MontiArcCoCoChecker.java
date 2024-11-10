@@ -2,28 +2,24 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.visitor.IVisitor;
-import montiarc._cocos.util.VariantTraverseDispatchVisitor;
+import montiarc._cocos.util.MontiArcVariantDispatch;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MontiArcCoCoChecker extends MontiArcCoCoCheckerTOP {
 
-  protected VariantTraverseDispatchVisitor variantVisitor;
+  protected MontiArcVariantDispatch variantDispatch;
 
-  public MontiArcCoCoChecker() {
-    super();
-    variantVisitor = new VariantTraverseDispatchVisitor();
-    getTraverser().add4ArcBasis(variantVisitor);
+  public MontiArcCoCoCheckerTOP get4Variant() {
+    return this.variantDispatch;
   }
 
-  /**
-   * Adds a CoCo that is checked on all Variants of a component
-   *
-   * @param coco that will be checked
-   */
-  public void addVariantCoCo(@NotNull Class<? extends IVisitor> coco) {
-    Preconditions.checkNotNull(coco);
+  public MontiArcCoCoChecker() {
+    this(new MontiArcVariantDispatch());
+  }
 
-    variantVisitor.addVisitor(coco);
+  protected MontiArcCoCoChecker(@NotNull MontiArcVariantDispatch variantDispatch) {
+    Preconditions.checkNotNull(variantDispatch);
+    this.variantDispatch = variantDispatch;
+    this.getTraverser().add4ArcBasis(variantDispatch);
   }
 }

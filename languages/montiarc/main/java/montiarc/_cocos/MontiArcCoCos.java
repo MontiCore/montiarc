@@ -98,22 +98,22 @@ public class MontiArcCoCos {
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
-    checker.addVariantCoCo(PortsConnected.class);
-    checker.addVariantCoCo(PortUniqueSender.class);
-    checker.addVariantCoCo(SubPortsConnected.class);
-    checker.addVariantCoCo(ConnectorPortsExist.class);
-    checker.addVariantCoCo(variablearc._cocos.arcbasis.ConnectorTypesFit.class);
-    checker.addVariantCoCo(ConnectorDirectionsFit.class);
-    checker.addVariantCoCo(ConnectorTimingsFit.class);
+    checker.get4Variant().addCoCo(new PortsConnected());
+    checker.get4Variant().addCoCo(new PortUniqueSender());
+    checker.get4Variant().addCoCo(new SubPortsConnected());
+    checker.get4Variant().addCoCo(new ConnectorPortsExist());
+    checker.get4Variant().addCoCo(new variablearc._cocos.arcbasis.ConnectorTypesFit());
+    checker.get4Variant().addCoCo(new ConnectorDirectionsFit());
+    checker.get4Variant().addCoCo(new ConnectorTimingsFit());
     checker.addCoCo(new OnlyOneTiming());
     checker.addCoCo(new DelayOutPortOnly());
-    checker.addVariantCoCo(AtomicNoConnector.class);
-    checker.addVariantCoCo(AtomicMaxOneBehavior.class);
-    checker.addVariantCoCo(FeedbackStrongCausality.class);
+    checker.get4Variant().addCoCo(new AtomicNoConnector());
+    checker.get4Variant().addCoCo(new AtomicMaxOneBehavior());
+    checker.get4Variant().addCoCo(new FeedbackStrongCausality());
     checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
-    checker.addVariantCoCo(PortHeritageTypeFits.class);
+    checker.get4Variant().addCoCo(new PortHeritageTypeFits());
     checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldInitTypeFits());
     checker.addCoCo(new ParameterDefaultValueTypeFits());
@@ -124,7 +124,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
-    checker.addVariantCoCo(variablearc._cocos.arcbasis.UniqueIdentifier.class);
+    checker.get4Variant().addCoCo(new variablearc._cocos.arcbasis.UniqueIdentifier());
     checker.addCoCo(new ComponentNamedTick());
     checker.addCoCo(new ComponentInstantiationNamedTick());
     checker.addCoCo(new FieldNamedTick());
@@ -164,7 +164,7 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
-    checker.addVariantCoCo(TransitionPreconditionsAreBoolean.class);
+    checker.get4Variant().addCoCo(new TransitionPreconditionsAreBoolean());
     MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new AtLeastOneInitialState(traverser));
@@ -188,12 +188,12 @@ public class MontiArcCoCos {
     checker.addCoCo(new AtomicNoAutoConnect());
 
     // Basic MontiCore cocos
-    checker.addVariantCoCo(ExpressionStatementIsValid.class);
-    checker.addVariantCoCo(VarDeclarationInitializationHasCorrectType.class);
-    checker.addVariantCoCo(ForConditionHasBooleanType.class);
-    checker.addVariantCoCo(ForEachIsValid.class);
-    checker.addVariantCoCo(IfConditionHasBooleanType.class);
-    checker.addVariantCoCo(SwitchStatementValid.class);
+    checker.get4Variant().addCoCo(new ExpressionStatementIsValid());
+    checker.get4Variant().addCoCo(new VarDeclarationInitializationHasCorrectType());
+    checker.get4Variant().addCoCo(new ForConditionHasBooleanType());
+    checker.get4Variant().addCoCo(new ForEachIsValid());
+    checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
+    checker.get4Variant().addCoCo(new SwitchStatementValid());
 
     // Block unsupported model elements
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
