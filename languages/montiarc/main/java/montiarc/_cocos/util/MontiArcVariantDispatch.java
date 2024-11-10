@@ -5,23 +5,15 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
-import de.monticore.sctransitions4code._visitor.SCTransitions4CodeVisitor2;
-import de.monticore.statements.mccommonstatements._visitor.MCCommonStatementsVisitor2;
-import de.monticore.statements.mcvardeclarationstatements._visitor.MCVarDeclarationStatementsVisitor2;
-import de.monticore.types3.AbstractTypeVisitor;
-import de.monticore.types3.Type4Ast;
-import de.monticore.visitor.IVisitor;
 import de.se_rwth.commons.logging.Log;
 import modes._cocos.util.IgnoreASTArcModeHandler;
-import montiarc.MontiArcMill;
 import montiarc._cocos.MontiArcCoCoCheckerTOP;
 import montiarc._symboltable.MontiArcComponentTypeSymbol;
-import montiarc._visitor.MontiArcTraverser;
+import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._cocos.util.IgnoreASTArcVarIfHandler;
 import variablearc.check.VariableArcTypeCheck;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,18 +42,15 @@ public class MontiArcVariantDispatch extends MontiArcCoCoCheckerTOP implements A
     }
 
     List<? extends ComponentTypeSymbol> variants = ((MontiArcComponentTypeSymbol) node.getSymbol()).getVariants();
-    Type4Ast staticMap = AbstractTypeVisitor.tmpMap;
     for (ComponentTypeSymbol variant : variants) {
-      AbstractTypeVisitor.tmpMap = new Type4Ast(); // override static map to clear cached results for variants
-      VariableArcTypeCheck.setCurrentVariant(variant);
+      MontiArcTypeCheck.enterContext(variant);
       long findings = Log.getFindingsCount();
       variant.getAstNode().accept(getTraverser());
       findings = Log.getFindingsCount() - findings;
       if (findings > 0 && variants.size() > 1) {
         Log.info(findings + " Error" + (findings > 1 ? "s" : "") + " in " + variant, "↳");
       }
-      VariableArcTypeCheck.setCurrentVariant(null);
+      MontiArcTypeCheck.leaveContext();
     }
-    AbstractTypeVisitor.tmpMap = staticMap;
   }
 }

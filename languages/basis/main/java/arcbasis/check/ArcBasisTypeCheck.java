@@ -24,6 +24,10 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
 
   private static final String LOG_NAME = ArcBasisTypeCheck.class.getSimpleName();
 
+  protected static ExpressionBasisTypeVisitor expressionBasis;
+  protected static MCBasicTypesTypeVisitor mcBasicTypes;
+  protected static MCCommonLiteralsTypeVisitor mcCommonLiterals;
+
   /**
    * @see MapBasedTypeCheck3(ITraverser, Type4Ast, InferenceContext4Ast)
    */
@@ -92,11 +96,11 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(ctx4Ast);
     Preconditions.checkNotNull(inScopeResolver);
     Log.trace("Start initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
-    ExpressionBasisTypeVisitor visitor = new ExpressionBasisTypeVisitor();
-    visitor.setType4Ast(type4Ast);
-    visitor.setContext4Ast(ctx4Ast);
-    visitor.setWithinScopeResolver(inScopeResolver);
-    traverser.add4ExpressionsBasis(visitor);
+    expressionBasis = new ExpressionBasisTypeVisitor();
+    expressionBasis.setType4Ast(type4Ast);
+    expressionBasis.setContext4Ast(ctx4Ast);
+    expressionBasis.setWithinScopeResolver(inScopeResolver);
+    traverser.add4ExpressionsBasis(expressionBasis);
     Log.trace("Finish initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
   }
 
@@ -111,12 +115,12 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(inScopeResolver);
     Preconditions.checkNotNull(inTypeResolver);
     Log.trace("Start initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
-    MCBasicTypesTypeVisitor visitor = new MCBasicTypesTypeVisitor();
-    visitor.setType4Ast(type4Ast);
-    visitor.setContext4Ast(ctx4Ast);
-    visitor.setWithinScopeResolver(inScopeResolver);
-    visitor.setWithinTypeResolver(inTypeResolver);
-    traverser.add4MCBasicTypes(visitor);
+    mcBasicTypes = new MCBasicTypesTypeVisitor();
+    mcBasicTypes.setType4Ast(type4Ast);
+    mcBasicTypes.setContext4Ast(ctx4Ast);
+    mcBasicTypes.setWithinScopeResolver(inScopeResolver);
+    mcBasicTypes.setWithinTypeResolver(inTypeResolver);
+    traverser.add4MCBasicTypes(mcBasicTypes);
     Log.trace("Finish initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
   }
 
@@ -127,10 +131,10 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
     Log.trace("Start initializing the MCCommonLiterals visitor of the type-check delegate", LOG_NAME);
-    MCCommonLiteralsTypeVisitor visitor = new MCCommonLiteralsTypeVisitor();
-    visitor.setType4Ast(type4Ast);
-    visitor.setContext4Ast(ctx4Ast);
-    traverser.add4MCCommonLiterals(visitor);
+    mcCommonLiterals = new MCCommonLiteralsTypeVisitor();
+    mcCommonLiterals.setType4Ast(type4Ast);
+    mcCommonLiterals.setContext4Ast(ctx4Ast);
+    traverser.add4MCCommonLiterals(mcCommonLiterals);
     Log.trace("Finish initializing the MCCommonLiterals visitor of the type-check delegate", LOG_NAME);
   }
 }

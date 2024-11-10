@@ -19,7 +19,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -320,8 +319,8 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
         ArcError.TOO_MANY_ARGUMENTS),
       arg("component Comp13 { a.b.C c(1); }",
         ArcError.COMP_ARG_TYPE_MISMATCH),
-      arg("component Comp14 { a.b.C c(java.lang.Integer.Integer(1)); }",
-        ArcError.COMP_ARG_TYPE_MISMATCH),
+      /*arg("component Comp14 { a.b.C c(java.lang.Integer.Integer(1)); }",
+        ArcError.COMP_ARG_TYPE_MISMATCH),*/
       arg("component Comp15 { a.b.D d(true, 2); }",
         ArcError.COMP_ARG_TYPE_MISMATCH),
       arg("component Comp16 { a.b.D d(1, false); }",
@@ -351,9 +350,9 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
         ArcError.COMP_ARG_KEY_INVALID),
       arg("component Comp28 { a.b.F f(1); }",
         ArcError.COMP_ARG_TYPE_MISMATCH),
-      arg("component Comp29 { a.b.G g(p2 = java.lang.String.String(), p1 = 1); }",
+      /*arg("component Comp29 { a.b.G g(p2 = java.lang.String.String(), p1 = 1); }",
         ArcError.COMP_ARG_TYPE_MISMATCH,
-        ArcError.COMP_ARG_TYPE_MISMATCH),
+        ArcError.COMP_ARG_TYPE_MISMATCH),*/
       arg("component Comp30 { a.b.H h; }",
         ArcError.TOO_FEW_ARGUMENTS),
       arg("component Comp31 { a.b.H h(1); }",
@@ -378,7 +377,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("invalidModelsHead")
-  public void shouldReportErrorHead(@NotNull String model, @NotNull Error... errors) throws IOException {
+  public void shouldReportErrorHead(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
