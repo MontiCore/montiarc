@@ -605,7 +605,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
     checker.get4Variant().addCoCo(new PortsConnected());
     checker.get4Variant().addCoCo(new PortUniqueSender());
     checker.get4Variant().addCoCo(new SubPortsConnected());
@@ -642,7 +642,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
     checker.get4Variant().addCoCo(new PortsConnected());
     checker.get4Variant().addCoCo(new PortUniqueSender());
     checker.get4Variant().addCoCo(new SubPortsConnected());

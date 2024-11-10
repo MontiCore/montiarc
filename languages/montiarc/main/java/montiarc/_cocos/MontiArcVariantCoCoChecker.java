@@ -3,21 +3,21 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import montiarc._cocos.util.MontiArcVariantDispatch;
-import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
-public class MontiArcCoCoChecker extends MontiArcCoCoCheckerTOP {
+public class MontiArcVariantCoCoChecker extends MontiArcCoCoChecker {
 
   protected MontiArcVariantDispatch variantDispatch;
 
-  public MontiArcCoCoCheckerTOP get4Variant() {
+  public MontiArcCoCoChecker get4Variant() {
     return this.variantDispatch;
   }
 
-  public MontiArcCoCoChecker() {
+  public MontiArcVariantCoCoChecker() {
     this(new MontiArcVariantDispatch());
   }
 
-  protected MontiArcCoCoChecker(@NotNull MontiArcVariantDispatch variantDispatch) {
+  protected MontiArcVariantCoCoChecker(@Nullable MontiArcVariantDispatch variantDispatch) {
     Preconditions.checkNotNull(variantDispatch);
     this.variantDispatch = variantDispatch;
     this.getTraverser().add4ArcBasis(variantDispatch);

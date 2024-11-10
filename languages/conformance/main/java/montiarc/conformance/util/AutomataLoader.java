@@ -110,11 +110,13 @@ public class AutomataLoader {
   }
 
   private static void checkMACoCos(ASTMACompilationUnit ast) {
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab();
-    checker.addCoCo(new ActionsMustBeAssignmentsCoCo());
-    checker.addCoCo(new AtLeastOneInAndOutPort());
-    checker.addCoCo(new UniqueVarAssignmentInTransActions(ast));
-    checker.checkAll(ast);
+    MontiArcCoCoChecker checker1 = MontiArcCoCos.afterSymTab1();
+    MontiArcCoCoChecker checker2 = MontiArcCoCos.afterSymTab2();
+    checker2.addCoCo(new ActionsMustBeAssignmentsCoCo());
+    checker2.addCoCo(new AtLeastOneInAndOutPort());
+    checker2.addCoCo(new UniqueVarAssignmentInTransActions(ast));
+    checker1.checkAll(ast);
+    checker2.checkAll(ast);
   }
 
   private static void createMASymbolTab(ASTMACompilationUnit ast) {

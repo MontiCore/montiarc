@@ -7,7 +7,7 @@ import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import modes._cocos.util.IgnoreASTArcModeHandler;
-import montiarc._cocos.MontiArcCoCoCheckerTOP;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc._symboltable.MontiArcComponentTypeSymbol;
 import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * A visitor that invokes another traverser on all component variants.
  */
-public class MontiArcVariantDispatch extends MontiArcCoCoCheckerTOP implements ArcBasisVisitor2 {
+public class MontiArcVariantDispatch extends MontiArcCoCoChecker implements ArcBasisVisitor2 {
 
   public MontiArcVariantDispatch() {
     super();

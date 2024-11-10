@@ -373,7 +373,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runDefaultCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    MontiArcCoCos.afterSymTab().checkAll(ast);
+    MontiArcCoCos.afterSymTab1().checkAll(ast);
   }
 
   public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
@@ -384,6 +384,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
+    MontiArcCoCos.afterSymTab2().checkAll(ast);
   }
 
   public void prettyPrint(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String file) {

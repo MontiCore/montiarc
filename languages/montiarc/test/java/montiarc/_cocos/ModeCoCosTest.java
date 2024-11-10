@@ -118,28 +118,28 @@ public class ModeCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.get4Variant().addCoCo(new PortsConnected());
-    checker.get4Variant().addCoCo(new PortUniqueSender());
-    checker.get4Variant().addCoCo(new SubPortsConnected());
-    checker.get4Variant().addCoCo(new ConnectorPortsExist());
-    checker.get4Variant().addCoCo(new variablearc._cocos.arcbasis.ConnectorTypesFit());
-    checker.get4Variant().addCoCo(new ConnectorDirectionsFit());
-    checker.get4Variant().addCoCo(new ConnectorTimingsFit());
-    checker.get4Variant().addCoCo(new AtomicMaxOneBehavior());
-    checker.get4Variant().addCoCo(new FeedbackStrongCausality());
-    checker.get4Variant().addCoCo(new PortHeritageTypeFits());
-    checker.get4Variant().addCoCo(new variablearc._cocos.arcbasis.UniqueIdentifier());
-    checker.get4Variant().addCoCo(new TransitionPreconditionsAreBoolean());
-    checker.get4Variant().addCoCo(new ExpressionStatementIsValid());
-    checker.get4Variant().addCoCo(new VarDeclarationInitializationHasCorrectType());
-    checker.get4Variant().addCoCo(new ForConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new ForEachIsValid());
-    checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new SwitchStatementValid());
+    MontiArcVariantCoCoChecker checker2 = new MontiArcVariantCoCoChecker();
+    checker2.get4Variant().addCoCo(new PortsConnected());
+    checker2.get4Variant().addCoCo(new PortUniqueSender());
+    checker2.get4Variant().addCoCo(new SubPortsConnected());
+    checker2.get4Variant().addCoCo(new ConnectorPortsExist());
+    checker2.get4Variant().addCoCo(new variablearc._cocos.arcbasis.ConnectorTypesFit());
+    checker2.get4Variant().addCoCo(new ConnectorDirectionsFit());
+    checker2.get4Variant().addCoCo(new ConnectorTimingsFit());
+    checker2.get4Variant().addCoCo(new AtomicMaxOneBehavior());
+    checker2.get4Variant().addCoCo(new FeedbackStrongCausality());
+    checker2.get4Variant().addCoCo(new PortHeritageTypeFits());
+    checker2.get4Variant().addCoCo(new variablearc._cocos.arcbasis.UniqueIdentifier());
+    checker2.get4Variant().addCoCo(new TransitionPreconditionsAreBoolean());
+    checker2.get4Variant().addCoCo(new ExpressionStatementIsValid());
+    checker2.get4Variant().addCoCo(new VarDeclarationInitializationHasCorrectType());
+    checker2.get4Variant().addCoCo(new ForConditionHasBooleanType());
+    checker2.get4Variant().addCoCo(new ForEachIsValid());
+    checker2.get4Variant().addCoCo(new IfConditionHasBooleanType());
+    checker2.get4Variant().addCoCo(new SwitchStatementValid());
 
     // When
-    checker.checkAll(ast);
+    checker2.checkAll(ast);
 
     // Then
     assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
@@ -154,7 +154,7 @@ public class ModeCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
     checker.get4Variant().addCoCo(new PortsConnected());
     checker.get4Variant().addCoCo(new PortUniqueSender());
     checker.get4Variant().addCoCo(new SubPortsConnected());

@@ -93,8 +93,14 @@ public class MontiArcCoCos {
     return checker;
   }
 
-  public static MontiArcCoCoChecker afterSymTab() {
+  public static MontiArcCoCoChecker afterSymTab1() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    return checker;
+  }
+
+  public static MontiArcCoCoChecker afterSymTab2() {
+    MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
 
     // ArcBasis CoCos
     checker.addCoCo(new CircularInheritance());
@@ -110,7 +116,6 @@ public class MontiArcCoCos {
     checker.get4Variant().addCoCo(new AtomicNoConnector());
     checker.get4Variant().addCoCo(new AtomicMaxOneBehavior());
     checker.get4Variant().addCoCo(new FeedbackStrongCausality());
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
     checker.get4Variant().addCoCo(new PortHeritageTypeFits());
@@ -143,10 +148,10 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ConstraintIsBoolean());
     checker.addCoCo(new ConstraintSmtConvertible());
-    //checker.addCoCo(new ConstraintSatisfied4Comp());
+    checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
-    //checker.addCoCo(new SubcomponentsConstraint());
+    checker.addCoCo(new SubcomponentsConstraint());
     checker.addCoCo(new VarIfNoAssignmentExpr());
     checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
