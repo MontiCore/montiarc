@@ -184,45 +184,31 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
-    List<SymTypeExpression> argTypes = arguments.stream()
+    List<ASTExpression> exprs = arguments.stream()
       .map(ASTArcArgument::getExpression)
-      .map(TypeCheck3::typeOf)
       .collect(Collectors.toList());
 
     List<SymTypeExpression> paramTypes = componentExpression.getParameterTypes();
 
-    for (int i = 0; i < Math.min(argTypes.size(), paramTypes.size()); i++) {
-      if (arguments.get(i).isPresentName()) {
-        // check keyword argument
-        String key = arguments.get(i).getName();
+    for (int i = 0; i < Math.min(exprs.size(), paramTypes.size()); i++) {
 
-        int paramIndex = paramIndices.get(key);
-        if (!paramTypes.get(paramIndex).isObscureType()
-          && !argTypes.get(i).isObscureType()
-          && !SymTypeRelations.isCompatible(paramTypes.get(paramIndex), argTypes.get(i))) {
-          // check non-keyword argument
-          ASTExpression argument = arguments.get(i).getExpression();
+      SymTypeExpression paramType = arguments.get(i).isPresentName() ?
+        // get keyword parameter
+        paramTypes.get(paramIndices.get(arguments.get(i).getName())) :
+        // else get non-keyword parameter
+        paramTypes.get(i);
 
-          Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
-              paramTypes.get(i).print(), argTypes.get(i).print()
-            ),
-            argument.get_SourcePositionStart(),
-            argument.get_SourcePositionEnd()
-          );
-        }
-      } else {
-        // the non-keyword argument's type is available
-        if (!paramTypes.get(i).isObscureType()
-          && !argTypes.get(i).isObscureType()
-          && !SymTypeRelations.isCompatible(paramTypes.get(i), argTypes.get(i))) {
-          ASTExpression argument = arguments.get(i).getExpression();
+      SymTypeExpression argType = TypeCheck3.typeOf(exprs.get(i), paramType);
 
-          Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
-              paramTypes.get(i).print(), argTypes.get(i).print()
-            ),
-            argument.get_SourcePositionStart(),
-            argument.get_SourcePositionEnd());
-        }
+      if (!paramType.isObscureType()
+        && !argType.isObscureType()
+        && !SymTypeRelations.isCompatible(paramType, argType)) {
+
+        Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
+            paramType.print(), argType.print()
+          ),
+          exprs.get(i).get_SourcePositionStart(),
+          exprs.get(i).get_SourcePositionEnd());
       }
     }
   }
