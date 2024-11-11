@@ -3,6 +3,14 @@ package montiarc;
 
 classdiagram types {
 
+  public enum CardinalDirection {
+    NORTH, EAST, SOUTH, WEST;
+  }
+
+  public enum Signal {
+    SIGNAL;
+  }
+
   public enum OnOff {
     ON, OFF;
   }
