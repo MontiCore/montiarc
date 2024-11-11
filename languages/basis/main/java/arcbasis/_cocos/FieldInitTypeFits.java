@@ -17,32 +17,45 @@ import org.codehaus.commons.nullanalysis.NotNull;
  */
 public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
 
+  private static final String LOG_NAME = "FieldInitTypeFits";
+
   @Override
   public void check(@NotNull ASTArcField astField) {
     Preconditions.checkNotNull(astField);
     Preconditions.checkArgument(astField.isPresentSymbol());
+    Preconditions.checkNotNull(astField.getSymbol());
+    Preconditions.checkNotNull(astField.getSymbol().getType());
+    Log.trace("Start the context-condition check. ", LOG_NAME);
 
-    if (astField.getSymbol().getType() == null) {
-      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
-          this.getClass().getSimpleName());
+    if (astField.getSymbol().getType().isObscureType()) {
+      Log.debug("Skip the context-condition check. " +
+          "The symtype of the field's type is obscure. " +
+          "An error should have already been logged.",
+        LOG_NAME
+      );
       return;
     }
 
-    VariableSymbol fieldSym = astField.getSymbol();
-    SymTypeExpression fieldType = fieldSym.getType();
+    VariableSymbol field = astField.getSymbol();
+    SymTypeExpression fieldSymType = field.getType();
 
-    ASTExpression initExpr = astField.getInitial();
-    SymTypeExpression expressionType = TypeCheck3.typeOf(initExpr, fieldType);
+    ASTExpression expr = astField.getInitial();
+    SymTypeExpression exprSymType = TypeCheck3.typeOf(expr, fieldSymType);
 
-    if (expressionType.isObscureType()) {
-      Log.debug(astField.get_SourcePositionStart()
-          + ": Skip execution of CoCo, could not calculate the field's type.",
-        this.getClass().getCanonicalName()
+    if (exprSymType.isObscureType()) {
+      Log.debug("Skip the context-condition check. " +
+          "The symtype of the initializer expression is obscure. " +
+          "An error should have already been logged.",
+        LOG_NAME
       );
-    } else if (!SymTypeRelations.isCompatible(fieldType, expressionType)) {
-      Log.error(ArcError.FIELD_INIT_TYPE_MISMATCH.format(fieldType.printFullName(), expressionType.printFullName()),
-        astField.get_SourcePositionStart(), astField.get_SourcePositionEnd()
-      );
+      return;
     }
+    if (!SymTypeRelations.isCompatible(fieldSymType, exprSymType)) {
+      Log.error(ArcError.FIELD_INIT_TYPE_MISMATCH.format(
+          fieldSymType.printFullName(), exprSymType.printFullName()
+        ),
+        expr.get_SourcePositionStart());
+    }
+    Log.trace("Finished the context-condition check.", LOG_NAME);
   }
 }
