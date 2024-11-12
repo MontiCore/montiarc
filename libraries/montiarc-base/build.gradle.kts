@@ -3,7 +3,7 @@
 plugins {
   id("cd2pojo")
   id("montiarc-jsim")
-  id("montiarc.build.integration-test")
+  id("montiarc.build.java-library")
 }
 
 sourceSets {
