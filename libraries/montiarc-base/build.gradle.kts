@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
+  id("montiarc.build.java-library")
   id("cd2pojo")
   id("montiarc-jsim")
-  id("montiarc.build.java-library")
 }
 
 sourceSets {
