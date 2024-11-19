@@ -29,6 +29,7 @@ public class MA2JSimApi {
   private APIContext context;
   // Flags
   private boolean useC2MC;
+  private boolean checkVariability = true;
   private boolean fuse;
 
   private MontiArcTool tool;
@@ -107,7 +108,7 @@ public class MA2JSimApi {
     tool.runSymbolTablePhase3(asts);
     tool.runAfterSymbolTablePhase3Trafos(asts);
     tool.runDefaultCoCos(asts);
-    tool.runAdditionalCoCos(asts);
+    tool.runAdditionalCoCos(asts, checkVariability);
 
     // cancels build process if errors are already present
     if(Log.getErrorCount() != 0){

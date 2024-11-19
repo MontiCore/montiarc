@@ -6,8 +6,8 @@ import montiarc.types.OnOff;
 
 component SimpleTransition {
   port
-   in OnOff i,
-   out OnOff o;
+   <<timed>> in OnOff i,
+   <<timed>> out OnOff o;
 
   <<timed>> mode automaton {
     initial mode Normal {

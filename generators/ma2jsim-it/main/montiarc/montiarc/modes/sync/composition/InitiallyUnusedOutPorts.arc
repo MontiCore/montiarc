@@ -6,8 +6,8 @@ import montiarc.types.OnOff;
 component InitiallyUnusedOutPorts {
   // The ports are not connected in the view without modes.
   // Only the mode connects the ports
-  port in OnOff i;
-  port out OnOff o;
+  port <<sync>> in OnOff i;
+  port <<sync>> out OnOff o;
 
   component WithUse {
     port in OnOff i;

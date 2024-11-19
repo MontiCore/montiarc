@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.variability.atomic;
+package montiarc.mixed_timing;
 
 import montiarc.types.OnOff;
 

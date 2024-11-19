@@ -193,7 +193,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     this.runDefaultCoCos(asts);
 
     Log.info("Perform remaining context-condition checks", "MontiArcTool");
-    this.runAdditionalCoCos(asts);
+    this.runAdditionalCoCos(asts, !cl.hasOption("novar"));
     Log.enableFailQuick(true);
 
     if (cl.hasOption("pp")) {
@@ -387,6 +387,16 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcCoCos.afterSymTab2().checkAll(ast);
   }
 
+  public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts, boolean checkVariability) {
+    Preconditions.checkNotNull(asts);
+    asts.forEach(a -> this.runAdditionalCoCos(a, checkVariability));
+  }
+
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean checkVariability) {
+    Preconditions.checkNotNull(ast);
+    MontiArcCoCos.afterSymTab2(checkVariability).checkAll(ast);
+  }
+
   public void prettyPrint(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String file) {
     Preconditions.checkNotNull(asts);
     Preconditions.checkNotNull(file);
@@ -562,6 +572,11 @@ public class MontiArcTool extends MontiArcToolTOP {
     options.addOption(Option.builder("c2mc")
       .longOpt("class2mc")
       .desc("Enables to resolve java classes in the model path")
+      .build());
+
+    options.addOption(Option.builder("novar")
+      .longOpt("no-variability-checks")
+      .desc("Disable the analysis of variable components")
       .build());
 
     return options;

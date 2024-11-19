@@ -4,8 +4,8 @@ package montiarc.modes.timed.composition;
 import montiarc.types.OnOff;
 
 component ChangingUseOfOutPorts {
-  port in OnOff i;
-  port out OnOff o;
+  port <<timed>> in OnOff i;
+  port <<timed>> out OnOff o;
 
   component WithUse {
     port in OnOff i;

@@ -80,6 +80,8 @@ import variablearc._cocos.VarIfOmitFieldReferences;
 import variablearc._cocos.VarIfOmitPortReferences;
 import variablearc._cocos.VarIfSmtConvertible;
 
+import java.util.function.Consumer;
+
 /**
  * Bundle of CoCos for the MontiArc language.
  */
@@ -98,27 +100,36 @@ public class MontiArcCoCos {
     checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
     return checker;
   }
-
+  
   public static MontiArcCoCoChecker afterSymTab2() {
+    return afterSymTab2(true);
+  }
+    
+  public static MontiArcCoCoChecker afterSymTab2(boolean checkVariants) {
     MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
+    MontiArcCoCoChecker varChecker = checker.get4Variant();
+
+    if (!checkVariants) {
+      checker.addCoCo(new UnsupportedVariability());
+    }
 
     // ArcBasis CoCos
-    checker.addCoCo(new CircularInheritance());
-    checker.get4Variant().addCoCo(new PortsConnected());
-    checker.get4Variant().addCoCo(new PortUniqueSender());
-    checker.get4Variant().addCoCo(new SubPortsConnected());
-    checker.get4Variant().addCoCo(new ConnectorPortsExist());
-    checker.get4Variant().addCoCo(new variablearc._cocos.arcbasis.ConnectorTypesFit());
-    checker.get4Variant().addCoCo(new ConnectorDirectionsFit());
-    checker.get4Variant().addCoCo(new ConnectorTimingsFit());
+    addCoCoAs(new CircularInheritance(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new PortsConnected(),      checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new PortUniqueSender(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new SubPortsConnected(),   checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new ConnectorPortsExist(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new variablearc._cocos.arcbasis.ConnectorTypesFit(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new ConnectorDirectionsFit(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new ConnectorTimingsFit(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new OnlyOneTiming());
     checker.addCoCo(new DelayOutPortOnly());
-    checker.get4Variant().addCoCo(new AtomicNoConnector());
-    checker.get4Variant().addCoCo(new AtomicMaxOneBehavior());
-    checker.get4Variant().addCoCo(new FeedbackStrongCausality());
+    addCoCoAs(new AtomicNoConnector(),       checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new AtomicMaxOneBehavior(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new FeedbackStrongCausality(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
-    checker.get4Variant().addCoCo(new PortHeritageTypeFits());
+    addCoCoAs(new PortHeritageTypeFits(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new FieldInitTypeFits());
     checker.addCoCo(new ParameterDefaultValueTypeFits());
@@ -129,7 +140,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
-    checker.get4Variant().addCoCo(new variablearc._cocos.arcbasis.UniqueIdentifier());
+    addCoCoAs(new variablearc._cocos.arcbasis.UniqueIdentifier(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new ComponentNamedTick());
     checker.addCoCo(new ComponentInstantiationNamedTick());
     checker.addCoCo(new FieldNamedTick());
@@ -169,7 +180,7 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
-    checker.get4Variant().addCoCo(new TransitionPreconditionsAreBoolean());
+    addCoCoAs(new TransitionPreconditionsAreBoolean(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new AtLeastOneInitialState(traverser));
@@ -193,15 +204,19 @@ public class MontiArcCoCos {
     checker.addCoCo(new AtomicNoAutoConnect());
 
     // Basic MontiCore cocos
-    checker.get4Variant().addCoCo(new ExpressionStatementIsValid());
-    checker.get4Variant().addCoCo(new VarDeclarationInitializationHasCorrectType());
-    checker.get4Variant().addCoCo(new ForConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new ForEachIsValid());
-    checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new SwitchStatementValid());
+    addCoCoAs(new ExpressionStatementIsValid(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new VarDeclarationInitializationHasCorrectType(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new ForConditionHasBooleanType(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new ForEachIsValid(),             checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new IfConditionHasBooleanType(),  checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new SwitchStatementValid(),       checkVariants ? varChecker::addCoCo : checker::addCoCo);
 
     // Block unsupported model elements
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
     return checker;
+  }
+
+  private static <T> void addCoCoAs(T coco, Consumer<T> consumer) {
+    consumer.accept(coco);
   }
 }

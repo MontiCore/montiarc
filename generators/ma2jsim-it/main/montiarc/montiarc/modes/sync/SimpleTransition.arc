@@ -6,8 +6,8 @@ import montiarc.types.OnOff;
 
 component SimpleTransition {
   port
-   in OnOff i,
-   out OnOff o;
+   <<sync>> in OnOff i,
+   <<sync>> out OnOff o;
 
   <<sync>> mode automaton {
     initial mode Normal {

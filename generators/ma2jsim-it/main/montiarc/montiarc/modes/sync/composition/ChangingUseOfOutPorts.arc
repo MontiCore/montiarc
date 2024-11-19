@@ -4,8 +4,8 @@ package montiarc.modes.sync.composition;
 import montiarc.types.OnOff;
 
 component ChangingUseOfOutPorts {
-  port in OnOff i;
-  port out OnOff o;
+  port <<sync>> in OnOff i;
+  port <<sync>> out OnOff o;
 
   component WithUse {
     port in OnOff i;

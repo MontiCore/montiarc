@@ -13,6 +13,7 @@ public class APIContext {
 
   // flags
   private boolean useC2MC;
+  private boolean checkVariability;
 
   public APIContext(ArrayList<String> modelList, ArrayList<String> symFiles){
     Preconditions.checkNotNull(modelList);

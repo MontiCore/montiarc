@@ -42,6 +42,9 @@ abstract class MontiArcCompile : JavaExec() {
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
+  @get:Input
+  abstract val checkVariability : Property<Boolean>
+
   init {
     description = "Generates .java code from MontiArc models."
 
@@ -49,6 +52,7 @@ abstract class MontiArcCompile : JavaExec() {
     mainClass.convention(MA_TOOL_CLASS)
 
     useClass2Mc.convention(false)
+    checkVariability.convention(false)
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -86,6 +90,8 @@ abstract class MontiArcCompile : JavaExec() {
       args("-path", cleanSymbolImportDirs.asPath)
     }
 
+    if(!checkVariability.get()) { args("--no-variability-checks"); }
+
     // 3) Execute
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
@@ -114,6 +120,8 @@ abstract class MontiArcCompile : JavaExec() {
 
     println("HWCpath:")
     hwcPath.forEach { println("  $it") }
+
+    println("Check variability: " + checkVariability.get())
 
     println("class2mc: " + useClass2Mc.get())
 
