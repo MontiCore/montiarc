@@ -6,7 +6,7 @@ name: Prepare and deploy pages
 on:
   push:
     branches:
-      - develop
+      - dev
 
 jobs:
   build:
