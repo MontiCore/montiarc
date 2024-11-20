@@ -29,7 +29,7 @@ import montiarc.types.Role;
 
 the following are valid expressions
 
-1. Object creation 
+## Object creation 
 
 ```
 Person p = Person.Person();
@@ -38,7 +38,7 @@ Person p = Person.Person();
 `Person p` declares a variable of type Person
 and `Person.Person()` creates the corresponding object.
 
-2. Field access
+## Field access
 
 `p.age = 35;` 
 
@@ -60,13 +60,13 @@ access the field `id` of field `role` of variable `p` and sets it to `5`
 
 accesses field `age` of variable `p` and stores it in a new variable `age2` 
 
-3. Method invocation
+## Method invocation
 
 `p.getFullName()` 
 
 invokes method `getFullName()` on the object behind variable `p`
 
-4. Arithmetic Operators
+## Arithmetic Operators
 
 Arithmetic operators perform mathematical operations and return a number.
 
@@ -78,7 +78,7 @@ Arithmetic operators perform mathematical operations and return a number.
 | /        | Division       | a / b   |
 | %        | Modulo         | a % b   |
 
-5. Assignment Operators
+## Assignment Operators
 
 Assignment operators assign a value to a variable or send a message via a port.
 
@@ -91,7 +91,7 @@ Assignment operators assign a value to a variable or send a message via a port.
 | /=       | a /= b  | a = a / b        |
 | %=       | a %= b  | a = a % b        |
 
-6. Comparison Operators
+## Comparison Operators
 
 Comparison operators compare two values and return a boolean.
 
@@ -104,7 +104,7 @@ Comparison operators compare two values and return a boolean.
 | \>=      | Greater than or equal | a >= b  |
 | <=       | Less than or equal    | a <= b  |
 
-7. Logical Operators
+## Logical Operators
 
 Logical operators operate on boolean values and return a boolean.
 
