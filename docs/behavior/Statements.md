@@ -37,7 +37,7 @@ foo.callToAMethod();
 One can always use an expression as a statement.
 Thus, assignments can be declared (which are formally expressions) and methods can be called.
 
-### Statement block
+## Statement block
 ```java
 x = 15;
 {
