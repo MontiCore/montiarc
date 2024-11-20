@@ -25,6 +25,8 @@ An automaton has at least one state and exactly one initial state.
 
 A simple state declaration looks like
 
+### State
+
 ```montiarc
 initial state S;
 ```
@@ -38,6 +40,8 @@ where
 An automaton can have any number of transitions between states.
 
 A simple transition looks like
+
+### Transition
 
 ```montiarc
 S1 -> S2 [condition] event / { action };
@@ -59,9 +63,11 @@ transition is triggered by discrete time progress.
 * `/ { action }` (optional) the actions that are executed when taking the 
 transition where `action` is a list of statements.
 
-A state may optionally define entry and exit actions that are executed when 
-entering respectively exiting the state. A state with both entry and exit 
-actions may look like 
+### Entry- and Exit-Action
+
+A state may define entry and exit actions that are executed when entering 
+respectively exiting the state. A state with both entry and exit actions 
+looks like 
 
 ```montiarc
 state S {
@@ -72,19 +78,43 @@ state S {
 
 where `action1` and `action2` are each a list of statements.
 
-A state may be hierarchically decomposed into sbstates.
+### Initial-Action
 
-A state with hierarchy looks like
+An initial state may define an initial action that is executed when entering 
+the state for the very first time at the start of a run of the automaton. 
+Therefore, the initial action is executed at most once during a run of an 
+automaton. An initial state with an initializer action looks like 
+
+```montiarc
+initial { action } state S;
+```
+
+where `{ action }` is the initial action and `action` a list of statements.
+
+
+### Hierarchical States
+
+A state may be hierarchically decomposed into substates. A state can have any 
+number of substates and substates themselves can be hierarchically decomposed.
 
 ```montiarc
 state S {
-  state Sub1; 
+  state Sub1 {
+    state SubSub1;
+    state SubSub2;  
+  }
   state Sub2; 
 }
 ```
 
-A state can have any number of substates and substates themselves can be 
-hierarchically decomposed. 
+where 
+
+* `S` is the name of the state
+
+* that consists of two substates named `Sub1` and `Sub2` 
+
+* state `Sub1` consists of two substates named `SubSub1` and `SubSub2` 
+
 
 ## Event Automata
 
