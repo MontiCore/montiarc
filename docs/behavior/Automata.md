@@ -30,7 +30,9 @@ initial state S;
 ```
 
 where
-* `initial` is the optional modifier defining the initial state,
+
+* `initial` is the optional modifier defining the initial state, 
+
 * `S` is the unique name of the state
 
 An automaton can have any number of transitions between states.
@@ -42,13 +44,18 @@ S1 -> S2 [condition] event / { action };
 ```
 
 where 
+
 * `S1` is the name of the source state (reference)
+
 * `S2` is the name of the target state (reference)
+
 * `[condition]` (optional) is the guard where the `condition` is a boolean 
 expression
+
 * `event` (optional) is the event that triggers the transition. The name of 
 any input port is a valid trigger. If no event trigger is specified, then the 
 transition is triggered by discrete time progress.
+
 * `/ { action }` (optional) the actions that are executed when taking the 
 transition where `action` is a list of statements.
 
