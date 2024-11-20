@@ -47,7 +47,7 @@ nav:
       - Overview: 'Behavior.md'
       - Automata: 'behavior/Automata.md'
       - Compute: 'behavior/Compute.md'
-      - Operators: 'behavior/Operators.md'
+      - Expressions: 'behavior/Expressions.md'
       - Statements: 'behavior/Statements.md'
       - Timing: 'behavior/Timing.md'
       - Variables: 'behavior/Variables.md'
