@@ -1,22 +1,35 @@
-This page summarizes the available statements in MontiArc.
-Note that the are not available everywhere (e.g. they are not allowed directly
- in component bodies), but usually where behavior is defined.
+<!-- (c) https://github.com/MontiCore/monticore -->
 
-## Operational statements
+Actions are defined by a list of statements that are instructions to be 
+executed in some sequence. A statement can include one or more expressions.
 
-### Variable declarations
+## Variable declarations
+Declaration statements declare variable and constants, specifying their data 
+type, name, and initial value. Some examples are given in the following.
+
 ```java
-DataType varName;
-DataType varName = initValue;
-DataType var1Name, varName2 = initVal, varName3;
+int a = 42;
 ```
-Variables are declared by first defining their type
-and then creating a name for them.
-Usually, one assigns an initial value to the variable, but this is optional.
-Moreover, one can define multiple variables of the same type within the same 
-statement, separating them with commas.
+The declaration statement above declares a variable named `a` of type `int` 
+and assigns it the value `42`.
 
-### Expression statements
+```java
+String text = "Hello";
+```
+
+The declaration statement above declares a variable named `text` of type 
+`String` and assigns it the value `"Hello"`.
+
+A variables data type may also be some object type.
+
+```java
+Person person = Person.Person();
+```
+
+The declaration statement above declares a variable named `person` of type 
+`Parson` and assigns the variable to a new object of type `Person`;
+
+## Expression statements
 ```java
 x = 14;
 foo.callToAMethod();
@@ -40,12 +53,6 @@ if (condition) thenStatement;
 else elseStatement;
 ```
 but this is discouraged.
-
-### Empty statement
-```java
-;
-```
-It is possible to use the semicolon as a statement to signify that nothing should be done as part of the statement.
 
 ## Control statements
 
