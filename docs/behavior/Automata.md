@@ -113,6 +113,71 @@ where
 Hierarchical states and their substates can be the source and target of 
 transitions just like regular states.
 
+## Message Events
+
+A message event occurs when an incoming, non-synchronous port receives a 
+message. The execution of a transition can be triggered by such an event. 
+The type and name of the message event is the type and name of the 
+corresponding port.
+
+Given the port declaration
+
+```
+port in int number;
+```
+
+the transition 
+
+```
+S1 -> S2 [CONDITION] number / { ACTION };
+```
+
+is executed when the port `number` receives a message (an `int`) and if the 
+automaton is currently in state `S1` and if the `CONDITION` evaluates to `true`.
+
+The transition's guard can then reason about properties of the received message 
+and use the message in transition action.
+
+```
+S1 -> S2 [number != 0] number / { long v = 2 / number; };
+```
+
+## Time Events
+
+A time event, which we also call a tick, occurs at discrete points in time. 
+It is not specified how much time passes between two ticks, but it can be 
+assumed that any calculation can be computed between two successive ticks.
+
+If a transition does not specify a message event, it is implicitly triggered by 
+a time event. The transition's trigger can also be modeled explicitly through 
+the `Tick` event.
+
+Given the port declarations
+
+```
+port <<sync>> in int a;
+port <<sync>> in int b;
+```
+
+the transitions 
+
+```
+S1 -> S2 [CONDITION] / { ACTION };
+S1 -> S2 [CONDITION] Tick / { ACTION };
+```
+
+are equivalent and executed at discrete points in time and if the automaton 
+then is currently in state `S1` and if the `CONDITION` evaluates to `true`.
+
+Synchronous ports are synchronized at time events. The current message on each 
+synchronous port is available for the duration of the time event. A transition 
+triggered by a time event can reason about properties messages on all incoming, 
+synchronous ports and use the messages in the transition action.
+
+```
+S1 -> S2 [b != 0] / { long v = a / b; };
+```
+
 ## Examples
 
 ### Event Automata
