@@ -1,126 +1,121 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-This guide introduces you to modeling with MontiArc.
-It is especially suited, if you have not worked with MontiArc before.
-If you just want to review concepts, then look at the dedicated pages.
-To follow along, also make sure to read Getting Started.
-It introduces you to available tooling that enables you to verify the correctness of written models.
+MontiArc is a textual architecture description language. A MontiArc component 
+model describes a topology of components and connections between these 
+components.
 
-## Basic model structure
-Let's start by looking at how to write models:
-MontiArc models are written in plain text.
-The content of a model file generally looks like the following:
+## Component type
+
+A component type describes a set of components with common characteristics and 
+defines their interface, structure, and behavior. A component type definition 
+looks like
 
 ```montiarc
-package car.userinteraction;
+package car.ui;
 
-import car.userinteraction.window.WindowPosition;
+component WindowController {
+  // Component body
+}
+```
+
+where 
+
+* `WindowController` is the unique name of the component type
+
+## Comments 
+
+Comments can be used to explain a model in more detail and will be ignored by
+the parser.
+
+A single-line comment starts with two forward slashes (`//`) and ends with the 
+end of line. 
+
+A multi-line comments starts with `/*` and ends with `*/`.
+
+## Packages and Imports
+
+A component type is located in some package. Elements (component types, data 
+types) defined in the same package are usually visible to each other and can 
+therefore can be used in other models. Elements located in another package 
+must be imported explicitly. 
+
+A component model with a package declaration and some imports looks like
+
+```montiarc
+package car.ui;
+
+import car.ui.window.WindowPosition;
+import car.ui.window.WindowButtonMoveEvent;
 
 component WindowController {
   // Component content
 }
 ```
-The structure is as follows:
-1. Models are organized in *package structures*.
-   Elements defined in the same package are usually visible to each other.
-   The first declaration of a model defines in which package the model lays.
-2. To use model elements that are defined in other packages, *import statements* are used.
-   In the example, we import the `WindowPosition` type.
-   We will see later what this means and for what it is used.
-3. Every model file contains one top-level *component type* definition.
-   The definition starts with the keyword `component`. 
-   It is followed by the *name* that is mandatory so that we can refer to the component from other locations within our models.
-4. The last syntactic element of the example is a simple comment, declared using double slashes `//`.
-   Everything that follows within the same line will be ignored by MontiArc.
+
+where 
+
+* `package car.ui;` is a package declaration that defines that the component 
+type `WindowController` is located in package `car.ui`
+
+* `import car.ui.window.WindowPosition;` is an import statement that imports
+element `car.ui.window.WindowPosition` so that it can be used in the component 
+model via its simple name `WindowPosition`.
 
 ## Project file tree organization
-Now that we have seen what the content of the file is, we will investigate the role of the file in the file system structure of the project.
 
-The file extension is `.arc`.
-The file system path to models must match the packages in which they are defined.
-For our `WindowController` example, the location could look like `my-project/src/montiarc/car/userinteraction/WindowController.arc`.
-For MontiArc, it is only relevant that the last part of the the path matches the whole package hierarchy (namely, `car/userinteraction/WindowController.arc`).
-However, build tools may constrain the rest of the path.
+Each component model is located in a textfile. The file extension is `.arc`. 
+The name of the file must correspond to the name of the component type. The 
+files relative path from the source directory must conform to the package 
+declaration.
+
+That is, the file contained the component model
+
+```montiarc
+package car.ui;
+
+component WindowController {
+  // Component content
+}
+```
+
+is called `WindowController.arc` and located in the relative directory `car/ui`.
 
 ## Component interfaces
-An important concept of MontiArc is that the internals of a component are hidden to its operating environment and regarding the other direction: that the component is agnostic of its operating environment, so that it can be used in various operational scenarios.
-However, somehow the component has to interact with the environment.
-*Ports* are used for that role.
-Their concept includes the following aspects:
-<!--They appear in models in the following way:-->
-* They have predefined directions: Either they are *incoming* or *outgoing*.
-   If a port is incoming, then the owning component uses the port to *receive* data from its environment.
-   On the other hand, if the port is outgoing, then the owning component uses the port to *send* data to its environment.
-* Ports are *typed*.
-  The types of a ports constrains *what* data can be received / sent through them.
-  Example port types are `int`, `boolean`, or `WindowPosition` (from the example above).
-  We will look at which types can be used later.
-*  *Names* are assigned to each port so that we can later refer to them and the information flowing through them.
 
-### Example for component interfaces
+Components encapsulate their internals and interact with components in their 
+environment via well-defined interfaces. A component's interface is made up of 
+ports and each port has a direction, a type, and a unique name. A component's 
+ports are defined in the body of the corresponding component type. 
 
-Let us now look at how we can declare ports for components.
-As an example, let us assume that we are developing a window motor control system for a car.
-It gets three different kinds of information from its environment:
-* Whether a window *button* is pressed and in which direction,
-* Whether a *finger* has been detected within in the gap of the window,
-* The *position* of the window.
-   The controller uses this information to stop the window motor when it has been fully closed or opened to avoid damage to the glass.
+For example 
 
-Based on this information, the window control system should send *out* a concrete *motor control command* to the motor.
-
-We can model this environment interaction in MontiArc like this:
 ```montiarc
 // Package declaration and imports ...
 
 component WindowController {
   port in WindowPosition position,
        in WindowButtonMoveEvent buttonEvent,
-       in FingerProtectionOrder fingerProtectionOrder,
-       out WindowMoveAction winMoveAction;
+       in FingerProtectionOrder fingerProtection,
+       out WindowMoveAction moveAction;
 }
 ```
-The declaration of the component's ports is started with the `port` keyword.
-It is followed by a comma-separated list that contains the declaration of the individual ports.
-Every such declaration has the form `<direction> <port-type> <port-name>`.
-Note the semicolon ending the port declaration.
-It is also allowed to split the declaration of all ports into separate statements:
-```montiarc
-// Package declaration and imports ...
 
-component WindowController {
-  port in WindowPosition position;
-  port in WindowButtonMoveEvent buttonEvent;
-  
-  port in FingerProtectionOrder fingerProtectionOrder,
-       out WindowMoveAction winMoveAction;
-}
-```
-You may use these different options to structure your component model and group ports into  groups of related functionality.
-The last example is a bad one in that sense, as the `fingerProtectionOrder` port is grouped with the `winMoveAction` port where no direct coherence exists (at least not a stronger one than with the other ports).
+defines that components of type `WindowController` have three incoming ports 
+called `position`, `buttonEvent` and `fingerProtection` of type`WindowPosition`, 
+`WindowButtonMoveEvent`, and`FingerProtectionOrder` respectively, as well as an 
+outgoing port called `moveAction` of type `WindowMoveAction`.
 
-## Defining component behavior with automatons
-After having looked at the API of a component to its environment, let's explore how we can define how the component internally works: let's define some behavior.
+## Data types
 
-### The behavior we want to model
-We will work again with the example of the `WindowController` for which we have already defined the component interface.
-We want to use this information to implement the following behavior:
-* If the window button is pressed in the "up" direction, the window shall completely close.
-  One press of the "up" button should suffice.
-  It is not mandatory that the button is held during the whole process.
-* The process is the same for the opposite direction, opening the window completely once the button is pressed in the "down" direction.
-* The user can cancel the opening / closing process by pressing the window button in the direction that is opposite to the window movement ("down" while closing and "up" while opening).
-* When a finger has been detected in an open window gap, than the closing window movement must stop.
-  The system returns to normal operation only after receiving the signal that the finger left the window gap and consequently receiving a window "down" movement signal from the window button.
-* To order the window motor to move, a movement signal shall be sent _constantly_ during the movement period.
-* When stopping the window movement, the window motor should _once_ receive the information to stop the movement.
+Components communicate by sending and receiving messages. Messages are received
+via incoming ports and send via outgoing ports. Messages are also of some type, 
+which defines the message's structure. A message's type is called a data type 
+and can be defined in a classdiagram. 
 
-Before looking at the behavior implementation of the `WindowController`, lets look at the port types so that we know how to utilize them in our automaton.
-We use class-diagram models to define the used types as enumerations.
-You don't have to understand the class-diagram syntax completely, but it should give you an intuitive understanding of the enum types that we will later use.
+For our example, we define the following data types.
+
 ```cd4code
-// Model com/example/window.cd
-package com.example;
+package car.ui;
 
 classdiagram window {
 
@@ -128,58 +123,64 @@ classdiagram window {
     OPEN, CLOSED, INBETWEEN;
   }
 
-  public enum WindowButtonMoveEvent {
-    UP_PRESSED, DOWN_PRESSED;
+  public enum WindowButton {
+    UP, DOWN;
   }
 
   public enum WindowMoveAction {
     MOVE_UP, MOVE_DOWN, STOP_MOVEMENT;
   }
-}
-```
-```cd4code
-// Model com/example/fingerprotection.cd
-package com.example;
-
-classdiagram fingerprotection {
+  
   public enum FingerProtectionOrder {
     PROTECT, PROTECTION_OFF;
   }
 }
 ```
 
-### The MontiArc model implemented with an automaton
+* the data type `WindowPosition` indicates the window's position. A window 
+can be `OPEN`, `CLOSED`, or `INBETWEEN`.
+
+* the data type `WindowButton` indicates whether the `UP` or `DOWN` button was
+pressed.
+
+* the data type `WindowMoveAction` indicates the direction the window should 
+be moving. A window can move up (`MOVE_UP`), down (`MOVE_DOWN`) or stop 
+moving (`STOP_MOVEMENT`).
+
+* the data type `FingerProtectionOrder` indicates the state of the finger 
+protection. The finger protection can be turned on (`PROTECT`) or be turned off
+( `PROTECTION_OFF`).
+
+## Automata 
+
+Automata define the discrete state space and behavior of a component. 
+An automaton consists of states and transitions between these states. Events
+(incoming message, time progress) trigger the execution of a transition and the 
+actions executed alongside the transition determine which messages are send in
+response via outgoing channels. 
 
 ```montiarc
-package com.example.window;
+package car.ui;
 
-// Types within class diagram "window" are in a sub-package called window.
-// As the "window" class diagram is in the package "com.example", its inner types are
-// in the package com.example.window, and thereby in the same package as the WindowController.
-// Hence, we do not need to import its types. We only need to import the types from the
-// fingerprotection class diagram:
-import com.example.fingerprotection.FingerProtectionOrder;
+import car.ui.window.WindowButton;
+import car.ui.window.WindowPosition;
+import car.ui.window.WindowMoveAction;
+import car.ui.window.FingerProtectionOrder;
 
 component WindowController {
-  
-  // In this example we distinguish between "continuous" and "event" values.
-  // With "continuous" we mean that we expect that there is always a value at the given port.
-  // With "event" we mean that there is only sometimes a value at that port.
-  //   If an event value is not present at a port, then expressions like PORT_NAME == ...
-  //   will always evaluate to false.
-  
-  port in WindowPosition position,  // Continuous value
-       in WindowButtonMoveEvent buttonEvent,  // Event value
-       in FingerProtectionOrder fingerProtectionOrder,  // Event value
-       out WindowMoveAction winMoveAction;  // Continuous values during movement, event value when stopping
+
+  port <<sync>> in WindowPosition position,
+       in WindowButton buttonEvent,
+       in FingerProtectionOrder protectFinger,
+       <<sync>> out WindowMoveAction winMoveAction;
 
   automaton {
     initial state Closed;
     state Intermediate;
     state Open;
     state Blocked;
-    state UnblockingOnDownSignal;
-    
+
+    // Constantly send outputs via the synchronized output port
     state Opening {
       entry / winMoveAction = WindowMoveAction.MOVE_DOWN;
       do / winMoveAction = WindowMoveAction.MOVE_DOWN;
@@ -192,36 +193,37 @@ component WindowController {
       exit / winMoveAction = WindowMoveAction.STOP_MOVEMENT;
     };
 
-
     // Blocking the movement in case of a detected finger
-    Open -> Blocked [fingerProtectionOrder == FingerProtectionOrder.PROTECT];
-    Intermediate -> Blocked [fingerProtectionOrder == FingerProtectionOrder.PROTECT];
-    Closing -> Blocked [fingerProtectionOrder == FingerProtectionOrder.PROTECT];
+    Open -> Blocked [protectFinger == FingerProtectionOrder.PROTECT] protectFinger;
+    Intermediate -> Blocked [protectFinger == FingerProtectionOrder.PROTECT] protectFinger;
+    Closing -> Blocked [protectFinger == FingerProtectionOrder.PROTECT] protectFinger;
 
-    // Transitioning from closed to open
-    Closed -> Opening [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED];
+    // Open the window when the button `DOWN` is pressed
+    Closed -> Opening [buttonEvent == WindowButton.DOWN] buttonEvent;
+
+    // Stop the window's motor if the window is fully open
     Opening -> Open [position == WindowPosition.OPEN];
 
-    // Transitioning from opened to closed
-    Open -> Closing [buttonEvent == WindowButtonMoveEvent.UP_PRESSED];
+    // Close the window when the button `CLOSED` is pressed
+    Open -> Closing [buttonEvent == WindowButton.UP] buttonEvent;
+
+    // Stop the window's motor if the window is fully closed
     Closing -> Closed [position == WindowPosition.CLOSED];
 
-    // Interrupting the window movement
-    Closing -> Intermediate [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED];
-    Opening -> Intermediate [buttonEvent == WindowButtonMoveEvent.UP_PRESSED];
+    // Stop the window's movement and remain in the current position
+    // when the window is currently closing and the button `DOWN` is released
+    Closing -> Intermediate [buttonEvent == WindowButton.DOWN] buttonEvent;
+    // when the window is currently opening and the button `OPEN` is released
+    Opening -> Intermediate [buttonEvent == WindowButton.UP] buttonEvent;
 
-    // Resuming the window movement
-    Intermediate -> Opening [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED];
-    Intermediate -> Closing [buttonEvent == WindowButtonMoveEvent.UP_PRESSED];
+    // Resume the window's movement
+    Intermediate -> Opening [buttonEvent == WindowButton.DOWN] buttonEvent;
+    Intermediate -> Closing [buttonEvent == WindowButton.UP] buttonEvent;
 
     // Recovering from finger protection
-    Blocked -> UnblockingOnDownSignal [
-      fingerProtectionOrder == FingerProtectionOrder.PROTECTION_OFF
+    Blocked -> Intermediate [
+      protectFinger == FingerProtectionOrder.PROTECTION_OFF
     ];
-    UnblockingOnDownSignal -> Open [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED
-                                    && position == WindowPosition.OPEN];
-    UnblockingOnDownSignal -> Intermediate [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED
-                                            && position != WindowPosition.OPEN];
   }
 }
 ```
@@ -248,11 +250,11 @@ In our case, the component starts, assuming that the window is closed.
     bar();
   }
   ```
-  In our case, we defined all logic that controls the `windowMoveAction` using entry / exit / and do actions: When entering and remaining in the `Opening` / `Closing` state, the window move action is always sent accordingly.
+  In our case, we defined all logic that controls the `winMoveAction` using entry / exit / and do actions: When entering and remaining in the `Opening` / `Closing` state, the window move action is always sent accordingly.
   Moreover, when exiting these states, the information that the window movement should stop is sent once.
 
 ### Transition definitions
-They follow the syntax `<source-state> -> <target-state> [ <condition> ] (/ <action>;)`, even if we have not seen the `/ <action>` syntax in the example.
+They follow the syntax `<source-state> -> <target-state> [ <condition> ] <event> (/ <action>;)`, even if we have not seen the `/ <action>` syntax in the example.
 Important elements of the syntax are:
 * Within square brackets, one can define the condition under which the transition is triggered.
   In our case, we constrain the values of input ports.
@@ -260,14 +262,14 @@ Important elements of the syntax are:
   While in the example above we defined all the behavior using entry-, do-, and exit-actions, we could alternatively use transition actions the following way:
   ```montiarc
   // excerpt within automaton { ... }:
-  Closed -> Opening [buttonEvent == WindowButtonMoveEvent.DOWN_PRESSED] / {
+  Closed -> Opening [buttonEvent == WindowButton.DOWN] buttonEvent / {
     winMoveAction = WindowMoveAction.MOVE_DOWN;
   };
   // Self-loop for sending continuous signals
-  Opening -> Opening [buttonEvent != WindowButtonMoveEvent.UP_PRESSED] / {
+  Opening -> Opening [buttonEvent != WindowButton.UP] buttonEvent / {
     winMoveAction = WindowMoveAction.MOVE_DOWN;
   }
-  Opening -> Open [position == WindowPosition.OPEN] / {
+  Opening -> Open [position == WindowPosition.OPEN] buttonEvent / {
     winMoveAction = WindowMoveAction.STOP_MOVEMENT;
   };
   ```
@@ -277,7 +279,7 @@ Important elements of the syntax are:
 
 ### Interacting with the environment: port values
 Moreover, we can generally see that
-* Values of incoming ports can be read by using their name in an expression, e.g.: `buttonEvent == WindowButtonMoveEvent.UP_PRESSED`.
+* Values of incoming ports can be read by using their name in an expression, e.g.: `buttonEvent == WindowButton.UP`.
   In this sense they behave like read-only variables, always with the most recent port value.
 * Values of outgoing ports can be set by using their name in an assignment expression, e.g.: `winMoveAction = WindowMoveAction.MOVE_UP`.
   In this sense they behave like write-only variables.
@@ -303,12 +305,12 @@ To complete the window system, we also need the following components:
   A car may have multiple buttons to control the same window (directly at the window, at the drivers seat, and in a remote controller).
   This human machine interfaces aggregates all the state of all potential control sources and sends out a single control source to the window controller.
   ```montiarc
-  package com.example.hmi;
+  package car.ui;
 
-  import com.example.window.WindowButtonMoveEvent;
+  import car.ui.window.WindowButton;
 
   component HumanMachineInterface {
-    port out WindowButtonMoveEvent winButtonEvent;
+    port out WindowButton buttonEvent;
 
     // The component behavior implementation is not relevant to us.
     // The same holds for the other components.
@@ -316,7 +318,7 @@ To complete the window system, we also need the following components:
   ```
 * A _finger protection sensor_ that recognizes whether a finger is in the gap of a window
   ```montiarc
-  package com.example.fingerprotection;
+  package car.sec;
 
   component FingerProtectionSensor {
     port out FingerProtectionOrder order;
@@ -324,15 +326,15 @@ To complete the window system, we also need the following components:
   ```
 * A _window position sensor_ that recognizes the current state of the window (open, closed, or in between)
   ```montiarc
-  package com.example.window;
+  package car.window;
 
   component WindowPositionSensor {
-    port out WindowPosition winPosition;
+    port <<sync>> out WindowPosition winPosition;
   }
   ```
 * A _window motor_ that, when prompted, moves the window
   ```montiarc
-  package com.example.window;
+  package car.window;
 
   component WindowMotor {
     port in WindowMoveAction moveOrder;
@@ -340,7 +342,7 @@ To complete the window system, we also need the following components:
   ```
 * A _status LED icon_ in the cockpit of the car that gives the user feedback by indicating whether current window movement takes place and in which direction
   ```montiarc
-  package com.example.window;
+  package car.ui;
 
   component WindowStatusLED {
     port in WindowMoveAction moveOrder;
@@ -350,10 +352,10 @@ To complete the window system, we also need the following components:
 ### The composition of the sub systems
 Connecting these systems to the `WindowController`, creating the overall `WindowSystem` looks like the following:
 ```montiarc
-package com.example.window;
+package car.window;
 
-import com.example.fingerprotection.FingerProtectionSensor;
-import com.example.hmi.HumanMachineInterface;
+import car.sec.FingerProtectionSensor;
+import car.ui.HumanMachineInterface;
 
 component WindowSystem {
   WindowController controller;
@@ -364,7 +366,7 @@ component WindowSystem {
 
   winPositionSensor.winPosition -> controller.position;
   hmi.winButtonEvent -> controller.buttonEvent;
-  fingerSensor.order -> controller.fingerProtectionOrder;
+  fingerSensor.order -> controller.protectFinger;
 
   WindowMotor motor;
   WindowStatusLED led;
@@ -401,9 +403,9 @@ This is exemplified by the `WindowSystem` importing `HumanMachineInterface` and 
 After having declared the component instances that one wants to use, one connects their ports with _connectors_ through which information flows.
 The syntax of of a connector declaration is `<source-instance-name>.<port-name> -> <target-instance-name>.<port-name> ;`.
 Information that the source component sends through a port travels through the attached connector and becomes the input of the declared port of the target component.
-For example, take the declaration `fingerSensor.order -> controller.fingerProtectionOrder;` within `WindowSystem`:
+For example, take the declaration `fingerSensor.order -> controller.protectFinger;` within `WindowSystem`:
 The finger detection sensor has some internal logic that at some point detects a finger in the window gap. It then sends the instruction through its outgoing `order`-port that the window shall be locked.
-This information (a port value of `FingerProtectionOrder.PROTECT`) becomes the new current value at the `fingerProtectionOrder`-port of the window controller.
+This information (a port value of `FingerProtectionOrder.PROTECT`) becomes the new current value at the `protectFinger`-port of the window controller.
 This information can then be used in the behavior implementation of the window controller.
 
 If one connects component instances, then there are some restrictions on what ports can be connected:
@@ -448,7 +450,7 @@ component WindowSystem {
 
   winPositionSensor.winPosition -> controller.position;
   hmi.winButtonEvent -> controller.buttonEvent;
-  fingerSensor.order -> controller.fingerProtectionOrder;
+  fingerSensor.order -> controller.protectFinger;
   
   WindowMotor motor;
   controller.winMoveAction -> motor.moveOrder;
@@ -493,7 +495,3 @@ We have seen how to define components and their interfaces through which they in
 Then we have seen, how we can define behavior of components using automatons.
 At the end, we have seen how we can compose components to bigger systems which themselves turn out to be components!
 If you want to learn more, there look at other ways to define behavior, or advanced ways in the definition of component types, such as configuring them during initialization with type or value parameters. 
-
-## References
-The running example of the window control system is based on the following case study:\
-Lity, S., Lachmann, R., Lochau, M., & Schaefer, I. (2013). Delta-oriented software product line test models-the body comfort system case study. _Technical report, TU Braunschweig_.
