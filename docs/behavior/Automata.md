@@ -5,12 +5,6 @@ states and transitions between these states. When time progresses, or when the
 component receives an input, the automata may execute a transition, producing 
 some output given current input and state.
 
-We differentiate between two types of automata. Event automata that operate on 
-single message events and time-synchronous automata that operate on 
-synchronized inputs.
-
-## Syntax
-
 An automaton is defined inside the body of a component and consists of states 
 and transitions.
 
@@ -21,11 +15,12 @@ component Comp {
   }
 }
 ```
+
+## States
+
 An automaton has at least one state and exactly one initial state.
 
 A simple state declaration looks like
-
-### State
 
 ```montiarc
 initial state S;
@@ -41,7 +36,7 @@ An automaton can have any number of transitions between states.
 
 A simple transition looks like
 
-### Transition
+## Transitions
 
 ```montiarc
 S1 -> S2 [condition] event / { action };
@@ -63,7 +58,7 @@ transition is triggered by discrete time progress.
 * `/ { action }` (optional) the actions that are executed when taking the 
 transition where `action` is a list of statements.
 
-### Entry- and Exit-Action
+## Entry- and Exit-Actions
 
 A state may define entry and exit actions that are executed when entering 
 respectively exiting the state. A state with both entry and exit actions 
@@ -78,7 +73,7 @@ state S {
 
 where `action1` and `action2` are each a list of statements.
 
-### Initial-Action
+## Initial-Action
 
 An initial state may define an initial action that is executed when entering 
 the state for the very first time at the start of a run of the automaton. 
@@ -92,7 +87,7 @@ initial { action } state S;
 where `{ action }` is the initial action and `action` a list of statements.
 
 
-### Hierarchical States
+## Hierarchical States
 
 A state may be hierarchically decomposed into substates. A state can have any 
 number of substates and substates themselves can be hierarchically decomposed.
@@ -115,8 +110,9 @@ where
 
 * state `Sub1` consists of two substates named `SubSub1` and `SubSub2` 
 
+## Examples
 
-## Event Automata
+### Event Automata
 
 ```montiarc 
 import montiarc.types.Color;
@@ -164,7 +160,7 @@ component TrafficLight {
 }
 ```
 
-## Time-Synchronous Automata
+### Time-Synchronous Automata
 
 Synchronous automata operate on synchronous inputs. Where message events only 
 remain on the port for the duration of the event, messages on synchronous ports 
