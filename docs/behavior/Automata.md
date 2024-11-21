@@ -139,7 +139,8 @@ The transition's guard can then reason about properties of the received message
 and use the message in transition action.
 
 ```
-S1 -> S2 [number != 0] number / { long v = 2 / number; };
+S1 -> S2 [number >= 0] number / { int v = number; };
+S1 -> S2 [number < 0] number / { int v = -number; };
 ```
 
 ## Time Events
@@ -175,7 +176,7 @@ time event can reason about properties of messages on all incoming, synchronous
 ports and use the messages in the transition action.
 
 ```
-S1 -> S2 [b != 0] / { long v = a / b; };
+S1 -> S2 [b != 0] / { int v = a / b; };
 ```
 
 ## Output 
@@ -194,11 +195,11 @@ port out long result;
 and the transition
 
 ```
-S1 -> S2 [number != 0] number / { result = 2 / number; };
+S1 -> S2 [number != 0] number / { result = 100 / number; };
 ```
 
-a message (the result of the expression `2 / number`) is sent via port `result` 
-every time the transition is executed. 
+a message (the result of the expression `100 / number`) is sent via port 
+`result` every time the transition is executed. 
 
 The moment a message is sent via a port it is no longer available to the 
 automaton (don't read from outgoing ports). Multiple messages can be sent via 
@@ -208,14 +209,14 @@ Given the transition
 
 ```
 S1 -> S2 [number != 0] number / { 
-  result = 2 / number; 
-  result = 2 * number;
+  result = 100 / number; 
+  result = 100 * number;
 };
 ```
 
 two message are send via port `result` every time the transition is executed. 
 The messages are send in order, that is, first the result of the expression 
-`2 / number` and then the result of the expression `2 * number`.
+`100 / number` and then the result of the expression `100 * number`.
 
 ## Examples
 
