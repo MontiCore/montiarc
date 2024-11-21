@@ -97,9 +97,9 @@ state HS {
   state Sub1 {
     state SubSub1;
     state SubSub2;  
-  }
+  };
   state Sub2; 
-}
+};
 ```
 
 where 
@@ -170,13 +170,52 @@ are equivalent and executed at discrete points in time and if the automaton
 then is currently in state `S1` and if the `CONDITION` evaluates to `true`.
 
 Synchronous ports are synchronized at time events. The current message on each 
-synchronous port is available for the duration of the time event. A transition 
-triggered by a time event can reason about properties of messages on all 
-incoming, synchronous ports and use the messages in the transition action.
+synchronous port is available for the time event. A transition triggered by a 
+time event can reason about properties of messages on all incoming, synchronous 
+ports and use the messages in the transition action.
 
 ```
 S1 -> S2 [b != 0] / { long v = a / b; };
 ```
+
+## Output 
+
+An automaton can send a message via an outgoing port by assigning it some value.
+While messages on incoming ports are only available in the context of a 
+specific event, messages can be sent via an outgoing port in any action. 
+
+Given the port declarations
+
+```
+port in int number;
+port out long result;
+```
+
+and the transition
+
+```
+S1 -> S2 [number != 0] number / { result = 2 / number; };
+```
+
+a message (the result of the expression `2 / number`) is sent via port `result` 
+every time the transition is executed. 
+
+The moment a message is sent via a port it is no longer available to the 
+automaton (don't read from outgoing ports). Multiple messages can be sent via 
+outgoing ports in quick succession. 
+
+Given the transition
+
+```
+S1 -> S2 [number != 0] number / { 
+  result = 2 / number; 
+  result = 2 * number;
+};
+```
+
+two message are send via port `result` every time the transition is executed. 
+The messages are send in order, that is, first the result of the expression 
+`2 / number` and then the result of the expression `2 * number`.
 
 ## Examples
 
