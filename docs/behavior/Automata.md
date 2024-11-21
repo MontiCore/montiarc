@@ -171,8 +171,8 @@ then is currently in state `S1` and if the `CONDITION` evaluates to `true`.
 
 Synchronous ports are synchronized at time events. The current message on each 
 synchronous port is available for the duration of the time event. A transition 
-triggered by a time event can reason about properties messages on all incoming, 
-synchronous ports and use the messages in the transition action.
+triggered by a time event can reason about properties of messages on all 
+incoming, synchronous ports and use the messages in the transition action.
 
 ```
 S1 -> S2 [b != 0] / { long v = a / b; };
