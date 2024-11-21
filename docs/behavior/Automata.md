@@ -30,16 +30,16 @@ where
 
 * `initial` is the optional modifier defining the initial state, 
 
-* `S` is the unique name of the state
+* `S` is the unique name of the state (defines the state's name)
+
+## Transitions
 
 An automaton can have any number of transitions between states.
 
 A simple transition looks like
 
-## Transitions
-
 ```montiarc
-S1 -> S2 [condition] event / { action };
+S1 -> S2 [CONDITION] EVENT / { ACTION };
 ```
 
 where 
@@ -48,15 +48,15 @@ where
 
 * `S2` is the name of the target state (reference)
 
-* `[condition]` (optional) is the guard where the `condition` is a boolean 
+* `[CONDITION]` (optional) is the guard where the `CONDITION` is a boolean 
 expression
 
-* `event` (optional) is the event that triggers the transition. The name of 
+* `EVENT` (optional) is the event that triggers the transition. The name of 
 any input port is a valid trigger. If no event trigger is specified, then the 
 transition is triggered by discrete time progress.
 
-* `/ { action }` (optional) the actions that are executed when taking the 
-transition where `action` is a list of statements.
+* `/ { ACTION }` (optional) the actions that are executed when taking the 
+transition where `ACTION` is a list of statements.
 
 ## Entry- and Exit-Actions
 
@@ -66,12 +66,12 @@ looks like
 
 ```montiarc
 state S {
-  entry / { action1 }
-  exit / { action2 }
+  entry / { ACTION1 }
+  exit / { ACTION2 }
 };
 ```
 
-where `action1` and `action2` are each a list of statements.
+where `ACTION1` and `ACTION2` are each a list of statements.
 
 ## Initial-Action
 
@@ -81,10 +81,10 @@ Therefore, the initial action is executed at most once during a run of an
 automaton. An initial state with an initializer action looks like 
 
 ```montiarc
-initial { action } state S;
+initial { ACTION } state S;
 ```
 
-where `{ action }` is the initial action and `action` a list of statements.
+where `{ ACTION }` is the initial action and `ACTION` a list of statements.
 
 
 ## Hierarchical States
@@ -93,7 +93,7 @@ A state may be hierarchically decomposed into substates. A state can have any
 number of substates and substates themselves can be hierarchically decomposed.
 
 ```montiarc
-state S {
+state HS {
   state Sub1 {
     state SubSub1;
     state SubSub2;  
@@ -104,11 +104,14 @@ state S {
 
 where 
 
-* `S` is the name of the state
+* `HS` is the name of the state
 
 * that consists of two substates named `Sub1` and `Sub2` 
 
 * state `Sub1` consists of two substates named `SubSub1` and `SubSub2` 
+
+Hierarchical states and their substates can be the source and target of 
+transitions just like regular states.
 
 ## Examples
 
