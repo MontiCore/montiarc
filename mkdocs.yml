@@ -49,7 +49,6 @@ nav:
       - Compute: 'behavior/Compute.md'
       - Expressions: 'behavior/Expressions.md'
       - Statements: 'behavior/Statements.md'
-      - Timing: 'behavior/Timing.md'
       - Variables: 'behavior/Variables.md'
   - TypeSystem: 
       - Overview: 'TypeSystem.md'
