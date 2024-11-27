@@ -30,6 +30,8 @@ sourceSets {
 // Therefore, we add an exclusion rule.
 configurations.montiarc.get()
   .exclude("montiarc.libraries", "montiarc-base")
+configurations.montiarc.get()
+  .exclude("montiarc.libraries", "maunit")
 
 dependencies {
   testImplementation(libs.guava)

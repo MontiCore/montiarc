@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator;
 
+import de.se_rwth.commons.logging.Log;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
@@ -22,5 +24,6 @@ public class MA2JSimTest {
     };
 
     MA2JSimTool.main(args);
+    Assertions.assertEquals(0, Log.getErrorCount());
   }
 }

@@ -6,9 +6,11 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.plugins.JavaPluginExtension
+import org.gradle.api.plugins.JavaTestFixturesPlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.tasks.Jar
 
@@ -29,6 +31,9 @@ const val INTERNAL_MA_BASE_PROJECT_REF = ":libraries:montiarc-base"
 const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base"
 
 const val MA2JSIM_LOGGING_ENV_VAR = "MA2JSIM_LOGGING_BASE_PATH"
+
+const val INTERNAL_MAUNIT_PROJECT_REF = ":libraries:maunit"
+const val MAVEN_MAUNIT_PROJECT_REF = "montiarc.libraries:maunit"
 
 /**
  * Enables the integration of montiarc models into a project build:
@@ -55,6 +60,7 @@ class Ma2JavaPlugin : Plugin<Project> {
         createCompileMontiarcTask(sourceSet)
         addRuntimeEnvironmentDependencyFor(sourceSet)
         addMontiArcBaseDependencyFor(sourceSet)
+        addMaUnitDependencyFor(sourceSet)
       }
 
       // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
@@ -69,6 +75,10 @@ class Ma2JavaPlugin : Plugin<Project> {
 
         // Also special treatment for the test task
         addLoggingEnvVarToTestTask()
+      }
+
+      pluginManager.withPlugin("java-test-fixtures") {
+        makeTestFixturesModelsAvailableInTests()
       }
 
       pluginManager.withPlugin("cd2pojo") {
@@ -164,6 +174,23 @@ class Ma2JavaPlugin : Plugin<Project> {
   }
 
   /**
+   * Adds the library montiarc.libraries:maunit as montiarc dependency for the source set
+   */
+  private fun addMaUnitDependencyFor(sourceSet: SourceSet) = with(project) {
+    // Depending on what the user wishes, montiarc-base may be drawn from maven (default), or it may be an internal
+    // project dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test
+    // the freshly compiled version of montiarc-base.
+
+    dependencies.addProvider(sourceSet.montiarcDependencyDeclarationConfigName, provider {
+      if (maExtension.internalMontiArcTesting.get()) {
+        project(INTERNAL_MAUNIT_PROJECT_REF)
+      } else {
+        "${MAVEN_MAUNIT_PROJECT_REF}:${GENERATOR_VERSION}"
+      }
+    })
+  }
+
+  /**
    * Create a task that compiles the MontiArc sources of the specified source set.
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * task is added to the java sources of the same SourceSet.
@@ -245,6 +272,25 @@ class Ma2JavaPlugin : Plugin<Project> {
     val compileTask = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
     tasks.named(sourceSet.montiarcSymbolsJarTaskName, Jar::class.java).configure {jar ->
       jar.from(compileTask.get().symbolOutputDir())
+    }
+  }
+
+  /**
+   * Makes the compiled java source set `testFxitures` available in `test` (these source sets must exist, checked by
+   * whether the [org.gradle.api.plugins.JavaPlugin] and [org.gradle.api.plugins.JavaTestFixturesPlugin] is applied).
+   */
+  private fun makeTestFixturesModelsAvailableInTests() = with (project) {
+    if (!pluginManager.hasPlugin("java") || !pluginManager.hasPlugin("java-test-fixtures")) {
+      logger.error("Internal error: Tried to link testFixtures and test source sets, but the Java and JavaTestFixturesPlugin are not applied!")
+    }
+
+    val sourceSets = extensions.getByType(JavaPluginExtension::class.java).sourceSets
+    val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
+
+    val compileTestFixturesJava = tasks.named("compileTestFixturesJava", JavaCompile::class.java)
+    // Puts test fixtures on the symbol path of test
+    tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java) {
+      it.symbolImportDir.from(compileTestFixturesJava.get().destinationDirectory)
     }
   }
 }

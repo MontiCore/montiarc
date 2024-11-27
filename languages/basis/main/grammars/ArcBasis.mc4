@@ -61,7 +61,7 @@ component grammar ArcBasis extends
    * @attribute body Contains the architectural elements of this component.
    */
   symbol scope ComponentType implements Component, ArcElement =
-    key("component") Name
+    Stereotype? key("component") Name
     head:ComponentHead
     (ComponentInstance || ",")*
     body:ComponentBody
@@ -173,7 +173,7 @@ component grammar ArcBasis extends
    * @attribute componentInstance A list of instantiated components.
    */
   ComponentInstantiation implements ArcElement <100> =
-    MCType (ComponentInstance || ",")+ ";"
+    Stereotype? MCType (ComponentInstance || ",")+ ";"
   ;
 
   /**
@@ -207,4 +207,5 @@ component grammar ArcBasis extends
    */
   PortAccess = (component:Name@Subcomponent ".")? port:Name@ArcPort ;
 
+  StereoValueExpr extends StereoValue = Name& "=" Expression;
 }

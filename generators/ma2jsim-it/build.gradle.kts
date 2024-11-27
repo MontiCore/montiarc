@@ -8,6 +8,7 @@ plugins {
   id("cd2pojo")
   id("montiarc-jsim")
   id("montiarc.build.integration-test")
+  id("java-test-fixtures")
 }
 
 var variabilitySources: SourceSet? = null
@@ -21,7 +22,6 @@ sourceSets {
       setSrcDirs(setOf("$projectDir/main/montiarc"))
     }
   }
-
   variabilitySources = create("variability") {
     cd2pojo {
       setSrcDirs(setOf("$projectDir/variability/cd2pojo"))
@@ -30,7 +30,11 @@ sourceSets {
       setSrcDirs(setOf("$projectDir/variability/montiarc"))
     }
   }
-
+  testFixtures {
+    java {
+      setSrcDirs(setOf("$projectDir/testFixtures/java"))
+    }
+  }
   test {
     cd2pojo {
       setSrcDirs(setOf("$projectDir/test/cd2pojo"))

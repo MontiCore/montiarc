@@ -1,0 +1,9 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc;
+
+classdiagram lang {
+
+  public class Simulation {
+    public static void stop();
+  }
+}

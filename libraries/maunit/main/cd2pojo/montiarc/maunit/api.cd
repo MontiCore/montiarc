@@ -1,0 +1,38 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.maunit;
+
+classdiagram api {
+
+  public class Assertions {
+    public static void fail();
+    public static void fail(String message);
+    public static void assertTrue(boolean expression);
+    public static void assertTrue(boolean expression, String message);
+    public static void assertFalse(boolean expression);
+    public static void assertFalse(boolean expression, String message);
+    public static void assertEquals(int expected, int actual);
+    public static void assertEquals(int expected, int actual, String message);
+    public static void assertEquals(long expected, long actual);
+    public static void assertEquals(long expected, long actual, String message);
+    public static void assertEquals(float expected, float actual);
+    public static void assertEquals(float expected, float actual, String message);
+    public static void assertEquals(double expected, double actual);
+    public static void assertEquals(double expected, double actual, String message);
+    public static void assertEquals(char expected, char actual);
+    public static void assertEquals(char expected, char actual, String message);
+    public static void assertEquals(Object expected, Object actual);
+    public static void assertEquals(Object expected, Object actual, String message);
+    public static void assertNotEquals(int expected, int actual);
+    public static void assertNotEquals(int expected, int actual, String message);
+    public static void assertNotEquals(long expected, long actual);
+    public static void assertNotEquals(long expected, long actual, String message);
+    public static void assertNotEquals(float expected, float actual);
+    public static void assertNotEquals(float expected, float actual, String message);
+    public static void assertNotEquals(double expected, double actual);
+    public static void assertNotEquals(double expected, double actual, String message);
+    public static void assertNotEquals(char expected, char actual);
+    public static void assertNotEquals(char expected, char actual, String message);
+    public static void assertNotEquals(Object expected, Object actual);
+    public static void assertNotEquals(Object expected, Object actual, String message);
+  }
+}

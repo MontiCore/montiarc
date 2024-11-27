@@ -8,6 +8,18 @@ Legend:
 - ☒ Intentionally not included
 - ☐ Inclusion pending or to be discussed
 
+### Code Ranges
+
+| Language       | Range             |
+|----------------|-------------------|
+| MontiArc       | 0xC1000 - 0xC1099 |
+| ArcBasis       | 0xC1100 - 0xC1199 |
+| GenericArc     | 0xC1200 - 0xC1249 |
+| Modes          | 0xC1350 - 0xC1399 |
+| VariableArc    | 0xC1400 - 0xC1449 |
+| ComfortableArc | 0xC1450 - 0xC1499 |
+| Unit           | 0xC1500 - 0xC1549 |
+
 ## ArcBasis CoCos
 
 | in MA | VariantCoCo | CoCo(s)                             | Language | Code(s)                                                       | 
@@ -119,6 +131,12 @@ Legend:
 |-------|---------------------|----------------|---------|------------------------------------------------------------------------------------------------------------------------------------------|
 | ☑     | MaxOneAutoConnect   | ComfortableArc | 0xC1450 | There may only be one `autoconnect` declaration per component. It is also allowed to omit it in which case `autoconnect off` is implied. |
 | ☑     | AtomicNoAutoConnect | ComfortableArc | 0xC1451 | There should be no `autoconnect` declarations in atomic components, as atomic components have no subcomponents.                          |
+
+## MaUnit CoCos
+
+| in MA | CoCo(s)                     | Language | Code(s)                            | 
+|-------|-----------------------------|----------|------------------------------------|
+| ☑     | UnitTestConfiguredCorrectly | Unit     | 0xC1500, 0xC1501, 0xC1502, 0xC1503 |
 
 ## Statement CoCos
 

@@ -92,7 +92,7 @@ public class ComponentScheduler {
     }
   }
 
-  private void executePortSchedule(InPort<?> port) {
+  protected void executePortSchedule(InPort<?> port) {
     if (!scheduledPorts.contains(port)) {
       throw new IllegalStateException("Can not execute unscheduled port.");
     }
@@ -108,7 +108,7 @@ public class ComponentScheduler {
     }
   }
 
-  private void executeTickSchedule() {
+  protected void executeTickSchedule() {
     if (!isTickScheduled) {
       throw new IllegalStateException("Can not execute unscheduled tick.");
     }

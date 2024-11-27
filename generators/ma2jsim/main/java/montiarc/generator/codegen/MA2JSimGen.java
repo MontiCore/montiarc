@@ -18,6 +18,7 @@ import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.util.Helper;
+import montiarc.generator.util.MaUnitHelper;
 import montiarc.util.LogAspects;
 import montiarc.util.MASimError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -60,6 +61,11 @@ public class MA2JSimGen {
     GeneratorSetup setup = new GeneratorSetup();
     setup.setOutputDirectory(targetDir.toFile());
     setup.setHandcodedPath(new MCPath(hwcPath));
+    setup.setGlex(glex());
+    return setup;
+  }
+
+  protected static GlobalExtensionManagement glex() {
     GlobalExtensionManagement glex = new GlobalExtensionManagement();
     glex.setGlobalValue("suffixes", Suffixes.getInstance());
     glex.setGlobalValue("prefixes", Prefixes.getInstance());
@@ -67,8 +73,10 @@ public class MA2JSimGen {
     glex.setGlobalValue("helper", new Helper());
     glex.setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
     glex.setGlobalValue("timing_untimed", Timing.UNTIMED);
-    setup.setGlex(glex);
-    return setup;
+    glex.setGlobalValue("MaUnitHelper", new MaUnitHelper());
+    glex.bindTemplateHookPoint("<Component>Body", "montiarc.generator.ma2jsim.unit.Component.ftl");
+    glex.bindTemplateHookPoint("<Component>Header", "montiarc.generator.ma2jsim.unit.Header.ftl");
+    return glex;
   }
 
   protected GeneratorEngine getEngine() {

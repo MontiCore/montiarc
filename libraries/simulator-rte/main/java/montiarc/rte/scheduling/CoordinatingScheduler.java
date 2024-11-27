@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
+import montiarc.lang.Simulation;
 import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.InPort;
@@ -17,7 +18,9 @@ import java.util.stream.Collectors;
  */
 public class CoordinatingScheduler implements Scheduler {
 
-  private final Map<Component, ComponentScheduler> compToScheduler;
+  protected final Map<Component, ComponentScheduler> compToScheduler;
+
+  protected boolean requestedToStop = false;
 
   public CoordinatingScheduler() {
     this.compToScheduler = new HashMap<>();
@@ -63,6 +66,8 @@ public class CoordinatingScheduler implements Scheduler {
       throw new IllegalArgumentException("Component not registered");
     }
 
+    requestedToStop = false;
+    Simulation.coordinatingScheduler = this;
     ComponentScheduler scheduler = compToScheduler.get(component);
 
     if (!this.isReadyToExecute()) {
@@ -70,7 +75,7 @@ public class CoordinatingScheduler implements Scheduler {
     }
 
     Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
-    while (!activeSchedulers.isEmpty()) {
+    while (!activeSchedulers.isEmpty() && !requestedToStop) {
       for (ComponentScheduler s : activeSchedulers) {
         s.executeNextSchedule();
       }
@@ -81,6 +86,7 @@ public class CoordinatingScheduler implements Scheduler {
         activeSchedulers = getActiveSchedulers();
       }
     }
+    Simulation.coordinatingScheduler = null;
   }
 
   public void run(Component component, int ticks) {
@@ -88,23 +94,30 @@ public class CoordinatingScheduler implements Scheduler {
       throw new IllegalArgumentException("Component not registered");
     }
 
+    requestedToStop = false;
+    Simulation.coordinatingScheduler = this;
     compToScheduler.get(component).triggerComponentTickPort(ticks);
 
     Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
 
-    while (!activeSchedulers.isEmpty()) {
+    while (!activeSchedulers.isEmpty() && !requestedToStop) {
       for (ComponentScheduler s : activeSchedulers) {
         s.executeNextSchedule();
       }
       activeSchedulers = getActiveSchedulers();
     }
+    Simulation.coordinatingScheduler = null;
+  }
+
+  public void stop() {
+    requestedToStop = true;
   }
 
   private boolean isReadyToExecute() {
     return this.compToScheduler.values().stream().anyMatch(ComponentScheduler::isReadyToExecute);
   }
 
-  boolean isASubCompScheduled(Component comp) {
+  public boolean isASubCompScheduled(Component comp) {
     Collection<? extends Component> directSubs = comp.getAllSubcomponents();
 
     return

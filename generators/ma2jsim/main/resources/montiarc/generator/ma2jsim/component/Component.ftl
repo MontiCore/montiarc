@@ -1,6 +1,7 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTComponentType ast -->
 
+${glex.defineHookPoint(tc,"<Component>Header", ast)}
 ${tc.include("montiarc.generator.ma2jsim.component.Header.ftl")} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.parameters.Parameters.ftl")}
@@ -36,4 +37,5 @@ ${tc.include("montiarc.generator.ma2jsim.component.Header.ftl")} {
     ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeTeardown.ftl")}
   </#if>
 
+  ${glex.defineHookPoint(tc,"<Component>Body", ast)}
 }

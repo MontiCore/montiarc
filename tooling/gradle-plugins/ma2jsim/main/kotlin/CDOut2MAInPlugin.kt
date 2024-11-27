@@ -24,6 +24,12 @@ class CDOut2MAInPlugin : Plugin<Project> {
       connectCdSymbolsToMontiarc(sourceSet)
       createDependencyBetweenCdAndMaCompileTasks(sourceSet)
     }
+
+    with (project) {
+      pluginManager.withPlugin("java") {
+        makeMainModelsAvailableInTests()
+      }
+    }
   }
 
   private fun sourceSetsOf(project: Project): SourceSetContainer = with (project) {
@@ -51,4 +57,23 @@ class CDOut2MAInPlugin : Plugin<Project> {
     maCompile.configure { it.dependsOn(cdCompile) }
   }
 
+  /**
+   * Makes symbols of cd source set `main`'s compiled models available in MontiArc  `test` (these source sets must exist, checked by
+   * whether the [org.gradle.api.plugins.JavaPlugin] is applied).
+   */
+  private fun makeMainModelsAvailableInTests() = with (project) {
+    if (!pluginManager.hasPlugin("java")) {
+      logger.error("Internal error: Tried to link main and test source sets, but the JavaPlugin is not applied!")
+    }
+
+    val sourceSets = extensions.getByType(JavaPluginExtension::class.java).sourceSets
+    val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
+    val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
+
+    val mainCompile = tasks.named(mainSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
+    // Puts main's symbols on the symbol path of test
+    tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java) {
+      it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
+    }
+  }
 }

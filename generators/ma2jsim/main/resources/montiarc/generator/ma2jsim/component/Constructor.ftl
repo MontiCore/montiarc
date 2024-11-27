@@ -6,7 +6,7 @@
 
 <#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
 
-protected ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
+public ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
   String name,
   montiarc.rte.scheduling.Scheduler scheduler
   <#list ast.getHead().getArcParameterList()>,

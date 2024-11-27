@@ -1,0 +1,80 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.generator.util;
+
+import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTComponentType;
+import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
+import montiarc.MontiArcMill;
+import arcbasis._ast.ASTStereoValueExpr;
+import variablearc._ast.ASTArcFeature;
+import variablearc._ast.ASTArcFeatureDeclaration;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@SuppressWarnings("unused")
+public class MaUnitHelper {
+
+  /**
+   * @return the number of test cases defined by the component
+   */
+  public int unitTestCaseCount(ASTComponentType node) {
+    Preconditions.checkNotNull(node);
+    if (!node.isPresentStereotype()) return 0;
+
+    Set<String> names = node.getHead().getArcParameterList().stream().map(ASTArcParameter::getName).collect(Collectors.toSet());
+    names.addAll(node.getBody().streamArcElementsOfType(ASTArcFeatureDeclaration.class).flatMap(ASTArcFeatureDeclaration::streamArcFeatures).map(ASTArcFeature::getName).collect(Collectors.toSet()));
+    names.add("ticks");
+
+    return Math.max(
+      node.getStereotype().getValuesList().stream()
+        .filter(sv -> names.contains(sv.getName()))
+        .filter(MontiArcMill.typeDispatcher()::isArcBasisASTStereoValueExpr)
+        .map(MontiArcMill.typeDispatcher()::asArcBasisASTStereoValueExpr)
+        .filter(stereo -> MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()) && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList())
+        .map(stereo -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size())
+        .reduce(1, Math::max),
+      getStereoValue(node, "test").map(stereo -> {
+        if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()))
+          return MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size();
+        else return 1;
+      }).orElse(1)
+    );
+  }
+
+  public boolean isStereoValueList(ASTStereoValueExpr stereo) {
+    return MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
+      && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList();
+  }
+
+  public Optional<ASTStereoValueExpr> getStereoValue(ASTComponentType comp, String name) {
+    return comp.getStereotype().getValuesList().stream().filter(sv -> Objects.equals(name, sv.getName())).filter(MontiArcMill.typeDispatcher()::isArcBasisASTStereoValueExpr).findAny().map(MontiArcMill.typeDispatcher()::asArcBasisASTStereoValueExpr);
+  }
+
+  public boolean isTestSource(ASTComponentType comp) {
+    return getStereoValue(comp, "test").isPresent();
+  }
+
+  public List<ASTExpression> getTestValues(ASTComponentType comp, int index) {
+    Optional<ASTSetEnumeration> testDefinition = getStereoValue(comp, "test")
+      .map(ASTStereoValueExpr::getExpression)
+      .filter(MontiArcMill.typeDispatcher()::isSetExpressionsASTSetEnumeration)
+      .map(MontiArcMill.typeDispatcher()::asSetExpressionsASTSetEnumeration);
+    Preconditions.checkArgument(testDefinition.isPresent());
+
+    ArrayList<ASTExpression> testValues = new ArrayList<>();
+    for (List<ASTExpression> testCaseDefinition : testDefinition.get().getSetCollectionItemList().stream()
+      .map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).getSetCollectionItemList())
+      .map(list -> list.stream().map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).collect(Collectors.toList())).collect(Collectors.toList())) {
+      if (index < testCaseDefinition.size())
+        testValues.add(testCaseDefinition.get(index));
+    }
+    return testValues;
+  }
+}

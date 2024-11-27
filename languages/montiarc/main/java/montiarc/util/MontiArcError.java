@@ -20,7 +20,18 @@ public enum MontiArcError implements Error {
   CLI_ARGUMENT_MISSING("0xC1009", "Option '%s' is missing an argument"),
   ROOT_NO_INSTANCE("0xC1010", "Cannot instantiate component without context"),
   SUPERIMPOSED_MODELPATH("0xC1011", "The path %s superimposes another filepath %s"),
-  SUPERIMPOSED_SYMPATH("0xC1012", "The sympath %s superimposes another sympath %s");
+  SUPERIMPOSED_SYMPATH("0xC1012", "The sympath %s superimposes another sympath %s"),
+  UNIT_CANNOT_HAVE_PORTS("0xC1011", "Tests must be deployable and cannot have ports"),
+  UNIT_MISSING_ARGUMENT("0xC1012", "Missing test assignment for argument '%s'"),
+  UNIT_MISSING_ARGUMENTS("0xC1013", "Missing test assignments in test case %d for arguments '%s'"),
+  UNIT_TOO_MANY_ARGUMENTS("0xC1014", "Too many assignments in test case %d"),
+  UNIT_TEST_SOURCE_MISCONFIGURED("0xC1015", "Test source misconfigured, has to be a set of test cases in the form of <<test={}>>"),
+  UNIT_TEST_CASE_MISCONFIGURED("0xC1016", "Test case %d misconfigured, has to be a list of parameter assignments in the form of <<test={[]}>>"),
+  UNIT_TEST_CASE_PARAMETER_MISCONFIGURED("0xC1017", "Test case %d, parameter %d misconfigured, has to be a list of parameter assignments in the form of <<test={[1,2,3]}>>"),
+  UNIT_TEST_SOURCE_AND_VALUE_SOURCE("0xC1018", "Cannot combine test and value source for parameter %s, choose either <<test={[value]}>> or <<test, %<s=[value]>>, not both"),
+  UNIT_DUPLICATE_ARGUMENTS("0xC1019", "Multiple test assignments found for argument '%s'"),
+  UNIT_TYPE_MISMATCH("0xC1020", "Test assignment type mismatch for '%s', expected '%s' but provided '%s'"),
+  UNIT_TEST_COUNT_MISMATCH("0xC1021", "Test count mismatch, expected values for '%d' tests but provided '%d'");
 
   private final String errorCode;
   private final String errorMessage;

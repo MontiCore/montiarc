@@ -194,6 +194,9 @@ public class MontiArcCoCos {
     checker.addCoCo(new NoEventsInSyncAutomata());
     //checker.addCoCo(new NoTickEventInUntimedAutomata());
 
+    // Unit CoCos
+    checker.addCoCo(new MaUnitTestConfiguredCorrectly());
+
     // MontiArc CoCos
     checker.addCoCo(new ComponentHeritageTypeBound());
     checker.addCoCo(new SubcomponentTypeBound());
