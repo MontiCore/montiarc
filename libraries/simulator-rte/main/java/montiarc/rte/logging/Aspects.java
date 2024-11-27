@@ -17,13 +17,13 @@ public class Aspects {
 
   public static final String SEND_MSG = "send";
 
-  public static final String RECEIVE_MSG = "receive";
+  public static final String RECEIVE_MSG = "schedule";
 
   public static final String ENTER_STATE = "enter_state";
 
   public static final String MODE_CHANGE = "mode_change";
 
-  public static final String RECEIVE_EVENT = "event";
+  public static final String RECEIVE_EVENT = "receive";
 
   public static final String FIELD_VALUE = "field";
 }

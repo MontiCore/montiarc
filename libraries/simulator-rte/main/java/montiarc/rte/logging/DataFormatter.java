@@ -9,7 +9,7 @@ public class DataFormatter {
   private DataFormatter() {}
 
   /** "√" */
-  public static final String TK = "√";
+  public static final String TK = "Tick";
 
   /**
    * Formats
