@@ -116,3 +116,14 @@ component Delay<T> {
   }
 }
 ```
+
+this delay can then be added anywhere in the communication circle.
+
+```
+Delay<Integer> delay;
+
+sub1.o -> sub2.i;
+sub2.o -> delay.i; 
+delay.o -> sub3.i;
+sub3.o -> sub1.i;
+```
