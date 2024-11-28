@@ -73,8 +73,25 @@ connects port `o` of subcomponent `sub` to port `i` of subcomponent `sub1`.
 ## Feedback
 
 If subcomponents form a communication circle along the direction of connectors, 
-then a subcomponent may talk to itself, either directly or indirectly across 
-other subcomponents. We call this a feedback loop. 
+then a subcomponent may communicate with itself, either directly or indirectly 
+across other subcomponents. We call this a feedback loop. 
+
+In a direct feedback loop the output of a component is directly connected to 
+the input of the component. The component communicates directly with itself.
+
+```
+sub.o -> sub.i; 
+```
+
+In an indirect feedback loop the output of a component is connected to the 
+input of the component indirectly across one to multiple subcomponents. The 
+component communicates indirectly with itself.
+
+```
+sub1.o -> sub2.i;
+sub2.o -> sub3.i;
+sub3.o -> sub1.i;
+```
 
 While communication is otherwise abstracted to be instantaneous, for the 
 propagation of timing events in feedback loops we need delay. Otherwise, the 
