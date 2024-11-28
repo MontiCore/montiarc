@@ -10,7 +10,7 @@ of subcomponents and connectors between the components' interfaces.
 ## Subcomponent Declaration
 
 Subcomponents are declared in the body of a component type, specifying the 
-subcomponent's type and defining its name. A simple subcomponent declaration 
+subcomponents' types and stating their names. A simple subcomponent declaration 
 looks like 
 
 ``` 
@@ -25,10 +25,10 @@ where
 
 Subcomponents are directly instantiated alongside there declaration. 
 
-A component type can have of multiple subcomponents of different types but also 
+A component can have multiple subcomponents of different types but also 
 multiple subcomponents of the same type. For convenience, multiple subcomponents
 of the same type can be instantiated by stating their names in a comma-separated 
-list after the component type, which looks like 
+list after the component's type, which looks like 
 
 ``` 
 TYPE SUB1, SUB2;
@@ -44,14 +44,13 @@ TYPE SUB2;
 ## Arguments
 
 The instantiation of a component may require arguments, which configure the 
-components initial state. 
-The number, order and type of arguments needed is defined by the component's 
-type declaration.
+component's initial state.
+The component's type declaration defines the number, order, and type of 
+arguments required.
 
 Arguments must be provided during component instantiation and are listed after 
-the subcomponents name in round brackets (`(` `)`). 
-A subcomponent declaration and component instantiation with arguments looks 
-like 
+the subcomponents' name in round brackets (`( )`).
+A subcomponent declaration with arguments looks like
 
 ```
 TYPE SUB(ARGS);
@@ -64,12 +63,13 @@ using expressions.
 
 ## Type Arguments
 
-Generic components require type arguments that replace the type parameters 
-with the actual types. 
-The number of type arguments needed and potential typing restrictions are 
-defined by the component's type declaration. 
-The type arguments may affect the component's signature, e.g., the type of 
-parameters and ports.
+Generic components require type arguments that replace the generic's type 
+parameters with the actual types.
+The component's type declaration defines the number of type arguments needed, 
+their order, and potential typing restrictions.
+The signature of a generic component depends in part on the provided type 
+arguments; that is, type arguments may define the actual typing of ports and 
+parameters.
 
 Type arguments must be provided with the subcomponent declaration alongside 
 the component type in angle brackets (`< >`).
@@ -78,33 +78,29 @@ the component type in angle brackets (`< >`).
 TYPE<TARGS> SUB; 
 ```
 
-where `TARGS` is a comma-separated list of arguments of the form
-`TARG1, TARG2, ...., TARGn` where `TARG1`, `TARG2`, and so forth until `TARGn` 
-are  the first, second, and so forth until n-th type argument.
 
-For example. 
+where `TARGS` is a comma-separated list of arguments of the form 
+`TARG1, TARG2, ...., TARGn` where `TARG1`, `TARG2`, and so forth until `TARGn` 
+are the first, second, and so forth until n-th type argument.
+
+For example, 
 
 ```
 Delay<Integer> delay;
 ```
 
-declares and instantiates a subcomponent `delay` of type `Delay` and type 
+declares and instantiates a subcomponent `delay` of type `Delay` with type 
 argument `Integer`.
 
 Note that only data types may be used as type arguments. 
 Component types **cannot** be used as type arguments.
 
-Multiple type arguments can be provided as a comma separated list:
-
-```
-TYPE<TARG1, TARG2> SUB; 
-```
-
 ## Connectors
 
 Connectors connect the interfaces (ports) of components, defining the flow of 
-messages and determining which components communicate whit each-other. 
-Connectors are defined in the body of the component type and look like 
+messages and determining which components communicate whit each other. 
+Connectors are defined in the body of the component type. A connector looks 
+like 
 
 `SOURCE` -> `TARGET`;
 
@@ -170,7 +166,7 @@ component Delay<T> {
   
   automaton {
     initial state S;
-    S -> S / { o = i; };
+    S -> S Tick / { o = i; };
   }
 }
 ```
