@@ -2,43 +2,51 @@
 
 # Component variables
 
-```montiarc
-component MovingAverageSmoother {
-  port in double roughSignal,
-       out double smoothedSignal;
+Component variables extend a component's state space. They can store messages 
+and intermediate computation results to record state that is maintained across 
+individual execution steps. 
 
-  // Declaring fields to save the most recent values
-  double oldestVal = 0.0;
-  double olderVal = 0.0;
-  double youngerVal = 0.0;
-  double youngestVal = 0.0;
+Component variables are declared directly within the body of a component. 
+The declaration of a component variable specifies the variable's type, states 
+its name, and assigns its initial value. A component-variable declaration looks 
+like 
 
-  compute {
-    double average = (oldestVal + olderVal + youngerVal + youngestVal + roughSignal) / 5.0;
-    
-    // Updating the history values
-    oldestVal = olderVal;
-    olderVal = youngerVal;
-    youngerVal = youngestVal; 
-    youngestVal = roughSignal;
+```
+TYPE NAME = INITIAL; 
+```
 
-    // Sending the smoothed value through the out port
-    smoothedSignal = average;
+where 
+
+* `TYPE` is the variable's data type (reference)
+
+* `NAME` is the variable's name (defining)
+
+* `INITIAL` is an expression defining the variable's initial value
+
+For example,
+
+```
+component SumUp {
+  port in int i;
+  port in Signal r;
+  port out int o;
+  
+  int sum = 0;
+  
+  automaton {
+    initial state S;
+    S -> S i / {
+      sum = sum + i;
+    };
+    S -> S r / {
+      o = sum;
+    };
   }
 }
 ```
 
-Components may contain internal variables to record state that is maintained 
-across individual execution steps.
-Variables are declared directly within the component body with the syntax 
-`<var-type> <var-name> = <initial-value> ;`.
-It is mandatory to assign initial values to all variables.
-One can also declare multiple variables of the same type within the same 
-declaration by separating them with commas:
-```montiarc
-component MovingAverageSmoother {
-  // ...
-  double oldestVal = 0.0, olderVal = 0.0, youngerVal = 0.0, youngestVal = 0.0;
-  // ...
-}
-```
+calculates the sum over past inputs using component variable `sum` of type 
+`int`. The variable's initial value is `0`. Every time the component receives 
+a message on port `i` it adds it to the value of `sum` and stores the new value 
+in variable `sum`. When the component receives a message on port `r` it 
+outputs the total sum calculated so far on port `o`.

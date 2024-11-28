@@ -1,0 +1,11 @@
+package montiarc;
+
+component Delay<T> {
+  port in T i;
+  port <<delayed>> out T o;
+
+  automaton {
+    initial state S;
+    S -> S / { o = i; };
+  }
+}
