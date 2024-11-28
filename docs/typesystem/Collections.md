@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Collections
+
 Collections are a means to _collect_ multiple values into one value.
 This is especially useful, if their quantity changes over time
 or is very large.

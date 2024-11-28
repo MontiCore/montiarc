@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Primitives
+
 ```montiarc
 component Dummy {
   int myIntField = 0;

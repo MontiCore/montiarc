@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Class Diagrams
+
 ```cd4code
 package corp;
 import java.util.Date;

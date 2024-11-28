@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Component variables
+
 ```montiarc
 component MovingAverageSmoother {
   port in double roughSignal,

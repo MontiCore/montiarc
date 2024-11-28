@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Expressions
+
 Expressions are a combination of variables, operations, and method invocations 
 that evaluate to some value. Expressions can be used in arguments of component 
 instantiations, in guards of transitions, and as part of statements in actions 

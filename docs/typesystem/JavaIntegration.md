@@ -1,4 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
+
+# Java Integration (a.k.a. Class2MC)
+
 When enabling the `class2mc` option, then the Java standard library is available in all MontiArc models.
 
 ## Special behavior of Java type usage in MontiArc

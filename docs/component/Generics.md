@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Generic Components
+
 ```montiarc
 /* Merges streams by selecting the element of one of them at a time */
 component Selector<T>(SelectionRule<T, T, Boolean> rule) {

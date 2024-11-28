@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Component Interface (a.k.a. Ports)
+
 ```montiarc
 component MyComp {
   port <<sync>> in int inPort1,

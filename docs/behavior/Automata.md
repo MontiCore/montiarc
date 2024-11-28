@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Automata (or actually: Statecharts)
+
 Automata are a means to model behavior in MontiArc. An automaton consists of 
 states and transitions between these states. When time progresses, or when the 
 component receives an input, the automata may execute a transition, producing 

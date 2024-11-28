@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# Parameters
+
 ```montiarc
 component LinearScalar(double factor, double offset = 0.0) {
   port in double baseValue,

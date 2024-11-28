@@ -1,5 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
+# (De-) Composition
+
 Components can be decomposed to structure a system, separate concerns, and 
 reduce complexity by distributing system functionality across multiple smaller 
 components. 
