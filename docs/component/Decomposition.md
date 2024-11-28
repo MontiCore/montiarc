@@ -7,7 +7,7 @@ components.
 In MontiArc, component types define the decomposition of components in terms 
 of subcomponents and connectors between the components' interfaces. 
 
-## Component Declaration
+## Subcomponent Declaration
 
 Subcomponents are declared in the body of a component type, specifying the 
 subcomponent's type and defining its name. A simple subcomponent declaration 
@@ -31,14 +31,14 @@ of the same type can be instantiated by stating their names in a comma-separated
 list after the component type, which looks like 
 
 ``` 
-TYPE SUB, SUB1;
+TYPE SUB1, SUB2;
 ```
 
 and is a shorthand notation for 
 
 ``` 
-TYPE SUB;
 TYPE SUB1;
+TYPE SUB2;
 ```
 
 ## Type Arguments
@@ -46,7 +46,8 @@ TYPE SUB1;
 Generic component types require type arguments that define the type of 
 variables and messages they handle. The number of type arguments needed and 
 potential typing restrictions are defined by the component type declaration. 
-Type arguments must be provided with the subcomponent declaration.
+Type arguments must be provided with the subcomponent declaration alongside 
+the component type in angle brackets (`< >`).
 A subcomponent declaration with type arguments looks like
 
 ```
@@ -57,7 +58,7 @@ where
 
 * `TYPE` is the subcomponent's (qualified) type (reference)
 
-* `TARG` is the provided type argument (reference)
+* `TARG` is the provided type argument (reference) 
 
 * `SUB`  is the subcomponent's unique name (defining)
 
@@ -132,9 +133,8 @@ sub2.o -> sub3.i;
 sub3.o -> sub1.i;
 ```
 
-While communication is otherwise abstracted to be instantaneous, for the 
-propagation of timing events in feedback loops we need delay. Otherwise, the 
-output to some point in time `t` would depend on itself. 
+Communication is abstracted to be instantaneous. However, for the propagation 
+of timing events in feedback loops we need delay. Otherwise, the components output at some point in time would depend on itself. 
 
 Where the delay happens in the communication circle is irrelevant, just there
 needs to be some kind of delay. 
