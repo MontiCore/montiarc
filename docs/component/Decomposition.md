@@ -112,7 +112,35 @@ where
 
 * `TARGET` is the (qualified) name of the target port (reference)
 
-Generally, there are three types of connectors:
+
+The source of a connector can be
+
+* an incoming port of the component
+
+* an outgoing port of a subcomponent
+
+The target of a connector can be
+
+* an outgoing port of the component
+
+* an incoming port of a subcomponent
+
+A port can only be targeted by a single connector but can be the source of 
+multiple connectors. For convenience, a connector can define multiple targets. 
+The targets are given as a comma-separated list, which looks like
+
+```
+SOURCE -> TARGET1, TARGET2;
+```
+
+which is a shorthand notation for 
+
+```
+SOURCE -> TARGET1; 
+SOURCE -> TARGET2; 
+```
+
+We distinguish three kinds of connectors:
 
 * A connector from an incoming port of the component to an incoming port of a 
 subcomponent, forwarding messages received by the component to one of its
