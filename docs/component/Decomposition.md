@@ -83,7 +83,7 @@ output to some point in time `t` would depend on itself.
 Where the delay happens in the communication circle is irrelevant, just there
 needs to be some kind of delay. 
 
-Delay can be introduced through the stereotype <<delayed>> on the output 
+Delay can be introduced through the stereotype `<<delayed>>` on the output 
 port of an atomic component, specifying outputs on that port are delayed by 
 one Tick. For simplicity, we can also introduce a specific delay: 
 
