@@ -49,7 +49,7 @@ The number, order and type of arguments needed is defined by the component's
 type declaration.
 
 Arguments must be provided during component instantiation and are listed after 
-the subcomponents name in round brackets. 
+the subcomponents name in round brackets (`(` `)`). 
 A subcomponent declaration and component instantiation with arguments looks 
 like 
 
@@ -67,7 +67,7 @@ using expressions.
 Generic components require type arguments that replace the type parameters 
 with the actual types. 
 The number of type arguments needed and potential typing restrictions are 
-defined by the component type declaration. 
+defined by the component's type declaration. 
 The type arguments may affect the component's signature, e.g., the type of 
 parameters and ports.
 
@@ -78,15 +78,11 @@ the component type in angle brackets (`< >`).
 TYPE<TARGS> SUB; 
 ```
 
-where 
+where `TARGS` is a comma-separated list of arguments of the form
+`TARG1, TARG2, ...., TARGn` where `TARG1`, `TARG2`, and so forth until `TARGn` 
+are  the first, second, and so forth until n-th type argument.
 
-* `TYPE` is the subcomponent's (qualified) type (reference)
-
-* `TARG` is the provided type argument (reference) 
-
-* `SUB`  is the subcomponent's unique name (defining)
-
-For example,
+For example. 
 
 ```
 Delay<Integer> delay;
@@ -96,7 +92,7 @@ declares and instantiates a subcomponent `delay` of type `Delay` and type
 argument `Integer`.
 
 Note that only data types may be used as type arguments. 
-Component types **cannot**be used as type arguments.
+Component types **cannot** be used as type arguments.
 
 Multiple type arguments can be provided as a comma separated list:
 
@@ -182,8 +178,6 @@ component Delay<T> {
 this delay can then be added anywhere in the communication circle.
 
 ```
-Delay<Integer> delay;
-
 sub1.o -> sub2.i;
 sub2.o -> delay.i; 
 delay.o -> sub3.i;
