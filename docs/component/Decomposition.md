@@ -41,14 +41,38 @@ TYPE SUB1;
 TYPE SUB2;
 ```
 
+## Arguments
+
+The instantiation of a component may require arguments, which configure the 
+components initial state. 
+The number, order and type of arguments needed is defined by the component's 
+type declaration.
+
+Arguments must be provided during component instantiation and are listed after 
+the subcomponents name in round brackets. 
+A subcomponent declaration and component instantiation with arguments looks 
+like 
+
+```
+TYPE SUB(ARGS);
+```
+
+where `ARGS` is a comma-separated list of arguments of the form 
+`ARG1, ARG2, ...., ARGn` where `ARG1`, `ARG2`, and so forth until `ARGn` are 
+the first, second, and so forth until n-th argument. All arguments are defined 
+using expressions.
+
 ## Type Arguments
 
-Generic component types require type arguments that define the type of 
-variables and messages they handle. The number of type arguments needed and 
-potential typing restrictions are defined by the component type declaration. 
+Generic components require type arguments that replace the type parameters 
+with the actual types. 
+The number of type arguments needed and potential typing restrictions are 
+defined by the component type declaration. 
+The type arguments may affect the component's signature, e.g., the type of 
+parameters and ports.
+
 Type arguments must be provided with the subcomponent declaration alongside 
 the component type in angle brackets (`< >`).
-A subcomponent declaration with type arguments looks like
 
 ```
 TYPE<TARGS> SUB; 
@@ -71,8 +95,8 @@ Delay<Integer> delay;
 declares and instantiates a subcomponent `delay` of type `Delay` and type 
 argument `Integer`.
 
-Note that only data types may be used as type arguments. Component types may 
-**not** be used as type arguments.
+Note that only data types may be used as type arguments. 
+Component types **cannot**be used as type arguments.
 
 Multiple type arguments can be provided as a comma separated list:
 
