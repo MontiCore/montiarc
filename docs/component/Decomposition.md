@@ -41,6 +41,44 @@ TYPE SUB;
 TYPE SUB1;
 ```
 
+## Type Arguments
+
+Generic component types require type arguments that define the type of 
+variables and messages they handle. The number of type arguments needed and 
+potential typing restrictions are defined by the component type declaration. 
+Type arguments must be provided with the subcomponent declaration.
+A subcomponent declaration with type arguments looks like
+
+```
+TYPE<TARGS> SUB; 
+```
+
+where 
+
+* `TYPE` is the subcomponent's (qualified) type (reference)
+
+* `TARG` is the provided type argument (reference)
+
+* `SUB`  is the subcomponent's unique name (defining)
+
+For example,
+
+```
+Delay<Integer> delay;
+```
+
+declares and instantiates a subcomponent `delay` of type `Delay` and type 
+argument `Integer`.
+
+Note that only data types may be used as type arguments. Component types may 
+**not** be used as type arguments.
+
+Multiple type arguments can be provided as a comma separated list:
+
+```
+TYPE<TARG1, TARG2> SUB; 
+```
+
 ## Connectors
 
 Connectors connect the interfaces (ports) of components, defining the flow of 
