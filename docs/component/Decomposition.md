@@ -25,9 +25,9 @@ where
 
 Subcomponents are directly instantiated alongside there declaration. 
 
-A component can be composed of multiple components of different types but also 
-multiple components of the same type. For convenience, multiple components of 
-the same type can be instantiated by stating their names in a comma-separated 
+A component type can have of multiple subcomponents of different types but also 
+multiple subcomponents of the same type. For convenience, multiple subcomponents
+of the same type can be instantiated by stating their names in a comma-separated 
 list after the component type, which looks like 
 
 ``` 
@@ -67,8 +67,9 @@ the component, forwarding messages send by the subcomponent. E.g., `sub.o -> p;`
 forwards messages send by subcomponent `sub` on port `o` via port `p`.
 
 * A connector from an outgoing port of a subcomponent to an incoming port of 
-a subcomponent (potentially the same subcomponent). E.g., `sub.o -> sub1.i; ` 
-connects port `o` of subcomponent `sub` to port `i` of subcomponent `sub1`.
+a subcomponent (potentially the same subcomponent), sometime called a hidden 
+connector. E.g., `sub1.o -> sub2.i;` connects port `o` of subcomponent `sub1` 
+to port `i` of subcomponent `sub2`.
 
 ## Feedback
 
