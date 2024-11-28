@@ -1,107 +1,100 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-```montiarc
-component WindowSystem {
-  port in WindowButtonMoveEvent windowCommand;
-  port out WindowMoveAction currentMovementInfo;
+Components can be decomposed to structure a system, separate concerns, and 
+reduce complexity by distributing system functionality across multiple smaller 
+components. 
 
-  // Instantiating sub components:
-  WindowController controller;
-  WindowPositionSensor winPositionSensor;
-  FingerProtectionSensor fingerSensor;
-  WindowMotor motor;
+In MontiArc, component types define the decomposition of components in terms 
+of subcomponents and connectors between the components' interfaces. 
 
-  // Connecting an incoming port of the enclosing component to a sub component
-  windowButtonCommand -> controller.command;
+## Component Declaration
 
-  // Connecting sub components among each other
-  winPositionSensor.winPosition -> controller.position;
-  fingerSensor.order -> controller.fingerProtectionOrder;
+Subcomponents are declared in the body of a component type, specifying the 
+subcomponent's type and defining its name. A simple subcomponent declaration 
+looks like 
 
-  // 1. Connecting one source port with multiple target ports;
-  // 2. Connecting a sub component port to an outgoing port of the enclosing component
-  controller.winMoveAction -> motor.moveOrder,
-                              currentMovementInfo;
-}
-```
-Components can be defined to be a composition of other components.
-These decomposed components are hierarchically structured into further subcomponents and
-thus have their behavior derived from the sub component's composition.
-
-## Subcomponents
-```montiarc
-component WindowSystem {
-
-  // Instantiating subcomponents:
-  WindowController controller;
-  WindowPositionSensor winPositionSensor;
-  FingerProtectionSensor fingerSensor;
-  WindowMotor motor;
-
-  // ...
-}
+``` 
+TYPE SUB;
 ```
 
-Sub components are added to a component by instantiating them within the body 
-of a component type definition.
-They are defined by first referencing the name of the component type to 
-instantiate, followed by a name under which one can refer to the newly 
-created sub component instance: `<component-type> <name> ;`.
-It is also possible to instantiate multiple component instances of the 
-same type by declaring their names in a comma-separated list after the 
-component type, e.g.: `FooComp foo1, foo2, foo3;`
+where 
 
-### Instantiation of generics
-```montiarc
-FooComp<Student, EMail> foo1, foo2, foo3;
+* `TYPE` is the subcomponent's (qualified) type (reference) 
+
+* `SUB`  is the subcomponent's unique name (defining)
+
+Subcomponents are directly instantiated alongside there declaration. 
+
+A component can be composed of multiple components of different types but also 
+multiple components of the same type. For convenience, multiple components of 
+the same type can be instantiated by stating their names in a comma-separated 
+list after the component type, which looks like 
+
+``` 
+TYPE SUB, SUB1;
 ```
 
-### Instantiation of configurable components
-```
-FooComp foo1(0.314, true), foo2(4.2, false);
-```
+and is a shorthand notation for 
 
+``` 
+TYPE SUB;
+TYPE SUB1;
+```
 
 ## Connectors
-```montiarc
-component WindowSystem {
-  port in WindowButtonMoveEvent windowCommand;
-  port out WindowMoveAction currentMovementInfo;
 
-  // ...
+Connectors connect the interfaces (ports) of components, defining the flow of 
+messages and determining which components communicate whit each-other. 
+Connectors are defined in the body of the component type and look like 
 
-  windowButtonCommand -> controller.command;
-  winPositionSensor.winPosition -> controller.position;
-  fingerSensor.order -> controller.fingerProtectionOrder;
-  controller.winMoveAction -> motor.moveOrder,
-                              currentMovementInfo;
+`SOURCE` -> `TARGET`;
+
+where 
+
+* `SOURCE` is the (qualified) name of the source port (reference)
+
+* `TARGET` is the (qualified) name of the target port (reference)
+
+Generally, there are three types of connectors:
+
+* A connector from an incoming port of the component to an incoming port of a 
+subcomponent, forwarding messages received by the component to one of its
+subcomponents. E.g., `i -> sub.j; ` forwards message received by port `i` to 
+port `j` of subcomponent `sub`.
+
+* A connector from an outgoing port of a subcomponent to an outgoing port of 
+the component, forwarding messages send by the subcomponent. E.g., `sub.o -> p;` 
+forwards messages send by subcomponent `sub` on port `o` via port `p`.
+
+* A connector from an outgoing port of a subcomponent to an incoming port of 
+a subcomponent (potentially the same subcomponent). E.g., `sub.o -> sub1.i; ` 
+connects port `o` of subcomponent `sub` to port `i` of subcomponent `sub1`.
+
+## Feedback
+
+If subcomponents form a communication circle along the direction of connectors, 
+then a subcomponent may talk to itself, either directly or indirectly across 
+other subcomponents. We call this a feedback loop. 
+
+While communication is otherwise abstracted to be instantaneous, for the 
+propagation of timing events in feedback loops we need delay. Otherwise, the 
+output to some point in time `t` would depend on itself. 
+
+Where the delay happens in the communication circle is irrelevant, just there
+needs to be some kind of delay. 
+
+Delay can be introduced through the stereotype <<delayed>> on the output 
+port of an atomic component, specifying outputs on that port are delayed by 
+one Tick. For simplicity, we can also introduce a specific delay: 
+
+```
+component Delay<T> {
+  port in T i;
+  port <<delayed>> out T o;
+  
+  automaton {
+    initial state S;
+    S -> S / { o = i; };
+  }
 }
 ```
-Connectors connect the interfaces of components to realize component communication.
-They have the syntax `<source-port> -> <target-port> ;` and obey following behavior:
-* They are directed: information can only flow through them in a predefined direction 
-  (implicitly set by which connected port is a source and which is a target).
-  If a response is needed from a connected sub component, this has to be modeled as a 
-  feedback via another communication channel
-* Source ports may be
-  * Incoming ports of the enclosing component
-  * Outgoing ports of a sub component
-* Target ports may be
-  * Outgoing ports of the enclosing component
-  * Incoming ports of a sub component
-* A target port may only be part of _one_ connector. On the other hand, source 
-ports may participate in multiple connectors.
-As such, the targets of a source port can be declared within a single connector 
-declaration (`source -> target1, target2, ..., targetN;`) or be split over multiple 
-multiple connector declarations:
-  ```montiarc
-  source -> target1;
-  source -> target2;
-  ```
-* The types of the ports participating in the connection must match.
-  Alternatively, the target port may have a supertype of the source port's type.
-* If the port ot the enclosing component type participates in the connection, 
-one references it just by its name.
-* If the port of a sub component participates in the connection, one references 
-it with the instance name of the connected sub component that is followed by the 
-name of the component's port. They are separated by a point: `instanceName.portName`
