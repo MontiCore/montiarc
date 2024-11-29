@@ -51,6 +51,8 @@ abstract class MontiArcCompile : JavaExec() {
     classpath(project.configurations.getByName(GENERATOR_DEPENDENCY_CONFIG_NAME))
     mainClass.convention(MA_TOOL_CLASS)
 
+    this.setIgnoreExitValue(true)
+
     useClass2Mc.convention(false)
     checkVariability.convention(false)
   }
@@ -98,7 +100,7 @@ abstract class MontiArcCompile : JavaExec() {
     } else {
       super.exec()
 
-      if (executionResult.get().exitValue == -1) {
+      if (executionResult.get().exitValue != 0) {
         throw GradleException("There are compile errors.")
       }
     }

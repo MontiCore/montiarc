@@ -46,7 +46,6 @@ class CDOut2MAInPlugin : Plugin<Project> {
       it.symbolImportDir.from(
         provider { cdCompile.get().symbolOutputDir() }
       )
-      it.setIgnoreExitValue(true)
     }
   }
 
