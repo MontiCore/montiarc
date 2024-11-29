@@ -7,12 +7,12 @@ package automata.evaluation.smallModel;
 component SmallModel(Integer parameter) {
   port <<sync>> in String module;
   port <<sync>> in Integer mtrNr;
-  port <<sync>> out Double voteMDSE;
+  port <<sync>> out Double voteMBSE;
   port <<sync>> out Double voteSA;
 
   DistinctionModel distinction(parameter);
   EvaluationModel evaluation;
-  Counter counterMDSE;
+  Counter counterMBSE;
   Counter counterSA;
 
 
@@ -20,13 +20,13 @@ component SmallModel(Integer parameter) {
   distinction.factor -> evaluation.factor;
   module -> evaluation.module;
 
-  evaluation.mdseCounter -> counterMDSE.factor;
+  evaluation.mbseCounter -> counterMBSE.factor;
   evaluation.saCounter -> counterSA.factor;
 
-  counterMDSE.out -> evaluation.mdseCounted;
+  counterMBSE.out -> evaluation.mbseCounted;
   counterSA.out -> evaluation.saCounted;
 
-  evaluation.voteMDSE -> voteMDSE;
+  evaluation.voteMBSE -> voteMBSE;
   evaluation.voteSA -> voteSA;
 
 }

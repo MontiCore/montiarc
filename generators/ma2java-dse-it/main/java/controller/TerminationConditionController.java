@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.dse.strategies;
+package controller;
 
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
@@ -13,6 +13,7 @@ import montiarc.rte.dse.PathCondition;
 import montiarc.rte.dse.ResultI;
 import montiarc.rte.dse.StatesList;
 import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.strategies.ResultPathController;
 import montiarc.rte.log.LogException;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -26,7 +27,8 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PathCoverageController<In, Out> implements ControllerI<In, Out>, EvaluationControllerI {
+public class TerminationConditionController<In, Out>
+  implements ControllerI<In, Out>, EvaluationControllerI {
 
   protected Function<In, Out> sut;
   protected Context ctx;
@@ -36,18 +38,22 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   protected List<Boolean> oracles = new ArrayList<>();
   protected PathCondition takenBranches;
 
+  protected Set<StatesList> visitedStates = new HashSet<>();
+
+  // list of bool conditions that have to be set in order not to visit aborted states twice
+  protected Set<BoolExpr> abortConditions = new HashSet<>();
+
+  // Number of times a transition or a state may be taken
+  protected int maxNum = 10;
+
   // for evaluation purpose, to track the number of solver calls
   protected int solverCalls = 0;
 
   // for evaluation purpose, to track the number of satisfiability paths
   protected int satPaths = 0;
 
-  /**
-   * This variable stores all visited states. Since a model to be examined can be a composition
-   * of several models, the overall state must be stored. The total state consists of lists of
-   * StateInfos, each of which reflects the state of the individual components.
-   */
-  protected Set<StatesList> visitedStates = new HashSet<>();
+  protected boolean aborted = false;
+
 
   @Override
   public void init() {
@@ -71,7 +77,7 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
     return startTest(initialInput, new ArrayList<>(), 0);
   }
 
-  public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
+  private ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
     if (TestController.getController() != this) {
       throw new LogException("Given controller does not match the " +
         "PathCoverageController");
@@ -91,7 +97,13 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
     ResultPathController<In, Out> result = new ResultPathController<>();
 
     Out output = sut.apply(input);
-    result.addInputsAndCondition(input, output, takenBranches);
+
+
+    if (!output.equals(new ArrayList<>())) {
+      saveInformation();
+      result.addInputsAndCondition(input, output, takenBranches);
+    }
+    aborted = false;
 
     montiarc.rte.log.Log.trace("branchingC: " + branchingConditions);
 
@@ -109,6 +121,11 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
         s.add(branches.get(j));
       }
 
+      // add abortConditions to avoid getting into aborted states
+      for (BoolExpr cond : abortConditions) {
+        s.add(cond);
+      }
+
       // NOT!!
       s.add(ctx.mkNot(branches.get(i)));
 
@@ -118,7 +135,6 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
 
       if (status == Status.SATISFIABLE) {
         satPaths++;
-
         // Load Input Oracles for next run!
         List<Boolean> nextOracles = loadBoolListValue(s.getModel(), getOracleExpressions());
 
@@ -128,9 +144,13 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
         montiarc.rte.log.Log.trace("model:" + s.getModel());
 
         result.addAll(startTest(evalModel.apply(s.getModel()), nextOracles, i + 1));
+        System.gc();
       }
     }
     return result;
+  }
+
+  protected void saveInformation() {
   }
 
   protected void resetBranchesLog() {
@@ -211,6 +231,10 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   @Override
   public Set<StatesList> getVisitedStates() {
     return visitedStates;
+  }
+
+  public Set<BoolExpr> getAbortConditions() {
+    return abortConditions;
   }
 
   @Override

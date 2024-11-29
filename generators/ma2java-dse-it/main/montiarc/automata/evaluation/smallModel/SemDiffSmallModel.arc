@@ -7,26 +7,29 @@ package automata.evaluation.smallModel;
 component SemDiffSmallModel(Integer parameter) {
   port <<sync>> in Integer mtrNr;
   port <<sync>> in String module;
-  port <<sync>> out Double voteMDSE;
+  port <<sync>> out Double voteMBSE;
   port <<sync>> out Double voteSA;
 
   DistinctionModel distinction(parameter);
-  EvaluationModel evaluation;
-  Counter counterMDSE;
-  Counter counterSA;
+  EvaluationModelSemDiff evaluation;
+  CounterSemDiff counterMBSE;
+  CounterSemDiff counterSA;
 
 
   mtrNr -> distinction.mtrNr;
   distinction.factor -> evaluation.factor;
   module -> evaluation.module;
 
-  evaluation.mdseCounter -> counterMDSE.factor;
+  evaluation.mbseCounter -> counterMBSE.factor;
   evaluation.saCounter -> counterSA.factor;
 
-  counterMDSE.out -> evaluation.mdseCounted;
+  evaluation.chaosMBSE -> counterMBSE.chaos;
+  evaluation.chaosSA -> counterSA.chaos;
+
+  counterMBSE.out -> evaluation.mbseCounted;
   counterSA.out -> evaluation.saCounted;
 
-  evaluation.voteMDSE -> voteMDSE;
+  evaluation.voteMBSE -> voteMBSE;
   evaluation.voteSA -> voteSA;
 
 }

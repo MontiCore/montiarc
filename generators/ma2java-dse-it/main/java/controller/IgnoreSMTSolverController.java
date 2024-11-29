@@ -1,23 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.dse.strategies;
+package controller;
 
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Model;
-import com.microsoft.z3.Params;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import montiarc.rte.dse.ControllerI;
 import montiarc.rte.dse.EvaluationControllerI;
+import montiarc.rte.dse.ListerI;
 import montiarc.rte.dse.PathCondition;
 import montiarc.rte.dse.ResultI;
 import montiarc.rte.dse.StatesList;
 import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.strategies.ResultPathController;
 import montiarc.rte.log.LogException;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +26,15 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PathCoverageController<In, Out> implements ControllerI<In, Out>, EvaluationControllerI {
+/**
+ * This controller does not use a SMTSolver to generate new input values.
+ * New input values a generated randomly.
+ * The controller is not usable without concrete implementation of randomInput() for a specific
+ * component.
+ * This function can not be set with the initialization, because the initialization is inside the
+ * dse-tool and not usable for the user
+ */
+public class IgnoreSMTSolverController<In, Out> implements ControllerI<In, Out>, EvaluationControllerI {
 
   protected Function<In, Out> sut;
   protected Context ctx;
@@ -35,6 +43,14 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   protected int usedOracleCount = 0;
   protected List<Boolean> oracles = new ArrayList<>();
   protected PathCondition takenBranches;
+  protected Set<StatesList> visitedStates = new HashSet<>();
+
+  protected int inputLength = 0;
+  /**
+   * defines the maximal recursive depth of this controller.
+   * This results in the number of paths the controller can explore
+   */
+  protected final Integer recursionDepth;
 
   // for evaluation purpose, to track the number of solver calls
   protected int solverCalls = 0;
@@ -42,12 +58,16 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   // for evaluation purpose, to track the number of satisfiability paths
   protected int satPaths = 0;
 
+  public IgnoreSMTSolverController(Integer recursionDepth) {
+    this.recursionDepth = recursionDepth;
+  }
+
   /**
-   * This variable stores all visited states. Since a model to be examined can be a composition
-   * of several models, the overall state must be stored. The total state consists of lists of
-   * StateInfos, each of which reflects the state of the individual components.
+   * the default recursiveDepth of the controller is 10
    */
-  protected Set<StatesList> visitedStates = new HashSet<>();
+  public IgnoreSMTSolverController() {
+    this.recursionDepth = 10;
+  }
 
   @Override
   public void init() {
@@ -69,72 +89,6 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
     this.sut = sut;
     this.evalModel = evalModel;
     return startTest(initialInput, new ArrayList<>(), 0);
-  }
-
-  public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
-    if (TestController.getController() != this) {
-      throw new LogException("Given controller does not match the " +
-        "PathCoverageController");
-    }
-    if (!branchingConditions.isEmpty()) {
-      throw new LogException("BranchingCondition is not empty, although it should " +
-        "be, because a new path was started");
-    }
-    if (usedOracleCount != 0) {
-      throw new LogException("usedOracleCount is not zero, although it should be, " +
-        "because a new path was started");
-    }
-    this.oracles = oracles;
-
-    takenBranches = new PathCondition();
-
-    ResultPathController<In, Out> result = new ResultPathController<>();
-
-    Out output = sut.apply(input);
-    result.addInputsAndCondition(input, output, takenBranches);
-
-    montiarc.rte.log.Log.trace("branchingC: " + branchingConditions);
-
-    List<BoolExpr> branches = branchingConditions;
-
-    for (int i = branchDepth; i < branches.size(); i++) {
-      Solver s = ctx.mkSolver();
-
-      // add timeout to optimize speed of solver
-      Params p = ctx.mkParams();
-      p.add("timeout", 10);
-      s.setParameters(p);
-
-      for (int j = 0; j < i; j++) {
-        s.add(branches.get(j));
-      }
-
-      // NOT!!
-      s.add(ctx.mkNot(branches.get(i)));
-
-      Status status = s.check();
-      solverCalls++;
-      montiarc.rte.log.Log.trace(status + "\tRun check with: " + Arrays.toString(s.getAssertions()));
-
-      if (status == Status.SATISFIABLE) {
-        satPaths++;
-
-        // Load Input Oracles for next run!
-        List<Boolean> nextOracles = loadBoolListValue(s.getModel(), getOracleExpressions());
-
-        resetBranchesLog();
-        usedOracleCount = 0;
-
-        montiarc.rte.log.Log.trace("model:" + s.getModel());
-
-        result.addAll(startTest(evalModel.apply(s.getModel()), nextOracles, i + 1));
-      }
-    }
-    return result;
-  }
-
-  protected void resetBranchesLog() {
-    branchingConditions = new ArrayList<>();
   }
 
   @Override
@@ -211,6 +165,56 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   @Override
   public Set<StatesList> getVisitedStates() {
     return visitedStates;
+  }
+
+  public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
+    if (TestController.getController() != this) {
+      throw new LogException("Given controller does not match the " +
+        "PathCoverageController");
+    }
+    if (!branchingConditions.isEmpty()) {
+      throw new LogException("BranchingCondition is not empty, although it should " +
+        "be, because a new path was started");
+    }
+    if (usedOracleCount != 0) {
+      throw new LogException("usedOracleCount is not zero, although it should be, " +
+        "because a new path was started");
+    }
+    this.oracles = oracles;
+
+    takenBranches = new PathCondition();
+
+    ResultPathController<In, Out> result = new ResultPathController<>();
+
+    Out output = sut.apply(input);
+    result.addInputsAndCondition(input, output, takenBranches);
+
+    Solver s = ctx.mkSolver();
+    Status status = s.check();
+
+    List<Boolean> nextOracles = loadBoolListValue(s.getModel(), getOracleExpressions());
+
+    Pair<List<ListerI>, ListerI> nextInput = randomInput();
+
+    if (branchDepth < recursionDepth) {
+
+      resetBranchesLog();
+      usedOracleCount = 0;
+      result.addAll(startTest((In) nextInput, nextOracles, branchDepth + 1));
+      System.gc();
+    }
+    return result;
+  }
+
+  /**
+   * calculates the new input values, needs to be overridden in the subclass
+   */
+  protected Pair<List<ListerI>, ListerI> randomInput() {
+    return null;
+  }
+
+  protected void resetBranchesLog() {
+    branchingConditions = new ArrayList<>();
   }
 
   @Override

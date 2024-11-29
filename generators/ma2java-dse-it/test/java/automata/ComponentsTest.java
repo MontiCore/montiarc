@@ -1,32 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package automata;
 
-import automata.Types.MotorCmd;
-import automata.Types.TimerSignal;
 import automata.assignments.AssignmentLiteral;
 import automata.assignments.AssignmentName;
-import automata.dataTypes.BooleanComponent;
-import automata.dataTypes.CharactersComponent;
-import automata.dataTypes.DoubleComponent;
-import automata.dataTypes.DoubleComponentParameter;
-import automata.dataTypes.EnumComponent;
-import automata.dataTypes.FloatComponent;
-import automata.dataTypes.LongComponent;
-import automata.dataTypes.StringComponent;
+import automata.Types.MotorCmd;
+import automata.Types.TimerSignal;
+import com.google.common.base.Preconditions;
+import com.microsoft.z3.*;
+import automata.dataTypes.*;
 import automata.expressions.DivExpression;
 import automata.expressions.MinusExpression;
 import automata.expressions.MultExpression;
 import automata.expressions.PlusExpression;
-import com.google.common.base.Preconditions;
-import com.microsoft.z3.BoolSort;
-import com.microsoft.z3.CharSort;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.EnumSort;
-import com.microsoft.z3.Expr;
-import com.microsoft.z3.IntSort;
-import com.microsoft.z3.RealSort;
-import com.microsoft.z3.SeqSort;
-import com.microsoft.z3.Sort;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.MockTestController;
 import montiarc.rte.dse.TestController;
@@ -78,7 +63,8 @@ public class ComponentsTest {
     result.add(Arguments.of(
         List.of(inDiv),
         List.of(outDiv),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           div.getIn().update(input);
           div.compute();
           return div.getOut().getValue();
@@ -106,7 +92,8 @@ public class ComponentsTest {
     result.add(Arguments.of(
       List.of(in_1Minus),
       List.of(out_1Minus),
-      (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+      (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+              AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
         minus.getIn().update(input);
         minus.compute();
         return minus.getOut().getValue();
@@ -116,7 +103,8 @@ public class ComponentsTest {
     result.add(Arguments.of(
         List.of(in_1Minus, in_2Minus),
         List.of(out_1Minus, out_2Minus),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           minus.getIn().update(input);
           minus.compute();
           return minus.getOut().getValue();
@@ -137,7 +125,8 @@ public class ComponentsTest {
     result.add(Arguments.of(
         List.of(inMult),
         List.of(outMult),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           mult.getIn().update(input);
           mult.compute();
           return mult.getOut().getValue();
@@ -159,7 +148,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inPlus),
         List.of(outPlus),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           plus.getIn().update(input);
           plus.compute();
           return plus.getOut().getValue();
@@ -182,7 +172,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inInternal),
         List.of(outInternal),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           internal.getIn().update(input);
           internal.compute();
           return internal.getOut().getValue();
@@ -204,7 +195,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inTran0),
         List.of(outTran0),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           tran0.getIn().update(input);
           tran0.compute();
           return tran0.getOut().getValue();
@@ -226,7 +218,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inTran1),
         List.of(outTran1),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           tran1.getIn().update(input);
           tran1.compute();
           return tran1.getOut().getValue();
@@ -245,7 +238,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inTran2),
         List.of(outTran0),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           tran2.getIn().update(input);
           tran2.compute();
           return tran2.getOut().getValue();
@@ -267,7 +261,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inTran1, in2Tran3),
         List.of(out1Tran3, out1Tran3),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           tran3.getIn().update(input);
           tran3.compute();
           return tran3.getOut().getValue();
@@ -289,7 +284,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inTran1, in2Tran4),
         List.of(outTran1, out2Tran4),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           tran4.getIn().update(input);
           tran4.compute();
           return tran4.getOut().getValue();
@@ -308,7 +304,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inComposition),
         List.of(inComposition),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           composition.getIn().update(input);
           composition.compute();
           return composition.getOut().getValue();
@@ -327,7 +324,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inName),
         List.of(inName),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           name.getIn().update(input);
           name.compute();
           return name.getOut().getValue();
@@ -348,7 +346,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inLiteral),
         List.of(outLiteral),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           literal.getIn().update(input);
           literal.compute();
           return literal.getOut().getValue();
@@ -460,7 +459,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inDouble),
         List.of(outDouble),
-        (Function<AnnotatedValue<Expr<RealSort>, Double>, AnnotatedValue<Expr<RealSort>, Double>>) (input) -> {
+        (Function<AnnotatedValue<Expr<RealSort>, Double>,
+                AnnotatedValue<Expr<RealSort>, Double>>) (input) -> {
           doubleComponent.getIn().update(input);
           doubleComponent.compute();
           return doubleComponent.getOut().getValue();
@@ -472,7 +472,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inDouble2),
         List.of(outDouble2),
-        (Function<AnnotatedValue<Expr<RealSort>, Double>, AnnotatedValue<Expr<RealSort>, Double>>) (input) -> {
+        (Function<AnnotatedValue<Expr<RealSort>, Double>,
+                AnnotatedValue<Expr<RealSort>, Double>>) (input) -> {
           doubleComponent.getIn().update(input);
           doubleComponent.compute();
           return doubleComponent.getOut().getValue();
@@ -498,7 +499,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inFloat),
         List.of(outFloat),
-        (Function<AnnotatedValue<Expr<RealSort>, Float>, AnnotatedValue<Expr<RealSort>, Float>>) (input) -> {
+        (Function<AnnotatedValue<Expr<RealSort>, Float>,
+                AnnotatedValue<Expr<RealSort>, Float>>) (input) -> {
           floatComponent.getIn().update(input);
           floatComponent.compute();
           return floatComponent.getOut().getValue();
@@ -510,7 +512,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inFloat2),
         List.of(outFloat2),
-        (Function<AnnotatedValue<Expr<RealSort>, Float>, AnnotatedValue<Expr<RealSort>, Float>>) (input) -> {
+        (Function<AnnotatedValue<Expr<RealSort>, Float>,
+                AnnotatedValue<Expr<RealSort>, Float>>) (input) -> {
           floatComponent.getIn().update(input);
           floatComponent.compute();
           return floatComponent.getOut().getValue();
@@ -574,7 +577,8 @@ public class ComponentsTest {
       Arguments.of(
         List.of(inParameter),
         List.of(parameterInput),
-        (Function<AnnotatedValue<Expr<IntSort>, Integer>, AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
+        (Function<AnnotatedValue<Expr<IntSort>, Integer>,
+                AnnotatedValue<Expr<IntSort>, Integer>>) (input) -> {
           parameter.getIn().update(input);
           parameter.compute();
           return parameter.getOut().getValue();
@@ -711,10 +715,11 @@ public class ComponentsTest {
 
   @ParameterizedTest
   @MethodSource("histories")
-  public <T extends Sort, X, G extends Sort, Z> void testCompute(@NotNull List<AnnotatedValue<Expr<T>, X>> in,
-                                                                 @NotNull List<AnnotatedValue<Expr<G>, Z>> out,
-                                                                 @NotNull Function<AnnotatedValue<Expr<T>, X>, AnnotatedValue<Expr<G>, Z>> component,
-                                                                 @NotNull List<Integer> pathControl) {
+  public <T extends Sort, X, G extends Sort, Z> void testCompute(
+          @NotNull List<AnnotatedValue<Expr<T>, X>> in,
+          @NotNull List<AnnotatedValue<Expr<G>, Z>> out,
+          @NotNull Function<AnnotatedValue<Expr<T>, X>, AnnotatedValue<Expr<G>, Z>> component,
+          @NotNull List<Integer> pathControl) {
 
     Preconditions.checkNotNull(in);
     Preconditions.checkArgument(in.size() > 0);

@@ -63,7 +63,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class Evaluation {
 
-  private static final String TEST_FILE_PATH = System.getProperty("buildDir") + "/Evaluation.xls";
+  private static final String TEST_FILE_PATH
+          = System.getProperty("user.dir") + "/build/Evaluation.xls";
   HSSFWorkbook workbook = new HSSFWorkbook();
   HSSFSheet sheetSmallModel = workbook.createSheet("smallModel");
   HSSFSheet sheetBigModel = workbook.createSheet("bigModel");
@@ -72,16 +73,17 @@ public class Evaluation {
 
     // parameters for the component must be the fourth element in the args argument of the run
     // function
-    Integer inputLength = 1;
+    Integer inputLength = 2;
     return Stream.of(
             Arguments.of(
-                    (Callable<ResultI<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>,
+                    (Callable<ResultI<Pair<List<ListerInSmallModel>,
+                            ListerParameterSmallModel>,
                             List<ListerOutSmallModel>>>) () -> {
                       DSEMainSmallModel smallModel = new DSEMainSmallModel();
 
                       try {
-                        return smallModel.runPathCoverageController(inputLength, new String[]{"", "", "",
-                                "400000"});
+                        return smallModel.runPathCoverageController(inputLength,
+                                new String[]{"", "", "", "400000"});
                       } catch (Exception e) {
                         throw new RuntimeException(e);
                       }
@@ -96,18 +98,20 @@ public class Evaluation {
 
   public static Stream<Arguments> specificationBigModel() {
 
-    Integer inputLength = 1;
+    Integer inputLength = 0;
 
     // parameters for the component must be the fourth element in the args argument of the run
     // function
     return Stream.of(
             Arguments.of(
-                    (Callable<ResultI<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>,
+                    (Callable<ResultI<Pair<List<ListerInElevatorSystem>,
+                            ListerParameterElevatorSystem>,
                             List<ListerOutElevatorSystem>>>) () -> {
                       DSEMainElevatorSystem bigModel = new DSEMainElevatorSystem();
 
                       try {
-                        return bigModel.runPathCoverageController(inputLength, new String[]{"", "", "", "3"});
+                        return bigModel.runPathCoverageController(inputLength,
+                                new String[]{"", "", "", "3"});
                       } catch (Exception e) {
                         throw new RuntimeException(e);
                       }
@@ -145,6 +149,8 @@ public class Evaluation {
     fillCell(sheet, 0, 9, "existing states");
     fillCell(sheet, 0, 10, "redundant paths");
     fillCell(sheet, 0, 11, "non-deterministic paths");
+    fillCell(sheet, 0, 12, "number of solver calls");
+    fillCell(sheet, 0, 13, "number of found SAT paths");
   }
 
   @AfterAll
@@ -166,11 +172,12 @@ public class Evaluation {
 
   @ParameterizedTest
   @MethodSource("specificationSmallModel")
-  public void evaluationSmallModel(@NotNull Callable<ResultI<Pair<List<ListerInSmallModel>,
+  public void
+  evaluationSmallModel(@NotNull Callable<ResultI<Pair<List<ListerInSmallModel>,
           ListerParameterSmallModel>,
           List<ListerOutSmallModel>>> testController, @NotNull boolean calculateNonDetPaths,
-                                   @NotNull int row, @NotNull String controller,
-                                   @NotNull Integer inputLength) throws Exception {
+                       @NotNull int row, @NotNull String controller,
+                       @NotNull Integer inputLength) throws Exception {
 
     //  final long timeStartMili = System.currentTimeMillis();
     final long timeStartNano = System.nanoTime();
@@ -195,7 +202,8 @@ public class Evaluation {
             result.getInterestingInputs();
 
     // evaluation time
-    System.out.println(controller + ": Time of the controller in nanoseconds: " + (timeEndNano - timeStartNano));
+    System.out.println(controller
+            + ": Time of the controller in nanoseconds: " + (timeEndNano - timeStartNano));
 
     fillCell(sheetSmallModel, row, 1, timeEndNano - timeStartNano);
 
@@ -239,8 +247,13 @@ public class Evaluation {
     Set<StatesList> visitedStates = new HashSet<>();
 
     if (TestController.getController() instanceof EvaluationControllerI) {
-      EvaluationControllerI evaluationControllerI = (EvaluationControllerI) TestController.getController();
+      EvaluationControllerI evaluationControllerI
+              = (EvaluationControllerI) TestController.getController();
       visitedStates = evaluationControllerI.getVisitedStates();
+
+      saveSolverCalls_SatPaths(sheetSmallModel, row, evaluationControllerI.getSolverCalls(),
+              evaluationControllerI.getSatPaths());
+
     }
 
     assertThat(visitedStates).isNotNull();
@@ -279,7 +292,7 @@ public class Evaluation {
             visitedEnumsEvaluationModel.add(EvaluationModel.States.valueOf(state.getState()
                     .name()));
             break;
-          case "counterMDSE":
+          case "counterMBSE":
             visitedEnumsCounterMDSE.add(Counter.States.valueOf(state.getState().name()));
             break;
           case "counterSA":
@@ -290,21 +303,30 @@ public class Evaluation {
     }
 
     // calculation of missed enum states
-    missedEnumStates += getMissedEnumStates(visitedEnumsDistinctionModel, Arrays.asList(DistinctionModel.States.values()));
-    missedEnumStates += getMissedEnumStates(visitedEnumsEvaluationModel, Arrays.asList(EvaluationModel.States.values()));
-    missedEnumStates += getMissedEnumStates(visitedEnumsCounterMDSE, Arrays.asList(Counter.States.values()));
-    missedEnumStates += getMissedEnumStates(visitedEnumsCounterSA, Arrays.asList(Counter.States.values()));
+    missedEnumStates += getMissedEnumStates(visitedEnumsDistinctionModel,
+            Arrays.asList(DistinctionModel.States.values()));
+    missedEnumStates += getMissedEnumStates(visitedEnumsEvaluationModel,
+            Arrays.asList(EvaluationModel.States.values()));
+    missedEnumStates += getMissedEnumStates(visitedEnumsCounterMDSE,
+            Arrays.asList(Counter.States.values()));
+    missedEnumStates += getMissedEnumStates(visitedEnumsCounterSA,
+            Arrays.asList(Counter.States.values()));
 
     {
       // visitedEnumStates are evaluated with -1 if enum states were visited that were not
       // included in the expected enum states.
       int sizeOfAllStates =
-              EvaluationModel.States.values().length + DistinctionModel.States.values().length + (2 * Counter.States.values().length);
+              EvaluationModel.States.values().length
+                      + DistinctionModel.States.values().length
+                      + (2 * Counter.States.values().length);
 
-      int visitedEnumStates =
-              visitedEnumsCounterMDSE.size() + visitedEnumsCounterSA.size() + visitedEnumsEvaluationModel.size() + visitedEnumsDistinctionModel.size();
+      int visitedEnumStates = visitedEnumsCounterMDSE.size()
+              + visitedEnumsCounterSA.size()
+              + visitedEnumsEvaluationModel.size()
+              + visitedEnumsDistinctionModel.size();
 
-      resultVisitedEnumStates(row, controller, sheetSmallModel, missedEnumStates, sizeOfAllStates, visitedEnumStates);
+      resultVisitedEnumStates(row, controller, sheetSmallModel, missedEnumStates, sizeOfAllStates,
+              visitedEnumStates);
     }
 
     //evaluation completeness -  states (enums + internal states)
@@ -320,7 +342,7 @@ public class Evaluation {
           case "evaluation":
             visitedStatesCompareEvaluationModel.add(state);
             break;
-          case "counterMDSE":
+          case "counterMBSE":
             visitedStatesCompareCounterMDSE.add(state);
             break;
           case "counterSA":
@@ -330,24 +352,28 @@ public class Evaluation {
       }
     }
 
-    missedStates += getMissedStates(expectedStatesDistinctionModel, visitedStatesCompareDistinctionModel);
-    missedStates += getMissedStates(expectedStatesEvaluationModel, visitedStatesCompareEvaluationModel);
-    missedStates += getMissedStates(expectedStatesCounterMDSE, visitedStatesCompareCounterMDSE);
-    missedStates += getMissedStates(expectedStatesCounterSA, visitedStatesCompareCounterSA);
+    missedStates += getMissedStates(expectedStatesDistinctionModel,
+            visitedStatesCompareDistinctionModel);
+    missedStates += getMissedStates(expectedStatesEvaluationModel,
+            visitedStatesCompareEvaluationModel);
+//    missedStates += getMissedStates(expectedStatesCounterMDSE, visitedStatesCompareCounterMDSE);
+//    missedStates += getMissedStates(expectedStatesCounterSA, visitedStatesCompareCounterSA);
 
     {
       /* numberOfVisitedStates are evaluated with -1 if states were visited, that were not
        * included in the expected states (checked only for the DistinctionModel and
        * EvaluationModel subcomponents, since the Counter component has an infinite state space).
        */
-      int sizeOfAllStates =
-              expectedStatesEvaluationModel.size() + expectedStatesDistinctionModel.size();
+      int sizeOfAllStates = expectedStatesEvaluationModel.size()
+              + expectedStatesDistinctionModel.size();
 
-      int numberOfVisitedStates =
-              visitedStatesCompareEvaluationModel.size() + visitedStatesCompareDistinctionModel.size();
+      int numberOfVisitedStates = visitedStatesCompareEvaluationModel.size()
+                      + visitedStatesCompareDistinctionModel.size();
 
 
-      resultVisitedStates(row, controller, sheetSmallModel, missedStates, numberOfVisitedStates, sizeOfAllStates, visitedStatesCompareCounterMDSE.size() + visitedEnumsCounterSA.size());
+      resultVisitedStates(row, controller, sheetSmallModel, missedStates, numberOfVisitedStates,
+              sizeOfAllStates, visitedStatesCompareCounterMDSE.size()
+                      + visitedEnumsCounterSA.size());
     }
 
     //check existence of redundant paths
@@ -400,7 +426,8 @@ public class Evaluation {
     }
 
     // check if component is non-deterministic
-    if (calculateNonDetPaths) {
+    // to reduce runtime when building the whole project this function is commented out
+   /* if (calculateNonDetPaths) {
       int nonDetPaths = checkNumberOfNonDeterminism(condition, ctx);
       System.out.println(controller + ": The component has " + nonDetPaths + " non-deterministic " +
               "paths");
@@ -413,7 +440,7 @@ public class Evaluation {
         System.out.println(controller + ": The component has only deterministic paths");
       }
       fillCell(sheetSmallModel, row, 11, String.valueOf(nonDeterministic));
-    }
+    }*/
   }
 
   /**
@@ -424,13 +451,13 @@ public class Evaluation {
 
     expectedStatesCounterMDSE.add(StateInfo.newStateInfo(Counter.States.valueOf("Idle"),
             new ArrayList<>(Collections.singleton("counter: " +
-                    "<(+ 0.0 0.0), 0.0>")), "counterMDSE"));
+                    "<(+ 0.0 0.0), 0.0>")), "counterMBSE"));
     expectedStatesCounterMDSE.add(StateInfo.newStateInfo(Counter.States.valueOf("Idle"),
             new ArrayList<>(Collections.singleton("counter: " +
-                    "<(+ 0.0 1.0), 1.0>")), "counterMDSE"));
+                    "<(+ 0.0 1.0), 1.0>")), "counterMBSE"));
     expectedStatesCounterMDSE.add(StateInfo.newStateInfo(Counter.States.valueOf("Idle"),
             new ArrayList<>(Collections.singleton("counter: " +
-                    "<(+ 0.0 (/ 3.0 2.0)), 1.5>")), "counterMDSE"));
+                    "<(+ 0.0 (/ 3.0 2.0)), 1.5>")), "counterMBSE"));
 
     return expectedStatesCounterMDSE;
   }
@@ -459,7 +486,7 @@ public class Evaluation {
    */
   private Set<StateInfo> fillExpectedStatesEvaluationModel() {
     Set<StateInfo> expectedStatesEvaluationModel = new HashSet<>();
-    expectedStatesEvaluationModel.add(StateInfo.newStateInfo(EvaluationModel.States.valueOf("mdse"),
+    expectedStatesEvaluationModel.add(StateInfo.newStateInfo(EvaluationModel.States.valueOf("mbse"),
             new ArrayList<>(), "evaluation"));
     expectedStatesEvaluationModel.add(StateInfo.newStateInfo(EvaluationModel.States.valueOf("sa"),
             new ArrayList<>(), "evaluation"));
@@ -471,24 +498,30 @@ public class Evaluation {
   }
 
   /**
-   * this function counts the number of states of expectedStates that are not contained in visitedStates
+   * this function counts the number of states of expectedStates that are not contained in
+   * visitedStates
    */
   private int getMissedStates(Set<StateInfo> expectedStates, Set<StateInfo> visitedStates) {
     int missedStates = 0;
 
-    //  missedStates += expectedStates.stream().filter(expected -> !containsState(visitedStates, expected)).count();
-    missedStates += expectedStates.stream().filter(expected -> !visitedStates.contains(expected)).count();
+    missedStates += expectedStates.stream()
+            .filter(expected -> !visitedStates.contains(expected))
+            .count();
 
     return missedStates;
   }
 
   /**
-   * this function counts the number of enum states of expectedStates that are not contained in visitedStates
+   * this function counts the number of enum states of expectedStates that are not contained in
+   * visitedStates
    */
-  private int getMissedEnumStates(Set<Enum<? extends Enum>> visitedStates, List<Enum<? extends Enum>> expectedStates) {
+  private int getMissedEnumStates(Set<Enum<? extends Enum>> visitedStates,
+                                  List<Enum<? extends Enum>> expectedStates) {
     int missedStates = 0;
 
-    missedStates += expectedStates.stream().filter(expected -> !visitedStates.contains(expected)).count();
+    missedStates += expectedStates.stream()
+            .filter(expected -> !visitedStates.contains(expected))
+            .count();
     return missedStates;
 
   }
@@ -532,7 +565,8 @@ public class Evaluation {
 
   /**
    * this functions prints and stores the result of the visitedStates
-   * extra states is used if the state space is infinitif and therefor they need to be excluded of the check if all states were either visited or missed
+   * extra states is used if the state space is infinite if and therefor they need to be excluded
+   * of the check if all states were either visited or missed
    * if the state space is finite extra states needs to be 0
    */
   private void resultVisitedStates(int row, String controller, HSSFSheet sheet, int missedStates, int numberOfVisitedStates, int sizeOfAllStates, int extraStates) {
@@ -558,8 +592,8 @@ public class Evaluation {
       fillCell(sheet, row, 8, numberOfVisitedStatesFinal);
       fillCell(sheet, row, 9, "\u221E");
     } else {
-      System.out.println(controller + ": " + numberOfVisitedStates + " out of " + sizeOfAllStates + " states where " +
-              "visited by the controller");
+      System.out.println(controller + ": " + numberOfVisitedStates + " out of " + sizeOfAllStates
+              + " states where " + "visited by the controller");
 
       fillCell(sheet, row, 8, numberOfVisitedStates);
       fillCell(sheet, row, 9, sizeOfAllStates);
@@ -569,7 +603,10 @@ public class Evaluation {
   /**
    * this function prints and stores the result of the visited EnumStates in the Excel file
    */
-  private void resultVisitedEnumStates(int row, String controller, HSSFSheet sheet, int missedEnumStats, int sizeOfAllStates,
+  private void resultVisitedEnumStates(int row, String controller,
+                                       HSSFSheet sheet,
+                                       int missedEnumStats,
+                                       int sizeOfAllStates,
                                        int visitedEnumStates) {
 
     if (visitedEnumStates + missedEnumStats != sizeOfAllStates) {
@@ -649,7 +686,8 @@ public class Evaluation {
             result.getInterestingInputs();
 
     // evaluation time
-    System.out.println(controller + ": Time of the controller in nanoseconds: " + (timeEndNano - timeStartNano));
+    System.out.println(controller + ": Time of the controller in nanoseconds: "
+            + (timeEndNano - timeStartNano));
 
     fillCell(sheetBigModel, row, 1, timeEndNano - timeStartNano);
 
@@ -695,6 +733,8 @@ public class Evaluation {
     if (TestController.getController() instanceof EvaluationControllerI) {
       EvaluationControllerI evaluationControllerI = (EvaluationControllerI) TestController.getController();
       visitedStates = evaluationControllerI.getVisitedStates();
+
+      saveSolverCalls_SatPaths(sheetBigModel, row, evaluationControllerI.getSolverCalls(), evaluationControllerI.getSatPaths());
     }
 
     assertThat(visitedStates).isNotNull();
@@ -795,14 +835,23 @@ public class Evaluation {
       }
     }
 
-    missedEnumStats += getMissedEnumStates(visitedEnumsController, Arrays.stream(Controller.States.values()).filter(value -> value != Controller.States.valueOf("Init") && value != Controller.States.valueOf("WaitReq")).collect(Collectors.toList()));
+    missedEnumStats += getMissedEnumStates(visitedEnumsController,
+            Arrays.stream(Controller.States.values())
+                    .filter(value -> value != Controller.States.valueOf("Init")
+                            && value != Controller.States.valueOf("WaitReq"))
+                    .collect(Collectors.toList()));
     missedEnumStats += getMissedEnumStates(visitedEnumsDoor, Arrays.asList(Door.States.values()));
     missedEnumStats += getMissedEnumStates(visitedEnumsLift, Arrays.asList(Lift.States.values()));
-    missedEnumStats += getMissedEnumStates(visitedEnumsSplitter, Arrays.asList(Splitter.States.values()));
-    missedEnumStats += getMissedEnumStates(visitedEnumsFloor1, Arrays.asList(FloorControl.States.values()));
-    missedEnumStats += getMissedEnumStates(visitedEnumsFloor2, Arrays.asList(FloorControl.States.values()));
-    missedEnumStats += getMissedEnumStates(visitedEnumsFloor3, Arrays.asList(FloorControl.States.values()));
-    missedEnumStats += getMissedEnumStates(visitedEnumsFloor4, Arrays.asList(FloorControl.States.values()));
+    missedEnumStats += getMissedEnumStates(visitedEnumsSplitter,
+            Arrays.asList(Splitter.States.values()));
+    missedEnumStats += getMissedEnumStates(visitedEnumsFloor1,
+            Arrays.asList(FloorControl.States.values()));
+    missedEnumStats += getMissedEnumStates(visitedEnumsFloor2,
+            Arrays.asList(FloorControl.States.values()));
+    missedEnumStats += getMissedEnumStates(visitedEnumsFloor3,
+            Arrays.asList(FloorControl.States.values()));
+    missedEnumStats += getMissedEnumStates(visitedEnumsFloor4,
+            Arrays.asList(FloorControl.States.values()));
 
     {
       /* visitedEnumStates are evaluated with -1 if enum states were visited that were not
@@ -811,14 +860,18 @@ public class Evaluation {
        * so they are excluded from the size of the visitable states.
        */
       int sizeOfAllStates =
-              (Controller.States.values().length - 2) + Door.States.values().length + Lift.States.values()
-                      .length + Splitter.States.values().length + (4 * FloorControl.States.values().length);
+              (Controller.States.values().length - 2) + Door.States.values().length
+                      + Lift.States.values().length + Splitter.States.values().length
+                      + (4 * FloorControl.States.values().length);
 
       int visitedEnumStates =
-              visitedEnumsLift.size() + visitedEnumsSplitter.size() + visitedEnumsDoor.size() + visitedEnumsController.size()
-                      + visitedEnumsFloor1.size() + visitedEnumsFloor2.size() + visitedEnumsFloor3.size() + visitedEnumsFloor4.size();
+              visitedEnumsLift.size() + visitedEnumsSplitter.size() + visitedEnumsDoor.size()
+                      + visitedEnumsController.size() + visitedEnumsFloor1.size()
+                      + visitedEnumsFloor2.size() + visitedEnumsFloor3.size()
+                      + visitedEnumsFloor4.size();
 
-      resultVisitedEnumStates(row, controller, sheetBigModel, missedEnumStats, sizeOfAllStates, visitedEnumStates);
+      resultVisitedEnumStates(row, controller, sheetBigModel, missedEnumStats, sizeOfAllStates,
+              visitedEnumStates);
     }
 
     //evaluation completeness -  states (enums + internal states)
@@ -870,15 +923,20 @@ public class Evaluation {
        * included in the expected states.
        */
       int sizeOfAllStates =
-              expectedStatesDoor.size() + expectedStatesController.size() + expectedStatesLift.size() + expectedStatesSplitter.size()
-                      + expectedStatesFloor1.size() + expectedStatesFloor2.size() + expectedStatesFloor3.size() + expectedStatesFloor4.size();
+              expectedStatesDoor.size() + expectedStatesController.size()
+                      + expectedStatesLift.size() + expectedStatesSplitter.size()
+                      + expectedStatesFloor1.size() + expectedStatesFloor2.size()
+                      + expectedStatesFloor3.size() + expectedStatesFloor4.size();
 
       int numberOfVisitedStates =
-              visitedStatesCompareLift.size() + visitedStatesCompareSplitter.size() + visitedStatesCompareDoor.size() + visitedStatesCompareController.size()
-                      + visitedStatesCompareFloor1.size() + visitedStatesCompareFloor2.size() + visitedStatesCompareFloor3.size() + visitedStatesCompareFloor4.size();
+              visitedStatesCompareLift.size() + visitedStatesCompareSplitter.size()
+                      + visitedStatesCompareDoor.size() + visitedStatesCompareController.size()
+                      + visitedStatesCompareFloor1.size() + visitedStatesCompareFloor2.size()
+                      + visitedStatesCompareFloor3.size() + visitedStatesCompareFloor4.size();
 
       // last argument is 0 because no states need to be exculde of the safety check
-      resultVisitedStates(row, controller, sheetBigModel, missedStates, numberOfVisitedStates, sizeOfAllStates, 0);
+      resultVisitedStates(row, controller, sheetBigModel, missedStates, numberOfVisitedStates,
+              sizeOfAllStates, 0);
     }
 
     //check existence of redundant paths
@@ -943,6 +1001,8 @@ public class Evaluation {
     }
 
     // check if component is non-deterministic
+    // to reduce runtime when building the whole project this function is commented out
+/*
     if (calculateNonDetPaths) {
       int nonDetPaths = checkNumberOfNonDeterminism(condition, ctx);
       System.out.println(controller + ": The component has " + nonDetPaths + " non-deterministic " +
@@ -956,7 +1016,7 @@ public class Evaluation {
         System.out.println(controller + ": The component has only deterministic paths");
       }
       fillCell(sheetBigModel, row, 11, String.valueOf(nonDeterministic));
-    }
+    }*/
   }
 
   /**
@@ -1098,19 +1158,19 @@ public class Evaluation {
   private Set<String> setTransitionsSM() {
     Set<String> allTransitions = new HashSet<>();
 
-    allTransitions.add("counterMDSEFromIdleToIdleNoGuard0");
+    allTransitions.add("counterMBSEFromIdleToIdleNoGuard0");
     allTransitions.add("counterSAFromIdleToIdleNoGuard0");
 
     allTransitions.add("distinctionFromIdleToIdle0");
     allTransitions.add("distinctionFromIdleToIdle1");
 
-    allTransitions.add("evaluationFrommdseTomdse0");
-    allTransitions.add("evaluationFrommdseTosa1");
+    allTransitions.add("evaluationFrommbseTombse0");
+    allTransitions.add("evaluationFrommbseTosa1");
     allTransitions.add("evaluationFromsaTosa0");
-    allTransitions.add("evaluationFromsaTomdse1");
-    allTransitions.add("evaluationFromnonModuleTomdse0");
+    allTransitions.add("evaluationFromsaTombse1");
+    allTransitions.add("evaluationFromnonModuleTombse0");
     allTransitions.add("evaluationFromnonModuleTosa1");
-    allTransitions.add("evaluationFrommdseTononModule2");
+    allTransitions.add("evaluationFrommbseTononModule2");
     allTransitions.add("evaluationFromsaTononModule2");
     allTransitions.add("evaluationFromnonModuleTononModule2");
 
@@ -1134,13 +1194,15 @@ public class Evaluation {
                     "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.625>")), "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("Wait"),
             new ArrayList<>(Collections.singleton("timer: " +
-                    "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")), "elevator.door"));
+                    "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")),
+            "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("CloseDoor"),
             new ArrayList<>(Collections.singleton("timer: " +
                     "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.625>")), "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("CloseDoor"),
             new ArrayList<>(Collections.singleton("timer: " +
-                    "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")), "elevator.door"));
+                    "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")),
+            "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("OpenDoor"),
             new ArrayList<>(Collections.singleton("timer: " +
                     "<3, 3.0>")), "elevator.door"));
@@ -1149,7 +1211,8 @@ public class Evaluation {
                     "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.625>")), "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("DoorIsClosed"),
             new ArrayList<>(Collections.singleton("timer: " +
-                    "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")), "elevator.door"));
+                    "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")),
+            "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("OpenDoor"),
             new ArrayList<>(Collections.singleton("timer: " +
                     "<10, 10.0>")), "elevator.door"));
@@ -1170,7 +1233,8 @@ public class Evaluation {
                     "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.625>")), "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("DoorIsOpen"),
             new ArrayList<>(Collections.singleton("timer: " +
-                    "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")), "elevator.door"));
+                    "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")),
+            "elevator.door"));
 
 
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("CloseDoor"),
@@ -1178,14 +1242,16 @@ public class Evaluation {
                     "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0), 0.625>")), "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("CloseDoor"),
             new ArrayList<>(Collections.singleton("timer: " +
-                    "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")), "elevator.door"));
+                    "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")),
+            "elevator.door"));
 
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("DoorIsClosed"),
             new ArrayList<>(Collections.singleton("timer: " +
                     "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0), 0.625>")), "elevator.door"));
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("DoorIsClosed"),
             new ArrayList<>(Collections.singleton("timer: " +
-                    "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")), "elevator.door"));
+                    "<(* 10.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.3125>")),
+            "elevator.door"));
 
 
     return expectedStatesDoor;
@@ -1200,7 +1266,8 @@ public class Evaluation {
     List<String> boolList = Arrays.asList("true", "false");
     List<String> enumList = Arrays.asList("UP", "DOWN");
     List<Enum<Controller.States>> excludedStates = Arrays.asList(Controller.States.valueOf(
-                    "WaitTimer"), Controller.States.valueOf("CloseDoor"), Controller.States.valueOf("OK"),
+                    "WaitTimer"), Controller.States.valueOf("CloseDoor"),
+            Controller.States.valueOf("OK"),
             Controller.States.valueOf("DriveDown"), Controller.States.valueOf("Init"),
             Controller.States.valueOf("WaitReq"));
 
@@ -1214,9 +1281,12 @@ public class Evaluation {
             for (int i = 0; i < 5; i++) {
               for (int j = 1; j < 5; j++) {
                 expectedStatesController.add(StateInfo.newStateInfo(state,
-                        new ArrayList<>(Arrays.asList("directions: <" + enumElement + "," + enumElement + ">", "current: " + "<" + j + "," + j + ">", "target: " + "<" + i + "," + i + ">", "timer: " + "<(* 5.0" +
-                                        " (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.625>",
-                                "stopNext: " + "<" + boolElement + "," + boolElement + ">")), "elevator.ctrl"));
+                        new ArrayList<>(Arrays.asList("directions: <" + enumElement + ","
+                                        + enumElement + ">", "current: " + "<" + j + "," + j + ">",
+                                "target: " + "<" + i + "," + i + ">", "timer: " + "<(* 5.0"
+                                        + " (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0.625>",
+                                "stopNext: " + "<" + boolElement + "," + boolElement + ">")),
+                        "elevator.ctrl"));
               }
             }
           }
@@ -1227,35 +1297,39 @@ public class Evaluation {
     // these are the remaining possible states
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("WaitTimer"),
             new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<5.0, 5.0>", "stopNext: " +
-                    "<false, false>")), "elevator.ctrl"));
+                    " " + "<0, 0>", "timer: " + "<5.0, 5.0>", "stopNext: " + "<false, false>")),
+            "elevator.ctrl"));
 
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("WaitTimer"),
-            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0)), 2.5>", "stopNext: " +
-                    "<false, false>")), "elevator.ctrl"));
+            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>",
+                    "target:" + " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0)), 2.5>",
+                    "stopNext: " + "<false, false>")), "elevator.ctrl"));
 
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("WaitTimer"),
-            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0)), 1.25>", "stopNext: " +
-                    "<false, false>")), "elevator.ctrl"));
+            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>",
+                    "target:" + " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0)), 1.25>",
+                    "stopNext: " + "<false, false>")), "elevator.ctrl"));
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("WaitTimer"),
             new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" +
-                    ".625>", "stopNext: " + "<false, false>")), "elevator.ctrl"));
+                    " " + "<0, 0>",
+                    "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" + ".625>",
+                    "stopNext: " + "<false, false>")), "elevator.ctrl"));
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("CloseDoor"),
-            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" +
-                    ".625>", "stopNext: " + "<false, false>")), "elevator.ctrl"));
+            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>",
+                    "target:" + " " + "<0, 0>",
+                    "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" + ".625>",
+                    "stopNext: " + "<false, false>")), "elevator.ctrl"));
 
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("DriveDown"),
-            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" +
-                    ".625>", "stopNext: " + "<false, false>")), "elevator.ctrl"));
+            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>",
+                    "target:" + " " + "<0, 0>",
+                    "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" + ".625>",
+                    "stopNext: " + "<false, false>")), "elevator.ctrl"));
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("OK"),
-            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>", "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" +
-                    ".625>", "stopNext: " + "<false, false>")), "elevator.ctrl"));
+            new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>",
+                    "target:" + " " + "<0, 0>",
+                    "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" + ".625>",
+                    "stopNext: " + "<false, false>")), "elevator.ctrl"));
 
     return expectedStatesController;
   }
@@ -1272,7 +1346,8 @@ public class Evaluation {
    * For a desired execution of the function in the evaluation, the value of
    * "calculateNonDetPaths" must be set to "true".
    */
-  public int checkNumberOfNonDeterminism(Set<InputAndCondition> inputAndConditions, Context ctx) throws ExecutionException, InterruptedException {
+  public int checkNumberOfNonDeterminism(Set<InputAndCondition> inputAndConditions, Context ctx)
+          throws ExecutionException, InterruptedException {
     int numberOfNonDetPaths = 0;
     List<List<Pair<Integer, Expr<?>>>> pathConditions = new ArrayList<>();
 
@@ -1409,7 +1484,8 @@ public class Evaluation {
   }
 
   /**
-   * separates a BoolExpr into individual BoolExpr. The separation happens between the and-components.
+   * separates a BoolExpr into individual BoolExpr. The separation happens between the
+   * and-components.
    */
   public List<Pair<Integer, Expr<?>>> splitConditions(BoolExpr input) {
     List<Pair<Integer, Expr<?>>> individualConditions = new ArrayList<>();
@@ -1446,7 +1522,7 @@ public class Evaluation {
    */
   private int evaluateTransitions(Set<InputAndCondition> condition, Set<String> allTransitions) {
     Set<String> takenTransitions = new HashSet<>();
-    for (InputAndCondition<ListerI, ListerI> temp : condition) {
+    for (InputAndCondition temp : condition) {
       takenTransitions.addAll(temp.getBranches().getBranchIds());
     }
 
@@ -1466,6 +1542,15 @@ public class Evaluation {
 
     return takenTransitions.size();
   }
+
+  /**
+   * saves SolverCalls and number of SAT paths to Excel sheet
+   */
+  private void saveSolverCalls_SatPaths(HSSFSheet sheet, int row, int solverCalls, int satPaths){
+    fillCell(sheet, row, 12, solverCalls);
+    fillCell(sheet, row, 13, satPaths);
+  }
+
 
   /**
    * helper method for creating an Excel table

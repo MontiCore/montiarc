@@ -8,102 +8,129 @@ component EvaluationModelSemDiff {
   port in Double factor;
   port in String module;
 
-  port out Double mdseCounter;
+  port out Double mbseCounter;
   port out Double saCounter;
 
-  port in Double mdseCounted;
+  port in Double mbseCounted;
   port in Double saCounted;
 
-  port  out Double voteMDSE;
+  port  out Double voteMBSE;
   port  out Double voteSA;
 
+  port out Boolean chaosMBSE;
+  port out Boolean chaosSA;
+
   <<sync>> automaton{
-    initial state mdse;
+    initial state mbse;
     state sa;
     state nonModule;
 
-    mdse -> mdse [module == "MDSE"]/{
-      mdseCounter = factor;
+    mbse -> mbse [module == "MBSE"]/{
+      mbseCounter = factor;
       saCounter = 0.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    mdse -> mdse [module == "mdse&sa"]/{
-      mdseCounter = 2.0;
+    mbse -> mbse [module == "mbse&sa"]/{
+      mbseCounter = 2.0;
       saCounter = 2.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = true;
+      chaosSA = true;
     };
 
-    mdse -> sa [module == "SA"] /{
-      mdseCounter = 0.0;
+    mbse -> sa [module == "SA"] /{
+      mbseCounter = 0.0;
       saCounter = factor;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
     sa -> sa [module == "SA"] /{
-      mdseCounter = 0.0;
+      mbseCounter = 0.0;
       saCounter = factor;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    sa -> sa [module == "mdse&sa"] /{
-      mdseCounter = 2.0;
+    sa -> sa [module == "mbse&sa"] /{
+      mbseCounter = 2.0;
       saCounter = 2.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = true;
+      chaosSA = true;
     };
 
-    sa -> mdse [module == "MDSE"]/{
-      mdseCounter = factor;
+    sa -> mbse [module == "MBSE"]/{
+      mbseCounter = factor;
       saCounter = 0.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    nonModule -> mdse [module == "MDSE"]/{
-      mdseCounter = factor;
+    nonModule -> mbse [module == "MBSE"]/{
+      mbseCounter = factor;
       saCounter = 0.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
     nonModule -> sa [module == "SA"] /{
-      mdseCounter = 0.0;
+      mbseCounter = 0.0;
       saCounter = factor;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    mdse -> nonModule [module != "MDSE" && module != "SA"]/{
-      mdseCounter = 0.0;
+    mbse -> nonModule [module != "MBSE" && module != "SA" && module != "mbse&sa"]/{
+      mbseCounter = 0.0;
       saCounter = 0.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    sa -> nonModule [module != "MDSE" && module != "SA"]/{
-      mdseCounter = 0.0;
+    sa -> nonModule [module != "MBSE" && module != "SA" && module != "mbse&sa"]/{
+      mbseCounter = 0.0;
       saCounter = 0.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    nonModule -> nonModule [module != "MDSE" && module != "SA"]/{
-      mdseCounter = 0.0;
+    nonModule -> nonModule [module != "MBSE" && module != "SA" && module != "mbse&sa"]/{
+      mbseCounter = 0.0;
       saCounter = 0.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = false;
+      chaosSA = false;
     };
 
-    nonModule -> nonModule [module == "mdse&sa"]/{
-      mdseCounter = 2.0;
+    nonModule -> nonModule [module == "mbse&sa"]/{
+      mbseCounter = 2.0;
       saCounter = 2.0;
-      voteMDSE = mdseCounted;
+      voteMBSE = mbseCounted;
       voteSA = saCounted;
+      chaosMBSE = true;
+      chaosSA = true;
     };
   }
 }

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.rte.dse.strategies;
+package controller;
 
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
@@ -13,6 +13,7 @@ import montiarc.rte.dse.PathCondition;
 import montiarc.rte.dse.ResultI;
 import montiarc.rte.dse.StatesList;
 import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.strategies.ResultPathController;
 import montiarc.rte.log.LogException;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -22,11 +23,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public class PathCoverageController<In, Out> implements ControllerI<In, Out>, EvaluationControllerI {
+/**
+ * this controller randomly negates a condition to find new paths
+ */
+public class RandomNegationController<In, Out>
+  implements ControllerI<In, Out>, EvaluationControllerI {
 
   protected Function<In, Out> sut;
   protected Context ctx;
@@ -35,19 +41,15 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   protected int usedOracleCount = 0;
   protected List<Boolean> oracles = new ArrayList<>();
   protected PathCondition takenBranches;
+  protected Set<StatesList> visitedStates = new HashSet<>();
+
+  protected Set<List<BoolExpr>> checkedBranches = new HashSet<>();
 
   // for evaluation purpose, to track the number of solver calls
   protected int solverCalls = 0;
 
   // for evaluation purpose, to track the number of satisfiability paths
   protected int satPaths = 0;
-
-  /**
-   * This variable stores all visited states. Since a model to be examined can be a composition
-   * of several models, the overall state must be stored. The total state consists of lists of
-   * StateInfos, each of which reflects the state of the individual components.
-   */
-  protected Set<StatesList> visitedStates = new HashSet<>();
 
   @Override
   public void init() {
@@ -59,9 +61,8 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
   }
 
   @Override
-  public ResultI<In, Out> startTest(In initialInput,
-                                    Function<Model, In> evalModel,
-                                    Function<In, Out> sut) {
+  public ResultI<In, Out> startTest(In initialInput, Function<Model, In> evalModel, Function<In,
+    Out> sut) throws Exception {
     if (sut == null) {
       throw new IllegalArgumentException("passed function for PathCoverageController is null");
     }
@@ -71,7 +72,7 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
     return startTest(initialInput, new ArrayList<>(), 0);
   }
 
-  public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
+  private ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
     if (TestController.getController() != this) {
       throw new LogException("Given controller does not match the " +
         "PathCoverageController");
@@ -98,8 +99,10 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
     List<BoolExpr> branches = branchingConditions;
 
     for (int i = branchDepth; i < branches.size(); i++) {
-      Solver s = ctx.mkSolver();
 
+      List<BoolExpr> currentBranches = new ArrayList<>();
+
+      Solver s = ctx.mkSolver();
       // add timeout to optimize speed of solver
       Params p = ctx.mkParams();
       p.add("timeout", 10);
@@ -107,18 +110,40 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
 
       for (int j = 0; j < i; j++) {
         s.add(branches.get(j));
+        currentBranches.add(branches.get(j));
       }
 
-      // NOT!!
-      s.add(ctx.mkNot(branches.get(i)));
+      int currentNegation;
+
+      Set<Integer> currentAllNegations = new HashSet<>();
+
+      int randomIn = new Random().nextInt();
+      int branchSize = branches.size();
+      currentNegation = Math.abs((randomIn % branchSize));
+      currentBranches.add(ctx.mkNot(branches.get(currentNegation)));
+
+      while (checkedBranches.contains(currentBranches)) {
+        int lastIndex = currentBranches.size() - 1;
+        currentBranches.remove(lastIndex);
+        if (currentAllNegations.size() == branches.size()) {
+          return result;
+        }
+        do {
+          currentNegation = new Random().nextInt() % branches.size();
+        } while (currentAllNegations.contains(currentNegation));
+
+        currentBranches.add(ctx.mkNot(branches.get(currentNegation)));
+      }
+
+      s.add(ctx.mkNot(branches.get(currentNegation)));
 
       Status status = s.check();
       solverCalls++;
-      montiarc.rte.log.Log.trace(status + "\tRun check with: " + Arrays.toString(s.getAssertions()));
+      montiarc.rte.log.Log.trace(status + "\tRun check with: "
+        + Arrays.toString(s.getAssertions()));
 
       if (status == Status.SATISFIABLE) {
         satPaths++;
-
         // Load Input Oracles for next run!
         List<Boolean> nextOracles = loadBoolListValue(s.getModel(), getOracleExpressions());
 
@@ -128,6 +153,10 @@ public class PathCoverageController<In, Out> implements ControllerI<In, Out>, Ev
         montiarc.rte.log.Log.trace("model:" + s.getModel());
 
         result.addAll(startTest(evalModel.apply(s.getModel()), nextOracles, i + 1));
+        System.gc();
+        int z = 2;
+
+        z = z + 1;
       }
     }
     return result;
