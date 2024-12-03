@@ -177,31 +177,31 @@ outgoing port called `out`. All components lie in the `montiarc.maunit.api` pack
 
 ##### Asserter
 
-- **AssertTrue:**
+- **`AssertTrue:`**
   The most simple assertion component. 
   It has a single boolean input port called `actual` and asserts that all 
   incoming messages are true. 
   I.e., the input stream has to be of the form `〈true, true, true, ...〉`. 
   If not, it throws an assertion error.
-- **AssertFalse**
+- **`AssertFalse`**
   Has a single boolean input port called `actual` like the _AssertTrue_ 
   component, but expects the incoming messages on the port `actual` to be false. 
-- **AssertEquals<T>(T expected)**
+- **`AssertEquals<T>(T expected)`**
   A component that can make assertions over objects.
   The expected value is specified by the parameter `expected`. 
   This is a generic component with a single input port T actual that asserts 
   all incoming messages are equal to that parameter expected.
-- **AssertEqualsSync<T>(List<T> expected)**
+- **`AssertEqualsSync<T>(List<T> expected)`**
   A component with a single input port, of type T called `actual`, that asserts 
   the stream of incoming messages is equal to expected interpreted as a 
   synchronous stream.
   It also fails the test if more messages are received than what was expected.
-- **AssertEqualsUntimed<T>(List<T> expected)**
+- **`AssertEqualsUntimed<T>(List<T> expected)`**
   A component with a single input port, of type T called actual, that asserts 
   the stream of incoming messages is equal to expected while ignoring ticks in 
   the stream. 
   It fails the test if more messages are received than what was expected.
-- **AssertEqualsTimed<T>(List<List<T>> expected)**
+- **`AssertEqualsTimed<T>(List<List<T>> expected)`**
   Like the `AssertEqualsUntimed`, this is a component with a single input port 
   T actual. 
   But, instead of ignoring ticks, the expected values are grouped by ticks, 
@@ -215,26 +215,26 @@ outgoing port called `out`. All components lie in the `montiarc.maunit.api` pack
 
 ##### Emitter
 
-- **Emit<T>(T output)** 
+- **`Emit<T>(T output)`** 
   This component will emit a single message of type T with the value of output 
   on the sync port out every tick. 
   Resulting in an infinite output stream of the form 
   `〈output, Tick, output, Tick, output, Tick, ...〉`. 
   It can be used to generate a mock message every tick to drive a test for 
   sync or timed components.
-- **EmitList<T>(List<T> output)** 
+- **`EmitList<T>(List<T> output)`** 
   A timed variant of the Emit component. 
   Instead of a single message, all elements `ei` of output are emitted in one 
   time slice. 
   The resulting output is an infinite stream of the form 
   `〈e1 , e2 , ..., en , Tick, e1 , e2 , ..., en , Tick, ...〉`.
-- **EmitSync<T>(List<T> output)** 
+- **`EmitSync<T>(List<T> output)`** 
   A component that will send the elements of output on the sync port out with 
   a tick after each. 
   After all elements have been sent, the output stream is repeated. 
   Consequently, it gives an infinite output stream of the form 
   `〈e1 , Tick, e2 , Tick, ..., en , Tick, e1 , ...〉`.
-- **EmitTimed<T>(List<List<T>> output)** 
+- **`EmitTimed<T>(List<List<T>> output)`** 
   Similarly to `EmitSync`, this component will emit messages on port out. 
   The messages are timed, the sublists are grouped by ticks, and all elements 
   are sent out as individual messages. 
