@@ -246,6 +246,10 @@ outgoing port called `out`. All components lie in the `montiarc.maunit.api` pack
 
 ## Controlling How Tests Are Run
 
-If the MontiArc Gradle plugin is used tests are automatically run during the test task. This can be run manually by executing `gradle test`.
+If the MontiArc Gradle plugin is used, tests are automatically run during the 
+test task. The task only considers components located in the test source 
+directory that have the `<<test>>` stereotype. The test task can be run 
+specifically by executing `gradle test`.
 
-Individual tests can also be run with the `gradle test -tests SomeTestComponent` command, where `SomeTestComponent` is the name of a component that has a `<<test>>` stereotype.
+Individual tests can also be run with the `gradle test -tests SomeTestComponent` 
+command, where `SomeTestComponent` is the name of the test component.
