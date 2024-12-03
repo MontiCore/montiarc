@@ -9,6 +9,7 @@ theme:
     - navigation.tabs
     - toc.integrate
     - toc.follow
+    - content.tabs.link
   icon:
     logo: 'fontawesome/solid/desktop'
 
@@ -20,12 +21,17 @@ copyright: '(c) https://github.com/MontiCore/monticore'
 
 markdown_extensions:
   - def_list
+  - attr_list
+  - md_in_html
+  - pymdownx.blocks.caption
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.highlight
   - pymdownx.inlinehilite
   - pymdownx.superfences
   - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
 
 nav:
   - Home: 'index.md'
@@ -43,6 +49,7 @@ nav:
       - Inheritance: 'component/Inheritance.md'
       - Interfaces: 'component/Interfaces.md'
       - Parameters: 'component/Parameter.md'
+      - Testing: 'component/Testing.md'
   - Behavior: 
       - Overview: 'Behavior.md'
       - Automata: 'behavior/Automata.md'
