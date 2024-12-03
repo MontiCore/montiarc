@@ -227,7 +227,7 @@ outgoing port called `out`. All components lie in the `montiarc.maunit.api` pack
   Instead of a single message, all elements `ei` of output are emitted in one 
   time slice. 
   The resulting output is an infinite stream of the form 
-  `e1 , e2 , ..., en , Tick, e1 , e2 , ..., en , Tick, ...〉`.
+  `〈e1 , e2 , ..., en , Tick, e1 , e2 , ..., en , Tick, ...〉`.
 - **EmitSync<T>(List<T> output)** 
   A component that will send the elements of output on the sync port out with 
   a tick after each. 
