@@ -85,6 +85,7 @@ The test is parameterized by the input and output streams of the SUT.
 
 === "Timed"
 ```
+import java.util.List;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
 
@@ -102,9 +103,9 @@ import montiarc.maunit.api.EmitTimed;
     [[false], [false], [true]],
     [[false], [false], [true]]
   ]>>
-  component AndTest(List<List<boolean>> a, 
-                    List<List<boolean>> b, 
-                    List<List<boolean>> expected) {
+  component AndTest(List<List<Boolean>> a, 
+                    List<List<Boolean>> b, 
+                    List<List<Boolean>> expected) {
   
   And sut;
 
@@ -120,6 +121,7 @@ import montiarc.maunit.api.EmitTimed;
 
 === "Sync"
 ```
+import java.util.List;
 import montiarc.maunit.api.AssertEqualsSync;
 import montiarc.maunit.api.EmitSync;
 
@@ -137,9 +139,9 @@ import montiarc.maunit.api.EmitSync;
     [false, false, false, true],
     [false, false, false, false, true]
   ]>>
-  component AndTest(List<boolean> a, 
-                    List<boolean> b, 
-                    List<boolean> expected) {
+  component AndTest(List<Boolean> a, 
+                    List<Boolean> b, 
+                    List<Boolean> expected) {
     And sut;
 
     emitterA.out -> sut.a;
