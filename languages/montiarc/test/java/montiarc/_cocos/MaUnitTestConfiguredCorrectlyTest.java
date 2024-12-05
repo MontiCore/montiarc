@@ -5,17 +5,23 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.mccollectiontypes.MCCollectionTypesMill;
+import de.monticore.types.mccollectiontypes.types3.util.MCCollectionSymTypeFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -34,6 +40,12 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Tests for {@link MaUnitTestConfiguredCorrectly}
  */
 class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
+
+  @BeforeEach
+  public void initSymbols() {
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+  }
 
   @ParameterizedTest
   @ValueSource(strings = {
@@ -143,10 +155,10 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
         MontiArcError.UNIT_TYPE_MISMATCH),
       // 2 tests, ticks type mismatch in list
       arg("<<test, ticks=[1,true]>> component Comp12() { }",
-        MontiArcError.UNIT_TYPE_MISMATCH),
+        MCError.TARGET_TYPE_MISMATCH),
       // 2 tests, parameter type mismatch in list
       arg("<<test, ticks=[1,2], i=[1,true]>> component Comp13(int i) { }",
-        MontiArcError.UNIT_TYPE_MISMATCH),
+        MCError.TARGET_TYPE_MISMATCH),
       // test, but not deployable
       arg("<<test>> component Comp14 { port out int p; }",
         MontiArcError.UNIT_CANNOT_HAVE_PORTS),

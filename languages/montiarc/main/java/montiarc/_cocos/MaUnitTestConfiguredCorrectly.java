@@ -4,21 +4,22 @@ package montiarc._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTStereoValueExpr;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.ocl.setexpressions._ast.ASTSetCollectionItem;
 import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.check.SymTypeOfGenerics;
+import de.monticore.types.mccollectiontypes.types3.util.MCCollectionSymTypeFactory;
 import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import arcbasis._ast.ASTStereoValueExpr;
 import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcFeatureDeclaration;
 
@@ -230,9 +231,14 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
 
     if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
       && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList()) {
-      for (ASTSetCollectionItem node : MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList()) {
-        checkTypeFits(stereo.getName(), node, type, TypeCheck3.typeOf(MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(node).getExpression(), type));
-      }
+
+      // The stereo value should be of type List<X> where X is the type of the
+      // corresponding parameter. We create the target type for the stereo
+      // value here to check against it.
+      SymTypeOfGenerics targetType = MCCollectionSymTypeFactory.createList(type);
+
+      checkTypeFits(stereo.getName(), stereo.getExpression(), targetType, TypeCheck3.typeOf(stereo.getExpression(), targetType) );
+
     } else {
       checkTypeFits(stereo.getName(), stereo, type, TypeCheck3.typeOf(ArcBasisMill.typeDispatcher().asArcBasisASTStereoValueExpr(stereo).getExpression(), type));
     }
