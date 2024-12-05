@@ -113,9 +113,9 @@ import montiarc.maunit.api.EmitTimed;
   emitterB.out -> sut.b;
   sut.q -> assertEquals.actual;
 
-  AssertEqualsTimed<boolean> assertEquals(expected);
-  EmitTimed<boolean> emitterA(a);
-  EmitTimed<boolean> emitterB(b);
+  AssertEqualsTimed<Boolean> assertEquals(expected);
+  EmitTimed<Boolean> emitterA(a);
+  EmitTimed<Boolean> emitterB(b);
 }
 ```
 
@@ -148,9 +148,9 @@ import montiarc.maunit.api.EmitSync;
     emitterB.out -> sut.b;
     sut.q -> assertEquals.actual;
 
-    AssertEqualsSync<boolean> assertEquals(expected);
-    EmitSync<boolean> emitterA(a);
-    EmitSync<boolean> emitterB(b);
+    AssertEqualsSync<Boolean> assertEquals(expected);
+    EmitSync<Boolean> emitterA(a);
+    EmitSync<Boolean> emitterB(b);
   }
 ```
 
@@ -253,5 +253,5 @@ test task. The task only considers components located in the test source
 directory that have the `<<test>>` stereotype. The test task can be run 
 specifically by executing `gradle test`.
 
-Individual tests can also be run with the `gradle test -tests SomeTestComponent` 
-command, where `SomeTestComponent` is the name of the test component.
+Individual tests can also be run with the `gradle test -tests SomeTestComp` 
+command, where `SomeTest` is the name of the test component.
