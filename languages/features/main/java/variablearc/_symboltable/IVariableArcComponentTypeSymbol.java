@@ -43,7 +43,10 @@ public interface IVariableArcComponentTypeSymbol {
       visited.add(getTypeInfo());
       ExpressionSet conditions = new ComponentConverter().convert(this, visited);
       for (CompKindExpression parent : getTypeInfo().getSuperComponentsList()) {
-        conditions.add(((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).getConstraints(visited));
+
+        if (parent.getTypeInfo() instanceof IVariableArcComponentTypeSymbol) {
+          conditions.add(((IVariableArcComponentTypeSymbol) parent.getTypeInfo()).getConstraints(visited));
+        }
       }
       return conditions;
     }
