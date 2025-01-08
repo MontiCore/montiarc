@@ -6,117 +6,75 @@ import java.util.List;
 
 classdiagram Factory {
 
-  public class Order {
-    int orderId;
-    OrderStatus status;
-    Date orderDate;
-    Date deliveryDate;
+  public class Inquiry {
+    String inquiryId;
+    Date requiredDueDate;
   }
 
-  public enum OrderStatus {
-    REQUESTED,
-    IN_PROGRESS,
-    DONE;
+  public class OrderQuotation {
+    String quotationId;
+    String inquiryId;
+  }
+
+  public class OrderConfirmation {
+    String quotationId;
+    boolean confirmed;
+  }
+
+  public class SalesOrder {
+    String salesOrderId;
   }
 
   public class OrderItem {
-    int itemId;
-    int quantity;
-    ProductSpec spec;
-    Configuration config;
+    int itemNumber;
+    public int quantity;
+    String partId;
   }
 
-  public class Configuration {
-    CADModel cadModel;
-    Material material;
-    List<Processing> processingSteps;
+  association [1] SalesOrder <-> (items) OrderItem [1..*];
+
+  public class ProductionOrder {
+    String productionOrderId;
+    OrderItem orderItem;
+    BillOfMaterial bom;
   }
 
-  public class CADModel {}
+  public class Operation {}
 
-  public class Material {
-    String unit;
-    float amount;
-    MaterialType materialType;
-  }
+  public class BillOfMaterial {}
 
-  public enum MaterialType {
-    ALUMINUM,
-    STEEL,
-    STAINLESS_STEEL,
-    COPPER,
-    BRASS,
-    TITANIUM,
-    PLASTIC;
-  }
-
-  public enum Processing {
-    HEATING,
-    ROLLING,
-    BENDING,
-    DRILLING,
-    MILLING,
-    PUNCHING;
-  }
-
-  public class Customer {
-    int customerId;
-    String name;
-    String billingAddress;
-    String deliveryAddress;
-  }
-
-  public class OrderHistory {
-    Customer customer;
-  }
-
-  public enum MachineStatus {
-    PROCESSING,
-    STOP,
-    ERROR;
-  }
-
-  public class ConstructionPart {
-    int partId;
-    OrderItem item;
-    List<Processing> missingProcessingSteps;
-  }
+  association [1] ProductionOrder <-> (productionSteps) Operation [1..*];
 
   public class PurchaseOrder {
-    int materialOrderId;
-    Date orderDate;
-    Date deliveryDate;
+    String purchaseOrderId;
+    double amount;
+    String materialId;
   }
 
-  public class PurchaseOrderItem {
-    int itemNumber;
-    Material material;
-  }
-
-  public class Money {
+  public class Material {
+    String materialId;
     double amount;
   }
 
-  public class Invoice {
-    int invoiceId;
-    Date entryDate;
-    Date dueDate;
-    Money total;
+  public class MaterialRequest {
+    String materialId;
+    double amount;
   }
 
-  public class ProductSpec {
-    String name;
-    String description;
-    Money price;
-  }
+  public class Inventory {}
 
-  public class Offer {
-    ProductSpec productSpec;
-    int quantity;
-    Money total;
-  }
+  public class Shipping {}
 
-  association [1] Order <-> OrderItem [1..*];
-  association [1] OrderHistory <-> Order [*];
-  association [1] PurchaseOrder <-> PurchaseOrderItem [1..*];
+  public class ShippingConfirmation {}
+
+  public class ProductConfig {}
+
+  public class Product {}
+
+  public class WorkPiece {}
+
+  // Gear production
+  public class GearBlank extends WorkPiece {}
+  public class Gear extends WorkPiece {}
+
 }

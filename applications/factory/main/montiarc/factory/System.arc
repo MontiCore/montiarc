@@ -1,24 +1,21 @@
 /* (c) https://github.com/MontiCore/monticore */
 package factory;
 
-import factory.company.Company;
+import factory.manufacturer.Manufacturer;
 import factory.environment.Supplier;
 import factory.environment.Customer;
 
 component System {
-  Company company;
   Customer customer;
+  Manufacturer manufacturer;
   Supplier supplier;
 
-  company.producedPart -> customer.producedPart;
-  company.customerInvoice -> customer.invoice;
-  company.purchase -> supplier.purchase;
-  company.expenses -> supplier.costs;
+  customer.inquiry -> manufacturer.inquiry;
+  customer.orderConfirmation -> manufacturer.orderConfirmation;
+  manufacturer.orderQuotation -> customer.quotation;
+  manufacturer.shipping -> customer.shipping;
+  manufacturer.shippingConfirmation -> customer.shippingConfirmation;
 
-  customer.payment -> company.income;
-  customer.order -> company.order;
-  company.offer -> customer.offer;
-
-  supplier.material -> company.material;
-  supplier.invoice -> company.supplierInvoice;
+  supplier.material -> manufacturer.material;
+  manufacturer.purchaseOrder -> supplier.purchaseOrder;
 }
