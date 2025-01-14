@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcautomaton._cocos.NoEventsInSyncAutomata;
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
@@ -191,8 +190,6 @@ public class MontiArcCoCos {
     traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new MaxOneInitialState(traverser));
-    checker.addCoCo(new NoEventsInSyncAutomata());
-    //checker.addCoCo(new NoTickEventInUntimedAutomata());
 
     // Unit CoCos
     checker.addCoCo(new MaUnitTestConfiguredCorrectly());

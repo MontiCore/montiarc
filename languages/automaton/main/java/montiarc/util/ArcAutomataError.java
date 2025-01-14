@@ -14,10 +14,7 @@ public enum ArcAutomataError implements Error {
   PORT_NOT_WRITTEN_IN_TRANSITION("0xC1304", "There is a transition, which, when followed, leaves port '%s' without a value."),
   PORT_NOT_WRITTEN_IN_STATE("0xC1305", "When staying in state '%s' (which might happen, because there is no unconditional" +
       "transition leaving that state), port '%s' is left without a value"),
-  MSG_EVENT_WITHOUT_SYMBOL("0xC1306", "Could not resolve a symbol for a message event."),
-  TICK_EVENT_IN_UNTIMED_AUTOMATON("0xC1307", "Cannot use tick event in transitions of untimed automata."),
-  EVENT_IN_SYNC_AUTOMATON("0xC1308", "Cannot use events in transitions of sync automata."),
-  NO_EVENT_IN_UNTIMED_AUTOMATON("0xC1309", "No Event in an untimed transition");
+  MSG_EVENT_WITHOUT_SYMBOL("0xC1306", "Could not resolve a symbol for a message event.");
 
   private final String errorCode;
   private final String errorMessage;
