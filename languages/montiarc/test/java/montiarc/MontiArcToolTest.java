@@ -1004,7 +1004,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
       Arguments.of("MissingPortType9.arc", new Error[]{MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH}),
       Arguments.of("MissingPortType10.arc", new Error[]{MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH}),
       //Arguments.of("MissingPortType11.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType12.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL, ArcError.CONNECTOR_TYPE_MISMATCH}),
+      Arguments.of("MissingPortType12.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
       //Arguments.of("MissingPortType13.arc", new Error[]{MCError.CANT_FIND_SYMBOL, SCError.PRECONDITION_NOT_BOOLEAN}),
       //Arguments.of("MissingPortType14.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
       //Arguments.of("MissingPortType15.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
