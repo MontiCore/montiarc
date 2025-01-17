@@ -19,7 +19,6 @@ public class MAReplaceAbsentTriggersByTicks implements UnaryOperator<ASTMACompil
 
     ReplaceAbsentTriggersByTicks trafo = new ReplaceAbsentTriggersByTicks();
     this.traverser.add4SCTransitions4Code(trafo);
-    this.traverser.setArcAutomatonHandler(trafo);
   }
   @Override
   public ASTMACompilationUnit apply(@NotNull ASTMACompilationUnit cUnit) {

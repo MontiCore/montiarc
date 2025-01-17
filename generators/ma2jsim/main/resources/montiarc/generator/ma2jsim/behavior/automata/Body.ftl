@@ -5,15 +5,25 @@ ${tc.signature("automaton")}
 
 <#assign compAutomatonClass>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}<#if isTop>TOP</#if></#assign>
 <#assign contextClass>${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/></#assign>
-<#assign contextObj>${ast.getName()?uncap_first}${suffixes.context()}</#assign>
-<#assign syncMsgClass>${ast.getName()}${suffixes.syncMsg()}</#assign>
+<#assign contextObj = ast.getName()?uncap_first + suffixes.context()/>
+<#assign syncMsgType>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
+<#assign syncedPorts = helper.getSyncedInPortsOf(ast.getSymbol())/>
+<#assign hasSyncedPorts = syncedPorts?size gt 0/>
+<#assign tickMsgType = hasSyncedPorts?then(syncMsgType, "montiarc.rte.automaton.NoInput")/>
+
+
+
+<#if hasSyncedPorts>
+  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/MsgGuardInterface.ftl", [])}
+  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/MsgActionInterface.ftl", [])}
+</#if>
 
 protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}<@Util.printTypeParameters ast false/> states;
 
-<#-- Creating transition objects for tick-triggered transitions -->
+<#-- Declaring transition fields for tick-triggered transitions -->
 <#assign transitionsForTickEvent = helper.getTransitionsForTickEvent(automaton)/>
 <#list transitionsForTickEvent as transition>
-protected montiarc.rte.automaton.Transition<montiarc.rte.automaton.NoInput> ${prefixes.transition()}tick_${transition?counter};
+  protected montiarc.rte.automaton.Transition<${tickMsgType}> ${prefixes.transition()}tick_${transition?counter};
 </#list>
 
 protected ${compAutomatonClass} (
@@ -25,8 +35,13 @@ protected ${compAutomatonClass} (
   <#-- Create transitions on tick events (if enabled). -->
   <#list transitionsForTickEvent as transition>
     ${prefixes.transition()}tick_${transition?counter} =
-    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, true, false, []])};
+    <#if syncedPorts?size == 0>
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, true, false, []])};
+    <#else>
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, false, true, syncedPorts])};
+    </#if>
   </#list>
+
   <#-- Create transition objects for message-triggered transitions. -->
   <#list helper.getTransitionsForPortEvents(automaton) as port, transitions>
     <#assign portName = port.getName()>
@@ -40,17 +55,19 @@ protected ${compAutomatonClass} (
 
 <#-- Generate method that executes tick-triggered transitions on tick events (if enabled). -->
 @Override
-public void tick(${syncMsgClass} nullMsg) {
+public void tick(${syncMsgType} syncedInputs) {
+  <#assign transitionArg =  hasSyncedPorts?then("syncedInputs", "null")/>
   <#list transitionsForTickEvent as tr>
-      if(${prefixes.transition()}${prefixes.tick()}${tr?counter}.isEnabled(state, null)) {
-        ${prefixes.transition()}${prefixes.tick()}${tr?counter}.execute(this, null);
-      }<#sep> else </#sep>
+    <#assign transition_field = prefixes.transition() + prefixes.tick() + tr?counter>
+    if(${transition_field}.isEnabled(state, ${transitionArg})) {
+      ${transition_field}.execute(this, ${transitionArg});
+    }<#sep> else </#sep>
   </#list>
 
   this.getState().doActionWithSuper();
 }
 
-<#-- Create transition objects for message-triggered transitions.
+<#-- Declare transition objects for message-triggered transitions.
   -- Also create methods for the triggering input ports, executing these transitions.
   -->
 <#list helper.getTransitionsForPortEvents(automaton) as port, transitions>
@@ -62,7 +79,7 @@ public void tick(${syncMsgClass} nullMsg) {
 
   <#-- Methods for the triggering input port, to execute matching transitions. -->
   @Override
-  public void ${prefixes.message()}${portName}(<@Util.getTypeString port.getType()/> msg) {
+  public void ${prefixes.message()}${portName}${helper.portVariantSuffix(ast, port)}(<@Util.getTypeString port.getType()/> msg) {
   <#list transitions as tr>
     if(${prefixes.transition()}${prefixes.message()}${portName}_${tr?counter}.isEnabled(state, msg)) {
       ${prefixes.transition()}${prefixes.message()}${portName}_${tr?counter}.execute(this, msg);
@@ -75,9 +92,22 @@ public void tick(${syncMsgClass} nullMsg) {
   -- but are a required part of the automaton API.
   -->
 <#list helper.getInPortsNotTriggeringAnyTransition(automaton, ast) as port>
-  <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}</#assign>
-  <#assign getPort>${prefixes.port()}${port.getName()}</#assign>
+  <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}${helper.portVariantSuffix(ast, port)}</#assign>
 
   @Override
-  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {}
+  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
+    <#if helper.isSync(port)>
+      de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
+    </#if>
+  }
+</#list>
+
+<#-- Methods for ports from other variants of the same component -->
+<#list helper.getInPortsWithSuffixesOfOtherVariants(ast.getSymbol()) as port, varSuffix>
+  <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}${varSuffix}</#assign>
+
+  @Override
+  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
+    throw new IllegalStateException("This event method is not available in this variant (${port.getName()}${varSuffix}).");
+  }
 </#list>

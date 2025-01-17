@@ -4,7 +4,7 @@ ${tc.signature()}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign syncMsg> ${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
-<#assign inPorts = ast.getSymbol().getAllIncomingPorts()>
+<#assign inPorts = helper.getSyncedInPortsOf(ast.getSymbol())>
 
 <#--
   - The explicit declaration of the signature guard lambda, unwrapping the synced input objects to individual lambda parameters

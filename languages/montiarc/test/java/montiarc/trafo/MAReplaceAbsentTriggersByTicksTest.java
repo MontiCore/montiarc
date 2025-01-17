@@ -15,24 +15,29 @@ import montiarc._ast.ASTMACompilationUnit;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
 class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
 
-  @Test
-  void shouldAddTickToUntriggeredEventTransition() throws IOException {
+  @ParameterizedTest
+  @ValueSource(strings = {"<<timed>>", "<<sync>>", "<<untimed>>", ""})
+  void shouldAddTickToUntriggeredTransition(@NotNull String timingStereotype) throws IOException {
+    Preconditions.checkNotNull(timingStereotype);
+
     // Given
-    String model =
+    String model = String.format(
       "component Comp {" +
         "  port in int i;" +
         "  port out int o;" +
         "  " +
-        "  <<timed>> automaton {" +
+        "  %s automaton {" +
         "    initial state S;" +
         "    S -> S / { o = i; };" +
         "  }" +
-        "}";
+        "}", timingStereotype);
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
 
@@ -42,6 +47,40 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     // Then
     ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
     ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(automaton);
+
+    Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
+    Assertions.assertThat(transitionBody.getSCEvent()).as("trigger").isInstanceOf(ASTMsgEvent.class);
+    Assertions.assertThat(((ASTMsgEvent) transitionBody.getSCEvent()).getName()).as("trigger").isEqualTo("Tick");
+  }
+
+  @ParameterizedTest
+  @ValueSource(strings = {"<<timed>>", "<<sync>>", "<<untimed>>", ""})
+  void shouldAddTickInNestedEventTransition(@NotNull String timingStereotype) throws IOException {
+    Preconditions.checkNotNull(timingStereotype);
+
+    // Given
+    String model = String.format(
+      "component Comp {" +
+        "  port in int i;" +
+        "  port out int o;" +
+        "  " +
+        "  %s automaton {" +
+        "    initial state S {" +
+        "      initial state SI;" +
+        "      SI -> SI / { o = i; };" +
+        "    };" +
+        "    S -> S / { o = i; };" +
+        "  }" +
+        "}", timingStereotype);
+    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
+    MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
+
+    // When
+    trafo.apply(ast);
+
+    // Then
+    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
+    ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(firstStateOf(automaton));
 
     Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
     Assertions.assertThat(transitionBody.getSCEvent()).as("trigger").isInstanceOf(ASTMsgEvent.class);
@@ -77,63 +116,6 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
   }
 
   @Test
-  void shouldNotAddTickToSyncTransition() throws IOException {
-    // Given
-    String model =
-      "component Comp {" +
-        "  port in int i;" +
-        "  port out int o;" +
-        "  " +
-        "  <<sync>> automaton {" +
-        "    initial state S;" +
-        "    S -> S / { o = i; };" +
-        "  }" +
-        "}";
-    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
-
-    // When
-    trafo.apply(ast);
-
-    // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
-    ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(automaton);
-
-    Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isFalse();
-  }
-
-  @Test
-  void shouldAddTickInNestedEventTransition() throws IOException {
-    // Given
-    String model =
-      "component Comp {" +
-        "  port in int i;" +
-        "  port out int o;" +
-        "  " +
-        "  <<timed>> automaton {" +
-        "    initial state S {" +
-        "      initial state SI;" +
-        "      SI -> SI / { o = i; };" +
-        "    };" +
-        "    S -> S / { o = i; };" +
-        "  }" +
-        "}";
-    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
-
-    // When
-    trafo.apply(ast);
-
-    // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
-    ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(firstStateOf(automaton));
-
-    Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
-    Assertions.assertThat(transitionBody.getSCEvent()).as("trigger").isInstanceOf(ASTMsgEvent.class);
-    Assertions.assertThat(((ASTMsgEvent) transitionBody.getSCEvent()).getName()).as("trigger").isEqualTo("Tick");
-  }
-
-  @Test
   void shouldNotAddTickToTriggeredEventInNestedTransition() throws IOException {
     // Given
     String model =
@@ -162,35 +144,6 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
     Assertions.assertThat(transitionBody.getSCEvent()).as("trigger").isInstanceOf(ASTMsgEvent.class);
     Assertions.assertThat(((ASTMsgEvent) transitionBody.getSCEvent()).getName()).as("trigger").isEqualTo("i");
-  }
-
-  @Test
-  void shouldNotAddTickInNestedSyncTransition() throws IOException {
-    // Given
-    String model =
-      "component Comp {" +
-        "  port in int i;" +
-        "  port out int o;" +
-        "  " +
-        "  <<sync>> automaton {" +
-        "    initial state S {" +
-        "      initial state SI;" +
-        "      SI -> SI / { o = i; };" +
-        "    };" +
-        "    S -> S / { o = i; };" +
-        "  }" +
-        "}";
-    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
-
-    // When
-    trafo.apply(ast);
-
-    // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
-    ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(firstStateOf(automaton));
-
-    Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isFalse();
   }
 
   private ASTArcStatechart getAutomatonOf(@NotNull ASTComponentType componentType) {

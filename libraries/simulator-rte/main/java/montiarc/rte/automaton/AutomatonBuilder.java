@@ -7,7 +7,7 @@ public abstract class AutomatonBuilder<C, I, A extends Automaton<C, I>> {
   protected State initial;
   protected String name;
 
-  public AutomatonBuilder(C context) {
+  protected AutomatonBuilder(C context) {
     this.context = context;
   }
 
@@ -48,6 +48,14 @@ public abstract class AutomatonBuilder<C, I, A extends Automaton<C, I>> {
       && this.getName() != null;
   }
 
-  public abstract A build();
+  public A build() {
+    if (context == null) throw new IllegalStateException();
+    if (initial == null) throw new IllegalStateException();
+    if (name == null) throw new IllegalStateException();
+
+    return buildActual(context, initial, name);
+  }
+
+  protected abstract A buildActual(C context, State initial, String name);
 
 }

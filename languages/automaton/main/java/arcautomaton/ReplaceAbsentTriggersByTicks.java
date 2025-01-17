@@ -1,10 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcautomaton;
 
-import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
-import arcautomaton._visitor.ArcAutomatonHandler;
-import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcbasis.trafo.SourcePositionUtil;
 import com.google.common.base.Preconditions;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
@@ -13,15 +10,15 @@ import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
- * Adds the {@code Tick} as a trigger to transitions without triggers in event automatons.
+ * Adds the {@code Tick} as a trigger to transitions without triggers in automatons.
  * <br>
- * In event automatons, transitions without a trigger event implicitly
+ * Transitions without a trigger event implicitly
  * represent transitions that are triggered by ticks. E.g.:
  * <pre>{@code
  *   component A {
  *     port out int o;
  *
- *     <<timed>> automaton {
+ *     automaton {
  *       initial state S;
  *
  *       // The following two transitions are semantically equal:
@@ -33,29 +30,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * }</pre>
  *
  * <br>
- * Usage: Add this as the handler for {@code ArcAutomaton} and visitor for {@code SCTransition4Code} to a traverser.
+ * Usage: Add this as the visitor for {@code SCTransition4Code} to a traverser.
  */
-public class ReplaceAbsentTriggersByTicks implements ArcAutomatonHandler, SCTransitions4CodeVisitor2 {
-
-  protected ArcAutomatonTraverser traverser;
-
-  @Override
-  public ArcAutomatonTraverser getTraverser() {
-    return traverser;
-  }
-
-  @Override
-  public void setTraverser(@NotNull ArcAutomatonTraverser traverser) {
-    this.traverser = Preconditions.checkNotNull(traverser);
-  }
-
-  @Override
-  public void traverse(ASTArcStatechart node) {
-    // Only continue traversal if the automaton is an event automaton, i.e. <<timed>>
-    if (node.isPresentStereotype() && node.getStereotype().contains("timed")) {
-      ArcAutomatonHandler.super.traverse(node);
-    }
-  }
+public class ReplaceAbsentTriggersByTicks implements SCTransitions4CodeVisitor2 {
 
   @Override
   public void visit(ASTTransitionBody node) {

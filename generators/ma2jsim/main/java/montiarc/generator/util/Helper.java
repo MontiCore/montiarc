@@ -13,6 +13,7 @@ import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
@@ -48,6 +49,7 @@ import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariationPoint;
+import variablearc._symboltable.VariantComponentTypeSymbol;
 import variablearc._symboltable.VariantPortSymbol;
 import variablearc._symboltable.VariantSubcomponentSymbol;
 import variablearc.evaluation.expressions.Expression;
@@ -62,6 +64,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -150,10 +153,13 @@ public class Helper {
     ArrayList<ASTSCTransition> result = new ArrayList<>();
     transitions.forEach(tr -> {
       Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
-      if (body.isEmpty() || !body.get().isPresentSCEvent()) return;
-      if (!(body.get().getSCEvent() instanceof ASTMsgEvent)) return;
-      if (ArcAutomatonMill.TICK.equals(((ASTMsgEvent) body.get().getSCEvent()).getName()))
+      if (body.isPresent()
+        && body.get().isPresentSCEvent()
+        && body.get().getSCEvent() instanceof ASTMsgEvent
+        && ArcAutomatonMill.TICK.equals(((ASTMsgEvent) body.get().getSCEvent()).getName())
+      ) {
         result.add(tr);
+      }
     });
     return result;
   }
@@ -250,6 +256,16 @@ public class Helper {
       .filter(Optional::isPresent)
       .map(Optional::get)
       .findFirst().orElse(Timing.DEFAULT);
+  }
+
+  public boolean isSync(ArcPortSymbol portSymbol) {
+    return portSymbol.getTiming().matches(Timing.TIMED_SYNC);
+  }
+
+  public List<ArcPortSymbol> getSyncedInPortsOf(ComponentTypeSymbol comp) {
+    return comp.getAllIncomingArcPorts().stream()
+      .filter(this::isSync)
+      .collect(Collectors.toList());
   }
 
   public Optional<ASTModeAutomaton> getModeAutomaton(ASTComponentType ast) {
@@ -572,6 +588,26 @@ public class Helper {
     }
 
     return varsWithSub;
+  }
+
+  public Map<ArcPortSymbol, String> getInPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSym) {
+    return getPortsWithSuffixesOfOtherVariants(variantCompSym).entrySet().stream()
+      .filter(p -> p.getKey().isIncoming())
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+  }
+
+  public Map<ArcPortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSymbol) {
+    List<ArcPortSymbol> ownPorts = variantCompSymbol.getArcPorts();
+    List<String> ownPortSuffixes = ownPorts.stream().map(p -> portVariantSuffix(variantCompSymbol.getAstNode(), p)).collect(Collectors.toList());
+    ComponentTypeSymbol original = variantCompSymbol.getAdaptee();
+
+    return getVariants(original.getAstNode()).stream()
+      .filter(v -> v != variantCompSymbol)
+      .map(ComponentTypeSymbol::getAllArcPorts)
+      .flatMap(Collection::stream)
+      .map(p -> Map.entry(p, portVariantSuffix(variantCompSymbol.getAstNode(), p)))
+      .filter(p -> !ownPortSuffixes.contains(p.getValue()))
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
   public List<ASTSCState> getSubstates(ASTSCState state) {

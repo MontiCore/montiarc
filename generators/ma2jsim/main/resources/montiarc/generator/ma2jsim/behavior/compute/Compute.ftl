@@ -46,5 +46,16 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
   }
 
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/sync/UnsupportedEventBehaviorMembers.ftl", [true])}
+  <#-- ArcCompute does not support event driven behavior.
+    -- The corresponding event messages must still be implemented (to obey the behavior signature).
+    -- -> The methods are implemented throwing an exception.
+    -->
+  <#assign compSym = ast.getSymbol().getAdaptee()>
+  <#list compSym.getAllIncomingPorts() as portSym>
+    <#assign methodName = prefixes.message() + portSym.getName() + helper.portVariantSuffix(ast, portSym)>
+    @Override
+    public void ${methodName}(<@Util.getTypeString portSym.getType()/> msg) {
+      throw new UnsupportedOperationException("Message event method can not be invoked for sync behavior");
+    }
+  </#list>
 }

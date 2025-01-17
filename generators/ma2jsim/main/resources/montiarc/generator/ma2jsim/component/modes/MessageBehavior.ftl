@@ -35,5 +35,9 @@
 <#list helper.getInPortsNotTriggeringAnyTransition(modeAutomaton, ast) as port>
   <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}</#assign>
 
-  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> ${port.getName()}) { }
+  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> ${port.getName()}) {
+    <#if helper.isSync(port)>
+      de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
+    </#if>
+  }
 </#list>

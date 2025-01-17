@@ -5,13 +5,12 @@ ${tc.signature("variant")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign automaton = helper.getAutomatonBehavior(ast).get() />
 <#assign ubGenerics><@Util.printTypeParameters ast false/></#assign>
-<#assign isEvent = helper.isEventBased(automaton)/>
 <#assign MODIFIER><#if isTop>abstract</#if></#assign>
 <#assign CLASS>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${suffixes.builder()}<#if isTop>TOP</#if></#assign>
 <#assign CONTEXT>${ast.getName()}${suffixes.context()}${ubGenerics}</#assign>
 <#assign SYNC_MSG>${ast.getName()}${suffixes.syncMsg()}${ubGenerics}</#assign>
 <#assign BEHAVIOR>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}</#assign>
-<#assign SUPER>montiarc.rte.automaton.<#if isEvent>Event<#else>Sync</#if>Automaton${suffixes.builder()}${"<"} ${CONTEXT}, ${SYNC_MSG}, ${BEHAVIOR} ${">"}</#assign>
+<#assign SUPER>montiarc.rte.automaton.Automaton${suffixes.builder()}${"<"} ${CONTEXT}, ${SYNC_MSG}, ${BEHAVIOR} ${">"}</#assign>
 
 public ${MODIFIER} class ${CLASS}<@Util.printTypeParameters ast/> extends ${SUPER} {
 

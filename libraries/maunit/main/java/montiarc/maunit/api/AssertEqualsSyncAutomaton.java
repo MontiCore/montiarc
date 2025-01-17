@@ -10,8 +10,7 @@ public class AssertEqualsSyncAutomaton<T> extends AssertEqualsSyncAutomatonTOP<T
 
   protected AssertEqualsSyncAutomaton(AssertEqualsSyncContext<T> assertEqualsSyncContext, AssertEqualsSyncStates<T> states, State initial, String name) {
     super(assertEqualsSyncContext, states, initial, name);
-    this.transitions.clear();
-    this.transitions.add(
+    this.transition_tick_1 =
       new TransitionBuilder<AssertEqualsSyncSyncMsg<T>>()
         .setSource(states.state_S)
         .setTarget(states.state_S)
@@ -33,6 +32,6 @@ public class AssertEqualsSyncAutomaton<T> extends AssertEqualsSyncAutomatonTOP<T
               context.set_field_index(index);
               this.states.state_S.doAction();
             })
-        .build());
+        .build();
   }
 }
