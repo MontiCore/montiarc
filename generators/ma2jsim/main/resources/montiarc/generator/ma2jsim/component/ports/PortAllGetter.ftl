@@ -3,51 +3,121 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
 
+<@allInPortsGetter/>
+<@allOutPortsGetter/>
+<@allSyncedInPortsGetter/>
+<@allMsgEventInPortsGetter/>
+
+<#macro allInPortsGetter>
 @Override
 protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllInPorts() {
-  final java.util.ArrayList${"<"}montiarc.rte.port.InOutPort${"<?>>"} allInPortList = new java.util.ArrayList<>();
-  allInPortList.add(tickPort);
-
   <#if hasOnlyOneVariant>
-    <#list ast.getSymbol().getAllIncomingPorts() as port>
-      allInPortList.add(${prefixes.port()}${port.getName()});
-    </#list>
+    return java.util.List.of(tickPort
+      <#list ast.getSymbol().getAllIncomingPorts() as port>
+        , this.${prefixes.port()}${port.getName()}
+      </#list>
+    );
   <#else>
     switch (this.variantID) {
       <#list helper.getVariants(ast) as variant>
         case ${helper.variantSuffix(variant)}:
-        <#list variant.getAllIncomingPorts() as port>
-          allInPortList.add(this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)});
-        </#list>
-          break;
+          return java.util.List.of(tickPort
+            <#list variant.getAllIncomingPorts() as port>
+              , this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}
+            </#list>
+          );
       </#list>
-      default: assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+      default:
+        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+        return java.util.Collections.emptyList();
     }
   </#if>
-
-  return allInPortList;
 }
+</#macro>
 
+
+
+<#macro allOutPortsGetter>
 @Override
 public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllOutPorts() {
-  final java.util.ArrayList${"<"}montiarc.rte.port.OutPort${"<?>>"} allOutPortList = new java.util.ArrayList<>();
-
   <#if hasOnlyOneVariant>
-    <#list ast.getSymbol().getAllOutgoingPorts() as port>
-      allOutPortList.add(${prefixes.port()}${port.getName()}());
-    </#list>
+    return java.util.List.of(
+      <#list ast.getSymbol().getAllOutgoingPorts() as port>
+        this.${prefixes.port()}${port.getName()}() <#sep>, </#sep>
+      </#list>
+    );
   <#else>
     switch (this.variantID) {
       <#list helper.getVariants(ast) as variant>
         case ${helper.variantSuffix(variant)}:
-        <#list variant.getAllOutgoingPorts() as port>
-          allOutPortList.add(this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}());
-        </#list>
-          break;
+        return java.util.List.of(
+          <#list variant.getAllOutgoingPorts() as port>
+            this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}() <#sep>, </#sep>
+          </#list>
+        );
       </#list>
-      default: assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+      default:
+        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+        return java.util.Collections.emptyList();
     }
   </#if>
-
-  return allOutPortList;
 }
+</#macro>
+
+
+
+<#macro allSyncedInPortsGetter>
+@Override
+protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllSyncedInPorts() {
+  <#if hasOnlyOneVariant>
+    return java.util.List.of(tickPort
+    <#list helper.getSyncedInPortsOf(ast.getSymbol()) as port>
+      , this.${prefixes.port()}${port.getName()}
+    </#list>
+    );
+  <#else>
+    switch (this.variantID) {
+      <#list helper.getVariants(ast) as variant>
+        case ${helper.variantSuffix(variant)}:
+          return java.util.List.of(tickPort
+            <#list helper.getSyncedInPortsOf(variant) as port>
+              , this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}
+            </#list>
+          );
+      </#list>
+      default:
+        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+        return java.util.Collections.emptyList();
+    }
+  </#if>
+}
+</#macro>
+
+
+
+<#macro allMsgEventInPortsGetter>
+protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllMsgEventInPorts() {
+  <#if hasOnlyOneVariant>
+    return java.util.List.of(
+    <#list helper.getMsgEventInPortsOf(ast.getSymbol()) as port>
+      this.${prefixes.port()}${port.getName()}<#sep>, </#sep>
+    </#list>
+    );
+
+  <#else>
+    switch (this.variantID) {
+      <#list helper.getVariants(ast) as variant>
+        case ${helper.variantSuffix(variant)}:
+          return java.util.List.of(
+            <#list helper.getMsgEventInPortsOf(variant) as port>
+              this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} <#sep>, </#sep>
+            </#list>
+          );
+      </#list>
+      default:
+        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
+        return java.util.Collections.emptyList();
+    }
+  </#if>
+}
+</#macro>

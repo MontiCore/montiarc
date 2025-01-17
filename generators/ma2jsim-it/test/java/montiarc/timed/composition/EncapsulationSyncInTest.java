@@ -54,14 +54,6 @@ class EncapsulationSyncInTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(msg(OnOff.ON)),
-        List.of(msg(OnOff.ON))
-      ),
-      Arguments.of(
-        List.of(msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF))
-      ),
-      Arguments.of(
         List.of(tk()),
         List.of(tk())
       ),
@@ -74,28 +66,20 @@ class EncapsulationSyncInTest {
         List.of(msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(tk(), msg(OnOff.ON)),
-        List.of(tk(), msg(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(tk(), msg(OnOff.OFF)),
-        List.of(tk(), msg(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF))
-      ),
-      Arguments.of(
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON))
-      ),
-      Arguments.of(
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         List.of(tk(), tk()),
@@ -118,44 +102,44 @@ class EncapsulationSyncInTest {
         List.of(tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(tk(), tk(), msg(OnOff.ON)),
-        List.of(tk(), tk(), msg(OnOff.ON))
+        List.of(tk(), tk(), msg(OnOff.ON), tk()),
+        List.of(tk(), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(tk(), tk(), msg(OnOff.OFF)),
-        List.of(tk(), tk(), msg(OnOff.OFF))
+        List.of(tk(), tk(), msg(OnOff.OFF), tk()),
+        List.of(tk(), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON), tk()),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ));
   }
 }

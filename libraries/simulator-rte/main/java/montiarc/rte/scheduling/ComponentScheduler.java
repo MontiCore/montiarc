@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
+import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
@@ -9,25 +10,32 @@ import montiarc.rte.port.InPort;
 import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ComponentScheduler {
 
   protected final Component component;
+  protected final Set<InPort<?>> syncPorts;
+  protected final Set<InPort<?>> msgEventPorts;
   protected final Set<InPort<?>> allInPorts;
-  protected final boolean isSyncComp;
 
-  protected final Deque<InPort<?>> scheduledPorts;
+  protected final Deque<InPort<?>> scheduledMsgEventPorts;
   protected boolean isTickScheduled;
   protected boolean isExecuting;
 
-
-  public ComponentScheduler(Component component, Collection<? extends InPort<?>> inPorts, boolean isSync) {
+  public ComponentScheduler(Component component,
+                            Collection<? extends InPort<?>> msgEventPorts,
+                            Collection<? extends InPort<?>> syncPorts) {
     this.component = component;
-    this.allInPorts = Set.copyOf(inPorts);
-    this.isSyncComp = isSync;
+    this.msgEventPorts = Set.copyOf(msgEventPorts);
+    this.syncPorts = Set.copyOf(syncPorts);
 
-    this.scheduledPorts = new ArrayDeque<>(this.allInPorts.size());
+    this.allInPorts = new HashSet<>(msgEventPorts.size() + syncPorts.size());
+    this.allInPorts.addAll(msgEventPorts);
+    this.allInPorts.addAll(syncPorts);
+
+    this.scheduledMsgEventPorts = new ArrayDeque<>(this.msgEventPorts.size());
     this.isTickScheduled = false;
     this.isExecuting = false;
   }
@@ -36,75 +44,97 @@ public class ComponentScheduler {
     if (newMsg instanceof Message) {
       throw new IllegalArgumentException("Requested message object should be unwrapped and not instance of the rte class 'Message'");
     }
-    requestScheduling(port);
+
+    if (syncPorts.contains(port)) {
+      Log.warn("Scheduler method 'requestScheduling(InPort, Object)' should not be invoked on sync ports.");
+    } else {
+      requestMsgEventPortScheduling(port);
+    }
   }
 
   public void requestSchedulingOfNewTick(InPort<?> port) {
     requestScheduling(port);
   }
 
+  protected void requestScheduling(InPort<?> port) {
+    if (syncPorts.contains(port)) {
+      requestSyncPortScheduling();
+    } else if (msgEventPorts.contains(port)){
+      requestMsgEventPortScheduling(port);
+    } else {
+      throw new IllegalArgumentException(
+        String.format("Port '%s'is not registered with the scheduler for component '%s'.",
+          port.getQualifiedName(), component.getName())
+      );
+    }
+  }
 
-  public void requestScheduling(InPort<?> port) {
+  protected void requestSyncPortScheduling() {
     if (this.isExecuting) {
       return;  // After execution has finished, the scheduler will schedule the port by itself if there is a new message
     }
 
-    if (isSyncComp) {
-      requestSyncedScheduling();
-    } else {
-      requestTimedScheduling(port);
-    }
-  }
-
-  protected void requestSyncedScheduling() {
     if (isTickScheduled) {
       return;
     } else if (allPortsHaveBufferedTick()) {
-      for (InPort<?> p : allInPorts) {
-        p.dropMessagesIgnoredBySync();
-      }
-      isTickScheduled = true;
+      orderTickSchedule();
     }
   }
 
-  protected void requestTimedScheduling(InPort<?> port) {
-    if (scheduledPorts.contains(port) || isTickScheduled || port.isBufferEmpty()) {
+  protected void requestMsgEventPortScheduling(InPort<?> port) {
+    if (this.isExecuting) {
+      return;  // After execution has finished, the scheduler will schedule the port by itself if there is a new message
+    }
+
+    if (scheduledMsgEventPorts.contains(port) || port.isBufferEmpty()) {
       return;
+      // Unless the port has messages _before_ the next tick
     }
 
     if (!port.isTickBlocked()) {
-      scheduledPorts.add(port);
-    } else if (scheduledPorts.isEmpty() && allPortsAreTickBlocked()) {
-      isTickScheduled = true;
+      scheduledMsgEventPorts.add(port);
+    } else if (scheduledMsgEventPorts.isEmpty() && allPortsAreTickBlocked()) {
+      orderTickSchedule();
     }
+  }
+
+  /**
+   * Forces all sync ports to execute {@link InPort#dropMessagesIgnoredBySync()}
+   * and sets {@link ComponentScheduler#isTickScheduled} to true.
+   */
+  protected void orderTickSchedule() {
+    for (InPort<?> p : syncPorts) {
+      p.dropMessagesIgnoredBySync();
+    }
+    isTickScheduled = true;
   }
 
   public void executeNextSchedule() {
     if (isExecuting) {
-      throw new IllegalStateException("Triggering the execution of a component that has not finished the already " +
+      throw new IllegalStateException("Triggering the execution of a component that has not finished an already " +
         "running execution is not allowed.");
     }
 
-    if (!scheduledPorts.isEmpty()) {
-      executePortSchedule(scheduledPorts.getFirst());
+    if (!scheduledMsgEventPorts.isEmpty()) {
+      executePortSchedule(scheduledMsgEventPorts.getFirst());
     } else if (isTickScheduled) {
       executeTickSchedule();
     }
   }
 
   protected void executePortSchedule(InPort<?> port) {
-    if (!scheduledPorts.contains(port)) {
+    if (!scheduledMsgEventPorts.contains(port)) {
       throw new IllegalStateException("Can not execute unscheduled port.");
     }
 
     isExecuting = true;
-    scheduledPorts.remove(port);
+    scheduledMsgEventPorts.remove(port);
     component.handleMessage(port);
     port.pollBuffer();  // Remove processed message from port buffer
     isExecuting = false;
 
     if (!port.isBufferEmpty()) {
-      this.requestScheduling(port);
+      this.requestMsgEventPortScheduling(port);
     }
   }
 
@@ -116,20 +146,32 @@ public class ComponentScheduler {
     isExecuting = true;
     isTickScheduled = false;
     component.handleTick();
-    // remove messages in front of tick and then the tick
     for (InPort<?> p : allInPorts) {
-      while ((!p.isBufferEmpty()) && (p.peekBuffer() != Tick.get())) {
-        p.pollBuffer();  // Remove all data messages
-      }
-      p.pollBuffer();  // Remove the processed tick
+      removeCurrentTimeSliceContentFrom(p);
     }
     isExecuting = false;
 
     // Put ports that had messages buffered behind the tick into the scheduling queue again
-    for (InPort<?> p : allInPorts) {
+    for (InPort<?> p : msgEventPorts) {
       if (!p.isBufferEmpty()) {
-        this.requestScheduling(p);
+        this.requestMsgEventPortScheduling(p);
       }
+    }
+
+    if (allPortsHaveBufferedTick()) {
+      requestSyncPortScheduling();
+    }
+  }
+
+  /**
+   * Removes all messages until and including the next tick from the port's buffer.
+   */
+  private void removeCurrentTimeSliceContentFrom(InPort<?> p) {
+    while (!p.isBufferEmpty() && !p.isTickBlocked()) {
+      p.pollBuffer();  // Remove all data messages
+    }
+    if (!p.isBufferEmpty() && p.isTickBlocked()) {
+      p.pollBuffer();  // Remove the time-slice-ending tick
     }
   }
 
@@ -144,7 +186,7 @@ public class ComponentScheduler {
   }
 
   public boolean isReadyToExecute() {
-    return isTickScheduled || !scheduledPorts.isEmpty();
+    return isTickScheduled || !scheduledMsgEventPorts.isEmpty();
   }
 
   public void run() {

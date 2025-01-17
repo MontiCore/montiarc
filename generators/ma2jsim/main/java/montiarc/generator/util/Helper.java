@@ -241,14 +241,6 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public boolean isEventBased(ASTArcStatechart sc) {
-    return !sc.getTiming().matches(Timing.TIMED_SYNC);
-  }
-
-  public boolean isEventBased(ASTModeAutomaton modeAutomaton) {
-    return !determineTiming(modeAutomaton).matches(Timing.TIMED_SYNC);
-  }
-
   protected Timing determineTiming(ASTModeAutomaton modeAutomaton) {
     if (!modeAutomaton.isPresentStereotype()) return Timing.DEFAULT;
     return modeAutomaton.getStereotype().streamValues()
@@ -262,9 +254,20 @@ public class Helper {
     return portSymbol.getTiming().matches(Timing.TIMED_SYNC);
   }
 
+  public boolean isMsgEventPort(ArcPortSymbol portSymbol) {
+    return portSymbol.getTiming().matches(Timing.TIMED)
+      || portSymbol.getTiming().matches(Timing.UNTIMED);
+  }
+
   public List<ArcPortSymbol> getSyncedInPortsOf(ComponentTypeSymbol comp) {
     return comp.getAllIncomingArcPorts().stream()
       .filter(this::isSync)
+      .collect(Collectors.toList());
+  }
+
+  public List<ArcPortSymbol> getMsgEventInPortsOf(ComponentTypeSymbol comp) {
+    return comp.getAllIncomingArcPorts().stream()
+      .filter(this::isMsgEventPort)
       .collect(Collectors.toList());
   }
 

@@ -5,7 +5,7 @@ import montiarc.types.OnOff;
 
 component Delay {
 
-  port in OnOff i;
+  port <<sync>> in OnOff i;
   port <<delayed>> out OnOff o;
 
   init {

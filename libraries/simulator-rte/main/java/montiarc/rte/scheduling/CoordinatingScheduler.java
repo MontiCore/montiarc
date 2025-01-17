@@ -27,11 +27,13 @@ public class CoordinatingScheduler implements Scheduler {
   }
 
   @Override
-  public void register(Component component, Collection<? extends InPort<?>> inPorts, boolean isSync) {
+  public void register(Component component,
+                       Collection<? extends InPort<?>> msgEventPorts,
+                       Collection<? extends InPort<?>> syncPorts) {
     if (component.hasModeAutomaton()) {
-      this.compToScheduler.put(component, new ModeComponentScheduler(component, inPorts, isSync, this));
+      this.compToScheduler.put(component, new ModeComponentScheduler(component, msgEventPorts, syncPorts, this));
     } else {
-      this.compToScheduler.put(component, new ComponentScheduler(component, inPorts, isSync));
+      this.compToScheduler.put(component, new ComponentScheduler(component, msgEventPorts, syncPorts));
     }
   }
 

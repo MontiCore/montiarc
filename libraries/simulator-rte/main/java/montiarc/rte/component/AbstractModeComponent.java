@@ -44,18 +44,12 @@ public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC exte
    * To be overwritten by timed components, calling the mode automaton reaction to the message on port <i>p</i>
    */
   protected void handleMessageWithModeAutomaton(InPort<?> p) {
-    // Empty default behavior for synced components that don't react to message triggers
+    // Empty default behavior for synced ports that don't react to message triggers
   }
 
   @Override
-  protected void handleSyncedTickExecution() {
+  protected void handleTickExecution() {
     modeAutomaton.tick(buildSyncMessage());
-    super.handleSyncedTickExecution();
-  }
-
-  @Override
-  protected void handleEventTickExecution() {
-    modeAutomaton.tick(null);
-    super.handleEventTickExecution();
+    super.handleTickExecution();
   }
 }

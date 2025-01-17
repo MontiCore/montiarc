@@ -20,7 +20,8 @@ public interface Component {
   /**
    * Executes the component's logic that processes the completion of a timing interval.
    * <br>
-   * This does not mean that, if the component is decomposed, all sub components process the tick as well.
+   * This does not mean that, if the component is decomposed, all sub components process the tick as well,
+   * as this is scheduling-dependent.
    */
   void handleTick();
 

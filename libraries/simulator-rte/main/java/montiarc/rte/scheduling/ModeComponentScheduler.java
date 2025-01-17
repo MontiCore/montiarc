@@ -9,8 +9,11 @@ import java.util.Collection;
 public final class ModeComponentScheduler extends ComponentScheduler {
   private final CoordinatingScheduler coordinator;
 
-  public ModeComponentScheduler(Component component, Collection<? extends InPort<?>> inPorts, boolean isSync, CoordinatingScheduler coordinator) {
-    super(component, inPorts, isSync);
+  public ModeComponentScheduler(Component component,
+                                Collection<? extends InPort<?>> msgEventPorts,
+                                Collection<? extends InPort<?>> syncPorts,
+                                CoordinatingScheduler coordinator) {
+    super(component, msgEventPorts, syncPorts);
     this.coordinator = coordinator;
   }
 

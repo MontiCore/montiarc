@@ -38,7 +38,7 @@ public class MAUnitTestEngineTest {
 
     public ExampleMaUnitTest(String name, Scheduler scheduler) {
       super(name, scheduler);
-      this.scheduler.register(this, List.of(tickPort), true);
+      this.scheduler.register(this, List.of(), List.of(tickPort));
     }
 
     @Override
@@ -74,6 +74,9 @@ public class MAUnitTestEngineTest {
     public List<OutPort<?>> getAllOutPorts() {
       return List.of();
     }
+
+    @Override
+    protected List<InOutPort<?>> getAllSyncedInPorts() { return List.of(); }
 
     @Override
     protected Object portValueOf(InPort<?> p) {

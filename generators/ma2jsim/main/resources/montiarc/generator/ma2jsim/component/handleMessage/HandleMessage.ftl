@@ -6,7 +6,7 @@
 
 <#assign modeAutomatonOpt = helper.getModeAutomaton(ast)/>
 
-<#if modeAutomatonOpt.isPresent() && helper.isEventBased(modeAutomatonOpt.get())>
+<#if modeAutomatonOpt.isPresent()>
 @Override
 public void handleMessageWithModeAutomaton(montiarc.rte.port.InPort<?> p) {
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>

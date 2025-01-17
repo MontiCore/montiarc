@@ -4,7 +4,7 @@ package montiarc.sync.compute;
 import montiarc.types.OnOff;
 
 component Send2MessagesInitially {
-  port in OnOff p;
+  port <<sync>> in OnOff p;
   port <<delayed>> out OnOff o;
 
   init {

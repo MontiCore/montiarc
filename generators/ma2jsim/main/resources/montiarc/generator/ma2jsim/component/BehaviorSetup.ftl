@@ -10,9 +10,7 @@
     <#assign hasModeAutomaton = modeAutomaton.isPresent()>
     <#assign compute = helper.getComputeBehavior(variant.getAstNode())/>
     <#assign hasCompute = compute.isPresent()/>
-    <#assign isEvent = (hasAutomaton && helper.isEventBased(automaton.get())) || (hasModeAutomaton && helper.isEventBased(modeAutomaton.get()))/>
   protected void <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}() {
-    this.isSync = ${(!isEvent)?c};
     <#if hasAutomaton>
       this.behavior = new ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(variant)}${suffixes.builder()}<@Util.printTypeParameters ast false/>(this)
       .addDefaultStates()

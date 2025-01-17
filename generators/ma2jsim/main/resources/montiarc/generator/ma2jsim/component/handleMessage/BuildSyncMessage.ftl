@@ -27,7 +27,7 @@ protected ${SYNC_MSG} buildSyncMessage() {
 }
 
 <#list helper.getVariants(ast) as variant>
-  <#assign variantPorts = variant.getAllIncomingArcPorts()>
+  <#assign variantPorts = helper.getSyncedInPortsOf(variant)>
   protected ${SYNC_MSG} doBuildSyncMessage${helper.variantSuffix(variant)}() {
     return new ${SYNC_MSG}(
         <#list ast.getSymbol().getAllIncomingPorts() as inPort>
@@ -35,8 +35,9 @@ protected ${SYNC_MSG} buildSyncMessage() {
             ${prefixes.portValueOf()}${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}()
           <#else>
             <#-- The SyncedInputs class is a 150% class. It contains fields for the ports of all possible variants
-              -- of a component. Therefore, we have to call the constructor with values for non-existing ports, too
+              -- of a component. Therefore, we have to call the constructor with values for non-existing ports, too.
               -- (regarding the given variant).
+              -- We are also initializing message-event ports with null-like values.
               -->
             ${helper.getNarrowedNullLikeValue(inPort.getType())}
           </#if>

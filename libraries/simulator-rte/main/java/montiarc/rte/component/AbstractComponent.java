@@ -17,13 +17,13 @@ import java.util.Set;
 
 /**
  * Provides basic implementation for timed components, especially including message handling:
- * {@link #handleTick()}, {@link #handleMessage(InPort)} and {@link #handleSyncedTickExecution()}.
+ * {@link #handleTick()}, {@link #handleMessage(InPort)} and {@link #handleTickExecution()}.
  * <br>
- * Timed components should provide logic for the method {@link #handleMessageWithBehavior(InPort)} to call the
+ * Components should provide logic for the method {@link #handleMessageWithBehavior(InPort)} to call the
  * behavior for the respective port event.
  * <br>
- * Synced components should provide logic for the method {@link #buildSyncMessage()}, creating a synced input object of
- * type {@code <I>} with the current values of all input ports.
+ * They should also provide logic for the method {@link #buildSyncMessage()}, creating a synced input object of
+ * type {@code <I>} with the current values of all synchronized input ports.
  * <br>
  * For dynamic components with modes, {@link AbstractModeComponent} should be used.
  *
@@ -39,7 +39,6 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   protected final Scheduler scheduler;
 
   protected boolean isAtomic;
-  protected boolean isSync;
   protected B behavior;
 
   protected AbstractComponent(String name, Scheduler scheduler) {
@@ -80,6 +79,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
   protected abstract List<InOutPort<?>> getAllInPorts();
   public abstract List<OutPort<?>> getAllOutPorts();
+  protected abstract List<InOutPort<?>> getAllSyncedInPorts();
   protected abstract Object portValueOf(InPort<?> p);
 
   protected void sendTickOnAllOutputs() {
@@ -111,11 +111,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   @Override
   public void handleTick() {
     Log.info(DataFormatter.TK, this.getName() + "#" + Aspects.RECEIVE_EVENT);
-    if (isSync) {
-      handleSyncedTickExecution();
-    } else {
-      handleEventTickExecution();
-    }
+    handleTickExecution();
   }
 
   @Override
@@ -136,36 +132,32 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
   protected abstract I buildSyncMessage();
 
-  protected void handleSyncedTickExecution() {
+  protected void handleTickExecution() {
     // forward message to sub components / atomic behavior
     if (isAtomic) {
       if (behavior != null) {
         this.behavior.tick(buildSyncMessage());
       }
       sendTickOnAllOutputs();
-    } else {
-      for (InOutPort<?> inPort : getAllInPorts()) {
-        // Forward the sync message (if existent) and send a tick afterwards
-        if (!inPort.isTickBlocked()) {
-          inPort.forwardWithoutRemoval();
-        }
-        inPort.sendTick();
-      }
-      this.sendTickOnAllUnconnectedOutputs();
-    }
-  }
 
-  protected void handleEventTickExecution() {
-    // Forward tick to sub components / behavior
-    if (isAtomic) {
-      if (behavior != null) {
-        behavior.tick(null);
-      }
-      sendTickOnAllOutputs();
     } else {
-      for (InOutPort<?> inPort : this.getAllInPorts()) {
-        inPort.forwardWithoutRemoval();
+      // Component is decomposed
+      for (InOutPort<?> p : getAllSyncedInPorts()) {
+        // If there was a message on the port, forward it
+        if (!p.isTickBlocked()) {
+          p.forwardWithoutRemoval();
+        }
       }
+
+      for (InOutPort<?> p : this.getAllInPorts()) {
+        // "Forward" the tick of this execution
+        // (Pure forwarding does not work for sync ports, as we did not remove the message before it.
+        //  This is done by the scheduler later. Therefore, send the tick manually.)
+        p.sendTick();
+      }
+
+      // Output ports that have no internal connection do not receive ticks via internal behavior or
+      // connectors. Therefore, we have to send ticks to them manually.
       this.sendTickOnAllUnconnectedOutputs();
     }
   }

@@ -56,7 +56,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
   this.modeAutomaton.setup();
 </#if>
 
-this.scheduler.register(this, this.getAllInPorts(), isSync);
+this.scheduler.register(this, this.getAllMsgEventInPorts(), this.getAllSyncedInPorts());
 
 <@logInstantiation/>
 }

@@ -5,7 +5,7 @@ import montiarc.types.OnOff;
 
 component Medium {
 
-  port in OnOff i;
+  port <<sync>> in OnOff i;
   port out OnOff o;
 
   compute {

@@ -5,8 +5,8 @@ import montiarc.types.OnOff;
 
 component Switch {
 
-  port in OnOff i1;
-  port in OnOff i2;
+  port <<sync>> in OnOff i1;
+  port <<sync>> in OnOff i2;
   port out OnOff o;
 
   compute {
