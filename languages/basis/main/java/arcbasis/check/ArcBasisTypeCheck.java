@@ -10,6 +10,7 @@ import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
+import de.monticore.types3.util.TypeVisitorOperatorCalculator;
 import de.monticore.types3.util.WithinScopeBasicSymbolsResolver;
 import de.monticore.types3.util.WithinTypeBasicSymbolsResolver;
 import de.monticore.visitor.ITraverser;
@@ -64,6 +65,10 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(inScopeResolver);
     Preconditions.checkNotNull(inTypeResolver);
     Log.trace("Start initializing the type-check delegate", LOG_NAME);
+    ArcBasisWithinScopeBasicSymbolsResolver.init();
+    WithinTypeBasicSymbolsResolver.init();
+    ArcBasisTypeContextCalculator.init();
+    TypeVisitorOperatorCalculator.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast, inScopeResolver, inTypeResolver);
     Log.trace("Set the type-check delegate as global TC3 delegate", LOG_NAME);
     setDelegate(new ArcBasisTypeCheck(traverser, type4Ast, ctx4Ast));
@@ -99,7 +104,6 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     expressionBasis = new ExpressionBasisTypeVisitor();
     expressionBasis.setType4Ast(type4Ast);
     expressionBasis.setContext4Ast(ctx4Ast);
-    expressionBasis.setWithinScopeResolver(inScopeResolver);
     traverser.add4ExpressionsBasis(expressionBasis);
     Log.trace("Finish initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
   }
@@ -118,8 +122,6 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     mcBasicTypes = new MCBasicTypesTypeVisitor();
     mcBasicTypes.setType4Ast(type4Ast);
     mcBasicTypes.setContext4Ast(ctx4Ast);
-    mcBasicTypes.setWithinScopeResolver(inScopeResolver);
-    mcBasicTypes.setWithinTypeResolver(inTypeResolver);
     traverser.add4MCBasicTypes(mcBasicTypes);
     Log.trace("Finish initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
   }

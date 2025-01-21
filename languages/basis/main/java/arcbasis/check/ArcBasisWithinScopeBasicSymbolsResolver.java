@@ -21,13 +21,8 @@ import static de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION;
 
 public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSymbolsResolver {
 
-  public ArcBasisWithinScopeBasicSymbolsResolver() {
-    this(new ArcBasisTypeContextCalculator(), new ArcBasisWithinTypeBasicSymbolsResolver());
-  }
-
-  protected ArcBasisWithinScopeBasicSymbolsResolver(@NotNull TypeContextCalculator typeCtxCalc,
-                                                    @NotNull WithinTypeBasicSymbolsResolver withinTypeResolver) {
-    super(Preconditions.checkNotNull(typeCtxCalc), Preconditions.checkNotNull(withinTypeResolver));
+  public static void init() {
+    setDelegate(new ArcBasisWithinScopeBasicSymbolsResolver());
   }
 
   @Override
@@ -42,7 +37,7 @@ public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSym
   }
 
   @Override
-  public Optional<SymTypeExpression> resolveType(@NotNull IBasicSymbolsScope scope,
+  protected Optional<SymTypeExpression> _resolveType(@NotNull IBasicSymbolsScope scope,
                                                  @NotNull String name) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(name);

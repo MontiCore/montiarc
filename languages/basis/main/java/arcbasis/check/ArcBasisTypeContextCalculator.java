@@ -11,8 +11,12 @@ import java.util.Optional;
 
 public class ArcBasisTypeContextCalculator extends TypeContextCalculator {
 
+  public static void init() {
+    setDelegate(new ArcBasisTypeContextCalculator());
+  }
+
   @Override
-  public Optional<TypeSymbol> getEnclosingType(IScope enclosingScope) {
+  protected Optional<TypeSymbol> _getEnclosingType(IScope enclosingScope) {
     Optional<TypeSymbol> enclosingType = Optional.empty();
 
     for (IScope scope = enclosingScope; scope != null && enclosingType.isEmpty(); scope = scope.getEnclosingScope()) {
