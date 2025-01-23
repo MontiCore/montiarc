@@ -45,6 +45,9 @@ abstract class MontiArcCompile : JavaExec() {
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
+  @get:Input
+  abstract val printTaskInfo : Property<Boolean>
+
   init {
     description = "Generates .java code from MontiArc models."
 
@@ -53,6 +56,7 @@ abstract class MontiArcCompile : JavaExec() {
 
     useClass2Mc.convention(false)
     dse.convention(false)
+    printTaskInfo.convention(false)
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -70,7 +74,9 @@ abstract class MontiArcCompile : JavaExec() {
   @TaskAction
   override fun exec() {
 
-    // printInfo()
+    if (printTaskInfo.get()) {
+      printInfo()
+    }
 
     // 1) For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
