@@ -2,6 +2,7 @@
 package montiarc.trafo;
 
 import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPortAccess;
 import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -195,6 +196,7 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
     MontiArcTrafos.afterParsing().applyAll(ast);
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
     List<ASTConnector> before = ast.getComponentType().getConnectors();
 
     MAAutoConnectTrafo trafo = new MAAutoConnectTrafo();
@@ -208,6 +210,15 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
     SoftAssertions.assertSoftly(a -> {
       a.assertThat(after.size()).as("Checking number of new connectors").isEqualTo(expected);
       a.assertThat(after).as("Should retain connectors").containsAll(before);
+      a.assertThat(after).map(ASTConnector::getSource).as("Source ports have transferred sub comp symbol")
+        .allMatch(p -> p.isPresentComponent() == p.isPresentComponentSymbol());
+      a.assertThat(after).map(ASTConnector::getSource).as("Source ports have transferred port symbol")
+        .allMatch(ASTPortAccess::isPresentPortSymbol);
+      a.assertThat(after).flatMap(ASTConnector::getTargetList)
+        .as("Target ports have transferred sub comp symbol")
+        .allMatch(p -> p.isPresentComponent() == p.isPresentComponentSymbol());
+      a.assertThat(after).flatMap(ASTConnector::getTargetList).as("Target ports have transferred port symbol")
+        .allMatch(ASTPortAccess::isPresentPortSymbol);
     });
     assertThat(Log.getFindings()).isEmpty();
 

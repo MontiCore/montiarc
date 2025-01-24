@@ -26,15 +26,9 @@ public class ASTArcAutoConnect extends ASTArcAutoConnectTOP {
     Preconditions.checkNotNull(source);
     Preconditions.checkNotNull(target);
 
-    ASTPortAccess newSource = source.deepClone();
-    newSource.setEnclosingScope(this.getEnclosingScope());
-    newSource.set_SourcePositionStart(this.get_SourcePositionStart());
-    newSource.set_SourcePositionEnd(this.get_SourcePositionEnd());
 
-    ASTPortAccess newTarget = target.deepClone();
-    newTarget.setEnclosingScope(this.getEnclosingScope());
-    newTarget.set_SourcePositionStart(this.get_SourcePositionStart());
-    newTarget.set_SourcePositionEnd(this.get_SourcePositionEnd());
+    ASTPortAccess newSource = preparedClone(source);
+    ASTPortAccess newTarget = preparedClone(target);
 
     ASTConnector connector = ComfortableArcMill.connectorBuilder()
       .setSource(newSource)
@@ -46,5 +40,25 @@ public class ASTArcAutoConnect extends ASTArcAutoConnectTOP {
     connector.setEnclosingScope(this.getEnclosingScope());
 
     return connector;
+  }
+
+  protected ASTPortAccess preparedClone(@NotNull ASTPortAccess orig) {
+    Preconditions.checkNotNull(orig);
+    Preconditions.checkNotNull(enclosingScope);
+
+    ASTPortAccess clone = orig.deepClone();
+    clone.setEnclosingScope(this.getEnclosingScope());
+
+    if (orig.isPresentComponentSymbol()) {
+      clone.setComponentSymbol(orig.getComponentSymbol());
+    }
+    if (orig.isPresentPortSymbol()) {
+      clone.setPortSymbol(orig.getPortSymbol());
+    }
+
+    clone.set_SourcePositionStart(this.get_SourcePositionStart());
+    clone.set_SourcePositionEnd(this.get_SourcePositionEnd());
+
+    return clone;
   }
 }
