@@ -8,14 +8,14 @@ plugins {
   id("montiarc-jsim")
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest"
+group = "montiarc.tooling.ma2jsim-plugin-itest"
 
 montiarc {
   internalMontiArcTesting.set(true)
 }
 
 dependencies {
-  montiarc(project(":tooling:ma2java-plugin-itest:consumes-library"))
+  montiarc(project(":tooling:ma2jsim-plugin-itest:consumes-library"))
 
   testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")

@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.consumes_montiarc_base;
+package consumes_montiarc_base;
 
 // Tests that the montiarc-base library can be accessed
 // (should be shipped together with the plugin)

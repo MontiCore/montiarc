@@ -1,23 +1,32 @@
 /* (c) https://github.com/MontiCore/monticore */
 package endconsumerpackage;
 
+import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
+
+@JSimTest
 public class TransitiveConsumerTest {
 
   @Test
   public void checkComponentIsUsable() {
     // Given
-    TransitiveConsumer comp = new TransitiveConsumer();
-    comp.setUp();
+    TransitiveConsumerComp comp = new TransitiveConsumerCompBuilder().setName("sut").build();
+    PortObserver<Number> port_o = new PortObserver<>();
     comp.init();
+    comp.port_outgoing.connect(port_o);
 
     // When
-    comp.getIncoming().update(10);
-    comp.compute();
+    comp.port_incoming.receive(msg(10));
+    comp.port_incoming.receive(tk());
+    comp.run();
 
     // Then
-    Assertions.assertEquals(11, comp.getOutgoing().getValue());
+    Assertions.assertEquals(1, port_o.getObservedValues().size());
+    Assertions.assertEquals(11, port_o.getObservedValues().get(0));
   }
 }

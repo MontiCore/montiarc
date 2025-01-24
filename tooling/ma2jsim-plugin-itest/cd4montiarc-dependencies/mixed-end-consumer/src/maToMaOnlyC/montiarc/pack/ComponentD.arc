@@ -5,9 +5,10 @@ import pack.cda.A;
 import pack.cdb.B;
 
 component ComponentD {
-  autoconnect port;
   port in A aPort,
        in B bPort;
 
   ComponentC cComp;
+  aPort -> cComp.aPort;
+  bPort -> cComp.bPort;
 }

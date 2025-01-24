@@ -1,6 +1,5 @@
-import montiarc.build.BuildConstants
-
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.build.BuildConstants
 
 plugins {
   id("montiarc.build.repositories")
@@ -10,7 +9,7 @@ plugins {
   id("cd2pojo")
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"
+group = "montiarc.tooling.ma2jsim-plugin-itest.cd4montiarc-dependencies"
 version = BuildConstants.VERSION
 
 cd2pojo {

@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.gradle.ma2java.MontiArcCompile
-import montiarc.gradle.ma2java.compileMontiarcTaskName
+import montiarc.gradle.ma2jsim.MontiArcCompile
+import montiarc.gradle.ma2jsim.compileMontiarcTaskName
 
 /**
  * This build is mostly a test specification. It defines configurations for different compileMontiarc tasks
@@ -15,7 +15,7 @@ plugins {
   id("montiarc-jsim")
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest"
+group = "montiarc.tooling.ma2jsim-plugin-itest"
 
 montiarc {
   internalMontiArcTesting.set(true)
@@ -45,8 +45,8 @@ val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesA
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingImportedSymbols.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponentCompTOP.java",
+    "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
     "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym",
   )
@@ -84,11 +84,11 @@ val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePrese
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedJavaGenDir/mainpackage/HwcComponent2TOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingComponentFromOtherModelPath.java",
-    "$expectedJavaGenDir/mainpackage/UsingImportedSymbols.java",
-    "$expectedJavaGenDir/mainpackage/ComponentFromModelPath2.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponentCompTOP.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponent2CompTOP.java",
+    "$expectedJavaGenDir/mainpackage/UsingComponentFromOtherModelPathComp.java",
+    "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
+    "$expectedJavaGenDir/mainpackage/ComponentFromModelPath2Comp.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
     "$expectedSymbolGenDir/mainpackage/HwcComponent2.arcsym",
     "$expectedSymbolGenDir/mainpackage/UsingComponentFromOtherModelPath.arcsym",
@@ -129,8 +129,8 @@ val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", 
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingImportedSymbols.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponentCompTOP.java",
+    "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
     "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym"
   )
@@ -182,7 +182,7 @@ val unusedConfigValuesCheck = tasks.register("checkUnusedConfigValues", CheckFil
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/NoHwcComponent.java",
+    "$expectedJavaGenDir/mainpackage/NoHwcComponentComp.java",
     "$expectedSymbolGenDir/mainpackage/NoHwcComponent.arcsym"
   )
 }

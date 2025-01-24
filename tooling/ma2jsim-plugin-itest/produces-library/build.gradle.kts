@@ -8,7 +8,7 @@ plugins {
   id("montiarc-jsim")
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest"
+group = "montiarc.tooling.ma2jsim-plugin-itest"
 
 montiarc {
   internalMontiArcTesting.set(true)

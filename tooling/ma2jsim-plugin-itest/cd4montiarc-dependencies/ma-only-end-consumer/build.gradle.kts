@@ -12,7 +12,7 @@ plugins {
   // This project tests MontiArc plugin application without cd2pojo
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"
+group = "montiarc.tooling.ma2jsim-plugin-itest.cd4montiarc-dependencies"
 version = BuildConstants.VERSION
 
 montiarc {
@@ -36,27 +36,27 @@ val cd4maToB: SourceSet = sourceSets.create("cd4maToB")
 dependencies {
   add(
     maToMaOnlyC.montiarcDependencyDeclarationConfigName,
-    project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:ma-only-c")
+    project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:ma-only-c")
   )
   add(
     maToMixedCWith4MaDepToB.montiarcDependencyDeclarationConfigName,
-    project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
+    project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
     maToMixedCWithCdDepToB.montiarcDependencyDeclarationConfigName,
-    project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
+    project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
     cd4maToMixedCWith4MaDepToB.cd2pojo4MaDeclarationConfigName,
-    project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
+    project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
     cd4maToMixedCWithCdDepToB.cd2pojo4MaDeclarationConfigName,
-    project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
+    project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
     cd4maToB.cd2pojo4MaDeclarationConfigName,
-    project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:cd-b")
+    project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:cd-b")
   )
 }
 

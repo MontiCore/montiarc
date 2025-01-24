@@ -7,7 +7,7 @@ plugins {
   id("montiarc-jsim")  // Implicitly applies java-base
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest"
+group = "montiarc.tooling.ma2jsim-plugin-itest"
 
 val fooSourceSet = sourceSets.create("foo")
 val fooImplConfig = configurations.getByName(fooSourceSet.implementationConfigurationName)
@@ -25,8 +25,8 @@ val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesAre
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/foopackage/Foo.java",
-    "$expectedJavaGenDir/barpackage/BarTOP.java",
+    "$expectedJavaGenDir/foopackage/FooComp.java",
+    "$expectedJavaGenDir/barpackage/BarCompTOP.java",
     "$expectedSymbolGenDir/foopackage/Foo.arcsym",
     "$expectedSymbolGenDir/barpackage/Bar.arcsym"
   )

@@ -1,6 +1,5 @@
-import montiarc.build.BuildConstants
-
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.build.BuildConstants
 
 plugins {
   id("montiarc.build.repositories")
@@ -11,7 +10,7 @@ plugins {
   // This project tests MontiArc plugin application without cd2pojo
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest.cd4montiarc-dependencies"
+group = "montiarc.tooling.ma2jsim-plugin-itest.cd4montiarc-dependencies"
 version = BuildConstants.VERSION
 
 montiarc {
@@ -19,7 +18,7 @@ montiarc {
 }
 
 dependencies {
-  cd2pojo4montiarc(project(":tooling:ma2java-plugin-itest:cd4montiarc-dependencies:cd-b"))
+  cd2pojo4montiarc(project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:cd-b"))
 }
 
 tasks.getByName<Test>("test") {

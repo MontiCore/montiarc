@@ -6,11 +6,12 @@ import pack.cdb.B;
 import pack.cdc.C;
 
 component ComponentD {
-  autoconnect port;
   port in A aPort,
        in B bPort;
 
   ComponentC cComp;
+  aPort -> cComp.aPort;
+  bPort -> cComp.bPort;
 
   C cVal = C.FOO;
 }

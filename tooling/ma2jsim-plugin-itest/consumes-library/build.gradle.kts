@@ -8,14 +8,14 @@ plugins {
   id("montiarc-jsim")
 }
 
-group = "montiarc.tooling.ma2java-plugin-itest"
+group = "montiarc.tooling.ma2jsim-plugin-itest"
 
 montiarc {
   internalMontiArcTesting.set(true)
 }
 
 dependencies {
-  montiarc(project(":tooling:ma2java-plugin-itest:produces-library"))
+  montiarc(project(":tooling:ma2jsim-plugin-itest:produces-library"))
 }
 
 tasks.getByName<Test>("test") {
