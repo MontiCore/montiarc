@@ -49,8 +49,6 @@ sourceSets {
 }
 
 dependencies {
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
   implementation(libs.guava)
   implementation(libs.janino)
 }

@@ -16,7 +16,7 @@ sourceSets {
 }
 
 dependencies {
-  implementation(libs.se.logging)
+  api(libs.se.logging)
 
   testImplementation(libs.mockito)
 }
