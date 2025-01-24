@@ -70,6 +70,7 @@ include("tooling:ma2java-plugin-itest:cd4montiarc-dependencies:ma-only-end-consu
 include("tooling:ma2java-plugin-itest:cd4montiarc-dependencies:mixed-end-consumer")
 include("tooling:ma2java-plugin-itest:cd4montiarc-dependencies:availability-in-tests")
 include("tooling:ma2java-plugin-itest:just-applies-java-base-plugin")
+include("tooling:ma2java-plugin-itest:main-cds-are-available-to-test-arcs")
 include("tooling:cd2pojo-plugin-itest:produces-library")
 include("tooling:cd2pojo-plugin-itest:consumes-library")
 include("tooling:cd2pojo-plugin-itest:consumes-library-transitively")
