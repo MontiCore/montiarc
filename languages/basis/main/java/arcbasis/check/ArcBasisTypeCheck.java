@@ -10,8 +10,8 @@ import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
-import de.monticore.types3.util.WithinScopeBasicSymbolsResolver;
-import de.monticore.types3.util.WithinTypeBasicSymbolsResolver;
+import de.monticore.types3.util.TypeContextCalculator;
+import de.monticore.types3.util.TypeVisitorOperatorCalculator;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -47,79 +47,64 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     initTC3Delegate(
       ArcBasisMill.inheritanceTraverser(),
       new Type4Ast(),
-      new InferenceContext4Ast(),
-      new ArcBasisWithinScopeBasicSymbolsResolver(),
-      new WithinTypeBasicSymbolsResolver()
+      new InferenceContext4Ast()
     );
   }
 
   protected static void initTC3Delegate(@NotNull ArcBasisTraverser traverser,
                                         @NotNull Type4Ast type4Ast,
-                                        @NotNull InferenceContext4Ast ctx4Ast,
-                                        @NotNull WithinScopeBasicSymbolsResolver inScopeResolver,
-                                        @NotNull WithinTypeBasicSymbolsResolver inTypeResolver) {
+                                        @NotNull InferenceContext4Ast ctx4Ast) {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Preconditions.checkNotNull(inScopeResolver);
-    Preconditions.checkNotNull(inTypeResolver);
     Log.trace("Start initializing the type-check delegate", LOG_NAME);
-    initTypeVisitors(traverser, type4Ast, ctx4Ast, inScopeResolver, inTypeResolver);
-    Log.trace("Set the type-check delegate as global TC3 delegate", LOG_NAME);
+    ArcBasisWithinScopeBasicSymbolsResolver.init();
+    ArcBasisWithinTypeBasicSymbolsResolver.init();
+    TypeContextCalculator.init();
+    TypeVisitorOperatorCalculator.init();
+    initTypeVisitors(traverser, type4Ast, ctx4Ast);
+    Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
     setDelegate(new ArcBasisTypeCheck(traverser, type4Ast, ctx4Ast));
     Log.trace("Finish initializing the type-check delegate", LOG_NAME);
   }
 
   protected static void initTypeVisitors(@NotNull ArcBasisTraverser traverser,
                                         @NotNull Type4Ast type4Ast,
-                                        @NotNull InferenceContext4Ast ctx4Ast,
-                                        @NotNull WithinScopeBasicSymbolsResolver inScopeResolver,
-                                        @NotNull WithinTypeBasicSymbolsResolver inTypeResolver) {
+                                        @NotNull InferenceContext4Ast ctx4Ast) {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Preconditions.checkNotNull(inScopeResolver);
-    Preconditions.checkNotNull(inTypeResolver);
     Log.trace("Start initializing the visitors of the type-check delegate", LOG_NAME);
-    initExpressionBasisTypeVisitor(traverser, type4Ast, ctx4Ast, inScopeResolver);
-    initMCBasicTypesTypeVisitor(traverser, type4Ast, ctx4Ast, inScopeResolver, inTypeResolver);
+    initExpressionBasisTypeVisitor(traverser, type4Ast, ctx4Ast);
+    initMCBasicTypesTypeVisitor(traverser, type4Ast, ctx4Ast);
     initMCCommonLiteralsTypeVisitor(traverser, type4Ast, ctx4Ast);
     Log.trace("Finish initializing the visitors of the type-check delegate", LOG_NAME);
   }
 
   protected static void initExpressionBasisTypeVisitor(@NotNull ArcBasisTraverser traverser,
                                                        @NotNull Type4Ast type4Ast,
-                                                       @NotNull InferenceContext4Ast ctx4Ast,
-                                                       @NotNull WithinScopeBasicSymbolsResolver inScopeResolver) {
+                                                       @NotNull InferenceContext4Ast ctx4Ast) {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Preconditions.checkNotNull(inScopeResolver);
     Log.trace("Start initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
     expressionBasis = new ExpressionBasisTypeVisitor();
     expressionBasis.setType4Ast(type4Ast);
     expressionBasis.setContext4Ast(ctx4Ast);
-    expressionBasis.setWithinScopeResolver(inScopeResolver);
     traverser.add4ExpressionsBasis(expressionBasis);
     Log.trace("Finish initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
   }
 
   protected static void initMCBasicTypesTypeVisitor(@NotNull ArcBasisTraverser traverser,
                                                     @NotNull Type4Ast type4Ast,
-                                                    @NotNull InferenceContext4Ast ctx4Ast,
-                                                    @NotNull WithinScopeBasicSymbolsResolver inScopeResolver,
-                                                    @NotNull WithinTypeBasicSymbolsResolver inTypeResolver) {
+                                                    @NotNull InferenceContext4Ast ctx4Ast) {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Preconditions.checkNotNull(inScopeResolver);
-    Preconditions.checkNotNull(inTypeResolver);
     Log.trace("Start initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
     mcBasicTypes = new MCBasicTypesTypeVisitor();
     mcBasicTypes.setType4Ast(type4Ast);
     mcBasicTypes.setContext4Ast(ctx4Ast);
-    mcBasicTypes.setWithinScopeResolver(inScopeResolver);
-    mcBasicTypes.setWithinTypeResolver(inTypeResolver);
     traverser.add4MCBasicTypes(mcBasicTypes);
     Log.trace("Finish initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
   }

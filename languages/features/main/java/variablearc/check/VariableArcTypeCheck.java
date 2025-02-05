@@ -9,8 +9,8 @@ import com.google.common.base.Preconditions;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
-import de.monticore.types3.util.WithinScopeBasicSymbolsResolver;
-import de.monticore.types3.util.WithinTypeBasicSymbolsResolver;
+import de.monticore.types3.util.TypeContextCalculator;
+import de.monticore.types3.util.TypeVisitorOperatorCalculator;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -58,25 +58,23 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
     initTC3Delegate(
       VariableArcMill.inheritanceTraverser(),
       new Type4Ast(),
-      new InferenceContext4Ast(),
-      new VariableArcVariantWithinScopeBasicSymbolsResolver(),
-      new ArcBasisWithinTypeBasicSymbolsResolver()
+      new InferenceContext4Ast()
     );
   }
 
   protected static void initTC3Delegate(@NotNull VariableArcTraverser traverser,
                                         @NotNull Type4Ast type4Ast,
-                                        @NotNull InferenceContext4Ast ctx4Ast,
-                                        @NotNull WithinScopeBasicSymbolsResolver inScopeResolver,
-                                        @NotNull WithinTypeBasicSymbolsResolver inTypeResolver) {
+                                        @NotNull InferenceContext4Ast ctx4Ast) {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Preconditions.checkNotNull(inScopeResolver);
-    Preconditions.checkNotNull(inTypeResolver);
     Log.trace("Start initializing the type-check delegate", LOG_NAME);
-    initTypeVisitors(traverser, type4Ast, ctx4Ast, inScopeResolver, inTypeResolver);
-    Log.trace("Set the type-check delegate as global TC3 delegate", LOG_NAME);
+    VariableArcVariantWithinScopeBasicSymbolsResolver.init();
+    ArcBasisWithinTypeBasicSymbolsResolver.init();
+    TypeContextCalculator.init();
+    TypeVisitorOperatorCalculator.init();
+    initTypeVisitors(traverser, type4Ast, ctx4Ast);
+    Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
     setDelegate(new VariableArcTypeCheck(traverser, type4Ast, ctx4Ast));
     Log.trace("Finish initializing the type-check delegate", LOG_NAME);
   }

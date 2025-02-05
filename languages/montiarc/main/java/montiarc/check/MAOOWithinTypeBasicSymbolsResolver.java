@@ -7,12 +7,20 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.modifiers.StaticAccessModifier;
 import de.monticore.types3.util.OOWithinTypeBasicSymbolsResolver;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
 import java.util.function.Predicate;
 
 public class MAOOWithinTypeBasicSymbolsResolver extends OOWithinTypeBasicSymbolsResolver {
+
+  private static final String LOG_NAME = MAOOWithinTypeBasicSymbolsResolver.class.getSimpleName();
+
+  public static void init() {
+    Log.trace("Initialize MAOOWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
+    setDelegate(new MAOOWithinTypeBasicSymbolsResolver());
+  }
 
   @Override
   protected List<FunctionSymbol> resolveFunctionLocally(@NotNull IBasicSymbolsScope scope,

@@ -6,6 +6,7 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types3.util.WithinTypeBasicSymbolsResolver;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
@@ -13,8 +14,11 @@ import java.util.function.Predicate;
 
 public class ArcBasisWithinTypeBasicSymbolsResolver extends WithinTypeBasicSymbolsResolver {
 
-  public ArcBasisWithinTypeBasicSymbolsResolver() {
-    super();
+  private static final String LOG_NAME = ArcBasisWithinTypeBasicSymbolsResolver.class.getSimpleName();
+
+  public static void init() {
+    Log.trace("Initialize ArcBasisWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
+    setDelegate(new ArcBasisWithinTypeBasicSymbolsResolver());
   }
 
   @Override
