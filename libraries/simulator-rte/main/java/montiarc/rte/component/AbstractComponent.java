@@ -69,7 +69,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
     this.scheduler.run(this);
   }
 
-  public void run(int ticks) {
+  public void run(long ticks) {
     this.scheduler.run(this, ticks);
   }
 

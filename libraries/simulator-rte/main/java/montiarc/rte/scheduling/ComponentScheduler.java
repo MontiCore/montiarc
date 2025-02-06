@@ -179,7 +179,7 @@ public class ComponentScheduler {
     this.triggerComponentTickPort(1);
   }
 
-  void triggerComponentTickPort(int ticks) {
+  void triggerComponentTickPort(long ticks) {
     for (int i = 0; i < ticks; i++) {
       this.component.getTickPort().receive(Tick.get());
     }

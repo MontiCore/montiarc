@@ -91,7 +91,7 @@ public class CoordinatingScheduler implements Scheduler {
     Simulation.coordinatingScheduler = null;
   }
 
-  public void run(Component component, int ticks) {
+  public void run(Component component, long ticks) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }

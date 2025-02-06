@@ -17,5 +17,5 @@ public interface Scheduler {
   void requestSchedulingOfNewTick(InPort<?> port);
 
   void run(Component component);
-  void run(Component component, int ticks);
+  void run(Component component, long ticks);
 }
