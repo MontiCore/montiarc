@@ -8,7 +8,6 @@ import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arccore.ArcCoreMill;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.FullCompKindExprDeSer;
-import genericarc.check.GenericArcCompTypeExprDeSer;
 import montiarc.MontiArcMill;
 import montiarc.check.MontiArcCompTypeExprDeSer;
 import montiarc.check.MontiArcSynthesizeComponent;
@@ -62,8 +61,8 @@ public class ArcBasisMillForMontiArcTest {
   protected static Stream<Arguments> setupAndExpectedClassForCompTypeExprDeSerProvider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisCompTypeExprDeSer.class),
-      Arguments.of(arcCoreMillSetup(), GenericArcCompTypeExprDeSer.class),  // Will change later to include generics
-      Arguments.of(montiArcMillSetup(), MontiArcCompTypeExprDeSer.class)  // Will change later to include generics
+      Arguments.of(arcCoreMillSetup(), ArcBasisCompTypeExprDeSer.class),
+      Arguments.of(montiArcMillSetup(), MontiArcCompTypeExprDeSer.class)
     );
   }
 

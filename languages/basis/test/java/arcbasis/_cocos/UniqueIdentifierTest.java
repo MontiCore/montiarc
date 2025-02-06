@@ -17,6 +17,7 @@ import arcbasis._ast.ASTPortDirection;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.apache.commons.lang3.tuple.Pair;
@@ -319,5 +320,131 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     }
 
     return pairs;
+  }
+
+  @ParameterizedTest
+  @MethodSource("provideIdentifiers")
+  public void shouldFindDuplicatedNameWithTypeParam (@NotNull ASTArcElement arcEl) {
+    Preconditions.checkNotNull(arcEl);
+    Preconditions.checkState(UniqueIdentifierTest.coco != null);
+
+    // Given
+    TypeVarSymbol typeParam = simpleTypeParamNamed("unique");
+    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+      .setName("Outer")
+      .setBody(ArcBasisMill.componentBodyBuilder()
+        .addArcElement(arcEl)
+        .build()
+      )
+      .setHead(Mockito.mock(ASTComponentHead.class))
+      .build();
+
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
+    enclosingComp.getSpannedScope().add(typeParam);
+
+    // When
+    UniqueIdentifierTest.coco.check(enclosingComp);
+
+    // Then
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.UNIQUE_IDENTIFIER_NAMES));
+  }
+
+  @Test
+  public void shouldFindDuplicatedNameWithTypeAndConfigParam() {
+    Preconditions.checkState(UniqueIdentifierTest.coco != null);
+
+    // Given
+    TypeVarSymbol typeParam = simpleTypeParamNamed("unique");
+    ASTArcParameter configParam = UniqueIdentifierTest.simpleConfigParamNamed("unique");
+    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+      .setName("Outer")
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParameter(configParam)
+        .build()
+      )
+      .build();
+
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
+    enclosingComp.getSpannedScope().add(typeParam);
+
+    // When
+    UniqueIdentifierTest.coco.check(enclosingComp);
+
+    // Then
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes((ArcError.UNIQUE_IDENTIFIER_NAMES)));
+  }
+
+  @Test
+  public void shouldFindDuplicatedTypeParamName() {
+    Preconditions.checkState(UniqueIdentifierTest.coco != null);
+
+    // Given
+    TypeVarSymbol typeParam = simpleTypeParamNamed("unique");
+    TypeVarSymbol typeParam2 = simpleTypeParamNamed("unique");
+    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+      .setName("Outer")
+      .setBody(Mockito.mock(ASTComponentBody.class))
+      .setHead(Mockito.mock(ASTComponentHead.class))
+      .build();
+
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
+    enclosingComp.getSpannedScope().add(typeParam);
+    enclosingComp.getSpannedScope().add(typeParam2);
+
+    // When
+    UniqueIdentifierTest.coco.check(enclosingComp);
+
+    // Then
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(ArcError.UNIQUE_IDENTIFIER_NAMES));
+  }
+
+  @Test
+  public void shouldNotFindDuplicateNamesWithTypeParams() {
+    Preconditions.checkState(UniqueIdentifierTest.coco != null);
+    // Given
+    ASTComponentType compType = UniqueIdentifierTest.simpleCompTypeNamed("type");
+    ASTComponentInstantiation compInst = UniqueIdentifierTest.simpleCompInstNamed("inst");
+    ASTComponentInterface port = UniqueIdentifierTest.simplePortNamed("port");
+    ASTArcFieldDeclaration field = UniqueIdentifierTest.simpleFieldNamed("field");
+    ASTArcParameter configParam = UniqueIdentifierTest.simpleConfigParamNamed("configParam");
+    TypeVarSymbol typeParam = simpleTypeParamNamed("typeParam");
+
+    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+      .setName("Outer")
+      .setBody(ArcBasisMill.componentBodyBuilder()
+        .addArcElement(compType)
+        .addArcElement(compInst)
+        .addArcElement(port)
+        .addArcElement(field)
+        .build()
+      )
+      .setHead(ArcBasisMill.componentHeadBuilder()
+        .addArcParameter(configParam)
+        .build()
+      )
+      .build();
+
+    ArcBasisMill.scopesGenitorDelegator().createFromAST(enclosingComp);
+    enclosingComp.getSpannedScope().add(typeParam);
+
+    // When
+    UniqueIdentifierTest.coco.check(enclosingComp);
+
+    // Then
+    Assertions.assertEquals(0, Log.getErrorCount());
+  }
+
+  /* ======================== helpers ================================= */
+
+  protected static TypeVarSymbol simpleTypeParamNamed(@NotNull String name) {
+    Preconditions.checkNotNull(name);
+
+    return ArcBasisMill.typeVarSymbolBuilder()
+      .setName(name)
+      .build();
   }
 }

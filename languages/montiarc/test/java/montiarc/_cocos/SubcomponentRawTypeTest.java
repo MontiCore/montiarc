@@ -3,11 +3,11 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import genericarc._cocos.SubcomponentRawType;
+import arcbasis._cocos.SubcomponentRawType;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.GenericArcError;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -74,9 +74,9 @@ public class SubcomponentRawTypeTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       arg("component Comp1 { a.b.B sub; }",
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
       arg("component Comp2<T> { a.b.B sub; }",
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
     );
   }
 }

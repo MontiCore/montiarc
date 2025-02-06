@@ -36,9 +36,9 @@
     </#if>
 </#macro>
 
-<#-- TypeVarSymbol arcTypeParameter -->
-<#macro printTypeParameter arcTypeParameter printBounds>
-${arcTypeParameter.getName()}<#if printBounds><#list arcTypeParameter.getSuperTypesList()> extends <#items as bound><@getTypeString bound true/><#sep> & </#sep></#items></#list></#if>
+<#-- TypeVarSymbol typeParameter -->
+<#macro printTypeParameter typeParameter printBounds>
+${typeParameter.getName()}<#if printBounds><#list typeParameter.getSuperTypesList()> extends <#items as bound><@getTypeString bound true/><#sep> & </#sep></#items></#list></#if>
 </#macro>
 
 <#-- SymTypeExpression type -->

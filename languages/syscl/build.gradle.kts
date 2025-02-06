@@ -9,12 +9,10 @@ buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 dependencies {
   grammar(libs.mc.grammar)
   grammar(project(":languages:ag"))
-  grammar(project(":languages:generics"))
   grammar(project(":languages:prepost"))
   grammar(project(":languages:syscl-basis"))
 
   api(project(":languages:ag"))
-  api(project(":languages:generics"))
   api(project(":languages:prepost"))
   api(project(":languages:syscl-basis"))
 

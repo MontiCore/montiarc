@@ -33,6 +33,7 @@ public class ComfortableArcScopesGenitorP2Delegator {
     ArcBasisScopesGenitorP2 arcBasisScopesGenitorP2 = ArcBasisMill.scopesGenitorP2();
     this.getTraverser().add4ArcBasis(arcBasisScopesGenitorP2);
     this.getTraverser().add4CompSymbols(arcBasisScopesGenitorP2);
+    this.getTraverser().add4TypeParameters(arcBasisScopesGenitorP2);
     this.getTraverser().setArcBasisHandler(arcBasisScopesGenitorP2);
   }
 

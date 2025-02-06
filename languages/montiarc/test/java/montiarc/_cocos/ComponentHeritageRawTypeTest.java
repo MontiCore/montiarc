@@ -3,11 +3,11 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import genericarc._cocos.ComponentHeritageRawType;
+import arcbasis._cocos.ComponentHeritageRawType;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.ArcError;
 import montiarc.util.Error;
-import montiarc.util.GenericArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -78,14 +78,14 @@ public class ComponentHeritageRawTypeTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       arg("component Comp1 extends a.b.B { }",
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
       arg("component Comp2<T> extends a.b.B { }",
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
       arg("component Comp3<T> extends a.b.A, a.b.B { }",
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
       arg("component Comp4 extends a.b.B, a.b.B { }",
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE,
-        GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE,
+        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
     );
   }
 }

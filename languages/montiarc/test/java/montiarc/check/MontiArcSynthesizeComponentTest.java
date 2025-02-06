@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
+import arcbasis.check.TypeExprOfGenericComponent;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -16,7 +17,6 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCPrimitiveTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
-import genericarc.check.TypeExprOfGenericComponent;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;

@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._cocos.ArcBasisASTComponentInstantiationCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
+import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.CompKindExpression;
@@ -14,8 +14,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
-import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.util.GenericArcError;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
@@ -49,7 +48,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
           bound.replaceTypeVariables(compTypeExpr.getTypeVarBindings());
           if (!SymTypeRelations.isSubTypeOf(typeVarBinding.get(), bound)) {
             Log.error(
-                GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
+                ArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
                 astInstantiation.get_SourcePositionStart(), astInstantiation.get_SourcePositionEnd()
             );
           }
@@ -103,7 +102,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
     List<SymTypeExpression> args = compTypeExpr.getTypeBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
       Log.error(
-        GenericArcError.TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        ArcError.TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }
@@ -124,7 +123,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
 
     if (parentSymTypeParameters.size() < args.size()) {
       Log.error(
-        GenericArcError.TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        ArcError.TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }

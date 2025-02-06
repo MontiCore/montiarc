@@ -7,7 +7,7 @@ import arcbasis._cocos.FieldNameIsNoReservedKeyword;
 import arcbasis._cocos.ParameterNoReservedKeyword;
 import arcbasis._cocos.PortNoReservedKeyword;
 import arcbasis._cocos.SubcomponentNoReservedKeyword;
-import genericarc._cocos.TypeParamNameIsNoReservedKeyword;
+import arcbasis._cocos.TypeParamNameIsNoReservedKeyword;
 
 import java.util.Set;
 

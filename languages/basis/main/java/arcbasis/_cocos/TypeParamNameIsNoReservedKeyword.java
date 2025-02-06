@@ -1,15 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
 import com.google.common.base.Preconditions;
+import de.monticore.types.typeparameters._ast.ASTTypeParameter;
+import de.monticore.types.typeparameters._cocos.TypeParametersASTTypeParameterCoCo;
 import de.se_rwth.commons.logging.Log;
-import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
 
-public class TypeParamNameIsNoReservedKeyword implements GenericArcASTArcTypeParameterCoCo {
+public class TypeParamNameIsNoReservedKeyword implements TypeParametersASTTypeParameterCoCo {
 
   protected final Collection<String> reservedKeywords;
   protected final String languageName;
@@ -20,7 +21,7 @@ public class TypeParamNameIsNoReservedKeyword implements GenericArcASTArcTypePar
   }
 
   @Override
-  public void check(ASTArcTypeParameter node) {
+  public void check(ASTTypeParameter node) {
     Preconditions.checkNotNull(node);
     String typeParamName = node.getName();
 

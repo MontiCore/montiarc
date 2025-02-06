@@ -22,9 +22,9 @@ ${tc.signature("isTop")}
 
 <#macro printTypeParameters ast>
   <#if ast.getSymbol().hasTypeParameter()>
-    <<#list ast.getHead().getArcTypeParameterList() as typeParameter>${typeParameter.getName()}
-      <#if !typeParameter.isEmptyUpperBound()> extends
-        <#list typeParameter.getUpperBoundList() as boundEntry> ${boundEntry.printType()}</#list>
+    <<#list ast.getHead().getTypeParameters().getTypeParameterList() as typeParameter>${typeParameter.getName()}
+      <#if !typeParameter.isEmptyMCTypes()> extends
+        <#list typeParameter.getMCTypeList() as boundEntry> ${boundEntry.printType()}</#list>
       </#if>
       <#sep>, </#sep>
     </#list>>

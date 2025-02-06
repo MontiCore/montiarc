@@ -4,12 +4,12 @@ package montiarc._cocos;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.se_rwth.commons.logging.Log;
-import genericarc._cocos.SubcomponentTypeBound;
+import arcbasis._cocos.SubcomponentTypeBound;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.GenericArcError;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -101,37 +101,37 @@ public class SubcomponentTypeBoundTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       arg("component Comp1 { a.b.D<boolean> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp2 { a.b.E<java.lang.String> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp3 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp4 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp5 { a.b.G<java.lang.Integer, java.lang.String> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp6 { a.b.H<java.lang.Integer, java.lang.String> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp7<T extends java.lang.String> { a.b.E<T> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp8 { a.b.C<java.lang.Integer> sub; }",
-        GenericArcError.TOO_FEW_TYPE_ARGUMENTS),
+        ArcError.TOO_FEW_TYPE_ARGUMENTS),
       arg("component Comp8 { a.b.F<java.lang.Integer> sub; }",
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        GenericArcError.TOO_FEW_TYPE_ARGUMENTS),
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
+        ArcError.TOO_FEW_TYPE_ARGUMENTS),
       arg("component Comp9 { a.b.F<java.lang.String> sub; }",
-        GenericArcError.TOO_FEW_TYPE_ARGUMENTS),
+        ArcError.TOO_FEW_TYPE_ARGUMENTS),
       arg("component Comp10 { a.b.A<java.lang.Integer> sub; }",
-        GenericArcError.TOO_MANY_TYPE_ARGUMENTS),
+        ArcError.TOO_MANY_TYPE_ARGUMENTS),
       arg("component Comp11 { a.b.B<java.lang.Integer, java.lang.Integer> sub; }",
-        GenericArcError.TOO_MANY_TYPE_ARGUMENTS),
+        ArcError.TOO_MANY_TYPE_ARGUMENTS),
       arg("component Comp12 { a.b.E<java.lang.String, java.lang.Integer> sub; }",
-        GenericArcError.TOO_MANY_TYPE_ARGUMENTS,
-        GenericArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
+        ArcError.TOO_MANY_TYPE_ARGUMENTS,
+        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component Comp13 { a.b.E<java.lang.Integer, java.lang.Integer> sub; }",
-        GenericArcError.TOO_MANY_TYPE_ARGUMENTS)
+        ArcError.TOO_MANY_TYPE_ARGUMENTS)
     );
   }
 }

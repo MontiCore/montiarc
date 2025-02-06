@@ -8,12 +8,11 @@ import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.SubcomponentNameCapitalization;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import genericarc._cocos.TypeParameterCapitalization;
+import arcbasis._cocos.TypeParameterCapitalization;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
-import montiarc.util.GenericArcError;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -186,7 +185,7 @@ public class NamesCapitalizationTest extends MontiArcTestBase {
         ArcError.SUBCOMPONENT_UPPER_CASE),
       // lowercase type-parameter
       arg("component Comp7<t> { }",
-        GenericArcError.TYPE_PARAMETER_UPPER_CASE),
+        ArcError.TYPE_PARAMETER_UPPER_CASE),
       // uppercase feature
       arg("component Comp8 { " +
           "feature F; " +
@@ -200,7 +199,7 @@ public class NamesCapitalizationTest extends MontiArcTestBase {
           "inner Sub; " +
           "feature F; " +
           "} ",
-        GenericArcError.TYPE_PARAMETER_UPPER_CASE,
+        ArcError.TYPE_PARAMETER_UPPER_CASE,
         ArcError.PARAMETER_UPPER_CASE,
         ArcError.PORT_UPPER_CASE,
         ArcError.FIELD_UPPER_CASE,
@@ -245,7 +244,7 @@ public class NamesCapitalizationTest extends MontiArcTestBase {
       arg("component Comp15 { " +
           "component Inner<t> { } " +
           "}",
-        GenericArcError.TYPE_PARAMETER_UPPER_CASE),
+        ArcError.TYPE_PARAMETER_UPPER_CASE),
       // uppercase feature (inner component)
       arg("component Comp16 { " +
           "component Inner { " +

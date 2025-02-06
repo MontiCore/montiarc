@@ -3,7 +3,7 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import genericarc._cocos.TypeParamNameIsNoReservedKeyword;
+import arcbasis._cocos.TypeParamNameIsNoReservedKeyword;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;

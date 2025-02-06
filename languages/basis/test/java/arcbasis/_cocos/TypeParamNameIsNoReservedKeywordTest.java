@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
+import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
+import de.monticore.types.typeparameters._ast.ASTTypeParameter;
 import de.se_rwth.commons.logging.Log;
-import genericarc.GenericArcMill;
-import genericarc.GenericArcTestBase;
-import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +12,12 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TypeParamNameIsNoReservedKeywordTest extends GenericArcTestBase {
+public class TypeParamNameIsNoReservedKeywordTest extends ArcBasisTestBase {
 
   @Test
   void checkPortNameMatchesKeyword() {
     // Given
-    ASTArcTypeParameter typeParam = GenericArcMill.arcTypeParameterBuilder().setName("keyword").build();
+    ASTTypeParameter typeParam = ArcBasisMill.typeParameterBuilder().setName("keyword").build();
     TypeParamNameIsNoReservedKeyword coco =
       new TypeParamNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
 
@@ -32,7 +32,7 @@ public class TypeParamNameIsNoReservedKeywordTest extends GenericArcTestBase {
   @Test
   void checkPortNameIsNoKeyword() {
     // Given
-    ASTArcTypeParameter typeParam = GenericArcMill.arcTypeParameterBuilder().setName("noKeyword").build();
+    ASTTypeParameter typeParam = ArcBasisMill.typeParameterBuilder().setName("noKeyword").build();
     TypeParamNameIsNoReservedKeyword coco =
       new TypeParamNameIsNoReservedKeyword("testLang", Collections.singleton("keyword"));
 

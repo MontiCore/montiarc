@@ -50,12 +50,12 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-import genericarc._cocos.ComponentHeritageRawType;
-import genericarc._cocos.ComponentHeritageTypeBound;
-import genericarc._cocos.SubcomponentRawType;
-import genericarc._cocos.SubcomponentTypeBound;
-import genericarc._cocos.TypeParameterCapitalization;
-import genericarc._cocos.TypeParameterNamedTick;
+import arcbasis._cocos.ComponentHeritageRawType;
+import arcbasis._cocos.ComponentHeritageTypeBound;
+import arcbasis._cocos.SubcomponentRawType;
+import arcbasis._cocos.SubcomponentTypeBound;
+import arcbasis._cocos.TypeParameterCapitalization;
+import arcbasis._cocos.TypeParameterNamedTick;
 import modes._cocos.MaxOneModeAutomaton;
 import modes._cocos.ModeAutomatonContainsNoStates;
 import modes._cocos.ModeOmitPortDefinition;
@@ -146,7 +146,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ParameterNamedTick());
     checker.addCoCo(new PortNamedTick());
 
-    // GenericArc CoCos
+    // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
     checker.addCoCo(new ComponentHeritageRawType());
     checker.addCoCo(new SubcomponentRawType());

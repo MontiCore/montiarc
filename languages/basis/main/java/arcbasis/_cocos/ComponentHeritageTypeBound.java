@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParent;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.CompKindExpression;
@@ -13,8 +13,7 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
-import genericarc.check.TypeExprOfGenericComponent;
-import montiarc.util.GenericArcError;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
@@ -55,7 +54,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
     List<SymTypeExpression> args = parentExpr.getTypeBindingsAsList();
     if (parentSymTypeParameters.size() > args.size()) {
       Log.error(
-        GenericArcError.HERITAGE_TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        ArcError.HERITAGE_TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }
@@ -76,7 +75,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
 
     if (parentSymTypeParameters.size() < args.size()) {
       Log.error(
-        GenericArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
+        ArcError.HERITAGE_TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }
@@ -93,7 +92,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
           bound.replaceTypeVariables(parentExpr.getTypeVarBindings());
           if (!SymTypeRelations.isCompatible(bound, typeVarBinding.get())) {
             Log.error(
-              GenericArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
+              ArcError.HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
               node.get_SourcePositionStart(), node.get_SourcePositionEnd());
           }
         }

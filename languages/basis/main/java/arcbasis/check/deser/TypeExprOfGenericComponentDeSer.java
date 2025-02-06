@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc.check;
+package arcbasis.check.deser;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
-import arcbasis.check.deser.CompKindExpressionDeSer;
+import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
@@ -19,7 +19,7 @@ import static arcbasis.check.deser.TypeExprOfComponentDeSer.COMP_TYPE_NAME;
 
 public class TypeExprOfGenericComponentDeSer implements CompKindExpressionDeSer<TypeExprOfGenericComponent> {
 
-  public static final String SERIALIZED_KIND = "genericarc.check.TypeExprOfGenericComponent";
+  public static final String SERIALIZED_KIND = "arcbasis.check.TypeExprOfGenericComponent";
   public static final String TYPE_VAR_BINDINGS = "typeVarBindings";
 
   @Override

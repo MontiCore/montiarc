@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arccore;
 
+import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import arccore._symboltable.ArcCoreScopesGenitorP2;
 import arccore._symboltable.ArcCoreScopesGenitorP2Delegator;
 import de.monticore.types.check.FullCompKindExprDeSer;
-import genericarc.check.GenericArcCompTypeExprDeSer;
 
 public class ArcCoreMill extends ArcCoreMillTOP {
 
@@ -44,7 +44,7 @@ public class ArcCoreMill extends ArcCoreMillTOP {
   }
 
   protected FullCompKindExprDeSer _compTypeExprDeSer() {
-    return new GenericArcCompTypeExprDeSer();
+    return new ArcBasisCompTypeExprDeSer();
   }
 
   public static void initMe(ArcCoreMill a) {

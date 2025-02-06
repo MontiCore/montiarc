@@ -15,10 +15,9 @@
  * which are organized according to this extension hierarchy:
  * * ArcBasis.mc4
  * * -- ComfortableArc.mc4
- * * -- GenericArc.mc4
  *
  * * ArcCore.mc4 composes
- *   + ArcBasis.mc4 + ComfortableArc.mc4 + GenericArc.mc4
+ *   + ArcBasis.mc4 + ComfortableArc.mc4
  *   and builds the core of architectural modelling
  *   (still without concrete expressions, literals, etc.)
  *
@@ -32,7 +31,6 @@
 component grammar ArcCore extends
              ArcBasis,
              ArcAutomaton,
-             ComfortableArc,
-             GenericArc       {
+             ComfortableArc     {
 
 }

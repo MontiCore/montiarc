@@ -8,8 +8,8 @@ import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
-import genericarc.check.TypeExprOfGenericComponent;
-import genericarc.check.TypeExprOfGenericComponentDeSer;
+import arcbasis.check.TypeExprOfGenericComponent;
+import arcbasis.check.deser.TypeExprOfGenericComponentDeSer;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MontiArcCompTypeExprDeSer implements FullCompKindExprDeSer {

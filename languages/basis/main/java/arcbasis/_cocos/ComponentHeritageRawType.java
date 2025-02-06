@@ -1,13 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParent;
-import arcbasis._cocos.ArcBasisASTArcParentCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.GenericArcError;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -27,7 +26,7 @@ public class ComponentHeritageRawType implements ArcBasisASTArcParentCoCo {
     } else if (node.getType().getDefiningSymbol().get() instanceof ComponentTypeSymbol &&
       !((ComponentTypeSymbol) node.getType().getDefiningSymbol().get()).getTypeParameters().isEmpty()
       && !(node.getType() instanceof ASTMCBasicGenericType)) {
-      Log.warn(GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE.format(node.getType().printType()),
+      Log.warn(ArcError.RAW_USE_OF_PARAMETRIZED_TYPE.format(node.getType().printType()),
         node.get_SourcePositionStart()
       );
     }

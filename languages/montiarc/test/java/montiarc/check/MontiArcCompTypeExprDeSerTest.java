@@ -15,8 +15,7 @@ import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import genericarc._symboltable.IGenericArcArtifactScope;
-import genericarc.check.TypeExprOfGenericComponent;
+import arcbasis.check.TypeExprOfGenericComponent;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +27,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
 
   public static final String GENERIC_COMP_JSON =
     "{" +
-      "\"kind\":\"genericarc.check.TypeExprOfGenericComponent\"," +
+      "\"kind\":\"arcbasis.check.TypeExprOfGenericComponent\"," +
       "\"componentTypeName\":\"foo.bar.MyComp\"," +
       "\"typeVarBindings\":[" +
       "{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
@@ -148,7 +147,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
       .setName("Bar")
       .build());
 
-    IGenericArcArtifactScope as = MontiArcMill.artifactScope();
+    IArcBasisArtifactScope as = MontiArcMill.artifactScope();
     as.setPackageName("foo.bar");
 
     SymbolService.link(as, myComp);
@@ -160,7 +159,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
       .setSpannedScope(MontiArcMill.scope())
       .build();
 
-    IGenericArcArtifactScope as2 = MontiArcMill.artifactScope();
+    IArcBasisArtifactScope as2 = MontiArcMill.artifactScope();
     as2.setPackageName("noo.boo");
 
     SymbolService.link(as2, student);
@@ -228,7 +227,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
       .setSpannedScope(MontiArcMill.scope())
       .build();
 
-    IGenericArcArtifactScope as = MontiArcMill.artifactScope();
+    IArcBasisArtifactScope as = MontiArcMill.artifactScope();
     as.setPackageName("noo.boo");
 
     SymbolService.link(as, student);

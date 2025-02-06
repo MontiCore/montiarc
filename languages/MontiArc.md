@@ -29,7 +29,6 @@ which also might be used independently:
 of ports, components, and connectors
 - **ComfortableArc**: extension of the architecture basis with comfort elements
 to ease the description of architectures
-- **GenericArc**: extension of the architecture basis for generic component types
 - **ArcCore**: builds the core of architectural modelling by aggregating the above 
   mentioned languages components (still without concrete expressions, literals, etc.)
 - **VariableArc**: extension of the architecture basis for variable component types,

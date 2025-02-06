@@ -37,7 +37,6 @@ import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
-import genericarc._ast.ASTGenericComponentHead;
 import modes._ast.ASTArcMode;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
@@ -415,7 +414,7 @@ public class Helper {
   }
 
   public boolean isGenericComponent(ASTComponentType astComponentType) {
-    return astComponentType.getHead() instanceof ASTGenericComponentHead;
+    return astComponentType.getHead().isPresentTypeParameters();
   }
 
   public ASTExpression getInitialForVariable(VariableSymbol variableSymbol) {

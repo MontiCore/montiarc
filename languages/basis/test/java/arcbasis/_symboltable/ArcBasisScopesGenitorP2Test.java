@@ -17,6 +17,7 @@ import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
@@ -24,6 +25,7 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.typeparameters._ast.ASTTypeParameter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -884,5 +886,60 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     Assertions.assertEquals(typeExpr.getTypeInfo(), symbol.getType()
       .getTypeInfo());
     Assertions.assertIterableEquals(bindings, (((TypeExprOfComponent) symbol.getType()).getParamArcBindingsAsList()));
+  }
+
+  @Test
+  public void shouldVisitTypeParameter() {
+    // Given
+    ASTTypeParameter astTypeParam = ArcBasisMill.typeParameterBuilder()
+      .setName("T")
+      .build();
+    TypeVarSymbol typeParamSym = ArcBasisMill.typeVarSymbolBuilder()
+      .setName("T")
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    astTypeParam.setSymbol(typeParamSym);
+    typeParamSym.setAstNode(astTypeParam);
+
+    ASTMCType upperDouble = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.DOUBLE).build();
+    upperDouble.setEnclosingScope(ArcBasisMill.globalScope());
+    ASTMCType upperBool = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build();
+    upperBool.setEnclosingScope(ArcBasisMill.globalScope());
+
+    ASTTypeParameter astTypeParamWithBounds = ArcBasisMill.typeParameterBuilder()
+      .setName("U")
+      .addMCType(upperDouble)
+      .addMCType(upperBool)
+      .build();
+    TypeVarSymbol typeParamWithBoundSym = ArcBasisMill.typeVarSymbolBuilder()
+      .setName("U")
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    astTypeParamWithBounds.setSymbol(typeParamWithBoundSym);
+    typeParamWithBoundSym.setAstNode(astTypeParamWithBounds);
+
+    // When
+    this.getScopeGenP2().visit(astTypeParam);
+    this.getScopeGenP2().visit(astTypeParamWithBounds);
+
+    // Then
+    Assertions.assertEquals(0, typeParamSym.getSuperTypesList().size());
+    Assertions.assertEquals(2, typeParamWithBoundSym.getSuperTypesList().size());
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("double").deepEquals(
+      typeParamWithBoundSym.getSuperTypes(0)));
+    Assertions.assertTrue(SymTypeExpressionFactory.createPrimitive("boolean").deepEquals(
+      typeParamWithBoundSym.getSuperTypes(1)));
+  }
+
+  @Test
+  public void visitShouldThrowException() {
+    // Given
+    ASTTypeParameter param = ArcBasisMill.typeParameterBuilder().setName("A").build();
+
+    // When & Then
+    Assertions.assertAll(
+      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getScopeGenP2().visit((ASTTypeParameter) null)),
+      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getScopeGenP2().visit(param))
+    );
   }
 }

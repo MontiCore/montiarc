@@ -13,8 +13,7 @@ Legend:
 | Language       | Range             |
 |----------------|-------------------|
 | MontiArc       | 0xC1000 - 0xC1099 |
-| ArcBasis       | 0xC1100 - 0xC1199 |
-| GenericArc     | 0xC1200 - 0xC1249 |
+| ArcBasis       | 0xC1100 - 0xC1249 |
 | Modes          | 0xC1350 - 0xC1399 |
 | VariableArc    | 0xC1400 - 0xC1449 |
 | ComfortableArc | 0xC1450 - 0xC1499 |
@@ -61,21 +60,17 @@ Legend:
 | ☑     | ☒           | ParameterNamedTick                  | ArcBasis | 0xC1170                                                       |
 | ☑     | ☒           | FieldNamedTick                      | ArcBasis | 0xC1171                                                       |
 | ☑     | ☑           | AtomicNoConnector                   | ArcBasis | 0xC1174                                                       |
+| ☑     | ☒           | TypeParameterCapitalization         | ArcBasis | 0xC1175                                                       |       
+| ☑     | ☒           | SubcomponentTypeBound               | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |       
+| ☑     | ☒           | ComponentHeritageTypeBound          | ArcBasis | 0xC1179, 0xC1180, 0xC1181                                     |       
+| ☑     | ☒           | ComponentHeritageRawType            | ArcBasis | 0xC1182                                                       |
+| ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |       
 
 ## MontiArc CoCos
 
 | in MA | CoCo(s)        | Language | Code(s) | 
 |-------|----------------|----------|---------|
 | ☑     | RootNoInstance | MontiArc | 0xC1010 |
-
-## GenericArc CoCos
-
-| in MA | CoCo(s)                     | Language   | Code                      | Notes |
-|-------|-----------------------------|------------|---------------------------|-------|
-| ☑     | TypeParameterCapitalization | GenericArc | 0xC1201                   |       |
-| ☑     | SubcomponentTypeBound       | GenericArc | 0xC1202, 0xC1203, 0xC1204 |       |
-| ☑     | ComponentHeritageTypeBound  | GenericArc | 0xC1205, 0xC1206, 0xC1207 |       |
-| ☑     | TypeParameterNamedTick      | GenericArc | 0xC1172                   |       |
 
 # VariableArc CoCos
 

@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
@@ -18,18 +19,25 @@ import arcbasis.check.CompTypeExpression;
 import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
+import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.mcbasictypes._ast.ASTMCType;
+import de.monticore.types.typeparameters._ast.ASTTypeParameter;
+import de.monticore.types.typeparameters._visitor.TypeParametersVisitor2;
 import de.monticore.types3.TypeCheck3;
+import de.se_rwth.commons.logging.Log;
+import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.Optional;
 
-public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVisitor2, ArcBasisHandler {
+public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVisitor2, TypeParametersVisitor2, ArcBasisHandler {
 
   protected CompKindExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
@@ -160,6 +168,22 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     Preconditions.checkNotNull(node);
     if (node.isTypePresent()){
       node.getType().bindParams();
+    }
+  }
+
+  @Override
+  public void visit(@NotNull ASTTypeParameter typeParam) {
+    Preconditions.checkNotNull(typeParam);
+    Preconditions.checkArgument(typeParam.isPresentSymbol());
+
+    TypeVarSymbol typeParamSym = typeParam.getSymbol();
+
+    for (ASTMCType upperBound : typeParam.getMCTypeList()) {
+      try {
+        typeParamSym.addSuperTypes(TypeCheck3.symTypeFromAST(upperBound));
+      }  catch (ResolvedSeveralEntriesForSymbolException e) {
+        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(ArcBasisMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
+      }
     }
   }
 }

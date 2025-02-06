@@ -17,8 +17,7 @@ import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesHand
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-import genericarc._symboltable.IGenericArcScope;
-import genericarc.check.TypeExprOfGenericComponent;
+import arcbasis.check.TypeExprOfGenericComponent;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -63,7 +62,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
     Preconditions.checkNotNull(mcType.getEnclosingScope());
     Preconditions.checkArgument(mcType.getEnclosingScope() instanceof IMontiArcScope);
 
-    IGenericArcScope enclScope = (IGenericArcScope) mcType.getEnclosingScope();
+    IMontiArcScope enclScope = (IMontiArcScope) mcType.getEnclosingScope();
     String compName = String.join(".", mcType.getNameList());
     List<ComponentTypeSymbol> compSym = enclScope.resolveComponentTypeMany(compName);
 
@@ -101,7 +100,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
         typeArg -> typeArg instanceof ASTMCBasicTypeArgument
           || typeArg instanceof ASTMCPrimitiveTypeArgument
           || typeArg instanceof ASTMCCustomTypeArgument),
-      "Only Type arguments of the types '%s', '%s', '%s' are supported in GenericArc. For you that means " +
+      "Only Type arguments of the types '%s', '%s', '%s' are supported in ArcBasis. For you that means " +
         "that you can use other MontiCore types as type arguments. But you can not use WildCards as type arguments, " +
         "such as GenericType<? extends Person>.", ASTMCBasicTypeArgument.class.getName(),
       ASTMCPrimitiveTypeArgument.class.getName(), ASTMCCustomTypeArgument.class.getName()

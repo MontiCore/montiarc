@@ -2,6 +2,7 @@
 package arcbasis.check.deser;
 
 import arcbasis.check.TypeExprOfComponent;
+import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
@@ -13,10 +14,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
  * Composed DeSerializator of {@link CompKindExpression}s for the ArcBasis language.
  */
 public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
+
   protected TypeExprOfComponentDeSer componentExprDeSer;
+
+  protected TypeExprOfGenericComponentDeSer genericComponentExprDeSer;
 
   public ArcBasisCompTypeExprDeSer() {
     componentExprDeSer = new TypeExprOfComponentDeSer();
+    genericComponentExprDeSer = new TypeExprOfGenericComponentDeSer();
   }
 
   @Override
@@ -25,18 +30,22 @@ public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
 
     if (toSerialize instanceof TypeExprOfComponent) {
       return componentExprDeSer.serializeAsJson((TypeExprOfComponent) toSerialize);
+    } else if (toSerialize instanceof TypeExprOfGenericComponent) {
+      return genericComponentExprDeSer.serializeAsJson((TypeExprOfGenericComponent) toSerialize);
     } else {
       throw missingDeSerException(toSerialize);
     }
   }
 
   @Override
-  public CompKindExpression deserialize(@NotNull JsonElement serialized) {
+  public CompKindExpression deserialize(JsonElement serialized) {
     Preconditions.checkNotNull(serialized);
 
-    if (JsonDeSers.getKind(serialized.getAsJsonObject()).equals(TypeExprOfComponentDeSer.SERIALIZED_KIND)) {
-      return componentExprDeSer.deserialize(serialized.getAsJsonObject());
+    switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {
+      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(serialized.getAsJsonObject());
+      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericComponentExprDeSer.deserialize(serialized.getAsJsonObject());
+      default:
+        throw missingDeSerException(serialized.getAsJsonObject());
     }
-    throw missingDeSerException(serialized.getAsJsonObject());
   }
 }

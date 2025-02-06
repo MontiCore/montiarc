@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc.check;
+package arcbasis.check;
 
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;

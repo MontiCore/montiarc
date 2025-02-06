@@ -1,13 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._cocos.ArcBasisASTComponentInstantiationCoCo;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.GenericArcError;
+import montiarc.util.ArcError;
 
 /**
  * A generic component may be used in raw form, i.e., without providing
@@ -27,7 +26,7 @@ public class SubcomponentRawType implements ArcBasisASTComponentInstantiationCoC
       node.getMCType().getDefiningSymbol().get() instanceof ComponentTypeSymbol &&
       ((ComponentTypeSymbol) node.getMCType().getDefiningSymbol().get()).getTypeParameters().size() > 0
       && !(node.getMCType() instanceof ASTMCBasicGenericType)) {
-      Log.warn(GenericArcError.RAW_USE_OF_PARAMETRIZED_TYPE.format(node.getMCType().printType()),
+      Log.warn(ArcError.RAW_USE_OF_PARAMETRIZED_TYPE.format(node.getMCType().printType()),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }
   }

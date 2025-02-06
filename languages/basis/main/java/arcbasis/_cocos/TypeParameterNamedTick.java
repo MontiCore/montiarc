@@ -1,16 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc._cocos;
+package arcbasis._cocos;
 
 import com.google.common.base.Preconditions;
+import de.monticore.types.typeparameters._ast.ASTTypeParameter;
+import de.monticore.types.typeparameters._cocos.TypeParametersASTTypeParameterCoCo;
 import de.se_rwth.commons.logging.Log;
-import genericarc._ast.ASTArcTypeParameter;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-public class TypeParameterNamedTick implements GenericArcASTArcTypeParameterCoCo {
+public class TypeParameterNamedTick implements TypeParametersASTTypeParameterCoCo {
 
   @Override
-  public void check(@NotNull ASTArcTypeParameter p) {
+  public void check(@NotNull ASTTypeParameter p) {
     Preconditions.checkNotNull(p);
 
     if (!p.getName().isEmpty() && p.getName().equals("Tick")) {

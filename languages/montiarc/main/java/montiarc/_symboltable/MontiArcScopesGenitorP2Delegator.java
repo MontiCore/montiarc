@@ -7,8 +7,6 @@ import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import com.google.common.base.Preconditions;
 import de.monticore.statements.mccommonstatements._symboltable.MCCommonStatementsSymTabCompletion;
 import de.monticore.statements.mcvardeclarationstatements._symboltable.MCVarDeclarationStatementsSymTabCompletion;
-import genericarc.GenericArcMill;
-import genericarc._symboltable.GenericArcScopesGenitorP2;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
@@ -35,7 +33,6 @@ public class MontiArcScopesGenitorP2Delegator {
   protected void init() {
     this.initArcBasis();
     this.initArcAutomaton();
-    this.initGenericArc();
     this.initMCCommonStatements();
     this.initMCVarDeclarationStatements();
   }
@@ -44,17 +41,12 @@ public class MontiArcScopesGenitorP2Delegator {
     ArcBasisScopesGenitorP2 scopesGenP2 = ArcBasisMill.scopesGenitorP2();
     this.getTraverser().add4ArcBasis(scopesGenP2);
     this.getTraverser().add4CompSymbols(scopesGenP2);
+    this.getTraverser().add4TypeParameters(scopesGenP2);
     this.getTraverser().setArcBasisHandler(scopesGenP2);
   }
   
   protected void initArcAutomaton() {
     this.getTraverser().add4ArcAutomaton(ArcAutomatonMill.scopesGenitorP2());
-  }
-
-  protected void initGenericArc() {
-    GenericArcScopesGenitorP2 scopesGenP2 = GenericArcMill.scopesGenitorP2();
-    this.getTraverser().add4GenericArc(scopesGenP2);
-    this.getTraverser().setGenericArcHandler(scopesGenP2);
   }
 
   protected void initMCCommonStatements() {

@@ -1,13 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
-package genericarc.check;
+package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
+import arcbasis.ArcBasisTestBase;
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -17,8 +16,6 @@ import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypePrimitive;
 import de.monticore.types.check.SymTypeVariable;
-import genericarc.GenericArcMill;
-import genericarc.GenericArcTestBase;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Named;
@@ -33,15 +30,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
+public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
 
   @Test
   public void shouldGetParentComponent() {
     // Given
     ComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S");
-    ComponentTypeSymbol component = GenericArcMill.componentTypeSymbolBuilder()
+    ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
-      .setSpannedScope(GenericArcMill.scope())
+      .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     // Creating a typeExpr representing Parent<int> that is then set to be the parent of comp
@@ -148,7 +145,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
     child.setSuperComponentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
 
-    TypeVarSymbol symbol = GenericArcMill.typeVarSymbolBuilder().setName("A").build();
+    TypeVarSymbol symbol = ArcBasisMill.typeVarSymbolBuilder().setName("A").build();
     SymTypeExpression typeArg = SymTypeExpressionFactory.createTypeVariable(symbol);
     CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
 
@@ -197,7 +194,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
     TypeVarSymbol typeVar = symbolWithDefinitions.getTypeParameters().get(0);
 
     String portName = "port";
-    ArcPortSymbol port = GenericArcMill.arcPortSymbolBuilder()
+    ArcPortSymbol port = ArcBasisMill.arcPortSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(typeVar))
       .setIncoming(true)
@@ -223,7 +220,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
     ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
     String portName = "porr";
-    ArcPortSymbol port = GenericArcMill.arcPortSymbolBuilder()
+    ArcPortSymbol port = ArcBasisMill.arcPortSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(parentTypeVar))
       .setIncoming(true)
@@ -271,7 +268,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
     TypeVarSymbol typeVar = symbolWithDefinitions.getTypeParameters().get(0);
 
     String paramName = "parr";
-    VariableSymbol param = GenericArcMill.variableSymbolBuilder()
+    VariableSymbol param = ArcBasisMill.variableSymbolBuilder()
       .setName(paramName)
       .setType(SymTypeExpressionFactory.createTypeVariable(typeVar))
       .build();
@@ -297,7 +294,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
     ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
     String name = "parr";
-    VariableSymbol paramOfParent = GenericArcMill.variableSymbolBuilder()
+    VariableSymbol paramOfParent = ArcBasisMill.variableSymbolBuilder()
       .setName(name)
       .setType(SymTypeExpressionFactory.createTypeVariable(parentTypeVar))
       .build();
@@ -306,7 +303,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
 
     ComponentTypeSymbol compDefinition = createComponentWithTypeVar("Comp", "T");
     TypeVarSymbol childTypeVar = compDefinition.getTypeParameters().get(0);
-    VariableSymbol paramOfComp = GenericArcMill.variableSymbolBuilder()
+    VariableSymbol paramOfComp = ArcBasisMill.variableSymbolBuilder()
       .setName(name)
       .setType(SymTypeExpressionFactory.createTypeVariable(childTypeVar))
       .build();
@@ -390,15 +387,15 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
 
     List<TypeVarSymbol> typeVars = new ArrayList<>(typeVarNames.length);
     for(String typeVarName : typeVarNames) {
-      TypeVarSymbol typeVar = GenericArcMill.typeVarSymbolBuilder()
+      TypeVarSymbol typeVar = ArcBasisMill.typeVarSymbolBuilder()
         .setName(typeVarName)
         .build();
       typeVars.add(typeVar);
     }
 
-    return GenericArcMill.componentTypeSymbolBuilder()
+    return ArcBasisMill.componentTypeSymbolBuilder()
       .setName(compName)
-      .setSpannedScope(GenericArcMill.scope())
+      .setSpannedScope(ArcBasisMill.scope())
       .setTypeParameters(typeVars)
       .build();
   }
@@ -409,7 +406,7 @@ public class TypeExprOfGenericComponentTest extends GenericArcTestBase {
   protected static ComponentTypeSymbol createSurrogateInGlobalScopeFor(@NotNull ComponentTypeSymbol original) {
     Preconditions.checkNotNull(original);
 
-    return GenericArcMill
+    return ArcBasisMill
       .componentTypeSymbolSurrogateBuilder()
       .setName(original.getFullName())
       .build();

@@ -17,7 +17,7 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import de.se_rwth.commons.logging.Log;
-import genericarc.check.TypeExprOfGenericComponent;
+import arcbasis.check.TypeExprOfGenericComponent;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
