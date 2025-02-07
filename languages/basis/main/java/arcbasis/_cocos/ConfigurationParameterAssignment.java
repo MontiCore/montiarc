@@ -2,7 +2,6 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
@@ -127,11 +126,6 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(sourcePositionStart);
     Preconditions.checkNotNull(sourcePositionEnd);
 
-    if (!componentExpression.getTypeInfo().isPresentAstNode()) {
-      Log.debug("Skip coco check, we currently do not support this check for library components", this.getClass().getCanonicalName());
-      return;
-    }
-
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
 
@@ -144,12 +138,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       .filter(ASTArcArgument::isPresentName)
       .collect(Collectors.toList());
 
-    long mandatoryParamsAmount = parameters.stream()
-      .map(VariableSymbol::getAstNode)
-      .map(ASTArcParameter.class::cast)
-      .filter(param -> !param.isPresentDefault())
-      .count();
-
+    int mandatoryParamsAmount = parameters.size() - componentExpression.getTypeInfo().getNumOptParams();
     int defaultAssignedByKey = 0;
 
     for (ASTArcArgument keywordArg : keywordArgs) {

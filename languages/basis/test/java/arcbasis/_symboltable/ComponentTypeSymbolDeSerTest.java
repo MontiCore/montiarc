@@ -17,7 +17,7 @@ import java.util.Collections;
 /**
  * Holds tests for {@link ComponentTypeSymbolDeSer}.
  */
-public class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
+class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
   private static final String SIMPLE_JSON =
     "{" +
@@ -51,6 +51,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
+      "\"numOptParams\":1," +
       "\"parameters\":[{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\"," +
       "\"name\":\"a\"," +
@@ -183,6 +184,7 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     comp.getSpannedScope().add(paramB);
     comp.addParameter(paramA);
     comp.addParameter(paramB);
+    comp.setNumOptParams(1);
 
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
     ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
@@ -275,7 +277,8 @@ public class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     Assertions.assertEquals(2, comp.getParameters().size());
     Assertions.assertAll(
       () -> Assertions.assertEquals("a", comp.getParameters().get(0).getName()),
-      () -> Assertions.assertEquals("b", comp.getParameters().get(1).getName())
+      () -> Assertions.assertEquals("b", comp.getParameters().get(1).getName()),
+      () -> Assertions.assertEquals(1, comp.getNumOptParams())
     );
   }
 

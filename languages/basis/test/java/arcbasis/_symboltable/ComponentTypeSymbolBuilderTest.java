@@ -23,17 +23,17 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 /**
  * Holds tests for the handwritten methods of {@link ComponentTypeSymbolBuilder}.
  */
-public class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
+class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
 
   @Test
-  public void shouldBeValid() {
+  void shouldBeValid() {
     ComponentTypeSymbolBuilder builder = new ComponentTypeSymbolBuilder();
     builder.setName("A").setSpannedScope(ArcBasisMill.scope());
     Assertions.assertTrue(builder.isValid());
   }
 
   @Test
-  public void shouldBeInvalid() {
+  void shouldBeInvalid() {
     ComponentTypeSymbolBuilder builder1 = new ComponentTypeSymbolBuilder();
     ComponentTypeSymbolBuilder builder2 = new ComponentTypeSymbolBuilder();
     builder2.setName("Comp");
@@ -45,7 +45,7 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
   }
 
   @Test
-  public void shouldHaveParent() {
+  void shouldHaveParent() {
     ComponentTypeSymbol parentComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setSpannedScope(Mockito.mock(IArcBasisScope.class)).setName("A").build();
     ComponentTypeSymbol childComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
@@ -54,14 +54,14 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
   }
 
   @Test
-  public void shouldNotHaveParent() {
+  void shouldNotHaveParent() {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(ArcBasisMill.scope()).build();
     Assertions.assertTrue(symbol.isEmptySuperComponents());
   }
 
   @Test
-  public void shouldHaveOuter() {
+  void shouldHaveOuter() {
     ComponentTypeSymbol outerComp = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol innerComp = ArcBasisMill.componentTypeSymbolBuilder().setName("B")
@@ -70,7 +70,7 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
   }
 
   @Test
-  public void shouldNotHaveOuter() {
+  void shouldNotHaveOuter() {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(ArcBasisMill.scope()).build();
     Assertions.assertFalse(symbol.getOuterComponent().isPresent());
@@ -78,7 +78,7 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("compNameAndParametersProvider")
-  public void shouldBuildWithExpectedParameters(String name, List<VariableSymbol> parameters) {
+  void shouldBuildWithExpectedParameters(String name, List<VariableSymbol> parameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(ArcBasisMill.scope()).setParameters(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
@@ -96,9 +96,30 @@ public class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
         ArcBasisMill.variableSymbolBuilder().setName("d").build())));
   }
 
+  @Test
+  void shouldBuildWithExpectedNumberOfOptionalParameters() {
+    // Given
+    VariableSymbol symParamA = ArcBasisMill.variableSymbolBuilder().setName("A").build();
+    VariableSymbol symParamB = ArcBasisMill.variableSymbolBuilder().setName("B").build();
+    VariableSymbol symParamC = ArcBasisMill.variableSymbolBuilder().setName("C").build();
+    VariableSymbol symParamD = ArcBasisMill.variableSymbolBuilder().setName("D").build();
+    int numberOfOptionalParameters = 2;
+
+    // When
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("A")
+      .setParameters(List.of(symParamA, symParamB, symParamC, symParamD))
+      .setNumOptParams(numberOfOptionalParameters)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+
+    // Then
+    Assertions.assertEquals(2, symbol.getNumOptParams());
+  }
+
   @ParameterizedTest
   @MethodSource("compNameAndTypeParametersProvider")
-  public void shouldBuildWithExpectedTypeParameters(String name,
+  void shouldBuildWithExpectedTypeParameters(String name,
     List<TypeVarSymbol> typeParameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(ArcBasisMill.scope()).setTypeParameters(typeParameters).build();

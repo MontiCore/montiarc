@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -114,7 +115,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    */
   public void addParameters(@NotNull Collection<VariableSymbol> parameters) {
     Preconditions.checkNotNull(parameters);
-    Preconditions.checkArgument(!parameters.contains(null));
+    Preconditions.checkArgument(parameters.stream().noneMatch(Objects::isNull));
     for (VariableSymbol parameter : parameters) {
       this.addParameter(parameter);
     }

@@ -60,6 +60,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
     printer.member(de.monticore.symboltable.serialization.JsonDeSers.NAME, toSerialize.getName());
 
     // serialize symbolrule attributes
+    serializeNumOptParams(toSerialize.getNumOptParams(), s2j);
     if (!toSerialize.isEmptySuperComponents()) {
       serializeSuperComponents(toSerialize.getSuperComponentsList(), s2j);
     }

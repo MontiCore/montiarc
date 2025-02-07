@@ -25,9 +25,6 @@ public class MontiArcComponentTypeSymbol extends ComponentTypeSymbol implements 
   protected List<VariableArcVariantComponentTypeSymbol> variableArcVariants;
   protected List<VariableArcVariationPoint> variationPoints;
 
-  /**
-   * @param name the name of this component type.
-   */
   protected MontiArcComponentTypeSymbol(String name) {
     super(name);
     variationPoints = new ArrayList<>();

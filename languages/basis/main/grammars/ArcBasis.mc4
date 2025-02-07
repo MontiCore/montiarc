@@ -68,6 +68,10 @@ component grammar ArcBasis extends
     body:ComponentBody
   ;
 
+  symbolrule ComponentType =
+    numOptParams : int
+  ;
+
   /**
    * ASTComponentHead holds the definitions of generic type parameters that may
    * be used as prt types in the component, definitions of configuration parameters

@@ -123,6 +123,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(this.getCurrentScope().isPresent());
     Preconditions.checkState(this.getCurrentComponent().get().isPresentAstNode());
     Preconditions.checkState(this.getCurrentComponent().get().getAstNode().equals(node));
+    this.getCurrentComponent().orElseThrow()
+      .setNumOptParams((int) node.getHead()
+        .getArcParameterList().stream()
+        .filter(ASTArcParameter::isPresentDefault)
+        .count());
     this.removeCurrentComponent();
     this.removeCurrentScope();
   }

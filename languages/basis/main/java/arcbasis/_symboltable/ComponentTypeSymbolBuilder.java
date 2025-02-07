@@ -7,12 +7,14 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected List<VariableSymbol> parameters;
+  protected List<VariableSymbol> parameters = new ArrayList<>();
   protected List<TypeVarSymbol> typeParameters;
 
   public ComponentTypeSymbolBuilder() {
@@ -47,7 +49,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   public ComponentTypeSymbolBuilder setParameters(@NotNull List<VariableSymbol> parameters) {
     Preconditions.checkNotNull(parameters);
-    Preconditions.checkArgument(!parameters.contains(null));
+    Preconditions.checkArgument(parameters.stream().noneMatch(Objects::isNull));
     this.parameters = parameters;
     return this.realBuilder;
   }
@@ -65,26 +67,46 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   @Override
   public ComponentTypeSymbol build() {
-    if (!isValid()) {
-      Preconditions.checkState(this.getName() != null);
-      Preconditions.checkState(this.getSpannedScope() != null);
+    Preconditions.checkState(isValid());
+    return doBuild(new ComponentTypeSymbol(this.name));
+  }
+
+  protected ComponentTypeSymbol doBuild(@NotNull ComponentTypeSymbol symbol) {
+    Preconditions.checkNotNull(symbol);
+    Preconditions.checkState(isValid());
+    symbol.setSuperComponentsList(this.superComponents);
+    symbol.setRefinementsList(this.refinements);
+    symbol.setName(this.name);
+    symbol.setFullName(this.fullName);
+    symbol.setPackageName(this.packageName);
+    if (this.astNode.isPresent()) {
+      symbol.setAstNode(this.astNode.get());
+    } else {
+      symbol.setAstNodeAbsent();
     }
-    ComponentTypeSymbol symbol = super.build();
-    symbol.setSpannedScope(this.getSpannedScope());
-    if (this.getParameters() != null) {
-      this.getParameters().forEach(symbol.getSpannedScope()::add);
-      symbol.addParameters(this.getParameters());
+    symbol.setAccessModifier(this.accessModifier);
+    symbol.setEnclosingScope(this.enclosingScope);
+    symbol.setSpannedScope(this.spannedScope);
+    if (this.parameters != null) {
+      this.parameters.forEach(this.getSpannedScope()::add);
+      symbol.addParameters(this.parameters);
     }
-    if (this.getTypeParameters() != null) {
+    symbol.setNumOptParams(this.numOptParams);
+    if (this.typeParameters != null) {
       this.getTypeParameters().forEach(symbol.getSpannedScope()::add);
     }
     symbol.setOuterComponent(this.getOuterComponent());
-    symbol.setSuperComponentsList(this.superComponents);
     return symbol;
   }
 
   @Override
   public boolean isValid() {
-    return getName() != null && spannedScope != null;
+    return this.name != null
+      && this.spannedScope != null;
+     // && isValidNumOptParams();
+  }
+
+  protected final boolean isValidNumOptParams() {
+    return this.parameters.size() >= this.numOptParams;
   }
 }
