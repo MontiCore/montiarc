@@ -3,6 +3,8 @@ package montiarc.check;
 
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisTypeCheck;
+import arcbasis.check.ArcBasisTypeContextCalculator;
+import arcbasis.check.ArcBasisWithinTypeBasicSymbolsResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsCTTIVisitor;
 import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
@@ -22,6 +24,7 @@ import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.check.VariableArcTypeCheck;
 import variablearc.check.VariableArcVariantWithinScopeBasicSymbolsResolver;
+import variablearc.check.VariableArcVariantWithinTypeBasicSymbolsResolver;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,8 +75,9 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     Preconditions.checkNotNull(ctx4Ast);
     Log.trace("Start initializing the type-check delegate", LOG_NAME);
     VariableArcVariantWithinScopeBasicSymbolsResolver.init();
+    VariableArcVariantWithinTypeBasicSymbolsResolver.init();
     MAOOWithinTypeBasicSymbolsResolver.init();
-    TypeContextCalculator.init();
+    ArcBasisTypeContextCalculator.init();
     TypeVisitorOperatorCalculator.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);

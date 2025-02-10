@@ -60,7 +60,8 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Log.trace("Start initializing the type-check delegate", LOG_NAME);
     ArcBasisWithinScopeBasicSymbolsResolver.init();
     ArcBasisWithinTypeBasicSymbolsResolver.init();
-    TypeContextCalculator.init();
+    ArcBasisOOWithinTypeBasicSymbolsResolver.init();
+    ArcBasisTypeContextCalculator.init();
     TypeVisitorOperatorCalculator.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);

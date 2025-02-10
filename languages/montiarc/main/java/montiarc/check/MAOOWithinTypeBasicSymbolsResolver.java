@@ -6,14 +6,14 @@ import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.modifiers.StaticAccessModifier;
-import de.monticore.types3.util.OOWithinTypeBasicSymbolsResolver;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.check.VariableArcVariantOOWithinTypeBasicSymbolsResolver;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class MAOOWithinTypeBasicSymbolsResolver extends OOWithinTypeBasicSymbolsResolver {
+public class MAOOWithinTypeBasicSymbolsResolver extends VariableArcVariantOOWithinTypeBasicSymbolsResolver {
 
   private static final String LOG_NAME = MAOOWithinTypeBasicSymbolsResolver.class.getSimpleName();
 

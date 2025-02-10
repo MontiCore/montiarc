@@ -44,7 +44,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcTestBase {
     compile("component Super<T> {" +
       "port in T pGenInh; " +
       "}");
-    scope = compile("component A<K extends java.lang.Integer>(int p1) extends Super<K> {" +
+    scope = compile("component A<K extends int>(int p1) extends Super<K> {" +
       "feature f; " +
       "port out int pOut; " +
       "int field = 1; " +
@@ -67,7 +67,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcTestBase {
     "sub", // Subcomponent
     "sub.fSub", // Sub-feature
     "sub.pIn == 1", // Sub-port
-    //"field = pGenInh" // Inherited generic port
+    "field = pGenInh" // Inherited generic port
   })
   public void testValidExpression(@NotNull String expr) throws IOException {
     Preconditions.checkNotNull(expr);
@@ -121,8 +121,8 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidExpression() {
     return Stream.of(
       Arguments.of("B", new String[]{"0xFD118"}), // Component Type
-      //Arguments.of("sub.fieldSub == 1", new String[]{"0xF737F"}), // Sub-field
-      //Arguments.of("sub.pSub == 1", new String[]{"0xF737F"}), // Sub-parameter
+      Arguments.of("sub.fieldSub == 1", new String[]{"0xF737F"}), // Sub-field
+      Arguments.of("sub.pSub == 1", new String[]{"0xF737F"}), // Sub-parameter
       Arguments.of("sub.sub", new String[]{"0xF737F"}), // Sub-instance
       Arguments.of("sub.C", new String[]{"0xF737F"}), // Sub-Component Type
       Arguments.of("sub.sub.fSubSub", new String[]{"0xF737F"}) // Sub-sub-feature
