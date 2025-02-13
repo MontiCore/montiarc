@@ -15,7 +15,7 @@ import java.util.Set;
  * Definition of 'interesting' and 'boring' states for the bigModel
  */
 public class Boring_Interesting_EnumState_SM<In, Out>
-  extends Boring_Interesting_EnumState<In, Out> {
+        extends Boring_Interesting_EnumState<In, Out> {
 
   @Override
   public void init() {

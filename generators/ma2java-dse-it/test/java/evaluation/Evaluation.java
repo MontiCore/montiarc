@@ -71,9 +71,19 @@ public class Evaluation {
 
   public static Stream<Arguments> specificationSmallModel() {
 
-    // parameters for the component must be the fourth element in the args argument of the run
-    // function
-    Integer inputLength = 2;
+    // parameters for the component must be the fourth element in the args argument of the run function
+
+    Integer inputLength = 1;
+
+    // defines if the existence of non-deterministic paths should be checked
+    Boolean checkForNonDetPaths = true;
+
+    // defines if the number of non-deterministic paths should be calculated
+    Boolean calculateNumberOfNonDetPaths = true;
+    String controller = "PathController";
+    int Row_excelSheet = 1;
+
+
     return Stream.of(
             Arguments.of(
                     (Callable<ResultI<Pair<List<ListerInSmallModel>,
@@ -88,9 +98,10 @@ public class Evaluation {
                         throw new RuntimeException(e);
                       }
                     },
-                    false,
-                    (1),
-                    ("PathController"),
+                    checkForNonDetPaths,
+                    calculateNumberOfNonDetPaths,
+                    Row_excelSheet,
+                    controller,
                     inputLength
             )
     );
@@ -100,8 +111,16 @@ public class Evaluation {
 
     Integer inputLength = 0;
 
-    // parameters for the component must be the fourth element in the args argument of the run
-    // function
+    // defines if the existence of non-deterministic paths should be checked
+    Boolean checkForNonDetPaths = false;
+
+    // defines if the number of non-deterministic paths should be calculated
+    Boolean calculateNumberOfNonDetPaths = false;
+    String controller = "PathController";
+    int Row_excelSheet = 1;
+
+
+    // parameters for the component must be the fourth element in the args argument of the run function
     return Stream.of(
             Arguments.of(
                     (Callable<ResultI<Pair<List<ListerInElevatorSystem>,
@@ -116,9 +135,10 @@ public class Evaluation {
                         throw new RuntimeException(e);
                       }
                     },
-                    false,
-                    (1),
-                    ("PathController"),
+                    checkForNonDetPaths,
+                    calculateNumberOfNonDetPaths,
+                    Row_excelSheet,
+                    controller,
                     inputLength
             )
     );
@@ -148,9 +168,11 @@ public class Evaluation {
     fillCell(sheet, 0, 8, "visited states");
     fillCell(sheet, 0, 9, "existing states");
     fillCell(sheet, 0, 10, "redundant paths");
-    fillCell(sheet, 0, 11, "non-deterministic paths");
+    fillCell(sheet, 0, 11, "number of non-deterministic paths");
     fillCell(sheet, 0, 12, "number of solver calls");
     fillCell(sheet, 0, 13, "number of found SAT paths");
+    fillCell(sheet, 0, 14, "existence of non-deterministic paths");
+
   }
 
   @AfterAll
@@ -170,12 +192,19 @@ public class Evaluation {
     workbook.close();
   }
 
+
+  /***
+   * This method performs the evaluation for the SmallModel.
+   * The model, controller, and input length must be defined in specificationSmallModel.
+   * Due to increased runtime, the last evaluation step, the calculation of non-determinism, is commented out.
+   * The evaluation results are displayed in the output and also saved in an Excel table.
+   */
   @ParameterizedTest
   @MethodSource("specificationSmallModel")
   public void
   evaluationSmallModel(@NotNull Callable<ResultI<Pair<List<ListerInSmallModel>,
           ListerParameterSmallModel>,
-          List<ListerOutSmallModel>>> testController, @NotNull boolean calculateNonDetPaths,
+          List<ListerOutSmallModel>>> testController, @NotNull boolean checkForNonDetPaths, @NotNull boolean calculateNumberOfNonDetPaths,
                        @NotNull int row, @NotNull String controller,
                        @NotNull Integer inputLength) throws Exception {
 
@@ -233,8 +262,8 @@ public class Evaluation {
     //evaluation completeness - transitions
     Set<String> allTransitions = setTransitionsSM();
 
-    Set<InputAndCondition> condition = result.getInputsAndCondition();
-    int transitions = evaluateTransitions(condition, allTransitions);
+    Set<InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>>> condition = result.getInputsAndCondition();
+    int transitions = evaluateTransitionsSM(condition, allTransitions);
 
     // transitions will be -1 if transitions were taken, that were not in allTransitions
     System.out.println(controller + ": " + transitions + " out of " + allTransitions.size() + " " +
@@ -259,10 +288,10 @@ public class Evaluation {
     assertThat(visitedStates).isNotNull();
 
 
-    Set<Enum<? extends Enum>> visitedEnumsDistinctionModel = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsEvaluationModel = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsCounterMDSE = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsCounterSA = new HashSet<>();
+    Set<Enum<?>> visitedEnumsDistinctionModel = new HashSet<>();
+    Set<Enum<?>> visitedEnumsEvaluationModel = new HashSet<>();
+    Set<Enum<?>> visitedEnumsCounterMDSE = new HashSet<>();
+    Set<Enum<?>> visitedEnumsCounterSA = new HashSet<>();
 
     // fill expectedStates
     Set<StateInfo> expectedStatesDistinctionModel = new HashSet<>();
@@ -368,7 +397,7 @@ public class Evaluation {
               + expectedStatesDistinctionModel.size();
 
       int numberOfVisitedStates = visitedStatesCompareEvaluationModel.size()
-                      + visitedStatesCompareDistinctionModel.size();
+              + visitedStatesCompareDistinctionModel.size();
 
 
       resultVisitedStates(row, controller, sheetSmallModel, missedStates, numberOfVisitedStates,
@@ -380,8 +409,7 @@ public class Evaluation {
     Set<Pair<List<ListerI>, Expr<BoolSort>>> output = new HashSet<>();
 
     // extract the simplified output with the corresponding branchConditions
-    for (InputAndCondition<List<ListerInSmallModel>,
-            List<ListerOutSmallModel>> temp : condition) {
+    for (InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>> temp : condition) {
 
       List<ListerI> listOutSimplified = new ArrayList<>();
       for (ListerOutSmallModel temps : temp.getOutput()) {
@@ -426,21 +454,25 @@ public class Evaluation {
     }
 
     // check if component is non-deterministic
-    // to reduce runtime when building the whole project this function is commented out
-   /* if (calculateNonDetPaths) {
-      int nonDetPaths = checkNumberOfNonDeterminism(condition, ctx);
+
+    // calculate number of non-deterministic paths
+    if (calculateNumberOfNonDetPaths) {
+      int nonDetPaths = checkNumberOfNonDeterminismSM(condition, ctx);
       System.out.println(controller + ": The component has " + nonDetPaths + " non-deterministic " +
               "paths");
       fillCell(sheetSmallModel, row, 11, nonDetPaths);
-    } else {
-      boolean nonDeterministic = checkNonDeterminism(condition, ctx);
+    }
+
+    // check existence of non-deterministic paths
+    if (checkForNonDetPaths) {
+      boolean nonDeterministic = checkNonDeterminismSM(condition, ctx);
       if (nonDeterministic) {
         System.out.println(controller + ": The component has non-deterministic paths");
       } else {
         System.out.println(controller + ": The component has only deterministic paths");
       }
-      fillCell(sheetSmallModel, row, 11, String.valueOf(nonDeterministic));
-    }*/
+      fillCell(sheetSmallModel, row, 14, String.valueOf(nonDeterministic));
+    }
   }
 
   /**
@@ -515,8 +547,8 @@ public class Evaluation {
    * this function counts the number of enum states of expectedStates that are not contained in
    * visitedStates
    */
-  private int getMissedEnumStates(Set<Enum<? extends Enum>> visitedStates,
-                                  List<Enum<? extends Enum>> expectedStates) {
+  private int getMissedEnumStates(Set<Enum<?>> visitedStates,
+                                  List<Enum<?>> expectedStates) {
     int missedStates = 0;
 
     missedStates += expectedStates.stream()
@@ -569,7 +601,8 @@ public class Evaluation {
    * of the check if all states were either visited or missed
    * if the state space is finite extra states needs to be 0
    */
-  private void resultVisitedStates(int row, String controller, HSSFSheet sheet, int missedStates, int numberOfVisitedStates, int sizeOfAllStates, int extraStates) {
+  private void resultVisitedStates(int row, String controller, HSSFSheet sheet, int missedStates,
+                                   int numberOfVisitedStates, int sizeOfAllStates, int extraStates) {
 
     if (numberOfVisitedStates + missedStates != sizeOfAllStates) {
       numberOfVisitedStates = -1;
@@ -655,11 +688,19 @@ public class Evaluation {
     return duplicates;
   }
 
+
+  /***
+   * This method performs the evaluation for the BigModel.
+   * The model, controller, and input length must be defined in specificationBigModel.
+   * Due to increased runtime, the last evaluation step, the calculation of non-determinism, is commented out.
+   * The evaluation results are displayed in the output and also saved in an Excel table.
+   */
+
   @ParameterizedTest
   @MethodSource("specificationBigModel")
   public void evaluationBigModel(@NotNull Callable<ResultI<Pair<List<ListerInElevatorSystem>,
           ListerParameterElevatorSystem>,
-          List<ListerOutElevatorSystem>>> testController, @NotNull boolean calculateNonDetPaths,
+          List<ListerOutElevatorSystem>>> testController, @NotNull boolean checkForNonDetPaths, @NotNull boolean calculateNumberOfNonDetPaths,
                                  @NotNull int row, @NotNull String controller,
                                  @NotNull Integer inputLength) throws Exception {
 
@@ -717,8 +758,9 @@ public class Evaluation {
     //evaluation completeness - transitions
     Set<String> allTransitions = setTransitionsBM();
 
-    Set<InputAndCondition> condition = result.getInputsAndCondition();
-    int transitions = evaluateTransitions(condition, allTransitions);
+    Set<InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>,
+            List<ListerOutElevatorSystem>>> condition = result.getInputsAndCondition();
+    int transitions = evaluateTransitionsBM(condition, allTransitions);
 
     // transitions will be -1 if transitions were taken, that were not in allTransitions
     System.out.println(controller + ": " + transitions + " out of " + allTransitions.size() + " " +
@@ -734,19 +776,20 @@ public class Evaluation {
       EvaluationControllerI evaluationControllerI = (EvaluationControllerI) TestController.getController();
       visitedStates = evaluationControllerI.getVisitedStates();
 
-      saveSolverCalls_SatPaths(sheetBigModel, row, evaluationControllerI.getSolverCalls(), evaluationControllerI.getSatPaths());
+      saveSolverCalls_SatPaths(sheetBigModel, row, evaluationControllerI.getSolverCalls(),
+              evaluationControllerI.getSatPaths());
     }
 
     assertThat(visitedStates).isNotNull();
 
-    Set<Enum<? extends Enum>> visitedEnumsController = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsDoor = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsLift = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsSplitter = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsFloor1 = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsFloor2 = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsFloor3 = new HashSet<>();
-    Set<Enum<? extends Enum>> visitedEnumsFloor4 = new HashSet<>();
+    Set<Enum<?>> visitedEnumsController = new HashSet<>();
+    Set<Enum<?>> visitedEnumsDoor = new HashSet<>();
+    Set<Enum<?>> visitedEnumsLift = new HashSet<>();
+    Set<Enum<?>> visitedEnumsSplitter = new HashSet<>();
+    Set<Enum<?>> visitedEnumsFloor1 = new HashSet<>();
+    Set<Enum<?>> visitedEnumsFloor2 = new HashSet<>();
+    Set<Enum<?>> visitedEnumsFloor3 = new HashSet<>();
+    Set<Enum<?>> visitedEnumsFloor4 = new HashSet<>();
 
     // Controller component
     Set<StateInfo> expectedStatesController = fillExpectedSatesController();
@@ -943,7 +986,7 @@ public class Evaluation {
     Set<Pair<List<ListerI>, Expr<BoolSort>>> output = new HashSet<>();
 
     // extract the simplified output with the corresponding branchConditions
-    for (InputAndCondition<List<ListerInElevatorSystem>,
+    for (InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>,
             List<ListerOutElevatorSystem>> temp : condition) {
       List<ListerI> listOutSimplified = new ArrayList<>();
       for (ListerOutElevatorSystem temps : temp.getOutput()) {
@@ -1001,22 +1044,25 @@ public class Evaluation {
     }
 
     // check if component is non-deterministic
-    // to reduce runtime when building the whole project this function is commented out
-/*
-    if (calculateNonDetPaths) {
-      int nonDetPaths = checkNumberOfNonDeterminism(condition, ctx);
+
+    // calculate number of non-deterministic paths
+    if (calculateNumberOfNonDetPaths) {
+      int nonDetPaths = checkNumberOfNonDeterminismBM(condition, ctx);
       System.out.println(controller + ": The component has " + nonDetPaths + " non-deterministic " +
               "paths");
       fillCell(sheetBigModel, row, 11, nonDetPaths);
-    } else {
-      boolean nonDeterministic = checkNonDeterminism(condition, ctx);
+    }
+
+    // check for existence of non-deterministic paths
+    if (checkForNonDetPaths) {
+      boolean nonDeterministic = checkNonDeterminismBM(condition, ctx);
       if (nonDeterministic) {
         System.out.println(controller + ": The component has non-deterministic paths");
       } else {
         System.out.println(controller + ": The component has only deterministic paths");
       }
-      fillCell(sheetBigModel, row, 11, String.valueOf(nonDeterministic));
-    }*/
+      fillCell(sheetBigModel, row, 14, String.valueOf(nonDeterministic));
+    }
   }
 
   /**
@@ -1311,7 +1357,7 @@ public class Evaluation {
                     "stopNext: " + "<false, false>")), "elevator.ctrl"));
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("WaitTimer"),
             new ArrayList<>(Arrays.asList("directions: " + "<NA, NA>", "current: " + "<0, 0>", "target:" +
-                    " " + "<0, 0>",
+                            " " + "<0, 0>",
                     "timer: " + "<(* 5.0 (/ 1.0 2.0) (/ 1.0 2.0) (/ 1.0 2.0)), 0" + ".625>",
                     "stopNext: " + "<false, false>")), "elevator.ctrl"));
     expectedStatesController.add(StateInfo.newStateInfo(Controller.States.valueOf("CloseDoor"),
@@ -1335,6 +1381,55 @@ public class Evaluation {
   }
 
   /**
+   * This function extracts all path conditions of the given inputAndConditions of SmallModel
+   * and further allows the calculation of non-deterministic paths
+   */
+  public int checkNumberOfNonDeterminismSM(Set<InputAndCondition<Pair<List<ListerInSmallModel>,
+          ListerParameterSmallModel>, List<ListerOutSmallModel>>> inputAndConditions, Context ctx)
+          throws ExecutionException, InterruptedException {
+    List<List<Pair<Integer, Expr<?>>>> pathConditions = new ArrayList<>();
+
+    for (InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>> temp : inputAndConditions) {
+      BoolExpr expr = temp.getBranches().getBranchConditions();
+      List<Pair<Integer, Expr<?>>> individualConditions = new ArrayList<>();
+      individualConditions.addAll(splitConditions(expr));
+
+      // the first expr is removed because each path starts with the expr true
+      individualConditions.remove(0);
+      pathConditions.add(individualConditions);
+      System.gc();
+    }
+
+    // calculate number of non-deterministic paths
+    return checkNumberOfNonDeterminism(pathConditions, ctx);
+  }
+
+  /**
+   * This function extracts all path conditions of the given inputAndConditions of BigModel
+   * and further allows the calculation of non-deterministic paths
+   */
+  public int checkNumberOfNonDeterminismBM(Set<InputAndCondition<Pair<List<ListerInElevatorSystem>,
+          ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>>> inputAndConditions, Context ctx)
+          throws ExecutionException, InterruptedException {
+    List<List<Pair<Integer, Expr<?>>>> pathConditions = new ArrayList<>();
+
+    for (InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>> temp : inputAndConditions) {
+      BoolExpr expr = temp.getBranches().getBranchConditions();
+      List<Pair<Integer, Expr<?>>> individualConditions = new ArrayList<>();
+      individualConditions.addAll(splitConditions(expr));
+
+      // the first expr is removed because each path starts with the expr true
+      individualConditions.remove(0);
+      pathConditions.add(individualConditions);
+      System.gc();
+    }
+
+    // calculate number of non-deterministic paths
+    return checkNumberOfNonDeterminism(pathConditions, ctx);
+
+  }
+
+  /**
    * This function calculates the number of non-deterministic paths in the analyzed model.
    * All paths are checked for equality and, in the case of inequality, for satisfiability.
    * Satisfiability is checked for the unequal partial expressions. These comparisons are very
@@ -1346,28 +1441,8 @@ public class Evaluation {
    * For a desired execution of the function in the evaluation, the value of
    * "calculateNonDetPaths" must be set to "true".
    */
-  public int checkNumberOfNonDeterminism(Set<InputAndCondition> inputAndConditions, Context ctx)
-          throws ExecutionException, InterruptedException {
+  public int checkNumberOfNonDeterminism(List<List<Pair<Integer, Expr<?>>>> pathConditions, Context ctx) {
     int numberOfNonDetPaths = 0;
-    List<List<Pair<Integer, Expr<?>>>> pathConditions = new ArrayList<>();
-
-    for (InputAndCondition temp : inputAndConditions) {
-      BoolExpr expr = temp.getBranches().getBranchConditions();
-      List<Pair<Integer, Expr<?>>> individualConditions = new ArrayList<>();
-      individualConditions.addAll(splitConditions(expr));
-
-      // the first expr is removed because each path starts with the expr true
-      individualConditions.remove(0);
-      pathConditions.add(individualConditions);
-      System.gc();
-    }
-
-    /*
-     * is set to null to allow the garbage collector to free memory and thus improve performance
-     * during the
-     * because very large data structures can occur
-     */
-    inputAndConditions = null;
 
     List<List<Pair<Integer, Expr<?>>>> toBeDeleted = new ArrayList<>(pathConditions);
     List<List<Pair<Integer, Expr<?>>>> nonDetPaths = new ArrayList<>();
@@ -1420,15 +1495,14 @@ public class Evaluation {
   }
 
   /**
-   * This function calculates if the analyzed models have non-deterministic paths.
-   * It returns true if a non-deterministic path is found. Since this function uses the
-   * same algorithm as 'checkNumberOfNonDeterminism', it is possible that the calculation
-   * cannot be done in a reasonable time if the model is large and deterministic.
+   * This function extracts all path conditions of the given inputAndConditions of SmallModel
+   * and further allows to check the existence of non-deterministic paths
    */
-  public boolean checkNonDeterminism(Set<InputAndCondition> inputAndConditions, Context ctx) {
+  public boolean checkNonDeterminismSM(Set<InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>,
+          List<ListerOutSmallModel>>> inputAndConditions, Context ctx) {
     List<List<Pair<Integer, Expr<?>>>> pathConditions = new ArrayList<>();
 
-    for (InputAndCondition temp : inputAndConditions) {
+    for (InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>> temp : inputAndConditions) {
       BoolExpr expr = temp.getBranches().getBranchConditions();
       List<Pair<Integer, Expr<?>>> individualConditions = new ArrayList<>();
       individualConditions.addAll(splitConditions(expr));
@@ -1439,13 +1513,40 @@ public class Evaluation {
       System.gc();
     }
 
-    /*
-     * is set to null to allow the garbage collector to free memory and thus improve performance
-     * during the
-     * because very large data structures can occur
-     */
-    inputAndConditions = null;
+    // check existence of non-deterministic paths
+    return checkNonDeterminism(pathConditions, ctx);
+  }
 
+  /**
+   * This function extracts all path conditions of the given inputAndConditions of BigModel
+   * and further allows to check the existence of non-deterministic paths
+   */
+  public boolean checkNonDeterminismBM(Set<InputAndCondition<Pair<List<ListerInElevatorSystem>,
+          ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>>> inputAndConditions, Context ctx) {
+    List<List<Pair<Integer, Expr<?>>>> pathConditions = new ArrayList<>();
+
+    for (InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>> temp : inputAndConditions) {
+      BoolExpr expr = temp.getBranches().getBranchConditions();
+      List<Pair<Integer, Expr<?>>> individualConditions = new ArrayList<>();
+      individualConditions.addAll(splitConditions(expr));
+
+      // the first expr is removed because each path starts with the expr true
+      individualConditions.remove(0);
+      pathConditions.add(individualConditions);
+      System.gc();
+    }
+
+    // check existence of non-deterministic paths
+    return checkNonDeterminism(pathConditions, ctx);
+  }
+
+  /**
+   * This function calculates if the analyzed models have non-deterministic paths.
+   * It returns true if a non-deterministic path is found. Since this function uses the
+   * same algorithm as 'checkNumberOfNonDeterminism', it is possible that the calculation
+   * cannot be done in a reasonable time if the model is large and deterministic.
+   */
+  public boolean checkNonDeterminism(List<List<Pair<Integer, Expr<?>>>> pathConditions, Context ctx) {
     List<List<Pair<Integer, Expr<?>>>> toBeDeleted = new ArrayList<>(pathConditions);
 
     for (List<Pair<Integer, Expr<?>>> path : pathConditions) {
@@ -1518,14 +1619,33 @@ public class Evaluation {
   }
 
   /**
-   * evaluates how many transitions included in 'allTransitions' are in 'condition' included
+   * extracts all transitions included in 'condition'
    */
-  private int evaluateTransitions(Set<InputAndCondition> condition, Set<String> allTransitions) {
+  private int evaluateTransitionsSM(Set<InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>,
+          List<ListerOutSmallModel>>> condition, Set<String> allTransitions) {
     Set<String> takenTransitions = new HashSet<>();
-    for (InputAndCondition temp : condition) {
+    for (InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>> temp : condition) {
       takenTransitions.addAll(temp.getBranches().getBranchIds());
     }
+    return checkTakenTransitions(takenTransitions, allTransitions);
+  }
 
+  /**
+   * extracts all transitions included in 'condition'
+   */
+  private int evaluateTransitionsBM(Set<InputAndCondition<Pair<List<ListerInElevatorSystem>,
+          ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>>> condition, Set<String> allTransitions) {
+    Set<String> takenTransitions = new HashSet<>();
+    for (InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>> temp : condition) {
+      takenTransitions.addAll(temp.getBranches().getBranchIds());
+    }
+    return checkTakenTransitions(takenTransitions, allTransitions);
+  }
+
+  /**
+   * evaluates how many transitions included in 'allTransitions' are in 'takenTransitions' included
+   */
+  private int checkTakenTransitions(Set<String> takenTransitions, Set<String> allTransitions) {
     int transitions = 0;
     for (String transition : allTransitions) {
       if (!takenTransitions.contains(transition)) {
@@ -1546,7 +1666,7 @@ public class Evaluation {
   /**
    * saves SolverCalls and number of SAT paths to Excel sheet
    */
-  private void saveSolverCalls_SatPaths(HSSFSheet sheet, int row, int solverCalls, int satPaths){
+  private void saveSolverCalls_SatPaths(HSSFSheet sheet, int row, int solverCalls, int satPaths) {
     fillCell(sheet, row, 12, solverCalls);
     fillCell(sheet, row, 13, satPaths);
   }

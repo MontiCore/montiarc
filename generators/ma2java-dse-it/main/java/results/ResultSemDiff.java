@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * type definition of the result for the computation of semDiff
+ * This class defines the type of the result for the computation of semDiff
  */
 public class ResultSemDiff<In, Out> implements ResultI<In, Out> {
 
@@ -32,7 +32,7 @@ public class ResultSemDiff<In, Out> implements ResultI<In, Out> {
   }
 
   @Override
-  public Set<InputAndCondition> getInputsAndCondition() {
+  public Set<InputAndCondition<In, Out>> getInputsAndCondition() {
     return null;
   }
 

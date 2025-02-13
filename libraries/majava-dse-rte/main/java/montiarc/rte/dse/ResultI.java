@@ -16,6 +16,6 @@ public interface ResultI<In, Out> {
    * this function returns all collected input output pairs with the corresponding taken branch
    * condition
    */
-  Set<InputAndCondition> getInputsAndCondition();
+  Set<InputAndCondition<In,Out>> getInputsAndCondition();
 
 }

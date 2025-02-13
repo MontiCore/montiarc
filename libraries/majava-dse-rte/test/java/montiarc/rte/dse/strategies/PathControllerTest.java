@@ -7,18 +7,16 @@ import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
 import com.microsoft.z3.Solver;
 import dse.DSE;
-import montiarc.rte.dse.AnnotatedValue;
-import montiarc.rte.dse.PathCondition;
-import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.*;
 import montiarc.rte.timesync.IInPort;
 import montiarc.rte.timesync.IOutPort;
 import montiarc.rte.timesync.InPort;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -28,11 +26,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 class PathControllerTest {
 
   MockPathCoverageController
-    <List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
-      List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
+          <List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
+                  List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
 
   @BeforeEach
-  void setUpMock(){
+  void setUpMock() {
     controller = new MockPathCoverageController<>();
     assertThat(controller).isNotNull();
 
@@ -49,7 +47,7 @@ class PathControllerTest {
 
     for (int i = 0; i < 2; i++) {
       inputExpr.add(TestController.getCtx()
-        .mkConst("input_" + i, TestController.getCtx().getIntSort()));
+              .mkConst("input_" + i, TestController.getCtx().getIntSort()));
       InPort<AnnotatedValue<Expr<IntSort>, Integer>> in = new InPort<>();
       in.update(AnnotatedValue.newAnnoValue(inputExpr.get(i), 0));
       expectedInput.add(in);
@@ -60,70 +58,80 @@ class PathControllerTest {
     solver.check();
 
     Set<Pair<List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
-      List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>>>
-      result = controller.startTest(DSE.getInputValues(solver.getModel(), inputExpr),
-      m -> DSE.getInputValues(m, inputExpr), DSE::runOnce).getInterestingInputs();
+            List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>>>
+            result = controller.startTest(DSE.getInputValues(solver.getModel(), inputExpr),
+            m -> DSE.getInputValues(m, inputExpr), DSE::runOnce).getInterestingInputs();
 
     assertThat(result).isNotNull();
 
     for (Pair<List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
-      List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> res : result) {
+            List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> res : result) {
       for (int i = 0; i < 2; i++) {
         int finalI = i;
 
         assertAll(
-          () -> assertThat(res.getKey().get(finalI).getValue()
-            .getExpr()).isEqualTo(expectedInput.get(finalI).getValue().getExpr()),
-          () -> assertThat(res.getKey().get(finalI).getValue()
-            .getValue()).isEqualTo(expectedInput.get(finalI).getValue().getValue()),
-          () -> assertThat(res.getValue().get(finalI).getValue()
-            .getValue()).isEqualTo(expectedInput.get(finalI).getValue().getValue()),
-          () -> assertThat(res.getValue().get(finalI).getValue()
-            .getExpr()).isEqualTo(expectedInput.get(finalI).getValue().getExpr())
+                () -> assertThat(res.getKey().get(finalI).getValue()
+                        .getExpr()).isEqualTo(expectedInput.get(finalI).getValue().getExpr()),
+                () -> assertThat(res.getKey().get(finalI).getValue()
+                        .getValue()).isEqualTo(expectedInput.get(finalI).getValue().getValue()),
+                () -> assertThat(res.getValue().get(finalI).getValue()
+                        .getValue()).isEqualTo(expectedInput.get(finalI).getValue().getValue()),
+                () -> assertThat(res.getValue().get(finalI).getValue()
+                        .getExpr()).isEqualTo(expectedInput.get(finalI).getValue().getExpr())
         );
       }
     }
   }
 
   @Test
-  @Order(3)
   public void testGetIf() {
 
     BoolExpr expr = controller.getCtx().mkEq(controller.getCtx()
-      .mkConst("input", controller.getCtx().mkIntSort()), controller.getCtx().mkInt(42));
+            .mkConst("input", controller.getCtx().mkIntSort()), controller.getCtx().mkInt(42));
 
     Boolean ifResult = controller.getIf(expr, 42 == 42, "testGetIf");
     BoolExpr condition = controller.getCtx().mkEq(controller.getCtx()
-      .mkConst("input", controller.getCtx().mkIntSort()), controller.getCtx().mkInt(42));
+            .mkConst("input", controller.getCtx().mkIntSort()), controller.getCtx().mkInt(42));
     BoolExpr resultCondition = controller.getCtx()
-      .mkEq(condition, controller.getCtx().mkBool(true));
+            .mkEq(condition, controller.getCtx().mkBool(true));
 
     assertThat(ifResult).isEqualTo(true);
     assertThat(controller.branchingCondition.size()).isEqualTo(1);
     assertThat(controller.branchingCondition.get(0)
-      .toString()).isEqualTo(resultCondition.toString());
+            .toString()).isEqualTo(resultCondition.toString());
   }
 
   @Test
   public void testGetIfOracle() {
 
-    controller.getIfOracle("testgetIfOracle");
+    controller.getIfOracle("testGetIfOracle");
 
     BoolExpr condition = controller.getCtx()
-      .mkEq(controller.getCtx().mkBoolConst("oracle_0"), controller.getCtx().mkBool(true));
+            .mkEq(controller.getCtx().mkBoolConst("oracle_0"), controller.getCtx().mkBool(true));
     BoolExpr resultCondition = controller.getCtx()
-      .mkEq(condition, controller.getCtx().mkBool(true));
+            .mkEq(condition, controller.getCtx().mkBool(true));
 
     assertThat(controller.branchingCondition.size()).isEqualTo(1);
     assertThat(controller.branchingCondition.get(0)
-      .toString()).isEqualTo(resultCondition.toString());
+            .toString()).isEqualTo(resultCondition.toString());
+  }
+
+  @Test
+  public void testSaveStates() {
+    StateInfo stateInfo = StateInfo.newStateInfo(TestEnum1.HAMBURG,
+            Arrays.asList("country : Germany"), "testComponent");
+    StatesList statesList = new StatesList(Arrays.asList(stateInfo));
+
+    controller.saveStates(statesList);
+
+    assertThat(controller.getVisitedStates()).isEqualTo(Set.of(statesList));
   }
 
   @Test
   public void testAddBranches() {
 
     BoolExpr branch = controller.getCtx()
-      .mkEq(controller.getCtx().mkInt(42), controller.getCtx().mkInt(43));
+            .mkEq(controller.getCtx().mkInt(42), controller.getCtx().mkInt(43));
 
     PathCondition expected = new PathCondition();
     expected.addBranch(branch, "testBranch");
@@ -132,5 +140,9 @@ class PathControllerTest {
 
     assertThat(controller.takenBranches).isNotNull();
     assertThat(controller.takenBranches.toString()).isEqualTo(expected.toString());
+  }
+
+  private enum TestEnum1 {
+    HAMBURG;
   }
 }

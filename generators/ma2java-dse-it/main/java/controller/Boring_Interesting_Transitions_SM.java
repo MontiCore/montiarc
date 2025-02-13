@@ -16,7 +16,7 @@ import java.util.Set;
  * Definition of 'interesting' and 'boring' states for the bigModel
  */
 public class Boring_Interesting_Transitions_SM<In, Out>
-  extends Boring_Interesting_Transitions<In, Out> {
+        extends Boring_Interesting_Transitions<In, Out> {
 
   @Override
   public void init() {
@@ -24,8 +24,8 @@ public class Boring_Interesting_Transitions_SM<In, Out>
 
     // define 'boring' transitions
     Set<String> boring = new HashSet<>(Arrays.asList("evaluationFrommdseTononModule2",
-      "evaluationFromsaTononModule2",
-      "evaluationFromnonModuleTononModule2"));
+            "evaluationFromsaTononModule2",
+            "evaluationFromnonModuleTononModule2"));
 
     // define 'interesting' transitions
     Set<String> interesting = new HashSet<>(Arrays.asList("distinctionFromIdleToIdle1"));

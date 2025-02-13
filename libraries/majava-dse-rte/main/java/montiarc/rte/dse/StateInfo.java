@@ -18,25 +18,25 @@ public class StateInfo {
   /**
    * every state has an enum state
    */
-  private Enum<? extends Enum> state;
+  private Enum<?> state;
 
   /**
    * every state has a list of internal variables and their current values
    */
   private List<String> internalStates;
 
-  public StateInfo(Enum<? extends Enum> state, List<String> internalStates, String component) {
+  public StateInfo(Enum<?> state, List<String> internalStates, String component) {
     this.state = state;
     this.internalStates = internalStates;
     this.component = component;
   }
 
-  public static StateInfo newStateInfo(Enum<? extends Enum> state, List<String> internalStates,
+  public static StateInfo newStateInfo(Enum<?> state, List<String> internalStates,
                                        String component) {
     return new StateInfo(state, internalStates, component);
   }
 
-  public Enum<? extends Enum> getState() {
+  public Enum<?> getState() {
     return this.state;
   }
 

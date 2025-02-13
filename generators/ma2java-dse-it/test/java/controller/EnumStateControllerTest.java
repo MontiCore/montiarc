@@ -8,19 +8,17 @@ import montiarc.rte.dse.StateInfo;
 import montiarc.rte.dse.StatesList;
 import montiarc.rte.timesync.IInPort;
 import montiarc.rte.timesync.IOutPort;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class EnumStateControllerTest {
 
-  EnumStateController
-    <List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
-      List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
+  EnumStateController<List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>, List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
 
   @BeforeEach
   void setUpMock() {
@@ -33,56 +31,26 @@ class EnumStateControllerTest {
   }
 
   @Test
-  public void testSaveStates() {
-    StateInfo stateInfo = StateInfo.newStateInfo(TestEnum1.HAMBURG,
-      Arrays.asList("country : Germany"), "testComponent");
-    StatesList statesList = new StatesList(Arrays.asList(stateInfo));
+  public void testCompareStates() {
+    Set<Pair<StatesList, Integer>> visitedStates = new HashSet<>();
 
-    controller.saveStates(statesList);
+    StateInfo stateInfoCSRwth = StateInfo.newStateInfo(EnumStateControllerTest.TestEnum2.COMPUTERSCIENCE,
+            Arrays.asList("university : RWTH"), "testComponent2");
+    StateInfo stateInfoAachen = StateInfo.newStateInfo(TestEnum1.AACHEN,
+            Arrays.asList("country : Germany"), "testComponent1");
 
-    assertThat(controller.getCurrentState()).isEqualTo(statesList);
+    StatesList infoRWTH = new StatesList(Arrays.asList(stateInfoCSRwth));
+    StatesList infoAachen = new StatesList(Arrays.asList(stateInfoAachen));
+
+    visitedStates = Set.of(Pair.of(infoRWTH, 2));
+
+    assertThat(controller.compareStates(visitedStates, infoRWTH)).isEqualTo(Pair.of(infoRWTH, 2));
+
+    assertThat(controller.compareStates(visitedStates, infoAachen)).isNull();
   }
-
-  @Test
-  public void testShouldEndRun() {
-
-    StateInfo stateInfoHamburg = StateInfo.newStateInfo(TestEnum1.HAMBURG,
-      Arrays.asList("country : Germany"), "testComponent1");
-    StateInfo stateInfoCSRwth = StateInfo.newStateInfo(TestEnum2.COMPUTERSCIENCE,
-      Arrays.asList("university : RWTH"), "testComponent2");
-    StateInfo stateInfoCSHamburg = StateInfo.newStateInfo(TestEnum2.COMPUTERSCIENCE,
-      Arrays.asList("university : Hamburg"), "testComponent2");
-
-    StatesList statesList = new StatesList(Arrays.asList(stateInfoHamburg, stateInfoCSRwth));
-
-    //add the state 10 times to reach upper limit
-    for (int i = 0; i < 10; i++) {
-      controller.saveStates(statesList);
-      controller.shouldEndRun();
-    }
-
-    assertThat(controller.shouldEndRun()).isEqualTo(true);
-    assertThat(controller.getVisitedStates().contains(statesList));
-
-    StatesList statesListSCRwth = new StatesList(Arrays.asList(stateInfoCSRwth));
-
-    controller.saveStates(statesListSCRwth);
-
-    assertThat(controller.shouldEndRun()).isEqualTo(false);
-    assertThat(controller.getVisitedStates().contains(statesListSCRwth));
-
-    StatesList statesListCSHamburg = new StatesList(Arrays.asList(stateInfoHamburg,
-      stateInfoCSHamburg));
-
-    controller.saveStates(statesListCSHamburg);
-
-    assertThat(controller.shouldEndRun()).isEqualTo(false);
-    assertThat(controller.getCurrentVisitedStates().size()).isEqualTo(3);
-  }
-
 
   private enum TestEnum1 {
-    HAMBURG;
+    AACHEN;
   }
 
   private enum TestEnum2 {

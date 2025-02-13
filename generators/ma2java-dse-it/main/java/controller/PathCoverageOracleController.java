@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * this controller extend the PathCoverageController and implements a different oracle
+ * This controller extend the PathCoverageController and implements a different oracle
  */
 public class PathCoverageOracleController<In, Out> extends PathCoverageControllerGC<In, Out> {
 

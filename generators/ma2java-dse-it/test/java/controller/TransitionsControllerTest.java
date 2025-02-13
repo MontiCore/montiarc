@@ -4,6 +4,7 @@ package controller;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
+import controller.TransitionsController;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.timesync.IInPort;
 import montiarc.rte.timesync.IOutPort;
@@ -24,8 +25,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TransitionsControllerTest {
 
   TransitionsController
-    <List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
-      List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
+          <List<IInPort<AnnotatedValue<Expr<IntSort>, Integer>>>,
+                    List<IOutPort<AnnotatedValue<Expr<IntSort>, Integer>>>> controller;
 
   @BeforeEach
   void setUpMock() {
@@ -41,11 +42,11 @@ class TransitionsControllerTest {
   public void testAddBranch() {
 
     BoolExpr expr1 = controller.getCtx().mkLe(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId1 = "testBranch1";
 
     BoolExpr expr2 = controller.getCtx().mkGe(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId2 = "testBranch2";
 
     controller.addBranch(expr1, branchId1);
@@ -61,27 +62,27 @@ class TransitionsControllerTest {
   public void testShouldEndRun() {
 
     BoolExpr expr1 = controller.getCtx().mkLe(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId1 = "testBranch1";
 
     BoolExpr expr2 = controller.getCtx().mkGe(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId2 = "testBranch2";
 
     BoolExpr expr3 = controller.getCtx().mkLt(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId3 = "testBranch3";
 
     BoolExpr expr4 = controller.getCtx().mkLt(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId4 = "testBranch4";
 
     BoolExpr expr5 = controller.getCtx().mkLt(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId5 = "testBranch5";
 
     BoolExpr expr6 = controller.getCtx().mkLt(controller.getCtx().mkInt(42),
-      controller.getCtx().mkInt(43));
+            controller.getCtx().mkInt(43));
     String branchId6 = "testBranch6";
 
 
@@ -116,5 +117,48 @@ class TransitionsControllerTest {
 
     assertThat(controller.getTransitionsAll().containsAll(expectedTransitionsAll));
     assertThat(controller.getAbortConditions()).isEqualTo(expectedAbortConditions);
+  }
+
+  @Test
+  public void testSaveInformation() {
+    // case: aborted = true
+    controller.aborted = true;
+    controller.abortedTransitions = controller.getCtx().mkBool(false);
+    controller.saveInformation();
+
+    assertThat(controller.abortConditions.contains(controller.getCtx().mkNot(controller.abortedTransitions)));
+
+    controller.aborted = false;
+
+    // visited transitions in the current computation
+    controller.currentCountedTransitions.add(Pair.of("transition1", 1));
+    controller.currentTransitions.add(Pair.of(controller.getCtx().mkBool(true), "transition1"));
+    controller.currentCountedTransitions.add(Pair.of("transition2", 2));
+    controller.currentTransitions.add(Pair.of(controller.getCtx().mkBool(true), "transition2"));
+
+    // visited transitions in the complete dse run
+    controller.transitionsAll.add(Pair.of("transition2", 1));
+
+    controller.saveInformation();
+
+    assertThat(controller.currentCountedTransitions.size()).isEqualTo(0);
+    assertThat(controller.currentTransitions.size()).isEqualTo(0);
+
+    assertThat(controller.transitionsAll.size()).isEqualTo(2);
+    assertThat(controller.transitionsAll.contains(Pair.of("transition1", 1))).isTrue();
+    assertThat(controller.transitionsAll.contains(Pair.of("transition2", 3))).isTrue();
+
+  }
+
+  @Test
+  public void testCompareTransitions() {
+    Pair<String, Integer> pathCondition1 = Pair.of("condition1", 1);
+    Pair<String, Integer> pathCondition2 = Pair.of("condition2", 3);
+
+    assertThat(controller.compareTransitions(List.of(pathCondition1, pathCondition2), "condition2"))
+            .isEqualTo(pathCondition2);
+    assertThat(controller.compareTransitions(List.of(pathCondition1, pathCondition2), "condition3"))
+            .isNull();
+
   }
 }

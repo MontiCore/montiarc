@@ -12,21 +12,21 @@ import java.util.Set;
 
 public class ResultPathController<In, Out> implements ResultI<In, Out> {
 
-  private Set<InputAndCondition> inputsAndConditions = new HashSet<>();
+  private Set<InputAndCondition<In, Out>> inputsAndConditions = new HashSet<>();
 
   @Override
   public Set<Pair<In, Out>> getInterestingInputs() {
 
     Set<Pair<In,Out>> interestingInputs = new HashSet<>();
-    for(InputAndCondition conditon : inputsAndConditions){
-      interestingInputs.add((Pair<In, Out>) ImmutablePair.of(conditon.getInput(), conditon.getOutput()));
+    for(InputAndCondition<In,Out> condition : inputsAndConditions){
+      interestingInputs.add(ImmutablePair.of(condition.getInput(), condition.getOutput()));
     }
 
     return interestingInputs;
   }
 
   @Override
-  public Set<InputAndCondition> getInputsAndCondition() {
+  public Set<InputAndCondition<In, Out>> getInputsAndCondition() {
     return inputsAndConditions;
   }
 

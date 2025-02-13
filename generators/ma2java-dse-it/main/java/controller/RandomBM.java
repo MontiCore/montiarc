@@ -57,8 +57,8 @@ public class RandomBM<In, Out> extends IgnoreSMTSolverController<In, Out> {
       isObstacle.update(randomBool());
 
       ListerInElevatorSystem newInput
-        = new ListerInElevatorSystem(btn1, btn2, btn3, btn4, at1, at2, at3, at4,
-        isOpen, isClosed, isObstacle);
+              = new ListerInElevatorSystem(btn1, btn2, btn3, btn4, at1, at2, at3, at4,
+              isOpen, isClosed, isObstacle);
       inputList.add(newInput);
     }
 

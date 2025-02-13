@@ -10,6 +10,9 @@ import org.apache.commons.lang3.tuple.Pair;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This controller implements the general structure used for a controller using State information
+ */
 public class StateController<In, Out> extends TerminationConditionController<In, Out> {
 
   // set of all visitedStates in the current computation of the component
@@ -24,6 +27,10 @@ public class StateController<In, Out> extends TerminationConditionController<In,
   protected boolean aborted = false;
   protected PathCondition currentBranches;
 
+  /**
+   * This function saves the information of visited states in the current computation to the information of visited
+   * states in the whole dse run
+   */
   @Override
   protected void saveInformation() {
     for (Pair<StatesList, Integer> states : visitedStates) {
@@ -31,7 +38,8 @@ public class StateController<In, Out> extends TerminationConditionController<In,
       if (duplicate == null) {
         visitedStatesAll.add(MutablePair.of(states.getLeft(), states.getRight()));
       } else {
-        duplicate.setValue(duplicate.getRight() + states.getRight());
+        visitedStatesAll.remove(duplicate);
+        visitedStatesAll.add(MutablePair.of(duplicate.getLeft(), states.getRight() + duplicate.getRight()));
       }
     }
 
@@ -43,11 +51,18 @@ public class StateController<In, Out> extends TerminationConditionController<In,
     currentBranches = new PathCondition();
   }
 
+  /**
+   * This function determines whether a run should be terminated based on the number of visits to a state.
+   */
   @Override
   public boolean shouldEndRun() {
+
+    // get number of visits for the current state considering all states visited in the dse run
     Pair<StatesList, Integer> duplicate1 = compareStates(visitedStatesAll, currentState);
+    // get number of visits for the current state considering all states visited in the current computation
     Pair<StatesList, Integer> duplicate2 = compareStates(visitedStates, currentState);
 
+    // case: the state was already visited in the current computation as well as in the whole dse run
     if (duplicate1 != null && duplicate2 != null) {
       if (duplicate1.getRight() + duplicate2.getRight() >= maxNum) {
         aborted = true;
@@ -56,6 +71,7 @@ public class StateController<In, Out> extends TerminationConditionController<In,
         duplicate2.setValue(duplicate2.getRight() + 1);
         return false;
       }
+      // case: the state was already visited in the whole dse run
     } else if (duplicate1 != null) {
       if (duplicate1.getRight() >= maxNum) {
         aborted = true;
@@ -64,6 +80,7 @@ public class StateController<In, Out> extends TerminationConditionController<In,
         visitedStates.add(MutablePair.of(duplicate1.getLeft(), 1));
         return false;
       }
+      // case: the state was already visited in the current computation
     } else if (duplicate2 != null) {
       if (duplicate2.getRight() >= maxNum) {
         aborted = true;
@@ -98,8 +115,11 @@ public class StateController<In, Out> extends TerminationConditionController<In,
     return currentState;
   }
 
-  private Pair<StatesList, Integer> compareStates(Set<Pair<StatesList, Integer>> visitedStates,
-                                                  StatesList currentState) {
+  /**
+   * checks if the state, represented in a StatesList, is already part of visitedStates
+   */
+  protected Pair<StatesList, Integer> compareStates(Set<Pair<StatesList, Integer>> visitedStates,
+                                                    StatesList currentState) {
     for (Pair<StatesList, Integer> states : visitedStates) {
 
       if (states.getLeft().getStates().equals(currentState.getStates())) {
@@ -119,10 +139,11 @@ public class StateController<In, Out> extends TerminationConditionController<In,
 
   @Override
   public void addBranch(BoolExpr condition, String branchId) {
-    takenBranches.addBranch(condition, branchId);
-    if (currentBranches == null) {
+    if (currentBranches == null || takenBranches == null) {
       currentBranches = new PathCondition();
+      takenBranches = new PathCondition();
     }
     currentBranches.addBranch(condition, branchId);
+    takenBranches.addBranch(condition, branchId);
   }
 }

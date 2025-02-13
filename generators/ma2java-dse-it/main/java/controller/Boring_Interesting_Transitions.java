@@ -34,19 +34,24 @@ public class Boring_Interesting_Transitions<In, Out> extends TransitionsControll
   /**
    * returns true, if the total state of transition are counted more than the maxNumber for the transition with the highest priority
    */
-
-  private boolean countTransition() {
+  protected boolean countTransition() {
     boolean currentAborted = aborted;
 
     for (Pair<BoolExpr, String> transitionPair : currentTransitions) {
 
       String transition = transitionPair.getRight();
+
+      // get number of visits for the current transition considering all transitions visited in the dse run
       Pair<String, Integer> duplicate1 = compareTransitions(transitionsAll, transition);
+
+      // get number of visits for the current transition considering all transition visited in the current computation
+      // of the component
       Pair<String, Integer> duplicate2 = compareTransitions(currentCountedTransitions, transition);
 
       // get maxNum according to the classification of the transition
       int maxNum = getMaxNum(transition);
 
+      // case: the transition was already visited in the current computation and the whole dse run
       if (duplicate1 != null && duplicate2 != null) {
         if (duplicate1.getRight() + duplicate2.getRight() >= maxNum) {
           if (!currentAborted) {
@@ -58,8 +63,10 @@ public class Boring_Interesting_Transitions<In, Out> extends TransitionsControll
           currentTransitions.clear();
           return true;
         } else {
-          duplicate2.setValue(duplicate2.getRight() + 1);
+          currentCountedTransitions.remove(duplicate2);
+          currentCountedTransitions.add(MutablePair.of(duplicate2.getLeft(), duplicate2.getRight() + 1));
         }
+        // case: the transition was already visited in the whole dse run
       } else if (duplicate1 != null) {
         if (duplicate1.getRight() >= maxNum) {
           if (!currentAborted) {
@@ -73,6 +80,7 @@ public class Boring_Interesting_Transitions<In, Out> extends TransitionsControll
         } else {
           currentCountedTransitions.add(MutablePair.of(duplicate1.getLeft(), 1));
         }
+        // case: the transition was already visited in the current computation
       } else if (duplicate2 != null) {
         if (duplicate2.getRight() >= maxNum) {
           if (!currentAborted) {
@@ -84,7 +92,8 @@ public class Boring_Interesting_Transitions<In, Out> extends TransitionsControll
           currentTransitions.clear();
           return true;
         } else {
-          duplicate2.setValue(duplicate2.getRight() + 1);
+          currentCountedTransitions.remove(duplicate2);
+          currentCountedTransitions.add(MutablePair.of(duplicate2.getLeft(), duplicate2.getRight() + 1));
         }
       } else {
         currentCountedTransitions.add(MutablePair.of(transition, 1));
@@ -101,10 +110,12 @@ public class Boring_Interesting_Transitions<In, Out> extends TransitionsControll
 
     List<Integer> maxNums = new ArrayList<>();
 
+    // get classification of each transition
     for (Pair<BoolExpr, String> transitionPair : currentTransitions) {
       maxNums.add(getMaxNum(transitionPair.getRight()));
     }
 
+    // transitions classified as interesting are labeled with -1
     if (maxNums.contains(-1)) {
       countTransition();
       currentTransitions.clear();
@@ -121,7 +132,7 @@ public class Boring_Interesting_Transitions<In, Out> extends TransitionsControll
   /**
    * function to calculate the maximal number of visits for a transition based on their classification
    */
-  private int getMaxNum(String transition) {
+  protected int getMaxNum(String transition) {
     if (boring.contains(transition)) {
       return boringCount;
     }

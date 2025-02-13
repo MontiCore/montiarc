@@ -15,25 +15,25 @@ import montiarc.rte.log.LogException;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * This controller extend the PathCoverageController and implements the same algorithm as PathCoverageController,
+ * with one difference. fter each recursion the garbage collector is triggered, to achieve better performance
+ */
 public class PathCoverageControllerGC<In, Out> extends PathCoverageController<In, Out> {
 
-  /**
-   * same algorithm as PathCoverageController, with one difference.
-   * After each recursion the garbage collector is triggered, to achieve better performance
-   */
   @Override
   public ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
     if (TestController.getController() != this) {
       throw new LogException("Given controller does not match the " +
-        "PathCoverageController");
+              "PathCoverageController");
     }
     if (!branchingConditions.isEmpty()) {
       throw new LogException("BranchingCondition is not empty, although it should " +
-        "be, because a new path was started");
+              "be, because a new path was started");
     }
     if (usedOracleCount != 0) {
       throw new LogException("usedOracleCount is not zero, although it should be, " +
-        "because a new path was started");
+              "because a new path was started");
     }
 
     this.oracles = oracles;
@@ -68,7 +68,7 @@ public class PathCoverageControllerGC<In, Out> extends PathCoverageController<In
       Status status = s.check();
       solverCalls++;
       montiarc.rte.log.Log.trace(status + "\tRun check with: "
-        + Arrays.toString(s.getAssertions()));
+              + Arrays.toString(s.getAssertions()));
 
       if (status == Status.SATISFIABLE) {
         satPaths++;

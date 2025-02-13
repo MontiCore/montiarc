@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * controller to compute the semantic differences between two MontiArc models.
+ * This controller computes the semantic differences between two MontiArc models.
  */
 public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI, EvaluationControllerI {
 
@@ -57,16 +57,18 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
   // for evaluation purpose, to track the number of satisfiability paths
   protected int satPaths = 0;
 
+  /***
+   * This function generates all possible Boolean combinations, it is used to generate all Oracle combinations.
+   */
   private static void generateBooleanCombinationsHelper(int n, List<Boolean> currentCombination,
                                                         List<List<Boolean>> combinations) {
-    // Base case: Wenn die aktuelle Kombination die gewünschte Länge erreicht hat
+    // Base case: current combination has reached the desired length
     if (currentCombination.size() == n) {
       combinations.add(new ArrayList<>(currentCombination));
       return;
     }
 
-    // Rekursiv alle möglichen Werte (true/false) für die aktuelle Position der Kombination
-    // durchgehen
+    // Recursively go through all possible values (true/false) for the current position of the combination
     currentCombination.add(true);
     generateBooleanCombinationsHelper(n, currentCombination, combinations);
     System.gc();
@@ -82,7 +84,7 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
    * sets all needed functions for semDiff, must be called before startSemDiff
    */
   public void setUp(Function<Pair<In1, Out1>, In2> converter, Function<Pair<In1, Out1>,
-    List<String>> getEntriesResult1, Function<Out2, List<String>> getEntriesResult2, DSEMain component1, Function<In2, Out2> component2) {
+          List<String>> getEntriesResult1, Function<Out2, List<String>> getEntriesResult2, DSEMain component1, Function<In2, Out2> component2) {
     this.component1 = component1;
     this.component2 = component2;
     this.converter = converter;
@@ -91,7 +93,8 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
   }
 
   /**
-   * executes the actual calculation of the semantic difference between component1 and component2. Takes as an input the inputLength for the components and if needed parameters
+   * executes the actual calculation of the semantic difference between component1 and component2.
+   * Takes as an input the inputLength for the components and if needed parameters
    */
   public ResultSemDiff<In1, Out1> startSemDiff(Integer inputLength, String... parameter) throws Exception {
     List<String> inputDef = new ArrayList<>();
@@ -104,9 +107,11 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
     }
 
     String[] comp1Input = inputDef.toArray(new String[0]);
+
+    // starts the run of the first component
     ResultI<In1, Out1> resultComponent1 = component1.runController(comp1Input);
 
-    // get Solvercalls and number of SAT paths for evaluation purpose
+    // get solver calls and number of SAT paths for evaluation purpose
     if (TestController.getController() instanceof EvaluationControllerI) {
       EvaluationControllerI controllerEvaluation = (EvaluationControllerI) TestController.getController();
       solverCalls = controllerEvaluation.getSolverCalls();
@@ -120,36 +125,52 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
     takenBranches = new PathCondition();
 
     for (Pair<In1, Out1> res : resultComponent1.getInterestingInputs()) {
+      // reset oracle use
       usedOracleCount = 0;
       oraclesRun.clear();
 
+      // Convert the input to be used for the second component
       In2 inputComp2 = converter.apply(res);
+
       Out2 resultComponent2 = component2.apply(inputComp2);
 
+      // List of possible semDiff witnesses
       List<List<ListerI>> localSemDiff = new ArrayList<>();
 
       List<ListerI> result2 = (List<ListerI>) resultComponent2;
 
-      // expressions are compared through strings, because it is not a hundred  percent save to compare with expressions directly
+      /***
+       * Expressions are compared via strings because it is not a hundred percent reliable to compare
+       * expressions directly.
+       */
       List<String> res1 = getEntriesResult1.apply(res);
       List<String> res2 = getEntriesResult2.apply(resultComponent2);
 
-      // if the results are not equal, the result of the first component is added to the localSemDiff
+      /***If the results are not equal, the result of the first component is a possible semDiff witness
+       * and is added to the localSemDiff.
+       */
       if (!res2.equals(res1)) {
         localSemDiff.add(result2);
       }
 
-      // if the result was added to the localSemDiff, it will be checked if the path was non-deterministic. In that case all possible oracle occupancies will be calculated, to test every possible path with that input
-      // if the path is deterministic the content of localSemDiff will be added to the overalSemDiff of the two components
+      /***
+       * If the result was added to localSemDiff, it is checked if the path was non-deterministic.
+       * In this case, all possible oracle assignments are computed to test every possible path with this input.
+       *
+       * If the path is deterministic, the contents of localSemDiff are added to the list of SemDiff witness
+       * of the two components.
+       */
       if (localSemDiff.size() != 0) {
         boolean next = true;
         if (oraclesRun.size() != 0) {
-
           localSemDiff = checkAllOracleCombinations(inputComp2, localSemDiff, res1, next, allOracleCombinations(oraclesRun.size()));
         }
       }
 
-      // if localSemDiff contains something a semantic difference was found
+      /***
+       * If localSemDiff contains something, a semantic difference has been found and  are added to the list
+       * of SemDiff witnesses
+       */
       if (localSemDiff.size() != 0) {
         semDiff.addSemDiffPair(res);
       }
@@ -159,21 +180,32 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
     return semDiff;
   }
 
+  /**
+   * This function checks all possible oracle path combinations to determine if a non-deterministic path of component 1
+   * is reproducible in component 2
+   *
+   * @param inputComp2,   Input of Component 2
+   * @param localSemDiff, Possible SemDiff witness where oracles were used
+   * @param res1,         output of component 1 as a List of Strings
+   * @param next
+   * @param newOracles,   all possible oracle combinations for the size of the oracles used for this output in component 1
+   * @return List of inputs that are semDiff witness
+   */
   protected List<List<ListerI>> checkAllOracleCombinations(In2 inputComp2, List<List<ListerI>> localSemDiff, List<String> res1,
                                                            boolean next, List<List<Boolean>> newOracles) {
     // needed to check later if more oracles are used than in the beginning
     int localSizeOfOraclesRun = oraclesRun.size();
 
-    //   List<List<Boolean>> newOracles = allOracleCombinations(oraclesRun.size());
     usedOracleCount = 0;
     oraclesRun.clear();
 
+    // Each oracle combination is checked to see if it reproduces the input/output combination of component 1 for component 2.
     for (List<Boolean> oracleList : newOracles) {
       if (next) {
         this.oracles = oracleList;
         Out2 resComponent2 = component2.apply(inputComp2);
 
-        //check if more oracles were used than in the first run, runs the function again with new oracles
+        //check if more oracles were used than in the first run, if yes runs the function again with new oracles
         if (oraclesRun.size() > localSizeOfOraclesRun) {
           localSemDiff = checkAllOracleCombinations(inputComp2, localSemDiff, res1, next, allOracleCombinations(oraclesRun.size()));
           break;
@@ -181,9 +213,19 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
         usedOracleCount = 0;
         oraclesRun.clear();
 
+        /***
+         * Expressions are compared via strings because it is not a hundred percent reliable to compare
+         * expressions directly.
+         */
         List<ListerI> result2_ = (List<ListerI>) resComponent2;
         List<String> res22 = getEntriesResult2.apply(resComponent2);
 
+        /**
+         * if the results of component 1 and component 2 are the same, the non-deterministic path of component 1
+         * is reproducible in component 2
+         *
+         * if the results of component 1 and component 2 differ, the remaining oracle combination is checked
+         */
         if (!res22.equals(res1)) {
           localSemDiff.add(result2_);
         } else {
@@ -195,10 +237,18 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
         break;
       }
     }
+
+    // List of semDiff witness, if this list is empty no semDiffWitness could be found
     return localSemDiff;
   }
 
 
+  /**
+   * This function calculates all possible oracle combinations for a given number of oracle occurrences
+   *
+   * @param oracleCount, number of oracle occurrences
+   * @return List of all possible oracle combinations
+   */
   public List<List<Boolean>> allOracleCombinations(Integer oracleCount) {
     List<List<Boolean>> combinations = new ArrayList<>();
     generateBooleanCombinationsHelper(oracleCount, new ArrayList<>(), combinations);
@@ -252,21 +302,6 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
   @Override
   public void addBranch(BoolExpr condition, String branchId) {
     takenBranches.addBranch(condition, branchId);
-  }
-
-  @Override
-  public void selectTransition(List<Pair<Runnable, String>> possibleTransitions) {
-    if (possibleTransitions.size() == 1) {
-      possibleTransitions.get(0).getKey().run();
-    }
-
-    if (possibleTransitions.size() > 1) {
-      int transition = 0;
-      while (transition < possibleTransitions.size() - 1 && !getIfOracle("possibleTransitions")) {
-        transition++;
-      }
-      possibleTransitions.get(transition).getKey().run();
-    }
   }
 
   @Override

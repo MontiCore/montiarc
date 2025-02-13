@@ -2,46 +2,30 @@
 package controller;
 
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
 import com.microsoft.z3.Model;
 import com.microsoft.z3.Params;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
-import montiarc.rte.dse.ControllerI;
-import montiarc.rte.dse.EvaluationControllerI;
-import montiarc.rte.dse.PathCondition;
-import montiarc.rte.dse.ResultI;
-import montiarc.rte.dse.StatesList;
-import montiarc.rte.dse.TestController;
+import montiarc.rte.dse.*;
 import montiarc.rte.dse.strategies.ResultPathController;
 import montiarc.rte.log.LogException;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 /**
  * this controller randomly negates a condition to find new paths
  */
-public class RandomNegationController<In, Out>
-  implements ControllerI<In, Out>, EvaluationControllerI {
+public class RandomNegationController<In, Out> extends AbstractController<In, Out>
+        implements EvaluationControllerI {
 
   protected Function<In, Out> sut;
-  protected Context ctx;
   protected Function<Model, In> evalModel;
-  protected List<BoolExpr> branchingConditions = new ArrayList<>();
-  protected int usedOracleCount = 0;
-  protected List<Boolean> oracles = new ArrayList<>();
-  protected PathCondition takenBranches;
-  protected Set<StatesList> visitedStates = new HashSet<>();
 
   protected Set<List<BoolExpr>> checkedBranches = new HashSet<>();
 
@@ -52,19 +36,10 @@ public class RandomNegationController<In, Out>
   protected int satPaths = 0;
 
   @Override
-  public void init() {
-    Map<String, String> cfg = new HashMap<>();
-    cfg.put("model", "true");
-
-    ctx = new Context(cfg);
-    TestController.init(this);
-  }
-
-  @Override
   public ResultI<In, Out> startTest(In initialInput, Function<Model, In> evalModel, Function<In,
-    Out> sut) throws Exception {
+          Out> sut) throws Exception {
     if (sut == null) {
-      throw new IllegalArgumentException("passed function for PathCoverageController is null");
+      throw new IllegalArgumentException("passed function for the controller is null");
     }
 
     this.sut = sut;
@@ -75,15 +50,15 @@ public class RandomNegationController<In, Out>
   private ResultI<In, Out> startTest(In input, List<Boolean> oracles, int branchDepth) {
     if (TestController.getController() != this) {
       throw new LogException("Given controller does not match the " +
-        "PathCoverageController");
+              "PathCoverageController");
     }
     if (!branchingConditions.isEmpty()) {
       throw new LogException("BranchingCondition is not empty, although it should " +
-        "be, because a new path was started");
+              "be, because a new path was started");
     }
     if (usedOracleCount != 0) {
       throw new LogException("usedOracleCount is not zero, although it should be, " +
-        "because a new path was started");
+              "because a new path was started");
     }
     this.oracles = oracles;
 
@@ -117,8 +92,11 @@ public class RandomNegationController<In, Out>
 
       Set<Integer> currentAllNegations = new HashSet<>();
 
+
       int randomIn = new Random().nextInt();
       int branchSize = branches.size();
+
+      // randomly choose a condition to be negated
       currentNegation = Math.abs((randomIn % branchSize));
       currentBranches.add(ctx.mkNot(branches.get(currentNegation)));
 
@@ -140,7 +118,7 @@ public class RandomNegationController<In, Out>
       Status status = s.check();
       solverCalls++;
       montiarc.rte.log.Log.trace(status + "\tRun check with: "
-        + Arrays.toString(s.getAssertions()));
+              + Arrays.toString(s.getAssertions()));
 
       if (status == Status.SATISFIABLE) {
         satPaths++;
@@ -154,92 +132,9 @@ public class RandomNegationController<In, Out>
 
         result.addAll(startTest(evalModel.apply(s.getModel()), nextOracles, i + 1));
         System.gc();
-        int z = 2;
-
-        z = z + 1;
       }
     }
     return result;
-  }
-
-  protected void resetBranchesLog() {
-    branchingConditions = new ArrayList<>();
-  }
-
-  @Override
-  public Context getCtx() {
-    return ctx;
-  }
-
-  @Override
-  public boolean shouldEndRun() {
-    return false;
-  }
-
-  @Override
-  public boolean getIfOracle(String branchId) {
-    BoolExpr booleExpr = ctx.mkBoolConst("oracle_" + usedOracleCount);
-
-    boolean result = true;
-    if (usedOracleCount < oracles.size()) {
-      result = oracles.get(usedOracleCount);
-    }
-
-    usedOracleCount++;
-    return getIf(ctx.mkEq(booleExpr, ctx.mkBool(result)), result, branchId);
-  }
-
-  protected List<BoolExpr> getOracleExpressions() {
-    List<BoolExpr> result = new ArrayList<>(usedOracleCount);
-    for (int i = 0; i < usedOracleCount; i++) {
-      result.add(ctx.mkBoolConst("oracle_" + usedOracleCount));
-    }
-    return result;
-  }
-
-  protected Boolean loadBoolValue(Model model, BoolExpr boolExpr) {
-    return model.eval(boolExpr, true).isTrue();
-  }
-
-  protected List<Boolean> loadBoolListValue(Model model, List<BoolExpr> boolExpr) {
-    return boolExpr.stream().map(b -> loadBoolValue(model, b)).collect(Collectors.toList());
-  }
-
-  @Override
-  public boolean getIf(BoolExpr condition, boolean result, String branchID) {
-    branchingConditions.add(ctx.mkEq(condition, ctx.mkBool(result)));
-    montiarc.rte.log.Log.trace("BranchingCondition:   " + ctx.mkEq(condition, ctx.mkBool(result)));
-    return result;
-  }
-
-  @Override
-  public void addBranch(BoolExpr condition, String branchId) {
-    takenBranches.addBranch(condition, branchId);
-  }
-
-  @Override
-  public void selectTransition(List<Pair<Runnable, String>> possibleTransitions) {
-    if (possibleTransitions.size() == 1) {
-      possibleTransitions.get(0).getKey().run();
-    }
-
-    if (possibleTransitions.size() > 1) {
-      int transition = 0;
-      while (transition < possibleTransitions.size() - 1 && !getIfOracle("possibleTransitions")) {
-        transition++;
-      }
-      possibleTransitions.get(transition).getKey().run();
-    }
-  }
-
-  @Override
-  public void saveStates(StatesList info) {
-    visitedStates.add(info);
-  }
-
-  @Override
-  public Set<StatesList> getVisitedStates() {
-    return visitedStates;
   }
 
   @Override
@@ -250,5 +145,10 @@ public class RandomNegationController<In, Out>
   @Override
   public int getSatPaths() {
     return satPaths;
+  }
+
+  @Override
+  public Set<StatesList> getVisitedStates() {
+    return visitedStates;
   }
 }

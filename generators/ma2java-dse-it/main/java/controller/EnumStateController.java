@@ -19,6 +19,7 @@ public class EnumStateController<In, Out> extends StateController<In, Out> {
    * Because visitedStates contains also other information, it needs to be checked manually for
    * every enumState
    */
+  @Override
   protected Pair<StatesList, Integer> compareStates(Set<Pair<StatesList, Integer>> visitedStates, StatesList currentState) {
     boolean found = false;
     for (Pair<StatesList, Integer> states : visitedStates) {
