@@ -397,7 +397,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   })
   public void testVisitPortDeclaration1(@Nullable short tid, boolean i, Boolean d) {
     // Given
-    Timing t = tid == 0 ? Timing.TIMED_SYNC : tid == 1 ? Timing.TIMED : Timing.UNTIMED;
+    Timing t = tid == 0 ? Timing.TIMED_SYNC : Timing.TIMED;
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
       .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
         .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
@@ -407,18 +407,15 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
           .build())
         .build())
       .setIncoming(i)
-      .setStereotype(ArcBasisMill.stereotypeBuilder()
-        .addValues(ArcBasisMill.stereoValueBuilder()
-          .setName(t.getName())
-          .setContent("")
-          .build())
-        .build())
+      .setSync(t.equals(Timing.TIMED_SYNC))
       .addPort("p")
       .build();
     if (d) {
-      ast.getStereotype().addValues(ArcBasisMill.stereoValueBuilder()
-        .setName(ASTPortDeclaration.DELAY)
-        .setContent("")
+      ast.setStereotype(ArcBasisMill.stereotypeBuilder()
+        .addValues(ArcBasisMill.stereoValueBuilder()
+          .setName(ASTPortDeclaration.DELAY)
+          .setContent("")
+          .build())
         .build()
       );
     }
@@ -469,7 +466,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   })
   public void testVisitPortDeclaration2(@Nullable short tid, boolean i, Boolean d) {
     // Given
-    Timing t = tid == 0 ? Timing.TIMED_SYNC : tid == 1 ? Timing.TIMED : Timing.UNTIMED;
+    Timing t = tid == 0 ? Timing.TIMED_SYNC : Timing.TIMED;
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
       .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
         .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
@@ -479,19 +476,16 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
           .build())
         .build())
       .setIncoming(i)
-      .setStereotype(ArcBasisMill.stereotypeBuilder()
-        .addValues(ArcBasisMill.stereoValueBuilder()
-          .setName(t.getName())
-          .setContent("")
-          .build())
-        .build())
+      .setSync(t.equals(Timing.TIMED_SYNC))
       .addPort("p1")
       .addPort("p2")
       .build();
     if (d) {
-      ast.getStereotype().addValues(ArcBasisMill.stereoValueBuilder()
-        .setName(ASTPortDeclaration.DELAY)
-        .setContent("")
+      ast.setStereotype(ArcBasisMill.stereotypeBuilder()
+        .addValues(ArcBasisMill.stereoValueBuilder()
+          .setName(ASTPortDeclaration.DELAY)
+          .setContent("")
+          .build())
         .build()
       );
     }
@@ -547,7 +541,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   })
   public void testVisitPortDeclaration3(@Nullable short tid, boolean i, Boolean d) {
     // Given
-    Timing t = tid == 0 ? Timing.TIMED_SYNC : tid == 1 ? Timing.TIMED : Timing.UNTIMED;
+    Timing t = tid == 0 ? Timing.TIMED_SYNC : Timing.TIMED;
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
       .setMCType(ArcBasisMill.mCQualifiedTypeBuilder()
         .setMCQualifiedName(ArcBasisMill.mCQualifiedNameBuilder()
@@ -557,18 +551,15 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
           .build())
         .build())
       .setIncoming(i)
-      .setStereotype(ArcBasisMill.stereotypeBuilder()
-        .addValues(ArcBasisMill.stereoValueBuilder()
-          .setName(t.getName())
-          .setContent("")
-          .build())
-        .build())
+      .setSync(t.equals(Timing.TIMED_SYNC))
       .addPort("p")
       .build();
     if (d) {
-      ast.getStereotype().addValues(ArcBasisMill.stereoValueBuilder()
-        .setName(ASTPortDeclaration.DELAY)
-        .setContent("")
+      ast.setStereotype(ArcBasisMill.stereotypeBuilder()
+        .addValues(ArcBasisMill.stereoValueBuilder()
+          .setName(ASTPortDeclaration.DELAY)
+          .setContent("")
+          .build())
         .build()
       );
     }

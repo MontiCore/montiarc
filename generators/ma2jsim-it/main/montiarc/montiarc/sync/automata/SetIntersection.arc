@@ -6,11 +6,11 @@ import java.util.Set;
 
 component SetIntersection {
 
-  port in Set<Integer> a;
-  port in Set<Integer> b;
-  port out Set<Integer> out;
+  port sync in Set<Integer> a;
+  port sync in Set<Integer> b;
+  port sync out Set<Integer> out;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / {

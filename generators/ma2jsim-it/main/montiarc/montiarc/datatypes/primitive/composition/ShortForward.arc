@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component ShortForward {
-  port in short pIn,
-       out short pOut;
+  port sync in short pIn,
+       sync out short pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       short intermediate = pIn;

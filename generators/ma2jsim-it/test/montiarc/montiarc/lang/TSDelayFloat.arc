@@ -5,8 +5,8 @@ import java.lang.Float;
 
 component TSDelayFloat(Float iv) {
 
-  port <<sync>> in Float i;
-  port <<sync, delayed>> out Float o;
+  port sync in Float i;
+  port <<delayed>> sync out Float o;
 
   TSDelay<Float> delay(iv);
 

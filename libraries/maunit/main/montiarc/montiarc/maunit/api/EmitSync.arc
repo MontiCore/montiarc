@@ -4,11 +4,11 @@ package montiarc.maunit.api;
 import java.util.List;
 
 component EmitSync<T>(List<T> output) {
-  port out T out;
+  port sync out T out;
 
   int index = 0;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       if (!output.isEmpty()) {

@@ -9,7 +9,7 @@ port out boolean q;
 boolean as = false;
 boolean bs = false;
 
-<<timed>> automaton {
+automaton {
   initial state S;
   S -> S a / { as = a; };
   S -> S b / { bs = b; };

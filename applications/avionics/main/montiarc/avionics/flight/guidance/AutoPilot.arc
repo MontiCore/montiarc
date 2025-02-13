@@ -6,8 +6,8 @@ import avionics.flight.guidance.Signals.FlightData;
 
 component AutoPilot {
 
-  port <<sync>> in FlightData data;
-  port <<sync>> in CMD op;
-  port <<sync>> out CMD cmd;
+  port sync in FlightData data;
+  port sync in CMD op;
+  port sync out CMD cmd;
 
 }

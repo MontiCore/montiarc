@@ -3,11 +3,11 @@ package elevator;
 
 component Elevator {
 
-  port <<sync>> in Boolean req1, req2, req3, req4,
-       <<sync>> out Integer clear;
-  port <<sync>> in Boolean at1, at2, at3, at4,
-       <<sync>> out Boolean open, close, up, down,
-       <<sync>> in Boolean isOpen, isClosed, isObstacle;
+  port sync in Boolean req1, req2, req3, req4,
+       sync out Integer clear;
+  port sync in Boolean at1, at2, at3, at4,
+       sync out Boolean open, close, up, down,
+       sync in Boolean isOpen, isClosed, isObstacle;
 
   Controller ctrl;
 

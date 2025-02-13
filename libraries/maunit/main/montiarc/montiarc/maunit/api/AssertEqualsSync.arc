@@ -5,11 +5,11 @@ import montiarc.maunit.api.Assertions;
 import java.util.List;
 
 component AssertEqualsSync<T>(List<T> expected, String message = "") {
-  port in T actual;
+  port sync in T actual;
 
   int index = 0;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       if (index >= expected.size()) Assertions.fail("Unexpected additional message received with value: " + actual);

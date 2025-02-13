@@ -10,7 +10,7 @@ component AssertEqualsTimed<T>(List<List<T>> expected, String message = "") {
   int tick = 0;
   int index = 0;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       if (tick >= expected.size()) {

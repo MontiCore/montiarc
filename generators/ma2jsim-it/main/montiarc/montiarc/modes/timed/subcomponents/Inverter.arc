@@ -8,7 +8,7 @@ component Inverter {
    in OnOff i,
    out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S i / {
       if (i == OnOff.ON) { o = OnOff.OFF; };

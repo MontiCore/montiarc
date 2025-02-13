@@ -5,8 +5,8 @@ import montiarc.types.OnOff;
 
 component WithMediumSub {
 
-  port <<timed>> in OnOff inA, inB;
-  port <<sync>>  in OnOff inY, inZ;
+  port in OnOff inA, inB;
+  port sync  in OnOff inY, inZ;
 
   port out OnOff outA, outB, outY, outZ;
 

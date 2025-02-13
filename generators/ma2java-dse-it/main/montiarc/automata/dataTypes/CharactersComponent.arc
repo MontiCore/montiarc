@@ -5,10 +5,10 @@ package automata.dataTypes;
  * Simple atomic component for testing characters
  */
 component CharactersComponent {
-  port in Character in;
-  port out Character out;
+  port sync in Character in;
+  port sync out Character out;
 
-  <<sync>> automaton{
+  automaton{
     initial state Idle;
 
     Idle -> Idle [in == 'c'] /{

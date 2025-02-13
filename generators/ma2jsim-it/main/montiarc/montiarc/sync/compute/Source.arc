@@ -5,7 +5,7 @@ import montiarc.types.OnOff;
 
 component Source {
 
-  port out OnOff o;
+  port sync out OnOff o;
 
   compute {
     o = OnOff.ON;

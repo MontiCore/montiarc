@@ -5,9 +5,9 @@ import montiarc.types.OnOff;
 
 component Sink {
 
-  port in OnOff i;
+  port sync in OnOff i;
 
-  <<sync>> automaton {
+  automaton {
     initial state Init;
     state On;
     state Off;

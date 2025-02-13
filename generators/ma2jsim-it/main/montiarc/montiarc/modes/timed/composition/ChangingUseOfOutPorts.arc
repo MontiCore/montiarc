@@ -4,13 +4,13 @@ package montiarc.modes.timed.composition;
 import montiarc.types.OnOff;
 
 component ChangingUseOfOutPorts {
-  port <<timed>> in OnOff i;
-  port <<timed>> out OnOff o;
+  port in OnOff i;
+  port out OnOff o;
 
   component WithUse {
     port in OnOff i;
     port out OnOff o;
-    <<timed>> automaton {
+    automaton {
       initial state X;
       X -> X i / o = i;;
     }
@@ -20,7 +20,7 @@ component ChangingUseOfOutPorts {
     port in OnOff i;
   }
 
-  <<timed>> mode automaton {
+  mode automaton {
 
     initial mode WithConnection {
       WithUse sub;

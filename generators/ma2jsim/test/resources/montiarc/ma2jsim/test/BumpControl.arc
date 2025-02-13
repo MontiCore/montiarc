@@ -3,10 +3,10 @@ package montiarc.ma2jsim.test;
 
 component BumpControl {
   port
-    out int right,
-    out int left;
+    sync out int right,
+    sync out int left;
 
-  <<sync>> automaton {
+  automaton {
     initial {
       right = 1;
       left = 2;

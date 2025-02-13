@@ -6,7 +6,7 @@ import java.util.List;
 component EmitList<T>(List<T> output) {
   port out T out;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       for (int i = 0; i < output.size(); i++) {

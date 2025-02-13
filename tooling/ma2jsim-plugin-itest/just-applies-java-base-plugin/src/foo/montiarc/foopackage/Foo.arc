@@ -5,8 +5,8 @@ import barpackage.Bar;
 
 component Foo {
   port
-    <<sync>> in int inPort,
-    <<sync>> out int outPort;
+    sync in int inPort,
+    sync out int outPort;
 
   Bar bar;
 

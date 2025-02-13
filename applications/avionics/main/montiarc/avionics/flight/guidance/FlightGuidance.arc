@@ -6,7 +6,7 @@ import avionics.flight.guidance.Signals.FlightData;
 
 component FlightGuidance {
 
-  port <<sync>> in Coordinates i;
-  port <<sync>> out FlightData fd;
+  port sync in Coordinates i;
+  port sync out FlightData fd;
 
 }

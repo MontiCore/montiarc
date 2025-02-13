@@ -5,17 +5,17 @@ import evaluation.Commands.DoorCMD;
 
 component Door {
 
-  port in DoorCMD cmd;
-  port in Boolean isOpen;
-  port in Boolean isClosed;
-  port in Boolean isObstacle;
-  port out Boolean open;
-  port out Boolean close;
-  port <<delayed>> out Boolean closed;
+  port sync in DoorCMD cmd;
+  port sync in Boolean isOpen;
+  port sync in Boolean isClosed;
+  port sync in Boolean isObstacle;
+  port sync out Boolean open;
+  port sync out Boolean close;
+  port <<delayed>> sync out Boolean closed;
 
   Double timer = 5.0;
 
-  <<sync>> automaton {
+  automaton {
     initial { closed = false; } state Wait;
 
     Wait -> Wait [timer >= 0.625] / {

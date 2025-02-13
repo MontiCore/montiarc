@@ -8,9 +8,9 @@ component FlightSystem {
 
   feature advanced, dualGPS;
 
-  port <<sync>> in SatelliteSignal sat;
-  port <<sync>> in CMD pi;
-  port <<sync>> out boolean of;
+  port sync in SatelliteSignal sat;
+  port sync in CMD pi;
+  port sync out boolean of;
 
   PowerSupply powersupply;
   FlightControl flightControl;

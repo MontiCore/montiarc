@@ -5,10 +5,10 @@ import montiarc.types.OnOff;
 
 component Inverter {
   port
-   in OnOff i,
-   out OnOff o;
+   sync in OnOff i,
+   sync out OnOff o;
 
-  <<sync>> compute {
+  compute {
     if (i == OnOff.ON) { o = OnOff.OFF; }
     if (i == OnOff.OFF) { o = OnOff.ON; }
   }

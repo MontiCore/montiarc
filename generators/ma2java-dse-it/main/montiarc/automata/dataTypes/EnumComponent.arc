@@ -7,10 +7,10 @@ import automata.Types.*;
  * Simple atomic component for testing enums
  */
 component EnumComponent {
-  port in TimerSignal in;
-  port out MotorCmd out;
+  port sync in TimerSignal in;
+  port sync out MotorCmd out;
 
-  <<sync>> automaton{
+  automaton{
     initial state Idle;
     state Second;
 

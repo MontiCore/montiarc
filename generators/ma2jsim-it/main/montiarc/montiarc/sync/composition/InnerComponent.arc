@@ -5,24 +5,24 @@ import montiarc.types.OnOff;
 
 component InnerComponent {
 
-  port in OnOff i;
-  port out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   i -> sub.i;
   sub.o -> o;
 
   component InnerMedium sub {
-    port in OnOff i;
-    port out OnOff o;
+    port sync in OnOff i;
+    port sync out OnOff o;
 
     i -> sub.i;
     sub.o -> o;
 
     component Medium sub {
-      port in OnOff i;
-      port out OnOff o;
+      port sync in OnOff i;
+      port sync out OnOff o;
 
-      <<sync>> automaton {
+      automaton {
         initial state S;
 
         S -> S / {

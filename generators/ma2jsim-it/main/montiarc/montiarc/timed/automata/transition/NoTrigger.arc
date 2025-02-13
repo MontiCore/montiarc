@@ -8,7 +8,7 @@ component NoTrigger {
   port in int i;
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S / { o = OnOff.ON; };
   }

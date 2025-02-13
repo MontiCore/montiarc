@@ -2,10 +2,10 @@
 package montiarc.sync.automata.actions;
 
 component EntryExitDoInternal {
-  port in String i;
-  port out String o;
+  port sync in String i;
+  port sync out String o;
 
-  <<sync>> automaton {
+  automaton {
 
     initial state A {
       entry / o = "Enter A";

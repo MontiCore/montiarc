@@ -2,25 +2,25 @@
 package montiarc.datatypes.primitive.ports;
 
 component Calculations {
-  port in byte    inByte,
-       in short   inShort,
-       in int     inInt,
-       in long    inLong,
-       in float   inFloat,
-       in double  inDouble,
-       in char    inChar,
-       in boolean inBoolean;
+  port sync in byte    inByte,
+       sync in short   inShort,
+       sync in int     inInt,
+       sync in long    inLong,
+       sync in float   inFloat,
+       sync in double  inDouble,
+       sync in char    inChar,
+       sync in boolean inBoolean;
 
-  port out byte outByte,
-       out short   outShort,
-       out int     outInt,
-       out long    outLong,
-       out float   outFloat,
-       out double  outDouble,
-       out char    outChar,
-       out boolean outBoolean;
+  port sync out byte outByte,
+       sync out short   outShort,
+       sync out int     outInt,
+       sync out long    outLong,
+       sync out float   outFloat,
+       sync out double  outDouble,
+       sync out char    outChar,
+       sync out boolean outBoolean;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / {

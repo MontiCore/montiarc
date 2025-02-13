@@ -2,11 +2,11 @@
 package montiarc.ma2jsim.test;
 
 component Other(int first, int second, int withDefault = 3) {
-  port <<sync>> in Integer i;
-  port <<sync>> out Integer o;
-  port <<sync>> out boolean b;
+  port sync in Integer i;
+  port sync out Integer o;
+  port sync out boolean b;
 
-  <<sync>> automaton {
+  automaton {
       // initial state to delay initial output
       initial state S;
 

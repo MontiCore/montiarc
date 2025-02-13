@@ -788,7 +788,7 @@ class MA2JSimToolIncrementalityTest {
         "package %s; component %s {" +
             "port in int i;" +
             "port in int o;" +
-            "<<timed>> automaton {" +
+            "automaton {" +
             "initial state S1;" +
             "}" +
             "}",

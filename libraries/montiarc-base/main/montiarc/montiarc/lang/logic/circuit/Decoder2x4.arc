@@ -7,8 +7,8 @@ import montiarc.lang.logic.gate.Not;
 
 component Decoder2x4 {
 
-  port <<sync>> in boolean a0, a1;
-  port <<sync>> out boolean q0, q1, q2, q3;
+  port sync in boolean a0, a1;
+  port sync out boolean q0, q1, q2, q3;
 
   Not notA0, notA1;
 

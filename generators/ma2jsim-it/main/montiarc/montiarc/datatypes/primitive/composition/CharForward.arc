@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component CharForward {
-  port in char pIn,
-       out char pOut;
+  port sync in char pIn,
+       sync out char pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       char intermediate = pIn;

@@ -5,7 +5,7 @@ component InitialAndEntryActionsInHierarchy {
   port in String i;
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial { o = "INIT A"; } state A {
       entry / o = "-> A";

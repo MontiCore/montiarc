@@ -10,15 +10,15 @@ import Types.ChildType;
  */
 component SubtypeConnection {
 
-  port <<sync>> in ChildType i;
-  port <<sync>> out SuperType o;
+  port sync in ChildType i;
+  port sync out SuperType o;
 
   /**
    * The component's subcomponents are sequentially composed.
    */
   component SuperTypePassthrough {
-    port <<sync>> in SuperType i;
-    port <<sync>> out SuperType o;
+    port sync in SuperType i;
+    port sync out SuperType o;
 
     compute {
       o = i;
@@ -26,8 +26,8 @@ component SubtypeConnection {
   }
 
   component ChildTypePassthrough {
-    port <<sync>> in ChildType i;
-    port <<sync>> out ChildType o;
+    port sync in ChildType i;
+    port sync out ChildType o;
 
     compute {
       o = i;

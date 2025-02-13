@@ -6,9 +6,9 @@ package consumes_montiarc_base;
 import montiarc.lang.logic.gate.And;
 
 component Consumer {
-  port <<sync>> in boolean a,
-       <<sync>> in boolean b;
-  port <<sync>> out boolean q;
+  port sync in boolean a,
+       sync in boolean b;
+  port sync out boolean q;
 
    And gate;
 

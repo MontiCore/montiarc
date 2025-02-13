@@ -4,13 +4,13 @@ package automata.evaluation.smallModel;
  * small model for the evaluation
  */
 component CounterSemDiff {
-  port in Double factor;
-  port in Boolean chaos;
-  port <<delayed>> out Double out;
+  port sync in Double factor;
+  port sync in Boolean chaos;
+  port <<delayed>> sync out Double out;
 
   Double counter = 0.0;
 
-  <<sync>> automaton{
+  automaton{
     initial {out = 0.0;} state Idle;
     state Chaos;
 

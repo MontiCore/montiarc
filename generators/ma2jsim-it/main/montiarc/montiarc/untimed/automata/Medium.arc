@@ -8,7 +8,7 @@ component Medium {
   port in OnOff i;
   port out OnOff o;
 
-  <<untimed>> automaton {
+  automaton {
     initial state S;
 
     S -> S i / {

@@ -61,13 +61,13 @@ public class VariantCoCosTest extends MontiArcTestBase {
     compile("package a.b; component F { port out boolean o; }");
     compile("package a.b; component G { feature ff; varif (ff) { port in boolean i, out boolean o; } else { port in int i, out int o; } }");
     compile("package a.b; component H { feature ff; varif (ff) { port in int io; } else { port out boolean io; } }");
-    compile("package a.b; component I { feature ff; varif (ff) { port <<sync>> in int i; } else { port <<timed>> in int i; } }");
-    compile("package a.b; component J { feature ff; varif (ff) { port <<sync>> out int o; } else { port <<timed>> out int o; } }");
+    compile("package a.b; component I { feature ff; varif (ff) { port sync in int i; } else { port in int i; } }");
+    compile("package a.b; component J { feature ff; varif (ff) { port sync out int o; } else { port out int o; } }");
     compile("package a.b; component K { port in int i; port out int o1, <<delayed>> out int o2; } ");
     compile("package a.b; component L { port in int i; feature ff; varif (ff) { port out int o; } else { port <<delayed>> out int o; } }");
     compile("package a.b; component M { feature ff; varif (ff) { port in int i; } }");
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } }");
-    compile("package a.b; component O { feature ff; port out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
+    compile("package a.b; component O { feature ff; port sync out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
     compile("package a.b; component P<A,B> { feature ff; varif (ff) { port out A o; } else { port out B o; } }");
   }
 
@@ -328,28 +328,28 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "}",
     // in port forward, subcomponent with variable interface timing (deselect feature)
     "component Comp30 { " +
-      "port <<timed>> in int i; " +
+      "port in int i; " +
       "a.b.I sub; " +
       "i -> sub.i; " +
       "constraint (!sub.ff); " +
       "}",
     // in port forward, subcomponent with variable interface timing (select feature)
     "component Comp31 { " +
-      "port <<sync>> in int i; " +
+      "port sync in int i; " +
       "a.b.I sub; " +
       "i -> sub.i; " +
       "constraint (sub.ff); " +
       "}",
     // out port forward, subcomponent with variable interface timing (deselect feature)
     "component Comp32 { " +
-      "port <<timed>> out int o; " +
+      "port out int o; " +
       "a.b.J sub; " +
       "sub.o -> o; " +
       "constraint (!sub.ff); " +
       "}",
     // out port forward, subcomponent with variable interface timing (select feature)
     "component Comp33 { " +
-      "port <<sync>> out int o; " +
+      "port sync out int o; " +
       "a.b.J sub; " +
       "sub.o -> o; " +
       "constraint (sub.ff); " +
@@ -358,9 +358,9 @@ public class VariantCoCosTest extends MontiArcTestBase {
     "component Comp34 { " +
       "feature f; " +
       "varif (f) { " +
-      "port <<sync>> in int i; " +
+      "port sync in int i; " +
       "} else {" +
-      "port <<timed>> in int i; " +
+      "port in int i; " +
       "}" +
       "a.b.I sub; " +
       "i -> sub.i; " +
@@ -370,9 +370,9 @@ public class VariantCoCosTest extends MontiArcTestBase {
     "component Comp35 { " +
       "feature f; " +
       "varif (f) { " +
-      "port <<sync>> out int o; " +
+      "port sync out int o; " +
       "} else {" +
-      "port <<timed>> out int o; " +
+      "port out int o; " +
       "}" +
       "a.b.J sub; " +
       "sub.o -> o; " +
@@ -458,22 +458,15 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "a.b.N sub; " +
       "constraint (!sub.ff); " +
       "}",
-    // timing of subcomponent is implicitly set by its composition
-    "component Comp45 { " +
-      "port <<timed>> out int o; " +
-      "a.b.O sub; " +
-      "sub.o -> o; " +
-      "constraint(!sub.ff); " +
-      "}",
     // out port forward, subcomponent with variable generic interface type (selected feature)
-    "component Comp46<T> { " +
+    "component Comp45<T> { " +
       "port out T o; " +
       "a.b.P<T, java.lang.Integer> sub; " +
       "sub.o -> o; " +
       "constraint(sub.ff); " +
       "}",
     // out port forward, subcomponent with variable generic interface type
-    "component Comp47<A, B> { " +
+    "component Comp46<A, B> { " +
       "feature f; " +
       "varif (f) { port out A o; } " +
       "else { port out B o; } " +
@@ -482,14 +475,14 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "constraint(sub.ff == f); " +
       "}",
     // in port forward with inherited port
-    "component Comp48 extends a.b.M { " +
+    "component Comp47 extends a.b.M { " +
       "varif (ff) { " +
       "a.b.A sub;" +
       "i -> sub.i;" +
       "} " +
       "}",
     // inherited port that switches direction
-    "component Comp49 extends a.b.D { " +
+    "component Comp48 extends a.b.D { " +
       "varif (ff) { " +
       "a.b.A sub;" +
       "io -> sub.i;" +
@@ -499,7 +492,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "} " +
       "}",
     // inherited generic port that switches between int and boolean
-    "component Comp50 extends a.b.P<int, boolean> { " +
+    "component Comp49 extends a.b.P<int, boolean> { " +
       "varif (ff) { " +
       "a.b.B sub; " +
       "} else {" +
@@ -508,7 +501,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "sub.o -> o; " +
       "}",
     // atomic component with port that switches types
-    "component Comp51 { " +
+    "component Comp50 { " +
       "feature ff; " +
       "varif (ff) { " +
       "port out int p; " +
@@ -520,7 +513,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "}" +
       "}",
     // Switches between behaviors
-    "component Comp52 { " +
+    "component Comp51 { " +
       "feature f; " +
       "varif (f) { " +
       "compute { } " +
@@ -529,7 +522,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "} " +
       "}",
     // Switches between field initial values
-    "component Comp53 { " +
+    "component Comp52 { " +
       "feature f; " +
       "port out int o; " +
       "varif (f) { " +
@@ -542,24 +535,24 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "} " +
       "}",
     // Switches between automaton behaviors with preconditions
-    "component Comp54 { " +
+    "component Comp53 { " +
       "feature f;" +
       "varif (f) {" +
       "port in int i;" +
-      "<<sync>> automaton {" +
+      "automaton {" +
       "initial state A;" +
       "A -> A [i > 1];" +
       "}" +
       "} else {" +
       "port in boolean i;" +
-      "<<sync>> automaton {" +
+      "automaton {" +
       "initial state A;" +
       "A -> A [i];" +
       "}" +
       "}" +
       "}",
     // Switches between field types
-    "component Comp55 { " +
+    "component Comp54 { " +
       "feature f; " +
       "port out double o; " +
       "varif (f) { " +
@@ -572,7 +565,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "} " +
       "}",
     // Enum constants map to different values
-    "component Comp56(OnOff onOff) { " +
+    "component Comp55(OnOff onOff) { " +
       "varif(onOff == OnOff.OFF) {" +
       "  automaton {" +
       "    initial state S;" +
@@ -585,15 +578,15 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "} " +
       "}",
     // in port forward, timing match, subcomponent with variable interface timing (deselect feature)
-    "component Comp57 { " +
-      "port <<sync>> in int i; " +
+    "component Comp56 { " +
+      "port sync in int i; " +
       "a.b.I sub; " +
       "i -> sub.i; " +
       "constraint (!sub.ff); " +
       "}",
     // out port forward, timing mismatch, subcomponent with variable interface timing (select feature)
-    "component Comp58 { " +
-      "port <<timed>> out int o; " +
+    "component Comp57 { " +
+      "port out int o; " +
       "a.b.J sub; " +
       "sub.o -> o; " +
       "constraint (sub.ff); " +
@@ -997,7 +990,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
         ArcError.CONNECTOR_TYPE_MISMATCH),
       // in port forward, timing mismatch, subcomponent with variable interface timing (select feature)
       arg("component Comp35 { " +
-          "port <<timed>> in int i; " +
+          "port in int i; " +
           "a.b.I sub; " +
           "i -> sub.i; " +
           "constraint (sub.ff); " +
@@ -1005,7 +998,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
         ArcError.CONNECTOR_TIMING_MISMATCH),
       // out port forward, timing mismatch, subcomponent with variable interface timing (deselect feature)
       arg("component Comp36 { " +
-          "port <<sync>> out int o; " +
+          "port sync out int o; " +
           "a.b.J sub; " +
           "sub.o -> o; " +
           "constraint (!sub.ff); " +
@@ -1015,9 +1008,9 @@ public class VariantCoCosTest extends MontiArcTestBase {
       arg("component Comp37 { " +
           "feature f; " +
           "varif (f) { " +
-          "port <<sync>> in int i; " +
+          "port sync in int i; " +
           "} else {" +
-          "port <<timed>> in int i; " +
+          "port in int i; " +
           "}" +
           "a.b.I sub; " +
           "i -> sub.i; " +
@@ -1028,9 +1021,9 @@ public class VariantCoCosTest extends MontiArcTestBase {
       arg("component Comp38 { " +
           "feature f; " +
           "varif (f) { " +
-          "port <<sync>> out int o; " +
+          "port sync out int o; " +
           "} else {" +
-          "port <<timed>> out int o; " +
+          "port out int o; " +
           "}" +
           "a.b.J sub; " +
           "sub.o -> o; " +
@@ -1248,17 +1241,8 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "compute { } " +
           "}",
         ArcError.MULTIPLE_BEHAVIOR),
-      // timing mismatch with implicitly set timing
-      arg("component Comp61 { " +
-          "feature ff; " +
-          "port <<sync>> out int o; " +
-          "a.b.O sub; " +
-          "sub.o -> o; " +
-          "constraint(ff == sub.ff); " +
-          "}",
-        ArcError.CONNECTOR_TIMING_MISMATCH),
       // out port forward, subcomponent with variable generic interface type (deselected feature)
-      arg("component Comp62<T> { " +
+      arg("component Comp61<T> { " +
           "port out T o; " +
           "a.b.P<T, java.lang.Integer> sub; " +
           "sub.o -> o; " +
@@ -1266,21 +1250,21 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.CONNECTOR_TYPE_MISMATCH),
       // in port forward with inherited port
-      arg("component Comp63 extends a.b.M { " +
+      arg("component Comp62 extends a.b.M { " +
           "a.b.A sub;" +
           "i -> sub.i;" +
           "}",
         ArcError.MISSING_PORT
       ),
       // inherited port that switches direction
-      arg("component Comp64 extends a.b.D { " +
+      arg("component Comp63 extends a.b.D { " +
           "a.b.A sub;" +
           "io -> sub.i;" +
           "}",
         ArcError.SOURCE_DIRECTION_MISMATCH
       ),/*
       // atomic component with port that switches existence
-      arg("component Comp65 { " +
+      arg("component Comp64 { " +
           "feature ff; " +
           "varif (ff) { " +
           "port out int p; " +
@@ -1292,7 +1276,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
         new InternalError("0xFD118")
       ),*/
       // Multiple behaviors if feature is selected
-      arg("component Comp66 { " +
+      arg("component Comp65 { " +
           "feature f; " +
           "varif (f) { " +
           "compute { } " +
@@ -1301,7 +1285,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.MULTIPLE_BEHAVIOR),
       // Multiple behaviors if both features are selected
-      arg("component Comp67 { " +
+      arg("component Comp66 { " +
           "feature f1, f2; " +
           "varif (f1) { " +
           "compute { } " +
@@ -1312,7 +1296,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.MULTIPLE_BEHAVIOR),
       // Multiple fields if both features are selected
-      arg("component Comp68 { " +
+      arg("component Comp67 { " +
           "feature f1, f2; " +
           "varif (f1) { " +
           "int i = 0; " +
@@ -1323,7 +1307,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.UNIQUE_IDENTIFIER_NAMES),
       // component that switches between atomic and decomposed with connector
-      arg("component Comp69 { " +
+      arg("component Comp68 { " +
           "feature f;" +
           "port in int i;" +
           "port out int o;" +
@@ -1341,17 +1325,17 @@ public class VariantCoCosTest extends MontiArcTestBase {
       ),
       // Switches between automaton behaviors with preconditions
       arg(
-        "component Comp70 { " +
+        "component Comp69 { " +
           "feature f;" +
           "varif(f){" +
           "port in int i;" +
-          "<<sync>> automaton {" +
+          "automaton {" +
           "initial state B;" +
           "B -> B [i];" +
           "}" +
           "} else {" +
           "port in boolean i;" +
-          "<<sync>> automaton {" +
+          "automaton {" +
           "initial state A;" +
           "A -> A [i == \"a\"];" +
           "}" +
@@ -1361,7 +1345,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
         new InternalError("0xCC111") // int not boolean
       ),
       // Enum constants map to same value
-      arg("component Comp71(OnOff onOff) { " +
+      arg("component Comp70(OnOff onOff) { " +
           "varif(onOff == OnOff.OFF) {" +
           "  automaton {" +
           "    initial state S;" +
@@ -1375,7 +1359,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.MULTIPLE_BEHAVIOR),
       // Multiple identifier if feature is selected
-      arg("component Comp72(boolean i) { " +
+      arg("component Comp71(boolean i) { " +
           "feature f1; " +
           "varif (f1) { " +
           "int i = 0; " +
@@ -1383,7 +1367,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.UNIQUE_IDENTIFIER_NAMES),
       // Multiple identifier if feature is selected
-      arg("component Comp73(boolean i) { " +
+      arg("component Comp72(boolean i) { " +
           "feature f1; " +
           "varif (f1) { " +
           "port in int i; " +
@@ -1391,7 +1375,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}",
         ArcError.UNIQUE_IDENTIFIER_NAMES),
       // Multiple identifier feature should not throw exception
-      arg("component Comp74 { " +
+      arg("component Comp73 { " +
           "feature f; " +
           "feature f; " +
           "varif (f) { } " +

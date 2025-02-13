@@ -9,7 +9,7 @@ component Switch {
   port in OnOff i2;
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state Off;
     state On;
 

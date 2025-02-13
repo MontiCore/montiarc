@@ -5,11 +5,11 @@ import montiarc.types.OnOff;
 
 component Switch {
 
-  port in OnOff i1;
-  port in OnOff i2;
-  port out OnOff o;
+  port sync in OnOff i1;
+  port sync in OnOff i2;
+  port sync out OnOff o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S [i1 == OnOff.ON] / { o = i2; };

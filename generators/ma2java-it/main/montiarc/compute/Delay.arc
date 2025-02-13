@@ -8,8 +8,8 @@ import Types.OnOff;
  */
 component Delay {
 
-  port <<sync>> in OnOff i;
-  port <<sync, delayed>> out OnOff o;
+  port sync in OnOff i;
+  port <<delayed>> sync out OnOff o;
 
   init {
     o = OnOff.OFF;

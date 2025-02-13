@@ -5,7 +5,7 @@ component Hierarchy {
   port in int i;
   port out String o;
 
-  <<sync>> automaton {
+  automaton {
     initial state A{
       initial state A1;
       state A2;

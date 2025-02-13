@@ -9,7 +9,7 @@ component NestedTransitionsInSameHierarchy {
   port in String i;
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     // There are 6 mayor states: a, b, c, d, e, f
     // "f" has a sub state hierarchy of 5 additional levels,

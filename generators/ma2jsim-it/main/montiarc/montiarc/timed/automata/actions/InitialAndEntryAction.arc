@@ -5,7 +5,7 @@ component InitialAndEntryAction {
   port in String i;
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial { o = "INIT"; } state A {
       entry / o = "Enter A";

@@ -9,7 +9,7 @@ component OptionalDelay {
   port in OnOff i;
   varif (delayed) {
     port <<delayed>> out OnOff o;
-    <<timed>> automaton {
+    automaton {
         initial { o = OnOff.OFF; } state S;
 
         S -> S i / {
@@ -18,7 +18,7 @@ component OptionalDelay {
       }
   } else {
     port out OnOff o;
-    <<timed>> automaton {
+    automaton {
         initial state S;
 
         S -> S i / {

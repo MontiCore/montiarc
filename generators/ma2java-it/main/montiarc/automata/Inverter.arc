@@ -9,13 +9,13 @@ import Types.OnOff;
  */
 component Inverter {
 
-  port in OnOff i;
-  port out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   /**
    * The automaton inverts messages.
    */
-  <<sync>> automaton {
+  automaton {
     // initial state to delay initial output
     initial state S;
 

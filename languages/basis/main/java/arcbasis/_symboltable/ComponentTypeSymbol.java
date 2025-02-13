@@ -414,19 +414,6 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
       .collect(Collectors.toList());
   }
 
-  protected Timing timing;
-
-  public Optional<Timing> getTiming() {
-    if (this.timing != null) {
-      return Optional.of(this.timing);
-    } else if (this.isAtomic() && this.getBehavior().isPresent()) {
-      this.timing = this.getBehavior().get().getTiming();
-      return Optional.of(this.timing);
-    } else {
-      return Optional.empty();
-    }
-  }
-
   public boolean isStronglyCausal() {
     return false;
   }

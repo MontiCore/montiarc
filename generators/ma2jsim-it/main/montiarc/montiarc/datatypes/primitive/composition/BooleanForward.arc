@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component BooleanForward {
-  port in boolean pIn,
-       out boolean pOut;
+  port sync in boolean pIn,
+       sync out boolean pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       boolean intermediate = pIn;

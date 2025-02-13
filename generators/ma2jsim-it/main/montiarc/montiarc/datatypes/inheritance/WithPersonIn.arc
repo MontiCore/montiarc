@@ -4,9 +4,9 @@ package montiarc.datatypes.inheritance;
 import montiarc.types.Person;
 
 component WithPersonIn {
-  port in Person person;
+  port sync in Person person;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { };
   }

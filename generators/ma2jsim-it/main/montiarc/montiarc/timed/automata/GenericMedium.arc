@@ -8,7 +8,7 @@ component GenericMedium<T> {
   port in T i;
   port out T o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     S -> S i / {

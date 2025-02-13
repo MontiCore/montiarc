@@ -5,10 +5,10 @@ package automata.dataTypes;
  *  Simple atomic component for testing strings
  */
 component StringComponent {
-  port in String in;
-  port out String out;
+  port sync in String in;
+  port sync out String out;
 
-  <<sync>> automaton{
+  automaton{
     initial state Idle;
 
     Idle -> Idle [in == "helloWorld"]/{

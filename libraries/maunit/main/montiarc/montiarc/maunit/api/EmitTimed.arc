@@ -8,7 +8,7 @@ component EmitTimed<T>(List<List<T>> output) {
 
   int index = 0;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       if (index >= output.size()) index = 0;

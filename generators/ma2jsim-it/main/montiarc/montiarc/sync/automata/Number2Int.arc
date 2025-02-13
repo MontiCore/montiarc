@@ -3,10 +3,10 @@ package montiarc.sync.automata;
 
 component Number2Int<T extends Number> {
   port
-   in T i,
-   out int o;
+   sync in T i,
+   sync out int o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / { o = i.intValue(); };

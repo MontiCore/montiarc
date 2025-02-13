@@ -12,7 +12,7 @@ component SCD {
   SF vsf = SF.SF("");
   SFs vsfs = SFs.SFs("", "");
 
-  <<sync>> automaton {
+  automaton {
     initial state s;
 
     s -> s / {

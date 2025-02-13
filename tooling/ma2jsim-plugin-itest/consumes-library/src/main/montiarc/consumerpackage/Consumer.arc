@@ -4,8 +4,8 @@ package consumerpackage;
 import libpackage.*;
 
 component Consumer {
-  port <<sync>> in int incoming;
-  port <<sync>> out int outgoing;
+  port sync in int incoming;
+  port sync out int outgoing;
 
   LibComponent sub;
 

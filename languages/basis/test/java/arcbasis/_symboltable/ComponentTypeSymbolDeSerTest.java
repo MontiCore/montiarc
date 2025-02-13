@@ -6,6 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
@@ -75,14 +76,14 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
       "\"fullName\":\"Comp.inc\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"incoming\":true," +
-      "\"timing\":\"untimed\"" +
+      "\"timing\":\"timed\"" +
       "},{" +
       "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
       "\"name\":\"outg\"," +
       "\"fullName\":\"Comp.outg\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"outgoing\":true," +
-      "\"timing\":\"untimed\"" +
+      "\"timing\":\"timed\"" +
       "}]" +
       "}";
 
@@ -204,11 +205,13 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
       .setName("inc")
       .setIncoming(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
+      .setTiming(Timing.TIMED)
       .build();
     ArcPortSymbol portOutgoing = ArcBasisMill.arcPortSymbolBuilder()
       .setName("outg")
       .setOutgoing(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
+      .setTiming(Timing.TIMED)
       .build();
 
     comp.getSpannedScope().add(portIncoming);

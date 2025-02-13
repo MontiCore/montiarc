@@ -5,12 +5,12 @@ package automata.evaluation.smallModel;
  * small model for the evaluation
  */
 component Counter {
-  port in Double factor;
-  port <<delayed>> out Double out;
+  port sync in Double factor;
+  port <<delayed>> sync out Double out;
 
   Double counter = 0.0;
 
-  <<sync>> automaton{
+  automaton{
     initial {out = 0.0;} state Idle;
 
     Idle -> Idle /{

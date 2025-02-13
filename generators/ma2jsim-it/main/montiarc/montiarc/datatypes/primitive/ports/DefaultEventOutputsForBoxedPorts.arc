@@ -12,7 +12,7 @@ component DefaultEventOutputsForBoxedPorts {
        out Character outChar,
        out Boolean outBoolean;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S;
   }

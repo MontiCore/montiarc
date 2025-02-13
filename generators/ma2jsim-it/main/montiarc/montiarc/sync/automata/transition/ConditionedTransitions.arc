@@ -4,10 +4,10 @@ package montiarc.sync.automata.transition;
 import montiarc.types.NumberSign;
 
 component ConditionedTransitions {
-  port in int i;
-  port out NumberSign o;
+  port sync in int i;
+  port sync out NumberSign o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S [i > 0] / { o = NumberSign.POSITIVE; };

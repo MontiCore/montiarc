@@ -22,7 +22,7 @@ component NestedTransitionsCrosscuttingTheHierarchy {
   port in String i;
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
     initial state INIT;
 
     // There are various bystanders that in the hierarchy that offer alternative paths,

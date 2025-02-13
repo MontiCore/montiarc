@@ -2,9 +2,9 @@
 package montiarc.maunit.api;
 
 component Emit<T>(T output) {
-  port out T out;
+  port sync out T out;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       out = output;

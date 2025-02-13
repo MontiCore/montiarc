@@ -4,10 +4,10 @@ package montiarc.modes.sync.subcomponents;
 import montiarc.types.OnOff;
 component Forwarder {
   port
-   in OnOff i,
-   out OnOff o;
+   sync in OnOff i,
+   sync out OnOff o;
 
-  <<sync>> compute {
+  compute {
     o = i;
   }
 }

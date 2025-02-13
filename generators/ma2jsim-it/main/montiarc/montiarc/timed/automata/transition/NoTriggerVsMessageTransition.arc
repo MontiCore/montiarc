@@ -10,7 +10,7 @@ component NoTriggerVsMessageTransition {
   port in int i;
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S [i > 0] i / { o = OnOff.ON; };
     S -> S / { o = OnOff.OFF; };

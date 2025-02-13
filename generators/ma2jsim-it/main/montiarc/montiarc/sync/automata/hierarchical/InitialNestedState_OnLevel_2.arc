@@ -3,9 +3,9 @@ package montiarc.sync.automata.hierarchical;
 
 component InitialNestedState_OnLevel_2 {
 
-  port out String o;
+  port sync out String o;
 
-  <<sync>> automaton {
+  automaton {
 
     initial state A {
       initial state AA {

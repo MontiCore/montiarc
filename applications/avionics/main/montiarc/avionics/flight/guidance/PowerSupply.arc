@@ -5,6 +5,6 @@ import avionics.flight.guidance.Signals.Power;
 
 component PowerSupply {
 
-  port <<sync>> out Power pow;
+  port sync out Power pow;
 
 }

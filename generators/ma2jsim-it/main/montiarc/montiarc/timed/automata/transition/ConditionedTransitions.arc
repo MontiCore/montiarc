@@ -7,7 +7,7 @@ component ConditionedTransitions {
   port in int i;
   port out NumberSign o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     S -> S [i > 0] i / { o = NumberSign.POSITIVE; };

@@ -131,7 +131,7 @@ component grammar ArcBasis extends
    * @attribute ports A list of declared port identifiers.
    */
   PortDeclaration =
-    Stereotype? PortDirection MCType (ArcPort || ",")+
+    Stereotype? sync:[key("sync")]? PortDirection MCType (ArcPort || ",")+
   ;
 
   /**

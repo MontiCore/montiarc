@@ -5,7 +5,7 @@ package montiarc.maunit.api;
 component AssertTrueTest(boolean value) {
   component Source(boolean value) source(value) {
     port out boolean o;
-    <<timed>> compute {
+    compute {
       o = value;
     }
   }

@@ -5,7 +5,7 @@ import sympackage.*;
 import libpackage.*;
 
 component UsingImportedSymbols {
-  port <<sync>> in int inPort;
+  port sync in int inPort;
 
   LibComponent subcomponent;
 }

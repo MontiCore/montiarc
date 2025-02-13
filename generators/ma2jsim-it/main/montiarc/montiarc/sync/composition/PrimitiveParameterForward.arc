@@ -6,7 +6,7 @@ import montiarc.types.OnOff;
 
 component PrimitiveParameterForward(int param = 3) {
 
-  port out int o;
+  port sync out int o;
 
   PrimitiveParameter comp(p=param);
   comp.o -> o;

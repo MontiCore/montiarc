@@ -3,8 +3,8 @@ package foopackage;
 
 component FooTest {
   port
-    <<sync>> in int inPort,
-    <<sync>> out int outPort;
+    sync in int inPort,
+    sync out int outPort;
 
   Foo foo;
 

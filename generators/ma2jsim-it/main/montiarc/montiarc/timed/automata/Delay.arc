@@ -8,7 +8,7 @@ component Delay {
   port in OnOff i;
   port <<delayed>> out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial { o = OnOff.OFF; } state S;
 
     S -> S i / { o = i; };

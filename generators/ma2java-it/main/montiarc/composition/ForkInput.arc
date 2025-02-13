@@ -6,8 +6,8 @@ import compute.Forward;
 
 component ForkInput {
 
-  port in OnOff i;
-  port out OnOff o1, o2;
+  port sync in OnOff i;
+  port sync out OnOff o1, o2;
 
   Forward c1, c2;
 

@@ -6,7 +6,7 @@ component NoEnabledTransition {
   port in String i;
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial state INIT;
     state Target;

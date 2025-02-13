@@ -5,7 +5,7 @@ component InitialNestedState_OnLevel_1 {
 
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial state A {
       initial state AA;  // <- We want to check that this state is entered

@@ -5,11 +5,11 @@ import elevator.Commands.LiftCMD;
 
 component Lift {
 
-  port in LiftCMD cmd;
-  port out Boolean up;
-  port out Boolean down;
+  port sync in LiftCMD cmd;
+  port sync out Boolean up;
+  port sync out Boolean down;
 
-  <<sync>> automaton {
+  automaton {
     initial state Wait;
 
     Wait -> Wait [cmd == null || cmd == LiftCMD.STOP] / {

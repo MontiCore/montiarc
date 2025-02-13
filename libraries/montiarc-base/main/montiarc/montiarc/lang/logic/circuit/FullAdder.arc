@@ -6,19 +6,19 @@ import montiarc.lang.logic.gate.Or;
 component FullAdder {
 
   // the augend bit
-  port <<sync>> in boolean a;
+  port sync in boolean a;
 
   // the addend bit
-  port <<sync>> in boolean b;
+  port sync in boolean b;
 
   // the input carry bit
-  port <<sync>> in boolean caIn;
+  port sync in boolean caIn;
 
   // the sum of a and b
-  port <<sync>> out boolean sum;
+  port sync out boolean sum;
 
   // the output carry bit
-  port <<sync>> out boolean caOut;
+  port sync out boolean caOut;
 
   HalfAdder ha0;
 

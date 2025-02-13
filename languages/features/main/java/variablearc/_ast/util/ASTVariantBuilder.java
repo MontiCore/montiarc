@@ -107,18 +107,16 @@ public class ASTVariantBuilder implements ArcBasisHandler {
   }
 
   /**
-   * Set the timing and delay of a {@link variablearc._symboltable.VariantPortSymbol}
+   * Set the delay of a {@link variablearc._symboltable.VariantPortSymbol}
    *
    * @param node the port declaration used
    */
   @Override
   public void handle(@NotNull ASTPortDeclaration node) {
     Preconditions.checkNotNull(node);
-    Timing timing = node.getTiming().orElse(null);
 
     for (ASTArcPort port : node.getArcPortList()) {
       if (variant.containsSymbol(port.getSymbol())) {
-        variant.getArcPort(port.getName()).ifPresent(p -> p.setTiming(timing));
         if (node.hasDelay()) variant.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(true));
       }
     }

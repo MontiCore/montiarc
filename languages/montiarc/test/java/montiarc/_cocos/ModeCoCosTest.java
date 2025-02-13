@@ -43,7 +43,7 @@ public class ModeCoCosTest extends MontiArcTestBase {
     compile("package a.b; component B { port out int o; }");
     compile("package a.b; component C { port in int i1, i2; port out int o; }");
     compile("package a.b; component D { port out boolean o; }");
-    compile("package a.b; component E { port out int o, in int i; <<sync>> compute {o = i;}}");
+    compile("package a.b; component E { port out int o, in int i; compute {o = i;}}");
   }
 
   @ParameterizedTest
@@ -103,7 +103,7 @@ public class ModeCoCosTest extends MontiArcTestBase {
       "a.b.E always2;" +
       "i -> always1.i;" +
       "always1.o -> always2.i;" +
-      "<<sync>> mode automaton {" +
+      "mode automaton {" +
       "initial mode Normal {" +
       "a.b.E modeComp;" +
       "always2.o -> modeComp.i;" +

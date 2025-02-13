@@ -5,9 +5,9 @@ import montiarc.lang.logic.gate.Or;
 
 component Encoder8x3 {
 
-  port <<sync>> in boolean a0, a1, a2, a3,
+  port sync in boolean a0, a1, a2, a3,
                            a4, a5, a6, a7;
-  port <<sync>> out boolean q0, q1, q2;
+  port sync out boolean q0, q1, q2;
 
   // Q0 = OR(A1, A3, A5, A7) = OR(OR(OR(A1, A3), A5), A7)
   Or or13, or135, or1357;

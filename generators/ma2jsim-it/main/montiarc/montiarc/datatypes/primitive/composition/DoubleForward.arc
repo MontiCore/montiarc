@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component DoubleForward {
-  port in double pIn,
-       out double pOut;
+  port sync in double pIn,
+       sync out double pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       double intermediate = pIn;

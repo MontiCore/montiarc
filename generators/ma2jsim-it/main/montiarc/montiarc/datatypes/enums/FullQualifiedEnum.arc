@@ -4,9 +4,9 @@ package montiarc.datatypes.enums;
 import montiarc.types.OnOff;
 
 component FullQualifiedEnum {
-  port out OnOff off;
+  port sync out OnOff off;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       off = montiarc.types.OnOff.OFF;

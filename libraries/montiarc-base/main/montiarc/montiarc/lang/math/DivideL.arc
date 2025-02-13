@@ -2,9 +2,9 @@
 package montiarc.lang.math;
 
 component DivideL {
-  port <<sync>> in long a, b,
-       <<sync>> out long r;
-  port <<sync>> out boolean of;
+  port sync in long a, b,
+       sync out long r;
+  port sync out boolean of;
 
   compute {
     r = a / b;

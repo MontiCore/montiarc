@@ -12,7 +12,7 @@ component DefaultEventOutputs {
        out char outChar,
        out boolean outBoolean;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S / { };
   }

@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component ShortOut {
-  port out short p;
+  port sync out short p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { int foo = 1; };
   }

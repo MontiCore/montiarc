@@ -6,11 +6,11 @@ import montiarc.types.Person;
 
 /* This test does not come with java i/o tests, but checks whether the complex guard expression compiles */
 component ComplexGuard {
-  port <<sync>> in Map<String, String> nameToWhatever;
-  port <<sync>> in Person person;
-  port out String o;
+  port sync in Map<String, String> nameToWhatever;
+  port sync in Person person;
+  port sync out String o;
 
-  <<sync>> automaton {
+  automaton {
       initial state S;
       // deliberately chains ASTFieldAccessExpressions
       S -> S [

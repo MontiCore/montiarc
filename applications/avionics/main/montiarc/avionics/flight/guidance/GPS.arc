@@ -8,7 +8,7 @@ component GPS {
 
   feature advanced;
 
-  port <<sync>> in SatelliteSignal sat;
-  port <<sync>> out Coordinates pos;
+  port sync in SatelliteSignal sat;
+  port sync out Coordinates pos;
 
 }

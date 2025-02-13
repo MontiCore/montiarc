@@ -3,10 +3,10 @@ package montiarc.sync.automata.hierarchical.actions;
 
 component NoEnabledTransition {
 
-  port in String i;
-  port out String o;
+  port sync in String i;
+  port sync out String o;
 
-  <<sync>> automaton {
+  automaton {
 
     initial state INIT;
     state Target;

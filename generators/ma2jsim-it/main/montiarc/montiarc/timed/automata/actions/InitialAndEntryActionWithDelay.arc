@@ -5,7 +5,7 @@ component InitialAndEntryActionWithDelay {
   port in String i;
   port <<delayed>> out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial { o = "INIT"; } state A {
       entry / o = "Enter A";

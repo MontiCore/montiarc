@@ -25,7 +25,7 @@ component ImplicitCasting {
        out char outChar,
        out boolean outBoolean;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     // All transitions triggered by inByte will try to assign bytes to outPorts / fields etc.

@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component ByteForward {
-  port in byte pIn,
-       out byte pOut;
+  port sync in byte pIn,
+       sync out byte pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       byte intermediate = pIn;

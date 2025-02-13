@@ -5,7 +5,7 @@ component EntryExitDoInternal {
   port in String i;
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial state A {
       entry / o = "Enter A";

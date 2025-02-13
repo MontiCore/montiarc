@@ -26,13 +26,8 @@ public class ASTPortDeclaration extends ASTPortDeclarationTOP {
     return this.getPortDirection().isOut();
   }
 
-  public Optional<Timing> getTiming() {
-    if (this.isPresentStereotype()) {
-      for (ASTStereoValue v : this.getStereotype().getValuesList()) {
-        if (Timing.contains(v.getName())) return Timing.of(v.getName());
-      }
-    }
-    return Optional.empty();
+  public Timing getTiming() {
+    return this.sync ? Timing.TIMED_SYNC : Timing.TIMED;
   }
 
   public boolean hasDelay() {

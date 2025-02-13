@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component LongIn {
-  port in long p;
+  port sync in long p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { long foo = p; };
   }

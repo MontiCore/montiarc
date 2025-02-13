@@ -2,9 +2,9 @@
 package montiarc.sync.automata.actions;
 
 component InitialAndEntryActionWithDelay {
-  port <<delayed>> out String o;
+  port <<delayed>> sync out String o;
 
-  <<sync>> automaton {
+  automaton {
 
     initial { o = "INIT"; } state A {
       entry / o = "Enter A";

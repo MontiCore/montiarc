@@ -3,16 +3,16 @@ package montiarc.datatypes.primitive.ports;
 
 // Should compile (by assigning correct default values to the ports)
 component DefaultSyncOutputs {
-  port out byte outByte,
-       out short outShort,
-       out int outInt,
-       out long outLong,
-       out float outFloat,
-       out double outDouble,
-       out char outChar,
-       out boolean outBoolean;
+  port sync out byte outByte,
+       sync out short outShort,
+       sync out int outInt,
+       sync out long outLong,
+       sync out float outFloat,
+       sync out double outDouble,
+       sync out char outChar,
+       sync out boolean outBoolean;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S;
   }

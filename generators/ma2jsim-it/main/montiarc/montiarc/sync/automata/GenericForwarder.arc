@@ -3,10 +3,10 @@ package montiarc.sync.automata;
 
 component GenericForwarder<T> {
   port
-   in T i,
-   out T o;
+   sync in T i,
+   sync out T o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / { o = i; };

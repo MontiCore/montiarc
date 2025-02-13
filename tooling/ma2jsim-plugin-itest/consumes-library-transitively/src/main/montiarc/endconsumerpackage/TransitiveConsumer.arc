@@ -4,8 +4,8 @@ package endconsumerpackage;
 import consumerpackage.*;
 
 component TransitiveConsumer {
-  port <<sync>> in int incoming;
-  port <<sync>> out int outgoing;
+  port sync in int incoming;
+  port sync out int outgoing;
 
   Consumer sub;
 

@@ -19,10 +19,10 @@ package montiarc.sync.automata.hierarchical.actions;
  */
 component NestedTransitionsCrosscuttingTheHierarchy {
 
-  port in String i;
-  port out String o;
+  port sync in String i;
+  port sync out String o;
 
-  <<sync>> automaton {
+  automaton {
     initial state INIT;
 
     // There are various bystanders that in the hierarchy that offer alternative paths,

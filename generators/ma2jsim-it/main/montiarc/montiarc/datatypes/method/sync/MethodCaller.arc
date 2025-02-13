@@ -6,9 +6,9 @@ import montiarc.types.AmbiguousMethodProvider;
 import montiarc.types.MethodProvider;
 
 component MethodCaller {
-  port in int number;
+  port sync in int number;
 
-  <<sync>> automaton {
+  automaton {
     initial state A;
 
     A -> A / {

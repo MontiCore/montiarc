@@ -8,7 +8,7 @@ component Forwarder {
    in OnOff i,
    out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S i / { o = i; };
   }

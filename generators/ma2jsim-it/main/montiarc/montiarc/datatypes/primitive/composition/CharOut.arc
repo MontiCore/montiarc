@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component CharOut {
-  port out char p;
+  port sync out char p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { p = 'a'; };
   }

@@ -2,8 +2,8 @@
 package libpackage;
 
 component LibComponent {
-  port <<sync>> in int incoming;
-  port <<sync>> out int outgoing;
+  port sync in int incoming;
+  port sync out int outgoing;
 
   compute {
     outgoing = incoming + 1;

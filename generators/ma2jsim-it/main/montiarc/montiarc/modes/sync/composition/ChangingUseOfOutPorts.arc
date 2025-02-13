@@ -4,13 +4,13 @@ package montiarc.modes.sync.composition;
 import montiarc.types.OnOff;
 
 component ChangingUseOfOutPorts {
-  port <<sync>> in OnOff i;
-  port <<sync>> out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   component WithUse {
-    port in OnOff iSub;
-    port out OnOff oSub;
-    <<sync>> automaton {
+    port sync in OnOff iSub;
+    port sync out OnOff oSub;
+    automaton {
       initial state X;
       X -> X / oSub = iSub;;
     }
@@ -20,7 +20,7 @@ component ChangingUseOfOutPorts {
     port in OnOff iSub;
   }
 
-  <<sync>> mode automaton {
+  mode automaton {
 
     initial mode WithConnection {
       WithUse sub;

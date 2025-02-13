@@ -5,9 +5,9 @@ import montiarc.types.OnOff;
 
 component Source {
 
-  port out OnOff o;
+  port sync out OnOff o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / { o = OnOff.ON; };

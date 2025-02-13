@@ -4,7 +4,7 @@ package montiarc.sync.variability;
 component FieldSource {
   feature highPrecision;
 
-  port out double o;
+  port sync out double o;
   varif (highPrecision) {
     double field = 2.5;
   } else {

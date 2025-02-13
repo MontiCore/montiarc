@@ -5,9 +5,9 @@ import montiarc.lang.logic.gate.Nand;
 
 component Xnor {
 
-  port <<sync>> in boolean a,
-       <<sync>> in boolean b;
-  port <<sync>> out boolean q;
+  port sync in boolean a,
+       sync in boolean b;
+  port sync out boolean q;
 
   Nand notA;
   a -> notA.a;

@@ -3,6 +3,6 @@ package bumperbot;
 
 component Ultrasonic {
   port
-    <<sync>> out Integer distance;
+    sync out Integer distance;
 
 }

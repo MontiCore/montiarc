@@ -7,13 +7,13 @@ import montiarc.lang.logic.gate.Nor;
 component SRNorLatch {
 
   // set bit
-  port <<sync>> in boolean s;
+  port sync in boolean s;
 
   // reset bit
-  port <<sync>> in boolean r;
+  port sync in boolean r;
 
   // state bits
-  port <<sync>> out boolean q0, q1;
+  port sync out boolean q0, q1;
 
   Nor norS, norR;
 

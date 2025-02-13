@@ -7,10 +7,10 @@ component NameOverlap {
   feature onOff;
 
   varif (onOff) {
-    port out OnOff o;
+    port sync out OnOff o;
     OnOff var = OnOff.OFF;
   } else {
-    port out Integer o;
+    port sync out Integer o;
     Integer var = 0;
   }
 

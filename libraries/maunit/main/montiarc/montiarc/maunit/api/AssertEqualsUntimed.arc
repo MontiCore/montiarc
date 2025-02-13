@@ -9,7 +9,7 @@ component AssertEqualsUntimed<T>(List<T> expected, String message = "") {
 
   int index = 0;
 
-  <<untimed>> automaton {
+  automaton {
     initial state S;
     S -> S actual / {
       if (index >= expected.size()) Assertions.fail("Unexpected additional message received with value: " + actual);

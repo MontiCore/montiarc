@@ -8,13 +8,13 @@ import montiarc.lang.logic.gate.Or;
 component Mux4x1 {
 
   // the data input bits
-  port <<sync>> in boolean i0, i1, i2, i3;
+  port sync in boolean i0, i1, i2, i3;
 
   // the selection input bits
-  port <<sync>> in boolean s0, s1;
+  port sync in boolean s0, s1;
 
   // the selected bit
-  port <<sync>> out boolean o;
+  port sync out boolean o;
 
   Not notS0, notS1;
 

@@ -7,7 +7,7 @@ component Send2Messages {
   port in OnOff p;
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     S -> S p / { o = p; o = p; };

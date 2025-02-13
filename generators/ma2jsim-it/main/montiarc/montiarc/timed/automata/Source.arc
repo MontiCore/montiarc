@@ -7,7 +7,7 @@ component Source {
 
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     S -> S / { o = OnOff.ON; };

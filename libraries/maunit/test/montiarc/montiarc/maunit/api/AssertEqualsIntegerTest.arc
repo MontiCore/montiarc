@@ -5,7 +5,7 @@ package montiarc.maunit.api;
 component AssertEqualsIntegerTest(int value) {
   component Source source {
     port out Integer o;
-    <<timed>> compute {
+    compute {
       o = 5;
     }
   }

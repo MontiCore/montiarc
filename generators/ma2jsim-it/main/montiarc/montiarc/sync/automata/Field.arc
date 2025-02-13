@@ -7,10 +7,10 @@ component Field {
 
   OnOff v = montiarc.types.OnOff.OFF;
 
-  port in OnOff i;
-  port out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S [i == OnOff.ON] / {

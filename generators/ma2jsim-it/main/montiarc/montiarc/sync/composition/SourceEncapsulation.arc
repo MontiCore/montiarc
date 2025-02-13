@@ -6,7 +6,7 @@ import montiarc.types.OnOff;
 
 component SourceEncapsulation {
 
-  port out OnOff o;
+  port sync out OnOff o;
 
   Source sub;
 

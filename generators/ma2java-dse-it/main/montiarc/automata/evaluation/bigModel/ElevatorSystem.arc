@@ -7,11 +7,11 @@ package automata.evaluation.bigModel;
  */
 component ElevatorSystem(Integer parameter) {
 
-  port <<sync>> in Boolean btn1, btn2, btn3, btn4,
-       <<sync>> out Boolean light1, light2, light3, light4;
-  port <<sync>> in Boolean at1, at2, at3, at4,
-       <<sync>> out Boolean open, close, up, down,
-       <<sync>> in Boolean isOpen, isClosed, isObstacle;
+  port sync in Boolean btn1, btn2, btn3, btn4,
+       sync out Boolean light1, light2, light3, light4;
+  port sync in Boolean at1, at2, at3, at4,
+       sync out Boolean open, close, up, down,
+       sync in Boolean isOpen, isClosed, isObstacle;
 
   ControlStation control(parameter);
 

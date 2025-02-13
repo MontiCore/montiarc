@@ -7,16 +7,16 @@ import montiarc.lang.logic.gate.Xor;
 component HalfAdder {
 
   // the augend bit
-  port <<sync>> in boolean a;
+  port sync in boolean a;
 
   // the addend bit
-  port <<sync>> in boolean b;
+  port sync in boolean b;
 
   // the sum of a and b
-  port <<sync>> out boolean sum;
+  port sync out boolean sum;
 
   // the carry bit
-  port <<sync>> out boolean ca;
+  port sync out boolean ca;
 
   Xor xor;
 

@@ -7,7 +7,7 @@ import montiarc.sync.automata.Medium;
 
 component SequentialComposition {
 
-  port in OnOff i;
+  port sync in OnOff i;
   port out OnOff o;
 
   Medium sub1;

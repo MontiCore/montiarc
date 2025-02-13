@@ -5,10 +5,10 @@ package automata.assignments;
  * Simple atomic component where the output is assigned a variable
  */
 component AssignmentName {
-  port in Integer in;
-  port out Integer out;
+  port sync in Integer in;
+  port sync out Integer out;
 
-  <<sync>> automaton{
+  automaton{
     initial state Idle;
 
     Idle -> Idle /{

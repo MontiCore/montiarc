@@ -7,8 +7,8 @@ import montiarc.types.OnOff;
 
 component FeedbackLoop {
 
-  port in OnOff i;
-  port out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   Medium2x2 medium;
 

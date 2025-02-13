@@ -3,10 +3,10 @@ package montiarc.sync.compute;
 
 component GenericForwarder<T> {
   port
-   in T i,
-   out T o;
+   sync in T i,
+   sync out T o;
 
-  <<sync>> compute {
+  compute {
     o = i;
   }
 }

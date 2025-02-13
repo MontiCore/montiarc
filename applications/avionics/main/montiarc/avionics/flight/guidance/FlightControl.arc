@@ -6,8 +6,8 @@ import avionics.flight.guidance.Signals.Power;
 
 component FlightControl {
 
-  port <<sync>> in CMD gc;
-  port <<sync>> in Power pow;
-  port <<sync>> out boolean fsc;
+  port sync in CMD gc;
+  port sync in Power pow;
+  port sync out boolean fsc;
 
 }

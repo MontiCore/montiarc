@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component LongForward {
-  port in long pIn,
-       out long pOut;
+  port sync in long pIn,
+       sync out long pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       long intermediate = pIn;

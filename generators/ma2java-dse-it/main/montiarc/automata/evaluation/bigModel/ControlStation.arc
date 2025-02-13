@@ -3,10 +3,10 @@ package automata.evaluation.bigModel;
 
 component ControlStation(Integer parameter) {
 
-  port <<sync>> in Boolean btn1, btn2, btn3, btn4,
-       <<sync>> out Boolean light1, light2, light3, light4,
-       <<sync>> out Boolean req1, req2, req3, req4;
-  port <<sync>> in Integer clear;
+  port sync in Boolean btn1, btn2, btn3, btn4,
+       sync out Boolean light1, light2, light3, light4,
+       sync out Boolean req1, req2, req3, req4;
+  port sync in Integer clear;
 
   FloorControl floor1, floor2, floor3, floor4;
 

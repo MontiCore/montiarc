@@ -6,7 +6,7 @@ import montiarc.maunit.api.Assertions;
 component AssertEquals<T>(T expected, String message = "") {
   port in T actual;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S actual / {
       Assertions.assertTrue(expected == actual, message);

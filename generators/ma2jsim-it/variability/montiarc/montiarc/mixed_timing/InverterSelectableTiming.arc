@@ -7,11 +7,11 @@ component InverterSelectableTiming {
 
   feature sync;
 
-  port in OnOff i;
+  port sync in OnOff i;
   port out OnOff o;
 
   varif (sync) {
-    <<sync>> automaton {
+    automaton {
         initial state S;
 
         S -> S [i == OnOff.ON] / {
@@ -23,7 +23,7 @@ component InverterSelectableTiming {
         };
       }
   } else {
-    <<timed>> automaton {
+    automaton {
       initial state S;
 
       S -> S [i == OnOff.ON] i / {

@@ -4,8 +4,8 @@ package montiarc.sync.compute;
 import montiarc.types.OnOff;
 
 component SendNoMessages {
-  port <<sync>> in OnOff p;
-  port out OnOff o;
+  port sync in OnOff p;
+  port sync out OnOff o;
 
   compute { }
 }

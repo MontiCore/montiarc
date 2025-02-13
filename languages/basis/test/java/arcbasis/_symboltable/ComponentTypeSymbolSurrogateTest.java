@@ -634,24 +634,6 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   }
 
   @Test
-  void getTimingShouldSkipSurrogate() {
-    // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
-
-    Timing timing = Timing.TIMED;
-    comp.timing = timing;
-
-    // When
-    Optional<Timing> calculatedTiming = surrogate.getTiming();
-
-    // Then
-    Assertions.assertTrue(calculatedTiming.isPresent(), "No Timing");
-    Assertions.assertSame(timing, calculatedTiming.get());
-  }
-
-  @Test
   void getAllPortsShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");

@@ -5,8 +5,8 @@ import montiarc.lang.logic.gate.Nand;
 
 component Not {
 
-  port <<sync>> in boolean a;
-  port <<sync>> out boolean q;
+  port sync in boolean a;
+  port sync out boolean q;
 
   Nand nand;
   a -> nand.a;

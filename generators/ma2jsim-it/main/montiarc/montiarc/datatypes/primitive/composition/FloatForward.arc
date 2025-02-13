@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component FloatForward {
-  port in float pIn,
-       out float pOut;
+  port sync in float pIn,
+       sync out float pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       float intermediate = pIn;

@@ -143,7 +143,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getMCType());
     SymTypeExpression type = TypeCheck3.symTypeFromAST(node.getMCType());
-    Timing timing = node.getTiming().orElse(null);
+    Timing timing = node.getTiming();
 
     for (ASTArcPort port : node.getArcPortList()) {
       port.getSymbol().setType(type);

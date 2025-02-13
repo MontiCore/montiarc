@@ -5,7 +5,7 @@ component SAut() {
   port in String i;
   port out String o;
 
-  <<sync>> automaton {
+  automaton {
     initial state s1;
     state s2;
 

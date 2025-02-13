@@ -2,9 +2,9 @@
 package montiarc.lang.math;
 
 component MultiplyI {
-  port <<sync>> in int a, b,
-       <<sync>> out int r;
-  port <<sync>> out boolean of;
+  port sync in int a, b,
+       sync out int r;
+  port sync out boolean of;
 
   compute {
     int _r = a * b;

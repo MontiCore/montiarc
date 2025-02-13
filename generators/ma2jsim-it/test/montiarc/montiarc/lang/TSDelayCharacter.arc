@@ -5,8 +5,8 @@ import java.lang.Character;
 
 component TSDelayCharacter(Character iv) {
 
-  port <<sync>> in Character i;
-  port <<sync, delayed>> out Character o;
+  port sync in Character i;
+  port <<delayed>> sync out Character o;
 
   TSDelay<Character> delay(iv);
 

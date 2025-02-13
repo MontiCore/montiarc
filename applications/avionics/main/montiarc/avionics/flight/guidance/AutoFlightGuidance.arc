@@ -9,11 +9,11 @@ component AutoFlightGuidance {
 
   feature advanced;
 
-  port <<sync>> in Coordinates pos;
-  port <<sync>> in CMD cmd;
-  port <<sync>> in Power pow;
+  port sync in Coordinates pos;
+  port sync in CMD cmd;
+  port sync in Power pow;
 
-  port <<sync>> out CMD gc;
+  port sync out CMD gc;
 
   varif (advanced) {
     FlightGuidance flightGuidance;
@@ -23,7 +23,7 @@ component AutoFlightGuidance {
     flightGuidance.fd -> autoPilot.data;
     autoPilot.cmd -> gc;
   } else {
-    <<sync>> automaton {
+    automaton {
       initial state Operational;
       state NonCriticalModeFailure;
       state CriticalModeFailure;

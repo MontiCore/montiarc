@@ -10,12 +10,12 @@ import Types.OnOff;
  */
 component Source {
 
-  port out OnOff o;
+  port sync out OnOff o;
 
   /**
    * The automaton sends messages alternating between ON and OFF.
    */
-  <<sync>> automaton {
+  automaton {
     initial state A;
     state B;
 

@@ -3,8 +3,8 @@ package expressions;
 
 component RightShift {
 
-  port <<sync>> in int d, b;
-  port <<sync>> out int r;
+  port sync in int d, b;
+  port sync out int r;
 
   compute {
     r = d >> b;

@@ -5,7 +5,7 @@ component InitialNestedState_OnLevel_2 {
 
   port out String o;
 
-  <<timed>> automaton {
+  automaton {
 
     initial state A {
       initial state AA {

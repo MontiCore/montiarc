@@ -2,10 +2,10 @@
 package montiarc.datatypes.primitive.composition;
 
 component IntForward {
-  port in int pIn,
-       out int pOut;
+  port sync in int pIn,
+       sync out int pOut;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       int intermediate = pIn;

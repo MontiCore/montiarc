@@ -8,8 +8,8 @@ import Types.OnOff;
  */
 component Forward {
 
-  port <<sync>> in OnOff i;
-  port <<sync>> out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   init {
     o = OnOff.OFF;

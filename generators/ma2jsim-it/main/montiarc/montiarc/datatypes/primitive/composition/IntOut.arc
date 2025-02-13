@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component IntOut {
-  port out int p;
+  port sync out int p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { p = 1; };
   }

@@ -6,12 +6,12 @@ import montiarc.types.OnOff;
 component OptionalDelay {
   feature delayed;
 
-  port <<sync>> in OnOff i;
+  port sync in OnOff i;
   varif (delayed) {
-    port <<delayed>> out OnOff o;
+    port <<delayed>> sync out OnOff o;
     init { o = OnOff.OFF; }
   } else {
-    port out OnOff o;
+    port sync out OnOff o;
   }
 
   compute {

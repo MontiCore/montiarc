@@ -3,9 +3,9 @@ package montiarc.sync.automata.hierarchical;
 
 component InitialNestedState_OnLevel_1 {
 
-  port out String o;
+  port sync out String o;
 
-  <<sync>> automaton {
+  automaton {
 
     initial state A {
       initial state AA;  // <- We want to check that this state is entered

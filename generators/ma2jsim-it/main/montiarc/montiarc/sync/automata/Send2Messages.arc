@@ -4,10 +4,10 @@ package montiarc.sync.automata;
 import montiarc.types.OnOff;
 
 component Send2Messages {
-  port in OnOff p;
-  port out OnOff o;
+  port sync in OnOff p;
+  port sync out OnOff o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / { o = p; o = p; };

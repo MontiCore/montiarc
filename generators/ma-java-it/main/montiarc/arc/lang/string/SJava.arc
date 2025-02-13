@@ -5,7 +5,7 @@ component SJava {
   port in String i;
   port out String o;
 
-  <<sync>> compute {
+  compute {
     if (i.isBlank()) {
       o = "isBlank";
     } else {

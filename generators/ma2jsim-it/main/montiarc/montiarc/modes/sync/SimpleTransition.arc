@@ -6,10 +6,10 @@ import montiarc.types.OnOff;
 
 component SimpleTransition {
   port
-   <<sync>> in OnOff i,
-   <<sync>> out OnOff o;
+   sync in OnOff i,
+   sync out OnOff o;
 
-  <<sync>> mode automaton {
+  mode automaton {
     initial mode Normal {
       Forwarder compNormal;
       i -> compNormal.i;

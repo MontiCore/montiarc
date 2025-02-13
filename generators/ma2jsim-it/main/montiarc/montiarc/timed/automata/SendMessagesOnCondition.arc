@@ -7,7 +7,7 @@ component SendMessagesOnCondition {
   port in OnOff p;
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     S -> S p / {

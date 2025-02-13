@@ -9,7 +9,7 @@ component IgnoresInPort {
   port in OnOff i2;
   port out OnOff o;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
     S -> S i1 / { o = i1; };
   }

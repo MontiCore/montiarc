@@ -3,6 +3,6 @@ package bumperbot;
 
 component Logger {
   port
-    <<sync>> in String message;
+    sync in String message;
 
 }

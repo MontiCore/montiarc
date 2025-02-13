@@ -111,13 +111,6 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public Optional<Timing> getTiming() {
-    return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getTiming() :
-      super.getTiming();  // Avoid infinite recursion with this case
-  }
-
-  @Override
   public List<ArcPortSymbol> getAllArcPorts() {
     return checkLazyLoadDelegate() ?
       this.lazyLoadDelegate().getAllArcPorts() :

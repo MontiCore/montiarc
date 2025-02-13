@@ -5,7 +5,7 @@ component ToString() {
   port in Object i;
   port out String o;
 
-  <<sync>> compute {
+  compute {
     o = i.toString();
   }
 }

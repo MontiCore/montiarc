@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component ByteOut {
-  port out byte p;
+  port sync out byte p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { int foo = 1; };
   }

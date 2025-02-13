@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component BooleanOut {
-  port out boolean p;
+  port sync out boolean p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { p = true; };
   }

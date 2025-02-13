@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 component GenericTypes {
-  port <<sync>> in Optional<Integer> iOpt;
-  port <<sync>> out int o;
+  port sync in Optional<Integer> iOpt;
+  port sync out int o;
 
   Optional<Integer> iBuf = Optional.empty();
   List<Integer> aList = ArrayList.ArrayList();
 
-  <<sync>> automaton {
+  automaton {
       initial state S;
 
       // emit received message

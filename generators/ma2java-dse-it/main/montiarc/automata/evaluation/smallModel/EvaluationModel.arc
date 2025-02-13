@@ -5,19 +5,19 @@ package automata.evaluation.smallModel;
  * small model for the evaluation
  */
 component EvaluationModel {
-  port in Double factor;
-  port in String module;
+  port sync in Double factor;
+  port sync in String module;
 
-  port out Double mbseCounter;
-  port out Double saCounter;
+  port sync out Double mbseCounter;
+  port sync out Double saCounter;
 
-  port in Double mbseCounted;
-  port in Double saCounted;
+  port sync in Double mbseCounted;
+  port sync in Double saCounted;
 
-  port out Double voteMBSE;
-  port out Double voteSA;
+  port sync out Double voteMBSE;
+  port sync out Double voteSA;
 
-  <<sync>> automaton{
+  automaton{
     initial state mbse;
     state sa;
     state nonModule;

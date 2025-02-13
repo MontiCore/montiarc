@@ -2,9 +2,9 @@
 package montiarc.datatypes.primitive.composition;
 
 component CharIn {
-  port in char p;
+  port sync in char p;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / { char foo = p; };
   }

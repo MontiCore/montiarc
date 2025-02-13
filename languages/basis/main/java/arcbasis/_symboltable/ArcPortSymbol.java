@@ -41,17 +41,6 @@ public class ArcPortSymbol extends ArcPortSymbolTOP {
     this.outgoing = outgoing;
   }
 
-  /**
-   * @return the timing of this port.
-   */
-  @Override
-  public @NotNull Timing getTiming() {
-    if (this.timing == null) {
-      this.timing = this.getHereditaryTiming().orElse(Timing.DEFAULT);
-    }
-    return this.timing;
-  }
-
   @Override
   public Boolean getDelayed() {
     return this.isDelayed();
@@ -67,36 +56,6 @@ public class ArcPortSymbol extends ArcPortSymbolTOP {
   @Override  // We override only add the @Nullable annotation
   public void setDelayed(@Nullable Boolean delayed) {
     this.delayed = delayed;
-  }
-
-  protected Optional<Timing> getHereditaryTiming() {
-    if (this.getComponent().isEmpty()) {
-      return Optional.empty();
-    }
-    ComponentTypeSymbol component = getComponent().get();
-    
-    if (component.isAtomic()) {
-      return component.getTiming();
-    } else if (this.isOutgoing()) {
-      return component.getAstNode()
-          .getConnectorsMatchingTarget(this.getName()).stream()
-          .map(ASTConnector::getSource)
-          .filter(ASTPortAccess::isPresentPortSymbol).map(ASTPortAccess::getPortSymbol)
-          // filter out all ports where there is no timing set and the owning component is the same as ours (which would lead to a stack overflow because of unstopped recursion)
-          .filter(source -> source.timing != null || source.getComponent().map(comp -> comp != component).orElse(true))
-          .findFirst()
-          .map(ArcPortSymbol::getTiming);
-    } else if (this.isIncoming()) {
-      return component.getAstNode().getConnectorsMatchingSource(this.getName())
-          .stream().map(ASTConnectorTOP::getTargetList).flatMap(Collection::stream)
-          .filter(ASTPortAccessTOP::isPresentComponent)
-          .filter(ASTPortAccess::isPresentPortSymbol)
-          .map(ASTPortAccess::getPortSymbol)
-          .map(ArcPortSymbol::getTiming)
-          .findFirst();
-    } else {
-      return Optional.empty();
-    }
   }
 
   protected boolean isHereditaryDelayed() {

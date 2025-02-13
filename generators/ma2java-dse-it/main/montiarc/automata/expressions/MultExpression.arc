@@ -5,10 +5,10 @@ package automata.expressions;
  * Simple atomic component, the output is the input multiplied by two
  */
 component MultExpression {
-  port in Integer in;
-  port out Integer out;
+  port sync in Integer in;
+  port sync out Integer out;
 
-  <<sync>> automaton{
+  automaton{
     initial state Idle;
 
     Idle -> Idle /{

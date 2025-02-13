@@ -13,8 +13,8 @@ package montiarc.lang;
  */
 component TSDelay<T>(T iv) {
 
-  port <<sync>> in T i;
-  port <<sync, delayed>> out T o;
+  port sync in T i;
+  port <<delayed>> sync out T o;
 
   init {
     o = iv;

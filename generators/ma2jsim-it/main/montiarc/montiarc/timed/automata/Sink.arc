@@ -7,7 +7,7 @@ component Sink {
 
   port in OnOff i;
 
-  <<timed>> automaton {
+  automaton {
     initial state Init;
     state On;
     state Off;

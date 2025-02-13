@@ -8,7 +8,7 @@ import montiarc.types.MethodProvider;
 component MethodCaller {
   port in int number;
 
-  <<timed>> automaton {
+  automaton {
     initial state A;
 
     A -> A number / {

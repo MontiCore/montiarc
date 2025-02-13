@@ -8,11 +8,11 @@ component AtomicAndComposed {
 
   feature atomic;
 
-  port in OnOff i;
-  port out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   varif (atomic) {
-    <<sync>> automaton {
+    automaton {
         initial state S;
 
         S -> S [i == OnOff.ON] / {

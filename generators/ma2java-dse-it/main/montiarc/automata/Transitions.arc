@@ -5,12 +5,12 @@ package automata;
  * Atomic component with multiple transitions
  */
 component Transitions {
-  port in Integer in;
-  port out Integer out;
+  port sync in Integer in;
+  port sync out Integer out;
 
   Integer intern = 0;
 
-  <<sync>> automaton{
+  automaton{
     initial state Idle;
     state Second;
 

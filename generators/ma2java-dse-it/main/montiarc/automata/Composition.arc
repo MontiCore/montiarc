@@ -7,8 +7,8 @@ import automata.assignments.*;
  * Simple composite component where the input of the component is transferred directly to the output.
  */
 component Composition {
-  port <<sync>> in Integer in;
-  port <<sync>> out Integer out;
+  port sync in Integer in;
+  port sync out Integer out;
 
   AssignmentName comp1;
   AssignmentName comp2;

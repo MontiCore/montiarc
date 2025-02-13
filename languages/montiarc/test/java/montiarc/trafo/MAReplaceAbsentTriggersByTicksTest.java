@@ -22,22 +22,19 @@ import java.io.IOException;
 
 class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
 
-  @ParameterizedTest
-  @ValueSource(strings = {"<<timed>>", "<<sync>>", "<<untimed>>", ""})
-  void shouldAddTickToUntriggeredTransition(@NotNull String timingStereotype) throws IOException {
-    Preconditions.checkNotNull(timingStereotype);
+  @Test
+  void shouldAddTickToUntriggeredTransition() throws IOException {
 
     // Given
-    String model = String.format(
-      "component Comp {" +
+    String model = "component Comp {" +
         "  port in int i;" +
         "  port out int o;" +
         "  " +
-        "  %s automaton {" +
+        "  automaton {" +
         "    initial state S;" +
         "    S -> S / { o = i; };" +
         "  }" +
-        "}", timingStereotype);
+        "}";
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
 
@@ -53,25 +50,21 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     Assertions.assertThat(((ASTMsgEvent) transitionBody.getSCEvent()).getName()).as("trigger").isEqualTo("Tick");
   }
 
-  @ParameterizedTest
-  @ValueSource(strings = {"<<timed>>", "<<sync>>", "<<untimed>>", ""})
-  void shouldAddTickInNestedEventTransition(@NotNull String timingStereotype) throws IOException {
-    Preconditions.checkNotNull(timingStereotype);
-
+  @Test
+  void shouldAddTickInNestedEventTransition() throws IOException {
     // Given
-    String model = String.format(
-      "component Comp {" +
+    String model = "component Comp {" +
         "  port in int i;" +
         "  port out int o;" +
         "  " +
-        "  %s automaton {" +
+        "  automaton {" +
         "    initial state S {" +
         "      initial state SI;" +
         "      SI -> SI / { o = i; };" +
         "    };" +
         "    S -> S / { o = i; };" +
         "  }" +
-        "}", timingStereotype);
+        "}";
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     MAReplaceAbsentTriggersByTicks trafo = new MAReplaceAbsentTriggersByTicks();
 
@@ -95,7 +88,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
         "  port in int i;" +
         "  port out int o;" +
         "  " +
-        "  <<timed>> automaton {" +
+        "  automaton {" +
         "    initial state S;" +
         "    S -> S i / { o = i; };" +
         "  }" +
@@ -123,7 +116,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
         "  port in int i;" +
         "  port out int o;" +
         "  " +
-        "  <<timed>> automaton {" +
+        "  automaton {" +
         "    initial state S {" +
         "      initial state SI;" +
         "      SI -> SI i / { o = i; };" +

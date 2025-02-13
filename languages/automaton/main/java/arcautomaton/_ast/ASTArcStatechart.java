@@ -82,25 +82,6 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
       .filter(s -> s.getSCModifier().isInitial());
   }
 
-  protected Timing timing;
-
-  @Override
-  public Timing getTiming() {
-    if (this.timing != null) {
-      return this.timing;
-    } else if (this.isPresentStereotype()) {
-      this.timing = this.getStereotype().streamValues()
-        .map(v -> Timing.of(v.getName()))
-        .filter(Optional::isPresent)
-        .map(Optional::get)
-        .findFirst().orElse(Timing.DEFAULT);
-      return this.timing;
-    } else {
-      this.timing = Timing.DEFAULT;
-      return this.timing;
-    }
-  }
-
   public ASTSCState findCommonSuperstate(ASTSCState state1, ASTSCState state2) {
     List<ASTSCState> path1 = getAncestors(state1);
     List<ASTSCState> path2 = getAncestors(state2);

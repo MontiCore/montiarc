@@ -7,7 +7,7 @@ import Types.OnOff;
  * Empty atomic component, the component should not produce any output.
  */
 component Empty {
-  port <<sync>> in OnOff i;
-  port <<sync>> out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
 }

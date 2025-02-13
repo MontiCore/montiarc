@@ -3,11 +3,11 @@ package variables;
 
 component VFullyQualified(Types.Direction p) {
 
-  port out Types.Direction o;
+  port sync out Types.Direction o;
 
   Types.Direction f = Types.Direction.FORWARDS;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / {

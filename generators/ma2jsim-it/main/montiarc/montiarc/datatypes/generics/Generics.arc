@@ -6,16 +6,16 @@ import montiarc.types.Student;
 import java.util.List;
 
 component Generics<T, U extends Person>(T parameter, List<U> listParameter, List<Person> boundListParameter) {
-  port in T inPort;
-  port in List<T> listInPort;
-  port in List<Person> boundListInPort;
+  port sync in T inPort;
+  port sync in List<T> listInPort;
+  port sync in List<Person> boundListInPort;
 
   T field = parameter;
   List<U> listField = listParameter;
   List<Person> boundListField = boundListParameter;
 
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
     S -> S / {
       T variable = field;

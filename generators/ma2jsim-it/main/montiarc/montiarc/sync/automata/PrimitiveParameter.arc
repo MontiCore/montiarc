@@ -5,9 +5,9 @@ import montiarc.types.OnOff;
 
 component PrimitiveParameter(int p) {
 
-  port out int o;
+  port sync out int o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S / { o = p; };

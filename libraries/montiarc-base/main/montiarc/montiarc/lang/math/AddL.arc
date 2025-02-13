@@ -2,9 +2,9 @@
 package montiarc.lang.math;
 
 component AddL {
-  port <<sync>> in long a, b,
-       <<sync>> out long r;
-  port <<sync>> out boolean of;
+  port sync in long a, b,
+       sync out long r;
+  port sync out boolean of;
 
   compute {
     long _r = a + b;

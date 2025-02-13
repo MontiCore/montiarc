@@ -5,8 +5,8 @@ import montiarc.types.OnOff;
 
 component GenericSequentialComposition {
 
-  port in OnOff i;
-  port out OnOff o;
+  port sync in OnOff i;
+  port sync out OnOff o;
 
   montiarc.sync.automata.GenericForwarder<OnOff> sub1;
   montiarc.sync.compute.GenericForwarder<montiarc.types.OnOff> sub2;

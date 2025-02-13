@@ -2,13 +2,13 @@
 package montiarc.ma2jsim.test;
 
 component EventInverter {
-  port <<timed>> in Boolean bIn;
-  port <<timed>> in Integer iIn;
+  port in Boolean bIn;
+  port in Integer iIn;
 
   port out Boolean bOut;
   port out Integer iOut;
 
-  <<timed>> automaton {
+  automaton {
     initial state S;
 
     S -> S [bIn != null] bIn / {

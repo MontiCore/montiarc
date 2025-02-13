@@ -5,10 +5,10 @@ import montiarc.types.OnOff;
 
 // Test case: a message event only conditionally leads to the execution of a transition.
 component IncompleteCondition {
-  port in int i;
-  port out OnOff o;
+  port sync in int i;
+  port sync out OnOff o;
 
-  <<sync>> automaton {
+  automaton {
     initial state S;
 
     S -> S [i > 0] / { o = OnOff.ON; };
