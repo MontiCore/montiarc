@@ -49,4 +49,7 @@ public abstract class ASTVariantComponentType extends ASTComponentType {
     this.body = VariableArcMill.componentBodyBuilder().setArcElementsList(arcElementList).build();
   }
 
+  public ASTComponentType getOriginal() {
+    return parent;
+  }
 }

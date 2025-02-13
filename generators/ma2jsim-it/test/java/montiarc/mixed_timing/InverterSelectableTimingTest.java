@@ -43,7 +43,11 @@ class InverterSelectableTimingTest {
     sut.init();
 
     for (Message<OnOff> msg : input) {
-      sut.port_i().receive(msg);
+      if (sync) {
+        sut.port_i0().receive(msg);
+      } else {
+        sut.port_i1().receive(msg);
+      }
     }
 
     sut.run();
@@ -88,42 +92,47 @@ class InverterSelectableTimingTest {
         true,
         List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk()),
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+      ),
+      Arguments.of(
+        false,
+        List.of(msg(OnOff.ON), msg(OnOff.OFF), tk(), msg(OnOff.ON), msg(OnOff.ON), tk(), msg(OnOff.ON)),
+        List.of(msg(OnOff.OFF), msg(OnOff.ON), tk(), msg(OnOff.OFF), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       )
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.ON)),
-//        List.of(msg(OnOff.OFF))
-//      ),
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.OFF)),
-//        List.of(msg(OnOff.ON))
-//      ),
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
-//        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF))
-//      ),
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
-//        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON))
-//      ),
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
-//        List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF))
-//      ),
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-//        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON))
-//      ),
-//      Arguments.of(
-//        false,
-//        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
-//        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
-//      )
-      );
+    );
   }
 }

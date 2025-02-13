@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcautomaton._symboltable.Port2EventDefAdapter;
 import arcbasis._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
@@ -96,6 +97,9 @@ public class VariableArcVariantComponentTypeSymbol extends VariantComponentTypeS
     }
     if (symbol instanceof Port2VariableAdapter) {
       symbol = ((Port2VariableAdapter) symbol).getAdaptee();
+    }
+    if (symbol instanceof Port2EventDefAdapter) {
+      symbol = ((Port2EventDefAdapter) symbol).getAdaptee();
     }
     ISymbol finalSymbol = symbol;
     return typeSymbol.variationPointsContainSymbol(includedVariationPoints, symbol) ||

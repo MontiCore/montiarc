@@ -26,6 +26,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.ArcAutomataError;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -34,6 +35,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
+import variablearc._cocos.arcautomaton.EventTriggerExists;
 import variablearc._cocos.arcbasis.ConnectorTypesFit;
 import variablearc._cocos.arcbasis.UniqueIdentifier;
 
@@ -591,6 +593,18 @@ public class VariantCoCosTest extends MontiArcTestBase {
       "sub.o -> o; " +
       "constraint (sub.ff); " +
       "}",
+    // Event trigger constraint always required
+    "component Comp58 { " +
+      "feature f;" +
+      "varif (f) {" +
+      "port in boolean i;" +
+      "}" +
+      "automaton {" +
+      "initial state A;" +
+      "A -> A i;" +
+      "}" +
+      "constraint (f);" +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -618,6 +632,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     checker.get4Variant().addCoCo(new ForEachIsValid());
     checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
     checker.get4Variant().addCoCo(new SwitchStatementValid());
+    checker.get4Variant().addCoCo(new EventTriggerExists());
 
     // When
     checker.checkAll(ast);
@@ -655,6 +670,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     checker.get4Variant().addCoCo(new ForEachIsValid());
     checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
     checker.get4Variant().addCoCo(new SwitchStatementValid());
+    checker.get4Variant().addCoCo(new EventTriggerExists());
 
     // When
     checker.checkAll(ast);
@@ -1381,7 +1397,20 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "varif (f) { } " +
           "}",
         ArcError.UNIQUE_IDENTIFIER_NAMES,
-        ArcError.UNIQUE_IDENTIFIER_NAMES)
+        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      // Automaton with missing trigger symbol in one variant
+      arg("component Comp74 { " +
+          "feature f;" +
+          "varif(f) {" +
+          "port in boolean i;" +
+          "}" +
+          "automaton {" +
+          "initial state A;" +
+          "A -> A i;" +
+          "}" +
+          "}",
+        ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL
+      )
     );
   }
 

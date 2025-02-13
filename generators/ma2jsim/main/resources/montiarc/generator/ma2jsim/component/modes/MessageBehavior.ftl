@@ -8,7 +8,7 @@
 <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
 <#assign modes = helper.getModes(modeAutomaton)>
 
-<#list helper.getTransitionsForPortEvents(modeAutomaton) as port, transitions>
+<#list helper.getTransitionsForPortEvents(ast, modeAutomaton) as port, transitions>
   <#assign portName = port.getName()>
   public void ${prefixes.message()}${portName}(<@Util.getTypeString port.getType()/> ${portName}) {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}

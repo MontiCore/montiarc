@@ -43,7 +43,7 @@ protected ${compAutomatonClass} (
   </#list>
 
   <#-- Create transition objects for message-triggered transitions. -->
-  <#list helper.getTransitionsForPortEvents(automaton) as port, transitions>
+  <#list helper.getTransitionsForPortEvents(ast, automaton) as port, transitions>
     <#assign portName = port.getName()>
     <#list transitions as transition>
     <#-- Transition objects -->
@@ -70,7 +70,7 @@ public void tick(${syncMsgType} syncedInputs) {
 <#-- Declare transition objects for message-triggered transitions.
   -- Also create methods for the triggering input ports, executing these transitions.
   -->
-<#list helper.getTransitionsForPortEvents(automaton) as port, transitions>
+<#list helper.getTransitionsForPortEvents(ast, automaton) as port, transitions>
   <#assign portName = port.getName()>
   <#list transitions as transition>
     <#-- Transition objects -->

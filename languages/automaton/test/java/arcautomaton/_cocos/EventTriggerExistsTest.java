@@ -1,8 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arcautomaton._ast;
+package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton.ArcAutomatonTestBase;
+import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._symboltable.IArcAutomatonScope;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcbasis._symboltable.ArcPortSymbol;
@@ -15,11 +16,12 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ASTMsgEventTest extends ArcAutomatonTestBase {
+public class EventTriggerExistsTest extends ArcAutomatonTestBase {
 
   @ParameterizedTest
   @MethodSource("validParams")
@@ -30,16 +32,14 @@ public class ASTMsgEventTest extends ArcAutomatonTestBase {
     //Given
     ASTMsgEvent msgEvent = ArcAutomatonMill.msgEventBuilder().setName(eventName).build();
     msgEvent.setEnclosingScope(createTestScope(portNames));
-  
-    ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
-    traverser.add4ArcAutomaton(ArcAutomatonMill.scopesGenitorP2());
+
+    EventTriggerExists coco = new EventTriggerExists();
     
     //When
-    msgEvent.accept(traverser);
+    coco.check(msgEvent);
     
     //Then
     assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
-    assertThat(msgEvent.getEventSymbol()).isNotNull();
   }
   
   @ParameterizedTest
@@ -51,12 +51,11 @@ public class ASTMsgEventTest extends ArcAutomatonTestBase {
     //Given
     ASTMsgEvent msgEvent = ArcAutomatonMill.msgEventBuilder().setName(eventName).build();
     msgEvent.setEnclosingScope(createTestScope(portNames));
-  
-    ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
-    traverser.add4ArcAutomaton(ArcAutomatonMill.scopesGenitorP2());
-  
+
+    EventTriggerExists coco = new EventTriggerExists();
+
     //When
-    msgEvent.accept(traverser);
+    coco.check(msgEvent);
   
     //Then
     assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();

@@ -18,11 +18,13 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Predicate;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
+import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
@@ -44,6 +46,7 @@ import montiarc._symboltable.MontiArcComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcFeatureDeclaration;
+import variablearc._ast.ASTVariantComponentType;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
@@ -63,7 +66,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -100,23 +102,24 @@ public class Helper {
    * Get all transitions from the given statechart that are triggered by a message stimulus.
    * Messages are grouped by triggering port event name.
    *
+   * @param enclosingComponent the component the statechart is a part of
    * @param sc the statechart from which transitions should be extracted
    * @return event-triggered transitions grouped by triggering port
    */
-  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTArcStatechart sc) {
-    return getTransitionsMappedToPortTriggers(sc.streamTransitions());
+  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTComponentType enclosingComponent, ASTArcStatechart sc) {
+    return getTransitionsMappedToPortTriggers(enclosingComponent, sc.streamTransitions());
   }
 
-  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTModeAutomaton modeAutomaton) {
-    return getTransitionsMappedToPortTriggers(getTransitions(modeAutomaton).stream());
+  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTComponentType enclosingComponent, ASTModeAutomaton modeAutomaton) {
+    return getTransitionsMappedToPortTriggers(enclosingComponent, getTransitions(modeAutomaton).stream());
   }
 
-  protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(Stream<ASTSCTransition> transitions) {
+  protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(ASTComponentType enclosingComponent, Stream<ASTSCTransition> transitions) {
     Map<PortSymbol, List<ASTSCTransition>> result = new HashMap<>();
     transitions.forEach(tr -> {
       Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
       if (body.isEmpty()) return;
-      Optional<PortSymbol> trigger = getTriggeringPortName(body.get());
+      Optional<PortSymbol> trigger = getTriggeringPortSymbol(enclosingComponent, body.get());
       if (trigger.isEmpty()) return;
       if (result.containsKey(trigger.get())) result.get(trigger.get()).add(tr);
       else {
@@ -211,19 +214,26 @@ public class Helper {
     return Optional.empty();
   }
 
-  public Optional<PortSymbol> getTriggeringPortName(ASTTransitionBody body) {
+  public Optional<PortSymbol> getTriggeringPortSymbol(ASTComponentType componentType, ASTTransitionBody body) {
+    Predicate<SCEventDefSymbol> predicate;
+    if (componentType instanceof ASTVariantComponentType) {
+      predicate = ((VariableArcVariantComponentTypeSymbol) componentType.getSymbol())::containsSymbol;
+    } else {
+      predicate = e -> true;
+    }
     return Optional.of(body)
       .filter(ASTTransitionBody::isPresentSCEvent)
       .filter(bdy -> bdy.getSCEvent() instanceof ASTMsgEvent)
       .map(bdy -> (ASTMsgEvent) bdy.getSCEvent())
       .filter(event -> !ArcAutomatonMill.TICK.equals(event.getName()))
-      .map(ASTMsgEvent::getEventSymbol)
-      .filter(sym -> sym instanceof Port2EventDefAdapter)
-      .map(sym -> ((Port2EventDefAdapter) sym).getAdaptee());
+      .map(event -> event.getEnclosingScope().resolveSCEventDefMany(event.getName(), predicate).stream().findFirst())
+      .filter(Optional::isPresent)
+      .filter(sym -> sym.get() instanceof Port2EventDefAdapter)
+      .map(sym -> ((Port2EventDefAdapter) sym.get()).getAdaptee());
   }
 
   public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTComponentType comp) {
-    List<String> triggeringPorts = getTransitionsForPortEvents(sc).keySet().stream()
+    List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
       .map(ISymbol::getName)
       .map(String::toLowerCase).collect(Collectors.toList());
     return comp.getSymbol().getAllIncomingPorts().stream()
@@ -232,7 +242,7 @@ public class Helper {
   }
 
   public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTModeAutomaton sc, ASTComponentType comp) {
-    List<String> triggeringPorts = getTransitionsForPortEvents(sc).keySet().stream()
+    List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
       .map(ISymbol::getName)
       .map(String::toLowerCase).collect(Collectors.toList());
     return comp.getSymbol().getAllIncomingPorts().stream()
@@ -529,6 +539,9 @@ public class Helper {
     if (subcomponent instanceof VariantSubcomponentSymbol) {
       subcomponent = ((VariantSubcomponentSymbol) subcomponent).getOriginal();
     }
+    if (comp instanceof ASTVariantComponentType) {
+      comp = ((ASTVariantComponentType) comp).getOriginal();
+    }
     List<SubcomponentSymbol> subs = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolveSubcomponentMany(subcomponent.getName()));
     return subs.size() <= 1 ? "" : Integer.toString(subs.indexOf(subcomponent));
   }
@@ -536,6 +549,9 @@ public class Helper {
   public String portVariantSuffix(ASTComponentType comp, PortSymbol port) {
     if (port instanceof VariantPortSymbol) {
       port = ((VariantPortSymbol) port).getOriginal();
+    }
+    if (comp instanceof ASTVariantComponentType) {
+      comp = ((ASTVariantComponentType) comp).getOriginal();
     }
     List<PortSymbol> ports = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolvePortMany(port.getName()));
     return ports.size() <= 1 ? "" : Integer.toString(ports.indexOf(port));
@@ -545,11 +561,17 @@ public class Helper {
     if (port instanceof VariantPortSymbol) {
       port = ((VariantPortSymbol) port).getOriginal();
     }
+    if (sub instanceof VariantSubcomponentSymbol) {
+      sub = ((VariantSubcomponentSymbol) sub).getOriginal();
+    }
     List<PortSymbol> ports = ISymbol.sortSymbolsByPosition(sub.getType().getTypeInfo().getSpannedScope().resolvePortMany(port.getName()));
     return ports.size() <= 1 ? "" : Integer.toString(ports.indexOf(port));
   }
 
   public String fieldVariantSuffix(ASTComponentType comp, VariableSymbol field) {
+    if (comp instanceof ASTVariantComponentType) {
+      comp = ((ASTVariantComponentType) comp).getOriginal();
+    }
     List<VariableSymbol> fields = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolveVariableMany(field.getName()));
     return fields.size() <= 1 ? "" : Integer.toString(fields.indexOf(field));
   }

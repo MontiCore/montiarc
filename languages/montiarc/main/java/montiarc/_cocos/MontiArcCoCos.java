@@ -186,6 +186,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new AnteBlocksOnlyForInitialStates());
 
     // ArcAutomaton CoCos
+    addCoCoAs(new variablearc._cocos.arcautomaton.EventTriggerExists(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
     traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
