@@ -19,5 +19,5 @@ component grammar Modes extends ArcBasis, de.monticore.SCBasis {
     "}";
 
   symbol scope ArcMode extends SCState =
-      SCModifier "mode" Name body:ComponentBody;
+      SCModifier SCSAnte "mode" Name body:ComponentBody;
 }
