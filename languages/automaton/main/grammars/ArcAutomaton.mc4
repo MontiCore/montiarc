@@ -2,6 +2,7 @@
 
 component grammar ArcAutomaton extends ArcBasis,
             de.monticore.SCTransitions4Code,
+            de.monticore.SCStateInvariants,
             de.monticore.SCStateHierarchy,
             de.monticore.SCEvents {
 

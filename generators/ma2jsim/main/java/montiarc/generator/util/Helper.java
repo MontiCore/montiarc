@@ -18,14 +18,15 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
-import com.google.common.base.Predicate;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
+import de.monticore.scstateinvariants._ast.ASTSCInvState;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
@@ -42,6 +43,7 @@ import de.monticore.types.check.SymTypePrimitive;
 import modes._ast.ASTArcMode;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc._symboltable.MontiArcComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
@@ -66,6 +68,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -665,8 +668,29 @@ public class Helper {
         return getBlockStatementOfAction(actionBody);
       }
     }
-
     return Optional.empty();
+  }
+
+  /**
+   * New function getStateInvariant that gets a state as an input
+   * and checks if an invariant is Present. If so the invariant is
+   * printed and then returned to be used in the generation of States
+   * via the States.ftl template. If no invariant is Present an empty
+   * String is returned, which is interpreted as an invariant that only
+   * consists of true in the entry-Action of each state.
+  */
+  public String getStateInvariant(ASTSCState state) {
+    if(state instanceof ASTSCInvState) {
+      ASTSCInvState invState = (ASTSCInvState) state;
+
+      IndentPrinter printer = new IndentPrinter();
+      MontiArcFullPrettyPrinter expPrinter = new MontiArcFullPrettyPrinter(printer, true);
+
+      expPrinter.prettyprint(invState.getExpression());
+
+      return printer.getContent();
+    }
+    return "";
   }
 
   public Optional<ASTMCBlockStatement> getExitAction(ASTSCState state) {
@@ -731,4 +755,5 @@ public class Helper {
       return Optional.empty();
     }
   }
+
 }

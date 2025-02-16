@@ -15,6 +15,16 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
   }
 
 <#list automaton.getStates()?reverse as state>
+  <#assign invariantOfSuperState = false>
+  <#list automaton.getStates()?reverse as superstate>
+    <#list helper.getSubstates(superstate) as substate>
+      <#if "${state.getName()}" == "${substate.getName()}">
+        <#if "${helper.getStateInvariant(superstate)}" != "">
+          <#assign invariantOfSuperState = true>
+        </#if>
+      </#if>
+    </#list>
+  </#list>
   <#assign initialSubstateList = helper.getInitialSubstates(state)>
   public montiarc.rte.automaton.State ${prefixes.state()}${state.getName()} = new montiarc.rte.automaton.StateBuilder().setName("${state.getName()}")
   <#list helper.getSubstates(state)>
@@ -41,11 +51,27 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
       </#items>
     </@executeAction>
   })
+
   </#list>
   <#if helper.getEntryAction(state).isPresent()>
-  .setEntryAction((in) -> {
+  .setEntryAction(
+    (in) -> {
     <@executeAction> ${prettyPrinter.prettyprint(helper.getEntryAction(state).get())} </@executeAction>
+    <#if "${helper.getStateInvariant(state)}" != "" || invariantOfSuperState>
+      if(!${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant()) {
+        de.se_rwth.commons.logging.Log.warn("Invariant not satisfied before entering state ${state.getName()} ");
+      }
+    </#if>
   })
+  <#else>
+    <#if "${helper.getStateInvariant(state)}" != "" || invariantOfSuperState>
+    .setEntryAction(
+      (in) -> {
+      if(!${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant()) {
+        de.se_rwth.commons.logging.Log.warn("Invariant not satisfied before entering state ${state.getName()} ");
+      }
+    })
+    </#if>
   </#if>
   <#if helper.getExitAction(state).isPresent()>
   .setExitAction((in) -> {
@@ -55,10 +81,60 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
   <#if helper.getDoAction(state).isPresent()>
   .setDoAction((in) -> {
     <@executeAction> ${prettyPrinter.prettyprint(helper.getDoAction(state).get())} </@executeAction>
+    <#if "${helper.getStateInvariant(state)}" != "" || invariantOfSuperState>
+      if(!${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant()) {
+        de.se_rwth.commons.logging.Log.warn("Invariant not satisfied after executing Do-Action of state ${state.getName()} ");
+      }
+    </#if>
   })
+  <#else>
+    <#if invariantOfSuperState>
+    .setDoAction((in) -> {
+      if(!${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant()) {
+        de.se_rwth.commons.logging.Log.warn("Invariant not satisfied after executing Do-Action");
+      }
+    })
+    </#if>
   </#if>
   .build();
 </#list>
+
+<#list automaton.getStates()?reverse as state>
+  <#if "${helper.getStateInvariant(state)}" != "">
+    public boolean ${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant() {
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+
+      return ${helper.getStateInvariant(state)}
+      <#list automaton.getStates()?reverse as superstate>
+        <#list helper.getSubstates(superstate) as substate>
+          <#if "${state.getName()}" == "${substate.getName()}">
+            && ${superstate.getName()?substring(0, 1)?lower_case + superstate.getName()?substring(1)}Invariant()
+          </#if>
+        </#list>
+      </#list>
+      ;
+    }
+  <#else>
+    <#list automaton.getStates()?reverse as superstate>
+      <#list helper.getSubstates(superstate) as substate>
+        <#if "${state.getName()}" == "${substate.getName()}">
+          <#if "${helper.getStateInvariant(superstate)}" != "">
+            public boolean ${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant() {
+              ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
+              ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
+              ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+
+              return ${superstate.getName()?substring(0, 1)?lower_case + superstate.getName()?substring(1)}Invariant();
+            }
+          </#if>
+        </#if>
+      </#list>
+    </#list>
+  </#if>
+</#list>
+
 }
 
 <#macro executeAction>
