@@ -7,19 +7,15 @@ mapping AutomataMapping {
     state == Anon ==> state == NotLoggedIn;
   }
 
-
   outputMap {
     output ==[Output.ERROR] ==> output == [Output.ERROR];
     output ==[Output.DONE] ==> output == [Output.RESPONSE];
     output == [] ==> output == [];
   }
 
-
-
   inputMap {
     input == Input.LOGOUT ==> input == Input.LOGOUT;
     input == Input.INCREASE_VALUE ==> input == Input.ACTION;
     input == Input.PASSWORD ==> input == Input.LOGIN;
   }
-
 }

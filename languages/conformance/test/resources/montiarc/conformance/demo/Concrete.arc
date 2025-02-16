@@ -18,28 +18,28 @@ component Concrete {
     initial state Anon;
     state Known;
 
-    Anon -> Known [password == "correct"];
+    Anon -> Known [password == "correct"] password;
 
-    Known -> Known [input == Input.GET_VALUE] / {
+    Known -> Known [input == Input.GET_VALUE] input / {
       value = counter;
     };
 
-    Known -> Known [input == Input.INCREASE_VALUE] / {
+    Known -> Known [input == Input.INCREASE_VALUE] input / {
       counter = counter+1 ;
       value = counter;
     };
 
-    Known -> Anon [input == Input.LOGOUT] / {counter = counter;};
+    Known -> Anon [input == Input.LOGOUT] input / {counter = counter;};
 
-    Anon -> Anon [input == Input.INCREASE_VALUE]/ {
+    Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
     };
 
-    Anon -> Anon [input == Input.GET_VALUE] /{
+    Anon -> Anon [input == Input.GET_VALUE] input / {
       output = Output.ERROR;
     };
 
     // Comment in the following line to see non-conformance:
-    // Anon -> Known [password == "wrong"];
+    // Anon -> Known [password == "wrong"] password;
   }
 }

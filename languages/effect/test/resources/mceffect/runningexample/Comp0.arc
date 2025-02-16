@@ -25,4 +25,5 @@ component Comp0 {
   comp2.out1 -> out1;
   comp2.out2 -> out2;
   comp2.out3 -> comp3.in2;
+
 }

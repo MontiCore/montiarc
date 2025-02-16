@@ -17,7 +17,9 @@ mapping AutomataMapping {
     input == Input.LOGOUT ==> input == Input.LOGOUT;
     input == Input.INCREASE_VALUE ==> input == Input.ACTION;
     password == "correct" ==> input == Input.LOGIN;
-    input != Input.INCREASE_VALUE && input != Input.GET_VALUE && password != "correct" ==> input == Input.LOGOUT;
-}
+    input != Input.INCREASE_VALUE
+      && input != Input.GET_VALUE
+      && password != "correct" ==> input == Input.LOGOUT;
+  }
 
 }

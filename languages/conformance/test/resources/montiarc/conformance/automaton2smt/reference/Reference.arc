@@ -12,18 +12,18 @@ component Reference {
     initial state LoggedIn;
     state NotLoggedIn;
 
-    <<n="0">> NotLoggedIn -> LoggedIn [input == Input.LOGIN];
+    <<n="0">> NotLoggedIn -> LoggedIn [input == Input.LOGIN] input;
 
-    <<n="1">> LoggedIn -> LoggedIn [input == Input.ACTION] / {
+    <<n="1">> LoggedIn -> LoggedIn [input == Input.ACTION] input / {
       output = Output.RESPONSE;
     };
 
-    <<n="2">> LoggedIn -> NotLoggedIn [input == Input.LOGOUT];
+    <<n="2">> LoggedIn -> NotLoggedIn [input == Input.LOGOUT] input;
 
-    <<n="3">> NotLoggedIn -> NotLoggedIn [input == Input.ACTION] / {
+    <<n="3">> NotLoggedIn -> NotLoggedIn [input == Input.ACTION] input / {
       output = Output.ERROR;
     };
 
-    <<n="4">> NotLoggedIn -> NotLoggedIn [input == Input.LOGOUT];
+    <<n="4">> NotLoggedIn -> NotLoggedIn [input == Input.LOGOUT] input;
   }
 }

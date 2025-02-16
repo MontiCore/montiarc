@@ -8,11 +8,11 @@ component B {
     out boolean o1,
     out boolean o2;
 
-    automaton {
-      initial state Anon;
-      state Known;
+  automaton {
+    initial state Anon;
+    state Known;
 
-      Anon -> Anon [i1 == true]/{o1 = true;};
-      Anon -> Anon [i1 == false]/{o1 = false;};
-    }
+    Anon -> Anon [i1 == true] i1 / { o1 = true; };
+    Anon -> Anon [i1 == false] i1 / { o1 = false; };
+  }
 }

@@ -2,8 +2,8 @@
 package arc.lang.string;
 
 component SJava {
-  port in String i;
-  port out String o;
+  port sync in String i;
+  port sync out String o;
 
   compute {
     if (i.isBlank()) {

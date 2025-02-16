@@ -2,8 +2,8 @@
 package arc.lang.string;
 
 component SExpr {
-  port in String i;
-  port out String o;
+  port sync in String i;
+  port sync out String o;
 
   String v1 = "";
   java.lang.String v2 = "";

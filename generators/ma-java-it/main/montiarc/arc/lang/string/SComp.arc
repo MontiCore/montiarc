@@ -2,12 +2,12 @@
 package arc.lang.string;
 
 component SComp(String s) {
-  port in String i;
-  port out String o;
+  port sync in String i;
+  port sync out String o;
 
   component SInner(String p) {
-    port in String i;
-    port out String o;
+    port sync in String i;
+    port sync out String o;
   }
 
   SInner sub1(s);

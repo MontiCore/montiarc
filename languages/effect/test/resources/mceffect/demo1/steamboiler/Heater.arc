@@ -8,5 +8,4 @@ component Heater {
   port in double heat,
         in double waterIn,
         out double waterOut;
-
 }

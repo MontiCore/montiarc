@@ -12,15 +12,15 @@ port out Output output;
     initial state LoggedIn;
     state NotLoggedIn;
 
-    NotLoggedIn -> LoggedIn [input == Input.LOGIN];
+    NotLoggedIn -> LoggedIn [input == Input.LOGIN] input;
 
-    LoggedIn -> LoggedIn [input == Input.ACTION] / {
+    LoggedIn -> LoggedIn [input == Input.ACTION] input / {
       output = Output.RESPONSE;
     };
 
-    LoggedIn -> NotLoggedIn [input == Input.LOGOUT];
+    LoggedIn -> NotLoggedIn [input == Input.LOGOUT] input;
 
-    NotLoggedIn -> NotLoggedIn [input == Input.ACTION] / {
+    NotLoggedIn -> NotLoggedIn [input == Input.ACTION] input / {
       output = Output.ERROR;
     };
   }

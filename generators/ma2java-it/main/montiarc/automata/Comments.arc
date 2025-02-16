@@ -51,6 +51,7 @@ Comments // line comment after component name
     S // line comment after source state
     -> // line comment after arrow keyword
     S // line comment after target state
+    i // line comment after trigger
     / // line comment after action delimiter keyword
     { // line comment after transition action opening bracket
     // line comment before expression statement

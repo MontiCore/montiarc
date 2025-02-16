@@ -7,4 +7,5 @@ component A {
     in boolean i2,
     out boolean o1,
     out boolean o2;
+
 }

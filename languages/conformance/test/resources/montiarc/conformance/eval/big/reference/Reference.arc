@@ -13,26 +13,24 @@ component Reference {
     initial state LoggedIn;
             state LoggedOut;
 
-    LoggedOut -> LoggedIn [input == Input.LOGIN] ;
-    LoggedIn -> LoggedOut [input == Input.LOGOUT] ;
+    LoggedOut -> LoggedIn [input == Input.LOGIN] input;
+    LoggedIn -> LoggedOut [input == Input.LOGOUT] input;
 
-    LoggedIn -> LoggedIn [input == Input.POST_LOGIN_ACTION] / {
+    LoggedIn -> LoggedIn [input == Input.POST_LOGIN_ACTION] input/ {
       output = Output.RESPONSE;
     };
 
-    LoggedIn -> LoggedIn [input == Input.PRE_LOGIN_ACTION] / {
+    LoggedIn -> LoggedIn [input == Input.PRE_LOGIN_ACTION] input/ {
       output = Output.ERROR;
     };
 
 
-    LoggedOut -> LoggedOut [input == Input.PRE_LOGIN_ACTION] / {
+    LoggedOut -> LoggedOut [input == Input.PRE_LOGIN_ACTION] input/ {
       output = Output.RESPONSE ;
     };
 
-    LoggedOut -> LoggedOut [input == Input.POST_LOGIN_ACTION] / {
+    LoggedOut -> LoggedOut [input == Input.POST_LOGIN_ACTION] input/ {
       output = Output.ERROR ;
     };
-
-
- }
+  }
 }

@@ -10,8 +10,9 @@ component CoCos {
     initial state Anon;
 
     <<n="0">> Anon -> Anon [counter == 0] / {
-    counter = 10;
-    counter = 11;
-    counter++;};
+      counter = 10;
+      counter = 11;
+      counter++;
+    };
   }
 }

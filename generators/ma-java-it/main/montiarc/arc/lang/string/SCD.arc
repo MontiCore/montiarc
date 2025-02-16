@@ -5,9 +5,9 @@ import arc.lang.Strings.SF;
 import arc.lang.Strings.SFs;
 
 component SCD {
-  port in SF sf, in SFs sfs;
+  port sync in SF sf, sync in SFs sfs;
 
-  port out String o1, o2, o3;
+  port sync out String o1, o2, o3;
 
   SF vsf = SF.SF("");
   SFs vsfs = SFs.SFs("", "");

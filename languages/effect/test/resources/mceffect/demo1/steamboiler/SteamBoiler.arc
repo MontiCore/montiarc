@@ -11,11 +11,9 @@ component SteamBoiler {
   port out double waterOut,
        out boolean status;
 
-
   WaterTank tank;
   Heater heater;
   Controller controller;
-
 
   waterIn -> tank.waterIn;
   tank.waterOut -> heater.waterIn;
@@ -24,5 +22,4 @@ component SteamBoiler {
 
   controller.signal -> tank.valveStatus;
   tank.waterLevel -> controller.waterLevel;
-
 }

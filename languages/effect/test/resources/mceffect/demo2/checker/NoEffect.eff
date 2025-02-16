@@ -15,5 +15,3 @@ B {
   check potential effect: i1 => o1;
   check potential effect: i2 => o2;
 }
-
-

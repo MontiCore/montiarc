@@ -33,6 +33,7 @@ import static montiarc.conformance.util.AutomataLoader.loadModels;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public class EffectTest {
+
   @BeforeEach
   public void setup() {
     Log.init();

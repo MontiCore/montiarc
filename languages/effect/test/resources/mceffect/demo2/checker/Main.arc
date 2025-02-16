@@ -20,5 +20,4 @@ component Main {
   b.o1 -> o1;
   b.o2 -> o2;
 
-
 }

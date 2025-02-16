@@ -10,26 +10,25 @@ component Concrete {
 
   int counter = 0;
 
-
   automaton {
 
     initial {} state Anon;
     state Known;
 
-    Anon -> Known [input == Input.PASSWORD];
+    Anon -> Known [input == Input.PASSWORD] input;
 
-    Known -> Known [input == Input.INCREASE_VALUE] / {
+    Known -> Known [input == Input.INCREASE_VALUE] input / {
       counter = counter + 1 ;
       output = Output.DONE;
     };
 
-    Known -> Anon [input == Input.LOGOUT];
+    Known -> Anon [input == Input.LOGOUT] input;
 
-    Anon -> Anon [input == Input.INCREASE_VALUE]/ {
+    Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
     };
 
-    Anon -> Anon [input == Input.INCREASE_VALUE]/ {
+    Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
     };
   }

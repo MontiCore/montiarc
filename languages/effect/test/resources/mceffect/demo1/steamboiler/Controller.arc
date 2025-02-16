@@ -8,7 +8,7 @@ component Controller {
 
   automaton {
     initial state Anon;
-    Anon -> Anon [waterLevel == 0 ]/{signal = false;};
-    Anon -> Anon [waterLevel != 0 ]/{signal = true;};
+    Anon -> Anon [waterLevel == 0 ] waterLevel / { signal = false; };
+    Anon -> Anon [waterLevel != 0 ] waterLevel / { signal = true; };
   }
 }

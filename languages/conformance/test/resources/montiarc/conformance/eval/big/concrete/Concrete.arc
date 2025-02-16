@@ -23,87 +23,87 @@ component Concrete {
             state CheckingOut;
             state OnProduct;
 
-    Start -> Connecting [input == Input.CONNECT_BTN] / {
+    Start -> Connecting [input == Input.CONNECT_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    Start -> Registering [input == Input.REGISTER_BTN] / {
+    Start -> Registering [input == Input.REGISTER_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    Registering -> Connecting [input == Input.REGISTER_BTN] / {
+    Registering -> Connecting [input == Input.REGISTER_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    Connecting -> OnDashboard [input == Input.LOG_IN_BTN];
+    Connecting -> OnDashboard [input == Input.LOG_IN_BTN] input;
 
-    OnDashboard -> OnProfile [input == Input.VIEW_PROFILE_BTN] / {
+    OnDashboard -> OnProfile [input == Input.VIEW_PROFILE_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnDashboard -> Searching [input == Input.SEARCH_BTN] / {
+    OnDashboard -> Searching [input == Input.SEARCH_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnDashboard -> InCart [input == Input.CART_BTN] / {
+    OnDashboard -> InCart [input == Input.CART_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnDashboard -> Start [input == Input.LOG_OUT_BTN];
+    OnDashboard -> Start [input == Input.LOG_OUT_BTN] input;
 
-    OnProfile -> OnDashboard [input == Input.DASHBOARD_BTN] / {
+    OnProfile -> OnDashboard [input == Input.DASHBOARD_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnProfile -> OnProfile [input == Input.EDIT_PROFILE_BTN] / {
+    OnProfile -> OnProfile [input == Input.EDIT_PROFILE_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnProfile -> Start [input == Input.LOG_OUT_BTN];
+    OnProfile -> Start [input == Input.LOG_OUT_BTN] input;
 
-    Searching -> Searching [input == Input.ENTER_TEXT_BTN] / {
+    Searching -> Searching [input == Input.ENTER_TEXT_BTN] input / {
       output = Output.ACTION_DONE;
     };
-    Searching -> OnSearchResult [input == Input.SEARCH_BTN] / {
-      output = Output.ACTION_DONE;
-    };
-
-    Searching -> Start [input == Input.LOG_OUT_BTN];
-
-    OnSearchResult -> OnProduct [input == Input.CHOOSE_PRODUCT_BTN] / {
+    Searching -> OnSearchResult [input == Input.SEARCH_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnSearchResult -> Start [input == Input.LOG_OUT_BTN];
+    Searching -> Start [input == Input.LOG_OUT_BTN] input;
 
-    OnProduct -> InCart [input == Input.ADD_TO_CART_BTN];//not conforming
-
-    OnProduct -> OnDashboard [input == Input.DASHBOARD_BTN] / {
+    OnSearchResult -> OnProduct [input == Input.CHOOSE_PRODUCT_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    OnProduct -> Start [input == Input.LOG_OUT_BTN] ;
+    OnSearchResult -> Start [input == Input.LOG_OUT_BTN] input;
 
-    InCart -> CheckingOut [input == Input.CHECKOUT_BTN] / {
+    OnProduct -> InCart [input == Input.ADD_TO_CART_BTN] input;//not conforming
+
+    OnProduct -> OnDashboard [input == Input.DASHBOARD_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    InCart -> OnDashboard [input == Input.CONTINUE_BTN] / {
+    OnProduct -> Start [input == Input.LOG_OUT_BTN] input;
+
+    InCart -> CheckingOut [input == Input.CHECKOUT_BTN] input/ {
       output = Output.ACTION_DONE;
     };
 
-    InCart -> Start [input == Input.LOG_OUT_BTN];
-
-    CheckingOut -> Confirming [input == Input.CONFIRMATION_BTN] / {
+    InCart -> OnDashboard [input == Input.CONTINUE_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    CheckingOut -> Start [input == Input.LOG_OUT_BTN];
+    InCart -> Start [input == Input.LOG_OUT_BTN] input;
 
-    Confirming -> OnDashboard [input == Input.CONTINUE_BTN] / {
+    CheckingOut -> Confirming [input == Input.CONFIRMATION_BTN] input / {
       output = Output.ACTION_DONE;
     };
 
-    Confirming -> Start [input == Input.LOG_OUT_BTN];
+    CheckingOut -> Start [input == Input.LOG_OUT_BTN] input;
+
+    Confirming -> OnDashboard [input == Input.CONTINUE_BTN] input / {
+      output = Output.ACTION_DONE;
+    };
+
+    Confirming -> Start [input == Input.LOG_OUT_BTN] input;
   }
 }

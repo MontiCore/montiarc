@@ -7,8 +7,8 @@ component Effect {
   port out int output;
 
   automaton {
-    initial {} state S;
-    S -> S / {output = input;};
-    S -> S [input==1337] / {output = 4000;};
+    initial state S;
+    S -> S input / { output = input; };
+    S -> S [input==1337] input / { output = 4000; };
   }
 }

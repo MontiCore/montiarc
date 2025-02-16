@@ -45,10 +45,9 @@
 
 
 ;map output
-(assert   (=> (= output  (seq.unit ERROR_con))    (= (map_output output ) (seq.unit ERROR_ref))))
-(assert   (=> (= output  (seq.unit ACTION_DONE_con))    (= (map_output output ) (seq.unit RESPONSE_ref))))
-(assert   (=> (= output  (as seq.empty (Seq Output_con)))    (= (map_output output ) (as seq.empty (Seq Output_ref)))))
-
-
-
-
+(assert   (=> (= output  (seq.unit ERROR_con))
+              (= (map_output output ) (seq.unit ERROR_ref))))
+(assert   (=> (= output  (seq.unit ACTION_DONE_con))
+              (= (map_output output ) (seq.unit RESPONSE_ref))))
+(assert   (=> (= output  (as seq.empty (Seq Output_con)))
+              (= (map_output output ) (as seq.empty (Seq Output_ref)))))

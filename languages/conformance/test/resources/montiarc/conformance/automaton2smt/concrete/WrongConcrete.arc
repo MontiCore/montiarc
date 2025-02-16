@@ -17,31 +17,40 @@ component WrongConcrete {
     initial {} state Anon;
     state Known;
 
-    <<n="0">> Anon -> Known [password == "correct"] / {counter = counter;};
+    <<n="0">> Anon -> Known [password == "correct"] password / {
+      counter = counter;
+    };
 
-    <<n="1">> Known -> Known [input == Input.GET_VALUE] / {
+    <<n="1">> Known -> Known [input == Input.GET_VALUE] input / {
       value = counter;
       counter = counter;
     };
 
-    <<n="2">> Known -> Known [input == Input.INCREASE_VALUE] / {
+    <<n="2">> Known -> Known [input == Input.INCREASE_VALUE] input / {
       counter = counter +1;
       value = counter;
     };
 
-    <<n="3">> Known -> Anon [input == Input.LOGOUT] / {counter = counter;};
-    <<n="4">> Anon -> Anon [input == Input.LOGOUT] / {counter = counter;};
+    <<n="3">> Known -> Anon [input == Input.LOGOUT] input / {
+      counter = counter;
+    };
 
-    <<n ="5">> Anon -> Anon [input == Input.INCREASE_VALUE] / {
+    <<n="4">> Anon -> Anon [input == Input.LOGOUT] input / {
+      counter = counter;
+    };
+
+    <<n ="5">> Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
       counter = counter;
     };
 
-    <<n="6">> Anon -> Anon [input == Input.GET_VALUE] / {
+    <<n="6">> Anon -> Anon [input == Input.GET_VALUE] input / {
       output = Output.ERROR;
       counter = counter;
     };
 
-    Anon -> Known [password == "wrong"] / {counter = counter;};
+    Anon -> Known [password == "wrong"] password / {
+      counter = counter;
+    };
   }
 }
