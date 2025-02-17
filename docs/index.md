@@ -16,8 +16,8 @@ MontiArc is an architectural definition language for component and connector mod
 hierarchical decomposition, behavior description, and variability.
 
 Architectures are described as [component](./Component.md) and connector systems in which autonomously acting components 
-perform computations. Communication between components is regulated by connectors between the components’ [interfaces](./component/Interfaces.md), which are stable and built up by typed, directed ports. Components are either atomic or composed
-of connected subcomponents. Atomic components yield [behavior descriptions](./Behavior.md). For [composed components](./component/Decomposition.md), the behavior emerges from the behavior of their subcomponents. 
+perform computations. Communication between components is regulated by connectors between the components’ [interfaces](./Component/Interfaces.md), which are stable and built up by typed, directed ports. Components are either atomic or composed
+of connected subcomponents. Atomic components yield [behavior descriptions](./Behavior.md). For [composed components](./Component/Decomposition.md), the behavior emerges from the behavior of their subcomponents. 
 
 
 ## Further Information
