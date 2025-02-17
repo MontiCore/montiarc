@@ -1,3 +1,7 @@
+---
+hide:
+  - navigation
+---
 <!-- (c) https://github.com/MontiCore/monticore -->
 
 MontiArc is a textual architecture description language. A MontiArc component 
@@ -6,7 +10,7 @@ components.
 
 ## Component type
 
-A component type describes a set of components with common characteristics and 
+A component type describes a set of [components](./Component.md) with common characteristics and 
 defines their interface, structure, and behavior. A component type definition 
 looks like
 
@@ -114,7 +118,7 @@ and can be defined in a classdiagram.
 
 For our example, we define the following data types.
 
-```cd4code
+```classdiagram
 package car.ui;
 
 classdiagram window {

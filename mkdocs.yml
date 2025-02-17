@@ -3,21 +3,31 @@ theme:
   name: 'material'
   favicon: 'docs/img/favicon.png'
   custom_dir: docs/overrides
-  hide:
-    - navigation
   features:
     - navigation.tabs
-    - toc.integrate
     - toc.follow
     - content.tabs.link
-  icon:
-    logo: 'fontawesome/solid/desktop'
+    - social
+  logo: img/icon.png
+  favicon: img/icon.png
 
 site_url: https://monticore.github.io/montiarc/
 repo_url: https://github.com/MontiCore/montiarc/
 edit_uri: ""
 
 copyright: '(c) https://github.com/MontiCore/monticore'
+
+extra:
+  version:
+    provider: mike
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/MontiCore/montiarc
+    - icon: fontawesome/solid/paper-plane
+      link: mailto:webmaster@se-rwth.de
+
+extra_css:
+  - stylesheets/extra.css
 
 markdown_extensions:
   - def_list
@@ -63,4 +73,4 @@ nav:
       - Java Integration: 'typesystem/JavaIntegration.md'
       - Primitives: 'typesystem/Primitives.md'
       - Collections: 'typesystem/Collections.md'
-  - License: http://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/
+  - License: https://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/

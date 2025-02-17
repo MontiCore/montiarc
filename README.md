@@ -1,4 +1,10 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
+<h1 align="center">
+  <picture>
+    <img width="300" src="./docs/img/Logo.jpg" alt="MontiArc">
+  </picture>
+</h1>
+
 # The MontiArc Architecture Description Language
 
 In MontiArc, architectures are described as component and connector systems in which autonomously acting components 
