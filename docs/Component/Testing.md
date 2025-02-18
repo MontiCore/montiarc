@@ -1,30 +1,30 @@
 # Writing Automated Tests
 
-An important approach to ensuring system quality is systematic testing. 
+An important approach to ensuring system quality is systematic testing.
 Testing is the act of detecting failures in a product.
-A failure is a divergence between the expected and actual behavior of software. 
+A failure is a divergence between the expected and actual behavior of software.
 MontiArc includes support for writing automated tests.
-These can be run whenever changes are made to ensure that the systems behaves 
+These can be run whenever changes are made to ensure that the systems behaves
 as specified.
 
 ## How to Write Tests
 
 In MontiArc, tests are components that verify the behavior of other components.
-This is achieved by making assertions over the input and output streams of the 
-system to be tested, also called system under test (SUT).  
+This is achieved by making assertions over the input and output streams of the
+system to be tested, also called system under test (SUT).
 
-A test component is usually [decomposed](./Decomposition.md) and consists of 
-three major parts, namely the test fixture, the SUT, and the test oracle. 
+A test component is usually [decomposed](./Decomposition.md) and consists of
+three major parts, namely the test fixture, the SUT, and the test oracle.
 The test fixture (also called the test context) provides inputs to the SUT.
-The SUT produces outputs based on the provided inputs, which are then evaluated 
+The SUT produces outputs based on the provided inputs, which are then evaluated
 and compared against the expected results by a test oracle.
 
 ### Test Anatomy
 
-A test in MontiArc is identified by the `<<test>>` stereotype in front of the 
+A test in MontiArc is identified by the `<<test>>` stereotype in front of the
 component definition. Take a look at the following example:
 
-```
+```montiarc
 <<test>>
 component AndTest {
   And sut;
@@ -39,29 +39,30 @@ component AndTest {
 }
 ```
 
-The component `sut` implements the logic of a binary AND gate and is the SUT. 
-The `emitterA` and `emitterB` are the test fixture, they provide input to the 
-SUT. Here they emit a single message with value `true`, wich is configured via 
-their argument. 
+The component `sut` implements the logic of a binary AND gate and is the SUT.
+The `emitterA` and `emitterB` are the test fixture, they provide input to the
+SUT. Here they emit a single message with value `true`, wich is configured via
+their argument.
 The `assertEquals` component then checks the output against the expected output.
-The example makes use of two library components called `Emit` and `AssertEquals`,
-which are responsible for the setup and assertions respectively. 
+The example makes use of two library components called `Emit` and
+`AssertEquals`,
+which are responsible for the setup and assertions respectively.
 
 ### Parameterized Tests
 
-MontiArc allows the definition of parameterized tests. 
-This is useful when wanting to define multiple tests while keeping the overall 
+MontiArc allows the definition of parameterized tests.
+This is useful when wanting to define multiple tests while keeping the overall
 architecture the same.
-A test component can have [parameters](./Parameter.md) for which different values can be 
-provided, each of which results in an individual test execution.
-The values are provided as a list assigned to a stereo value with the same name 
-as the parameter. 
+A test component can have [parameters](./Parameter.md) for which different
+values can be provided, each of which results in an individual test execution.
+The values are provided as a list assigned to a stereo value with the same name
+as the parameter.
 
-The following example shows a parameterized test component, which creates `N` 
-different test cases. For convenience, if a parameter stays the same over all 
+The following example shows a parameterized test component, which creates `N`
+different test cases. For convenience, if a parameter stays the same over all
 tests than the list can be omitted and a direct value can be assigned.
 
-```
+```montiarc
 <<test, p1=[val1, val2, ..., valN], p2=valP2>>
 component AndTest(T p1, T p2) { }
 ```
@@ -75,97 +76,101 @@ component AndTest(T p1, T p2) { }
 
 ### Complex Tests
 
-More complex tests can be defined by using other library components that 
+More complex tests can be defined by using other library components that
 produce or assert streams of messages.
-The execution length of the test can be set with the `ticks` stereotype, which 
+The execution length of the test can be set with the `ticks` stereotype, which
 defines the number of ticks that the test should run for.
 
 The following test description targets an implementation of the binary AND gate.
 The test is parameterized by the input and output streams of the SUT.
 
+[//]: # ( @formatter:off)
+
 === "Timed"
-```
-import java.util.List;
-import montiarc.maunit.api.AssertEqualsTimed;
-import montiarc.maunit.api.EmitTimed;
+    ```montiarc
+    import java.util.List;
+    import montiarc.maunit.api.AssertEqualsTimed;
+    import montiarc.maunit.api.EmitTimed;
 
-<<test,
-  ticks=3,
-  a=[
-    [[false, false], [true], [true]],
-    [[false, false], [false], [false, true]]
-  ],
-  b=[
-    [[false, true], [false], [true]],
-    [[false, true], [false], [true, true]]
-  ],
-  expected=[
-    [[false], [false], [true]],
-    [[false], [false], [true]]
-  ]>>
-  component AndTest(List<List<Boolean>> a, 
-                    List<List<Boolean>> b, 
-                    List<List<Boolean>> expected) {
-  
-  And sut;
+    <<test,
+      ticks=3,
+      a=[
+        [[false, false], [true], [true]],
+        [[false, false], [false], [false, true]]
+      ],
+      b=[
+        [[false, true], [false], [true]],
+        [[false, true], [false], [true, true]]
+      ],
+      expected=[
+        [[false], [false], [true]],
+        [[false], [false], [true]]
+      ]>>
+      component AndTest(List<List<Boolean>> a, 
+                        List<List<Boolean>> b, 
+                        List<List<Boolean>> expected) {
+      
+        And sut;
 
-  emitterA.out -> sut.a;
-  emitterB.out -> sut.b;
-  sut.q -> assertEquals.actual;
+        emitterA.out -> sut.a;
+        emitterB.out -> sut.b;
+        sut.q -> assertEquals.actual;
 
-  AssertEqualsTimed<Boolean> assertEquals(expected);
-  EmitTimed<Boolean> emitterA(a);
-  EmitTimed<Boolean> emitterB(b);
-}
-```
+        AssertEqualsTimed<Boolean> assertEquals(expected);
+        EmitTimed<Boolean> emitterA(a);
+        EmitTimed<Boolean> emitterB(b);
+      }
+    ```
 
 === "Sync"
-```
-import java.util.List;
-import montiarc.maunit.api.AssertEqualsSync;
-import montiarc.maunit.api.EmitSync;
+    ```montiarc
+    import java.util.List;
+    import montiarc.maunit.api.AssertEqualsSync;
+    import montiarc.maunit.api.EmitSync;
 
-<<test,
-  ticks=[4, 5],
-  a=[
-    [false, false, true, true],
-    [false, false, false, false, true]
-  ],
-  b=[
-    [false, true, false, true],
-    [false, true, false, true, true]
-  ],
-  expected=[
-    [false, false, false, true],
-    [false, false, false, false, true]
-  ]>>
-  component AndTest(List<Boolean> a, 
-                    List<Boolean> b, 
-                    List<Boolean> expected) {
-    And sut;
+    <<test,
+      ticks=[4, 5],
+      a=[
+        [false, false, true, true],
+        [false, false, false, false, true]
+      ],
+      b=[
+        [false, true, false, true],
+        [false, true, false, true, true]
+      ],
+      expected=[
+        [false, false, false, true],
+        [false, false, false, false, true]
+      ]>>
+      component AndTest(List<Boolean> a, 
+                        List<Boolean> b, 
+                        List<Boolean> expected) {
+        And sut;
 
-    emitterA.out -> sut.a;
-    emitterB.out -> sut.b;
-    sut.q -> assertEquals.actual;
+        emitterA.out -> sut.a;
+        emitterB.out -> sut.b;
+        sut.q -> assertEquals.actual;
 
-    AssertEqualsSync<Boolean> assertEquals(expected);
-    EmitSync<Boolean> emitterA(a);
-    EmitSync<Boolean> emitterB(b);
-  }
-```
+        AssertEqualsSync<Boolean> assertEquals(expected);
+        EmitSync<Boolean> emitterA(a);
+        EmitSync<Boolean> emitterB(b);
+      }
+    ```
 
 Resulting in the following test cases:
 === "Timed"
-| Test index | #Ticks | Input `a`                                              | Input `b`                                            | Expected output `q`                      |
-|------------|--------|--------------------------------------------------------|------------------------------------------------------|------------------------------------------|
-| 0          | 3      | `〈false, false, Tick, true, Tick, true, Tick〉`         | `〈false, true, Tick, false, Tick, true, Tick〉`       | `〈false, Tick, false, Tick, true, Tick〉` |
-| 1          | 3      | `〈false, false, Tick, false, Tick, false, true, Tick〉` | `〈false, true, Tick, false, Tick, true, true, Tick〉` | `〈false, Tick, false, Tick, true, Tick〉` |
+    | Test index | #Ticks | Input `a`                                              | Input `b`                                            | Expected output `q`                      |
+    |------------|--------|--------------------------------------------------------|------------------------------------------------------|------------------------------------------|
+    | 0          | 3      | `〈false, false, Tick, true, Tick, true, Tick〉`         | `〈false, true, Tick, false, Tick, true, Tick〉`       | `〈false, Tick, false, Tick, true, Tick〉` |
+    | 1          | 3      | `〈false, false, Tick, false, Tick, false, true, Tick〉` | `〈false, true, Tick, false, Tick, true, true, Tick〉` | `〈false, Tick, false, Tick, true, Tick〉` |
 
 === "Sync"
-| Test index | #Ticks | Input `a`                                                          | Input `b`                                                        | Expected output `q`                                                |
-|------------|--------|--------------------------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------|
-| 0          | 4      | `〈false, Tick, false, Tick, true, Tick, true, Tick〉`               | `〈false, Tick, true, Tick, false, Tick, true, Tick〉`             | `〈false, Tick, false, Tick, false, Tick, true, Tick〉`              |
-| 1          | 5      | `〈false, Tick, false, Tick, false, Tick, false, Tick, true, Tick〉` | `〈false, Tick, true, Tick, false, Tick, true, Tick, true, Tick〉` | `〈false, Tick, false, Tick, false, Tick, false, Tick, true, Tick〉` |
+    | Test index | #Ticks | Input `a`                                                          | Input `b`                                                        | Expected output `q`                                                |
+    |------------|--------|--------------------------------------------------------------------|------------------------------------------------------------------|--------------------------------------------------------------------|
+    | 0          | 4      | `〈false, Tick, false, Tick, true, Tick, true, Tick〉`               | `〈false, Tick, true, Tick, false, Tick, true, Tick〉`             | `〈false, Tick, false, Tick, false, Tick, true, Tick〉`              |
+    | 1          | 5      | `〈false, Tick, false, Tick, false, Tick, false, Tick, true, Tick〉` | `〈false, Tick, true, Tick, false, Tick, true, Tick, true, Tick〉` | `〈false, Tick, false, Tick, false, Tick, false, Tick, true, Tick〉` |
+
+[//]: # ( @formatter:on)
 
 ### Library Components
 

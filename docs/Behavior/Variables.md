@@ -11,7 +11,7 @@ The declaration of a component variable specifies the variable's type, states
 its name, and assigns its initial value. A component-variable declaration looks 
 like 
 
-```
+```montiarc
 TYPE NAME = INITIAL; 
 ```
 
@@ -25,7 +25,7 @@ where
 
 For example,
 
-```
+```montiarc
 component SumUp {
   port in int i;
   port in Signal r;

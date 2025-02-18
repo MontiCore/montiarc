@@ -9,7 +9,7 @@ of automata.
 
 Given the following types 
 
-```
+```classdiagram
   public class Person {
     public int age;
     public String name;
@@ -24,7 +24,7 @@ Given the following types
 
 and imports of these types 
 
-```
+```montiarc
 import montiarc.types.Person;
 import montiarc.types.Role;
 ```
@@ -33,7 +33,7 @@ the following are valid expressions
 
 ## Object creation 
 
-```
+```java
 Person p = Person.Person();
 ```
 

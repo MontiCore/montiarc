@@ -7,61 +7,60 @@ Moreover, it distributes cd2pojo models as jars with `.cdsym` files.
 ## Apply it:
 Within gradle's settings script, you need to declare:
 
-With Groovy:
-```kotlin
-// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to make it available to our build process.
-pluginManagement {
-  repositories {
-    maven {
-      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+=== "Kotlin"
+    ```kotlin
+    // The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to make it available to our build process.
+    pluginManagement {
+      repositories {
+        maven {
+          url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+        }
+      }
     }
-  }
-}
-```
-
-With Groovy:
-```groovy
-// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to make it available to our build process.
-pluginManagement {
-  repositories {
-    maven {
-      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+    ```
+=== "Groovy"
+    ```groovy
+    // The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to make it available to our build process.
+    pluginManagement {
+      repositories {
+        maven {
+          url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+        }
+      }
     }
-  }
-}
-```
+    ```
 
 Then, within the build script, you need to declare:
 
-With Kotlin:
-```kotlin
-plugins {
-  id("cd2pojo") version "VERSION_YOU_WANT_TO_USE"
-}
+=== "Kotlin"
+    ```kotlin
+    plugins {
+      id("cd2pojo") version "VERSION_YOU_WANT_TO_USE"
+    }
 
-// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen
-repositories {
-  maven {
-    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-  }
-}
-```
+    // The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen
+    repositories {
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+    ```
 
-With Groovy:
-```groovy
-plugins {
-  id "cd2pojo" version "VERSION_YOU_WANT_TO_USE"
-}
+=== "Groovy"
+    ```groovy
+    plugins {
+      id "cd2pojo" version "VERSION_YOU_WANT_TO_USE"
+    }
 
-// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen
-repositories {
-  maven {
-    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-  }
-}
-```
+    // The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen
+    repositories {
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+    ```
 
 ---
 ## Configure it:
@@ -71,64 +70,63 @@ The name of that task is `compileSRC_SET_NAMECd2pojo`, omitting the name of the 
 Note that Java source files that the cd2pojo generator produces are automatically added to the Java source of the same source set.
 Therefor, the generated source code will automatically be compiled by `compileJava` (or `compileTestJava`, etc.).
 
-With Kotlin:
-```kotlin
-// Kotlin:
-sourceSets {
-  main {
-    cd2pojo {
-      srcDir("where/your/cd2pojo/models/are") // default value: $projectDir/src/SOURCE_SET_NAME/cd2pojo
-      destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/cd2pojo/SOURCE_SET_NAME
+=== "Kotlin"
+    ```kotlin
+    sourceSets {
+      main {
+        cd2pojo {
+          srcDir("where/your/cd2pojo/models/are") // default value: $projectDir/src/SOURCE_SET_NAME/cd2pojo
+          destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/cd2pojo/SOURCE_SET_NAME
+        }
+      }
     }
-  }
-}
 
-// Declare dependencies on published models
-dependencies {
-  cd2pojo("some.model.publisher:factory-types:1.2.0")
-  testCd2pojo("some.testModel.publisher:factory-testers:1.2.0")
-}
-
-task.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pjo"
-  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
-  useClass2Mc.set(true)  // Default value is false
-}
-
-cd2pojo {
-  // Only use the following option if you build the MontiArc project itself!
-  // Else ignore it (You can just omit the option).
-  internalMontiArcTesting.set(true)
-}
-```
-
-With Groovy:
-```groovy
-sourceSets {
-  main {
-    cd2pojo {
-      srcDir "where/your/cd2pojo/models/are"  // default value: $projectDir/src/SOURCE_SET_NAME/cd2pojo
-      destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/cd2pojo/SOURCE_SET_NAME
+    // Declare dependencies on published models
+    dependencies {
+      cd2pojo("some.model.publisher:factory-types:1.2.0")
+      testCd2pojo("some.testModel.publisher:factory-testers:1.2.0")
     }
-  }
-}
 
-// Declare dependencies on published models
-dependencies {
-    cd2pojo "some.model.publisher:factory-types:1.2.0"
-    testCd2pojo "some.testModel.publisher:factory-testers:1.2.0"
-}
+    task.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pjo"
+      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+      useClass2Mc.set(true)  // Default value is false
+    }
 
-task.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"
-  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
-  useClass2Mc.set(true)  // Default value is false
-}
+    cd2pojo {
+      // Only use the following option if you build the MontiArc project itself!
+      // Else ignore it (You can just omit the option).
+      internalMontiArcTesting.set(true)
+    }
+    ```
 
-cd2pojo {
-  // Only use the following option if you build the MontiArc project itself!
-  // Else ignore it (You can just omit the option).
-  internalMontiArcTesting.set(true)
-}
-```
+=== "Groovy"
+    ```groovy
+    sourceSets {
+      main {
+        cd2pojo {
+          srcDir "where/your/cd2pojo/models/are"  // default value: $projectDir/src/SOURCE_SET_NAME/cd2pojo
+          destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/cd2pojo/SOURCE_SET_NAME
+        }
+      }
+    }
+
+    // Declare dependencies on published models
+    dependencies {
+      cd2pojo "some.model.publisher:factory-types:1.2.0"
+      testCd2pojo "some.testModel.publisher:factory-testers:1.2.0"
+    }
+
+    task.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"
+      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+      useClass2Mc.set(true)  // Default value is false
+    }
+
+    cd2pojo {
+      // Only use the following option if you build the MontiArc project itself!
+      // Else ignore it (You can just omit the option).
+      internalMontiArcTesting.set(true)
+    }
+    ```
 
 Note that the generated java code will be generated to `$destinationDirectory/java` and created `.cdsym` files are
 placed in `$destinationDirectory/symbols` (`destinationDirectory` being defined in the `cd2pojo` entry of the source

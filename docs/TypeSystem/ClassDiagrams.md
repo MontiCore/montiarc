@@ -2,7 +2,7 @@
 
 # Class Diagrams
 
-```cd4code
+```classdiagram
 package corp;
 import java.util.Date;
 
@@ -59,7 +59,7 @@ There are some things that you should note when working with object oriented typ
 Class diagrams themselves are defined within a package structure.
 However, they themselves also span a new package.
 E.g., take the following class diagram model:
-```cd4code
+```classdiagram
 package com.example;
 
 classdiagram fingerprotection {

@@ -15,7 +15,7 @@ Subcomponents are declared in the body of a component type, specifying the
 subcomponents' types and stating their names. A simple subcomponent declaration 
 looks like 
 
-``` 
+```montiarc
 TYPE SUB;
 ```
 
@@ -32,13 +32,13 @@ multiple subcomponents of the same type. For convenience, multiple subcomponents
 of the same type can be instantiated by stating their names in a comma-separated 
 list after the component's type, which looks like 
 
-``` 
+```montiarc
 TYPE SUB1, SUB2;
 ```
 
 and is a shorthand notation for 
 
-``` 
+```montiarc
 TYPE SUB1;
 TYPE SUB2;
 ```
@@ -54,7 +54,7 @@ Arguments must be provided during component instantiation and are listed after
 the subcomponents' name in round brackets (`( )`).
 A subcomponent declaration with arguments looks like
 
-```
+```montiarc
 TYPE SUB(ARGS);
 ```
 
@@ -76,7 +76,7 @@ parameters.
 Type arguments must be provided with the subcomponent declaration alongside 
 the component type in angle brackets (`< >`).
 
-```
+```montiarc
 TYPE<TARGS> SUB; 
 ```
 
@@ -87,7 +87,7 @@ are the first, second, and so forth until n-th type argument.
 
 For example, 
 
-```
+```montiarc
 Delay<Integer> delay;
 ```
 
@@ -129,13 +129,13 @@ A port can only be targeted by a single connector but can be the source of
 multiple connectors. For convenience, a connector can define multiple targets. 
 The targets are given as a comma-separated list, which looks like
 
-```
+```montiarc
 SOURCE -> TARGET1, TARGET2;
 ```
 
 which is a shorthand notation for 
 
-```
+```montiarc
 SOURCE -> TARGET1; 
 SOURCE -> TARGET2; 
 ```
@@ -165,7 +165,7 @@ across other subcomponents. We call this a feedback loop.
 In a direct feedback loop the output of a component is directly connected to 
 the input of the component. The component communicates directly with itself.
 
-```
+```montiarc
 sub.o -> sub.i; 
 ```
 
@@ -173,7 +173,7 @@ In an indirect feedback loop the output of a component is connected to the
 input of the component indirectly across one to multiple subcomponents. The 
 component communicates indirectly with itself.
 
-```
+```montiarc
 sub1.o -> sub2.i;
 sub2.o -> sub3.i;
 sub3.o -> sub1.i;
@@ -189,7 +189,7 @@ Delay can be introduced through the stereotype `<<delayed>>` on the output
 port of an atomic component, specifying outputs on that port are delayed by 
 one Tick. For simplicity, we can also introduce a specific delay: 
 
-```
+```montiarc
 component Delay<T> {
   port in T i;
   port <<delayed>> out T o;
@@ -203,7 +203,7 @@ component Delay<T> {
 
 this delay can then be added anywhere in the communication circle.
 
-```
+```montiarc
 sub1.o -> sub2.i;
 sub2.o -> delay.i; 
 delay.o -> sub3.i;

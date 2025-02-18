@@ -7,61 +7,60 @@ Moreover, it distributes MontiArc models as jars with `.arcsym` files.
 ## Apply it:
 Within gradle's settings script, you need to declare:
 
-With Kotlin:
-```kotlin
-// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to make it available to our build process.
-pluginManagement {
-  repositories {
-    maven {
-      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+=== "Kotlin"
+    ```kotlin
+    // The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to make it available to our build process.
+    pluginManagement {
+      repositories {
+        maven {
+          url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+        }
+      }
     }
-  }
-}
-```
-
-With Groovy:
-```groovy
-// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to make it available to our build process.
-pluginManagement {
-  repositories {
-    maven {
-      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+    ```
+=== "Groovy"
+    ```groovy
+    // The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to make it available to our build process.
+    pluginManagement {
+      repositories {
+        maven {
+          url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+        }
+      }
     }
-  }
-}
-```
+    ```
 
 Then, within the build script, you need to declare:
 
-With Kotlin:
-```kotlin
-plugins {
-  id("montiarc") version "VERSION_YOU_WANT_TO_USE"
-}
+=== "Kotlin"
+    ```kotlin
+    plugins {
+      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+    }
 
-// The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
-repositories {
-  maven {
-    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-  }
-}
-```
+    // The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
+    repositories {
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+    ```
 
-With Groovy:
-```groovy
-plugins {
-  id "montiarc" version "VERSION_YOU_WANT_TO_USE"
-}
+=== "Groovy"
+    ```groovy
+    plugins {
+      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+    }
 
-// The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
-repositories {
-  maven {
-    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-  }
-}
-```
+    // The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
+    repositories {
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+    ```
 
 ---
 ## Configure it:
@@ -72,66 +71,66 @@ Note that Java source files that the MontiArc generator produces are automatical
 source set. Therefor, the generated source code will automatically be compiled by `compileJava` (or `compileTestJava`,
 etc. )
 
-With Kotlin:
-```kotlin
-// Kotlin:
-sourceSets {
-  main {
-    montiarc {
-      srcDir("where/your/montiarc/models/are")  // default value: $projectDir/src/SOURCE_SET_NAME/montiarc
-      destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/montiarc/SOURCE_SET_NAME
+=== "Kotlin"
+    ```kotlin
+    // Kotlin:
+    sourceSets {
+      main {
+        montiarc {
+          srcDir("where/your/montiarc/models/are")  // default value: $projectDir/src/SOURCE_SET_NAME/montiarc
+          destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/montiarc/SOURCE_SET_NAME
+        }
+      }
     }
-  }
-}
 
-// Declare dependencies on published models
-dependencies {
-  montiarc("some.model.publisher:logic-gates:1.2.0")
-  cd2pojo4montiarc("some.class:diagram.types:1.1.0")
-  testMontiarc("some.testModel.publisher:logic-gates:1.2.0")
-}
-
-task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
-  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
-  useClass2Mc.set(true)  // Default value is false
-}
-
-montiarc {
-  // Only use the following option if you build the MontiArc project itself!
-  // Else ignore it (You can just omit the option).
-  internalMontiArcTesting.set(true)
-}
-```
-
-With Groovy:
-```groovy
-sourceSets {
-  main {
-    montiarc {
-      srcDir "where/your/montiarc/models/are"  // default value: $projectDir/src/SOURCE_SET_NAME/montiarc
-      destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/montiarc/SOURCE_SET_NAME
+    // Declare dependencies on published models
+    dependencies {
+      montiarc("some.model.publisher:logic-gates:1.2.0")
+      cd2pojo4montiarc("some.class:diagram.types:1.1.0")
+      testMontiarc("some.testModel.publisher:logic-gates:1.2.0")
     }
-  }
-}
 
-// Declare dependencies on published models
-dependencies {
-    montiarc "some.model.publisher:logic-gates:1.2.0"
-    cd2pojo4montiarc "some.class:diagram.types:1.1.0"
-    testMontiarc "some.testModel.publisher:logic-gates:1.2.0"
-}
+    task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
+      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+      useClass2Mc.set(true)  // Default value is false
+    }
 
-task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
-  symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
-  useClass2Mc.set(true)  // Default value is false
-}
+    montiarc {
+      // Only use the following option if you build the MontiArc project itself!
+      // Else ignore it (You can just omit the option).
+      internalMontiArcTesting.set(true)
+    }
+    ```
 
-montiarc {
-  // Only use the following option if you build the MontiArc project itself!
-  // Else ignore it (You can just omit the option).
-  internalMontiArcTesting.set(true)
-}
-```
+=== "Groovy"
+    ```groovy
+    sourceSets {
+      main {
+        montiarc {
+          srcDir "where/your/montiarc/models/are"  // default value: $projectDir/src/SOURCE_SET_NAME/montiarc
+          destinationDirectory.fileValue(file("where/to/generate/the/code/to"))  // default value: $buildDir/montiarc/SOURCE_SET_NAME
+        }
+      }
+    }
+
+    // Declare dependencies on published models
+    dependencies {
+        montiarc "some.model.publisher:logic-gates:1.2.0"
+        cd2pojo4montiarc "some.class:diagram.types:1.1.0"
+        testMontiarc "some.testModel.publisher:logic-gates:1.2.0"
+    }
+
+    task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
+      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+      useClass2Mc.set(true)  // Default value is false
+    }
+
+    montiarc {
+      // Only use the following option if you build the MontiArc project itself!
+      // Else ignore it (You can just omit the option).
+      internalMontiArcTesting.set(true)
+    }
+    ```
 
 Note that the generated java code will be generated to `$destinationDirectory/java` and created `.arcsym` files are
 placed in `$destinationDirectory/symbols` (`destinationDirectory` being defined in the `montiarc` entry of the source

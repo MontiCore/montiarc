@@ -124,13 +124,13 @@ corresponding port.
 
 Given the port declaration
 
-```
+```montiarc
 port in int number;
 ```
 
 the transition 
 
-```
+```montiarc
 S1 -> S2 [CONDITION] number / { ACTION };
 ```
 
@@ -140,7 +140,7 @@ automaton is currently in state `S1` and if the `CONDITION` evaluates to `true`.
 The transition's guard can then reason about properties of the received message 
 and use the message in transition action.
 
-```
+```montiarc
 S1 -> S2 [number >= 0] number / { int v = number; };
 S1 -> S2 [number < 0] number / { int v = -number; };
 ```
@@ -157,14 +157,14 @@ the `Tick` event.
 
 Given the port declarations
 
-```
+```montiarc
 port <<sync>> in int a;
 port <<sync>> in int b;
 ```
 
 the transitions 
 
-```
+```montiarc
 S1 -> S2 [CONDITION] / { ACTION };
 S1 -> S2 [CONDITION] Tick / { ACTION };
 ```
@@ -177,7 +177,7 @@ synchronous port is available for the time event. A transition triggered by a
 time event can reason about properties of messages on all incoming, synchronous 
 ports and use the messages in the transition action.
 
-```
+```montiarc
 S1 -> S2 [b != 0] / { int v = a / b; };
 ```
 
@@ -189,14 +189,14 @@ specific event, messages can be sent via an outgoing port in any action.
 
 Given the port declarations
 
-```
+```montiarc
 port in int number;
 port out long result;
 ```
 
 and the transition
 
-```
+```montiarc
 S1 -> S2 [number != 0] number / { result = 100 / number; };
 ```
 
@@ -209,7 +209,7 @@ outgoing ports in quick succession.
 
 Given the transition
 
-```
+```montiarc
 S1 -> S2 [number != 0] number / { 
   result = 100 / number; 
   result = 100 * number;

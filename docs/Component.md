@@ -21,13 +21,13 @@ Component types can be defined
 
 
 ## Complete syntax
-```
+```montiarc
 component <name> (<type-parameters>) (<configuration-parameters>) (extends <parent-component>) {
   // Component body
 }
 ```
 Example:
-```
+```montiarc
 component AgeCategorizer <K, V extends Person> (double classSize, Rule<K, V> rule)
   extends BiProcessor<K, V> (rule) {
   // Component body

@@ -57,76 +57,73 @@ You can also [change the location](#further-references) in which models are foun
 ### Project setup
 To enable the usage of the MontiArc plugin, we have to add the repository in which it lays to the settings file of gradle:
 
-{{< tabs "gradle-settings-file" >}}
-{{< tab "Kotlin" >}} 
-```kotlin
-// If your settings file is settings.gradle.kts (namely, it uses kotlin syntax)
+[//]: # ( @formatter:off)
 
-// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to make it available to our build process.
-pluginManagement {
-  repositories {
-    maven {
-      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-    }
-  }
-}
-```
-{{< /tab >}}
-{{< tab "Groovy" >}} 
-```groovy
-// If your settings file is settings.gradle (namely, it uses groovy syntax)
+=== "Kotlin" 
+    ```kotlin
+    // If your settings file is settings.gradle.kts (namely, it uses kotlin syntax)
 
-// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to make it available to our build process.
-pluginManagement {
-  repositories {
-    maven {
-      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+    // The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to make it available to our build process.
+    pluginManagement {
+      repositories {
+        maven {
+          url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+        }
+      }
     }
-  }
-}
-```
-{{< /tab >}}
-{{< /tabs >}}
+    ```
+=== "Groovy"
+    ```groovy
+    // If your settings file is settings.gradle (namely, it uses groovy syntax)
+
+    // The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to make it available to our build process.
+    pluginManagement {
+      repositories {
+        maven {
+          url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+        }
+      }
+    }
+    ```
 
 We can then apply the plugin by adding the following to Gradle's Build file:
-{{< tabs "gradle-build-file" >}}
-{{< tab "Kotlin" >}} 
-```kotlin
-// Use this code if your build file is build.gradle.kts (namely, it uses kotlin syntax)
-plugins {
-  id("java")  // Optional, but recommended for this tutorial
-  id("montiarc") version "VERSION_YOU_WANT_TO_USE"
-}
 
-// Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to add this repo to our build.
-repositories {
-  maven {
-    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-  }
-}
-```
-{{< /tab >}}
-{{< tab "Groovy" >}} 
-```groovy
-// Use this code if your build file is build.gradle (namely, it uses groovy syntax)
-plugins {
-  id "java"  // Optional, but recommended for this tutorial
-  id "montiarc" version "VERSION_YOU_WANT_TO_USE"
-}
+=== "Kotlin"
+    ```kotlin
+    // Use this code if your build file is build.gradle.kts (namely, it uses kotlin syntax)
+    plugins {
+      id("java")  // Optional, but recommended for this tutorial
+      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+    }
 
-// Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.
-// Therefore we have to add this repo to our build.
-repositories {
-  maven {
-    url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
-  }
-}
-```
-{{< /tab >}}
-{{< /tabs >}}
+    // Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to add this repo to our build.
+    repositories {
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+    ```
+=== "Groovy"
+    ```groovy
+    // Use this code if your build file is build.gradle (namely, it uses groovy syntax)
+    plugins {
+      id "java"  // Optional, but recommended for this tutorial
+      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+    }
+
+    // Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.
+    // Therefore we have to add this repo to our build.
+    repositories {
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+    ```
+
+[//]: # ( @formatter:on)
 
 You can now place your models in the `src/main/montiarc` folder of your project.
 
@@ -141,7 +138,7 @@ Executing the `build` task will also trigger the generation.
 It will additionally compile the generated Java code if the [_java_][Java Gradle Plugin] plugin is also applied.
 
 Try creating a simple MontiArc model at the location of `src/main/montiarc/com/example/MyComp.arc`:
-```
+```montiarc
 package com.example;
 
 component MyComp { }
@@ -151,53 +148,54 @@ Now execute the `compileMontiarc` task with Gradle.
 Check that, as a result, the java class `MyComp` should be generated to `build/montiarc/main/java/com/example/MyComp.java`.
 
 If you also want that the `build` task compiles the generated code, then also apply the [_java_][Java Gradle Plugin] plugin in your build script (if you have not done this yet):
-{{< tabs "gradle-apply-java" >}}
-{{< tab "Kotlin" >}} 
-```kotlin
-// If your build file is build.gradle.kts (namely, it uses kotlin syntax)
-plugins {
-  id("java")
-  id("montiarc") version "VERSION_YOU_WANT_TO_USE"
-}
-```
-{{< /tab >}}
-{{< tab "Groovy" >}} 
-```groovy
-// If your build file is build.gradle (namely, it uses groovy syntax)
-plugins {
-  id "java"
-  id "montiarc" version "VERSION_YOU_WANT_TO_USE"
-}
-```
-{{< /tab >}}
-{{< /tabs >}}
+
+[//]: # ( @formatter:off)
+
+=== "Kotlin"
+    ```kotlin
+    // If your build file is build.gradle.kts (namely, it uses kotlin syntax)
+    plugins {
+      id("java")
+      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+    }
+    ```
+=== "Groovy"
+    ```groovy
+    // If your build file is build.gradle (namely, it uses groovy syntax)
+    plugins {
+      id "java"
+      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+    }
+    ```
+
+[//]: # ( @formatter:on)
 
 ### Adding class diagrams to your project
 You can declare class diagram models to be used by MontiArc by applying the _cd2pojo_ plugin.
 In order to do this, add the cd2pojo plugin to the `plugins` block within the build script:
 
-{{< tabs "gradle-apply-cd2pojo" >}}
-{{< tab "Kotlin" >}} 
-```kotlin
-// If your build file is build.gradle.kts (namely, it uses kotlin syntax)
-plugins {
-  id("java")
-  id("montiarc") version "VERSION_YOU_WANT_TO_USE"
-  id("cd2pojo") version "VERSION_YOU_WANT_TO_USE"
-}
-```
-{{< /tab >}}
-{{< tab "Groovy" >}} 
-```groovy
-// If your build file is build.gradle (namely, it uses groovy syntax)
-plugins {
-  id "java"
-  id "montiarc" version "VERSION_YOU_WANT_TO_USE"
-  id "cd2pojo" version "VERSION_YOU_WANT_TO_USE"
-}
-```
-{{< /tab >}}
-{{< /tabs >}}
+[//]: # ( @formatter:off)
+
+=== "Kotlin"
+    ```kotlin
+    // If your build file is build.gradle.kts (namely, it uses kotlin syntax)
+    plugins {
+      id("java")
+      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+      id("cd2pojo") version "VERSION_YOU_WANT_TO_USE"
+    }
+    ```
+=== "Groovy"
+    ```groovy
+    // If your build file is build.gradle (namely, it uses groovy syntax)
+    plugins {
+      id "java"
+      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+      id "cd2pojo" version "VERSION_YOU_WANT_TO_USE"
+    }
+    ```
+
+[//]: # ( @formatter:on)
 
 The project structure of projects with class diagrams is similar to [projects with MontiArc](#montiarc-project-structure) (but can also be [customized](#further-references)):
 ```
@@ -226,7 +224,7 @@ project-root
 ```
 
 Try creating a simple class diagram model at the location of `src/main/cd2pojo/com/example/MyTypes.cd`:
-```
+```classdiagram
 package com.example;
 
 classdiagram MyTypes {
@@ -238,7 +236,7 @@ classdiagram MyTypes {
 ```
 
 Now use the enum type in your MontiArc model [`MyComp`](#executing-the-generation-process):
-```
+```montiarc
 package com.example;
 
 import com.example.MyTypes.Status;
@@ -261,7 +259,7 @@ task.compileMontiarc {
 ```
 
 Now use `String` in your MontiArc model [`MyComp`](#executing-the-generation-process):
-```
+```montiarc
 package com.example;
 
 // Types from java.lang are automatically imported.
@@ -277,7 +275,7 @@ Check that no error occurs.
 
 Java types can be used similarly from within class diagram models.
 To this end, the `useClass2Mc` option has to be set for the `compileCd2pojo` task that under the hood processes the class diagram models:
-```
+```kotlin
 // Add the following to your build file:
 task.compileCd2pojo {
   useClass2Mc.set(true)
@@ -303,7 +301,7 @@ The main command line options are:
 
 To exemplify the usage, lets consider the following example:
 Having a project `demo`, create a MontiArc model in `demo/src/montiarc/com/example/MyComp.arc`:
-```
+```montiarc
 package com.example;
 
 component MyComp { }
@@ -329,7 +327,7 @@ Its main command line options are:
 | `-s, --symboltable <dir>`    | Sets the target path to which symbolic files are exported (optional). |
 As we can see, we can use the `--symboltable` option to export the `.cdsym` files that MontiArc can read.
 E.g. create a class diagram model at `demo/src/cd2pojo/com/example/MyTypes.cd`:
-```
+```classdiagram
 package com.example;
 
 classdiagram MyTypes {
@@ -351,7 +349,7 @@ If you do not want to use the generated java implementations, you may omit the `
 
 We can now use the class diagram in MontiArc.
 To this end, modify [`MyComp`](#execute-the-cli-generation-process):
-```
+```montiarc
 package com.example;
 
 import com.example.MyTypes.Status;
@@ -374,7 +372,7 @@ Moreover, one can put jars with the types to be used on the `-path` command line
 JDK types are available by default.
 
 Let's modify [`MyComp`](#execute-the-cli-generation-process):
-```
+```montiarc
 package com.example;
 
 import java.lang.String;  // TODO: test whether String is automatically imported
