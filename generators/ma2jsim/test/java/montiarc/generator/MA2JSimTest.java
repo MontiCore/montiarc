@@ -8,7 +8,14 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class MA2JSimTest {
+public class MA2JSimTest extends MA2JSimTestBase {
+
+  /**
+   * We override the type-check and basis symbols initialization as these
+   * should be done by the tool call.
+   */
+  @Override
+  protected void init() { }
 
   Path input = Paths.get("test/resources");
   Path hwcPath = Paths.get("test/resources/java");
@@ -16,6 +23,7 @@ public class MA2JSimTest {
 
   @Test
   public void test() {
+    // Given
     String[] args = new String[] {
       "-i", input.toAbsolutePath().toString(),
       "--o", output.toAbsolutePath().toString(),
@@ -23,7 +31,10 @@ public class MA2JSimTest {
       "-c2mc"
     };
 
+    // When
     MA2JSimTool.main(args);
-    Assertions.assertEquals(0, Log.getErrorCount());
+
+    // Then
+    Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
   }
 }

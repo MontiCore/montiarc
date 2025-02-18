@@ -45,6 +45,8 @@ public abstract class MontiArcTestBase extends ATestBase {
     MontiArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
     ArcAutomatonMill.initializeTick();
+    BasicSymbolsMill.initializeObject();
+    BasicSymbolsMill.initializeString();
   }
 
   /**

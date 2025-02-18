@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Tests the inc-check mechanics of the generation of the MA2JSimTool.
  */
-class MA2JSimToolIncrementalityTest {
+class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
 
   @TempDir
   Path tempDir;

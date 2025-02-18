@@ -554,6 +554,9 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(cl);
     if (cl.hasOption("c2mc")) {
       this.initializeClass2MC();
+    } else {
+      BasicSymbolsMill.initializeObject();
+      BasicSymbolsMill.initializeString();
     }
   }
 

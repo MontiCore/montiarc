@@ -34,7 +34,6 @@ val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesAre
 tasks.check.configure { dependsOn(checkGenerationTask) }
 
 
-
 abstract class CheckFilesArePresent : DefaultTask() {
 
   @get:InputFiles

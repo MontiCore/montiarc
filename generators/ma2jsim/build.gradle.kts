@@ -14,6 +14,12 @@ dependencies {
   implementation(libs.janino)
   implementation(libs.mc.ocl)
 
+  testImplementation((project(":languages:basis"))) {
+    capabilities {
+      requireCapability("montiarc.languages:basis-tests")
+    }
+  }
+
   testImplementation(project(":generators:cd2pojo"))
   testImplementation(libs.mockito)
 }
