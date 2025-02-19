@@ -9,10 +9,10 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/behavior/Automata/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Behavior/Automata/">
       
       
-        <link rel="prev" href="../../Behavior/">
+        <link rel="prev" href="../">
       
       
         <link rel="next" href="../Compute/">
@@ -239,7 +239,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../usage/GettingStarted/" class="md-tabs__link">
+        <a href="../../Usage/GettingStarted/" class="md-tabs__link">
           
   
   Usage
@@ -277,7 +277,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../Behavior/" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   Behavior
@@ -455,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/GettingStarted/" class="md-nav__link">
+      <a href="../../Usage/GettingStarted/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -477,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoCLTool/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -499,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -521,7 +521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcCLTool/" class="md-nav__link">
+      <a href="../../Usage/MontiArcCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -543,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/MontiArcGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -633,7 +633,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Decomposition/" class="md-nav__link">
+      <a href="../../Component/Decomposition/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -655,7 +655,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Generics/" class="md-nav__link">
+      <a href="../../Component/Generics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -677,7 +677,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Inheritance/" class="md-nav__link">
+      <a href="../../Component/Inheritance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -699,7 +699,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Interfaces/" class="md-nav__link">
+      <a href="../../Component/Interfaces/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -721,7 +721,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Parameter/" class="md-nav__link">
+      <a href="../../Component/Parameter/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -743,7 +743,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Testing/" class="md-nav__link">
+      <a href="../../Component/Testing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -816,7 +816,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Behavior/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1162,7 +1162,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/ClassDiagrams/" class="md-nav__link">
+      <a href="../../TypeSystem/ClassDiagrams/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1184,7 +1184,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/JavaIntegration/" class="md-nav__link">
+      <a href="../../TypeSystem/JavaIntegration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1206,7 +1206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Primitives/" class="md-nav__link">
+      <a href="../../TypeSystem/Primitives/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1228,7 +1228,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Collections/" class="md-nav__link">
+      <a href="../../TypeSystem/Collections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1427,16 +1427,16 @@ component receives an input, the automata may execute a transition, producing
 some output given current input and state.</p>
 <p>An automaton is defined inside the body of a component and consists of states 
 and transitions.</p>
-<div class="highlight"><pre><span></span><code>component Comp {
-  automaton {
-    // the state and transitions are defined here
-  }
-}
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// the state and transitions are defined here</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h2 id="states">States</h2>
 <p>An automaton has at least one state and exactly one initial state.</p>
 <p>A simple state declaration looks like</p>
-<div class="highlight"><pre><span></span><code>initial state S;
+<div class="highlight"><pre><span></span><code><span class="n">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 </code></pre></div>
 <p>where</p>
 <ul>
@@ -1450,7 +1450,7 @@ and transitions.</p>
 <h2 id="transitions">Transitions</h2>
 <p>An automaton can have any number of transitions between states.</p>
 <p>A simple transition looks like</p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [CONDITION] EVENT / { ACTION };
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 <p>where </p>
 <ul>
@@ -1478,10 +1478,10 @@ transition where <code>ACTION</code> is a list of statements.</p>
 <p>A state may define entry and exit actions that are executed when entering 
 respectively exiting the state. A state with both entry and exit actions 
 looks like </p>
-<div class="highlight"><pre><span></span><code>state S {
-  entry / { ACTION1 }
-  exit / { ACTION2 }
-};
+<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">S</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION1</span><span class="w"> </span><span class="p">}</span>
+<span class="w">  </span><span class="n">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION2</span><span class="w"> </span><span class="p">}</span>
+<span class="p">};</span>
 </code></pre></div>
 <p>where <code>ACTION1</code> and <code>ACTION2</code> are each a list of statements.</p>
 <h2 id="initial-action">Initial-Action</h2>
@@ -1489,19 +1489,19 @@ looks like </p>
 the state for the very first time at the start of a run of the automaton. 
 Therefore, the initial action is executed at most once during a run of an 
 automaton. An initial state with an initializer action looks like </p>
-<div class="highlight"><pre><span></span><code>initial { ACTION } state S;
+<div class="highlight"><pre><span></span><code><span class="n">initial</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 </code></pre></div>
 <p>where <code>{ ACTION }</code> is the initial action and <code>ACTION</code> a list of statements.</p>
 <h2 id="hierarchical-states">Hierarchical States</h2>
 <p>A state may be hierarchically decomposed into substates. A state can have any 
 number of substates and substates themselves can be hierarchically decomposed.</p>
-<div class="highlight"><pre><span></span><code>state HS {
-  state Sub1 {
-    state SubSub1;
-    state SubSub2;  
-  };
-  state Sub2; 
-};
+<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">HS</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="kd">state</span> <span class="nc">Sub1</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">state</span> <span class="nc">SubSub1</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">state</span> <span class="nc">SubSub2</span><span class="p">;</span><span class="w">  </span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="kd">state</span> <span class="nc">Sub2</span><span class="p">;</span><span class="w"> </span>
+<span class="p">};</span>
 </code></pre></div>
 <p>where </p>
 <ul>
@@ -1523,17 +1523,17 @@ message. The execution of a transition can be triggered by such an event.
 The type and name of the message event is the type and name of the 
 corresponding port.</p>
 <p>Given the port declaration</p>
-<div class="highlight"><pre><span></span><code>port in int number;
+<div class="highlight"><pre><span></span><code><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
 </code></pre></div>
 <p>the transition </p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [CONDITION] number / { ACTION };
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 <p>is executed when the port <code>number</code> receives a message (an <code>int</code>) and if the 
 automaton is currently in state <code>S1</code> and if the <code>CONDITION</code> evaluates to <code>true</code>.</p>
 <p>The transition's guard can then reason about properties of the received message 
 and use the message in transition action.</p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [number &gt;= 0] number / { int v = number; };
-S1 -&gt; S2 [number &lt; 0] number / { int v = -number; };
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 <h2 id="time-events">Time Events</h2>
 <p>A time event, which we also call a tick, occurs at discrete points in time. 
@@ -1543,12 +1543,12 @@ assumed that any calculation can be computed between two successive ticks.</p>
 a time event. The transition's trigger can also be modeled explicitly through 
 the <code>Tick</code> event.</p>
 <p>Given the port declarations</p>
-<div class="highlight"><pre><span></span><code>port &lt;&lt;sync&gt;&gt; in int a;
-port &lt;&lt;sync&gt;&gt; in int b;
+<div class="highlight"><pre><span></span><code><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
+<span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 </code></pre></div>
 <p>the transitions </p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [CONDITION] / { ACTION };
-S1 -&gt; S2 [CONDITION] Tick / { ACTION };
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span>
+<span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">Tick</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 <p>are equivalent and executed at discrete points in time and if the automaton 
 then is currently in state <code>S1</code> and if the <code>CONDITION</code> evaluates to <code>true</code>.</p>
@@ -1556,18 +1556,18 @@ then is currently in state <code>S1</code> and if the <code>CONDITION</code> eva
 synchronous port is available for the time event. A transition triggered by a 
 time event can reason about properties of messages on all incoming, synchronous 
 ports and use the messages in the transition action.</p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [b != 0] / { int v = a / b; };
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">b</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 <h2 id="output">Output</h2>
 <p>An automaton can send a message via an outgoing port by assigning it some value.
 While messages on incoming ports are only available in the context of a 
 specific event, messages can be sent via an outgoing port in any action. </p>
 <p>Given the port declarations</p>
-<div class="highlight"><pre><span></span><code>port in int number;
-port out long result;
+<div class="highlight"><pre><span></span><code><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+<span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">long</span><span class="w"> </span><span class="n">result</span><span class="p">;</span>
 </code></pre></div>
 <p>and the transition</p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [number != 0] number / { result = 100 / number; };
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
 <p>a message (the result of the expression <code>100 / number</code>) is sent via port 
 <code>result</code> every time the transition is executed. </p>
@@ -1575,91 +1575,91 @@ port out long result;
 automaton (don't read from outgoing ports). Multiple messages can be sent via 
 outgoing ports in quick succession. </p>
 <p>Given the transition</p>
-<div class="highlight"><pre><span></span><code>S1 -&gt; S2 [number != 0] number / { 
-  result = 100 / number; 
-  result = 100 * number;
-};
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">  </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">number</span><span class="p">;</span><span class="w"> </span>
+<span class="w">  </span><span class="n">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">number</span><span class="p">;</span>
+<span class="p">};</span>
 </code></pre></div>
 <p>two message are send via port <code>result</code> every time the transition is executed. 
 The messages are send in order, that is, first the result of the expression 
 <code>100 / number</code> and then the result of the expression <code>100 * number</code>.</p>
 <h2 id="examples">Examples</h2>
 <h3 id="event-automata">Event Automata</h3>
-<div class="highlight"><pre><span></span><code>import montiarc.types.Color;
-import montiarc.types.ButtonEvent;
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.types.Color</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.types.ButtonEvent</span><span class="p">;</span>
 
-component TrafficLight {
-  port in ButtonEvent reqL;
-  port in ButtonEvent reqR;
-  port out Color carLight;
-  port out Color pedLight;
+<span class="kd">component</span> <span class="nc">TrafficLight</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">ButtonEvent</span><span class="w"> </span><span class="n">reqL</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">ButtonEvent</span><span class="w"> </span><span class="n">reqR</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Color</span><span class="w"> </span><span class="n">carLight</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Color</span><span class="w"> </span><span class="n">pedLight</span><span class="p">;</span>
 
-  automaton {
-    // The light is green for the cars initially
-    initial { 
-      carLight = Color.GREEN;
-      pedLight = Color.RED; 
-    } state Green;
+<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// The light is green for the cars initially</span>
+<span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">GREEN</span><span class="p">;</span>
+<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">RED</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Green</span><span class="p">;</span>
 
-    state Yellow;
-    state Red;
+<span class="w">    </span><span class="kd">state</span> <span class="nc">Yellow</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">state</span> <span class="nc">Red</span><span class="p">;</span>
 
-    // A pedestrian presses the button on either side of the road, 
-    // tell the cars to stop (car light becomes yellow)
-    Green -&gt; Yellow reqL / {
-      carLight = Color.Yellow;
-    };
-    Green -&gt; Yellow reqR / {
-      carLight = Color.Yellow;
-    };
+<span class="w">    </span><span class="c1">// A pedestrian presses the button on either side of the road, </span>
+<span class="w">    </span><span class="c1">// tell the cars to stop (car light becomes yellow)</span>
+<span class="w">    </span><span class="n">Green</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Yellow</span><span class="w"> </span><span class="n">reqL</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Yellow</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="n">Green</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Yellow</span><span class="w"> </span><span class="n">reqR</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Yellow</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
 
-    // After some time, the car light becomes red and the light for the 
-    // pedestrians becomes green
-    Yellow -&gt; Red / {
-      carLight = Color.RED;
-      pedLight = Color.Green; 
-    };
+<span class="w">    </span><span class="c1">// After some time, the car light becomes red and the light for the </span>
+<span class="w">    </span><span class="c1">// pedestrians becomes green</span>
+<span class="w">    </span><span class="n">Yellow</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Red</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">RED</span><span class="p">;</span>
+<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Green</span><span class="p">;</span><span class="w"> </span>
+<span class="w">    </span><span class="p">};</span>
 
-    // After some time, the cars are allowed to drive again. The car light 
-    // becomes green, the pedestrian light becomes red
-    Red -&gt; Green / {
-      carLight = Color.Green;
-      pedLight = Color.Red;
-    };
-  }
-}
+<span class="w">    </span><span class="c1">// After some time, the cars are allowed to drive again. The car light </span>
+<span class="w">    </span><span class="c1">// becomes green, the pedestrian light becomes red</span>
+<span class="w">    </span><span class="n">Red</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Green</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Green</span><span class="p">;</span>
+<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Red</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 <h3 id="time-synchronous-automata">Time-Synchronous Automata</h3>
 <p>Synchronous automata operate on synchronous inputs. Where message events only 
 remain on the port for the duration of the event, messages on synchronous ports 
 are simulations available at time progress. </p>
-<div class="highlight"><pre><span></span><code>component Divide {
-  port &lt;&lt;sync&gt;&gt; in int a, b,
-       &lt;&lt;sync&gt;&gt; out int r;
-  port &lt;&lt;sync&gt;&gt; out boolean of;
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Divide</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">       </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">of</span><span class="p">;</span>
 
-  int r_pre = 0;
+<span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">r_pre</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
-  automaton {
-    initial state S;
+<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 
-    S -&gt; S [b != 0] / {
-      // store the result
-      r_pre = a / b;
-      // send the result on port r
-      r = r_pre;
-      // no error, send ok
-      of = true;
-    };
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">[</span><span class="n">b</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// store the result</span>
+<span class="w">      </span><span class="n">r_pre</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
+<span class="w">      </span><span class="c1">// send the result on port r</span>
+<span class="w">      </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r_pre</span><span class="p">;</span>
+<span class="w">      </span><span class="c1">// no error, send ok</span>
+<span class="w">      </span><span class="n">of</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
 
-    S -&gt; S [b == 0] / {
-      // send the previous result
-      r = r_pre;
-      // send error
-      of = false;
-    };
-  }
-}
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">[</span><span class="n">b</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="c1">// send the previous result</span>
+<span class="w">      </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">r_pre</span><span class="p">;</span>
+<span class="w">      </span><span class="c1">// send error</span>
+<span class="w">      </span><span class="n">of</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 
 

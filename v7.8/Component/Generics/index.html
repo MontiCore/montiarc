@@ -9,7 +9,7 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/component/Generics/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Component/Generics/">
       
       
         <link rel="prev" href="../Decomposition/">
@@ -239,7 +239,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../usage/GettingStarted/" class="md-tabs__link">
+        <a href="../../Usage/GettingStarted/" class="md-tabs__link">
           
   
   Usage
@@ -259,7 +259,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../Component/" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   Component
@@ -455,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/GettingStarted/" class="md-nav__link">
+      <a href="../../Usage/GettingStarted/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -477,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoCLTool/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -499,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -521,7 +521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcCLTool/" class="md-nav__link">
+      <a href="../../Usage/MontiArcCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -543,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/MontiArcGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -616,7 +616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Component/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -906,7 +906,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Automata/" class="md-nav__link">
+      <a href="../../Behavior/Automata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -928,7 +928,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Compute/" class="md-nav__link">
+      <a href="../../Behavior/Compute/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -950,7 +950,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Expressions/" class="md-nav__link">
+      <a href="../../Behavior/Expressions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -972,7 +972,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Statements/" class="md-nav__link">
+      <a href="../../Behavior/Statements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -994,7 +994,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Variables/" class="md-nav__link">
+      <a href="../../Behavior/Variables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1084,7 +1084,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/ClassDiagrams/" class="md-nav__link">
+      <a href="../../TypeSystem/ClassDiagrams/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1106,7 +1106,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/JavaIntegration/" class="md-nav__link">
+      <a href="../../TypeSystem/JavaIntegration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1128,7 +1128,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Primitives/" class="md-nav__link">
+      <a href="../../TypeSystem/Primitives/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1150,7 +1150,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Collections/" class="md-nav__link">
+      <a href="../../TypeSystem/Collections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1265,66 +1265,66 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
 <h1 id="generic-components">Generic Components</h1>
-<p><div class="highlight"><pre><span></span><code>/* Merges streams by selecting the element of one of them at a time */
-component Selector&lt;T&gt;(SelectionRule&lt;T, T, Boolean&gt; rule) {
-  port in T elementA,
-       in T elementB,
-       out T selectedElement;
+<p><div class="highlight"><pre><span></span><code><span class="cm">/* Merges streams by selecting the element of one of them at a time */</span>
+<span class="kd">component</span> <span class="nc">Selector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">SelectionRule</span><span class="o">&lt;</span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="p">,</span><span class="w"> </span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">rule</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">elementA</span><span class="p">,</span>
+<span class="w">       </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">elementB</span><span class="p">,</span>
+<span class="w">       </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">selectedElement</span><span class="p">;</span>
 
-      // ...
-}
+<span class="w">      </span><span class="c1">// ...</span>
+<span class="p">}</span>
 </code></pre></div>
 To facilitate reuse, <em>generic components</em> can be parametrized with <em>type parameters</em>.
 The type parameters can then be used as types for ports, parameters, or other entities in the behavior definition of a component.
 For defining multiple type parameters, one separates them using commas:
-<div class="highlight"><pre><span></span><code>component Foo&lt;K, V&gt; { /*...*/}
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Foo</span><span class="o">&lt;</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/*...*/</span><span class="p">}</span>
 </code></pre></div></p>
 <h2 id="instantiation">Instantiation</h2>
 <p>When instantiating a generic component, one has bind its type parameters with given types:
-<div class="highlight"><pre><span></span><code>component HumanMachineInterface {
-  port out WindowButtonMoveEvent buttonBackLeftEvent;
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">HumanMachineInterface</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">WindowButtonMoveEvent</span><span class="w"> </span><span class="n">buttonBackLeftEvent</span><span class="p">;</span>
 
-  // ...
+<span class="w">  </span><span class="c1">// ...</span>
 
-  Selector&lt;WindowButtonMoveEvent&gt; signalSelector(/*...*/);
-  signalSelector.selectedElement -&gt; buttonBackLeftEvent;  
+<span class="w">  </span><span class="n">Selector</span><span class="o">&lt;</span><span class="n">WindowButtonMoveEvent</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">signalSelector</span><span class="p">(</span><span class="cm">/*...*/</span><span class="p">);</span>
+<span class="w">  </span><span class="n">signalSelector</span><span class="p">.</span><span class="na">selectedElement</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">buttonBackLeftEvent</span><span class="p">;</span><span class="w">  </span>
 
-  // ...
-}
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
 </code></pre></div>
 Type parameters can also be bound with newly defined type parameters:
-<div class="highlight"><pre><span></span><code>component Oracle&lt;T&gt; {
-  port out T prediction;
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Oracle</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">prediction</span><span class="p">;</span>
 
-  Database&lt;T&gt; database;  // Used for predicting values
-  // Other sub components ...
-}
+<span class="w">  </span><span class="n">Database</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="n">database</span><span class="p">;</span><span class="w">  </span><span class="c1">// Used for predicting values</span>
+<span class="w">  </span><span class="c1">// Other sub components ...</span>
+<span class="p">}</span>
 </code></pre></div></p>
 <h2 id="extension">Extension</h2>
 <p>When extending from a generic component, all its type parameters must be bound.
 Using newly defined type parameters for this is also allowed.
-<div class="highlight"><pre><span></span><code>component Selector&lt;T&gt;(/*...*/) extends StreamMerger&lt;T&gt; {
-  // ...
-}
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Selector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="cm">/*...*/</span><span class="p">)</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">StreamMerger</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// ...</span>
+<span class="p">}</span>
 </code></pre></div></p>
 <h2 id="upper-bounds">Upper bounds</h2>
-<p><div class="highlight"><pre><span></span><code>component AgeFilter&lt;T extends Person&gt;(int minAge) {
-  port in T unfiltered;
-  port out T filtered;
+<p><div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">AgeFilter</span><span class="o">&lt;</span><span class="n">T</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Person</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">minAge</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">unfiltered</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">filtered</span><span class="p">;</span>
 
-  compute {
-    // Using information of the upper bound to access the age of the incoming element. 
-    if (unfiltered.age &gt;= minAge) {
-      filtered = unfiltered;
-    }
-  }
-}
+<span class="w">  </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// Using information of the upper bound to access the age of the incoming element. </span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">unfiltered</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="n">minAge</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">filtered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">unfiltered</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 One can limit the allowed types for binding type parameters by using upper bounds.
 As the upper bound introduces additional information about the type that the type parameter
 represents, one can access methods and fields of that type's elements within the behavior of the component.
 One can also define multiple upper bounds for the same type parameter by separating the upper bounds with <code>&amp;</code>s:
-<div class="highlight"><pre><span></span><code>component Foo&lt;K extends Worker &amp; Student, V&gt; { /*...*/ }
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Foo</span><span class="o">&lt;</span><span class="n">K</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Worker</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">Student</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/*...*/</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 
 

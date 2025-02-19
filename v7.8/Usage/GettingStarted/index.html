@@ -9,7 +9,7 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/usage/GettingStarted/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Usage/GettingStarted/">
       
       
         <link rel="prev" href="../../BeginnersGuide/">
@@ -795,7 +795,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Decomposition/" class="md-nav__link">
+      <a href="../../Component/Decomposition/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -817,7 +817,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Generics/" class="md-nav__link">
+      <a href="../../Component/Generics/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -839,7 +839,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Inheritance/" class="md-nav__link">
+      <a href="../../Component/Inheritance/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -861,7 +861,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Interfaces/" class="md-nav__link">
+      <a href="../../Component/Interfaces/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -883,7 +883,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Parameter/" class="md-nav__link">
+      <a href="../../Component/Parameter/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -905,7 +905,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../component/Testing/" class="md-nav__link">
+      <a href="../../Component/Testing/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -995,7 +995,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Automata/" class="md-nav__link">
+      <a href="../../Behavior/Automata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1017,7 +1017,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Compute/" class="md-nav__link">
+      <a href="../../Behavior/Compute/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1039,7 +1039,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Expressions/" class="md-nav__link">
+      <a href="../../Behavior/Expressions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1061,7 +1061,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Statements/" class="md-nav__link">
+      <a href="../../Behavior/Statements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1083,7 +1083,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Variables/" class="md-nav__link">
+      <a href="../../Behavior/Variables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1173,7 +1173,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/ClassDiagrams/" class="md-nav__link">
+      <a href="../../TypeSystem/ClassDiagrams/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1195,7 +1195,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/JavaIntegration/" class="md-nav__link">
+      <a href="../../TypeSystem/JavaIntegration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1217,7 +1217,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Primitives/" class="md-nav__link">
+      <a href="../../TypeSystem/Primitives/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1239,7 +1239,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Collections/" class="md-nav__link">
+      <a href="../../TypeSystem/Collections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1499,8 +1499,9 @@ E.g. if a model is in the package <code>com.example</code>, then its file should
 You can also <a href="#further-references">change the location</a> in which models are found.</p>
 <h3 id="project-setup">Project setup</h3>
 <p>To enable the usage of the MontiArc plugin, we have to add the repository in which it lays to the settings file of gradle:</p>
-<p>{{&lt; tabs "gradle-settings-file" &gt;}}
-{{&lt; tab "Kotlin" &gt;}} 
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Kotlin</label><label for="__tabbed_1_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// If your settings file is settings.gradle.kts (namely, it uses kotlin syntax)</span>
 
 <span class="c1">// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
@@ -1513,8 +1514,8 @@ You can also <a href="#further-references">change the location</a> in which mode
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; tab "Groovy" &gt;}} 
+</div>
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// If your settings file is settings.gradle (namely, it uses groovy syntax)</span>
 
 <span class="c1">// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
@@ -1527,11 +1528,13 @@ You can also <a href="#further-references">change the location</a> in which mode
 <span class="w">  </span><span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; /tabs &gt;}}</p>
-<p>We can then apply the plugin by adding the following to Gradle's Build file:
-{{&lt; tabs "gradle-build-file" &gt;}}
-{{&lt; tab "Kotlin" &gt;}} 
+</div>
+</div>
+</div>
+<p>We can then apply the plugin by adding the following to Gradle's Build file:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Kotlin</label><label for="__tabbed_2_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// Use this code if your build file is build.gradle.kts (namely, it uses kotlin syntax)</span>
 <span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// Optional, but recommended for this tutorial</span>
@@ -1546,8 +1549,8 @@ You can also <a href="#further-references">change the location</a> in which mode
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; tab "Groovy" &gt;}} 
+</div>
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// Use this code if your build file is build.gradle (namely, it uses groovy syntax)</span>
 <span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span><span class="w">  </span><span class="c1">// Optional, but recommended for this tutorial</span>
@@ -1562,8 +1565,9 @@ You can also <a href="#further-references">change the location</a> in which mode
 <span class="w">  </span><span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; /tabs &gt;}}</p>
+</div>
+</div>
+</div>
 <p>You can now place your models in the <code>src/main/montiarc</code> folder of your project.</p>
 <h3 id="executing-the-generation-process">Executing the generation process</h3>
 <p>Gradle can be run as a standalone tool from the command line, or from IDEs by using plugins:
@@ -1574,36 +1578,39 @@ You can also <a href="#further-references">change the location</a> in which mode
 Executing the <code>build</code> task will also trigger the generation.
 It will additionally compile the generated Java code if the <a href="https://docs.gradle.org/current/userguide/java_plugin.html"><em>java</em></a> plugin is also applied.</p>
 <p>Try creating a simple MontiArc model at the location of <code>src/main/montiarc/com/example/MyComp.arc</code>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
-component MyComp { }
+<span class="kd">component</span> <span class="nc">MyComp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <p>Now execute the <code>compileMontiarc</code> task with Gradle.
 Check that, as a result, the java class <code>MyComp</code> should be generated to <code>build/montiarc/main/java/com/example/MyComp.java</code>.</p>
-<p>If you also want that the <code>build</code> task compiles the generated code, then also apply the <a href="https://docs.gradle.org/current/userguide/java_plugin.html"><em>java</em></a> plugin in your build script (if you have not done this yet):
-{{&lt; tabs "gradle-apply-java" &gt;}}
-{{&lt; tab "Kotlin" &gt;}} 
+<p>If you also want that the <code>build</code> task compiles the generated code, then also apply the <a href="https://docs.gradle.org/current/userguide/java_plugin.html"><em>java</em></a> plugin in your build script (if you have not done this yet):</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Kotlin</label><label for="__tabbed_3_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// If your build file is build.gradle.kts (namely, it uses kotlin syntax)</span>
 <span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; tab "Groovy" &gt;}} 
+</div>
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// If your build file is build.gradle (namely, it uses groovy syntax)</span>
 <span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; /tabs &gt;}}</p>
+</div>
+</div>
+</div>
 <h3 id="adding-class-diagrams-to-your-project">Adding class diagrams to your project</h3>
 <p>You can declare class diagram models to be used by MontiArc by applying the <em>cd2pojo</em> plugin.
 In order to do this, add the cd2pojo plugin to the <code>plugins</code> block within the build script:</p>
-<p>{{&lt; tabs "gradle-apply-cd2pojo" &gt;}}
-{{&lt; tab "Kotlin" &gt;}} 
+<div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Kotlin</label><label for="__tabbed_4_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// If your build file is build.gradle.kts (namely, it uses kotlin syntax)</span>
 <span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span>
@@ -1611,8 +1618,8 @@ In order to do this, add the cd2pojo plugin to the <code>plugins</code> block wi
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;cd2pojo&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; tab "Groovy" &gt;}} 
+</div>
+<div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="c1">// If your build file is build.gradle (namely, it uses groovy syntax)</span>
 <span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span>
@@ -1620,8 +1627,9 @@ In order to do this, add the cd2pojo plugin to the <code>plugins</code> block wi
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;cd2pojo&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
-{{&lt; /tab &gt;}}
-{{&lt; /tabs &gt;}}</p>
+</div>
+</div>
+</div>
 <p>The project structure of projects with class diagrams is similar to <a href="#montiarc-project-structure">projects with MontiArc</a> (but can also be <a href="#further-references">customized</a>):
 <div class="highlight"><pre><span></span><code>project-root
 ├── src
@@ -1647,21 +1655,21 @@ In order to do this, add the cd2pojo plugin to the <code>plugins</code> block wi
 └── settings.gradle
 </code></pre></div></p>
 <p>Try creating a simple class diagram model at the location of <code>src/main/cd2pojo/com/example/MyTypes.cd</code>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="k k-NameSpace">package</span><span class="err"> com.example;</span>
 
-classdiagram MyTypes {
-  public enum Status {
-    ACTIVE,
-    STAND_BY;
-  }
-}
+<span class="k k-NameSpace">classdiagram</span><span class="err"> MyTypes {</span>
+<span class="err">  </span><span class="kd">public</span><span class="err"> </span><span class="k k-NameSpace">enum</span><span class="err"> Status {</span>
+<span class="err">    ACTIVE,</span>
+<span class="err">    STAND_BY;</span>
+<span class="err">  }</span>
+<span class="err">}</span>
 </code></pre></div></p>
 <p>Now use the enum type in your MontiArc model <a href="#executing-the-generation-process"><code>MyComp</code></a>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
-import com.example.MyTypes.Status;
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.MyTypes.Status</span><span class="p">;</span>
 
-component MyComp(Status initialStatus) { }
+<span class="kd">component</span> <span class="nf">MyComp</span><span class="p">(</span><span class="n">Status</span><span class="w"> </span><span class="n">initialStatus</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <p>Execute the <code>compileMontiarc</code> task with Gradle.
 Check that no error occurs.
@@ -1675,23 +1683,23 @@ Note: If an error occurs, try running Gradle's <code>clean</code> task before. <
 <span class="p">}</span>
 </code></pre></div></p>
 <p>Now use <code>String</code> in your MontiArc model <a href="#executing-the-generation-process"><code>MyComp</code></a>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
-// Types from java.lang are automatically imported.
-// For types from other packages, import them
-// E.g.: 
-// import com.example.MyJavaType;
+<span class="c1">// Types from java.lang are automatically imported.</span>
+<span class="c1">// For types from other packages, import them</span>
+<span class="c1">// E.g.: </span>
+<span class="c1">// import com.example.MyJavaType;</span>
 
-component MyComp(String prefix) {}
+<span class="kd">component</span> <span class="nf">MyComp</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">prefix</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div></p>
 <p>Execute the <code>compileMontiarc</code> task with Gradle.
 Check that no error occurs.</p>
 <p>Java types can be used similarly from within class diagram models.
 To this end, the <code>useClass2Mc</code> option has to be set for the <code>compileCd2pojo</code> task that under the hood processes the class diagram models:
-<div class="highlight"><pre><span></span><code>// Add the following to your build file:
-task.compileCd2pojo {
-  useClass2Mc.set(true)
-}
+<div class="highlight"><pre><span></span><code><span class="c1">// Add the following to your build file:</span>
+<span class="n">task</span><span class="p">.</span><span class="na">compileCd2pojo</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+<span class="p">}</span>
 </code></pre></div></p>
 <p>Note that, if you use java types from class diagrams, than you also have to set the <code>useClass2Mc</code> option for your MontiArc models.
 Else, you will encounter errors.</p>
@@ -1708,9 +1716,9 @@ You can find comprehensive information about the MontiArc plugin under [MontiArc
 | <code>-o, --output &lt;dir&gt;</code>         | Sets the target path for the generated files (optional). |</p>
 <p>To exemplify the usage, lets consider the following example:
 Having a project <code>demo</code>, create a MontiArc model in <code>demo/src/montiarc/com/example/MyComp.arc</code>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
-component MyComp { }
+<span class="kd">component</span> <span class="nc">MyComp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <p>Now execute the CLI tool:
 <div class="highlight"><pre><span></span><code><span class="c1"># Being in the &#39;demo&#39; directory</span>
@@ -1730,14 +1738,14 @@ Its main command line options are:
 | <code>-s, --symboltable &lt;dir&gt;</code>    | Sets the target path to which symbolic files are exported (optional). |
 As we can see, we can use the <code>--symboltable</code> option to export the <code>.cdsym</code> files that MontiArc can read.
 E.g. create a class diagram model at <code>demo/src/cd2pojo/com/example/MyTypes.cd</code>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="k k-NameSpace">package</span><span class="err"> com.example;</span>
 
-classdiagram MyTypes {
-  public enum Status {
-    ACTIVE,
-    STAND_BY;
-  }
-}
+<span class="k k-NameSpace">classdiagram</span><span class="err"> MyTypes {</span>
+<span class="err">  </span><span class="kd">public</span><span class="err"> </span><span class="k k-NameSpace">enum</span><span class="err"> Status {</span>
+<span class="err">    ACTIVE,</span>
+<span class="err">    STAND_BY;</span>
+<span class="err">  }</span>
+<span class="err">}</span>
 </code></pre></div></p>
 <p>Now execute the generator:
 <div class="highlight"><pre><span></span><code><span class="c1"># Being in the &#39;demo&#39; directory</span>
@@ -1748,11 +1756,11 @@ We also generated a java implementation of the class diagram at <code>demo/build
 If you do not want to use the generated java implementations, you may omit the <code>--output</code> option.</p>
 <p>We can now use the class diagram in MontiArc.
 To this end, modify <a href="#execute-the-cli-generation-process"><code>MyComp</code></a>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
-import com.example.MyTypes.Status;
+<span class="kn">import</span><span class="w"> </span><span class="nn">com.example.MyTypes.Status</span><span class="p">;</span>
 
-component MyComp(Status initialStatus) { }
+<span class="kd">component</span> <span class="nf">MyComp</span><span class="p">(</span><span class="n">Status</span><span class="w"> </span><span class="n">initialStatus</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <p>We can now use the <code>-path</code> option of the MontiArc generator to specify directories in which symbol files lay. The symbol files are also allowed to be wrapped in jar files.
 Try to execute the generator:
@@ -1766,11 +1774,11 @@ This will make all java types of the generators class-path available to MontiArc
 Moreover, one can put jars with the types to be used on the <code>-path</code> command line option.
 JDK types are available by default.</p>
 <p>Let's modify <a href="#execute-the-cli-generation-process"><code>MyComp</code></a>:
-<div class="highlight"><pre><span></span><code>package com.example;
+<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
-import java.lang.String;  // TODO: test whether String is automatically imported
+<span class="kn">import</span><span class="w"> </span><span class="nn">java.lang.String</span><span class="p">;</span><span class="w">  </span><span class="c1">// TODO: test whether String is automatically imported</span>
 
-component MyComp(String initialStatus) { }
+<span class="kd">component</span> <span class="nf">MyComp</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">initialStatus</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <p>Now execute the generator and verify that no error occurs:
 <div class="highlight"><pre><span></span><code><span class="c1"># Being in the &#39;demo&#39; directory</span>

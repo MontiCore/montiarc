@@ -9,7 +9,7 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/component/Interfaces/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Component/Interfaces/">
       
       
         <link rel="prev" href="../Inheritance/">
@@ -239,7 +239,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../usage/GettingStarted/" class="md-tabs__link">
+        <a href="../../Usage/GettingStarted/" class="md-tabs__link">
           
   
   Usage
@@ -259,7 +259,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../Component/" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   Component
@@ -455,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/GettingStarted/" class="md-nav__link">
+      <a href="../../Usage/GettingStarted/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -477,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoCLTool/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -499,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -521,7 +521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcCLTool/" class="md-nav__link">
+      <a href="../../Usage/MontiArcCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -543,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/MontiArcGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -616,7 +616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Component/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -888,7 +888,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Automata/" class="md-nav__link">
+      <a href="../../Behavior/Automata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -910,7 +910,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Compute/" class="md-nav__link">
+      <a href="../../Behavior/Compute/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -932,7 +932,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Expressions/" class="md-nav__link">
+      <a href="../../Behavior/Expressions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -954,7 +954,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Statements/" class="md-nav__link">
+      <a href="../../Behavior/Statements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -976,7 +976,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Variables/" class="md-nav__link">
+      <a href="../../Behavior/Variables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1066,7 +1066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/ClassDiagrams/" class="md-nav__link">
+      <a href="../../TypeSystem/ClassDiagrams/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1088,7 +1088,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/JavaIntegration/" class="md-nav__link">
+      <a href="../../TypeSystem/JavaIntegration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1110,7 +1110,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Primitives/" class="md-nav__link">
+      <a href="../../TypeSystem/Primitives/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1132,7 +1132,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Collections/" class="md-nav__link">
+      <a href="../../TypeSystem/Collections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1229,14 +1229,14 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
 <h1 id="component-interface-aka-ports">Component Interface (a.k.a. Ports)</h1>
-<p><div class="highlight"><pre><span></span><code>component MyComp {
-  port &lt;&lt;sync&gt;&gt; in int inPort1,
-       &lt;&lt;timed&gt;&gt; in int inPort2,
-                 out int outPort1,  // No timing specified
-       &lt;&lt;untimed&gt;&gt; out int outPort2;
+<p><div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">MyComp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">inPort1</span><span class="p">,</span>
+<span class="w">       </span><span class="o">&lt;&lt;</span><span class="n">timed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">inPort2</span><span class="p">,</span>
+<span class="w">                 </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">outPort1</span><span class="p">,</span><span class="w">  </span><span class="c1">// No timing specified</span>
+<span class="w">       </span><span class="o">&lt;&lt;</span><span class="n">untimed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">outPort2</span><span class="p">;</span>
 
-  port out boolean outPortInSeparateDeclaration;
-}
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">outPortInSeparateDeclaration</span><span class="p">;</span>
+<span class="p">}</span>
 </code></pre></div>
 Ports are declared within the bodies of the components to which they belong.
 It is possible to define multiple ports within one statement.
@@ -1250,7 +1250,7 @@ This allows the textual grouping of conceptually related ports.</p>
   Only data of that can flow through the port. See [Type system] for more information about types.
 *  The port's <em>name</em> that is later used to refer to the port and the information flowing through it.</p>
 <h2 id="complete-syntax">Complete syntax</h2>
-<div class="highlight"><pre><span></span><code>port (&lt;port-timing&gt;) &lt;direction&gt; &lt;type&gt; &lt;name&gt; ;
+<div class="highlight"><pre><span></span><code><span class="k">port</span><span class="w"> </span><span class="p">(</span><span class="o">&lt;</span><span class="k">port</span><span class="o">-</span><span class="n">timing</span><span class="o">&gt;</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;</span><span class="n">direction</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="n">type</span><span class="o">&gt;</span><span class="w"> </span><span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="w"> </span><span class="p">;</span>
 </code></pre></div>
 
 

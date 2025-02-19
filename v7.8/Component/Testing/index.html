@@ -9,7 +9,7 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/component/Testing/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Component/Testing/">
       
       
         <link rel="prev" href="../Parameter/">
@@ -239,7 +239,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../usage/GettingStarted/" class="md-tabs__link">
+        <a href="../../Usage/GettingStarted/" class="md-tabs__link">
           
   
   Usage
@@ -259,7 +259,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../Component/" class="md-tabs__link">
+        <a href="../" class="md-tabs__link">
           
   
   Component
@@ -455,7 +455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/GettingStarted/" class="md-nav__link">
+      <a href="../../Usage/GettingStarted/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -477,7 +477,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoCLTool/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -499,7 +499,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/CD2PojoGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/CD2PojoGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -521,7 +521,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcCLTool/" class="md-nav__link">
+      <a href="../../Usage/MontiArcCLTool/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -543,7 +543,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../usage/MontiArcGradlePlugin/" class="md-nav__link">
+      <a href="../../Usage/MontiArcGradlePlugin/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -616,7 +616,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Component/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -963,7 +963,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Automata/" class="md-nav__link">
+      <a href="../../Behavior/Automata/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -985,7 +985,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Compute/" class="md-nav__link">
+      <a href="../../Behavior/Compute/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1007,7 +1007,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Expressions/" class="md-nav__link">
+      <a href="../../Behavior/Expressions/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1029,7 +1029,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Statements/" class="md-nav__link">
+      <a href="../../Behavior/Statements/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1051,7 +1051,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../behavior/Variables/" class="md-nav__link">
+      <a href="../../Behavior/Variables/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1141,7 +1141,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/ClassDiagrams/" class="md-nav__link">
+      <a href="../../TypeSystem/ClassDiagrams/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1163,7 +1163,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/JavaIntegration/" class="md-nav__link">
+      <a href="../../TypeSystem/JavaIntegration/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1185,7 +1185,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Primitives/" class="md-nav__link">
+      <a href="../../TypeSystem/Primitives/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1207,7 +1207,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../typesystem/Collections/" class="md-nav__link">
+      <a href="../../TypeSystem/Collections/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -1377,57 +1377,58 @@
 
 
 <h1 id="writing-automated-tests">Writing Automated Tests</h1>
-<p>An important approach to ensuring system quality is systematic testing. 
+<p>An important approach to ensuring system quality is systematic testing.
 Testing is the act of detecting failures in a product.
-A failure is a divergence between the expected and actual behavior of software. 
+A failure is a divergence between the expected and actual behavior of software.
 MontiArc includes support for writing automated tests.
-These can be run whenever changes are made to ensure that the systems behaves 
+These can be run whenever changes are made to ensure that the systems behaves
 as specified.</p>
 <h2 id="how-to-write-tests">How to Write Tests</h2>
 <p>In MontiArc, tests are components that verify the behavior of other components.
-This is achieved by making assertions over the input and output streams of the 
-system to be tested, also called system under test (SUT).  </p>
-<p>A test component is usually <a href="../Decomposition/">decomposed</a> and consists of 
-three major parts, namely the test fixture, the SUT, and the test oracle. 
+This is achieved by making assertions over the input and output streams of the
+system to be tested, also called system under test (SUT).</p>
+<p>A test component is usually <a href="../Decomposition/">decomposed</a> and consists of
+three major parts, namely the test fixture, the SUT, and the test oracle.
 The test fixture (also called the test context) provides inputs to the SUT.
-The SUT produces outputs based on the provided inputs, which are then evaluated 
+The SUT produces outputs based on the provided inputs, which are then evaluated
 and compared against the expected results by a test oracle.</p>
 <h3 id="test-anatomy">Test Anatomy</h3>
-<p>A test in MontiArc is identified by the <code>&lt;&lt;test&gt;&gt;</code> stereotype in front of the 
+<p>A test in MontiArc is identified by the <code>&lt;&lt;test&gt;&gt;</code> stereotype in front of the
 component definition. Take a look at the following example:</p>
-<div class="highlight"><pre><span></span><code>&lt;&lt;test&gt;&gt;
-component AndTest {
-  And sut;
+<div class="highlight"><pre><span></span><code><span class="o">&lt;&lt;</span><span class="n">test</span><span class="o">&gt;&gt;</span>
+<span class="kd">component</span> <span class="nc">AndTest</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">And</span><span class="w"> </span><span class="n">sut</span><span class="p">;</span>
 
-  emitterA.out -&gt; sut.a;
-  emitterB.out -&gt; sut.b;
-  sut.q -&gt; assertEquals.actual;
+<span class="w">  </span><span class="n">emitterA</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">a</span><span class="p">;</span>
+<span class="w">  </span><span class="n">emitterB</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">b</span><span class="p">;</span>
+<span class="w">  </span><span class="n">sut</span><span class="p">.</span><span class="na">q</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">assertEquals</span><span class="p">.</span><span class="na">actual</span><span class="p">;</span>
 
-  AssertEquals&lt;boolean&gt; assertEquals(true);
-  Emit&lt;boolean&gt; emitterA(true);
-  Emit&lt;boolean&gt; emitterB(true);
-}
+<span class="w">  </span><span class="n">AssertEquals</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">assertEquals</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">Emit</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterA</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="w">  </span><span class="n">Emit</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterB</span><span class="p">(</span><span class="kc">true</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre></div>
-<p>The component <code>sut</code> implements the logic of a binary AND gate and is the SUT. 
-The <code>emitterA</code> and <code>emitterB</code> are the test fixture, they provide input to the 
-SUT. Here they emit a single message with value <code>true</code>, wich is configured via 
-their argument. 
+<p>The component <code>sut</code> implements the logic of a binary AND gate and is the SUT.
+The <code>emitterA</code> and <code>emitterB</code> are the test fixture, they provide input to the
+SUT. Here they emit a single message with value <code>true</code>, wich is configured via
+their argument.
 The <code>assertEquals</code> component then checks the output against the expected output.
-The example makes use of two library components called <code>Emit</code> and <code>AssertEquals</code>,
-which are responsible for the setup and assertions respectively. </p>
+The example makes use of two library components called <code>Emit</code> and
+<code>AssertEquals</code>,
+which are responsible for the setup and assertions respectively.</p>
 <h3 id="parameterized-tests">Parameterized Tests</h3>
-<p>MontiArc allows the definition of parameterized tests. 
-This is useful when wanting to define multiple tests while keeping the overall 
+<p>MontiArc allows the definition of parameterized tests.
+This is useful when wanting to define multiple tests while keeping the overall
 architecture the same.
-A test component can have <a href="../Parameter/">parameters</a> for which different values can be 
-provided, each of which results in an individual test execution.
-The values are provided as a list assigned to a stereo value with the same name 
-as the parameter. </p>
-<p>The following example shows a parameterized test component, which creates <code>N</code> 
-different test cases. For convenience, if a parameter stays the same over all 
+A test component can have <a href="../Parameter/">parameters</a> for which different
+values can be provided, each of which results in an individual test execution.
+The values are provided as a list assigned to a stereo value with the same name
+as the parameter.</p>
+<p>The following example shows a parameterized test component, which creates <code>N</code>
+different test cases. For convenience, if a parameter stays the same over all
 tests than the list can be omitted and a direct value can be assigned.</p>
-<div class="highlight"><pre><span></span><code>&lt;&lt;test, p1=[val1, val2, ..., valN], p2=valP2&gt;&gt;
-component AndTest(T p1, T p2) { }
+<div class="highlight"><pre><span></span><code><span class="o">&lt;&lt;</span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">p1</span><span class="o">=[</span><span class="n">val1</span><span class="p">,</span><span class="w"> </span><span class="n">val2</span><span class="p">,</span><span class="w"> </span><span class="p">...,</span><span class="w"> </span><span class="n">valN</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">p2</span><span class="o">=</span><span class="n">valP2</span><span class="o">&gt;&gt;</span>
+<span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">p1</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">p2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <table>
 <thead>
@@ -1456,93 +1457,89 @@ component AndTest(T p1, T p2) { }
 </tbody>
 </table>
 <h3 id="complex-tests">Complex Tests</h3>
-<p>More complex tests can be defined by using other library components that 
+<p>More complex tests can be defined by using other library components that
 produce or assert streams of messages.
-The execution length of the test can be set with the <code>ticks</code> stereotype, which 
+The execution length of the test can be set with the <code>ticks</code> stereotype, which
 defines the number of ticks that the test should run for.</p>
 <p>The following test description targets an implementation of the binary AND gate.
 The test is parameterized by the input and output streams of the SUT.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Timed</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Timed</label><label for="__tabbed_1_2">Sync</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
-</div>
-</div>
-<div class="highlight"><pre><span></span><code>import java.util.List;
-import montiarc.maunit.api.AssertEqualsTimed;
-import montiarc.maunit.api.EmitTimed;
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.AssertEqualsTimed</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.EmitTimed</span><span class="p">;</span>
 
-&lt;&lt;test,
-  ticks=3,
-  a=[
-    [[false, false], [true], [true]],
-    [[false, false], [false], [false, true]]
-  ],
-  b=[
-    [[false, true], [false], [true]],
-    [[false, true], [false], [true, true]]
-  ],
-  expected=[
-    [[false], [false], [true]],
-    [[false], [false], [true]]
-  ]&gt;&gt;
-  component AndTest(List&lt;List&lt;Boolean&gt;&gt; a, 
-                    List&lt;List&lt;Boolean&gt;&gt; b, 
-                    List&lt;List&lt;Boolean&gt;&gt; expected) {
+<span class="o">&lt;&lt;</span><span class="n">test</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ticks</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="w">  </span><span class="n">a</span><span class="o">=[</span>
+<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span><span class="p">,</span>
+<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]]</span>
+<span class="w">  </span><span class="o">]</span><span class="p">,</span>
+<span class="w">  </span><span class="n">b</span><span class="o">=[</span>
+<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span><span class="p">,</span>
+<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]]</span>
+<span class="w">  </span><span class="o">]</span><span class="p">,</span>
+<span class="w">  </span><span class="n">expected</span><span class="o">=[</span>
+<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span><span class="p">,</span>
+<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span>
+<span class="w">  </span><span class="o">]&gt;&gt;</span>
+<span class="w">  </span><span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
-  And sut;
+<span class="w">    </span><span class="n">And</span><span class="w"> </span><span class="n">sut</span><span class="p">;</span>
 
-  emitterA.out -&gt; sut.a;
-  emitterB.out -&gt; sut.b;
-  sut.q -&gt; assertEquals.actual;
+<span class="w">    </span><span class="n">emitterA</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">a</span><span class="p">;</span>
+<span class="w">    </span><span class="n">emitterB</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">b</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sut</span><span class="p">.</span><span class="na">q</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">assertEquals</span><span class="p">.</span><span class="na">actual</span><span class="p">;</span>
 
-  AssertEqualsTimed&lt;Boolean&gt; assertEquals(expected);
-  EmitTimed&lt;Boolean&gt; emitterA(a);
-  EmitTimed&lt;Boolean&gt; emitterB(b);
-}
+<span class="w">    </span><span class="n">AssertEqualsTimed</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">assertEquals</span><span class="p">(</span><span class="n">expected</span><span class="p">);</span>
+<span class="w">    </span><span class="n">EmitTimed</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterA</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">EmitTimed</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterB</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 </code></pre></div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Sync</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block"></div>
 </div>
-</div>
-<div class="highlight"><pre><span></span><code>import java.util.List;
-import montiarc.maunit.api.AssertEqualsSync;
-import montiarc.maunit.api.EmitSync;
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.AssertEqualsSync</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.EmitSync</span><span class="p">;</span>
 
-&lt;&lt;test,
-  ticks=[4, 5],
-  a=[
-    [false, false, true, true],
-    [false, false, false, false, true]
-  ],
-  b=[
-    [false, true, false, true],
-    [false, true, false, true, true]
-  ],
-  expected=[
-    [false, false, false, true],
-    [false, false, false, false, true]
-  ]&gt;&gt;
-  component AndTest(List&lt;Boolean&gt; a, 
-                    List&lt;Boolean&gt; b, 
-                    List&lt;Boolean&gt; expected) {
-    And sut;
+<span class="o">&lt;&lt;</span><span class="n">test</span><span class="p">,</span>
+<span class="w">  </span><span class="n">ticks</span><span class="o">=[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">]</span><span class="p">,</span>
+<span class="w">  </span><span class="n">a</span><span class="o">=[</span>
+<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span>
+<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span>
+<span class="w">  </span><span class="o">]</span><span class="p">,</span>
+<span class="w">  </span><span class="n">b</span><span class="o">=[</span>
+<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span>
+<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span>
+<span class="w">  </span><span class="o">]</span><span class="p">,</span>
+<span class="w">  </span><span class="n">expected</span><span class="o">=[</span>
+<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span>
+<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span>
+<span class="w">  </span><span class="o">]&gt;&gt;</span>
+<span class="w">  </span><span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span>
+<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">And</span><span class="w"> </span><span class="n">sut</span><span class="p">;</span>
 
-    emitterA.out -&gt; sut.a;
-    emitterB.out -&gt; sut.b;
-    sut.q -&gt; assertEquals.actual;
+<span class="w">    </span><span class="n">emitterA</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">a</span><span class="p">;</span>
+<span class="w">    </span><span class="n">emitterB</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">b</span><span class="p">;</span>
+<span class="w">    </span><span class="n">sut</span><span class="p">.</span><span class="na">q</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">assertEquals</span><span class="p">.</span><span class="na">actual</span><span class="p">;</span>
 
-    AssertEqualsSync&lt;Boolean&gt; assertEquals(expected);
-    EmitSync&lt;Boolean&gt; emitterA(a);
-    EmitSync&lt;Boolean&gt; emitterB(b);
-  }
+<span class="w">    </span><span class="n">AssertEqualsSync</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">assertEquals</span><span class="p">(</span><span class="n">expected</span><span class="p">);</span>
+<span class="w">    </span><span class="n">EmitSync</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterA</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">EmitSync</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterB</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="w">  </span><span class="p">}</span>
 </code></pre></div>
+</div>
+</div>
+</div>
 <p>Resulting in the following test cases:</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Timed</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Timed</label><label for="__tabbed_2_2">Sync</label></div>
 <div class="tabbed-content">
-<div class="tabbed-block"></div>
-</div>
-</div>
+<div class="tabbed-block">
 <table>
 <thead>
 <tr>
@@ -1570,11 +1567,8 @@ import montiarc.maunit.api.EmitSync;
 </tr>
 </tbody>
 </table>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Sync</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block"></div>
 </div>
-</div>
+<div class="tabbed-block">
 <table>
 <thead>
 <tr>
@@ -1602,6 +1596,9 @@ import montiarc.maunit.api.EmitSync;
 </tr>
 </tbody>
 </table>
+</div>
+</div>
+</div>
 <h3 id="library-components">Library Components</h3>
 <p>The library consists of two main component categories: assertion components and emitter
 components. The former provide means to compare input streams with expected values,

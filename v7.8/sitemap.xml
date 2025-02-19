@@ -2,102 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://monticore.github.io/montiarc/v7.8/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
          <loc>https://monticore.github.io/montiarc/v7.8/BeginnersGuide/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
          <loc>https://monticore.github.io/montiarc/v7.8/Behavior/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
          <loc>https://monticore.github.io/montiarc/v7.8/Component/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
          <loc>https://monticore.github.io/montiarc/v7.8/TypeSystem/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/behavior/Automata/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Behavior/Automata/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/behavior/Compute/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Behavior/Compute/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/behavior/Expressions/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Behavior/Expressions/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/behavior/Statements/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Behavior/Statements/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/behavior/Variables/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Behavior/Variables/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/component/Decomposition/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Component/Decomposition/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/component/Generics/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Component/Generics/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/component/Inheritance/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Component/Inheritance/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/component/Interfaces/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Component/Interfaces/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/component/Parameter/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Component/Parameter/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/component/Testing/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Component/Testing/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/typesystem/ClassDiagrams/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/TypeSystem/ClassDiagrams/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/typesystem/Collections/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/TypeSystem/Collections/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/typesystem/JavaIntegration/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/TypeSystem/JavaIntegration/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/typesystem/Primitives/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/TypeSystem/Primitives/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/usage/CD2PojoCLTool/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Usage/CD2PojoCLTool/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/usage/CD2PojoGradlePlugin/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Usage/CD2PojoGradlePlugin/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/usage/GettingStarted/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Usage/GettingStarted/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/usage/MontiArcCLTool/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Usage/MontiArcCLTool/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
     <url>
-         <loc>https://monticore.github.io/montiarc/v7.8/usage/MontiArcGradlePlugin/</loc>
-         <lastmod>2025-02-17</lastmod>
+         <loc>https://monticore.github.io/montiarc/v7.8/Usage/MontiArcGradlePlugin/</loc>
+         <lastmod>2025-02-19</lastmod>
     </url>
 </urlset>
