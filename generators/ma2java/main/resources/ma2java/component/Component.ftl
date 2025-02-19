@@ -42,7 +42,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 </#macro>
 
 <#macro printParameters comp>
-  <#list comp.getParameters() as param>
+  <#list comp.getParameterList() as param>
     protected final <@getTypeString param.getType()/> ${param.getName()};
   </#list>
 </#macro>
@@ -72,7 +72,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
       super(<#list comp.getSuperComponents(0).getParamArcBindingsAsList() as parentConfiguration>${compHelper.printExpression(parentConfiguration.getExpression())}<#sep>, </#sep></#list>);
     </#if>
 
-    <#list comp.getParameters() as param>
+    <#list comp.getParameterList() as param>
       this.${param.getName()} = ${param.getName()};
     </#list>
 
@@ -85,7 +85,7 @@ ${tc.includeArgs("ma2java.component.Header.ftl", ast, compHelper.asList(isTop))}
 </#macro>
 
 <#macro printParametersAsList comp>
-  <#list comp.getParameters() as param>
+  <#list comp.getParameterList() as param>
       <@getTypeString param.getType()/> ${param.getName()}<#t><#sep>, </#sep><#t>
   </#list>
 </#macro>

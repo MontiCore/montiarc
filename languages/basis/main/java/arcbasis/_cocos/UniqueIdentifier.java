@@ -140,7 +140,7 @@ public class UniqueIdentifier implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
-    component.getParameters().forEach(
+    component.getParameterList().forEach(
       field -> nameOccurrences.put(field.getName(), optSourcePosOf(field).orElse(new SourcePosition(-1, -1)))
     );
     return nameOccurrences;

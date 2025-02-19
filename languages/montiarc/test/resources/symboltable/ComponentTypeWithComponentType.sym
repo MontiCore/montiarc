@@ -1,36 +1,34 @@
 {
-  "name" : "ComponentTypeWithComponentType",
-  "package" : "symboltable",
-  "symbols" : [
+  "name": "ComponentTypeWithComponentType",
+  "package": "symboltable",
+  "symbols": [
     {
-          "kind": "arcbasis._symboltable.ComponentTypeSymbol",
-          "name": "ComponentTypeWithComponentType",
-          "innerComponents": [
-            {
-              "kind": "arcbasis._symboltable.ComponentTypeSymbol",
-              "name": "A"
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "ComponentTypeWithComponentType",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+            "name": "A"
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
+            "name": "a",
+            "type": {
+              "kind": "arcbasis.check.TypeExprOfComponent",
+              "componentTypeName": "Component.A"
             }
-          ],
-          "subcomponents": [
-            {
-              "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
-              "name": "a",
-              "type": {
-                "kind": "arcbasis.check.TypeExprOfComponent",
-                "componentTypeName": "Component.A"
-              }
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "j",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             }
-          ],
-          "fields": [
-            {
-              "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
-              "name": "j",
-              "type": {
-                "kind": "de.monticore.types.check.SymTypePrimitive",
-                "primitiveName": "int"
-              }
-            }
-          ]
-        }
+          }
+        ]
+      }
+    }
   ]
 }

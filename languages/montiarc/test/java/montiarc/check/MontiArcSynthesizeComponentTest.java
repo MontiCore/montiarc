@@ -78,13 +78,13 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     MontiArcMill.globalScope().add(compSym);
     MontiArcMill.globalScope().addSubScope(compSym.getSpannedScope());
 
-    String stringName = "String";
-    OOTypeSymbol stringSym = MontiArcMill.oOTypeSymbolBuilder()
-      .setName(stringName)
+    String fooName = "Foo";
+    OOTypeSymbol fooSym = MontiArcMill.oOTypeSymbolBuilder()
+      .setName(fooName)
       .setSpannedScope(MontiArcMill.scope())
       .build();
-    MontiArcMill.globalScope().add(stringSym);
-    MontiArcMill.globalScope().addSubScope(stringSym.getSpannedScope());
+    MontiArcMill.globalScope().add(fooSym);
+    MontiArcMill.globalScope().addSubScope(fooSym.getSpannedScope());
 
     String listName = "List";
     OOTypeSymbol listSym = MontiArcMill.oOTypeSymbolBuilder()
@@ -98,7 +98,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     // Now we build generic ast types Comp<String, List<String>> that lay in the global scope.
     ASTMCQualifiedType astString = MontiArcMill.mCQualifiedTypeBuilder()
       .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
-        .addParts(stringName)
+        .addParts(fooName)
         .build())
       .build();
     astString.setEnclosingScope(MontiArcMill.globalScope());
@@ -126,9 +126,9 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     Assertions.assertEquals(compSym, resultAsGeneric.getTypeInfo());
     Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject);
     Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics);
-    Assertions.assertEquals(stringSym, resultAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
+    Assertions.assertEquals(fooSym, resultAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
     Assertions.assertEquals(listSym, resultAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
-    Assertions.assertEquals(stringSym,
+    Assertions.assertEquals(fooSym,
       ((SymTypeOfGenerics) resultAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
     );
   }

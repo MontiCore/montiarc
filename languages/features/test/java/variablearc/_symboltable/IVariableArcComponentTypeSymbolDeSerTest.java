@@ -31,13 +31,15 @@ public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcTestBas
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"features\":[{\"kind\":\"variablearc._symboltable.ArcFeatureSymbol\",\"name\":\"f1\",\"fullName\":\"Comp.f1\"}]" +
+      "\"fullName\":\"Comp\"," +
+      "\"spannedScope\":{\"symbols\":[{\"kind\":\"variablearc._symboltable.ArcFeatureSymbol\",\"name\":\"f1\",\"fullName\":\"Comp.f1\"}]}" +
       "}";
 
   protected static final String JSON_WITH_CONSTRAINTS =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
+      "\"fullName\":\"Comp\"," +
       "\"constraints\":{\"kind\":\"variablearc.evaluation.ExpressionSet\",\"expressions\":[{\"expression\":\"f1\"}]}" +
       "}";
 
@@ -45,6 +47,7 @@ public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcTestBas
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
+      "\"fullName\":\"Comp\"," +
       "\"variationPoints\":[" +
       "{\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\",\"expression\":\"f1\"}," +
       "{\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\",\"expression\":\"f2\",\"childVariationPoints\":[{\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\",\"expression\":\"f3\"}]}]" +
@@ -191,22 +194,42 @@ public class IVariableArcComponentTypeSymbolDeSerTest extends VariableArcTestBas
     }
 
     @Override
-    protected void serializeAddons(@NotNull ComponentTypeSymbol toSerialize, @NotNull ArcBasisSymbols2Json s2j) {
-      Preconditions.checkNotNull(toSerialize);
-      Preconditions.checkNotNull(s2j);
+    public String serialize(ComponentTypeSymbol toSerialize, ArcBasisSymbols2Json s2j) {
+      de.monticore.symboltable.serialization.JsonPrinter p = s2j.getJsonPrinter();
+      p.beginObject();
+      p.member(de.monticore.symboltable.serialization.JsonDeSers.KIND, getSerializedKind());
+      p.member(de.monticore.symboltable.serialization.JsonDeSers.NAME, toSerialize.getName());
+      p.member(de.monticore.symboltable.serialization.JsonDeSers.FULL_NAME, toSerialize.getFullName());
+      p.member(de.monticore.symboltable.serialization.JsonDeSers.PACKAGE_NAME, toSerialize.getPackageName());
+
+      // serialize symbolrule attributes
+      serializeNumOptParams(toSerialize.getNumOptParams(), s2j);
+      serializeSuperComponents(toSerialize.getSuperComponentsList(), s2j);
+      serializeRefinements(toSerialize.getRefinementsList(), s2j);
+      serializeParameter(toSerialize.getParameterList(), s2j);
+
       if (toSerialize instanceof IVariableArcComponentTypeSymbol) {
-        serializeArcFeatures((IVariableArcComponentTypeSymbol) toSerialize, s2j);
         serializeConstraints((IVariableArcComponentTypeSymbol) toSerialize, s2j);
         serializeVariationPoint((IVariableArcComponentTypeSymbol) toSerialize, s2j);
       }
-      super.serializeAddons(toSerialize, s2j);
+
+      // serialize spanned scope
+      if (toSerialize.getSpannedScope().isExportingSymbols()
+        && toSerialize.getSpannedScope().getSymbolsSize() > 0) {
+        toSerialize.getSpannedScope().accept(s2j.getTraverser());
+      }
+      s2j.getTraverser().addTraversedElement(toSerialize.getSpannedScope());
+
+      serializeAddons(toSerialize, s2j);
+      p.endObject();
+
+      return p.toString();
     }
 
     @Override
     protected void deserializeAddons(@NotNull ComponentTypeSymbol component, @NotNull JsonObject json) {
       super.deserializeAddons(component, json);
       if (component instanceof IVariableArcComponentTypeSymbol) {
-        deserializeArcFeatures((IVariableArcComponentTypeSymbol) component, json);
         deserializeConstraints((IVariableArcComponentTypeSymbol) component, json);
         deserializeVariationPoints((IVariableArcComponentTypeSymbol) component, json);
       }

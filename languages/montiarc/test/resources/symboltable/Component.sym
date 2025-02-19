@@ -1,10 +1,10 @@
 {
-  "name" : "Component",
-  "package" : "symboltable",
-  "symbols" : [
+  "name": "Component",
+  "package": "symboltable",
+  "symbols": [
     {
-    "kind" : "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
-    "name" : "Component"
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
+      "name": "Component"
     }
   ]
 }

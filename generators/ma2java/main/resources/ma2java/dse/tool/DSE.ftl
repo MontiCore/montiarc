@@ -85,7 +85,7 @@ public class DSE${comp.getName()}{
 	public static List<ListerOut${comp.getName()}> runOnce(Pair<List<ListerIn${comp.getName()}>, ListerParameter${comp.getName()}> input){
 
 		${comp.getName()} comp = new ${comp.getName()}(
-			<#list comp.getParameters() as parameter>
+			<#list comp.getParameterList() as parameter>
 				input.getValue().get${parameter.getName()}()
 				<#sep> , </#sep>
 			</#list>

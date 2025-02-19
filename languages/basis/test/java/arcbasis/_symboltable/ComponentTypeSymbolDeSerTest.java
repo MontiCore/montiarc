@@ -23,21 +23,24 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   private static final String SIMPLE_JSON =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
-      "\"name\":\"Comp\"" +
+      "\"name\":\"Comp\"," +
+      "\"fullName\":\"Comp\"" +
       "}";
 
   private static final String JSON_WITH_PARENT =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"parents\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
+      "\"fullName\":\"Comp\"," +
+      "\"super\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
       "}";
 
   private static final String JSON_WITH_TYPE_PARAMS =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"typeParameters\":[{" +
+      "\"fullName\":\"Comp\"," +
+      "\"spannedScope\":{\"symbols\":[{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol\"," +
       "\"name\":\"A\"," +
       "\"fullName\":\"Comp.A\"" +
@@ -45,13 +48,14 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol\"," +
       "\"name\":\"B\"," +
       "\"fullName\":\"Comp.B\"" +
-      "}]" +
+      "}]}" +
       "}";
 
   private static final String JSON_WITH_PARAMS =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
+      "\"fullName\":\"Comp\"," +
       "\"numOptParams\":1," +
       "\"parameters\":[{" +
       "\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\"," +
@@ -70,7 +74,8 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"ports\":[{" +
+      "\"fullName\":\"Comp\"," +
+      "\"spannedScope\":{\"symbols\":[{" +
       "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
       "\"name\":\"inc\"," +
       "\"fullName\":\"Comp.inc\"," +
@@ -84,28 +89,31 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"outgoing\":true," +
       "\"timing\":\"timed\"" +
-      "}]" +
+      "}]}" +
       "}";
 
   private static final String JSON_WITH_SUB =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Parent\"," +
-      "\"subcomponents\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"fullName\":\"Parent.inst\",\"type\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Comp\"}}]" +
+      "\"fullName\":\"Parent\"," +
+      "\"spannedScope\":{\"symbols\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"fullName\":\"Parent.inst\",\"type\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Comp\"}}]}" +
       "}";
 
   private static final String JSON_WITH_INNER =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"innerComponents\":[{\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\",\"name\":\"inst\"}]" +
+      "\"fullName\":\"Comp\"," +
+      "\"spannedScope\":{\"symbols\":[{\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\"}]}" +
       "}";
 
   private static final String JSON_WITH_FIELD =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
-      "\"fields\":[{\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\",\"type\":null}]" +
+      "\"fullName\":\"Comp\"," +
+      "\"spannedScope\":{\"symbols\":[{\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\",\"type\":null}]}" +
       "}";
 
   @Test
@@ -277,10 +285,10 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARAMS);
 
     // Then
-    Assertions.assertEquals(2, comp.getParameters().size());
+    Assertions.assertEquals(2, comp.getParameterList().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("a", comp.getParameters().get(0).getName()),
-      () -> Assertions.assertEquals("b", comp.getParameters().get(1).getName()),
+      () -> Assertions.assertEquals("a", comp.getParameterList().get(0).getName()),
+      () -> Assertions.assertEquals("b", comp.getParameterList().get(1).getName()),
       () -> Assertions.assertEquals(1, comp.getNumOptParams())
     );
   }

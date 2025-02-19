@@ -223,10 +223,10 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("innerComponents").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
+        .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
         .isEqualTo(ComponentTypeSymbol.class.getCanonicalName()),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("innerComponents").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
+        .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
         .isEqualTo(ast.getComponentType().getInnerComponents().get(0).getName())
     );
   }

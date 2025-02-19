@@ -858,7 +858,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .setName("b").setEnclosingScope(scope).build();
     scope.add(parameter2);
     ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
-      .setParameters(Arrays.asList(parameter1, parameter2)) // List.of produces an
+      .setParameterList(Arrays.asList(parameter1, parameter2)) // List.of produces an
       .setName("C")
       .setSpannedScope(scope)
       .build();

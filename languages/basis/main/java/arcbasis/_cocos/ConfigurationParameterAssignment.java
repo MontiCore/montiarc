@@ -102,7 +102,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(componentExpression);
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
-    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     if (arguments.size() > parameters.size()) {
       ASTArcArgument firstIllegalArg = componentExpression.getArcArguments().get(parameters.size());
@@ -127,7 +127,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(sourcePositionEnd);
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
-    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     List<String> paramNames = parameters.stream()
       .map(VariableSymbol::getName).collect(Collectors.toList());
@@ -167,7 +167,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     Preconditions.checkNotNull(componentExpression);
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
-    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameters();
+    List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     List<String> paramNames = parameters.stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
@@ -243,7 +243,7 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
 
-    List<String> paramNames = componentExpression.getTypeInfo().getParameters()
+    List<String> paramNames = componentExpression.getTypeInfo().getParameterList()
       .stream().map(VariableSymbol::getName).collect(Collectors.toList());
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));

@@ -14,7 +14,6 @@ import java.util.Objects;
 public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
 
   protected ComponentTypeSymbol outerComponent;
-  protected List<VariableSymbol> parameters = new ArrayList<>();
   protected List<TypeVarSymbol> typeParameters;
 
   public ComponentTypeSymbolBuilder() {
@@ -40,17 +39,6 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   public ComponentTypeSymbolBuilder setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
     Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
-    return this.realBuilder;
-  }
-
-  public List<VariableSymbol> getParameters() {
-    return this.parameters;
-  }
-
-  public ComponentTypeSymbolBuilder setParameters(@NotNull List<VariableSymbol> parameters) {
-    Preconditions.checkNotNull(parameters);
-    Preconditions.checkArgument(parameters.stream().noneMatch(Objects::isNull));
-    this.parameters = parameters;
     return this.realBuilder;
   }
 
@@ -87,9 +75,9 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     symbol.setAccessModifier(this.accessModifier);
     symbol.setEnclosingScope(this.enclosingScope);
     symbol.setSpannedScope(this.spannedScope);
-    if (this.parameters != null) {
-      this.parameters.forEach(this.getSpannedScope()::add);
-      symbol.addParameters(this.parameters);
+    if (this.parameter != null) {
+      this.parameter.forEach(this.getSpannedScope()::add);
+      symbol.addParameters(this.parameter);
     }
     symbol.setNumOptParams(this.numOptParams);
     if (this.typeParameters != null) {
@@ -107,6 +95,6 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   }
 
   protected final boolean isValidNumOptParams() {
-    return this.parameters.size() >= this.numOptParams;
+    return this.parameter.size() >= this.numOptParams;
   }
 }

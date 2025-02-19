@@ -80,9 +80,9 @@ class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
   @MethodSource("compNameAndParametersProvider")
   void shouldBuildWithExpectedParameters(String name, List<VariableSymbol> parameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
-      .setSpannedScope(ArcBasisMill.scope()).setParameters(parameters).build();
+      .setSpannedScope(ArcBasisMill.scope()).setParameterList(parameters).build();
     Assertions.assertEquals(symbol.getName(), name);
-    Assertions.assertIterableEquals(parameters, symbol.getParameters());
+    Assertions.assertIterableEquals(parameters, symbol.getParameterList());
   }
 
   static Stream<Arguments> compNameAndParametersProvider() {
@@ -108,7 +108,7 @@ class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
     // When
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("A")
-      .setParameters(List.of(symParamA, symParamB, symParamC, symParamD))
+      .setParameterList(List.of(symParamA, symParamB, symParamC, symParamD))
       .setNumOptParams(numberOfOptionalParameters)
       .setSpannedScope(ArcBasisMill.scope())
       .build();

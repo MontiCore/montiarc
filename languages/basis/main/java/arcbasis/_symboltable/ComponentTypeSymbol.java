@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
@@ -128,7 +127,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     return this.getSpannedScope().getLocalVariableSymbols().stream()
       .filter(f -> !(f instanceof Port2VariableAdapter))
       .filter(f -> !(f instanceof Subcomponent2VariableAdapter))
-      .filter(f -> !(getParameters().contains(f)))
+      .filter(f -> !(getParameterList().contains(f)))
       .collect(Collectors.toList());
   }
 

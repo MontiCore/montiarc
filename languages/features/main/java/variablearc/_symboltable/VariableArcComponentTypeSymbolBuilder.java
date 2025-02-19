@@ -24,9 +24,9 @@ public class VariableArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBu
     symbol.setAccessModifier(this.accessModifier);
     symbol.setEnclosingScope(this.enclosingScope);
     symbol.setSpannedScope(this.spannedScope);
-    if (this.getParameters() != null) {
-      this.getParameters().forEach(symbol.getSpannedScope()::add);
-      symbol.addParameters(this.getParameters());
+    if (this.getParameterList() != null) {
+      this.getParameterList().forEach(symbol.getSpannedScope()::add);
+      symbol.addParameters(this.getParameterList());
     }
     if (this.getTypeParameters() != null) {
       this.getTypeParameters().forEach(symbol.getSpannedScope()::add);

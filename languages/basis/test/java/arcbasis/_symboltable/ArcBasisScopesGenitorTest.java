@@ -129,9 +129,9 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
     Assertions.assertTrue(this.getSymTab().getCurrentScope().isPresent());
     Assertions.assertEquals(compScope, this.getSymTab().getCurrentScope().get());
     Assertions.assertEquals(1, compScope.getLocalVariableSymbols().size());
-    Assertions.assertEquals(1, enclosingComp.getParameters().size());
+    Assertions.assertEquals(1, enclosingComp.getParameterList().size());
     Assertions.assertEquals(astParam, compScope.getLocalVariableSymbols().get(0).getAstNode());
-    Assertions.assertEquals(astParam, enclosingComp.getParameters().get(0).getAstNode());
+    Assertions.assertEquals(astParam, enclosingComp.getParameterList().get(0).getAstNode());
   }
 
   @Test
@@ -163,11 +163,11 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
     // Then
     Assertions.assertEquals(compScope, astParam.getEnclosingScope());
     Assertions.assertFalse(compScope.getVariableSymbols().isEmpty());
-    Assertions.assertFalse(enclosingComp.getParameters().isEmpty());
+    Assertions.assertFalse(enclosingComp.getParameterList().isEmpty());
     Assertions.assertEquals(1, compScope.getLocalVariableSymbols().size());
-    Assertions.assertEquals(1, enclosingComp.getParameters().size());
+    Assertions.assertEquals(1, enclosingComp.getParameterList().size());
     Assertions.assertEquals(astParam, compScope.getLocalVariableSymbols().get(0).getAstNode());
-    Assertions.assertEquals(astParam, enclosingComp.getParameters().get(0).getAstNode());
+    Assertions.assertEquals(astParam, enclosingComp.getParameterList().get(0).getAstNode());
   }
 
   @Test

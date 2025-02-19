@@ -71,7 +71,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
       .setName("C")
       .setSpannedScope(scope)
       .setAstNode(astComponentType)
-      .setParameters(Collections.singletonList(parameterSymbol))
+      .setParameterList(Collections.singletonList(parameterSymbol))
       .build();
     symbol.setLocalConstraints(new ExpressionSet(new ArrayList<>(Collections.singletonList(new Expression(expression)))));
 

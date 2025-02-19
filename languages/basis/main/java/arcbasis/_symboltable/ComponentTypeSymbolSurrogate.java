@@ -5,7 +5,6 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcBehaviorElement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -95,18 +94,18 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<VariableSymbol> getParameters() {
+  public List<VariableSymbol> getParameterList() {
     return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getParameters() :
-      super.getParameters();  // Avoid infinite recursion with this case
+      this.lazyLoadDelegate().getParameterList() :
+      super.getParameterList();  // Avoid infinite recursion with this case
   }
 
   @Override
-  public void addParameter(@NotNull VariableSymbol parameter) {
+  public boolean addParameter(@NotNull VariableSymbol parameter) {
     if (checkLazyLoadDelegate()) {
-      this.lazyLoadDelegate().addParameter(parameter);
+      return this.lazyLoadDelegate().addParameter(parameter);
     } else {
-      super.addParameter(parameter);  // Avoid infinite recursion with this case
+      return super.addParameter(parameter);  // Avoid infinite recursion with this case
     }
   }
 

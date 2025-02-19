@@ -1,10 +1,10 @@
 {
-  "name" : "ComponentType",
-  "package" : "symboltable",
-  "symbols" : [
+  "name": "ComponentType",
+  "package": "symboltable",
+  "symbols": [
     {
-    "kind" : "arcbasis._symboltable.ComponentTypeSymbol",
-    "name" : "ComponentType"
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "ComponentType"
     }
   ]
 }

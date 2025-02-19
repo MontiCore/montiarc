@@ -1,22 +1,24 @@
 {
-  "name" : "ComponentWithPort",
-  "package" : "symboltable",
-  "symbols" : [
+  "name": "ComponentWithPort",
+  "package": "symboltable",
+  "symbols": [
     {
-    "kind" : "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
-    "name" : "ComponentWithPort",
-    "ports" : [
-      {
-        "kind" : "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
-        "name" : "i",
-        "type" : {
-           "kind" : "de.monticore.types.check.SymTypePrimitive",
-           "primitiveName" : "int"
-        },
-        "incoming" : true,
-        "timing" : "untimed"
-        }
-    ]
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
+      "name": "ComponentWithPort",
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "i",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "incoming": true,
+            "timing": "untimed"
+          }
+        ]
+      }
     }
   ]
 }

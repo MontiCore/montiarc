@@ -12,7 +12,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
@@ -342,7 +341,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   }
   
   @Test
-  void getParametersShouldSkipSurrogate() {
+  void getParameterListShouldSkipSurrogate() {
     // Given
     Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
     ComponentTypeSymbol comp = pair.getKey();
@@ -351,7 +350,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
     VariableSymbol param = addParameterTo(comp, "myParam");
 
     // When
-    List<VariableSymbol> params = surrogate.getParameters();
+    List<VariableSymbol> params = surrogate.getParameterList();
 
     // Then
     Assertions.assertArrayEquals(new VariableSymbol[] {param}, params.toArray());
@@ -392,7 +391,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
     surrogate.addParameter(param);
 
     // Then
-    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameters().toArray());
+    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameterList().toArray());
   }
 
 
@@ -414,7 +413,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
     surrogate.addParameters(Collections.singletonList(param));
 
     // Then
-    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameters().toArray());
+    Assertions.assertArrayEquals(new VariableSymbol[] {param}, comp.getParameterList().toArray());
   }
 
   @Test

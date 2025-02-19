@@ -110,7 +110,7 @@ public class ComponentTypeSymbolTest extends ArcBasisTestBase {
     // Then
     Assertions.assertFalse(compWithoutParameters.hasParameters());
     Assertions.assertTrue(compWithParameters.hasParameters());
-    Assertions.assertEquals(3, compWithParameters.getParameters().size());
+    Assertions.assertEquals(3, compWithParameters.getParameterList().size());
   }
 
   @Test

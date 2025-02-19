@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
 import com.google.common.base.Preconditions;
-import de.monticore.symboltable.serialization.ISymbolDeSer;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
 import de.monticore.symboltable.serialization.json.JsonElement;
@@ -20,60 +18,12 @@ import java.util.Optional;
 
 public interface IVariableArcComponentTypeSymbolDeSer {
 
-  String FEATURES = "features";
   String CONSTRAINTS = "constraints";
   String VARIATION_POINTS = "variationPoints";
 
   ExpressionSetDeSer getExpressionSetDeSer();
 
   VariableArcVariationPointDeSer getVariationPointDeSer();
-
-  /**
-   * @param component the component that is serialized
-   * @param s2j       the json printer that the arcFeatures are serialized to
-   */
-  default void serializeArcFeatures(@NotNull IVariableArcComponentTypeSymbol component, @NotNull ArcBasisSymbols2Json s2j) {
-    Preconditions.checkNotNull(component);
-    Preconditions.checkNotNull(s2j);
-    JsonPrinter printer = s2j.getJsonPrinter();
-
-    printer.beginArray(FEATURES);
-    ((IVariableArcScope) component.getTypeInfo().getSpannedScope()).getLocalArcFeatureSymbols().forEach(f -> f.accept(s2j.getTraverser()));
-    printer.endArray();
-  }
-
-  /**
-   * @param component the component which owns the arcFeatures.
-   * @param json      the component which owns the arcFeatures, encoded as JSON.
-   */
-  default void deserializeArcFeatures(@NotNull IVariableArcComponentTypeSymbol component, @NotNull JsonObject json) {
-    Preconditions.checkNotNull(component);
-    Preconditions.checkNotNull(json);
-
-    final String featureSerializeKind = ArcFeatureSymbol.class.getCanonicalName();
-
-    List<JsonElement> features = json.getArrayMemberOpt(FEATURES).orElseGet(Collections::emptyList);
-
-    for (JsonElement feature : features) {
-      String featureJsonKind = JsonDeSers.getKind(feature.getAsJsonObject());
-      if (featureJsonKind.equals(featureSerializeKind)) {
-        ISymbolDeSer<?, ?> deSer = ArcBasisMill.globalScope().getSymbolDeSer(featureSerializeKind);
-        ArcFeatureSymbol featureSym = (ArcFeatureSymbol) deSer.deserialize(feature.getAsJsonObject());
-
-        ((IVariableArcScope) component.getTypeInfo().getSpannedScope()).add(featureSym);
-
-      } else {
-        Log.error(String.format(
-          "Could not deserialize port '%s' of component '%s', " +
-            "as it is of kind '%s'. However, we only know how to deserialize '%s'",
-          feature.getAsJsonObject().getStringMember(JsonDeSers.NAME),
-          component.getTypeInfo().getName(),
-          featureJsonKind,
-          featureSerializeKind
-        ));
-      }
-    }
-  }
 
   /**
    * @param component the component that is serialized

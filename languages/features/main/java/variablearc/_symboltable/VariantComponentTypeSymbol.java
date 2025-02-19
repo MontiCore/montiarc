@@ -30,7 +30,7 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
     Preconditions.checkNotNull(typeSymbol);
     this.typeSymbol = typeSymbol;
     this.portSymbolMap = new HashMap<>();
-    this.parameters = typeSymbol.getParameters();
+    this.parameter = typeSymbol.getParameterList();
     this.superComponents = typeSymbol.getSuperComponentsList();
     this.accessModifier = typeSymbol.getAccessModifier();
     this.fullName = typeSymbol.getFullName();

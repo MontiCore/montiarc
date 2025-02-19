@@ -3,8 +3,6 @@ package arcbasis.check;
 
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -140,7 +138,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   @Override
   public List<SymTypeExpression> getParameterTypes() {
-    List<SymTypeExpression> unbound = this.getTypeInfo().getParameters()
+    List<SymTypeExpression> unbound = this.getTypeInfo().getParameterList()
       .stream().map(VariableSymbol::getType)
       .collect(Collectors.toList());
 

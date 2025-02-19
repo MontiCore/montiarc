@@ -54,7 +54,7 @@ public class TypeExprOfComponent extends CompTypeExpression {
 
   @Override
   public List<SymTypeExpression> getParameterTypes() {
-    return this.getTypeInfo().getParameters().stream().map(VariableSymbol::getType).collect(Collectors.toList());
+    return this.getTypeInfo().getParameterList().stream().map(VariableSymbol::getType).collect(Collectors.toList());
   }
 
   @Override
