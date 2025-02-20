@@ -4,3 +4,4 @@
 *.kts	text eol=lf
 *.arc	text eol=lf
 *.cd	text eol=lf
+*.md	text eol=lf
