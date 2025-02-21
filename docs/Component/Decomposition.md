@@ -187,16 +187,32 @@ needs to be some kind of delay.
 
 Delay can be introduced through the stereotype `<<delayed>>` on the output 
 port of an atomic component, specifying outputs on that port are delayed by 
-one Tick. For simplicity, we can also introduce a specific delay: 
+one Tick. For simplicity, we can also introduce a specific delay.
+
+Delay for (timed) event automata: 
 
 ```montiarc
 component Delay<T> {
   port in T i;
   port <<delayed>> out T o;
   
-  automaton {
+  <<timed>> automaton {
     initial state S;
-    S -> S Tick / { o = i; };
+    S -> S i / { o = i; };
+  }
+}
+```
+
+Delay for synchronous automata
+
+```montiarc
+component Delay<T> {
+  port <<sync>> in T i;
+  port <<sync, delayed>> out T o;
+  
+  <<sync>> automaton {
+    initial state S;
+    S -> S / { o = i; };
   }
 }
 ```
@@ -204,6 +220,7 @@ component Delay<T> {
 this delay can then be added anywhere in the communication circle.
 
 ```montiarc
+Delay<Type> delay;
 sub1.o -> sub2.i;
 sub2.o -> delay.i; 
 delay.o -> sub3.i;

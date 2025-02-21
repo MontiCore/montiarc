@@ -165,8 +165,8 @@ port <<sync>> in int b;
 the transitions 
 
 ```montiarc
-S1 -> S2 [CONDITION] / { ACTION };
-S1 -> S2 [CONDITION] Tick / { ACTION };
+S1 -> S2 [CONDITION] / { ACTION }; // for synchronous automata
+S1 -> S2 [CONDITION] Tick / { ACTION }; // for timed automata
 ```
 
 are equivalent and executed at discrete points in time and if the automaton 
@@ -234,7 +234,7 @@ component TrafficLight {
   port out Color carLight;
   port out Color pedLight;
   
-  automaton {
+  <<timed>> automaton {
     // The light is green for the cars initially
     initial { 
       carLight = Color.GREEN;
@@ -284,7 +284,7 @@ component Divide {
 
   int r_pre = 0;
 
-  automaton {
+  <<sync>> automaton {
     initial state S;
 
     S -> S [b != 0] / {
