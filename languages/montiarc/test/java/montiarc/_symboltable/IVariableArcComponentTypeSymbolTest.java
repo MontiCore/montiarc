@@ -3,6 +3,7 @@ package montiarc._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -11,9 +12,11 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.evaluation.util.ASTExpressionSetEnclosingScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -247,5 +250,25 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
 
   static protected <E> ArrayList<E> arrayListOf(E... elements) {
     return new ArrayList<>(List.of(elements));
+  }
+
+  /**
+   * Should not visit inner compTypeDefinition when creating the variant.
+   * See #851
+   */
+  @Test
+  public void shouldNotVisitInnerCompTypeDefinitions() {
+    // Given
+    ASTMACompilationUnit compilationUnit = compile("component c1 {" +
+      "port out int o;" +
+      "component Inner {" +
+      "port <<delayed>> out int o;" +
+      "}}");
+
+    ArcPortSymbol portSymbol = compilationUnit.getComponentType().getSymbol().getArcPort("o").get();
+    ArcPortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getComponentType().getSymbol()).getVariants().get(0).getArcPort("o").get();
+
+    // Then
+    Assertions.assertEquals(portSymbol.getDelayed(), portVariantSymbol.getDelayed());
   }
 }

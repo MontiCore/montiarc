@@ -4,6 +4,7 @@ package variablearc._ast.util;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTArcPort;
+import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._ast.ASTPortDeclaration;
@@ -50,6 +51,11 @@ public class ASTVariantBuilder implements ArcBasisHandler {
     traverser.setArcBasisHandler(this);
     node.accept(traverser);
     return result;
+  }
+
+  @Override
+  public void handle(ASTComponentType node) {
+    // Do nothing, don't traverse into inner components
   }
 
   /**
