@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -1547,8 +1547,8 @@ the <code>Tick</code> event.</p>
 <span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 </code></pre></div>
 <p>the transitions </p>
-<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span>
-<span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">Tick</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span>
+<div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// for synchronous automata</span>
+<span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">Tick</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// for timed automata</span>
 </code></pre></div>
 <p>are equivalent and executed at discrete points in time and if the automaton 
 then is currently in state <code>S1</code> and if the <code>CONDITION</code> evaluates to <code>true</code>.</p>
@@ -1594,7 +1594,7 @@ The messages are send in order, that is, first the result of the expression
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Color</span><span class="w"> </span><span class="n">carLight</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Color</span><span class="w"> </span><span class="n">pedLight</span><span class="p">;</span>
 
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">timed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// The light is green for the cars initially</span>
 <span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">GREEN</span><span class="p">;</span>
@@ -1640,7 +1640,7 @@ are simulations available at time progress. </p>
 
 <span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">r_pre</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 
 <span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">[</span><span class="n">b</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>

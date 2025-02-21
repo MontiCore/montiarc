@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.4">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
     
     
       
@@ -1451,19 +1451,32 @@ of timing events in feedback loops we need delay. Otherwise, the components outp
 needs to be some kind of delay. </p>
 <p>Delay can be introduced through the stereotype <code>&lt;&lt;delayed&gt;&gt;</code> on the output 
 port of an atomic component, specifying outputs on that port are delayed by 
-one Tick. For simplicity, we can also introduce a specific delay: </p>
+one Tick. For simplicity, we can also introduce a specific delay.</p>
+<p>Delay for (timed) event automata: </p>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Delay</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">timed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
-<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="n">Tick</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Delay for synchronous automata</p>
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Delay</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="p">,</span><span class="w"> </span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
+
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
+<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>this delay can then be added anywhere in the communication circle.</p>
-<div class="highlight"><pre><span></span><code><span class="n">sub1</span><span class="p">.</span><span class="na">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sub2</span><span class="p">.</span><span class="na">i</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="n">Delay</span><span class="o">&lt;</span><span class="n">Type</span><span class="o">&gt;</span><span class="w"> </span><span class="n">delay</span><span class="p">;</span>
+<span class="n">sub1</span><span class="p">.</span><span class="na">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sub2</span><span class="p">.</span><span class="na">i</span><span class="p">;</span>
 <span class="n">sub2</span><span class="p">.</span><span class="na">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">delay</span><span class="p">.</span><span class="na">i</span><span class="p">;</span><span class="w"> </span>
 <span class="n">delay</span><span class="p">.</span><span class="na">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sub3</span><span class="p">.</span><span class="na">i</span><span class="p">;</span>
 <span class="n">sub3</span><span class="p">.</span><span class="na">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sub1</span><span class="p">.</span><span class="na">i</span><span class="p">;</span>
