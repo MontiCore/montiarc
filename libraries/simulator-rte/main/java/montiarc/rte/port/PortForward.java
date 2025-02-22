@@ -15,7 +15,7 @@ import montiarc.rte.msg.Tick;
  *
  * @param <T> the type that is sent via this forward
  */
-public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T> {
+public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T, T> {
 
   public PortForward(String qualifiedName, Component owner) {
     super(qualifiedName, owner);

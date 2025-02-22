@@ -66,7 +66,7 @@ public class MAUnitTestEngineTest {
     }
 
     @Override
-    public List<InOutPort<?>> getAllInPorts() {
+    public List<InOutPort<?, ?>> getAllInPorts() {
       return List.of();
     }
 
@@ -76,7 +76,7 @@ public class MAUnitTestEngineTest {
     }
 
     @Override
-    protected List<InOutPort<?>> getAllSyncedInPorts() { return List.of(); }
+    protected List<InOutPort<?, ?>> getAllSyncedInPorts() { return List.of(); }
 
     @Override
     protected Object portValueOf(InPort<?> p) {
