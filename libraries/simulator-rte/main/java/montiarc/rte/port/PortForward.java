@@ -24,7 +24,7 @@ public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T, T
   @Override
   public void receive(Message<? extends T> message) {
     // Directly forward the message
-    if (message == Tick.get()) {
+    if (Tick.get().equals(message)) {
       this.sendTick();
     } else {
       this.send(message.getData());
