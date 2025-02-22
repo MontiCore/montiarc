@@ -10,7 +10,7 @@
 
 <#macro allInPortsGetter>
 @Override
-protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllInPorts() {
+protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllInPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(tickPort
       <#list ast.getSymbol().getAllIncomingPorts() as port>
@@ -68,7 +68,7 @@ public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllOutPorts() {
 
 <#macro allSyncedInPortsGetter>
 @Override
-protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllSyncedInPorts() {
+protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllSyncedInPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(tickPort
     <#list helper.getSyncedInPortsOf(ast.getSymbol()) as port>
@@ -96,7 +96,7 @@ protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllSyncedI
 
 
 <#macro allMsgEventInPortsGetter>
-protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?>>"} getAllMsgEventInPorts() {
+protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllMsgEventInPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(
     <#list helper.getMsgEventInPortsOf(ast.getSymbol()) as port>

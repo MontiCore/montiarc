@@ -15,7 +15,7 @@ import montiarc.rte.msg.Tick;
  *
  * @param <T> the type that is sent via this forward
  */
-public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T> {
+public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T, T> {
 
   public PortForward(String qualifiedName, Component owner) {
     super(qualifiedName, owner);
@@ -24,7 +24,7 @@ public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T> {
   @Override
   public void receive(Message<? extends T> message) {
     // Directly forward the message
-    if (message == Tick.get()) {
+    if (Tick.get().equals(message)) {
       this.sendTick();
     } else {
       this.send(message.getData());

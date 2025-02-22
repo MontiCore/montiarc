@@ -16,7 +16,7 @@ import java.util.Iterator;
 /**
  * An incoming port of a MontiArc component that can receive messages and ticks and participates in scheduling.
  */
-public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T> {
+public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T, T> {
 
   protected Deque<Message<T>> buffer = new ArrayDeque<>();
   protected Scheduler scheduler;

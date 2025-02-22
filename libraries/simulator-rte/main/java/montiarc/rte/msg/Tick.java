@@ -33,4 +33,8 @@ public final class Tick<T> extends Message<T> {
     return TICK;
   }
 
+  @Override
+  public boolean equals(Object o) {
+    return this == o;
+  }
 }

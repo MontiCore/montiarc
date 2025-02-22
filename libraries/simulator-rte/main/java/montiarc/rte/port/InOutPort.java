@@ -6,7 +6,7 @@ package montiarc.rte.port;
  * E.g., a subcomponent instance receives messages through its incoming ports, but
  * if it is decomposed, then it forwards these messages to its own subcomponents.
  */
-public interface InOutPort<T> extends InPort<T>, OutPort<T> {
+public interface InOutPort<I, O> extends InPort<I>, OutPort<O> {
 
   void forwardWithoutRemoval();
 }

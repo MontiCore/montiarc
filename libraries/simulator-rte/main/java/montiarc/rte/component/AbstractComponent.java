@@ -34,7 +34,7 @@ import java.util.Set;
 public abstract class AbstractComponent<I, B extends Behavior<I>> implements Component {
 
   protected final String name;
-  protected final InOutPort<NoMsgType> tickPort;
+  protected final InOutPort<NoMsgType, NoMsgType> tickPort;
   protected Set<OutPort<?>> unconnectedOutputs;
   protected final Scheduler scheduler;
 
@@ -77,9 +77,9 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
     this.scheduler.unregister(this);
   }
 
-  protected abstract List<InOutPort<?>> getAllInPorts();
+  protected abstract List<InOutPort<?, ?>> getAllInPorts();
   public abstract List<OutPort<?>> getAllOutPorts();
-  protected abstract List<InOutPort<?>> getAllSyncedInPorts();
+  protected abstract List<InOutPort<?, ?>> getAllSyncedInPorts();
   protected abstract Object portValueOf(InPort<?> p);
 
   protected void sendTickOnAllOutputs() {
@@ -122,7 +122,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
   protected void processMessage(InPort<?> p) {
     if (!isAtomic) {
-      ((montiarc.rte.port.InOutPort<?>) p).forwardWithoutRemoval();
+      ((montiarc.rte.port.InOutPort<?, ?>) p).forwardWithoutRemoval();
     } else if (behavior != null) {
       handleMessageWithBehavior(p);
     }
@@ -142,14 +142,14 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
     } else {
       // Component is decomposed
-      for (InOutPort<?> p : getAllSyncedInPorts()) {
+      for (InOutPort<?, ?> p : getAllSyncedInPorts()) {
         // If there was a message on the port, forward it
         if (!p.isTickBlocked()) {
           p.forwardWithoutRemoval();
         }
       }
 
-      for (InOutPort<?> p : this.getAllInPorts()) {
+      for (InOutPort<?, ?> p : this.getAllInPorts()) {
         // "Forward" the tick of this execution
         // (Pure forwarding does not work for sync ports, as we did not remove the message before it.
         //  This is done by the scheduler later. Therefore, send the tick manually.)
