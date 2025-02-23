@@ -19,43 +19,43 @@ class CalculationsTest {
   @Test
   void testCorrectnessOfCalculations() {
     // Test data
-    List<Message<Number>> byteInput =
+    List<Message<Byte>> byteInput =
       List.of(msg((byte) 1), tk(), msg((byte) -2), tk(), msg((byte) 0), tk());
-    List<Message<Number>> expectedByteOut =
+    List<Message<Byte>> expectedByteOut =
       List.of(msg((byte) 1), tk(), msg((byte) -2), tk(), msg((byte) 0), tk());
 
-    List<Message<Number>> shortInput =
+    List<Message<Short>> shortInput =
       List.of(msg((short) 1), tk(), msg((short) -2), tk(), msg((short) 0), tk());
-    List<Message<Number>> expectedShortOut =
+    List<Message<Short>> expectedShortOut =
       List.of(msg((short) 1), tk(), msg((short) -2), tk(), msg((short) 0), tk());
 
-    List<Message<Number>> intInput          = List.of(msg(1), tk(), msg(-2), tk(), msg(0), tk());
-    List<Message<Number>> expectedIntOutput = List.of(msg(-1), tk(), msg(2), tk(), msg(0), tk());
+    List<Message<Integer>> intInput          = List.of(msg(1), tk(), msg(-2), tk(), msg(0), tk());
+    List<Message<Integer>> expectedIntOutput = List.of(msg(-1), tk(), msg(2), tk(), msg(0), tk());
 
-    List<Message<Number>> longInput          = List.of(msg(1L), tk(), msg(-2L), tk(), msg(0L), tk());
-    List<Message<Number>> expectedLongOutput = List.of(msg(-1L), tk(), msg(2L), tk(), msg(0L), tk());
+    List<Message<Long>> longInput          = List.of(msg(1L), tk(), msg(-2L), tk(), msg(0L), tk());
+    List<Message<Long>> expectedLongOutput = List.of(msg(-1L), tk(), msg(2L), tk(), msg(0L), tk());
 
-    List<Message<Number>> floatInput          = List.of(msg(1.0f), tk(), msg(-2.0f), tk(), msg(0.0f), tk());
-    List<Message<Number>> expectedFloatOutput = List.of(msg(-1.0f), tk(), msg(2.0f), tk(), msg(-0.0f), tk());
+    List<Message<Float>> floatInput          = List.of(msg(1.0f), tk(), msg(-2.0f), tk(), msg(0.0f), tk());
+    List<Message<Float>> expectedFloatOutput = List.of(msg(-1.0f), tk(), msg(2.0f), tk(), msg(-0.0f), tk());
 
-    List<Message<Number>> doubleInput          = List.of(msg(1.0), tk(), msg(-2.0), tk(), msg(0.0), tk());
-    List<Message<Number>> expectedDoubleOutput = List.of(msg(-1.0), tk(), msg(2.0), tk(), msg(-0.0), tk());
+    List<Message<Double>> doubleInput          = List.of(msg(1.0), tk(), msg(-2.0), tk(), msg(0.0), tk());
+    List<Message<Double>> expectedDoubleOutput = List.of(msg(-1.0), tk(), msg(2.0), tk(), msg(-0.0), tk());
 
-    List<Message<Number>> charInput =
-      List.of(msg((int) 'a'), tk(), msg((int) '-'), tk(), msg((int) '0'), tk());
-    List<Message<Number>> expectedCharOut =
-      List.of(msg((int) 'a'), tk(), msg((int) '-'), tk(), msg((int) '0'), tk());
+    List<Message<Character>> charInput =
+      List.of(msg('a'), tk(), msg('-'), tk(), msg('0'), tk());
+    List<Message<Character>> expectedCharOut =
+      List.of(msg('a'), tk(), msg('-'), tk(), msg('0'), tk());
 
     List<Message<Boolean>> boolInput       = List.of(msg(true), tk(), msg(false), tk(), msg(false), tk());
     List<Message<Boolean>> expectedBoolOut = List.of(msg(false), tk(), msg(true), tk(), msg(true), tk());
 
-    PortObserver<Number> port_byte = new PortObserver<>();
-    PortObserver<Number> port_short = new PortObserver<>();
-    PortObserver<Number> port_int = new PortObserver<>();
-    PortObserver<Number> port_long = new PortObserver<>();
-    PortObserver<Number> port_float = new PortObserver<>();
-    PortObserver<Number> port_double = new PortObserver<>();
-    PortObserver<Number> port_char = new PortObserver<>();
+    PortObserver<Byte> port_byte = new PortObserver<>();
+    PortObserver<Short> port_short = new PortObserver<>();
+    PortObserver<Integer> port_int = new PortObserver<>();
+    PortObserver<Long> port_long = new PortObserver<>();
+    PortObserver<Float> port_float = new PortObserver<>();
+    PortObserver<Double> port_double = new PortObserver<>();
+    PortObserver<Character> port_char = new PortObserver<>();
     PortObserver<Boolean> port_boolean = new PortObserver<>();
 
     // Given

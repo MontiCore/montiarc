@@ -26,21 +26,21 @@ class Number2IntTest {
    */
   @ParameterizedTest
   @MethodSource("io")
-  void testIO(@NotNull List<Message<Number>> input,
-              @NotNull List<Message<Number>> expected) {
+  void testIO(@NotNull List<Message<Integer>> input,
+              @NotNull List<Message<Integer>> expected) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(expected);
 
     // Given
-    Number2IntComp<Number> sut = new Number2IntCompBuilder<>().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    Number2IntComp<Integer> sut = new Number2IntCompBuilder<Integer>().setName("sut").build();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
 
     // When
     sut.init();
 
-    for (Message<Number> msg : input) {
+    for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }
 

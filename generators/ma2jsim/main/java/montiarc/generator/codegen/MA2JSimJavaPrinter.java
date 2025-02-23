@@ -37,6 +37,8 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
   public MA2JSimJavaPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
     super(Preconditions.checkNotNull(printer), printComments);
 
+    CodeGenContext context = new CodeGenContext();
+
     CommonExpressionsJavaPrinter commonExpressionsJavaPrinter = new CommonExpressionsJavaPrinter(printer, printComments);
     this.traverser.setCommonExpressionsHandler(commonExpressionsJavaPrinter);
     this.traverser.getCommonExpressionsVisitorList().clear();
@@ -47,17 +49,17 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.getExpressionsBasisVisitorList().clear();
     this.traverser.add4ExpressionsBasis(expressionsBasisJavaPrinter);
 
-    MCBasicTypesJavaPrinter mcBasicTypesJavaPrinter = new MCBasicTypesJavaPrinter(printer, printComments);
+    MCBasicTypesJavaPrinter mcBasicTypesJavaPrinter = new MCBasicTypesJavaPrinter(printer, context, printComments);
     this.traverser.setMCBasicTypesHandler(mcBasicTypesJavaPrinter);
     this.traverser.getMCBasicTypesVisitorList().clear();
     this.traverser.add4MCBasicTypes(mcBasicTypesJavaPrinter);
 
-    MCSimpleGenericTypesJavaPrinter mcSimpleGenericTypesJavaPrinter = new MCSimpleGenericTypesJavaPrinter(printer, printComments);
+    MCSimpleGenericTypesJavaPrinter mcSimpleGenericTypesJavaPrinter = new MCSimpleGenericTypesJavaPrinter(printer, context, printComments);
     this.traverser.setMCSimpleGenericTypesHandler(mcSimpleGenericTypesJavaPrinter);
     this.traverser.getMCSimpleGenericTypesVisitorList().clear();
     this.traverser.add4MCSimpleGenericTypes(mcSimpleGenericTypesJavaPrinter);
 
-    MCCollectionTypesJavaPrinter mcCollectionTypesJavaPrinter = new MCCollectionTypesJavaPrinter(printer, printComments);
+    MCCollectionTypesJavaPrinter mcCollectionTypesJavaPrinter = new MCCollectionTypesJavaPrinter(printer, context, printComments);
     this.traverser.setMCCollectionTypesHandler(mcCollectionTypesJavaPrinter);
     this.traverser.getMCCollectionTypesVisitorList().clear();
     this.traverser.add4MCCollectionTypes(mcCollectionTypesJavaPrinter);
@@ -138,7 +140,7 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     if (expression.isGenericType()) {
       StringBuilder r = new StringBuilder(expression.asGenericType().getTypeConstructorFullName()).append('<');
       for (int i = 0; i < expression.asGenericType().getArgumentList().size(); i++) {
-        r.append(prettyprint(expression.asGenericType().getArgument(i), boxPrimitives));
+        r.append(prettyprint(expression.asGenericType().getArgument(i), true));
         if (i < expression.asGenericType().getArgumentList().size() - 1) {
           r.append(',');
         }

@@ -27,12 +27,12 @@ class FieldSourceTest {
   @ParameterizedTest
   @MethodSource("ioDelayed")
   void testIODelayed(@NotNull boolean highPrecision,
-                     @NotNull List<Message<Number>> expected) {
+                     @NotNull List<Message<Double>> expected) {
     Preconditions.checkNotNull(expected);
 
     // Given
     FieldSourceComp sut = new FieldSourceCompBuilder().setName("sut").set_feature_highPrecision(highPrecision).build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Double> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
 

@@ -15,7 +15,7 @@ class InvariantViolation1Test {
   void testIO() {
     // Given
     InvariantViolation1Comp sut = new InvariantViolation1CompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
 

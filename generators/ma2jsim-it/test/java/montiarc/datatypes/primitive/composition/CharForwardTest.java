@@ -32,7 +32,7 @@ class CharForwardTest {
 
     // Given
     CharForwardComp sut = new CharForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Character> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 
@@ -40,15 +40,14 @@ class CharForwardTest {
     sut.init();
 
     for (char msg : input) {
-      sut.port_pIn().receive(Message.of((int) msg));
+      sut.port_pIn().receive(Message.of(msg));
       sut.port_pIn().receive(tk());
     }
 
     sut.run();
 
     // Then
-    Assertions.assertThat(port_o.getObservedValues().stream()
-      .map(c -> (char) c.intValue()))
+    Assertions.assertThat(port_o.getObservedValues())
       .containsExactlyElementsOf(expected);
   }
 

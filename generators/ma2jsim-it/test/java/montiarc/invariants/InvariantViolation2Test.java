@@ -24,22 +24,22 @@ class InvariantViolation2Test {
   @ParameterizedTest
   @MethodSource("io")
   void testIO(int errorCount,
-              @NotNull List<Message<Number>> input,
-              @NotNull List<Message<Number>> expected) {
+              @NotNull List<Message<Integer>> input,
+              @NotNull List<Message<Integer>> expected) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(errorCount >= 0);
 
     // Given
     InvariantViolation2Comp sut = new InvariantViolation2CompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
     // When
 
     sut.init();
 
-    for (Message<Number> msg : input) {
+    for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }
 

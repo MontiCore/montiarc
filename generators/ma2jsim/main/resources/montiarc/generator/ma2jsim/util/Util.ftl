@@ -2,8 +2,7 @@
 
 <#-- SymTypeExpression type -->
 <#macro getPortTypeString type>
-  <#if type.isPrimitive() && type.isNumericType()>Number<#t>
-  <#else><@getTypeString type true/><#t></#if>
+  <@getTypeString type true/><#t>
 </#macro>
 
 <#-- SymTypeExpression type -->
@@ -14,7 +13,7 @@
 <#-- CompTypeExpression type -->
 <#macro getCompTypeString type suffix="">
     <#if type.getTypeBindingsAsList()?has_content>
-        ${type.getTypeInfo().getFullName()}${suffix}<<#list type.getTypeBindingsAsList() as arg>${arg.printFullName()}<#sep>, </#sep></#list>>
+        ${type.getTypeInfo().getFullName()}${suffix}<<#list type.getTypeBindingsAsList() as arg><@getPortTypeString arg/><#sep>, </#sep></#list>>
     <#else>${type.printFullName()}${suffix}</#if>
 </#macro>
 
@@ -39,20 +38,4 @@
 <#-- TypeVarSymbol typeParameter -->
 <#macro printTypeParameter typeParameter printBounds>
 ${typeParameter.getName()}<#if printBounds><#list typeParameter.getSuperTypesList()> extends <#items as bound><@getTypeString bound true/><#sep> & </#sep></#items></#list></#if>
-</#macro>
-
-<#-- SymTypeExpression type -->
-<#macro unboxNumbersSuffix type>
-    <#if helper.isUnboxedChar(type)>.intValue()
-    <#elseif helper.isUnboxedByte(type)>.byteValue()
-    <#elseif helper.isUnboxedShort(type)>.shortValue()
-    <#elseif helper.isUnboxedInt(type)>.intValue()
-    <#elseif helper.isUnboxedLong(type)>.longValue()
-    <#elseif helper.isUnboxedFloat(type)>.floatValue()
-    <#elseif helper.isUnboxedDouble(type)>.doubleValue()</#if><#t>
-</#macro>
-
-<#-- SymTypeExpression type -->
-<#macro unboxChar type>
-    <#if helper.isUnboxedChar(type)>(char)</#if><#t>
 </#macro>

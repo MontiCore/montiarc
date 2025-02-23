@@ -23,21 +23,21 @@ class InvariantValidation2Test {
 
   @ParameterizedTest
   @MethodSource("io")
-  void testIO(@NotNull List<Message<Number>> input,
-              @NotNull List<Message<Number>> expected) {
+  void testIO(@NotNull List<Message<Integer>> input,
+              @NotNull List<Message<Integer>> expected) {
     Preconditions.checkNotNull(input);
     Preconditions.checkNotNull(expected);
 
     // Given
     InvariantValidation2Comp sut = new InvariantValidation2CompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
     // When
 
     sut.init();
 
-    for (Message<Number> msg : input) {
+    for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }
 

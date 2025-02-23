@@ -32,7 +32,7 @@ class ShortForwardTest {
 
     // Given
     ShortForwardComp sut = new ShortForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Short> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 

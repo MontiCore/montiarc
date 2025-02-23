@@ -12,7 +12,7 @@
 
       if(${prettyPrinter.prettyprint(existenceConditions)}) {
     </#if>
-      return ${portAccessor}.isTickBlocked() ? ${helper.getNullLikeValue(portSym.getType())} : <@unboxNumberPrefix portSym.getType()/> ${portAccessor}.peekBuffer().getData()<@Util.unboxNumbersSuffix portSym.getType()/>;
+      return ${portAccessor}.isTickBlocked() ? ${helper.getNullLikeValue(portSym.getType())} : ${portAccessor}.peekBuffer().getData();
 
     <#if existenceConditions?has_content>
       } else throw new RuntimeException(
@@ -22,7 +22,3 @@
   }
 
 </#list>
-
-<#macro unboxNumberPrefix type>
-  <#if helper.isUnboxedChar(type)>(char) </#if>
-</#macro>

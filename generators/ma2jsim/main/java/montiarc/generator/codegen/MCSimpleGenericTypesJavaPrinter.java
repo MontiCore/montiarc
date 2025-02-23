@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
+import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
@@ -15,12 +16,23 @@ import java.util.Optional;
 
 public class MCSimpleGenericTypesJavaPrinter extends MCSimpleGenericTypesPrettyPrinter {
 
-  public MCSimpleGenericTypesJavaPrinter(@NotNull IndentPrinter printer, boolean printComments) {
+  protected CodeGenContext context;
+
+  public MCSimpleGenericTypesJavaPrinter(@NotNull IndentPrinter printer,
+                                         @NotNull CodeGenContext context,
+                                         boolean printComments) {
     super(printer, printComments);
+    this.context = Preconditions.checkNotNull(context);
+  }
+
+  protected CodeGenContext getContext() {
+    return this.context;
   }
 
   @Override
-  public void handle(ASTMCBasicGenericType node) {
+  public void handle(@NotNull ASTMCBasicGenericType node) {
+    Preconditions.checkNotNull(node);
+    getContext().setInGenericTypeExpression(true);
     if (node.getNameList().size() == 1) {
       Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(node.getNameList().get(0));
       if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
@@ -45,5 +57,6 @@ public class MCSimpleGenericTypesJavaPrinter extends MCSimpleGenericTypesPrettyP
       }
     }
     super.handle(node);
+    getContext().setInGenericTypeExpression(false);
   }
 }

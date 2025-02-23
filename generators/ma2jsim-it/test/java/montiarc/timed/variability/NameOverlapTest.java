@@ -96,7 +96,7 @@ class NameOverlapTest {
 
     // Given
     NameOverlapComp sut = new NameOverlapCompBuilder().setName("sut").set_feature_onOff(false).build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o1().connect(port_o);
 

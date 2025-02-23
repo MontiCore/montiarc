@@ -28,13 +28,13 @@ class PrimitiveParameterForwardTest {
   @ParameterizedTest
   @MethodSource("io")
   void testIO(@Nullable int parameter,
-              @NotNull List<Message<Number>> expected) {
+              @NotNull List<Message<Integer>> expected) {
     Preconditions.checkNotNull(expected);
 
     // Given
     PrimitiveParameterForwardComp sut = new PrimitiveParameterForwardCompBuilder()
       .setName("sut").set_param_param(parameter).build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
 
