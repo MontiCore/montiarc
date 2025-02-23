@@ -169,7 +169,11 @@ S1 -> S2 [CONDITION] / { ACTION }; // for synchronous automata
 S1 -> S2 [CONDITION] Tick / { ACTION }; // for timed automata
 ```
 
-are semantically equivalent. They are executed at discrete, equidistant points in time, i.e. whenever a time slice finishes. Of course as usual the automaton has to be in state `S1` and the `CONDITION` evaluates to `true`. However, no explicit incoming trigger is needed, only the assumed internally or otherwise realized clock issues a 'TICK'.
+are semantically equivalent. They are executed at discrete, equidistant 
+points in time, i.e. whenever a time slice finishes. Of course as usual 
+the automaton has to be in state `S1` and the `CONDITION` evaluates to 
+`true`. However, no explicit incoming trigger is needed, only the 
+assumed internally or otherwise realized clock issues a 'TICK'.
 
 Synchronous ports are synchronized at time events. The current message on each 
 synchronous port is available for the time event. A transition triggered by a 
