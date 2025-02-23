@@ -1550,7 +1550,11 @@ the <code>Tick</code> event.</p>
 <div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// for synchronous automata</span>
 <span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">Tick</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// for timed automata</span>
 </code></pre></div>
-<p>are semantically equivalent. They are executed at discrete, equidistant points in time, i.e. whenever a time slice finishes. Of course as usual the automaton has to be in state <code>S1</code> and the <code>CONDITION</code> evaluates to <code>true</code>. However, no explicit incoming trigger is needed, only the assumed internally or otherwise realized clock issues a 'TICK'.</p>
+<p>are semantically equivalent. They are executed at discrete, equidistant 
+points in time, i.e. whenever a time slice finishes. Of course as usual 
+the automaton has to be in state <code>S1</code> and the <code>CONDITION</code> evaluates to 
+<code>true</code>. However, no explicit incoming trigger is needed, only the 
+assumed internally or otherwise realized clock issues a 'TICK'.</p>
 <p>Synchronous ports are synchronized at time events. The current message on each 
 synchronous port is available for the time event. A transition triggered by a 
 time event can reason about properties of messages on all incoming, synchronous 
