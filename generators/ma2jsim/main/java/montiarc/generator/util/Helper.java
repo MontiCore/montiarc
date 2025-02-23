@@ -37,9 +37,9 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypePrimitive;
 import modes._ast.ASTArcMode;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
@@ -442,8 +442,7 @@ public class Helper {
         return "false";
       if (BasicSymbolsMill.CHAR.equals(type.asPrimitive().getPrimitiveName())) {
         return "(char) 0";
-      }
-      else return "0";
+      } else return "0";
     } else return "null";
   }
 
@@ -495,15 +494,6 @@ public class Helper {
 
   public boolean isUnboxedDouble(SymTypeExpression type) {
     return type.isPrimitive() && BasicSymbolsMill.DOUBLE.equals(type.asPrimitive().getPrimitiveName());
-  }
-
-  /**
-   * Determines whether the type is a numeric primitive, but nor {@code char}.
-   * <br>
-   * I.e. whether the type is a {@code byte}, {@code short}, {@code int}, {@code long}, {@code float}, or {@code double}
-   */
-  public boolean isNumber(SymTypePrimitive type) {
-    return type.isNumericType() && !this.isUnboxedChar(type);
   }
 
   public List<Expression> getExistenceCondition(@NotNull ASTComponentType ast, @NotNull ISymbol symbol) {
@@ -756,4 +746,43 @@ public class Helper {
     }
   }
 
+  /**
+   * When we can find a port symbol that fits the given port access and we when its type has already been set then we
+   * return the type. When we can not find the port symbol or when we do not find the component instance of the port
+   * access or the type of that instance or if we do not find the type of the port then we return an empty Optional.
+   */
+  public Optional<SymTypeExpression> getTypeOfPortIfPresent(@NotNull ASTPortAccess astPort) {
+    Preconditions.checkNotNull(astPort);
+
+    if (astPort.isPresentComponent()) {
+      if (astPort.isPresentComponentSymbol() && astPort.getComponentSymbol().isTypePresent()) {
+        return astPort.getComponentSymbol().getType().getTypeOfPort(astPort.getPort());
+      }
+    } else if (getEnclosingComponent(astPort).isPresent()) {
+      return getEnclosingComponent(astPort).get().getTypeOfPort(astPort.getPort());
+    } else if (astPort.isPresentPortSymbol() && astPort.getPortSymbol().isTypePresent()) {
+      return Optional.ofNullable(astPort.getPortSymbol().getType());
+    }
+    return Optional.empty();
+  }
+
+  /**
+   * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
+   * does not belong to a component type.
+   */
+  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+    Preconditions.checkNotNull(portAccess);
+    if (portAccess.getEnclosingScope() == null) {
+      return Optional.empty();
+    }
+    if (!portAccess.getEnclosingScope().isPresentSpanningSymbol()) {
+      return Optional.empty();
+    }
+    IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
+    if (symbol instanceof ComponentTypeSymbol) {
+      return Optional.of((ComponentTypeSymbol) symbol);
+    } else {
+      return Optional.empty();
+    }
+  }
 }

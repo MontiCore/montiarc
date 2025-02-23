@@ -32,7 +32,7 @@ class LongForwardTest {
 
     // Given
     LongForwardComp sut = new LongForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Long> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 

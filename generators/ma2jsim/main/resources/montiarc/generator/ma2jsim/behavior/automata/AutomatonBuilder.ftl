@@ -22,7 +22,7 @@ protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymb
 <#-- Methods -->
 @Override
 public ${SUPER} addDefaultStates() {
-  states = new ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}(context);
+  states = new ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}(context);
   return this;
 }
 

@@ -12,6 +12,7 @@ import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import modes._ast.ASTModeAutomaton;
@@ -71,6 +72,7 @@ public class MA2JSimGen {
     glex.setGlobalValue("prefixes", Prefixes.getInstance());
     glex.setGlobalValue("log_aspects", LogAspects.getInstance());
     glex.setGlobalValue("helper", new Helper());
+    glex.setGlobalValue("SymTypeRelations", new SymTypeRelations());
     glex.setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
     glex.setGlobalValue("timing_untimed", Timing.UNTIMED);
     glex.setGlobalValue("MaUnitHelper", new MaUnitHelper());

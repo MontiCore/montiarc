@@ -8,10 +8,9 @@ import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmen
 import de.monticore.expressions.assignmentexpressions._prettyprint.AssignmentExpressionsPrettyPrinter;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.ISymbol;
-import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.SymTypeRelations;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -45,7 +44,6 @@ public class AssignmentExpressionsMA2JSimPrinter extends AssignmentExpressionsPr
       Optional<PortSymbol> port = Optional.ofNullable(currentVariant).flatMap(v -> v.getPort(name, true)).or(() -> ((IMontiArcScope) left.getEnclosingScope()).resolvePortMany(name).stream().findAny());
 
       if (port.isPresent()) {
-        String sendValue = isUnboxedChar(port.get().getType()) ? "(int) " + name : name;
 
         this.getPrinter().println(";");
         if (!port.get().getType().isPrimitive()) {
@@ -58,13 +56,8 @@ public class AssignmentExpressionsMA2JSimPrinter extends AssignmentExpressionsPr
         List<PortSymbol> ports = ISymbol.sortSymbolsByPosition(port.get().getEnclosingScope().resolvePortMany(name));
         String suffix = ports.size() <= 1 ? "" : Integer.toString(ports.indexOf(port.get()));
 
-        this.getPrinter().print(String.format("context.port_%s().send(%s);", name + suffix, sendValue));
+        this.getPrinter().print(String.format("context.port_%s().send(%s);", name + suffix, name));
       }
     }
-  }
-
-  private boolean isUnboxedChar(SymTypeExpression expr) {
-    return expr.isPrimitive()
-      && BasicSymbolsMill.CHAR.equals(expr.asPrimitive().getPrimitiveName());
   }
 }

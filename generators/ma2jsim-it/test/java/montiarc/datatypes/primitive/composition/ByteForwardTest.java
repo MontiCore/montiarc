@@ -32,7 +32,7 @@ class ByteForwardTest {
 
     // Given
     ByteForwardComp sut = new ByteForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Byte> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 

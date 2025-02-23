@@ -32,7 +32,7 @@ class IntForwardTest {
 
     // Given
     IntForwardComp sut = new IntForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 

@@ -32,7 +32,7 @@ class FloatForwardTest {
 
     // Given
     FloatForwardComp sut = new FloatForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Float> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 

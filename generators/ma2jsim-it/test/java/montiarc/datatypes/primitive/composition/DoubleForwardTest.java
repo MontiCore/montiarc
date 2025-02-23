@@ -32,7 +32,7 @@ class DoubleForwardTest {
 
     // Given
     DoubleForwardComp sut = new DoubleForwardCompBuilder().setName("sut").build();
-    PortObserver<Number> port_o = new PortObserver<>();
+    PortObserver<Double> port_o = new PortObserver<>();
 
     sut.port_pOut().connect(port_o);
 
