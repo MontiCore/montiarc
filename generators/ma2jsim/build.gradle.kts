@@ -9,6 +9,7 @@ plugins {
 dependencies {
   api(project(":languages:montiarc"))
   implementation(project(":libraries:simulator-rte"))
+  implementation(libs.freemarker)
   implementation(libs.format)
   implementation(libs.guava)
   implementation(libs.janino)

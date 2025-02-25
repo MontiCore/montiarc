@@ -78,6 +78,7 @@ dependencyResolutionManagement {
   versionCatalogs {
     create("libs") {
       library("apache", "org.apache.commons:commons-lang3:3.12.0")
+      library("freemarker", "org.freemarker:freemarker:2.3.28")
       library("format", "com.google.googlejavaformat:google-java-format:1.7")
       library("guava", "com.google.guava:guava:31.1-jre")
       library("janino", "org.codehaus.janino:janino:3.1.9")

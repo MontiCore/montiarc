@@ -15,6 +15,8 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import freemarker.ext.beans.BeansWrapper;
+import freemarker.template.TemplateModelException;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -63,6 +65,14 @@ public class MA2JSimGen {
     setup.setOutputDirectory(targetDir.toFile());
     setup.setHandcodedPath(new MCPath(hwcPath));
     setup.setGlex(glex());
+    String name = SymTypeRelations.class.getCanonicalName();
+    try {
+      setup.getGlex().setGlobalValue("SymTypeRelations",
+        ((BeansWrapper) setup.getConfig().getObjectWrapper())
+          .getStaticModels().get(name));
+    } catch (TemplateModelException e) {
+      Log.errorInternal("Internal error: could not retrieve the static model for " + name);
+    }
     return setup;
   }
 
@@ -72,7 +82,6 @@ public class MA2JSimGen {
     glex.setGlobalValue("prefixes", Prefixes.getInstance());
     glex.setGlobalValue("log_aspects", LogAspects.getInstance());
     glex.setGlobalValue("helper", new Helper());
-    glex.setGlobalValue("SymTypeRelations", new SymTypeRelations());
     glex.setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
     glex.setGlobalValue("timing_untimed", Timing.UNTIMED);
     glex.setGlobalValue("MaUnitHelper", new MaUnitHelper());
