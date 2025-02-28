@@ -37,6 +37,8 @@ import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
+import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
+import de.monticore.expressions.assignmentexpressions.cocos.AssignmentExpressionsOnlyAssignToLValuesCoCo;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
@@ -205,6 +207,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new AtomicNoAutoConnect());
 
     // Basic MontiCore cocos
+    checker.addCoCo((AssignmentExpressionsASTAssignmentExpressionCoCo) new AssignmentExpressionsOnlyAssignToLValuesCoCo());
     addCoCoAs(new ExpressionStatementIsValid(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     addCoCoAs(new VarDeclarationInitializationHasCorrectType(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     addCoCoAs(new ForConditionHasBooleanType(), checkVariants ? varChecker::addCoCo : checker::addCoCo);

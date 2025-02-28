@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsCTTIVisitor;
 import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
 import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
+import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
 import de.monticore.ocl.setexpressions.types3.SetExpressionsCTTIVisitor;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
@@ -79,6 +80,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     MAOOWithinTypeBasicSymbolsResolver.init();
     ArcBasisTypeContextCalculator.init();
     TypeVisitorOperatorCalculator.init();
+    CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
     MontiArcTypeCheck delegate = new MontiArcTypeCheck(traverser, type4Ast, ctx4Ast);

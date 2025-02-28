@@ -7,6 +7,7 @@ import arcbasis.check.ArcBasisTypeCheck;
 import arcbasis.check.ArcBasisTypeContextCalculator;
 import arcbasis.check.ArcBasisWithinTypeBasicSymbolsResolver;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
@@ -75,6 +76,7 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
     VariableArcVariantOOWithinTypeBasicSymbolsResolver.init();
     ArcBasisTypeContextCalculator.init();
     TypeVisitorOperatorCalculator.init();
+    CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
     setDelegate(new VariableArcTypeCheck(traverser, type4Ast, ctx4Ast));
