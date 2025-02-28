@@ -190,7 +190,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
     );
 
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(MontiArcMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName());
@@ -209,7 +209,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
     );
 
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(MontiArcMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals("MyComp", deserializedExpr.printFullName());
@@ -235,7 +235,7 @@ public class MontiArcCompTypeExprDeSerTest extends MontiArcTestBase {
     MontiArcMill.globalScope().addSubScope(as);
     
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(MontiArcMill.globalScope(), serialized);
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);

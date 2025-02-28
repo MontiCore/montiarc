@@ -113,7 +113,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     );
 
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName());
@@ -132,7 +132,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     );
 
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals("MyComp", deserializedExpr.printFullName());
@@ -289,7 +289,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(as);
 
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);
@@ -318,7 +318,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(as);
 
     // When
-    CompKindExpression deserializedExpr = deser.deserialize(serialized);
+    CompKindExpression deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);

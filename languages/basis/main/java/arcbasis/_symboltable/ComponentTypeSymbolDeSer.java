@@ -67,15 +67,20 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected List<CompKindExpression> deserializeSuperComponents(JsonObject symbolJson) {
+  protected List<CompKindExpression> deserializeSuperComponents(IArcBasisScope scope, JsonObject symbolJson) {
 
     List<JsonElement> superComponents = symbolJson.getArrayMemberOpt(ComponentSymbolDeSer.SUPER).orElseGet(Collections::emptyList);
     List<CompKindExpression> result = new ArrayList<>(superComponents.size());
 
     for (JsonElement superComponent : superComponents) {
-      result.add(this.getCompTypeExprDeSer().deserialize(superComponent));
+      result.add(this.getCompTypeExprDeSer().deserialize(scope, superComponent));
     }
     return result;
+  }
+
+  @Override
+  protected List<CompKindExpression> deserializeSuperComponents(JsonObject symbolJson) {
+    throw new UnsupportedOperationException();
   }
 
   @Override
@@ -122,13 +127,18 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected List<CompKindExpression> deserializeRefinements(JsonObject symbolJson) {
+  protected List<CompKindExpression> deserializeRefinements(IArcBasisScope scope, JsonObject symbolJson) {
     List<JsonElement> refinements = symbolJson.getArrayMemberOpt(ComponentSymbolDeSer.REFINEMENTS).orElseGet(Collections::emptyList);
     List<CompKindExpression> result = new ArrayList<>(refinements.size());
 
     for (JsonElement refinement : refinements) {
-      result.add(compTypeExprDeSer.deserialize(refinement));
+      result.add(compTypeExprDeSer.deserialize(scope, refinement));
     }
     return result;
+  }
+
+  @Override
+  protected List<CompKindExpression> deserializeRefinements(JsonObject symbolJson) {
+    throw new UnsupportedOperationException();
   }
 }

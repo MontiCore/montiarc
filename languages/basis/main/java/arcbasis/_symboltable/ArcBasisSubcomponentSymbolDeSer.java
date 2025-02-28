@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
+import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbolDeSer;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.CompKindExpression;
@@ -21,7 +22,7 @@ public class ArcBasisSubcomponentSymbolDeSer extends SubcomponentSymbolDeSer {
   }
 
   @Override
-  protected CompKindExpression deserializeType(JsonObject symbolJson) {
-    return symbolJson.getObjectMemberOpt("type").map(t -> this.getCompKindExprDeSer().deserialize(t)).orElse(null);
+  protected CompKindExpression deserializeType(ICompSymbolsScope scope, JsonObject symbolJson) {
+    return symbolJson.getObjectMemberOpt("type").map(t -> this.getCompKindExprDeSer().deserialize(scope, t)).orElse(null);
   }
 }

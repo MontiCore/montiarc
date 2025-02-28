@@ -4,10 +4,12 @@ package arcbasis.check.deser;
 import arcbasis.check.TypeExprOfComponent;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
+import org.checkerframework.checker.nullness.qual.NonNull;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -38,7 +40,8 @@ public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
   }
 
   @Override
-  public CompKindExpression deserialize(JsonElement serialized) {
+  public CompKindExpression deserialize(@NonNull ICompSymbolsScope scope, @NonNull JsonElement serialized) {
+    Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(serialized);
 
     switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {

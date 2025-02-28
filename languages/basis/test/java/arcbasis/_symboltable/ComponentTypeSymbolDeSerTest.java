@@ -241,7 +241,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARENT);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PARENT);
 
     // Then
     Assertions.assertFalse(comp.isEmptySuperComponents(), "Parent not present");
@@ -254,7 +254,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ComponentTypeSymbol comp = deser.deserialize(SIMPLE_JSON);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), SIMPLE_JSON);
 
     // Then
     Assertions.assertTrue(comp.isEmptySuperComponents(), "Parent is present");
@@ -266,7 +266,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_TYPE_PARAMS);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_TYPE_PARAMS);
 
     // Then
     Assertions.assertEquals(2, comp.getTypeParameters().size());
@@ -282,7 +282,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PARAMS);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PARAMS);
 
     // Then
     Assertions.assertEquals(2, comp.getParameterList().size());
@@ -299,7 +299,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_PORTS);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PORTS);
 
     // Then
     Assertions.assertEquals(2, comp.getArcPorts().size());
@@ -408,7 +408,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_FIELD);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_FIELD);
 
     // Then
     Assertions.assertEquals(1, comp.getFields().size());

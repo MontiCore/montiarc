@@ -4,6 +4,7 @@ package montiarc.check;
 import arcbasis.check.TypeExprOfComponent;
 import arcbasis.check.deser.TypeExprOfComponentDeSer;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.types.check.CompKindExpression;
@@ -37,7 +38,8 @@ public class MontiArcCompTypeExprDeSer implements FullCompKindExprDeSer {
   }
 
   @Override
-  public CompKindExpression deserialize(JsonElement serialized) {
+  public CompKindExpression deserialize(@NotNull ICompSymbolsScope scope, @NotNull JsonElement serialized) {
+    Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(serialized);
 
     switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {
