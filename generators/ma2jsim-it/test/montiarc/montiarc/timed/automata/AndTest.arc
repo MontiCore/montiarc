@@ -5,7 +5,7 @@ import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
 
 <<test,
-  ticks=3,
+  ticks=2,
   a=[
     [[false, false], [true], [true]],
     [[false, false], [false], [false, true]]

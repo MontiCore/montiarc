@@ -15,5 +15,5 @@ component Send2MessagesInitiallyTest(OnOff input) {
 
   Emit<OnOff> generator(input);
 
-  AssertEqualsUntimed<OnOff> assertions([OnOff.OFF, OnOff.OFF, input]);
+  AssertEqualsUntimed<OnOff> assertions([OnOff.OFF, OnOff.OFF, input, input]);
 }

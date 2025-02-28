@@ -53,8 +53,8 @@ class DeployTest {
   static Stream<Arguments> expected() {
     return Stream.of(
       Arguments.of(
-        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF)),
-        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk())
+        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF)),
+        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk())
       ));
   }
 }

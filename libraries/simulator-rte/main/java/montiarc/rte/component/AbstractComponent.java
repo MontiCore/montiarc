@@ -106,6 +106,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
         comp.init();
       }
     }
+    tickPort.sendTick();
   }
 
   @Override

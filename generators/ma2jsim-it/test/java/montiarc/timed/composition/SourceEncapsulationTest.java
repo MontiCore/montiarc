@@ -46,7 +46,7 @@ class SourceEncapsulationTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(msg(OnOff.ON), tk())
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk())
       )
     );
   }

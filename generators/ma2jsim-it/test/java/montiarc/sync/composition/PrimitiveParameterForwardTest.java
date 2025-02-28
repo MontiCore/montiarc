@@ -50,15 +50,15 @@ class PrimitiveParameterForwardTest {
     return Stream.of(
       Arguments.of(
         0,
-        List.of(msg(0), tk())
+        List.of(msg(0), tk(), msg(0), tk())
       ),
       Arguments.of(
         2000,
-        List.of(msg(2000), tk())
+        List.of(msg(2000), tk(), msg(2000), tk())
       ),
       Arguments.of(
         -1,
-        List.of(msg(-1), tk())
+        List.of(msg(-1), tk(), msg(-1), tk())
       )
     );
   }

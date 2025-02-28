@@ -43,6 +43,7 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
     compile("package a.b; component H { port in int i; port out int o; D sub; i -> sub.i; sub.o -> o; }");
     compile("package a.b; component I { port in int i; port out int o; E sub; i -> sub.i; sub.o -> o; }");
     compile("package a.b; component J { port in int i; port out int o; D sub1; E sub2; i -> sub1.i; sub1.o -> sub2.i; sub2.o -> o; } ");
+    compile("package a.b; component K { port in int i; port out int o; B sub1; C sub2; i -> sub1.i; sub2.o -> o; } ");
   }
 
   @ParameterizedTest
@@ -157,6 +158,11 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
       "  i -> sub1.i1; " +
       "  sub1.o -> sub2.i1, sub2.i2; " +
       "  sub2.o -> sub1.i2, o; " +
+      "}",
+    // Strongly causal feedback loops with nested sink and source
+    "component Comp16 { " +
+      "  a.b.K sub; " +
+      "  sub.o -> sub.i; " +
       "}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {

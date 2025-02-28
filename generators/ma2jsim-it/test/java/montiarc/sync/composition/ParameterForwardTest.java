@@ -54,15 +54,15 @@ class ParameterForwardTest {
     return Stream.of(
       Arguments.of(
         null,
-        List.of(msg(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         OnOff.OFF,
-        List.of(msg(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         OnOff.ON,
-        List.of(msg(OnOff.ON), tk())
+        List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk())
       )
     );
   }
