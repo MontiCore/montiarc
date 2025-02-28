@@ -69,10 +69,14 @@ class CDOut2MAInPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainCompile = tasks.named(mainSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
+    val mainCDCompile = tasks.named(mainSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
+    val testMACompile = tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+
     // Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java) {
-      it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
+    testMACompile.configure {
+      it.symbolImportDir.from(
+          provider { mainCDCompile.get().symbolOutputDir() }
+      )
     }
   }
 }
