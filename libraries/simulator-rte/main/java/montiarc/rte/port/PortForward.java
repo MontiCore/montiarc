@@ -27,7 +27,7 @@ public class PortForward<T> extends AbstractOutPort<T> implements InOutPort<T, T
     if (Tick.get().equals(message)) {
       this.sendTick();
     } else {
-      this.send(message.getData());
+      this.send(message);
     }
   }
 

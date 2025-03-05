@@ -39,7 +39,7 @@ public interface OutPort<T> extends Port {
    *
    * @param message the message to send
    */
-  void send(Message<T> message);
+  void send(Message<? extends T> message);
 
   /**
    * Try to send a tick via this port.

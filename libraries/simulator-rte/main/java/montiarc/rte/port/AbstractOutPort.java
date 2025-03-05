@@ -92,7 +92,7 @@ public class AbstractOutPort<T> implements OutPort<T> {
    * @param message the message to send
    */
   @Override
-  public void send(Message<T> message) {
+  public void send(Message<? extends T> message) {
     for (InPort<? super T> recipient : recipients) {
       recipient.receive(message);
     }

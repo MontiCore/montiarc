@@ -12,6 +12,8 @@
 public class ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</#if> {
 
   public static void main(String[] args) {
+    de.se_rwth.commons.logging.Log.initWARN();
+
     final ${comp.getName()}${suffixes.component()} DEPLOY_${comp.getName()} =
       new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("DEPLOY_${comp.getName()}")
       <#if variant??>
