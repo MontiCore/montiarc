@@ -3,8 +3,10 @@ package montiarc._symboltable;
 
 import arcbasis._symboltable.ArcPortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.SymTypeOfObject;
 import de.monticore.types.check.SymTypePrimitive;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -229,5 +231,33 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
         .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
         .isEqualTo(ast.getComponentType().getInnerComponents().get(0).getName())
     );
+  }
+
+  @Test
+  public void shouldSerializeComponentWithGenerics() throws IOException {
+    // Given
+    final ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(
+      "package a.b;" +
+        "component Comp<A, B extends String> { }"
+    ).orElseThrow();
+    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+    MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+
+    // When
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getComponentType().getSpannedScope());
+
+    // Then
+    final JsonObject json = JsonParser.parseJsonObject(s);
+    assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(2);
+    final JsonObject jsonTypeVar1 = json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject();
+    assertThat(jsonTypeVar1.getMember("kind").getAsJsonString().getValue()).isEqualTo(TypeVarSymbol.class.getCanonicalName());
+    assertThat(jsonTypeVar1.getMember("name").getAsJsonString().getValue()).isEqualTo("A");
+    final JsonObject jsonTypeVar2 = json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject();
+    assertThat(jsonTypeVar2.getMember("kind").getAsJsonString().getValue()).isEqualTo(TypeVarSymbol.class.getCanonicalName());
+    assertThat(jsonTypeVar2.getMember("name").getAsJsonString().getValue()).isEqualTo("B");
+    assertThat(jsonTypeVar2.getMember("superTypes").getAsJsonArray().size()).isEqualTo(1);
+    assertThat(jsonTypeVar2.getMember("superTypes").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue()).isEqualTo(SymTypeOfObject.class.getCanonicalName());
+    assertThat(jsonTypeVar2.getMember("superTypes").getAsJsonArray().get(0).getAsJsonObject().getMember("objName").getAsJsonString().getValue()).isEqualTo("String");
   }
 }

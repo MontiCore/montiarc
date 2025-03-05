@@ -1,0 +1,56 @@
+{
+  "name": "ComponentWithGenericComponent",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "ComponentWithGenericComponent",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+            "name": "A",
+            "fullName": "ComponentWithGenericComponent.A",
+            "spannedScope": {
+              "isShadowingScope": true,
+              "symbols": [
+                {
+                  "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+                  "name": "T",
+                  "fullName": "ComponentWithGenericComponent.A.T"
+                },
+                {
+                  "kind": "arcbasis._symboltable.ArcPortSymbol",
+                  "name": "out",
+                  "fullName": "ComponentWithGenericComponent.A.out",
+                  "type": {
+                    "kind": "de.monticore.types.check.SymTypeVariable",
+                    "varName": "ComponentWithGenericComponent.A.T"
+                  },
+                  "outgoing": true,
+                  "timing": "timed"
+                }
+              ]
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
+            "name": "a",
+            "fullName": "ComponentWithGenericComponent.a",
+            "type": {
+              "kind": "arcbasis.check.TypeExprOfGenericComponent",
+              "componentTypeName": "ComponentWithGenericComponent.A",
+              "typeVarBindings": [
+                {
+                  "kind": "de.monticore.types.check.SymTypePrimitive",
+                  "primitiveName": "int"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

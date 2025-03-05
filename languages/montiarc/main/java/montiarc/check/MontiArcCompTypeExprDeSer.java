@@ -43,8 +43,8 @@ public class MontiArcCompTypeExprDeSer implements FullCompKindExprDeSer {
     Preconditions.checkNotNull(serialized);
 
     switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {
-      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return simpleCompExprDeSer.deserialize(serialized.getAsJsonObject());
-      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericCompExprDeSer.deserialize(serialized.getAsJsonObject());
+      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return simpleCompExprDeSer.deserialize(scope, serialized.getAsJsonObject());
+      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericCompExprDeSer.deserialize(scope, serialized.getAsJsonObject());
       default:
         throw missingDeSerException(serialized.getAsJsonObject());
     }

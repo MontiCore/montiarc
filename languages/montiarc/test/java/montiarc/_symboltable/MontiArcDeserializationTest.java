@@ -1178,4 +1178,29 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
       () -> assertThat(symbol.getAllArcPorts().size()).isEqualTo(1)
     );
   }
+
+  @Test
+  public void shouldLoadComponentTypeWithGenericComponent() {
+    // Given
+    final String name = "ComponentWithGenericComponent";
+    final String fn = name + ".sym";
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // WHen
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
+    );
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
+      () -> assertThat(symbol.getAllArcPorts().size()).isEqualTo(0),
+      () -> assertThat(symbol.getSubcomponents().size()).isEqualTo(1),
+      () -> assertThat(symbol.getSubcomponents("a").get().getType().getTypeOfPort("out").get().getTypeInfo().getName()).isEqualTo("int")
+    );
+  }
 }

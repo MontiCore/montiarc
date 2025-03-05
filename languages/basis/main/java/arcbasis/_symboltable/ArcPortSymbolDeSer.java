@@ -3,8 +3,6 @@ package arcbasis._symboltable;
 
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.serialization.json.JsonObject;
-import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeExpressionDeSer;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.NoSuchElementException;
@@ -12,18 +10,8 @@ import java.util.NoSuchElementException;
 public class ArcPortSymbolDeSer extends ArcPortSymbolDeSerTOP {
 
   @Override
-  protected void serializeType(@NotNull SymTypeExpression type, @NotNull ArcBasisSymbols2Json s2j) {
-    SymTypeExpressionDeSer.serializeMember(s2j.getJsonPrinter(), "type", type);
-  }
-
-  @Override
   protected void serializeTiming(@NotNull Timing timing, @NotNull ArcBasisSymbols2Json s2j) {
     s2j.getJsonPrinter().member("timing", timing.getName());
-  }
-
-  @Override
-  protected SymTypeExpression deserializeType(@NotNull JsonObject symbolJson) {
-    return SymTypeExpressionDeSer.deserializeMember("type", symbolJson);
   }
 
   @Override

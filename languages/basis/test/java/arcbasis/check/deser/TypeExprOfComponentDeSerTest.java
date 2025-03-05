@@ -102,7 +102,7 @@ public class TypeExprOfComponentDeSerTest extends ArcBasisTestBase {
     );
 
     // When
-    TypeExprOfComponent deserializedExpr = deser.deserialize(serialized);
+    TypeExprOfComponent deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName());
@@ -120,7 +120,7 @@ public class TypeExprOfComponentDeSerTest extends ArcBasisTestBase {
     );
 
     // When
-    TypeExprOfComponent deserializedExpr = deser.deserialize(serialized);
+    TypeExprOfComponent deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals("MyComp", deserializedExpr.printFullName());

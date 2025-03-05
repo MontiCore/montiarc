@@ -3,11 +3,14 @@ package arcbasis.check.deser;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.CompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionDeSer;
 import de.se_rwth.commons.logging.Log;
@@ -17,7 +20,7 @@ import java.util.List;
 
 import static arcbasis.check.deser.TypeExprOfComponentDeSer.COMP_TYPE_NAME;
 
-public class TypeExprOfGenericComponentDeSer implements CompKindExpressionDeSer<TypeExprOfGenericComponent> {
+public class TypeExprOfGenericComponentDeSer implements CompKindExprDeSer<TypeExprOfGenericComponent> {
 
   public static final String SERIALIZED_KIND = "arcbasis.check.TypeExprOfGenericComponent";
   public static final String TYPE_VAR_BINDINGS = "typeVarBindings";
@@ -38,15 +41,14 @@ public class TypeExprOfGenericComponentDeSer implements CompKindExpressionDeSer<
   }
 
   @Override
-  public TypeExprOfGenericComponent deserialize(JsonObject serialized) {
+  public TypeExprOfGenericComponent deserialize(@NotNull ICompSymbolsScope scope, @NotNull JsonObject serialized) {
+    Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(serialized);
     Preconditions.checkArgument(
       JsonDeSers.getKind(serialized).equals(SERIALIZED_KIND),
       "Kind must be %s, but is %s.",
       SERIALIZED_KIND, JsonDeSers.getKind(serialized)
     );
-
-    Log.warn("Deserializing TypeExprOfGenericComponents is buggy currently!");
 
     String compTypeName = serialized.getMember(COMP_TYPE_NAME)
       .getAsJsonString()
@@ -55,10 +57,10 @@ public class TypeExprOfGenericComponentDeSer implements CompKindExpressionDeSer<
     ComponentTypeSymbolSurrogate compType = ArcBasisMill
       .componentTypeSymbolSurrogateBuilder()
       .setName(compTypeName)
-      .setEnclosingScope(ArcBasisMill.globalScope())
+      .setEnclosingScope((IArcBasisScope) scope)
       .build();
 
-    List<SymTypeExpression> paramBindings = SymTypeExpressionDeSer.deserializeListMember(TYPE_VAR_BINDINGS, serialized);
+    List<SymTypeExpression> paramBindings = SymTypeExpressionDeSer.deserializeListMember(TYPE_VAR_BINDINGS, serialized, scope);
 
     return new TypeExprOfGenericComponent(compType, paramBindings);
   }

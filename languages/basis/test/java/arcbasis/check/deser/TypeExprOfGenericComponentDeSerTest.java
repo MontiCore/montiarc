@@ -197,7 +197,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(as);
 
     // When
-    TypeExprOfGenericComponent deserializedExpr = deser.deserialize(serialized);
+    TypeExprOfGenericComponent deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals(
@@ -225,7 +225,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(as);
 
     // When
-    TypeExprOfGenericComponent deserializedExpr = deser.deserialize(serialized);
+    TypeExprOfGenericComponent deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals(

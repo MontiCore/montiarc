@@ -45,8 +45,8 @@ public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
     Preconditions.checkNotNull(serialized);
 
     switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {
-      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(serialized.getAsJsonObject());
-      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericComponentExprDeSer.deserialize(serialized.getAsJsonObject());
+      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(scope, serialized.getAsJsonObject());
+      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericComponentExprDeSer.deserialize(scope, serialized.getAsJsonObject());
       default:
         throw missingDeSerException(serialized.getAsJsonObject());
     }
