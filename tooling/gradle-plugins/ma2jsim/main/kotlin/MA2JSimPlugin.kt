@@ -6,7 +6,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.plugins.JavaPluginExtension
-import org.gradle.api.plugins.JavaTestFixturesPlugin
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
@@ -42,7 +41,7 @@ const val MAVEN_MAUNIT_PROJECT_REF = "montiarc.libraries:maunit"
  * @see MontiArcCompile
  */
 @Suppress("unused")
-class Ma2JavaPlugin : Plugin<Project> {
+class MA2JSimPlugin : Plugin<Project> {
 
   private lateinit var project: Project
   private lateinit var maExtension: MAExtension

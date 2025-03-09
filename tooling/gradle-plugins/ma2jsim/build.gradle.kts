@@ -16,7 +16,7 @@ gradlePlugin {
   plugins {
     create("MontiArc") {
       id = "montiarc-jsim"
-      implementationClass = "montiarc.gradle.ma2jsim.Ma2JavaPlugin"
+      implementationClass = "montiarc.gradle.ma2jsim.MA2JSimPlugin"
     }
   }
 }

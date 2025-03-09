@@ -18,7 +18,7 @@ class CDOut2MAInPlugin : Plugin<Project> {
 
   override fun apply(project: Project) {
     this.project = project
-    this.project.pluginManager.apply(Ma2JavaPlugin::class.java)
+    this.project.pluginManager.apply(MA2JSimPlugin::class.java)
 
     sourceSetsOf(project).all { sourceSet ->
       connectCdSymbolsToMontiarc(sourceSet)
