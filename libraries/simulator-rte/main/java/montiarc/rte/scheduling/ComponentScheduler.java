@@ -45,9 +45,7 @@ public class ComponentScheduler {
       throw new IllegalArgumentException("Requested message object should be unwrapped and not instance of the rte class 'Message'");
     }
 
-    if (syncPorts.contains(port)) {
-      Log.warn("Scheduler method 'requestScheduling(InPort, Object)' should not be invoked on sync ports.");
-    } else {
+    if (!syncPorts.contains(port)) {
       requestMsgEventPortScheduling(port);
     }
   }
@@ -93,7 +91,7 @@ public class ComponentScheduler {
 
     if (!port.isTickBlocked()) {
       scheduledMsgEventPorts.add(port);
-    } else if (scheduledMsgEventPorts.isEmpty() && allPortsAreTickBlocked()) {
+    } else if (scheduledMsgEventPorts.isEmpty() && allPortsHaveBufferedTick()) {
       orderTickSchedule();
     }
   }
