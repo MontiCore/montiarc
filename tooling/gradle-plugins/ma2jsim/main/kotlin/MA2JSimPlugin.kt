@@ -113,6 +113,7 @@ class MA2JSimPlugin : Plugin<Project> {
 
   private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {
     addRuntimeEnvironmentDependencyFor(sourceSet.implementationConfigurationName)
+    addRuntimeEnvironmentDependencyFor(sourceSet.cd2pojo4MaDeclarationConfigName)
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
     // too. Therefore, we want to put the dependency on the api configuration. However, the api configuration only
