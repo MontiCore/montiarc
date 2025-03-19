@@ -10,10 +10,12 @@ import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
+import de.se_rwth.commons.logging.RichConsoleLogHook;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.check.MontiArcTypeCheck;
+import montiarc.logging.MontiArcLog;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import montiarc.report.VersionFileDeserializer;
@@ -66,6 +68,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   @Override
   public void init() {
+    MontiArcLog.init();
     super.init();
     MontiArcTypeCheck.init();
   }
