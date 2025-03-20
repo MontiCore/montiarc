@@ -11,13 +11,54 @@ on:
       - dev
 
 jobs:
-  create-build:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
+          cache: gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 7.5.1
+
+      - name: Build with Gradle
+        run: gradle shadowjar
+
+      - name: Extract version name
+        shell: bash
+        run: echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
+        id: extract_version
+
+      - name: Rename Jar
+        if: matrix.target == 'Jar'
+        run: mv generators/ma2jsim/build/libs/MontiArcSimulator.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
+
+
+      # Upload the build.
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MontiArc-${{ steps.extract_version.outputs.version }}.jar
+          path: ./MontiArc-${{ steps.extract_version.outputs.version }}.jar
+          retention-days: 7
+
+
+  package:
     name: Create ${{ matrix.target }} build
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
+    needs: build
     strategy:
       matrix:
-        target: [ macOS, Windows, Linux, Debian, Fedora, Jar ]
+        target: [ macOS, Windows, Linux, Debian, Fedora ]
         include:
           - os: macos-latest
             target: macOS
@@ -42,9 +83,6 @@ jobs:
             target: Fedora
             asset_extension: .rpm
             package_settings: -t rpm --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
-          - os: ubuntu-latest
-            target: Jar
-            asset_extension: .jar
       # Disable fail-fast as we want results from all even if one fails.
       fail-fast: false
     steps:
@@ -63,33 +101,23 @@ jobs:
         if: matrix.target == 'Fedora'
         run: |
           sudo dnf update -y
-          sudo dnf install -y rpm-build java-17-openjdk
+          sudo dnf install -y rpm-build
       - name: Install Linux dependencies
         if: matrix.target == 'Linux' || matrix.target == 'Debian'
         run: |
           sudo apt-get update
           sudo apt-get install -y fakeroot
 
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 11
-          cache: gradle
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4
-        with:
-          gradle-version: 7.5.1
-
-      # Build
-      - name: Build with Gradle
-        run: gradle shadowjar
-
       # Package
       - name: Extract version name
         shell: bash
         run: echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
         id: extract_version
+
+      - name: Download Jar
+        uses: actions/download-artifact@v4
+        with:
+          name: MontiArc-${{ steps.extract_version.outputs.version }}.jar
 
       - name: Package
         if: matrix.target != 'Jar'
