@@ -1,0 +1,120 @@
+# (c) https://github.com/MontiCore/monticore
+name: Build and Package
+
+concurrency: # run this test workflow only once per branch
+  group: ${{ github.repository }}-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  create-build:
+    name: Create ${{ matrix.target }} build
+    runs-on: ${{ matrix.os }}
+    container: ${{ matrix.container }}
+    strategy:
+      matrix:
+        target: [ macOS, Windows, Linux, Debian, Fedora, Jar ]
+        include:
+          - os: macos-latest
+            target: macOS
+            asset_extension: .pkg
+            package_settings: -t pkg --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
+          - os: windows-latest
+            target: Windows
+            asset_extension: .exe
+            package_settings: --win-console --win-dir-chooser --icon docs/img/icon.ico --about-url "https://monticore.github.io/montiarc"
+          - os: ubuntu-latest
+            target: Linux
+            asset_extension: -Linux.tar.xz
+            package_settings: -t app-image --icon docs/img/icon.png
+          - os: ubuntu-latest
+            target: Debian
+            asset_extension: .deb
+            package_settings: -t deb --linux-deb-maintainer "SE at RWTH" --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
+          - os: ubuntu-latest
+            container:
+              image: fedora:latest
+              options: --group-add 135
+            target: Fedora
+            asset_extension: .rpm
+            package_settings: -t rpm --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
+          - os: ubuntu-latest
+            target: Jar
+            asset_extension: .jar
+      # Disable fail-fast as we want results from all even if one fails.
+      fail-fast: false
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      # Setup Dependencies
+      - name: Add msbuild to PATH
+        if: matrix.target == 'Windows'
+        uses: microsoft/setup-msbuild@v1.1
+      - name: Install WiX
+        if: matrix.target == 'Windows'
+        run: choco install wixtoolset --version=3.14.1
+
+      - name: Install Fedora dependencies
+        if: matrix.target == 'Fedora'
+        run: |
+          sudo dnf update -y
+          sudo dnf install -y rpm-build java-17-openjdk
+      - name: Install Linux dependencies
+        if: matrix.target == 'Linux' || matrix.target == 'Debian'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fakeroot
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 11
+          cache: gradle
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 7.5.1
+
+      # Build
+      - name: Build with Gradle
+        run: gradle shadowjar
+
+      # Package
+      - name: Extract version name
+        shell: bash
+        run: echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
+        id: extract_version
+
+      - name: Package
+        if: matrix.target != 'Jar'
+        run: jpackage -i generators/ma2jsim/build/libs/ --main-jar MontiArcSimulator.jar --name MontiArc --app-version ${{ steps.extract_version.outputs.version }} --copyright "SE at RWTH, (C) 2025" ${{ matrix.package_settings }}
+
+      # Rename and compress
+      - name: Compress build for Linux
+        if: matrix.target == 'Linux'
+        run: tar czf MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }} MontiArc
+      - name: Rename for Debian
+        if: matrix.target == 'debian'
+        run: mv montiarc_${{ steps.extract_version.outputs.version }}-1_amd64${{ matrix.asset_extension }} MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
+      - name: Package Jar
+        if: matrix.target == 'Jar'
+        run: mv generators/ma2jsim/build/libs/MontiArcSimulator.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
+
+      # Debug list files
+      - name: List files
+        if: matrix.target != 'Windows'
+        run: ls -l
+
+      # Upload the build.
+      - name: 'Upload Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
+          path: ./MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
+          retention-days: 7
