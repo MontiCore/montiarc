@@ -1,4 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
+<#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#-- AST IGNORED -->
 ${tc.signature("portSymbols")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>

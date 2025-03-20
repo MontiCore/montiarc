@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTComponentType ast -->
+<#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTComponentType" -->
+<#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#list ast.getSymbol().getAllIncomingPorts() as portSym>
     ${tc.includeArgs("montiarc.generator.ma2jsim.component.ports.PortGetter.ftl", [portSym])}
 </#list>

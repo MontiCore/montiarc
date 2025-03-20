@@ -1,4 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
+<#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 

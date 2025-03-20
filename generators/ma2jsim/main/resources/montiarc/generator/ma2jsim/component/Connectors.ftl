@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- ASTComponentType ast -->
+<#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTComponentType" -->
+<#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 

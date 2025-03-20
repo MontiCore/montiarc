@@ -1,4 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
+<#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 
 <#-- SymTypeExpression type -->
 <#macro getPortTypeString type>
