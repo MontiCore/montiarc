@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.5">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.9">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.8608ea7d.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.4af4bdda.min.css">
       
       
 
@@ -1687,22 +1687,22 @@ response via outgoing channels. </p>
 <span class="w">       </span><span class="o">&lt;&lt;</span><span class="k">sync</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="w"> </span><span class="n">winMoveAction</span><span class="p">;</span>
 
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Closed</span><span class="p">;</span>
+<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Closed</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Intermediate</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Open</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Blocked</span><span class="p">;</span>
 
 <span class="w">    </span><span class="c1">// Constantly send outputs via the synchronized output port</span>
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Opening</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">MOVE_DOWN</span><span class="p">;</span>
+<span class="w">      </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">MOVE_DOWN</span><span class="p">;</span>
 <span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">MOVE_DOWN</span><span class="p">;</span>
-<span class="w">      </span><span class="n">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">STOP_MOVEMENT</span><span class="p">;</span>
+<span class="w">      </span><span class="k">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">STOP_MOVEMENT</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Closing</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">MOVE_UP</span><span class="p">;</span>
+<span class="w">      </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">MOVE_UP</span><span class="p">;</span>
 <span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">MOVE_UP</span><span class="p">;</span>
-<span class="w">      </span><span class="n">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">STOP_MOVEMENT</span><span class="p">;</span>
+<span class="w">      </span><span class="k">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">winMoveAction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">WindowMoveAction</span><span class="p">.</span><span class="na">STOP_MOVEMENT</span><span class="p">;</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="c1">// Blocking the movement in case of a detected finger</span>
@@ -1754,7 +1754,7 @@ In our case, the component starts, assuming that the window is closed.
 <p>These actions are defined within a state body, enclosed by {curly braces} following the state name.
   The defined actions are formulated as statements, following <code>entry /</code>, <code>exit /</code>, and <code>do /</code>.
   If multiple actions should be executed, then they are wrapped in {curly braces}, creating a statement block. Example:
-  <div class="highlight"><pre><span></span><code><span class="n">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+  <div class="highlight"><pre><span></span><code><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">foo</span><span class="p">();</span>
 <span class="w">  </span><span class="n">bar</span><span class="p">();</span>
 <span class="p">}</span>
@@ -2058,7 +2058,7 @@ If you want to learn more, there look at other ways to define behavior, or advan
     <script id="__config" type="application/json">{"base": "..", "features": ["navigation.tabs", "toc.follow", "content.tabs.link", "social"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.f1b6f286.min.js"></script>
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
       
     
   </body>
