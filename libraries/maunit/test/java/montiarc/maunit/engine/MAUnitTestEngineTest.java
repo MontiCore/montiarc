@@ -83,6 +83,9 @@ public class MAUnitTestEngineTest {
       return null;
     }
 
+    @Override
+    protected List<OutPort<?>> getAllDelayedOutPorts() {return List.of(); }
+
     public static class ExampleMaUnitTestContext implements MaUnitTestContext {
 
       @Override

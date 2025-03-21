@@ -21,7 +21,6 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
     ${prettyPrinter.prettyprint(helper.getComputeInit(ast).get().getMCBlockStatement())}
   </#if>
 
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SendInitialTicksOnDelayedPorts.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
   }
 

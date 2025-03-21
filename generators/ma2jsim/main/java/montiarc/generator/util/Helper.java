@@ -330,6 +330,12 @@ public class Helper {
     );
   }
 
+  public List<PortSymbol> getAllDelayedOutPorts(ComponentTypeSymbol comp) {
+    return comp.getAllOutgoingArcPorts().stream()
+      .filter(ArcPortSymbol::isDelayed)
+      .collect(Collectors.toList());
+  }
+
   public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ComponentTypeSymbol comp) {
     Set<String> targets = comp.getAstNode().getConnectors().stream()
       .map(ASTConnector::getTargetsNames)

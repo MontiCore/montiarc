@@ -46,8 +46,8 @@ class InitialAndEntryActionWithDelayTest {
     return Stream.of(
       Arguments.of(
         List.of(
-          msg("INIT"), tk(),
-          msg("Enter A"), msg("A -> B"), msg("Enter B"), msg("Do B"), tk(),
+          msg("INIT"), msg("Enter A"), tk(),
+          msg("A -> B"), msg("Enter B"), msg("Do B"), tk(),
           msg("B -> A"), msg("Enter A"), msg("Do A"), tk()
         )
       )

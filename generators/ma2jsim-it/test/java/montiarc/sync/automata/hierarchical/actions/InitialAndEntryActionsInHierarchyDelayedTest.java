@@ -32,9 +32,9 @@ class InitialAndEntryActionsInHierarchyDelayedTest {
     List<Message<String>> expectedOutput = List.of(
       msg("INIT A"),
       msg("INIT AA"),
-      tk(),
       msg("-> A"),
       msg("-> AA"),
+      tk(),
       msg("A -> B"),
       tk(),
       msg("B -> A"),

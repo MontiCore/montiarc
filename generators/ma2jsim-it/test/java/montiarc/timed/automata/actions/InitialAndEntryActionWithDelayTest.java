@@ -55,16 +55,16 @@ class InitialAndEntryActionWithDelayTest {
       Arguments.of(
         List.of(msg("trigger"), tk(), msg("trigger"), tk()),
         List.of(
-          msg("INIT"), tk(),
-          msg("Enter A"), msg("A -> B"), msg("Enter B"), msg("Do B"), tk(),
+          msg("INIT"), msg("Enter A"), tk(),
+          msg("A -> B"), msg("Enter B"), msg("Do B"), tk(),
           msg("B -> A"), msg("Enter A"), msg("Do A"), tk()
         )
       ),
       Arguments.of(
         List.of(msg("noop"), tk(), msg("trigger"), tk()),
         List.of(
-          msg("INIT"), tk(),
-          msg("Enter A"), msg("Do A"), tk(),
+          msg("INIT"), msg("Enter A"), tk(),
+          msg("Do A"), tk(),
           msg("A -> B"), msg("Enter B"), msg("Do B"), tk()
         )
       )
