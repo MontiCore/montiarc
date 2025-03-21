@@ -9,6 +9,7 @@ on:
   push:
     branches:
       - dev
+  workflow_dispatch:
 
 jobs:
   build:
@@ -48,10 +49,11 @@ jobs:
           name: MontiArc-${{ steps.extract_version.outputs.version }}.jar
           path: ./MontiArc-${{ steps.extract_version.outputs.version }}.jar
           retention-days: 7
+          if-no-files-found: error
 
 
   package:
-    name: Create ${{ matrix.target }} build
+    name: Package ${{ matrix.target }} build
     runs-on: ${{ matrix.os }}
     container: ${{ matrix.container }}
     needs: build
@@ -95,12 +97,18 @@ jobs:
       - name: Install WiX
         if: matrix.target == 'Windows'
         run: choco install wixtoolset --version=3.14.1
+      - name: Setup Java
+        if: matrix.target == 'Windows'
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
 
       - name: Install Fedora dependencies
         if: matrix.target == 'Fedora'
         run: |
           sudo dnf update -y
-          sudo dnf install -y rpm-build
+          sudo dnf install -y rpm-build java-latest-openjdk-*
       - name: Install Linux dependencies
         if: matrix.target == 'Linux' || matrix.target == 'Debian'
         run: |
@@ -117,26 +125,25 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: MontiArc-${{ steps.extract_version.outputs.version }}.jar
+          path: dist/
 
       - name: Package
         if: matrix.target != 'Jar'
-        run: jpackage -i generators/ma2jsim/build/libs/ --main-jar MontiArcSimulator.jar --name MontiArc --app-version ${{ steps.extract_version.outputs.version }} --copyright "SE at RWTH, (C) 2025" ${{ matrix.package_settings }}
+        run: jpackage -i dist/ --main-jar MontiArc-${{ steps.extract_version.outputs.version }}.jar --name MontiArc --app-version ${{ steps.extract_version.outputs.version }} --vendor "SE at RWTH Aachen" --copyright "(c) https://github.com/MontiCore/monticore" ${{ matrix.package_settings }}
 
       # Rename and compress
       - name: Compress build for Linux
         if: matrix.target == 'Linux'
         run: tar czf MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }} MontiArc
       - name: Rename for Debian
-        if: matrix.target == 'debian'
+        if: matrix.target == 'Debian'
         run: mv montiarc_${{ steps.extract_version.outputs.version }}-1_amd64${{ matrix.asset_extension }} MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
+      - name: Rename for Fedora
+        if: matrix.target == 'Fedora'
+        run: mv montiarc-${{ steps.extract_version.outputs.version }}-1.x86_64${{ matrix.asset_extension }} MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
       - name: Package Jar
         if: matrix.target == 'Jar'
         run: mv generators/ma2jsim/build/libs/MontiArcSimulator.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
-
-      # Debug list files
-      - name: List files
-        if: matrix.target != 'Windows'
-        run: ls -l
 
       # Upload the build.
       - name: 'Upload Artifact'
