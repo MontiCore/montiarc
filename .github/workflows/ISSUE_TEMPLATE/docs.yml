@@ -1,0 +1,19 @@
+# (c) https://github.com/MontiCore/monticore
+name: Documentation issue
+description: Report an issue with the MontiArc documentation (including missing information)
+labels: [doc]
+title: "Docs: "
+body:
+  - type: input
+    id: url
+    attributes:
+      label: "URL to the Wiki page"
+      placeholder: "https://monticore.github.io/montiarc/"
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: "What is your issue with the documentation?"
+    validations:
+      required: true
