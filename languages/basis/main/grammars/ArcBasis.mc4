@@ -212,6 +212,4 @@ component grammar ArcBasis extends
    * @attribute port the name of the port.
    */
   PortAccess = (component:Name@Subcomponent ".")? port:Name@ArcPort ;
-
-  StereoValueExpr extends StereoValue = Name& "=" Expression;
 }

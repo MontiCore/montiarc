@@ -6,8 +6,8 @@ import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
+import de.monticore.umlstereotype._ast.ASTStereoValue;
 import montiarc.MontiArcMill;
-import arcbasis._ast.ASTStereoValueExpr;
 import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcFeatureDeclaration;
 
@@ -35,8 +35,7 @@ public class MaUnitHelper {
     return Math.max(
       node.getStereotype().getValuesList().stream()
         .filter(sv -> names.contains(sv.getName()))
-        .filter(MontiArcMill.typeDispatcher()::isArcBasisASTStereoValueExpr)
-        .map(MontiArcMill.typeDispatcher()::asArcBasisASTStereoValueExpr)
+        .filter(ASTStereoValue::isPresentExpression)
         .filter(stereo -> MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()) && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList())
         .map(stereo -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size())
         .reduce(1, Math::max),
@@ -48,13 +47,14 @@ public class MaUnitHelper {
     );
   }
 
-  public boolean isStereoValueList(ASTStereoValueExpr stereo) {
-    return MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
+  public boolean isStereoValueList(ASTStereoValue stereo) {
+    return stereo.isPresentExpression()
+      && MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
       && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList();
   }
 
-  public Optional<ASTStereoValueExpr> getStereoValue(ASTComponentType comp, String name) {
-    return comp.getStereotype().getValuesList().stream().filter(sv -> Objects.equals(name, sv.getName())).filter(MontiArcMill.typeDispatcher()::isArcBasisASTStereoValueExpr).findAny().map(MontiArcMill.typeDispatcher()::asArcBasisASTStereoValueExpr);
+  public Optional<ASTStereoValue> getStereoValue(ASTComponentType comp, String name) {
+    return comp.getStereotype().getValuesList().stream().filter(sv -> Objects.equals(name, sv.getName())).filter(ASTStereoValue::isPresentExpression).findAny();
   }
 
   public boolean isTestSource(ASTComponentType comp) {
@@ -63,7 +63,7 @@ public class MaUnitHelper {
 
   public List<ASTExpression> getTestValues(ASTComponentType comp, int index) {
     Optional<ASTSetEnumeration> testDefinition = getStereoValue(comp, "test")
-      .map(ASTStereoValueExpr::getExpression)
+      .map(ASTStereoValue::getExpression)
       .filter(MontiArcMill.typeDispatcher()::isSetExpressionsASTSetEnumeration)
       .map(MontiArcMill.typeDispatcher()::asSetExpressionsASTSetEnumeration);
     Preconditions.checkArgument(testDefinition.isPresent());

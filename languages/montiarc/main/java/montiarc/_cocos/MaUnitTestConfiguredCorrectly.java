@@ -1,10 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTStereoValueExpr;
 import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
@@ -16,6 +14,7 @@ import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.mccollectiontypes.types3.util.MCCollectionSymTypeFactory;
 import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
+import de.monticore.umlstereotype._ast.ASTStereoValue;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.util.MontiArcError;
@@ -60,7 +59,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     for (ASTArcFeature feature : node.getBody()
       .streamArcElementsOfType(ASTArcFeatureDeclaration.class)
       .flatMap(ASTArcFeatureDeclaration::streamArcFeatures).collect(Collectors.toList())) {
-      Optional<ASTStereoValueExpr> stereo = getStereo(node, feature.getName());
+      Optional<ASTStereoValue> stereo = getStereo(node, feature.getName());
       if (stereo.isEmpty()) continue;
 
       checkTestCountFits(stereo.get(), testCount);
@@ -68,14 +67,14 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     }
 
     // Check tick count
-    Optional<ASTStereoValueExpr> tickStereo = getStereo(node, "ticks");
+    Optional<ASTStereoValue> tickStereo = getStereo(node, "ticks");
     if (tickStereo.isPresent()) {
       checkTestCountFits(tickStereo.get(), testCount);
       checkTypeFits(tickStereo.get(), SymTypeExpressionFactory.createPrimitive("int"));
     }
 
     // Check expected outcome
-    Optional<ASTStereoValueExpr> expectedStereo = getStereo(node, "exception");
+    Optional<ASTStereoValue> expectedStereo = getStereo(node, "exception");
     if (expectedStereo.isPresent()) {
       checkTestCountFits(expectedStereo.get(), testCount);
     }
@@ -85,7 +84,8 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     Preconditions.checkArgument(getStereo(node, "test").isPresent());
 
     Optional<ASTSetEnumeration> testDefinition = getStereo(node, "test")
-      .map(ASTStereoValueExpr::getExpression)
+      .filter(ASTStereoValue::isPresentExpression)
+      .map(ASTStereoValue::getExpression)
       .filter(MontiArcMill.typeDispatcher()::isSetExpressionsASTSetEnumeration)
       .map(MontiArcMill.typeDispatcher()::asSetExpressionsASTSetEnumeration);
 
@@ -177,7 +177,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
 
     // Check parameter assignments
     for (ASTArcParameter parameter : node.getHead().getArcParameterList()) {
-      Optional<ASTStereoValueExpr> stereo = getStereo(node, parameter.getName());
+      Optional<ASTStereoValue> stereo = getStereo(node, parameter.getName());
       if (stereo.isEmpty()) {
         if (!parameter.isPresentDefault())
           Log.error(MontiArcError.UNIT_MISSING_ARGUMENT.format(parameter.getName()),
@@ -191,14 +191,13 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     }
   }
 
-  protected Optional<ASTStereoValueExpr> getStereo(@NotNull ASTComponentType node, @NotNull String name) {
+  protected Optional<ASTStereoValue> getStereo(@NotNull ASTComponentType node, @NotNull String name) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(name);
 
-    List<ASTStereoValueExpr> stereos = node.getStereotype().getValuesList().stream()
+    List<ASTStereoValue> stereos = node.getStereotype().getValuesList().stream()
       .filter(s -> Objects.equals(s.getName(), name))
-      .filter(MontiArcMill.typeDispatcher()::isArcBasisASTStereoValueExpr)
-      .map(MontiArcMill.typeDispatcher()::asArcBasisASTStereoValueExpr)
+      .filter(ASTStereoValue::isPresentExpression)
       .collect(Collectors.toList());
     if (stereos.isEmpty()) {
       return Optional.empty();
@@ -212,7 +211,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     return Optional.of(stereos.get(0));
   }
 
-  protected void checkTestCountFits(@NotNull ASTStereoValueExpr stereo, int testCount) {
+  protected void checkTestCountFits(@NotNull ASTStereoValue stereo, int testCount) {
     Preconditions.checkNotNull(stereo);
     if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
       && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList()
@@ -225,7 +224,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
   /**
    * Checks if the type of the value source stereo expression(s) fit the parameter/feature/timing type
    */
-  protected void checkTypeFits(@NotNull ASTStereoValueExpr stereo, @NotNull SymTypeExpression type) {
+  protected void checkTypeFits(@NotNull ASTStereoValue stereo, @NotNull SymTypeExpression type) {
     Preconditions.checkNotNull(stereo);
     Preconditions.checkNotNull(type);
 
@@ -240,7 +239,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
       checkTypeFits(stereo.getName(), stereo.getExpression(), targetType, TypeCheck3.typeOf(stereo.getExpression(), targetType) );
 
     } else {
-      checkTypeFits(stereo.getName(), stereo, type, TypeCheck3.typeOf(ArcBasisMill.typeDispatcher().asArcBasisASTStereoValueExpr(stereo).getExpression(), type));
+      checkTypeFits(stereo.getName(), stereo, type, TypeCheck3.typeOf(stereo.getExpression(), type));
     }
   }
 
@@ -270,13 +269,12 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     return Math.max(
       node.getStereotype().getValuesList().stream()
         .filter(sv -> names.contains(sv.getName()))
-        .filter(MontiArcMill.typeDispatcher()::isArcBasisASTStereoValueExpr)
-        .map(MontiArcMill.typeDispatcher()::asArcBasisASTStereoValueExpr)
+        .filter(ASTStereoValue::isPresentExpression)
         .filter(stereo -> MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()) && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList())
         .map(stereo -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size())
         .reduce(1, Math::max),
       getStereo(node, "test").map(stereo -> {
-        if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()))
+        if (stereo.isPresentExpression() && MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()))
           return MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size();
         else return 1;
       }).orElse(1)

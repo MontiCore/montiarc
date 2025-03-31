@@ -202,7 +202,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
       .setStereotype(MontiArcMill.stereotypeBuilder()
         .addValues(MontiArcMill.stereoValueBuilder()
           .setName("s")
-          .setContent("")
+          
           .build())
         .build())
       .setHead(MontiArcMill.componentHeadBuilder()
@@ -226,8 +226,8 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-          MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-          MontiArcMill.stereoValueBuilder().setName("s").setContent("").build()))
+          MontiArcMill.stereoValueBuilder().setName("test").build(),
+          MontiArcMill.stereoValueBuilder().setName("s").build()))
         .build())
       .setHead(MontiArcMill.componentHeadBuilder()
         .addArcParameter(MontiArcMill.arcParameterBuilder()
@@ -254,9 +254,9 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-        MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-        MontiArcMill.stereoValueExprBuilder().setName("p").setExpression(getIntLiteral(1)).build(),
-        MontiArcMill.stereoValueBuilder().setName("s").setContent("").build())).build())
+        MontiArcMill.stereoValueBuilder().setName("test").build(),
+        MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(1)).build(),
+        MontiArcMill.stereoValueBuilder().setName("s").build())).build())
       .setHead(MontiArcMill.componentHeadBuilder()
         .addArcParameter(MontiArcMill.arcParameterBuilder()
           .setName("p").setMCType(Mockito.mock(ASTMCType.class))
@@ -281,10 +281,10 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-          MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-          MontiArcMill.stereoValueExprBuilder()
+          MontiArcMill.stereoValueBuilder().setName("test").build(),
+          MontiArcMill.stereoValueBuilder()
             .setName("p1").setExpression(getListExpression(List.of(getIntLiteral(2), getIntLiteral(3)))).build(),
-          MontiArcMill.stereoValueExprBuilder()
+          MontiArcMill.stereoValueBuilder()
             .setName("p2").setExpression(getIntLiteral(5)).build()))
         .build())
       .setHead(MontiArcMill.componentHeadBuilder().setArcParametersList(List.of(
@@ -316,8 +316,8 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-          MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-          MontiArcMill.stereoValueBuilder().setName("s").setContent("").build()))
+          MontiArcMill.stereoValueBuilder().setName("test").build(),
+          MontiArcMill.stereoValueBuilder().setName("s").build()))
         .build())
       .setHead(MontiArcMill.componentHeadBuilder()
         .setArcParametersList(List.of(MontiArcMill.arcParameterBuilder()
@@ -344,10 +344,10 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-        MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-        MontiArcMill.stereoValueExprBuilder().setName("p").setExpression(getIntLiteral(5)).build(),
-        MontiArcMill.stereoValueExprBuilder().setName("p").setExpression(getIntLiteral(1)).build(),
-        MontiArcMill.stereoValueBuilder().setName("s").setContent("").build())).build())
+        MontiArcMill.stereoValueBuilder().setName("test").build(),
+        MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(5)).build(),
+        MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(1)).build(),
+        MontiArcMill.stereoValueBuilder().setName("s").build())).build())
       .setHead(MontiArcMill.componentHeadBuilder()
         .setArcParametersList(List.of(MontiArcMill.arcParameterBuilder()
           .setName("p").setMCType(Mockito.mock(ASTMCType.class))
@@ -372,9 +372,9 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-        MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-        MontiArcMill.stereoValueExprBuilder().setName("p").setExpression(getIntLiteral(5)).build(),
-        MontiArcMill.stereoValueBuilder().setName("s").setContent("").build())).build())
+        MontiArcMill.stereoValueBuilder().setName("test").build(),
+        MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(5)).build(),
+        MontiArcMill.stereoValueBuilder().setName("s").build())).build())
       .setHead(MontiArcMill.componentHeadBuilder()
         .setArcParametersList(List.of(MontiArcMill.arcParameterBuilder()
           .setName("p").setMCType(Mockito.mock(ASTMCType.class))
@@ -399,10 +399,10 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     // Given
     ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
-          MontiArcMill.stereoValueBuilder().setName("test").setContent("").build(),
-          MontiArcMill.stereoValueExprBuilder().setName("p1")
+          MontiArcMill.stereoValueBuilder().setName("test").build(),
+          MontiArcMill.stereoValueBuilder().setName("p1")
             .setExpression(getListExpression(List.of(getIntLiteral(2), getIntLiteral(3)))).build(),
-          MontiArcMill.stereoValueExprBuilder().setName("p2")
+          MontiArcMill.stereoValueBuilder().setName("p2")
             .setExpression(getListExpression(List.of(getIntLiteral(2)))).build()))
         .build())
       .setHead(MontiArcMill.componentHeadBuilder().setArcParametersList(List.of(
