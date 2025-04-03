@@ -152,3 +152,24 @@ jobs:
           name: MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
           path: ./MontiArc-${{ steps.extract_version.outputs.version }}${{ matrix.asset_extension }}
           retention-days: 7
+
+  snapshot-release:
+    name: Release SNAPSHOT
+    runs-on: ubuntu-latest
+    if: github.repository_owner == 'MontiCore' && github.event_name == 'push' && github.ref == 'refs/heads/dev'
+    needs: package
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+      # GitHub Releases require a tag
+      - name: Delete release if exist then create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release view "snapshot" && gh release delete "snapshot" -y --cleanup-tag
+          gh release create "snapshot" "./dist/*" -p -t "MontiArc SNAPSHOT" --generate-notes
