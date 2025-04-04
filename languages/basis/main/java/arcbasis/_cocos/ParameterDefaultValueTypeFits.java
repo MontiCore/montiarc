@@ -33,7 +33,7 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
 
     if (astParam.isPresentDefault()) {
       ASTExpression defaultExpr = astParam.getDefault();
-      SymTypeExpression expressionType = TypeCheck3.typeOf(defaultExpr);
+      SymTypeExpression expressionType = TypeCheck3.typeOf(defaultExpr, paramType);
 
       if (expressionType.isObscureType()) {
         Log.debug(astParam.get_SourcePositionStart()

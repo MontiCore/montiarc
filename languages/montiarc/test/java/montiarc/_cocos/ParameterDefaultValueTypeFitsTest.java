@@ -10,6 +10,7 @@ import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -97,11 +98,11 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
         ArcError.PARAM_DEFAULT_TYPE_MISMATCH,
         ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
       arg("component Comp6(java.lang.Integer p = java.lang.String.String()) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
+        MCError.TARGET_TYPE_MISMATCH),
       arg("component Comp7<T>(T p = 1) { }",
         ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
       arg("component Comp8<T>(T p = java.lang.Integer.Integer(1)) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH)
+        MCError.TARGET_TYPE_MISMATCH)
     );
   }
 }
