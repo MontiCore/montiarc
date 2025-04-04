@@ -12,6 +12,5 @@ public <#if isTop> abstract </#if> class ${compName}<@Util.printTypeParameters a
   extends <#if hasModeAutomaton> montiarc.rte.component.AbstractModeComponent<${syncMsgClass}, ${eventClass}, ${ast.getName()}${suffixes.modeAutomaton()}>
           <#else> montiarc.rte.component.AbstractComponent<${syncMsgClass}, ${eventClass}> </#if>
   implements
-    ${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/>,
-    <#if hasModeAutomaton> ${ast.getName()}${suffixes.contextForModes()}<@Util.printTypeParameters ast false/>, </#if>
-    montiarc.rte.component.Component
+    ${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/>
+    <#if hasModeAutomaton>, ${ast.getName()}${suffixes.contextForModes()}<@Util.printTypeParameters ast false/></#if>
