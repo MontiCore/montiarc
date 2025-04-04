@@ -23,8 +23,6 @@ public class ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</
       </#if>
       .build();
 
-    DEPLOY_${comp.getName()}.init();
-
     DEPLOY_${comp.getName()}.run();
   }
 }

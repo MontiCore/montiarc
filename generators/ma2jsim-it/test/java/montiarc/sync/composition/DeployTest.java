@@ -41,7 +41,6 @@ class DeployTest {
     sut.subcomp_parallel().port_o2().connect(port_o2);
 
     // When
-    sut.init();
     sut.run(3);
 
     // Then
