@@ -20,7 +20,7 @@ subcomponents.
 
 ### Prerequisites 
 - Git (for checking out the project)
-- Gradle 7.5.0 (for building the project)
+- Gradle 7.6.4 (for building the project)
 - Java 11 (for building and executing the project)
 
 ### Installation
