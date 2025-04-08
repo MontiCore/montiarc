@@ -10,7 +10,6 @@ import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
-import de.se_rwth.commons.logging.RichConsoleLogHook;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
@@ -28,16 +27,22 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,6 +51,8 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 public class MontiArcTool extends MontiArcToolTOP {
 
@@ -77,40 +84,88 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void run(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
 
-    Options options = this.initOptions();
-
     try {
       //parse input options from the command line
       CommandLineParser cliParser = new DefaultParser();
-      CommandLine cl = cliParser.parse(options, args);
 
-      // if --help: print help and stop
-      if (cl.hasOption("h")) {
-        this.printHelp(options);
-        return;
+      if (args.length > 0 && args[0].equals("create")) {
+        if (args.length == 1) {
+          printHelp();
+          return;
+        }
+        Options options = this.initCreateOptions();
+        CommandLine cl = cliParser.parse(options, args);
+        runCreate(args[1], cl);
+      } else {
+        Options options = this.initOptions();
+        CommandLine cl = cliParser.parse(options, args);
+
+        // if --help: print help and stop
+        if (cl.hasOption("h")) {
+          this.printHelp();
+          return;
+        }
+
+        // if --version: print version and stop
+        if (cl.hasOption("v")) {
+          this.printVersion();
+          return;
+        }
+
+        // if --input is missing: print help
+        if (!cl.hasOption("i")) {
+          this.printHelp();
+          return;
+        }
+
+        runBuild(cl);
       }
-
-      // if --version: print version and stop
-      if (cl.hasOption("v")) {
-        this.printVersion();
-        return;
-      }
-
-      // if --input is missing: print help
-      if (!cl.hasOption("i")) {
-        this.printHelp(options);
-        return;
-      }
-
-      this.initGlobalScope(cl);
-      this.initializeBasicTypes();
-      this.initializeTickEvent();
-      this.initializeClass2MC(cl);
-
-      this.runTasks(cl);
-
     } catch (ParseException e) {
       Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), e.getMessage()));
+    }
+  }
+
+  protected void runBuild(CommandLine cl) {
+    this.initGlobalScope(cl);
+    this.initializeBasicTypes();
+    this.initializeTickEvent();
+    this.initializeClass2MC(cl);
+
+    this.runTasks(cl);
+  }
+
+  protected void runCreate(String name, CommandLine cl) {
+    String templateName = "montiarc-templates-main/";
+    if (cl.hasOption("t")) {
+      templateName += cl.getOptionValue("t");
+    } else {
+      templateName += "empty";
+    }
+    // download and unzip
+    try {
+      File file = new File(System.getProperty("java.io.tmpdir") + "MontiArcTemplateProject.zip");
+      Log.info("Downloading template...", "MontiArcTool");
+      FileUtils.copyURLToFile(new URL("https://github.com/MontiCore/montiarc-templates/archive/refs/heads/main.zip"), file);
+      Log.info("Creating Project " + name, "MontiArcTool");
+      try (java.util.zip.ZipFile zipFile = new ZipFile(file)) {
+        Enumeration<? extends ZipEntry> entries = zipFile.entries();
+        while (entries.hasMoreElements()) {
+          ZipEntry entry = entries.nextElement();
+          if (!entry.getName().startsWith(templateName)) continue;
+          File entryDestination = new File("./" + name, entry.getName().substring(templateName.length()));
+          if (entry.isDirectory()) {
+            entryDestination.mkdirs();
+          } else {
+            entryDestination.getParentFile().mkdirs();
+            try (InputStream in = zipFile.getInputStream(entry);
+                 OutputStream out = new FileOutputStream(entryDestination)) {
+              IOUtils.copy(in, out);
+            }
+          }
+        }
+      }
+    } catch (IOException e) {
+      Log.error(e.getMessage());
     }
   }
 
@@ -586,6 +641,25 @@ public class MontiArcTool extends MontiArcToolTOP {
       .build());
 
     return options;
+  }
+
+  protected Options initCreateOptions() {
+    Options options = new Options();
+    options.addOption(Option.builder("t")
+      .longOpt("template")
+      .optionalArg(true)
+      .numberOfArgs(1)
+      .argName("templateName")
+      .desc("The project template that should be used for the new project.")
+      .build());
+    return options;
+  }
+
+  protected void printHelp() {
+    org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
+    formatter.setWidth(80);
+    formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
+    formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
   }
 
   /**
