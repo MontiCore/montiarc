@@ -162,6 +162,10 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
+      - name: Extract version name
+        shell: bash
+        run: echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
+        id: extract_version
       - uses: actions/download-artifact@v4
         with:
           path: dist
@@ -172,4 +176,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release view "snapshot" && gh release delete "snapshot" -y --cleanup-tag
-          gh release create "snapshot" "./dist/*" -p -t "MontiArc SNAPSHOT" --generate-notes
+          gh release create "snapshot" "./dist/*" -p -t "MontiArc ${{ steps.extract_version.outputs.version }} SNAPSHOT" --generate-notes
