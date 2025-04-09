@@ -27,6 +27,9 @@ publishing {
 }
 
 repositories {
+  if(("true").equals(System.getProperty("useLocalRepo"))){
+    mavenLocal()
+  }
   maven {
     url = uri(repo)
   }

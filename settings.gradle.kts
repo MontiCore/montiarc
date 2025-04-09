@@ -4,6 +4,9 @@ pluginManagement {
   includeBuild("./build-logic")
 
   repositories {
+    if(("true").equals(System.getProperty("useLocalRepo"))){
+      mavenLocal()
+    }
     maven {
       url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
     }
