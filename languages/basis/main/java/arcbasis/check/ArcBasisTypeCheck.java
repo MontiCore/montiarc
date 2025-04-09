@@ -3,6 +3,7 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._visitor.ArcBasisTraverser;
+import arcbasis.check.util.ArcBasisTypeVisitorOperatorCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
 import de.monticore.expressions.expressionsbasis.types3.ExpressionBasisTypeVisitor;
@@ -11,8 +12,6 @@ import de.monticore.types.mcbasictypes.types3.MCBasicTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
-import de.monticore.types3.util.TypeContextCalculator;
-import de.monticore.types3.util.TypeVisitorOperatorCalculator;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -63,7 +62,7 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     ArcBasisWithinTypeBasicSymbolsResolver.init();
     ArcBasisOOWithinTypeBasicSymbolsResolver.init();
     ArcBasisTypeContextCalculator.init();
-    TypeVisitorOperatorCalculator.init();
+    ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);

@@ -4,7 +4,7 @@ package montiarc.check;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.ArcBasisTypeCheck;
 import arcbasis.check.ArcBasisTypeContextCalculator;
-import arcbasis.check.ArcBasisWithinTypeBasicSymbolsResolver;
+import arcbasis.check.util.ArcBasisTypeVisitorOperatorCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressionsCTTIVisitor;
 import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
@@ -16,8 +16,6 @@ import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVi
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
-import de.monticore.types3.util.TypeContextCalculator;
-import de.monticore.types3.util.TypeVisitorOperatorCalculator;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
@@ -79,7 +77,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     VariableArcVariantWithinTypeBasicSymbolsResolver.init();
     MAOOWithinTypeBasicSymbolsResolver.init();
     ArcBasisTypeContextCalculator.init();
-    TypeVisitorOperatorCalculator.init();
+    ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
