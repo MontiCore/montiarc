@@ -55,6 +55,7 @@ include("languages:conformance")
 include("languages:effect")
 //include(":applications:avionics")
 include(":tooling:language-server")
+include(":tooling:Ma2JsimCLI")
 includeBuild("tooling/gradle-plugins")
 
 // Integration test projects for the built gradle plugins

@@ -39,7 +39,7 @@ jobs:
         id: extract_version
 
       - name: Rename Jar
-        run: mv generators/ma2jsim/build/libs/MontiArcSimulator.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
+        run: mv tooling/Ma2JsimCLI/build/libs/MontiArc.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
 
 
       # Upload the build.
