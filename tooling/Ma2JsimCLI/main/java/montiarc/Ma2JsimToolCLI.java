@@ -30,15 +30,20 @@ public class Ma2JsimToolCLI extends MA2JSimTool {
   @Override
   protected void initGlobalScope(CommandLine cl) {
     super.initGlobalScope(cl);
-    copyResourceToTmp("montiarc-base-arcSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
-    copyResourceToTmp("montiarc-base-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
-    copyResourceToTmp("simulator-rte-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
+    // Add montiarc-base
+    copyZipResourceToJarTmp("montiarc-base-arcSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
+    copyZipResourceToJarTmp("montiarc-base-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
+    // Add simulator-rte
+    copyZipResourceToJarTmp("simulator-rte-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
+    // Add maunit
+    copyZipResourceToJarTmp("maunit-arcSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
+    copyZipResourceToJarTmp("maunit-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
   }
 
-  protected Optional<Path> copyResourceToTmp(String ressourceName) {
+  protected Optional<Path> copyZipResourceToJarTmp(String ressourceName) {
     URL url = this.getClass().getResource(ressourceName);
     if (url == null) {
-      Log.error("Ressource not found " + ressourceName);
+      Log.warn("Ressource not found " + ressourceName);
       return Optional.empty();
     }
     if (url.toString().startsWith("jar:")) {
@@ -55,7 +60,7 @@ public class Ma2JsimToolCLI extends MA2JSimTool {
         out.flush();
         out.close();
         input.close();
-        //file.deleteOnExit();
+        file.deleteOnExit();
         return Optional.of(Paths.get(file.toURI()));
       } catch (IOException e) {
         Log.error(e.toString());

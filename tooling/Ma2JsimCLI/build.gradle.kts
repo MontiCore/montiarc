@@ -8,6 +8,7 @@ plugins {
 dependencies {
   implementation(project(":generators:ma2jsim"))
   implementation(project(":libraries:montiarc-base"))
+  implementation(project(":libraries:maunit"))
 }
 
 sourceSets {
@@ -29,19 +30,32 @@ tasks.shadowJar {
 }
 
 tasks.register<Copy>("copyMontiArcBaseResources") {
-  from(rootProject.projectDir.absolutePath + "/libraries/montiarc-base/build/libs")
+  val libraryName = "montiarc-base"
+  dependsOn(rootProject.project(":libraries:${libraryName}").tasks.named("assemble"))
+  from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
   include("*Symbols.jar")
-  rename("montiarc-base-${version}-(.*)\\.jar", "montiarc-base-$1.zip")
+  rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
   into("${buildDir}/generated/resources/montiarc")
 }
 
 tasks.register<Copy>("copySimulatorResources") {
-  from(rootProject.projectDir.absolutePath + "/libraries/simulator-rte/build/libs")
+  val libraryName = "simulator-rte"
+  dependsOn(rootProject.project(":libraries:${libraryName}").tasks.named("assemble"))
+  from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
   include("*Symbols.jar")
-  rename("simulator-rte-${version}-(.*)\\.jar", "simulator-rte-$1.zip")
+  rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
+  into("${buildDir}/generated/resources/montiarc")
+}
+
+tasks.register<Copy>("copyMaUnitResources") {
+  val libraryName = "maunit"
+  dependsOn(rootProject.project(":libraries:${libraryName}").tasks.named("assemble"))
+  from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
+  include("*Symbols.jar")
+  rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
   into("${buildDir}/generated/resources/montiarc")
 }
 
 tasks.named("processResources") {
-  dependsOn("copyMontiArcBaseResources", "copySimulatorResources")
+  dependsOn("copyMontiArcBaseResources", "copySimulatorResources", "copyMaUnitResources")
 }
