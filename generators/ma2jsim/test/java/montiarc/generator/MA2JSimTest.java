@@ -22,13 +22,28 @@ public class MA2JSimTest extends MA2JSimTestBase {
   Path output = Paths.get("build/generated/montiarc/test/java");
 
   @Test
-  public void test() {
+  public void testBuild() {
     // Given
     String[] args = new String[] {
       "-i", input.toAbsolutePath().toString(),
       "--o", output.toAbsolutePath().toString(),
       "-hwc", hwcPath.toAbsolutePath().toString(),
       "-c2mc"
+    };
+
+    // When
+    MA2JSimTool.main(args);
+
+    // Then
+    Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
+  }
+
+  @Test
+  public void testRun() {
+    // Given
+    String[] args = new String[] {
+      "run", "test/resources/MA2JSimToolTestRunFile.java",
+      "-t", "test",
     };
 
     // When

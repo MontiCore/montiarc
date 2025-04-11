@@ -11,12 +11,19 @@ import montiarc.generator.codegen.MA2JSimGen;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import montiarc.report.VersionFileDeserializer;
+import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +56,32 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
+  public void run(String[] args) {
+    try {
+      //parse input options from the command line
+      CommandLineParser cliParser = new DefaultParser();
+
+      if (args.length > 0 && args[0].equals("run")) {
+        if (args.length == 1) {
+          printHelp();
+          return;
+        }
+        Options options = this.initRunSimulationOptions();
+        CommandLine cl = cliParser.parse(options, args, true);
+        runSimulation(args[1], cl);
+      }
+    } catch (ParseException e) {
+      Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), e.getMessage()));
+    } catch (Exception e) {
+      Log.error(e.getMessage());
+    }
+
+    if (!(args.length > 0 && args[0].equals("run"))) {
+      super.run(args);
+    }
+  }
+
+  @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
     options.addOption(org.apache.commons.cli.Option.builder("o")
@@ -62,9 +95,9 @@ public class MA2JSimTool extends MontiArcTool {
       .desc("Sets the artifact path for handwritten code (optional).")
       .build());
     options.addOption(org.apache.commons.cli.Option.builder("symbolic")
-        .longOpt("symbolic-execution")
-        .desc("Sets the template to symbolic template).")
-        .build());
+      .longOpt("symbolic-execution")
+      .desc("Sets the template to symbolic template).")
+      .build());
     return super.addStandardOptions(options);
   }
 
@@ -74,7 +107,7 @@ public class MA2JSimTool extends MontiArcTool {
     Preconditions.checkNotNull(cl);
     super.runTasks(asts, cl);
 
-    if(cl.hasOption("output")) {
+    if (cl.hasOption("output")) {
       Log.info("Generate java", "MontiArcTool");
       this.generate(asts, cl);
     }
@@ -132,8 +165,6 @@ public class MA2JSimTool extends MontiArcTool {
     }
   }
 
-
-
   public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull List<String> hwc) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
@@ -146,4 +177,49 @@ public class MA2JSimTool extends MontiArcTool {
     generator.generate(ast);
   }
 
+  protected Options initRunSimulationOptions() {
+    Options options = new Options();
+    options.addOption(org.apache.commons.cli.Option.builder("cp")
+      .hasArgs()
+      .longOpt("classpath")
+      .desc("Additional java user classes added to the simulation runtime classpath.")
+      .build());
+    return options;
+  }
+
+  protected void printHelp() {
+    org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
+    formatter.setWidth(80);
+    formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
+    formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
+    formatter.printHelp("MontiArcTool run <DeployComp.java>",
+      " Run the simulator for a generated DeployComp.java file. Additional parameters are forwarded to the Component. This commands needs Java installed on the system.",
+      initRunSimulationOptions(),
+      "",
+      true);
+  }
+
+  protected void runSimulation(String name, CommandLine options) throws InterruptedException, IOException {
+    StringBuilder classpath = new StringBuilder(System.getProperty("java.class.path"));
+    if (options.hasOption("cp")) {
+      String[] additionalCPValues = splitPathEntries(options.getOptionValues("cp"));
+      for (String additionalCPValue : additionalCPValues) {
+        classpath.append(File.pathSeparator).append(additionalCPValue);
+      }
+    }
+
+    List<String> command = new ArrayList<>();
+    command.add("java");
+    command.add("-cp");
+    command.add(classpath.toString());
+    command.add(name);
+    command.addAll(options.getArgList().subList(2, options.getArgList().size()));
+
+    ProcessBuilder builder = new ProcessBuilder(command);
+    Process process = builder.inheritIO().start();
+    process.waitFor();
+    if (process.exitValue() != 0) {
+      Log.error(MontiArcError.TOOL_SIMULATION_FAILED.format(process.exitValue(), process.getOutputStream().toString()));
+    }
+  }
 }

@@ -31,7 +31,8 @@ public enum MontiArcError implements Error {
   UNIT_TEST_SOURCE_AND_VALUE_SOURCE("0xC1018", "Cannot combine test and value source for parameter %s, choose either <<test={[value]}>> or <<test, %<s=[value]>>, not both"),
   UNIT_DUPLICATE_ARGUMENTS("0xC1019", "Multiple test assignments found for argument '%s'"),
   UNIT_TYPE_MISMATCH("0xC1020", "Test assignment type mismatch for '%s', expected '%s' but provided '%s'"),
-  UNIT_TEST_COUNT_MISMATCH("0xC1021", "Test count mismatch, expected values for '%d' tests but provided '%d'");
+  UNIT_TEST_COUNT_MISMATCH("0xC1021", "Test count mismatch, expected values for '%d' tests but provided '%d'"),
+  TOOL_SIMULATION_FAILED("0xC1022", "Simulation exited with error code %d. Output:\n%s");
 
   private final String errorCode;
   private final String errorMessage;
