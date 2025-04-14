@@ -1,0 +1,344 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "fileTypes": [
+    "arc"
+  ],
+  "name": "MontiArc",
+  "scopeName": "source.montiarc",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#block"
+    },
+    {
+      "include": "#code"
+    },
+    {
+      "include": "#java"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.montiarc"
+            }
+          },
+          "match": "/\\*\\*/",
+          "name": "comment.block.empty.montiarc"
+        },
+        {
+          "include": "#comments-inline"
+        }
+      ]
+    },
+    "comments-inline": {
+      "patterns": [
+        {
+          "begin": "/\\*",
+          "captures": {
+            "0": {
+              "name": "punctuation.definition.comment.montiarc"
+            }
+          },
+          "end": "\\*/",
+          "name": "comment.block.montiarc"
+        },
+        {
+          "begin": "(^[ \\t]+)?(?=//)",
+          "beginCaptures": {
+            "1": {
+              "name": "punctuation.whitespace.comment.leading.montiarc"
+            }
+          },
+          "end": "(?!\\G)",
+          "patterns": [
+            {
+              "begin": "//",
+              "beginCaptures": {
+                "0": {
+                  "name": "punctuation.definition.comment.montiarc"
+                }
+              },
+              "end": "\\n",
+              "name": "comment.line.double-slash.montiarc"
+            }
+          ]
+        }
+      ]
+    },
+    "block": {
+      "begin": "{",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.section.block.montiarc"
+        }
+      },
+      "end": "}",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.section.block.montiarc"
+        }
+      },
+      "patterns": [
+        {
+          "include": "#code"
+        }
+      ]
+    },
+    "primitive-types": {
+      "match": "\\b(void|boolean|byte|char|short|int|float|long|double)\\b",
+      "name": "storage.type.primitive.montiarc"
+    },
+    "keywords": {
+      "match": "\\b(autoconnect|->|constraint|varif|extends|refines|compute|init|automaton|initial|do|entry|exit)\\b",
+      "name": "keyword.montiarc"
+    },
+    "object-types": {
+      "patterns": [
+        {
+          "include": "#generics"
+        },
+        {
+          "match": "\\b((?:[A-Za-z_]\\w*\\s*\\.\\s*)*[A-Z_]\\w*)\\s*(?=<)",
+          "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "match": "[A-Za-z_]\\w*",
+                  "name": "storage.type.montiarc"
+                },
+                {
+                  "match": "\\.",
+                  "name": "punctuation.separator.period.montiarc"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "match": "\\b((?:[A-Za-z_]\\w*\\s*\\.\\s*)*[A-Z_]\\w*)\\b((?=\\s*[A-Za-z$_\\n])|(?=\\s*\\.\\.\\.)|(?=\\s+(-|{|\\/|\\[)))",
+          "captures": {
+            "1": {
+              "patterns": [
+                {
+                  "match": "[A-Za-z_]\\w*",
+                  "name": "storage.type.montiarc"
+                },
+                {
+                  "match": "\\.",
+                  "name": "punctuation.separator.period.montiarc"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "generics": {
+      "begin": "<",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.bracket.angle.montiarc"
+        }
+      },
+      "end": ">",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.bracket.angle.montiarc"
+        }
+      },
+      "patterns": [
+        {
+          "match": "\\b(extends|super)\\b",
+          "name": "storage.modifier.$1.montiarc"
+        },
+        {
+          "match": "(?<!\\.)([a-zA-Z$_][a-zA-Z0-9$_]*)(?=\\s*<)",
+          "captures": {
+            "1": {
+              "name": "storage.type.montiarc"
+            }
+          }
+        },
+        {
+          "include": "#primitive-types"
+        },
+        {
+          "match": "[a-zA-Z$_][a-zA-Z0-9$_]*",
+          "name": "storage.type.generic.montiarc"
+        },
+        {
+          "match": "\\?",
+          "name": "storage.type.generic.wildcard.montiarc"
+        },
+        {
+          "match": "&",
+          "name": "punctuation.separator.types.montiarc"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.delimiter.montiarc"
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.separator.period.montiarc"
+        },
+        {
+          "include": "#generics"
+        },
+        {
+          "include": "#comments"
+        }
+      ]
+    },
+    "stereotypes": {
+      "begin": "<<",
+      "beginCaptures": {
+        "0": {
+          "name": "punctuation.bracket.angle.montiarc"
+        }
+      },
+      "end": ">>",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.bracket.angle.montiarc"
+        }
+      }
+    },
+    "java": {
+      "patterns": [
+        {
+          "include": "source.java"
+        }
+      ]
+    },
+    "component": {
+      "match": "(component)\\s+([A-Za-z_]*)",
+      "captures": {
+        "1": {
+          "name": "storage.modifier.montiarc"
+        },
+        "2": {
+          "name": "entity.name.type.component.montiarc"
+        }
+      }
+    },
+    "classdiagram": {
+      "match": "(classdiagram)\\s+([A-Za-z_]*)",
+      "captures": {
+        "1": {
+          "name": "storage.modifier.montiarc"
+        },
+        "2": {
+          "name": "entity.name.type.classdiagram.montiarc"
+        }
+      }
+    },
+    "state": {
+      "match": "(state)\\s+([A-Za-z_]*)",
+      "captures": {
+        "1": {
+          "name": "keyword.montiarc"
+        },
+        "2": {
+          "name": "entity.name.state.montiarc"
+        }
+      }
+    },
+    "port": {
+      "begin": "port",
+      "beginCaptures": {
+        "0": {
+          "name": "keyword.montiarc"
+        }
+      },
+      "end": ";",
+      "endCaptures": {
+        "0": {
+          "name": "punctuation.montiarc"
+        }
+      },
+      "patterns": [
+        {
+          "match": "(\\b(in|out|sync|timed)\\b)",
+          "name": "keyword.montiarc",
+          "comment": "keywords inside of port definition"
+        },
+        {
+          "include": "#primitive-types"
+        },
+        {
+          "include": "#object-types"
+        },
+        {
+          "match": "(\\b[a-z][A-Za-z0-9_\\x{0024}]*)",
+          "name": "entity.name.port.montiarc",
+          "comment": "port name"
+        },
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#stereotypes"
+        }
+      ]
+    },
+    "code": {
+      "patterns": [
+        {
+          "include": "#stereotypes"
+        },
+        {
+          "include": "#component"
+        },
+        {
+          "include": "#keywords"
+        },
+        {
+          "include": "#block"
+        },
+        {
+          "include": "#classdiagram"
+        },
+        {
+          "include": "#generics"
+        },
+        {
+          "include": "#port"
+        },
+        {
+          "include": "#automaton"
+        },
+        {
+          "include": "#state"
+        },
+        {
+          "include": "#primitive-types"
+        },
+        {
+          "include": "#object-types"
+        },
+        {
+          "match": ",",
+          "name": "punctuation.separator.delimiter.montiarc"
+        },
+        {
+          "match": "\\.",
+          "name": "punctuation.separator.period.montiarc"
+        },
+        {
+          "match": ";",
+          "name": "punctuation.terminator.montiarc"
+        },
+        {
+          "include": "#java"
+        }
+      ]
+    }
+  }
+}

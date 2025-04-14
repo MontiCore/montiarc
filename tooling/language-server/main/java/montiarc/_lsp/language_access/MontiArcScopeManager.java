@@ -1,11 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._lsp.language_access;
 
+import arcautomaton.ArcAutomatonMill;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3;
 import de.monticore.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd4analysis.resolver.CD4AnalysisResolver;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
@@ -13,12 +15,14 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.IMontiArcGlobalScope;
 import montiarc._symboltable.MontiArcGlobalScope;
+import montiarc.check.MontiArcTypeCheck;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
+
   private final CD4AnalysisResolver cd4AnalysisResolver = new CD4AnalysisResolver(CD4AnalysisMill.globalScope());
   private final OOClass2MCResolver ooClass2MCResolver = new OOClass2MCResolver();
   private final MontiArcTool tool = new MontiArcTool();
@@ -29,14 +33,9 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     IMontiArcGlobalScope gs = MontiArcMill.globalScope();
     setGlobalScope((MontiArcGlobalScope) gs);
     ensureAdapterPresent(gs);
-  }
-
-  @Override
-  public void clearGlobalScope() {
-    syncAccessGlobalScope(gs -> {
-      gs.clear();
-      ensureAdapterPresent(gs);
-    });
+    tool.initializeTickEvent();
+    tool.initializeBasicTypes();
+    MontiArcTypeCheck.init();
   }
 
   /**

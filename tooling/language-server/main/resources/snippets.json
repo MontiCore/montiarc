@@ -1,0 +1,20 @@
+{
+  "define component": {
+    "prefix": "component",
+    "body": [
+      "component $1 {",
+      "  $2",
+      "}"
+    ],
+    "description": "define a component"
+  },
+  "define automaton": {
+    "prefix": "automaton",
+    "body": [
+      "automaton {",
+      "  initial state $1;",
+      "}"
+    ],
+    "description": "define an automaton"
+  }
+}

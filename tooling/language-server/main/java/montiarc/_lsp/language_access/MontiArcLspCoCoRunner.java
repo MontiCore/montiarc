@@ -15,9 +15,4 @@ public class MontiArcLspCoCoRunner extends MontiArcLspCoCoRunnerTOP {
   public boolean needsSymbols() {
     return true;
   }
-
-  @Override
-  public void runAllCoCos(ASTMACompilationUnit ast) {
-    MontiArcCoCos.afterSymTab().checkAll(ast);
-  }
 }

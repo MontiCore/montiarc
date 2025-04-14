@@ -29,17 +29,24 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: 7.5.1
+      - name: Setup NodeJS
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
 
       - name: Build with Gradle
-        run: gradle shadowjar
+        run: gradle shadowjar :tooling:language-server:build
 
       - name: Extract version name
         shell: bash
         run: echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
         id: extract_version
 
-      - name: Rename Jar
-        run: mv tooling/Ma2JsimCLI/build/libs/MontiArc.jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
+      - name: Rename and move artifacts
+        run: |
+          mkdir dist
+          mv tooling/Ma2JsimCLI/build/libs/MontiArc.jar dist/MontiArc-${{ steps.extract_version.outputs.version }}.jar
+          mv tooling/language-server/build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-vscode-plugin/montiarc-${{ steps.extract_version.outputs.version }}-SNAPSHOT.vsix dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
 
 
       # Upload the build.
