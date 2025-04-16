@@ -1,21 +1,31 @@
 site_name: MontiArc
 theme:
+  pallete:
+    primary: custom
+    accent: custom
   name: 'material'
-  favicon: 'docs/img/favicon.png'
   custom_dir: docs/overrides
   features:
     - navigation.tabs
+    - navigation.sections
+    - navigation.footer
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.indexes
     - toc.follow
     - content.tabs.link
     - social
-  logo: img/icon.png
+    - content.code.copy
+    - content.code.annotate
+  logo: img/icon-mono.png
   favicon: img/icon.png
+  icon:
+    annotation: material/help-circle
 
 site_url: https://monticore.github.io/montiarc/
 repo_url: https://github.com/MontiCore/montiarc/
-edit_uri: ""
 
-copyright: '(c) https://github.com/MontiCore/monticore'
+copyright: "&copy; https://github.com/MontiCore/monticore"
 
 extra:
   version:
@@ -33,44 +43,91 @@ markdown_extensions:
   - def_list
   - attr_list
   - md_in_html
+  - admonition
+  - footnotes
   - pymdownx.blocks.caption
+  - pymdownx.extra
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.highlight
   - pymdownx.inlinehilite
-  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.snippets
   - pymdownx.tabbed:
       alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
 
 nav:
   - Home: 'index.md'
-  - Beginners Guide: 'BeginnersGuide.md'
+  - Getting Started: 
+    - Getting Started: 'GettingStarted/index.md'
+    - Setup: 'GettingStarted/Setup.md'
+    - Tools & Editors: 'GettingStarted/Editor.md'
+    - Hello World!: 'GettingStarted/HelloWorld.md'
+    - Hello Gradle!: 'GettingStarted/HelloGradle.md'
+    - Your First System: 
+      - Your First System: 'GettingStarted/ElevatorSystem/index.md'
+      - Interfaces: 'GettingStarted/ElevatorSystem/Interfaces.md'
+      - Connectors: 'GettingStarted/ElevatorSystem/Connectors.md'
+      - Behavior: 'GettingStarted/ElevatorSystem/Behavior.md'
+      - Types: 'GettingStarted/ElevatorSystem/Types.md'
+      - Simulating: 'GettingStarted/ElevatorSystem/Simulating.md'
   - Usage:
-      - Getting Started: 'Usage/GettingStarted.md'
-      - CD2Java CL Tool: 'Usage/CD2PojoCLTool.md'
-      - CD2Java Gradle Plugin: 'Usage/CD2PojoGradlePlugin.md'
-      - MontiArc CL Tool: 'Usage/MontiArcCLTool.md'
-      - MontiArc Gradle Plugin: 'Usage/MontiArcGradlePlugin.md'
-  - Component: 
-      - Overview: 'Component.md'
-      - Decomposition: 'Component/Decomposition.md'
-      - Generics: 'Component/Generics.md'
-      - Inheritance: 'Component/Inheritance.md'
-      - Interfaces: 'Component/Interfaces.md'
-      - Parameters: 'Component/Parameter.md'
-      - Testing: 'Component/Testing.md'
-  - Behavior: 
-      - Overview: 'Behavior.md'
-      - Automata: 'Behavior/Automata.md'
-      - Compute: 'Behavior/Compute.md'
-      - Expressions: 'Behavior/Expressions.md'
-      - Statements: 'Behavior/Statements.md'
-      - Variables: 'Behavior/Variables.md'
-  - TypeSystem: 
-      - Overview: 'TypeSystem.md'
-      - Class Diagrams: 'TypeSystem/ClassDiagrams.md'
-      - Java Integration: 'TypeSystem/JavaIntegration.md'
-      - Primitives: 'TypeSystem/Primitives.md'
-      - Collections: 'TypeSystem/Collections.md'
+    - Usage: 'Usage/index.md'
+    - Gradle:
+      - Gradle: 'Usage/Gradle/index.md'
+      - CD2Java: 'Usage/Gradle/CD2Pojo.md'
+      - MontiArc: 'Usage/Gradle/MontiArc.md'
+    - CLI:
+      - CLI: 'Usage/CLI/index.md'
+      - CD2Java: 'Usage/CLI/CD2Pojo.md'
+      - MontiArc: 'Usage/CLI/MontiArc.md'
+    - Errors: 
+        - Errors: 'Usage/Errors/index.md'
+  - Reference:
+    - Reference: 'Reference/index.md'
+    - Concepts:
+      - Concepts: 'Reference/Concepts/index.md'
+      - Comments: 'Reference/Concepts/Comments.md'
+      - Expressions: 'Reference/Concepts/Expressions.md'
+      - Statements: 'Reference/Concepts/Statements.md'
+      - Timing: 'Reference/Concepts/Timing.md'
+    - Component: 
+      - Component: 'Reference/Component/index.md'
+      - Decomposition: 'Reference/Component/Decomposition.md'
+      - Connectors: 'Reference/Component/Connectors.md'
+      - Generics: 'Reference/Component/Generics.md'
+      - Inheritance: 'Reference/Component/Inheritance.md'
+      - Interfaces: 'Reference/Component/Interfaces.md'
+      - Parameters: 'Reference/Component/Parameter.md'
+      - Variability: 'Reference/Component/Variability.md'
+    - Behavior: 
+      - Behavior: 'Reference/Behavior/index.md'
+      - Automata: 'Reference/Behavior/Automata.md'
+      - Compute: 'Reference/Behavior/Compute.md'
+      - Fields: 'Reference/Behavior/Fields.md'
+      - Handwritten Code: 'Reference/Behavior/HWC.md'
+    - Types: 
+      - Types: 'Reference/Types/index.md'
+      - Primitives: 'Reference/Types/Primitives.md'
+      - Collections: 'Reference/Types/Collections.md'
+      - Classes: 'Reference/Types/Classes.md'
+      - Java Integration: 'Reference/Types/JavaIntegration.md'
+    - Testing:
+      - Testing: 'Reference/Testing/index.md'
+      - MaUnit: 'Reference/Testing/MaUnit.md'
+      - JUnit: 'Reference/Testing/JUnit.md'
+  - Library:
+    - Library: 'Library/index.md'
+    - Components: 'Library/Components.md'
+    - Functions: 'Library/Functions.md'
+  - FAQ: 'FAQ/index.md'
+  - Contributing: 'Contributing/index.md'
   - License: https://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/

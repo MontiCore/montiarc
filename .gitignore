@@ -9,6 +9,7 @@ site
 .idea
 .project
 .settings
+.vscode
 
 *.iml
 *.hprof
@@ -17,3 +18,5 @@ site
 gradle
 gradlew
 gradlew.bat
+
+!docs/Usage/Gradle

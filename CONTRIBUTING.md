@@ -1,0 +1,88 @@
+# Contributing
+
+This guide is for developers of MontiArc, or those who want to become one.
+
+For a general introduction into the MontiArc language read the [Documentation](https://monticore.github.io/montiarc).
+
+MontiArc is built using the [MontiCore](https://www.monticore.de/) language workbench.
+
+This guide comprises the following steps:
+
+- [Setting up the Development Environment](#setting-up-the-development-environment)
+- [Documentation](#documentation)
+- [Making a Pull Request](#making-a-pull-request)
+
+## Setting up the Development Environment
+
+### Setup
+
+#### Prerequisites 
+- Git (for checking out the project)
+- Gradle 7.6.4 (for building the project)
+- Java 11 (for building and executing the project)
+
+#### Cloning the Project
+This project uses Git as its version control system. A repository can be cloned with:
+
+```bash
+git clone <link to this Git repository>
+```
+
+#### Using an IDE
+
+We recommend using an IDE (e.g. IntelliJ) for developing MontiArc.
+
+#### Building the Project
+
+To build the project run:
+
+```bash
+gradle build
+```
+
+This builds all subprojects and executes all test.
+
+> Please note that `gradle build` on the topmost folder builds the whole project. 
+> However, each subproject contains an individual build file. 
+> Executing the build command on a subproject builds everything needed for that 
+> project and then builds the project. See the [Gradle Website](https://gradle.org/) 
+> for more information about the Gradle build tool.
+
+### Documentation
+
+#### Prerequisites
+- Python
+- MkDocs Material (can be installed with `pip install mkdocs mkdocs-material`)
+
+#### View Changes
+Run a development server with `mkdocs serve` and open `http://127.0.0.1:8000/montiarc` in your browser
+
+## Project Structure
+
+The project can generally be divided into four parts:
+1. **Frontend**: Located in the `languages` folder this contains everything related to parsing and processing of MontiArc models. That is parsers to create abstract
+syntax trees (ASTs) from textual models, infrastructure to create the symbol 
+table, context condition checks, transformations, visitors, and a command line 
+tool that puts everything together.
+2. **Backend**: Located in the `generators` folder this contains code for translating MontiArc models into general-purpose languages.
+3. **Applications**: Located in the `applications` folder are example projects that use MontiArc.
+4. **Documentation**: The `docs` folder contain all pages of the documentation.
+
+## Making a Pull Request
+
+When creating a change there a few thing to consider.
+
+1. Follow the established coding style and guidelines.
+2. Make sure you added sufficient tests
+3. Commit your changes to a newly created branch.
+4. Create a PR to the `dev` branch of the project.
+
+## Further Information
+
+* [Project root: MontiArc @GitHub](https://github.com/MontiCore/montiarc)
+* [**MontiArc - Documentation**](https://monticore.github.io/montiarc)
+* [MontiCore - Documentation](https://www.monticore.de/)
+* [MontiCore - List of languages](https://github.com/MontiCore/monticore/blob/HEAD/docs/Languages.md)
+* [MontiCore - Grammar Library](https://github.com/MontiCore/monticore/blob/HEAD/monticore-grammar/src/main/grammars/de/monticore/Grammars.md)
+* [MontiCore - Best Practices](https://github.com/MontiCore/monticore/blob/HEAD/docs/BestPractices.md)
+* [Publications about MBSE, MontiArc, and MontiCore](https://www.se-rwth.de/publications/)

@@ -2,26 +2,26 @@
 
 # MontiArc Context Conditions (CoCos)
 
-Legend:
+#### Legend
 
 - ☑ Intentionally included
 - ☒ Intentionally not included
 - ☐ Inclusion pending or to be discussed
 
-### Code Ranges
+#### Code Ranges
 
-| Language       | Range             |
-|----------------|-------------------|
-| MontiArc       | 0xC1000 - 0xC1099 |
-| ArcBasis       | 0xC1100 - 0xC1249 |
-| Modes          | 0xC1350 - 0xC1399 |
-| VariableArc    | 0xC1400 - 0xC1449 |
-| ComfortableArc | 0xC1450 - 0xC1499 |
-| Unit           | 0xC1500 - 0xC1549 |
+| Language                                       | Range             |
+|------------------------------------------------|-------------------|
+| [MontiArc](#montiarc-cocos)                    | 0xC1000 - 0xC1099 |
+| [ArcBasis](#arcbasis-cocos)                    | 0xC1100 - 0xC1249 |
+| [Modes](#mode-automata)                        | 0xC1350 - 0xC1399 |
+| [VariableArc](#variablearc-cocos)              | 0xC1400 - 0xC1449 |
+| [ComfortableArc](#comfortablearc-cocos)        | 0xC1450 - 0xC1499 |
+| [Unit](#maunit-cocos)                          | 0xC1500 - 0xC1549 |
 
 ## ArcBasis CoCos
 
-| in MA | VariantCoCo | CoCo(s)                             | Language | Code(s)                                                       | 
+| in MA | VariantCoCo | CoCo(s)                             | Language | Code(s)                                                       |
 |-------|-------------|-------------------------------------|----------|---------------------------------------------------------------|
 | ☑     | ☒           | CircularInheritance                 | ArcBasis | 0xC1100                                                       |
 | ☑     | ☑           | PortsConnected                      | ArcBasis | 0xC1103, 0xC1104                                              |
@@ -53,26 +53,26 @@ Legend:
 | ☒     | ☒           | RestrictedIdentifier                | ArcBasis | 0xC1149                                                       |
 | ☑     | ☒           | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158                   |
 | ☐     | ☒           | ImportsAreUnique                    |          |                                                               |
-| ☐     | ☒           | ImportsAreUsed                      |          |                                                               | 
-| ☑     | ☒           | PortnamedTick                       | ArcBasis | 0xC1166                                                       | 
+| ☐     | ☒           | ImportsAreUsed                      |          |                                                               |
+| ☑     | ☒           | PortnamedTick                       | ArcBasis | 0xC1166                                                       |
 | ☑     | ☒           | ComponentNamedTick                  | ArcBasis | 0xC1168                                                       |
 | ☑     | ☒           | ComponentInstantiationNamedTick     | ArcBasis | 0xC1169                                                       |
 | ☑     | ☒           | ParameterNamedTick                  | ArcBasis | 0xC1170                                                       |
 | ☑     | ☒           | FieldNamedTick                      | ArcBasis | 0xC1171                                                       |
 | ☑     | ☑           | AtomicNoConnector                   | ArcBasis | 0xC1174                                                       |
-| ☑     | ☒           | TypeParameterCapitalization         | ArcBasis | 0xC1175                                                       |       
-| ☑     | ☒           | SubcomponentTypeBound               | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |       
-| ☑     | ☒           | ComponentHeritageTypeBound          | ArcBasis | 0xC1179, 0xC1180, 0xC1181                                     |       
+| ☑     | ☒           | TypeParameterCapitalization         | ArcBasis | 0xC1175                                                       |
+| ☑     | ☒           | SubcomponentTypeBound               | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |
+| ☑     | ☒           | ComponentHeritageTypeBound          | ArcBasis | 0xC1179, 0xC1180, 0xC1181                                     |
 | ☑     | ☒           | ComponentHeritageRawType            | ArcBasis | 0xC1182                                                       |
-| ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |       
+| ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |
 
 ## MontiArc CoCos
 
-| in MA | CoCo(s)        | Language | Code(s) | 
+| in MA | CoCo(s)        | Language | Code(s) |
 |-------|----------------|----------|---------|
 | ☑     | RootNoInstance | MontiArc | 0xC1010 |
 
-# VariableArc CoCos
+## VariableArc CoCos
 
 | in MA | CoCo(s)                        | Language    | Code                                        | Notes |
 |-------|--------------------------------|-------------|---------------------------------------------|-------|
@@ -92,7 +92,7 @@ Legend:
 | ☑     | VarIfSmtConvertible            | VariableArc | 0xC1417                                     |       |
 | ☑     | FeatureNamedTick               | VariableArc | 0xC1173                                     |       |
 
-# Mode Automata
+## Mode Automata
 
 | in MA | CoCo(s)                           | Language | Code    | Notes |
 |-------|-----------------------------------|----------|---------|-------|
@@ -128,17 +128,17 @@ Legend:
 
 ## MaUnit CoCos
 
-| in MA | CoCo(s)                     | Language | Code(s)                            | 
+| in MA | CoCo(s)                     | Language | Code(s)                            |
 |-------|-----------------------------|----------|------------------------------------|
 | ☑     | UnitTestConfiguredCorrectly | Unit     | 0xC1500, 0xC1501, 0xC1502, 0xC1503 |
 
 ## Statement CoCos
 
-| in MA | VariantCoCo | CoCo(s)                                    | Language   | Notes |        
+| in MA | VariantCoCo | CoCo(s)                                    | Language   | Notes |
 |-------|-------------|--------------------------------------------|------------|-------|
-| ☑     | ☑           | ExpressionStatementIsValid                 | Statements |       |   
-| ☑     | ☑           | VarDeclarationInitializationHasCorrectType | Statements |       |   
-| ☑     | ☑           | ForConditionHasBooleanType                 | Statements |       |   
-| ☑     | ☑           | ForEachIsValid                             | Statements |       |          
-| ☑     | ☑           | IfConditionHasBooleanType                  | Statements |       |          
-| ☑     | ☑           | SwitchStatementValid                       | Statements |       |                
+| ☑     | ☑           | ExpressionStatementIsValid                 | Statements |       |
+| ☑     | ☑           | VarDeclarationInitializationHasCorrectType | Statements |       |
+| ☑     | ☑           | ForConditionHasBooleanType                 | Statements |       |
+| ☑     | ☑           | ForEachIsValid                             | Statements |       |
+| ☑     | ☑           | IfConditionHasBooleanType                  | Statements |       |
+| ☑     | ☑           | SwitchStatementValid                       | Statements |       |

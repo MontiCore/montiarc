@@ -1,5 +1,20 @@
-:root  > * {
-    --md-primary-fg-color:        #0067a7;
-    --md-primary-fg-color--light: #0067a7;
-    --md-primary-fg-color--dark:  #0067a7;
-  }
+:root {
+  --md-primary-fg-color:        #0067a7;
+  --md-primary-fg-color--light: #0067a7;
+  --md-primary-fg-color--dark:  #0067a7;
+  --md-accent-fg-color: #048bdf;
+  --md-accent-fg-color--transparent: #048bdf19;
+}
+
+.md-typeset .admonition.info,
+.md-typeset details.info {
+  border-color: var(--md-accent-fg-color);
+}
+.md-typeset .info > .admonition-title,
+.md-typeset .info > summary {
+  background-color: #048bdf1a;
+}
+.md-typeset .info > .admonition-title::before,
+.md-typeset .info > summary::before {
+  background-color: var(--md-accent-fg-color);
+}
