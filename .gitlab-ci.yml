@@ -26,9 +26,6 @@ Build:
       - tooling/language-server/build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-vscode-plugin/*.vsix
       - .gradle/
     expire_in: 1 week
-  before_script:
-    - curl -fsSL https://deb.nodesource.com/setup_18.x | bash
-    - apt-get install -y nodejs
   script:
     - gradle clean assemble
 

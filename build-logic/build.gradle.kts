@@ -16,6 +16,7 @@ dependencies {
   implementation("de.se_rwth.commons:se-commons-gradle:7.8.0-SNAPSHOT")
   implementation("de.monticore.generator:de.monticore.generator.gradle.plugin:7.8.0-SNAPSHOT")
   implementation("de.monticore.language-server:de.monticore.language-server.gradle.plugin:7.8.0-SNAPSHOT")
+  implementation("com.github.node-gradle:gradle-node-plugin:5.0.0")
 }
 
 publishing {
