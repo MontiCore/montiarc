@@ -32,7 +32,8 @@ public enum MontiArcError implements Error {
   UNIT_DUPLICATE_ARGUMENTS("0xC1019", "Multiple test assignments found for argument '%s'"),
   UNIT_TYPE_MISMATCH("0xC1020", "Test assignment type mismatch for '%s', expected '%s' but provided '%s'"),
   UNIT_TEST_COUNT_MISMATCH("0xC1021", "Test count mismatch, expected values for '%d' tests but provided '%d'"),
-  TOOL_SIMULATION_FAILED("0xC1022", "Simulation exited with error code %d. Output:\n%s");
+  TOOL_SIMULATION_FAILED("0xC1022", "Simulation exited with error code %d. Output:\n%s"),
+  TOOL_CREATE_TEMPLATE_NOT_EXIST("0xC1023", "The template '%s' does not exist");
 
   private final String errorCode;
   private final String errorMessage;

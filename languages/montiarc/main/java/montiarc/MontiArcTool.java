@@ -137,7 +137,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   protected void runCreate(String name, CommandLine cl) {
     String templateName = "montiarc-templates-main/";
     if (cl.hasOption("t")) {
-      templateName += cl.getOptionValue("t");
+      templateName += cl.getOptionValue("t").toLowerCase();
     } else {
       templateName += "empty";
     }
@@ -147,11 +147,13 @@ public class MontiArcTool extends MontiArcToolTOP {
       Log.info("Downloading template...", "MontiArcTool");
       FileUtils.copyURLToFile(new URL("https://github.com/MontiCore/montiarc-templates/archive/refs/heads/main.zip"), file);
       Log.info("Creating Project " + name, "MontiArcTool");
+      boolean foundTemplate = false;
       try (java.util.zip.ZipFile zipFile = new ZipFile(file)) {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
           ZipEntry entry = entries.nextElement();
-          if (!entry.getName().startsWith(templateName)) continue;
+          if (!entry.getName().toLowerCase().startsWith(templateName)) continue;
+          if (!foundTemplate) foundTemplate = true;
           File entryDestination = new File("./" + name, entry.getName().substring(templateName.length()));
           if (entry.isDirectory()) {
             entryDestination.mkdirs();
@@ -164,7 +166,8 @@ public class MontiArcTool extends MontiArcToolTOP {
           }
         }
       }
-    } catch (IOException e) {
+      if (!foundTemplate) Log.error(MontiArcError.TOOL_CREATE_TEMPLATE_NOT_EXIST.format(cl.getOptionValue("t")));
+    } catch (IOException | SecurityException e) {
       Log.error(e.getMessage());
     }
   }
