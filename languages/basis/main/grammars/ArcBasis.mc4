@@ -81,11 +81,13 @@ component grammar ArcBasis extends
    * options of the component.
    * @attribute parent The type of the parent component.
    * @attribute parentParameters The list of parameters that define the parent.
+   * @attribute spec The list of components that this component refines.
    */
   ComponentHead =
     TypeParameters?
     ( "(" (ArcParameter || ",")* ")" )?
     ( "extends" (ArcParent || ",")* )?
+    ( "refines" spec:(ArcParent || ",")+ )?
   ;
 
   /**

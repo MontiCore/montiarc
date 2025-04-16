@@ -1,0 +1,19 @@
+{
+  "name": "MCComponentWithRefinement",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentSymbol",
+      "name": "MCComponentWithRefinement",
+      "refinements": [
+        {
+          "kind" : "arcbasis.check.TypeExprOfComponent",
+          "componentTypeName" : "Parent"
+        }
+      ],
+      "spannedScope": {
+        "symbols": []
+      }
+    }
+  ]
+}

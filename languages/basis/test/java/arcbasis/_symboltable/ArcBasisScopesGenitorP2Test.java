@@ -6,6 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
+import arcbasis._ast.ASTArcParent;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
@@ -21,8 +22,10 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
+import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.typeparameters._ast.ASTTypeParameter;
@@ -41,6 +44,7 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.mockito.Mockito;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -350,6 +354,188 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       Arguments.of(ast1, consumer1, NullPointerException.class),
       Arguments.of(ast2, consumer1, IllegalArgumentException.class),
       Arguments.of(ast3, consumer1, IllegalArgumentException.class)
+    );
+  }
+
+  /**
+   * If a refined component is uniquely resolvable, visiting it should link
+   * the symbol of the refining component to the refined component via a component type
+   * expression. The type expression has bound arguments if the ast reference has such.
+   * <p>
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
+   */
+  @Test
+  void testVisitComponentHead6() {
+    // Given
+    String abstractionName = "Abstraction";
+    ComponentTypeSymbol abstraction = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(abstractionName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    ArcBasisMill.globalScope().add(abstraction);
+
+    VariableSymbol param = ArcBasisMill.variableSymbolBuilder()
+      .setName("param")
+      .setType(Mockito.mock(SymTypeExpression.class))
+      .setEnclosingScope(ArcBasisMill.globalScope())
+      .build();
+    abstraction.getSpannedScope().add(param);
+    abstraction.addParameter(param);
+
+    String concretizationName = "Concretization";
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(concretizationName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    ArcBasisMill.globalScope().add(concretizationSym);
+
+    IArcBasisScope compScope = ArcBasisMill.scope();
+    concretizationSym.setSpannedScope(compScope);
+    compScope.setEnclosingScope(ArcBasisMill.globalScope());
+
+    ASTExpression argExpr = Mockito.mock(ASTExpression.class);
+    ASTMCQualifiedName astTypeName = ArcBasisMill.mCQualifiedNameBuilder()
+      .addParts(abstractionName)
+      .build();
+    astTypeName.setEnclosingScope(compScope);
+    ASTMCType astType = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(astTypeName)
+      .build();
+    astType.setEnclosingScope(compScope);
+    ASTArcParent ref = ArcBasisMill.arcParentBuilder()
+      .setArcArgumentsList(Collections.singletonList(
+        ArcBasisMill.arcArgumentBuilder().setExpression(argExpr).build())
+      )
+      .setType(astType)
+      .uncheckedBuild();
+    ref.setEnclosingScope(compScope);
+
+    ASTComponentHead concretizationAst = ArcBasisMill.componentHeadBuilder()
+        .addSpec(ref)
+        .build();
+    concretizationAst.setEnclosingScope(compScope);
+
+    // When
+    getScopeGenP2().visit(concretizationAst);
+
+    // Then
+    Assertions.assertEquals(1, concretizationSym.getRefinementsList().size());
+    Assertions.assertAll(
+      () -> Assertions.assertNotNull(concretizationSym.getRefinements(0)),
+      () -> Assertions.assertEquals(abstraction, concretizationSym.getRefinements(0).getTypeInfo()),
+      () -> assertThat(concretizationSym.getRefinements(0).getArguments())
+              .containsExactly(argExpr)
+    );
+  }
+
+  /**
+   * If a refined component is not resolvable, visiting should report a missing
+   * component symbol.
+   * <p>
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
+   */
+  @Test
+  void testVisitComponentHead7() {
+    // Given
+    String concretizationName = "Concretization";
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(concretizationName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    ArcBasisMill.globalScope().add(concretizationSym);
+
+    IArcBasisScope compScope = ArcBasisMill.scope();
+    concretizationSym.setSpannedScope(compScope);
+    compScope.setEnclosingScope(ArcBasisMill.globalScope());
+
+    ASTMCQualifiedName astTypeName = ArcBasisMill.mCQualifiedNameBuilder()
+      .addParts("NotExistent")
+      .build();
+    astTypeName.setEnclosingScope(compScope);
+    ASTMCType astType = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(astTypeName)
+      .build();
+    astType.setEnclosingScope(compScope);
+    ASTArcParent ref = ArcBasisMill.arcParentBuilder()
+      .setType(astType)
+      .uncheckedBuild();
+    ref.setEnclosingScope(compScope);
+
+    ASTComponentHead headAst = ArcBasisMill.componentHeadBuilder()
+      .addSpec(ref)
+      .build();
+    headAst.setEnclosingScope(compScope);
+
+    // When
+    getScopeGenP2().visit(headAst);
+
+    // Then
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(0, concretizationSym.getRefinementsList().size()),
+      () -> assertThat(getLoggedErrorCodes())
+              .containsExactly(ArcError.MISSING_COMPONENT.getErrorCode())
+    );
+  }
+
+  /**
+   * If the refined component is ambiguously referenced, visiting should report
+   * an ambiguous symbol reference.
+   * <p>
+   * Method under test {@link ArcBasisScopesGenitorP2#visit(ASTComponentHead)}
+   */
+  @Test
+  void testVisitComponentHead8() {
+    // Given
+    String abstractionName = "Abstraction";
+    ComponentTypeSymbol abstraction1 = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(abstractionName)
+      .setSpannedScope(Mockito.mock(IArcBasisScope.class))
+      .build();
+    ArcBasisMill.globalScope().add(abstraction1);
+
+    ComponentTypeSymbol abstraction2 = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(abstractionName)
+      .setSpannedScope(Mockito.mock(IArcBasisScope.class))
+      .build();
+    ArcBasisMill.globalScope().add(abstraction2);
+
+    String concretizationName = "Concretization";
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName(concretizationName)
+      .setSpannedScope(ArcBasisMill.scope())
+      .build();
+    ArcBasisMill.globalScope().add(concretizationSym);
+
+    IArcBasisScope compScope = ArcBasisMill.scope();
+    concretizationSym.setSpannedScope(compScope);
+    compScope.setEnclosingScope(ArcBasisMill.globalScope());
+
+    ASTMCQualifiedName astTypeName = ArcBasisMill.mCQualifiedNameBuilder()
+      .addParts(abstractionName)
+      .build();
+    astTypeName.setEnclosingScope(compScope);
+    ASTMCType astType = ArcBasisMill.mCQualifiedTypeBuilder()
+      .setMCQualifiedName(astTypeName)
+      .build();
+    astType.setEnclosingScope(ArcBasisMill.globalScope());
+    ASTArcParent ref = ArcBasisMill.arcParentBuilder()
+      .setType(astType)
+      .uncheckedBuild();
+    ref.setEnclosingScope(compScope);
+
+    ASTComponentHead headAst = ArcBasisMill.componentHeadBuilder()
+      .addSpec(ref)
+      .build();
+    headAst.setEnclosingScope(compScope);
+
+    // When
+    getScopeGenP2().visit(headAst);
+
+    // Then
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(1, concretizationSym.getRefinementsList().size()),
+      () -> assertThat(getLoggedErrorCodes())
+              .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE))
     );
   }
 

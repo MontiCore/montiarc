@@ -2,6 +2,7 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTArcParameter;
@@ -35,6 +36,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVisitor2, TypeParametersVisitor2, ArcBasisHandler {
@@ -76,6 +78,11 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
 
   @Override
   public void visit(@NotNull ASTComponentHead node) {
+    calcAndSetParents(node);
+    calcAndSetRefinements(node);
+  }
+
+  protected void calcAndSetParents(@NotNull ASTComponentHead node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(node.getEnclosingScope());
     Preconditions.checkArgument(node.getEnclosingScope().isPresentSpanningSymbol());
@@ -96,6 +103,31 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
         }
       }
       comp.setSuperComponentsList(listBuilder.build());
+    }
+  }
+
+  protected void calcAndSetRefinements(@NotNull ASTComponentHead node) {
+    Preconditions.checkNotNull(node);
+    Preconditions.checkNotNull(node.getEnclosingScope());
+    Preconditions.checkArgument(node.getEnclosingScope().isPresentSpanningSymbol());
+    Preconditions.checkArgument(node.getEnclosingScope().getSpanningSymbol() instanceof ComponentTypeSymbol);
+
+    if (!node.isEmptySpec()) {
+      ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
+      ImmutableList.Builder<CompKindExpression> listBuilder = ImmutableList.builder();
+      for (ASTArcParent astSpec : node.getSpecList()) {
+        Optional<CompKindExpression> spec = this.getComponentSynthesizer().synthesizeFrom(astSpec.getType());
+        if (spec.isPresent()) {
+          astSpec.getType().setDefiningSymbol(spec.get().getTypeInfo());
+          listBuilder.add(spec.get());
+          if (!astSpec.isEmptyArcArguments() && spec.get() instanceof CompTypeExpression) {
+            List<ASTArcArgument> args = astSpec.getArcArgumentList();
+            ((CompTypeExpression) spec.get()).addArcArguments(args);
+            spec.get().bindParams();
+          }
+        }
+      }
+      comp.setRefinementsList(listBuilder.build());
     }
   }
 

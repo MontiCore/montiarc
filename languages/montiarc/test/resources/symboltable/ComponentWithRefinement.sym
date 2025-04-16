@@ -1,0 +1,19 @@
+{
+  "name": "ComponentWithRefinement",
+  "package": "symboltable",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "ComponentWithRefinement",
+      "refinements": [
+        {
+          "kind" : "arcbasis.check.TypeExprOfComponent",
+          "componentTypeName" : "Parent"
+        }
+      ],
+      "spannedScope": {
+        "symbols": []
+      }
+    }
+  ]
+}

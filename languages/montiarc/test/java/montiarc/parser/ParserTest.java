@@ -66,7 +66,14 @@ public class ParserTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"ComponentCoveringMostOfConcreteSyntax.arc", "VariabilitySyntax.arc", "ModeAutomataSyntax.arc", "MultipleInheritance.arc", "UnitSyntax.arc"})
+  @ValueSource(strings = {
+    "ComponentCoveringMostOfConcreteSyntax.arc",
+    "VariabilitySyntax.arc",
+    "ModeAutomataSyntax.arc",
+    "MultipleInheritance.arc",
+    "UnitSyntax.arc",
+    "RefinementSyntax.arc"
+  })
   public void shouldParseWithoutError(String fileName) {
     parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString(), false);
   }

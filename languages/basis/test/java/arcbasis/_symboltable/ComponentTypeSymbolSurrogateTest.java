@@ -339,6 +339,61 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
     // Then
     Assertions.assertSame(parentExpr, comp.getSuperComponents(0));
   }
+
+  @Test
+  void isPresentRefinementShouldSkipSurrogate() {
+    // Given
+    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
+    ComponentTypeSymbol comp = pair.getKey();
+    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+
+    ComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
+    CompKindExpression abstractionExpr = new TypeExprOfComponent(abstraction);
+    comp.setRefinementsList(Collections.singletonList(abstractionExpr));
+
+    // When
+    boolean refinedCompIsPresent = !surrogate.isEmptyRefinements();
+
+    // Then
+    Assertions.assertTrue(refinedCompIsPresent, "No refined component present");
+  }
+
+
+  @Test
+  void getRefinementShouldSkipSurrogate() {
+    // Given
+    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
+    ComponentTypeSymbol comp = pair.getKey();
+    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+
+    ComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
+    CompTypeExpression abstractionExpr = new TypeExprOfComponent(abstraction);
+    comp.setRefinementsList(Collections.singletonList(abstractionExpr));
+
+    // When
+    CompKindExpression parentCalculated = surrogate.getRefinements(0);
+
+    // Then
+    Assertions.assertSame(abstractionExpr, parentCalculated);
+  }
+
+
+  @Test
+  void setRefinementShouldSkipSurrogate() {
+    // Given
+    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
+    ComponentTypeSymbol comp = pair.getKey();
+    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+
+    ComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
+    CompTypeExpression abstractionExpr = new TypeExprOfComponent(abstraction);
+
+    // When
+    surrogate.setRefinementsList(Collections.singletonList(abstractionExpr));
+
+    // Then
+    Assertions.assertSame(abstractionExpr, comp.getRefinements(0));
+  }
   
   @Test
   void getParameterListShouldSkipSurrogate() {

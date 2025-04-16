@@ -13,8 +13,10 @@ import de.monticore.symbols.oosymbols._symboltable.MethodSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
+import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -31,6 +33,18 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 public class MontiArcDeserializationTest extends MontiArcTestBase {
 
   protected static final String PACKAGE = "symboltable";
+
+  @BeforeEach
+  protected void setUpComponents() {
+    setUpParentComp();
+  }
+
+  protected ComponentTypeSymbol setUpParentComp() {
+    return MontiArcMill.componentTypeSymbolBuilder()
+      .setName("Parent")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+  }
 
   @ParameterizedTest
   @Order(0)
@@ -1061,6 +1075,58 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
       () -> assertThat(symbol.getName()).isEqualTo(name),
       () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
       () -> assertThat(symbol.getEnclosingScope().resolveComponent("j").isPresent()).isTrue()
+    );
+  }
+
+  @Test
+  public void shouldLoadComponentWithRefinement() {
+    // Given
+    final String name = "ComponentWithRefinement";
+    Path compWithRefPath = Path.of(TEST_RESOURCE, PACKAGE, name + ".sym");
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(compWithRefPath.toString())
+    );
+    final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getRefinementsList())
+        .extracting(ref -> ref.getTypeInfo().getName())
+        .as("refined components")
+        .containsExactly("Parent")
+    );
+  }
+
+  @Test
+  @Disabled("If a ComponentSymbol contains references to CompKindExpressions, " +
+    "then MontiArc can't load it because the ComponentSymbolDeSer is broken.")
+  public void shouldLoadMCComponentWithRefinement() {
+    // Given
+    final String name = "MCComponentWithRefinement";
+    Path compWithRefPath = Path.of(TEST_RESOURCE, PACKAGE, name + ".sym");
+
+    final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
+
+    // When
+    final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
+      s2j.load(compWithRefPath.toString())
+    );
+    final ComponentSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentSymbols().get(0));
+
+    // Then
+    assertAll(
+      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
+      () -> assertThat(symbol.getName()).isEqualTo(name),
+      () -> assertThat(symbol.getRefinementsList())
+        .extracting(ref -> ref.getTypeInfo().getName())
+        .as("refined components")
+        .containsExactly("Parent")
     );
   }
 

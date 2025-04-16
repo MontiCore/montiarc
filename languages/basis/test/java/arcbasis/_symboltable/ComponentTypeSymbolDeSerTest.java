@@ -35,6 +35,14 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
       "\"super\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
       "}";
 
+  private static final String JSON_WITH_REFINEMENT =
+    "{" +
+      "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
+      "\"name\":\"Comp\"," +
+      "\"fullName\":\"Comp\"," +
+      "\"refinements\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
+      "}";
+
   private static final String JSON_WITH_TYPE_PARAMS =
     "{" +
       "\"kind\":\"arcbasis._symboltable.ComponentTypeSymbol\"," +
@@ -132,6 +140,24 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(JSON_WITH_PARENT, createdJson);
+  }
+
+  @Test
+  void shouldSerializeSpec() {
+    // Given
+    ComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol parent = createParentComp();
+    CompTypeExpression parentType = new TypeExprOfComponent(parent);
+    comp.setRefinementsList(Collections.singletonList(parentType));
+
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+
+    // When
+    String createdJson = deser.serialize(comp, arc2json);
+
+    // Then
+    Assertions.assertEquals(JSON_WITH_REFINEMENT, createdJson);
   }
 
   @Test
@@ -246,6 +272,19 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     // Then
     Assertions.assertFalse(comp.isEmptySuperComponents(), "Parent not present");
     Assertions.assertEquals("Parent", comp.getSuperComponents(0).printName());
+  }
+
+  @Test
+  void shouldDeserializeSpec() {
+    // Given
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+
+    // When
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_REFINEMENT);
+
+    // Then
+    Assertions.assertFalse(comp.isEmptyRefinements(), "Refined component not present");
+    Assertions.assertEquals("Parent", comp.getRefinements(0).printName());
   }
 
   @Test

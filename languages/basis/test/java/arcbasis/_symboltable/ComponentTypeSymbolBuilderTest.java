@@ -6,6 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -58,6 +59,72 @@ class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A")
       .setSpannedScope(ArcBasisMill.scope()).build();
     Assertions.assertTrue(symbol.isEmptySuperComponents());
+  }
+
+  @Test
+  void shouldHaveSpec() {
+    // Given
+    ComponentTypeSymbol parentComp = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("A")
+      .setSpannedScope(Mockito.mock(IArcBasisScope.class))
+      .build();
+    CompKindExpression parentExpr = new TypeExprOfComponent(parentComp);
+    ComponentTypeSymbolBuilder childBuilder = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("B")
+      .setSpannedScope(ArcBasisMill.scope())
+      .setRefinementsList(Collections.singletonList(parentExpr));
+
+    // When
+    ComponentTypeSymbol child = childBuilder.build();
+
+    // Then
+    Assertions.assertEquals(1, child.sizeRefinements());
+    Assertions.assertEquals(parentExpr, child.getRefinements(0));
+  }
+
+  @Test
+  void shouldHaveSpecs() {
+    // Given
+    ComponentTypeSymbol parentComp1 = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("A1")
+      .setSpannedScope(Mockito.mock(IArcBasisScope.class))
+      .build();
+    ComponentTypeSymbol parentComp2 = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("A2")
+      .setSpannedScope(Mockito.mock(IArcBasisScope.class))
+      .build();
+
+    CompKindExpression parentExpr1 = new TypeExprOfComponent(parentComp1);
+    CompKindExpression parentExpr2 = new TypeExprOfComponent(parentComp2);
+
+    ComponentTypeSymbolBuilder childBuilder = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("B")
+      .setSpannedScope(ArcBasisMill.scope())
+      .setRefinementsList(List.of(parentExpr1, parentExpr2));
+
+    // When
+    ComponentTypeSymbol child = childBuilder.build();
+
+    // Then
+    Assertions.assertEquals(2, child.sizeRefinements());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(parentExpr1, child.getRefinements(0)),
+      () -> Assertions.assertEquals(parentExpr2, child.getRefinements(1))
+    );
+  }
+
+  @Test
+  void shouldNotHaveSpecs() {
+    // Given
+    ComponentTypeSymbolBuilder childBuilder = ArcBasisMill.componentTypeSymbolBuilder()
+      .setName("A")
+      .setSpannedScope(ArcBasisMill.scope());
+
+    // When
+    ComponentTypeSymbol child = childBuilder.build();
+
+    // Then
+    Assertions.assertTrue(child.isEmptyRefinements());
   }
 
   @Test

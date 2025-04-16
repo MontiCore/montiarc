@@ -1,7 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
+import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -9,6 +12,7 @@ import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Named;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -27,6 +31,36 @@ import java.util.stream.Stream;
  * scope, and that all spanning symbols and ast nodes have a spanned scope.
  */
 public class SymbolTableTest extends MontiArcTestBase {
+
+  @BeforeEach
+  protected void setUpComponents() {
+    MontiArcMill.globalScope().add(setUpParentComp());
+  }
+
+  protected ComponentTypeSymbol setUpParentComp() {
+    ComponentTypeSymbol parentComp = MontiArcMill.componentTypeSymbolBuilder()
+      .setName("Parent")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+
+    parentComp.getSpannedScope().add(
+      MontiArcMill.arcPortSymbolBuilder()
+        .setIncoming(true)
+        .setName("i")
+        .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
+        .build()
+    );
+
+    parentComp.getSpannedScope().add(
+      MontiArcMill.arcPortSymbolBuilder()
+        .setOutgoing(true)
+        .setName("o")
+        .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
+        .build()
+    );
+
+    return parentComp;
+  }
 
   @ParameterizedTest
   @MethodSource("componentProvider")
@@ -289,6 +323,13 @@ public class SymbolTableTest extends MontiArcTestBase {
           + "}\n"
           + "}"
       );
+    Optional<ASTMACompilationUnit> ast12 = MontiArcMill.parser()
+      .parse_StringMACompilationUnit(
+        "component Refinement refines Parent {" +
+          "port in int i;" +
+          "port out int o;" +
+          "}"
+      );
     
     Assertions.assertTrue(ast1.isPresent());
     Assertions.assertTrue(ast2.isPresent());
@@ -301,6 +342,7 @@ public class SymbolTableTest extends MontiArcTestBase {
     Assertions.assertTrue(ast9.isPresent());
     Assertions.assertTrue(ast10.isPresent());
     Assertions.assertTrue(ast11.isPresent());
+    Assertions.assertTrue(ast12.isPresent());
 
     return Stream.of(
       Arguments.of(Named.of(ast1.get().getComponentType().getName(), ast1.get())),
@@ -312,7 +354,9 @@ public class SymbolTableTest extends MontiArcTestBase {
       Arguments.of(Named.of(ast7.get().getComponentType().getName(), ast7.get())),
       Arguments.of(Named.of(ast8.get().getComponentType().getName(), ast8.get())),
       Arguments.of(Named.of(ast9.get().getComponentType().getName(), ast9.get())),
-      Arguments.of(Named.of(ast10.get().getComponentType().getName(), ast10.get()))
+      Arguments.of(Named.of(ast10.get().getComponentType().getName(), ast10.get())),
+      Arguments.of(Named.of(ast11.get().getComponentType().getName(), ast11.get())),
+      Arguments.of(Named.of(ast12.get().getComponentType().getName(), ast12.get()))
     );
   }
 }
