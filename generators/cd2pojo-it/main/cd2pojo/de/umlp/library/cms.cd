@@ -34,8 +34,8 @@ classdiagram cms {
     Date opened;
   }
 
-  association [1] Account -> (borrowed) Book [*];
-  association [1] Account -> (reserved) Book [*];
+  association [1] Account (borrower) -> (borrowed) Book [*];
+  association [1] Account (reserver) -> (reserved) Book [*];
 
   public class Library {
     String name;
