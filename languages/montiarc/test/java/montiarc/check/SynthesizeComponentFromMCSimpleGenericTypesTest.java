@@ -119,35 +119,45 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     synth4qual.handle(astQualComp);
 
     // Then
-    Assertions.assertTrue(result4normal.getResult().isPresent());
-    Assertions.assertTrue(result4qual.getResult().isPresent());
-    Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfGenericComponent);
-    Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfGenericComponent);
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(result4normal.getResult().isPresent()),
+      () -> Assertions.assertTrue(result4qual.getResult().isPresent())
+    );
+
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfGenericComponent),
+      () -> Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfGenericComponent)
+    );
 
     TypeExprOfGenericComponent result4normalAsGeneric =
       (TypeExprOfGenericComponent) result4normal.getResult().get();
     TypeExprOfGenericComponent result4qualAsGeneric =
       (TypeExprOfGenericComponent) result4qual.getResult().get();
 
-    Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo());
-    Assertions.assertEquals(compSym, result4qual.getResult().get().getTypeInfo());
+    Assertions.assertAll(
+      () -> Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo()),
+      () -> Assertions.assertEquals(compSym, result4qual.getResult().get().getTypeInfo()),
 
-    Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject);
-    Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics);
-    Assertions.assertEquals(stringSym, result4normalAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
-    Assertions.assertEquals(listSym, result4normalAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
-    Assertions.assertEquals(stringSym,
-      ((SymTypeOfGenerics) result4normalAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
-    );
+      () -> Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject),
+      () -> Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics),
+      () -> Assertions.assertEquals(stringSym, result4normalAsGeneric.getTypeBindingFor("K").get().getTypeInfo()),
+      () -> Assertions.assertEquals(listSym, result4normalAsGeneric.getTypeBindingFor("V").get().getTypeInfo()),
+      () -> Assertions.assertEquals(stringSym,
+          ((SymTypeOfGenerics) result4normalAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
+        ),
 
-    Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfGenerics);
-    Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfObject);
-    Assertions.assertEquals(stringSym, result4qualAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
-    Assertions.assertEquals(listSym, result4qualAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
-    Assertions.assertEquals(stringSym,
-      ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
+      () -> Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfGenerics),
+      () -> Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfObject),
+      () -> Assertions.assertEquals(stringSym, result4qualAsGeneric.getTypeBindingFor("V").get().getTypeInfo()),
+      () -> Assertions.assertEquals(listSym, result4qualAsGeneric.getTypeBindingFor("K").get().getTypeInfo()),
+      () -> Assertions.assertEquals(stringSym,
+          ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
+        ),
+      () -> assertThat(Log.getFindings()).isEmpty(),
+
+      () -> assertThat(result4normalAsGeneric.getSourceNode()).contains(astNormalComp),
+      () -> assertThat(result4qualAsGeneric.getSourceNode()).contains(astQualComp)
     );
-    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test

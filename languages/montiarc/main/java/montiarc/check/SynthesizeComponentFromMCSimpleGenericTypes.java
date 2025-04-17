@@ -6,6 +6,7 @@ import arcbasis.check.CompTypeExpression;
 import arcbasis.check.SynthCompTypeResult;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCBasicTypeArgument;
@@ -86,7 +87,10 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
           return typeResult;
         })
         .collect(Collectors.toList());
-      this.resultWrapper.setResult(new TypeExprOfGenericComponent(compSym.get(0), typeArgExpressions));
+
+      CompKindExpression result = new TypeExprOfGenericComponent(compSym.get(0), typeArgExpressions);
+      result.setSourceNode(mcType);
+      this.resultWrapper.setResult(result);
     }
   }
 

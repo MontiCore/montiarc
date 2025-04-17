@@ -90,17 +90,27 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     synth4multi.handle(astMultiNormalComp);
 
     // Then
-    Assertions.assertTrue(result4normal.getResult().isPresent());
-    Assertions.assertTrue(result4qual.getResult().isPresent());
-    Assertions.assertTrue(result4multi.getResult().isPresent());
-    Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfComponent);
-    Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfComponent);
-    Assertions.assertTrue(result4multi.getResult().get() instanceof TypeExprOfComponent);
-    Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo());
-    Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo());
-    Assertions.assertTrue(result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp1) || result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp2));
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE));
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(result4normal.getResult().isPresent()),
+      () -> Assertions.assertTrue(result4qual.getResult().isPresent()),
+      () -> Assertions.assertTrue(result4multi.getResult().isPresent())
+    );
+    Assertions.assertAll(
+      () -> Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfComponent),
+      () -> Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfComponent),
+      () -> Assertions.assertTrue(result4multi.getResult().get() instanceof TypeExprOfComponent),
+      () -> Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo()),
+      () -> Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo()),
+      () -> Assertions.assertTrue(
+        result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp1)
+          || result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp2)),
+      () -> assertThat(getLoggedErrorCodes())
+        .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE)),
+
+      () -> assertThat(result4normal.getResult().get().getSourceNode()).contains(astNormalComp),
+      () -> assertThat(result4qual.getResult().get().getSourceNode()).contains(astQualComp),
+      () -> assertThat(result4multi.getResult().get().getSourceNode()).contains(astMultiNormalComp)
+    );
   }
 
   @Test

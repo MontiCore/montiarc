@@ -4,6 +4,7 @@ package arcbasis.check;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._visitor.MCBasicTypesHandler;
@@ -54,13 +55,16 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
       resultWrapper.setResultAbsent();
-    } else if (comp.size() > 1) {
-      Log.error(ArcError.AMBIGUOUS_REFERENCE.format(comp.get(0).getFullName(), comp.get(1).getFullName()),
-        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
-      );
-      resultWrapper.setResult(new TypeExprOfComponent(comp.get(0)));
     } else {
-      resultWrapper.setResult(new TypeExprOfComponent(comp.get(0)));
+      CompKindExpression result = new TypeExprOfComponent(comp.get(0));
+      result.setSourceNode(node);
+      resultWrapper.setResult(result);
+
+      if (comp.size() > 1) {
+        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(comp.get(0).getFullName(), comp.get(1).getFullName()),
+          node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+        );
+      }
     }
   }
 
@@ -78,13 +82,16 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
       resultWrapper.setResultAbsent();
-    } else if (comp.size() > 1) {
-      Log.error(ArcError.AMBIGUOUS_REFERENCE.format(comp.get(0).getFullName(), comp.get(1).getFullName()),
-        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
-      );
-      resultWrapper.setResult(new TypeExprOfComponent(comp.get(0)));
     } else {
-      resultWrapper.setResult(new TypeExprOfComponent(comp.get(0)));
+      CompKindExpression result = new TypeExprOfComponent(comp.get(0));
+      result.setSourceNode(node);
+      resultWrapper.setResult(result);
+
+      if (comp.size() > 1) {
+        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(comp.get(0).getFullName(), comp.get(1).getFullName()),
+          node.get_SourcePositionStart(), node.get_SourcePositionEnd()
+        );
+      }
     }
   }
 }
