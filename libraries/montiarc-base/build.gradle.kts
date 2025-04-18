@@ -50,16 +50,12 @@ montiarc {
 val enableAttachDebugger = false
 
 tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-
   if(enableAttachDebugger) {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
 }
 
 tasks.compileTestCd2pojo {
-  useClass2Mc.set(true)
-
   if(enableAttachDebugger) {
     jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
   }
