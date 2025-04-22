@@ -7,6 +7,7 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
@@ -22,6 +23,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -40,10 +42,11 @@ import java.util.stream.IntStream;
  * * [typecheck]: The configuration parameters must be assignable from the
  * specified value bindings.
  * <p>
- * The CoCo can also be applied to super and refinement component configurations.
+ * This CoCo is also applied to refinement declarations, and super component configurations.
  * <p>
  */
-public class ConfigurationParameterAssignment implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTComponentTypeCoCo {
+public class ConfigurationParameterAssignment
+  implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTComponentTypeCoCo {
 
   public ConfigurationParameterAssignment() { }
 
@@ -56,11 +59,28 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     for (CompKindExpression parent : component.getSuperComponentsList()) {
       if (!(parent instanceof CompTypeExpression)) continue;
-      check((CompTypeExpression) parent, node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+
+      Optional<SourcePosition> srcStart = parent.getSourceNode().map(ASTNode::get_SourcePositionStart);
+      Optional<SourcePosition> srcEnd = parent.getSourceNode().map(ASTNode::get_SourcePositionEnd);
+
+      check(
+        (CompTypeExpression) parent,
+        srcStart.isPresent() ? srcStart : getSrcStart(node.getHead().getArcParentList()),
+        srcEnd.isPresent() ? srcEnd : getSrcEnd(node.getHead().getArcParentList())
+      );
     }
+
     for (CompKindExpression refines : component.getRefinementsList()) {
       if (!(refines instanceof CompTypeExpression)) continue;
-      check((CompTypeExpression) refines, node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+
+      Optional<SourcePosition> srcStart = refines.getSourceNode().map(ASTNode::get_SourcePositionStart);
+      Optional<SourcePosition> srcEnd = refines.getSourceNode().map(ASTNode::get_SourcePositionEnd);
+
+      check(
+        (CompTypeExpression) refines,
+        srcStart.isPresent() ? srcStart : getSrcStart(node.getHead().getSpecList()),
+        srcEnd.isPresent() ? srcEnd : getSrcEnd(node.getHead().getSpecList())
+      );
     }
   }
 
@@ -74,10 +94,16 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
       return;
     }
 
-    check((CompTypeExpression) node.getSymbol().getType(), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+    check(
+      (CompTypeExpression) node.getSymbol().getType(),
+      Optional.of(node.get_SourcePositionStart()),
+      Optional.of(node.get_SourcePositionEnd())
+    );
   }
 
-  protected void check(@NotNull CompTypeExpression componentExpression, @NotNull SourcePosition sourcePositionStart, @NotNull SourcePosition sourcePositionEnd) {
+  protected void check(@NotNull CompTypeExpression componentExpression,
+                       @NotNull Optional<SourcePosition> sourcePositionStart,
+                       @NotNull Optional<SourcePosition> sourcePositionEnd) {
     Preconditions.checkNotNull(componentExpression);
     Preconditions.checkNotNull(sourcePositionStart);
     Preconditions.checkNotNull(sourcePositionEnd);
@@ -121,10 +147,12 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
    *
    * @param componentExpression the component expression to check
    */
-  protected void checkArgumentsBindAllMandatoryParameters(@NotNull CompTypeExpression componentExpression, @NotNull SourcePosition sourcePositionStart, @NotNull SourcePosition sourcePositionEnd) {
+  protected void checkArgumentsBindAllMandatoryParameters(@NotNull CompTypeExpression componentExpression,
+                                                          @NotNull Optional<SourcePosition> srcStart,
+                                                          @NotNull Optional<SourcePosition> srcEnd) {
     Preconditions.checkNotNull(componentExpression);
-    Preconditions.checkNotNull(sourcePositionStart);
-    Preconditions.checkNotNull(sourcePositionEnd);
+    Preconditions.checkNotNull(srcStart);
+    Preconditions.checkNotNull(srcEnd);
 
     List<ASTArcArgument> arguments = componentExpression.getArcArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
@@ -150,10 +178,13 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
     }
 
     if (mandatoryParamsAmount + defaultAssignedByKey > arguments.size()) {
-      Log.error(ArcError.TOO_FEW_ARGUMENTS.format(mandatoryParamsAmount, arguments.size()),
-        sourcePositionStart,
-        sourcePositionEnd
-      );
+      String errorMsg = ArcError.TOO_FEW_ARGUMENTS.format(mandatoryParamsAmount, arguments.size());
+
+      if (srcStart.isPresent() && srcEnd.isPresent()) {
+        Log.error(errorMsg, srcStart.get(), srcEnd.get());
+      } else {
+        Log.error(errorMsg);
+      }
     }
   }
 
@@ -321,5 +352,29 @@ public class ConfigurationParameterAssignment implements ArcBasisASTComponentIns
 
     }
     return keysAreParams;
+  }
+
+  /**
+   * If the list is non-empty, returns the start source position of the first element
+   */
+  protected static Optional<SourcePosition> getSrcStart(@NotNull List<? extends ASTNode> nodes) {
+    Preconditions.checkNotNull(nodes);
+    if (nodes.isEmpty()) {
+      return Optional.empty();
+    } else {
+      return Optional.of(nodes.get(0).get_SourcePositionStart());
+    }
+  }
+
+  /**
+   * If the list is non-empty, returns the end source position of the last element
+   */
+  protected static Optional<SourcePosition> getSrcEnd(@NotNull List<? extends ASTNode> nodes) {
+    Preconditions.checkNotNull(nodes);
+    if (nodes.isEmpty()) {
+      return Optional.empty();
+    } else {
+      return Optional.of(nodes.get(nodes.size() - 1).get_SourcePositionEnd());
+    }
   }
 }

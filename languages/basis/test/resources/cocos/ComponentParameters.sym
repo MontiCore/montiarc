@@ -1,0 +1,102 @@
+{
+  "name": "ComponentParameters",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "Simple",
+      "fullName": "Simple",
+      "parameters": [
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "intParam",
+          "fullName": "Simple.intParam",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        }
+      ],
+      "spannedScope": {
+        "isShadowingScope": true
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "Advanced",
+      "fullName": "Advanced",
+      "numOptParams": 2,
+      "parameters": [
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "first",
+          "fullName": "Advanced.first",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        },
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "second",
+          "fullName": "Advanced.second",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "boolean"
+          }
+        },
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "third",
+          "fullName": "Advanced.third",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "double"
+          }
+        }
+      ],
+      "spannedScope": {
+        "isShadowingScope": true
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "AdvancedWithOneOptional",
+      "fullName": "AdvancedWithOneOptional",
+      "numOptParams": 1,
+      "parameters": [
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "first",
+          "fullName": "Advanced.first",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        },
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "second",
+          "fullName": "AdvancedWithOneOptional.second",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "boolean"
+          }
+        },
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "third",
+          "fullName": "AdvancedWithOneOptional.third",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "double"
+          }
+        }
+      ],
+      "spannedScope": {
+        "isShadowingScope": true
+      }
+    }
+  ]
+}
