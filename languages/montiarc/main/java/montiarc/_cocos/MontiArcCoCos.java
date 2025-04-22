@@ -33,6 +33,8 @@ import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.PortNamedTick;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
+import arcbasis._cocos.RefinementRawType;
+import arcbasis._cocos.RefinementTypeBound;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
 import comfortablearc._cocos.AtomicNoAutoConnect;
@@ -152,8 +154,10 @@ public class MontiArcCoCos {
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
+    checker.addCoCo(new RefinementTypeBound());
     checker.addCoCo(new ComponentHeritageRawType());
     checker.addCoCo(new SubcomponentRawType());
+    checker.addCoCo(new RefinementRawType());
     checker.addCoCo(new TypeParameterNamedTick());
 
     // VariableArc

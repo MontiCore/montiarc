@@ -1,0 +1,57 @@
+{
+  "name": "GenericTypes",
+  "package": "",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "Comparable",
+      "fullName": "Comparable",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "Comparable.T"
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "String",
+      "fullName": "String",
+      "superTypes": [
+        {
+          "kind": "de.monticore.types.check.SymTypeOfGenerics",
+          "typeConstructorFullName": "Comparable",
+          "arguments":[
+            {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "String"
+            }
+          ]
+        }
+      ]
+    },
+
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeSymbol",
+      "name": "Integer",
+      "fullName": "Integer",
+      "superTypes": [
+        {
+          "kind": "de.monticore.types.check.SymTypeOfGenerics",
+          "typeConstructorFullName": "Comparable",
+          "arguments":[
+            {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "Integer"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,210 @@
+{
+  "name": "GenericComps",
+  "package": "",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "A",
+      "fullName": "A",
+      "spannedScope": {}
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "B",
+      "fullName": "B",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "B.T"
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "C",
+      "fullName": "C",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "C.T"
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "U",
+            "fullName": "C.U"
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "D",
+      "fullName": "D",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "D.T",
+            "superTypes": [
+              {
+                "kind": "de.monticore.types.check.SymTypePrimitive",
+                "primitiveName": "int"
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "E",
+      "fullName": "E",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "E.T",
+            "superTypes": [
+              {
+                "kind": "de.monticore.types.check.SymTypeOfGenerics",
+                "typeConstructorFullName": "Comparable",
+                "arguments":[
+                  {
+                    "kind": "de.monticore.types.check.SymTypeOfObject",
+                    "objName": "Integer"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "F",
+      "fullName": "F",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "F.T",
+            "superTypes": [
+              {
+                "kind": "de.monticore.types.check.SymTypeOfGenerics",
+                "typeConstructorFullName": "Comparable",
+                "arguments":[
+                  {
+                    "kind": "de.monticore.types.check.SymTypeOfObject",
+                    "objName": "String"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "U",
+            "fullName": "F.U",
+            "superTypes": [
+              {
+                "kind": "de.monticore.types.check.SymTypeOfGenerics",
+                "typeConstructorFullName": "Comparable",
+                "arguments":[
+                  {
+                    "kind": "de.monticore.types.check.SymTypeOfObject",
+                    "objName": "Integer"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "G",
+      "fullName": "G",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "G.T"
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "U",
+            "fullName": "G.U",
+            "superTypes": [
+              {
+                "kind": "de.monticore.types.check.SymTypeOfGenerics",
+                "typeConstructorFullName": "Comparable",
+                "arguments":[
+                  {
+                    "kind": "de.monticore.types.check.SymTypeOfObject",
+                    "objName": "G.T"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "H",
+      "fullName": "H",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "U",
+            "fullName": "H.U",
+            "superTypes": [
+              {
+                "kind": "de.monticore.types.check.SymTypeOfGenerics",
+                "typeConstructorFullName": "Comparable",
+                "arguments":[
+                  {
+                    "kind": "de.monticore.types.check.SymTypeOfObject",
+                    "objName": "H.T"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol",
+            "name": "T",
+            "fullName": "H.T"
+          }
+        ]
+      }
+    }
+  ]
+}

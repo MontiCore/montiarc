@@ -64,6 +64,8 @@
 | ☑     | ☒           | SubcomponentTypeBound               | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |
 | ☑     | ☒           | ComponentHeritageTypeBound          | ArcBasis | 0xC1179, 0xC1180, 0xC1181                                     |
 | ☑     | ☒           | ComponentHeritageRawType            | ArcBasis | 0xC1182                                                       |
+| ☑     | ☒           | RefinementTypeBound                 | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |
+| ☑     | ☒           | RefinementRawType                   | ArcBasis | 0xC1182                                                       |
 | ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |
 
 ## MontiArc CoCos
