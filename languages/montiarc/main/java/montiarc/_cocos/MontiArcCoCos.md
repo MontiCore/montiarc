@@ -67,6 +67,7 @@
 | ☑     | ☒           | RefinementTypeBound                 | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |
 | ☑     | ☒           | RefinementRawType                   | ArcBasis | 0xC1182                                                       |
 | ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |
+| ☑     | ☒           | RefinementPortsMatch                | ArcBasis | 0xC1184, 0xC1185, 0xC1186, 0xC1187, 0xC1188, 0xC1189          |
 
 ## MontiArc CoCos
 

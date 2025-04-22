@@ -76,7 +76,13 @@ public enum ArcError implements Error {
   HERITAGE_TYPE_ARG_IGNORES_UPPER_BOUND("0xC1179", "Type parameter '%s' does not respect its upper bound, should extend '%s'"),
   HERITAGE_TOO_FEW_TYPE_ARGUMENTS("0xC1180", "Too few type arguments, expected `%s` but provided `%s`"),
   HERITAGE_TOO_MANY_TYPE_ARGUMENTS("0xC1181", "Too many type arguments, expected `%s` but provided `%s`"),
-  RAW_USE_OF_PARAMETRIZED_TYPE("0xC1182", "Raw usage of generic component type `%s`");
+  RAW_USE_OF_PARAMETRIZED_TYPE("0xC1182", "Raw usage of generic component type `%s`"),
+  REFINEMENT_PORT_NAME_MISMATCH("0xC1184", "Interface mismatch during refinement, port '%s' exists in '%s' but not in '%s'."),
+  REFINEMENT_PORT_DIRECTION_CHANGED("0xC1185", "Direction mismatch, port '%s' has direction '%s', mismatching the direction in the abstraction '%s'."),
+  REFINEMENT_TIMING_MISMATCH_IN("0xC1186","Timing mitmatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for incoming ports."),
+  REFINEMENT_TIMING_MISMATCH_OUT("0xC1187","Timing mitmatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for outgoing ports."),
+  REFINEMENT_IN_PORT_TYPE_MISMATCH("0xC1188", "Type mismatch, input port '%s' has type '%s', which is not a super type of the port's type '%s' in the abstraction '%s'."),
+  REFINEMENT_OUT_PORT_TYPE_MISMATCH("0xC1189", "Type mismatch, output port '%s' has type '%s', which is not a sub type of the port's type '%s' in the abstraction '%s'.");
 
   private final String errorCode;
   private final String errorMessage;

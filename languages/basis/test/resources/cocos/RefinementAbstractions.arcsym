@@ -1,0 +1,283 @@
+{
+  "name": "RefinementAbstractions",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "Restrictive",
+      "fullName": "Restrictive",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "i",
+            "fullName": "Restrictive.i",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "o",
+            "fullName": "Restrictive.o",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "outgoing": true,
+            "timing": "sync"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "Liberal",
+      "fullName": "Liberal",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "i",
+            "fullName": "Liberal.i",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "incoming": true,
+            "timing": "sync"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "o",
+            "fullName": "Liberal.o",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "outgoing": true,
+            "timing": "timed"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "RestrictiveMorePorts",
+      "fullName": "RestrictiveMorePorts",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "i1",
+            "fullName": "RestrictiveMorePorts.i1",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "i2",
+            "fullName": "RestrictiveMorePorts.i2",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "o1",
+            "fullName": "RestrictiveMorePorts.o1",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "outgoing": true,
+            "timing": "sync"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "o2",
+            "fullName": "RestrictiveMorePorts.o2",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "outgoing": true,
+            "timing": "sync"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "DuplicatePortAllDifferent",
+      "fullName": "DuplicatePortAllDifferent",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicatePortAllDifferent.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicatePortAllDifferent.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "long"
+            },
+            "outgoing": true,
+            "timing": "sync"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "DuplicatePortSameDirection",
+      "fullName": "DuplicatePortSameDirection",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicatePortSameDirection.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicatePortSameDirection.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "long"
+            },
+            "incoming": true,
+            "timing": "sync"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "DuplicateSameDirectionTiming",
+      "fullName": "DuplicateSameDirectionTiming",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicateSameDirectionTiming.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicateSameDirectionTiming.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "long"
+            },
+            "incoming": true,
+            "timing": "timed"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "DuplicateSameTimingTypes",
+      "fullName": "DuplicateSameTimingTypes",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicateSameTimingTypes.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicateSameTimingTypes.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "outgoing": true,
+            "timing": "timed"
+          }
+        ]
+      }
+    },
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "DuplicateEverythingSame",
+      "fullName": "DuplicateEverythingSame",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicateEverythingSame.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "name": "a",
+            "fullName": "DuplicateEverythingSame.a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "incoming": true,
+            "timing": "timed"
+          }
+        ]
+      }
+    }
+  ]
+}
