@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
+import montiarc.rte.port.InOutPort;
 import montiarc.rte.port.InPort;
 import montiarc.rte.port.NoMsgType;
 
@@ -14,6 +15,8 @@ public interface Component {
   default boolean hasModeAutomaton() { return false; }
 
   List<? extends Component> getAllSubcomponents();
+
+  List<InOutPort<?, ?>> getAllInPorts();
 
   void init();
 

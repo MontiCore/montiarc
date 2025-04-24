@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
@@ -57,7 +56,7 @@ public class ComponentScheduler {
   protected void requestScheduling(InPort<?> port) {
     if (syncPorts.contains(port)) {
       requestSyncPortScheduling();
-    } else if (msgEventPorts.contains(port)){
+    } else if (msgEventPorts.contains(port)) {
       requestMsgEventPortScheduling(port);
     } else {
       throw new IllegalArgumentException(
@@ -173,35 +172,18 @@ public class ComponentScheduler {
     }
   }
 
-  void triggerComponentTickPort() {
-    this.triggerComponentTickPort(1);
+  void triggerComponentInPorts() {
+    this.component.getAllInPorts().forEach(p -> p.receive(Tick.get()));
   }
 
-  void triggerComponentTickPort(long ticks) {
-    for (int i = 0; i < ticks; i++) {
-      this.component.getTickPort().receive(Tick.get());
-    }
+  void triggerComponentTickPort() {
+    this.component.getTickPort().receive(Tick.get());
   }
 
   public boolean isReadyToExecute() {
     return isTickScheduled || !scheduledMsgEventPorts.isEmpty();
   }
 
-  public void run() {
-    while (isReadyToExecute()) {
-      executeNextSchedule();
-    }
-  }
-
-  public void run(int ticks) {
-    if (ticks < 0) {
-      this.run();
-    }
-
-    for (int i = 0; i < ticks && isReadyToExecute(); i++) {
-      executeNextSchedule();
-    }
-  }
 
   private boolean allPortsHaveBufferedTick() {
     return allInPorts.stream().allMatch(InPort::hasBufferedTick);

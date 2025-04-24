@@ -68,21 +68,27 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
     return this.behavior;
   }
 
+  /**
+   * Runs the simulation
+   */
   public void run() {
     ensureInitialized();
-    this.scheduler.run(this);
+    this.scheduler.runToCompletion(this);
   }
 
+  /**
+   * Runs the simulation for the specified duration
+   * @param ticks The number of ticke to run the simulation for.
+   */
   public void run(long ticks) {
     ensureInitialized();
-    this.scheduler.run(this, ticks);
+    this.scheduler.runTicks(this, ticks);
   }
 
   public void unregisterFromScheduler() {
     this.scheduler.unregister(this);
   }
 
-  protected abstract List<InOutPort<?, ?>> getAllInPorts();
   public abstract List<OutPort<?>> getAllOutPorts();
   protected abstract List<InOutPort<?, ?>> getAllSyncedInPorts();
   protected abstract Object portValueOf(InPort<?> p);

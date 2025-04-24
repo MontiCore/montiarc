@@ -13,7 +13,7 @@
 
 <#macro allInPortsGetter>
 @Override
-protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllInPorts() {
+public java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllInPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(tickPort
       <#list ast.getSymbol().getAllIncomingPorts() as port>

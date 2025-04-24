@@ -62,8 +62,30 @@ public class CoordinatingScheduler implements Scheduler {
       .collect(Collectors.toList());
   }
 
-  @Override
-  public void run(Component component) {
+  public void runToCompletion(Component component) {
+    run(component, true, Long.MIN_VALUE, 0);
+  }
+
+  public void runIndefinitely(Component component) {
+    run(component, false, Long.MIN_VALUE, 0);
+  }
+
+  public void runTicks(Component component, long ticks) {
+    run(component, false, ticks, 0);
+  }
+
+  /**
+   * Method responsible for controlling the simulation
+   *
+   * @param component            The component to run the simulation for
+   * @param runToCompletion      If true all incoming ports are expected to have messages
+   *                             and the simulation is run until no more messages can be handled
+   * @param ticks                The maximum tick count to run the simulation for.
+   *                             If it is {@code Long.MIN_VALUE} the simulation has no upper tick count bound.
+   * @param simulationTickLength The time the simulation takes for each tick.
+   *                             Can effectively slow the simulation down (e.g. to be interactive)
+   */
+  protected void run(Component component, boolean runToCompletion, long ticks, long simulationTickLength) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
@@ -72,41 +94,44 @@ public class CoordinatingScheduler implements Scheduler {
     Simulation.coordinatingScheduler = this;
     ComponentScheduler scheduler = compToScheduler.get(component);
 
-    if (!this.isReadyToExecute()) {
-      scheduler.triggerComponentTickPort();
+    if (!this.isReadyToExecute() && (ticks > 0 || ticks == Long.MIN_VALUE)) {
+      if (runToCompletion) {
+        scheduler.triggerComponentTickPort();
+      } else {
+        scheduler.triggerComponentInPorts();
+      }
+      if (ticks != Long.MIN_VALUE) {
+        ticks--;
+      }
     }
 
     Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
+    long tickStart = System.nanoTime();
     while (!activeSchedulers.isEmpty() && !requestedToStop) {
       for (ComponentScheduler s : activeSchedulers) {
         s.executeNextSchedule();
       }
 
       activeSchedulers = getActiveSchedulers();
-      if (activeSchedulers.isEmpty()) {
-        scheduler.triggerComponentTickPort();
+      boolean tickTriggered = false; // End the simulation if after a tick no component can be scheduled
+      while (!tickTriggered && activeSchedulers.isEmpty() && (ticks > 0 || ticks == Long.MIN_VALUE)) {
+        // This loop blocks the thread until a component can be scheduled (e.g. through an event outside the simulation)
+        // simulationTickLength time has passed
+        if (tickStart + simulationTickLength <= System.nanoTime()) {
+          if (runToCompletion) {
+            scheduler.triggerComponentTickPort();
+          } else {
+            scheduler.triggerComponentInPorts();
+          }
+          tickTriggered = true;
+          Simulation.ticks++;
+          if (ticks != Long.MIN_VALUE) {
+            ticks--;
+          }
+          tickStart = System.nanoTime();
+        }
         activeSchedulers = getActiveSchedulers();
       }
-    }
-    Simulation.coordinatingScheduler = null;
-  }
-
-  public void run(Component component, long ticks) {
-    if (!compToScheduler.containsKey(component)) {
-      throw new IllegalArgumentException("Component not registered");
-    }
-
-    requestedToStop = false;
-    Simulation.coordinatingScheduler = this;
-    compToScheduler.get(component).triggerComponentTickPort(ticks);
-
-    Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
-
-    while (!activeSchedulers.isEmpty() && !requestedToStop) {
-      for (ComponentScheduler s : activeSchedulers) {
-        s.executeNextSchedule();
-      }
-      activeSchedulers = getActiveSchedulers();
     }
     Simulation.coordinatingScheduler = null;
   }
@@ -125,6 +150,6 @@ public class CoordinatingScheduler implements Scheduler {
     return
       directSubs.stream().map(this.compToScheduler::get)
         .anyMatch(ComponentScheduler::isReadyToExecute)
-      || directSubs.stream().anyMatch(this::isASubCompScheduled);
+        || directSubs.stream().anyMatch(this::isASubCompScheduled);
   }
 }

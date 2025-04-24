@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.maunit.descriptior;
 
+import montiarc.lang.Simulation;
 import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.maunit.engine.MAUnitTestExecutionContext;
@@ -53,11 +54,12 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
     AbstractComponent<?, ?> component = (AbstractComponent<?, ?>) testClass.getConstructors()[0].newInstance(getArguments(testClass.getConstructors()[0].getParameterCount(), scheduler));
     boolean caughtException = false;
     try {
+      Simulation.ticks = 0;
       component.init();
       component.run(getTickCount());
     } catch (Throwable e) {
       caughtException = true;
-      String schedulerTrace = "\nafter <" + (getTickCount() - ((ScheduledPort<?>) component.getTickPort()).getBuffer().size()) + "> ticks.";
+      String schedulerTrace = "\nafter <" + Simulation.ticks + "> ticks.";
       if (invocationContext.isExceptionExpected(iteration)) {
         if (!invocationContext.getExpectedException(iteration).isInstance(e)) {
           throw new AssertionError("Expected throwable <" + invocationContext.getExpectedException(iteration).getName() + "> but was <" + e.getClass().getName() + ">" + schedulerTrace, e);
