@@ -85,7 +85,7 @@ public class MA2JSimApi {
    * @throws IOException
    */
   private List<Finding> runTasks() throws IOException {
-    Log.info("Parse the input models", "MontiArcTool");
+    Log.info(() -> "Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
     // parsing the input models
     for(String model: context.getModelList()){

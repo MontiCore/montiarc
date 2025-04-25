@@ -249,7 +249,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     Preconditions.checkNotNull(assigner);
 
     if (assigner.isObscureType()) {
-      Log.debug(node.get_SourcePositionStart() + ": Skip execution of CoCo, could not calculate the stereotype's type.", this.getClass().getCanonicalName());
+      Log.debug(() -> node.get_SourcePositionStart() + ": Skip execution of CoCo, could not calculate the stereotype's type.", this.getClass().getCanonicalName());
     } else if (!SymTypeRelations.isCompatible(assignee, assigner)) {
       Log.error(MontiArcError.UNIT_TYPE_MISMATCH.format(name, assignee.printFullName(), assigner.printFullName()), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }

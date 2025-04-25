@@ -95,12 +95,12 @@ public class MA2JavaTool extends MontiArcTool {
     super.runTasks(asts, cl);
 
     if (cl.hasOption("dse")) {
-      Log.info("Perform remaining context-condition checks", "MontiArcTool-dse");
+      Log.info(() -> "Perform remaining context-condition checks", "MontiArcTool-dse");
       asts.forEach(this::runAdditionalCoCosDse);
     }
 
     if (cl.hasOption("output")) {
-      Log.info("Generate java", "MontiArcTool");
+      Log.info(() -> "Generate java", "MontiArcTool");
 
       this.generate(asts, cl);
     }

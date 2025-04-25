@@ -59,7 +59,7 @@
   <#assign addLogName = level == "info" || level == "debug" || level == "trace">
   <#assign addThrowable = throwable != "">
   de.se_rwth.commons.logging.Log.${level}(
-    <#nested>  <#-- represents the msg content-->
+    () -> <#nested>  <#-- represents the msg content-->
     <#if addThrowable>, ${throwable}</#if>
     <#if addLogName>, ${logName}</#if>
   );

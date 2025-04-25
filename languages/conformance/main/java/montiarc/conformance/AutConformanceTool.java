@@ -106,13 +106,13 @@ public class AutConformanceTool extends MontiArcTool {
 
   public boolean checkConformance(String[] reference, String[] concrete, String mappingPath) {
     String logName = this.getClass().getSimpleName();
-    Log.info("Loading and checking reference Model.....", logName);
+    Log.info(() -> "Loading and checking reference Model.....", logName);
     Pair<ASTCDCompilationUnit, ASTMACompilationUnit> ref = loadModels(reference);
 
-    Log.info("Loading and checking concrete Model.....", logName);
+    Log.info(() -> "Loading and checking concrete Model.....", logName);
     Pair<ASTCDCompilationUnit, ASTMACompilationUnit> con = loadModels(concrete);
 
-    Log.info("Loading and checking mapping.....", logName);
+    Log.info(() -> "Loading and checking mapping.....", logName);
     AutomataMapping mapping =
         new MCMapping(
             AutomataLoader.loadMapping(
@@ -122,7 +122,7 @@ public class AutConformanceTool extends MontiArcTool {
                 con.getValue().getComponentType(),
                 con.getKey()));
 
-    Log.info("Checking Conformance..... ", logName);
+    Log.info(() -> "Checking Conformance..... ", logName);
     boolean isConform =
         new AutomataConfChecker()
             .isConform(
@@ -132,7 +132,7 @@ public class AutConformanceTool extends MontiArcTool {
                 con.getKey(),
                 mapping);
     if (isConform) {
-      Log.info("Models are conform.", logName);
+      Log.info(() -> "Models are conform.", logName);
     } else {
       Log.warn("Models are NOT conform.");
     }

@@ -17,7 +17,7 @@ public class ArcBasisOOWithinTypeBasicSymbolsResolver extends OOWithinTypeBasicS
   private static final String LOG_NAME = ArcBasisOOWithinTypeBasicSymbolsResolver.class.getSimpleName();
 
   public static void init() {
-    Log.trace("Initialize ArcBasisOOWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
+    Log.trace(() -> "Initialize ArcBasisOOWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
     setDelegate(new ArcBasisOOWithinTypeBasicSymbolsResolver());
   }
 

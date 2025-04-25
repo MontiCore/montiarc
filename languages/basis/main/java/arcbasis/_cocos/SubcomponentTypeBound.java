@@ -54,7 +54,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
           }
         }
       } else {
-        Log.debug(String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for component " +
+        Log.debug(() -> String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for component " +
                 "instantiation at '%s' because the binding for that type parameter is not set.",
             SubcomponentTypeBound.class.getSimpleName(), typeVar.getName(), compTypeSymbol.getName(),
             astInstantiation.get_SourcePositionStart()), "CoCos");
@@ -71,7 +71,7 @@ public class SubcomponentTypeBound implements ArcBasisASTComponentInstantiationC
     Preconditions.checkArgument(node.streamComponentInstances().allMatch(ASTComponentInstance::isPresentSymbol));
 
     if (!node.streamComponentInstances().allMatch(inst -> inst.getSymbol().isTypePresent())) {
-      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.", this.getClass().getSimpleName());
+      Log.debug(() -> "Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.", this.getClass().getSimpleName());
       return;
     }
 

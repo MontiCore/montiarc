@@ -206,7 +206,7 @@ public class JSimLogExtension implements BeforeEachCallback, AfterEachCallback, 
       context.getRequiredTestMethod().getName(),
       context.getDisplayName()
     );
-    Log.info(testInfo,"TestExecution");
+    Log.info(() -> testInfo,"TestExecution");
   }
 
   @Override

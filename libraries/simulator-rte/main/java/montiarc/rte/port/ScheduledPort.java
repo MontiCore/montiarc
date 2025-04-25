@@ -54,7 +54,7 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T,
    * @param data the received data
    */
   protected void processReceivedData(T data) {
-    Log.debug(DataFormatter.format(data), this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
+    Log.debug(() -> DataFormatter.format(data), this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
     Message<T> msgObject = Message.of(data);
     buffer.add(msgObject);
     scheduler.requestScheduling(this, data);
@@ -66,7 +66,7 @@ public class ScheduledPort<T> extends AbstractOutPort<T> implements InOutPort<T,
    * {@code receive(Tick.get())}.
    */
   protected void processReceivedTick() {
-    Log.debug(DataFormatter.TK, this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
+    Log.debug(() -> DataFormatter.TK, this.getQualifiedName() + "#" + Aspects.RECEIVE_MSG);
     buffer.add(Tick.get());
     scheduler.requestSchedulingOfNewTick(this);
   }

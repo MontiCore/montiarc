@@ -21,7 +21,7 @@ public class SubcomponentRawType implements ArcBasisASTComponentInstantiationCoC
     Preconditions.checkNotNull(node);
 
     if (node.getMCType().getDefiningSymbol().isEmpty()) {
-      Log.trace("Skip coco check for " + node.get_SourcePositionStart() + ", component link is missing.", this.getClass().getCanonicalName());
+      Log.trace(() -> "Skip coco check for " + node.get_SourcePositionStart() + ", component link is missing.", this.getClass().getCanonicalName());
     } else if (node.getMCType().getDefiningSymbol().isPresent() &&
       node.getMCType().getDefiningSymbol().get() instanceof ComponentTypeSymbol &&
       ((ComponentTypeSymbol) node.getMCType().getDefiningSymbol().get()).getTypeParameters().size() > 0

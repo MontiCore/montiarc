@@ -31,7 +31,7 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
   private static ComponentTypeSymbol currentVariant;
 
   public static void setCurrentVariant(@Nullable ComponentTypeSymbol variant) {
-    Log.trace("Switch the context of the type-check", LOG_NAME);
+    Log.trace(() -> "Switch the context of the type-check", LOG_NAME);
     currentVariant = variant;
   }
 
@@ -49,9 +49,9 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
   }
 
   public static void init() {
-    Log.trace("Start initializing the type-check", LOG_NAME);
+    Log.trace(() -> "Start initializing the type-check", LOG_NAME);
     initTC3Delegate();
-    Log.trace("Finished initializing the type-check", LOG_NAME);
+    Log.trace(() -> "Finished initializing the type-check", LOG_NAME);
   }
 
   protected static void initTC3Delegate() {
@@ -68,7 +68,7 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Log.trace("Start initializing the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Start initializing the type-check delegate", LOG_NAME);
     VariableArcVariantWithinScopeBasicSymbolsResolver.init();
     VariableArcVariantWithinTypeBasicSymbolsResolver.init();
     VariableArcVariantOOWithinTypeBasicSymbolsResolver.init();
@@ -76,8 +76,8 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
     ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
-    Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
+    Log.trace(() -> "Set the type-check delegate as global type-check delegate", LOG_NAME);
     setDelegate(new VariableArcTypeCheck(traverser, type4Ast, ctx4Ast));
-    Log.trace("Finish initializing the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Finish initializing the type-check delegate", LOG_NAME);
   }
 }

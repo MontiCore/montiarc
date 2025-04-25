@@ -18,7 +18,7 @@ public class MAOOWithinTypeBasicSymbolsResolver extends VariableArcVariantOOWith
   private static final String LOG_NAME = MAOOWithinTypeBasicSymbolsResolver.class.getSimpleName();
 
   public static void init() {
-    Log.trace("Initialize MAOOWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
+    Log.trace(() -> "Initialize MAOOWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
     setDelegate(new MAOOWithinTypeBasicSymbolsResolver());
   }
 

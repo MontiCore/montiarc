@@ -38,9 +38,9 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
   }
 
   public static void init() {
-    Log.trace("Start initializing the type-check", LOG_NAME);
+    Log.trace(() -> "Start initializing the type-check", LOG_NAME);
     initTC3Delegate();
-    Log.trace("Finished initializing the type-check", LOG_NAME);
+    Log.trace(() -> "Finished initializing the type-check", LOG_NAME);
   }
 
   protected static void initTC3Delegate() {
@@ -57,7 +57,7 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Log.trace("Start initializing the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Start initializing the type-check delegate", LOG_NAME);
     ArcBasisWithinScopeBasicSymbolsResolver.init();
     ArcBasisWithinTypeBasicSymbolsResolver.init();
     ArcBasisOOWithinTypeBasicSymbolsResolver.init();
@@ -65,9 +65,9 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
-    Log.trace("Set the type-check delegate as global type-check delegate", LOG_NAME);
+    Log.trace(() -> "Set the type-check delegate as global type-check delegate", LOG_NAME);
     setDelegate(new ArcBasisTypeCheck(traverser, type4Ast, ctx4Ast));
-    Log.trace("Finish initializing the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Finish initializing the type-check delegate", LOG_NAME);
   }
 
   protected static void initTypeVisitors(@NotNull ArcBasisTraverser traverser,
@@ -76,11 +76,11 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Log.trace("Start initializing the visitors of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Start initializing the visitors of the type-check delegate", LOG_NAME);
     initExpressionBasisTypeVisitor(traverser, type4Ast, ctx4Ast);
     initMCBasicTypesTypeVisitor(traverser, type4Ast, ctx4Ast);
     initMCCommonLiteralsTypeVisitor(traverser, type4Ast, ctx4Ast);
-    Log.trace("Finish initializing the visitors of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Finish initializing the visitors of the type-check delegate", LOG_NAME);
   }
 
   protected static void initExpressionBasisTypeVisitor(@NotNull ArcBasisTraverser traverser,
@@ -89,12 +89,12 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Log.trace("Start initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Start initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
     expressionBasis = new ExpressionBasisTypeVisitor();
     expressionBasis.setType4Ast(type4Ast);
     expressionBasis.setContext4Ast(ctx4Ast);
     traverser.add4ExpressionsBasis(expressionBasis);
-    Log.trace("Finish initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Finish initializing the ExpressionBasis visitor of the type-check delegate", LOG_NAME);
   }
 
   protected static void initMCBasicTypesTypeVisitor(@NotNull ArcBasisTraverser traverser,
@@ -103,12 +103,12 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Log.trace("Start initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Start initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
     mcBasicTypes = new MCBasicTypesTypeVisitor();
     mcBasicTypes.setType4Ast(type4Ast);
     mcBasicTypes.setContext4Ast(ctx4Ast);
     traverser.add4MCBasicTypes(mcBasicTypes);
-    Log.trace("Finish initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Finish initializing the MCBasicTypes visitor of the type-check delegate", LOG_NAME);
   }
 
   protected static void initMCCommonLiteralsTypeVisitor(@NotNull ArcBasisTraverser traverser,
@@ -117,11 +117,11 @@ public class ArcBasisTypeCheck extends MapBasedTypeCheck3 {
     Preconditions.checkNotNull(traverser);
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
-    Log.trace("Start initializing the MCCommonLiterals visitor of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Start initializing the MCCommonLiterals visitor of the type-check delegate", LOG_NAME);
     mcCommonLiterals = new MCCommonLiteralsTypeVisitor();
     mcCommonLiterals.setType4Ast(type4Ast);
     mcCommonLiterals.setContext4Ast(ctx4Ast);
     traverser.add4MCCommonLiterals(mcCommonLiterals);
-    Log.trace("Finish initializing the MCCommonLiterals visitor of the type-check delegate", LOG_NAME);
+    Log.trace(() -> "Finish initializing the MCCommonLiterals visitor of the type-check delegate", LOG_NAME);
   }
 }

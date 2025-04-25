@@ -51,7 +51,7 @@ public class TemplateController extends de.monticore.generating.templateengine.T
 
     FileReaderWriter.storeInFile(completeFilePath, content);
 
-    Log.debug(completeFilePath + " written successfully!", this.getClass().getName());
+    Log.debug(() -> completeFilePath + " written successfully!", this.getClass().getName());
 
     Reporting.reportFileFinalization(qualifiedTemplateName, filePath, ast);
   }

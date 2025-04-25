@@ -97,7 +97,7 @@ public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo 
           }
         }
       } else {
-        Log.debug(String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for in " +
+        Log.debug(() -> String.format("Not checking coco '%s' on type parameter '%s' of component type '%s' for in " +
                 "parent declaration at '%s' because the binding for that type parameter is not set.", this.getClass().getSimpleName(), typeVar.getName(),
             parentSym.getName(), node.get_SourcePositionStart(), node.get_SourcePositionEnd()), "CoCos");
       }

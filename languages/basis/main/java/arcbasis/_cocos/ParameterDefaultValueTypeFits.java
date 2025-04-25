@@ -23,7 +23,7 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
     Preconditions.checkArgument(astParam.isPresentSymbol());
 
     if (astParam.getSymbol().getType() == null) {
-      Log.debug("Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
+      Log.debug(() -> "Could not perform coco check '" + this.getClass().getSimpleName() + "', due to missing type.",
         this.getClass().getSimpleName());
       return;
     }
@@ -36,7 +36,7 @@ public class ParameterDefaultValueTypeFits implements ArcBasisASTArcParameterCoC
       SymTypeExpression expressionType = TypeCheck3.typeOf(defaultExpr, paramType);
 
       if (expressionType.isObscureType()) {
-        Log.debug(astParam.get_SourcePositionStart()
+        Log.debug(() -> astParam.get_SourcePositionStart()
             + ": Skip execution of CoCo, could not calculate the parameter's type.",
           this.getClass().getCanonicalName()
         );

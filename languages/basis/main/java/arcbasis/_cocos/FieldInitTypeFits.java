@@ -25,10 +25,10 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
     Preconditions.checkArgument(astField.isPresentSymbol());
     Preconditions.checkNotNull(astField.getSymbol());
     Preconditions.checkNotNull(astField.getSymbol().getType());
-    Log.trace("Start the context-condition check. ", LOG_NAME);
+    Log.trace(() -> "Start the context-condition check. ", LOG_NAME);
 
     if (astField.getSymbol().getType().isObscureType()) {
-      Log.debug("Skip the context-condition check. " +
+      Log.debug(() -> "Skip the context-condition check. " +
           "The symtype of the field's type is obscure. " +
           "An error should have already been logged.",
         LOG_NAME
@@ -43,7 +43,7 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
     SymTypeExpression exprSymType = TypeCheck3.typeOf(expr, fieldSymType);
 
     if (exprSymType.isObscureType()) {
-      Log.debug("Skip the context-condition check. " +
+      Log.debug(() -> "Skip the context-condition check. " +
           "The symtype of the initializer expression is obscure. " +
           "An error should have already been logged.",
         LOG_NAME
@@ -56,6 +56,6 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
         ),
         expr.get_SourcePositionStart());
     }
-    Log.trace("Finished the context-condition check.", LOG_NAME);
+    Log.trace(() -> "Finished the context-condition check.", LOG_NAME);
   }
 }

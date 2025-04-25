@@ -22,7 +22,7 @@ public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSym
   private static final String LOG_NAME = ArcBasisWithinScopeBasicSymbolsResolver.class.getSimpleName();
 
   public static void init() {
-    Log.trace("Initialize ArcBasisWithinScopeBasicSymbolsResolver as within scope resolver", LOG_NAME);
+    Log.trace(() -> "Initialize ArcBasisWithinScopeBasicSymbolsResolver as within scope resolver", LOG_NAME);
     setDelegate(new ArcBasisWithinScopeBasicSymbolsResolver());
   }
 
@@ -68,7 +68,7 @@ public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSym
     // in Java the type variable is preferred
     // e.g. class C<U>{class U{} U v;} //new C<Float>().v has type Float
     if (optTypeVar.isPresent() && optObj.isPresent()) {
-      Log.trace("found type variable and object type for \""
+      Log.trace(() -> "found type variable and object type for \""
           + name
           + "\", selecting type variable",
         "TypeVisitor");

@@ -108,7 +108,7 @@ public class MA2JSimTool extends MontiArcTool {
     super.runTasks(asts, cl);
 
     if (cl.hasOption("output")) {
-      Log.info("Generate java", "MontiArcTool");
+      Log.info(() -> "Generate java", "MontiArcTool");
       this.generate(asts, cl);
     }
   }

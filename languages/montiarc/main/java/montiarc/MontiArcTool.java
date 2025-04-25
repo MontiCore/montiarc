@@ -144,9 +144,9 @@ public class MontiArcTool extends MontiArcToolTOP {
     // download and unzip
     try {
       File file = new File(System.getProperty("java.io.tmpdir") + "MontiArcTemplateProject.zip");
-      Log.info("Downloading template...", "MontiArcTool");
+      Log.info(() -> "Downloading template...", "MontiArcTool");
       FileUtils.copyURLToFile(new URL("https://github.com/MontiCore/montiarc-templates/archive/refs/heads/main.zip"), file);
-      Log.info("Creating Project " + name, "MontiArcTool");
+      Log.info(() -> "Creating Project " + name, "MontiArcTool");
       boolean foundTemplate = false;
       try (java.util.zip.ZipFile zipFile = new ZipFile(file)) {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
@@ -174,7 +174,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   protected void runTasks(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
-    Log.info("Parse the input models", "MontiArcTool");
+    Log.info(() -> "Parse the input models", "MontiArcTool");
     Log.enableFailQuick(false);
 
     List<Path> paths = List.copyOf(this.createModelPath(cl).getEntries());
@@ -235,30 +235,30 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     Log.enableFailQuick(false);
 
-    Log.info("Run post parsing transformations", "MontiArcTool");
+    Log.info(() -> "Run post parsing transformations", "MontiArcTool");
     this.runAfterParsingTrafos(asts);
 
-    Log.info("Run symbol-table creation phase 1", "MontiArcTool");
+    Log.info(() -> "Run symbol-table creation phase 1", "MontiArcTool");
     Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
 
-    Log.info("Run symbol-table creation phase 2", "MontiArcTool");
+    Log.info(() -> "Run symbol-table creation phase 2", "MontiArcTool");
     this.runSymbolTablePhase2(asts);
 
-    Log.info("Run symbol-table creation phase 3", "MontiArcTool");
+    Log.info(() -> "Run symbol-table creation phase 3", "MontiArcTool");
     this.runSymbolTablePhase3(asts);
 
-    Log.info("Run post symbol-table creation transformations", "MontiArcTool");
+    Log.info(() -> "Run post symbol-table creation transformations", "MontiArcTool");
     this.runAfterSymbolTablePhase3Trafos(asts);
 
-    Log.info("Perform initial context-condition checks", "MontiArcTool");
+    Log.info(() -> "Perform initial context-condition checks", "MontiArcTool");
     this.runDefaultCoCos(asts);
 
-    Log.info("Perform remaining context-condition checks", "MontiArcTool");
+    Log.info(() -> "Perform remaining context-condition checks", "MontiArcTool");
     this.runAdditionalCoCos(asts, !cl.hasOption("novar"));
     Log.enableFailQuick(true);
 
     if (cl.hasOption("pp")) {
-      Log.info("Pretty print models", "MontiArcTool");
+      Log.info(() -> "Pretty print models", "MontiArcTool");
       this.prettyPrint(asts, Optional.ofNullable(cl.getOptionValue("pp")).orElse(""));
     }
 
@@ -270,7 +270,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(cl);
 
     if (cl.hasOption("symboltable")) {
-      Log.info("Print symbol table", "MontiArcTool");
+      Log.info(() -> "Print symbol table", "MontiArcTool");
       this.storeSymbols(scopes, cl);
     }
   }
@@ -674,7 +674,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(scopes);
 
     if (scopes.stream().map(IMontiArcArtifactScope::getAstNode).anyMatch(a -> !(a instanceof ASTMACompilationUnit))) {
-      Log.debug(
+      Log.debug(() -> 
         String.format("MontiArcTool only works with ASTMACompilationUnit instances, but also found asts of type %s.",
           scopes.stream()
             .map(IMontiArcArtifactScope::getAstNode)

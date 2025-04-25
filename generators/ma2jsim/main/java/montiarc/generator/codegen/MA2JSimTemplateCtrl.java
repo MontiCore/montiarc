@@ -55,7 +55,7 @@ public class MA2JSimTemplateCtrl extends de.monticore.generating.templateengine.
 
     FileReaderWriter.storeInFile(completeFilePath, content);
 
-    Log.debug(completeFilePath + " written successfully!", this.getClass().getName());
+    Log.debug(() -> completeFilePath + " written successfully!", this.getClass().getName());
 
     Reporting.reportFileFinalization(qualifiedTemplateName, filePath, ast);
   }

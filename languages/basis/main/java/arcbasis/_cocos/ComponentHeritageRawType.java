@@ -22,7 +22,7 @@ public class ComponentHeritageRawType implements ArcBasisASTArcParentCoCo {
     Preconditions.checkNotNull(node);
 
     if (node.getType().getDefiningSymbol().isEmpty()) {
-      Log.trace("Skip coco check for " + node.get_SourcePositionStart() + ", parent link is missing.", this.getClass().getCanonicalName());
+      Log.trace(() -> "Skip coco check for " + node.get_SourcePositionStart() + ", parent link is missing.", this.getClass().getCanonicalName());
     } else if (node.getType().getDefiningSymbol().get() instanceof ComponentTypeSymbol &&
       !((ComponentTypeSymbol) node.getType().getDefiningSymbol().get()).getTypeParameters().isEmpty()
       && !(node.getType() instanceof ASTMCBasicGenericType)) {

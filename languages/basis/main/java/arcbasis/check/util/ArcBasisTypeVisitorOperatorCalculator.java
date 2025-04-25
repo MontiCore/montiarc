@@ -10,7 +10,7 @@ import static de.monticore.types.check.SymTypeExpressionFactory.createStringType
 public class ArcBasisTypeVisitorOperatorCalculator extends TypeVisitorOperatorCalculator {
 
   public static void init() {
-    Log.trace("init ArcBasisTypeVisitorOperatorCalculator", "TypeCheck setup");
+    Log.trace(() -> "init ArcBasisTypeVisitorOperatorCalculator", "TypeCheck setup");
     setDelegate(new ArcBasisTypeVisitorOperatorCalculator());
   }
 

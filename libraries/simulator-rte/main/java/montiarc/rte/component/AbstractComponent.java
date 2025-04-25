@@ -121,7 +121,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   @Override
   public void init() {
     if (initialized) {
-      Log.info("Component already initialized", this.getName() + "#init");
+      Log.info(() -> "Component already initialized", this.getName() + "#init");
       return;
     }
     this.initialized = true;
@@ -141,13 +141,13 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
 
   @Override
   public void handleTick() {
-    Log.info(DataFormatter.TK, this.getName() + "#" + Aspects.RECEIVE_EVENT);
+    Log.info(() -> DataFormatter.TK, this.getName() + "#" + Aspects.RECEIVE_EVENT);
     handleTickExecution();
   }
 
   @Override
   public final void handleMessage(InPort<?> p) {
-    Log.info(DataFormatter.format(portValueOf(p)), this.getName() + "#" + Aspects.RECEIVE_EVENT);
+    Log.info(() -> DataFormatter.format(portValueOf(p)), this.getName() + "#" + Aspects.RECEIVE_EVENT);
     this.processMessage(p);
   }
 

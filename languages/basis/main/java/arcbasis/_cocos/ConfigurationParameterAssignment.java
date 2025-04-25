@@ -90,7 +90,7 @@ public class ConfigurationParameterAssignment
     Preconditions.checkArgument(node.isPresentSymbol());
 
     if (!node.getSymbol().isTypePresent() || !(node.getSymbol().getType() instanceof CompTypeExpression)) {
-      Log.debug("Skip coco check, the subcomponent's type is missing.", this.getClass().getCanonicalName());
+      Log.debug(() -> "Skip coco check, the subcomponent's type is missing.", this.getClass().getCanonicalName());
       return;
     }
 

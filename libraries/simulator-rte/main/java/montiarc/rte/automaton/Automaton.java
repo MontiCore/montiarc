@@ -34,7 +34,7 @@ public abstract class Automaton<C, I> extends AbstractBehavior<C, I> {
    * @param state the new state
    */
   protected void setState(State state) {
-    Log.info(state.name(), this.getName() + "#" + Aspects.ENTER_STATE);
+    Log.info(() -> state.name(), this.getName() + "#" + Aspects.ENTER_STATE);
 
     this.state = state;
   }

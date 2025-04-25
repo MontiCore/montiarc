@@ -32,7 +32,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
 
     Optional<SymTypeExpression> symTypeOfSource = getTypeOfPortIfPresent(conn.getSource());
     if (symTypeOfSource.isEmpty()) {
-      Log.debug(String.format("Skip coco check, cannot resolve source port '%s'", conn.getSource().getQName()),
+      Log.debug(() -> String.format("Skip coco check, cannot resolve source port '%s'", conn.getSource().getQName()),
         this.getClass().getCanonicalName());
       return;
     }
@@ -83,7 +83,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
 
   protected static void logInfoThatCoCoIsNotChecked4TargetPort(@NotNull ASTPortAccess targetPort) {
     Preconditions.checkNotNull(targetPort);
-    Log.debug(String.format("Will not check CoCo on port '%s' at '%s' a its symbol does not " +
+    Log.debug(() -> String.format("Will not check CoCo on port '%s' at '%s' a its symbol does not " +
         "seem to exist or the type of the port does not seem to be set.", targetPort.getQName(),
       targetPort.get_SourcePositionStart()), ConnectorDirectionsFit.class.getSimpleName()
     );

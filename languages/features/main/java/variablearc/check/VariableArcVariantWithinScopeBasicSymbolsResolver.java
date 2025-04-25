@@ -18,7 +18,7 @@ public class VariableArcVariantWithinScopeBasicSymbolsResolver extends ArcBasisW
   private static final String LOG_NAME = VariableArcVariantWithinScopeBasicSymbolsResolver.class.getSimpleName();
 
   public static void init() {
-    Log.trace("Initialize VariableArcVariantWithinScopeBasicSymbolsResolver as within scope resolver", LOG_NAME);
+    Log.trace(() -> "Initialize VariableArcVariantWithinScopeBasicSymbolsResolver as within scope resolver", LOG_NAME);
     setDelegate(new VariableArcVariantWithinScopeBasicSymbolsResolver());
   }
 

@@ -29,7 +29,7 @@ public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
           node.get_SourcePositionStart(), node.get_SourcePositionEnd());
       }
     } else {
-      Log.debug(String.format(
+      Log.debug(() -> String.format(
         "'%s' Skipping constraint evaluation for '%s', could not calculate expression.",
         node.get_SourcePositionStart(), this.getClass().getSimpleName()), "ConstraintSatisfied4Comp");
     }

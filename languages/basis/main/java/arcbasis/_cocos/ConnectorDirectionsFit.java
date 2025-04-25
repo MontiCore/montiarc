@@ -91,7 +91,7 @@ public class ConnectorDirectionsFit implements ArcBasisASTConnectorCoCo {
 
   protected static void logInfoThatCoCoIsNotChecked(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
-    Log.debug(String.format("Will not check CoCo on port access '%s' at '%s' as the port to access does not " +
+    Log.debug(() -> String.format("Will not check CoCo on port access '%s' at '%s' as the port to access does not " +
         "seem to exist", portAccess.getQName(), portAccess.get_SourcePositionStart()),
       ConnectorDirectionsFit.class.getSimpleName());
   }
