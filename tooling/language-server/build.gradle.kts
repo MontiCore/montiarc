@@ -120,16 +120,25 @@ tasks.named("generateMontiArcWithCD4AVscodePlugin") {
   finalizedBy("editPackageJson", "copyIcon", "copyConfiguration", "copyReadme")
 }
 
+tasks.named<Exec>("buildMontiArcWithCD4AVscodePlugin") {
+  dependsOn(project.tasks.npmInstall)
+  addNpmToPath(this)
+}
+
 tasks.named<Exec>("packageMontiArcWithCD4AVscodePlugin") {
   dependsOn(project.tasks.npmInstall)
+  addNpmToPath(this)
+}
+
+fun addNpmToPath(task: Exec) {
   val isWindows = System.getProperty("os.name").toLowerCase().startsWith("win")
   if (isWindows) {
-    environment(
+    task.environment(
       "PATH",
       "${project.node.computedNodeDir.get()}${File.pathSeparator}${System.getenv("PATH")}"
     )
   } else {
-    environment(
+    task.environment(
       "PATH",
       "${project.node.computedNodeDir.get()}/bin${File.pathSeparator}${System.getenv("PATH")}"
     )
