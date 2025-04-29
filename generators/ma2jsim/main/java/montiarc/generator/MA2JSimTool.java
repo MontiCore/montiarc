@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.codegen.MA2JSimGen;
@@ -175,6 +176,17 @@ public class MA2JSimTool extends MontiArcTool {
     List<Path> hwcsAsPaths = hwc.stream().map(Paths::get).collect(Collectors.toList());
     MA2JSimGen generator = new MA2JSimGen(Paths.get(target), hwcsAsPaths);
     generator.generate(ast);
+  }
+
+  @Override
+  public void defaultImportTrafo(ASTMACompilationUnit ast, boolean c2mc) {
+    super.defaultImportTrafo(ast, c2mc);
+    ast.addImportStatement(MontiArcMill.mCImportStatementBuilder()
+      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+        .setPartsList(List.of("montiarc", "lang"))
+        .build())
+      .setStar(true)
+      .build());
   }
 
   protected Options initRunSimulationOptions() {

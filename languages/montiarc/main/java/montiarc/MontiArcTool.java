@@ -197,9 +197,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     this.runAfterParserCoCos(asts);
     Log.enableFailQuick(true);
 
-    if (cl.hasOption("c2mc")) {
-      this.defaultImportTrafo(asts);
-    }
+    this.defaultImportTrafo(asts, cl.hasOption("c2mc"));
 
     this.runTasks(asts, cl);
   }
@@ -214,19 +212,21 @@ public class MontiArcTool extends MontiArcToolTOP {
     }
   }
 
-  public void defaultImportTrafo(@NotNull Collection<ASTMACompilationUnit> asts) {
+  public void defaultImportTrafo(@NotNull Collection<ASTMACompilationUnit> asts, boolean c2mc) {
     Preconditions.checkNotNull(asts);
-    asts.forEach(this::defaultImportTrafo);
+    asts.forEach(ast -> defaultImportTrafo(ast, c2mc));
   }
 
-  public void defaultImportTrafo(@NotNull ASTMACompilationUnit ast) {
+  public void defaultImportTrafo(@NotNull ASTMACompilationUnit ast, boolean c2mc) {
     Preconditions.checkNotNull(ast);
-    ast.addImportStatement(MontiArcMill.mCImportStatementBuilder()
-      .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
-        .setPartsList(List.of("java", "lang"))
-        .build())
-      .setStar(true)
-      .build());
+    if (c2mc) {
+      ast.addImportStatement(MontiArcMill.mCImportStatementBuilder()
+        .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+          .setPartsList(List.of("java", "lang"))
+          .build())
+        .setStar(true)
+        .build());
+    }
   }
 
   public void runTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {

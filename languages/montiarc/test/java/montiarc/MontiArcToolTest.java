@@ -959,7 +959,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
     MontiArcTool tool = new MontiArcTool();
 
     // When
-    tool.defaultImportTrafo(ast);
+    tool.defaultImportTrafo(ast, true);
     tool.createSymbolTable(ast);
 
     // Then

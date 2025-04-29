@@ -95,9 +95,7 @@ public class MA2JSimApi {
       }
     }
     // Class to MontiCore
-    if (useC2MC) {
-      tool.defaultImportTrafo(asts);
-    }
+    tool.defaultImportTrafo(asts, useC2MC);
 
     // running tasks (copy-pasted code)
     tool.runAfterParsingTrafos(asts);
