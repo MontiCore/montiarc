@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
+import de.se_rwth.commons.logging.Log;
 import montiarc.lang.Simulation;
 import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
@@ -100,6 +101,8 @@ public class CoordinatingScheduler implements Scheduler {
       } else {
         scheduler.triggerComponentInPorts();
       }
+      Simulation.ticks++;
+      Log.info("--- Tick " + Simulation.ticks + " ---", "Scheduler");
       if (ticks != Long.MIN_VALUE) {
         ticks--;
       }
@@ -125,6 +128,7 @@ public class CoordinatingScheduler implements Scheduler {
           }
           tickTriggered = true;
           Simulation.ticks++;
+          Log.info("--- Tick " + Simulation.ticks + " ---", "Scheduler");
           if (ticks != Long.MIN_VALUE) {
             ticks--;
           }
