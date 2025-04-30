@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.11">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
     
     
       
@@ -27,7 +27,7 @@
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.4af4bdda.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.2afb09e1.min.css">
       
       
 
@@ -825,18 +825,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sending" class="md-nav__link">
+  <a href="#sending-and-storing-values" class="md-nav__link">
     <span class="md-ellipsis">
-      Sending
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#storing-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      Storing values
+      Sending and Storing values
     </span>
   </a>
   
@@ -846,6 +837,15 @@
   <a href="#initial-entry-exit-do" class="md-nav__link">
     <span class="md-ellipsis">
       Initial, Entry, Exit, Do
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchical-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hierarchical States
     </span>
   </a>
   
@@ -932,6 +932,8 @@
       
         
           
+        
+      
         
       
         
@@ -1271,6 +1273,69 @@
           <label class="md-nav__title" for="__nav_3_4">
             <span class="md-nav__icon md-icon"></span>
             Errors
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_5" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../Usage/Simulation/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 2h10v2H4v10H2V4c0-1.11.89-2 2-2m4 4h10v2H8v10H6V8c0-1.11.89-2 2-2m4 4h8c1.11 0 2 .89 2 2v8c0 1.11-.89 2-2 2h-8c-1.11 0-2-.89-2-2v-8c0-1.11.89-2 2-2m2 2v8l6-4z"/></svg>
+  
+  <span class="md-ellipsis">
+    Simulation
+    
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3_5">
+            <span class="md-nav__icon md-icon"></span>
+            Simulation
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2450,18 +2515,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#sending" class="md-nav__link">
+  <a href="#sending-and-storing-values" class="md-nav__link">
     <span class="md-ellipsis">
-      Sending
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#storing-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      Storing values
+      Sending and Storing values
     </span>
   </a>
   
@@ -2471,6 +2527,15 @@
   <a href="#initial-entry-exit-do" class="md-nav__link">
     <span class="md-ellipsis">
       Initial, Entry, Exit, Do
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hierarchical-states" class="md-nav__link">
+    <span class="md-ellipsis">
+      Hierarchical States
     </span>
   </a>
   
@@ -2530,50 +2595,17 @@ The behavior is defined using <a href="../../../Reference/Behavior/Automata/">st
 The guard can be identified by the rectangular brackets <code>[]</code> and contains a Boolean expression.
 The transition can only be taken if the condition inside the guard holds, i.e. evaluates to true.
 Following the guard is the trigger. Transition can only be taken if their trigger is activated. In this case, if a message on the <code>shouldOpen</code> port has been received.</p>
-<h2 id="sending">Sending</h2>
-<p>Our button, on the other hand, only produces events and doesn't have any outside input. Since there is no other possible trigger than time itself, we use a tick transition.
-A tick indicates one progress in time and is regularly triggered.</p>
+<h2 id="sending-and-storing-values">Sending and Storing values</h2>
+<p>In the <code>Door</code> component, we have already seen how we can write stateful behaviors. In addition to multiple states, a behavior can also store information inside component fields.
+These can then be accessed in transitions and allow for another form of stateful behaviors.</p>
+<p>Since all the motor's ports are synchronous, the motor only uses tick transitions, too. A tick indicates one progress in time and is regularly triggered. 
+If it has an up command, the motor moves the elevator up; if it has a down command, it moves down.
+Otherwise, it stays in the same position. The motor always outputs its current position.</p>
 <div class="admonition info">
 <p class="admonition-title">Hint</p>
 <p>Inside tick transitions, we can only read from synchronous ports and not event ports. Since they only have a value once an event has been received.</p>
 </div>
-<p>Our goal is to read an input from the console and send that to the system. To send a message on a port, you just assign a value to it.
-Generally, multiple events can be emitted by assigning multiple values to the port. Each assignment corresponds to one event.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Buttons.arc</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Scanner</span><span class="p">;</span>
-
-<span class="kd">component</span> <span class="nc">Buttons</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">pressedOnFloor</span><span class="p">;</span>
-
-<span class="w">  </span><span class="n">Scanner</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Scanner</span><span class="p">.</span><span class="na">Scanner</span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="na">in</span><span class="p">);</span>
-
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
-<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;---&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Do you want to call the elvator to a floor ([n]/y)?&quot;</span><span class="p">);</span>
-<span class="w">      </span><span class="n">String</span><span class="w"> </span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="na">nextLine</span><span class="p">();</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">res</span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="s">&quot;y&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Enter a floor:&quot;</span><span class="p">);</span>
-<span class="w">        </span><span class="n">pressedOnFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="na">nextInt</span><span class="p">();</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<h2 id="storing-values">Storing values</h2>
-<p>In the <code>Door</code> component, we have already seen how we can write stateful behaviors. In addition to multiple states, a behavior can also store information inside component fields.
-These can then be accessed in transitions and allow for another form of stateful behaviors.</p>
-<p>Since all the motor's ports are synchronous, the motor only uses tick transitions, too. If it has an up command, the motor moves the elevator up; if it has a down command, it moves down.
-Otherwise, it stays in the same position. The motor always outputs its current position.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Motor.arc</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Motor.arc</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
@@ -2613,7 +2645,7 @@ They have a type and name followed by a mandatory default value. In our case, th
 <h2 id="initial-entry-exit-do">Initial, Entry, Exit, Do</h2>
 <p>Finally, we have our controller, which is the heart of the system and provides most of the logic behind it.
 It reacts to the button presses, decides in which direction to move the elevator, and is responsible for opening and closing the door. </p>
-<div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">ControlStation.arc</label></div>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">ControlStation.arc</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
@@ -2650,6 +2682,17 @@ It reacts to the button presses, decides in which direction to move the elevator
 <span class="w">      </span><span class="k">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">openDoor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
 <span class="w">      </span><span class="p">}</span>
+
+<span class="w">      </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">IdleOpenDoor</span><span class="p">;</span>
+
+<span class="w">      </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
+<span class="w">      </span><span class="p">};</span>
+<span class="w">      </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
+<span class="w">        </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="w">        </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="w">      </span><span class="p">};</span>
 <span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="kd">state</span> <span class="nc">MovingUp</span><span class="w"> </span><span class="p">{</span>
@@ -2688,16 +2731,8 @@ It reacts to the button presses, decides in which direction to move the elevator
 <span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingDown</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
 <span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
-<span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
 <span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
 <span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
@@ -2740,6 +2775,23 @@ When this state is active, the motor is always stopped.</p>
 <div class="highlight"><pre><span></span><code><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="p">;</span>
 </code></pre></div></p>
 </div>
+<h2 id="hierarchical-states">Hierarchical States</h2>
+<p>To avoid triggering exit and entry actions again when processing new incoming button presses we use hierarchical states.</p>
+<p>States can be composed of other states. Where the innermost initial state is visited when the state is reached.</p>
+<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">OpenDoor</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">IdleOpenDoor</span><span class="p">;</span>
+
+<span class="w">  </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
+<span class="w">    </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="w">    </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
+<span class="w">  </span><span class="p">};</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>For a complete look into hierarchical statecharts see <a href="https://mbse.se-rwth.de/book1/index.php?c=chapter5-3#x1-1250005.3.2">Modeling with UML</a>.</p>
 <hr />
 <p>A detailed behavior reference can be found <a href="../../../Reference/Behavior/">here</a></p>
 
