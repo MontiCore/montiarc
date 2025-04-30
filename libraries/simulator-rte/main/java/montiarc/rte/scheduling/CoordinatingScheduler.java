@@ -67,8 +67,8 @@ public class CoordinatingScheduler implements Scheduler {
     run(component, true, Long.MIN_VALUE, 0);
   }
 
-  public void runIndefinitely(Component component) {
-    run(component, false, Long.MIN_VALUE, 0);
+  public void runIndefinitely(Component component, long simulationTickLength) {
+    run(component, false, Long.MIN_VALUE, simulationTickLength);
   }
 
   public void runTicks(Component component, long ticks) {

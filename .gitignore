@@ -13,6 +13,7 @@ site
 
 *.iml
 *.hprof
+*.lck
 .DS_Store
 
 gradle

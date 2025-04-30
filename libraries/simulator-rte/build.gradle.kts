@@ -2,6 +2,7 @@
 
 plugins {
   id("montiarc.build.java-library")
+  id("montiarc.build.java-test-fixtures")
   id("montiarc.build.shadow")
   id("cd2pojo")
 }
@@ -17,6 +18,11 @@ sourceSets {
 
 dependencies {
   api(libs.se.logging)
+  api(libs.mqtt)
+  implementation(libs.guava)
+  implementation(libs.jackson)
+  testFixturesImplementation(libs.guava)
+  testFixturesImplementation(libs.mqtt)
 
   testImplementation(libs.mockito)
 }

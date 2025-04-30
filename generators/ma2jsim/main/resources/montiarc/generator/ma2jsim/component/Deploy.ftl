@@ -8,21 +8,23 @@
 </#if>
 
 <#assign comp=variant!ast.getComponentType().getSymbol()/>
+<#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ComponentTypeSymbol" -->
 
-public class ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</#if> {
+public class ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</#if>
+  extends montiarc.rte.deploy.Deployment<${comp.getName()}${suffixes.component()}> {
 
-  public static void main(String[] args) {
-    de.se_rwth.commons.logging.Log.initWARN();
+  public static void main(String[] args){
+    new ${prefixes.deploy()}${comp.getName()}().deploy(args);
+  }
 
-    final ${comp.getName()}${suffixes.component()} DEPLOY_${comp.getName()} =
-      new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("DEPLOY_${comp.getName()}")
+  @Override
+  public ${comp.getName()}${suffixes.component()} buildComponent() {
+    return new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("DEPLOY_${comp.getName()}")
       <#if variant??>
         <#list variant.getFeatureSymbolBooleanMap() as feature, value>
       .${prefixes.setterMethod()}${prefixes.feature()}${feature.getName()}(${value?c})
         </#list>
       </#if>
-      .build();
-
-    DEPLOY_${comp.getName()}.run();
+    .build();
   }
 }

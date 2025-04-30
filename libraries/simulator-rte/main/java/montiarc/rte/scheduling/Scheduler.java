@@ -19,7 +19,13 @@ public interface Scheduler {
 
   void runToCompletion(Component component);
 
-  void runIndefinitely(Component component);
+  /**
+   * Run the simulation indefinitly
+   *
+   * @param component            the component to start the simulation with
+   * @param simulationTickLength the length between ticks in nanoseconds
+   */
+  void runIndefinitely(Component component, long simulationTickLength);
 
   void runTicks(Component component, long ticks);
 }

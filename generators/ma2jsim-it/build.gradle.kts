@@ -8,7 +8,7 @@ plugins {
   id("cd2pojo")
   id("montiarc-jsim")
   id("montiarc.build.integration-test")
-  id("java-test-fixtures")
+  id("montiarc.build.java-test-fixtures")
 }
 
 var variabilitySources: SourceSet? = null
@@ -30,11 +30,6 @@ sourceSets {
       setSrcDirs(setOf("$projectDir/variability/montiarc"))
     }
   }
-  testFixtures {
-    java {
-      setSrcDirs(setOf("$projectDir/testFixtures/java"))
-    }
-  }
   test {
     cd2pojo {
       setSrcDirs(setOf("$projectDir/test/cd2pojo"))
@@ -51,6 +46,7 @@ sourceSets {
 dependencies {
   implementation(libs.guava)
   implementation(libs.janino)
+  testImplementation(testFixtures(project(":libraries:simulator-rte")))
 }
 
 cd2pojo {

@@ -131,6 +131,13 @@ public class MA2JSimGen {
       && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
     }
+    if (!ast.getComponentType().getSymbol().getAllPorts().isEmpty()
+      && ast.getComponentType().getSymbol().getParameterList().isEmpty()
+      && helper.getVariants(ast.getComponentType()).size() <= 1
+      && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
+      this.generateComponentMqttDeployment(ast);
+      this.generateComponentRestDeployment(ast);
+    }
   }
 
   protected void generateComponentClass(@NotNull ASTMACompilationUnit ast) {
@@ -295,6 +302,36 @@ public class MA2JSimGen {
     final String template = "montiarc.generator.ma2jsim.component.Deploy.ftl";
     String suffix = "";
     String prefix = Prefixes.DEPLOY;
+    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
+    if (existsHwc) suffix += Suffixes.TOP;
+
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getComponentType()).stream().findFirst().orElse(null));
+  }
+
+  /**
+   * Generates a component deployment class that regularly executes {@code comp}
+   */
+  protected void generateComponentMqttDeployment(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+
+    final String template = "montiarc.generator.ma2jsim.component.DeployMqtt.ftl";
+    String suffix = "";
+    String prefix = Prefixes.DEPLOY + "Mqtt";
+    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
+    if (existsHwc) suffix += Suffixes.TOP;
+
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getComponentType()).stream().findFirst().orElse(null));
+  }
+
+  /**
+   * Generates a component deployment class that regularly executes {@code comp}
+   */
+  protected void generateComponentRestDeployment(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+
+    final String template = "montiarc.generator.ma2jsim.component.DeployRest.ftl";
+    String suffix = "";
+    String prefix = Prefixes.DEPLOY + "Rest";
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 

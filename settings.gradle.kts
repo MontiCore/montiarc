@@ -95,6 +95,8 @@ dependencyResolutionManagement {
       library("jgrapht-core", "org.jgrapht:jgrapht-core:1.5.2")
       library("jgrapht-jgraphx", "org.tinyjee.jgraphx:jgraphx:3.4.1.3")
       library("jgrapht-ext", "org.jgrapht:jgrapht-ext:1.5.2")
+      library("mqtt", "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+      library("jackson", "com.fasterxml.jackson.core:jackson-databind:2.0.1")
 
       library("mc-lsp", "de.monticore.language-server:monticore-language-server-runtime:7.8.0-SNAPSHOT")
       library("mc-grammar", "de.monticore:monticore-grammar:7.8.0-SNAPSHOT")
