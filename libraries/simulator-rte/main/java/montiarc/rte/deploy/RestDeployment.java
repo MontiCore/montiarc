@@ -18,7 +18,7 @@ public abstract class RestDeployment<T extends AbstractComponent<?, ?>> extends 
 
   @Override
   public void deploy(String[] args) {
-    Log.init();
+    Log.ensureInitialization();
 
     final T component = Objects.requireNonNull(buildComponent());
     SimpleRest server = null;
@@ -40,7 +40,13 @@ public abstract class RestDeployment<T extends AbstractComponent<?, ?>> extends 
   }
 
   protected SimpleRest initRest() throws IOException {
-    HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+    String host = System.getenv().getOrDefault("REST_SERVER_HOST", "127.0.0.1");
+    int port = 8020;
+    try {
+      port = Integer.parseInt(System.getenv().getOrDefault("REST_SERVER_PORT", "8020"));
+    } catch (NumberFormatException ignored) {}
+    Log.info("Serving on http://" + host + ":" + port, "RestDeployment");
+    HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
     server.setExecutor(null);
 
     return new SimpleRest(server);

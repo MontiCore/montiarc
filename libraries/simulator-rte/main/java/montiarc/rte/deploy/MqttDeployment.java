@@ -19,7 +19,7 @@ public abstract class MqttDeployment<T extends AbstractComponent<?, ?>> extends 
 
   @Override
   public void deploy(String[] args) {
-    Log.init();
+    Log.ensureInitialization();
 
     final T component = Objects.requireNonNull(buildComponent());
     final SimpleMqtt mqtt;

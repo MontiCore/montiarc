@@ -1,11 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
-import montiarc.rte.logging.Aspects;
-import montiarc.rte.logging.DataFormatter;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.scheduling.Scheduler;
 
 /**
@@ -20,12 +16,5 @@ public class TickPort extends ScheduledPort<NoMsgType> {
   
   public TickPort(Component owner, Scheduler scheduler) {
     super(owner.getName() + ".>tick", owner, scheduler);
-  }
-
-  @Override
-  public void sendTick() {
-    // Overwrite to Log.debug instead of info
-    Log.debug(() -> DataFormatter.TK, this.getQualifiedName() + "#" + Aspects.SEND_MSG);
-    this.send(Tick.get());
   }
 }

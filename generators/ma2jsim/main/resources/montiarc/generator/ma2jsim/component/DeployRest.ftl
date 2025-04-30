@@ -20,7 +20,7 @@ public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top(
 
   @Override
   public ${comp.getName()}${suffixes.component()} buildComponent() {
-    return new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("DEPLOY_${comp.getName()}")
+    return new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("${comp.getName()}")
       <#if variant??>
         <#list variant.getFeatureSymbolBooleanMap() as feature, value>
       .${prefixes.setterMethod()}${prefixes.feature()}${feature.getName()}(${value?c})

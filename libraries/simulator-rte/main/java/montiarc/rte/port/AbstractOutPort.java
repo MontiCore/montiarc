@@ -103,7 +103,7 @@ public class AbstractOutPort<T> implements OutPort<T> {
    */
   @Override
   public void sendTick() {
-    Log.info(() -> DataFormatter.TK, this.getQualifiedName() + "#" + Aspects.SEND_MSG);
+    Log.debug(() -> DataFormatter.TK, this.getQualifiedName() + "#" + Aspects.SEND_MSG);
     this.send(Tick.get());
   }
 }
