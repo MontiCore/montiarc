@@ -7,19 +7,26 @@ Every port has a direction, type, and [timing](../../Reference/Concepts/Timing.m
 Incoming ports receive messages, whereas outgoing ports send messages. The port type can be primitive or an object type.
 We look at user-defined type definitions [later](./Types.md).
 
+It is uncommon for a component to not have any inputs. Since there is always something a component reacts to.
+Be it the force that pushes a button to information that flows through the system.
+
 ## Event Ports
 
 The default timing of ports is event-based; this means events are emitted and received over ports.
 
-In our elevator system, we start with the buttons. They should send an event once a button has been pressed and on which floor.
-To model this, we use an outgoing port of the primitive type integer. Each value represents a floor that the elevator has been called to.
+In our elevator system, we start with the buttons. Our system only receives an event when a button has been pressed with the information on which floor that was.
+To model this, we use an incoming port of the primitive type integer. Each value represents a floor that the elevator has been called to.
 
-=== "Buttons.arc"
+=== "ElevatorSystem.arc"
     ```montiarc
     package elevator;
     
-    component Buttons {
-      port out int pressedOnFloor;
+    component ElevatorSystem {
+      port in int pressedOnFloor;
+
+      Elevator elevator;
+      ControlStation control;
+      Motor motor;
     }
     ```
 Ports are always declared with the port keyword followed by their direction, type, and name.

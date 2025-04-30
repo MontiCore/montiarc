@@ -33,6 +33,17 @@ component ControlStation {
       exit / {
         openDoor = false;
       }
+
+      initial state IdleOpenDoor;
+
+      IdleOpenDoor -> IdleOpenDoor requestOnFloor / {
+        pendingRequests.add(requestOnFloor);
+      };
+      IdleOpenDoor -> IdleOpenDoor [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
+        int next = pendingRequests.first();
+        pendingRequests.remove(next);
+        targetFloor = Optional.of(next);
+      };
     };
 
     state MovingUp {
@@ -71,16 +82,8 @@ component ControlStation {
     MovingDown -> MovingDown requestOnFloor / {
       pendingRequests.add(requestOnFloor);
     };
-    OpenDoor -> OpenDoor requestOnFloor / {
-      pendingRequests.add(requestOnFloor);
-    };
 
     Idle -> Idle [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
-      int next = pendingRequests.first();
-      pendingRequests.remove(next);
-      targetFloor = Optional.of(next);
-    };
-    OpenDoor -> OpenDoor [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
       int next = pendingRequests.first();
       pendingRequests.remove(next);
       targetFloor = Optional.of(next);

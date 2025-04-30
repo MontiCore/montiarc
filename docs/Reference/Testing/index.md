@@ -10,7 +10,7 @@ hide:
 An important approach to ensuring system quality is systematic testing.
 Testing is the act of detecting failures in a product.
 A failure is a divergence between the expected and actual behavior of software.
-MontiArc includes support for writing automated tests.
+MontiArc includes support for writing automated tests using the [simulator](../../Usage/Simulation/index.md).
 These can be run whenever changes are made to ensure that the systems behaves as specified.
 
 There are two testing frameworks available:

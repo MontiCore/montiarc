@@ -91,6 +91,8 @@ nav:
       - MontiArc: 'Usage/CLI/MontiArc.md'
     - Errors: 
         - Errors: 'Usage/Errors/index.md'
+    - Simulation: 
+      - Simulation: 'Usage/Simulation/index.md'
   - Reference:
     - Reference: 'Reference/index.md'
     - Concepts:

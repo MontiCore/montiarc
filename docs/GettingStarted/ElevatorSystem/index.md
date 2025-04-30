@@ -14,7 +14,7 @@ We will now model a simplified elevator system. It consists of:
 
 1. A control base station that handles all the logic of where to send the elevator next
 2. The elevator itself, which contains doors that can be opened and closed
-3. Buttons that call the elevator to a specific floor
+3. Buttons that call the elevator to a specific floor. These are not part of the system but provide inputs to it
 4. A motor for lifting and lowering the elevator
 
 Create a new empty project, delete the HelloWorld component, and create an elevator package in the main sources.
@@ -37,7 +37,6 @@ First, let's create six components inside our new elevator package.
     component ElevatorSystem {
       Elevator elevator;
       ControlStation control;
-      Buttons buttons;
       Motor motor;
     }
     ```
@@ -61,13 +60,6 @@ First, let's create six components inside our new elevator package.
     package elevator;
     
     component Door {
-    }
-    ```
-=== "Buttons.arc"
-    ```montiarc
-    package elevator;
-    
-    component Buttons {
     }
     ```
 === "Motor.arc"

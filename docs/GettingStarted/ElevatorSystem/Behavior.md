@@ -19,29 +19,17 @@ The guard can be identified by the rectangular brackets `[]` and contains a Bool
 The transition can only be taken if the condition inside the guard holds, i.e. evaluates to true.
 Following the guard is the trigger. Transition can only be taken if their trigger is activated. In this case, if a message on the `shouldOpen` port has been received.
 
-## Sending
-
-Our button, on the other hand, only produces events and doesn't have any outside input. Since there is no other possible trigger than time itself, we use a tick transition.
-A tick indicates one progress in time and is regularly triggered.
-
-!!! info "Hint"
-    Inside tick transitions, we can only read from synchronous ports and not event ports. Since they only have a value once an event has been received.
-
-Our goal is to read an input from the console and send that to the system. To send a message on a port, you just assign a value to it.
-Generally, multiple events can be emitted by assigning multiple values to the port. Each assignment corresponds to one event.
-
-=== "Buttons.arc"
-    ```montiarc
-    --8<-- "applications/tutorial/main/montiarc/elevator/Buttons.arc:2"
-    ```
-
-## Storing values
+## Sending and Storing values
 
 In the `Door` component, we have already seen how we can write stateful behaviors. In addition to multiple states, a behavior can also store information inside component fields.
 These can then be accessed in transitions and allow for another form of stateful behaviors.
 
-Since all the motor's ports are synchronous, the motor only uses tick transitions, too. If it has an up command, the motor moves the elevator up; if it has a down command, it moves down.
+Since all the motor's ports are synchronous, the motor only uses tick transitions, too. A tick indicates one progress in time and is regularly triggered. 
+If it has an up command, the motor moves the elevator up; if it has a down command, it moves down.
 Otherwise, it stays in the same position. The motor always outputs its current position.
+
+!!! info "Hint"
+    Inside tick transitions, we can only read from synchronous ports and not event ports. Since they only have a value once an event has been received.
 
 === "Motor.arc"
     ```montiarc
@@ -99,6 +87,29 @@ When this state is active, the motor is always stopped.
     ```montiarc
     OpenDoor -> OpenDoor;
     ```
+
+## Hierarchical States
+
+To avoid triggering exit and entry actions again when processing new incoming button presses we use hierarchical states.
+
+States can be composed of other states. Where the innermost initial state is visited when the state is reached.
+
+```montiarc
+state OpenDoor {
+  initial state IdleOpenDoor;
+
+  IdleOpenDoor -> IdleOpenDoor requestOnFloor / {
+    pendingRequests.add(requestOnFloor);
+  };
+  IdleOpenDoor -> IdleOpenDoor [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
+    int next = pendingRequests.first();
+    pendingRequests.remove(next);
+    targetFloor = Optional.of(next);
+  };
+}
+```
+
+For a complete look into hierarchical statecharts see [Modeling with UML](https://mbse.se-rwth.de/book1/index.php?c=chapter5-3#x1-1250005.3.2).
 
 ---
 
