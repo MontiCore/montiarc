@@ -104,7 +104,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
       - name: Install WiX
         if: matrix.target == 'Windows'
-        run: choco install wixtoolset --version=3.14.1
+        run: choco install wixtoolset --version=3.14.1.20250415 --allow-downgrade
       - name: Setup Java
         if: matrix.target == 'Windows'
         uses: actions/setup-java@v4
