@@ -66,8 +66,6 @@ class MediumTest {
     sut.port_outZ().connect(port_outZ);
 
     // When
-    sut.init();
-
     inA.forEach(sut.port_inA()::receive);
     inB.forEach(sut.port_inB()::receive);
     inY.forEach(sut.port_inY()::receive);

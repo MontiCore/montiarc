@@ -36,7 +36,6 @@ class NameOverlapTest {
     sut.port_o0().connect(port_o);
 
     // When
-    sut.init();
     sut.run((int) expected.stream().filter(msg -> !msg.equals(tk())).count());
 
     // Then
@@ -71,8 +70,6 @@ class NameOverlapTest {
     sut.port_o1().connect(port_o);
 
     // When
-    sut.init();
-
     sut.run((int) expected.stream().filter(msg -> !msg.equals(tk())).count());
 
     // Then

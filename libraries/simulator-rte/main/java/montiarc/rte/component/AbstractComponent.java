@@ -119,6 +119,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   }
 
   @Override
+  @Deprecated(forRemoval = true)
   public void init() {
     if (initialized) {
       Log.info(() -> "Component already initialized", this.getName() + "#init");

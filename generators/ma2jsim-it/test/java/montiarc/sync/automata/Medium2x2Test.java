@@ -47,8 +47,6 @@ class Medium2x2Test {
     sut.port_o2().connect(port_o2);
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input_i1) {
       sut.port_i1().receive(msg);
     }

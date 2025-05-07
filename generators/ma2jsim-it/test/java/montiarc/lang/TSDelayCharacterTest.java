@@ -32,8 +32,6 @@ class TSDelayCharacterTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<Character> msg : i) {
       sut.port_i().receive(msg);
     }

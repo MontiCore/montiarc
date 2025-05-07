@@ -36,7 +36,6 @@ class SourceEncapsulationTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
     sut.run(1);
 
     // Then

@@ -70,7 +70,6 @@ class CalculationsTest {
     sut.port_outBoolean().connect(port_boolean);
 
     // When
-    sut.init();
     for (int i = 0; i < byteInput.size(); i++) {
       sut.port_inByte.receive(byteInput.get(i));
       sut.port_inShort.receive(shortInput.get(i));

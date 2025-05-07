@@ -43,8 +43,6 @@ class ComplexGuardTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<Map<String, String>> msg : input_name) {
       sut.port_nameToWhatever().receive(msg);
     }

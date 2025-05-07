@@ -36,13 +36,9 @@ class SinkTest {
     SinkComp sut = new SinkCompBuilder().setName("sut").build();
 
     // When
-    sut.init();
-
     List<String> actual = new ArrayList<>(expected.size());
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
       sut.port_i().receive(tk());

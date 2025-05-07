@@ -27,8 +27,6 @@ class MinTest {
     sut.port_r().connect(port_r);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
     sut.port_b().receive(msg(b));
@@ -82,8 +80,6 @@ class MinTest {
     sut.port_r().connect(port_r);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
     sut.port_b().receive(msg(b));

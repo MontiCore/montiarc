@@ -18,6 +18,7 @@ public interface Component {
 
   List<InOutPort<?, ?>> getAllInPorts();
 
+  @Deprecated(forRemoval = true)
   void init();
 
   /**

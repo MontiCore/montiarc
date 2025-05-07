@@ -25,7 +25,6 @@ class InitialAndEntryActionsInHierarchyDelayedTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
     sut.port_i().receive(tk());
     sut.port_i().receive(tk());
     sut.port_i().receive(msg("trigger"));

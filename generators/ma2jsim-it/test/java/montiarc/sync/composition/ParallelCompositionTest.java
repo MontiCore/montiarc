@@ -49,8 +49,6 @@ class ParallelCompositionTest {
     sut.port_o2().connect(port_o2);
 
     // When
-    sut.init();
-
     for (int i = 0; i < input_i1.size(); i++) {
       sut.port_i1().receive(input_i1.get(i));
       sut.port_i2().receive(input_i2.get(i));

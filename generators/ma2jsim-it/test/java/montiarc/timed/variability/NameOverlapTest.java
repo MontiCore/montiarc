@@ -39,8 +39,6 @@ class NameOverlapTest {
     sut.port_o0().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       sut.port_i0().receive(msg);
     }
@@ -101,8 +99,6 @@ class NameOverlapTest {
     sut.port_o1().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<Integer> msg : input) {
       sut.port_i1().receive(msg);
     }

@@ -37,8 +37,6 @@ class DoubleForwardTest {
     sut.port_pOut().connect(port_o);
 
     // When
-    sut.init();
-
     for (double msg : input) {
       sut.port_pIn().receive(Message.of(msg));
       sut.port_pIn().receive(tk());

@@ -43,8 +43,6 @@ public class List1Test {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<CardinalDirection> msg : i1) {
       sut.port_i().receive(msg);
     }

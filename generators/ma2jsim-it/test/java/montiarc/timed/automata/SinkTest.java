@@ -38,8 +38,6 @@ class SinkTest {
     List<String> actual = new ArrayList<>(expected.size());
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
       sut.port_i().receive(tk());

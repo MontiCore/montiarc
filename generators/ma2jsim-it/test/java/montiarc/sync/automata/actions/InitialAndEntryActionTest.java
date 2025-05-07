@@ -35,7 +35,6 @@ class InitialAndEntryActionTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
     sut.run(2);
 
     // Then

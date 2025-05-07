@@ -29,8 +29,6 @@ class SubtractTest {
     sut.port_of().connect(port_of);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
     sut.port_b().receive(msg(b));
@@ -87,8 +85,6 @@ class SubtractTest {
     sut.port_of().connect(port_of);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
     sut.port_b().receive(msg(b));

@@ -9,7 +9,6 @@ public class FailingComponentTest {
   @Test
   public void testFail() {
     FailingComponentComp sut = new FailingComponentCompBuilder().setName("sut").build();
-    sut.init();
     try {
       sut.run(3);
     } catch (AssertionError e) {

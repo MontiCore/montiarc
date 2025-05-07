@@ -39,8 +39,6 @@ class OptionalDelayTest {
     sut.port_o0().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }
@@ -126,8 +124,6 @@ class OptionalDelayTest {
     sut.port_o1().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }

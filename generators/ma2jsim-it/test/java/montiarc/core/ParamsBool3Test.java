@@ -48,8 +48,6 @@ class ParamsBool3Test {
     sut.port_o2().connect(port_o2);
 
     // When
-    sut.init();
-
     for (Message<Boolean> msg : input) {
       sut.port_i().receive(msg);
     }

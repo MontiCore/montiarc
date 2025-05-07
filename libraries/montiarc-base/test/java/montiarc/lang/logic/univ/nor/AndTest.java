@@ -41,8 +41,6 @@ class AndTest {
     sut.port_q().connect(actual_q);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
     sut.port_b().receive(msg(b));
@@ -71,8 +69,6 @@ class AndTest {
     sut.port_q().connect(actual_q);
 
     // When
-    sut.init();
-
     for (Message<Boolean> msg : a) {
       sut.port_a().receive(msg);
     }

@@ -29,8 +29,6 @@ class AbsTest {
     sut.port_of().connect(port_of);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
 
@@ -65,8 +63,6 @@ class AbsTest {
     sut.port_of().connect(port_of);
 
     // When
-    sut.init();
-
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
 

@@ -18,9 +18,7 @@ public class FlatDelayedLoopTest {
 
         PortObserver<OnOff> port = new PortObserver<>();
         sut.port_o().connect(port);
-        
-        sut.init();
-        
+
         int num_ticks = 20;
         
         for (int i = 0 ; i < num_ticks ; i++) {

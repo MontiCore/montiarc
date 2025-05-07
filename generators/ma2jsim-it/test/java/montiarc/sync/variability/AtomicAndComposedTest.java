@@ -41,8 +41,6 @@ class AtomicAndComposedTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }

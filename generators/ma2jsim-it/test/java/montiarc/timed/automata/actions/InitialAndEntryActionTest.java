@@ -38,8 +38,6 @@ class InitialAndEntryActionTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<String> msg : input) {
       sut.port_i().receive(msg);
     }

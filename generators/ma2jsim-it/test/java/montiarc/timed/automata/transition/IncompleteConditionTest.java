@@ -40,8 +40,6 @@ class IncompleteConditionTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<Integer> msg : input) {
       sut.port_i().receive(msg);
     }

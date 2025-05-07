@@ -34,8 +34,6 @@ public class List3Test {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<Integer> msg : i) {
       sut.port_i().receive(msg);
     }

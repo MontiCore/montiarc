@@ -45,8 +45,6 @@ class IgnoresInPortTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     input_i1.forEach(sut.port_i1()::receive);
     input_i2.forEach(sut.port_i2()::receive);
 

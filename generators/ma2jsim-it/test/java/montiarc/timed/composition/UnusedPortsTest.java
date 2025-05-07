@@ -46,8 +46,6 @@ class UnusedPortsTest {
     sut.port_o2().connect(port_o2);
 
     // When
-    sut.init();
-
     for (Message<Boolean> msg : i1) {
       sut.port_i1().receive(msg);
     }

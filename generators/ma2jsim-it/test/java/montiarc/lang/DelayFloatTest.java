@@ -30,8 +30,6 @@ class DelayFloatTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<Float> msg : i) {
       sut.port_i().receive(msg);
     }

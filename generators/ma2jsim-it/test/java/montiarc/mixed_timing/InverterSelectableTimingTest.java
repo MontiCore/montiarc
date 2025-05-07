@@ -40,8 +40,6 @@ class InverterSelectableTimingTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.init();
-
     for (Message<OnOff> msg : input) {
       if (sync) {
         sut.port_i0().receive(msg);
