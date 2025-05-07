@@ -57,10 +57,11 @@ import java.util.zip.ZipFile;
 public class MontiArcTool extends MontiArcToolTOP {
 
   public static final String SYMBOLS_REPORT_DIR = "symbols-inc-data";
-  public static final String MONITARC_INC_CHECK_VERSION_PATH = "montiarc/MontiArcToolVersion.txt";
+
+  public static final String INC_CHECK_VERSION_PATH = "montiarc/MontiArcToolVersion.txt";
 
   private Supplier<String> versionSupplier =
-    new VersionFileDeserializer(MONITARC_INC_CHECK_VERSION_PATH)::loadVersion;
+    new VersionFileDeserializer(INC_CHECK_VERSION_PATH)::loadVersion;
 
   public void setMa2JavaVersionSupplier(@NotNull Supplier<String> versionSupplier) {
     this.versionSupplier = Preconditions.checkNotNull(versionSupplier);
@@ -674,15 +675,15 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(scopes);
 
     if (scopes.stream().map(IMontiArcArtifactScope::getAstNode).anyMatch(a -> !(a instanceof ASTMACompilationUnit))) {
-      Log.debug(() -> 
-        String.format("MontiArcTool only works with ASTMACompilationUnit instances, but also found asts of type %s.",
-          scopes.stream()
-            .map(IMontiArcArtifactScope::getAstNode)
-            .filter(a -> !(a instanceof ASTMACompilationUnit))
-            .map(Object::getClass)
-            .map(Class::getSimpleName)
-            .collect(Collectors.joining(", "))
-        ),
+      Log.debug(() ->
+          String.format("MontiArcTool only works with ASTMACompilationUnit instances, but also found asts of type %s.",
+            scopes.stream()
+              .map(IMontiArcArtifactScope::getAstNode)
+              .filter(a -> !(a instanceof ASTMACompilationUnit))
+              .map(Object::getClass)
+              .map(Class::getSimpleName)
+              .collect(Collectors.joining(", "))
+          ),
         "MontiArcTool"
       );
     }
@@ -764,7 +765,6 @@ public class MontiArcTool extends MontiArcToolTOP {
       .flatMap(Arrays::stream)
       .toArray(String[]::new);
   }
-
 
   /**
    * Like {@link #splitPathEntries(String[])}, but returns a {@code List<String>} instead.
