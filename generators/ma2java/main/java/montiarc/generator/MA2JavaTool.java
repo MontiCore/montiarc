@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
-import de.se_rwth.commons.logging.MCFatalError;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -57,15 +56,7 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkNotNull(args);
     MA2JavaTool tool = new MA2JavaTool();
     tool.init();
-    try {
-      tool.run(args);
-    } catch (MCFatalError error) {
-      if (Log.isDebugEnabled("")) {
-        throw new Error("Compilation failed; see the compiler error output for details.", error);
-      } else {
-        throw new Error("Compilation failed; see the compiler error output for details.");
-      }
-    }
+    tool.run(args);
   }
 
   @Override
