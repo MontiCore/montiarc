@@ -48,6 +48,15 @@ abstract class MontiArcCompile : JavaExec() {
   @get:Input
   abstract val printTaskInfo : Property<Boolean>
 
+  @get:Input
+  abstract val debugLog: Property<Boolean>
+
+  @get:Input
+  abstract val traceLog: Property<Boolean>
+
+  @get:Input
+  abstract val fileLog: Property<Boolean>
+
   init {
     description = "Generates .java code from MontiArc models."
 
@@ -59,6 +68,9 @@ abstract class MontiArcCompile : JavaExec() {
     useClass2Mc.convention(false)
     checkVariability.convention(false)
     printTaskInfo.convention(false)
+    debugLog.convention(false)
+    traceLog.convention(false)
+    fileLog.convention(false)
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -90,6 +102,10 @@ abstract class MontiArcCompile : JavaExec() {
     args("--output", this.javaOutputDir().get().asFile.path)
     args("--symboltable", this.symbolOutputDir().get().asFile.path)
     args("--report", this.reportsOutputDir().get().asFile.path)
+
+    if (debugLog.get()) {args("--debug");}
+    if (traceLog.get()) {args("--trace");}
+    if(fileLog.get()) {args("--file");}
 
     if(useClass2Mc.get()) { args("--class2mc"); }
 

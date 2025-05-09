@@ -101,10 +101,15 @@ public class MontiArcTool extends MontiArcToolTOP {
         Options options = this.initOptions();
         CommandLine cl = cliParser.parse(options, args);
 
-        // if --help: print help and stop
         if (cl.hasOption("h")) {
           this.printHelp();
           return;
+        }
+
+        if (cl.hasOption("d")) {
+          MontiArcLog.initDEBUG();
+        } else if (cl.hasOption("t")) {
+          MontiArcLog.initTRACE();
         }
 
         // if --version: print version and stop
@@ -642,6 +647,17 @@ public class MontiArcTool extends MontiArcToolTOP {
     options.addOption(Option.builder("novar")
       .longOpt("no-variability-checks")
       .desc("Disable the analysis of variable components")
+      .build());
+
+    options.addOption(Option.builder("d")
+      .longOpt("debug")
+      .desc("Enable DEBUG logging")
+      .build());
+
+    // trace
+    options.addOption(Option.builder("t")
+      .longOpt("trace")
+      .desc("Enable TRACE logging")
       .build());
 
     return options;

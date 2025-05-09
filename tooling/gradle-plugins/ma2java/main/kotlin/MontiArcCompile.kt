@@ -42,6 +42,12 @@ abstract class MontiArcCompile : JavaExec() {
   @get:Optional
   abstract val dse : Property<Boolean>
 
+  @get:Input
+  abstract val debugLog: Property<Boolean>
+
+  @get:Input
+  abstract val traceLog: Property<Boolean>
+
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
@@ -57,6 +63,8 @@ abstract class MontiArcCompile : JavaExec() {
     useClass2Mc.convention(false)
     dse.convention(false)
     printTaskInfo.convention(false)
+    debugLog.convention(false)
+    traceLog.convention(false)
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -90,6 +98,9 @@ abstract class MontiArcCompile : JavaExec() {
     args("--report", this.reportsOutputDir().get().asFile.path)
 
     if(useClass2Mc.get()) { args("--class2mc"); }
+
+    if (debugLog.get()) {args("--debug");}
+    if (traceLog.get()) {args("--trace");}
 
     if (!cleanHwcPath.isEmpty) { args("--handwritten-code", cleanHwcPath.asPath); }
     if (!cleanSymbolImportDirs.isEmpty) {
