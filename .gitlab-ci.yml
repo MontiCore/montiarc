@@ -27,7 +27,7 @@ Build:
       - .gradle/
     expire_in: 1 week
   script:
-    - gradle clean assemble
+    - gradle clean assemble --stacktrace
 
 Verify Formatting:
   stage: test
@@ -55,7 +55,7 @@ Package:
     - Build
   needs: ["Build"]
   script:
-    - gradle test jacocoAggregatedTestReport
+    - gradle test jacocoAggregatedTestReport --stacktrace
     - awk -F","
       '{ instructions += $4 + $5; covered += $5 } END
       { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }'
