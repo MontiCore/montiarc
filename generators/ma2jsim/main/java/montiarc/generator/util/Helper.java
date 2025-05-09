@@ -620,16 +620,12 @@ public class Helper {
   }
 
   public Map<ArcPortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSymbol) {
-    List<ArcPortSymbol> ownPorts = variantCompSymbol.getArcPorts();
-    List<String> ownPortSuffixes = ownPorts.stream().map(p -> portVariantSuffix(variantCompSymbol.getAstNode(), p)).collect(Collectors.toList());
+    List<ArcPortSymbol> ownOriginalPorts = variantCompSymbol.getAllArcPorts().stream().map(p -> ((VariantPortSymbol) p).getOriginal()).collect(Collectors.toList());
     ComponentTypeSymbol original = variantCompSymbol.getAdaptee();
 
-    return getVariants(original.getAstNode()).stream()
-      .filter(v -> v != variantCompSymbol)
-      .map(ComponentTypeSymbol::getAllArcPorts)
-      .flatMap(Collection::stream)
+    return original.getAllArcPorts().stream()
+      .filter(p -> !ownOriginalPorts.contains(p))
       .map(p -> Map.entry(p, portVariantSuffix(variantCompSymbol.getAstNode(), p)))
-      .filter(p -> !ownPortSuffixes.contains(p.getValue()))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
