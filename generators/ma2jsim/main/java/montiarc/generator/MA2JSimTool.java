@@ -85,21 +85,20 @@ public class MA2JSimTool extends MontiArcTool {
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
+    super.addStandardOptions(options);
     options.addOption(org.apache.commons.cli.Option.builder("o")
       .longOpt("output")
-      .hasArgs()
-      .desc("Sets the target path for the generated files (optional).")
+      .desc("Generates java code to the specified directory")
+      .hasArg()
+      .argName("dir")
       .build());
     options.addOption(org.apache.commons.cli.Option.builder("hwc")
       .longOpt("handwritten-code")
+      .desc("Sets the artifact path for handwritten code, space separated")
       .hasArgs()
-      .desc("Sets the artifact path for handwritten code (optional).")
+      .argName("paths")
       .build());
-    options.addOption(org.apache.commons.cli.Option.builder("symbolic")
-      .longOpt("symbolic-execution")
-      .desc("Sets the template to symbolic template).")
-      .build());
-    return super.addStandardOptions(options);
+    return options;
   }
 
   @Override

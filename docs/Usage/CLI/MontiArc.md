@@ -13,17 +13,21 @@ montiarc [build] [-h] -i <dirlist> [-path <p>] [-pp [<file>]] [-s [<file>]] [-o 
 
 Where the arguments are:
 
-| Option                     | Explanation                                                                                                                                                                     |
-| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `-i, --input <dirlist>`    | Sets the directories in which the MontiArc models are.                                                                                                                          |
-| `-o, --output <dir>`       | Sets the target path for the generated files (optional).                                                                                                                        |
-| `-hwc <dir>`               | Sets the artifact path for handwritten code customizations (optional).                                                                                                           |
-| `-path <dirlist>`          | Sets the artifact path for imported symbols (of other MontiArc or class diagram models) (optional).                                                                             |
-| `-pp, --prettyprint <dir>` | Prints the AST of the component models to stdout or the specified directory (optional).                                                                                         |
-| `-s, --symboltable <dir>`  | Serializes and prints the symbol table to stdout or the specified output directory (optional). This creates `.arcsym` files.                                                    |
-| `-c2mc, --class2mc>`       | Makes Java types from the class path or the symboltable directory available as types in MontiArc models. These can be either `.class` files or bundled within `.jar` archives. |
-| `-h, --help`               | Prints the help dialog.                                                                                                                                                         |
-| `-v, --version`            | Prints version information.                                                                                                                                                     |
+| Option                            | Explanation                                                                       |
+|-----------------------------------|-----------------------------------------------------------------------------------|
+| `-h, --help`                      | Prints the help dialog                                                            |
+| `-v, --version`                   | Prints version information                                                        |
+| `-i, --input <dirlist>`           | Parses alls MontiArc models from the specified files or directories (recursively) |
+| `-o, --output <dir>`              | Generates java code to the specified directory                                    |
+| `-path, --path <dirlist>`         | Sets the artifact path for imported symbols, space separated                      |
+| `-hwc, --handwritten-code <dir>`  | Sets the artifact path for handwritten code, space separated                      |
+| `-pp, --prettyprint <dir>`        | Prints the models to stdout or the specified directory (optional)                 |
+| `-s, --symboltable <dir>`         | Serializes the symbol table of the given artifacts to the specified directory     |
+| `-r, --report <dir>`              | Prints reports of the artifact to the specified directory                         |
+| `-c2mc, --class2mc`               | Enables importing java symbols from the java runtime environment                  |
+| `-novar, --no-variability-checks` | Disable the analysis of variable components for better performance                |
+| `-d, --debug`                     | Enables verbose logging with debug-level information                              |
+| `-t, --trace`                     | Enables verbose logging with trace-level information                              |
 
 ### New
 

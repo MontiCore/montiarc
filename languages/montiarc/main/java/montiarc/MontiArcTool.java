@@ -630,34 +630,47 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
-    options = super.addStandardOptions(options);
+    super.addStandardOptions(options);
 
-    // We accept multiple inputs
+    // allow multiple inputs
     Option i = options.getOption("i");
-    i.setArgName("files");
+    i.setDescription("Parses alls MontiArc models from the specified files or directories (recursively)");
     i.setArgs(Option.UNLIMITED_VALUES);
-    i.setDescription("Reads the source files (mandatory) and parses their contents");
+    i.setArgName("paths");
 
-    // class2mc
+    // allow path to be used as long option also
+    Option p = options.getOption("path");
+    p.setLongOpt("path");
+    p.setArgName("dir");
+
+    // print to a directory instead of a file
+    Option pp = options.getOption("pp");
+    pp.setDescription("Prints the models to stdout or the specified directory (optional)");
+    pp.setArgName("dir");
+
+    // serialize to a directory instead of a file
+    Option s = options.getOption("s");
+    s.setDescription("Serializes the symbol table of the given artifacts to the specified directory");
+    s.setArgName("dir");
+
     options.addOption(Option.builder("c2mc")
       .longOpt("class2mc")
-      .desc("Enables to resolve java classes in the model path")
+      .desc("Enables importing java symbols from the java runtime environment")
       .build());
 
     options.addOption(Option.builder("novar")
       .longOpt("no-variability-checks")
-      .desc("Disable the analysis of variable components")
+      .desc("Disable the analysis of variable components for better performance")
       .build());
 
     options.addOption(Option.builder("d")
       .longOpt("debug")
-      .desc("Enable DEBUG logging")
+      .desc("Enables verbose logging with debug-level information")
       .build());
 
-    // trace
     options.addOption(Option.builder("t")
       .longOpt("trace")
-      .desc("Enable TRACE logging")
+      .desc("Enables verbose logging with trace-level information")
       .build());
 
     return options;
