@@ -5,8 +5,9 @@ import montiarc.types.OnOff;
 
 component FieldReferencing {
   int x = 1;
-  int y = x + 1;
   int z = x + y;
+  int y = x + 1 + w;
+  int w = 3 + x;
 
   port sync out int o;
 

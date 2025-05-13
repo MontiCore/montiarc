@@ -15,7 +15,8 @@ public class FieldReferencingTest {
 
     // Then
     Assertions.assertEquals(1, sut.field_x());
-    Assertions.assertEquals(2, sut.field_y());
-    Assertions.assertEquals(3, sut.field_z());
+    Assertions.assertEquals(6, sut.field_y());
+    Assertions.assertEquals(7, sut.field_z());
+    Assertions.assertEquals(4, sut.field_w());
   }
 }

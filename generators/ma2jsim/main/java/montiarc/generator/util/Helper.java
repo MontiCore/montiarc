@@ -18,7 +18,9 @@ import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scbasis._ast.ASTSCState;
@@ -58,19 +60,12 @@ import variablearc._symboltable.VariantPortSymbol;
 import variablearc._symboltable.VariantSubcomponentSymbol;
 import variablearc.evaluation.expressions.Expression;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
 
 @SuppressWarnings("unused")
 public class Helper {
@@ -786,5 +781,79 @@ public class Helper {
     } else {
       return Optional.empty();
     }
+  }
+
+  /**
+   * Returns the list of fields in an order such that every field’s initializer
+   * only refers to fields that have already been initialized.
+   * <p>
+   * We build a directed dependency graph from each field to the other fields
+   * it references in its initializer, then perform a topological sort (Kahn’s
+   * algorithm).  Any fields involved in cycles are simply appended in their
+   * original declaration order at the end.
+   *
+   * @param ast  the component AST whose fields we want to order
+   * @return     a List of VariableSymbol in an order respecting dependencies
+   */
+  public List<VariableSymbol> getFieldsInDependencyOrder(ASTComponentType ast) {
+    List<VariableSymbol> fields = ast.getSymbol().getFields();
+    Map<VariableSymbol, Set<VariableSymbol>> deps = new LinkedHashMap<>();
+
+    for (VariableSymbol f : fields) {
+      ASTExpression initExpr = getInitialForVariable(f);
+      ExpressionsBasisTraverser traverser = ExpressionsBasisMill.traverser();
+      NameCollectorVisitor nameCollector = new NameCollectorVisitor();
+      traverser.add4ExpressionsBasis(nameCollector);
+      initExpr.accept(traverser);
+
+      Set<String> usedNames = nameCollector.getNames();
+      Set<VariableSymbol> usedFields = fields.stream()
+        .filter(g -> !g.equals(f) && usedNames.contains(g.getName()))
+        .collect(Collectors.toSet());
+      deps.put(f, usedFields);
+    }
+
+    Map<VariableSymbol, List<VariableSymbol>> rev = new HashMap<>();
+    for (VariableSymbol f : fields) {
+      rev.put(f, new ArrayList<>());
+    }
+    for (Map.Entry<VariableSymbol, Set<VariableSymbol>> e : deps.entrySet()) {
+      for (VariableSymbol g : e.getValue()) {
+        rev.get(g).add(e.getKey());
+      }
+    }
+
+    Map<VariableSymbol, Integer> inDeg = new HashMap<>();
+    for (Map.Entry<VariableSymbol, Set<VariableSymbol>> e : deps.entrySet()) {
+      inDeg.put(e.getKey(), e.getValue().size());
+    }
+
+    Deque<VariableSymbol> queue = new ArrayDeque<>();
+    for (Map.Entry<VariableSymbol, Integer> e : inDeg.entrySet()) {
+      if (e.getValue() == 0) {
+        queue.add(e.getKey());
+      }
+    }
+
+    List<VariableSymbol> sorted = new ArrayList<>();
+    while (!queue.isEmpty()) {
+      VariableSymbol u = queue.remove();
+      sorted.add(u);
+      for (VariableSymbol child : rev.get(u)) {
+        int d2 = inDeg.get(child) - 1;
+        inDeg.put(child, d2);
+        if (d2 == 0) {
+          queue.add(child);
+        }
+      }
+    }
+
+    for (VariableSymbol f : fields) {
+      if (!sorted.contains(f)) {
+        sorted.add(f);
+      }
+    }
+
+    return sorted;
   }
 }

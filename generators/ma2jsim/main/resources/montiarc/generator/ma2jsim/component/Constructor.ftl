@@ -35,7 +35,7 @@ public ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
-<#list ast.getSymbol().getFields() as field>
+<#list helper.getFieldsInDependencyOrder(ast) as field>
   <#assign initExpr = prettyPrinter.prettyprint(helper.getInitialForVariable(field))>
   <@Util.getTypeString field.getType()/> ${field.getName()}${helper.fieldVariantSuffix(ast, field)} = ${initExpr};
 </#list>
