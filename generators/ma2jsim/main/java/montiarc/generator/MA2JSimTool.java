@@ -19,16 +19,19 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -102,37 +105,123 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
-  public void runTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
-    Preconditions.checkNotNull(asts);
+  protected void run(@NotNull CommandLine cl) {
+    Preconditions.checkArgument(!cl.hasOption("h"));
+    Preconditions.checkArgument(!cl.hasOption("v"));
+    Preconditions.checkArgument(cl.hasOption("i"));
     Preconditions.checkNotNull(cl);
-    super.runTasks(asts, cl);
 
-    if (cl.hasOption("output")) {
-      Log.info(() -> "Generate java", "MontiArcTool");
-      this.generate(asts, cl);
-    }
+    String[] i = cl.hasOption("i") ? splitPathEntries(cl.getOptionValues("i")) : new String[0];
+
+    String[] p = cl.hasOption("path") ? splitPathEntries(cl.getOptionValues("path")) : new String[0];
+
+    String[] hwc = cl.hasOption("hwc") ? splitPathEntries(cl.getOptionValues("hwc")) : new String[0];
+
+    String o = cl.getOptionValue("o");
+
+    String pp = cl.hasOption("pp") ? Optional.of(cl.getOptionValue("pp")).orElse("") : null;
+
+    String s = cl.getOptionValue("s");
+
+    String r = cl.getOptionValue("r");
+
+    boolean c2mc = cl.hasOption("c2mc");
+
+    boolean novar = cl.hasOption("novar");
+
+    this.run(i, p, hwc, o, pp, s, r, c2mc, novar);
+  }
+
+  protected void run(@NotNull String[] i,
+                     @NotNull String[] p,
+                     @NotNull String[] hwc,
+                     @Nullable String o,
+                     @Nullable String pp,
+                     @Nullable String s,
+                     @Nullable String r,
+                     boolean c2mc,
+                     boolean novar) {
+    Preconditions.checkNotNull(i);
+    Preconditions.checkNotNull(p);
+    Preconditions.checkNotNull(hwc);
+    Preconditions.checkArgument(i.length > 0);
+
+    this.initGlobalScope(p);
+    this.initBuildInSymbols(c2mc);
+    this.compile(i, hwc, o, pp, s, r, c2mc, novar);
   }
 
   /**
-   * @param cl Must at least contain the option "output"
+   * Parses all MontiArc component models found in the specified input files
+   * and directories and checks context-condition. Optionally pretty-prints
+   * the models, serializes their symbol table, generates reports,
+   * and translates the models to java code.
+   * <p>
+   * Class2MC (c2mc) can be enabled to import symbols from the Java runtime
+   * environment (Java RTE). Context-condition checking for variable components
+   * can be skipped (novar) to improve performance.
+   *
+   * @param i     Array of file and directory paths that form the model path,
+   *              i.e, the paths that contain the MontiArc models to be compiled.
+   *              At least one path must be provided.
+   * @param hwc   Array of file and directory paths to handwritten java code to
+   *              be considered for TOP classes during code generation.
+   *              May be empty.
+   * @param o     Path to the directory where the generated java code should be stored.
+   *              If {@code null}, code generation is disabled.
+   * @param pp    Path to the directory where pretty-printed models should be stored.
+   *              If {@code null}, pretty-printing is disabled.
+   *              If an empty string is provided, models are printed to standard output.
+   * @param s     Path to the directory where the symbol table should be serialized.
+   *              If {@code null}, symbol table serialization is disabled.
+   * @param r     Path to the directory where reports should be stored.
+   *              If {@code null}, report generation is disabled.
+   * @param c2mc  Enables importing of Java symbols (via Class2MC).
+   * @param novar Disables context-condition checking for variable components to improve performance.
+   * @return A collection of the abstract syntay trees (ASTs) of the parsed
+   * input models found in the given model paths.
    */
-  public void generate(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
-    // The majority of this method deals about the reporting of the tooling execution.
-    Preconditions.checkNotNull(asts);
-    Preconditions.checkNotNull(cl);
-    Preconditions.checkArgument(cl.hasOption("output"));
+  public Set<ASTMACompilationUnit> compile(@NotNull String[] i,
+                                           @NotNull String[] hwc,
+                                           @Nullable String o,
+                                           @Nullable String pp,
+                                           @Nullable String s,
+                                           @Nullable String r,
+                                           boolean c2mc,
+                                           boolean novar) {
+    Preconditions.checkNotNull(i);
+    Preconditions.checkNotNull(hwc);
+    Preconditions.checkArgument(i.length > 0);
 
-    String target = cl.getOptionValue("output");
-    List<String> modelpaths = getAllModelDirsFrom(cl);
-    Optional<String> reportDir = Optional.ofNullable(cl.getOptionValue("report"));
-    List<String> hwc = getAllHwcDirsFrom(cl);
+    Set<ASTMACompilationUnit> asts = super.compile(i, pp, s, r, c2mc, novar);
+
+    if (o != null) {
+      Log.info(() -> "Generate java", "MontiArcTool");
+      this.generate(asts, i, hwc, o, r);
+    }
+
+    return asts;
+  }
+
+  public void generate(@NotNull Collection<ASTMACompilationUnit> asts,
+                       @NotNull String[] input,
+                       @NotNull String[] hwc,
+                       @NotNull String o,
+                       @Nullable String r) {
+    Preconditions.checkNotNull(asts);
+    Preconditions.checkNotNull(input);
+    Preconditions.checkNotNull(hwc);
+    Preconditions.checkNotNull(o);
+    Preconditions.checkArgument(input.length > 0);
+
+    Optional<String> reportDir = Optional.ofNullable(r);
 
     Collection<ASTMACompilationUnit> models4NewGeneration;
 
-    boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
+    boolean writeReports = reportDir.isPresent();
     if (writeReports) {
       IncCheckUtil.Config incCheckConfig = new IncCheckUtil.Config(
-        modelpaths, target, reportDir.get(), MA2JSIM_INC_CHECK_REPORT_DIR, hwc, ma2jsimVersionSupplier.get()
+        Arrays.asList(input), o, reportDir.get(), MA2JSIM_INC_CHECK_REPORT_DIR, Arrays.asList(hwc), ma2jsimVersionSupplier.get()
       );
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
@@ -145,7 +234,7 @@ public class MA2JSimTool extends MontiArcTool {
       models4NewGeneration = asts;
     }
 
-    MCPath modelPaths = new MCPath(modelpaths.toArray(new String[0]));
+    MCPath modelPaths = new MCPath(input);
 
     for (ASTMACompilationUnit ast : models4NewGeneration) {
       Optional<Path> modelLocation = IncCheckUtil.findModelLocation(modelPaths, ast);
@@ -157,7 +246,7 @@ public class MA2JSimTool extends MontiArcTool {
       }
 
       // In all cases
-      this.generate(ast, target, hwc);
+      this.generate(ast, o, hwc);
 
       if (writeReport4ThisModel) {
         Reporting.flush(ast);
@@ -165,14 +254,14 @@ public class MA2JSimTool extends MontiArcTool {
     }
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull List<String> hwc) {
+  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String[] hwc) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
 
-    List<Path> hwcsAsPaths = hwc.stream().map(Paths::get).collect(Collectors.toList());
+    List<Path> hwcsAsPaths = Arrays.stream(hwc).map(Paths::get).collect(Collectors.toList());
     MA2JSimGen generator = new MA2JSimGen(Paths.get(target), hwcsAsPaths);
     generator.generate(ast);
   }

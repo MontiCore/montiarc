@@ -33,8 +33,8 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     IMontiArcGlobalScope gs = MontiArcMill.globalScope();
     setGlobalScope((MontiArcGlobalScope) gs);
     ensureAdapterPresent(gs);
-    tool.initializeTickEvent();
-    tool.initializeBasicTypes();
+    BasicSymbolsMill.initializePrimitives();
+    ArcAutomatonMill.initializeTick();
     MontiArcTypeCheck.init();
   }
 

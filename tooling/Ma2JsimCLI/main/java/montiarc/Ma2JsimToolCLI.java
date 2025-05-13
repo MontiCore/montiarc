@@ -4,7 +4,6 @@ package montiarc;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.generator.MA2JSimTool;
-import org.apache.commons.cli.CommandLine;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -28,8 +27,9 @@ public class Ma2JsimToolCLI extends MA2JSimTool {
   }
 
   @Override
-  protected void initGlobalScope(CommandLine cl) {
-    super.initGlobalScope(cl);
+  public void initGlobalScope(String... entries) {
+    super.initGlobalScope(entries);
+
     // Add montiarc-base
     copyZipResourceToJarTmp("montiarc-base-arcSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
     copyZipResourceToJarTmp("montiarc-base-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);

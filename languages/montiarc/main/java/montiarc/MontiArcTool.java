@@ -8,6 +8,7 @@ import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
@@ -29,6 +30,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -38,15 +40,16 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
@@ -77,16 +80,21 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void init() {
     MontiArcLog.init();
-    super.init();
+    MontiArcMill.init();
     MontiArcTypeCheck.init();
+    SymTypeRelations.init();
+    MCCollectionSymTypeRelations.init();
   }
 
   @Override
   public void run(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
 
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.globalScope().init();
+
     try {
-      //parse input options from the command line
+      // parse input options from the command line
       CommandLineParser cliParser = new DefaultParser();
 
       if (args.length > 0 && args[0].equals("create")) {
@@ -101,15 +109,10 @@ public class MontiArcTool extends MontiArcToolTOP {
         Options options = this.initOptions();
         CommandLine cl = cliParser.parse(options, args);
 
+        // if --h: print help and stop
         if (cl.hasOption("h")) {
           this.printHelp();
           return;
-        }
-
-        if (cl.hasOption("d")) {
-          MontiArcLog.initDEBUG();
-        } else if (cl.hasOption("t")) {
-          MontiArcLog.initTRACE();
         }
 
         // if --version: print version and stop
@@ -118,26 +121,145 @@ public class MontiArcTool extends MontiArcToolTOP {
           return;
         }
 
-        // if --input is missing: print help
+        // if --input is missing: print help and stop
         if (!cl.hasOption("i")) {
           this.printHelp();
           return;
         }
 
-        runBuild(cl);
+        // if --d or --t: enable verbose logging
+        if (cl.hasOption("d")) {
+          MontiArcLog.initDEBUG();
+        } else if (cl.hasOption("t")) {
+          MontiArcLog.initTRACE();
+        }
+
+        run(cl);
       }
     } catch (ParseException e) {
       Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), e.getMessage()));
     }
   }
 
-  protected void runBuild(CommandLine cl) {
-    this.initGlobalScope(cl);
-    this.initializeBasicTypes();
-    this.initializeTickEvent();
-    this.initializeClass2MC(cl);
+  protected void run(@NotNull CommandLine cl) {
+    Preconditions.checkNotNull(cl);
+    Preconditions.checkArgument(!cl.hasOption("h"));
+    Preconditions.checkArgument(!cl.hasOption("v"));
+    Preconditions.checkArgument(cl.hasOption("i"));
 
-    this.runTasks(cl);
+    String[] i = cl.hasOption("i") ? splitPathEntries(cl.getOptionValues("i")) : new String[0];
+
+    String[] p = cl.hasOption("path") ? splitPathEntries(cl.getOptionValues("path")) : new String[0];
+
+    String pp = cl.hasOption("pp") ? Optional.of(cl.getOptionValue("pp")).orElse("") : null;
+
+    String s = cl.getOptionValue("s");
+
+    String r = cl.getOptionValue("r");
+
+    boolean c2mc = cl.hasOption("c2mc");
+
+    boolean novar = cl.hasOption("novar");
+
+    this.run(i, p, pp, s, r, c2mc, novar);
+  }
+
+  protected void run(@NotNull String[] i,
+                     @NotNull String[] p,
+                     @Nullable String pp,
+                     @Nullable String s,
+                     @Nullable String r,
+                     boolean c2mc,
+                     boolean novar) {
+    Preconditions.checkNotNull(i);
+    Preconditions.checkNotNull(p);
+    Preconditions.checkArgument(i.length > 0);
+
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.globalScope().init();
+    this.initBuildInSymbols(c2mc);
+    this.initGlobalScope(p);
+    this.compile(i, pp, s, r, c2mc, novar);
+  }
+
+  /**
+   * Parses all MontiArc component models found in the specified input files
+   * and directories and checks context-condition. Optionally pretty-prints
+   * the models, serializes their symbol table, and generates reports.
+   * <p>
+   * Class2MC (c2mc) can be enabled to import symbols from the Java runtime
+   * environment (Java RTE). Context-condition checking for variable components
+   * can be skipped (novar) to improve performance.
+   *
+   * @param i     Array of file and directory paths that form the modelpath,
+   *              i.e, the paths that contain the MontiArc models to be compiled.
+   *              At least one path must be provided.
+   * @param pp    Path to the directory where pretty-printed models should be stored.
+   *              If {@code null}, pretty-printing is disabled.
+   *              If an empty string is provided, models are printed to standard output.
+   * @param s     Path to the directory where the symbol table should be serialized.
+   *              If {@code null}, symbol table serialization is disabled.
+   * @param r     Path to the directory where reports should be stored.
+   *              If {@code null}, report generation is disabled.
+   * @param c2mc  Enables importing of Java symbols (via Class2MC).
+   * @param novar Disables context-condition checking for variable components to improve performance.
+   * @return A collection of the abstract syntay trees (ASTs) of the parsed
+   * input models found in the given model paths.
+   */
+  public Set<ASTMACompilationUnit> compile(@NotNull String[] i,
+                                           @Nullable String pp,
+                                           @Nullable String s,
+                                           @Nullable String r,
+                                           boolean c2mc,
+                                           boolean novar) {
+    Preconditions.checkNotNull(i);
+    Preconditions.checkArgument(i.length > 0);
+
+    Log.info(() -> "Parse the input models", "MontiArcTool");
+    Set<ASTMACompilationUnit> asts = this.parse(i);
+
+    this.runAfterParserCoCos(asts);
+
+    Log.enableFailQuick(true);
+
+    this.defaultImportTrafo(asts, c2mc);
+
+    Log.enableFailQuick(false);
+
+    Log.info(() -> "Run post parsing transformations", "MontiArcTool");
+    this.runAfterParsingTrafos(asts);
+
+    Log.info(() -> "Run symbol-table creation phase 1", "MontiArcTool");
+    Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
+
+    Log.info(() -> "Run symbol-table creation phase 2", "MontiArcTool");
+    this.runSymbolTablePhase2(asts);
+
+    Log.info(() -> "Run symbol-table creation phase 3", "MontiArcTool");
+    this.runSymbolTablePhase3(asts);
+
+    Log.info(() -> "Run post symbol-table creation transformations", "MontiArcTool");
+    this.runAfterSymbolTablePhase3Trafos(asts);
+
+    Log.info(() -> "Perform initial context-condition checks", "MontiArcTool");
+    this.runDefaultCoCos(asts);
+
+    Log.info(() -> "Perform remaining context-condition checks", "MontiArcTool");
+    this.runAdditionalCoCos(asts, !novar);
+
+    Log.enableFailQuick(true);
+
+    if (pp != null) {
+      Log.info(() -> "Pretty print models", "MontiArcTool");
+      this.prettyPrint(asts, pp);
+    }
+
+    if (s != null) {
+      Log.info(() -> "Print symbol table", "MontiArcTool");
+      this.storeSymbols(scopes, i, s, r);
+    }
+
+    return asts;
   }
 
   protected void runCreate(String name, CommandLine cl) {
@@ -178,46 +300,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     }
   }
 
-  protected void runTasks(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-    Log.info(() -> "Parse the input models", "MontiArcTool");
-    Log.enableFailQuick(false);
-
-    List<Path> paths = List.copyOf(this.createModelPath(cl).getEntries());
-
-    for (int i = 0; i < paths.size(); i++) {
-      for (int j = i + 1; j < paths.size(); j++) {
-        if (paths.get(i).startsWith(paths.get(j).toString() + File.separator)) {
-          Log.error(MontiArcError.SUPERIMPOSED_MODELPATH.format(paths.get(j).toString(), paths.get(i).toString()));
-        } else if (paths.get(j).startsWith(paths.get(i).toString() + File.separator)) {
-          Log.error(MontiArcError.SUPERIMPOSED_MODELPATH.format(paths.get(i).toString(), paths.get(j).toString()));
-        }
-      }
-    }
-
-    Log.enableFailQuick(true);
-    Log.enableFailQuick(false);
-
-    Collection<ASTMACompilationUnit> asts = this.parse("arc", paths);
-
-    this.runAfterParserCoCos(asts);
-    Log.enableFailQuick(true);
-
-    this.defaultImportTrafo(asts, cl.hasOption("c2mc"));
-
-    this.runTasks(asts, cl);
-  }
-
-  protected MCPath createModelPath(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-
-    if (cl.hasOption("i")) {
-      return new MCPath(this.getAllModelDirsFrom(cl).toArray(new String[0]));
-    } else {
-      return new MCPath();
-    }
-  }
-
   public void defaultImportTrafo(@NotNull Collection<ASTMACompilationUnit> asts, boolean c2mc) {
     Preconditions.checkNotNull(asts);
     asts.forEach(ast -> defaultImportTrafo(ast, c2mc));
@@ -235,67 +317,43 @@ public class MontiArcTool extends MontiArcToolTOP {
     }
   }
 
-  public void runTasks(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull CommandLine cl) {
-    Preconditions.checkNotNull(asts);
-    Preconditions.checkNotNull(cl);
+  public Set<ASTMACompilationUnit> parse(@NotNull String[] paths) {
+    Preconditions.checkNotNull(paths);
+    Preconditions.checkArgument(paths.length > 0);
 
+    List<Path> pathList = List.copyOf(new MCPath(paths).getEntries());
+
+    for (int i = 0; i < pathList.size(); i++) {
+      for (int j = i + 1; j < pathList.size(); j++) {
+        if (pathList.get(i).startsWith(pathList.get(j).toString() + File.separator)) {
+          Log.error(MontiArcError.SUPERIMPOSED_MODELPATH.format(pathList.get(j).toString(), pathList.get(i).toString()));
+        } else if (pathList.get(j).startsWith(pathList.get(i).toString() + File.separator)) {
+          Log.error(MontiArcError.SUPERIMPOSED_MODELPATH.format(pathList.get(i).toString(), pathList.get(j).toString()));
+        }
+      }
+    }
+
+    Log.enableFailQuick(true);
     Log.enableFailQuick(false);
 
-    Log.info(() -> "Run post parsing transformations", "MontiArcTool");
-    this.runAfterParsingTrafos(asts);
-
-    Log.info(() -> "Run symbol-table creation phase 1", "MontiArcTool");
-    Collection<IMontiArcArtifactScope> scopes = this.createSymbolTable(asts);
-
-    Log.info(() -> "Run symbol-table creation phase 2", "MontiArcTool");
-    this.runSymbolTablePhase2(asts);
-
-    Log.info(() -> "Run symbol-table creation phase 3", "MontiArcTool");
-    this.runSymbolTablePhase3(asts);
-
-    Log.info(() -> "Run post symbol-table creation transformations", "MontiArcTool");
-    this.runAfterSymbolTablePhase3Trafos(asts);
-
-    Log.info(() -> "Perform initial context-condition checks", "MontiArcTool");
-    this.runDefaultCoCos(asts);
-
-    Log.info(() -> "Perform remaining context-condition checks", "MontiArcTool");
-    this.runAdditionalCoCos(asts, !cl.hasOption("novar"));
-    Log.enableFailQuick(true);
-
-    if (cl.hasOption("pp")) {
-      Log.info(() -> "Pretty print models", "MontiArcTool");
-      this.prettyPrint(asts, Optional.ofNullable(cl.getOptionValue("pp")).orElse(""));
-    }
-
-    this.runAdditionalTasks(scopes, cl);
+    return this.parse("arc", pathList);
   }
 
-  public void runAdditionalTasks(@NotNull Collection<IMontiArcArtifactScope> scopes, @NotNull CommandLine cl) {
-    Preconditions.checkNotNull(scopes);
-    Preconditions.checkNotNull(cl);
-
-    if (cl.hasOption("symboltable")) {
-      Log.info(() -> "Print symbol table", "MontiArcTool");
-      this.storeSymbols(scopes, cl);
-    }
-  }
-
-  public Collection<ASTMACompilationUnit> parse(@NotNull String fileExt,
-                                                @NotNull Collection<Path> paths) {
+  public Set<ASTMACompilationUnit> parse(@NotNull String fileExt,
+                                         @NotNull Collection<Path> paths) {
     Preconditions.checkNotNull(fileExt);
     Preconditions.checkNotNull(paths);
     Preconditions.checkArgument(!fileExt.isEmpty());
 
-    List<ASTMACompilationUnit> asts = new ArrayList<>();
+    Set<ASTMACompilationUnit> asts = new HashSet<>();
     for (Path path : paths) {
       asts.addAll(this.parse(fileExt, path));
     }
-    return Collections.unmodifiableList(asts);
+    return Collections.unmodifiableSet(asts);
   }
 
-  public Collection<ASTMACompilationUnit> parse(@NotNull String fileExt,
-                                                @NotNull Path path) {
+  public Set<ASTMACompilationUnit> parse(@NotNull String fileExt,
+                                         @NotNull Path path) {
     Preconditions.checkNotNull(fileExt);
     Preconditions.checkNotNull(path);
     Preconditions.checkArgument(!fileExt.isEmpty());
@@ -304,10 +362,10 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     if (!filepath.exists()) {
       Log.warn("Directory does not exist: " + path);
-      return Collections.emptyList();
+      return Collections.emptySet();
     }
 
-    Collection<ASTMACompilationUnit> asts = new ArrayList<>();
+    Set<ASTMACompilationUnit> asts = new HashSet<>();
     if (filepath.isFile()) {
       this.parse(filepath, filepath).ifPresent(asts::add);
     } else if (filepath.isDirectory()) {
@@ -316,7 +374,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       }
     }
 
-    return Collections.unmodifiableCollection(asts);
+    return Collections.unmodifiableSet(asts);
   }
 
   /**
@@ -489,25 +547,21 @@ public class MontiArcTool extends MontiArcToolTOP {
     super.print(content, path);
   }
 
-  /**
-   * @param cl At least the option "symboltable" must be set.
-   */
-  public void storeSymbols(@NotNull Collection<IMontiArcArtifactScope> scopes, @NotNull CommandLine cl) {
-    // The majority of this method deals about the reporting of the tooling execution.
+  public void storeSymbols(@NotNull Collection<IMontiArcArtifactScope> scopes,
+                           @NotNull String[] input,
+                           @NotNull String symboltableDir,
+                           @NotNull String reports) {
     Preconditions.checkNotNull(scopes);
-    Preconditions.checkNotNull(cl);
-    Preconditions.checkArgument(cl.hasOption("symboltable"));
+    Preconditions.checkNotNull(symboltableDir);
 
-    String symbolTargetDir = cl.getOptionValue("symboltable");
-    Optional<String> reportDir = Optional.ofNullable(cl.getOptionValue("report"));
-    List<String> modelpaths = this.getAllModelDirsFrom(cl);
+    Optional<String> reportDir = Optional.ofNullable(reports);
     Collection<IMontiArcArtifactScope> scopes4NewSerialization;
     Map<IMontiArcArtifactScope, ASTMACompilationUnit> scopeToAst;
 
-    boolean writeReports = reportDir.isPresent() && !modelpaths.isEmpty();
+    boolean writeReports = reportDir.isPresent() && !(input.length == 0);
     if (writeReports) {
       IncCheckUtil.Config incCheckConfig = new IncCheckUtil.Config(
-        modelpaths, symbolTargetDir, reportDir.get(), SYMBOLS_REPORT_DIR, Collections.emptyList(), versionSupplier.get()
+        Arrays.asList(input), symboltableDir, reportDir.get(), SYMBOLS_REPORT_DIR, Collections.emptyList(), versionSupplier.get()
       );
       IncCheckUtil.configureIncCheckReporting(incCheckConfig);
 
@@ -528,7 +582,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       scopeToAst = new HashMap<>(0);
     }
 
-    MCPath modelPaths = new MCPath(modelpaths.toArray(new String[0]));
+    MCPath modelPaths = new MCPath(input);
 
     for (IMontiArcArtifactScope scope : scopes4NewSerialization) {
       Optional<ASTMACompilationUnit> ast = Optional.ofNullable(scopeToAst.get(scope));
@@ -542,7 +596,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       }
 
       // In all cases
-      this.storeSymbols(scope, symbolTargetDir);
+      this.storeSymbols(scope, symboltableDir);
 
       if (writeReport4ThisModel) {
         Reporting.flush(ast.orElseThrow());
@@ -557,21 +611,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkArgument(!path.isEmpty());
 
     super.storeSymbols(scope, path + "/" + Names.getPathFromPackage(scope.getFullName()) + ".arcsym");
-  }
-
-  protected void initGlobalScope(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-    if (cl.hasOption("path")) {
-      this.initGlobalScope(getAllSymbolImportDirsFrom(cl));
-    } else {
-      this.initGlobalScope();
-    }
-  }
-
-  public void initGlobalScope() {
-    MontiArcMill.globalScope().clear();
-    MontiArcMill.globalScope().init();
-    MCCollectionSymTypeRelations.init();
   }
 
   public void initGlobalScope(@NotNull String... entries) {
@@ -600,16 +639,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void initGlobalScope(@NotNull Collection<Path> entries) {
     Preconditions.checkNotNull(entries);
     Preconditions.checkArgument(!entries.contains(null));
-    this.initGlobalScope();
     entries.forEach(entry -> MontiArcMill.globalScope().getSymbolPath().addEntry(entry));
-  }
-
-  public void initializeBasicTypes() {
-    BasicSymbolsMill.initializePrimitives();
-  }
-
-  public void initializeTickEvent() {
-    ArcAutomatonMill.initializeTick();
   }
 
   public void initializeClass2MC() {
@@ -617,9 +647,10 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
   }
 
-  protected void initializeClass2MC(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-    if (cl.hasOption("c2mc")) {
+  protected void initBuildInSymbols(boolean c2mc) {
+    BasicSymbolsMill.initializePrimitives();
+    ArcAutomatonMill.initializeTick();
+    if (c2mc) {
       this.initializeClass2MC();
     } else {
       BasicSymbolsMill.initializeObject();
@@ -726,79 +757,26 @@ public class MontiArcTool extends MontiArcToolTOP {
   }
 
   /**
-   * Extracts all model paths as separate strings from the given command line.
-   * <br>
-   * E.g. the model path argument may be the Array {"\first\path", "\second\path;third\path"} on Windows or
-   * {"first/path", "second/path:third/path"} on Unix.
-   * This method will decompose composed paths and return them as separate strings. The other paths are unaffected.
-   * Thus, this method would yield for the above example:
-   * {"\first\path", "\second\path", "third\path"} on Windows and {"first/path", "second/path", "third/path"} on Unix.
+   * Splits composedPath on their {@link File#pathSeparator},
+   * e.g. {@code some/path:another/path} on Unix
+   * would return {@code {some/path, another/path}}
+   * and {@code some\path;other\path} on Windows
+   * would return {@code {some\path, other\path}}
    */
-  protected List<String> getAllModelDirsFrom(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-    return cl.hasOption("i") ?
-      splitPathEntriesToList(cl.getOptionValues("i")) :
-      Collections.emptyList();
-  }
+  protected final @NotNull String[] splitPathEntries(@NotNull String paths) {
+    Preconditions.checkNotNull(paths);
 
-  /**
-   * Extracts all hwc paths as separate strings from the given command line.
-   * <br>
-   * E.g. the hwc path argument may be the Array {"\first\path", "\second\path;third\path"} on Windows or
-   * {"first/path", "second/path:third/path"} on Unix.
-   * This method will decompose composed paths and return them as separate strings. The other paths are unaffected.
-   * Thus, this method would yield for the above example:
-   * {"\first\path", "\second\path", "third\path"} on Windows and {"first/path", "second/path", "third/path"} on Unix.
-   */
-  protected List<String> getAllHwcDirsFrom(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-    return cl.hasOption("handwritten-code") ?
-      splitPathEntriesToList(cl.getOptionValues("handwritten-code")) :
-      Collections.emptyList();
-  }
-
-  /**
-   * Extracts all symbol import dir paths as separate strings from the given command line.
-   * <br>
-   * E.g. the symbol import path argument may be the Array {"\first\path", "\second\path;third\path"} on Windows or
-   * {"first/path", "second/path:third/path"} on Unix.
-   * This method will decompose composed paths and return them as separate strings. The other paths are unaffected.
-   * Thus, this method would yield for the above example:
-   * {"\first\path", "\second\path", "third\path"} on Windows and {"first/path", "second/path", "third/path"} on Unix.
-   */
-  protected String[] getAllSymbolImportDirsFrom(@NotNull CommandLine cl) {
-    Preconditions.checkNotNull(cl);
-    return cl.hasOption("path") ?
-      splitPathEntries(cl.getOptionValues("path")) :
-      new String[0];
-  }
-
-  /**
-   * Splits composedPath on their {@link File#pathSeparator}, e.g. {@code some/path:another/path} on Unix would return
-   * {@code {some/path, another/path}} and {@code some\path;other\path} on Windows would return
-   * {@code {some\path, other\path}}
-   */
-  protected final @NotNull String[] splitPathEntries(@NotNull String composedPath) {
-    Preconditions.checkNotNull(composedPath);
-
-    return composedPath.split(Pattern.quote(File.pathSeparator));
+    return paths.split(Pattern.quote(File.pathSeparator));
   }
 
   /**
    * {@link this#splitPathEntries(String)} on every entry of <i>composedPath</i>.
    */
-  protected final @NotNull String[] splitPathEntries(@NotNull String[] composedPaths) {
-    Preconditions.checkNotNull(composedPaths);
-    return Arrays.stream(composedPaths)
+  protected final @NotNull String[] splitPathEntries(@NotNull String[] paths) {
+    Preconditions.checkNotNull(paths);
+    return Arrays.stream(paths)
       .map(this::splitPathEntries)
       .flatMap(Arrays::stream)
       .toArray(String[]::new);
-  }
-
-  /**
-   * Like {@link #splitPathEntries(String[])}, but returns a {@code List<String>} instead.
-   */
-  protected final @NotNull List<String> splitPathEntriesToList(@NotNull String[] composedPath) {
-    return Arrays.asList(splitPathEntries(composedPath));
   }
 }

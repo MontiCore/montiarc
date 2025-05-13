@@ -1,11 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
+import de.se_rwth.commons.logging.Log;
+import montiarc._ast.ASTMACompilationUnit;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Contains unit tests for the application programming interface (API)
@@ -32,8 +41,8 @@ class MontiArcToolAPITest extends MontiArcTestBase {
 
     // Then
     assertThat(options.getOptions().size())
-      .as(() -> options.getOptions().toString())
-      .isEqualTo(11);
+        .as(() -> options.getOptions().toString())
+        .isEqualTo(11);
   }
 
   @Test
@@ -228,5 +237,117 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThat(option.hasOptionalArg()).isFalse();
     assertThat(option.hasArgName()).isFalse();
     assertThat(option.hasValueSeparator()).isFalse();
+  }
+
+  @Test
+  void compileNullInputShouldThrow() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    assertThrows(NullPointerException.class, () -> tool.compile(null, "", "", "", false, false));
+  }
+
+  @Test
+  void compileEmptyInputShouldThrow() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When && Then
+    assertThrows(IllegalArgumentException.class, () -> tool.compile(new String[]{}, "", "", "", false, false));
+  }
+
+  @TempDir
+  Path i1, i2, pp, s, r;
+
+  @Test
+  void compileEmptyInputDirShouldSucceed() {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    // When
+    Set<ASTMACompilationUnit> asts = tool.compile(new String[]{i1.toString()}, null, null, null, false, false);
+
+    // Then
+    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
+    assertThat(asts).isEmpty();
+  }
+
+  @Test
+  void compileFileInputShouldReturnAST() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    Path f = i1.resolve("Comp.arc");
+    Files.writeString(f, "component Comp { }");
+
+    // When
+    Set<ASTMACompilationUnit> asts = tool.compile(new String[]{f.toString()}, null, null, null, false, false);
+
+    // Then
+    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
+    assertThat(asts).isNotEmpty();
+    assertThat(asts.size()).isEqualTo(1);
+    assertThat(asts).anyMatch(ast -> "Comp".equals(ast.getComponentType().getName()));
+  }
+
+  @Test
+  void compileFileInputShouldReturnASTs() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    Path f1 = i1.resolve("Comp1.arc");
+    Path f2 = i1.resolve("Comp2.arc");
+    Files.writeString(f1, "component Comp1 { }");
+    Files.writeString(f2, "component Comp2 { }");
+
+    // When
+    Set<ASTMACompilationUnit> asts = tool.compile(new String[]{f1.toString(), f2.toString()}, null, null, null, false, false);
+
+    // Then
+    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
+    assertThat(asts).isNotEmpty();
+    assertThat(asts.size()).isEqualTo(2);
+    assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getComponentType().getName()));
+  }
+
+  @Test
+  void compileNonEmptyInputDirShouldReturnAST() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    Path f = i1.resolve("Comp.arc");
+    Files.writeString(f, "component Comp { }");
+
+    // When
+    Set<ASTMACompilationUnit> asts = tool.compile(new String[]{i1.toString()}, null, null, null, false, false);
+
+    // Then
+    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
+    assertThat(asts).isNotEmpty();
+    assertThat(asts.size()).isEqualTo(1);
+    assertThat(asts).anyMatch(ast -> "Comp".equals(ast.getComponentType().getName()));
+  }
+
+  @Test
+  void compileNonEmptyInputDirShouldReturnASTs() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+
+    Path f1 = i1.resolve("Comp1.arc");
+    Path f2 = i1.resolve("Comp2.arc");
+    Files.writeString(f1, "component Comp1 { }");
+    Files.writeString(f2, "component Comp2 { }");
+
+    // When
+    Set<ASTMACompilationUnit> asts = tool.compile(new String[]{i1.toString()}, null, null, null, false, false);
+
+    // Then
+    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
+    assertThat(asts).isNotEmpty();
+    assertThat(asts.size()).isEqualTo(2);
+    assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getComponentType().getName()));
   }
 }

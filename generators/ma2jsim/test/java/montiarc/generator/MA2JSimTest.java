@@ -26,7 +26,7 @@ public class MA2JSimTest extends MA2JSimTestBase {
     // Given
     String[] args = new String[] {
       "-i", input.toAbsolutePath().toString(),
-      "--o", output.toAbsolutePath().toString(),
+      "-o", output.toAbsolutePath().toString(),
       "-hwc", hwcPath.toAbsolutePath().toString(),
       "-c2mc"
     };
