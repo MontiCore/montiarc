@@ -73,7 +73,7 @@ public interface IPortReferenceInExpressionExtractor {
     public static Collection<PortReference> ofComponentTypePorts(@NotNull ComponentTypeSymbol comp) {
       Preconditions.checkNotNull(comp);
 
-      return comp.getAllArcPorts().stream()
+      return comp.getAllPorts().stream()
         .map(port -> new PortReference(port.getName()))
         .collect(Collectors.toSet());
     }

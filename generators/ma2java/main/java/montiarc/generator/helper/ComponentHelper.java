@@ -7,7 +7,7 @@ import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis.check.CompTypeExpression;
@@ -55,7 +55,7 @@ public class ComponentHelper {
    * @param portSymbol Symbol of the port for which the type name should be determined.
    * @return The String representation of the type of the port.
    */
-  public static String getRealPortTypeString(ArcPortSymbol portSymbol) {
+  public static String getRealPortTypeString(PortSymbol portSymbol) {
     SymTypeExpression portType = portSymbol.getType();
     return portType.isPrimitive() ?
       ((SymTypePrimitive) portType).getBoxedPrimitiveName() :

@@ -42,7 +42,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
       return;
 
     // Check has no ports
-    if (!node.getSymbol().getAllArcPorts().isEmpty()) {
+    if (!node.getSymbol().getAllPorts().isEmpty()) {
       Log.error(MontiArcError.UNIT_CANNOT_HAVE_PORTS.format());
     }
 

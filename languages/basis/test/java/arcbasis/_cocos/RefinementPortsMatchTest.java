@@ -9,7 +9,7 @@ import arcbasis._ast.ASTComponentInterface;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -398,7 +398,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
     }
 
     for (PortTestInput port : usedPorts) {
-      Pair<ASTComponentInterface, ArcPortSymbol> portWithSymbol = portWithSymbolFrom(port);
+      Pair<ASTComponentInterface, PortSymbol> portWithSymbol = portWithSymbolFrom(port);
       compType.getBody().addArcElement(portWithSymbol.getLeft());
       compSym.getSpannedScope().add(portWithSymbol.getRight());
     }
@@ -462,7 +462,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       .build();
 
     for (PortTestInput port : inheritedPorts) {
-      Pair<ASTComponentInterface, ArcPortSymbol> portWithSymbol = portWithSymbolFrom(port);
+      Pair<ASTComponentInterface, PortSymbol> portWithSymbol = portWithSymbolFrom(port);
       parentComp.getSpannedScope().add(portWithSymbol.getRight());
       // Simulating that the parent is from a library
       portWithSymbol.getRight().setAstNodeAbsent();
@@ -547,10 +547,10 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       .build();
   }
 
-  protected Pair<ASTComponentInterface, ArcPortSymbol> portWithSymbolFrom(@NotNull PortTestInput portInfos) {
+  protected Pair<ASTComponentInterface, PortSymbol> portWithSymbolFrom(@NotNull PortTestInput portInfos) {
     Preconditions.checkNotNull(portInfos);
 
-    ArcPortSymbol portSym = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol portSym = ArcBasisMill.portSymbolBuilder()
       .setName(portInfos.name)
       .setType(typeExprFrom(portInfos.type))
       .setIncoming(portInfos.isIncoming)

@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsHandler;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsTraverser;
@@ -32,9 +33,9 @@ public class InstanceVisitor implements ArcBasisHandler, CompSymbolsHandler {
     this.component = node;
   }
 
-  protected ArcPortSymbol port;
+  protected PortSymbol port;
 
-  public Optional<ArcPortSymbol> asPort(@NotNull ISymbol symbol) {
+  public Optional<PortSymbol> asPort(@NotNull ISymbol symbol) {
     Preconditions.checkNotNull(symbol);
     this.port = null;
     ArcBasisTraverser traverser = ArcBasisMill.traverser();
@@ -45,7 +46,7 @@ public class InstanceVisitor implements ArcBasisHandler, CompSymbolsHandler {
   }
 
   @Override
-  public void handle(ArcPortSymbol node) {
+  public void handle(PortSymbol node) {
     this.port = node;
   }
 

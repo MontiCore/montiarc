@@ -3,7 +3,7 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -71,12 +71,12 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
       ComponentTypeSymbol comp = VariableArcMill.componentTypeSymbolBuilder()
         .setName(compName).setSpannedScope(VariableArcMill.scope()).build();
 
-      ArcPortSymbol inPort = VariableArcMill.arcPortSymbolBuilder()
+      PortSymbol inPort = VariableArcMill.portSymbolBuilder()
         .setName(inPortName).setIncoming(true)
         .setType(Mockito.mock(SymTypeExpression.class)).build();
       comp.getSpannedScope().add(inPort);
 
-      ArcPortSymbol outPort = VariableArcMill.arcPortSymbolBuilder()
+      PortSymbol outPort = VariableArcMill.portSymbolBuilder()
         .setName(outPortName).setIncoming(false)
         .setType(Mockito.mock(SymTypeExpression.class)).build();
       comp.getSpannedScope().add(outPort);
@@ -107,14 +107,14 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
           .setName(INDEPENDENT_COMPONENT_NAME)
           .setSpannedScope(VariableArcMill.scope()).build();
 
-      ArcPortSymbol inPort =
-        VariableArcMill.arcPortSymbolBuilder()
+      PortSymbol inPort =
+        VariableArcMill.portSymbolBuilder()
           .setName(INDEPENDENT_COMPONENT_IN_PORT_NAME).setIncoming(true)
           .setType(Mockito.mock(SymTypeExpression.class)).build();
       independentComp.getSpannedScope().add(inPort);
 
-      ArcPortSymbol outPort =
-        VariableArcMill.arcPortSymbolBuilder()
+      PortSymbol outPort =
+        VariableArcMill.portSymbolBuilder()
           .setName(INDEPENDENT_COMPONENT_OUT_PORT_NAME).setIncoming(false)
           .setType(Mockito.mock(SymTypeExpression.class))
           .build();

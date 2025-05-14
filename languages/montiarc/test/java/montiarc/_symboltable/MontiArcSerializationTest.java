@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -37,7 +37,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       .build();
 
     parentComp.getSpannedScope().add(
-      MontiArcMill.arcPortSymbolBuilder()
+      MontiArcMill.portSymbolBuilder()
         .setIncoming(true)
         .setName("i")
         .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
@@ -45,7 +45,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     );
 
     parentComp.getSpannedScope().add(
-      MontiArcMill.arcPortSymbolBuilder()
+      MontiArcMill.portSymbolBuilder()
         .setOutgoing(true)
         .setName("o")
         .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
@@ -102,7 +102,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     final JsonObject json = JsonParser.parseJsonObject(s);
     assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcPortSymbol.class.getCanonicalName());
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(PortSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("name").getAsJsonString().getValue()).isEqualTo("i");
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
@@ -133,7 +133,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     final JsonObject json = JsonParser.parseJsonObject(s);
     assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcPortSymbol.class.getCanonicalName());
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(PortSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("name").getAsJsonString().getValue()).isEqualTo("o");
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
@@ -165,7 +165,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     final JsonObject json = JsonParser.parseJsonObject(s);
     assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(2);
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcPortSymbol.class.getCanonicalName());
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(PortSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("name").getAsJsonString().getValue()).isEqualTo("i");
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
@@ -175,7 +175,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("type").getAsJsonObject()
       .getMember("primitiveName").getAsJsonString().getValue()).isEqualTo("int");
     assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject()
-      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcPortSymbol.class.getCanonicalName());
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(PortSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject()
       .getMember("name").getAsJsonString().getValue()).isEqualTo("o");
     assertThat(json.getMember("symbols").getAsJsonArray().get(1).getAsJsonObject()

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
@@ -13,9 +13,9 @@ import java.util.function.Predicate;
 public class MontiArcArtifactScope extends MontiArcArtifactScopeTOP {
 
   @Override
-  public List<ArcPortSymbol> resolvePortManyEnclosing(boolean foundSymbols, String name, AccessModifier modifier,
-                                                      Predicate<ArcPortSymbol> predicate) {
-    return resolveArcPortMany(foundSymbols, name, modifier, predicate);
+  public List<PortSymbol> resolvePortManyEnclosing(boolean foundSymbols, String name, AccessModifier modifier,
+                                                      Predicate<PortSymbol> predicate) {
+    return resolvePortMany(foundSymbols, name, modifier, predicate);
   }
 
   @Override

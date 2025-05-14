@@ -8,13 +8,24 @@ import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._ast.ASTPortDeclaration;
+import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.symboltable.IScopeSpanningSymbol;
+import de.monticore.types3.TypeCheck3;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
+import variablearc._ast.ASTVariantPortAccess;
 import variablearc._symboltable.VariantComponentTypeSymbol;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A class that can duplicate AST elements or update symbols.
@@ -69,21 +80,15 @@ public class ASTVariantBuilder implements ArcBasisHandler {
   public void handle(@NotNull ASTConnector node) {
     Preconditions.checkNotNull(node);
     if (node == result) {
-      ASTConnector result = ArcBasisMill.connectorBuilder().setSource(node.getSourceName())
-        .setTargetList(node.getTargetsNames().toArray(String[]::new)).build();
+      ASTConnector result = ArcBasisMill.connectorBuilder()
+        .setSource(new ASTVariantPortAccess(node.getSource()))
+        .setTargetList(node.getTargetList().stream().map(ASTVariantPortAccess::new).collect(Collectors.toList()))
+        .build();
+
       result.setEnclosingScope(node.getEnclosingScope());
 
-      // duplicate source positions
       result.set_SourcePositionStart(node.get_SourcePositionStart());
       result.set_SourcePositionEnd(node.get_SourcePositionEnd());
-
-      result.getSource().set_SourcePositionStart(node.getSource().get_SourcePositionStart());
-      result.getSource().set_SourcePositionEnd(node.getSource().get_SourcePositionEnd());
-
-      for (int i = 0; i < result.getTargetList().size(); i++) {
-        result.getTargetList().get(i).set_SourcePositionStart(node.getTargetList().get(i).get_SourcePositionStart());
-        result.getTargetList().get(i).set_SourcePositionEnd(node.getTargetList().get(i).get_SourcePositionEnd());
-      }
 
       traverse(result);
       this.result = result;
@@ -107,28 +112,10 @@ public class ASTVariantBuilder implements ArcBasisHandler {
       if (node.isPresentComponentSymbol() && node.getComponentSymbol().isTypePresent() &&
         node.getComponentSymbol().getType().getTypeInfo() != null && VariableArcMill.typeDispatcher().isArcBasisComponentType(node.getComponentSymbol().getType().getTypeInfo())
       ) {
-        ArcBasisMill.typeDispatcher().asArcBasisComponentType(node.getComponentSymbol().getType().getTypeInfo()).getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+        ArcBasisMill.typeDispatcher().asArcBasisComponentType(node.getComponentSymbol().getType().getTypeInfo()).getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
       }
     } else {
-      variant.getArcPort(node.getPort(), true).ifPresent(node::setPortSymbol);
-    }
-  }
-
-  /**
-   * Set the delay of a {@link variablearc._symboltable.VariantPortSymbol}
-   *
-   * @param node the port declaration used
-   */
-  @Override
-  public void handle(@NotNull ASTPortDeclaration node) {
-    Preconditions.checkNotNull(node);
-
-    for (ASTArcPort port : node.getArcPortList()) {
-      if (variant.containsSymbol(port.getSymbol())) {
-        if (variant.getBehavior().isPresent())
-          variant.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(port.getSymbol().isOutgoing()
-            && variant.getBehavior().get().isDelayed()));
-      }
+      variant.getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
     }
   }
 }

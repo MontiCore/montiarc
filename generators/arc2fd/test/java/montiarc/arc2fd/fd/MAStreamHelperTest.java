@@ -42,8 +42,8 @@ public class MAStreamHelperTest {
     tool.runAfterParsingTrafos(asts);
     tool.createSymbolTable(asts);
     tool.runSymbolTablePhase2(asts);
+    tool.runAfterSymbolTablePhase2Trafos(asts);
     tool.runSymbolTablePhase3(asts);
-    tool.runAfterSymbolTablePhase3Trafos(asts);
 
     // And now get the .arc-File we're finally interested in
     Optional<ASTMACompilationUnit> optAst =

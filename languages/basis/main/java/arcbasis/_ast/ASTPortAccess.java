@@ -2,7 +2,7 @@
 package arcbasis._ast;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -25,32 +25,73 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     componentSymbol = symbol;
   }
 
-  public void setPortSymbol(@NotNull ArcPortSymbol symbol) {
+  public void setPortSymbol(@NotNull PortSymbol symbol) {
     Preconditions.checkNotNull(symbol);
     portSymbol = symbol;
   }
 
   @Override
-  public SubcomponentSymbol getComponentSymbol() {
-    return componentSymbol;
+  protected void updateComponentSymbol() {
+    // Don't update if symbol is present
+    if (componentSymbol != null) return;
+
+    if (this.isPresentComponent()) {
+      this.getEnclosingScope()
+        .resolveSubcomponentMany(this.getComponent())
+        .stream()
+        .findFirst()
+        .ifPresent(this::setComponentSymbol);
+    }
   }
 
   @Override
-  public ArcPortSymbol getPortSymbol() {
+  protected void updatePortSymbol() {
+    // Don't update if symbol is present
+    if (portSymbol != null) return;
+
+    // Link the port access with the respective port
+    // If the port access has a component part,
+    // then the port belongs to a subcomponent
+    if (this.isPresentComponent()) {
+      if (this.isPresentComponentSymbol()
+        && this.getComponentSymbol().isTypePresent()
+        && this.getComponentSymbol().getType().getTypeInfo() != null
+        && this.getComponentSymbol()
+        .getType().getTypeInfo().getSpannedScope() != null) {
+        (this.getComponentSymbol()
+          .getType()
+          .getTypeInfo()
+          .getSpannedScope())
+          .resolvePortMany(this.getPort())
+          .stream()
+          .findFirst()
+          .ifPresent(this::setPortSymbol);
+      }
+      // else the port belongs to this component
+    } else {
+      this.getEnclosingScope()
+        .resolvePortMany(this.getPort())
+        .stream()
+        .findFirst()
+        .ifPresent(this::setPortSymbol);
+    }
+  }
+
+  @Override
+  public PortSymbol getPortSymbol() {
+    // Override to remove error message from super
+    updatePortSymbol();
     return portSymbol;
   }
 
   @Override
-  public boolean isPresentComponentSymbol() {
-    return componentSymbol != null;
+  public SubcomponentSymbol getComponentSymbol() {
+    // Override to remove error message from super
+    updateComponentSymbol();
+    return componentSymbol;
   }
 
-  @Override
-  public boolean isPresentPortSymbol() {
-    return portSymbol != null;
-  }
-
-  public static ASTPortAccess of(@NotNull ArcPortSymbol port) {
+  public static ASTPortAccess of(@NotNull PortSymbol port) {
     Preconditions.checkNotNull(port);
     ASTPortAccess p = ArcBasisMill.portAccessBuilder()
       .setPort(port.getName())
@@ -59,7 +100,7 @@ public class ASTPortAccess extends ASTPortAccessTOP {
     return p;
   }
 
-  public static ASTPortAccess of(@NotNull SubcomponentSymbol subComp, @NotNull ArcPortSymbol port) {
+  public static ASTPortAccess of(@NotNull SubcomponentSymbol subComp, @NotNull PortSymbol port) {
     Preconditions.checkNotNull(port);
     ASTPortAccess p = ArcBasisMill.portAccessBuilder()
       .setComponent(subComp.getName())

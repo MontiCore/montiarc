@@ -146,64 +146,16 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     return this.getFields().stream().filter(field -> field.getName().equals(name)).findFirst();
   }
 
-  /**
-   * Returns the {@code List} of the ports of this component type. Does not include inherited ports.
-   *
-   * @return a {@code List} of the ports of this component type.
-   */
-  public List<ArcPortSymbol> getArcPorts() {
-    return this.getSpannedScope().getLocalArcPortSymbols();
-  }
-
-  @Override
-  public List<PortSymbol> getPorts() {
-    return (List<PortSymbol>) (List<? extends PortSymbol>) getArcPorts();
-  }
-
-  /**
-   * Searches the ports of this component type for a port with the given name. Does not consider
-   * inherited ports. Returns an empty {@code Optional} if no such port exist. Throws an
-   * {@link IllegalArgumentException} if the given name is {@code null}.
-   *
-   * @param name the name of the port.
-   * @return an {@code Optional} of a port of this component type with the given name or an empty
-   * {@code Optional} if no such port exists.
-   */
-  public Optional<ArcPortSymbol> getArcPort(@NotNull String name) {
-    Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolveArcPortLocallyMany(
-      false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, x -> true
-    ).stream().findFirst();
-  }
-
-  /**
-   * Searches the ports of this component type for a port with the given name. Search range can be
-   * extended to inherited ports with the boolean parameter. Returns an empty {@code Optional} if
-   * not such port exists. Throws an {@link IllegalArgumentException} if the given name is {@code
-   * null}.
-   *
-   * @param name the name of the port.
-   * @param searchInherited true, if to consider inherited ports in the search.
-   * @return an {@code Optional} of a port with the given name, or an empty {@code Optional}, if no
-   * such port exists.
-   */
-  public Optional<ArcPortSymbol> getArcPort(@NotNull String name, boolean searchInherited) {
-    Preconditions.checkNotNull(name);
-    Collection<ArcPortSymbol> portsToConsider
-      = searchInherited ? this.getAllArcPorts() : this.getArcPorts();
-    return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
-  }
-
   public Optional<SymTypeExpression> getTypeOfPort(@NotNull String portName) {
     Preconditions.checkNotNull(portName);
     // We first look if the requested port is part of our definition.
     // If not, we ask our parent if they have such a port.
-    boolean portDefinedByUs = getArcPort(portName, false).isPresent();
+    boolean portDefinedByUs = getPort(portName, false).isPresent();
 
     if (portDefinedByUs) {
-      return getArcPort(portName, false)
-        .filter(ArcPortSymbol::isTypePresent)
-        .map(ArcPortSymbol::getType);
+      return getPort(portName, false)
+        .filter(PortSymbol::isTypePresent)
+        .map(PortSymbol::getType);
     } else if (!getSuperComponentsList().isEmpty()) {
       // We do not have this port. Now we look if our parents have such a port.
       return this.getSuperComponentsList().stream().map(parent -> parent.getTypeOfPort(portName)).filter(Optional::isPresent).map(Optional::get).findAny();
@@ -212,13 +164,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     }
   }
 
-  /**
-   * Returns the incoming ports of this component type. Does not include inherited ports.
-   *
-   * @return a {@code List} of incoming ports of this component type.
-   */
-  public List<ArcPortSymbol> getIncomingArcPorts() {
-    return this.getArcPorts(true);
+  public boolean hasPorts() {
+    return !this.getPorts().isEmpty();
   }
 
   /**
@@ -230,50 +177,10 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of the incoming ports of this component type that have the given
    * visibility.
    */
-  public List<ArcPortSymbol> getIncomingArcPorts(@NotNull AccessModifier visibility) {
+  public List<PortSymbol> getIncomingPorts(@NotNull AccessModifier visibility) {
     Preconditions.checkNotNull(visibility);
-    return this.getIncomingArcPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
+    return this.getIncomingPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
-  }
-
-  /**
-   * Searches the ports of this component type for an incoming port with the given name. Does not
-   * consider inherited ports. Returns an empty {@code Optional} if no such port exist. Throws an
-   * {@link IllegalArgumentException} if the given name is {@code null}.
-   *
-   * @param name the name of the port.
-   * @return an {@code Optional} of an incoming port with the given name or an empty {@code
-   * Optional} if no such port exists.
-   */
-  public Optional<ArcPortSymbol> getIncomingArcPort(@NotNull String name) {
-    Preconditions.checkNotNull(name);
-    return this.getIncomingArcPort(name, false);
-  }
-
-  /**
-   * Searches the ports of this component type for an incoming port with the given name. Does
-   * consider inherited ports as stated by the given {@code boolean} value. Throws an
-   * {@link IllegalArgumentException} if the given name is {@code null}.
-   *
-   * @param name the name of the port.
-   * @param searchInherited if to consider inherited ports.
-   * @return an {@code Optional} of an incoming port with the given name or an empty {@code
-   * Optional} if no such port exists in the specified search range.
-   */
-  public Optional<ArcPortSymbol> getIncomingArcPort(@NotNull String name, boolean searchInherited) {
-    Preconditions.checkNotNull(name);
-    Collection<ArcPortSymbol> portsToConsider
-      = searchInherited ? this.getAllIncomingArcPorts() : this.getIncomingArcPorts();
-    return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
-  }
-
-  /**
-   * Returns the outgoing ports of this component type. Does not include inherited ports.
-   *
-   * @return a {@code List} of the outgoing ports of this component type.
-   */
-  public List<ArcPortSymbol> getOutgoingArcPorts() {
-    return this.getArcPorts(false);
   }
 
   /**
@@ -285,120 +192,10 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of the outgoing ports of this component type that have the given
    * visibility.
    */
-  public List<ArcPortSymbol> getOutgoingArcPorts(@NotNull AccessModifier visibility) {
+  public List<PortSymbol> getOutgoingPorts(@NotNull AccessModifier visibility) {
     Preconditions.checkNotNull(visibility);
-    return this.getOutgoingArcPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
+    return this.getOutgoingPorts().stream().filter(p -> p.getAccessModifier().includes(visibility))
       .collect(Collectors.toList());
-  }
-
-  /**
-   * Searches the ports of this component type for an outgoing port with the given name. Does not
-   * consider inherited ports. Returns an empty {@code Optional} if no such port exist. Throws an
-   * {@link IllegalArgumentException} if the given name is {@code null}.
-   *
-   * @param name the name of the port.
-   * @return an {@code Optional} of an outgoing port with the given name or an empty {@code
-   * Optional} if no such port exists.
-   */
-  public Optional<ArcPortSymbol> getOutgoingArcPort(@NotNull String name) {
-    Preconditions.checkNotNull(name);
-    return this.getOutgoingArcPort(name, false);
-  }
-
-  /**
-   * Searches the ports of this component type for an outgoing port with the given name. Does
-   * consider inherited ports as stated by the given {@code boolean} value. Throws an
-   * {@link IllegalArgumentException} if the given name is {@code null}.
-   *
-   * @param name the name of the port.
-   * @param searchInherited if to consider inherited ports.
-   * @return an {@code Optional} of an outgoing port with the given name or an empty {@code
-   * Optional} if no such port exists in the specified search range.
-   */
-  public Optional<ArcPortSymbol> getOutgoingArcPort(@NotNull String name, boolean searchInherited) {
-    Preconditions.checkNotNull(name);
-    Collection<ArcPortSymbol> portsToConsider
-      = searchInherited ? this.getAllOutgoingArcPorts() : this.getOutgoingArcPorts();
-    return portsToConsider.stream().filter(p -> p.getName().equals(name)).findFirst();
-  }
-
-  /**
-   * Returns the ports of this component type that have the given direction. Does not included
-   * ports inherited from parent component types.
-   *
-   * @param isIncoming the direction of the ports.
-   * @return a {@code List} of ports of this component type that have the given direction.
-   */
-  protected List<ArcPortSymbol> getArcPorts(boolean isIncoming) {
-    return this.getArcPorts().stream().filter(p -> p.isIncoming() == isIncoming)
-      .collect(Collectors.toList());
-  }
-
-  /**
-   * Return all ports of this component type, including inherited port from all parent
-   * components types. NameSpaceHiding is considered and therefore hidden ports are not returned.
-   *
-   * @return a {@code List} of all ports of this component type.
-   */
-  public List<ArcPortSymbol> getAllArcPorts() {
-    return this.getAllArcPorts(new HashSet<>());
-  }
-
-  protected List<ArcPortSymbol> getAllArcPorts(@NotNull Collection<ComponentTypeSymbol> visited) {
-    Preconditions.checkNotNull(visited);
-    visited.add(this);
-
-    List<ArcPortSymbol> result = new ArrayList<>(getArcPorts());
-    for (CompKindExpression parent : getSuperComponentsList()) {
-      if (!visited.contains(parent.getTypeInfo())) {
-        List<ArcPortSymbol> inheritedPorts = new ArrayList<>();
-        for (ArcPortSymbol port : ((ComponentTypeSymbol) parent.getTypeInfo()).getAllArcPorts(visited)) {
-          if (result.stream().noneMatch(p -> p.getName().equals(port.getName()))) {
-            inheritedPorts.add(port);
-          }
-        }
-        result.addAll(inheritedPorts);
-      }
-    }
-
-    return result;
-  }
-
-  /**
-   * Returns all incoming ports of this component type, including inherited ports from all parent
-   * component types. NameSpaceHiding is considered and therefore hidden ports are not returned.
-   *
-   * @return a {@code List} of all incoming ports of this component type.
-   */
-  public List<ArcPortSymbol> getAllIncomingArcPorts() {
-    return this.getAllArcPorts(true);
-  }
-
-  /**
-   * Returns all outgoing ports of this component type, including inherited ports from all parent
-   * component types. NameSpaceHiding is considered and therefore hidden ports are not returned.
-   *
-   * @return a {@code List} of all outgoing ports of this component type.
-   */
-  public List<ArcPortSymbol> getAllOutgoingArcPorts() {
-    return this.getAllArcPorts(false);
-  }
-
-  /**
-   * Returns all ports of this component type that have the given direction, including inherited
-   * ports from all parent components types. NameSpaceHiding is considered and therefore hidden
-   * ports are not returned.
-   *
-   * @param isIncoming the direction of the ports.
-   * @return a {@code List} of all ports of this component type that have the given direction.
-   */
-  protected List<ArcPortSymbol> getAllArcPorts(boolean isIncoming) {
-    return this.getAllArcPorts().stream().filter(p -> p.isIncoming() == isIncoming)
-      .collect(Collectors.toList());
-  }
-
-  public boolean hasPorts() {
-    return !this.getArcPorts().isEmpty();
   }
 
   /**

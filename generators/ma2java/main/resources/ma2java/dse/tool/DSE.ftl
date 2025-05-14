@@ -190,7 +190,7 @@ public class DSE${comp.getName()}{
 <#macro printTick comp>
 	<#assign tickStatement = "comp"/>
 	<#list comp.getPorts() as port>
-		<#if port.isDelayed()>
+		<#if port.isStronglyCausal()>
 			<#assign item = tickStatement + "." + port.getName() />
 			<#assign tickStatementList = tickStatementList + [item] />
 		</#if>
@@ -201,7 +201,7 @@ public class DSE${comp.getName()}{
 		<#assign innerComp = inner.getSymbol().getType().getTypeInfo()>
 			<#assign tickStatements = tickStatement + ".getComponent${inner.getName()?cap_first}()"/>
 			<#list innerComp.getPorts() as port>
-				<#if port.isDelayed()>
+				<#if port.isStronglyCausal()>
 					<@printTickDecomposed port tickStatements/>
 				</#if>
 			</#list>
@@ -227,7 +227,7 @@ Set<montiarc.rte.timesync.IOutPort> delayedPorts = new HashSet<>();
 </#macro>
 
 <#macro printTickDecomposed port ticksPath>
-	<#if port.isDelayed()>
+	<#if port.isStronglyCausal()>
 		<#assign item = ticksPath + ".get" + port.getName()?cap_first + "()"/>
 		<#assign tickStatementList = tickStatementList + [item] />
 	</#if>
@@ -235,7 +235,7 @@ Set<montiarc.rte.timesync.IOutPort> delayedPorts = new HashSet<>();
 
 <#macro printInnerCompTick (comp varTickStatement)>
 	<#list comp.getPorts() as port>
-		<#if port.isDelayed()>
+		<#if port.isStronglyCausal()>
 			<@printTickDecomposed port varTickStatement/>
 		</#if>
 	</#list>

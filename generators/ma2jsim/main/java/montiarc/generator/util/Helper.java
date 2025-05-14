@@ -13,7 +13,7 @@ import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
@@ -257,23 +257,23 @@ public class Helper {
       .findFirst().orElse(Timing.DEFAULT);
   }
 
-  public boolean isSync(ArcPortSymbol portSymbol) {
+  public boolean isSync(PortSymbol portSymbol) {
     return portSymbol.getTiming().matches(Timing.TIMED_SYNC);
   }
 
-  public boolean isMsgEventPort(ArcPortSymbol portSymbol) {
+  public boolean isMsgEventPort(PortSymbol portSymbol) {
     return portSymbol.getTiming().matches(Timing.TIMED)
       || portSymbol.getTiming().matches(Timing.UNTIMED);
   }
 
-  public List<ArcPortSymbol> getSyncedInPortsOf(ComponentTypeSymbol comp) {
-    return comp.getAllIncomingArcPorts().stream()
+  public List<PortSymbol> getSyncedInPortsOf(ComponentTypeSymbol comp) {
+    return comp.getAllIncomingPorts().stream()
       .filter(this::isSync)
       .collect(Collectors.toList());
   }
 
-  public List<ArcPortSymbol> getMsgEventInPortsOf(ComponentTypeSymbol comp) {
-    return comp.getAllIncomingArcPorts().stream()
+  public List<PortSymbol> getMsgEventInPortsOf(ComponentTypeSymbol comp) {
+    return comp.getAllIncomingPorts().stream()
       .filter(this::isMsgEventPort)
       .collect(Collectors.toList());
   }
@@ -325,9 +325,9 @@ public class Helper {
     );
   }
 
-  public List<PortSymbol> getAllDelayedOutPorts(ComponentTypeSymbol comp) {
-    return comp.getAllOutgoingArcPorts().stream()
-      .filter(ArcPortSymbol::isDelayed)
+  public List<PortSymbol> getAllStronglyCausalOutPorts(ComponentTypeSymbol comp) {
+    return comp.getAllOutgoingPorts().stream()
+      .filter(PortSymbol::getStronglyCausal)
       .collect(Collectors.toList());
   }
 
@@ -608,17 +608,17 @@ public class Helper {
     return varsWithSub;
   }
 
-  public Map<ArcPortSymbol, String> getInPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSym) {
+  public Map<PortSymbol, String> getInPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSym) {
     return getPortsWithSuffixesOfOtherVariants(variantCompSym).entrySet().stream()
       .filter(p -> p.getKey().isIncoming())
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
-  public Map<ArcPortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSymbol) {
-    List<ArcPortSymbol> ownOriginalPorts = variantCompSymbol.getAllArcPorts().stream().map(p -> ((VariantPortSymbol) p).getOriginal()).collect(Collectors.toList());
+  public Map<PortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSymbol) {
+    List<PortSymbol> ownOriginalPorts = variantCompSymbol.getAllPorts().stream().map(p -> ((VariantPortSymbol) p).getOriginal()).collect(Collectors.toList());
     ComponentTypeSymbol original = variantCompSymbol.getAdaptee();
 
-    return original.getAllArcPorts().stream()
+    return original.getAllPorts().stream()
       .filter(p -> !ownOriginalPorts.contains(p))
       .map(p -> Map.entry(p, portVariantSuffix(variantCompSymbol.getAstNode(), p)))
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));

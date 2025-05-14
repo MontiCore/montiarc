@@ -21,7 +21,7 @@
                   "fullName": "ComponentWithGenericComponent.A.T"
                 },
                 {
-                  "kind": "arcbasis._symboltable.ArcPortSymbol",
+                  "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
                   "name": "out",
                   "fullName": "ComponentWithGenericComponent.A.out",
                   "type": {

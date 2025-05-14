@@ -16,9 +16,12 @@ import arcbasis._ast.ASTPortDirection;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbolBuilder;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbolBuilder;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -179,13 +182,14 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.setCurrentPortDirection(null);
   }
 
-  protected ArcPortSymbolBuilder create_Port(@NotNull ASTArcPort ast) {
+  protected PortSymbolBuilder create_Port(@NotNull ASTArcPort ast) {
     Preconditions.checkState(this.getCurrentPortDirection().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    ArcPortSymbolBuilder builder = ArcBasisMill.arcPortSymbolBuilder();
+    PortSymbolBuilder builder = ArcBasisMill.portSymbolBuilder();
     builder.setName(ast.getName());
     builder.setIncoming(this.getCurrentPortDirection().get().isIn());
     builder.setOutgoing(this.getCurrentPortDirection().get().isOut());
+    builder.setType(SymTypeExpressionFactory.createObscureType());
     return builder;
   }
 
@@ -195,7 +199,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     Preconditions.checkState(getCurrentScope().isPresent());
     Preconditions.checkState(getCurrentPortDirection().isPresent());
 
-    ArcPortSymbol port = this.create_Port(node).buildWithoutType();
+    PortSymbol port = this.create_Port(node).build();
     node.setSymbol(port);
     port.setAstNode(node);
     node.setEnclosingScope(this.getCurrentScope().get());

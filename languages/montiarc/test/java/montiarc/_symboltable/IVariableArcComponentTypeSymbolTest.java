@@ -3,7 +3,7 @@ package montiarc._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -266,10 +266,10 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
       "<<delayed>> compute {}" +
       "}}");
 
-    ArcPortSymbol portSymbol = compilationUnit.getComponentType().getSymbol().getArcPort("o").get();
-    ArcPortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getComponentType().getSymbol()).getVariants().get(0).getArcPort("o").get();
+    PortSymbol portSymbol = compilationUnit.getComponentType().getSymbol().getPort("o").get();
+    PortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getComponentType().getSymbol()).getVariants().get(0).getPort("o").get();
 
     // Then
-    Assertions.assertEquals(portSymbol.getDelayed(), portVariantSymbol.getDelayed());
+    Assertions.assertEquals(portSymbol.getStronglyCausal(), portVariantSymbol.getStronglyCausal());
   }
 }

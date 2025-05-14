@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -48,8 +48,8 @@ public class PortsConnected implements ArcBasisASTComponentTypeCoCo {
       .collect(Collectors.toSet());
 
     // --------- INCOMING PORTS ----------
-    Collection<ArcPortSymbol> incoming = symbol.getAllIncomingArcPorts();
-    for (ArcPortSymbol port : incoming) {
+    Collection<PortSymbol> incoming = symbol.getAllIncomingPorts();
+    for (PortSymbol port : incoming) {
       if (!sources.contains(port.getName()) && !targets.contains(port.getName())) {
         Log.warn(ArcError.IN_PORT_UNUSED.format(port.getName()),
           port.getAstNode().get_SourcePositionStart(), port.getAstNode().get_SourcePositionEnd()
@@ -58,8 +58,8 @@ public class PortsConnected implements ArcBasisASTComponentTypeCoCo {
     }
 
     // --------- OUTGOING PORTS ----------
-    Collection<ArcPortSymbol> outgoing = symbol.getAllOutgoingArcPorts();
-    for (ArcPortSymbol port : outgoing) {
+    Collection<PortSymbol> outgoing = symbol.getAllOutgoingPorts();
+    for (PortSymbol port : outgoing) {
       if (!sources.contains(port.getName()) && !targets.contains(port.getName())) {
         Log.warn(ArcError.OUT_PORT_UNUSED.format(port.getName()),
           port.getAstNode().get_SourcePositionStart(), port.getAstNode().get_SourcePositionEnd()

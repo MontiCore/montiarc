@@ -2,7 +2,7 @@
 package arcautomaton._visitor;
 
 import arcautomaton._symboltable.IArcAutomatonScope;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symboltable.IScope;
@@ -40,9 +40,9 @@ public class StatechartNameResolver {
   /**
    * searches for a port of the component with the given variable
    */
-  public Optional<ArcPortSymbol> resolvePort(@NotNull String name) {
+  public Optional<PortSymbol> resolvePort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return scope.resolveArcPortMany(name).stream().findFirst();
+    return scope.resolvePortMany(name).stream().findFirst();
   }
 
   /**

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -23,7 +24,7 @@ import java.util.stream.Collectors;
 public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
 
   protected ComponentTypeSymbol typeSymbol;
-  protected Map<ArcPortSymbol, VariantPortSymbol> portSymbolMap;
+  protected Map<PortSymbol, VariantPortSymbol> portSymbolMap;
 
   protected VariantComponentTypeSymbol(@NotNull ComponentTypeSymbol typeSymbol) {
     super(typeSymbol.getName());
@@ -55,22 +56,22 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
   }
 
   @Override
-  public List<ArcPortSymbol> getAllArcPorts() {
-    return typeSymbol.getAllArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol).collect(Collectors.toList());
+  public Set<PortSymbol> getAllPorts() {
+    return typeSymbol.getAllPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol).collect(Collectors.toSet());
   }
 
   @Override
-  public List<ArcPortSymbol> getArcPorts() {
-    return typeSymbol.getArcPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol).collect(Collectors.toList());
+  public List<PortSymbol> getPorts() {
+    return typeSymbol.getPorts().stream().filter(this::containsSymbol).map(this::getVariantPortSymbol).collect(Collectors.toList());
   }
 
   @Override
-  public Optional<ArcPortSymbol> getArcPort(@NotNull String name) {
+  public Optional<PortSymbol> getPort(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolveArcPortLocallyMany(false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, this::containsSymbol).stream().findFirst().map(this::getVariantPortSymbol);
+    return this.getSpannedScope().resolvePortLocallyMany(false, name, de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION, this::containsSymbol).stream().findFirst().map(this::getVariantPortSymbol);
   }
 
-  protected ArcPortSymbol getVariantPortSymbol(ArcPortSymbol port) {
+  protected PortSymbol getVariantPortSymbol(PortSymbol port) {
     if (!portSymbolMap.containsKey(port)) {
       portSymbolMap.put(port, new VariantPortSymbol(port, this));
     }

@@ -9,6 +9,7 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
@@ -879,13 +880,13 @@ public class SymbolServiceTest extends ArcBasisTestBase {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, ArcPortSymbol)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, PortSymbol)}
    */
   @Test
   public void shouldLinkPortAndScope() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    ArcPortSymbol port = ArcBasisMill.arcPortSymbolBuilder().setName("port")
+    PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("port")
       .setIncoming(true).setType(SymTypeExpressionFactory
         .createPrimitive(BasicSymbolsMill.BOOLEAN)).build();
 
@@ -894,7 +895,7 @@ public class SymbolServiceTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalArcPortSymbols().contains(port),
+      () -> Assertions.assertTrue(scope.getLocalPortSymbols().contains(port),
         "The scope does not contain the expected port."),
       () -> Assertions.assertEquals(scope, port.getEnclosingScope(),
         "The port's enclosing scope does not match the expected scope.")
@@ -902,31 +903,31 @@ public class SymbolServiceTest extends ArcBasisTestBase {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, ArcPortSymbol...)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, PortSymbol...)}
    */
   @Test
   public void shouldLinkPortsAndScope() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    ArcPortSymbol[] ports = new ArcPortSymbol[]{};
+    PortSymbol[] ports = new PortSymbol[]{};
 
     // When
     SymbolService.link(scope, ports);
 
     // Then
-    Assertions.assertTrue(scope.getLocalArcPortSymbols().containsAll(Arrays.asList(ports)),
+    Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
       "The scope does not contain all expected ports.");
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, ArcPortSymbol...)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, PortSymbol...)}
    */
   @Test
   public void shouldLinkPortsAndScope2() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    ArcPortSymbol[] ports = new ArcPortSymbol[]{ArcBasisMill
-      .arcPortSymbolBuilder().setName("port1").setIncoming(true)
+    PortSymbol[] ports = new PortSymbol[]{ArcBasisMill
+      .portSymbolBuilder().setName("port1").setIncoming(true)
       .setType(SymTypeExpressionFactory
         .createPrimitive(BasicSymbolsMill.BOOLEAN)).build()
     };
@@ -936,10 +937,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalArcPortSymbols().containsAll(Arrays.asList(ports)),
+      () -> Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
         "The scope does not contain all expected ports."),
       () -> {
-        for (ArcPortSymbol port : ports) {
+        for (PortSymbol port : ports) {
           Assertions.assertEquals(scope, port.getEnclosingScope(),
             "The port's enclosing scope does not match the expected scope.");
         }
@@ -948,16 +949,16 @@ public class SymbolServiceTest extends ArcBasisTestBase {
   }
 
   /**
-   * Method under test {@link SymbolService#link(IArcBasisScope, ArcPortSymbol...)}
+   * Method under test {@link SymbolService#link(IArcBasisScope, PortSymbol...)}
    */
   @Test
   public void shouldLinkPortsAndScope3() {
     // Given
     IArcBasisScope scope = ArcBasisMill.scope();
-    ArcPortSymbol[] ports = new ArcPortSymbol[]{
-      ArcBasisMill.arcPortSymbolBuilder().setName("port1").setIncoming(true)
+    PortSymbol[] ports = new PortSymbol[]{
+      ArcBasisMill.portSymbolBuilder().setName("port1").setIncoming(true)
         .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build(),
-      ArcBasisMill.arcPortSymbolBuilder().setName("port2").setIncoming(true)
+      ArcBasisMill.portSymbolBuilder().setName("port2").setIncoming(true)
         .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN)).build()};
 
     // When
@@ -965,10 +966,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalArcPortSymbols().containsAll(Arrays.asList(ports)),
+      () -> Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
         "The scope does not contain all expected ports."),
       () -> {
-        for (ArcPortSymbol port : ports) {
+        for (PortSymbol port : ports) {
           Assertions.assertEquals(scope, port.getEnclosingScope(),
             "The port's enclosing scope does not match the expected scope.");
         }

@@ -69,10 +69,10 @@ public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllOutPorts() {
 
 <#macro allDelayedOutPortsGetter>
 @Override
-protected java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllDelayedOutPorts() {
+protected java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllStronglyCausalOutPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(
-    <#list helper.getAllDelayedOutPorts(ast.getSymbol()) as port>
+    <#list helper.getAllStronglyCausalOutPorts(ast.getSymbol()) as port>
         this.${prefixes.port()}${port.getName()}() <#sep>, </#sep>
     </#list>
     );
@@ -81,7 +81,7 @@ protected java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllDelayedOu
       <#list helper.getVariants(ast) as variant>
         case ${helper.variantSuffix(variant)}:
         return java.util.List.of(
-        <#list helper.getAllDelayedOutPorts(variant) as port>
+        <#list helper.getAllStronglyCausalOutPorts(variant) as port>
             this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}() <#sep>, </#sep>
         </#list>
         );

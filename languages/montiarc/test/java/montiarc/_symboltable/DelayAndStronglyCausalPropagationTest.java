@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
@@ -28,32 +28,28 @@ public class DelayAndStronglyCausalPropagationTest extends MontiArcTestBase {
         .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
+    tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runAfterSymbolTablePhase3Trafos(ast);
     tool.runDefaultCoCos(ast);
     IArcBasisScope scope = ast.getComponentType().getSpannedScope();
 
     // Then
-    Optional<ArcPortSymbol> pDirectDelayed = scope.resolveArcPort("pDirectDelayed"),
-      pChainedDelayed = scope.resolveArcPort("pChainedDelayed"),
-      pNotDelayed = scope.resolveArcPort("pNotDelayed"),
-      pNoPathToIn = scope.resolveArcPort("pNoPathToIn");
+    Optional<PortSymbol> pDirectDelayed = scope.resolvePort("pDirectDelayed"),
+      pChainedDelayed = scope.resolvePort("pChainedDelayed"),
+      pNotDelayed = scope.resolvePort("pNotDelayed"),
+      pNoPathToIn = scope.resolvePort("pNoPathToIn");
 
     Assertions.assertTrue(pDirectDelayed.isPresent());
     Assertions.assertTrue(pChainedDelayed.isPresent());
     Assertions.assertTrue(pNotDelayed.isPresent());
     Assertions.assertTrue(pNoPathToIn.isPresent());
 
-    Assertions.assertTrue(pDirectDelayed.get().isDelayed());
     Assertions.assertTrue(pDirectDelayed.get().getStronglyCausal());
 
-    Assertions.assertFalse(pChainedDelayed.get().isDelayed());
     Assertions.assertTrue(pChainedDelayed.get().getStronglyCausal());
 
-    Assertions.assertFalse(pNotDelayed.get().isDelayed());
     Assertions.assertFalse(pNotDelayed.get().getStronglyCausal());
 
-    Assertions.assertFalse(pNoPathToIn.get().isDelayed());
     Assertions.assertTrue(pNoPathToIn.get().getStronglyCausal());
   }
 }

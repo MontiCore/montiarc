@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
@@ -113,13 +113,13 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     Preconditions.checkNotNull(portName);
     // We first look if the requested port is part of our definition.
     // If not, we ask our parent if they have such a port.
-    boolean portDefinedByUs = this.getTypeInfo().getArcPort(portName, false).isPresent();
+    boolean portDefinedByUs = this.getTypeInfo().getPort(portName, false).isPresent();
 
     if (portDefinedByUs) {
       Optional<SymTypeExpression> unboundPortType = this.getTypeInfo()
-        .getArcPort(portName, false)
-        .filter(ArcPortSymbol::isTypePresent)
-        .map(ArcPortSymbol::getType);
+        .getPort(portName, false)
+        .filter(PortSymbol::isTypePresent)
+        .map(PortSymbol::getType);
       return unboundPortType.map(this::createBoundTypeExpression);
     } else if (!this.getTypeInfo().isEmptySuperComponents()) {
       // We do not have this port. Now we look if our parent has such a port.

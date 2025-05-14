@@ -30,7 +30,7 @@ public class MontiArcTrafos {
     );
   }
 
-  public static MontiArcTrafos afterSymTab() {
+  public static MontiArcTrafos afterSymTabP2() {
     return new MontiArcTrafos(
       new MAAutoConnectTrafo()
     );

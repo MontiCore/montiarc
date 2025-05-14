@@ -8,7 +8,7 @@
       "spannedScope": {
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "i",
             "type": {
               "kind": "de.monticore.types.check.SymTypePrimitive",

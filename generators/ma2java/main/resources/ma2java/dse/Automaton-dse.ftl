@@ -304,7 +304,7 @@ ${tc.signature("comp")}
     this.transitionTo${state.getName()}();
     // provide initial value for delay ports
     <#list comp.getOutgoingPorts() as port>
-      <#if port.isDelayed()>this.${port.getName()}.tick();</#if>
+      <#if port.isStronglyCausal()>this.${port.getName()}.tick();</#if>
     </#list>
   }
 </#macro>

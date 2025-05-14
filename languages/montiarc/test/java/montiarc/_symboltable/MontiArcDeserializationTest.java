@@ -1241,7 +1241,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
       () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
       () -> assertThat(symbol.getName()).isEqualTo(name),
       () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getAllArcPorts().size()).isEqualTo(1)
+      () -> assertThat(symbol.getAllPorts().size()).isEqualTo(1)
     );
   }
 
@@ -1264,7 +1264,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
       () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
       () -> assertThat(symbol.getName()).isEqualTo(name),
       () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getAllArcPorts().size()).isEqualTo(0),
+      () -> assertThat(symbol.getAllPorts().size()).isEqualTo(0),
       () -> assertThat(symbol.getSubcomponents().size()).isEqualTo(1),
       () -> assertThat(symbol.getSubcomponents("a").get().getType().getTypeOfPort("out").get().getTypeInfo().getName()).isEqualTo("int")
     );

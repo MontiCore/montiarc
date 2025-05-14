@@ -64,8 +64,8 @@ public abstract class MontiArcTestBase extends ATestBase {
       MontiArcTrafos.afterParsing().applyAll(ast);
       MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
       MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
+      MontiArcTrafos.afterSymTabP2().applyAll(ast);
       MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
-      MontiArcTrafos.afterSymTab().applyAll(ast);
       return ast;
     } catch (IOException e) {
       throw new RuntimeException(e);

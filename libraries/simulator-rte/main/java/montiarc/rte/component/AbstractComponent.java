@@ -84,7 +84,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Sim
 
   protected abstract Object portValueOf(InPort<?> p);
 
-  protected abstract List<OutPort<?>> getAllDelayedOutPorts();
+  protected abstract List<OutPort<?>> getAllStronglyCausalOutPorts();
 
   @Override
   public abstract List<? extends InOutPort<?, ?>> getAllSyncedInPorts();
@@ -104,8 +104,8 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Sim
     }
   }
 
-  protected void sendTickOnAllDelayedOutputs() {
-    for (OutPort<?> outP : this.getAllDelayedOutPorts()) {
+  protected void sendTickOnAllStronglyCausalOutputs() {
+    for (OutPort<?> outP : this.getAllStronglyCausalOutPorts()) {
       outP.sendTick();
     }
   }
@@ -128,7 +128,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Sim
       if (behavior != null) {
         behavior.init();
       }
-      sendTickOnAllDelayedOutputs();
+      sendTickOnAllStronglyCausalOutputs();
     } else {
       for (SimComponent comp : this.getAllSubcomponents()) {
         comp.init();

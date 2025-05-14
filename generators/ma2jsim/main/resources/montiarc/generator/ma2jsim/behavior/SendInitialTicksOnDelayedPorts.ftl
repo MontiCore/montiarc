@@ -4,7 +4,7 @@
 ${tc.signature("portSymbols")}
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#list portSymbols as port>
-  <#if port.isDelayed()>
+  <#if port.isStronglyCausal()>
     context.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}().<@MethodNames.sendTick/>();
   </#if>
 </#list>

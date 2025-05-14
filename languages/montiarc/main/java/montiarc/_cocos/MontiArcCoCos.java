@@ -15,7 +15,6 @@ import arcbasis._cocos.ConfigurationParameterAssignment;
 import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
 import arcbasis._cocos.ConnectorTimingsFit;
-import arcbasis._cocos.DelayOutPortOnly;
 import arcbasis._cocos.FeedbackStrongCausality;
 import arcbasis._cocos.FieldInitOmitPortReferences;
 import arcbasis._cocos.FieldInitTypeFits;
@@ -129,7 +128,6 @@ public class MontiArcCoCos {
     addCoCoAs(new ConnectorDirectionsFit(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     addCoCoAs(new ConnectorTimingsFit(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new OnlyOneTiming());
-    checker.addCoCo(new DelayOutPortOnly());
     addCoCoAs(new AtomicNoConnector(),       checkVariants ? varChecker::addCoCo : checker::addCoCo);
     addCoCoAs(new AtomicMaxOneBehavior(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
     addCoCoAs(new FeedbackStrongCausality(), checkVariants ? varChecker::addCoCo : checker::addCoCo);

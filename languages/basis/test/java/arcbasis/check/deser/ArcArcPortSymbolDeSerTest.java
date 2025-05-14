@@ -2,8 +2,8 @@
 package arcbasis.check.deser;
 
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ArcPortSymbolDeSer;
+import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbolDeSer;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
@@ -20,7 +20,7 @@ public class ArcArcPortSymbolDeSerTest extends ArcBasisTestBase {
     // Given
     String expectedJson = String.format("{\"timing\":\"%s\"}", timing.getName());
     PortSymbolDeSerForTests deser = new PortSymbolDeSerForTests();
-    ArcBasisSymbols2Json arcBasis2Json = new ArcBasisSymbols2Json();
+    CompSymbolsSymbols2Json arcBasis2Json = new CompSymbolsSymbols2Json();
 
     // When
     arcBasis2Json.getJsonPrinter().beginObject();
@@ -51,9 +51,9 @@ public class ArcArcPortSymbolDeSerTest extends ArcBasisTestBase {
   /**
    * Provides access to the methods for serializing and deserializing timing
    */
-  private static class PortSymbolDeSerForTests extends ArcPortSymbolDeSer {
+  private static class PortSymbolDeSerForTests extends PortSymbolDeSer {
     @Override
-    public void serializeTiming(@NotNull Timing timing, @NotNull ArcBasisSymbols2Json s2j) {
+    public void serializeTiming(@NotNull Timing timing, @NotNull CompSymbolsSymbols2Json s2j) {
       super.serializeTiming(timing, s2j);
     }
 

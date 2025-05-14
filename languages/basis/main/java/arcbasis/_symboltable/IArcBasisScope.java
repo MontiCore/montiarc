@@ -2,6 +2,7 @@
 package arcbasis._symboltable;
 
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.check.CompKindExpression;
@@ -19,12 +20,12 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
                                                                  AccessModifier modifier,
                                                                  Predicate<VariableSymbol> predicate) {
 
-    List<ArcPortSymbol> ports = resolveArcPortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
+    List<PortSymbol> ports = resolvePortLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
     List<SubcomponentSymbol> instances = resolveSubcomponentLocallyMany(foundSymbols, name, AccessModifier.ALL_INCLUSION, x -> true);
 
     List<VariableSymbol> adapters = new ArrayList<>(ports.size() + instances.size());
 
-    for (ArcPortSymbol port : ports) {
+    for (PortSymbol port : ports) {
 
       if (getLocalVariableSymbols().stream().filter(v -> v instanceof Port2VariableAdapter)
         .noneMatch(v -> ((Port2VariableAdapter) v).getAdaptee().equals(port))) {
@@ -73,25 +74,25 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
    * @return the resolved port symbols in the enclosing scope
    */
   @Override
-  default List<ArcPortSymbol> resolveArcPortMany(boolean foundSymbols,
-                                              String name,
-                                              AccessModifier modifier,
-                                              Predicate<ArcPortSymbol> predicate) {
+  default List<PortSymbol> resolvePortMany(boolean foundSymbols,
+                                           String name,
+                                           AccessModifier modifier,
+                                           Predicate<PortSymbol> predicate) {
 
-    List<ArcPortSymbol> symbols = IArcBasisScopeTOP.super.resolveArcPortMany(foundSymbols, name, modifier, predicate);
+    List<PortSymbol> symbols = IArcBasisScopeTOP.super.resolvePortMany(foundSymbols, name, modifier, predicate);
     symbols.addAll(resolvePortOfParentMany(foundSymbols || symbols.size() > 0, name, modifier, predicate));
     return symbols;
   }
 
-  default List<ArcPortSymbol> resolvePortOfParentMany(boolean foundSymbols, String name,
+  default List<PortSymbol> resolvePortOfParentMany(boolean foundSymbols, String name,
                                                       AccessModifier modifier,
-                                                      Predicate<ArcPortSymbol> predicate) {
+                                                      Predicate<PortSymbol> predicate) {
     if (!foundSymbols && this.isPresentSpanningSymbol()) {
       Optional<ComponentTypeSymbol> component = new InstanceVisitor().asComponent(this.getSpanningSymbol());
       if (component.isPresent() && !component.get().isEmptySuperComponents()) {
-        ArrayList<ArcPortSymbol> symbols = new ArrayList<>();
+        ArrayList<PortSymbol> symbols = new ArrayList<>();
         for (CompKindExpression parent : component.get().getSuperComponentsList()) {
-          symbols.addAll(((IArcBasisScope) parent.getTypeInfo().getSpannedScope()).resolveArcPortMany(false, name, modifier, predicate));
+          symbols.addAll((parent.getTypeInfo().getSpannedScope()).resolvePortMany(false, name, modifier, predicate));
         }
         return symbols;
       }
@@ -126,21 +127,21 @@ public interface IArcBasisScope extends IArcBasisScopeTOP {
   }
 
   @Override
-  default List<ArcPortSymbol> continueArcPortWithEnclosingScope(boolean foundSymbols, String name, AccessModifier modifier,
-                                                             Predicate<ArcPortSymbol> predicate) {
+  default List<PortSymbol> continuePortWithEnclosingScope(boolean foundSymbols, String name, AccessModifier modifier,
+                                                             Predicate<PortSymbol> predicate) {
     if (checkIfContinueWithEnclosingScope(foundSymbols) && (getEnclosingScope() != null)) {
       if (isPresentSpanningSymbol() && new InstanceVisitor().asComponent(this.getSpanningSymbol()).isPresent()) {
         return getEnclosingScope().resolvePortManyEnclosing(foundSymbols, name, modifier, predicate);
       } else {
-        return getEnclosingScope().resolveArcPortMany(foundSymbols, name, modifier, predicate);
+        return getEnclosingScope().resolvePortMany(foundSymbols, name, modifier, predicate);
       }
     }
     return new ArrayList<>();
   }
 
-  default List<ArcPortSymbol> resolvePortManyEnclosing(boolean foundSymbols, String name, AccessModifier modifier,
-                                                       Predicate<ArcPortSymbol> predicate) {
-    return continueArcPortWithEnclosingScope(foundSymbols, name, modifier, predicate);
+  default List<PortSymbol> resolvePortManyEnclosing(boolean foundSymbols, String name, AccessModifier modifier,
+                                                       Predicate<PortSymbol> predicate) {
+    return continuePortWithEnclosingScope(foundSymbols, name, modifier, predicate);
   }
 
   @Override

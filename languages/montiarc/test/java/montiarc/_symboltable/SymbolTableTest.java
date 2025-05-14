@@ -44,7 +44,7 @@ public class SymbolTableTest extends MontiArcTestBase {
       .build();
 
     parentComp.getSpannedScope().add(
-      MontiArcMill.arcPortSymbolBuilder()
+      MontiArcMill.portSymbolBuilder()
         .setIncoming(true)
         .setName("i")
         .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
@@ -52,7 +52,7 @@ public class SymbolTableTest extends MontiArcTestBase {
     );
 
     parentComp.getSpannedScope().add(
-      MontiArcMill.arcPortSymbolBuilder()
+      MontiArcMill.portSymbolBuilder()
         .setOutgoing(true)
         .setName("o")
         .setType(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT))
@@ -75,8 +75,8 @@ public class SymbolTableTest extends MontiArcTestBase {
     // When
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
+    tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runAfterSymbolTablePhase3Trafos(ast);
 
     // Then
     List<String> findings = SymbolTableChecker.checkComplete(ast);

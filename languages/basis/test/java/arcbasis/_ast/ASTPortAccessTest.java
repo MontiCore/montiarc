@@ -3,7 +3,7 @@ package arcbasis._ast;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
@@ -38,14 +38,6 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
       .setPort("").setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
 
-    ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
-    portAccess.accept(traverser);
-
-    traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
-    portAccess.accept(traverser);
-
     //When
     SubcomponentSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
 
@@ -63,14 +55,6 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
     ASTPortAccess portAccess = ArcBasisMill.portAccessBuilder()
       .setPort("").setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
-
-    ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
-    portAccess.accept(traverser);
-
-    traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
-    portAccess.accept(traverser);
 
     //When
     SubcomponentSymbol resolvedSubcomponent = portAccess.getComponentSymbol();
@@ -90,16 +74,8 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
       .setPort(port).setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
 
-    ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
-    portAccess.accept(traverser);
-
-    traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
-    portAccess.accept(traverser);
-
     //When
-    ArcPortSymbol resolvedPort = portAccess.getPortSymbol();
+    PortSymbol resolvedPort = portAccess.getPortSymbol();
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -127,16 +103,8 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
       .setPort(port).setComponent(subcomponent).build();
     portAccess.setEnclosingScope(this.createTestScope());
 
-    ArcBasisTraverser traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP2());
-    portAccess.accept(traverser);
-
-    traverser = ArcBasisMill.traverser();
-    traverser.add4ArcBasis(ArcBasisMill.scopesGenitorP3());
-    portAccess.accept(traverser);
-
     //When
-    ArcPortSymbol resolvedPort = portAccess.getPortSymbol();
+    PortSymbol resolvedPort = portAccess.getPortSymbol();
 
     //Then
     Assertions.assertTrue(Log.getFindings().isEmpty());
@@ -177,28 +145,28 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().add(compB);
     ArcBasisMill.globalScope().add(compC);
 
-    ArcPortSymbol port1 = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port1 = ArcBasisMill.portSymbolBuilder()
       .setName("i1").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope1.add(port1);
     port1.setEnclosingScope(scope1);
-    ArcPortSymbol port2 = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port2 = ArcBasisMill.portSymbolBuilder()
       .setName("i2").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope1.add(port2);
     port2.setEnclosingScope(scope1);
-    ArcPortSymbol port3 = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port3 = ArcBasisMill.portSymbolBuilder()
       .setName("o1").setIncoming(false).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope1.add(port3);
     port3.setEnclosingScope(scope1);
 
-    ArcPortSymbol port4 = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port4 = ArcBasisMill.portSymbolBuilder()
       .setName("i1").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope2.add(port4);
     port4.setEnclosingScope(scope2);
-    ArcPortSymbol port5 = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port5 = ArcBasisMill.portSymbolBuilder()
       .setName("i3").setIncoming(true).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope2.add(port5);
     port5.setEnclosingScope(scope2);
-    ArcPortSymbol port6 = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port6 = ArcBasisMill.portSymbolBuilder()
       .setName("o2").setIncoming(false).setType(Mockito.mock(SymTypeExpression.class)).build();
     scope2.add(port6);
     port6.setEnclosingScope(scope2);

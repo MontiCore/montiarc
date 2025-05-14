@@ -9,7 +9,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "i",
             "fullName": "Restrictive.i",
             "type": {
@@ -20,7 +20,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "o",
             "fullName": "Restrictive.o",
             "type": {
@@ -41,7 +41,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "i",
             "fullName": "Liberal.i",
             "type": {
@@ -52,7 +52,7 @@
             "timing": "sync"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "o",
             "fullName": "Liberal.o",
             "type": {
@@ -73,7 +73,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "i1",
             "fullName": "RestrictiveMorePorts.i1",
             "type": {
@@ -84,7 +84,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "i2",
             "fullName": "RestrictiveMorePorts.i2",
             "type": {
@@ -95,7 +95,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "o1",
             "fullName": "RestrictiveMorePorts.o1",
             "type": {
@@ -106,7 +106,7 @@
             "timing": "sync"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "o2",
             "fullName": "RestrictiveMorePorts.o2",
             "type": {
@@ -127,7 +127,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicatePortAllDifferent.a",
             "type": {
@@ -138,7 +138,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicatePortAllDifferent.a",
             "type": {
@@ -159,7 +159,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicatePortSameDirection.a",
             "type": {
@@ -170,7 +170,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicatePortSameDirection.a",
             "type": {
@@ -191,7 +191,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicateSameDirectionTiming.a",
             "type": {
@@ -202,7 +202,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicateSameDirectionTiming.a",
             "type": {
@@ -223,7 +223,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicateSameTimingTypes.a",
             "type": {
@@ -234,7 +234,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicateSameTimingTypes.a",
             "type": {
@@ -255,7 +255,7 @@
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicateEverythingSame.a",
             "type": {
@@ -266,7 +266,7 @@
             "timing": "timed"
           },
           {
-            "kind": "arcbasis._symboltable.ArcPortSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "a",
             "fullName": "DuplicateEverythingSame.a",
             "type": {

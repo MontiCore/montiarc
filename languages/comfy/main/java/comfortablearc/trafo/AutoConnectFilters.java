@@ -39,7 +39,7 @@ public final class AutoConnectFilters {
     Preconditions.checkNotNull(comp);
     Preconditions.checkArgument(comp.isPresentAstNode());
 
-    return comp.getIncomingArcPorts().stream()
+    return comp.getIncomingPorts().stream()
       .filter(p -> comp.getAstNode().getConnectors().stream()
         .noneMatch(c -> c.getSource().isPresentPortSymbol() && c.getSource().getPortSymbol().equals(p)))
       .map(ASTPortAccess::of)
@@ -50,7 +50,7 @@ public final class AutoConnectFilters {
     Preconditions.checkNotNull(comp);
     Preconditions.checkArgument(comp.isPresentAstNode());
 
-    return comp.getOutgoingArcPorts().stream()
+    return comp.getOutgoingPorts().stream()
       .filter(p -> comp.getAstNode().getConnectors().stream()
         .noneMatch(c -> c.getTargetList().stream()
           .noneMatch(t -> t.isPresentPortSymbol() && t.getPortSymbol().equals(p))))
@@ -66,7 +66,7 @@ public final class AutoConnectFilters {
     Preconditions.checkState(comp.isPresentAstNode());
     Preconditions.checkState(ComfortableArcMill.typeDispatcher().isArcBasisComponentType(subComp.getType().getTypeInfo()));
 
-    return ArcBasisMill.typeDispatcher().asArcBasisComponentType(subComp.getType().getTypeInfo()).getOutgoingArcPorts().stream()
+    return ArcBasisMill.typeDispatcher().asArcBasisComponentType(subComp.getType().getTypeInfo()).getOutgoingPorts().stream()
       .filter(p -> comp.getAstNode().getConnectors().stream()
         .noneMatch(c -> c.getSource().isPresentPortSymbol() && c.getSource().getPortSymbol().equals(p)))
       .map(p -> ASTPortAccess.of(subComp, p))
@@ -81,7 +81,7 @@ public final class AutoConnectFilters {
     Preconditions.checkState(comp.isPresentAstNode());
     Preconditions.checkState(ComfortableArcMill.typeDispatcher().isArcBasisComponentType(subComp.getType().getTypeInfo()));
 
-    return ArcBasisMill.typeDispatcher().asArcBasisComponentType(subComp.getType().getTypeInfo()).getIncomingArcPorts().stream()
+    return ArcBasisMill.typeDispatcher().asArcBasisComponentType(subComp.getType().getTypeInfo()).getIncomingPorts().stream()
       .filter(p -> comp.getAstNode().getConnectors().stream()
         .noneMatch(c -> c.getTargetList().stream()
           .noneMatch(t -> t.isPresentPortSymbol() && t.getPortSymbol().equals(p))))

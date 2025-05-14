@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._ast;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -152,7 +152,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @param source the source port
    * @return a {@code List} of all connectors with matching source
    */
-  public List<ASTConnector> getConnectorsMatchingSource(@NotNull ArcPortSymbol source) {
+  public List<ASTConnector> getConnectorsMatchingSource(@NotNull PortSymbol source) {
     Preconditions.checkNotNull(source);
     return this.getConnectors().stream()
       .filter(connector -> connector.getSource().isPresentPortSymbol()
@@ -168,7 +168,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @param target the target port
    * @return a {@code List} of all connectors with matching target
    */
-  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull ArcPortSymbol target) {
+  public List<ASTConnector> getConnectorsMatchingTarget(@NotNull PortSymbol target) {
     Preconditions.checkNotNull(target);
     return this.getConnectors().stream()
       .filter(connector -> connector.getTargetList().stream()

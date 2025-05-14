@@ -235,11 +235,11 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.info(() -> "Run symbol-table creation phase 2", "MontiArcTool");
     this.runSymbolTablePhase2(asts);
 
+    Log.info(() -> "Run post symbol-table creation transformations", "MontiArcTool");
+    this.runAfterSymbolTablePhase2Trafos(asts);
+
     Log.info(() -> "Run symbol-table creation phase 3", "MontiArcTool");
     this.runSymbolTablePhase3(asts);
-
-    Log.info(() -> "Run post symbol-table creation transformations", "MontiArcTool");
-    this.runAfterSymbolTablePhase3Trafos(asts);
 
     Log.info(() -> "Perform initial context-condition checks", "MontiArcTool");
     this.runDefaultCoCos(asts);
@@ -470,14 +470,14 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcTrafos.afterParsing().applyAll(ast);
   }
 
-  public void runAfterSymbolTablePhase3Trafos(@NotNull Collection<ASTMACompilationUnit> asts) {
+  public void runAfterSymbolTablePhase2Trafos(@NotNull Collection<ASTMACompilationUnit> asts) {
     Preconditions.checkNotNull(asts);
-    asts.forEach(this::runAfterSymbolTablePhase3Trafos);
+    asts.forEach(this::runAfterSymbolTablePhase2Trafos);
   }
 
-  public void runAfterSymbolTablePhase3Trafos(@NotNull ASTMACompilationUnit ast) {
+  public void runAfterSymbolTablePhase2Trafos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    MontiArcTrafos.afterSymTab().applyAll(ast);
+    MontiArcTrafos.afterSymTabP2().applyAll(ast);
   }
 
   public void runAfterParserCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {

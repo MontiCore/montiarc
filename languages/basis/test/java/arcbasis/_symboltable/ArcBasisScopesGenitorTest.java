@@ -18,6 +18,7 @@ import arcbasis.trafo.SeparateCompInstantiationFromTypeDeclTrafo;
 import com.google.common.collect.Lists;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
@@ -198,7 +199,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
   public void shouldCreatePort() {
     this.getSymTab().setCurrentPortDirection(arcbasis.ArcBasisMill.portDirectionBuilder().setIn(true).build());
     ASTArcPort ast = arcbasis.ArcBasisMill.arcPortBuilder().setName("p").build();
-    ArcPortSymbol symbol = this.getSymTab().create_Port(ast).buildWithoutType();
+    PortSymbol symbol = this.getSymTab().create_Port(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
     Assertions.assertTrue(symbol.isIncoming());
     Assertions.assertFalse(symbol.isOutgoing());
@@ -217,8 +218,8 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(scope, ast.getEnclosingScope());
-    Assertions.assertFalse(scope.getLocalArcPortSymbols().isEmpty());
-    Assertions.assertEquals(1, scope.getLocalArcPortSymbols().size());
+    Assertions.assertFalse(scope.getLocalPortSymbols().isEmpty());
+    Assertions.assertEquals(1, scope.getLocalPortSymbols().size());
   }
 
   @Test

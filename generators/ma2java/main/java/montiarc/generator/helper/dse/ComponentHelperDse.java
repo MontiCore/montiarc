@@ -7,7 +7,7 @@ import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis.check.CompTypeExpression;
@@ -65,7 +65,7 @@ public class ComponentHelperDse {
       type.isTypeVariable() ? type.print() :
         type.printFullName();
   }
-  public static String getRealPortTypeString(ArcPortSymbol portSymbol) {
+  public static String getRealPortTypeString(PortSymbol portSymbol) {
     return getRealPortTypeString(portSymbol.getType());
   }
 
@@ -107,7 +107,7 @@ public class ComponentHelperDse {
   /**
    * Prints the extraction of numbers of a String
    */
-  public static String printCharReplace(ArcPortSymbol sym){
+  public static String printCharReplace(PortSymbol sym){
     switch (getRealPortTypeString(sym)){
       case "char":
       case "java.lang.Character":
@@ -120,7 +120,7 @@ public class ComponentHelperDse {
   /**
    * checks if the port has a float or double as type
    */
-  public static boolean isFloatOrDouble(ArcPortSymbol symbol){
+  public static boolean isFloatOrDouble(PortSymbol symbol){
     switch (symbol.getType().print()){
       case "Double":
       case "double":
@@ -135,7 +135,7 @@ public class ComponentHelperDse {
   /**
    * checks if the port has a string as type
    */
-  public static boolean isString(ArcPortSymbol symbol){
+  public static boolean isString(PortSymbol symbol){
     return symbol.getType().print().equals("String");
   }
 
@@ -170,7 +170,7 @@ public class ComponentHelperDse {
   /**
    * Prints the parsing phrase according to the port type
    */
-  public static String getParseType (ArcPortSymbol port){
+  public static String getParseType (PortSymbol port){
     return getParseType(getRealPortTypeString(port));
   }
 
@@ -299,7 +299,7 @@ public class ComponentHelperDse {
    * @param port to be checked
    * @return if port type is an enum
    */
-  public static boolean isEnum(ArcPortSymbol port) {
+  public static boolean isEnum(PortSymbol port) {
     if (port.getTypeInfo() instanceof OOTypeSymbol) {
       return ((OOTypeSymbol) port.getType().getTypeInfo()).isIsEnum();
     }
@@ -322,7 +322,7 @@ public class ComponentHelperDse {
    * @param port to get the type from
    * @return string sort type of the port type
    */
-  public static String getPortTypeSort(ArcPortSymbol port) {
+  public static String getPortTypeSort(PortSymbol port) {
     return getSort(port.getTypeInfo().getFullName());
   }
 
@@ -356,7 +356,7 @@ public class ComponentHelperDse {
    * @param symbol
    * @return
    */
-  public static String getMkSort(ArcPortSymbol symbol) {
+  public static String getMkSort(PortSymbol symbol) {
     switch (symbol.getType().printFullName()){
       case "java.lang.String":
         return "StringSort";

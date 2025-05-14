@@ -3,7 +3,7 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.SymbolService;
@@ -194,7 +194,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     TypeVarSymbol typeVar = symbolWithDefinitions.getTypeParameters().get(0);
 
     String portName = "port";
-    ArcPortSymbol port = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(typeVar))
       .setIncoming(true)
@@ -220,7 +220,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
     String portName = "porr";
-    ArcPortSymbol port = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol port = ArcBasisMill.portSymbolBuilder()
       .setName(portName)
       .setType(SymTypeExpressionFactory.createTypeVariable(parentTypeVar))
       .setIncoming(true)

@@ -82,8 +82,8 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
       for (ASTMACompilationUnit node : astNodes) {
         Log.clearFindings();
         tool.runSymbolTablePhase2(node);
+        tool.runAfterSymbolTablePhase2Trafos(node);
         tool.runSymbolTablePhase3(node);
-        tool.runAfterSymbolTablePhase3Trafos(node);
         if (res.containsKey(node)) {
           res.get(node).findings.addAll(Log.getFindings());
         }

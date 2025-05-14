@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -43,7 +43,7 @@ public class TypeExprOfComponent extends CompTypeExpression {
   public Optional<SymTypeExpression> getTypeOfPort(@NotNull String portName) {
     Preconditions.checkNotNull(portName);
     return this.getTypeInfo()
-      .getArcPort(portName, true).map(ArcPortSymbol::getType);
+      .getPort(portName, true).map(PortSymbol::getType);
   }
 
   @Override

@@ -6,9 +6,10 @@ import arcautomaton.ArcAutomatonTestBase;
 import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._symboltable.IArcAutomatonScope;
 import arcautomaton._visitor.ArcAutomatonTraverser;
-import arcbasis._symboltable.ArcPortSymbol;
-import arcbasis._symboltable.ArcPortSymbolBuilder;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbolBuilder;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcAutomataError;
 import montiarc.util.Error;
@@ -84,12 +85,14 @@ public class EventTriggerExistsTest extends ArcAutomatonTestBase {
     IArcAutomatonScope scope = ArcAutomatonMill.scope();
     
     for(String portName: portNames) {
-      ArcPortSymbol portSymbol = new ArcPortSymbolBuilder()
+      PortSymbol portSymbol = new PortSymbolBuilder()
           .setName(portName)
           .setIncoming(true)
           .setOutgoing(false)
           .setEnclosingScope(scope)
-          .buildWithoutType();
+          .setType(SymTypeExpressionFactory.createObscureType())
+          .setStronglyCausal(false)
+          .build();
       scope.add(portSymbol);
     }
     

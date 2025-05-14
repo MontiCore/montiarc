@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable.util;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -18,7 +18,7 @@ public class ScopeAddSymbolVisitor implements ArcBasisVisitor2, CompSymbolsVisit
   }
 
   @Override
-  public void visit(ArcPortSymbol node) {
+  public void visit(PortSymbol node) {
     scope.add(node);
   }
 

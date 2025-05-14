@@ -3,7 +3,7 @@ package montiarc;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.io.paths.MCPath;
@@ -495,29 +495,29 @@ public class MontiArcToolTest extends MontiArcTestBase {
   }
 
   /**
-   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(Collection)}
+   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase2Trafos(Collection)}
    */
   @Test
-  void runAfterSymbolTablePhase3TrafosCollectionShouldThrowException() {
+  void runAfterSymbolTablePhase2TrafosCollectionShouldThrowException() {
     // Given
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
-      () -> tool.runAfterSymbolTablePhase3Trafos((Collection<ASTMACompilationUnit>) null));
+      () -> tool.runAfterSymbolTablePhase2Trafos((Collection<ASTMACompilationUnit>) null));
   }
 
   /**
-   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase2Trafos(ASTMACompilationUnit)}
    */
   @Test
-  void runAfterSymbolTablePhase3TrafosShouldThrowException() {
+  void runAfterSymbolTablePhase2TrafosShouldThrowException() {
     // Given
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
-      () -> tool.runAfterSymbolTablePhase3Trafos((ASTMACompilationUnit) null));
+      () -> tool.runAfterSymbolTablePhase2Trafos((ASTMACompilationUnit) null));
   }
 
   /**
@@ -572,8 +572,8 @@ public class MontiArcToolTest extends MontiArcTestBase {
     // Then
     ComponentTypeSymbol aCompType = astA.getComponentType().getSymbol();
     ComponentTypeSymbol bCompType = astB.getComponentType().getSymbol();
-    ArcPortSymbol aInPort = aCompType.getArcPort("inPortA").orElseThrow();
-    ArcPortSymbol bInPort = bCompType.getArcPort("inPortB").orElseThrow();
+    PortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
+    PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
     SubcomponentSymbol aInstance = bCompType.getSubcomponents("a").orElseThrow();
 
     ASTConnector connector = astB.getComponentType().getConnectors().get(0);
@@ -618,7 +618,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
 
 
   /**
-   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase3Trafos(ASTMACompilationUnit)}
+   * Method under test {@link MontiArcTool#runAfterSymbolTablePhase2Trafos(ASTMACompilationUnit)}
    */
   @Test
   void shouldRunAfterSymbolLinkingTransformations() throws IOException {
@@ -635,13 +635,11 @@ public class MontiArcToolTest extends MontiArcTestBase {
     tool.createSymbolTable(astB);
     tool.runSymbolTablePhase2(astA);
     tool.runSymbolTablePhase2(astB);
-    tool.runSymbolTablePhase3(astA);
-    tool.runSymbolTablePhase3(astB);
 
     int connectorCountBeforeTrafo = astB.getComponentType().getConnectors().size();
 
     // When
-    tool.runAfterSymbolTablePhase3Trafos(astB);
+    tool.runAfterSymbolTablePhase2Trafos(astB);
 
     // Then
     long connectorCountAfterTrafo = astB.getComponentType().getConnectors().size();
@@ -678,8 +676,8 @@ public class MontiArcToolTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = optAst.get();
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
+    tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runAfterSymbolTablePhase3Trafos(ast);
     IMontiArcArtifactScope scope = (MontiArcArtifactScope) ast.getEnclosingScope();
     return Stream.of(
       Arguments.of(null, System.getProperty("buildDir") + "/test-sources/resources/CLI/symboltable", NullPointerException.class),

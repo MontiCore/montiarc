@@ -6,6 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import org.junit.jupiter.api.Assertions;
@@ -159,7 +160,7 @@ public class ComponentTypeSymbolTest extends ArcBasisTestBase {
     ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     Assertions.assertIterableEquals(ports.entrySet().stream()
         .filter(p -> p.getValue().equals(true)).map(Map.Entry::getKey).collect(Collectors.toList()),
-      symbol.getIncomingArcPorts().stream().map(ArcPortSymbol::getName).collect(Collectors.toList()));
+      symbol.getIncomingPorts().stream().map(PortSymbol::getName).collect(Collectors.toList()));
   }
 
   @ParameterizedTest
@@ -168,7 +169,7 @@ public class ComponentTypeSymbolTest extends ArcBasisTestBase {
     ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     Assertions.assertIterableEquals(ports.entrySet().stream()
         .filter(p -> p.getValue().equals(false)).map(Map.Entry::getKey).collect(Collectors.toList()),
-      symbol.getOutgoingArcPorts().stream().map(ArcPortSymbol::getName).collect(Collectors.toList()));
+      symbol.getOutgoingPorts().stream().map(PortSymbol::getName).collect(Collectors.toList()));
   }
 
   @ParameterizedTest
@@ -177,12 +178,12 @@ public class ComponentTypeSymbolTest extends ArcBasisTestBase {
     ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     for (String port : ports.keySet()) {
       if (ports.get(port)) {
-        Assertions.assertTrue(symbol.getIncomingArcPort(port).isPresent());
-        Assertions.assertFalse(symbol.getOutgoingArcPort(port).isPresent());
+        Assertions.assertTrue(symbol.getIncomingPort(port).isPresent());
+        Assertions.assertFalse(symbol.getOutgoingPort(port).isPresent());
       }
       else {
-        Assertions.assertFalse(symbol.getIncomingArcPort(port).isPresent());
-        Assertions.assertTrue(symbol.getOutgoingArcPort(port).isPresent());
+        Assertions.assertFalse(symbol.getIncomingPort(port).isPresent());
+        Assertions.assertTrue(symbol.getOutgoingPort(port).isPresent());
       }
     }
   }
@@ -219,8 +220,8 @@ public class ComponentTypeSymbolTest extends ArcBasisTestBase {
     ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(ArcBasisMill.scope()).build();
     for (String port : ports.keySet()) {
-      ArcPortSymbol portSymbol = ArcBasisMill.arcPortSymbolBuilder()
-        .setName(port).setType(mock(SymTypeExpression.class)).setIncoming(ports.get(port)).build();
+      PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder()
+        .setName(port).setType(mock(SymTypeExpression.class)).setIncoming(ports.get(port)).setOutgoing(!ports.get(port)).build();
       compSymbol.getSpannedScope().add(portSymbol);
     }
     return compSymbol;

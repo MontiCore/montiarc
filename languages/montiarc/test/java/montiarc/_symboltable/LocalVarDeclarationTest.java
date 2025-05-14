@@ -48,8 +48,8 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
       .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
+    tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runAfterSymbolTablePhase3Trafos(ast);
     tool.runDefaultCoCos(ast);
 
     // Then
@@ -81,8 +81,8 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
       .orElseThrow(() -> new IllegalStateException(Log.getFindings().toString()));
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
+    tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runAfterSymbolTablePhase3Trafos(ast);
     tool.runDefaultCoCos(ast);
 
     // Then

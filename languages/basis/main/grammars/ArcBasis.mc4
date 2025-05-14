@@ -148,11 +148,7 @@ component grammar ArcBasis extends
   *
   * @attribute name The name of the port.
   */
-  symbol ArcPort implements Port = Name;
-
-  symbolrule ArcPort =
-    delayed: Boolean
-  ;
+  ArcPort implements Port = Name;
 
   /**
   * ASTArcFieldDeclaration declares one or more component fields by
@@ -213,5 +209,5 @@ component grammar ArcBasis extends
    * @attribute component The name of the component the port belongs to.
    * @attribute port the name of the port.
    */
-  PortAccess = (component:Name@Subcomponent ".")? port:Name@ArcPort ;
+  PortAccess = (component:Name@Subcomponent ".")? port:Name@Port ;
 }

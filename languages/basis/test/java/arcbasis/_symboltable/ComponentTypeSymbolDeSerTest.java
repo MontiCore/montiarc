@@ -6,6 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -84,14 +85,14 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"spannedScope\":{\"symbols\":[{" +
-      "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.PortSymbol\"," +
       "\"name\":\"inc\"," +
       "\"fullName\":\"Comp.inc\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
       "\"incoming\":true," +
       "\"timing\":\"timed\"" +
       "},{" +
-      "\"kind\":\"arcbasis._symboltable.ArcPortSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.PortSymbol\"," +
       "\"name\":\"outg\"," +
       "\"fullName\":\"Comp.outg\"," +
       "\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
@@ -235,17 +236,19 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   void shouldSerializePorts() {
     // Given
     ComponentTypeSymbol comp = createSimpleComp();
-    ArcPortSymbol portIncoming = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol portIncoming = ArcBasisMill.portSymbolBuilder()
       .setName("inc")
       .setIncoming(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .setTiming(Timing.TIMED)
+      .setStronglyCausal(false)
       .build();
-    ArcPortSymbol portOutgoing = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol portOutgoing = ArcBasisMill.portSymbolBuilder()
       .setName("outg")
       .setOutgoing(true)
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
       .setTiming(Timing.TIMED)
+      .setStronglyCausal(false)
       .build();
 
     comp.getSpannedScope().add(portIncoming);
@@ -341,10 +344,10 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PORTS);
 
     // Then
-    Assertions.assertEquals(2, comp.getArcPorts().size());
+    Assertions.assertEquals(2, comp.getPorts().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("inc", comp.getArcPorts().get(0).getName()),
-      () -> Assertions.assertEquals("outg", comp.getArcPorts().get(1).getName())
+      () -> Assertions.assertEquals("inc", comp.getPorts().get(0).getName()),
+      () -> Assertions.assertEquals("outg", comp.getPorts().get(1).getName())
     );
   }
 

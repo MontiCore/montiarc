@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -28,7 +29,7 @@ public class Port2VariableAdapterTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(name);
 
     // Given
-    ArcPortSymbol adaptee = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol adaptee = ArcBasisMill.portSymbolBuilder()
       .setName(name)
       .setIncoming(in)
       .setOutgoing(out)
@@ -69,7 +70,7 @@ public class Port2VariableAdapterTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(name);
 
     // Given
-    ArcPortSymbol adaptee = ArcBasisMill.arcPortSymbolBuilder()
+    PortSymbol adaptee = ArcBasisMill.portSymbolBuilder()
       .setName(name)
       .setIncoming(in)
       .setOutgoing(out)

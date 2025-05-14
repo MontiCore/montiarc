@@ -36,6 +36,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -197,7 +198,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
   @Override
   public void visit(@NotNull SubcomponentSymbol node) {
     Preconditions.checkNotNull(node);
-    if (node.isTypePresent()){
+    if (node.isTypePresent()) {
       node.getType().bindParams();
     }
   }
@@ -212,7 +213,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     for (ASTMCType upperBound : typeParam.getMCTypeList()) {
       try {
         typeParamSym.addSuperTypes(TypeCheck3.symTypeFromAST(upperBound));
-      }  catch (ResolvedSeveralEntriesForSymbolException e) {
+      } catch (ResolvedSeveralEntriesForSymbolException e) {
         Log.error(ArcError.AMBIGUOUS_REFERENCE.format(ArcBasisMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
       }
     }

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._cocos;
 
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import modes.ModesMill;
 import modes.ModesTestBase;
@@ -45,7 +45,7 @@ public class ModeOmitPortDefinitionTest extends ModesTestBase {
     mode.setSpannedScope(ModesMill.scope());
     mode.setSymbol(ModesMill.arcModeSymbolBuilder().setName("m").setAstNode(mode).setSpannedScope(mode.getSpannedScope()).build());
     for (int i = 0; i < numberOfPortSymbols; i++) {
-      mode.getSpannedScope().add(Mockito.mock(ArcPortSymbol.class));
+      mode.getSpannedScope().add(Mockito.mock(PortSymbol.class));
     }
 
     // When

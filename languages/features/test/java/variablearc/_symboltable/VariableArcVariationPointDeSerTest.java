@@ -27,7 +27,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
   protected static final String JSON_VARIATION_POINT_WITH_SYMBOL = "{" +
     "\"kind\":\"variablearc._symboltable.VariableArcVariationPoint\"," +
     "\"expression\":\"f1\"," +
-    "\"symbols\":[{\"kind\":\"arcbasis._symboltable.ArcPortSymbol\",\"name\":\"p1\",\"fullName\":\"p1\",\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"},\"outgoing\":true,\"timing\":\"timed\"}]" +
+    "\"symbols\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.PortSymbol\",\"name\":\"p1\",\"fullName\":\"p1\",\"type\":{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"},\"outgoing\":true,\"timing\":\"timed\"}]" +
     "}";
 
   @Test
@@ -121,7 +121,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.empty());
     ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
 
-    variationPoint.add(VariableArcMill.arcPortSymbolBuilder().setName("p1").setOutgoing(true).setType(SymTypeExpressionFactory.createPrimitive("int")).setTiming(Timing.TIMED).build());
+    variationPoint.add(VariableArcMill.portSymbolBuilder().setName("p1").setOutgoing(true).setIncoming(false).setStronglyCausal(false).setType(SymTypeExpressionFactory.createPrimitive("int")).setTiming(Timing.TIMED).build());
 
     // When
     deser.serialize(variationPoint, arc2json);
@@ -145,12 +145,12 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
-    Assertions.assertEquals(1, componentTypeSymbol.getTypeInfo().getArcPorts().size());
+    Assertions.assertEquals(1, componentTypeSymbol.getTypeInfo().getPorts().size());
     Assertions.assertEquals(1, variationPoint.getSymbols().size());
     Assertions.assertAll(
       () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
       () -> Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0)),
-      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getArcPorts().get(0))
+      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getPorts().get(0))
     );
   }
 

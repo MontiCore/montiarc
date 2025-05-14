@@ -14,7 +14,7 @@ ${tc.signature("comp")}
     <@printSetOutput comp/>
     // provide initial value for delay ports
     <#list comp.getPorts() as port>
-      <#if port.isDelayed()>this.${port.getName()}.tick();</#if>
+      <#if port.isStronglyCausal()>this.${port.getName()}.tick();</#if>
     </#list>
   }
 </#macro>

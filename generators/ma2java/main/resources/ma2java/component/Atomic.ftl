@@ -54,8 +54,8 @@
 <#macro printPortType port>
   montiarc.rte.timesync.
   <#if port.getType().isPrimitive()>
-    ${port.getType().print()?cap_first}<#if port.isDelayed()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port
+    ${port.getType().print()?cap_first}<#if port.isStronglyCausal()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port
   <#else>
-    <#if port.isDelayed()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port<>
+    <#if port.isStronglyCausal()>Delay<#elseif port.isOutgoing()>Out<#else>In</#if>Port<>
   </#if>
 </#macro>

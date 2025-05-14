@@ -7,6 +7,7 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
@@ -268,10 +269,10 @@ public final class SymbolService {
    * @param scope the scope to set as enclosing scope
    * @param ports the ports to add to the scope
    */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull ArcPortSymbol... ports) {
+  public static void link(@NotNull IArcBasisScope scope, @NotNull PortSymbol... ports) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(ports);
-    for (ArcPortSymbol port: ports) {
+    for (PortSymbol port: ports) {
       link(scope, port);
     }
   }
@@ -282,7 +283,7 @@ public final class SymbolService {
    * @param scope the scope to set as enclosing scope
    * @param port the port to add to the scope
    */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull ArcPortSymbol port) {
+  public static void link(@NotNull IArcBasisScope scope, @NotNull PortSymbol port) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(port);
     scope.add(port);

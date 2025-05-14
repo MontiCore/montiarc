@@ -5,12 +5,14 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcBehaviorElement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTOP {
 
@@ -110,10 +112,10 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public List<ArcPortSymbol> getAllArcPorts() {
+  public Set<PortSymbol> getAllPorts() {
     return checkLazyLoadDelegate() ?
-      this.lazyLoadDelegate().getAllArcPorts() :
-      super.getAllArcPorts();  // Avoid infinite recursion with this case
+      this.lazyLoadDelegate().getAllPorts() :
+      super.getAllPorts();  // Avoid infinite recursion with this case
   }
 
   @Override

@@ -4,26 +4,27 @@ package arcbasis._symboltable;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
- * Adapts {@link ArcPortSymbol}s to {@link VariableSymbol}s, e.g., so that they can
+ * Adapts {@link PortSymbol}s to {@link VariableSymbol}s, e.g., so that they can
  * easily be referred to from expressions.
  */
 public class Port2VariableAdapter extends VariableSymbol {
 
-  protected ArcPortSymbol adaptee;
+  protected PortSymbol adaptee;
 
-  public Port2VariableAdapter(@NotNull ArcPortSymbol adaptee) {
+  public Port2VariableAdapter(@NotNull PortSymbol adaptee) {
     super(Preconditions.checkNotNull(adaptee).getName());
     this.adaptee = adaptee;
     this.accessModifier = BasicAccessModifier.PUBLIC;
   }
 
-  public ArcPortSymbol getAdaptee() {
+  public PortSymbol getAdaptee() {
     return adaptee;
   }
 

@@ -125,8 +125,8 @@ public class AutomataLoader {
     tool.initializeClass2MC();
     tool.createSymbolTable(ast);
     tool.runSymbolTablePhase2(ast);
+    tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runAfterSymbolTablePhase3Trafos(ast);
   }
 
   public static Pair<ASTCDCompilationUnit, ASTMACompilationUnit> loadModels(

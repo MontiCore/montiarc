@@ -2,7 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
@@ -31,14 +31,14 @@ public class PortHeritageTypeFits implements ArcBasisASTComponentTypeCoCo {
     Preconditions.checkNotNull(component);
 
     // check all ports
-    for (ArcPortSymbol port : component.getArcPorts()) {
+    for (PortSymbol port : component.getPorts()) {
       for (CompKindExpression parent : component.getSuperComponentsList()) {
         this.checkPort(port, parent);
       }
     }
   }
 
-  protected void checkPort(@NotNull ArcPortSymbol port, @NotNull CompKindExpression parent) {
+  protected void checkPort(@NotNull PortSymbol port, @NotNull CompKindExpression parent) {
     Preconditions.checkNotNull(port);
     Preconditions.checkNotNull(parent);
     Preconditions.checkNotNull(parent.getTypeInfo());

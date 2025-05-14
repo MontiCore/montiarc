@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcPortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
@@ -65,7 +65,7 @@ public class ConnectorPortsExist implements ArcBasisASTConnectorCoCo {
         if (!sub.get().isTypePresent()) { // ignore missing type as this is handled by other cocos
           return;
         }
-        Optional<ArcPortSymbol> portSym = Optional.ofNullable(port.getPortSymbol());
+        Optional<PortSymbol> portSym = Optional.ofNullable(port.getPortSymbol());
         if (portSym.isEmpty()) {
           Log.error(ArcError.MISSING_PORT.format(port.getQName()),
             port.get_SourcePositionStart(), port.get_SourcePositionEnd()
@@ -75,7 +75,7 @@ public class ConnectorPortsExist implements ArcBasisASTConnectorCoCo {
 
       // v checking the port existence for ports of the enclosing component type.
     } else {
-      Optional<ArcPortSymbol> portSym = Optional.ofNullable(port.getPortSymbol());
+      Optional<PortSymbol> portSym = Optional.ofNullable(port.getPortSymbol());
       if (portSym.isEmpty()) {
         Log.error(ArcError.MISSING_PORT.format(port.getQName()),
           port.get_SourcePositionStart(), port.get_SourcePositionEnd()
