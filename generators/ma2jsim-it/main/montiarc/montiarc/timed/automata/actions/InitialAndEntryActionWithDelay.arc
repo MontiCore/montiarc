@@ -3,9 +3,9 @@ package montiarc.timed.automata.actions;
 
 component InitialAndEntryActionWithDelay {
   port in String i;
-  port <<delayed>> out String o;
+  port out String o;
 
-  automaton {
+  <<delayed>> automaton {
 
     initial { o = "INIT"; } state A {
       entry / o = "Enter A";

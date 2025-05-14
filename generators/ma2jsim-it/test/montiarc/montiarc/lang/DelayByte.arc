@@ -6,7 +6,7 @@ import java.lang.Byte;
 component DelayByte {
 
   port in Byte i;
-  port <<delayed>> out Byte o;
+  port out Byte o;
 
   Delay<Byte> delay;
 

@@ -6,7 +6,7 @@ import java.lang.Double;
 component TSDelayDouble(Double iv) {
 
   port sync in Double i;
-  port <<delayed>> sync out Double o;
+  port sync out Double o;
 
   TSDelay<Double> delay(iv);
 

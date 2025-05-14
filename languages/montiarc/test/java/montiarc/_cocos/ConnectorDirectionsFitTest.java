@@ -29,7 +29,7 @@ public class ConnectorDirectionsFitTest extends MontiArcTestBase {
   protected void setUpComponents() {
     compile("package a.b; component A { }");
     compile("package a.b; component B { port in int i; port out int o; }");
-    compile("package a.b; component C { port in int i; port <<delayed>> out int o; }");
+    compile("package a.b; component C { port in int i; port out int o; <<delayed>> compute {} }");
     compile("package a.b; component D { port in int i1, i2; port out int o; }");
   }
 

@@ -98,6 +98,8 @@ public class ControllerTest {
 
     // When
     ctrl.compute();
+    ctrl.getDoor().tick();
+    ctrl.getLift().tick();
     ctrl.getClear().tick();
 
     // Then
@@ -227,8 +229,8 @@ public class ControllerTest {
       () -> assertThat(ctrl.getAt3().getValue()).isNotNull().isTrue(),
       () -> assertThat(ctrl.getAt4().getValue()).isNotNull().isTrue(),
       () -> assertThat(ctrl.getIsClosed().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getDoor().getValue()).isNull(),
-      () -> assertThat(ctrl.getLift().getValue()).isNull(),
+      () -> assertThat(ctrl.getDoor().getValue()).isNotNull().isEqualTo(DoorCMD.OPEN),
+      () -> assertThat(ctrl.getLift().getValue()).isNotNull().isEqualTo(LiftCMD.STOP),
       () -> assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0)
     );
   }

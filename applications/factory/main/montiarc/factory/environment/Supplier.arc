@@ -6,5 +6,7 @@ import factory.Factory.*;
 component Supplier {
   /* Assuming that manufacturer can order and material is delivered without bureaucracy */
   port in PurchaseOrder purchaseOrder;
-  port <<delayed>> out Material material;
+  port out Material material;
+
+  <<delayed>> compute {}
 }

@@ -6,7 +6,7 @@ import java.lang.Long;
 component TSDelayLong(Long iv) {
 
   port sync in Long i;
-  port <<delayed>> sync out Long o;
+  port sync out Long o;
 
   TSDelay<Long> delay(iv);
 

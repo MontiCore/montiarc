@@ -262,7 +262,8 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
     ASTMACompilationUnit compilationUnit = compile("component c1 {" +
       "port out int o;" +
       "component Inner {" +
-      "port <<delayed>> out int o;" +
+      "port out int o;" +
+      "<<delayed>> compute {}" +
       "}}");
 
     ArcPortSymbol portSymbol = compilationUnit.getComponentType().getSymbol().getArcPort("o").get();

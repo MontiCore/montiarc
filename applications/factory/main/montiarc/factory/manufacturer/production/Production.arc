@@ -7,7 +7,7 @@ import factory.manufacturer.production.lines.*;
 component Production {
   port in ProductionOrder productionOrder,
        in Material material;
-  port <<delayed>> out Product product,
+  port out Product product,
        out MaterialRequest materialRequest;
 
   ProductionControl control;

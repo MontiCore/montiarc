@@ -6,7 +6,7 @@ import java.lang.Integer;
 component DelayInteger {
 
   port in Integer i;
-  port <<delayed>> out Integer o;
+  port out Integer o;
 
   Delay<Integer> delay;
 

@@ -54,10 +54,7 @@ component MyComp {
 }
 ```
 
-## Delayed Ports
-
-
 ## Complete syntax
 ```montiarc
-port (<<delayed>>)? (sync)? <direction> <type> <name> ;
+port (sync)? <direction> <type> <name> ;
 ```

@@ -84,6 +84,8 @@ public class DoorTest {
 
     // When
     door.compute();
+    door.getOpen().tick();
+    door.getClose().tick();
     door.getClosed().tick();
 
     // Then
@@ -207,11 +209,11 @@ public class DoorTest {
       door.compute();
 
       actStates[i] = door.getCurrentState();
-      actOpen[i] = door.getOpen().getValue();
-      actClose[i] = door.getClose().getValue();
 
       door.tick();
 
+      actOpen[i] = door.getOpen().getValue();
+      actClose[i] = door.getClose().getValue();
       actClosed[i] = door.getClosed().getValue();
     }
 
@@ -285,11 +287,11 @@ public class DoorTest {
       door.compute();
 
       actStates[i] = door.getCurrentState();
-      actOpen[i] = door.getOpen().getValue();
-      actClose[i] = door.getClose().getValue();
 
       door.tick();
 
+      actOpen[i] = door.getOpen().getValue();
+      actClose[i] = door.getClose().getValue();
       actClosed[i] = door.getClosed().getValue();
     }
 
@@ -353,8 +355,8 @@ public class DoorTest {
       () -> assertThat(door.getIsOpen().getValue()).isNotNull().isEqualTo(true),
       () -> assertThat(door.getIsClosed().getValue()).isNotNull().isEqualTo(true),
       () -> assertThat(door.getIsObstacle().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(door.getOpen().getValue()).isNull(),
-      () -> assertThat(door.getClose().getValue()).isNull(),
+      () -> assertThat(door.getOpen().getValue()).isNotNull().isEqualTo(true),
+      () -> assertThat(door.getClose().getValue()).isNotNull().isEqualTo(true),
       () -> assertThat(door.getClosed().getValue()).isNotNull().isEqualTo(true)
     );
   }
@@ -412,12 +414,12 @@ public class DoorTest {
 
       door.compute();
 
-      actOpen[i] = door.getOpen().getValue();
-      actClose[i] = door.getClose().getValue();
       actStates[i + 1] = door.getCurrentState();
 
       door.tick();
 
+      actOpen[i] = door.getOpen().getValue();
+      actClose[i] = door.getClose().getValue();
       actClosed[i] = door.getClosed().getValue();
     }
 

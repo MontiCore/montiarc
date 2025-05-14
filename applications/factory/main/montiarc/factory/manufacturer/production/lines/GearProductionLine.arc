@@ -12,7 +12,7 @@ component GearProductionLine {
        in ProductConfig heatingConfig,
        in ProductConfig grindingConfig,
        in ProductConfig polishingConfig;
-  port <<delayed>> out Gear finishedGear;
+  port out Gear finishedGear;
 
   Drilling<GearBlank, Gear> drilling;
   Milling<Gear, Gear> milling;

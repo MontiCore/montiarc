@@ -6,7 +6,7 @@ import java.lang.Boolean;
 component TSDelayBoolean(Boolean iv) {
 
   port sync in Boolean i;
-  port <<delayed>> sync out Boolean o;
+  port sync out Boolean o;
 
   TSDelay<Boolean> delay(iv);
 

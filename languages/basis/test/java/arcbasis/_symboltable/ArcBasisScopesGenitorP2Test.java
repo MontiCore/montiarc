@@ -568,20 +568,14 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
    */
   @ParameterizedTest
   @CsvSource(value = {
-    "0, false, null",
-    "0, true, null",
-    "0, false, true",
-    "0, false, null",
-    "1, false, null",
-    "1, true, null",
-    "1, false, true",
-    "1, false, null",
-    "2, false, null",
-    "2, true, null",
-    "2, false, true",
-    "2, false, null"
+    "0, false",
+    "0, true",
+    "1, false",
+    "1, true",
+    "2, false",
+    "2, true",
   })
-  public void testVisitPortDeclaration1(@Nullable short tid, boolean i, Boolean d) {
+  public void testVisitPortDeclaration1(@Nullable short tid, boolean i) {
     // Given
     Timing t = tid == 0 ? Timing.TIMED_SYNC : Timing.TIMED;
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
@@ -596,15 +590,6 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .setSync(t.equals(Timing.TIMED_SYNC))
       .addPort("p")
       .build();
-    if (d) {
-      ast.setStereotype(ArcBasisMill.stereotypeBuilder()
-        .addValues(ArcBasisMill.stereoValueBuilder()
-          .setName(ASTPortDeclaration.DELAY)
-          .setContent("")
-          .build())
-        .build()
-      );
-    }
 
     IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
     as.add(ArcBasisMill.typeSymbolBuilder()
@@ -624,7 +609,6 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       () -> Assertions.assertEquals("a.b.X", ast.getArcPort(0).getSymbol().getType().printFullName()),
       () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
       () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(d, ast.getArcPort(0).getSymbol().getDelayed()),
       () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
     );
   }
@@ -637,20 +621,14 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
    */
   @ParameterizedTest
   @CsvSource(value = {
-    "0, false, null",
-    "0, true, null",
-    "0, false, true",
-    "0, false, null",
-    "1, false, null",
-    "1, true, null",
-    "1, false, true",
-    "1, false, null",
-    "2, false, null",
-    "2, true, null",
-    "2, false, true",
-    "2, false, null"
+    "0, false",
+    "0, true",
+    "1, false",
+    "1, true",
+    "2, false",
+    "2, true",
   })
-  public void testVisitPortDeclaration2(@Nullable short tid, boolean i, Boolean d) {
+  public void testVisitPortDeclaration2(@Nullable short tid, boolean i) {
     // Given
     Timing t = tid == 0 ? Timing.TIMED_SYNC : Timing.TIMED;
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
@@ -666,15 +644,6 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .addPort("p1")
       .addPort("p2")
       .build();
-    if (d) {
-      ast.setStereotype(ArcBasisMill.stereotypeBuilder()
-        .addValues(ArcBasisMill.stereoValueBuilder()
-          .setName(ASTPortDeclaration.DELAY)
-          .setContent("")
-          .build())
-        .build()
-      );
-    }
 
     IArcBasisArtifactScope as = ArcBasisMill.artifactScope();
     as.add(ArcBasisMill.typeSymbolBuilder()
@@ -697,8 +666,6 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       () -> Assertions.assertEquals(t, ast.getArcPort(1).getSymbol().getTiming()),
       () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
       () -> Assertions.assertEquals(i, ast.getArcPort(1).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(d, ast.getArcPort(0).getSymbol().isDelayed()),
-      () -> Assertions.assertEquals(d, ast.getArcPort(1).getSymbol().isDelayed()),
       () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
     );
   }
@@ -712,20 +679,14 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
    */
   @ParameterizedTest
   @CsvSource(value = {
-    "0, false, null",
-    "0, true, null",
-    "0, false, true",
-    "0, false, null",
-    "1, false, null",
-    "1, true, null",
-    "1, false, true",
-    "1, false, null",
-    "2, false, null",
-    "2, true, null",
-    "2, false, true",
-    "2, false, null"
+    "0, false",
+    "0, true",
+    "1, false",
+    "1, true",
+    "2, false",
+    "2, true",
   })
-  public void testVisitPortDeclaration3(@Nullable short tid, boolean i, Boolean d) {
+  public void testVisitPortDeclaration3(@Nullable short tid, boolean i) {
     // Given
     Timing t = tid == 0 ? Timing.TIMED_SYNC : Timing.TIMED;
     ASTPortDeclaration ast = arcbasis.ArcBasisMill.portDeclarationBuilder()
@@ -740,15 +701,6 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       .setSync(t.equals(Timing.TIMED_SYNC))
       .addPort("p")
       .build();
-    if (d) {
-      ast.setStereotype(ArcBasisMill.stereotypeBuilder()
-        .addValues(ArcBasisMill.stereoValueBuilder()
-          .setName(ASTPortDeclaration.DELAY)
-          .setContent("")
-          .build())
-        .build()
-      );
-    }
 
     ast.accept(ArcBasisMill.scopesGenitorDelegator().traverser);
 
@@ -760,7 +712,6 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       () -> Assertions.assertTrue(ast.getArcPort(0).getSymbol().getType().isObscureType()),
       () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
       () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(d, ast.getArcPort(0).getSymbol().isDelayed()),
       () -> Assertions.assertEquals(1, Log.getFindingsCount(), Log.getFindings().toString())
     );
   }

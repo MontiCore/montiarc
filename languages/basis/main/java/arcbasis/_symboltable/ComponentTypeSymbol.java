@@ -417,7 +417,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
     return false;
   }
 
-  protected Optional<ASTArcBehaviorElement> getBehavior() {
+  public Optional<ASTArcBehaviorElement> getBehavior() {
     if (this.isPresentAstNode()) {
       return this.getAstNode().getBody().streamArcElements()
         .filter(e -> e instanceof ASTArcBehaviorElement)

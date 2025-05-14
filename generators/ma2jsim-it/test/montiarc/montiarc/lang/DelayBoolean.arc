@@ -6,7 +6,7 @@ import java.lang.Boolean;
 component DelayBoolean {
 
   port in Boolean i;
-  port <<delayed>> out Boolean o;
+  port out Boolean o;
 
   Delay<Boolean> delay;
 

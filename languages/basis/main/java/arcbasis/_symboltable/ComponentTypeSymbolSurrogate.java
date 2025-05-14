@@ -117,7 +117,7 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  protected Optional<ASTArcBehaviorElement> getBehavior() {
+  public Optional<ASTArcBehaviorElement> getBehavior() {
     return checkLazyLoadDelegate() ?
       this.lazyLoadDelegate().getBehavior() :
       super.getBehavior();  // Avoid infinite recursion with this case

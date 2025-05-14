@@ -6,5 +6,6 @@ import factory.Factory.*;
 component Heating<PIType extends WorkPiece, POType extends WorkPiece> {
   port in PIType pieceIn,
        in ProductConfig config;
-  port <<delayed>> out POType pieceOut;
+  port out POType pieceOut;
+  <<delayed>> compute {}
 }

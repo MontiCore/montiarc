@@ -33,9 +33,9 @@ public class AtomicCompute extends AtomicComputeTOP {
 
 You can now override all the methods a behavior has:
 
-| Method                                                        | Description                                                                                                                                   |
-| ------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
-| `init()`                                                      | Called before the simulation starts. It can be used to send initial values on (delayed) ports. Must end with sending a tick on delayed ports. |
-| `tick(<ComponentName>SyncMsg msg)`                            | Called on every tick. The default behavior is to unwrap the `msg` and call `realTick`.                                                        |
-| `realTick(<syncPortType1> port1, <syncPortType2> port2, ...)` | The action executed on a tick. It has the sync port values as parameters.                                                                     |
-| `msg_<PortName>(<portType> value)`                            | Called whenever an event message is received on `<PortName>`.                                                                                 |
+| Method                                                        | Description                                                                                    |
+| ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `init()`                                                      | Called before the simulation starts. It can be used to send initial values on (delayed) ports. |
+| `tick(<ComponentName>SyncMsg msg)`                            | Called on every tick. The default behavior is to unwrap the `msg` and call `realTick`.         |
+| `realTick(<syncPortType1> port1, <syncPortType2> port2, ...)` | The action executed on a tick. It has the sync port values as parameters.                      |
+| `msg_<PortName>(<portType> value)`                            | Called whenever an event message is received on `<PortName>`.                                  |

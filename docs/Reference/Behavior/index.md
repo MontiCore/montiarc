@@ -11,6 +11,7 @@ There are different ways to describe the behavior of components:
 * At the heart are expressions that allow calculating new output values based on input values.
 * Automatons that define state-based behavior with finite state machines
 * Imperative code blocks that facilitate algorithm-based behavior programming
+* Delaying behaviors such that the input does not directly depend on the output
 * Additionally, variables may be used to persist state as time progresses
 
 
@@ -37,6 +38,17 @@ There are different ways to describe the behavior of components:
     ---
 
     [:octicons-arrow-right-24: Read more](./Compute.md)
+
+-   :material-timer-sand: &nbsp;
+    __Delay__
+
+    ---
+
+    Delay outputs to avoid feedback loops
+
+    ---
+
+    [:octicons-arrow-right-24: Read more](./Delay.md)
 
 -   :material-soccer-field: &nbsp;
     __Fields__

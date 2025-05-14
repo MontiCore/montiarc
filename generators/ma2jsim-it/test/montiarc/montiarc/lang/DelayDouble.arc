@@ -6,7 +6,7 @@ import java.lang.Double;
 component DelayDouble {
 
   port in Double i;
-  port <<delayed>> out Double o;
+  port out Double o;
 
   Delay<Double> delay;
 

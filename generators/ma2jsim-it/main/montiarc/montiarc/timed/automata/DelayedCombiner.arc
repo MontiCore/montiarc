@@ -6,9 +6,9 @@ import montiarc.types.OnOff;
 component DelayedCombiner {
   port in OnOff i1;
   port in OnOff i2;
-  port <<delayed>> out OnOff o;
+  port out OnOff o;
 
-  automaton {
+  <<delayed>> automaton {
     initial state S;
     S -> S i1 / { o = i1; };
     S -> S i2 / { o = i2; };

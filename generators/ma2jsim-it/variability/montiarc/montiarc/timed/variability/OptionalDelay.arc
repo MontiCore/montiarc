@@ -8,8 +8,8 @@ component OptionalDelay {
 
   port in OnOff i;
   varif (delayed) {
-    port <<delayed>> out OnOff o;
-    automaton {
+    port out OnOff o;
+    <<delayed>> automaton {
         initial { o = OnOff.OFF; } state S;
 
         S -> S i / {

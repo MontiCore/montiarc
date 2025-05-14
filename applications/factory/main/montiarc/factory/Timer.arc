@@ -2,11 +2,11 @@ package factory;
 
 component Timer {
   port in int time;
-  port <<delayed>> out boolean timeout;
+  port out boolean timeout;
 
   int timer = 0;
 
-  automaton {
+  <<delayed>> automaton {
     initial state idle;
     state running;
 

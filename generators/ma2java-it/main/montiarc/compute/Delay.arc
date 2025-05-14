@@ -9,13 +9,13 @@ import Types.OnOff;
 component Delay {
 
   port sync in OnOff i;
-  port <<delayed>> sync out OnOff o;
+  port sync out OnOff o;
 
   init {
     o = OnOff.OFF;
   }
 
-  compute {
+  <<delayed>> compute {
     o = i;
   }
 }

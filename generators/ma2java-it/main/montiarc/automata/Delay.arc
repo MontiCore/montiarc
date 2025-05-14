@@ -9,9 +9,9 @@ import Types.OnOff;
 component Delay {
 
   port sync in OnOff i;
-  port <<delayed>> sync out OnOff o;
+  port sync out OnOff o;
 
-  automaton {
+  <<delayed>> automaton {
     initial state S;
 
     // emit received messages, the port delays

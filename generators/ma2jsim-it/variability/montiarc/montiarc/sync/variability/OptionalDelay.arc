@@ -8,13 +8,15 @@ component OptionalDelay {
 
   port sync in OnOff i;
   varif (delayed) {
-    port <<delayed>> sync out OnOff o;
+    port sync out OnOff o;
     init { o = OnOff.OFF; }
+    <<delayed>> compute {
+      o = i;
+    }
   } else {
     port sync out OnOff o;
-  }
-
-  compute {
-    o = i;
+    compute {
+      o = i;
+    }
   }
 }

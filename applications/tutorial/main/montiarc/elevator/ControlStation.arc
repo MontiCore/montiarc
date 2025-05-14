@@ -9,12 +9,12 @@ component ControlStation {
   port in int requestOnFloor;
   port out boolean openDoor;
   port sync in double motorPosition;
-  port <<delayed>> sync out MotorCMD motorCommand;
+  port sync out MotorCMD motorCommand;
 
   TreeSet<int> pendingRequests = TreeSet.TreeSet();
   Optional<int> targetFloor = Optional.empty();
 
-  automaton {
+  <<delayed>> automaton {
     initial {
       motorCommand = MotorCMD.STOP;
     } state Idle {

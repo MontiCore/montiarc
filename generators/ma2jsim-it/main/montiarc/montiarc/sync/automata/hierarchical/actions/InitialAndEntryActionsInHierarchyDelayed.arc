@@ -3,9 +3,9 @@ package montiarc.sync.automata.hierarchical.actions;
 
 component InitialAndEntryActionsInHierarchyDelayed {
 
-  port <<delayed>> sync out String o;
+  port sync out String o;
 
-  automaton {
+  <<delayed>> automaton {
 
     initial { o = "INIT A"; } state A {
       entry / o = "-> A";

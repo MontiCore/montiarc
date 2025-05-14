@@ -6,11 +6,11 @@ package automata.evaluation.smallModel;
  */
 component Counter {
   port sync in Double factor;
-  port <<delayed>> sync out Double out;
+  port sync out Double out;
 
   Double counter = 0.0;
 
-  automaton{
+  <<delayed>> automaton{
     initial {out = 0.0;} state Idle;
 
     Idle -> Idle /{

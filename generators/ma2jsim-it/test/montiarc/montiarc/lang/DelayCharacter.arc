@@ -6,7 +6,7 @@ import java.lang.Character;
 component DelayCharacter {
 
   port in Character i;
-  port <<delayed>> out Character o;
+  port out Character o;
 
   Delay<Character> delay;
 

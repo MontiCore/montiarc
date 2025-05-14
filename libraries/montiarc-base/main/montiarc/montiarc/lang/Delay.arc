@@ -9,9 +9,9 @@ package montiarc.lang;
 component Delay<T> {
 
   port in T i;
-  port <<delayed>> out T o;
+  port out T o;
 
-  automaton {
+  <<delayed>> automaton {
     initial state S;
     S -> S i / {
       o = i;

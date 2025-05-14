@@ -6,7 +6,7 @@ import java.lang.Long;
 component DelayLong {
 
   port in Long i;
-  port <<delayed>> out Long o;
+  port out Long o;
 
   Delay<Long> delay;
 

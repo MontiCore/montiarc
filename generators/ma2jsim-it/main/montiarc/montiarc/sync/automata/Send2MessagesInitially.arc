@@ -5,9 +5,9 @@ import montiarc.types.OnOff;
 
 component Send2MessagesInitially {
   port sync in OnOff p;
-  port <<delayed>> sync out OnOff o;
+  port sync out OnOff o;
 
-  automaton {
+  <<delayed>> automaton {
     initial {
       o = OnOff.OFF;
       o = OnOff.OFF;

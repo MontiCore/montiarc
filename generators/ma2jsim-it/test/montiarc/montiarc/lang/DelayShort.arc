@@ -6,7 +6,7 @@ import java.lang.Short;
 component DelayShort {
 
   port in Short i;
-  port <<delayed>> out Short o;
+  port out Short o;
 
   Delay<Short> delay;
 

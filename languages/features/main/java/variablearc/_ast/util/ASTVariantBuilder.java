@@ -26,7 +26,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
   protected ASTArcElement result;
   protected final VariantComponentTypeSymbol variant;
 
-  public ASTVariantBuilder(VariantComponentTypeSymbol variant) {this.variant = variant;}
+  public ASTVariantBuilder(VariantComponentTypeSymbol variant) {
+    this.variant = variant;
+  }
 
   @Override
   public ArcBasisTraverser getTraverser() {
@@ -123,7 +125,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
     for (ASTArcPort port : node.getArcPortList()) {
       if (variant.containsSymbol(port.getSymbol())) {
-        if (node.hasDelay()) variant.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(true));
+        if (variant.getBehavior().isPresent())
+          variant.getArcPort(port.getName()).ifPresent(p -> p.setDelayed(port.getSymbol().isOutgoing()
+            && variant.getBehavior().get().isDelayed()));
       }
     }
   }

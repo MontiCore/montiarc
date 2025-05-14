@@ -65,8 +65,8 @@ public class VariantCoCosTest extends MontiArcTestBase {
     compile("package a.b; component H { feature ff; varif (ff) { port in int io; } else { port out boolean io; } }");
     compile("package a.b; component I { feature ff; varif (ff) { port sync in int i; } else { port in int i; } }");
     compile("package a.b; component J { feature ff; varif (ff) { port sync out int o; } else { port out int o; } }");
-    compile("package a.b; component K { port in int i; port out int o1, <<delayed>> out int o2; } ");
-    compile("package a.b; component L { port in int i; feature ff; varif (ff) { port out int o; } else { port <<delayed>> out int o; } }");
+    compile("package a.b; component K { port in int i; port out int o1, out int o2; <<delayed>> compute {}} ");
+    compile("package a.b; component L { port in int i; port out int o; feature ff; varif (!ff) { <<delayed>> compute {}} }");
     compile("package a.b; component M { feature ff; varif (ff) { port in int i; } }");
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } }");
     compile("package a.b; component O { feature ff; port sync out int o; a.b.J sub; sub.o -> o; constraint(ff == sub.ff); }");
@@ -1051,11 +1051,11 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "port in int i; " +
           "port out int o; " +
           "a.b.C sub1; " +
-          "a.b.K sub2; " +
+          "a.b.L sub2; " +
           "i -> sub1.i1; " +
           "sub1.o -> sub2.i; " +
-          "sub2.o1 -> sub1.i2; " +
-          "sub2.o2 -> o; " +
+          "sub2.o -> sub1.i2; " +
+          "sub2.o -> o; " +
           "}",
         ArcError.FEEDBACK_CAUSALITY),
       // feedback loop, weakly-causal feedback, subcomponent with variable interface delay (select feature)

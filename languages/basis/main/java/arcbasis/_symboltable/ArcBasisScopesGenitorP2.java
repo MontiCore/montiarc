@@ -180,7 +180,6 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     for (ASTArcPort port : node.getArcPortList()) {
       port.getSymbol().setType(type);
       port.getSymbol().setTiming(timing);
-      if (node.hasDelay()) port.getSymbol().setDelayed(true);
     }
   }
 

@@ -4,6 +4,7 @@ package arcautomaton._ast;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcautomaton._visitor.SCTransitionsCollector;
+import arcbasis._ast.ASTPortDeclaration;
 import de.monticore.scbasis._ast.ASTSCEmptyBody;
 import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
@@ -11,7 +12,6 @@ import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
-import de.monticore.symbols.compsymbols._symboltable.Timing;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -80,6 +80,21 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
       .filter(ASTSCState.class::isInstance)
       .map(ASTSCState.class::cast)
       .filter(s -> s.getSCModifier().isInitial());
+  }
+
+  protected Boolean isDelayed;
+
+  @Override
+  public boolean isDelayed() {
+    if (this.isDelayed != null) {
+      return this.isDelayed;
+    } else if (this.isPresentStereotype()) {
+      this.isDelayed = this.getStereotype().contains(ASTPortDeclaration.DELAY);
+      return this.isDelayed;
+    } else {
+      this.isDelayed = false;
+      return this.isDelayed;
+    }
   }
 
   public ASTSCState findCommonSuperstate(ASTSCState state1, ASTSCState state2) {

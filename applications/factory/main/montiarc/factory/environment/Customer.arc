@@ -7,6 +7,8 @@ component Customer {
   port in OrderQuotation quotation,
        in Shipping shipping,
        in ShippingConfirmation shippingConfirmation;
-  port <<delayed>> out Inquiry inquiry,
-       <<delayed>> out OrderConfirmation orderConfirmation;
+  port out Inquiry inquiry,
+       out OrderConfirmation orderConfirmation;
+
+  <<delayed>> compute {}
 }

@@ -6,7 +6,7 @@ import java.lang.Short;
 component TSDelayShort(Short iv) {
 
   port sync in Short i;
-  port <<delayed>> sync out Short o;
+  port sync out Short o;
 
   TSDelay<Short> delay(iv);
 

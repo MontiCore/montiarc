@@ -14,4 +14,6 @@ component ProductionControl {
        out ProductConfig grindingConfig,
        out ProductConfig polishingConfig,
        out Product product;
+
+  <<delayed>> compute {}
 }

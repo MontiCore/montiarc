@@ -6,7 +6,7 @@ import java.lang.Float;
 component DelayFloat {
 
   port in Float i;
-  port <<delayed>> out Float o;
+  port out Float o;
 
   Delay<Float> delay;
 

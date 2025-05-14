@@ -36,9 +36,9 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
     compile("package a.b; component A { }");
     compile("package a.b; component B { port in int i; } ");
     compile("package a.b; component C { port out int o; } ");
-    compile("package a.b; component D { port in int i; port <<delayed>> out int o; }");
+    compile("package a.b; component D { port in int i; port out int o; <<delayed>> compute {}}");
     compile("package a.b; component E { port in int i; port out int o; }");
-    compile("package a.b; component F { port in int i1, i2; port <<delayed>> out int o; }");
+    compile("package a.b; component F { port in int i1, i2; port out int o; <<delayed>> compute {}}");
     compile("package a.b; component G { port in int i1, i2; port out int o; }");
     compile("package a.b; component H { port in int i; port out int o; D sub; i -> sub.i; sub.o -> o; }");
     compile("package a.b; component I { port in int i; port out int o; E sub; i -> sub.i; sub.o -> o; }");
@@ -163,7 +163,18 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
     "component Comp16 { " +
       "  a.b.K sub; " +
       "  sub.o -> sub.i; " +
-      "}"
+      "}",
+    // directly strongly causal with behavior declaring the delay
+    "component Comp17 { " +
+      "  port in int i; " +
+      "  port out int o; " +
+      "  component Inner inner {" +
+      "    port in int i;" +
+      "    port out int o;" +
+      "    <<delayed>> automaton {}" +
+      "  }" +
+      "  i -> inner.i; inner.o -> o; " +
+      "}",
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);

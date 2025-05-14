@@ -6,7 +6,7 @@ import java.lang.Integer;
 component TSDelayInteger(Integer iv) {
 
   port sync in Integer i;
-  port <<delayed>> sync out Integer o;
+  port sync out Integer o;
 
   TSDelay<Integer> delay(iv);
 

@@ -10,7 +10,9 @@ component PropagateTiming {
 
   component Inner1 {
     port in int iIn;
-    port <<delayed>> out int iOut;
+    port out int iOut;
+
+    <<delayed>> compute {}
   }
 
   component Inner2 {

@@ -63,8 +63,10 @@ public class ArcPortSymbol extends ArcPortSymbolTOP {
       // ill-structured symbol table
       return false;
     } else if (this.getComponent().get().isAtomic()) {
-      // ports in atomic components are delayed explicitly
-      return false;
+      // Outgoing ports may inherit the delay annotation from the behavior
+      return this.isOutgoing()
+        && getComponent().get().getBehavior().isPresent()
+        && getComponent().get().getBehavior().get().isDelayed();
     } else if (this.isOutgoing() && this.getComponent().get().isDecomposed()) {
       // outgoing ports in composed components are delayed if their source is delayed
       Optional<ASTPortAccess> source = this.getComponent().get().getAstNode()

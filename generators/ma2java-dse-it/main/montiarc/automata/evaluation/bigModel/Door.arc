@@ -11,11 +11,11 @@ component Door {
   port sync in Boolean isObstacle;
   port sync out Boolean open;
   port sync out Boolean close;
-  port <<delayed>> sync out Boolean closed;
+  port sync out Boolean closed;
 
   Double timer = 5.0;
 
-  automaton {
+  <<delayed>> automaton {
     initial { closed = false; } state Wait;
 
     Wait -> Wait [timer >= 0.625] / {

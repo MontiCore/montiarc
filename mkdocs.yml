@@ -114,6 +114,7 @@ nav:
       - Behavior: 'Reference/Behavior/index.md'
       - Automata: 'Reference/Behavior/Automata.md'
       - Compute: 'Reference/Behavior/Compute.md'
+      - Delay: 'Reference/Behavior/Delay.md'
       - Fields: 'Reference/Behavior/Fields.md'
       - Handwritten Code: 'Reference/Behavior/HWC.md'
     - Types: 

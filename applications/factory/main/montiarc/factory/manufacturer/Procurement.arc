@@ -6,5 +6,7 @@ import factory.Factory.*;
 component Procurement {
   port in SalesOrder salesOrder,
        in Inventory inventory;
-  port <<delayed>> out PurchaseOrder purchaseOrder;
+  port out PurchaseOrder purchaseOrder;
+
+  <<delayed>> compute {}
 }

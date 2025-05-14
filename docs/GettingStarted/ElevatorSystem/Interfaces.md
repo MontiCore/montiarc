@@ -72,10 +72,10 @@ For now, just know that object ports behave the same as primitive ports, and we 
 
 
 ## Delayed Ports
-Since in both timings it is possible that the outputs causally depend on the inputs, we can mark a port as delayed.
+Since in both timings it is possible that the outputs causally depend on the inputs, ports can be delayed.
 
 In the case of the control station, this means the `motorCommand` is dependent on the `motorPoition`, but the `motorPosition` depends on the `motorCommand`.
-To avoid this circle, the `motorCommand` is delayed and sent only after the current time step has been completed.  
+To avoid this circle, all outputs are delayed and sent only after the current time step has been completed. 
 
 === "ControlStation.arc"
     ```montiarc
@@ -85,11 +85,12 @@ To avoid this circle, the `motorCommand` is delayed and sent only after the curr
       port in int requestOnFloor;
       port out boolean openDoor;
       port sync in double motorPosition;
-      port <<delayed>> sync out MotorCMD motorCommand;
+      port sync out MotorCMD motorCommand;
+      <<delayed>> compute {}
     }
     ```
 
-A delayed port can be identified by the `<<delayed>>` stereotype.
+Outputs are delayed if the component behavior is delayed, as identified by the `<<delayed>>` stereotype. For now we simply use an empty [compute](../../Reference/Behavior/Compute.md) block.
 
 ---
 

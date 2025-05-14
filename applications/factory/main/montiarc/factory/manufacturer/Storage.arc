@@ -6,7 +6,8 @@ import factory.Factory.*;
 component Storage {
   port in Material materialIn,
        in MaterialRequest materialRequest;
-  port <<delayed>> out Material materialOut,
+  port out Material materialOut,
        out Inventory inventory;
 
+  <<delayed>> compute {}
 }

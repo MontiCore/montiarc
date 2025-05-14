@@ -6,9 +6,9 @@ import montiarc.types.OnOff;
 component Delay {
 
   port in OnOff i;
-  port <<delayed>> out OnOff o;
+  port out OnOff o;
 
-  automaton {
+  <<delayed>> automaton {
     initial { o = OnOff.OFF; } state S;
 
     S -> S i / { o = i; };

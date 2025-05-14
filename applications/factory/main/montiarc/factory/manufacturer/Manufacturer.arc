@@ -11,10 +11,10 @@ component Manufacturer {
   port in Inquiry inquiry,
        in OrderConfirmation orderConfirmation,
        in Material material;
-  port <<delayed>> out OrderQuotation orderQuotation,
-       <<delayed>> out Shipping shipping,
-       <<delayed>> out ShippingConfirmation shippingConfirmation,
-       <<delayed>> out PurchaseOrder purchaseOrder;
+  port out OrderQuotation orderQuotation,
+       out Shipping shipping,
+       out ShippingConfirmation shippingConfirmation,
+       out PurchaseOrder purchaseOrder;
 
   Sales sales;
   Storage storage;
