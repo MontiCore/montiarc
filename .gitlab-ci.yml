@@ -110,27 +110,6 @@ Deploy Nexus:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
-      
-Pages:
-  stage: report
-  needs: []
-  image: python:alpine
-  rules:
-    - changes:
-        - mkdocs.yml
-        - README.md
-        - docs/
-  before_script:
-    - apk add gcc musl-dev python3-dev
-    - pip install cython
-    - pip install mkdocs
-    - pip install mkdocs-material
-  script:
-    - mkdocs build --verbose --clean --strict
-    - mv site public
-  artifacts:
-    paths:
-      - public
 
 # Mirrors this repository to GitHub.
 #
