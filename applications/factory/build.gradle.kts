@@ -32,36 +32,18 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 
-val enableAttachDebugger = false
-
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
-
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
 }
 
 tasks.compileTestCd2pojo {
   useClass2Mc.set(true)
-
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
 }
 
 tasks.compileMontiarc {
   useClass2Mc.set(true)
-
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
 }
 
 tasks.compileTestMontiarc {
   useClass2Mc.set(true)
-
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
 }

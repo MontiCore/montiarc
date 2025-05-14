@@ -15,6 +15,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.options.Option
 
 /**
  * A task that generates Java code from class diagrams, using cd2pojo.
@@ -45,6 +46,23 @@ abstract class Cd2PojoCompile : JavaExec() {
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
+  /** Enable debugging of the CD2PojoTool while executing*/
+  @get:Input
+  @get:Option(
+    option = "debugTask",
+    description = "Enable debugging of the CD2PojoTool while executing. " +
+      "Set a the port to which the debugger listens with '--debugPort=...'"
+  )
+  abstract val debugTask : Property<Boolean>
+
+  @get:Input
+  @get:Option(
+    option = "debugPort",
+    description = "If '--debugTask' is specified, use this option to specify " +
+      "to which port the debugger shall listen. Defaults to 5005."
+  )
+  abstract val debugPort : Property<String>
+
   init {
     description = "Generates .java code from class diagrams using cd2pojo."
 
@@ -52,6 +70,9 @@ abstract class Cd2PojoCompile : JavaExec() {
     mainClass.convention(CD2POJO_TOOL_CLASS)
 
     useClass2Mc.convention(false)
+
+    debugTask.convention(false)
+    debugPort.convention("5005")
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -69,6 +90,11 @@ abstract class Cd2PojoCompile : JavaExec() {
 
     // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
     project.delete(outputDir)
+
+    // Enable remote debugging when option is set
+    if (debugTask.get()) {
+      enableDebugging()
+    }
 
     // 1) For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
@@ -102,6 +128,13 @@ abstract class Cd2PojoCompile : JavaExec() {
     )
   }
 
+  private fun enableDebugging() {
+    jvmArgs(
+      "-Xdebug",
+      "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
+    )
+  }
+
   private fun printInfo() {
     println("Trying generation")
 
@@ -125,5 +158,7 @@ abstract class Cd2PojoCompile : JavaExec() {
     println("MainClass:" + mainClass.get())
     println("ClassPath:")
     classpath.asPath.split(":").forEach { println("  $it") }
+
+    println("Debugging infos: isEnabled=${debugTask.get()}; port=${debugPort.get()}")
   }
 }

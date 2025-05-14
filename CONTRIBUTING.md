@@ -11,6 +11,7 @@ This guide comprises the following steps:
 - [Setting up the Development Environment](#setting-up-the-development-environment)
 - [Documentation](#documentation)
 - [Making a Pull Request](#making-a-pull-request)
+- [Debug Support](#debug-support)
 
 ## Setting up the Development Environment
 
@@ -67,6 +68,33 @@ tool that puts everything together.
 2. **Backend**: Located in the `generators` folder this contains code for translating MontiArc models into general-purpose languages.
 3. **Applications**: Located in the `applications` folder are example projects that use MontiArc.
 4. **Documentation**: The `docs` folder contain all pages of the documentation.
+
+## Debug support
+The Gradle plugins `cd2pojo` and `montiarc-jsim` offer configuration options 
+to facilitate the debugging of generator executions in integration and 
+application projects: 
+All [`Cd2PojoCompile`](tooling%2Fgradle-plugins%2Fcd2pojo%2Fmain%2Fkotlin%2FCd2PojoCompile.kt) 
+and [`MontiArcCompile`](tooling%2Fgradle-plugins%2Fma2jsim%2Fmain%2Fkotlin%2FMontiArcCompile.kt) 
+tasks expose a boolean property called `debugTask`. When set to `true`, the 
+corresponding task will wait for a remote debugger to connect on port `5005` 
+by default. This port can be altered using the `debugPort` string property. 
+There are two ways to configure these debugging options:
+
+1. In the build script of the project that applies the respective plugin:
+   ```kotlin
+   tasks.compileMontiarc {
+     debugTask.set(true)    // Default value is false
+     debugPort.set("3003")  // Default value is "5005"
+   }
+   ```
+2. Via a command line option when executing Gradle
+   ```bash
+   ./gradlew :applications:factory:compileMontiarc --debugTask
+   ```
+   Note that configuring which port to use, again, is optional. The default port is 5005.
+   ```bash
+   ./gradlew :applications:factory:compileMontiarc --debugTask --debugPort=3003
+   ```
 
 ## Making a Pull Request
 

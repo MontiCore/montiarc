@@ -17,6 +17,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.options.Option
 
 /**
  * A task that generates Java code from MontiArc models.
@@ -57,6 +58,23 @@ abstract class MontiArcCompile : JavaExec() {
   @get:Input
   abstract val fileLog: Property<Boolean>
 
+  /** Enable debugging of the CD2PojoTool while executing. */
+  @get:Input
+  @get:Option(
+    option = "debugTask",
+    description = "Enable debugging of the MA2JsimTool while executing. " +
+            "Set a the port to which the debugger listens with '--debugPort=...'"
+  )
+  abstract val debugTask : Property<Boolean>
+
+  @get:Input
+  @get:Option(
+    option = "debugPort",
+    description = "If '--debugTask' is specified, use this option to specify " +
+            "to which port the debugger shall listen. Defaults to 5005."
+  )
+  abstract val debugPort : Property<String>
+
   init {
     description = "Generates .java code from MontiArc models."
 
@@ -67,10 +85,13 @@ abstract class MontiArcCompile : JavaExec() {
 
     useClass2Mc.convention(false)
     checkVariability.convention(false)
-    printTaskInfo.convention(false)
     debugLog.convention(false)
     traceLog.convention(false)
     fileLog.convention(false)
+
+    printTaskInfo.convention(false)
+    debugTask.convention(false)
+    debugPort.convention("5005")
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -90,6 +111,11 @@ abstract class MontiArcCompile : JavaExec() {
 
     if (printTaskInfo.get()) {
       printInfo()
+    }
+
+    // Enable remote debugging when option is set
+    if (debugTask.get()) {
+      enableDebugging()
     }
 
     // 1) For directories: filter out entries that do not exist
@@ -131,6 +157,13 @@ abstract class MontiArcCompile : JavaExec() {
   private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {
     return project.files(
       fileCollection.files.filter { it.exists() }
+    )
+  }
+
+  private fun enableDebugging() {
+    jvmArgs(
+      "-Xdebug",
+      "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
     )
   }
 
