@@ -6,8 +6,9 @@
 <#assign modeAutomatonOpt = helper.getModeAutomaton(ast)>
 <#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
 
-public java.util.List${"<"}montiarc.rte.component.Component${">"} getAllSubcomponents() {
-  final java.util.ArrayList${"<"}montiarc.rte.component.Component${">"} allSubcomponentList = new java.util.ArrayList<>();
+@Override
+public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubcomponents() {
+  final java.util.ArrayList${"<"}montiarc.rte.component.SimComponent${">"} allSubcomponentList = new java.util.ArrayList<>();
 
   <#if hasOnlyOneVariant>
     <#list ast.getSymbol().getSubcomponents() as subcomponent>

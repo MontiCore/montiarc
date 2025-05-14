@@ -29,7 +29,7 @@ import java.util.Set;
  *            (containing a message for every port at the time of a synced tick)
  * @param <B> the class defining the interface of the behavior (accepting tick and message events)
  */
-public abstract class AbstractComponent<I, B extends Behavior<I>> implements Component {
+public abstract class AbstractComponent<I, B extends Behavior<I>> implements SimComponent {
 
   protected final String name;
   protected Set<OutPort<?>> unconnectedOutputs;
@@ -51,39 +51,46 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
     return name;
   }
 
-  public Scheduler getScheduler() {
+  protected Scheduler getScheduler() {
     return this.scheduler;
   }
 
-  public B getBehavior() {
+  protected B getBehavior() {
     return this.behavior;
   }
 
-  /**
-   * Runs the simulation
-   */
-  public void run() {
+  @Override
+  public void runToCompletion() {
     ensureInitialized();
     this.scheduler.runToCompletion(this);
   }
 
-  /**
-   * Runs the simulation for the specified duration
-   * @param ticks The number of ticke to run the simulation for.
-   */
+  @Override
   public void run(long ticks) {
     ensureInitialized();
     this.scheduler.runTicks(this, ticks);
   }
 
+  @Override
+  public void runIndefinitely(long simulationTickLength) {
+    ensureInitialized();
+    this.scheduler.runIndefinitely(this, simulationTickLength);
+  }
+
+  @Override
   public void unregisterFromScheduler() {
     this.scheduler.unregister(this);
   }
 
-  public abstract List<OutPort<?>> getAllOutPorts();
-  protected abstract List<InOutPort<?, ?>> getAllSyncedInPorts();
   protected abstract Object portValueOf(InPort<?> p);
+
   protected abstract List<OutPort<?>> getAllDelayedOutPorts();
+
+  @Override
+  public abstract List<? extends InOutPort<?, ?>> getAllSyncedInPorts();
+
+  @Override
+  public abstract List<? extends InOutPort<?, ?>> getAllInPorts();
 
   protected void sendTickOnAllOutputs() {
     for (OutPort<?> outP : this.getAllOutPorts()) {
@@ -110,7 +117,6 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   }
 
   @Override
-  @Deprecated(forRemoval = true)
   public void init() {
     if (initialized) {
       Log.info(() -> "Component already initialized", this.getName() + "#init");
@@ -124,7 +130,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
       }
       sendTickOnAllDelayedOutputs();
     } else {
-      for (Component comp : this.getAllSubcomponents()) {
+      for (SimComponent comp : this.getAllSubcomponents()) {
         comp.init();
       }
     }

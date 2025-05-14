@@ -2,9 +2,9 @@
 package montiarc.rte.deploy;
 
 import de.se_rwth.commons.logging.Log;
-import montiarc.rte.component.AbstractComponent;
+import montiarc.rte.component.Component;
 
-public abstract class Deployment<T extends AbstractComponent<?, ?>> {
+public abstract class Deployment<T extends Component> {
 
   public void deploy(String[] args) {
     Log.initWARN();

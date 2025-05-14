@@ -4,7 +4,7 @@ package montiarc.rte.scheduling;
 import com.google.common.collect.Comparators;
 import de.se_rwth.commons.logging.Log;
 import montiarc.lang.Simulation;
-import montiarc.rte.component.Component;
+import montiarc.rte.component.SimComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.InPort;
@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 public class CoordinatingScheduler implements Scheduler {
 
-  protected final Map<Component, ComponentScheduler> compToScheduler;
+  protected final Map<SimComponent, ComponentScheduler> compToScheduler;
 
   protected boolean requestedToStop = false;
 
@@ -31,14 +31,12 @@ public class CoordinatingScheduler implements Scheduler {
   }
 
   @Override
-  public void register(Component component,
-                       Collection<? extends InPort<?>> msgEventPorts,
-                       Collection<? extends InPort<?>> syncPorts) {
+  public void register(SimComponent component) {
     ComponentScheduler scheduler;
     if (component.hasModeAutomaton()) {
-      scheduler =  new ModeComponentScheduler(component, msgEventPorts, syncPorts, this);
+      scheduler =  new ModeComponentScheduler(component, this);
     } else {
-      scheduler = new ComponentScheduler(component, msgEventPorts, syncPorts);
+      scheduler = new ComponentScheduler(component);
     }
     if (Simulation.coordinatingScheduler == this) {
       // Simulation is currently running
@@ -48,7 +46,7 @@ public class CoordinatingScheduler implements Scheduler {
   }
 
   @Override
-  public void unregister(Component component) {
+  public void unregister(SimComponent component) {
     this.compToScheduler.remove(component);
   }
 
@@ -72,15 +70,15 @@ public class CoordinatingScheduler implements Scheduler {
       .collect(Collectors.toList());
   }
 
-  public void runToCompletion(Component component) {
+  public void runToCompletion(SimComponent component) {
     run(component, true, Long.MIN_VALUE, 0);
   }
 
-  public void runIndefinitely(Component component, long simulationTickLength) {
+  public void runIndefinitely(SimComponent component, long simulationTickLength) {
     run(component, false, Long.MIN_VALUE, simulationTickLength);
   }
 
-  public void runTicks(Component component, long ticks) {
+  public void runTicks(SimComponent component, long ticks) {
     run(component, false, ticks, 0);
   }
 
@@ -95,7 +93,10 @@ public class CoordinatingScheduler implements Scheduler {
    * @param simulationTickLength The time the simulation takes for each tick.
    *                             Can effectively slow the simulation down (e.g. to be interactive)
    */
-  protected void run(Component component, boolean runToCompletion, long ticks, long simulationTickLength) {
+  protected void run(SimComponent component,
+                     boolean runToCompletion,
+                     long ticks,
+                     long simulationTickLength) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
@@ -155,8 +156,8 @@ public class CoordinatingScheduler implements Scheduler {
     return this.compToScheduler.values().stream().anyMatch(ComponentScheduler::isReadyToExecute);
   }
 
-  public boolean isASubCompScheduled(Component comp) {
-    Collection<? extends Component> directSubs = comp.getAllSubcomponents();
+  public boolean isASubCompScheduled(SimComponent comp) {
+    Collection<? extends SimComponent> directSubs = comp.getAllSubcomponents();
 
     return
       directSubs.stream().map(this.compToScheduler::get)

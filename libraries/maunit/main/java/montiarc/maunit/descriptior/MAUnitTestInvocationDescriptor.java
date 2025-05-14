@@ -5,7 +5,7 @@ import montiarc.lang.Simulation;
 import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.maunit.engine.MAUnitTestExecutionContext;
-import montiarc.rte.component.AbstractComponent;
+import montiarc.rte.component.SimComponent;
 import montiarc.rte.port.ScheduledPort;
 import montiarc.rte.scheduling.CoordinatingScheduler;
 import org.junit.platform.engine.TestDescriptor;
@@ -21,13 +21,13 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
 
   public static final String SEGMENT_TYPE = "matest-invocation";
 
-  protected Class<? extends AbstractComponent<?, ?>> testClass;
+  protected Class<? extends SimComponent> testClass;
 
   protected MaUnitTestContext invocationContext;
 
   protected int iteration;
 
-  protected MAUnitTestInvocationDescriptor(UniqueId uniqueId, MaUnitTestContext invocationContext, Class<? extends AbstractComponent<?, ?>> testClass, int iteration) {
+  protected MAUnitTestInvocationDescriptor(UniqueId uniqueId, MaUnitTestContext invocationContext, Class<? extends SimComponent> testClass, int iteration) {
     super(uniqueId, invocationContext.getDisplayName(iteration), ClassSource.from(testClass));
     this.testClass = testClass;
     this.invocationContext = invocationContext;
@@ -51,11 +51,10 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
   @Override
   public MAUnitTestExecutionContext execute(MAUnitTestExecutionContext context, DynamicTestExecutor dynamicTestExecutor) throws Exception {
     CoordinatingScheduler scheduler = new CoordinatingScheduler();
-    AbstractComponent<?, ?> component = (AbstractComponent<?, ?>) testClass.getConstructors()[0].newInstance(getArguments(testClass.getConstructors()[0].getParameterCount(), scheduler));
+    SimComponent component = (SimComponent) testClass.getConstructors()[0].newInstance(getArguments(testClass.getConstructors()[0].getParameterCount(), scheduler));
     boolean caughtException = false;
     try {
       Simulation.ticks = 0;
-      component.init();
       component.run(getTickCount());
     } catch (Throwable e) {
       caughtException = true;

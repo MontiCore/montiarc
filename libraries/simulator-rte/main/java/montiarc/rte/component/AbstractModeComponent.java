@@ -35,7 +35,7 @@ public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC exte
   }
 
   @Override
-  public void processMessage(InPort<?> p) {
+  protected void processMessage(InPort<?> p) {
     this.handleMessageWithModeAutomaton(p);
     super.processMessage(p);
   }

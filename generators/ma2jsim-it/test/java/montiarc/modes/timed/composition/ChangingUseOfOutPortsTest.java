@@ -37,7 +37,7 @@ class ChangingUseOfOutPortsTest {
     sut.port_o().connect(port_o);
 
     // When
-    input.forEach(sut.port_i::receive);
+    input.forEach(sut.port_i()::receive);
 
     sut.run();
 

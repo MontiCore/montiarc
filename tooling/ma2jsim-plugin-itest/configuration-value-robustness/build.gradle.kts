@@ -45,7 +45,7 @@ val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesA
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentCompTOP.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponentCompImplTOP.java",
     "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
     "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym",
@@ -84,7 +84,7 @@ val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePrese
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentCompTOP.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponentCompImplTOP.java",
     "$expectedJavaGenDir/mainpackage/HwcComponent2CompTOP.java",
     "$expectedJavaGenDir/mainpackage/UsingComponentFromOtherModelPathComp.java",
     "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
@@ -129,7 +129,7 @@ val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", 
   val expectedSymbolGenDir = "$expectedGenDir/symbols"
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentCompTOP.java",
+    "$expectedJavaGenDir/mainpackage/HwcComponentCompImplTOP.java",
     "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
     "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
     "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym"

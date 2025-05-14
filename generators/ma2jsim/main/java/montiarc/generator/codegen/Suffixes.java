@@ -13,7 +13,8 @@ public class Suffixes {
   }
   
   public final static String TOP = "TOP";
-  public final static String COMPONENT = "Comp";
+  public final static String COMP = "Comp";
+  public final static String COMP_IMPL = "CompImpl";
   public final static String BUILDER = "Builder";
   public final static String INPUT = "Input";
   public final static String OUTPUT = "Output";
@@ -33,7 +34,8 @@ public class Suffixes {
   public final static String MSG_Action = "MsgAction";
 
   public String top() { return TOP; }
-  public String component() { return COMPONENT; }
+  public String comp() { return COMP; }
+  public String compImpl() { return COMP_IMPL; }
   public String builder() { return BUILDER; }
   public String input() { return INPUT; }
   public String output() { return OUTPUT; }

@@ -3,7 +3,7 @@ package montiarc.rte.deploy;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.se_rwth.commons.logging.Log;
-import montiarc.rte.component.AbstractComponent;
+import montiarc.rte.component.Component;
 import montiarc.rte.deploy.mqtt.SimpleMqtt;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class MqttDeployment<T extends AbstractComponent<?, ?>> extends Deployment<T> {
+public abstract class MqttDeployment<T extends Component> extends Deployment<T> {
 
   protected long msPerStep = 1000;
 
@@ -35,8 +35,7 @@ public abstract class MqttDeployment<T extends AbstractComponent<?, ?>> extends 
 
   @Override
   protected void runSimulation(T component) {
-    component.init();
-    component.getScheduler().runIndefinitely(component, msPerStep * 1000000);
+    component.runIndefinitely(msPerStep * 1000000);
   }
 
   protected SimpleMqtt initMqtt() throws MqttException {

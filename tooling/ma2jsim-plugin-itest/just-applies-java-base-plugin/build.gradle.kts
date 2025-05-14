@@ -26,7 +26,7 @@ val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesAre
 
   mandatoryFiles.from(
     "$expectedJavaGenDir/foopackage/FooComp.java",
-    "$expectedJavaGenDir/barpackage/BarCompTOP.java",
+    "$expectedJavaGenDir/barpackage/BarCompImplTOP.java",
     "$expectedSymbolGenDir/foopackage/Foo.arcsym",
     "$expectedSymbolGenDir/barpackage/Bar.arcsym"
   )

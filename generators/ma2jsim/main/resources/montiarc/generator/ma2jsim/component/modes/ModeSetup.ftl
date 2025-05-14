@@ -26,9 +26,10 @@
   <#list helper.getInstancesFromMode(mode) as sub>
     <#assign subSymbol = sub.getSymbol()>
     <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
-    <#assign builderType><@Util.getCompTypeString subSymbol.getType() "${suffixes.component()}${suffixes.builder()}"/></#assign>
+    <#assign subCompType><@Util.getCompTypeString subSymbol.getType() "${suffixes.compImpl()}"/></#assign>
+    <#assign builderType><@Util.getCompTypeString subSymbol.getType() "${suffixes.comp()}${suffixes.builder()}"/></#assign>
 
-    ${subCompName} = new ${builderType}()
+    ${subCompName} = (${subCompType}) new ${builderType}()
     .setName("${subSymbol.getName()}")
     .setScheduler(this.getScheduler())
       <#list helper.getArgNamesMappedToExpressions(subSymbol.getAstNode()) as name, expression>

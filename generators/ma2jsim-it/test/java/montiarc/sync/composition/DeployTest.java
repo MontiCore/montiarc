@@ -33,7 +33,7 @@ class DeployTest {
     Preconditions.checkNotNull(expected2);
 
     // Given
-    DeployComp sut = new DeployCompBuilder("sut").build();
+    DeployCompImpl sut = (DeployCompImpl) new DeployCompBuilder("sut").build();
     PortObserver<OnOff> port_o1 = new PortObserver<>();
     PortObserver<OnOff> port_o2 = new PortObserver<>();
 

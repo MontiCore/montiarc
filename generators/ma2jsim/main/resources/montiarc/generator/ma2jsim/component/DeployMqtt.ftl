@@ -12,15 +12,15 @@
 <#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ComponentTypeSymbol" -->
 
 public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top()}</#if>
-  extends montiarc.rte.deploy.MqttDeployment<${comp.getName()}${suffixes.component()}> {
+  extends montiarc.rte.deploy.MqttDeployment<${comp.getName()}${suffixes.comp()}> {
 
   public static void main(String[] args){
     new ${prefixes.deploy()}Mqtt${comp.getName()}().deploy(args);
   }
 
   @Override
-  public ${comp.getName()}${suffixes.component()} buildComponent() {
-    return new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("${comp.getName()}")
+  public ${comp.getName()}${suffixes.comp()} buildComponent() {
+    return new ${comp.getName()}${suffixes.comp()}${suffixes.builder()}("${comp.getName()}")
       <#if variant??>
         <#list variant.getFeatureSymbolBooleanMap() as feature, value>
       .${prefixes.setterMethod()}${prefixes.feature()}${feature.getName()}(${value?c})
@@ -30,7 +30,7 @@ public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top(
   }
 
   @Override
-  protected void connect(${comp.getName()}${suffixes.component()} component, montiarc.rte.deploy.mqtt.SimpleMqtt mqtt)
+  protected void connect(${comp.getName()}${suffixes.comp()} component, montiarc.rte.deploy.mqtt.SimpleMqtt mqtt)
     throws org.eclipse.paho.client.mqttv3.MqttException {
     <#list comp.getAllIncomingPorts() as port>
       <#if !port.getType().isGenericType()>

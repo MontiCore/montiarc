@@ -6,6 +6,7 @@ ${tc.signature("portSym")}
 <#assign variants = helper.getVariants(ast)>
 <#assign hasOnlyOneVariant = variants?size == 1>
 
+@Override
 public <@Util.getStaticPortInterface portSym/><<@Util.getPortTypeString portSym.getType()/>>
   ${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(ast, portSym)}() {
 

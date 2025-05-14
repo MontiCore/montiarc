@@ -6,12 +6,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 @JSimTest
-public class FieldReferencingTest {
+class FieldReferencingTest {
 
   @Test
-  public void fieldHasCorrectValue() {
+  void fieldHasCorrectValue() {
     // Given
-    FieldReferencingComp sut = new FieldReferencingCompBuilder().setName("sut").build();
+    FieldReferencingCompImpl sut
+      = (FieldReferencingCompImpl) new FieldReferencingCompBuilder().setName("sut").build();
 
     // Then
     Assertions.assertEquals(1, sut.field_x());

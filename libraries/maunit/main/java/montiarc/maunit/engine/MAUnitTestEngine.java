@@ -4,6 +4,7 @@ package montiarc.maunit.engine;
 import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.descriptior.MAUnitTestDescriptor;
 import montiarc.rte.component.AbstractComponent;
+import montiarc.rte.component.SimComponent;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.engine.EngineDiscoveryRequest;
 import org.junit.platform.engine.ExecutionRequest;
@@ -34,7 +35,7 @@ public class MAUnitTestEngine extends HierarchicalTestEngine<MAUnitTestExecution
 
   private void appendTestsInClass(Class<?> c, EngineDescriptor engineDescriptor) {
     if (AnnotationSupport.isAnnotated(c, MaUnitTest.class) && AbstractComponent.class.isAssignableFrom(c)) {
-      MAUnitTestDescriptor classTestDescriptor = new MAUnitTestDescriptor(engineDescriptor.getUniqueId().append("component", c.getName()), (Class<? extends AbstractComponent<?, ?>>) c);
+      MAUnitTestDescriptor classTestDescriptor = new MAUnitTestDescriptor(engineDescriptor.getUniqueId().append("component", c.getName()), (Class<? extends SimComponent>) c);
       engineDescriptor.addChild(classTestDescriptor);
     }
   }

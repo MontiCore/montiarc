@@ -6,8 +6,17 @@
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
+<#-- Usually, the constructor visibility is protected to force users to use the builder
+  -- for instantiating components. However, MAUnit components must have public
+  -- constructors so that the test engine can instantiate them.
+  -->
+<#if ast.isPresentStereotype() && ast.getStereotype().contains("test")>
+  <#assign visibility = "public">
+<#else>
+  <#assign visibility = "protected">
+</#if>
 
-public ${ast.getName()}${suffixes.component()}<#if isTop>${suffixes.top()}</#if>(
+${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}</#if>(
   String name,
   montiarc.rte.scheduling.Scheduler scheduler
   <#list ast.getHead().getArcParameterList()>,
@@ -62,7 +71,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
   this.modeAutomaton.setup();
 </#if>
 
-this.scheduler.register(this, this.getAllMsgEventInPorts(), this.getAllSyncedInPorts());
+this.scheduler.register(this);
 
 <@logInstantiation/>
 }

@@ -4,7 +4,7 @@ package montiarc.rte.deploy;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
 import de.se_rwth.commons.logging.Log;
-import montiarc.rte.component.AbstractComponent;
+import montiarc.rte.component.Component;
 import montiarc.rte.deploy.rest.SimpleRest;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.net.InetSocketAddress;
 import java.util.Objects;
 import java.util.Optional;
 
-public abstract class RestDeployment<T extends AbstractComponent<?, ?>> extends Deployment<T> {
+public abstract class RestDeployment<T extends Component> extends Deployment<T> {
 
   protected long msPerStep = 1000;
 
@@ -35,8 +35,7 @@ public abstract class RestDeployment<T extends AbstractComponent<?, ?>> extends 
 
   @Override
   protected void runSimulation(T component) {
-    component.init();
-    component.getScheduler().runIndefinitely(component, msPerStep * 1000000);
+    component.runIndefinitely(msPerStep * 1000000);
   }
 
   protected SimpleRest initRest() throws IOException {

@@ -5,7 +5,7 @@ import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.rte.behavior.AbstractBehavior;
 import montiarc.rte.component.AbstractComponent;
-import montiarc.rte.component.Component;
+import montiarc.rte.component.SimComponent;
 import montiarc.rte.port.InOutPort;
 import montiarc.rte.port.InPort;
 import montiarc.rte.port.OutPort;
@@ -38,7 +38,7 @@ public class MAUnitTestEngineTest {
 
     public ExampleMaUnitTest(String name, Scheduler scheduler) {
       super(name, scheduler);
-      this.scheduler.register(this, List.of(), List.of());
+      this.scheduler.register(this);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class MAUnitTestEngineTest {
     }
 
     @Override
-    public List<Component> getAllSubcomponents() {
+    public List<SimComponent> getAllSubcomponents() {
       return List.of();
     }
 
@@ -75,7 +75,12 @@ public class MAUnitTestEngineTest {
     }
 
     @Override
-    protected List<InOutPort<?, ?>> getAllSyncedInPorts() { return List.of(); }
+    public List<InOutPort<?, ?>> getAllSyncedInPorts() { return List.of(); }
+
+    @Override
+    public List<? extends InPort<?>> getAllMsgEventInPorts() {
+      return List.of();
+    }
 
     @Override
     protected Object portValueOf(InPort<?> p) {

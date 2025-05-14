@@ -5,7 +5,7 @@
 
 ${tc.include("montiarc/generator/ma2jsim/component/builder/Header.ftl", ast)}
 {
-<#assign classNameNoGenerics>${ast.getName()}${suffixes.component()}${suffixes.builder()}<#if isTop>${suffixes.top()}</#if></#assign>
+<#assign classNameNoGenerics>${ast.getName()}${suffixes.comp()}${suffixes.builder()}<#if isTop>${suffixes.top()}</#if></#assign>
 <#assign classNameWithGenerics>${classNameNoGenerics}<@Util.printTypeParameters ast false/></#assign>
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/NameProperty.ftl", ast, [classNameWithGenerics])}
 

@@ -107,6 +107,7 @@ public class MA2JSimGen {
 
     generateComponentClass(ast);
     generateComponentInstanceBuilder(ast);
+    generatePublicApiClass(ast);
     generateContextInterface(ast);
 
     generateSyncedInputsClass(ast);
@@ -144,7 +145,7 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(ast);
 
     final String template = "montiarc.generator.ma2jsim.component.CompilationUnitFile.ftl";
-    String suffix = Suffixes.COMPONENT;
+    String suffix = Suffixes.COMP_IMPL;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
@@ -155,7 +156,17 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(ast);
 
     final String template = "montiarc.generator.ma2jsim.component.builder.BuilderFile.ftl";
-    String suffix = Suffixes.COMPONENT + Suffixes.BUILDER;
+    String suffix = Suffixes.COMP + Suffixes.BUILDER;
+    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    if (existsHwc) suffix += Suffixes.TOP;
+
+    generate(template, ast, "", suffix, existsHwc);
+  }
+
+  protected void generatePublicApiClass(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+    final String template = "montiarc.generator.ma2jsim.component.interface.PublicApiFile.ftl";
+    String suffix = Suffixes.COMP;
     final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 

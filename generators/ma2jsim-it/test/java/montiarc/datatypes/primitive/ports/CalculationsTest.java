@@ -71,14 +71,14 @@ class CalculationsTest {
 
     // When
     for (int i = 0; i < byteInput.size(); i++) {
-      sut.port_inByte.receive(byteInput.get(i));
-      sut.port_inShort.receive(shortInput.get(i));
-      sut.port_inInt.receive(intInput.get(i));
-      sut.port_inLong.receive(longInput.get(i));
-      sut.port_inFloat.receive(floatInput.get(i));
-      sut.port_inDouble.receive(doubleInput.get(i));
-      sut.port_inChar.receive(charInput.get(i));
-      sut.port_inBoolean.receive(boolInput.get(i));
+      sut.port_inByte().receive(byteInput.get(i));
+      sut.port_inShort().receive(shortInput.get(i));
+      sut.port_inInt().receive(intInput.get(i));
+      sut.port_inLong().receive(longInput.get(i));
+      sut.port_inFloat().receive(floatInput.get(i));
+      sut.port_inDouble().receive(doubleInput.get(i));
+      sut.port_inChar().receive(charInput.get(i));
+      sut.port_inBoolean().receive(boolInput.get(i));
     }
 
     sut.run();

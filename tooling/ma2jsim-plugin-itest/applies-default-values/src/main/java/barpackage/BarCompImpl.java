@@ -3,9 +3,8 @@ package barpackage;
 
 import montiarc.rte.scheduling.Scheduler;
 
-public class BarComp extends BarCompTOP {
-
-  public BarComp(String name, Scheduler scheduler) {
+public class BarCompImpl extends BarCompImplTOP {
+  public BarCompImpl(String name, Scheduler scheduler) {
     super(name, scheduler);
   }
 }

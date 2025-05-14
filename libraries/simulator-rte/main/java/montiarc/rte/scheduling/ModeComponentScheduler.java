@@ -1,19 +1,14 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.Component;
-import montiarc.rte.port.InPort;
-
-import java.util.Collection;
+import montiarc.rte.component.SimComponent;
 
 public final class ModeComponentScheduler extends ComponentScheduler {
   private final CoordinatingScheduler coordinator;
 
-  public ModeComponentScheduler(Component component,
-                                Collection<? extends InPort<?>> msgEventPorts,
-                                Collection<? extends InPort<?>> syncPorts,
+  public ModeComponentScheduler(SimComponent component,
                                 CoordinatingScheduler coordinator) {
-    super(component, msgEventPorts, syncPorts);
+    super(component);
     this.coordinator = coordinator;
   }
 

@@ -7,7 +7,7 @@
   <#assign portAccessor>this.${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(ast, portSym)}()</#assign>
   <#assign existenceConditions = helper.getExistenceCondition(ast, portSym)/>
   <#assign methodName = prefixes.portValueOf() + portSym.getName() + helper.portVariantSuffix(ast, portSym)/>
-  public <@Util.getTypeString portSym.getType()/> ${methodName}() {
+  protected <@Util.getTypeString portSym.getType()/> ${methodName}() {
     <#if existenceConditions?has_content>
       ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 

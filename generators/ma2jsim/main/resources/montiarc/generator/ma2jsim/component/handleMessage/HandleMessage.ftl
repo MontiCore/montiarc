@@ -9,7 +9,7 @@
 
 <#if modeAutomatonOpt.isPresent()>
 @Override
-public void handleMessageWithModeAutomaton(montiarc.rte.port.InPort<?> p) {
+protected void handleMessageWithModeAutomaton(montiarc.rte.port.InPort<?> p) {
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
     <#assign portNameWithSuffix>${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
     <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
@@ -21,7 +21,7 @@ public void handleMessageWithModeAutomaton(montiarc.rte.port.InPort<?> p) {
 </#if>
 
 @Override
-public void handleMessageWithBehavior(montiarc.rte.port.InPort<?> p) {
+protected void handleMessageWithBehavior(montiarc.rte.port.InPort<?> p) {
   if (this.getBehavior() == null) throw new IllegalStateException();
 
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>

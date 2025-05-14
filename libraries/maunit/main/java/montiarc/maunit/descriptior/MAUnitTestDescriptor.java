@@ -4,7 +4,7 @@ package montiarc.maunit.descriptior;
 import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.maunit.engine.MAUnitTestExecutionContext;
-import montiarc.rte.component.AbstractComponent;
+import montiarc.rte.component.SimComponent;
 import org.junit.jupiter.engine.descriptor.DynamicDescendantFilter;
 import org.junit.jupiter.engine.descriptor.Filterable;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -23,9 +23,9 @@ import java.util.Optional;
 public class MAUnitTestDescriptor extends AbstractTestDescriptor implements Filterable, Node<MAUnitTestExecutionContext> {
 
   private final DynamicDescendantFilter dynamicDescendantFilter = new DynamicDescendantFilter();
-  protected Class<? extends AbstractComponent<?, ?>> testClass;
+  protected Class<? extends SimComponent> testClass;
 
-  public MAUnitTestDescriptor(UniqueId uniqueId, Class<? extends AbstractComponent<?, ?>> testClass) {
+  public MAUnitTestDescriptor(UniqueId uniqueId, Class<? extends SimComponent> testClass) {
     super(uniqueId, testClass.getName().substring(0, testClass.getName().length() - 4), ClassSource.from(testClass));
     this.testClass = testClass;
   }

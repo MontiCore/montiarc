@@ -12,15 +12,15 @@
 <#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ComponentTypeSymbol" -->
 
 public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top()}</#if>
-  extends montiarc.rte.deploy.RestDeployment<${comp.getName()}${suffixes.component()}> {
+  extends montiarc.rte.deploy.RestDeployment<${comp.getName()}${suffixes.comp()}> {
 
   public static void main(String[] args){
     new ${prefixes.deploy()}Rest${comp.getName()}().deploy(args);
   }
 
   @Override
-  public ${comp.getName()}${suffixes.component()} buildComponent() {
-    return new ${comp.getName()}${suffixes.component()}${suffixes.builder()}("${comp.getName()}")
+  public ${comp.getName()}${suffixes.comp()} buildComponent() {
+    return new ${comp.getName()}${suffixes.comp()}${suffixes.builder()}("${comp.getName()}")
       <#if variant??>
         <#list variant.getFeatureSymbolBooleanMap() as feature, value>
       .${prefixes.setterMethod()}${prefixes.feature()}${feature.getName()}(${value?c})
@@ -30,7 +30,7 @@ public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top(
   }
 
   @Override
-  protected void connect(${comp.getName()}${suffixes.component()} component, montiarc.rte.deploy.rest.SimpleRest server) {
+  protected void connect(${comp.getName()}${suffixes.comp()} component, montiarc.rte.deploy.rest.SimpleRest server) {
     <#list comp.getAllIncomingPorts() as port>
       <#if !port.getType().isGenericType()>
       server.subscribe("/${comp.getName()}/${port.getName()}${helper.portVariantSuffix(comp.getAstNode(), port)}", str -> deserialize(str, <@Util.getPortTypeString port.getType()/>.class)

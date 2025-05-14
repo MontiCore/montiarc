@@ -15,8 +15,7 @@ public class FooCompTest {
     // Given
     FooTestComp comp = new FooTestCompBuilder().setName("sut").build();
     PortObserver<Number> port_o = new PortObserver<>();
-    comp.port_outPort.connect(port_o);
-    comp.init();
+    comp.port_outPort().connect(port_o);
 
     // When
     comp.port_inPort().receive(msg(10));

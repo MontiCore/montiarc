@@ -1,20 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import montiarc.rte.component.Component;
+import montiarc.rte.component.SimComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 import montiarc.rte.port.InPort;
 
 import java.util.ArrayDeque;
-import java.util.Collection;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.Set;
 
 public class ComponentScheduler {
 
-  protected final Component component;
+  protected final SimComponent component;
   protected final Set<InPort<?>> syncPorts;
   protected final Set<InPort<?>> msgEventPorts;
   protected final Set<InPort<?>> allInPorts;
@@ -24,12 +23,10 @@ public class ComponentScheduler {
   protected boolean canExecuteTick;
   protected boolean isExecuting;
 
-  public ComponentScheduler(Component component,
-                            Collection<? extends InPort<?>> msgEventPorts,
-                            Collection<? extends InPort<?>> syncPorts) {
+  public ComponentScheduler(SimComponent component) {
     this.component = component;
-    this.msgEventPorts = Set.copyOf(msgEventPorts);
-    this.syncPorts = Set.copyOf(syncPorts);
+    this.msgEventPorts = Set.copyOf(component.getAllMsgEventInPorts());
+    this.syncPorts = Set.copyOf(component.getAllSyncedInPorts());
 
     this.allInPorts = new HashSet<>(msgEventPorts.size() + syncPorts.size());
     this.allInPorts.addAll(msgEventPorts);

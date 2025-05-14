@@ -33,7 +33,7 @@ class SinkTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    SinkComp sut = new SinkCompBuilder().setName("sut").build();
+    SinkCompImpl sut = (SinkCompImpl) new SinkCompBuilder().setName("sut").build();
 
     List<String> actual = new ArrayList<>(expected.size());
 
