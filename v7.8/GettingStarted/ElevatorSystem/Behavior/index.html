@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
@@ -1856,6 +1856,8 @@
       
         
       
+        
+      
     
     
     
@@ -1939,6 +1941,29 @@
   
   <span class="md-ellipsis">
     Compute
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Reference/Behavior/Delay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Delay
     
   </span>
   
@@ -2658,12 +2683,12 @@ It reacts to the button presses, decides in which direction to move the elevator
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">openDoor</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">motorPosition</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">MotorCMD</span><span class="w"> </span><span class="n">motorCommand</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">MotorCMD</span><span class="w"> </span><span class="n">motorCommand</span><span class="p">;</span>
 
 <span class="w">  </span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pendingRequests</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TreeSet</span><span class="p">.</span><span class="na">TreeSet</span><span class="p">();</span>
 <span class="w">  </span><span class="n">Optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
 
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Idle</span><span class="w"> </span><span class="p">{</span>

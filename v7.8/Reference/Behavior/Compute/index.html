@@ -15,11 +15,11 @@
         <link rel="prev" href="../Automata/">
       
       
-        <link rel="next" href="../Fields/">
+        <link rel="next" href="../Delay/">
       
       
       <link rel="icon" href="../../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
@@ -1783,6 +1783,8 @@
       
         
       
+        
+      
     
     
     
@@ -1884,6 +1886,29 @@
 
       </a>
       
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Delay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Delay
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -2473,18 +2498,18 @@
 port values by using blocks of arbitrary statements.
 These statements are declared within the <code>compute</code> block.
 Moreover, one can define initial outgoing values and other calculations within 
-the <code>init</code> block, which is especially relevant when using <a href="../../Component/Interfaces/#delayed-ports">delayed</a> interfaces.</p>
+the <code>init</code> block, which is especially relevant when using a <a href="../Delay/">delayed</a> compute block.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">FahrenheitToCelsiusAndKelvinConverter</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">fahrenheit</span><span class="p">,</span>
-<span class="w">       </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">celsius</span><span class="p">,</span>
-<span class="w">       </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">kelvin</span><span class="p">;</span>
+<span class="w">       </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">celsius</span><span class="p">,</span>
+<span class="w">       </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">kelvin</span><span class="p">;</span>
 
 <span class="w">  </span><span class="n">init</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">kelvin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">    </span><span class="n">celsius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="mf">273.15</span><span class="p">;</span><span class="w">  </span><span class="c1">// Equivalent to 0 °K</span>
 <span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">celsius</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">fahrenheit</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">9.0</span><span class="p">;</span>
 <span class="w">    </span><span class="n">kelvin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">fahrenheit</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">495.67</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">5.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">9.0</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
@@ -2549,13 +2574,13 @@ the <code>init</code> block, which is especially relevant when using <a href="..
         
         
           
-          <a href="../Fields/" class="md-footer__link md-footer__link--next" aria-label="Next: Fields">
+          <a href="../Delay/" class="md-footer__link md-footer__link--next" aria-label="Next: Delay">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Fields
+                Delay
               </div>
             </div>
             <div class="md-footer__button md-icon">

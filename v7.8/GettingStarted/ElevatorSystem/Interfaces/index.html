@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
@@ -1847,6 +1847,8 @@
       
         
       
+        
+      
     
     
     
@@ -1930,6 +1932,29 @@
   
   <span class="md-ellipsis">
     Compute
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Reference/Behavior/Delay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Delay
     
   </span>
   
@@ -2613,9 +2638,9 @@ For that, we use two ports, one incoming and one outgoing.</p>
 </div>
 <p>For now, just know that object ports behave the same as primitive ports, and we will look at the <code>MotorCMD</code> type definition <a href="../Types/">later</a>. </p>
 <h2 id="delayed-ports">Delayed Ports</h2>
-<p>Since in both timings it is possible that the outputs causally depend on the inputs, we can mark a port as delayed.</p>
+<p>Since in both timings it is possible that the outputs causally depend on the inputs, ports can be delayed.</p>
 <p>In the case of the control station, this means the <code>motorCommand</code> is dependent on the <code>motorPoition</code>, but the <code>motorPosition</code> depends on the <code>motorCommand</code>.
-To avoid this circle, the <code>motorCommand</code> is delayed and sent only after the current time step has been completed.  </p>
+To avoid this circle, all outputs are delayed and sent only after the current time step has been completed. </p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:1"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">ControlStation.arc</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
@@ -2625,13 +2650,14 @@ To avoid this circle, the <code>motorCommand</code> is delayed and sent only aft
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">openDoor</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">motorPosition</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">MotorCMD</span><span class="w"> </span><span class="n">motorCommand</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">MotorCMD</span><span class="w"> </span><span class="n">motorCommand</span><span class="p">;</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">compute</span><span class="w"> </span><span class="p">{}</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
 </div>
 </div>
-<p>A delayed port can be identified by the <code>&lt;&lt;delayed&gt;&gt;</code> stereotype.</p>
+<p>Outputs are delayed if the component behavior is delayed, as identified by the <code>&lt;&lt;delayed&gt;&gt;</code> stereotype. For now we simply use an empty <a href="../../../Reference/Behavior/Compute/">compute</a> block.</p>
 <hr />
 <p>A detailed interface reference can be found <a href="../../../Reference/Component/Interfaces/">here</a></p>
 

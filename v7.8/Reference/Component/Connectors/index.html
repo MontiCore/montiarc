@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../img/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.13">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
     
     
       
@@ -1874,6 +1874,8 @@
       
         
       
+        
+      
     
     
     
@@ -1960,6 +1962,29 @@
   
   <span class="md-ellipsis">
     Compute
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Behavior/Delay/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Delay
     
   </span>
   
@@ -2696,7 +2721,7 @@ component communicates indirectly with itself.</p>
 of timing events in feedback loops, we need delay. Otherwise, the component's output at some point in time would depend on itself. </p>
 <p>Where the delay happens in the communication circle is irrelevant, just there
 needs to be some kind of delay. </p>
-<p>Delay can be introduced directly on the <a href="../Interfaces/">interface</a> of an atomic component by marking a <a href="../Interfaces/#delayed-ports">port delayed</a>.
+<p>Delay can be introduced directly on the <a href="../../Behavior/">behavior</a> definition of an atomic component by marking it <a href="../../Behavior/Delay/">delayed</a>.
 Or using explicit delay components that delay all messages they receive. As part of the <a href="../../../Library/Components/">standard language library</a>, these components are available in all models.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Event-based</label><label for="__tabbed_1_2">Synchronous</label></div>
 <div class="tabbed-content">
@@ -2711,9 +2736,9 @@ Or using explicit delay components that delay all messages they receive. As part
 <span class="kd">component</span> <span class="nc">Delay</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 <span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
@@ -2739,13 +2764,13 @@ Or using explicit delay components that delay all messages they receive. As part
 <span class="kd">component</span> <span class="nc">TSDelay</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">T</span><span class="w"> </span><span class="n">iv</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 
 <span class="w">  </span><span class="n">init</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">iv</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
-<span class="w">  </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 
