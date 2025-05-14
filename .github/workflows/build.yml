@@ -31,7 +31,7 @@ jobs:
           gradle-version: 7.5.1
 
       - name: Build with Gradle
-        run: gradle shadowjar :tooling:language-server:build
+        run: gradle shadowjar :tooling:language-server:build -PenableLanguageServer
 
       - name: Extract version name
         shell: bash

@@ -10,13 +10,13 @@ group = "montiarc.build"
 val repo: String = "https://nexus.se.rwth-aachen.de/content/groups/public/"
 
 dependencies {
-  implementation("gradle.plugin.com.github.johnrengelman:shadow:7.1.2")
-  implementation("com.diffplug.spotless:spotless-plugin-gradle:6.18.0")
-  implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21")
-  implementation("de.se_rwth.commons:se-commons-gradle:7.8.0-SNAPSHOT")
-  implementation("de.monticore.generator:de.monticore.generator.gradle.plugin:7.8.0-SNAPSHOT")
-  implementation("de.monticore.language-server:de.monticore.language-server.gradle.plugin:7.8.0-SNAPSHOT")
-  implementation("com.github.node-gradle:gradle-node-plugin:5.0.0")
+  implementation(libs.shadow)
+  implementation(libs.spotless)
+  implementation(libs.kotlin)
+  implementation(libs.se.commons)
+  implementation(libs.mc.generator)
+  implementation(libs.mc.language.server)
+  implementation(libs.node.gradle)
 }
 
 publishing {

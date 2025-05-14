@@ -20,6 +20,10 @@ dependencies {
   implementation(libs.mc.c2mc)
 }
 
+tasks.configureEach {
+  enabled = enabled && project.hasProperty("enableLanguageServer")
+}
+
 // create needs to be used instead of register, since register is evaluated lazily and this too late,
 // since this task creates other tasks
 val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure") {

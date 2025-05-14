@@ -27,7 +27,7 @@ Build:
       - .gradle/
     expire_in: 1 week
   script:
-    - gradle clean assemble --stacktrace
+    - gradle clean assemble --stacktrace -PenableLanguageServer
 
 Verify Formatting:
   stage: test
