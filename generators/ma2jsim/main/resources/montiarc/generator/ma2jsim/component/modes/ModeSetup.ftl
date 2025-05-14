@@ -52,11 +52,6 @@
       <@Log.trace log_aspects.createConnector() "getName()">"${connector.getSourceName()} -> ${target.getQName()}"</@Log.trace>
     </#list>
   </#list>
-
-  <#-- Also setup simulator-specific tick connectors -->
-  <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
-    tickPort.connect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
-  </#list>
 </#macro>
 
 <#-- ASTArcMode mode, ASTComponentType compAst -->

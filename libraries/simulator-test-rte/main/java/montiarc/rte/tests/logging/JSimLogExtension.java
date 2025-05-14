@@ -4,6 +4,7 @@ package montiarc.rte.tests.logging;
 import de.se_rwth.commons.logging.FileLogHook;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogPrintCollector;
+import montiarc.lang.Simulation;
 import montiarc.rte.logging.Configuration;
 import montiarc.rte.logging.HookBuilder;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,7 @@ public class JSimLogExtension implements BeforeEachCallback, AfterEachCallback, 
 
   @Override
   public void beforeEach(ExtensionContext context) {
+    Simulation.ticks = 0;
     determineTestIndex(context);
     initLogger(context);
 

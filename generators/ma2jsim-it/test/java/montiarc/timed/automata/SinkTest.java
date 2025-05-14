@@ -41,7 +41,7 @@ class SinkTest {
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
       sut.port_i().receive(tk());
-      sut.run(1);
+      sut.run();
 
       actual.add(((SinkAutomaton) sut.getBehavior()).getState().name());
     }

@@ -15,18 +15,18 @@
 @Override
 public java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllInPorts() {
   <#if hasOnlyOneVariant>
-    return java.util.List.of(tickPort
+    return java.util.List.of(
       <#list ast.getSymbol().getAllIncomingPorts() as port>
-        , this.${prefixes.port()}${port.getName()}
+        this.${prefixes.port()}${port.getName()}<#sep>,
       </#list>
     );
   <#else>
     switch (this.variantID) {
       <#list helper.getVariants(ast) as variant>
         case ${helper.variantSuffix(variant)}:
-          return java.util.List.of(tickPort
+          return java.util.List.of(
             <#list variant.getAllIncomingPorts() as port>
-              , this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}
+              this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}<#sep>,
             </#list>
           );
       </#list>
@@ -99,18 +99,18 @@ public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllDelayedOutPo
 @Override
 protected java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllSyncedInPorts() {
   <#if hasOnlyOneVariant>
-    return java.util.List.of(tickPort
+    return java.util.List.of(
     <#list helper.getSyncedInPortsOf(ast.getSymbol()) as port>
-      , this.${prefixes.port()}${port.getName()}
+      this.${prefixes.port()}${port.getName()}<#sep>,
     </#list>
     );
   <#else>
     switch (this.variantID) {
       <#list helper.getVariants(ast) as variant>
         case ${helper.variantSuffix(variant)}:
-          return java.util.List.of(tickPort
+          return java.util.List.of(
             <#list helper.getSyncedInPortsOf(variant) as port>
-              , this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}
+              this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}<#sep>,
             </#list>
           );
       </#list>

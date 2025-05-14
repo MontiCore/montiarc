@@ -60,8 +60,6 @@ class DelayLogTest {
     });
 
     // When
-    Simulation.ticks = 0;
-
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);
     }

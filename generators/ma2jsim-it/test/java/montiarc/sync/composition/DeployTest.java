@@ -41,7 +41,7 @@ class DeployTest {
     sut.subcomp_parallel().port_o2().connect(port_o2);
 
     // When
-    sut.run(3);
+    sut.run(4);
 
     // Then
     Assertions.assertThat(port_o1.getObservedMessages()).as("parallel.o1").containsExactlyElementsOf(expected1);

@@ -71,7 +71,7 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
       } else throw e;
     }
     if (invocationContext.isExceptionExpected(iteration) && !caughtException)
-      throw new AssertionError("Expected throwable <" + invocationContext.getExpectedException(iteration).getName() + "> was not thrown\nafter <" + (getTickCount() - ((ScheduledPort<?>) component.getTickPort()).getBuffer().size()) + "> ticks.");
+      throw new AssertionError("Expected throwable <" + invocationContext.getExpectedException(iteration).getName() + "> was not thrown\nafter <" + Simulation.ticks + "> ticks.");
     return context;
   }
 

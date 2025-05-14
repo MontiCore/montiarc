@@ -30,8 +30,4 @@ public interface Component {
   void handleTick();
 
   void handleMessage(InPort<?> p);
-  /**
-   * Simulation-internal port that is used to control the time progress of components.
-   */
-  InPort<NoMsgType> getTickPort();
 }

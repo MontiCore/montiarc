@@ -58,10 +58,6 @@ protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() 
   </#if>
   </#list>
 </#list>
-
-<#list variant.getSubcomponents() as subcomp>
-  this.tickPort.connect(${prefixes.subcomp()}${subcomp.getName()}${helper.subcomponentVariantSuffix(ast, subcomp)}().getTickPort());
-</#list>
 }
 </#if>
 </#list>

@@ -29,11 +29,6 @@
       <@Log.trace log_aspects.removeConnector() "getName()">"${connector.getSourceName()} -> ${target.getQName()}"</@Log.trace>
     </#list>
   </#list>
-
-  <#-- also teardown simulator-specific tick connectors -->
-  <#list helper.getInstanceSymbolsFromMode(mode) as subComp>
-    this.tickPort.disconnect(${prefixes.subcomp()}${mode.getName()}_${subComp.getName()}().getTickPort());
-  </#list>
 </#macro>
 
 <#-- ASTArcMode mode -->

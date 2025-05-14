@@ -38,7 +38,7 @@ public class MAUnitTestEngineTest {
 
     public ExampleMaUnitTest(String name, Scheduler scheduler) {
       super(name, scheduler);
-      this.scheduler.register(this, List.of(), List.of(tickPort));
+      this.scheduler.register(this, List.of(), List.of());
     }
 
     @Override
@@ -56,7 +56,6 @@ public class MAUnitTestEngineTest {
 
     @Override
     public void handleTick() {
-      tickPort.dropBlockingTick();
       assert !isLifecycleTest || Objects.equals(getName(), "MaUnitTest:0");
     }
 
@@ -67,7 +66,7 @@ public class MAUnitTestEngineTest {
 
     @Override
     public List<InOutPort<?, ?>> getAllInPorts() {
-      return List.of(tickPort);
+      return List.of();
     }
 
     @Override
@@ -76,7 +75,7 @@ public class MAUnitTestEngineTest {
     }
 
     @Override
-    protected List<InOutPort<?, ?>> getAllSyncedInPorts() { return List.of(tickPort); }
+    protected List<InOutPort<?, ?>> getAllSyncedInPorts() { return List.of(); }
 
     @Override
     protected Object portValueOf(InPort<?> p) {

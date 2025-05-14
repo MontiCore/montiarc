@@ -7,9 +7,7 @@ import montiarc.rte.logging.Aspects;
 import montiarc.rte.logging.DataFormatter;
 import montiarc.rte.port.InOutPort;
 import montiarc.rte.port.InPort;
-import montiarc.rte.port.NoMsgType;
 import montiarc.rte.port.OutPort;
-import montiarc.rte.port.TickPort;
 import montiarc.rte.scheduling.Scheduler;
 
 import java.util.List;
@@ -34,7 +32,6 @@ import java.util.Set;
 public abstract class AbstractComponent<I, B extends Behavior<I>> implements Component {
 
   protected final String name;
-  protected final InOutPort<NoMsgType, NoMsgType> tickPort;
   protected Set<OutPort<?>> unconnectedOutputs;
   protected final Scheduler scheduler;
 
@@ -46,18 +43,12 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
   protected AbstractComponent(String name, Scheduler scheduler) {
     this.name = name;
     this.scheduler = scheduler;
-    this.tickPort = new TickPort(this, scheduler);
     this.initialized = false;
   }
 
   @Override
   public String getName() {
     return name;
-  }
-
-  @Override
-  public InPort<NoMsgType> getTickPort() {
-    return this.tickPort;
   }
 
   public Scheduler getScheduler() {
@@ -137,7 +128,6 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Com
         comp.init();
       }
     }
-    tickPort.sendTick();
   }
 
   @Override

@@ -21,6 +21,7 @@ public class ComponentScheduler {
 
   protected final Deque<InPort<?>> scheduledMsgEventPorts;
   protected boolean isTickScheduled;
+  protected boolean canExecuteTick;
   protected boolean isExecuting;
 
   public ComponentScheduler(Component component,
@@ -37,6 +38,11 @@ public class ComponentScheduler {
     this.scheduledMsgEventPorts = new ArrayDeque<>(this.msgEventPorts.size());
     this.isTickScheduled = false;
     this.isExecuting = false;
+    this.canExecuteTick = false;
+
+    if (allInPorts.isEmpty()) {
+      orderTickSchedule();
+    }
   }
 
   public void requestScheduling(InPort<?> port, Object newMsg) {
@@ -115,7 +121,11 @@ public class ComponentScheduler {
     if (!scheduledMsgEventPorts.isEmpty()) {
       executePortSchedule(scheduledMsgEventPorts.getFirst());
     } else if (isTickScheduled) {
+      canExecuteTick = false;
       executeTickSchedule();
+      if (allInPorts.isEmpty()) {
+        orderTickSchedule();
+      }
     }
   }
 
@@ -176,12 +186,12 @@ public class ComponentScheduler {
     this.component.getAllInPorts().forEach(p -> p.receive(Tick.get()));
   }
 
-  void triggerComponentTickPort() {
-    this.component.getTickPort().receive(Tick.get());
+  public boolean isReadyToExecute() {
+    return (isTickScheduled && canExecuteTick) || !scheduledMsgEventPorts.isEmpty();
   }
 
-  public boolean isReadyToExecute() {
-    return isTickScheduled || !scheduledMsgEventPorts.isEmpty();
+  protected void setCanExecuteTick(boolean canExecuteTick) {
+    this.canExecuteTick = canExecuteTick;
   }
 
 

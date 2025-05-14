@@ -49,10 +49,14 @@ public class FeedbackLoopTest {
     return Stream.of(
       Arguments.of(
         0,
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
+        List.of(msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         1,
+        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
+      ),
+      Arguments.of(
+        2,
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
       )
     );

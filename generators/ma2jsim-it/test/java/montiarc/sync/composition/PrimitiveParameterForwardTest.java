@@ -39,7 +39,7 @@ class PrimitiveParameterForwardTest {
     sut.port_o().connect(port_o);
 
     // When
-    sut.run(1);
+    sut.run(2);
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
