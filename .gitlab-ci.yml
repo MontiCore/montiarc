@@ -1,6 +1,18 @@
 # (c) https://github.com/MontiCore/monticore  
 # Build JAVA applications using Gradle (https://gradle.org/)
 
+# Store the local Gradle build cache
+cache:
+  key: gradle-cache-key
+  paths:
+    - .gradle/caches
+  policy: pull-push
+
+# Set up environment variables and configurations to be executed before each job
+before_script:
+  # Set Gradle user home to the current directory's .gradle folder
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+
 stages:
   - build
   - post-build
@@ -27,7 +39,7 @@ Build:
       - .gradle/
     expire_in: 1 week
   script:
-    - gradle clean assemble --stacktrace -PenableLanguageServer
+    - gradle clean assemble --stacktrace -PenableLanguageServer --build-cache
 
 Verify Formatting:
   stage: test
@@ -37,7 +49,7 @@ Verify Formatting:
   needs: ["Build"]
   allow_failure: false
   script:
-    - gradle spotlessCheck
+    - gradle spotlessCheck --build-cache
 
 Package:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
@@ -47,7 +59,7 @@ Package:
   needs: ["Build"]
   allow_failure: false
   script:
-    - gradle shadowjar
+    - gradle shadowjar --build-cache
     
 .unit_test_template: &unit_test_definition
   stage: test
@@ -55,7 +67,7 @@ Package:
     - Build
   needs: ["Build"]
   script:
-    - gradle test jacocoAggregatedTestReport --stacktrace
+    - gradle test jacocoAggregatedTestReport --stacktrace --build-cache
     - awk -F","
       '{ instructions += $4 + $5; covered += $5 } END
       { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }'
@@ -106,7 +118,7 @@ Deploy Nexus:
   dependencies:
     - Build #download artifacts from build
   script:
-    - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user
+    - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
