@@ -4,7 +4,6 @@ package montiarc._symboltable;
 import arcautomaton._visitor.ArcAutomatonInheritanceHandler;
 import arcbasis._visitor.ArcBasisInheritanceHandler;
 import arcbasis._visitor.ArcBasisTraverser;
-import arccore._visitor.ArcCoreInheritanceHandler;
 import com.google.common.base.Preconditions;
 import comfortablearc._visitor.ComfortableArcInheritanceHandler;
 import de.monticore.ast.ASTNode;
@@ -65,7 +64,6 @@ public class SymbolTableChecker {
     this.traverser.setArcBasisHandler(new ArcBasisInheritanceHandler());
     this.traverser.setArcAutomatonHandler(new ArcAutomatonInheritanceHandler());
     this.traverser.setComfortableArcHandler(new ComfortableArcInheritanceHandler());
-    this.traverser.setArcCoreHandler(new ArcCoreInheritanceHandler());
     this.traverser.setVariableArcHandler(new VariableArcInheritanceHandler());
     this.traverser.setModesHandler(new ModesInheritanceHandler());
     this.traverser.setMontiArcHandler(new MontiArcInheritanceHandler());

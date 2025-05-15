@@ -5,7 +5,6 @@ import arcbasis.ArcBasisMill;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.ISynthesizeComponent;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
-import arccore.ArcCoreMill;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.FullCompKindExprDeSer;
 import montiarc.MontiArcMill;
@@ -25,7 +24,6 @@ public class ArcBasisMillForMontiArcTest {
   protected static Stream<Arguments> setupAndExpectedClassForScopesGenitorP2Provider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisSynthesizeComponent.class),
-      Arguments.of(arcCoreMillSetup(), ArcBasisSynthesizeComponent.class),
       Arguments.of(montiArcMillSetup(), MontiArcSynthesizeComponent.class)
     );
   }
@@ -61,7 +59,6 @@ public class ArcBasisMillForMontiArcTest {
   protected static Stream<Arguments> setupAndExpectedClassForCompTypeExprDeSerProvider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisCompTypeExprDeSer.class),
-      Arguments.of(arcCoreMillSetup(), ArcBasisCompTypeExprDeSer.class),
       Arguments.of(montiArcMillSetup(), MontiArcCompTypeExprDeSer.class)
     );
   }
@@ -94,18 +91,6 @@ public class ArcBasisMillForMontiArcTest {
       () -> {
         ArcBasisMill.reset();
         ArcBasisMill.init();
-      }
-    );
-  }
-
-  /**
-   * @return a Runnable that configures the {@link ArcCoreMill} as the Mill to use.
-   */
-  protected static Named<Runnable> arcCoreMillSetup() {
-    return Named.of("ArcCoreMill",
-      () -> {
-        ArcCoreMill.reset();
-        ArcCoreMill.init();
       }
     );
   }

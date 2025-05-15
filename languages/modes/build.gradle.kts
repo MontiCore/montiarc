@@ -9,7 +9,6 @@ dependencies {
   grammar(libs.mc.sc)
   grammar(project(":languages:basis"))
 
-  api(project(":languages:core"))
   api(project(":languages:features"))
 
   implementation(libs.apache)

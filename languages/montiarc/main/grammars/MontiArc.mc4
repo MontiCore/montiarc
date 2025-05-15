@@ -45,7 +45,8 @@ grammar MontiArc extends
             de.monticore.SCDoActions,
             de.monticore.ocl.SetExpressions,
             ArcCompute,
-            ArcCore,
+            ArcAutomaton,
+            ComfortableArc,
             Modes,
             VariableArc                                 {
 
