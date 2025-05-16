@@ -12,9 +12,9 @@ import de.cd2pojo.modifier.CD1.EPackage;
  */
 classdiagram CD2 {
 
-  interface I1 extends IPackage;
-  class C1 implements IPackage;
-  class C2 extends CPackage;
-  enum E1 implements IPackage;
+  public interface I1 extends IPackage;
+  public class C1 implements IPackage;
+  public class C2 extends CPackage;
+  public enum E1 implements IPackage;
 
 }

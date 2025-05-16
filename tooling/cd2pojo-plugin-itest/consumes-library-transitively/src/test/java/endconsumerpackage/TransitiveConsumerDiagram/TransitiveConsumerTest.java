@@ -16,15 +16,15 @@ class TransitiveConsumerTest {
     LastConsumer lastConsumer = new LastConsumer();
 
     // When
-    intHolder.setSomeInt(11);
-    firstConsumer.setIntHolder(intHolder);
-    lastConsumer.setFirstConsumer(firstConsumer);
+    intHolder.someInt = 11;
+    firstConsumer.intHolder = intHolder;
+    lastConsumer.firstConsumer =firstConsumer;
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertEquals(11, intHolder.getSomeInt()),
-      () -> Assertions.assertSame(intHolder, firstConsumer.getIntHolder()),
-      () -> Assertions.assertSame(firstConsumer, lastConsumer.getFirstConsumer())
+      () -> Assertions.assertEquals(11, intHolder.someInt),
+      () -> Assertions.assertSame(intHolder, firstConsumer.intHolder),
+      () -> Assertions.assertSame(firstConsumer, lastConsumer.firstConsumer)
     );
   }
 }

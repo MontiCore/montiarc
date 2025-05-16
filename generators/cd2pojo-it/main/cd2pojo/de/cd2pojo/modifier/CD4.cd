@@ -12,13 +12,13 @@ import de.cd2pojo.modifier.CD1.EPackage;
  */
 classdiagram CD4 {
 
-  class C5;
+  public class C5;
 
   association C5 -> IPackage;
   association C5 -> CPackage;
   association C5 -> EPackage;
 
-  class C6;
+  public class C6;
 
   association C6 -> (a) IPackage;
 }

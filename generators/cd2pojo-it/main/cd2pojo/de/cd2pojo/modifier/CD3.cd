@@ -12,13 +12,13 @@ import de.cd2pojo.modifier.CD1.EPackage;
  */
 classdiagram CD3 {
 
-  class C3 {
+  public class C3 {
     IPackage iPackage;
     CPackage cPackage;
     EPackage ePackage;
   }
 
-  class C4 {
+  public class C4 {
     IPackage a1;
     public IPackage a2;
     protected IPackage a3;

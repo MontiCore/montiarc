@@ -3,6 +3,6 @@ package libpackage;
 
 classdiagram LibDiagram {
   public class TypeWithInt {
-    private int someInt;
+    public int someInt;
   }
 }

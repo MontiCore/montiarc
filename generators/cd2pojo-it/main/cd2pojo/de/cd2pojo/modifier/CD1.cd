@@ -7,10 +7,10 @@ package de.cd2pojo.modifier;
  */
 classdiagram CD1 {
 
-  interface IPackage;
+  public interface IPackage;
 
-  class CPackage;
+  public class CPackage;
 
-  enum EPackage;
+  public enum EPackage;
 
 }

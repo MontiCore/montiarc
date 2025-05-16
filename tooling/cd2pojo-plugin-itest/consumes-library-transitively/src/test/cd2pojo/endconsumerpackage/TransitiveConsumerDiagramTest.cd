@@ -5,6 +5,6 @@ import consumerpackage.ConsumerDiagram.FirstConsumer;
 
 classdiagram TransitiveConsumerDiagramTest {
   class LastConsumerTest {
-    private FirstConsumer firstConsumer;
+    public FirstConsumer firstConsumer;
   }
 }
