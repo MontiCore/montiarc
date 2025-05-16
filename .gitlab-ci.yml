@@ -5,7 +5,8 @@
 cache:
   key: gradle-cache-key
   paths:
-    - .gradle/caches
+    - .gradle
+    - build
   policy: pull-push
 
 # Set up environment variables and configurations to be executed before each job
@@ -26,15 +27,6 @@ Build:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: build
   allow_failure: false
-  artifacts:
-    paths:
-      - applications/**/build/
-      - build-logic/.gradle/
-      - build-logic/build/
-      - generators/**/build/
-      - languages/build/
-      - libraries/**/build/
-    expire_in: 1 week
   script:
     - gradle clean assemble --stacktrace --build-cache
 
