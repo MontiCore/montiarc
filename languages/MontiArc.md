@@ -21,20 +21,20 @@ as a standard extension.
 
 The MontiArc core repository contains the common basis
 of the MontiArc architecture description language. This project is maintained
-by the [Working Group for Model-Driven Systems Engineering (MDSE)][mdse].
+by the [Working Group for Model-Driven Systems Engineering (MDSE)][teams].
 
-The language for MontiArc Architecture diagrams is composed from five grammars,
+The language for MontiArc Architecture diagrams is composed of five grammars,
 which also might be used independently:
 - **ArcBasis**: basic language component for architectures consisting
 of ports, components, and connectors
 - **ComfortableArc**: extension of the architecture basis with comfort elements
 to ease the description of architectures
-- **ArcCore**: builds the core of architectural modelling by aggregating the above 
-  mentioned languages components (still without concrete expressions, literals, etc.)
 - **VariableArc**: extension of the architecture basis for variable component types,
 adding variable elements and constraints for their inclusion
-- **MontiArc**: extends ArcCore to a complete language with defined expressions,
-  literals, and types. MontiArc furthermore embedds statecharts for behavior description.
+- **Modes**: extension of the architecture basis for dynamic reconfiguration, 
+adding mode automata that describe structual reconfiguration through modes
+- **MontiArc**: extends the other language components to a complete language 
+with defined expressions, literals, and types
 
 The main grammar file is [`MontiArc`][MontiArcGrammar].
 
@@ -227,7 +227,7 @@ everything is understood as class.
 - [`MontiArcFullPrettyPrinter`][MontiArcFullPrettyPrinter] contains the basic pretty printer for MontiArc
 
 [se-rwth]: http://www.se-rwth.de
-[mdse]:http://www.se-rwth.de/teams/mdse/
+[teams]:https://www.se-rwth.de/teams/
 [MontiCore]:http://www.monticore.de/
 
 [Applications]: ../applications

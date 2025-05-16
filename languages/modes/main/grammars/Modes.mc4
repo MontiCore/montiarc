@@ -1,12 +1,25 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 /**
- * This grammar defines the basic structural elements of mode automata
- * combining statecharts and architectural descriptions. This grammar contains
- * definitions for modes and mode automata.
+ * This grammar defines the basic structural elements of mode automata for
+ * dynamic reconfiguration of component and connector architectures. This
+ * grammar defines modes and mode automata by adapting statecharts and
+ * embedds these elements into architectural descriptions.
  *
- * This grammar is part of the MontiArc language definition.
+ * This grammar is part of the MontiArc language family,
+ * which is organized according to this extension hierarchy:
+ * * ArcBasis.mc4
+ * * -- ArcAutomaton.mc4
+ * * -- ComfortableArc.mc4
+ * * -- Modes.mc4
+ * * -- VariableArc.mc4
+ * * * -- MontiArc.mc4
  *
+ * MontiArc.mc4 integrates the components of the MontiArc language family and
+ * extends these to a complete language with types, expressions, and statements.
+ *
+ * The Mode grammar relies on basic expressions, literals and types only.
+ * All these are meant to be extended.
  */
 component grammar Modes extends ArcBasis, de.monticore.SCBasis {
 

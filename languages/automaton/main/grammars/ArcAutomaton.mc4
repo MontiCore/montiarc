@@ -1,5 +1,27 @@
 /* (c) https://github.com/MontiCore/monticore */
 
+/* This is a MontiCore stable grammar.
+ * Adaptations -- if any -- are conservative. */
+
+/**
+ * This grammar embeds statecharts into architectural description for
+ * specifying component behavior.
+ *
+ * This grammar is part of the MontiArc language family,
+ * which is organized according to this extension hierarchy:
+ * * ArcBasis.mc4
+ * * -- ArcAutomaton.mc4
+ * * -- ComfortableArc.mc4
+ * * -- Modes.mc4
+ * * -- VariableArc.mc4
+ * * * -- MontiArc.mc4
+ *
+ * MontiArc.mc4 integrates the components of the MontiArc language family and
+ * extends these to a complete language with types, expressions, and statements.
+ *
+ * The ArcAutomaton grammar relies on basic expressions, literals and types
+ * only. All these are meant to be extended.
+ */
 component grammar ArcAutomaton extends ArcBasis,
             de.monticore.SCTransitions4Code,
             de.monticore.SCStateInvariants,

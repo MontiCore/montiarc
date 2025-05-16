@@ -7,23 +7,21 @@
  * This grammar defines additional elements to simplify the definition of
  * components, ports, and especially connectors.
  *
- * This grammar is part of the MontiArc language definition,
- * which are organized according to this extension hierarchy:
+ * This grammar is part of the MontiArc language family,
+ * which is organized according to this extension hierarchy:
  * * ArcBasis.mc4
+ * * -- ArcAutomaton.mc4
  * * -- ComfortableArc.mc4
+ * * -- Modes.mc4
+ * * -- VariableArc.mc4
+ * * * -- MontiArc.mc4
  *
- * * ArcCore.mc4 composes
- *   + ArcBasis.mc4 + ComfortableArc.mc4
- *   and builds the core of architectural modelling
- *   (still without concrete expressions, literals, etc.)
+ * MontiArc.mc4 integrates the components of the MontiArc language family andA
+ * extends these to a complete language with types, expressions, and statements.
  *
- * Furthermore MontiArc.mc4 extends Arc.mc4 to a complete
- * language, with Expressions, Literals, etc. defined
- * * ArcCore.mc4
- * * -- MontiArc.mc4
- *
+ * The ComfortableArc grammar relies on basic expressions, literals and types
+ * only. All these are meant to be extended.
  */
-
 component grammar ComfortableArc extends ArcBasis {
 
   /** "autoconnect" provides possibilities to automatically

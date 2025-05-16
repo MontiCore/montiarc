@@ -5,8 +5,23 @@
 
 /**
  * This grammar defines the basic structural elements required for a variable
- * component architecture. The grammar contains definitions for if-statements,
- * constraints, and features.
+ * component architectures. The grammar contains definitions for features,
+ * variation points, and constraints.
+ *
+ * This grammar is part of the MontiArc language family,
+ * which is organized according to this extension hierarchy:
+ * * ArcBasis.mc4
+ * * -- ArcAutomaton.mc4
+ * * -- ComfortableArc.mc4
+ * * -- Modes.mc4
+ * * -- VariableArc.mc4
+ * * * -- MontiArc.mc4
+ *
+ * MontiArc.mc4 integrates the components of the MontiArc language family and
+ * extends these to a complete language with types, expressions, and statements.
+ *
+ * The VariableArc grammar relies on basic expressions, literals and types only.
+ * All these are meant to be extended.
  */
 component grammar VariableArc extends ArcBasis {
 

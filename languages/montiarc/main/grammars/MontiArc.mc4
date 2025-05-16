@@ -7,33 +7,23 @@
  * MontiArc is an architecture and behavior modeling language and framework
  * that provides a platform independent structure and behavior modeling
  * language with an extensible code generation framework.
- * MontiArc covers components their ports, and connectors between components.
+ * The main modeling elements in MontiArc are components, ports, and connectors.
+ *
+ * See e.g. Focus (Broy/Stoelen 2001) for the underlying theory.
+ *
+ * This grammar is part of the MontiArc language family,
+ * which is organized according to this extension hierarchy:
+ * * ArcBasis.mc4
+ * * -- ArcAutomaton.mc4
+ * * -- ComfortableArc.mc4
+ * * -- Modes.mc4
+ * * -- VariableArc.mc4
+ * * * -- MontiArc.mc4
  *
  * Concrete sets of expressions, literals and types are defined using
  * the standards available from the MontiCore library,
  * which renders MontiArc to be a complete language.
- *
- * MontiCore also adds the possibility to define a concrete form
- * of timing, namely instant, sync and untimed.
- * See e.g. Focus (Broy/Stoelen 2001) for the underlying theory.
- *
- * This grammar is part of the MontiArc language definition,
- * which are organized according to this extension hierarchy:
- * * ArcBasis.mc4
- * * -- ComfortableArc.mc4
- *
- * * ArcCore.mc4 composes
- *   + ArcBasis.mc4 + ComfortableArc.mc4
- *   and builds the core of architectural modelling
- *   (still without concrete expressions, literals, etc.)
- *
- * Furthermore MontiArc.mc4 extends Arc.mc4 to a complete
- * language, with Expressions, Literals, etc. defined
- * * ArcCore.mc4
- * * -- MontiArc.mc4
- * 
  */
- 
 grammar MontiArc extends 
             de.monticore.literals.MCCommonLiterals,
             de.monticore.expressions.CommonExpressions,
