@@ -34,7 +34,6 @@ Build:
       - generators/**/build/
       - languages/build/
       - libraries/**/build/
-      - .gradle/
     expire_in: 1 week
   script:
     - gradle clean assemble --stacktrace --build-cache
