@@ -8,12 +8,15 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
@@ -22,15 +25,18 @@ import org.gradle.api.tasks.options.Option
 /**
  * A task that generates Java code from MontiArc models.
  */
+@CacheableTask
 abstract class MontiArcCompile : JavaExec() {
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
+  @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val modelPath : ConfigurableFileCollection
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:Optional
+  @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val symbolImportDir : ConfigurableFileCollection
 
   @get:Input
@@ -38,7 +44,8 @@ abstract class MontiArcCompile : JavaExec() {
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
-  abstract val hwcPath : ConfigurableFileCollection
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  abstract val hwcPath: ConfigurableFileCollection
 
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
