@@ -4,6 +4,8 @@ plugins {
   id("montiarc.build.language")
 }
 
+buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
+
 dependencies {
   grammar(libs.mc.grammar)
   grammar(libs.mc.sc)
