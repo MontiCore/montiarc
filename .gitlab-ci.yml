@@ -5,7 +5,7 @@
 cache:
   key: gradle-cache-key
   paths:
-    - .gradle\caches
+    - .gradle/caches
   policy: pull-push
 
 # Set up environment variables and configurations to be executed before each job
