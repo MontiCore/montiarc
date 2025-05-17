@@ -71,7 +71,7 @@ class WithMediumSubTest {
     inY.forEach(sut.port_inY()::receive);
     inZ.forEach(sut.port_inZ()::receive);
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     org.junit.jupiter.api.Assertions.assertAll(

@@ -48,7 +48,7 @@ class IgnoresInPortTest {
     input_i1.forEach(sut.port_i1()::receive);
     input_i2.forEach(sut.port_i2()::receive);
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

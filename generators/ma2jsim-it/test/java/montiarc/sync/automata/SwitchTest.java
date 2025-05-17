@@ -47,7 +47,7 @@ class SwitchTest {
       sut.port_i2().receive(input_i2.get(i));
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

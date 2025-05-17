@@ -52,7 +52,7 @@ class ParamsBool4Test {
       sut.port_i().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o1.getObservedMessages()).containsExactlyElementsOf(expected_o1);

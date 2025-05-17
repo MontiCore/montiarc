@@ -34,7 +34,7 @@ class MultiplyTest {
     sut.port_b().receive(msg(b));
     sut.port_b().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertAll(
@@ -90,7 +90,7 @@ class MultiplyTest {
     sut.port_b().receive(msg(b));
     sut.port_b().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertAll(

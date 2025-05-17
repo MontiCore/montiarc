@@ -32,7 +32,7 @@ class AbsTest {
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertAll(
@@ -66,7 +66,7 @@ class AbsTest {
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertAll(

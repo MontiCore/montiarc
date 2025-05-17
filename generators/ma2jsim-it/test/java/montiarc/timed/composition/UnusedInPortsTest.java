@@ -54,7 +54,7 @@ class UnusedInPortsTest {
       sut.port_i2().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(((ScheduledPort<Boolean>) sut.port_i1()).getBuffer()).isEmpty();

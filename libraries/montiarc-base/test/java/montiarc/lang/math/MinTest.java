@@ -32,7 +32,7 @@ class MinTest {
     sut.port_b().receive(msg(b));
     sut.port_b().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertAll(
@@ -85,7 +85,7 @@ class MinTest {
     sut.port_b().receive(msg(b));
     sut.port_b().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertAll(

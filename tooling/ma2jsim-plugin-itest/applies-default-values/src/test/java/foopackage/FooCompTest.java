@@ -20,7 +20,7 @@ public class FooCompTest {
     // When
     comp.port_inPort().receive(msg(10));
     comp.port_inPort().receive(tk());
-    comp.run();
+    comp.runToCompletion();
 
     // Then
     Assertions.assertEquals(1, port_o.getObservedValues().size());

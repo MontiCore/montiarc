@@ -81,7 +81,7 @@ class CalculationsTest {
       sut.port_inBoolean().receive(boolInput.get(i));
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertAll(

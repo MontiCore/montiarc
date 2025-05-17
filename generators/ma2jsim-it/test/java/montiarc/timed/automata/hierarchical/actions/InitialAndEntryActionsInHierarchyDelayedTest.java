@@ -29,7 +29,7 @@ class InitialAndEntryActionsInHierarchyDelayedTest {
     sut.port_i().receive(tk());
     sut.port_i().receive(msg("trigger"));
     sut.port_i().receive(msg("trigger"));
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     List<Message<String>> expectedOutput = List.of(

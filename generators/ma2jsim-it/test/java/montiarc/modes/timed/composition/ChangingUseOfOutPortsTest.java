@@ -39,7 +39,7 @@ class ChangingUseOfOutPortsTest {
     // When
     input.forEach(sut.port_i()::receive);
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

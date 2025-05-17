@@ -64,7 +64,7 @@ class DelayLogTest {
       sut.port_i().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(logs).containsExactlyElementsOf(expected);

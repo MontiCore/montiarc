@@ -80,7 +80,7 @@ class MediumTest {
       sut.port_i().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions

@@ -54,7 +54,7 @@ class ParallelCompositionTest {
       sut.port_i2().receive(input_i2.get(i));
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o1.getObservedMessages()).containsExactlyElementsOf(expected_o1);

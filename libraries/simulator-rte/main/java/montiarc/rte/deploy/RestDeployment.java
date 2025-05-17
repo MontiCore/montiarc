@@ -14,8 +14,6 @@ import java.util.Optional;
 
 public abstract class RestDeployment<T extends Component> extends Deployment<T> {
 
-  protected long msPerStep = 1000;
-
   @Override
   public void deploy(String[] args) {
     Log.ensureInitialization();

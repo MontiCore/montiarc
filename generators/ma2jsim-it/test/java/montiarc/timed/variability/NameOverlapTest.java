@@ -43,7 +43,7 @@ class NameOverlapTest {
       sut.port_i0().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);
@@ -103,7 +103,7 @@ class NameOverlapTest {
       sut.port_i1().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

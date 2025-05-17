@@ -42,7 +42,7 @@ class LongForwardTest {
       sut.port_pIn().receive(tk());
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedValues()).containsExactlyElementsOf(expected);

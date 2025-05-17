@@ -39,7 +39,7 @@ class InvariantValidation1Test {
       sut.port_i().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(o);

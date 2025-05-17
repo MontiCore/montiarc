@@ -44,7 +44,7 @@ class NorTest {
     sut.port_b().receive(msg(b));
     sut.port_b().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_q.getObservedValues()).containsExactly(q);
@@ -75,7 +75,7 @@ class NorTest {
       sut.port_b().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(actual_q.getObservedMessages()).containsExactlyElementsOf(q);

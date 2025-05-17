@@ -25,7 +25,7 @@ public class FlatDelayedLoopTest {
             sut.port_i().receive(tk());
         }
         
-        sut.run();
+        sut.runToCompletion();
         Assertions.assertEquals(21, port.getObservedMessages().size());
     }
 }

@@ -50,7 +50,7 @@ public class List1Test {
       sut.port_i2().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(o);

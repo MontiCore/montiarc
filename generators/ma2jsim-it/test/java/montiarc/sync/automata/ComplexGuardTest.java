@@ -51,7 +51,7 @@ class ComplexGuardTest {
       sut.port_person().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

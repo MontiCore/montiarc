@@ -45,7 +45,7 @@ class SimpleTransitionTest {
       sut.port_i().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

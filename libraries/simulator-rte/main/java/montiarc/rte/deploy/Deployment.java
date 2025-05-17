@@ -6,6 +6,8 @@ import montiarc.rte.component.Component;
 
 public abstract class Deployment<T extends Component> {
 
+  protected long msPerStep = 1000;
+
   public void deploy(String[] args) {
     Log.initWARN();
 
@@ -15,7 +17,7 @@ public abstract class Deployment<T extends Component> {
   }
 
   protected void runSimulation(T component) {
-    component.run();
+    component.runIndefinitely(msPerStep * 1000000);
   }
 
   protected abstract T buildComponent();

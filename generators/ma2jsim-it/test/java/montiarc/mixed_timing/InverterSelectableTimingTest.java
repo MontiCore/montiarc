@@ -48,7 +48,7 @@ class InverterSelectableTimingTest {
       }
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_o.getObservedMessages()).containsExactlyElementsOf(expected);

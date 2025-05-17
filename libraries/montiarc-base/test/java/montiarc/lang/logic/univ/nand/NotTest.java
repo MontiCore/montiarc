@@ -42,7 +42,7 @@ class NotTest {
     sut.port_a().receive(msg(a));
     sut.port_a().receive(tk());
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(port_q.getObservedValues()).containsExactly(q);
@@ -67,7 +67,7 @@ class NotTest {
       sut.port_a().receive(msg);
     }
 
-    sut.run();
+    sut.runToCompletion();
 
     // Then
     Assertions.assertThat(actual_q.getObservedMessages()).containsExactlyElementsOf(q);

@@ -22,7 +22,7 @@ class TransitiveConsumerTest {
     // When
     comp.port_incoming().receive(msg(10));
     comp.port_incoming().receive(tk());
-    comp.run();
+    comp.runToCompletion();
 
     // Then
     Assertions.assertEquals(1, port_o.getObservedValues().size());
