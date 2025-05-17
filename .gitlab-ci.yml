@@ -5,8 +5,7 @@
 cache:
   key: gradle-cache-key
   paths:
-    - .gradle
-    - build
+    - .gradle\caches
   policy: pull-push
 
 # Set up environment variables and configurations to be executed before each job
@@ -27,14 +26,17 @@ Build:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: build
   allow_failure: false
+  artifacts:
+    paths:
+      - languages/build/**/libs/*-grammars.jar
+    expire_in: 1 week
+
   script:
     - gradle clean assemble --stacktrace --build-cache
 
 Build LSP:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: build
-  dependencies:
-    - Build
   needs: ["Build"]
   allow_failure: false
   script:
@@ -43,8 +45,6 @@ Build LSP:
 Verify Formatting:
   stage: test
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
-  dependencies:
-    - Build
   needs: ["Build"]
   allow_failure: false
   script:
@@ -53,8 +53,6 @@ Verify Formatting:
 Package:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: post-build
-  dependencies:
-    - Build
   needs: ["Build"]
   allow_failure: false
   script:
@@ -62,8 +60,6 @@ Package:
     
 .unit_test_template: &unit_test_definition
   stage: test
-  dependencies:
-    - Build
   needs: ["Build"]
   script:
     - gradle test jacocoAggregatedTestReport --stacktrace --build-cache
