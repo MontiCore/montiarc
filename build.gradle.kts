@@ -1,3 +1,5 @@
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
+
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
@@ -5,6 +7,7 @@ plugins {
   id("jacoco-report-aggregation")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
+  alias(libs.plugins.versions)
 }
 
 dependencies {
@@ -28,4 +31,21 @@ tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports {
 
 tasks.check {
   dependsOn(tasks.named<JacocoReport>("jacocoAggregatedTestReport"))
+}
+
+tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
+  checkForGradleUpdate = false
+  outputFormatter = "json"
+  outputDir = "$buildDir/versions"
+  reportfileName = "dependency-updates"
+
+  rejectVersionIf {
+    isNonStable(candidate.version) && !isNonStable(currentVersion)
+  }
+}
+
+fun isNonStable(version: String): Boolean {
+  val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.contains(it) }
+  val regex = Regex("^[0-9,.v-]+(-r)?$")
+  return !stableKeyword && !regex.matches(version)
 }

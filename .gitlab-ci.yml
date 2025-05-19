@@ -153,6 +153,34 @@ Github Mirror:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
 
+Check Dependency Updates:
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  stage: check
+  needs: []
+  allow_failure: true
+  script:
+    - gradle dependencyUpdates
+    - |
+      echo "Checking for outdated dependencies..."
+      REPORT_FILE="build/versions/dependency-updates.json"
+      if [ ! -f "$REPORT_FILE" ]; then
+        echo "Report not found: $REPORT_FILE"
+        exit 1
+      fi
+      
+      OUTDATED_BLOCK=$(sed -n '/"outdated": {/,/}/p' build/versions/dependency-updates.json)
+      OUTDATED_COUNT=$(echo "$OUTDATED_BLOCK" | grep -oP '"count":\s*\K\d+' | head -1)
+      if [ "$OUTDATED_COUNT" -gt 0 ]; then
+        echo "Found $OUTDATED_COUNT outdated dependencies."
+        exit 1
+      else
+        echo "All dependencies are up to date."
+      fi
+  artifacts:
+    paths:
+      - build/versions/dependency-updates.json
+    when: always
+
 Check Links:
   # We need a JDK 17+ image for this job since the link checker requires Java 17.
   image: eclipse-temurin:17-jdk-alpine

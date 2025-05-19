@@ -36,3 +36,6 @@ se-commons = "de.se_rwth.commons:se-commons-gradle:7.8.0-SNAPSHOT"
 mc-generator = "de.monticore.generator:de.monticore.generator.gradle.plugin:7.8.0-SNAPSHOT"
 mc-language-server = "de.monticore.language-server:de.monticore.language-server.gradle.plugin:7.8.0-SNAPSHOT"
 node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
+
+[plugins]
+versions = { id = "com.github.ben-manes.versions", version = "0.51.0" }
