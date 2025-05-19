@@ -19,6 +19,7 @@ dependencies {
 
   testImplementation(libs.junit.api)
   testRuntimeOnly(libs.junit.engine)
+  testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.getByName<Test>("test") {

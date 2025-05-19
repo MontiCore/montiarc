@@ -18,13 +18,11 @@ import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
 import de.se_rwth.commons.logging.Log;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
 
@@ -56,8 +54,8 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected void serializeSuperComponents(@NonNull List<CompKindExpression> superComponents,
-                                          @NonNull ArcBasisSymbols2Json s2j) {
+  protected void serializeSuperComponents(@NotNull List<CompKindExpression> superComponents,
+                                          @NotNull ArcBasisSymbols2Json s2j) {
     s2j.getJsonPrinter().beginArray(ComponentSymbolDeSer.SUPER);
     for (CompKindExpression superComponent : superComponents) {
       s2j.getJsonPrinter().addToArray(JsonElementFactory

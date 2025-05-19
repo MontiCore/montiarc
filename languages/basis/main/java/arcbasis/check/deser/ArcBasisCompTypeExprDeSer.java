@@ -9,7 +9,6 @@ import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.FullCompKindExprDeSer;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
@@ -40,7 +39,7 @@ public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
   }
 
   @Override
-  public CompKindExpression deserialize(@NonNull ICompSymbolsScope scope, @NonNull JsonElement serialized) {
+  public CompKindExpression deserialize(@NotNull ICompSymbolsScope scope, @NotNull JsonElement serialized) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(serialized);
 
