@@ -21,8 +21,8 @@ dependencies {
   implementation(project(":libraries:majava-dse-rte"))
   implementation(libs.guava)
   implementation(libs.janino)
-  implementation(group= "org.apache.commons", name= "commons-lang3", version= "3.12.0")
-  testImplementation(group= "org.apache.poi", name=  "poi", version= "3.17")
+  implementation(libs.apache.commons)
+  testImplementation(libs.apache.poi)
 }
 
 cd2pojo {

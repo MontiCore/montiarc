@@ -12,7 +12,7 @@ dependencies {
   api(libs.mc.grammar)
   api(libs.se.logging)
 
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
 

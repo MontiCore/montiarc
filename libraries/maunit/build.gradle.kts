@@ -15,8 +15,8 @@ dependencies {
   testImplementation(libs.mockito)
   testImplementation(libs.mockito.junit)
 
-  implementation("org.junit.jupiter:junit-jupiter-engine:5.9.3")
-  testImplementation("org.junit.platform:junit-platform-testkit:1.10.2")
+  implementation(libs.junit.engine)
+  testImplementation(libs.junit.platform.testkit)
 }
 
 // The MontiArc plugin always adds maunit as a dependency to the montiarc configuration.

@@ -17,6 +17,8 @@ dependencies {
   implementation(libs.mc.generator)
   implementation(libs.mc.language.server)
   implementation(libs.node.gradle)
+  //https://github.com/gradle/gradle/issues/15383
+  implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
 publishing {

@@ -11,7 +11,7 @@ dependencies {
 
   implementation(libs.se.logging)
   implementation(libs.se.utilities)
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
 

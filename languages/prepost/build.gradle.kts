@@ -18,7 +18,7 @@ dependencies {
     }
   }
 
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
 

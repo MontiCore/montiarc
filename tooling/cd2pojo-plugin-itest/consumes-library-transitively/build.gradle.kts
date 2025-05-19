@@ -20,8 +20,8 @@ dependencies {
   implementation(libs.se.logging)
   implementation(libs.se.utilities)
 
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+  testImplementation(libs.junit.api)
+  testRuntimeOnly(libs.junit.engine)
 }
 
 tasks.getByName<Test>("test") {

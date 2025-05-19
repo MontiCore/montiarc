@@ -12,7 +12,7 @@ dependencies {
 
   api(project(":languages:basis"))
 
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
 

@@ -19,7 +19,7 @@ dependencies {
     exclude("org.apache.groovy", "groovy")
   }
 
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.jgrapht.core)
   implementation(libs.jgrapht.jgraphx)
   implementation(libs.jgrapht.ext)

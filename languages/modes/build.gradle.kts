@@ -13,7 +13,7 @@ dependencies {
 
   api(project(":languages:features"))
 
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
 

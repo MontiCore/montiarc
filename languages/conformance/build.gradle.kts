@@ -18,7 +18,7 @@ dependencies {
     exclude("org.apache.groovy", "groovy")
   }
 
-  implementation(libs.apache)
+  implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.z3)
   implementation(libs.mc.cd4a)

@@ -1,4 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
+import org.gradle.accessors.dm.LibrariesForLibs
 
 plugins {
   java
@@ -25,9 +26,12 @@ tasks.test {
   systemProperty("buildDir", layout.buildDirectory.get().toString())
 }
 
+//https://github.com/gradle/gradle/issues/15383
+val libs = the<LibrariesForLibs>()
+
 dependencies {
-  testImplementation("org.assertj:assertj-core:3.24.2")
-  testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-  testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.3")
-  testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+  testImplementation(libs.assertj.get())
+  testImplementation(libs.junit.api.get())
+  testImplementation(libs.junit.params.get())
+  testImplementation(libs.junit.engine.get())
 }
