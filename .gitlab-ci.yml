@@ -26,11 +26,6 @@ Build:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: build
   allow_failure: false
-  artifacts:
-    paths:
-      - languages/build/**/libs/*-grammars.jar
-    expire_in: 1 week
-
   script:
     - gradle clean assemble --stacktrace --build-cache
 
@@ -110,8 +105,6 @@ Test Coverage:
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
   stage: post-test
-  dependencies:
-    - Build #download artifacts from build
   script:
     - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache
   rules:
