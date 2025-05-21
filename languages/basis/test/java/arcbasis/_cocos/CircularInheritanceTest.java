@@ -3,9 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
@@ -29,7 +29,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
   @Test
   public void shouldFindDirectCircularInheritance() {
     // Given
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType ast = ArcBasisMill.arcComponentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -64,7 +64,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
   @Test
   public void shouldFindTransitiveCircularInheritance() {
     // Given
-    ASTComponentType a = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType a = ArcBasisMill.arcComponentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -76,7 +76,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
           .build())
         .build())
       .build();
-    ASTComponentType b = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTArcComponentType b = ArcBasisMill.arcComponentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -117,7 +117,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
   @Test
   public void shouldFindMultipleInheritedCircularInheritance() {
     // Given
-    ASTComponentType a = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType a = ArcBasisMill.arcComponentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
           .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -136,7 +136,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
             .build())
             .build())
         .build();
-    ASTComponentType b = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTArcComponentType b = ArcBasisMill.arcComponentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -182,7 +182,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
   @Test
   public void shouldNotReportCircularInheritance() {
     // Given
-    ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType parent = ArcBasisMill.arcComponentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -194,7 +194,7 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
           .build())
         .build())
       .build();
-    ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTArcComponentType child = ArcBasisMill.arcComponentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()
@@ -236,11 +236,11 @@ public class CircularInheritanceTest extends ArcBasisTestBase {
   @Test
   public void shouldNotFindCircularInheritance() {
     // Given
-    ASTComponentType parent = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType parent = ArcBasisMill.arcComponentTypeBuilder().setName("A")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))
       .build();
-    ASTComponentType child = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTArcComponentType child = ArcBasisMill.arcComponentTypeBuilder().setName("B")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
         .addArcParent(ArcBasisMill.arcParentBuilder()

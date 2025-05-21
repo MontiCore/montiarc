@@ -1,19 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolBuilder;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbolBuilder;
 import com.google.common.base.Preconditions;
 
-public class VariableArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilder {
+public class VariableArcComponentTypeSymbolBuilder extends ArcComponentTypeSymbolBuilder {
 
   @Override
-  public ComponentTypeSymbol build() {
+  public ArcComponentTypeSymbol build() {
     if (!isValid()) {
       Preconditions.checkState(this.getName() != null);
       Preconditions.checkState(this.getSpannedScope() != null);
     }
-    ComponentTypeSymbol symbol = new VariableArcComponentTypeSymbol(name);
+    ArcComponentTypeSymbol symbol = new VariableArcComponentTypeSymbol(name);
     symbol.setFullName(this.fullName);
     symbol.setPackageName(this.packageName);
     if (this.astNode.isPresent()) {

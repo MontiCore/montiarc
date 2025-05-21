@@ -13,13 +13,13 @@ import org.mockito.Mockito;
 import java.util.Collections;
 import java.util.List;
 
-public class ModesVariantComponentTypeSymbolTest extends ModesTestBase {
+public class ModesVariantArcComponentTypeSymbolTest extends ModesTestBase {
 
   @Test
   public void shouldAddComponentInstanceSymbols() {
     // Given
     IModesScope modeScope = ModesMill.scope();
-    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.componentTypeSymbolBuilder().setName("C").setEnclosingScope(ModesMill.scope()).setSpannedScope(ModesMill.scope()).build(), ModesMill.arcModeSymbolBuilder().setName("m1").setSpannedScope(modeScope).build());
+    ModesVariantComponentTypeSymbol variant = new ModesVariantComponentTypeSymbol(ModesMill.arcComponentTypeSymbolBuilder().setName("C").setEnclosingScope(ModesMill.scope()).setSpannedScope(ModesMill.scope()).build(), ModesMill.arcModeSymbolBuilder().setName("m1").setSpannedScope(modeScope).build());
     SubcomponentSymbol instanceSymbol = ModesMill.subcomponentSymbolBuilder().setName("c1").setType(Mockito.mock(CompTypeExpression.class)).build();
     modeScope.add(instanceSymbol);
 

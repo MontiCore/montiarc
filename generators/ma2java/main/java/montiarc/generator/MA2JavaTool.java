@@ -227,9 +227,9 @@ public class MA2JavaTool extends MontiArcTool {
 
     // Pre-calculate some variable values that will be used for every processed model
     MCPath modelPaths = new MCPath(input);
-    List<String> componentNames = asts.stream().map(a -> a.getComponentType().getName()).collect(Collectors.toList());
+    List<String> componentNames = asts.stream().map(a -> a.getArcComponentType().getName()).collect(Collectors.toList());
     List<String> imports = asts.stream()
-      .map(a -> a.getComponentType().getSymbol().getPackageName())
+      .map(a -> a.getArcComponentType().getSymbol().getPackageName())
       .distinct()
       .collect(Collectors.toList());
 
@@ -279,7 +279,7 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwcs);
     Preconditions.checkArgument(!target.isEmpty());
-    Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
+    Preconditions.checkArgument(ast.getArcComponentType().isPresentSymbol());
 
     List<Path> hwcsAsPath = hwcs.stream().map(Paths::get).collect(Collectors.toList());
     MontiArcGenerator generator = new MontiArcGenerator(Path.of(target), hwcsAsPath);

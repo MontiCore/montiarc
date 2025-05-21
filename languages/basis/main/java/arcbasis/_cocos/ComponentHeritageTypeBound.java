@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParent;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
@@ -24,10 +24,10 @@ import java.util.Optional;
  * inheritance declarations that type arguments passed for bounded type parameters of the parent component are subtypes
  * of these bounds.
  */
-public class ComponentHeritageTypeBound implements ArcBasisASTComponentTypeCoCo {
+public class ComponentHeritageTypeBound implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 

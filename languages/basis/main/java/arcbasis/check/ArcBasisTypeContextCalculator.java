@@ -3,7 +3,7 @@ package arcbasis.check;
 
 import arcbasis._symboltable.Component2TypeSymbolAdapter;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.IScope;
 import de.monticore.types3.util.TypeContextCalculator;
 
@@ -23,9 +23,9 @@ public class ArcBasisTypeContextCalculator extends TypeContextCalculator {
       if (scope.isPresentSpanningSymbol() && this.getTypeDispatcher().isBasicSymbolsType(scope.getSpanningSymbol())) {
         // Default behavior: enclosing scope is type
         enclosingType = Optional.of(this.getTypeDispatcher().asBasicSymbolsType(scope.getSpanningSymbol()));
-      } else if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof ComponentSymbol) {
+      } else if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof ComponentTypeSymbol) {
         // Enclosing scope is ComponentType
-        enclosingType = Optional.of(new Component2TypeSymbolAdapter((ComponentSymbol) scope.getSpanningSymbol()));
+        enclosingType = Optional.of(new Component2TypeSymbolAdapter((ComponentTypeSymbol) scope.getSpanningSymbol()));
       }
     }
 

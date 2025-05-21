@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -94,14 +94,14 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   }
 
   @Override
-  public void visit(@NotNull ASTComponentType node) {
+  public void visit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
     this.putOnStack((IVariableArcComponentTypeSymbol) node.getSymbol());
   }
 
   @Override
-  public void endVisit(@NotNull ASTComponentType node) {
+  public void endVisit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     Preconditions.checkState(this.getCurrentComponent().get().getTypeInfo().isPresentAstNode());

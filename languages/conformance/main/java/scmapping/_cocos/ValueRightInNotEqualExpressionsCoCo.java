@@ -2,7 +2,7 @@
 package scmapping._cocos;
 
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTNotEqualsExpression;
 import de.monticore.expressions.commonexpressions._cocos.CommonExpressionsASTNotEqualsExpressionCoCo;
@@ -27,7 +27,7 @@ public class ValueRightInNotEqualExpressionsCoCo
           + " can either be a state, input-port , output-port or global variable\n"
           + "Values must be at the right side";
 
-  public ValueRightInNotEqualExpressionsCoCo(ASTComponentType refAut, ASTComponentType conAut) {
+  public ValueRightInNotEqualExpressionsCoCo(ASTArcComponentType refAut, ASTArcComponentType conAut) {
     AutomataUtils.getInPorts(refAut).forEach(p -> validLeftNames.add(p.getName()));
     AutomataUtils.getInPorts(conAut).forEach(p -> validLeftNames.add(p.getName()));
     AutomataUtils.getOutPorts(refAut).forEach(p -> validLeftNames.add(p.getName()));

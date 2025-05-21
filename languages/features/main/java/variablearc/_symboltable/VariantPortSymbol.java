@@ -3,14 +3,12 @@ package variablearc._symboltable;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import de.monticore.symboltable.IScopeSpanningSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Represents a configured component type variant. Excludes all symbols not found in this specific variant.
@@ -19,9 +17,9 @@ public class VariantPortSymbol extends PortSymbol {
 
   protected PortSymbol parent;
 
-  protected ComponentTypeSymbol component;
+  protected ArcComponentTypeSymbol component;
 
-  public VariantPortSymbol(PortSymbol parent, ComponentTypeSymbol component) {
+  public VariantPortSymbol(PortSymbol parent, ArcComponentTypeSymbol component) {
     super(parent.getName());
     this.parent = parent;
     this.setIncoming(parent.isIncoming());

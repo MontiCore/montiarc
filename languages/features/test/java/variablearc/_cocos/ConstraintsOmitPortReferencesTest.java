@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -51,24 +51,24 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
    * port with specified names. If such a component did not exist in the global
    * scope yet, it is added to it.
    */
-  protected ComponentTypeSymbol provideComponentWithInAndOutPort(@NotNull String compName,
-                                                                 @NotNull String inPortName,
-                                                                 @NotNull String outPortName) {
+  protected ArcComponentTypeSymbol provideComponentWithInAndOutPort(@NotNull String compName,
+                                                                    @NotNull String inPortName,
+                                                                    @NotNull String outPortName) {
     Preconditions.checkNotNull(compName);
     Preconditions.checkNotNull(inPortName);
     Preconditions.checkNotNull(outPortName);
 
-    if (VariableArcMill.globalScope().resolveComponentType(compName)
+    if (VariableArcMill.globalScope().resolveArcComponentType(compName)
       .isPresent() && VariableArcMill.globalScope()
-      .resolveComponentType(compName).get()
+      .resolveArcComponentType(compName).get()
       .getIncomingPort(inPortName).isPresent() && VariableArcMill.globalScope()
-      .resolveComponentType(compName).get().getOutgoingPort(outPortName)
+      .resolveArcComponentType(compName).get().getOutgoingPort(outPortName)
       .isPresent()
-      && VariableArcMill.globalScope().resolveComponentType(compName).get()
+      && VariableArcMill.globalScope().resolveArcComponentType(compName).get()
       .getAllPorts().size() == 2) {
-      return VariableArcMill.globalScope().resolveComponentType(compName).get();
+      return VariableArcMill.globalScope().resolveArcComponentType(compName).get();
     } else {
-      ComponentTypeSymbol comp = VariableArcMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol comp = VariableArcMill.arcComponentTypeSymbolBuilder()
         .setName(compName).setSpannedScope(VariableArcMill.scope()).build();
 
       PortSymbol inPort = VariableArcMill.portSymbolBuilder()
@@ -95,15 +95,15 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
    * component type is added to the global scope subsequently, if it was not
    * present there before.
    */
-  protected ComponentTypeSymbol provideIndependentComponent() {
+  protected ArcComponentTypeSymbol provideIndependentComponent() {
 
     if (VariableArcMill.globalScope()
-      .resolveComponentType(INDEPENDENT_COMPONENT_NAME).isPresent()) {
+      .resolveArcComponentType(INDEPENDENT_COMPONENT_NAME).isPresent()) {
       return VariableArcMill.globalScope()
-        .resolveComponentType(INDEPENDENT_COMPONENT_NAME).get();
+        .resolveArcComponentType(INDEPENDENT_COMPONENT_NAME).get();
     } else {
-      ComponentTypeSymbol independentComp =
-        VariableArcMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol independentComp =
+        VariableArcMill.arcComponentTypeSymbolBuilder()
           .setName(INDEPENDENT_COMPONENT_NAME)
           .setSpannedScope(VariableArcMill.scope()).build();
 
@@ -133,16 +133,16 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
    * the initializer expressions of its fields. If no such component was found
    * in the global scope yet, the component is added to it.
    */
-  protected ComponentTypeSymbol provideCompWithoutPortRef() {
+  protected ArcComponentTypeSymbol provideCompWithoutPortRef() {
     final String compInPortName = "someInPort";
     final String compOutPortName = "someOutPort";
 
-    ComponentTypeSymbol comp = provideComponentWithInAndOutPort("WithoutPortRef", compInPortName, compOutPortName);
+    ArcComponentTypeSymbol comp = provideComponentWithInAndOutPort("WithoutPortRef", compInPortName, compOutPortName);
 
     ASTArcConstraintDeclaration constraint = VariableArcMill.arcConstraintDeclarationBuilder()
       .setExpression(nameExpression("someConstraint")).build();
 
-    ASTComponentType compAst = VariableArcMill.componentTypeBuilder()
+    ASTArcComponentType compAst = VariableArcMill.arcComponentTypeBuilder()
       .setName("WithoutPortRef").setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(VariableArcMill.componentBodyBuilder()
         .setArcElementsList(Collections.singletonList(constraint)).build())
@@ -172,7 +172,7 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
    * expressions of its if statements. If there was no such component before in
    * the global scope, the component is added to it.
    */
-  protected ComponentTypeSymbol provideCompWithOwnPortRef() {
+  protected ArcComponentTypeSymbol provideCompWithOwnPortRef() {
     final String compInPortName = "anotherInPort";
     final String compOutPortName = "anotherOutPort";
 
@@ -183,9 +183,9 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
     ASTArcConstraintDeclaration secondConstraint = VariableArcMill.arcConstraintDeclarationBuilder()
       .setExpression(nameExpression(compOutPortName)).build();
 
-    ComponentTypeSymbol comp = provideComponentWithInAndOutPort("WithOwnPortRef", compInPortName, compOutPortName);
+    ArcComponentTypeSymbol comp = provideComponentWithInAndOutPort("WithOwnPortRef", compInPortName, compOutPortName);
 
-    ASTComponentType compAst = VariableArcMill.componentTypeBuilder()
+    ASTArcComponentType compAst = VariableArcMill.arcComponentTypeBuilder()
       .setName("WithOwnPortRef").setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(VariableArcMill.componentBodyBuilder()
         .setArcElementsList(Arrays.asList(firstConstraint, secondConstraint))
@@ -199,7 +199,7 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
   @Test
   public void shouldNotFindPortReference() {
     // Given
-    ComponentTypeSymbol comp = provideCompWithoutPortRef();
+    ArcComponentTypeSymbol comp = provideCompWithoutPortRef();
 
     // When
     this.coco.check(comp.getAstNode());
@@ -211,7 +211,7 @@ public class ConstraintsOmitPortReferencesTest extends VariableArcTestBase {
   @Test
   public void shouldFindOwnPortReference() {
     // Given
-    ComponentTypeSymbol comp = provideCompWithOwnPortRef();
+    ArcComponentTypeSymbol comp = provideCompWithOwnPortRef();
 
     // When
     this.coco.check(comp.getAstNode());

@@ -2,7 +2,7 @@
 package montiarc._cocos;
 
 import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
 import arcbasis._cocos.CircularInheritance;
@@ -102,7 +102,7 @@ public class MontiArcCoCos {
 
   public static MontiArcCoCoChecker afterSymTab1() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
     return checker;
   }
   

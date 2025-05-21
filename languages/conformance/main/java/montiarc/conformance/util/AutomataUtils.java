@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcPort;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.Port2VariableAdapter;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
@@ -25,17 +25,17 @@ import java.util.stream.Collectors;
 
 public class AutomataUtils {
 
-  public static String getName(ASTComponentType ast) {
+  public static String getName(ASTArcComponentType ast) {
     return ast.getName();
   }
 
-  public static PortSymbol getPortSymbol(Port2VariableAdapter symbol, ASTComponentType comp) {
+  public static PortSymbol getPortSymbol(Port2VariableAdapter symbol, ASTArcComponentType comp) {
     Optional<PortSymbol> portSymbol = comp.getEnclosingScope().resolvePort(symbol.getFullName());
     assert portSymbol.isPresent();
     return portSymbol.get();
   }
 
-  public static List<SCStateSymbol> getStateList(ASTComponentType ast) {
+  public static List<SCStateSymbol> getStateList(ASTArcComponentType ast) {
     ASTStatechart sc = getAutomaton(ast);
 
     return sc.getSCStatechartElementList().stream()
@@ -46,7 +46,7 @@ public class AutomataUtils {
   }
 
 
-  public static List<ASTSCTransition> getTransitions(ASTComponentType ast) {
+  public static List<ASTSCTransition> getTransitions(ASTArcComponentType ast) {
     ASTStatechart sc = getAutomaton(ast);
 
     return sc.getSCStatechartElementList().stream()
@@ -55,21 +55,21 @@ public class AutomataUtils {
         .collect(Collectors.toList());
   }
 
-  public static List<PortSymbol> getInPorts(ASTComponentType ast) {
+  public static List<PortSymbol> getInPorts(ASTArcComponentType ast) {
     return ast.getPorts().stream()
         .map(ASTArcPort::getSymbol)
         .filter(PortSymbol::isIncoming)
         .collect(Collectors.toList());
   }
 
-  public static List<PortSymbol> getOutPorts(ASTComponentType ast) {
+  public static List<PortSymbol> getOutPorts(ASTArcComponentType ast) {
     return ast.getPorts().stream()
         .map(ASTArcPort::getSymbol)
         .filter(PortSymbol::isOutgoing)
         .collect(Collectors.toList());
   }
 
-  public static ASTStatechart getAutomaton(ASTComponentType ma) {
+  public static ASTStatechart getAutomaton(ASTArcComponentType ma) {
     return (ASTStatechart)
         ma.getBody().getArcElementList().stream()
             .filter(x -> x instanceof ASTStatechart)
@@ -77,7 +77,7 @@ public class AutomataUtils {
             .orElse(null);
   }
 
-  public static List<VariableSymbol> getGlobalVariables(ASTComponentType comp) {
+  public static List<VariableSymbol> getGlobalVariables(ASTArcComponentType comp) {
     return comp.getFields().stream().map(ASTArcField::getSymbol).collect(Collectors.toList());
   }
 

@@ -23,7 +23,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
   public void shouldSetEnclosingScope() {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.mACompilationUnitBuilder()
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -49,7 +49,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
   public void shouldWarnMissingEnclosingScope() {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.mACompilationUnitBuilder()
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -73,7 +73,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
   public void shouldRetainScopeStack() {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.mACompilationUnitBuilder()
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -99,7 +99,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
   public void shouldCreateArtifactScope() {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.mACompilationUnitBuilder()
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -136,7 +136,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
           .addParts("a").addParts("b").addParts("C").build())
         .setStar(false)
         .build())
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -175,7 +175,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
           .addParts("a").addParts("b").addParts("D").build())
         .setStar(false)
         .build())
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -208,7 +208,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = MontiArcMill.mACompilationUnitBuilder()
       .setPackage(MontiArcMill.mCQualifiedNameBuilder()
         .addParts("a").addParts("b").build())
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())
@@ -235,7 +235,7 @@ public class MontiArcScopesGenitorTest extends MontiArcTestBase {
   public void shouldRetainScopeStack2() {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.mACompilationUnitBuilder()
-      .setComponentType(MontiArcMill.componentTypeBuilder()
+      .setArcComponentType(MontiArcMill.arcComponentTypeBuilder()
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
         .setName("Comp").build())

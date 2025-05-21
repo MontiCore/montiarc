@@ -2,7 +2,7 @@
 package variablearc._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import org.junit.jupiter.api.Assertions;
@@ -53,10 +53,10 @@ public class VariableArcResolvingTest extends VariableArcTestBase {
     IVariableArcScope scope = VariableArcMill.scope();
     IVariableArcScope parentScope = VariableArcMill.scope();
 
-    ComponentTypeSymbol parent =
-      VariableArcMill.componentTypeSymbolBuilder().setName("Parent")
+    ArcComponentTypeSymbol parent =
+      VariableArcMill.arcComponentTypeSymbolBuilder().setName("Parent")
         .setSpannedScope(parentScope).build();
-    ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol child = VariableArcMill.arcComponentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
       .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
@@ -83,10 +83,10 @@ public class VariableArcResolvingTest extends VariableArcTestBase {
     IVariableArcScope scope = VariableArcMill.scope();
     enclosingScope.addSubScope(scope);
 
-    ComponentTypeSymbol parent =
-      VariableArcMill.componentTypeSymbolBuilder().setName("Parent")
+    ArcComponentTypeSymbol parent =
+      VariableArcMill.arcComponentTypeSymbolBuilder().setName("Parent")
         .setSpannedScope(ArcBasisMill.scope()).build();
-    ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol child = VariableArcMill.arcComponentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
       .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 

@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsHandler;
@@ -30,6 +31,10 @@ public class InstanceVisitor implements ArcBasisHandler, CompSymbolsHandler {
 
   @Override
   public void handle(ComponentTypeSymbol node) {
+    this.component = node;
+  }
+
+  public void handle(ArcComponentTypeSymbol node) {
     this.component = node;
   }
 

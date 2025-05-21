@@ -2,7 +2,7 @@
 package arcbasis.check;
 
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +31,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
 
   private ImmutableMap<TypeVarSymbol, SymTypeExpression> typeVarBindingsAsMap;
 
-  public TypeExprOfGenericComponent(@NotNull ComponentTypeSymbol compTypeSymbol,
+  public TypeExprOfGenericComponent(@NotNull ArcComponentTypeSymbol compTypeSymbol,
                                     @NotNull List<SymTypeExpression> typeArguments) {
     super(compTypeSymbol);
     Preconditions.checkNotNull(typeArguments);
@@ -89,7 +89,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   @Override
   public List<CompKindExpression> getSuperComponents() {
 
-    ComponentTypeSymbol rawType = this.getTypeInfo();
+    ArcComponentTypeSymbol rawType = this.getTypeInfo();
     if (rawType.isEmptySuperComponents()) {
       return rawType.getSuperComponentsList();
     }
@@ -190,7 +190,7 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
   }
 
   @Override
-  public TypeExprOfGenericComponent deepClone(@NotNull ComponentTypeSymbol compTypeSymbol) {
+  public TypeExprOfGenericComponent deepClone(@NotNull ArcComponentTypeSymbol compTypeSymbol) {
     List<SymTypeExpression> clonedBindings = this.getTypeBindingsAsList().stream()
       .map(SymTypeExpression::deepClone)
       .collect(Collectors.toList());

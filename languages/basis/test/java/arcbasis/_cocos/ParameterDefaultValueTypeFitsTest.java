@@ -3,9 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -81,7 +81,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
         .build())
       .build();
 
-    ASTComponentType enclComp = encloseParamInCompType(param);
+    ASTArcComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -104,7 +104,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
       .setDefault(doBuildNameExpressionInGlobalScope(INT_VAR_NAME))
       .build();
 
-    ASTComponentType enclComp = encloseParamInCompType(param);
+    ASTArcComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -127,7 +127,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
       .setDefault(doBuildNameExpressionInGlobalScope(INT_VAR_NAME))
       .build();
 
-    ASTComponentType enclComp = encloseParamInCompType(param);
+    ASTArcComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -154,7 +154,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
       .setDefault(doBuildNameExpressionInGlobalScope(DOUBLE_VAR_NAME))
       .build();
 
-    ASTComponentType enclComp = encloseParamInCompType(param);
+    ASTArcComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -182,7 +182,7 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
       .setDefault(doBuildNameExpressionInGlobalScope(FOO_TYPE_NAME))
       .build();
 
-    ASTComponentType enclComp = encloseParamInCompType(param);
+    ASTArcComponentType enclComp = encloseParamInCompType(param);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -196,10 +196,10 @@ public class ParameterDefaultValueTypeFitsTest extends ArcBasisTestBase {
     //this.checkOnlyExpectedErrorsPresent(ArcError.TYPE_REF_DEFAULT_VALUE);
   }
 
-  protected ASTComponentType encloseParamInCompType(@NotNull ASTArcParameter param) {
+  protected ASTArcComponentType encloseParamInCompType(@NotNull ASTArcParameter param) {
     Preconditions.checkNotNull(param);
 
-    return ArcBasisMill.componentTypeBuilder()
+    return ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder().addArcParameter(param).build())

@@ -90,7 +90,7 @@ public class FDGenerator {
     GeneratorEngine g = new GeneratorEngine(getGeneratorSetup(output));
 
     FDConfiguration fdConfig = new FDConfiguration();
-    Path fileName = Paths.get(ast.getComponentType().getName() + ".fd");
+    Path fileName = Paths.get(ast.getArcComponentType().getName() + ".fd");
 
     g.generate("templates/FDGenerationTemplate.ftl", fileName, ast, storage,
       fdConfig);

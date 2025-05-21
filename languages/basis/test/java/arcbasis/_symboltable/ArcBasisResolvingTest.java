@@ -155,11 +155,11 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
                                          @NotNull String resolutionName) {
     //Given
     this.getScope().setName(scopeName);
-    this.getScope().add(ArcBasisMill.componentTypeSymbolBuilder()
+    this.getScope().add(ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(typeName).setSpannedScope(ArcBasisMill.scope()).build());
 
     //When
-    Optional<ComponentTypeSymbol> symbol = this.getScope().resolveComponentType(resolutionName);
+    Optional<ArcComponentTypeSymbol> symbol = this.getScope().resolveArcComponentType(resolutionName);
 
     //Then
     Assertions.assertTrue(symbol.isPresent());
@@ -171,11 +171,11 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
                                             @NotNull String resolutionName) {
     //Given
     this.getScope().setName(scopeName);
-    this.getScope().add(ArcBasisMill.componentTypeSymbolBuilder()
+    this.getScope().add(ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(typeName).setSpannedScope(ArcBasisMill.scope()).build());
 
     //When
-    Optional<ComponentTypeSymbol> symbol = this.getScope().resolveComponentType(resolutionName);
+    Optional<ArcComponentTypeSymbol> symbol = this.getScope().resolveArcComponentType(resolutionName);
 
     //Then
     Assertions.assertFalse(symbol.isPresent());
@@ -375,11 +375,11 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope parent1Scope = ArcBasisMill.scope();
     IArcBasisScope parent2Scope = ArcBasisMill.scope();
 
-    ComponentTypeSymbol parent1 =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
-    ComponentTypeSymbol parent2 =
-      ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
-    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+    ArcComponentTypeSymbol parent1 =
+        ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
+    ArcComponentTypeSymbol parent2 =
+      ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
+    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
         .setSuperComponentsList(List.of(new TypeExprOfComponent(parent1), new TypeExprOfComponent(parent2))).build();
 
     PortSymbol port1 = ArcBasisMill.portSymbolBuilder().setName("p1")
@@ -421,9 +421,9 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope scope = ArcBasisMill.scope();
     IArcBasisScope parentScope = ArcBasisMill.scope();
 
-    ComponentTypeSymbol parent =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
-    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+    ArcComponentTypeSymbol parent =
+        ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
+    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
         .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1")
@@ -460,9 +460,9 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope scope = ArcBasisMill.scope();
     enclosingScope.addSubScope(scope);
 
-    ComponentTypeSymbol parent =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
-    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+    ArcComponentTypeSymbol parent =
+        ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
+    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
         .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")

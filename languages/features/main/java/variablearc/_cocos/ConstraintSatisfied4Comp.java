@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._ast.ASTArcComponentType;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
@@ -12,10 +12,10 @@ import variablearc.evaluation.ExpressionSolver;
 
 import java.util.Optional;
 
-public class ConstraintSatisfied4Comp implements ArcBasisASTComponentTypeCoCo {
+public class ConstraintSatisfied4Comp implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     if (!(node.getSymbol() instanceof IVariableArcComponentTypeSymbol)) return;

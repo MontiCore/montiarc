@@ -1,5 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTComponentType" -->
+<#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
@@ -55,7 +55,7 @@
   </#list>
 </#macro>
 
-<#-- ASTArcMode mode, ASTComponentType compAst -->
+<#-- ASTArcMode mode, ASTArcComponentType compAst -->
 <#macro updateUnconnectedOutputs mode compAst>
   this.unconnectedOutputs = java.util.Set.of(
     <#list helper.getUnconnectedOutPortsIncludingMode(compAst.getSymbol(), mode) as port>

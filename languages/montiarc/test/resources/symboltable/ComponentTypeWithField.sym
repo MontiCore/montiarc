@@ -3,7 +3,7 @@
   "package": "symboltable",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "ComponentTypeWithField",
       "spannedScope": {
         "symbols": [

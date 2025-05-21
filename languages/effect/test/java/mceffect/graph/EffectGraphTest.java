@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.graph;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import mceffect.EffectAbstractTest;
 import mceffect.MCEffectTool;
 import mceffect._ast.ASTMCEffect;
@@ -26,7 +26,7 @@ public class EffectGraphTest extends EffectAbstractTest {
   public void testEffectGraph() {
     // Given
     ASTMCEffect effect = parseEffect(modelPath  + "demo1/" + "steamboiler/SteamBoiler.eff");
-    Optional<ComponentTypeSymbol> compSymbol =
+    Optional<ArcComponentTypeSymbol> compSymbol =
         compResolver.apply("steamboiler.SteamBoiler");
     Assertions.assertTrue(compSymbol.isPresent());
     Assertions.assertNotNull(effect);

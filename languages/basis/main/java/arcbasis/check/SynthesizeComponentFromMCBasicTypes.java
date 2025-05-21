@@ -1,9 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
+import de.monticore.types.check.CompKindCheckResult;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
@@ -27,9 +28,9 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
   /**
    * Common state with other visitors, if this visitor is part of a visitor composition.
    */
-  protected SynthCompTypeResult resultWrapper;
+  protected CompKindCheckResult resultWrapper;
 
-  public SynthesizeComponentFromMCBasicTypes(@NotNull SynthCompTypeResult resultWrapper) {
+  public SynthesizeComponentFromMCBasicTypes(@NotNull CompKindCheckResult resultWrapper) {
     this.resultWrapper = Preconditions.checkNotNull(resultWrapper);
   }
 
@@ -48,7 +49,7 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
     Preconditions.checkNotNull(node);
 
     IArcBasisScope enclScope = ((IArcBasisScope) node.getEnclosingScope());
-    List<ComponentTypeSymbol> comp = enclScope.resolveComponentTypeMany(node.printType());
+    List<ArcComponentTypeSymbol> comp = enclScope.resolveArcComponentTypeMany(node.printType());
 
     if (comp.isEmpty()) {
       Log.error(ArcError.MISSING_COMPONENT.format(node.printType()),
@@ -75,7 +76,7 @@ public class SynthesizeComponentFromMCBasicTypes implements MCBasicTypesHandler 
     Preconditions.checkArgument(node.getEnclosingScope() instanceof IArcBasisScope);
 
     IArcBasisScope enclScope = ((IArcBasisScope) node.getEnclosingScope());
-    List<ComponentTypeSymbol> comp = enclScope.resolveComponentTypeMany(node.getMCQualifiedName().getQName());
+    List<ArcComponentTypeSymbol> comp = enclScope.resolveArcComponentTypeMany(node.getMCQualifiedName().getQName());
 
     if (comp.isEmpty()) {
       Log.error(ArcError.MISSING_COMPONENT.format(node.getMCQualifiedName().getQName()),

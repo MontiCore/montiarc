@@ -3,41 +3,40 @@ package arcbasis._symboltable;
 
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolSurrogate;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
+public class ArcComponentTypeSymbolBuilder extends ArcComponentTypeSymbolBuilderTOP {
 
-  protected ComponentTypeSymbol outerComponent;
+  protected ArcComponentTypeSymbol outerComponent;
   protected List<TypeVarSymbol> typeParameters;
 
-  public ComponentTypeSymbolBuilder() {
+  public ArcComponentTypeSymbolBuilder() {
     super();
   }
 
   @Override
-  public ComponentTypeSymbolBuilder setName(@NotNull String name) {
+  public ArcComponentTypeSymbolBuilder setName(@NotNull String name) {
     Preconditions.checkNotNull(name);
     return super.setName(name);
   }
 
   @Override
-  public ComponentTypeSymbolBuilder setSpannedScope(@NotNull IArcBasisScope spannedScope) {
+  public ArcComponentTypeSymbolBuilder setSpannedScope(@NotNull IArcBasisScope spannedScope) {
     Preconditions.checkNotNull(spannedScope);
     return super.setSpannedScope(spannedScope);
   }
 
-  public ComponentTypeSymbol getOuterComponent() {
+  public ArcComponentTypeSymbol getOuterComponent() {
     return this.outerComponent;
   }
 
-  public ComponentTypeSymbolBuilder setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
-    Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
+  public ArcComponentTypeSymbolBuilder setOuterComponent(@Nullable ArcComponentTypeSymbol outerComponent) {
+    Preconditions.checkArgument(!(outerComponent instanceof ArcComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
     return this.realBuilder;
   }
@@ -46,7 +45,7 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
     return this.typeParameters;
   }
 
-  public ComponentTypeSymbolBuilder setTypeParameters(@NotNull List<TypeVarSymbol> typeParameters) {
+  public ArcComponentTypeSymbolBuilder setTypeParameters(@NotNull List<TypeVarSymbol> typeParameters) {
     Preconditions.checkNotNull(typeParameters);
     Preconditions.checkArgument(!typeParameters.contains(null));
     this.typeParameters = typeParameters;
@@ -54,12 +53,12 @@ public class ComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilderTOP {
   }
 
   @Override
-  public ComponentTypeSymbol build() {
+  public ArcComponentTypeSymbol build() {
     Preconditions.checkState(isValid());
-    return doBuild(new ComponentTypeSymbol(this.name));
+    return doBuild(new ArcComponentTypeSymbol(this.name));
   }
 
-  protected ComponentTypeSymbol doBuild(@NotNull ComponentTypeSymbol symbol) {
+  protected ArcComponentTypeSymbol doBuild(@NotNull ArcComponentTypeSymbol symbol) {
     Preconditions.checkNotNull(symbol);
     Preconditions.checkState(isValid());
     symbol.setSuperComponentsList(this.superComponents);

@@ -5,7 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.ArcBasisTypeCheckTest;
 import com.google.common.base.Preconditions;
@@ -55,7 +55,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
       .addArcField(field)
       .build();
 
-    ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
+    ASTArcComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -78,7 +78,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
       .addArcField(field)
       .build();
 
-    ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
+    ASTArcComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -103,7 +103,7 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
       .addArcField(field)
       .build();
 
-    ASTComponentType enclComp = encloseFieldInCompType(fieldDecl);
+    ASTArcComponentType enclComp = encloseFieldInCompType(fieldDecl);
     ArcBasisMill.scopesGenitorDelegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP2Delegator().createFromAST(enclComp);
     ArcBasisMill.scopesGenitorP3Delegator().createFromAST(enclComp);
@@ -115,10 +115,10 @@ public class FieldInitTypeFitsCalculatorTest extends ArcBasisTypeCheckTest {
       .containsExactlyInAnyOrder(getErrorCodes(ArcError.FIELD_INIT_TYPE_MISMATCH));
   }
 
-  protected ASTComponentType encloseFieldInCompType(@NotNull ASTArcFieldDeclaration field) {
+  protected ASTArcComponentType encloseFieldInCompType(@NotNull ASTArcFieldDeclaration field) {
     Preconditions.checkNotNull(field);
 
-    return ArcBasisMill.componentTypeBuilder()
+    return ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder().addArcElement(field).build())

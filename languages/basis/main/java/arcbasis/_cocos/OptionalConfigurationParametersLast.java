@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -24,10 +24,10 @@ import java.util.stream.Collectors;
  * arguments at component instantiation requires more complex argument mapping semantics that might become confusing or
  * even non-deterministic."
  */
-public class OptionalConfigurationParametersLast implements ArcBasisASTComponentTypeCoCo {
+public class OptionalConfigurationParametersLast implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 

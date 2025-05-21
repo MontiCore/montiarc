@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.Context;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
@@ -26,8 +26,8 @@ import java.util.Optional;
 
 public class AutomatonAbstractTest {
 
-  protected ASTComponentType refAut;
-  protected ASTComponentType conAut;
+  protected ASTArcComponentType refAut;
+  protected ASTArcComponentType conAut;
 
   protected ASTCDCompilationUnit refCD;
 
@@ -56,7 +56,7 @@ public class AutomatonAbstractTest {
 
     Pair<ASTCDCompilationUnit, ASTMACompilationUnit> ref =
         AutomataLoader.loadModels(refAutFile, refCdFile);
-    refAut = ref.getValue().getComponentType();
+    refAut = ref.getValue().getArcComponentType();
     refCD = ref.getKey();
 
     initMills();
@@ -64,11 +64,11 @@ public class AutomatonAbstractTest {
     Pair<ASTCDCompilationUnit, ASTMACompilationUnit> con =
         AutomataLoader.loadModels(conAutFile, conCDFile);
 
-    conAut = con.getValue().getComponentType();
+    conAut = con.getValue().getArcComponentType();
     conCD = con.getKey();
   }
 
-  protected ASTSCTransition getTransition(String number, ASTComponentType ma) {
+  protected ASTSCTransition getTransition(String number, ASTArcComponentType ma) {
     for (ASTSCTransition trans : AutomataUtils.getTransitions(ma)) {
       if (trans.getStereotype().getValue("n").equals(number)) {
         return trans;
@@ -77,7 +77,7 @@ public class AutomatonAbstractTest {
     return null;
   }
 
-  public SCStateSymbol getState(String stateName, ASTComponentType ma) {
+  public SCStateSymbol getState(String stateName, ASTArcComponentType ma) {
     Optional<SCStateSymbol> state =
         AutomataUtils.getStateList(ma).stream()
             .filter(st -> st.getName().equals(stateName))
@@ -86,14 +86,14 @@ public class AutomatonAbstractTest {
     return state.get();
   }
 
-  public PortSymbol getInputPort(String portName, ASTComponentType ma) {
+  public PortSymbol getInputPort(String portName, ASTArcComponentType ma) {
     Optional<PortSymbol> res =
         AutomataUtils.getInPorts(ma).stream().filter(p -> p.getName().equals(portName)).findFirst();
     Assertions.assertTrue(res.isPresent());
     return res.get();
   }
 
-  public VariableSymbol getGlobalVariable(String varName, ASTComponentType aut) {
+  public VariableSymbol getGlobalVariable(String varName, ASTArcComponentType aut) {
     Optional<VariableSymbol> var =
         AutomataUtils.getGlobalVariables(aut).stream()
             .filter(v -> v.getName().equals(varName))
@@ -102,7 +102,7 @@ public class AutomatonAbstractTest {
     return var.get();
   }
 
-  public PortSymbol getOutputPort(String portName, ASTComponentType ma) {
+  public PortSymbol getOutputPort(String portName, ASTArcComponentType ma) {
     Optional<PortSymbol> res =
         AutomataUtils.getOutPorts(ma).stream()
             .filter(p -> p.getName().equals(portName))

@@ -4,12 +4,13 @@ package montiarc.generator.helper;
 import arcautomaton._ast.ASTArcStatechart;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
 import arcbasis.check.CompTypeExpression;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
@@ -17,7 +18,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
@@ -77,7 +77,7 @@ public class ComponentHelper {
     return this.getPrettyPrinter().prettyprint(statement);
   }
 
-  public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
+  public static List<VariableSymbol> getComponentVariables(ArcComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
     vss.removeAll(comp.getParameterList());
@@ -125,18 +125,18 @@ public class ComponentHelper {
      * the last parameter.
      *
      * @param configArguments The {@link Map} that contains the parameter bindings.
-     * @param comp The {@link ComponentSymbol} for which the parameters should be calculated.
+     * @param comp The {@link ComponentTypeSymbol} for which the parameters should be calculated.
      * @return The parameters.
      */
-  public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments, ComponentSymbol comp) {
+  public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments, ComponentTypeSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();
 
 
 
     //can only print default parameters if ASTNode exists.
-    if(comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTComponentType(comp.getAstNode())){
-      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTComponentType(comp.getAstNode());
+    if(comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTArcComponentType(comp.getAstNode())){
+      final ASTArcComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTArcComponentType(comp.getAstNode());
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -175,9 +175,9 @@ public class ComponentHelper {
    */
   public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
-    ComponentSymbol componentTypeReference = instance.getType().getTypeInfo();
-    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
-      componentTypeReference = ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
+    ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
+    if (componentTypeReference instanceof ArcComponentTypeSymbolSurrogate) {
+      componentTypeReference = ((ArcComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
     }
     String packageName = ComponentHelper.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
     if (packageName != null && !packageName.equals("")) {
@@ -195,17 +195,17 @@ public class ComponentHelper {
   /**
    * Helper function used to determine package names.
    */
-  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentSymbol comp) {
-    if (MontiArcMill.typeDispatcher().isArcBasisComponentType(comp) && ArcBasisMill.typeDispatcher().asArcBasisComponentType(comp).isInnerComponent()) {
+  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
+    if (MontiArcMill.typeDispatcher().isArcBasisArcComponentType(comp) && ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(comp).isInnerComponent()) {
       //TODO add check for outermost component being TOP-Class or remove this function?
-      String outerPackage = printPackageWithoutKeyWordAndSemicolon(ArcBasisMill.typeDispatcher().asArcBasisComponentType(comp).getOuterComponent().get());
-      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + ArcBasisMill.typeDispatcher().asArcBasisComponentType(comp).getOuterComponent().get().getName();
+      String outerPackage = printPackageWithoutKeyWordAndSemicolon(ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(comp).getOuterComponent().get());
+      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(comp).getOuterComponent().get().getName();
     } else {
       return comp.getPackageName();
     }
   }
 
-  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTComponentType component) {
+  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().getArcElementList().stream()
@@ -214,7 +214,7 @@ public class ComponentHelper {
       .findFirst();
   }
 
-  public Optional<ASTArcCompute> getComputeBehavior(ASTComponentType component) {
+  public Optional<ASTArcCompute> getComputeBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().getArcElementList().stream()
@@ -223,7 +223,7 @@ public class ComponentHelper {
       .findFirst();
   }
 
-  public Optional<ASTArcInit> getInitBehavior(ASTComponentType component) {
+  public Optional<ASTArcInit> getInitBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().getArcElementList().stream()

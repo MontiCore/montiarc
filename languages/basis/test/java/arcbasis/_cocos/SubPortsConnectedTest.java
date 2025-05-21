@@ -4,7 +4,7 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class SubPortsConnectedTest extends ArcBasisTestBase {
 
-  HashMap<String, ASTComponentType> components;
+  HashMap<String, ASTArcComponentType> components;
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
@@ -37,7 +37,7 @@ public class SubPortsConnectedTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(errors);
 
     //Given
-    ASTComponentType ast = components.get(comp);
+    ASTArcComponentType ast = components.get(comp);
     SubPortsConnected coco = new SubPortsConnected();
 
     //When
@@ -54,7 +54,7 @@ public class SubPortsConnectedTest extends ArcBasisTestBase {
     ArcBasisScopesGenitorP2Delegator scopesGenP2 = ArcBasisMill.scopesGenitorP2Delegator();
     ArcBasisScopesGenitorP3Delegator scopesGenP3 = ArcBasisMill.scopesGenitorP3Delegator();
 
-    ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp1 = ArcBasisMill.arcComponentTypeBuilder().setName("A")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()
@@ -72,7 +72,7 @@ public class SubPortsConnectedTest extends ArcBasisTestBase {
         .build())
       .build();
     scopesGen.createFromAST(comp1);
-    ASTComponentType comp2 = ArcBasisMill.componentTypeBuilder().setName("B")
+    ASTArcComponentType comp2 = ArcBasisMill.arcComponentTypeBuilder().setName("B")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()
@@ -100,7 +100,7 @@ public class SubPortsConnectedTest extends ArcBasisTestBase {
         .build())
       .build();
     scopesGen.createFromAST(comp2);
-    ASTComponentType comp3 = ArcBasisMill.componentTypeBuilder().setName("C")
+    ASTArcComponentType comp3 = ArcBasisMill.arcComponentTypeBuilder().setName("C")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()

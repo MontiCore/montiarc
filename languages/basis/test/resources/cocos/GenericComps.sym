@@ -3,14 +3,14 @@
   "package": "",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "A",
       "fullName": "A",
       "spannedScope": {}
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "B",
       "fullName": "B",
       "spannedScope": {
@@ -26,7 +26,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "C",
       "fullName": "C",
       "spannedScope": {
@@ -47,7 +47,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "D",
       "fullName": "D",
       "spannedScope": {
@@ -69,7 +69,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "E",
       "fullName": "E",
       "spannedScope": {
@@ -97,7 +97,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "F",
       "fullName": "F",
       "spannedScope": {
@@ -142,7 +142,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "G",
       "fullName": "G",
       "spannedScope": {
@@ -175,7 +175,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "H",
       "fullName": "H",
       "spannedScope": {

@@ -1,10 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
@@ -24,16 +23,16 @@ import java.util.stream.Collectors;
  * instantiation of such a system will result in an endless instantiation process, these cycles are forbidden." This
  * also transfers to deeper nested subcomponents. Example from Hab16: component A { B myB; } component B { A myA; }
  */
-public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoCo {
+public class NoSubcomponentReferenceCycle implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType astComp) {
+  public void check(@NotNull ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 
-    Optional<List<ComponentSymbol>> referenceCycle = findRefCycle(comp);
+    Optional<List<ComponentTypeSymbol>> referenceCycle = findRefCycle(comp);
     if (referenceCycle.isPresent()) {
       Log.error(ArcError.SUBCOMPONENT_REFERENCE_CYCLE.format(printCycle(referenceCycle.get())),
         astComp.get_SourcePositionStart(), astComp.get_SourcePositionEnd()
@@ -47,10 +46,10 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
    * @param compArg root element of the recursion
    * @return any cycles where the root-element directly or indirectly instantiates itself
    */
-  protected Optional<List<ComponentSymbol>> findRefCycle(@NotNull ComponentTypeSymbol compArg) {
+  protected Optional<List<ComponentTypeSymbol>> findRefCycle(@NotNull ComponentTypeSymbol compArg) {
     Preconditions.checkNotNull(compArg);
 
-    Deque<ComponentSymbol> stack = new LinkedList<>();
+    Deque<ComponentTypeSymbol> stack = new LinkedList<>();
     stack.push(compArg);
 
     return findRefCycleDepthFirst(stack);
@@ -61,28 +60,28 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
    * given stack
    *
    * @param trace recursion branch. The first entry is the root (the first parameter o {@link
-   *              #check(ASTComponentType)}), then it contains a trace of instantiated sub elements, the last element is
+   *              #check(ASTArcComponentType)}), then it contains a trace of instantiated sub elements, the last element is
    *              the current end of recursion
    * @return a cyclic instantiation reference, if it is contained in the model
    */
-  protected Optional<List<ComponentSymbol>> findRefCycleDepthFirst(@NotNull Deque<ComponentSymbol> trace) {
+  protected Optional<List<ComponentTypeSymbol>> findRefCycleDepthFirst(@NotNull Deque<ComponentTypeSymbol> trace) {
     Preconditions.checkNotNull(trace);
     Preconditions.checkNotNull(trace.peekLast());
 
-    Collection<ComponentSymbol> instantiatedTypes = trace.peekLast().getSubcomponents().stream()
+    Collection<ComponentTypeSymbol> instantiatedTypes = trace.peekLast().getSubcomponents().stream()
       .filter(SubcomponentSymbol::isTypePresent)
       .map(SubcomponentSymbol::getType)
       .map(CompKindExpression::getTypeInfo)
       .distinct()
       .collect(Collectors.toList());
 
-    for (ComponentSymbol type : instantiatedTypes) {
+    for (ComponentTypeSymbol type : instantiatedTypes) {
       if (type.equals(trace.peekFirst())) { // check for cycle
-        List<ComponentSymbol> cycle = new ArrayList<>(trace);
+        List<ComponentTypeSymbol> cycle = new ArrayList<>(trace);
         return Optional.of(cycle);
       } else if (!trace.contains(type)) { // else it is also a cycle, but it is dealt with by an other run of this coco
         trace.addLast(type);
-        Optional<List<ComponentSymbol>> cycle = findRefCycleDepthFirst(trace);
+        Optional<List<ComponentTypeSymbol>> cycle = findRefCycleDepthFirst(trace);
         if (cycle.isPresent()) {
           return cycle;
         }
@@ -104,14 +103,14 @@ public class NoSubcomponentReferenceCycle implements ArcBasisASTComponentTypeCoC
    *              has to be listed once)
    * @return a string where every list entry is named at least twice
    */
-  protected static String printCycle(@NotNull List<ComponentSymbol> cycle) {
+  protected static String printCycle(@NotNull List<ComponentTypeSymbol> cycle) {
     Preconditions.checkNotNull(cycle);
     Preconditions.checkArgument(!cycle.isEmpty());
 
     StringBuilder printer = new StringBuilder();
     for (int i = 0; i < cycle.size(); i++) {
-      ComponentSymbol enclCompType = cycle.get(i);
-      ComponentSymbol subCompType = cycle.get((i + 1) % cycle.size());
+      ComponentTypeSymbol enclCompType = cycle.get(i);
+      ComponentTypeSymbol subCompType = cycle.get((i + 1) % cycle.size());
 
       printer.append("\n'").append(enclCompType.getFullName()).append("' instantiates '").append(subCompType.getFullName()).append("'");
     }

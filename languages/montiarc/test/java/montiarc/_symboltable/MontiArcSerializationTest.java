@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
@@ -30,8 +30,8 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     MontiArcMill.globalScope().add(setUpParentComp());
   }
 
-  protected ComponentTypeSymbol setUpParentComp() {
-    ComponentTypeSymbol parentComp = MontiArcMill.componentTypeSymbolBuilder()
+  protected ArcComponentTypeSymbol setUpParentComp() {
+    ArcComponentTypeSymbol parentComp = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(MontiArcMill.scope())
       .build();
@@ -77,9 +77,9 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       .isEqualTo(((IMontiArcArtifactScope) ast.getEnclosingScope()).getPackageName());
     assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName());
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-      .getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getComponentType().getName());
+      .getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getArcComponentType().getName());
   }
 
   @Test
@@ -96,7 +96,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     // When
-    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getComponentType().getSpannedScope());
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getArcComponentType().getSpannedScope());
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
@@ -127,7 +127,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     // When
-    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getComponentType().getSpannedScope());
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getArcComponentType().getSpannedScope());
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
@@ -159,7 +159,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     // When
-    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getComponentType().getSpannedScope());
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getArcComponentType().getSpannedScope());
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
@@ -208,7 +208,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
         .getMember("kind").getAsJsonString().getValue())
-        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
+        .isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName())
     );
   }
 
@@ -234,7 +234,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
+        .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName())
     );
   }
 
@@ -316,10 +316,10 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
         .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
-        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName()),
+        .isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName()),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
         .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
-        .isEqualTo(ast.getComponentType().getInnerComponents().get(0).getName())
+        .isEqualTo(ast.getArcComponentType().getInnerComponents().get(0).getName())
     );
   }
 
@@ -335,7 +335,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
 
     // When
-    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getComponentType().getSpannedScope());
+    final String s = new MontiArcSymbols2Json().serialize((IMontiArcScope) ast.getArcComponentType().getSpannedScope());
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);

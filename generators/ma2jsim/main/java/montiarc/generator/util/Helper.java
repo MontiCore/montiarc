@@ -6,15 +6,16 @@ import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._symboltable.Port2EventDefAdapter;
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentInstantiationTOP;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
@@ -35,8 +36,6 @@ import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.IScopeSpanningSymbol;
@@ -50,12 +49,12 @@ import montiarc._symboltable.MontiArcComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTVariantComponentType;
+import variablearc._ast.ASTVariantArcComponentType;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc._symboltable.VariableArcVariationPoint;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.VariantArcComponentTypeSymbol;
 import variablearc._symboltable.VariantPortSymbol;
 import variablearc._symboltable.VariantSubcomponentSymbol;
 import variablearc.evaluation.expressions.Expression;
@@ -78,19 +77,19 @@ public class Helper {
     return stream.collect(Collectors.toList());
   }
 
-  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTComponentType component) {
+  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().streamArcElementsOfType(ASTArcStatechart.class).findFirst();
   }
 
-  public Optional<ASTArcCompute> getComputeBehavior(ASTComponentType component) {
+  public Optional<ASTArcCompute> getComputeBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().streamArcElementsOfType(ASTArcCompute.class).findFirst();
   }
 
-  public Optional<ASTArcInit> getComputeInit(ASTComponentType component) {
+  public Optional<ASTArcInit> getComputeInit(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().streamArcElementsOfType(ASTArcInit.class).findFirst();
@@ -104,15 +103,15 @@ public class Helper {
    * @param sc the statechart from which transitions should be extracted
    * @return event-triggered transitions grouped by triggering port
    */
-  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTComponentType enclosingComponent, ASTArcStatechart sc) {
+  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTArcComponentType enclosingComponent, ASTArcStatechart sc) {
     return getTransitionsMappedToPortTriggers(enclosingComponent, sc.streamTransitions());
   }
 
-  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTComponentType enclosingComponent, ASTModeAutomaton modeAutomaton) {
+  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTArcComponentType enclosingComponent, ASTModeAutomaton modeAutomaton) {
     return getTransitionsMappedToPortTriggers(enclosingComponent, getTransitions(modeAutomaton).stream());
   }
 
-  protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(ASTComponentType enclosingComponent, Stream<ASTSCTransition> transitions) {
+  protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(ASTArcComponentType enclosingComponent, Stream<ASTSCTransition> transitions) {
     Map<PortSymbol, List<ASTSCTransition>> result = new HashMap<>();
     transitions.forEach(tr -> {
       Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
@@ -212,9 +211,9 @@ public class Helper {
     return Optional.empty();
   }
 
-  public Optional<PortSymbol> getTriggeringPortSymbol(ASTComponentType componentType, ASTTransitionBody body) {
+  public Optional<PortSymbol> getTriggeringPortSymbol(ASTArcComponentType componentType, ASTTransitionBody body) {
     Predicate<SCEventDefSymbol> predicate;
-    if (componentType instanceof ASTVariantComponentType) {
+    if (componentType instanceof ASTVariantArcComponentType) {
       predicate = ((VariableArcVariantComponentTypeSymbol) componentType.getSymbol())::containsSymbol;
     } else {
       predicate = e -> true;
@@ -230,7 +229,7 @@ public class Helper {
       .map(sym -> ((Port2EventDefAdapter) sym.get()).getAdaptee());
   }
 
-  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTComponentType comp) {
+  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTArcComponentType comp) {
     List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
       .map(ISymbol::getName)
       .map(String::toLowerCase).collect(Collectors.toList());
@@ -239,7 +238,7 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTModeAutomaton sc, ASTComponentType comp) {
+  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTModeAutomaton sc, ASTArcComponentType comp) {
     List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
       .map(ISymbol::getName)
       .map(String::toLowerCase).collect(Collectors.toList());
@@ -278,7 +277,7 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public Optional<ASTModeAutomaton> getModeAutomaton(ASTComponentType ast) {
+  public Optional<ASTModeAutomaton> getModeAutomaton(ASTArcComponentType ast) {
     return getModeAutomaton(ast.getBody());
   }
 
@@ -331,7 +330,7 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ComponentTypeSymbol comp) {
+  public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ArcComponentTypeSymbol comp) {
     Set<String> targets = comp.getAstNode().getConnectors().stream()
       .map(ASTConnector::getTargetsNames)
       .flatMap(Collection::stream)
@@ -342,7 +341,7 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public List<PortSymbol> getUnconnectedOutPortsIncludingMode(ComponentTypeSymbol comp, ASTArcMode mode) {
+  public List<PortSymbol> getUnconnectedOutPortsIncludingMode(ArcComponentTypeSymbol comp, ASTArcMode mode) {
     Set<String> classicalTargets = comp.getAstNode().getConnectors().stream()
       .map(ASTConnector::getTargetsNames)
       .flatMap(Collection::stream)
@@ -370,13 +369,13 @@ public class Helper {
     return portAccess.getComponentSymbol().getEnclosingScope() == mode.getSpannedScope();
   }
 
-  public boolean isComponentInputTimeAware(ASTComponentType component) {
+  public boolean isComponentInputTimeAware(ASTArcComponentType component) {
     return component.getSymbol()
       .getAllIncomingPorts().stream().findAny()
       .map(p -> p.getTiming() != Timing.UNTIMED).orElse(false);
   }
 
-  public boolean isComponentOutputTimeAware(ASTComponentType component) {
+  public boolean isComponentOutputTimeAware(ASTArcComponentType component) {
     return component.getSymbol()
       .getAllOutgoingPorts().stream().findAny()
       .map(p -> p.getTiming() != Timing.UNTIMED).orElse(false);
@@ -385,7 +384,7 @@ public class Helper {
   public Map<String, ASTExpression> getArgNamesMappedToExpressions(ASTComponentInstance instance) {
     if (!instance.isPresentArcArguments()) return new HashMap<>();
 
-    ComponentSymbol type = instance.getSymbol().getType().getTypeInfo();
+    ComponentTypeSymbol type = instance.getSymbol().getType().getTypeInfo();
 
     List<String> unsetParams = type.getParameterList().stream()
       .map(VariableSymbolTOP::getName).collect(Collectors.toList());
@@ -405,7 +404,7 @@ public class Helper {
     return result;
   }
 
-  public List<?> getFeatures(@NotNull ASTComponentType ast) {
+  public List<?> getFeatures(@NotNull ASTArcComponentType ast) {
     Preconditions.checkNotNull(ast);
 
     return ast.getBody()
@@ -414,7 +413,7 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public List<?> getConstraintExpressions(@NotNull ASTComponentType ast) {
+  public List<?> getConstraintExpressions(@NotNull ASTArcComponentType ast) {
     Preconditions.checkNotNull(ast);
 
     return ast.getBody()
@@ -423,11 +422,11 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public List<?> getNonPrimitiveParameters(@NotNull ASTComponentType ast) {
+  public List<?> getNonPrimitiveParameters(@NotNull ASTArcComponentType ast) {
     return ast.getHead().streamArcParameters().filter(param -> !param.getSymbol().getType().isPrimitive()).collect(Collectors.toList());
   }
 
-  public boolean isGenericComponent(ASTComponentType astComponentType) {
+  public boolean isGenericComponent(ASTArcComponentType astComponentType) {
     return astComponentType.getHead().isPresentTypeParameters();
   }
 
@@ -497,7 +496,7 @@ public class Helper {
     return type.isPrimitive() && BasicSymbolsMill.DOUBLE.equals(type.asPrimitive().getPrimitiveName());
   }
 
-  public List<Expression> getExistenceCondition(@NotNull ASTComponentType ast, @NotNull ISymbol symbol) {
+  public List<Expression> getExistenceCondition(@NotNull ASTArcComponentType ast, @NotNull ISymbol symbol) {
     if (ast.getSymbol() instanceof IVariableArcComponentTypeSymbol) {
       return ((IVariableArcComponentTypeSymbol) ast.getSymbol()).getAllVariationPoints()
         .stream()
@@ -513,7 +512,7 @@ public class Helper {
     return vp.getArcElements().stream().filter(e -> MontiArcMill.typeDispatcher().isArcBasisASTConnector(e)).map(e -> MontiArcMill.typeDispatcher().asArcBasisASTConnector(e)).collect(Collectors.toList());
   }
 
-  public List<VariableArcVariantComponentTypeSymbol> getVariants(@NotNull ASTComponentType ast) {
+  public List<VariableArcVariantComponentTypeSymbol> getVariants(@NotNull ASTArcComponentType ast) {
     if (ast.getSymbol() instanceof MontiArcComponentTypeSymbol) {
       return ((MontiArcComponentTypeSymbol) ast.getSymbol()).getVariableArcVariants();
     }
@@ -529,23 +528,23 @@ public class Helper {
     return Integer.toString(variant.hashCode());
   }
 
-  public String subcomponentVariantSuffix(ASTComponentType comp, SubcomponentSymbol subcomponent) {
+  public String subcomponentVariantSuffix(ASTArcComponentType comp, SubcomponentSymbol subcomponent) {
     if (subcomponent instanceof VariantSubcomponentSymbol) {
       subcomponent = ((VariantSubcomponentSymbol) subcomponent).getOriginal();
     }
-    if (comp instanceof ASTVariantComponentType) {
-      comp = ((ASTVariantComponentType) comp).getOriginal();
+    if (comp instanceof ASTVariantArcComponentType) {
+      comp = ((ASTVariantArcComponentType) comp).getOriginal();
     }
     List<SubcomponentSymbol> subs = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolveSubcomponentMany(subcomponent.getName()));
     return subs.size() <= 1 ? "" : Integer.toString(subs.indexOf(subcomponent));
   }
 
-  public String portVariantSuffix(ASTComponentType comp, PortSymbol port) {
+  public String portVariantSuffix(ASTArcComponentType comp, PortSymbol port) {
     if (port instanceof VariantPortSymbol) {
       port = ((VariantPortSymbol) port).getOriginal();
     }
-    if (comp instanceof ASTVariantComponentType) {
-      comp = ((ASTVariantComponentType) comp).getOriginal();
+    if (comp instanceof ASTVariantArcComponentType) {
+      comp = ((ASTVariantArcComponentType) comp).getOriginal();
     }
     List<PortSymbol> ports = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolvePortMany(port.getName()));
     return ports.size() <= 1 ? "" : Integer.toString(ports.indexOf(port));
@@ -562,15 +561,15 @@ public class Helper {
     return ports.size() <= 1 ? "" : Integer.toString(ports.indexOf(port));
   }
 
-  public String fieldVariantSuffix(ASTComponentType comp, VariableSymbol field) {
-    if (comp instanceof ASTVariantComponentType) {
-      comp = ((ASTVariantComponentType) comp).getOriginal();
+  public String fieldVariantSuffix(ASTArcComponentType comp, VariableSymbol field) {
+    if (comp instanceof ASTVariantArcComponentType) {
+      comp = ((ASTVariantArcComponentType) comp).getOriginal();
     }
     List<VariableSymbol> fields = ISymbol.sortSymbolsByPosition(comp.getSpannedScope().resolveVariableMany(field.getName()));
     return fields.size() <= 1 ? "" : Integer.toString(fields.indexOf(field));
   }
 
-  public List<VariableArcVariantComponentTypeSymbol> getVariantsWithPort(ASTComponentType comp, PortSymbol port) {
+  public List<VariableArcVariantComponentTypeSymbol> getVariantsWithPort(ASTArcComponentType comp, PortSymbol port) {
     List<VariableArcVariantComponentTypeSymbol> variants = getVariants(comp);
     List<VariableArcVariantComponentTypeSymbol> varsWithPort = new ArrayList<>(variants.size());
 
@@ -591,7 +590,7 @@ public class Helper {
     return varsWithPort;
   }
 
-  public List<VariableArcVariantComponentTypeSymbol> getVariantsWithSubcomponent(ASTComponentType comp, SubcomponentSymbol sub) {
+  public List<VariableArcVariantComponentTypeSymbol> getVariantsWithSubcomponent(ASTArcComponentType comp, SubcomponentSymbol sub) {
     List<VariableArcVariantComponentTypeSymbol> variants = getVariants(comp);
     List<VariableArcVariantComponentTypeSymbol> varsWithSub = new ArrayList<>(variants.size());
 
@@ -608,13 +607,13 @@ public class Helper {
     return varsWithSub;
   }
 
-  public Map<PortSymbol, String> getInPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSym) {
+  public Map<PortSymbol, String> getInPortsWithSuffixesOfOtherVariants(VariantArcComponentTypeSymbol variantCompSym) {
     return getPortsWithSuffixesOfOtherVariants(variantCompSym).entrySet().stream()
       .filter(p -> p.getKey().isIncoming())
       .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
   }
 
-  public Map<PortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantComponentTypeSymbol variantCompSymbol) {
+  public Map<PortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantArcComponentTypeSymbol variantCompSymbol) {
     List<PortSymbol> ownOriginalPorts = variantCompSymbol.getAllPorts().stream().map(p -> ((VariantPortSymbol) p).getOriginal()).collect(Collectors.toList());
     ComponentTypeSymbol original = variantCompSymbol.getAdaptee();
 
@@ -640,7 +639,7 @@ public class Helper {
     return getSubstates(state).stream().filter(s -> s.getSCModifier().isInitial()).collect(Collectors.toList());
   }
 
-  public List<ASTSCState> getStates(ASTComponentType component) {
+  public List<ASTSCState> getStates(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return this.getAutomatonBehavior(component).get().getStates();
@@ -767,7 +766,7 @@ public class Helper {
    * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
    * does not belong to a component type.
    */
-  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+  protected Optional<ArcComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
     if (portAccess.getEnclosingScope() == null) {
       return Optional.empty();
@@ -776,8 +775,8 @@ public class Helper {
       return Optional.empty();
     }
     IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
-    if (symbol instanceof ComponentTypeSymbol) {
-      return Optional.of((ComponentTypeSymbol) symbol);
+    if (symbol instanceof ArcComponentTypeSymbol) {
+      return Optional.of((ArcComponentTypeSymbol) symbol);
     } else {
       return Optional.empty();
     }
@@ -795,7 +794,7 @@ public class Helper {
    * @param ast  the component AST whose fields we want to order
    * @return     a List of VariableSymbol in an order respecting dependencies
    */
-  public List<VariableSymbol> getFieldsInDependencyOrder(ASTComponentType ast) {
+  public List<VariableSymbol> getFieldsInDependencyOrder(ASTArcComponentType ast) {
     List<VariableSymbol> fields = ast.getSymbol().getFields();
     Map<VariableSymbol, Set<VariableSymbol>> deps = new LinkedHashMap<>();
 

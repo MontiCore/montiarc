@@ -7,6 +7,7 @@ import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
@@ -230,6 +231,19 @@ public final class SymbolService {
    * @param componentType the component type to add to the scope
    */
   public static void link(@NotNull IArcBasisScope scope, @NotNull ComponentTypeSymbol componentType) {
+    Preconditions.checkNotNull(scope);
+    Preconditions.checkNotNull(componentType);
+    scope.add(componentType);
+    componentType.setEnclosingScope(scope);
+  }
+
+  /**
+   * Adds the component type to the scope and sets the scope as the component type's enclosing scope.
+   *
+   * @param scope the scope to set as enclosing scope
+   * @param componentType the component type to add to the scope
+   */
+  public static void link(@NotNull IArcBasisScope scope, @NotNull ArcComponentTypeSymbol componentType) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(componentType);
     scope.add(componentType);

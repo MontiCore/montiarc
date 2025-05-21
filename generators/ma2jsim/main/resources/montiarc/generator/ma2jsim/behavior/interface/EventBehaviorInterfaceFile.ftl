@@ -6,4 +6,4 @@
     ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-${tc.include("montiarc.generator.ma2jsim.behavior.interface.EventBehaviorInterface.ftl", ast.getComponentType())}
+${tc.include("montiarc.generator.ma2jsim.behavior.interface.EventBehaviorInterface.ftl", ast.getArcComponentType())}

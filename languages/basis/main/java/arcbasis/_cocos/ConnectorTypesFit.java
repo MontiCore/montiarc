@@ -3,7 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
@@ -93,7 +93,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
    * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
    * does not belong to a component type.
    */
-  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+  protected Optional<ArcComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
     if (portAccess.getEnclosingScope() == null) {
       return Optional.empty();
@@ -102,8 +102,8 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
       return Optional.empty();
     }
     IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
-    if (symbol instanceof ComponentTypeSymbol) {
-      return Optional.of((ComponentTypeSymbol) symbol);
+    if (symbol instanceof ArcComponentTypeSymbol) {
+      return Optional.of((ArcComponentTypeSymbol) symbol);
     } else {
       return Optional.empty();
     }

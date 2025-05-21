@@ -2,7 +2,7 @@
 package montiarc._cocos;
 
 import arcbasis._cocos.ArcBasisASTComponentInstanceCoCo;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
@@ -254,7 +254,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);
@@ -385,7 +385,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);
@@ -959,7 +959,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);
@@ -978,7 +978,7 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     checker.checkAll(ast);

@@ -7,14 +7,17 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.json.JsonElement;
+import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.CompKindExpression;
-import de.monticore.types.check.FullCompKindExprDeSer;
+import de.monticore.types.check.CompKindExpressionDeSer;
+import de.monticore.types.check.CompKindOfComponentTypeDeSer;
+import de.monticore.types.check.CompKindOfGenericComponentTypeDeSer;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**
  * Composed DeSerializator of {@link CompKindExpression}s for the ArcBasis language.
  */
-public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
+public class ArcBasisCompTypeExprDeSer extends CompKindExpressionDeSer {
 
   protected TypeExprOfComponentDeSer componentExprDeSer;
 
@@ -26,16 +29,20 @@ public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
   }
 
   @Override
-  public String serializeAsJson(@NotNull CompKindExpression toSerialize) {
+  public String serialize(@NotNull CompKindExpression toSerialize) {
     Preconditions.checkNotNull(toSerialize);
 
     if (toSerialize instanceof TypeExprOfComponent) {
-      return componentExprDeSer.serializeAsJson((TypeExprOfComponent) toSerialize);
+      return componentExprDeSer.serialize((TypeExprOfComponent) toSerialize);
     } else if (toSerialize instanceof TypeExprOfGenericComponent) {
-      return genericComponentExprDeSer.serializeAsJson((TypeExprOfGenericComponent) toSerialize);
-    } else {
-      throw missingDeSerException(toSerialize);
+      return genericComponentExprDeSer.serialize((TypeExprOfGenericComponent) toSerialize);
+    } else if (toSerialize.isComponentType()) {
+      return this.kindOfComponentDeSer.serialize(toSerialize.asComponentType());
+    } else if (toSerialize.isGenericComponentType()) {
+      return this.kindOfGenericComponentDeSer.serialize(toSerialize.asGenericComponentType());
     }
+
+    throw this.missingDeSerException(toSerialize);
   }
 
   @Override
@@ -43,11 +50,22 @@ public class ArcBasisCompTypeExprDeSer implements FullCompKindExprDeSer {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(serialized);
 
-    switch (JsonDeSers.getKind(serialized.getAsJsonObject())) {
-      case TypeExprOfComponentDeSer.SERIALIZED_KIND: return componentExprDeSer.deserialize(scope, serialized.getAsJsonObject());
-      case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND: return genericComponentExprDeSer.deserialize(scope, serialized.getAsJsonObject());
-      default:
-        throw missingDeSerException(serialized.getAsJsonObject());
+    if (!serialized.isJsonObject()) {
+      throw new IllegalArgumentException(serialized.toString());
+    } else {
+      JsonObject serializedCompExpr = serialized.getAsJsonObject();
+      switch (JsonDeSers.getKind(serializedCompExpr)) {
+        case CompKindOfGenericComponentTypeDeSer.SERIALIZED_KIND:
+          return this.kindOfGenericComponentDeSer.deserialize(scope, serializedCompExpr);
+        case CompKindOfComponentTypeDeSer.SERIALIZED_KIND:
+          return this.kindOfComponentDeSer.deserialize(scope, serializedCompExpr);
+        case TypeExprOfComponentDeSer.SERIALIZED_KIND:
+          return componentExprDeSer.deserialize(scope, serialized.getAsJsonObject());
+        case TypeExprOfGenericComponentDeSer.SERIALIZED_KIND:
+          return genericComponentExprDeSer.deserialize(scope, serialized.getAsJsonObject());
+      }
+
+      throw this.missingDeSerException(serializedCompExpr);
     }
   }
 }

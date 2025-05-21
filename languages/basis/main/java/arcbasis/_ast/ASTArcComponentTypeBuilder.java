@@ -9,12 +9,12 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Extends the {@link ASTComponentTypeBuilderTOP} with utility functions for easy constructor of
- * {@link ASTComponentType} nodes.
+ * Extends the {@link ASTArcComponentTypeBuilderTOP} with utility functions for easy constructor of
+ * {@link ASTArcComponentType} nodes.
  */
-public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
+public class ASTArcComponentTypeBuilder extends ASTArcComponentTypeBuilderTOP {
   
-  public ASTComponentTypeBuilder() {
+  public ASTArcComponentTypeBuilder() {
     super();
   }
   
@@ -29,7 +29,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
    * @return this builder
    * @see List#set(int, Object)
    */
-  public ASTComponentTypeBuilder setInstance(int index, String instance) {
+  public ASTArcComponentTypeBuilder setInstance(int index, String instance) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
@@ -45,7 +45,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
    * @param instances names of the instances
    * @return this builder
    */
-  public ASTComponentTypeBuilder setComponentInstanceList(String... instances) {
+  public ASTArcComponentTypeBuilder setComponentInstanceList(String... instances) {
     Preconditions.checkNotNull(instances);
     this.setComponentInstancesList(this.doCreateInstanceList(instances));
     return this.realBuilder;
@@ -60,7 +60,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
    * @return this builder
    * @see List#add(Object)
    */
-  public ASTComponentTypeBuilder addInstance(String instance) {
+  public ASTArcComponentTypeBuilder addInstance(String instance) {
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
     this.addComponentInstance(this.doCreateInstance(instance));
@@ -76,7 +76,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
    * @return this builder
    * @see List#addAll(Collection)
    */
-  public ASTComponentTypeBuilder addAllInstances(String... instances) {
+  public ASTArcComponentTypeBuilder addAllInstances(String... instances) {
     this.addAllComponentInstances(this.doCreateInstanceList(instances));
     return this.realBuilder;
   }
@@ -92,7 +92,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
    * @return this builder
    * @see List#add(int, Object)
    */
-  public ASTComponentTypeBuilder addInstance(int index, String instance) {
+  public ASTArcComponentTypeBuilder addInstance(int index, String instance) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instance);
     Preconditions.checkArgument(!instance.contains("."));
@@ -111,7 +111,7 @@ public class ASTComponentTypeBuilder extends ASTComponentTypeBuilderTOP {
    * @return this builder
    * @see List#addAll(int, Collection)
    */
-  public ASTComponentTypeBuilder addAllInstances(int index, String... instances) {
+  public ASTArcComponentTypeBuilder addAllInstances(int index, String... instances) {
     Preconditions.checkArgument(index >= 0);
     Preconditions.checkNotNull(instances);
     this.addAllComponentInstances(index, this.doCreateInstanceList(instances));

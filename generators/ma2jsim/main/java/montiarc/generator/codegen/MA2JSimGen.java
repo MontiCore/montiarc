@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -115,27 +115,27 @@ public class MA2JSimGen {
     generateBehaviorClasses(ast);
 
     ASTMCQualifiedName innerComponentPackage = ast.isPresentPackage() ? ast.getPackage().deepClone() : MontiArcMill.mCQualifiedNameBuilder().build();
-    innerComponentPackage.addParts(ast.getComponentType().getName());
-    for (ComponentTypeSymbol innerComp : ast.getComponentType().getSymbol().getInnerComponents()) {
-      innerComp.setPackageName(ast.getComponentType().getSymbol().getFullName());
-      generate(MontiArcMill.mACompilationUnitBuilder().setComponentType(innerComp.getAstNode()).setPackage(innerComponentPackage).build());
+    innerComponentPackage.addParts(ast.getArcComponentType().getName());
+    for (ArcComponentTypeSymbol innerComp : ast.getArcComponentType().getSymbol().getInnerComponents()) {
+      innerComp.setPackageName(ast.getArcComponentType().getSymbol().getFullName());
+      generate(MontiArcMill.mACompilationUnitBuilder().setArcComponentType(innerComp.getAstNode()).setPackage(innerComponentPackage).build());
     }
 
-    if (ast.getComponentType().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findAny().isPresent()) {
+    if (ast.getArcComponentType().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findAny().isPresent()) {
       generateContextInterfaceForModeAutomaton(ast);
       generateModeAutomaton(ast);
     }
 
-    if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getComponentType().getSymbol().getParameterList().isEmpty()
-      && helper.getVariants(ast.getComponentType()).size() <= 1
-      && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
+    if (ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()
+      && ast.getArcComponentType().getSymbol().getParameterList().isEmpty()
+      && helper.getVariants(ast.getArcComponentType()).size() <= 1
+      && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
     }
-    if (!ast.getComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getComponentType().getSymbol().getParameterList().isEmpty()
-      && helper.getVariants(ast.getComponentType()).size() <= 1
-      && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
+    if (!ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()
+      && ast.getArcComponentType().getSymbol().getParameterList().isEmpty()
+      && helper.getVariants(ast.getArcComponentType()).size() <= 1
+      && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentMqttDeployment(ast);
       this.generateComponentRestDeployment(ast);
     }
@@ -146,7 +146,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.component.CompilationUnitFile.ftl";
     String suffix = Suffixes.COMP_IMPL;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -157,7 +157,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.component.builder.BuilderFile.ftl";
     String suffix = Suffixes.COMP + Suffixes.BUILDER;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -167,7 +167,7 @@ public class MA2JSimGen {
     Preconditions.checkNotNull(ast);
     final String template = "montiarc.generator.ma2jsim.component.interface.PublicApiFile.ftl";
     String suffix = Suffixes.COMP;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -178,7 +178,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.component.interface.ContextFile.ftl";
     String suffix = Suffixes.CONTEXT;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -189,7 +189,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.behavior.sync.SyncedInputsClass.ftl";
     String suffix = Suffixes.SYNC_MSG;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -200,7 +200,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.behavior.interface.EventBehaviorInterfaceFile.ftl";
     String suffix = Suffixes.EVENTS;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -209,7 +209,7 @@ public class MA2JSimGen {
   protected void generateBehaviorClasses(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
-    List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariants(ast.getComponentType());
+    List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariants(ast.getArcComponentType());
     for (VariableArcVariantComponentTypeSymbol variant : variants) {
 
       // set variant pretty printer
@@ -230,53 +230,53 @@ public class MA2JSimGen {
     this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
   }
 
-  protected void generateAutomatonImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
+  protected void generateAutomatonImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
     final String template = "montiarc.generator.ma2jsim.behavior.automata.AutomatonFile.ftl";
     suffix = Suffixes.AUTOMATON + suffix;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc, variant);
   }
 
-  protected void generateComputeImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
+  protected void generateComputeImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
     final String template = "montiarc.generator.ma2jsim.behavior.compute.ComputeFile.ftl";
     suffix = Suffixes.COMPUTE + suffix;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc, variant);
   }
 
-  protected void generateAutomatonBuilder(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
+  protected void generateAutomatonBuilder(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
     final String template = "montiarc.generator.ma2jsim.behavior.automata.AutomatonBuilderFile.ftl";
     suffix = Suffixes.AUTOMATON + suffix + Suffixes.BUILDER;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc, variant);
   }
 
-  protected void generateStatesClass(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
+  protected void generateStatesClass(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
 
     final String template = "montiarc.generator.ma2jsim.behavior.automata.StatesFile.ftl";
     suffix = Suffixes.STATES + suffix;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc, variant);
@@ -287,7 +287,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.component.modes.ModeAutomatonFile.ftl";
     String suffix = Suffixes.MODE_AUTOMATON;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -298,7 +298,7 @@ public class MA2JSimGen {
 
     final String template = "montiarc.generator.ma2jsim.component.interface.ContextForModesFile.ftl";
     String suffix = Suffixes.CONTEXT_FOR_MODES;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
     generate(template, ast, "", suffix, existsHwc);
@@ -313,10 +313,10 @@ public class MA2JSimGen {
     final String template = "montiarc.generator.ma2jsim.component.Deploy.ftl";
     String suffix = "";
     String prefix = Prefixes.DEPLOY;
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getComponentType()).stream().findFirst().orElse(null));
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
   }
 
   /**
@@ -328,10 +328,10 @@ public class MA2JSimGen {
     final String template = "montiarc.generator.ma2jsim.component.DeployMqtt.ftl";
     String suffix = "";
     String prefix = Prefixes.DEPLOY + "Mqtt";
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getComponentType()).stream().findFirst().orElse(null));
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
   }
 
   /**
@@ -343,17 +343,17 @@ public class MA2JSimGen {
     final String template = "montiarc.generator.ma2jsim.component.DeployRest.ftl";
     String suffix = "";
     String prefix = Prefixes.DEPLOY + "Rest";
-    final boolean existsHwc = existsHWC(ast.getComponentType().getSymbol(), prefix, suffix);
+    final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getComponentType()).stream().findFirst().orElse(null));
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
   }
 
   protected void generate(@NotNull String template, @NotNull ASTMACompilationUnit ast,
                           @NotNull String prefix, @NotNull String suffix, boolean existsHwc, Object... templateArguments) {
     final Path outPath = Paths.get(
       this.getSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(ast.getComponentType().getSymbol(), prefix, suffix).toString()
+      getFileAsPath(ast.getArcComponentType().getSymbol(), prefix, suffix).toString()
     );
 
     this.setup.getGlex().setGlobalValue("isTop", existsHwc);
@@ -365,13 +365,13 @@ public class MA2JSimGen {
       formattedCode = Optional.of(this.getFormatter().formatSource(code));
     } catch (FormatterException e) {
       Log.warn(MASimError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, template, ast.getComponentType().getSymbol().getFullName(), e.getMessage()));
+        outPath, template, ast.getArcComponentType().getSymbol().getFullName(), e.getMessage()));
     }
 
     FileReaderWriter.storeInFile(outPath, formattedCode.orElse(code));
   }
 
-  protected Path getFileAsPath(@NotNull ComponentTypeSymbol comp,
+  protected Path getFileAsPath(@NotNull ArcComponentTypeSymbol comp,
                                @NotNull String prefix,
                                @NotNull String suffix) {
     Preconditions.checkNotNull(comp);
@@ -382,13 +382,13 @@ public class MA2JSimGen {
     return Paths.get(dir, file);
   }
 
-  protected boolean existsHWC(@NotNull ComponentTypeSymbol comp, @NotNull String suffix) {
+  protected boolean existsHWC(@NotNull ArcComponentTypeSymbol comp, @NotNull String suffix) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(suffix);
     return GeneratorEngine.existsHandwrittenClass(this.getSetup().getHandcodedPath(), comp.getFullName() + suffix);
   }
 
-  protected boolean existsHWC(@NotNull ComponentTypeSymbol comp,
+  protected boolean existsHWC(@NotNull ArcComponentTypeSymbol comp,
                               @NotNull String prefix,
                               @NotNull String suffix) {
     Preconditions.checkNotNull(comp);

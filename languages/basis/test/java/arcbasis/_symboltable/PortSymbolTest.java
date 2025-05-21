@@ -3,13 +3,12 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInterface;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortDeclaration;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbolSurrogate;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.monticore.types.check.SymTypeExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -41,7 +40,7 @@ public class PortSymbolTest extends ArcBasisTestBase {
         .build())
       .build();
     ASTComponentInterface portInterface = ArcBasisMill.componentInterfaceBuilder().addPortDeclaration(ports).build();
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType ast = ArcBasisMill.arcComponentTypeBuilder()
       .setName("CompA").setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(portInterface)

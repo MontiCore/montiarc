@@ -3,9 +3,10 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
+import de.monticore.types.check.CompKindCheckResult;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
 import de.se_rwth.commons.logging.Log;
@@ -22,7 +23,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     // Given
     // First build some component type symbols which we refer to with the qualified type
     String normalCompName = "Comp1";
-    ComponentTypeSymbol normalComp = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol normalComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(normalCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -30,19 +31,19 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(normalComp.getSpannedScope());
 
     String qualifiedCompName = "Comp2";
-    ComponentTypeSymbol qualifiedComp = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol qualifiedComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(qualifiedCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     String multipleNormalCompName = "Comp3";
-    ComponentTypeSymbol multipleNormalComp1 = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol multipleNormalComp1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(multipleNormalCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     ArcBasisMill.globalScope().add(multipleNormalComp1);
     ArcBasisMill.globalScope().addSubScope(multipleNormalComp1.getSpannedScope());
-    ComponentTypeSymbol multipleNormalComp2 = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol multipleNormalComp2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(multipleNormalCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -77,9 +78,9 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     astQualComp.setEnclosingScope(ArcBasisMill.globalScope());
     astMultiNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
 
-    SynthCompTypeResult result4normal = new SynthCompTypeResult();
-    SynthCompTypeResult result4qual = new SynthCompTypeResult();
-    SynthCompTypeResult result4multi = new SynthCompTypeResult();
+    CompKindCheckResult result4normal = new CompKindCheckResult();
+    CompKindCheckResult result4qual = new CompKindCheckResult();
+    CompKindCheckResult result4multi = new CompKindCheckResult();
     SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
     SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
     SynthesizeComponentFromMCBasicTypes synth4multi = new SynthesizeComponentFromMCBasicTypes(result4multi);
@@ -131,8 +132,8 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     astNormalComp.setEnclosingScope(ArcBasisMill.globalScope());
     astQualComp.setEnclosingScope(ArcBasisMill.globalScope());
 
-    SynthCompTypeResult result4normal = new SynthCompTypeResult();
-    SynthCompTypeResult result4qual = new SynthCompTypeResult();
+    CompKindCheckResult result4normal = new CompKindCheckResult();
+    CompKindCheckResult result4qual = new CompKindCheckResult();
     SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
     SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
 
@@ -156,7 +157,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
   public void shouldNotHandleVoidType() {
     // Given
     ASTMCVoidType voidType = ArcBasisMill.mCVoidTypeBuilder().build();
-    SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
+    CompKindCheckResult resultWrapper = new CompKindCheckResult();
     SynthesizeComponentFromMCBasicTypes synth = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
 
     // Attach a traverser to the synth, as we do not override the handle method and thus the synth tries to traverse the

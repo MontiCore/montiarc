@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import mceffect._ast.ASTMCEffect;
 import mceffect._parser.MCEffectParser;
@@ -16,8 +16,8 @@ public class EffectAbstractTest {
   protected final String modelPath = "test/resources/mceffect/";
   protected Function<String, Optional<PortSymbol>> portResolver =
       s -> MontiArcMill.globalScope().resolvePort(s);
-  protected Function<String, Optional<ComponentTypeSymbol>> compResolver =
-      s -> MontiArcMill.globalScope().resolveComponentType(s);
+  protected Function<String, Optional<ArcComponentTypeSymbol>> compResolver =
+      s -> MontiArcMill.globalScope().resolveArcComponentType(s);
 
   public ASTMCEffect parseEffect(String path) {
     Optional<ASTMCEffect> ast;

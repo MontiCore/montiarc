@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
@@ -17,10 +17,10 @@ import java.util.Stack;
 /**
  * Checks that for every cycle there is at least one component that is strongly causal modulo a port on this cycle.
  */
-public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
+public class FeedbackStrongCausality implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
@@ -33,7 +33,7 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     }
   }
 
-  protected void check(@NotNull ASTComponentType graph,
+  protected void check(@NotNull ASTArcComponentType graph,
                        @NotNull SubcomponentSymbol next,
                        @NotNull Stack<SubcomponentSymbol> path,
                        @NotNull Set<SubcomponentSymbol> visited) {
@@ -49,7 +49,7 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     visited.add(path.pop());
   }
 
-  protected void check(@NotNull ASTComponentType graph,
+  protected void check(@NotNull ASTArcComponentType graph,
                        @NotNull ASTConnector next,
                        @NotNull Stack<SubcomponentSymbol> path,
                        @NotNull Set<SubcomponentSymbol> visited) {
@@ -65,7 +65,7 @@ public class FeedbackStrongCausality implements ArcBasisASTComponentTypeCoCo {
     }
   }
 
-  protected void check(@NotNull ASTComponentType graph,
+  protected void check(@NotNull ASTArcComponentType graph,
                        @NotNull ASTPortAccess next,
                        @NotNull Stack<SubcomponentSymbol> path,
                        @NotNull Set<SubcomponentSymbol> visited) {

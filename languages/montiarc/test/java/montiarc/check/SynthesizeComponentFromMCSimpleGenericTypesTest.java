@@ -1,11 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.SynthCompTypeResult;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis.check.SynthesizeComponentFromMCSimpleGenericTypes;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.CompKindCheckResult;
 import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.check.SymTypeOfObject;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
@@ -40,7 +41,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     // First, we build OOSymbols for String and List<T> and a ComponentTypeSymbol for Comp<K,V>. We put them in a
     // common sub scope of the global scope.
     String compName = "Comp";
-    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -109,8 +110,8 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     astNormalComp.setEnclosingScope(scopeOfComp);
     astQualComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    SynthCompTypeResult result4normal = new SynthCompTypeResult();
-    SynthCompTypeResult result4qual = new SynthCompTypeResult();
+    CompKindCheckResult result4normal = new CompKindCheckResult();
+    CompKindCheckResult result4qual = new CompKindCheckResult();
     SynthesizeComponentFromMCSimpleGenericTypes synth4normal = new SynthesizeComponentFromMCSimpleGenericTypes(result4normal);
     SynthesizeComponentFromMCSimpleGenericTypes synth4qual = new SynthesizeComponentFromMCSimpleGenericTypes(result4qual);
 
@@ -185,7 +186,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
       astString
     );
 
-    SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
+    CompKindCheckResult resultWrapper = new CompKindCheckResult();
     SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     // When
@@ -201,7 +202,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
   public void shouldHandleMCBasicGenericTypeBecauseTypeArgumentUnresolvable() {
     // Given
     String compName = "Comp";
-    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -224,7 +225,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
       astString
     );
 
-    SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
+    CompKindCheckResult resultWrapper = new CompKindCheckResult();
     SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     // When
@@ -240,7 +241,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
   public void shouldHandleMCBasicGenericTypeBecauseNestedTypeArgumentUnresolvable() {
     // Given
     String compName = "Comp";
-    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -274,7 +275,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
       astListOfString
     );
 
-    SynthCompTypeResult resultWrapper = new SynthCompTypeResult();
+    CompKindCheckResult resultWrapper = new CompKindCheckResult();
     SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
     // When

@@ -19,8 +19,8 @@ public class UniqueVarAssignmentInTransActions implements SCBasisASTSCTransition
       "SCC001 Invalid expression \"%s\" at position %s. Multiple value assigment to a variable(%s) is not allowed";
 
   public UniqueVarAssignmentInTransActions(ASTMACompilationUnit aut) {
-    aut.getComponentType().getPorts().forEach(p -> varNames.add(p.getName()));
-    aut.getComponentType().getFields().forEach(f -> varNames.add(f.getName()));
+    aut.getArcComponentType().getPorts().forEach(p -> varNames.add(p.getName()));
+    aut.getArcComponentType().getFields().forEach(f -> varNames.add(f.getName()));
   }
 
   @Override

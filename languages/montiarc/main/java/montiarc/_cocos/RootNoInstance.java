@@ -19,10 +19,10 @@ public class RootNoInstance implements MontiArcASTMACompilationUnitCoCo {
   public void check(@NotNull ASTMACompilationUnit node) {
     Preconditions.checkNotNull(node);
 
-    if (!node.getComponentType().getComponentInstanceList().isEmpty()) {
+    if (!node.getArcComponentType().getComponentInstanceList().isEmpty()) {
       Log.error(MontiArcError.ROOT_NO_INSTANCE.toString(),
-        node.getComponentType().getComponentInstance(0).get_SourcePositionStart(),
-        node.getComponentType().getComponentInstance(0).get_SourcePositionEnd()
+        node.getArcComponentType().getComponentInstance(0).get_SourcePositionStart(),
+        node.getArcComponentType().getComponentInstance(0).get_SourcePositionEnd()
       );
     }
   }

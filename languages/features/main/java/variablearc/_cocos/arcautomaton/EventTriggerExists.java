@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos.arcautomaton;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc.check.VariableArcTypeCheck;
@@ -16,7 +16,7 @@ public class EventTriggerExists extends arcautomaton._cocos.EventTriggerExists {
 
   @Override
   protected Predicate<SCEventDefSymbol> getSymbolPredicate() {
-    Optional<ComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
+    Optional<ArcComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
     if (variant.isEmpty() || !(variant.get() instanceof VariableArcVariantComponentTypeSymbol)) {
       return v -> true;
     } else {

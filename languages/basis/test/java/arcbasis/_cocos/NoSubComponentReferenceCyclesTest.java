@@ -3,10 +3,10 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -45,16 +45,16 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Provides a component symbol {@link #DUMMY_WITHOUT_CYCLE_NAME}. And adds it to the global scope if it was not in
    * there before.
    */
-  protected static ComponentTypeSymbol provideDummyWithoutCycle() {
-    if(ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITHOUT_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITHOUT_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideDummyWithoutCycle() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITHOUT_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITHOUT_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol dummyWithoutCycle = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol dummyWithoutCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(DUMMY_WITHOUT_CYCLE_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
 
-      ComponentTypeSymbol innerComp = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol innerComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Inner")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -78,12 +78,12 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Builds a component symbol {@link #DUMMY_WITH_CYCLE_NAME} that instantiates a component of type {@link
    * #MODEL_WITH_CYCLE_NAME}. If the built component type was not in the global scope before, it is added to it.
    */
-  protected static ComponentTypeSymbol provideDummyWithCycle() {
-    if(ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideDummyWithCycle() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
-      ComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
+      ArcComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
+      ArcComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
 
       dummyWithCycle.getSubcomponents("sub").orElseThrow().setType(new TypeExprOfComponent(modelWithCycle));
       modelWithCycle.getSubcomponents("dummy").orElseThrow().setType(new TypeExprOfComponent(dummyWithCycle));
@@ -96,11 +96,11 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * not set yet, but should be of type {@link #MODEL_WITH_CYCLE_NAME}. If the built component symbol was not in the
    * global scope before, it is added to it.
    */
-  protected static ComponentTypeSymbol provideDummyWithCycle_unlinked() {
-    if(ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideDummyWithCycle_unlinked() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol dummyWithCycle = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol dummyWithCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(DUMMY_WITH_CYCLE_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -122,12 +122,12 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * {@link #MODEL_WITH_NESTED_CYCLE_NAME}. The built symbol is added to the global scope, if it wasn't contained in
    * there already.
    */
-  protected static ComponentTypeSymbol provideDummyWithNestedCycle() {
-    if(ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideDummyWithNestedCycle() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol dummyWithNestedCycle = provideDummyWithNestedCycle_unlinked();
-      ComponentTypeSymbol modelWithNestedCycle = provideModelWithNestedCycle_unlinked();
+      ArcComponentTypeSymbol dummyWithNestedCycle = provideDummyWithNestedCycle_unlinked();
+      ArcComponentTypeSymbol modelWithNestedCycle = provideModelWithNestedCycle_unlinked();
 
       dummyWithNestedCycle.getInnerComponent("Sub1").orElseThrow()
         .getInnerComponent("Sub2").orElseThrow()
@@ -147,7 +147,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * not set yet. You should set this type to the component type {@link #MODEL_WITH_NESTED_CYCLE_NAME} after this
    * method. The built symbol is added to the global scope, if it wasn't contained in there already.
    */
-  protected static ComponentTypeSymbol provideDummyWithNestedCycle_unlinked() {
+  protected static ArcComponentTypeSymbol provideDummyWithNestedCycle_unlinked() {
     /*
      * We build:
      * component DummyWithNestedCycle {
@@ -161,29 +161,29 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
      * }
      */
 
-    if(ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).get();
+    if(ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(DUMMY_WITH_NESTED_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol dummyWithNestedCycle = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol dummyWithNestedCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(DUMMY_WITH_NESTED_CYCLE_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
 
-      ComponentTypeSymbol subType1 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol subType1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Sub1")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
       dummyWithNestedCycle.getSpannedScope().add(subType1);
       dummyWithNestedCycle.getSpannedScope().addSubScope(subType1.getSpannedScope());
 
-      ComponentTypeSymbol subType2 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol subType2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Sub2")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
       subType1.getSpannedScope().add(subType2);
       subType1.getSpannedScope().addSubScope(subType2.getSpannedScope());
 
-      ComponentTypeSymbol subType3 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol subType3 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Sub3")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -224,13 +224,13 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Provides a component symbol {@link #MODEL_LONG_CYCLE_1_NAME} that has a component instance of type
    * {@link #MODEL_LONG_CYCLE_2_NAME}. If the built symbol does not yet exist in the global scope, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelLongCycle1() {
-    if (ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_1_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_1_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelLongCycle1() {
+    if (ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_1_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_1_NAME).get();
     } else {
-      ComponentTypeSymbol longCycleComp1 = provideModelLongCycle1_unlinked();
-      ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
-      ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
+      ArcComponentTypeSymbol longCycleComp1 = provideModelLongCycle1_unlinked();
+      ArcComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
+      ArcComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
       longCycleComp1.getSubcomponents("lc2").orElseThrow().setType(new TypeExprOfComponent(longCycleComp2));
       longCycleComp2.getSubcomponents("lc3").orElseThrow().setType(new TypeExprOfComponent(longCycleComp3));
@@ -245,11 +245,11 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * has been set yet. This type should be set to component type {@link #MODEL_LONG_CYCLE_2_NAME} after this method
    * call. If the built symbol does not yet exist in the global scope, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelLongCycle1_unlinked() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_1_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_1_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelLongCycle1_unlinked() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_1_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_1_NAME).get();
     } else {
-      ComponentTypeSymbol longCycleType1 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol longCycleType1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(MODEL_LONG_CYCLE_1_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -260,7 +260,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
       longCycleType1.getSpannedScope().add(innerCompInst);
 
       longCycleType1.setAstNode(
-        ArcBasisMill.componentTypeBuilder()
+        ArcBasisMill.arcComponentTypeBuilder()
           .setName(MODEL_LONG_CYCLE_1_NAME)
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
@@ -279,13 +279,13 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Provides a component symbol {@link #MODEL_LONG_CYCLE_2_NAME} that has a component instance of type
    * {@link #MODEL_LONG_CYCLE_3_NAME}. If the built symbol does not yet exist in the global scope, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelLongCycle2() {
-    if (ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_2_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_2_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelLongCycle2() {
+    if (ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_2_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_2_NAME).get();
     } else {
-      ComponentTypeSymbol longCycleComp1 = provideModelLongCycle1_unlinked();
-      ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
-      ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
+      ArcComponentTypeSymbol longCycleComp1 = provideModelLongCycle1_unlinked();
+      ArcComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
+      ArcComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
       longCycleComp1.getSubcomponents("lc2").orElseThrow().setType(new TypeExprOfComponent(longCycleComp2));
       longCycleComp2.getSubcomponents("lc3").orElseThrow().setType(new TypeExprOfComponent(longCycleComp3));
@@ -300,11 +300,11 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * has been set yet. This type should be set to component type {@link #MODEL_LONG_CYCLE_3_NAME} after this method
    * call. If the built symbol does not yet exist in the global scope, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelLongCycle2_unlinked() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_2_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_2_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelLongCycle2_unlinked() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_2_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_2_NAME).get();
     } else {
-      ComponentTypeSymbol longCycleType2 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol longCycleType2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(MODEL_LONG_CYCLE_2_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -315,7 +315,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
       longCycleType2.getSpannedScope().add(innerCompInst);
 
       longCycleType2.setAstNode(
-        ArcBasisMill.componentTypeBuilder()
+        ArcBasisMill.arcComponentTypeBuilder()
           .setName(MODEL_LONG_CYCLE_2_NAME)
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
@@ -334,13 +334,13 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Provides a component symbol {@link #MODEL_LONG_CYCLE_3_NAME} that has a component instance of type
    * {@link #MODEL_LONG_CYCLE_1_NAME}. If the built symbol does not yet exist in the global scope, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelLongCycle3() {
-    if (ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_3_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_3_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelLongCycle3() {
+    if (ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_3_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_3_NAME).get();
     } else {
-      ComponentTypeSymbol longCycleComp1 = provideModelLongCycle1_unlinked();
-      ComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
-      ComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
+      ArcComponentTypeSymbol longCycleComp1 = provideModelLongCycle1_unlinked();
+      ArcComponentTypeSymbol longCycleComp2 = provideModelLongCycle2_unlinked();
+      ArcComponentTypeSymbol longCycleComp3 = provideModelLongCycle3_unlinked();
 
       longCycleComp1.getSubcomponents("lc2").orElseThrow().setType(new TypeExprOfComponent(longCycleComp2));
       longCycleComp2.getSubcomponents("lc3").orElseThrow().setType(new TypeExprOfComponent(longCycleComp3));
@@ -355,11 +355,11 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * has been set yet. This type should be set to component type {@link #MODEL_LONG_CYCLE_1_NAME} after this method
    * call. If the built symbol does not yet exist in the global scope, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelLongCycle3_unlinked() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_3_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_LONG_CYCLE_3_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelLongCycle3_unlinked() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_3_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_LONG_CYCLE_3_NAME).get();
     } else {
-      ComponentTypeSymbol longCycleType3 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol longCycleType3 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(MODEL_LONG_CYCLE_3_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -370,7 +370,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
       longCycleType3.getSpannedScope().add(innerCompInst);
 
       longCycleType3.setAstNode(
-        ArcBasisMill.componentTypeBuilder()
+        ArcBasisMill.arcComponentTypeBuilder()
           .setName(MODEL_LONG_CYCLE_3_NAME)
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
@@ -390,7 +390,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * {@link #DUMMY_WITHOUT_CYCLE_NAME}. If the created component symbol was not in the global scope before, it is added
    * to it.
    */
-  protected static ComponentTypeSymbol provideModelWithoutCycle() {
+  protected static ArcComponentTypeSymbol provideModelWithoutCycle() {
     /*
       we build:
       component WithoutCycle {
@@ -399,13 +399,13 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
         DummyWithoutCycle du1;
       }
      */
-    ComponentTypeSymbol modelWithoutCycle = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol modelWithoutCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(MODEL_WITHOUT_CYCLE_NAME)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     modelWithoutCycle.setAstNode(
-      ArcBasisMill.componentTypeBuilder()
+      ArcBasisMill.arcComponentTypeBuilder()
         .setName(MODEL_WITHOUT_CYCLE_NAME)
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
@@ -413,7 +413,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
     );
     modelWithoutCycle.getAstNode().setSymbol(modelWithoutCycle);
 
-    ComponentTypeSymbol fooComp = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol fooComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Foo")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -448,16 +448,16 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Provides a component symbol {@link #MODEL_WITH_DIRECT_SELF_REF_NAME} and adds it to the global scope if the global
    * scope did not contain it before.
    */
-  protected static ComponentTypeSymbol provideModelWithDirectSelfReference() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_DIRECT_SELF_REF_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_DIRECT_SELF_REF_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelWithDirectSelfReference() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_DIRECT_SELF_REF_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_DIRECT_SELF_REF_NAME).get();
     } else {
-      ComponentTypeSymbol modelWithSelfRef = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol modelWithSelfRef = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(MODEL_WITH_DIRECT_SELF_REF_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
       modelWithSelfRef.setAstNode(
-        ArcBasisMill.componentTypeBuilder()
+        ArcBasisMill.arcComponentTypeBuilder()
           .setName(MODEL_WITH_DIRECT_SELF_REF_NAME)
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
@@ -482,12 +482,12 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * Provides a component symbol {@link #MODEL_WITH_CYCLE_NAME} that instantiates a component of type {@link
    * #DUMMY_WITH_CYCLE_NAME}. If the built component symbol did not exist in the global scope before, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelWithCycle() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelWithCycle() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
-      ComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
+      ArcComponentTypeSymbol modelWithCycle = provideModelWithCycle_unlinked();
+      ArcComponentTypeSymbol dummyWithCycle = provideDummyWithCycle_unlinked();
 
       modelWithCycle.getSubcomponents("dummy").orElseThrow().setType(new TypeExprOfComponent(dummyWithCycle));
       dummyWithCycle.getSubcomponents("sub").orElseThrow().setType(new TypeExprOfComponent(modelWithCycle));
@@ -500,17 +500,17 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * not yet been set. It should be set to {@link #DUMMY_WITH_CYCLE_NAME} after this method call. If the built component
    * symbol did not exist in the global scope before, it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelWithCycle_unlinked() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelWithCycle_unlinked() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol modelWithCycle = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol modelWithCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(MODEL_WITH_CYCLE_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
 
       modelWithCycle.setAstNode(
-        ArcBasisMill.componentTypeBuilder()
+        ArcBasisMill.arcComponentTypeBuilder()
           .setName(MODEL_WITH_CYCLE_NAME)
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
@@ -535,12 +535,12 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * has is {@link #DUMMY_WITH_NESTED_CYCLE_NAME}. If the built component symbol was not in the global scope already,
    * it is added to it.
    */
-  protected static ComponentTypeSymbol provideModelWithNestedCycle() {
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_NESTED_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_NESTED_CYCLE_NAME).get();
+  protected static ArcComponentTypeSymbol provideModelWithNestedCycle() {
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_NESTED_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_NESTED_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol modelWithNestedCycle = provideModelWithNestedCycle_unlinked();
-      ComponentTypeSymbol dummyWithNestedCycle = provideDummyWithNestedCycle_unlinked();
+      ArcComponentTypeSymbol modelWithNestedCycle = provideModelWithNestedCycle_unlinked();
+      ArcComponentTypeSymbol dummyWithNestedCycle = provideDummyWithNestedCycle_unlinked();
 
       modelWithNestedCycle.getInnerComponent("Sub1").orElseThrow()
         .getInnerComponent("Sub2").orElseThrow()
@@ -561,7 +561,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * {@link #DUMMY_WITH_NESTED_CYCLE_NAME}. If the built component symbol was not in the global scope already, it is
    * added to it.
    */
-  protected static ComponentTypeSymbol provideModelWithNestedCycle_unlinked() {
+  protected static ArcComponentTypeSymbol provideModelWithNestedCycle_unlinked() {
     /*
      * We build:
      * component WithNestedCycle {
@@ -575,16 +575,16 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
      * }
      */
 
-    if(ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_NESTED_CYCLE_NAME).isPresent()) {
-      return ArcBasisMill.globalScope().resolveComponentType(MODEL_WITH_NESTED_CYCLE_NAME).get();
+    if(ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_NESTED_CYCLE_NAME).isPresent()) {
+      return ArcBasisMill.globalScope().resolveArcComponentType(MODEL_WITH_NESTED_CYCLE_NAME).get();
     } else {
-      ComponentTypeSymbol modelWithNestedCycle = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol modelWithNestedCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName(MODEL_WITH_NESTED_CYCLE_NAME)
         .setSpannedScope(ArcBasisMill.scope())
         .build();
 
       modelWithNestedCycle.setAstNode(
-        ArcBasisMill.componentTypeBuilder()
+        ArcBasisMill.arcComponentTypeBuilder()
           .setName(MODEL_WITH_NESTED_CYCLE_NAME)
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
@@ -592,21 +592,21 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
       );
       modelWithNestedCycle.getAstNode().setSymbol(modelWithNestedCycle);
 
-      ComponentTypeSymbol subType1 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol subType1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Sub1")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
       modelWithNestedCycle.getSpannedScope().add(subType1);
       modelWithNestedCycle.getSpannedScope().addSubScope(subType1.getSpannedScope());
 
-      ComponentTypeSymbol subType2 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol subType2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Sub2")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
       subType1.getSpannedScope().add(subType2);
       subType1.getSpannedScope().addSubScope(subType2.getSpannedScope());
 
-      ComponentTypeSymbol subType3 = ArcBasisMill.componentTypeSymbolBuilder()
+      ArcComponentTypeSymbol subType3 = ArcBasisMill.arcComponentTypeSymbolBuilder()
         .setName("Sub3")
         .setSpannedScope(ArcBasisMill.scope())
         .build();
@@ -651,7 +651,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
    * also fail, which would result in endless error messages. The created component symbol is added to the global scope
    * in case it was not in there before.
    */
-  protected static ComponentTypeSymbol provideModelWithSelfNestedCycle() {
+  protected static ArcComponentTypeSymbol provideModelWithSelfNestedCycle() {
     /*
      * We build:
      * component WithSelfNestedCycle {
@@ -665,13 +665,13 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
      * }
      */
 
-    ComponentTypeSymbol modelWithNestedCycle = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol modelWithNestedCycle = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(MODEL_WITH_SELF_NESTED_CYCLE_NAME)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     modelWithNestedCycle.setAstNode(
-      ArcBasisMill.componentTypeBuilder()
+      ArcBasisMill.arcComponentTypeBuilder()
         .setName(MODEL_WITH_SELF_NESTED_CYCLE_NAME)
         .setHead(Mockito.mock(ASTComponentHead.class))
         .setBody(Mockito.mock(ASTComponentBody.class))
@@ -679,21 +679,21 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
     );
     modelWithNestedCycle.getAstNode().setSymbol(modelWithNestedCycle);
 
-    ComponentTypeSymbol subType1 = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol subType1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Sub1")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     modelWithNestedCycle.getSpannedScope().add(subType1);
     modelWithNestedCycle.getSpannedScope().addSubScope(subType1.getSpannedScope());
 
-    ComponentTypeSymbol subType2 = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol subType2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Sub2")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     subType1.getSpannedScope().add(subType2);
     subType1.getSpannedScope().addSubScope(subType2.getSpannedScope());
 
-    ComponentTypeSymbol subType3 = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol subType3 = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Sub3")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -733,10 +733,10 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
   @Test
   public void shouldNotFindCycle() {
     // Given
-    ComponentTypeSymbol compSym = provideModelWithoutCycle();
+    ArcComponentTypeSymbol compSym = provideModelWithoutCycle();
 
     Preconditions.checkState(compSym.isPresentAstNode());
-    ASTComponentType comp = compSym.getAstNode();
+    ASTArcComponentType comp = compSym.getAstNode();
 
     // When
     NoSubcomponentReferenceCycle coco = new NoSubcomponentReferenceCycle();
@@ -748,16 +748,16 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
 
   protected static Stream<Arguments> invalidModelsAndErrorProvider() {
     return Stream.of(
-      Arguments.arguments(provideModelWithCycle(), new ComponentTypeSymbol[]{provideDummyWithCycle()},
+      Arguments.arguments(provideModelWithCycle(), new ArcComponentTypeSymbol[]{provideDummyWithCycle()},
         new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
-      Arguments.arguments(provideModelWithDirectSelfReference(), new ComponentTypeSymbol[]{},
+      Arguments.arguments(provideModelWithDirectSelfReference(), new ArcComponentTypeSymbol[]{},
         new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
       Arguments.arguments(provideModelLongCycle1(),
-        new ComponentTypeSymbol[]{provideModelLongCycle2(), provideModelLongCycle3()},
+        new ArcComponentTypeSymbol[]{provideModelLongCycle2(), provideModelLongCycle3()},
         new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
-      Arguments.arguments(provideModelWithNestedCycle(), new ComponentTypeSymbol[]{provideDummyWithNestedCycle()},
+      Arguments.arguments(provideModelWithNestedCycle(), new ArcComponentTypeSymbol[]{provideDummyWithNestedCycle()},
         new ArcError[]{ArcError.SUBCOMPONENT_REFERENCE_CYCLE}),
-      Arguments.arguments(provideModelWithSelfNestedCycle(), new ComponentTypeSymbol[]{},
+      Arguments.arguments(provideModelWithSelfNestedCycle(), new ArcComponentTypeSymbol[]{},
         new ArcError[0])
 
     );
@@ -766,8 +766,8 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("invalidModelsAndErrorProvider")
   public void shouldFindCycle(
-    @NotNull ComponentTypeSymbol compToTest,
-    @NotNull ComponentTypeSymbol[] contextComponents,
+    @NotNull ArcComponentTypeSymbol compToTest,
+    @NotNull ArcComponentTypeSymbol[] contextComponents,
     @NotNull ArcError... expectedErrors) {
     Preconditions.checkNotNull(contextComponents);
     Preconditions.checkNotNull(expectedErrors);
@@ -775,7 +775,7 @@ public class NoSubComponentReferenceCyclesTest extends ArcBasisTestBase {
     Preconditions.checkArgument(compToTest.isPresentAstNode());
 
     // Given
-    ASTComponentType astComp = compToTest.getAstNode();
+    ASTArcComponentType astComp = compToTest.getAstNode();
 
     // When
     NoSubcomponentReferenceCycle coco = new NoSubcomponentReferenceCycle();

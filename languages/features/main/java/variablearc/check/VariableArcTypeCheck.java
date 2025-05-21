@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.ArcBasisTypeCheck;
 import arcbasis.check.ArcBasisTypeContextCalculator;
@@ -28,14 +28,14 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
   
   private static final String LOG_NAME = VariableArcTypeCheck.class.getSimpleName();
 
-  private static ComponentTypeSymbol currentVariant;
+  private static ArcComponentTypeSymbol currentVariant;
 
-  public static void setCurrentVariant(@Nullable ComponentTypeSymbol variant) {
+  public static void setCurrentVariant(@Nullable ArcComponentTypeSymbol variant) {
     Log.trace(() -> "Switch the context of the type-check", LOG_NAME);
     currentVariant = variant;
   }
 
-  public static Optional<ComponentTypeSymbol> getCurrentVariant() {
+  public static Optional<ArcComponentTypeSymbol> getCurrentVariant() {
     return Optional.ofNullable(currentVariant);
   }
 

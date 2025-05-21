@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -111,32 +111,32 @@ public class MontiArcGenerator {
       engineSetup.getGlex()
         .replaceTemplate("ma2java.component.Transition.ftl", new TemplateHookPoint("ma2java.dse.Transition-dse.ftl"));
 
-      this.generateComponentDse(ast.getComponentType());
+      this.generateComponentDse(ast.getArcComponentType());
     }
 
     final String template = "ma2java.component.CompilationUnit.ftl";
-    final boolean existsHwc = existsHandWrittenCodeFor(ast.getComponentType().getSymbol(), COMPONENT_ADDENDUM);
+    final boolean existsHwc = existsHandWrittenCodeFor(ast.getArcComponentType().getSymbol(), COMPONENT_ADDENDUM);
     final String usedAddendum = existsHwc ? COMPONENT_ADDENDUM + "TOP" : COMPONENT_ADDENDUM;
     final Path outPath = Paths.get(
       this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
-      getFileAsPath(ast.getComponentType().getSymbol(), usedAddendum).toString()
+      getFileAsPath(ast.getArcComponentType().getSymbol(), usedAddendum).toString()
     );
 
     String code = getEngine().generateNoA(template, ast, existsHwc).toString();
 
-    formatFile(code, outPath, template, ast.getComponentType());
+    formatFile(code, outPath, template, ast.getArcComponentType());
 
-    if (ast.getComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getComponentType().getSymbol().getParameterList().isEmpty()
-      && ast.getComponentType().getSymbol().getTypeParameters().isEmpty()) {
-      this.generateComponentDeployment(ast.getComponentType());
+    if (ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()
+      && ast.getArcComponentType().getSymbol().getParameterList().isEmpty()
+      && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
+      this.generateComponentDeployment(ast.getArcComponentType());
     }
   }
 
   /**
    * Generates a component deployment class that regularly executes {@code comp}
    */
-  protected void generateComponentDeployment(@NotNull ASTComponentType comp) {
+  protected void generateComponentDeployment(@NotNull ASTArcComponentType comp) {
     final String templateName = "ma2java.component.Deploy.ftl";
     final boolean existsHwc = existsHandWrittenCodeFor(comp.getSymbol(), "Deploy", "");
     final String addendum = existsHwc ? "TOP" : "";
@@ -154,7 +154,7 @@ public class MontiArcGenerator {
    *
    * @param comp
    */
-  protected void generateComponentDse(@NotNull ASTComponentType comp) {
+  protected void generateComponentDse(@NotNull ASTArcComponentType comp) {
 
     String[] templateNames = new String[]{"ma2java.dse.tool.DSEMain.ftl", "ma2java.dse.tool.DSE" +
       ".ftl"};
@@ -175,14 +175,14 @@ public class MontiArcGenerator {
     }
   }
 
-  protected Path getFileAsPath(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
+  protected Path getFileAsPath(@NotNull ArcComponentTypeSymbol comp, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(addendum);
     return this.getFileAsPath(comp, "", addendum);
   }
 
   protected Path getFileAsPath(
-    @NotNull ComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
+    @NotNull ArcComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(addendum);
@@ -191,7 +191,7 @@ public class MontiArcGenerator {
         + "/" + prefix + comp.getName() + addendum + FILE_EXTENSION);
   }
 
-  protected boolean existsHandWrittenCodeFor(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
+  protected boolean existsHandWrittenCodeFor(@NotNull ArcComponentTypeSymbol comp, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(addendum);
 
@@ -199,7 +199,7 @@ public class MontiArcGenerator {
   }
 
   protected boolean existsHandWrittenCodeFor(
-    @NotNull ComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
+    @NotNull ArcComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(addendum);
@@ -218,7 +218,7 @@ public class MontiArcGenerator {
   public void generateMain(@NotNull ASTMACompilationUnit ast, List<String> names,
                            List<String> imports) {
 
-    ASTComponentType comp = ast.getComponentType();
+    ASTArcComponentType comp = ast.getArcComponentType();
     final String templateName = "ma2java.dse.tool.Main.ftl";
 
     final Path outPath = Paths.get(
@@ -244,7 +244,7 @@ public class MontiArcGenerator {
   /**
    * Helper function to generate extra classes
    */
-  public void generateDseFile(@NotNull ASTComponentType comp, String templateName,
+  public void generateDseFile(@NotNull ASTArcComponentType comp, String templateName,
                               String prefixName, String listerType) {
 
     final boolean existsHwc = existsHandWrittenCodeFor(comp.getSymbol(), prefixName, "");
@@ -258,7 +258,7 @@ public class MontiArcGenerator {
     formatFile(generatedCode, outPath, templateName, comp);
   }
 
-  protected Path getCodePath(@NotNull ASTComponentType comp, String prefixName, String addendum) {
+  protected Path getCodePath(@NotNull ASTArcComponentType comp, String prefixName, String addendum) {
     return Paths.get(
       this.getEngineSetup().getOutputDirectory().getAbsolutePath(),
       getFileAsPath(comp.getSymbol(), prefixName, addendum).toString()
@@ -269,7 +269,7 @@ public class MontiArcGenerator {
    * Helper function to format the generated Code
    */
   protected void formatFile(String generatedCode, Path outPath, String templateName,
-                            @NotNull ASTComponentType comp) {
+                            @NotNull ASTArcComponentType comp) {
     Optional<String> formattedCode = Optional.empty();
 
     try {

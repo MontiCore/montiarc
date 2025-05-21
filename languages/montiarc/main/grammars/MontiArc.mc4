@@ -48,7 +48,7 @@ grammar MontiArc extends
   MACompilationUnit =
     ("package" package:MCQualifiedName ";")?
     importStatement:MCImportStatement*
-    ComponentType
+    ArcComponentType
   ;
 
 }

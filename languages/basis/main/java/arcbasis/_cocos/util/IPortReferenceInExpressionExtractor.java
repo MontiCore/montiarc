@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos.util;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.SourcePosition;

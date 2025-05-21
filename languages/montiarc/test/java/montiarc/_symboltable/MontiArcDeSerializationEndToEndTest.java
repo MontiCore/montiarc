@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
@@ -44,7 +44,7 @@ class MontiArcDeSerializationEndToEndTest extends MontiArcTestBase {
     final ASTMACompilationUnit ast = compile(paramModel);
     final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     final String json = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());
@@ -185,7 +185,7 @@ class MontiArcDeSerializationEndToEndTest extends MontiArcTestBase {
     final ASTMACompilationUnit ast = compile(paramModel);
     final MontiArcSymbols2Json s2j = new MontiArcSymbols2Json();
     final MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTComponentTypeCoCo) new ConfigurationParameterAssignment());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
 
     // When
     final String json = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());

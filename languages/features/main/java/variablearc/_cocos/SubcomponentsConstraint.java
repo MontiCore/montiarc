@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._ast.ASTArcComponentType;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.BoolSort;
@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
  * 2. Add constraint that at least one feature of the new feature has to be different from its original feature (x.f != x.f__dup__ || ...)
  * 3. If the new formula has a solution at least one subcomponents' feature can have multiple values independent of the component's feature assignment -> Error
  */
-public class SubcomponentsConstraint implements ArcBasisASTComponentTypeCoCo {
+public class SubcomponentsConstraint implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     if (!(node.getSymbol() instanceof IVariableArcComponentTypeSymbol)) return;

@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.sort;
 
-
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Constructor;
 import com.microsoft.z3.Context;
@@ -26,7 +25,7 @@ public class InputSort implements SMTSort<PortSymbol, PortSymbol> {
   private final DatatypeSort<?> sort;
 
   public InputSort(
-          ASTComponentType comp, CD2SMT cd2SMT, Context ctx, Function<String, String> ident) {
+          ASTArcComponentType comp, CD2SMT cd2SMT, Context ctx, Function<String, String> ident) {
 
     // make a constructor for each incoming port
     for (PortSymbol port : AutomataUtils.getInPorts(comp)) {

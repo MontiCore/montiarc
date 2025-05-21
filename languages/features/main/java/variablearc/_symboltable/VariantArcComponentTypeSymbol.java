@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
  * An abstract component variant implementation.
  * Can be used as a starting point for implementing custom variants (e.g. {@link VariableArcVariantComponentTypeSymbol}).
  */
-public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
+public abstract class VariantArcComponentTypeSymbol extends ArcComponentTypeSymbol {
 
-  protected ComponentTypeSymbol typeSymbol;
+  protected ArcComponentTypeSymbol typeSymbol;
   protected Map<PortSymbol, VariantPortSymbol> portSymbolMap;
 
-  protected VariantComponentTypeSymbol(@NotNull ComponentTypeSymbol typeSymbol) {
+  protected VariantArcComponentTypeSymbol(@NotNull ArcComponentTypeSymbol typeSymbol) {
     super(typeSymbol.getName());
     Preconditions.checkNotNull(typeSymbol);
     this.typeSymbol = typeSymbol;
@@ -88,7 +88,7 @@ public abstract class VariantComponentTypeSymbol extends ComponentTypeSymbol {
     return typeSymbol.getFullName();
   }
 
-  public ComponentTypeSymbol getAdaptee() {
+  public ArcComponentTypeSymbol getAdaptee() {
     return this.typeSymbol;
   }
 }

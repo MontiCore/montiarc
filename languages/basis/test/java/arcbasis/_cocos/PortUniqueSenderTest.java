@@ -3,8 +3,8 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
 import montiarc.util.ArcError;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,7 +22,7 @@ public class PortUniqueSenderTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
-  public void shouldDetectMultipleConnectedTarget(ASTComponentType ast, ArcError[] errors) {
+  public void shouldDetectMultipleConnectedTarget(ASTArcComponentType ast, ArcError[] errors) {
     PortUniqueSender coco = new PortUniqueSender();
     coco.check(ast);
     assertThat(getLoggedErrorCodes())
@@ -30,7 +30,7 @@ public class PortUniqueSenderTest extends ArcBasisTestBase {
   }
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
-    ASTComponentType comp1 = ArcBasisMill. componentTypeBuilder().setName("Comp1")
+    ASTArcComponentType comp1 = ArcBasisMill.arcComponentTypeBuilder().setName("Comp1")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o1").build())
@@ -38,7 +38,7 @@ public class PortUniqueSenderTest extends ArcBasisTestBase {
         .build())
       .build();
     ArcError[] errors1 = new ArcError[] { ArcError.PORT_MULTIPLE_SENDER};
-    ASTComponentType comp2 = ArcBasisMill. componentTypeBuilder().setName("Comp2")
+    ASTArcComponentType comp2 = ArcBasisMill.arcComponentTypeBuilder().setName("Comp2")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o2").build())
@@ -46,7 +46,7 @@ public class PortUniqueSenderTest extends ArcBasisTestBase {
         .build())
       .build();
     ArcError[] errors2 = new ArcError[] { ArcError.PORT_MULTIPLE_SENDER};
-    ASTComponentType comp3 = ArcBasisMill. componentTypeBuilder().setName("Comp3")
+    ASTArcComponentType comp3 = ArcBasisMill.arcComponentTypeBuilder().setName("Comp3")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o1").build())
@@ -55,7 +55,7 @@ public class PortUniqueSenderTest extends ArcBasisTestBase {
         .build())
       .build();
     ArcError[] errors3 = new ArcError[] { ArcError.PORT_MULTIPLE_SENDER};
-    ASTComponentType comp4 = ArcBasisMill. componentTypeBuilder().setName("Comp4")
+    ASTArcComponentType comp4 = ArcBasisMill.arcComponentTypeBuilder().setName("Comp4")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.connectorBuilder().setSource("i1").setTargetList("o1").build())

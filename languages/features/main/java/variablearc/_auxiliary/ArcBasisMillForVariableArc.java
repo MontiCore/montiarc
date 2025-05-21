@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._auxiliary;
 
-import arcbasis._symboltable.ComponentTypeSymbolBuilder;
+import arcbasis._symboltable.ArcComponentTypeSymbolBuilder;
 import variablearc._symboltable.VariableArcComponentTypeSymbolBuilder;
 
 public class ArcBasisMillForVariableArc extends ArcBasisMillForVariableArcTOP {
 
   @Override
-  protected ComponentTypeSymbolBuilder _componentTypeSymbolBuilder() {
+  protected ArcComponentTypeSymbolBuilder _arcComponentTypeSymbolBuilder() {
     return new VariableArcComponentTypeSymbolBuilder();
   }
 }

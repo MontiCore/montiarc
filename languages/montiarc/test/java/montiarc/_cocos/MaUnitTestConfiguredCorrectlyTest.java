@@ -1,18 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
-import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
-import de.monticore.types.mccollectiontypes.MCCollectionTypesMill;
-import de.monticore.types.mccollectiontypes.types3.util.MCCollectionSymTypeFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -197,7 +194,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void shouldNotFindAnythingWithNoTestStereotypes() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder()
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder()
       .setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder()
         .addValues(MontiArcMill.stereoValueBuilder()
@@ -212,7 +209,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()).
         build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
 
     // When
     new MaUnitTestConfiguredCorrectly().check(comp);
@@ -224,7 +221,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void missingParameterStereotypeWithDefaultValue() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
           MontiArcMill.stereoValueBuilder().setName("test").build(),
           MontiArcMill.stereoValueBuilder().setName("s").build()))
@@ -236,7 +233,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build())
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -252,7 +249,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void correctAssignment() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
         MontiArcMill.stereoValueBuilder().setName("test").build(),
         MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(1)).build(),
@@ -263,7 +260,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build())
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -279,7 +276,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void combineListAndSingleValueAssignment() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
           MontiArcMill.stereoValueBuilder().setName("test").build(),
           MontiArcMill.stereoValueBuilder()
@@ -294,7 +291,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
             .setName("p2").setMCType(Mockito.mock(ASTMCType.class)).build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p1")
@@ -314,7 +311,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void missingParameterStereotype() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
           MontiArcMill.stereoValueBuilder().setName("test").build(),
           MontiArcMill.stereoValueBuilder().setName("s").build()))
@@ -326,7 +323,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -342,7 +339,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void tooManyStereotypesForParameter() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
         MontiArcMill.stereoValueBuilder().setName("test").build(),
         MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(5)).build(),
@@ -354,7 +351,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -370,7 +367,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void wrongType() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
         MontiArcMill.stereoValueBuilder().setName("test").build(),
         MontiArcMill.stereoValueBuilder().setName("p").setExpression(getIntLiteral(5)).build(),
@@ -381,7 +378,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -397,7 +394,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
   @Test
   void mismatchedListValueCount() {
     // Given
-    ASTComponentType comp = MontiArcMill.componentTypeBuilder().setName("A")
+    ASTArcComponentType comp = MontiArcMill.arcComponentTypeBuilder().setName("A")
       .setStereotype(MontiArcMill.stereotypeBuilder().setValuesList(List.of(
           MontiArcMill.stereoValueBuilder().setName("test").build(),
           MontiArcMill.stereoValueBuilder().setName("p1")
@@ -412,7 +409,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .setName("p2").setMCType(Mockito.mock(ASTMCType.class)).build()
       )).build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder().setName("p1")
         .setType(SymTypeExpressionFactory.createPrimitive("int")).build());

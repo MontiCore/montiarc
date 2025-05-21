@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.effect;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.tagging.ISymbolTagger;
 import de.monticore.tagging.SimpleSymbolTagger;
@@ -60,7 +60,7 @@ public class MCEffectTest extends EffectAbstractTest {
 
   private void checkEffects(EffectStorage storage) {
     // Given
-    Optional<ComponentTypeSymbol> wTank = compResolver.apply("steamboiler.WaterTank");
+    Optional<ArcComponentTypeSymbol> wTank = compResolver.apply("steamboiler.WaterTank");
     Assertions.assertTrue(wTank.isPresent());
 
     // When

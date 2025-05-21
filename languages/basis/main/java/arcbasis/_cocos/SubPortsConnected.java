@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTConnector;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
@@ -23,10 +23,10 @@ import java.util.stream.Collectors;
  * Implements [Hab16] CV6: All ports of subcomponents should be used in at
  * least one connector. (p.72 Lst. 3.53)
  */
-public class SubPortsConnected implements ArcBasisASTComponentTypeCoCo {
+public class SubPortsConnected implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 

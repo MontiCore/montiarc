@@ -65,7 +65,7 @@ public class EffectTest {
 
     // When
     ISMTAutomaton smtAut =
-        new SMTAutomaton(asts.getRight().getComponentType(), asts.getLeft(), s -> s, ctx);
+        new SMTAutomaton(asts.getRight().getArcComponentType(), asts.getLeft(), s -> s, ctx);
 
     Expr<?> initState = ctx.mkConst("initState", smtAut.getStateSort());
 
@@ -83,7 +83,7 @@ public class EffectTest {
 
     // Then
     ICompleteSMTAut completeSMTAut =
-        new ChaosComplete(asts.getRight().getComponentType(), smtAut, ctx);
+        new ChaosComplete(asts.getRight().getArcComponentType(), smtAut, ctx);
 
     BoolExpr trans1 = completeSMTAut.evaluate(input1, initState, nextState1, output1);
     BoolExpr trans2 = completeSMTAut.evaluate(input2, initState, nextState2, output2);

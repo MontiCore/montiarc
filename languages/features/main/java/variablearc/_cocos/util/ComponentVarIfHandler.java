@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos.util;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
@@ -19,15 +19,15 @@ import java.util.function.Consumer;
 public class ComponentVarIfHandler implements VariableArcVisitor2, ArcBasisHandler {
 
   final Consumer<ASTArcVarIf> consumer;
-  final ASTComponentType componentType;
+  final ASTArcComponentType componentType;
 
   private ArcBasisTraverser traverser;
 
-  public ComponentVarIfHandler(ASTComponentType componentType, Consumer<ASTArcVarIf> consumer) {
+  public ComponentVarIfHandler(ASTArcComponentType componentType, Consumer<ASTArcVarIf> consumer) {
     this(componentType, consumer, VariableArcMill.traverser());
   }
 
-  public ComponentVarIfHandler(ASTComponentType componentType, Consumer<ASTArcVarIf> consumer, VariableArcTraverser traverser) {
+  public ComponentVarIfHandler(ASTArcComponentType componentType, Consumer<ASTArcVarIf> consumer, VariableArcTraverser traverser) {
     this.componentType = componentType;
     this.consumer = consumer;
     traverser.setArcBasisHandler(this);
@@ -47,7 +47,7 @@ public class ComponentVarIfHandler implements VariableArcVisitor2, ArcBasisHandl
   }
 
   @Override
-  public void handle(ASTComponentType node) {
+  public void handle(ASTArcComponentType node) {
     if (node == componentType)
       ArcBasisHandler.super.handle(node);
   }

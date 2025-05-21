@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -31,10 +31,10 @@ import java.util.stream.Collectors;
 /**
  * Checks if test stereotypes fit to one another and the component signature
  */
-public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCoCo {
+public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
@@ -80,7 +80,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     }
   }
 
-  protected void checkTestSourceAssignmentMethod(@NotNull ASTComponentType node) {
+  protected void checkTestSourceAssignmentMethod(@NotNull ASTArcComponentType node) {
     Preconditions.checkArgument(getStereo(node, "test").isPresent());
 
     Optional<ASTSetEnumeration> testDefinition = getStereo(node, "test")
@@ -172,7 +172,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     }
   }
 
-  protected void checkValueSourceAssignmentMethod(@NotNull ASTComponentType node) {
+  protected void checkValueSourceAssignmentMethod(@NotNull ASTArcComponentType node) {
     int testCount = unitTestCaseCount(node);
 
     // Check parameter assignments
@@ -191,7 +191,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
     }
   }
 
-  protected Optional<ASTStereoValue> getStereo(@NotNull ASTComponentType node, @NotNull String name) {
+  protected Optional<ASTStereoValue> getStereo(@NotNull ASTArcComponentType node, @NotNull String name) {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(name);
 
@@ -258,7 +258,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTComponentTypeCo
   /**
    * @return the number of test cases defined by the component
    */
-  protected int unitTestCaseCount(@NotNull ASTComponentType node) {
+  protected int unitTestCaseCount(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     if (!node.isPresentStereotype()) return 0;
 

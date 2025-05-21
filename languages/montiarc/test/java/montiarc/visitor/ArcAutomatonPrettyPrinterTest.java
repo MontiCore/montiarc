@@ -79,8 +79,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    Assertions.assertEquals(0, ((ASTArcStatechart) prettyAST.get().getComponentType().getBody()
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    Assertions.assertEquals(0, ((ASTArcStatechart) prettyAST.get().getArcComponentType().getBody()
       .getArcElement(2)).getSCStatechartElementList().size());
   }
 
@@ -98,8 +98,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getComponentType().getBody().getArcElement(2);
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getArcComponentType().getBody().getArcElement(2);
 
     // Check states
     Assertions.assertTrue(statechart.getSCStatechartElement(0) instanceof ASTSCState);
@@ -135,8 +135,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getComponentType().getBody().getArcElement(2);
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getArcComponentType().getBody().getArcElement(2);
 
     // Check states
     Assertions.assertTrue(statechart.getSCStatechartElement(0) instanceof ASTSCState);
@@ -188,8 +188,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getComponentType().getBody().getArcElement(2);
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getArcComponentType().getBody().getArcElement(2);
 
     // Check transition
     Assertions.assertTrue(statechart.getSCStatechartElement(3) instanceof ASTSCTransition);
@@ -247,8 +247,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getComponentType().getBody().getArcElement(2);
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getArcComponentType().getBody().getArcElement(2);
 
     // Check transition
     Assertions.assertTrue(statechart.getSCStatechartElement(3) instanceof ASTSCTransition);
@@ -344,8 +344,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getComponentType().getBody().getArcElement(2);
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getArcComponentType().getBody().getArcElement(2);
 
     // Check states
     Assertions.assertTrue(statechart.getSCStatechartElement(0) instanceof ASTSCState);
@@ -382,9 +382,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Then
     Optional<ASTMACompilationUnit> prettyAST = parser.parse_String(prettyOut);
     Assertions.assertTrue(prettyAST.isPresent());
-    Assertions.assertEquals("G_Actions", prettyAST.get().getComponentType().getName());
-    Assertions.assertTrue(prettyAST.get().getComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
-    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getComponentType().getBody().getArcElement(2);
+    Assertions.assertEquals("G_Actions", prettyAST.get().getArcComponentType().getName());
+    Assertions.assertTrue(prettyAST.get().getArcComponentType().getBody().getArcElement(2) instanceof ASTArcStatechart);
+    ASTArcStatechart statechart = (ASTArcStatechart) prettyAST.get().getArcComponentType().getBody().getArcElement(2);
 
     // Check states
     Assertions.assertTrue(statechart.getSCStatechartElement(0) instanceof ASTSCState);

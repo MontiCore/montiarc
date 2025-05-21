@@ -3,6 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
@@ -11,7 +12,6 @@ import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentInterface;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._ast.ASTPortDirection;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
@@ -56,7 +56,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
   }
 
   protected static Stream<Arguments> provideIdentifiers() {
-    ASTComponentType innerComp = simpleCompTypeNamed("unique");
+    ASTArcComponentType innerComp = simpleCompTypeNamed("unique");
     ASTComponentInstantiation subComp = simpleCompInstNamed("unique");
     ASTComponentInterface port = simplePortNamed("unique");
     ASTArcFieldDeclaration field = simpleFieldNamed("unique");
@@ -70,8 +70,8 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
   }
 
   protected static Stream<Arguments> provideDuplicatedIdentifiers() {
-    ASTComponentType innerComp = simpleCompTypeNamed("unique");
-    ASTComponentType innerComp2 = simpleCompTypeNamed("unique");
+    ASTArcComponentType innerComp = simpleCompTypeNamed("unique");
+    ASTArcComponentType innerComp2 = simpleCompTypeNamed("unique");
 
     ASTComponentInstantiation subComp = simpleCompInstNamed("unique");
     ASTComponentInstantiation subComp2 = simpleCompInstNamed("unique");
@@ -112,7 +112,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     Preconditions.checkState(coco != null);
 
     // Given
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(firstEl)
@@ -141,7 +141,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
 
     // Given
     ASTArcParameter configParam = simpleConfigParamNamed("unique");
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(arcEl)
@@ -171,7 +171,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     // Given
     ASTArcParameter configParam = simpleConfigParamNamed("unique");
     ASTArcParameter configParam2 = simpleConfigParamNamed("unique");
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -197,13 +197,13 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     Preconditions.checkState(coco != null);
 
     // Given
-    ASTComponentType compType = simpleCompTypeNamed("type");
+    ASTArcComponentType compType = simpleCompTypeNamed("type");
     ASTComponentInstantiation compInst = simpleCompInstNamed("inst");
     ASTComponentInterface port = simplePortNamed("port");
     ASTArcFieldDeclaration field = simpleFieldNamed("field");
     ASTArcParameter configParam = simpleConfigParamNamed("configParam");
 
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(compType)
@@ -228,11 +228,11 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     Assertions.assertEquals(0, Log.getErrorCount());
   }
 
-  /** @return An arbitrary {@link ASTComponentType} with the given name. */
-  protected static ASTComponentType simpleCompTypeNamed(@NotNull String name) {
+  /** @return An arbitrary {@link ASTArcComponentType} with the given name. */
+  protected static ASTArcComponentType simpleCompTypeNamed(@NotNull String name) {
     Preconditions.checkNotNull(name);
 
-    return ArcBasisMill.componentTypeBuilder()
+    return ArcBasisMill.arcComponentTypeBuilder()
       .setName(name)
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(Mockito.mock(ASTComponentBody.class))
@@ -330,7 +330,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
 
     // Given
     TypeVarSymbol typeParam = simpleTypeParamNamed("unique");
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(arcEl)
@@ -357,7 +357,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     // Given
     TypeVarSymbol typeParam = simpleTypeParamNamed("unique");
     ASTArcParameter configParam = UniqueIdentifierTest.simpleConfigParamNamed("unique");
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -384,7 +384,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
     // Given
     TypeVarSymbol typeParam = simpleTypeParamNamed("unique");
     TypeVarSymbol typeParam2 = simpleTypeParamNamed("unique");
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))
@@ -406,14 +406,14 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
   public void shouldNotFindDuplicateNamesWithTypeParams() {
     Preconditions.checkState(UniqueIdentifierTest.coco != null);
     // Given
-    ASTComponentType compType = UniqueIdentifierTest.simpleCompTypeNamed("type");
+    ASTArcComponentType compType = UniqueIdentifierTest.simpleCompTypeNamed("type");
     ASTComponentInstantiation compInst = UniqueIdentifierTest.simpleCompInstNamed("inst");
     ASTComponentInterface port = UniqueIdentifierTest.simplePortNamed("port");
     ASTArcFieldDeclaration field = UniqueIdentifierTest.simpleFieldNamed("field");
     ASTArcParameter configParam = UniqueIdentifierTest.simpleConfigParamNamed("configParam");
     TypeVarSymbol typeParam = simpleTypeParamNamed("typeParam");
 
-    ASTComponentType enclosingComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType enclosingComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Outer")
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(compType)

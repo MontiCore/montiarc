@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -9,7 +9,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
 
-public class ComponentNoReservedKeyword implements ArcBasisASTComponentTypeCoCo {
+public class ComponentNoReservedKeyword implements ArcBasisASTArcComponentTypeCoCo {
 
   protected final Collection<String> reservedKeywords;
   protected final String languageName;
@@ -20,7 +20,7 @@ public class ComponentNoReservedKeyword implements ArcBasisASTComponentTypeCoCo 
   }
 
   @Override
-  public void check(ASTComponentType node) {
+  public void check(ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     String compName = node.getName();
 

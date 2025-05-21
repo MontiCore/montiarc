@@ -3,8 +3,8 @@ package mceffect.graph;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
@@ -20,7 +20,7 @@ public class EffectGraph {
 
   protected final SimpleDirectedGraph<EffectNode, EffectEdge> graph;
 
-  public EffectGraph(ComponentTypeSymbol component, EffectStorage effectStorage) {
+  public EffectGraph(ArcComponentTypeSymbol component, EffectStorage effectStorage) {
 
     // create effect graph
     graph = new SimpleDirectedGraph<>(EffectEdge.class);
@@ -30,13 +30,13 @@ public class EffectGraph {
 
     // add subcomponent interfaces as Node
     for (SubcomponentSymbol comp : component.getSubcomponents()) {
-      ComponentSymbol subComponent = comp.getType().getTypeInfo();
+      ComponentTypeSymbol subComponent = comp.getType().getTypeInfo();
       subComponent.getAllPorts().forEach(p -> addNode(p, comp));
     }
 
     // add effect between subcomponents as edges
     for (SubcomponentSymbol subComp : component.getSubcomponents()) {
-      List<Effect> effect = effectStorage.getEffectsOfComponent((ComponentTypeSymbol) subComp.getType().getTypeInfo());
+      List<Effect> effect = effectStorage.getEffectsOfComponent((ArcComponentTypeSymbol) subComp.getType().getTypeInfo());
       effect.forEach(eff -> addEffectEdge(eff, subComp));
     }
 

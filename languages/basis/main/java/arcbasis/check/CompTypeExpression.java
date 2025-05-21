@@ -2,11 +2,11 @@
 package arcbasis.check;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -123,14 +123,14 @@ public abstract class CompTypeExpression extends CompKindExpression {
     this.parameterBindings = parameterBindings;
   }
 
-  protected CompTypeExpression(@NotNull ComponentTypeSymbol compTypeSymbol) {
+  protected CompTypeExpression(@NotNull ArcComponentTypeSymbol compTypeSymbol) {
     super(Preconditions.checkNotNull(compTypeSymbol));
     this.arguments = new ArrayList<>();
     this.parameterBindings = new LinkedHashMap<>();
   }
 
-  public ComponentTypeSymbol getTypeInfo() {
-    return (ComponentTypeSymbol) this.component;
+  public ArcComponentTypeSymbol getTypeInfo() {
+    return (ArcComponentTypeSymbol) this.component;
   }
 
   public abstract String printName();
@@ -173,10 +173,10 @@ public abstract class CompTypeExpression extends CompKindExpression {
     return deepClone(getTypeInfo());
   }
 
-  public abstract CompTypeExpression deepClone(@NotNull ComponentTypeSymbol compTypeSymbol);
+  public abstract CompTypeExpression deepClone(@NotNull ArcComponentTypeSymbol compTypeSymbol);
 
-  public CompKindExpression deepClone(@NotNull ComponentSymbol componentSymbol) {
-    return deepClone((ComponentTypeSymbol) componentSymbol);
+  public CompKindExpression deepClone(@NotNull ComponentTypeSymbol componentSymbol) {
+    return deepClone((ArcComponentTypeSymbol) componentSymbol);
   }
 
   public abstract boolean deepEquals(@NotNull CompTypeExpression compSymType);

@@ -21,7 +21,7 @@ public class SubcomponentSymbolTest extends ArcBasisTestBase {
   @Test
   public void shouldAddArguments() {
     IArcBasisScope scope = ArcBasisMill.scope();
-    ComponentTypeSymbol typeSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("A").setSpannedScope(scope).build();
+    ArcComponentTypeSymbol typeSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("A").setSpannedScope(scope).build();
     SubcomponentSymbol instanceSymbol = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("a").setType(new TypeExprOfComponent(typeSymbol)).build();
     Assertions.assertEquals(0, ((TypeExprOfComponent) instanceSymbol.getType()).getArcArguments().size());

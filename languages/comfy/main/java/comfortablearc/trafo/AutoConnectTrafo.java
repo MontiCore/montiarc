@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc.trafo;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTArcACMode;
@@ -26,7 +26,7 @@ import static comfortablearc.trafo.AutoConnectFilters.isAFullyConnectedComponent
 
 public class AutoConnectTrafo implements IAutoConnectTrafo {
 
-  protected Stack<ASTComponentType> comps;
+  protected Stack<ASTArcComponentType> comps;
   protected Stack<List<ASTArcElement>> toAdd;
 
   public AutoConnectTrafo() {
@@ -73,14 +73,14 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
   }
 
   @Override
-  public void visit(@NotNull ASTComponentType node) {
+  public void visit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     this.comps.add(node);
   }
 
   @Override
-  public void endVisit(@NotNull ASTComponentType node) {
+  public void endVisit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(!this.comps.isEmpty());
     Preconditions.checkState(this.comps.peek().equals(node));

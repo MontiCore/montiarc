@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTConnector;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
@@ -17,10 +17,10 @@ import java.util.List;
  * Implements [Hab16] R2: Each incoming port of a subcomponent is used at most
  * once as target of a connector. (p. 62, Lst. 3.37)
  */
-public class PortUniqueSender implements ArcBasisASTComponentTypeCoCo {
+public class PortUniqueSender implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     List<String> targets = new ArrayList<>();
     for (ASTConnector connector : node.getConnectors()) {

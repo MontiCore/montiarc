@@ -4,13 +4,13 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcArguments;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.ArcBasisTypeCheckTest;
@@ -240,7 +240,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindTooFewParameterBindingsInCompRef() {
     // Given: Simple()
-    ASTComponentType ref = provideCompWithRefinement("Simple");
+    ASTArcComponentType ref = provideCompWithRefinement("Simple");
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -255,7 +255,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindTooManyParameterBindingsInCompRef() {
     // Given: Simple(int, bool)
-    ASTComponentType ref = provideCompWithRefinement("Simple", intArg(), boolArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Simple", intArg(), boolArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -270,7 +270,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindCorrectNumberOfParameterBindingsInCompRef() {
     // Given: Simple(int)
-    ASTComponentType ref = provideCompWithRefinement("Simple", intArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Simple", intArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -283,7 +283,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindTooFewParameterBindingsWithDefaultParametersInCompRef() {
     // Given: Advanced()
-    ASTComponentType ref = provideCompWithRefinement("Advanced");
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced");
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -298,7 +298,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindTooManyParameterBindingsWithDefaultParametersInCompRef() {
     // Given: Advanced(int, boolean, double, int)
-    ASTComponentType ref = provideCompWithRefinement("Advanced",
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced",
       intArg(), boolArg(), doubleArg(), intArg()
     );
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
@@ -315,7 +315,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindWrongBindingWithDefaultParametersInCompRef() {
     // Given: Advanced(int, double)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg(), doubleArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg(), doubleArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -330,7 +330,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindCorrectNumberOfParameterBindingsWithDefaultParametersInCompRef() {
     // Given: Advanced(int)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -343,7 +343,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindCorrectNumberOfParameterBindingsAllDefaultsOverwrittenInCompRef() {
     // Given: Advanced(int, boolean, double)
-    ASTComponentType ref = provideCompWithRefinement("Advanced",
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced",
       intArg(), boolArg(), doubleArg()
     );
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
@@ -358,7 +358,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindCorrectNumberOfParameterBindingsSomeDefaultsOverwrittenInCompRef() {
     // Given: Advanced(int, boolean)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg(), boolArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg(), boolArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -371,7 +371,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldFindWrongTypesInCompRef() {
     // Given: Advanced(double, boolean)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", doubleArg(), boolArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", doubleArg(), boolArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -386,7 +386,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void wrongTypeAndTooManyArgumentsInCompRef() {
     // Given: Advanced(double, int, boolean, boolean)
-    ASTComponentType ref = provideCompWithRefinement("Advanced",
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced",
       doubleArg(), intArg(), boolArg(), boolArg()
     );
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
@@ -406,7 +406,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void wrongTypeAndTooFewArgumentsInCompRef() {
     // Given: AdvancedWithOneOptional(double)
-    ASTComponentType ref = provideCompWithRefinement("AdvancedWithOneOptional", doubleArg());
+    ASTArcComponentType ref = provideCompWithRefinement("AdvancedWithOneOptional", doubleArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
 
     // When
@@ -421,7 +421,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldDetectAmbiguousKeys() {
     // Given: Advanced(first = int, first = int)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg("first"), intArg("first"));
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg("first"), intArg("first"));
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     // When
     coco.check(ref);
@@ -435,7 +435,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldDetectMultiAssignment() {
     // Given: Advanced(int, first = int)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg(), intArg("first"));
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg(), intArg("first"));
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     // When
     coco.check(ref);
@@ -449,7 +449,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldDetectKeyTooEarly() {
     // Given: Advanced(int, first = int)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg("first"), intArg());
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg("first"), intArg());
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     // When
     coco.check(ref);
@@ -463,7 +463,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
   @Test
   void shouldDetectInvalidKey() {
     // Given: Advanced(int, first = int)
-    ASTComponentType ref = provideCompWithRefinement("Advanced", intArg(), boolArg("noKey"));
+    ASTArcComponentType ref = provideCompWithRefinement("Advanced", intArg(), boolArg("noKey"));
     ConfigurationParameterAssignment coco = new ConfigurationParameterAssignment();
     // When
     coco.check(ref);
@@ -484,7 +484,7 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
     Preconditions.checkNotNull(componentType);
     Preconditions.checkNotNull(arguments);
 
-    ComponentTypeSymbol instantiatedType = ArcBasisMill.globalScope().resolveComponentType(componentType).orElseThrow(); 
+    ArcComponentTypeSymbol instantiatedType = ArcBasisMill.globalScope().resolveArcComponentType(componentType).orElseThrow();
     
     CompTypeExpression compExpr = new TypeExprOfComponent(instantiatedType);
     compExpr.addArcArguments(Arrays.asList(arguments));
@@ -508,24 +508,24 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
       .build();
   }
 
-  protected ASTComponentType provideCompWithRefinement(@NotNull String abstractionName,
-                                                       @NotNull ASTArcArgument... args) {
+  protected ASTArcComponentType provideCompWithRefinement(@NotNull String abstractionName,
+                                                          @NotNull ASTArcArgument... args) {
     Preconditions.checkNotNull(abstractionName);
     Preconditions.checkNotNull(args);
     Preconditions.checkArgument(Arrays.stream(args).noneMatch(Objects::isNull));
 
-    ComponentTypeSymbol abstraction = ArcBasisMill.globalScope().resolveComponentType(abstractionName).orElseThrow();
+    ArcComponentTypeSymbol abstraction = ArcBasisMill.globalScope().resolveArcComponentType(abstractionName).orElseThrow();
 
     CompTypeExpression compExpr = new TypeExprOfComponent(abstraction);
     compExpr.addArcArguments(Arrays.asList(args));
 
-    ComponentTypeSymbol concretization = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol concretization = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Dummy")
       .setSpannedScope(ArcBasisMill.scope())
       .addRefinements(compExpr)
       .build();
 
-    ASTComponentType ast = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType ast = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Dummy")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))

@@ -3,11 +3,10 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
-import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -22,7 +21,7 @@ public class PortsConnectedTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
-  public void shouldDetectWronglyConnectedPorts(ASTComponentType ast, ArcError[] errors) {
+  public void shouldDetectWronglyConnectedPorts(ASTArcComponentType ast, ArcError[] errors) {
     PortsConnected coco = new PortsConnected();
     coco.check(ast);
     assertThat(getLoggedErrorCodes())
@@ -31,7 +30,7 @@ public class PortsConnectedTest extends ArcBasisTestBase {
 
   static Stream<Arguments> componentAndErrorCodeProvider() {
     ArcBasisScopesGenitorDelegator symTab = ArcBasisMill.scopesGenitorDelegator();
-    ASTComponentType comp1 = ArcBasisMill.componentTypeBuilder().setName("Comp1")
+    ASTArcComponentType comp1 = ArcBasisMill.arcComponentTypeBuilder().setName("Comp1")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()
@@ -60,7 +59,7 @@ public class PortsConnectedTest extends ArcBasisTestBase {
         .build())
       .build();
     symTab.createFromAST(comp1);
-    ASTComponentType comp2 = ArcBasisMill.componentTypeBuilder().setName("Comp2")
+    ASTArcComponentType comp2 = ArcBasisMill.arcComponentTypeBuilder().setName("Comp2")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInterfaceBuilder()

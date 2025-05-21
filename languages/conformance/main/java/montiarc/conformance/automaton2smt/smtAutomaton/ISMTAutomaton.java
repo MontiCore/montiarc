@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.smtAutomaton;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.Sort;
@@ -92,7 +92,7 @@ public interface ISMTAutomaton {
   /**
    * @return the ast of the ISMTAutomaton.
    */
-  ASTComponentType getComponent();
+  ASTArcComponentType getComponent();
 
   /**
    * @return the class diagram containing the datatypes.

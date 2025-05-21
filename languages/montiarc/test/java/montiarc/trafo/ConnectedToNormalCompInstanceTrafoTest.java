@@ -4,7 +4,7 @@ package montiarc.trafo;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._cocos.ConnectorPortsExist;
 import com.google.common.base.Preconditions;
@@ -128,9 +128,9 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    List<ASTConnector> connectorsAfter = ast.getComponentType().getConnectors();
-    List<ASTComponentInstance> instantiancesAfter = ast.getComponentType().getSubComponents();
-    List<ASTConnectedComponentInstance> connectedComps = connectedCompsWithin(ast.getComponentType().getBody());
+    List<ASTConnector> connectorsAfter = ast.getArcComponentType().getConnectors();
+    List<ASTComponentInstance> instantiancesAfter = ast.getArcComponentType().getSubComponents();
+    List<ASTConnectedComponentInstance> connectedComps = connectedCompsWithin(ast.getArcComponentType().getBody());
 
     SoftAssertions.assertSoftly(a -> {
       a.assertThat(connectorsAfter.size()).as("Number of connectors").isEqualTo(expectedConnectors);
@@ -161,7 +161,7 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTConnector connector = ast.getComponentType().getConnectors().get(0);
+    ASTConnector connector = ast.getArcComponentType().getConnectors().get(0);
     assertThat(connector.getSource().isPresentComponent())
       .as("Checking whether port is of an instance")
       .isTrue();
@@ -259,7 +259,7 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTArcVarIf firstArcIf = varIfsWithin(ast.getComponentType().getBody()).get(0);
+    ASTArcVarIf firstArcIf = varIfsWithin(ast.getArcComponentType().getBody()).get(0);
     ASTArcVarIf nestedArcIf = varIfsWithin(((ASTComponentBody) firstArcIf.getThen())).get(0);
     ASTComponentBody arcIfContent = (ASTComponentBody) nestedArcIf.getThen();
 
@@ -286,8 +286,8 @@ class ConnectedToNormalCompInstanceTrafoTest extends MontiArcTestBase {
       .flatMap(ASTComponentInstantiation::streamComponentInstances)
       .forEach(instances::add);
 
-    body.streamArcElementsOfType(ASTComponentType.class)
-      .flatMap(ASTComponentType::streamComponentInstances)
+    body.streamArcElementsOfType(ASTArcComponentType.class)
+      .flatMap(ASTArcComponentType::streamComponentInstances)
       .forEach(instances::add);
 
     return instances;

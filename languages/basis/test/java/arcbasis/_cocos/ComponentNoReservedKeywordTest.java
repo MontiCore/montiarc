@@ -3,9 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.junit.jupiter.api.Test;
@@ -20,7 +20,7 @@ public class ComponentNoReservedKeywordTest extends ArcBasisTestBase {
   @Test
   public void checkPortNameMatchesKeyword() {
     // Given
-    ASTComponentType cType = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType cType = ArcBasisMill.arcComponentTypeBuilder()
       .setName("keyword")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(Mockito.mock(ASTComponentBody.class))
@@ -39,7 +39,7 @@ public class ComponentNoReservedKeywordTest extends ArcBasisTestBase {
   @Test
   public void checkPortNameIsNoKeyword() {
     // Given
-    ASTComponentType cType = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType cType = ArcBasisMill.arcComponentTypeBuilder()
       .setName("noKeyword")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(Mockito.mock(ASTComponentBody.class))

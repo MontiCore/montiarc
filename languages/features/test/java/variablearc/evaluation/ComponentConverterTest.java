@@ -1,17 +1,18 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -36,7 +37,7 @@ import java.util.Optional;
  */
 public class ComponentConverterTest extends VariableArcTestBase {
 
-  protected static SubcomponentSymbol createInstance(String name, ComponentTypeSymbol component) {
+  protected static SubcomponentSymbol createInstance(String name, ArcComponentTypeSymbol component) {
     CompTypeExpression typeExpression = new TypeExprOfComponent(component);
     return VariableArcMill.subcomponentSymbolBuilder().setName(name).setType(typeExpression).build();
   }
@@ -48,7 +49,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
       .setDefault(getTrueExpression())
       .setMCType(VariableArcMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BOOLEAN).build())
       .build();
-    ASTComponentType astComponentType = VariableArcMill.componentTypeBuilder()
+    ASTArcComponentType astComponentType = VariableArcMill.arcComponentTypeBuilder()
       .setName("C")
       .setHead(VariableArcMill.componentHeadBuilder().setArcParametersList(Collections.singletonList(parameter)).build())
       .setBody(Mockito.mock(ASTComponentBody.class))
@@ -67,7 +68,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
       scope.add(instance);
     }
 
-    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
       .setName("C")
       .setSpannedScope(scope)
       .setAstNode(astComponentType)
@@ -85,7 +86,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
       scope.add(instance);
     }
 
-    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
       .setName("C")
       .setSpannedScope(scope)
       .build();

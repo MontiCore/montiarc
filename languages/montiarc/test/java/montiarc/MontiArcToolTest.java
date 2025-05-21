@@ -3,10 +3,9 @@ package montiarc;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
-import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.se_rwth.commons.logging.Log;
@@ -18,9 +17,6 @@ import montiarc.util.Error;
 import montiarc.util.MCError;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -30,7 +26,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -347,7 +342,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
 
     // Then
     Assertions.assertTrue(ast2.isPresent());
-    Assertions.assertEquals("ValidMockComponent", ast2.get().getComponentType().getName());
+    Assertions.assertEquals("ValidMockComponent", ast2.get().getArcComponentType().getName());
   }
 
   /**
@@ -570,13 +565,13 @@ public class MontiArcToolTest extends MontiArcTestBase {
     tool.runSymbolTablePhase3(astB);
 
     // Then
-    ComponentTypeSymbol aCompType = astA.getComponentType().getSymbol();
-    ComponentTypeSymbol bCompType = astB.getComponentType().getSymbol();
+    ArcComponentTypeSymbol aCompType = astA.getArcComponentType().getSymbol();
+    ArcComponentTypeSymbol bCompType = astB.getArcComponentType().getSymbol();
     PortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
     PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
     SubcomponentSymbol aInstance = bCompType.getSubcomponents("a").orElseThrow();
 
-    ASTConnector connector = astB.getComponentType().getConnectors().get(0);
+    ASTConnector connector = astB.getArcComponentType().getConnectors().get(0);
     ASTPortAccess bAccess = connector.getSource();
     ASTPortAccess aAccess = connector.getTarget(0);
 
@@ -605,13 +600,13 @@ public class MontiArcToolTest extends MontiArcTestBase {
     ASTMACompilationUnit astA = MontiArcMill.parser().parse(
       packagePath.resolve("A.arc").toAbsolutePath().toString()).orElseThrow();
 
-    int connectorCountBeforeTrafo = astA.getComponentType().getConnectors().size();
+    int connectorCountBeforeTrafo = astA.getArcComponentType().getConnectors().size();
 
     // When
     tool.runAfterParsingTrafos(astA);
 
     // Then
-    int connectorCountAfterTrafo = astA.getComponentType().getConnectors().size();
+    int connectorCountAfterTrafo = astA.getArcComponentType().getConnectors().size();
 
     Assertions.assertTrue(connectorCountAfterTrafo > connectorCountBeforeTrafo, "Expected new connectors");
   }
@@ -636,13 +631,13 @@ public class MontiArcToolTest extends MontiArcTestBase {
     tool.runSymbolTablePhase2(astA);
     tool.runSymbolTablePhase2(astB);
 
-    int connectorCountBeforeTrafo = astB.getComponentType().getConnectors().size();
+    int connectorCountBeforeTrafo = astB.getArcComponentType().getConnectors().size();
 
     // When
     tool.runAfterSymbolTablePhase2Trafos(astB);
 
     // Then
-    long connectorCountAfterTrafo = astB.getComponentType().getConnectors().size();
+    long connectorCountAfterTrafo = astB.getArcComponentType().getConnectors().size();
 
     Assertions.assertTrue(connectorCountAfterTrafo > connectorCountBeforeTrafo, "Expected new connectors");
   }

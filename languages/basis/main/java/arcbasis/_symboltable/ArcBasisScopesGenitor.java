@@ -2,6 +2,7 @@
 package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
@@ -10,12 +11,12 @@ import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._ast.ASTPortDirection;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbolBuilder;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -31,7 +32,7 @@ import java.util.Stack;
 
 public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
-  protected Stack<ComponentTypeSymbol> componentStack;
+  protected Stack<ArcComponentTypeSymbol> componentStack;
   protected ASTPortDirection currentPortDirection;
 
   public ArcBasisScopesGenitor() {
@@ -39,11 +40,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.componentStack = new Stack<>();
   }
 
-  protected Stack<ComponentTypeSymbol> getComponentStack() {
+  protected Stack<ArcComponentTypeSymbol> getComponentStack() {
     return this.componentStack;
   }
 
-  protected Optional<ComponentTypeSymbol> getCurrentComponent() {
+  protected Optional<ArcComponentTypeSymbol> getCurrentComponent() {
     return Optional.ofNullable(this.getComponentStack().peek());
   }
 
@@ -51,7 +52,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getComponentStack().pop();
   }
 
-  protected void putOnStack(@Nullable ComponentTypeSymbol symbol) {
+  protected void putOnStack(@Nullable ArcComponentTypeSymbol symbol) {
     this.getComponentStack().push(symbol);
   }
 
@@ -83,8 +84,8 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getCurrentScope().get().add(symbol);
   }
 
-  protected ComponentTypeSymbolBuilder create_ComponentType(@NotNull ASTComponentType ast) {
-    ComponentTypeSymbolBuilder builder = ArcBasisMill.componentTypeSymbolBuilder();
+  protected ArcComponentTypeSymbolBuilder create_ComponentType(@NotNull ASTArcComponentType ast) {
+    ArcComponentTypeSymbolBuilder builder = ArcBasisMill.arcComponentTypeSymbolBuilder();
     builder.setName(ast.getName());
     IArcBasisScope scope = this.createScope(true);
     builder.setSpannedScope(scope);
@@ -96,17 +97,17 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
    *
    * @param symbol component to integrate into the structure
    */
-  protected void setOuter(@NotNull ComponentTypeSymbol symbol) {
+  protected void setOuter(@NotNull ArcComponentTypeSymbol symbol) {
     if (!componentStack.isEmpty()) {
       symbol.setOuterComponent(componentStack.peek());
     }
   }
 
   @Override
-  public void visit(@NotNull ASTComponentType node) {
+  public void visit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    ComponentTypeSymbol symbol = this.create_ComponentType(node).build();
+    ArcComponentTypeSymbol symbol = this.create_ComponentType(node).build();
     this.setOuter(symbol);
     node.setSymbol(symbol);
     node.setEnclosingScope(this.getCurrentScope().get());
@@ -120,7 +121,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
   }
 
   @Override
-  public void endVisit(@NotNull ASTComponentType node) {
+  public void endVisit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     Preconditions.checkState(this.getCurrentScope().isPresent());

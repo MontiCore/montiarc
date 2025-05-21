@@ -155,7 +155,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
   }
 
   protected static IVariableArcComponentTypeSymbol createSimpleComp() {
-    return (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+    return (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(VariableArcMill.scope())
       .build();

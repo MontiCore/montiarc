@@ -3,8 +3,7 @@ package montiarc.arc2fd.fd;
 
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._ast.ASTComponentTypeTOP;
+import arcbasis._ast.ASTArcComponentType;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
@@ -70,7 +69,7 @@ public class MAStreamHelperTest {
     List<String> falseFeatures = List.of("a", "b", "z");
     List<String> features =
         MAStreamHelper.getArcFeatureDeclarationsFromElements(
-            MAStreamHelper.getArcElements(ast.getComponentType())).stream().map(ASTArcFeature::getName).collect(Collectors.toList());
+            MAStreamHelper.getArcElements(ast.getArcComponentType())).stream().map(ASTArcFeature::getName).collect(Collectors.toList());
 
     // When && Then
     Assertions.assertEquals(trueFeatures, features);
@@ -88,7 +87,7 @@ public class MAStreamHelperTest {
     List<String> falseConstraints = List.of("a&&b", "(b&&c)");
     List<String> constraints =
         MAStreamHelper.getConstraintExpressionsFromArcElements(
-            MAStreamHelper.getArcElements(ast.getComponentType())).stream()
+            MAStreamHelper.getArcElements(ast.getArcComponentType())).stream()
           .map(t -> MontiArcMill.prettyPrint(t, true)).collect(Collectors.toList());
 
     // When && Then
@@ -105,7 +104,7 @@ public class MAStreamHelperTest {
     // Given
     List<ASTArcVarIf> varIfs =
         new ArrayList<>(MAStreamHelper.getVarIfsFromArcElements(
-            MAStreamHelper.getArcElements(ast.getComponentType())));
+            MAStreamHelper.getArcElements(ast.getArcComponentType())));
 
     // When && Then
     Assertions.assertEquals(2, varIfs.size());
@@ -122,8 +121,8 @@ public class MAStreamHelperTest {
     List<String> falseComponents = List.of("innerComp3");
     List<String> innerComponents =
         MAStreamHelper.getInnerComponentsFromArcElements(
-                MAStreamHelper.getArcElements(ast.getComponentType())).stream()
-            .map(ASTComponentTypeTOP::getName).collect(Collectors.toList());
+                MAStreamHelper.getArcElements(ast.getArcComponentType())).stream()
+            .map(ASTArcComponentType::getName).collect(Collectors.toList());
 
     // When && Then
     Assertions.assertEquals(trueComponents, innerComponents);
@@ -141,7 +140,7 @@ public class MAStreamHelperTest {
     List<String> falseCompInst = List.of("subComp");
     List<String> componentInstances =
         MAStreamHelper.getComponentInstancesFromArcElements(
-                MAStreamHelper.getArcElements(ast.getComponentType())).stream()
+                MAStreamHelper.getArcElements(ast.getArcComponentType())).stream()
             .map(ASTComponentInstance::getName).collect(Collectors.toList());
 
     // When && Then
@@ -150,14 +149,14 @@ public class MAStreamHelperTest {
   }
 
   /**
-   * Method under test {@link MAStreamHelper#getArcElements(ASTComponentType)}
+   * Method under test {@link MAStreamHelper#getArcElements(ASTArcComponentType)}
    */
   @Test
   public void getArcElements() {
     // Given
     int numberOfElements = 8;
     List<ASTArcElement> arcElements =
-        MAStreamHelper.getArcElements(ast.getComponentType());
+        MAStreamHelper.getArcElements(ast.getArcComponentType());
 
     // When && Then
     Assertions.assertEquals(numberOfElements, arcElements.size());

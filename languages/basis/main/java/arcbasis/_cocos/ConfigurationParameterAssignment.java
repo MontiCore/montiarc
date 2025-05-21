@@ -3,14 +3,13 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
@@ -46,12 +45,12 @@ import java.util.stream.IntStream;
  * <p>
  */
 public class ConfigurationParameterAssignment
-  implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTComponentTypeCoCo {
+  implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTArcComponentTypeCoCo {
 
   public ConfigurationParameterAssignment() { }
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
@@ -337,7 +336,7 @@ public class ConfigurationParameterAssignment
    */
   protected boolean checkKeywordsMustBeParameters(@NotNull CompTypeExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
-    ComponentSymbol component = componentExpression.getTypeInfo();
+    ComponentTypeSymbol component = componentExpression.getTypeInfo();
 
     boolean keysAreParams = true;
 

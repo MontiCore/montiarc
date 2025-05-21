@@ -288,7 +288,7 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
     assertThat(asts).isNotEmpty();
     assertThat(asts.size()).isEqualTo(1);
-    assertThat(asts).anyMatch(ast -> "Comp".equals(ast.getComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp".equals(ast.getArcComponentType().getName()));
   }
 
   @Test
@@ -308,8 +308,8 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
     assertThat(asts).isNotEmpty();
     assertThat(asts.size()).isEqualTo(2);
-    assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getComponentType().getName()));
-    assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getArcComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getArcComponentType().getName()));
   }
 
   @Test
@@ -327,7 +327,7 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
     assertThat(asts).isNotEmpty();
     assertThat(asts.size()).isEqualTo(1);
-    assertThat(asts).anyMatch(ast -> "Comp".equals(ast.getComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp".equals(ast.getArcComponentType().getName()));
   }
 
   @Test
@@ -347,7 +347,7 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
     assertThat(asts).isNotEmpty();
     assertThat(asts.size()).isEqualTo(2);
-    assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getComponentType().getName()));
-    assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getArcComponentType().getName()));
+    assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getArcComponentType().getName()));
   }
 }

@@ -3,7 +3,15 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._visitor.ArcBasisTraverser;
+import de.monticore.types.check.CompKindCheckResult;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullSynthesizeFromMCSimpleGenericTypes;
+import de.monticore.types.check.ISynthesizeComponent;
+import de.monticore.types.check.SynthesizeCompKindFromMCBasicTypes;
+import de.monticore.types.check.SynthesizeCompKindFromMCSimpleGenericTypes;
+import de.monticore.types.mcbasictypes._visitor.MCBasicTypesTraverser;
+import de.monticore.types.mcsimplegenerictypes.MCSimpleGenericTypesMill;
+import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
 
 import java.util.Optional;
 
@@ -13,24 +21,23 @@ import java.util.Optional;
  */
 public class ArcBasisSynthesizeComponent implements ISynthesizeComponent {
 
-  protected ArcBasisTraverser traverser;
-  protected SynthCompTypeResult resultWrapper;
+  protected MCSimpleGenericTypesTraverser traverser;
 
-  public ArcBasisSynthesizeComponent() {
-    init();
-  }
+  protected CompKindCheckResult resultWrapper;
 
   @Override
   public void init() {
-    this.traverser = ArcBasisMill.traverser();
-    this.resultWrapper = new SynthCompTypeResult();
+    this.traverser = MCSimpleGenericTypesMill.traverser();
+    this.resultWrapper = new CompKindCheckResult();
+    SynthesizeComponentFromMCBasicTypes synFromBasic = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
+    SynthesizeComponentFromMCSimpleGenericTypes synFromSimple = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
 
-    SynthesizeComponentFromMCBasicTypes synthFromBasicTypes = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
-    traverser.setMCBasicTypesHandler(synthFromBasicTypes);
+    traverser.setMCSimpleGenericTypesHandler(synFromSimple);
+    traverser.setMCBasicTypesHandler(synFromBasic);
   }
 
   @Override
-  public ArcBasisTraverser getTraverser() {
+  public MCBasicTypesTraverser getTraverser() {
     return traverser;
   }
 

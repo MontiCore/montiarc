@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.ocl.codegen.util.VariableNaming;
 import de.monticore.ocl.codegen.visitors.SetExpressionsPrinter;
@@ -26,7 +26,7 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this(new IndentPrinter());
   }
 
-  public MA2JSimJavaPrinter(@Nullable ComponentTypeSymbol currentVariant) {
+  public MA2JSimJavaPrinter(@Nullable ArcComponentTypeSymbol currentVariant) {
     this(new IndentPrinter(), true, currentVariant);
   }
 
@@ -34,7 +34,7 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this(Preconditions.checkNotNull(printer), true, null);
   }
 
-  public MA2JSimJavaPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
+  public MA2JSimJavaPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ArcComponentTypeSymbol currentVariant) {
     super(Preconditions.checkNotNull(printer), printComments);
 
     CodeGenContext context = new CodeGenContext();

@@ -3,8 +3,8 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._symboltable.ArcBasisScopesGenitorDelegator;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -37,7 +37,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindCorrectOrderWithNoParameters() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("NoParameters")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(Mockito.mock(ASTComponentBody.class))
@@ -57,7 +57,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindCorrectOrderWithMandatoryParameters() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("WithMandatoryParams")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -94,7 +94,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindCorrectOrderWithMandatoryParametersThenOptionalParameters() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("WithMandatoryThenOptionalParams")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -149,7 +149,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindCorrectOrderWithOptionalParameters() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("WithOptionalParams")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -188,7 +188,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindWrongOrderWithMixedParameters1() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("WithMixedParams1")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -236,7 +236,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindWrongOrderWithMixedParameters2() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("WithMixedParams2")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()
@@ -283,7 +283,7 @@ public class OptionalConfigurationParametersLastTest extends ArcBasisTestBase {
   @Test
   public void shouldFindWrongOrderWithOptionalThenMandatoryParameters() {
     // Given
-    ASTComponentType comp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType comp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("WithOptionalThenMandatoryParams")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()

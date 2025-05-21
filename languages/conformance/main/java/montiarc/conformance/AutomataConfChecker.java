@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
@@ -57,8 +57,8 @@ public class AutomataConfChecker {
   }
 
   public boolean isConform(
-      ASTComponentType referenceAut,
-      ASTComponentType concreteAut,
+      ASTArcComponentType referenceAut,
+      ASTArcComponentType concreteAut,
       ASTCDCompilationUnit refCD,
       ASTCDCompilationUnit conCD,
       AutomataMapping mapping) {

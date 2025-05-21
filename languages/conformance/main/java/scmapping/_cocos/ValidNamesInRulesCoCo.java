@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import montiarc.conformance.util.AutomataUtils;
 import scmapping.SCMappingMill;
@@ -26,9 +26,9 @@ public class ValidNamesInRulesCoCo implements SCMappingASTSCMappingCoCo {
   private final List<String> validRefNamesInOutputRules = new ArrayList<>();
 
   public ValidNamesInRulesCoCo(
-      ASTComponentType refAut,
+      ASTArcComponentType refAut,
       ASTCDCompilationUnit refCD,
-      ASTComponentType conAut,
+      ASTArcComponentType conAut,
       ASTCDCompilationUnit conCD) {
 
     // concrete names for state rules

@@ -2,14 +2,14 @@
 package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortReference;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -23,7 +23,7 @@ import java.util.List;
  * As a convention, we require that instantiations are performed prior to any communication taking place. Thus, default
  * values for configuration parameters may not reference any port.
  */
-public class ParameterDefaultValueOmitsPortRef implements arcbasis._cocos.ArcBasisASTComponentTypeCoCo {
+public class ParameterDefaultValueOmitsPortRef implements arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo {
 
   protected final IPortReferenceInExpressionExtractor portRefExtractor;
 
@@ -37,7 +37,7 @@ public class ParameterDefaultValueOmitsPortRef implements arcbasis._cocos.ArcBas
 
 
   @Override
-  public void check(ASTComponentType astComp) {
+  public void check(ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 

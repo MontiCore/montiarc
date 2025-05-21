@@ -16,15 +16,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Holds the tests for the handwritten methods of {@link ASTComponentTypeBuilder}.
+ * Holds the tests for the handwritten methods of {@link ASTArcComponentTypeBuilder}.
  */
 public class ComponentBuilderTest extends ArcBasisTestBase {
 
-  protected ASTComponentTypeBuilder builder;
+  protected ASTArcComponentTypeBuilder builder;
 
   @BeforeEach
   public void setUpBuilder() {
-    this.builder = new ASTComponentTypeBuilder();
+    this.builder = new ASTArcComponentTypeBuilder();
     this.builder.setName("Components")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder().build())
@@ -36,7 +36,7 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
   public void shouldAddGivenInstance(String instance) {
     List<String> expectedInstanceList = this.getInstanceList(this.builder);
     expectedInstanceList.add(instance);
-    ASTComponentType ast = this.builder.addInstance(instance).build();
+    ASTArcComponentType ast = this.builder.addInstance(instance).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
     Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
@@ -47,7 +47,7 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
   public void shouldSetGivenInstance(int index, String instance) {
     List<String> expectedInstanceList = this.getInstanceList(this.builder);
     expectedInstanceList.set(index, instance);
-    ASTComponentType ast = this.builder.setInstance(index, instance).build();
+    ASTArcComponentType ast = this.builder.setInstance(index, instance).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
     Assertions.assertEquals(ast.getComponentInstance(index).getName(), instance);
     Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
@@ -59,7 +59,7 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
   public void shouldAddGivenInstance(int index, String instance) {
     List<String> expectedInstanceList = this.getInstanceList(this.builder);
     expectedInstanceList.add(index, instance);
-    ASTComponentType ast = this.builder.addInstance(index, instance).build();
+    ASTArcComponentType ast = this.builder.addInstance(index, instance).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
     Assertions.assertEquals(ast.getComponentInstance(index).getName(), instance);
     Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
@@ -74,7 +74,7 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
   @MethodSource("instancesProvider")
   public void shouldSetGivenInstances(String[] instances) {
     List<String> expectedInstanceList = Arrays.asList(instances);
-    ASTComponentType ast = this.builder.setComponentInstanceList(instances).build();
+    ASTArcComponentType ast = this.builder.setComponentInstanceList(instances).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
     Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
@@ -85,7 +85,7 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
   public void shouldAddGivenInstances(String[] instances) {
     List<String> expectedInstanceList = this.getInstanceList(this.builder);
     expectedInstanceList.addAll(Arrays.asList(instances));
-    ASTComponentType ast = this.builder.addAllInstances(instances).build();
+    ASTArcComponentType ast = this.builder.addAllInstances(instances).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
     Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
@@ -102,7 +102,7 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
   public void shouldAddGivenInstances(int index, String[] instances) {
     List<String> expectedInstanceList = this.getInstanceList(this.builder);
     expectedInstanceList.addAll(index, Arrays.asList(instances));
-    ASTComponentType ast = this.builder.addAllInstances(index, instances).build();
+    ASTArcComponentType ast = this.builder.addAllInstances(index, instances).build();
     List<String> actualInstanceList = this.getInstanceList(ast);
     Assertions.assertEquals(expectedInstanceList.size(), ast.getComponentInstanceList().size());
     Assertions.assertEquals(expectedInstanceList, actualInstanceList);
@@ -114,13 +114,13 @@ public class ComponentBuilderTest extends ArcBasisTestBase {
       (Arguments.of(0, new String[] { "comp1", "comp2", "comp3" })));
   }
 
-  protected List<String> getInstanceList(ASTComponentTypeBuilder builder) {
+  protected List<String> getInstanceList(ASTArcComponentTypeBuilder builder) {
     return builder.getComponentInstanceList().stream()
       .map(ASTComponentInstance::getName)
       .collect(Collectors.toList());
   }
 
-  protected List<String> getInstanceList(ASTComponentType ast) {
+  protected List<String> getInstanceList(ASTArcComponentType ast) {
     return ast.getComponentInstanceList().stream().map(ASTComponentInstance::getName)
       .collect(Collectors.toList());
   }

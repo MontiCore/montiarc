@@ -1,8 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.TypeExprOfGenericComponent;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -36,7 +37,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
   public void shouldSynthesizeFromMCQualifiedType() {
     // Given
     String compName = "Comp";
-    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .build();
@@ -51,10 +52,10 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
       .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
+    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
-    Optional<CompKindExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompKindExpression> result = synth.synthesize(astComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
@@ -65,9 +66,9 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
   @Test
   public void shouldSynthesizeFromMCBasicGenericType() {
     // Given
-    // First, we build OOSymbols for String and List<T> and a ComponentTypeSymbol for Comp<K,V>.
+    // First, we build OOSymbols for String and List<T> and a ArcComponentTypeSymbol for Comp<K,V>.
     String compName = "Comp";
-    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -113,10 +114,10 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     );
     astNormalComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
+    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
-    Optional<CompKindExpression> result = synth.synthesizeFrom(astNormalComp);
+    Optional<CompKindExpression> result = synth.synthesize(astNormalComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
@@ -143,10 +144,10 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
       .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    MontiArcSynthesizeComponent synth = new MontiArcSynthesizeComponent();
+    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
 
     // When
-    Optional<CompKindExpression> result = synth.synthesizeFrom(astComp);
+    Optional<CompKindExpression> result = synth.synthesize(astComp);
 
     // Then
     Assertions.assertFalse(result.isPresent());

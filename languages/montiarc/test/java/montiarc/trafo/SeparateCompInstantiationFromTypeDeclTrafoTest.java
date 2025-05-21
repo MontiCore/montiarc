@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.trafo;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -74,15 +74,15 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
 
     // Then
     SoftAssertions.assertSoftly(s -> {
-      s.assertThat(ast.getComponentType().getSubComponentInstantiations())
+      s.assertThat(ast.getArcComponentType().getSubComponentInstantiations())
         .as("Instantiation declarations")
         .hasSize(1);
-      s.assertThat(ast.getComponentType().getInnerComponents().get(0).getComponentInstanceList())
+      s.assertThat(ast.getArcComponentType().getInnerComponents().get(0).getComponentInstanceList())
         .as("Instantiations paired with their type's declaration")
         .isEmpty();
     });
 
-    ASTComponentInstantiation realInstantiation = ast.getComponentType().getSubComponentInstantiations().get(0);
+    ASTComponentInstantiation realInstantiation = ast.getArcComponentType().getSubComponentInstantiations().get(0);
 
     Assertions.assertThat(realInstantiation)
       .as("Instantiation should equal %s", expectedNewInstantiation)
@@ -115,9 +115,9 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     // Replace component body with spy so we can verify that the list of component instantiations is not changed
-    ASTComponentBody originalBody = ast.getComponentType().getBody();
+    ASTComponentBody originalBody = ast.getArcComponentType().getBody();
     ASTComponentBody spyBody = Mockito.spy(originalBody);
-    ast.getComponentType().setBody(spyBody);
+    ast.getArcComponentType().setBody(spyBody);
 
     MASeparateCompInstantiationFromTypeDeclTrafo trafo = new MASeparateCompInstantiationFromTypeDeclTrafo();
 
@@ -154,7 +154,7 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTComponentType innerType = ast.getComponentType() // yields OuterMost
+    ASTArcComponentType innerType = ast.getArcComponentType() // yields OuterMost
       .getInnerComponents().get(0)  // yields Middle
       .getInnerComponents().get(0);  // yields Inner
 
@@ -197,7 +197,7 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTArcVarIf firstArcIf = ast.getComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
+    ASTArcVarIf firstArcIf = ast.getArcComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
     ASTArcVarIf nestedArcIf = ((ASTComponentBody) firstArcIf.getThen()).getElementsOfType(ASTArcVarIf.class).get(0);
 
     Assertions.assertThat(nestedArcIf.getThen()).as("Then statement").isInstanceOf(ASTComponentBody.class);
@@ -207,7 +207,7 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
       s.assertThat(arcIfContent.getElementsOfType(ASTComponentInstantiation.class))
         .as("Instantiation declarations")
         .hasSize(1);
-      s.assertThat(arcIfContent.getElementsOfType(ASTComponentType.class).get(0).getComponentInstanceList())
+      s.assertThat(arcIfContent.getElementsOfType(ASTArcComponentType.class).get(0).getComponentInstanceList())
         .as("Instantiations paired with their type's declaration")
         .isEmpty();
     });

@@ -3,12 +3,9 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols.CompSymbolsMill;
-import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbolDeSer;
-import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolDeSer;
 import de.monticore.symboltable.serialization.ISymbolDeSer;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
@@ -16,7 +13,7 @@ import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.symboltable.serialization.json.JsonElementFactory;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.CompKindExpression;
-import de.monticore.types.check.FullCompKindExprDeSer;
+import de.monticore.types.check.CompKindExpressionDeSer;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -24,31 +21,27 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
+public class ArcComponentTypeSymbolDeSer extends ArcComponentTypeSymbolDeSerTOP {
 
-  private FullCompKindExprDeSer compTypeExprDeSer;
+  protected final CompKindExpressionDeSer compTypeExprDeSer;
 
-  public ComponentTypeSymbolDeSer() {
-    this.compTypeExprDeSer = ArcBasisMill.compTypeExprDeSer();
+  public ArcComponentTypeSymbolDeSer() {
+    compTypeExprDeSer = ArcBasisMill.compKindExprDeSer();
   }
 
   /**
-   * @param compTypeExprDeSer the DeSer to use for (de)serializing the parent.
+   * @param compTypeExprDeSer the DeSer to use for (de)serializing the super components
    */
-  public ComponentTypeSymbolDeSer(@NotNull FullCompKindExprDeSer compTypeExprDeSer) {
+  public ArcComponentTypeSymbolDeSer(@NotNull CompKindExpressionDeSer compTypeExprDeSer) {
     this.compTypeExprDeSer = Preconditions.checkNotNull(compTypeExprDeSer);
   }
 
-  public FullCompKindExprDeSer getCompTypeExprDeSer() {
+  protected CompKindExpressionDeSer getCompTypeExprDeSer() {
     return compTypeExprDeSer;
   }
 
-  public void setCompTypeExprDeSer(@NotNull FullCompKindExprDeSer compTypeExprDeSer) {
-    this.compTypeExprDeSer = Preconditions.checkNotNull(compTypeExprDeSer);
-  }
-
   @Override
-  protected void deserializeAddons(ComponentTypeSymbol symbol, JsonObject symbolJson) {
+  protected void deserializeAddons(ArcComponentTypeSymbol symbol, JsonObject symbolJson) {
     symbol.getParameterList().forEach(symbol.getSpannedScope()::add);
     symbol.getInnerComponents().forEach(s -> s.setOuterComponent(symbol));
   }
@@ -56,10 +49,10 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   @Override
   protected void serializeSuperComponents(@NotNull List<CompKindExpression> superComponents,
                                           @NotNull ArcBasisSymbols2Json s2j) {
-    s2j.getJsonPrinter().beginArray(ComponentSymbolDeSer.SUPER);
+    s2j.getJsonPrinter().beginArray(ComponentTypeSymbolDeSer.SUPER);
     for (CompKindExpression superComponent : superComponents) {
       s2j.getJsonPrinter().addToArray(JsonElementFactory
-        .createJsonString(this.getCompTypeExprDeSer().serializeAsJson(superComponent)));
+        .createJsonString(this.getCompTypeExprDeSer().serialize(superComponent)));
     }
     s2j.getJsonPrinter().endArray();
   }
@@ -67,7 +60,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   @Override
   protected List<CompKindExpression> deserializeSuperComponents(IArcBasisScope scope, JsonObject symbolJson) {
 
-    List<JsonElement> superComponents = symbolJson.getArrayMemberOpt(ComponentSymbolDeSer.SUPER).orElseGet(Collections::emptyList);
+    List<JsonElement> superComponents = symbolJson.getArrayMemberOpt(ComponentTypeSymbolDeSer.SUPER).orElseGet(Collections::emptyList);
     List<CompKindExpression> result = new ArrayList<>(superComponents.size());
 
     for (JsonElement superComponent : superComponents) {
@@ -77,15 +70,10 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   }
 
   @Override
-  protected List<CompKindExpression> deserializeSuperComponents(JsonObject symbolJson) {
-    throw new UnsupportedOperationException();
-  }
-
-  @Override
   protected void serializeParameter(List<VariableSymbol> parameter, ArcBasisSymbols2Json s2j) {
     JsonPrinter printer = s2j.getJsonPrinter();
 
-    printer.beginArray(ComponentSymbolDeSer.PARAMETERS);
+    printer.beginArray(ComponentTypeSymbolDeSer.PARAMETERS);
     parameter.forEach(p -> p.accept(s2j.getTraverser()));
     printer.endArray();
   }
@@ -94,7 +82,7 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   protected List<VariableSymbol> deserializeParameter(JsonObject symbolJson) {
     final String varSerializeKind = VariableSymbol.class.getCanonicalName();
 
-    List<JsonElement> params = symbolJson.getArrayMemberOpt(ComponentSymbolDeSer.PARAMETERS).orElseGet(Collections::emptyList);
+    List<JsonElement> params = symbolJson.getArrayMemberOpt(ComponentTypeSymbolDeSer.PARAMETERS).orElseGet(Collections::emptyList);
     List<VariableSymbol> parameterResult = new ArrayList<>(params.size());
 
     for (JsonElement param : params) {
@@ -116,17 +104,17 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
   @Override
   protected void serializeRefinements(List<CompKindExpression> refinements,
                                       ArcBasisSymbols2Json s2j) {
-    s2j.getJsonPrinter().beginArray(ComponentSymbolDeSer.REFINEMENTS);
+    s2j.getJsonPrinter().beginArray(ComponentTypeSymbolDeSer.REFINEMENTS);
     for (CompKindExpression superComponent : refinements) {
       s2j.getJsonPrinter().addToArray(JsonElementFactory
-        .createJsonString(compTypeExprDeSer.serializeAsJson(superComponent)));
+        .createJsonString(compTypeExprDeSer.serialize(superComponent)));
     }
     s2j.getJsonPrinter().endArray();
   }
 
   @Override
   protected List<CompKindExpression> deserializeRefinements(IArcBasisScope scope, JsonObject symbolJson) {
-    List<JsonElement> refinements = symbolJson.getArrayMemberOpt(ComponentSymbolDeSer.REFINEMENTS).orElseGet(Collections::emptyList);
+    List<JsonElement> refinements = symbolJson.getArrayMemberOpt(ComponentTypeSymbolDeSer.REFINEMENTS).orElseGet(Collections::emptyList);
     List<CompKindExpression> result = new ArrayList<>(refinements.size());
 
     for (JsonElement refinement : refinements) {
@@ -137,6 +125,11 @@ public class ComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSerTOP {
 
   @Override
   protected List<CompKindExpression> deserializeRefinements(JsonObject symbolJson) {
+    throw new UnsupportedOperationException();
+  }
+
+  @Override
+  protected List<CompKindExpression> deserializeSuperComponents(JsonObject symbolJson) {
     throw new UnsupportedOperationException();
   }
 }

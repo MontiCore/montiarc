@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
@@ -20,14 +20,14 @@ import java.util.HashSet;
  * Implements [Hab16] R11: Inheritance cycles of component types are forbidden.
  * (p. 67, lst. 3.46)
  */
-public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
+public class CircularInheritance implements ArcBasisASTArcComponentTypeCoCo {
 
   /**
    * Checks that the component does not extend itself.
    * @param node the component that is to be checked
    */
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
@@ -44,8 +44,8 @@ public class CircularInheritance implements ArcBasisASTComponentTypeCoCo {
    * @param next the next component whose parent is to be checked
    * @param visited the (component) symbols already checked
    */
-  protected void check(@NotNull ASTComponentType root,
-                       @NotNull ComponentSymbol next,
+  protected void check(@NotNull ASTArcComponentType root,
+                       @NotNull ComponentTypeSymbol next,
                        @NotNull Collection<ISymbol> visited) {
     Preconditions.checkNotNull(root);
     Preconditions.checkNotNull(next);

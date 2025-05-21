@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.sort;
 
-
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.microsoft.z3.BoolExpr;
@@ -33,10 +32,10 @@ public class StateSort implements SMTSort<SCStateSymbol, VariableSymbol> {
   protected Map<SCStateSymbol, Constructor<?>> stateConstrMap = new HashMap<>();
   protected BiMap<VariableSymbol, String> varAccessor = HashBiMap.create();
   protected Constructor<?> constructor;
-  protected ASTComponentType comp;
+  protected ASTArcComponentType comp;
 
   public StateSort(
-          ASTComponentType comp, CD2SMT cd2SMT, Context ctx, Function<String, String> ident) {
+          ASTArcComponentType comp, CD2SMT cd2SMT, Context ctx, Function<String, String> ident) {
     this.ctx = ctx;
     this.comp = comp;
 

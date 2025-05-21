@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util.trafo;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
@@ -28,7 +28,7 @@ import java.io.File;
 public class GlobalVariableTrafoTest extends AutomatonAbstractTest {
   private final Context ctx = new Context();
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/";
-  private ASTComponentType aut;
+  private ASTArcComponentType aut;
   private SMTAutomaton smtAut;
   private Expr<?> src;
   private Expr<?> tgt;
@@ -46,8 +46,8 @@ public class GlobalVariableTrafoTest extends AutomatonAbstractTest {
 
     Pair<ASTCDCompilationUnit, ASTMACompilationUnit> res =
         AutomataLoader.loadModels(autFile, cdFile);
-    aut = res.getValue().getComponentType();
-    smtAut = new SMTAutomaton(res.getValue().getComponentType(), res.getKey(), s -> s, ctx);
+    aut = res.getValue().getArcComponentType();
+    smtAut = new SMTAutomaton(res.getValue().getArcComponentType(), res.getKey(), s -> s, ctx);
 
     src = ctx.mkConst("src_state", smtAut.getStateSort());
     tgt = ctx.mkConst("tgt_state", smtAut.getStateSort());

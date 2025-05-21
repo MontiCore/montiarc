@@ -12,12 +12,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Represents component declarations. Extends {@link ASTComponentTypeTOP} with utility functions
+ * Represents component declarations. Extends {@link ASTArcComponentTypeTOP} with utility functions
  * for easy access.
  */
-public class ASTComponentType extends ASTComponentTypeTOP {
+public class ASTArcComponentType extends ASTArcComponentTypeTOP {
 
-  protected ASTComponentType() {
+  protected ASTArcComponentType() {
     super();
   }
 
@@ -264,7 +264,7 @@ public class ASTComponentType extends ASTComponentTypeTOP {
       .collect(Collectors.toList()));
     subComponents.addAll(this.getInnerComponents()
       .stream()
-      .map(ASTComponentType::getComponentInstanceList)
+      .map(ASTArcComponentType::getComponentInstanceList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList()));
     return subComponents;
@@ -289,8 +289,8 @@ public class ASTComponentType extends ASTComponentTypeTOP {
    * @return a {@code List} of all inner component definitions contained in the body of this
    * component.
    */
-  public List<ASTComponentType> getInnerComponents() {
-    return getArcElementListOfType(ASTComponentType.class);
+  public List<ASTArcComponentType> getInnerComponents() {
+    return getArcElementListOfType(ASTArcComponentType.class);
   }
 
   /**

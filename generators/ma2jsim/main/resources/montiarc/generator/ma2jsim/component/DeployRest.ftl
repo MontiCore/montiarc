@@ -8,8 +8,8 @@
   ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-<#assign comp=variant!ast.getComponentType().getSymbol()/>
-<#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ComponentTypeSymbol" -->
+<#assign comp=variant!ast.getArcComponentType().getSymbol()/>
+<#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ArcComponentTypeSymbol" -->
 
 public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top()}</#if>
   extends montiarc.rte.deploy.RestDeployment<${comp.getName()}${suffixes.comp()}> {

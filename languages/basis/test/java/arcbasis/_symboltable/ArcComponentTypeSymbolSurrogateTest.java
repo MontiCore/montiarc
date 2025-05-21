@@ -5,7 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis.check.CompTypeExpression;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -27,14 +27,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
+public class ArcComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   
   @Test
   public void setSpannedScopeShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     IArcBasisScope scopeToSet = ArcBasisMill.scope();
 
@@ -48,9 +48,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getSpannedScopeShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     // When
     IArcBasisScope scope = surrogate.getSpannedScope();
@@ -62,30 +62,30 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getInnerComponentsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol inner = addInnerComponentTypeTo(comp, "Inner");
+    ArcComponentTypeSymbol inner = addInnerComponentTypeTo(comp, "Inner");
 
     // When
-    List<ComponentTypeSymbol> inners = surrogate.getInnerComponents();
+    List<ArcComponentTypeSymbol> inners = surrogate.getInnerComponents();
 
     // Then
-    Assertions.assertArrayEquals(new ComponentTypeSymbol[] {inner}, inners.toArray());
+    Assertions.assertArrayEquals(new ArcComponentTypeSymbol[] {inner}, inners.toArray());
   }
 
   @Test
   public void getInnerComponentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol inner = addInnerComponentTypeTo(comp, "Inner");
+    ArcComponentTypeSymbol inner = addInnerComponentTypeTo(comp, "Inner");
 
     // When
-    Optional<ComponentTypeSymbol> innerOpt = surrogate.getInnerComponent("Inner");
+    Optional<ArcComponentTypeSymbol> innerOpt = surrogate.getInnerComponent("Inner");
 
     // Then
     Assertions.assertTrue(innerOpt.isPresent(), "Inner comp is not present");
@@ -95,25 +95,25 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getInnerComponentsWithAccessModifierShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol inner = addInnerComponentTypeTo(comp, "Inner");
+    ArcComponentTypeSymbol inner = addInnerComponentTypeTo(comp, "Inner");
 
     // When
-    List<ComponentTypeSymbol> inners = surrogate.getInnerComponents(BasicAccessModifier.PUBLIC);
+    List<ArcComponentTypeSymbol> inners = surrogate.getInnerComponents(BasicAccessModifier.PUBLIC);
 
     // Then
-    Assertions.assertArrayEquals(new ComponentTypeSymbol[] {inner}, inners.toArray());
+    Assertions.assertArrayEquals(new ArcComponentTypeSymbol[] {inner}, inners.toArray());
   }
 
   @Test
   public void getPortsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -127,9 +127,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getPortByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -144,11 +144,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getInheritedPortByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol parent = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol parent = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -167,9 +167,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getIncomingPortsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -183,9 +183,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getIncomingPortsByAccessModifierShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -199,9 +199,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getIncomingPortByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -216,11 +216,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getInheritedIncomingPortByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
+    ArcComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     comp.setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
     PortSymbol port = addIncomingPortTo(parent, "parentPort");
@@ -236,11 +236,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void isInnerComponentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol outer = createCompWithSurrogate("Outer").getKey();
+    ArcComponentTypeSymbol outer = createCompWithSurrogate("Outer").getKey();
     comp.setOuterComponent(outer);
 
     // When
@@ -254,15 +254,15 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   public void getOuterComponentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol outer = createCompWithSurrogate("Outer").getKey();
+    ArcComponentTypeSymbol outer = createCompWithSurrogate("Outer").getKey();
     comp.setOuterComponent(outer);
 
     // When
-    Optional<ComponentTypeSymbol> outerOpt = surrogate.getOuterComponent();
+    Optional<ArcComponentTypeSymbol> outerOpt = surrogate.getOuterComponent();
 
     // Then
     Assertions.assertTrue(outerOpt.isPresent(), "No outer component");
@@ -273,11 +273,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void setOuterComponentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol outer = createCompWithSurrogate("Outer").getKey();
+    ArcComponentTypeSymbol outer = createCompWithSurrogate("Outer").getKey();
 
     // When
     surrogate.setOuterComponent(outer);
@@ -291,11 +291,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void isPresentParentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
+    ArcComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     comp.setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent)));
 
     // When
@@ -309,11 +309,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getParentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
+    ArcComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
     comp.setSuperComponentsList(Collections.singletonList(parentExpr));
 
@@ -328,11 +328,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void setParentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
+    ArcComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
 
     // When
@@ -345,11 +345,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void isPresentRefinementShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
+    ArcComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
     CompKindExpression abstractionExpr = new TypeExprOfComponent(abstraction);
     comp.setRefinementsList(Collections.singletonList(abstractionExpr));
 
@@ -364,11 +364,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getRefinementShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
+    ArcComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
     CompTypeExpression abstractionExpr = new TypeExprOfComponent(abstraction);
     comp.setRefinementsList(Collections.singletonList(abstractionExpr));
 
@@ -383,11 +383,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void setRefinementShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair = createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
+    ArcComponentTypeSymbol abstraction = createCompWithSurrogate("Abstraction").getKey();
     CompTypeExpression abstractionExpr = new TypeExprOfComponent(abstraction);
 
     // When
@@ -400,9 +400,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getParameterListShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     VariableSymbol param = addParameterTo(comp, "myParam");
 
@@ -416,9 +416,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getParameterShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     VariableSymbol param = addParameterTo(comp, "myParam");
 
@@ -433,9 +433,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void addParameterShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     VariableSymbol param = ArcBasisMill
       .variableSymbolBuilder()
@@ -455,9 +455,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void addParametersShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     VariableSymbol param = ArcBasisMill
       .variableSymbolBuilder()
@@ -476,9 +476,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void hasParametersShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     addParameterTo(comp, "param");
 
@@ -492,9 +492,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getTypeParametersShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     TypeVarSymbol typeParam = addTypeParameterTo(comp, "T");
 
@@ -508,9 +508,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void hasTypeParameterShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     addTypeParameterTo(comp, "T");
 
@@ -524,9 +524,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getFieldsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     VariableSymbol field = addFieldTo(comp, "myField");
 
@@ -540,9 +540,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getFieldByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     VariableSymbol field = addFieldTo(comp, "myField");
 
@@ -558,9 +558,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getOutgoingPortsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addOutgoingPortTo(comp, "myPort");
 
@@ -573,9 +573,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getOutgoingPortsByAccessModifierShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addOutgoingPortTo(comp, "myPort");
 
@@ -589,9 +589,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getOutgoingPortByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addOutgoingPortTo(comp, "myPort");
 
@@ -606,11 +606,11 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getInheritedOutgoingPortByNameShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
-    ComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
+    ArcComponentTypeSymbol parent = createCompWithSurrogate("Parent").getKey();
     CompTypeExpression parentExpr = new TypeExprOfComponent(parent);
     comp.setSuperComponentsList(Collections.singletonList(parentExpr));
 
@@ -627,9 +627,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getPortsWithDirectionShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
@@ -644,9 +644,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getAllIncomingPortsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -660,9 +660,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getAllOutgoingPortsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addOutgoingPortTo(comp, "myPort");
 
@@ -676,9 +676,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getAllPortsWithDirectionShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addIncomingPortTo(comp, "myPort");
 
@@ -692,9 +692,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getAllPortsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     PortSymbol port = addOutgoingPortTo(comp, "myPort");
 
@@ -708,9 +708,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getSubComponentsShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     SubcomponentSymbol sub = addSubComponentTo(comp, "sub");
 
@@ -724,9 +724,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getSubComponentsByVisibilityShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     SubcomponentSymbol sub = addSubComponentTo(comp, "sub");
 
@@ -740,9 +740,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getSubComponentShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     SubcomponentSymbol sub = addSubComponentTo(comp, "mySub");
 
@@ -758,9 +758,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void isDecomposedShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     addSubComponentTo(comp, "sub");
 
@@ -774,9 +774,9 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void isAtomicShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     addSubComponentTo(comp, "sub");
 
@@ -790,13 +790,13 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
   @Test
   void getBehaviorShouldSkipSurrogate() {
     // Given
-    Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
-    ComponentTypeSymbol comp = pair.getKey();
-    ComponentTypeSymbolSurrogate surrogate = pair.getValue();
+    Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> pair =  createCompWithSurrogate("Comp");
+    ArcComponentTypeSymbol comp = pair.getKey();
+    ArcComponentTypeSymbolSurrogate surrogate = pair.getValue();
 
     ASTArcBehaviorElement behavior = Mockito.mock(ASTArcBehaviorElement.class);
 
-    ASTComponentType astComp = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType astComp = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Comp")
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -818,7 +818,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds an incoming port symbol to the spanned scope of the component. The port type is only mocked.
    * @return the created Port
    */
-  protected PortSymbol addIncomingPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName) {
+  protected PortSymbol addIncomingPortTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String portName) {
     return addPortTo(compType, portName, true);
   }
 
@@ -826,7 +826,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds an outgoing port symbol to the spanned scope of the component. The port type is only mocked.
    * @return the created Port
    */
-  protected PortSymbol addOutgoingPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName) {
+  protected PortSymbol addOutgoingPortTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String portName) {
     return addPortTo(compType, portName, false);
   }
 
@@ -834,7 +834,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds a port symbol to the spanned scope of the component. The port type is only mocked.
    * @return the created Port
    */
-  protected PortSymbol addPortTo(@NotNull ComponentTypeSymbol compType, @NotNull String portName, boolean isIncoming) {
+  protected PortSymbol addPortTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String portName, boolean isIncoming) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(portName);
 
@@ -856,7 +856,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds a sub component to the spanned scope of the component. The sub component's type type is only mocked.
    * @return the created sub component
    */
-  protected SubcomponentSymbol addSubComponentTo(@NotNull ComponentTypeSymbol compType, @NotNull String subCompName) {
+  protected SubcomponentSymbol addSubComponentTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String subCompName) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(subCompName);
 
@@ -876,12 +876,12 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds an inner component type symbol to the spanned scope of the component.
    * @return the created inner component type
    */
-  protected ComponentTypeSymbol addInnerComponentTypeTo(@NotNull ComponentTypeSymbol compType, @NotNull String innerCompTypeName) {
+  protected ArcComponentTypeSymbol addInnerComponentTypeTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String innerCompTypeName) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(innerCompTypeName);
 
-    ComponentTypeSymbol innerComp =  ArcBasisMill
-      .componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol innerComp =  ArcBasisMill
+      .arcComponentTypeSymbolBuilder()
       .setName(innerCompTypeName)
       .setSpannedScope(ArcBasisMill.scope())
       .setAccessModifier(BasicAccessModifier.PUBLIC)
@@ -896,7 +896,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds a field to the spanned scope of the component. The field type is only mocked.
    * @return the created field.
    */
-  protected VariableSymbol addFieldTo(@NotNull ComponentTypeSymbol compType, @NotNull String fieldName) {
+  protected VariableSymbol addFieldTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String fieldName) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(fieldName);
 
@@ -916,7 +916,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds a parameter to the spanned scope of the component. The parameter type is only mocked.
    * @return the created parameter.
    */
-  protected VariableSymbol addParameterTo(@NotNull ComponentTypeSymbol compType, @NotNull String paramName) {
+  protected VariableSymbol addParameterTo(@NotNull ArcComponentTypeSymbol compType, @NotNull String paramName) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(paramName);
 
@@ -937,7 +937,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
    * Adds a type parameter to the component.
    * @return the created type parameter
    */
-  protected TypeVarSymbol addTypeParameterTo(@NotNull ComponentTypeSymbol compType,
+  protected TypeVarSymbol addTypeParameterTo(@NotNull ArcComponentTypeSymbol compType,
                                              @NotNull String typeParamName) {
     Preconditions.checkNotNull(compType);
     Preconditions.checkNotNull(typeParamName);
@@ -953,20 +953,20 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
     return typeVar;
   }
 
-  protected static Map.Entry<ComponentTypeSymbol, ComponentTypeSymbolSurrogate> createCompWithSurrogate(
+  protected static Map.Entry<ArcComponentTypeSymbol, ArcComponentTypeSymbolSurrogate> createCompWithSurrogate(
     @NotNull String compName) {
     Preconditions.checkNotNull(compName);
 
     IArcBasisScope commonScope = ArcBasisMill.scope();
 
-    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol symbol = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     commonScope.add(symbol);
 
-    ComponentTypeSymbolSurrogate surrogate = ArcBasisMill.componentTypeSymbolSurrogateBuilder()
+    ArcComponentTypeSymbolSurrogate surrogate = ArcBasisMill.arcComponentTypeSymbolSurrogateBuilder()
       .setName(compName)
       .setEnclosingScope(commonScope)
       .build();

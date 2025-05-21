@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.Port2VariableAdapter;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -9,7 +9,7 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 import modes._ast.ASTModeVariantComponentType;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.VariantArcComponentTypeSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,11 +18,11 @@ import java.util.stream.Collectors;
 /**
  * Represents a configured component type variant. Includes all symbols found in the mode.
  */
-public class ModesVariantComponentTypeSymbol extends VariantComponentTypeSymbol {
+public class ModesVariantComponentTypeSymbol extends VariantArcComponentTypeSymbol {
 
   protected ArcModeSymbol mode;
 
-  public ModesVariantComponentTypeSymbol(@NotNull ComponentTypeSymbol typeSymbol, @NotNull ArcModeSymbol mode) {
+  public ModesVariantComponentTypeSymbol(@NotNull ArcComponentTypeSymbol typeSymbol, @NotNull ArcModeSymbol mode) {
     super(typeSymbol);
     Preconditions.checkNotNull(typeSymbol);
     Preconditions.checkNotNull(mode);

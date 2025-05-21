@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.CompKindExpression;
@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
  */
 public class TypeExprOfComponent extends CompTypeExpression {
 
-  public TypeExprOfComponent(@NotNull ComponentTypeSymbol compTypeSymbol) {
+  public TypeExprOfComponent(@NotNull ArcComponentTypeSymbol compTypeSymbol) {
     super(compTypeSymbol);
   }
 
@@ -63,7 +63,7 @@ public class TypeExprOfComponent extends CompTypeExpression {
   }
 
   @Override
-  public CompTypeExpression deepClone(@NotNull ComponentTypeSymbol compTypeSymbol) {
+  public CompTypeExpression deepClone(@NotNull ArcComponentTypeSymbol compTypeSymbol) {
     return new TypeExprOfComponent(compTypeSymbol);
   }
 

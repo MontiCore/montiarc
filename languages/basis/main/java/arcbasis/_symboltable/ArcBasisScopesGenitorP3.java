@@ -33,8 +33,8 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
         node.getSymbol().setStronglyCausal(false);
       }
       IScopeSpanningSymbol symbol = node.getEnclosingScope().getSpanningSymbol();
-      if (symbol instanceof ComponentTypeSymbol) {
-        node.getSymbol().setStronglyCausal(isHereditaryStronglyCausal(node.getSymbol(), (ComponentTypeSymbol) symbol));
+      if (symbol instanceof ArcComponentTypeSymbol) {
+        node.getSymbol().setStronglyCausal(isHereditaryStronglyCausal(node.getSymbol(), (ArcComponentTypeSymbol) symbol));
       } else {
         node.getSymbol().setStronglyCausal(false);
       }
@@ -43,7 +43,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     return port.getStronglyCausal();
   }
 
-  protected boolean isHereditaryStronglyCausal(PortSymbol portSymbol, ComponentTypeSymbol componentTypeSymbol) {
+  protected boolean isHereditaryStronglyCausal(PortSymbol portSymbol, ArcComponentTypeSymbol componentTypeSymbol) {
     if (portSymbol.isOutgoing() && componentTypeSymbol.isAtomic()) {
       // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
       return componentTypeSymbol.getBehavior().isPresent()
@@ -55,7 +55,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     return false;
   }
 
-  protected boolean isComposedStronglyCausal(PortSymbol portSymbol, ComponentTypeSymbol componentTypeSymbol) {
+  protected boolean isComposedStronglyCausal(PortSymbol portSymbol, ArcComponentTypeSymbol componentTypeSymbol) {
     if (!componentTypeSymbol.isDecomposed() || !portSymbol.isOutgoing()) {
       return false;
     }

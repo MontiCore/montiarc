@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import de.monticore.ast.ASTNode;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.CompKindExpression;
@@ -56,7 +56,7 @@ import java.util.stream.Collectors;
  * share the same name. We check all parts of this coco, if their timing and direction
  * are unambiguous.
  */
-public class RefinementPortsMatch implements ArcBasisASTComponentTypeCoCo {
+public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
 
   /**
    * Provides more self speaking access to a port collection.<br>
@@ -99,7 +99,7 @@ public class RefinementPortsMatch implements ArcBasisASTComponentTypeCoCo {
   }
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 

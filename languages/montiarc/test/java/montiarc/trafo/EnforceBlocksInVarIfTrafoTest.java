@@ -55,7 +55,7 @@ public class EnforceBlocksInVarIfTrafoTest extends MontiArcTestBase {
 
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    ASTArcVarIf varIf = ast.getComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
+    ASTArcVarIf varIf = ast.getArcComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
     ASTArcElement astExpectedThen = MontiArcMill.parser().parse_StringArcElement(expectedThen).orElseThrow();
     Optional<ASTArcElement> astExpectedOtherwise = expectedOtherwise == null ? Optional.empty() :
       Optional.of(MontiArcMill.parser().parse_StringArcElement(expectedOtherwise).orElseThrow());
@@ -95,10 +95,10 @@ public class EnforceBlocksInVarIfTrafoTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
     // Replace component body with spy so we can verify that the list of component instantiations is not changed
-    ASTArcVarIf originalVarIf = ast.getComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
+    ASTArcVarIf originalVarIf = ast.getArcComponentType().getBody().getElementsOfType(ASTArcVarIf.class).get(0);
     ASTArcVarIf spyVarIf = Mockito.spy(originalVarIf);
-    ast.getComponentType().getBody().removeArcElement(originalVarIf);
-    ast.getComponentType().getBody().addArcElement(spyVarIf);
+    ast.getArcComponentType().getBody().removeArcElement(originalVarIf);
+    ast.getArcComponentType().getBody().addArcElement(spyVarIf);
 
     MAEnforceBlocksInVarIfTrafo trafo = new MAEnforceBlocksInVarIfTrafo();
 

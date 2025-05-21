@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Represents a configured component type variant. Excludes all symbols not found in this specific variant.
  */
-public class VariableArcVariantComponentTypeSymbol extends VariantComponentTypeSymbol {
+public class VariableArcVariantComponentTypeSymbol extends VariantArcComponentTypeSymbol {
 
   protected IVariableArcComponentTypeSymbol typeSymbol;
   protected Set<VariableArcVariationPoint> includedVariationPoints;

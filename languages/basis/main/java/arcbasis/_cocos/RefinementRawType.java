@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
@@ -18,10 +18,10 @@ import java.util.Optional;
  * Issues a warning if, in a refinement declaration, the refined component is
  * generic, but no type arguments are presented.
  */
-public class RefinementRawType implements ArcBasisASTComponentTypeCoCo {
+public class RefinementRawType implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType astCompType) {
+  public void check(@NotNull ASTArcComponentType astCompType) {
     Preconditions.checkNotNull(astCompType);
     Preconditions.checkArgument(astCompType.isPresentSymbol());
 

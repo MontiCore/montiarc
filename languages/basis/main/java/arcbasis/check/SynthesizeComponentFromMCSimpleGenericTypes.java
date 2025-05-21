@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.check;
+package arcbasis.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.SynthCompTypeResult;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
+import de.monticore.types.check.CompKindCheckResult;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -18,8 +18,6 @@ import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesHand
 import de.monticore.types.mcsimplegenerictypes._visitor.MCSimpleGenericTypesTraverser;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-import arcbasis.check.TypeExprOfGenericComponent;
-import montiarc._symboltable.IMontiArcScope;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -39,9 +37,9 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
   /**
    * Common state with other visitors, if this visitor is part of a visitor composition.
    */
-  protected SynthCompTypeResult resultWrapper;
+  protected CompKindCheckResult resultWrapper;
 
-  public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull SynthCompTypeResult resultWrapper) {
+  public SynthesizeComponentFromMCSimpleGenericTypes(@NotNull CompKindCheckResult resultWrapper) {
     Preconditions.checkNotNull(resultWrapper);
 
     this.resultWrapper = resultWrapper;
@@ -61,11 +59,11 @@ public class SynthesizeComponentFromMCSimpleGenericTypes implements MCSimpleGene
   public void handle(@NotNull ASTMCBasicGenericType mcType) {
     Preconditions.checkNotNull(mcType);
     Preconditions.checkNotNull(mcType.getEnclosingScope());
-    Preconditions.checkArgument(mcType.getEnclosingScope() instanceof IMontiArcScope);
+    Preconditions.checkArgument(mcType.getEnclosingScope() instanceof IArcBasisScope);
 
-    IMontiArcScope enclScope = (IMontiArcScope) mcType.getEnclosingScope();
+    IArcBasisScope enclScope = (IArcBasisScope) mcType.getEnclosingScope();
     String compName = String.join(".", mcType.getNameList());
-    List<ComponentTypeSymbol> compSym = enclScope.resolveComponentTypeMany(compName);
+    List<ArcComponentTypeSymbol> compSym = enclScope.resolveArcComponentTypeMany(compName);
 
     if (compSym.isEmpty()) {
       Log.error(ArcError.MISSING_COMPONENT.format(mcType.getNameList().stream().reduce("", String::concat)),

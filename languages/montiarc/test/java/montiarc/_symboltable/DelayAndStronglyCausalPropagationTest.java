@@ -31,7 +31,7 @@ public class DelayAndStronglyCausalPropagationTest extends MontiArcTestBase {
     tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
     tool.runDefaultCoCos(ast);
-    IArcBasisScope scope = ast.getComponentType().getSpannedScope();
+    IArcBasisScope scope = ast.getArcComponentType().getSpannedScope();
 
     // Then
     Optional<PortSymbol> pDirectDelayed = scope.resolvePort("pDirectDelayed"),

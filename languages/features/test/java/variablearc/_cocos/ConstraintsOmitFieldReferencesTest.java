@@ -4,7 +4,7 @@ package variablearc._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -31,11 +31,11 @@ public class ConstraintsOmitFieldReferencesTest extends VariableArcTestBase {
   /**
    * Provides a component type with specified name, one feature, one field, and the provided elements
    */
-  protected ASTComponentType provideComponentWithFieldAndFeature(@NotNull String compName,
-                                                                 List<ASTArcElement> elements) {
+  protected ASTArcComponentType provideComponentWithFieldAndFeature(@NotNull String compName,
+                                                                    List<ASTArcElement> elements) {
     Preconditions.checkNotNull(compName);
 
-    ASTComponentType comp = VariableArcMill.componentTypeBuilder().setName(compName)
+    ASTArcComponentType comp = VariableArcMill.arcComponentTypeBuilder().setName(compName)
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(VariableArcMill.componentBodyBuilder()
         .addArcElement(
@@ -69,7 +69,7 @@ public class ConstraintsOmitFieldReferencesTest extends VariableArcTestBase {
   /**
    * Provides a component type that references a feature in a constraint
    */
-  protected ASTComponentType provideCompWithFeatureRef() {
+  protected ASTArcComponentType provideCompWithFeatureRef() {
     ASTArcConstraintDeclaration constraint = VariableArcMill.arcConstraintDeclarationBuilder()
       .setExpression(VariableArcMill.nameExpressionBuilder()
         .setName(featureName)
@@ -82,7 +82,7 @@ public class ConstraintsOmitFieldReferencesTest extends VariableArcTestBase {
   /**
    * Provides a component type that references a feature and a field in constraints
    */
-  protected ASTComponentType provideCompWithFeatureAndFieldRef() {
+  protected ASTArcComponentType provideCompWithFeatureAndFieldRef() {
     ASTArcConstraintDeclaration firstConstraint =
       VariableArcMill.arcConstraintDeclarationBuilder()
         .setExpression(VariableArcMill.nameExpressionBuilder()
@@ -102,7 +102,7 @@ public class ConstraintsOmitFieldReferencesTest extends VariableArcTestBase {
   @Test
   public void shouldNotFindFieldReference() {
     // Given
-    ASTComponentType comp = provideCompWithFeatureRef();
+    ASTArcComponentType comp = provideCompWithFeatureRef();
 
     // When
     new ConstraintsOmitFieldReferences().check(comp);
@@ -114,7 +114,7 @@ public class ConstraintsOmitFieldReferencesTest extends VariableArcTestBase {
   @Test
   public void shouldFindFieldReference() {
     // Given
-    ASTComponentType comp = provideCompWithFeatureAndFieldRef();
+    ASTArcComponentType comp = provideCompWithFeatureAndFieldRef();
 
     // When
     new ConstraintsOmitFieldReferences().check(comp);

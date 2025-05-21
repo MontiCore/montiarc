@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc._cocos;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._cocos.ArcBasisASTComponentBodyCoCo;
 import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTArcAutoConnect;
@@ -43,9 +43,9 @@ public class AtomicNoAutoConnect implements ArcBasisASTComponentBodyCoCo {
     // The following counts simultaneous component type declarations directly paired instantiations,
     // e.g.: component MyComp myInstance1, myInstance2 { ... }
     int directInstantiations = comp.streamArcElements()
-      .filter(ASTComponentType.class::isInstance)
-      .map(ASTComponentType.class::cast)
-      .mapToInt(ASTComponentType::sizeComponentInstances)
+      .filter(ASTArcComponentType.class::isInstance)
+      .map(ASTArcComponentType.class::cast)
+      .mapToInt(ASTArcComponentType::sizeComponentInstances)
       .sum();
 
     return normalInstantiations + directInstantiations;

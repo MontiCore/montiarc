@@ -57,15 +57,11 @@ component grammar ArcBasis extends
    * of this component type. Only available for inner components.
    * @attribute body Contains the architectural elements of this component.
    */
-  symbol scope ComponentType implements Component, ArcElement =
+  symbol scope ArcComponentType implements ComponentType, ArcElement =
     Stereotype? key("component") Name
     head:ComponentHead
     (ComponentInstance || ",")*
     body:ComponentBody
-  ;
-
-  symbolrule ComponentType =
-    numOptParams : int
   ;
 
   /**

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis.check.ArcBasisTypeCheck;
 import arcbasis.check.ArcBasisTypeContextCalculator;
 import arcbasis.check.util.ArcBasisTypeVisitorOperatorCalculator;
@@ -11,6 +11,7 @@ import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
 import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
 import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
 import de.monticore.ocl.setexpressions.types3.SetExpressionsCTTIVisitor;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
@@ -94,7 +95,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
     Log.trace(() -> "Start initializing the visitors of the type-check delegate", LOG_NAME);
-    defaultContext = MontiArcMill.componentTypeSymbolBuilder()
+    defaultContext = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName("?DEFAULT_CONTEXT?").setSpannedScope(MontiArcMill.scope()).build();
     context2Type4AST = new HashMap<>();
     context2Type4AST.put(defaultContext, type4Ast);
@@ -221,7 +222,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     this.type4Ast = type4Ast;
   }
 
-  public static void enterContext(ComponentTypeSymbol context) {
+  public static void enterContext(ArcComponentTypeSymbol context) {
     if (!getContext2Type4AST().containsKey(context)) {
       Type4Ast type4Ast = new Type4Ast();
       getContext2Type4AST().put(context, type4Ast);

@@ -197,14 +197,14 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
     MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
     MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
-    List<ASTConnector> before = ast.getComponentType().getConnectors();
+    List<ASTConnector> before = ast.getArcComponentType().getConnectors();
 
     MAAutoConnectTrafo trafo = new MAAutoConnectTrafo();
 
     // When
     trafo.apply(ast);
 
-    List<ASTConnector> after = ast.getComponentType().getConnectors();
+    List<ASTConnector> after = ast.getArcComponentType().getConnectors();
 
     // Then
     SoftAssertions.assertSoftly(a -> {
@@ -300,7 +300,7 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    assertThat(ast.getComponentType().getConnectors())
+    assertThat(ast.getArcComponentType().getConnectors())
       .as("Checking connectors within component")
       .isEmpty();
   }

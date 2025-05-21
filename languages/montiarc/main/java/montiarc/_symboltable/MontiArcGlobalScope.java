@@ -16,7 +16,7 @@ public class MontiArcGlobalScope extends MontiArcGlobalScopeTOP {
   @Override
   public void init() {
     super.init();
-    this.putSymbolDeSer("arcbasis._symboltable.ComponentTypeSymbol", new MontiArcComponentTypeSymbolDeSer());
+    this.putSymbolDeSer("arcbasis._symboltable.ArcComponentTypeSymbol", new MontiArcComponentTypeSymbolDeSer());
     this.putSymbolDeSer("de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol", new ArcBasisSubcomponentSymbolDeSer());
     this.putSymbolDeSer("de.monticore.cdbasis._symboltable.CDTypeSymbol", new OOTypeSymbolDeSer());
     this.putSymbolDeSer("de.monticore.cd4codebasis._symboltable.CDMethodSignatureSymbol", new MethodSymbolDeSer());

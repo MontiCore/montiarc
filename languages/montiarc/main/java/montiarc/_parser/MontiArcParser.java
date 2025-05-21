@@ -40,10 +40,10 @@ public class MontiArcParser extends MontiArcParserTOP {
     Optional<ASTMACompilationUnit> ast = super.parseMACompilationUnit(file);
     if (ast.isPresent()) {
       String fRoot = Files.getNameWithoutExtension(file);
-      String mName = ast.get().getComponentType().getName();
+      String mName = ast.get().getArcComponentType().getName();
       if (!mName.equals(fRoot)) {
         Log.error(String.format(MontiArcError.COMPONENT_AND_FILE_NAME_DIFFER.toString(), mName, fRoot),
-          ast.get().getComponentType().get_SourcePositionStart()
+          ast.get().getArcComponentType().get_SourcePositionStart()
         );
         setError(true);
       }

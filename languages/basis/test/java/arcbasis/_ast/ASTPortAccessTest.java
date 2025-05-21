@@ -3,10 +3,9 @@ package arcbasis._ast;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -135,11 +134,11 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
     IArcBasisScope scope1 = ArcBasisMill.scope();
     IArcBasisScope scope2 = ArcBasisMill.scope();
     IArcBasisScope scope3 = ArcBasisMill.scope();
-    ComponentTypeSymbol compA = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol compA = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("CompA").setSpannedScope(scope1).build();
-    ComponentTypeSymbol compB = ArcBasisMill.componentTypeSymbolBuilder().setName("CompB")
+    ArcComponentTypeSymbol compB = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("CompB")
       .setSpannedScope(scope2).build();
-    ComponentTypeSymbol compC = ArcBasisMill.componentTypeSymbolBuilder().setName("CompC")
+    ArcComponentTypeSymbol compC = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("CompC")
       .setSpannedScope(scope3).build();
     ArcBasisMill.globalScope().add(compA);
     ArcBasisMill.globalScope().add(compB);

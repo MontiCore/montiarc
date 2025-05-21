@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolBuilder;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbolBuilder;
 
-public class MontiArcComponentTypeSymbolBuilder extends ComponentTypeSymbolBuilder {
+public class MontiArcComponentTypeSymbolBuilder extends ArcComponentTypeSymbolBuilder {
 
   @Override
-  public ComponentTypeSymbol build() {
+  public ArcComponentTypeSymbol build() {
     return doBuild(new MontiArcComponentTypeSymbol(this.name));
   }
 }

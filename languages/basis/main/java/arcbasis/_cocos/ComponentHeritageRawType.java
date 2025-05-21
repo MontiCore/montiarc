@@ -2,8 +2,8 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcParent;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;

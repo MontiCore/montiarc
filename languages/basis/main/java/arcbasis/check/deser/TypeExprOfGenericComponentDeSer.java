@@ -2,7 +2,7 @@
 package arcbasis.check.deser;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
@@ -10,23 +10,20 @@ import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
 import de.monticore.symboltable.serialization.json.JsonObject;
-import de.monticore.types.check.CompKindExprDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionDeSer;
-import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
 
 import static arcbasis.check.deser.TypeExprOfComponentDeSer.COMP_TYPE_NAME;
 
-public class TypeExprOfGenericComponentDeSer implements CompKindExprDeSer<TypeExprOfGenericComponent> {
+public class TypeExprOfGenericComponentDeSer {
 
   public static final String SERIALIZED_KIND = "arcbasis.check.TypeExprOfGenericComponent";
   public static final String TYPE_VAR_BINDINGS = "typeVarBindings";
 
-  @Override
-  public String serializeAsJson(@NotNull TypeExprOfGenericComponent toSerialize) {
+  public String serialize(@NotNull TypeExprOfGenericComponent toSerialize) {
     Preconditions.checkNotNull(toSerialize);
 
     JsonPrinter printer = new JsonPrinter();
@@ -40,7 +37,6 @@ public class TypeExprOfGenericComponentDeSer implements CompKindExprDeSer<TypeEx
     return printer.getContent();
   }
 
-  @Override
   public TypeExprOfGenericComponent deserialize(@NotNull ICompSymbolsScope scope, @NotNull JsonObject serialized) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(serialized);
@@ -54,8 +50,8 @@ public class TypeExprOfGenericComponentDeSer implements CompKindExprDeSer<TypeEx
       .getAsJsonString()
       .getValue();
 
-    ComponentTypeSymbolSurrogate compType = ArcBasisMill
-      .componentTypeSymbolSurrogateBuilder()
+    ArcComponentTypeSymbolSurrogate compType = ArcBasisMill
+      .arcComponentTypeSymbolSurrogateBuilder()
       .setName(compTypeName)
       .setEnclosingScope((IArcBasisScope) scope)
       .build();

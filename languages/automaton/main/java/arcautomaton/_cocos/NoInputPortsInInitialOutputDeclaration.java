@@ -4,15 +4,15 @@ package arcautomaton._cocos;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._visitor.ExpressionRootFinder;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
+import arcbasis._ast.ASTArcComponentType;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.scbasis._ast.ASTSCSAnte;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcAutomataError;
@@ -30,7 +30,7 @@ import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortRefer
  * Checks that initial output declarations do not reference input ports. We can not access input ports in the initial
  * output declaration, because when setting up a component, the values of input ports are not defined yet.
  */
-public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTComponentTypeCoCo {
+public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTArcComponentTypeCoCo {
 
   protected final IPortReferenceInExpressionExtractor portRefExtractor;
 
@@ -50,7 +50,7 @@ public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTCompon
   }
 
   @Override
-  public void check(@NotNull ASTComponentType astComp) {
+  public void check(@NotNull ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 
@@ -69,7 +69,7 @@ public class NoInputPortsInInitialOutputDeclaration implements ArcBasisASTCompon
     }
   }
 
-  protected static Collection<ASTArcStatechart> extractAutomatons(@NotNull ASTComponentType astComp) {
+  protected static Collection<ASTArcStatechart> extractAutomatons(@NotNull ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     return astComp.getBody()
       .streamArcElements()

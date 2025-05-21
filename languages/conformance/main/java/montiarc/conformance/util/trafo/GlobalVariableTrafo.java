@@ -63,7 +63,7 @@ public class GlobalVariableTrafo {
   }
 
   private static List<String> getGlobalVarNames(ASTMACompilationUnit ma) {
-    return ma.getComponentType().getFields().stream()
+    return ma.getArcComponentType().getFields().stream()
         .map(ASTArcField::getName)
         .collect(Collectors.toList());
   }

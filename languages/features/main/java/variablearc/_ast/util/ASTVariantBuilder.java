@@ -2,29 +2,18 @@
 package variablearc._ast.util;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcElement;
-import arcbasis._ast.ASTArcPort;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._ast.ASTPortDeclaration;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import de.monticore.symbols.compsymbols._symboltable.Timing;
-import de.monticore.symboltable.IScopeSpanningSymbol;
-import de.monticore.types3.TypeCheck3;
-import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTVariantPortAccess;
-import variablearc._symboltable.VariantComponentTypeSymbol;
+import variablearc._symboltable.VariantArcComponentTypeSymbol;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -35,9 +24,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
   protected ArcBasisTraverser traverser;
   protected ASTArcElement result;
-  protected final VariantComponentTypeSymbol variant;
+  protected final VariantArcComponentTypeSymbol variant;
 
-  public ASTVariantBuilder(VariantComponentTypeSymbol variant) {
+  public ASTVariantBuilder(VariantArcComponentTypeSymbol variant) {
     this.variant = variant;
   }
 
@@ -67,7 +56,7 @@ public class ASTVariantBuilder implements ArcBasisHandler {
   }
 
   @Override
-  public void handle(ASTComponentType node) {
+  public void handle(ASTArcComponentType node) {
     // Do nothing, don't traverse into inner components
   }
 
@@ -110,9 +99,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
     if (node.isPresentComponent()) {
       if (node.isPresentComponentSymbol() && node.getComponentSymbol().isTypePresent() &&
-        node.getComponentSymbol().getType().getTypeInfo() != null && VariableArcMill.typeDispatcher().isArcBasisComponentType(node.getComponentSymbol().getType().getTypeInfo())
+        node.getComponentSymbol().getType().getTypeInfo() != null && VariableArcMill.typeDispatcher().isArcBasisArcComponentType(node.getComponentSymbol().getType().getTypeInfo())
       ) {
-        ArcBasisMill.typeDispatcher().asArcBasisComponentType(node.getComponentSymbol().getType().getTypeInfo()).getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+        ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(node.getComponentSymbol().getType().getTypeInfo()).getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
       }
     } else {
       variant.getPort(node.getPort(), true).ifPresent(node::setPortSymbol);

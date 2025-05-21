@@ -2,7 +2,7 @@
 package scmapping._cocos;
 
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._cocos.CommonExpressionsASTEqualsExpressionCoCo;
@@ -24,7 +24,7 @@ public class ValueRightInEqualExpressionsCoCo implements CommonExpressionsASTEqu
           + " can either be a state, input-port , output-port or global variable\n"
           + "Values must be at the right side";
 
-  public ValueRightInEqualExpressionsCoCo(ASTComponentType refAut, ASTComponentType conAut) {
+  public ValueRightInEqualExpressionsCoCo(ASTArcComponentType refAut, ASTArcComponentType conAut) {
     AutomataUtils.getInPorts(refAut).forEach(p -> validLeftNames.add(p.getName()));
     AutomataUtils.getInPorts(conAut).forEach(p -> validLeftNames.add(p.getName()));
     AutomataUtils.getOutPorts(refAut).forEach(p -> validLeftNames.add(p.getName()));

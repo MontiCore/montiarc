@@ -2,9 +2,9 @@
 package modes._cocos;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import modes.ModesTestBase;
@@ -45,7 +45,7 @@ public class ModeAutomataInDecomposedComponentTest extends ModesTestBase {
     Preconditions.checkNotNull(expectedErrors);
 
     // Given
-    ASTComponentType compType = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType compType = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Comp")
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .setHead(Mockito.mock(ASTComponentHead.class))

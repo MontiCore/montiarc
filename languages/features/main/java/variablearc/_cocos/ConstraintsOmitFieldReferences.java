@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -21,7 +21,7 @@ import java.util.HashSet;
  * As a convention, we require that instantiations are performed prior to any
  * communication taking place. Thus, constraints may not reference any ArcField.
  */
-public class ConstraintsOmitFieldReferences implements ArcBasisASTComponentTypeCoCo {
+public class ConstraintsOmitFieldReferences implements ArcBasisASTArcComponentTypeCoCo {
 
   protected final IFieldReferenceInExpressionExtractor fieldRefExtractor;
 
@@ -30,11 +30,11 @@ public class ConstraintsOmitFieldReferences implements ArcBasisASTComponentTypeC
   }
 
   @Override
-  public void check(ASTComponentType astComp) {
+  public void check(ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 
-    ComponentTypeSymbol comp = astComp.getSymbol();
+    ArcComponentTypeSymbol comp = astComp.getSymbol();
 
     HashSet<FieldReference> portReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
     IVariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();

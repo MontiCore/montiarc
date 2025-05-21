@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd.fd;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions.CommonExpressionsMill;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanAndOpExpressionBuilder;
@@ -172,7 +172,7 @@ public class MAExtractionHelper<T extends Formula> {
       this.featureList = new HashSet<>();
 
       // Process the AST
-      ASTComponentType comp = a.getComponentType();
+      ASTArcComponentType comp = a.getArcComponentType();
       Log.println("[Arc2FD]: Process Model \"" + comp.getName() + "\"");
       StorageCache<T> finalExp = processASTComponentType(comp);
 
@@ -194,7 +194,7 @@ public class MAExtractionHelper<T extends Formula> {
    * @return Storage which was constructed from the given ASTComponent
    */
   @SuppressWarnings("unchecked")
-  private StorageCache<T> processASTComponentType(ASTComponentType comp) {
+  private StorageCache<T> processASTComponentType(ASTArcComponentType comp) {
     return processArcElementList(MAStreamHelper.getArcElements(comp),
       (T) bmgr.makeVariable(comp.getName()));
   }
@@ -208,7 +208,7 @@ public class MAExtractionHelper<T extends Formula> {
    *                 multiple instances)
    * @return Storage which was constructed from the given ASTComponent
    */
-  private StorageCache<T> processASTComponentType(ASTComponentType comp,
+  private StorageCache<T> processASTComponentType(ASTArcComponentType comp,
                                                   T rootName) {
     return processArcElementList(MAStreamHelper.getArcElements(comp), rootName);
   }
@@ -237,7 +237,7 @@ public class MAExtractionHelper<T extends Formula> {
       MAStreamHelper.getConstraintExpressionsFromArcElements(elements);
     List<ASTArcVarIf> varif =
       MAStreamHelper.getVarIfsFromArcElements(elements);
-    List<ASTComponentType> innerComponents =
+    List<ASTArcComponentType> innerComponents =
       MAStreamHelper.getInnerComponentsFromArcElements(elements);
     List<ASTComponentInstance> componentInstances =
       MAStreamHelper.getComponentInstancesFromArcElements(elements);
@@ -377,14 +377,14 @@ public class MAExtractionHelper<T extends Formula> {
    *                        relations should be added to
    */
   @SuppressWarnings("unchecked")
-  private void processInnerComponents(@NotNull List<ASTComponentType> innerComponents,
+  private void processInnerComponents(@NotNull List<ASTArcComponentType> innerComponents,
                                       @NotNull T root,
                                       @NotNull StorageCache<T> storageCache) {
     Preconditions.checkNotNull(innerComponents);
     Preconditions.checkNotNull(root);
     Preconditions.checkNotNull(storageCache);
 
-    for (ASTComponentType c : innerComponents) {
+    for (ASTArcComponentType c : innerComponents) {
       // Store & Reset the current variable mapping, since each component
       // should have its own mapping
       Map<String, String> backupMapping = new HashMap<>(this.variableRemapping);

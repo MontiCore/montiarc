@@ -7,13 +7,13 @@ import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbolDeSer;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.CompKindExpression;
-import de.monticore.types.check.FullCompKindExprDeSer;
+import de.monticore.types.check.CompKindExpressionDeSer;
 
 public class ArcBasisSubcomponentSymbolDeSer extends SubcomponentSymbolDeSer {
 
   @Override
-  protected FullCompKindExprDeSer getCompKindExprDeSer() {
-    return ArcBasisMill.compTypeExprDeSer();
+  protected CompKindExpressionDeSer getCompKindExprDeSer() {
+    return ArcBasisMill.compKindExprDeSer();
   }
 
   @Override

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package scmapping.util;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import de.monticore.ast.ASTNode;
 import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdinterfaceandenum._ast.ASTCDEnum;
@@ -35,7 +35,7 @@ public class MappingUtil {
         .orElseGet(ArrayList::new);
   }
 
-  public static List<String> getInputTypes(ASTComponentType aut, ASTCDCompilationUnit cd) {
+  public static List<String> getInputTypes(ASTArcComponentType aut, ASTCDCompilationUnit cd) {
     Set<String> enumsNames =
         cd.getCDDefinition().getCDEnumsList().stream()
             .map(ASTCDEnumTOP::getName)
@@ -46,7 +46,7 @@ public class MappingUtil {
         .collect(Collectors.toList());
   }
 
-  public static List<String> getOutputTypes(ASTComponentType aut, ASTCDCompilationUnit cd) {
+  public static List<String> getOutputTypes(ASTArcComponentType aut, ASTCDCompilationUnit cd) {
     Set<String> enumsNames =
         cd.getCDDefinition().getCDEnumsList().stream()
             .map(ASTCDEnumTOP::getName)
@@ -57,7 +57,7 @@ public class MappingUtil {
         .collect(Collectors.toList());
   }
 
-  public static List<String> getGlobalVarNames(ASTComponentType aut) {
+  public static List<String> getGlobalVarNames(ASTArcComponentType aut) {
     return AutomataUtils.getGlobalVariables(aut).stream()
         .map(VariableSymbolTOP::getName)
         .collect(Collectors.toList());

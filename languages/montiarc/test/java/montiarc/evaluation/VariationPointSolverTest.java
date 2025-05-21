@@ -64,7 +64,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
         .build());
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
         .setEnclosingScope(MontiArcMill.scope())
         .setEnclosingScope(MontiArcMill.scope())
@@ -91,7 +91,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
     bindings.forEach(e -> e.getExpression().setEnclosingScope(scope));
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(childComponentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(childComponentTypeName)
         .setSpannedScope(scope)
         .setEnclosingScope(MontiArcMill.scope())
         .build();
@@ -108,7 +108,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
     instanceSymbol.getType().bindParams();
     parentScope.add(instanceSymbol);
 
-    return (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
+    return (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(originComponentTypeName)
       .setSpannedScope(parentScope)
       .setEnclosingScope(MontiArcMill.scope())
       .build();
@@ -123,7 +123,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
   public void shouldCreateOrigin() {
     // Given
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
+      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName("C")
         .setSpannedScope(MontiArcMill.scope())
         .setEnclosingScope(MontiArcMill.scope())
         .build();

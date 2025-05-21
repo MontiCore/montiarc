@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
 import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions;
@@ -10,7 +10,6 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.ISymbol;
-import de.monticore.types3.SymTypeRelations;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -20,9 +19,9 @@ import java.util.List;
 import java.util.Optional;
 
 public class AssignmentExpressionsMA2JSimPrinter extends AssignmentExpressionsPrettyPrinter {
-  protected ComponentTypeSymbol currentVariant;
+  protected ArcComponentTypeSymbol currentVariant;
 
-  public AssignmentExpressionsMA2JSimPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
+  public AssignmentExpressionsMA2JSimPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ArcComponentTypeSymbol currentVariant) {
     super(Preconditions.checkNotNull(printer), printComments);
     this.currentVariant = currentVariant;
   }

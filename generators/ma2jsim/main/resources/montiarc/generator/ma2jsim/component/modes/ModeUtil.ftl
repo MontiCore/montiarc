@@ -4,7 +4,7 @@
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#-- Calculates the java expression to get the port object of the port access -->
-<#-- ASTPortAccess portAccess, ASTArcMode enclosingMode, ASTComponentType enclosingComp -->
+<#-- ASTPortAccess portAccess, ASTArcMode enclosingMode, ASTArcComponentType enclosingComp -->
 <#macro calcPortAccessor portAccess enclosingMode enclosingComp>
   <#assign portSym = portAccess.getPortSymbol()>
   <#assign portAccessorName>${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(enclosingComp, portSym)}</#assign>

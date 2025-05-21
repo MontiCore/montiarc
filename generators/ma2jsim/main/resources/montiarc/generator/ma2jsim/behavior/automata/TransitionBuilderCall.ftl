@@ -1,5 +1,5 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
-<#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTComponentType" -->
+<#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#-- Signature explanation:
   - noInputsForActions: Whether the built transition does not contain a message information.

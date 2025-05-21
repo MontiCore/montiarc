@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Holds test for the handwritten methods of {@link ASTComponentType}.
+ * Holds test for the handwritten methods of {@link ASTArcComponentType}.
  */
 public class ComponentTest extends ArcBasisTestBase {
 
@@ -66,8 +66,8 @@ public class ComponentTest extends ArcBasisTestBase {
       Arguments.of("sub2.i2", new String[] { "i2" }));
   }
 
-  private ASTComponentType getConnectorsTestComponent() {
-    return ArcBasisMill.componentTypeBuilder().setName("Connectors")
+  private ASTArcComponentType getConnectorsTestComponent() {
+    return ArcBasisMill.arcComponentTypeBuilder().setName("Connectors")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(
         ArcBasisMill.componentBodyBuilder().addArcElement(ArcBasisMill.componentInterfaceBuilder()
@@ -138,15 +138,15 @@ public class ComponentTest extends ArcBasisTestBase {
     return Stream.of(Arguments.of((Object) new String[] { "comp1", "comp2", "comp3" }));
   }
 
-  private ASTComponentType getInstancesTestComponent() {
+  private ASTArcComponentType getInstancesTestComponent() {
 
-    return ArcBasisMill.componentTypeBuilder().setName("Instances")
+    return ArcBasisMill.arcComponentTypeBuilder().setName("Instances")
       .setComponentInstanceList("comp1", "comp2", "comp3")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
           .setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a1").build())
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("A")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("A")
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .setHead(ArcBasisMill.componentHeadBuilder().build())
           .build())
@@ -155,12 +155,12 @@ public class ComponentTest extends ArcBasisTestBase {
         .addArcElement(ArcBasisMill.componentInstantiationBuilder()
           .setMCType(Mockito.mock(ASTMCObjectType.class)).setComponentInstanceList("a3", "a4", "a5")
           .build())
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("B")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("B")
           .setComponentInstanceList("b1", "b2")
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .setHead(ArcBasisMill.componentHeadBuilder().build())
           .build())
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("C")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("C")
           .setComponentInstanceList("c1", "c2", "c3")
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .setHead(ArcBasisMill.componentHeadBuilder().build())
@@ -174,7 +174,7 @@ public class ComponentTest extends ArcBasisTestBase {
   public void shouldFindExpectedInnerComponents(String... innerComponents) {
     List<String> expectedInnerComponents = Arrays.asList(innerComponents);
     List<String> actualInnerComponents = this.getInnerComponentsTestComponent()
-      .getInnerComponents().stream().map(ASTComponentType::getName)
+      .getInnerComponents().stream().map(ASTArcComponentType::getName)
       .collect(Collectors.toList());
     Assertions.assertTrue(expectedInnerComponents.containsAll(actualInnerComponents));
     Assertions.assertTrue(actualInnerComponents.containsAll(expectedInnerComponents));
@@ -184,21 +184,21 @@ public class ComponentTest extends ArcBasisTestBase {
     return Stream.of(Arguments.of((Object) new String[] { "A", "B", "C", "D" }));
   }
 
-  private ASTComponentType getInnerComponentsTestComponent() {
-    return ArcBasisMill.componentTypeBuilder()
+  private ASTArcComponentType getInnerComponentsTestComponent() {
+    return ArcBasisMill.arcComponentTypeBuilder()
       .setName("InnerComponents")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("A")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("A")
           .setHead(ArcBasisMill.componentHeadBuilder().build())
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .build())
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("B")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("B")
           .setComponentInstanceList("b1", "b2")
           .setHead(ArcBasisMill.componentHeadBuilder().build())
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .build())
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("C")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("C")
           .setHead(ArcBasisMill.componentHeadBuilder()
             .setArcParametersList(Collections.singletonList(ArcBasisMill.arcParameterBuilder()
               .setMCType(Mockito.mock(ASTMCObjectType.class))
@@ -207,7 +207,7 @@ public class ComponentTest extends ArcBasisTestBase {
             .build())
           .setBody(ArcBasisMill.componentBodyBuilder().build())
           .build())
-        .addArcElement(ArcBasisMill.componentTypeBuilder().setName("D")
+        .addArcElement(ArcBasisMill.arcComponentTypeBuilder().setName("D")
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(Mockito.mock(ASTComponentBody.class))
           .build())
@@ -229,8 +229,8 @@ public class ComponentTest extends ArcBasisTestBase {
       Arguments.of((Object) new String[] { "a", "b", "c", "d", "e", "f", "g", "h", "i", "o" }));
   }
 
-  private ASTComponentType getVariablesTestComponent() {
-    return ArcBasisMill.componentTypeBuilder()
+  private ASTArcComponentType getVariablesTestComponent() {
+    return ArcBasisMill.arcComponentTypeBuilder()
       .setName("Variables")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()
@@ -283,8 +283,8 @@ public class ComponentTest extends ArcBasisTestBase {
     return Stream.of(Arguments.of((Object) new String[] { "i1", "i2", "i3", "o1", "o2", "o3" }));
   }
 
-  protected ASTComponentType getPortTestComponent() {
-    return ArcBasisMill.componentTypeBuilder()
+  protected ASTArcComponentType getPortTestComponent() {
+    return ArcBasisMill.arcComponentTypeBuilder()
       .setName("Ports")
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .setBody(ArcBasisMill.componentBodyBuilder()

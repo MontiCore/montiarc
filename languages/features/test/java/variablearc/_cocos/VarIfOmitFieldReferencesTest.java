@@ -2,9 +2,9 @@
 package variablearc._cocos;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -32,11 +32,11 @@ public class VarIfOmitFieldReferencesTest extends VariableArcTestBase {
   /**
    * Provides a component type with specified name, one feature, one field, and the provided elements
    */
-  protected ASTComponentType provideComponentWithFieldAndFeature(@NotNull String compName,
-                                                                 List<ASTArcElement> elements) {
+  protected ASTArcComponentType provideComponentWithFieldAndFeature(@NotNull String compName,
+                                                                    List<ASTArcElement> elements) {
     Preconditions.checkNotNull(compName);
 
-    ASTComponentType comp = VariableArcMill.componentTypeBuilder().setName(compName)
+    ASTArcComponentType comp = VariableArcMill.arcComponentTypeBuilder().setName(compName)
       .setHead(Mockito.mock(ASTComponentHead.class))
       .setBody(VariableArcMill.componentBodyBuilder()
         .addArcElement(
@@ -69,7 +69,7 @@ public class VarIfOmitFieldReferencesTest extends VariableArcTestBase {
   /**
    * Provides a component type that references a feature in a varif
    */
-  protected ASTComponentType provideCompWithFeatureRef() {
+  protected ASTArcComponentType provideCompWithFeatureRef() {
     ASTArcVarIf varif = VariableArcMill.arcVarIfBuilder()
       .setCondition(VariableArcMill.nameExpressionBuilder().setName(featureName).build())
       .setThen(Mockito.mock(ASTArcElement.class)).build();
@@ -80,7 +80,7 @@ public class VarIfOmitFieldReferencesTest extends VariableArcTestBase {
   /**
    * Provides a component type that references a field and a feature in varifs
    */
-  protected ASTComponentType provideCompWithFieldAndFeatureRef() {
+  protected ASTArcComponentType provideCompWithFieldAndFeatureRef() {
     ASTArcVarIf varif1 =
       VariableArcMill.arcVarIfBuilder()
         .setCondition(VariableArcMill.nameExpressionBuilder().setName(fieldName).build())
@@ -96,7 +96,7 @@ public class VarIfOmitFieldReferencesTest extends VariableArcTestBase {
   @Test
   public void shouldNotFindFieldReference() {
     // Given
-    ASTComponentType comp = provideCompWithFeatureRef();
+    ASTArcComponentType comp = provideCompWithFeatureRef();
 
     // When
     new VarIfOmitFieldReferences().check(comp);
@@ -108,7 +108,7 @@ public class VarIfOmitFieldReferencesTest extends VariableArcTestBase {
   @Test
   public void shouldFindFieldReference() {
     // Given
-    ASTComponentType comp = provideCompWithFieldAndFeatureRef();
+    ASTArcComponentType comp = provideCompWithFieldAndFeatureRef();
 
     // When
     new VarIfOmitFieldReferences().check(comp);

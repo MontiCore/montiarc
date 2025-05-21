@@ -3,13 +3,11 @@ package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.ISynthesizeComponent;
 import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.FullCompKindExprDeSer;
+import de.monticore.types.check.CompKindExpressionDeSer;
+import de.monticore.types.check.ISynthesizeComponent;
 import montiarc.MontiArcMill;
-import montiarc.check.MontiArcCompTypeExprDeSer;
-import montiarc.check.MontiArcSynthesizeComponent;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Named;
@@ -24,7 +22,7 @@ public class ArcBasisMillForMontiArcTest {
   protected static Stream<Arguments> setupAndExpectedClassForScopesGenitorP2Provider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisSynthesizeComponent.class),
-      Arguments.of(montiArcMillSetup(), MontiArcSynthesizeComponent.class)
+      Arguments.of(montiArcMillSetup(), ArcBasisSynthesizeComponent.class)
     );
   }
 
@@ -56,10 +54,10 @@ public class ArcBasisMillForMontiArcTest {
     );
   }
 
-  protected static Stream<Arguments> setupAndExpectedClassForCompTypeExprDeSerProvider() {
+  protected static Stream<Arguments> setupAndExpectedClassForCompKindExprDeSerProvider() {
     return Stream.of(
       Arguments.of(arcBasisMillSetup(), ArcBasisCompTypeExprDeSer.class),
-      Arguments.of(montiArcMillSetup(), MontiArcCompTypeExprDeSer.class)
+      Arguments.of(montiArcMillSetup(), ArcBasisCompTypeExprDeSer.class)
     );
   }
 
@@ -70,9 +68,9 @@ public class ArcBasisMillForMontiArcTest {
    * @param expectedDeSer The class of the (de)serializer that the mill should instantiate.
    */
   @ParameterizedTest
-  @MethodSource("setupAndExpectedClassForCompTypeExprDeSerProvider")
-  void shouldProvideCompTypeExprDeSerAsExpected(@NotNull Runnable setup,
-                                                @NotNull Class<FullCompKindExprDeSer> expectedDeSer) {
+  @MethodSource("setupAndExpectedClassForCompKindExprDeSerProvider")
+  void shouldProvideCompKindExprDeSerAsExpected(@NotNull Runnable setup,
+                                                @NotNull Class<CompKindExpressionDeSer> expectedDeSer) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expectedDeSer);
 
@@ -80,7 +78,7 @@ public class ArcBasisMillForMontiArcTest {
     setup.run();
 
     // Then
-    Assertions.assertInstanceOf(expectedDeSer, ArcBasisMill.compTypeExprDeSer());
+    Assertions.assertInstanceOf(expectedDeSer, ArcBasisMill.compKindExprDeSer());
   }
 
   /**

@@ -3,13 +3,14 @@ package montiarc.generator.helper.dse;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTArcPort;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ComponentTypeSymbol;
-import arcbasis._symboltable.ComponentTypeSymbolSurrogate;
+import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
 import arcbasis.check.CompTypeExpression;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
@@ -17,7 +18,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -238,7 +238,7 @@ public class ComponentHelperDse {
    * Creates a list of VariableSymbols that do not have duplicate types and do not overlap with
    * port types
    */
-  public static List<VariableSymbol> getEnumSorts(ASTComponentType comp) {
+  public static List<VariableSymbol> getEnumSorts(ASTArcComponentType comp) {
     List<String> list = new ArrayList<>();
     List<VariableSymbol> portsWithOutDuplicates = new ArrayList<>();
 
@@ -365,7 +365,7 @@ public class ComponentHelperDse {
     }
   }
 
-  public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
+  public static List<VariableSymbol> getComponentVariables(ArcComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
     vss.removeAll(comp.getParameterList());
@@ -392,10 +392,10 @@ public class ComponentHelperDse {
    */
   public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
-    ComponentSymbol componentTypeReference = instance.getType().getTypeInfo();
-    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
+    ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
+    if (componentTypeReference instanceof ArcComponentTypeSymbolSurrogate) {
       componentTypeReference =
-        ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
+        ((ArcComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
     }
     String packageName =
       ComponentHelper.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
@@ -414,7 +414,7 @@ public class ComponentHelperDse {
   /**
    * Helper function used to determine package names.
    */
-  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
+  public static String printPackageWithoutKeyWordAndSemicolon(final ArcComponentTypeSymbol comp) {
     if (comp.isInnerComponent()) {
       //TODO add check for outermost component being TOP-Class or remove this function?
       return printPackageWithoutKeyWordAndSemicolon(comp.getOuterComponent()
@@ -477,18 +477,18 @@ public class ComponentHelperDse {
    * the last parameter.
    *
    * @param configArguments The {@link Map} that contains the parameter bindings.
-   * @param comp            The {@link ComponentSymbol} for which the parameters should be
+   * @param comp            The {@link ComponentTypeSymbol} for which the parameters should be
    *                        calculated.
    * @return The parameters.
    */
   public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments,
-                                           ComponentSymbol comp) {
+                                           ComponentTypeSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();
 
     //can only print default parameters if ASTNode exists.
-    if (comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTComponentType(comp.getAstNode())) {
-      final ASTComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTComponentType(comp.getAstNode());
+    if (comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTArcComponentType(comp.getAstNode())) {
+      final ASTArcComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTArcComponentType(comp.getAstNode());
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -522,7 +522,7 @@ public class ComponentHelperDse {
     return outputParameters;
   }
 
-  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTComponentType component) {
+  public Optional<ASTArcStatechart> getAutomatonBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().getArcElementList().stream()
@@ -531,7 +531,7 @@ public class ComponentHelperDse {
       .findFirst();
   }
 
-  public Optional<ASTArcCompute> getComputeBehavior(ASTComponentType component) {
+  public Optional<ASTArcCompute> getComputeBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().getArcElementList().stream()
@@ -540,7 +540,7 @@ public class ComponentHelperDse {
       .findFirst();
   }
 
-  public Optional<ASTArcInit> getInitBehavior(ASTComponentType component) {
+  public Optional<ASTArcInit> getInitBehavior(ASTArcComponentType component) {
     Preconditions.checkNotNull(component);
 
     return component.getBody().getArcElementList().stream()

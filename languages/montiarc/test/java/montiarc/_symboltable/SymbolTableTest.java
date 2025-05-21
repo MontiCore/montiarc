@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -37,8 +37,8 @@ public class SymbolTableTest extends MontiArcTestBase {
     MontiArcMill.globalScope().add(setUpParentComp());
   }
 
-  protected ComponentTypeSymbol setUpParentComp() {
-    ComponentTypeSymbol parentComp = MontiArcMill.componentTypeSymbolBuilder()
+  protected ArcComponentTypeSymbol setUpParentComp() {
+    ArcComponentTypeSymbol parentComp = MontiArcMill.arcComponentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(MontiArcMill.scope())
       .build();
@@ -345,18 +345,18 @@ public class SymbolTableTest extends MontiArcTestBase {
     Assertions.assertTrue(ast12.isPresent());
 
     return Stream.of(
-      Arguments.of(Named.of(ast1.get().getComponentType().getName(), ast1.get())),
-      Arguments.of(Named.of(ast2.get().getComponentType().getName(), ast2.get())),
-      Arguments.of(Named.of(ast3.get().getComponentType().getName(), ast3.get())),
-      Arguments.of(Named.of(ast4.get().getComponentType().getName(), ast4.get())),
-      Arguments.of(Named.of(ast5.get().getComponentType().getName(), ast5.get())),
-      Arguments.of(Named.of(ast6.get().getComponentType().getName(), ast6.get())),
-      Arguments.of(Named.of(ast7.get().getComponentType().getName(), ast7.get())),
-      Arguments.of(Named.of(ast8.get().getComponentType().getName(), ast8.get())),
-      Arguments.of(Named.of(ast9.get().getComponentType().getName(), ast9.get())),
-      Arguments.of(Named.of(ast10.get().getComponentType().getName(), ast10.get())),
-      Arguments.of(Named.of(ast11.get().getComponentType().getName(), ast11.get())),
-      Arguments.of(Named.of(ast12.get().getComponentType().getName(), ast12.get()))
+      Arguments.of(Named.of(ast1.get().getArcComponentType().getName(), ast1.get())),
+      Arguments.of(Named.of(ast2.get().getArcComponentType().getName(), ast2.get())),
+      Arguments.of(Named.of(ast3.get().getArcComponentType().getName(), ast3.get())),
+      Arguments.of(Named.of(ast4.get().getArcComponentType().getName(), ast4.get())),
+      Arguments.of(Named.of(ast5.get().getArcComponentType().getName(), ast5.get())),
+      Arguments.of(Named.of(ast6.get().getArcComponentType().getName(), ast6.get())),
+      Arguments.of(Named.of(ast7.get().getArcComponentType().getName(), ast7.get())),
+      Arguments.of(Named.of(ast8.get().getArcComponentType().getName(), ast8.get())),
+      Arguments.of(Named.of(ast9.get().getArcComponentType().getName(), ast9.get())),
+      Arguments.of(Named.of(ast10.get().getArcComponentType().getName(), ast10.get())),
+      Arguments.of(Named.of(ast11.get().getArcComponentType().getName(), ast11.get())),
+      Arguments.of(Named.of(ast12.get().getArcComponentType().getName(), ast12.get()))
     );
   }
 }

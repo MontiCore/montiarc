@@ -2,7 +2,7 @@
   "name": "ComponentParameters",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "Simple",
       "fullName": "Simple",
       "parameters": [
@@ -22,7 +22,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "Advanced",
       "fullName": "Advanced",
       "numOptParams": 2,
@@ -61,7 +61,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
       "name": "AdvancedWithOneOptional",
       "fullName": "AdvancedWithOneOptional",
       "numOptParams": 1,

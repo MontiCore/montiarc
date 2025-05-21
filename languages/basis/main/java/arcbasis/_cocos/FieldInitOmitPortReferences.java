@@ -3,10 +3,10 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcField;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.SourcePosition;
@@ -26,7 +26,7 @@ import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortRefer
  * to variables are performed prior to any communication taking place. Thus, variable declarations may not reference any
  * port.
  */
-public class FieldInitOmitPortReferences implements ArcBasisASTComponentTypeCoCo {
+public class FieldInitOmitPortReferences implements ArcBasisASTArcComponentTypeCoCo {
 
   protected final IPortReferenceInExpressionExtractor portRefExtractor;
 
@@ -39,11 +39,11 @@ public class FieldInitOmitPortReferences implements ArcBasisASTComponentTypeCoCo
   }
 
   @Override
-  public void check(@NotNull ASTComponentType astComp) {
+  public void check(@NotNull ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 
-    ComponentTypeSymbol comp = astComp.getSymbol();
+    ArcComponentTypeSymbol comp = astComp.getSymbol();
     HashSet<PortReference> portReferencesToLookFor = new HashSet<>();
 
     portReferencesToLookFor.addAll(PortReference.ofComponentTypePorts(comp));

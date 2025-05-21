@@ -8,4 +8,4 @@ ${tc.signature("ast", "isTop")}
 
 ${tc.include("ma2java.Import.ftl", ast.getImportStatementList())}
 
-${tc.includeArgs("ma2java.component.Component.ftl", ast.getComponentType(), compHelper.asList(isTop))}
+${tc.includeArgs("ma2java.component.Component.ftl", ast.getArcComponentType(), compHelper.asList(isTop))}

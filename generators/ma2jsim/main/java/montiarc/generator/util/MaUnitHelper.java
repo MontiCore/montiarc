@@ -2,7 +2,7 @@
 package montiarc.generator.util;
 
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
@@ -24,7 +24,7 @@ public class MaUnitHelper {
   /**
    * @return the number of test cases defined by the component
    */
-  public int unitTestCaseCount(ASTComponentType node) {
+  public int unitTestCaseCount(ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     if (!node.isPresentStereotype()) return 0;
 
@@ -53,15 +53,15 @@ public class MaUnitHelper {
       && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList();
   }
 
-  public Optional<ASTStereoValue> getStereoValue(ASTComponentType comp, String name) {
+  public Optional<ASTStereoValue> getStereoValue(ASTArcComponentType comp, String name) {
     return comp.getStereotype().getValuesList().stream().filter(sv -> Objects.equals(name, sv.getName())).filter(ASTStereoValue::isPresentExpression).findAny();
   }
 
-  public boolean isTestSource(ASTComponentType comp) {
+  public boolean isTestSource(ASTArcComponentType comp) {
     return getStereoValue(comp, "test").isPresent();
   }
 
-  public List<ASTExpression> getTestValues(ASTComponentType comp, int index) {
+  public List<ASTExpression> getTestValues(ASTArcComponentType comp, int index) {
     Optional<ASTSetEnumeration> testDefinition = getStereoValue(comp, "test")
       .map(ASTStereoValue::getExpression)
       .filter(MontiArcMill.typeDispatcher()::isSetExpressionsASTSetEnumeration)

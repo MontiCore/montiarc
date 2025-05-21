@@ -5,7 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Separates {@link ASTComponentInstance}s declared together with the definition of their {@link ASTComponentType} into
+ * Separates {@link ASTComponentInstance}s declared together with the definition of their {@link ASTArcComponentType} into
  * their own {@link ASTComponentInstantiation} declaration.
  * <p>
  * Example:
@@ -40,7 +40,7 @@ public class SeparateCompInstantiationFromTypeDeclTrafo implements ArcBasisVisit
   public void visit(@NotNull ASTComponentBody body) {
     Preconditions.checkNotNull(body);
 
-    for (ASTComponentType cType : body.getElementsOfType(ASTComponentType.class)) {
+    for (ASTArcComponentType cType : body.getElementsOfType(ASTArcComponentType.class)) {
       List<ASTComponentInstance> instances = cType.getComponentInstanceList();
       if (!instances.isEmpty()) {
         // Create new instantiation declaration and add it to the component body
@@ -62,7 +62,7 @@ public class SeparateCompInstantiationFromTypeDeclTrafo implements ArcBasisVisit
   /**
    * @return an {@link ASTMCType} with the simple name of the {@code compType}.
    */
-  protected ASTMCType buildMCTypeFrom(ASTComponentType compType) {
+  protected ASTMCType buildMCTypeFrom(ASTArcComponentType compType) {
     SourcePosition startPos = SourcePositionUtil.elongate(
       compType.get_SourcePositionStart(),
       "component ".length()

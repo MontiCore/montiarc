@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes.variability;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import modes._ast.ASTModeAutomaton;
 import modes._symboltable.IModesScope;
@@ -19,15 +19,15 @@ import java.util.stream.Collectors;
  */
 public class ModesVariantCalculator implements IVariantCalculator {
 
-  protected final ComponentTypeSymbol componentTypeSymbol;
+  protected final ArcComponentTypeSymbol componentTypeSymbol;
 
-  public ModesVariantCalculator(@NotNull ComponentTypeSymbol componentTypeSymbol) {
+  public ModesVariantCalculator(@NotNull ArcComponentTypeSymbol componentTypeSymbol) {
     Preconditions.checkNotNull(componentTypeSymbol);
     this.componentTypeSymbol = componentTypeSymbol;
   }
 
   @Override
-  public List<? extends ComponentTypeSymbol> calculateVariants() {
+  public List<? extends ArcComponentTypeSymbol> calculateVariants() {
     Optional<IModesScope> scope = componentTypeSymbol.getAstNode().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findFirst().map(ASTModeAutomaton::getSpannedScope);
     if (scope.isEmpty()) return Collections.singletonList(componentTypeSymbol);
     return scope.get().getLocalArcModeSymbols().stream().map((mode) -> new ModesVariantComponentTypeSymbol(componentTypeSymbol, mode)).collect(Collectors.toList());

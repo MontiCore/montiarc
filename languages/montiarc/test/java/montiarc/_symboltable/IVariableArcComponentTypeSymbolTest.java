@@ -2,7 +2,7 @@
 package montiarc._symboltable;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
@@ -61,12 +61,12 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
         .setType(SymTypeExpressionFactory.createPrimitive("int"))
         .build());
 
-    ASTComponentType astComponentType = Mockito.mock(ASTComponentType.class);
+    ASTArcComponentType astComponentType = Mockito.mock(ASTArcComponentType.class);
     Mockito.when(astComponentType.getBody())
       .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(componentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(componentTypeName)
         .setSpannedScope(scope)
         .setEnclosingScope(MontiArcMill.scope())
         .setAstNode(astComponentType)
@@ -266,8 +266,8 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
       "<<delayed>> compute {}" +
       "}}");
 
-    PortSymbol portSymbol = compilationUnit.getComponentType().getSymbol().getPort("o").get();
-    PortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getComponentType().getSymbol()).getVariants().get(0).getPort("o").get();
+    PortSymbol portSymbol = compilationUnit.getArcComponentType().getSymbol().getPort("o").get();
+    PortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getArcComponentType().getSymbol()).getVariants().get(0).getPort("o").get();
 
     // Then
     Assertions.assertEquals(portSymbol.getStronglyCausal(), portVariantSymbol.getStronglyCausal());

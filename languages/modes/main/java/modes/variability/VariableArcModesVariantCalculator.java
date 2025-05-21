@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes.variability;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
@@ -24,7 +24,7 @@ public class VariableArcModesVariantCalculator implements IVariantCalculator {
   }
 
   @Override
-  public List<? extends ComponentTypeSymbol> calculateVariants() {
+  public List<? extends ArcComponentTypeSymbol> calculateVariants() {
     return new VariableArcVariantCalculator(componentTypeSymbol).calculateVariants().stream().flatMap(variant ->
       new ModesVariantCalculator(variant).calculateVariants().stream()
     ).collect(Collectors.toList());

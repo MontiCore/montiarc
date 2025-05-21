@@ -7,27 +7,24 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
+public class ArcComponentTypeSymbol extends ArcComponentTypeSymbolTOP {
 
-  protected ComponentTypeSymbol outerComponent;
+  protected ArcComponentTypeSymbol outerComponent;
 
   /**
    * @param name the name of this component type.
    */
-  protected ComponentTypeSymbol(String name) {
+  protected ArcComponentTypeSymbol(String name) {
     super(name);
   }
 
@@ -41,12 +38,12 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of the inner component types of this component type. The {@code List}
    * is empty if this component type has no inner component types.
    */
-  public List<ComponentTypeSymbol> getInnerComponents() {
-    return this.getSpannedScope().getLocalComponentTypeSymbols();
+  public List<ArcComponentTypeSymbol> getInnerComponents() {
+    return this.getSpannedScope().getLocalArcComponentTypeSymbols();
   }
 
   /**
-   * Returns an {@code Optional} of an {@code ComponentSymbol} of an inner component of this
+   * Returns an {@code Optional} of an {@code ComponentTypeSymbol} of an inner component of this
    * component type with the given type name. The {@code Optional} is empty if the component type
    * has no inner component with the given type name. Throws an {@link IllegalArgumentException}
    * if the given type name is {@code null}.
@@ -55,13 +52,13 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of an inner component type with the given type name or an empty
    * {@code Optional}, if such an inner component type does not exist.
    */
-  public Optional<ComponentTypeSymbol> getInnerComponent(@NotNull String name) {
+  public Optional<ArcComponentTypeSymbol> getInnerComponent(@NotNull String name) {
     Preconditions.checkNotNull(name);
-    return this.getSpannedScope().resolveComponentTypeLocally(name);
+    return this.getSpannedScope().resolveArcComponentTypeLocally(name);
   }
 
   /**
-   * Returns a {@code List} of {@code ComponentSymbol} of the inner components of this
+   * Returns a {@code List} of {@code ComponentTypeSymbol} of the inner components of this
    * component type with the given visibility. The {@code List} is empty if this component
    * type has no inner components with the given visibility. Throws an
    * {@link IllegalArgumentException} if the visibility is {@code null}.
@@ -70,7 +67,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return a {@code List} of inner components with the given visibility or an empty {@code
    * List}, if the component type has no inner components with the given visibility.
    */
-  public List<ComponentTypeSymbol> getInnerComponents(@NotNull AccessModifier visibility) {
+  public List<ArcComponentTypeSymbol> getInnerComponents(@NotNull AccessModifier visibility) {
     Preconditions.checkNotNull(visibility);
     return this.getInnerComponents().stream()
       .filter(c -> c.getAccessModifier().includes(visibility))
@@ -88,7 +85,7 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    * @return an {@code Optional} of this component type's outer component, or an empty {@code
    * Optional} if this is not an inner component type.
    */
-  public Optional<ComponentTypeSymbol> getOuterComponent() {
+  public Optional<ArcComponentTypeSymbol> getOuterComponent() {
     return Optional.ofNullable(outerComponent);
   }
 
@@ -98,8 +95,8 @@ public class ComponentTypeSymbol extends ComponentTypeSymbolTOP {
    *
    * @param outerComponent the component type that contains this component type.
    */
-  public void setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
-    Preconditions.checkArgument(!(outerComponent instanceof ComponentTypeSymbolSurrogate));
+  public void setOuterComponent(@Nullable ArcComponentTypeSymbol outerComponent) {
+    Preconditions.checkArgument(!(outerComponent instanceof ArcComponentTypeSymbolSurrogate));
     this.outerComponent = outerComponent;
   }
 

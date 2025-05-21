@@ -117,17 +117,17 @@ public class AutConformanceTool extends MontiArcTool {
         new MCMapping(
             AutomataLoader.loadMapping(
                 mappingPath,
-                ref.getValue().getComponentType(),
+                ref.getValue().getArcComponentType(),
                 ref.getKey(),
-                con.getValue().getComponentType(),
+                con.getValue().getArcComponentType(),
                 con.getKey()));
 
     Log.info(() -> "Checking Conformance..... ", logName);
     boolean isConform =
         new AutomataConfChecker()
             .isConform(
-                ref.getValue().getComponentType(),
-                con.getValue().getComponentType(),
+                ref.getValue().getArcComponentType(),
+                con.getValue().getArcComponentType(),
                 ref.getKey(),
                 con.getKey(),
                 mapping);

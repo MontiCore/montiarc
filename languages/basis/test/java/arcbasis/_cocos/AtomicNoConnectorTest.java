@@ -3,9 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
 import arcbasis._ast.ASTConnector;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -45,7 +45,7 @@ public class AtomicNoConnectorTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(expectedErrors);
 
     // Given
-    ASTComponentType compType = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType compType = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Comp")
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .setHead(Mockito.mock(ASTComponentHead.class))

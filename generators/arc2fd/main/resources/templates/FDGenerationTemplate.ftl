@@ -2,7 +2,7 @@
 <#-- Implicit Variable Definitions for easier Developing in Intellij -->
 <#-- @ftlvariable name="storage" type="montiarc.arc2fd.fd.FDConstructionStorage" -->
 <#-- @ftlvariable name="config" type="montiarc.arc2fd.fd.FDConfiguration" -->
-<#-- @ftlvariable name="comp" type="arcbasis._ast.ASTComponentType " -->
+<#-- @ftlvariable name="comp" type="arcbasis._ast.ASTArcComponentType " -->
 <#compress>
 <#-- We compress the following content in order to prevent unnecessary whitespaces -->
 <#-- Assign passed values (by function) to variable for easier use -->
@@ -11,7 +11,7 @@
     <#assign config=fdConfig>
 
 <#-- Extract the ComponentType (to get the name) -->
-    <#assign comp = ast.getComponentType()>
+    <#assign comp = ast.getArcComponentType()>
 
 <#-- Get the Component Name -->
     <#assign fd_name=comp.getName()>

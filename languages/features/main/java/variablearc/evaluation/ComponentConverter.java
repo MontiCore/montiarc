@@ -3,11 +3,11 @@ package variablearc.evaluation;
 
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -76,7 +76,7 @@ public class ComponentConverter {
 
         // can only use default parameter value if ASTNode exists
         if (typeExpression.getTypeInfo().isPresentAstNode()) {
-          final ASTComponentHead componentHead = ((ASTComponentType) typeExpression.getTypeInfo().getAstNode()).getHead();
+          final ASTComponentHead componentHead = ((ASTArcComponentType) typeExpression.getTypeInfo().getAstNode()).getHead();
           bindingExpression = bindingExpression.or(() -> componentHead.streamArcParameters().filter(param -> Objects.equals(param.getName(), variable.getName()) && param.isPresentDefault()).findAny().map(ASTArcParameter::getDefault));
         }
 

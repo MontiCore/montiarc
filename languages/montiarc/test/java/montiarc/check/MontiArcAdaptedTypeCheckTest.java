@@ -55,7 +55,7 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcTestBase {
       "port in int pIn; " +
       "} " +
       "B sub(p1); " +
-      "}").getComponentType().getSpannedScope();
+      "}").getArcComponentType().getSpannedScope();
   }
 
   @ParameterizedTest

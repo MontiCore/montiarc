@@ -7,7 +7,7 @@
     ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-<#assign comp = ast.getComponentType()>
+<#assign comp = ast.getArcComponentType()>
 public interface ${comp.getName()}${suffixes.contextForModes()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters comp/>
   extends ${comp.getName()}${suffixes.parameters()} <@Util.printTypeParameters comp false/>,
           ${comp.getName()}${suffixes.fields()} <@Util.printTypeParameters comp false/>,
@@ -15,4 +15,4 @@ public interface ${comp.getName()}${suffixes.contextForModes()}<#if isTop>${suff
           ${comp.getName()}${suffixes.modes()} <@Util.printTypeParameters comp false/> {
   }
 
-${tc.include("montiarc.generator.ma2jsim.component.interface.ModeInterface.ftl", ast.getComponentType())}
+${tc.include("montiarc.generator.ma2jsim.component.interface.ModeInterface.ftl", ast.getArcComponentType())}

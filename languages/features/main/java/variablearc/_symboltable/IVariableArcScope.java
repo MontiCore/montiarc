@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis._symboltable.InstanceVisitor;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.check.CompKindExpression;
 

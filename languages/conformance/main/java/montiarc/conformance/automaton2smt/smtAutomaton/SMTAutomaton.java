@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.smtAutomaton;
 
-
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._symboltable.Port2VariableAdapter;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
@@ -44,7 +43,7 @@ public class SMTAutomaton implements ISMTAutomaton {
   protected Z3ExprFactory eFactory;
   protected SCZ3TypeFactory tFactory;
   protected Context ctx;
-  protected ASTComponentType comp;
+  protected ASTArcComponentType comp;
   protected CD2SMT cd2SMT;
   protected SMTSort<SCStateSymbol, VariableSymbol> smtState;
   protected SMTSort<PortSymbol, PortSymbol> inputPort;
@@ -60,7 +59,7 @@ public class SMTAutomaton implements ISMTAutomaton {
    * @param ctx the smt context of the declarations.
    */
   public SMTAutomaton(
-      ASTComponentType comp, ASTCDCompilationUnit cd, Function<String, String> ident, Context ctx) {
+    ASTArcComponentType comp, ASTCDCompilationUnit cd, Function<String, String> ident, Context ctx) {
 
     this.comp = comp;
     this.ctx = ctx;
@@ -175,7 +174,7 @@ public class SMTAutomaton implements ISMTAutomaton {
   }
 
   @Override
-  public ASTComponentType getComponent() {
+  public ASTArcComponentType getComponent() {
     return comp;
   }
 

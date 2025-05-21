@@ -3,7 +3,7 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentHead;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import montiarc.util.Error;
 import montiarc.util.VariableArcError;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -23,7 +23,7 @@ public class FeatureUsageTest extends VariableArcTestBase {
 
   protected static Stream<Arguments> provideComponentAndError() {
     return Stream.of(
-      Arguments.of(VariableArcMill.componentTypeBuilder()
+      Arguments.of(VariableArcMill.arcComponentTypeBuilder()
           .setName("comp1")
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(VariableArcMill.componentBodyBuilder()
@@ -45,7 +45,7 @@ public class FeatureUsageTest extends VariableArcTestBase {
           .build(),
         new Error[]{}
       ),
-      Arguments.of(VariableArcMill.componentTypeBuilder()
+      Arguments.of(VariableArcMill.arcComponentTypeBuilder()
           .setName("comp2")
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(VariableArcMill.componentBodyBuilder()
@@ -60,7 +60,7 @@ public class FeatureUsageTest extends VariableArcTestBase {
           .build(),
         new Error[]{}
       ),
-      Arguments.of(VariableArcMill.componentTypeBuilder()
+      Arguments.of(VariableArcMill.arcComponentTypeBuilder()
           .setName("comp3")
           .setHead(Mockito.mock(ASTComponentHead.class))
           .setBody(VariableArcMill.componentBodyBuilder()
@@ -84,7 +84,7 @@ public class FeatureUsageTest extends VariableArcTestBase {
 
   @ParameterizedTest
   @MethodSource("provideComponentAndError")
-  public void testComponentType(ASTComponentType component, Error[] errorList) {
+  public void testComponentType(ASTArcComponentType component, Error[] errorList) {
     // Given
     FeatureUsage coco = new FeatureUsage();
     VariableArcMill.scopesGenitorDelegator().createFromAST(component);

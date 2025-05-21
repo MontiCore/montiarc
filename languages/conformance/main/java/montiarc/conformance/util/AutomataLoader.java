@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.util;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.cd._symboltable.BuiltInTypes;
 import de.monticore.cd4code.CD4CodeMill;
@@ -151,9 +151,9 @@ public class AutomataLoader {
 
   public static ASTSCMapping loadMapping(
       String path,
-      ASTComponentType refAut,
+      ASTArcComponentType refAut,
       ASTCDCompilationUnit refCD,
-      ASTComponentType conAut,
+      ASTArcComponentType conAut,
       ASTCDCompilationUnit conCD) {
     ASTSCMapping ast = new SCMappingTool().parse(path);
 

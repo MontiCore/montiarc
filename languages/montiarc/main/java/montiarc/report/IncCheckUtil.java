@@ -124,7 +124,7 @@ public final class IncCheckUtil {
   public static Map<String, ASTMACompilationUnit> resolveAstByQName(@NotNull Collection<ASTMACompilationUnit> asts) {
     Preconditions.checkNotNull(asts);
     return asts.stream().collect(Collectors.toMap(
-      a -> a.getComponentType().getSymbol().getFullName(),
+      a -> a.getArcComponentType().getSymbol().getFullName(),
       Function.identity()
     ));
   }
@@ -242,9 +242,9 @@ public final class IncCheckUtil {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(modelLocation);
 
-    String simpleName = ast.getComponentType().getName();
-    String packName = ast.getComponentType().getSymbol().getPackageName();
-    String qName = ast.getComponentType().getSymbol().getFullName();
+    String simpleName = ast.getArcComponentType().getName();
+    String packName = ast.getArcComponentType().getSymbol().getPackageName();
+    String qName = ast.getArcComponentType().getSymbol().getFullName();
 
     // The generated folder that contains the incGen file will be in lower case, whether the last path element contains
     // capital letters or not. However, if we not apply the toLowerCase transformation a folder with the model name
@@ -261,7 +261,7 @@ public final class IncCheckUtil {
     Preconditions.checkNotNull(modelPath);
     Preconditions.checkNotNull(ast);
 
-    String qName = ast.getComponentType().getSymbol().getFullName();
+    String qName = ast.getArcComponentType().getSymbol().getFullName();
     return modelPath
       .find(qName, "arc")
       .flatMap(MCPath::toPath);

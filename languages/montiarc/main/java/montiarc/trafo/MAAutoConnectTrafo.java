@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.trafo;
 
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import comfortablearc.trafo.AutoConnectTrafo;
 import montiarc.MontiArcMill;
@@ -11,7 +12,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.function.UnaryOperator;
 
 /**
- * Uses {@link AutoConnectTrafo} as transformation on all {@link arcbasis._ast.ASTComponentType} in an
+ * Uses {@link AutoConnectTrafo} as transformation on all {@link ASTArcComponentType} in an
  * {@link ASTMACompilationUnit}.
  */
 public class MAAutoConnectTrafo extends AutoConnectTrafo implements UnaryOperator<ASTMACompilationUnit> {

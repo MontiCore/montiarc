@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis._ast.ASTComponentType;
-import arcbasis._cocos.ArcBasisASTComponentTypeCoCo;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
+import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 /**
  * Convention: Features should be used at least once.
  */
-public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
+public class FeatureUsage implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
-  public void check(@NotNull ASTComponentType node) {
+  public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
@@ -51,12 +51,12 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
     }
   }
 
-  protected Collection<String> getNamesOfFeatures(@NotNull ASTComponentType node) {
+  protected Collection<String> getNamesOfFeatures(@NotNull ASTArcComponentType node) {
     return ((IVariableArcScope) node.getSpannedScope()).getLocalArcFeatureSymbols()
       .stream().map(ArcFeatureSymbol::getName).collect(Collectors.toList());
   }
 
-  protected Collection<String> getNamesInIfConditions(@NotNull ASTComponentType node) {
+  protected Collection<String> getNamesInIfConditions(@NotNull ASTArcComponentType node) {
     List<String> names = new ArrayList<>();
     ComponentVarIfHandler handler = new ComponentVarIfHandler(node, (varif) -> {
       Preconditions.checkNotNull(varif);
@@ -70,7 +70,7 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
     return names;
   }
 
-  protected Collection<String> getNamesInConstraints(@NotNull ASTComponentType node) {
+  protected Collection<String> getNamesInConstraints(@NotNull ASTArcComponentType node) {
     List<String> names = new ArrayList<>();
     VariableArcTraverser traverser = VariableArcMill.traverser();
     traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((
@@ -88,7 +88,7 @@ public class FeatureUsage implements ArcBasisASTComponentTypeCoCo {
   }
 
   protected SourcePosition getSourcePosition(ComponentTypeSymbol symbol,
-                                             ASTComponentType node,
+                                             ASTArcComponentType node,
                                              String feature) {
     return ((IVariableArcScope) symbol.getSpannedScope()).getArcFeatureSymbols()
       .get(feature).stream().findFirst()

@@ -3,12 +3,12 @@ package arcbasis._cocos;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.util.IPortReferenceInExpressionExtractor;
 import arcbasis._cocos.util.PortReferenceExtractor4ExpressionBasis;
-import arcbasis._symboltable.ComponentTypeSymbol;
 import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -25,7 +25,7 @@ import static arcbasis._cocos.util.IPortReferenceInExpressionExtractor.PortRefer
  * instantiations are performed prior to any communication taking place. Thus, variable declarations may not reference
  * any port.
  */
-public class ComponentArgumentsOmitPortRef implements ArcBasisASTComponentTypeCoCo {
+public class ComponentArgumentsOmitPortRef implements ArcBasisASTArcComponentTypeCoCo {
 
   protected final IPortReferenceInExpressionExtractor portRefExtractor;
 
@@ -38,7 +38,7 @@ public class ComponentArgumentsOmitPortRef implements ArcBasisASTComponentTypeCo
   }
 
   @Override
-  public void check(@NotNull ASTComponentType astComp) {
+  public void check(@NotNull ASTArcComponentType astComp) {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 

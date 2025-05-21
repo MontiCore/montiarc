@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
@@ -21,9 +21,9 @@ import java.util.Optional;
  * Refinement declarations must respect the type bounds of the referenced component type.
  * This coco is checked for refinement declarations that are not raw, i.e., that do not omit type arguments.
  */
-public class RefinementTypeBound implements ArcBasisASTComponentTypeCoCo {
+public class RefinementTypeBound implements ArcBasisASTArcComponentTypeCoCo {
   @Override
-  public void check(@NotNull ASTComponentType astCompType) {
+  public void check(@NotNull ASTArcComponentType astCompType) {
     Preconditions.checkNotNull(astCompType);
     Preconditions.checkArgument(astCompType.isPresentSymbol());
 

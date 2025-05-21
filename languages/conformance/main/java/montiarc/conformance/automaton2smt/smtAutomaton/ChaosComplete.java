@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.automaton2smt.smtAutomaton;
 
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChaosComplete implements ICompleteSMTAut {
-  private final ASTComponentType comp;
+  private final ASTArcComponentType comp;
   private final ISMTAutomaton smtAut;
   private final Context ctx;
 
-  public ChaosComplete(ASTComponentType comp, ISMTAutomaton smtAut, Context ctx) {
+  public ChaosComplete(ASTArcComponentType comp, ISMTAutomaton smtAut, Context ctx) {
     this.comp = comp;
     this.smtAut = smtAut;
     this.ctx = ctx;

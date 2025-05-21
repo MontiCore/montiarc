@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.checker;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import mceffect.EffectAbstractTest;
 import mceffect.MCEffectTool;
@@ -21,7 +21,7 @@ public abstract class AbstractCheckerTest extends EffectAbstractTest {
   private EffectChecker checker;
   private EffectStorage storage;
 
-  private ComponentTypeSymbol mainComp;
+  private ArcComponentTypeSymbol mainComp;
 
   @BeforeEach
   public void setup() {

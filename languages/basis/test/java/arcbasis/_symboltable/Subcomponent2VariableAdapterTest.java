@@ -20,7 +20,7 @@ public class Subcomponent2VariableAdapterTest extends ArcBasisTestBase {
     // Given
     SubcomponentSymbol adaptee = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("sub")
-      .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
+      .setType(new TypeExprOfComponent(Mockito.mock(ArcComponentTypeSymbol.class)))
       .build();
     SymbolService.link(ArcBasisMill.scope(), adaptee);
 
@@ -48,7 +48,7 @@ public class Subcomponent2VariableAdapterTest extends ArcBasisTestBase {
     // Given
     SubcomponentSymbol adaptee = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("sub")
-      .setType(new TypeExprOfComponent(Mockito.mock(ComponentTypeSymbol.class)))
+      .setType(new TypeExprOfComponent(Mockito.mock(ArcComponentTypeSymbol.class)))
       .build();
     SymbolService.link(ArcBasisMill.scope(), adaptee);
 

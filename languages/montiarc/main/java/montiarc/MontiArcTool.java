@@ -399,7 +399,7 @@ public class MontiArcTool extends MontiArcToolTOP {
           Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), pkg, rfp),
             ast.get().isPresentPackage() ?
               ast.get().getPackage().get_SourcePositionStart() :
-              ast.get().getComponentType().get_SourcePositionStart()
+              ast.get().getArcComponentType().get_SourcePositionStart()
           );
         }
       } else if (root.isFile()) {
@@ -409,7 +409,7 @@ public class MontiArcTool extends MontiArcToolTOP {
           Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), pkg, rfp),
             ast.get().isPresentPackage() ?
               ast.get().getPackage().get_SourcePositionStart() :
-              ast.get().getComponentType().get_SourcePositionStart()
+              ast.get().getArcComponentType().get_SourcePositionStart()
           );
         }
       }
@@ -535,7 +535,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     if (!file.isEmpty()) {
       file = Paths.get(file,
         Names.getPathFromQualifiedName(ast.getPackage().getQName()),
-        ast.getComponentType().getName() + ".arc").toString();
+        ast.getArcComponentType().getName() + ".arc").toString();
     }
     this.print(MontiArcMill.prettyPrint(ast, true), file);
   }
@@ -574,7 +574,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       scopes4NewSerialization =
         IncCheckUtil.calcReportedModelsForNewGeneration(upToDateInfo, astByQName)
           .stream()
-          .map(a -> a.getComponentType().getEnclosingScope())
+          .map(a -> a.getArcComponentType().getEnclosingScope())
           .map(s -> (IMontiArcArtifactScope) s)
           .collect(Collectors.toList());
     } else {

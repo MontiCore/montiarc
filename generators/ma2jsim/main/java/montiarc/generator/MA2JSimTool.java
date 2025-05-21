@@ -258,7 +258,7 @@ public class MA2JSimTool extends MontiArcTool {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(hwc);
-    Preconditions.checkArgument(ast.getComponentType().isPresentSymbol());
+    Preconditions.checkArgument(ast.getArcComponentType().isPresentSymbol());
     Preconditions.checkArgument(!target.isEmpty());
 
     List<Path> hwcsAsPaths = Arrays.stream(hwc).map(Paths::get).collect(Collectors.toList());

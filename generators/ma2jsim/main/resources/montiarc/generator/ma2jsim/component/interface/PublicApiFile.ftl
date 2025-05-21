@@ -8,4 +8,4 @@
     ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-${tc.include("montiarc.generator.ma2jsim.component.interface.PublicApi.ftl", ast.getComponentType())}
+${tc.include("montiarc.generator.ma2jsim.component.interface.PublicApi.ftl", ast.getArcComponentType())}

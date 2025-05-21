@@ -4,7 +4,7 @@ package montiarc.arc2fd.fd;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -76,10 +76,10 @@ public class MAStreamHelper {
    * @return List of all Inner Component Types found in the given list of
    * elements
    */
-  public static List<ASTComponentType> getInnerComponentsFromArcElements(@NotNull List<ASTArcElement> elements) {
+  public static List<ASTArcComponentType> getInnerComponentsFromArcElements(@NotNull List<ASTArcElement> elements) {
     return elements.stream()
-      .filter(element -> element instanceof ASTComponentType)
-      .map(innerComponent -> (ASTComponentType) innerComponent)
+      .filter(element -> element instanceof ASTArcComponentType)
+      .map(innerComponent -> (ASTArcComponentType) innerComponent)
       .collect(Collectors.toList());
   }
 
@@ -103,7 +103,7 @@ public class MAStreamHelper {
     // declared inside)
     subComponents.addAll(getInnerComponentsFromArcElements(elements)
       .stream()
-      .map(ASTComponentType::getComponentInstanceList)
+      .map(ASTArcComponentType::getComponentInstanceList)
       .flatMap(Collection::stream)
       .collect(Collectors.toList()));
 
@@ -126,22 +126,22 @@ public class MAStreamHelper {
   }
 
   /**
-   * Gets the corresponding ASTComponentType from a given ASTComponentInstance
+   * Gets the corresponding ASTArcComponentType from a given ASTComponentInstance
    *
    * @param instance Component Instance where we want to extract the type from
-   * @return ASTComponentType corresponding to the Instance
+   * @return ASTArcComponentType corresponding to the Instance
    */
-  public static ASTComponentType getComponentTypeFromInstance(@NotNull ASTComponentInstance instance) {
-    return (ASTComponentType) instance.getSymbol().getType().getTypeInfo().getAstNode();
+  public static ASTArcComponentType getComponentTypeFromInstance(@NotNull ASTComponentInstance instance) {
+    return (ASTArcComponentType) instance.getSymbol().getType().getTypeInfo().getAstNode();
   }
 
   /**
-   * Extracts all ASTArcElements from an ASTComponentType
+   * Extracts all ASTArcElements from an ASTArcComponentType
    *
    * @param comp Component where we want to get the elements from
    * @return List of all ASTArcElements found in the component
    */
-  public static List<ASTArcElement> getArcElements(@NotNull ASTComponentType comp) {
+  public static List<ASTArcElement> getArcElements(@NotNull ASTArcComponentType comp) {
     Preconditions.checkNotNull(comp);
     return comp.getBody().getArcElementList();
   }

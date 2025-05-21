@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcBehaviorElement;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -14,43 +15,43 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTOP {
+public class ArcComponentTypeSymbolSurrogate extends ArcComponentTypeSymbolSurrogateTOP {
 
-  public ComponentTypeSymbolSurrogate(@NotNull String name) {
+  public ArcComponentTypeSymbolSurrogate(@NotNull String name) {
     super(name);
     this.spannedScope = ArcBasisMill.scope();
   }
 
-  protected Optional<ComponentTypeSymbol> getDelegate() {
+  protected Optional<ArcComponentTypeSymbol> getDelegate() {
     return this.delegate;
   }
 
-  protected void setDelegate(@Nullable ComponentTypeSymbol delegate) {
+  protected void setDelegate(@Nullable ArcComponentTypeSymbol delegate) {
     this.delegate = Optional.ofNullable(delegate);
   }
 
   @Override
-  public ComponentTypeSymbol lazyLoadDelegate() {
+  public ArcComponentTypeSymbol lazyLoadDelegate() {
     if (this.getDelegate().isEmpty()) {
-      this.setDelegate(this.getEnclosingScope().resolveComponentType(this.getName()).orElse(tryGeneric().orElse(null)));
+      this.setDelegate(this.getEnclosingScope().resolveArcComponentType(this.getName()).orElse(tryGeneric().orElse(null)));
     }
 
     if (this.getDelegate().isPresent()) {
       return this.getDelegate().get();
     } else {
       // Copied error message from the original lazyLoadDelegate
-      Log.error("0xA1038 " + ComponentTypeSymbolSurrogate.class.getSimpleName() +
+      Log.error("0xA1038 " + ArcComponentTypeSymbolSurrogate.class.getSimpleName() +
         " Could not load full information of '" + name +
-        "' (Kind " + "arcbasis._symboltable.ComponentTypeSymbol" + ")."
+        "' (Kind " + "arcbasis._symboltable.ArcComponentTypeSymbol" + ")."
       );
       return this;
     }
   }
 
-  protected Optional<ComponentTypeSymbol> tryGeneric() {
+  protected Optional<ArcComponentTypeSymbol> tryGeneric() {
     Optional<TypeVarSymbol> resolvedTypeSymbol = this.getEnclosingScope().resolveTypeVar(this.getName());
     if (resolvedTypeSymbol.isPresent()) {
-      ComponentTypeSymbol resolvedSymbol = this.getEnclosingScope().resolveComponentType(resolvedTypeSymbol.get().getSuperTypes(0).printFullName()).orElse(null);
+      ArcComponentTypeSymbol resolvedSymbol = this.getEnclosingScope().resolveArcComponentType(resolvedTypeSymbol.get().getSuperTypes(0).printFullName()).orElse(null);
       return Optional.ofNullable(resolvedSymbol);
     }
     return Optional.empty();
@@ -80,14 +81,14 @@ public class ComponentTypeSymbolSurrogate extends ComponentTypeSymbolSurrogateTO
   }
 
   @Override
-  public Optional<ComponentTypeSymbol> getOuterComponent() {
+  public Optional<ArcComponentTypeSymbol> getOuterComponent() {
     return checkLazyLoadDelegate() ?
       this.lazyLoadDelegate().getOuterComponent() :
       super.getOuterComponent();  // Avoid infinite recursion with this case
   }
 
   @Override
-  public void setOuterComponent(@Nullable ComponentTypeSymbol outerComponent) {
+  public void setOuterComponent(@Nullable ArcComponentTypeSymbol outerComponent) {
     if (checkLazyLoadDelegate()) {
       this.lazyLoadDelegate().setOuterComponent(outerComponent);
     } else {

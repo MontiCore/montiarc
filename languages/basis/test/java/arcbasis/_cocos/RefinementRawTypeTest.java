@@ -4,9 +4,9 @@ package arcbasis._cocos;
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis.check.TypeExprOfComponent;
 import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
@@ -54,7 +54,7 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
   @Test
   void shouldNotReportError1() {
     // Given: A
-    ASTComponentType refiningComp = buildCompWithRefinement("A");
+    ASTArcComponentType refiningComp = buildCompWithRefinement("A");
     RefinementRawType coco = new RefinementRawType();
     
     // When
@@ -68,7 +68,7 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
   void shouldNotReportError2() {
     // Given: B<int>
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
-    ASTComponentType refiningComp = buildCompWithRefinement("B", intExpr);
+    ASTArcComponentType refiningComp = buildCompWithRefinement("B", intExpr);
     RefinementRawType coco = new RefinementRawType();
     
     // When
@@ -81,7 +81,7 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
   @Test
   void shouldNotReportError3() {
     // Given: B<Integer>
-    ASTComponentType refiningComp = buildCompWithRefinement("B", integerExpr());
+    ASTArcComponentType refiningComp = buildCompWithRefinement("B", integerExpr());
     RefinementRawType coco = new RefinementRawType();
     
     // When
@@ -96,7 +96,7 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
   void shouldNotReportError4() {
     // Given: TypeVar T; reference B<T>
     TypeVarSymbol tTypeVar = typeVar("T");
-    ASTComponentType refiningComp = buildCompWithRefinement("B", typeVarExpr(tTypeVar));
+    ASTArcComponentType refiningComp = buildCompWithRefinement("B", typeVarExpr(tTypeVar));
     RefinementRawType coco = new RefinementRawType();
 
     // When
@@ -109,7 +109,7 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
   @Test
   void shouldReportWarning() {
     // Given: B
-    ASTComponentType refiningComp = buildCompWithRefinement("B");
+    ASTArcComponentType refiningComp = buildCompWithRefinement("B");
     RefinementRawType coco = new RefinementRawType();
     
     // When
@@ -139,29 +139,29 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
   }
 
   /**
-   * Creates a {@link ASTComponentType} with a symbol that refines the given abstraction with the given type
+   * Creates a {@link ASTArcComponentType} with a symbol that refines the given abstraction with the given type
    * arguments
    * @param abstractionName Raw name of the component type to refine (must be resolvable from the global scope)
    * @param typeArgs Type arguments to use in the refinement
    */
-  protected static ASTComponentType buildCompWithRefinement(@NotNull String abstractionName,
-                                                            @NotNull SymTypeExpression... typeArgs) {
+  protected static ASTArcComponentType buildCompWithRefinement(@NotNull String abstractionName,
+                                                               @NotNull SymTypeExpression... typeArgs) {
     Preconditions.checkNotNull(abstractionName);
     Preconditions.checkNotNull(typeArgs);
 
-    ComponentTypeSymbol abstractionSym = ArcBasisMill.globalScope().resolveComponentType(abstractionName).orElseThrow();
+    ArcComponentTypeSymbol abstractionSym = ArcBasisMill.globalScope().resolveArcComponentType(abstractionName).orElseThrow();
     
     CompKindExpression compExpr = typeArgs.length == 0 ?
       new TypeExprOfComponent(abstractionSym) :
       new TypeExprOfGenericComponent(abstractionSym, Arrays.asList(typeArgs));
 
-    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
+    ArcComponentTypeSymbol concretizationSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Dummy")
       .setSpannedScope(ArcBasisMill.scope())
       .addRefinements(compExpr)
       .build();
 
-    ASTComponentType astConcretization = ArcBasisMill.componentTypeBuilder()
+    ASTArcComponentType astConcretization = ArcBasisMill.arcComponentTypeBuilder()
       .setName("Dummy")
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(ArcBasisMill.componentHeadBuilder()

@@ -3,7 +3,7 @@ package montiarc.trafo;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
-import arcbasis._ast.ASTComponentType;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -15,8 +15,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
@@ -42,7 +40,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
+    ASTArcStatechart automaton = getAutomatonOf(ast.getArcComponentType());
     ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(automaton);
 
     Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
@@ -72,7 +70,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
+    ASTArcStatechart automaton = getAutomatonOf(ast.getArcComponentType());
     ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(firstStateOf(automaton));
 
     Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
@@ -100,7 +98,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
+    ASTArcStatechart automaton = getAutomatonOf(ast.getArcComponentType());
     ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(automaton);
 
     Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
@@ -131,7 +129,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    ASTArcStatechart automaton = getAutomatonOf(ast.getComponentType());
+    ASTArcStatechart automaton = getAutomatonOf(ast.getArcComponentType());
     ASTTransitionBody transitionBody = bodyOfFirstTransitionOf(firstStateOf(automaton));
 
     Assertions.assertThat(transitionBody.isPresentSCEvent()).as("trigger presence").isTrue();
@@ -139,7 +137,7 @@ class MAReplaceAbsentTriggersByTicksTest extends MontiArcTestBase {
     Assertions.assertThat(((ASTMsgEvent) transitionBody.getSCEvent()).getName()).as("trigger").isEqualTo("i");
   }
 
-  private ASTArcStatechart getAutomatonOf(@NotNull ASTComponentType componentType) {
+  private ASTArcStatechart getAutomatonOf(@NotNull ASTArcComponentType componentType) {
     Preconditions.checkNotNull(componentType);
 
     return componentType.getBody().streamArcElements()

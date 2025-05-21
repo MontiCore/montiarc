@@ -17,15 +17,16 @@ import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
 import arcbasis.check.ArcBasisSynthesizeComponent;
 import arcbasis.check.CompTypeExpression;
-import arcbasis.check.ISynthesizeComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.ISynthesizeComponent;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.typeparameters._ast.ASTTypeParameter;
@@ -36,7 +37,6 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,7 +93,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
       ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
       ImmutableList.Builder<CompKindExpression> listBuilder = ImmutableList.builder();
       for (ASTArcParent astParent : node.getArcParentList()) {
-        Optional<CompKindExpression> parent = this.getComponentSynthesizer().synthesizeFrom(astParent.getType());
+        Optional<CompKindExpression> parent = this.getComponentSynthesizer().synthesize(astParent.getType());
         if (parent.isPresent()) {
           astParent.getType().setDefiningSymbol(parent.get().getTypeInfo());
           listBuilder.add(parent.get());
@@ -117,7 +117,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
       ComponentTypeSymbol comp = (ComponentTypeSymbol) node.getEnclosingScope().getSpanningSymbol();
       ImmutableList.Builder<CompKindExpression> listBuilder = ImmutableList.builder();
       for (ASTArcParent astSpec : node.getSpecList()) {
-        Optional<CompKindExpression> spec = this.getComponentSynthesizer().synthesizeFrom(astSpec.getType());
+        Optional<CompKindExpression> spec = this.getComponentSynthesizer().synthesize(astSpec.getType());
         if (spec.isPresent()) {
           astSpec.getType().setDefiningSymbol(spec.get().getTypeInfo());
           listBuilder.add(spec.get());
@@ -136,7 +136,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
   public void visit(@NotNull ASTComponentInstantiation node) {
     Preconditions.checkNotNull(node);
 
-    Optional<CompKindExpression> comp = this.getComponentSynthesizer().synthesizeFrom(node.getMCType());
+    Optional<CompKindExpression> comp = this.getComponentSynthesizer().synthesize(node.getMCType());
     if (comp.isPresent()) {
       node.getMCType().setDefiningSymbol(comp.get().getTypeInfo());
       this.setCurrentCompInstanceType(comp.get());

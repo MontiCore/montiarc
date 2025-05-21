@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.check;
 
-import arcbasis._symboltable.ComponentTypeSymbol;
+import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis.check.ArcBasisWithinTypeBasicSymbolsResolver;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -34,7 +34,7 @@ public class VariableArcVariantWithinTypeBasicSymbolsResolver extends ArcBasisWi
   }
 
   protected Predicate<VariableSymbol> getVariablePredicate() {
-    Optional<ComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
+    Optional<ArcComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
     if (variant.isEmpty() || !(variant.get() instanceof VariableArcVariantComponentTypeSymbol)) {
       return v -> true;
     } else {

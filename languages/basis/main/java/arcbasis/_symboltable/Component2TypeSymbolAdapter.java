@@ -5,7 +5,7 @@ import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
-import de.monticore.symbols.compsymbols._symboltable.ComponentSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.SourcePosition;
@@ -15,9 +15,9 @@ import java.util.stream.Collectors;
 
 public class Component2TypeSymbolAdapter extends TypeSymbol {
 
-  protected ComponentSymbol adaptee;
+  protected ComponentTypeSymbol adaptee;
 
-  public Component2TypeSymbolAdapter(@NotNull ComponentSymbol adaptee) {
+  public Component2TypeSymbolAdapter(@NotNull ComponentTypeSymbol adaptee) {
     super(Preconditions.checkNotNull(adaptee).getName());
     this.adaptee = adaptee;
     this.accessModifier = BasicAccessModifier.PUBLIC;
@@ -33,7 +33,7 @@ public class Component2TypeSymbolAdapter extends TypeSymbol {
     }).collect(Collectors.toList());
   }
 
-  protected ComponentSymbol getAdaptee() {
+  protected ComponentTypeSymbol getAdaptee() {
     return adaptee;
   }
 

@@ -14,8 +14,8 @@ public class VariabilityParserTestHelper {
   static ASTMACompilationUnitBuilder getVariabilitySyntaxArcASTUnit() {
     return MontiArcMill.mACompilationUnitBuilder()
       .setPackage(MontiArcMill.mCQualifiedNameBuilder().setPartsList(List.of("parser")).build())
-      .setComponentType(
-        MontiArcMill.componentTypeBuilder().setName("VariabilitySyntax")
+      .setArcComponentType(
+        MontiArcMill.arcComponentTypeBuilder().setName("VariabilitySyntax")
           .setHead(MontiArcMill.componentHeadBuilder().build())
           .setBody(MontiArcMill.componentBodyBuilder().setArcElementsList(
             Arrays.asList(
@@ -66,7 +66,7 @@ public class VariabilityParserTestHelper {
                     .setArcElementsList(Collections.emptyList())
                     .build())
                 .build(),
-              MontiArcMill.componentTypeBuilder().setName("A").setHead(MontiArcMill.componentHeadBuilder().build()).setBody(
+              MontiArcMill.arcComponentTypeBuilder().setName("A").setHead(MontiArcMill.componentHeadBuilder().build()).setBody(
                 MontiArcMill.componentBodyBuilder().setArcElementsList(
                   Collections.singletonList(MontiArcMill.arcFeatureDeclarationBuilder()
                     .setArcFeaturesList(Collections.singletonList(
