@@ -201,6 +201,8 @@ class Cd2PojoDistributionPlugin : Plugin<Project> {
     val cdSymbolsJarTask = tasks.register(sourceSet.cd2PojoSymbolsJarTaskName, Jar::class.java) { jar ->
       jar.from(compileTask.get().symbolOutputDir())
       jar.archiveClassifier.set(sourceSet.cdSymbolsJarClassifierName)
+      jar.isPreserveFileTimestamps = false
+      jar.isReproducibleFileOrder = true
     }
 
     tasks.named(BasePlugin.ASSEMBLE_TASK_NAME) { it.dependsOn(cdSymbolsJarTask) }

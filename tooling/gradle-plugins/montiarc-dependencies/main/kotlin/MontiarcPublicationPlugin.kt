@@ -92,6 +92,8 @@ class MontiarcPublicationPlugin : Plugin<Project> {
   private fun createArcSymbolsJarTask(sourceSet: SourceSet): TaskProvider<Jar> = with (project) {
     val arcSymbolsJarTask = tasks.register(sourceSet.montiarcSymbolsJarTaskName, Jar::class.java) { jar ->
       jar.archiveClassifier.set(sourceSet.symbolsJarClassifierName)
+      jar.isPreserveFileTimestamps = false
+      jar.isReproducibleFileOrder = true
     }
     tasks.named(BasePlugin.ASSEMBLE_TASK_NAME) { it.dependsOn(arcSymbolsJarTask) }
 
