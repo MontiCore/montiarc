@@ -101,7 +101,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     }
     if (getResult().getValue().isEmpty()) {
       // Handle all other field access expressions of form a.X...X.b.c
-      Optional<Sort> sort = this.getExpr2Sort().toSort(this.getContext(), node);
+      Optional<Sort> sort = this.getExpr2Sort().toSort(node);
       if (sort.isPresent()) {
         if (sort.get() instanceof EnumSort<?> && getEnumIndex(node.getName(), (EnumSort<?>) sort.get()) >= 0) {
           // Handle enum constants

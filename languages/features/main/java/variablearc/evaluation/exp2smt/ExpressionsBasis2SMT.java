@@ -57,7 +57,7 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
   @Override
   public void handle(@NotNull ASTNameExpression node) {
     Preconditions.checkNotNull(node);
-    Optional<Sort> sort = this.getExpr2Sort().toSort(this.getContext(), node);
+    Optional<Sort> sort = this.getExpr2Sort().toSort(node);
 
     this.getResult().clear();
 

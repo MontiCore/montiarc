@@ -19,9 +19,11 @@ import java.util.stream.Stream;
 public class ExpressionSolver {
 
   protected Context context;
+  protected IDeriveSMTExpr converter;
 
   public ExpressionSolver() {
     this.context = new Context();
+    this.converter = VariableArcMill.fullConverter(context);
   }
 
   /**
@@ -42,8 +44,8 @@ public class ExpressionSolver {
         return Optional.of(true);
       case UNSATISFIABLE:
         return Optional.of(false);
-      default:
       case UNKNOWN:
+      default:
         return Optional.empty();
     }
   }
@@ -75,7 +77,6 @@ public class ExpressionSolver {
   public Optional<BoolExpr[]> convert(@NotNull ExpressionSet expressions) {
     Preconditions.checkNotNull(expressions);
 
-    IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
     BoolExpr[] smtExpr = Stream.concat(
         expressions.getExpressions().stream()
           .map(e -> e.convert(context, converter)),

@@ -14,24 +14,36 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTSort;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Derives a Z3 sort from an SymTypeExpression.
+ * Caches the result of complex types and reuses them for subsequent conversions.
+ */
 public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
 
-  public VariableArcDeriveSMTSort() { }
+  private final Context context;
+  private final Map<String, Sort> sortMap;
+
+  public VariableArcDeriveSMTSort(Context context) {
+    sortMap = new HashMap<>();
+    this.context = context;
+  }
 
   @Override
-  public Optional<Sort> toSort(@NotNull Context context, @NotNull ASTExpression nameExpression) {
+  public Optional<Sort> toSort(@NotNull ASTExpression nameExpression) {
     Preconditions.checkNotNull(context);
     Preconditions.checkNotNull(nameExpression);
     Preconditions.checkNotNull(nameExpression.getEnclosingScope());
     SymTypeExpression typeOfExpr = TypeCheck3.typeOf(nameExpression);
 
-    return toSort(context, typeOfExpr);
+    return toSort(typeOfExpr);
   }
 
   @Override
-  public Optional<Sort> toSort(@NotNull Context context, @NotNull SymTypeExpression typeExpression) {
+  public Optional<Sort> toSort(@NotNull SymTypeExpression typeExpression) {
     Preconditions.checkNotNull(context);
     Preconditions.checkNotNull(typeExpression);
     if (typeExpression.isPrimitive()) {
@@ -51,8 +63,14 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
     } else if (typeExpression.isObjectType() && typeExpression.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOSymbolsOOType(
       typeExpression.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOSymbolsOOType(typeExpression.asObjectType().getTypeInfo()).isIsEnum()) {
       // Case Enums
+      String fullName = typeExpression.asObjectType().getTypeInfo().getFullName();
+      if (sortMap.containsKey(fullName)) {
+        return Optional.of(sortMap.get(fullName));
+      }
       String[] s = VariableArcMill.typeDispatcher().asOOSymbolsOOType(typeExpression.asObjectType().getTypeInfo()).getSpannedScope().getLocalFieldSymbols().stream().map(FieldSymbol::getName).toArray(String[]::new);
-      return Optional.of(context.mkEnumSort(typeExpression.asObjectType().getTypeInfo().getFullName(), s));
+      Sort  enumSort = context.mkEnumSort(fullName, s);
+      sortMap.put(fullName, enumSort);
+      return Optional.of(enumSort);
     }
 
     return Optional.empty();

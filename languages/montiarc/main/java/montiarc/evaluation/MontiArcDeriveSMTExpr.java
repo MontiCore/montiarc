@@ -28,7 +28,7 @@ public class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
     Preconditions.checkNotNull(context);
     this.context = context;
     this.result = new Expr2SMTResult();
-    this.sortDerive = new VariableArcDeriveSMTSort();
+    this.sortDerive = new VariableArcDeriveSMTSort(context);
     this.traverser = MontiArcMill.traverser();
     this.prefix = "";
 

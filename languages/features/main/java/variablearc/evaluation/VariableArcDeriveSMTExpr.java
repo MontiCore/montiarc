@@ -25,7 +25,7 @@ public class VariableArcDeriveSMTExpr implements IDeriveSMTExpr {
     Preconditions.checkNotNull(context);
     this.context = context;
     this.result = new Expr2SMTResult();
-    this.sortDerive = new VariableArcDeriveSMTSort();
+    this.sortDerive = new VariableArcDeriveSMTSort(context);
     this.traverser = VariableArcMill.traverser();
     this.prefix = "";
 

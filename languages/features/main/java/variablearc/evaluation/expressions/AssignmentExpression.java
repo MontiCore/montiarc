@@ -42,7 +42,7 @@ public class AssignmentExpression extends Expression {
     String parentPrefix = Arrays.stream(prefixes).limit(prefixes.length - 1).reduce((a, b) -> a + "." + b).orElse("");
     converter.setPrefix(parentPrefix);
     Optional<Expr<?>> nameExpression =
-      converter.getSortDerive().toSort(context, variable.getType())
+      converter.getSortDerive().toSort(variable.getType())
         .map(s -> context.mkConst(prefix + "." + variable.getName(), s));
     Optional<Expr<?>> bindingExpression = converter.toExpr(getAstExpression());
 

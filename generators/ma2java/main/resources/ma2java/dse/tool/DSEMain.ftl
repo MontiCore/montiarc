@@ -150,7 +150,7 @@ public class DSEMain${comp.getName()} extends DSEMain{
 <#macro printEnumSorts ast>
 	<#list compHelperDse.getPortTypes(ast.getPorts()) as port>
 		<#if compHelperDse.isEnum(port.getSymbol())>
-			EnumSort<${port.getSymbol().getTypeInfo().getFullName()}> ${port.getSymbol().getType().print()?lower_case} = montiarc.rte.dse.TestController.getCtx().mkEnumSort("${port.getSymbol().getType().print()}",
+			EnumSort<${port.getSymbol().getTypeInfo().getFullName()}> ${port.getSymbol().getType().print()?lower_case} = montiarc.rte.dse.TestController.getEnumSort("${port.getSymbol().getType().print()}",
 				<#list compHelperDse.getEnumValues(port) as value>
 					"${value.getName()}"
 					<#sep> , </#sep>

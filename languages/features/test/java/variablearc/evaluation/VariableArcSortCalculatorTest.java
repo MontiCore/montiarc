@@ -34,10 +34,10 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
   public void shouldDeriveBool() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(context);
 
     // When
-    Optional<Sort> sort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN));
+    Optional<Sort> sort = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN));
 
     // Then
     Assertions.assertTrue(sort.isPresent());
@@ -48,14 +48,14 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
   public void shouldDeriveInt() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(context);
 
     // When
-    Optional<Sort> sortByte = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BYTE));
-    Optional<Sort> sortInt = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT));
-    Optional<Sort> sortShort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.SHORT));
-    Optional<Sort> sortChar = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.CHAR));
-    Optional<Sort> sortLong = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.LONG));
+    Optional<Sort> sortByte = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BYTE));
+    Optional<Sort> sortInt = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT));
+    Optional<Sort> sortShort = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.SHORT));
+    Optional<Sort> sortChar = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.CHAR));
+    Optional<Sort> sortLong = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.LONG));
 
     // Then
     Assertions.assertAll(() -> {
@@ -76,10 +76,10 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
   public void shouldDeriveFloat() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(context);
 
     // When
-    Optional<Sort> sort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.FLOAT));
+    Optional<Sort> sort = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.FLOAT));
 
     // Then
     Assertions.assertTrue(sort.isPresent());
@@ -90,10 +90,10 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
   public void shouldDeriveDouble() {
     // Given
     Context context = createContext();
-    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort();
+    VariableArcDeriveSMTSort calculator = new VariableArcDeriveSMTSort(context);
 
     // When
-    Optional<Sort> sort = calculator.toSort(context, SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.DOUBLE));
+    Optional<Sort> sort = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.DOUBLE));
 
     // Then
     Assertions.assertTrue(sort.isPresent());

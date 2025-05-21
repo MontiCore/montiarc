@@ -3,15 +3,22 @@ package montiarc.rte.dse;
 
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
+import com.microsoft.z3.EnumSort;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TestController {
+
   protected static TestControllerI controller;
+
+  protected static Map<String, EnumSort<?>> enumSorts;
 
   public static void init(TestControllerI controller) {
     TestController.controller = controller;
+    enumSorts = new HashMap<>();
   }
 
   public static TestControllerI getController() {
@@ -44,5 +51,14 @@ public class TestController {
 
   public static void saveStates(StatesList info) {
     controller.saveStates(info);
+  }
+
+  public static <T> EnumSort<T> getEnumSort(String name, String... enumNames) {
+    if (enumSorts.containsKey(name)) {
+      return (EnumSort<T>) enumSorts.get(name);
+    }
+    EnumSort<T> enumSort = getCtx().mkEnumSort(name, enumNames);
+    enumSorts.put(name, enumSort);
+    return enumSort;
   }
 }

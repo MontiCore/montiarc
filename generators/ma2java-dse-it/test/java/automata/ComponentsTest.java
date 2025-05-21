@@ -587,8 +587,8 @@ public class ComponentsTest {
       )
     );
 
-    EnumSort<TimerSignal> timerSignal = ctx.mkEnumSort("TimerSignal", "ALERT", "SLEEP");
-    EnumSort<MotorCmd> motorCmd = ctx.mkEnumSort("MotorCmd", "FORWARD", "BACKWARD", "STOP");
+    EnumSort<TimerSignal> timerSignal = TestController.getEnumSort("TimerSignal", "ALERT", "SLEEP");
+    EnumSort<MotorCmd> motorCmd = TestController.getEnumSort("MotorCmd", "FORWARD", "BACKWARD", "STOP");
     Expr<EnumSort<TimerSignal>> inputE_0 = ctx.mkConst("inputE_0", timerSignal);
 
     EnumComponent enumComponent = new EnumComponent();
