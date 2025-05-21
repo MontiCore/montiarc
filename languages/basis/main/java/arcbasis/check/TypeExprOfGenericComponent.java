@@ -194,7 +194,11 @@ public class TypeExprOfGenericComponent extends CompTypeExpression {
     List<SymTypeExpression> clonedBindings = this.getTypeBindingsAsList().stream()
       .map(SymTypeExpression::deepClone)
       .collect(Collectors.toList());
-    return new TypeExprOfGenericComponent(compTypeSymbol, clonedBindings);
+    TypeExprOfGenericComponent clone = new TypeExprOfGenericComponent(compTypeSymbol, clonedBindings);
+    getSourceNode().ifPresent(clone::setSourceNode);
+    clone.addArgument(getArguments());
+    clone.bindParams();
+    return clone;
   }
 
   @Override

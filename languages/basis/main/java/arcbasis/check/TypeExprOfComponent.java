@@ -63,8 +63,12 @@ public class TypeExprOfComponent extends CompTypeExpression {
   }
 
   @Override
-  public CompTypeExpression deepClone(@NotNull ArcComponentTypeSymbol compTypeSymbol) {
-    return new TypeExprOfComponent(compTypeSymbol);
+  public TypeExprOfComponent deepClone(@NotNull ArcComponentTypeSymbol compTypeSymbol) {
+    TypeExprOfComponent clone = new TypeExprOfComponent(compTypeSymbol);
+    getSourceNode().ifPresent(clone::setSourceNode);
+    clone.addArgument(getArguments());
+    clone.bindParams();
+    return clone;
   }
 
   @Override
