@@ -5,7 +5,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types3.generics.TypeParameterRelations;
@@ -31,15 +31,29 @@ public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSym
                                                                          @NotNull String name) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(name);
-
-    return scope.resolveVariableMany(name, ALL_INCLUSION, getVariablePredicate())
-      .stream().findFirst()
-      .map(VariableSymbolTOP::getType);
+    Optional<SymTypeExpression> result;
+    // modified, here do not fail if two types are found
+    Optional<VariableSymbol> optVarSym = scope.resolveVariableMany(name, ALL_INCLUSION, getVariablePredicate())
+      .stream().findFirst();
+    if (optVarSym.isEmpty()) {
+      result = Optional.empty();
+    } else if (optVarSym.get().getType() == null) {
+      Log.error("0xFD489 internal error: incorrect symbol table, "
+        + "variable symbol " + optVarSym.get().getFullName()
+        + " has no type set.");
+      return Optional.empty();
+    } else {
+      VariableSymbol varSym = optVarSym.get();
+      SymTypeExpression varType = varSym.getType();
+      varType.getSourceInfo().setSourceSymbol(varSym);
+      result = Optional.of(varType);
+    }
+    return result;
   }
 
   @Override
   protected Optional<SymTypeExpression> _resolveType(@NotNull IBasicSymbolsScope scope,
-                                                 @NotNull String name) {
+                                                     @NotNull String name) {
     Preconditions.checkNotNull(scope);
     Preconditions.checkNotNull(name);
 
