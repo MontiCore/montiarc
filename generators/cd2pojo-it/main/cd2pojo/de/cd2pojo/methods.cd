@@ -1,0 +1,31 @@
+/* (c) https://github.com/MontiCore/monticore */
+package de.cd2pojo;
+
+/**
+ * abstract, static, void, type methods
+ */
+classdiagram methods {
+
+  abstract class AContainer {
+    public AContainer();
+    public void call();
+    public boolean boolCall();
+    public Container contCall();
+    public abstract void aCall();
+    public abstract boolean aBoolCall();
+    public abstract Container aContCall();
+    public static void sCall();
+    public static boolean sBoolCall();
+    public static Container sContCall();
+  }
+
+  class Container {
+    public Container();
+    public void call();
+    public boolean boolCall();
+    public Container contCall();
+    public static void sCall();
+    public static boolean sBoolCall();
+    public static Container sContCall();
+  }
+}

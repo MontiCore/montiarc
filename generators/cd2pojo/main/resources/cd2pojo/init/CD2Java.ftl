@@ -11,4 +11,6 @@ ${tc.signature("glex", "deConf")}
 <#-- @ftlvariable name="deConf" type="de.monticore.cd.codegen.DecoratorConfig" -->
 <#-- @ftlvariable name="tc" type="de.monticore.generating.templateengine.TemplateController" -->
 
+${glex.replaceTemplate("cd2java.EmptyBody", glex.templateHP("cd2pojo.EmptyBody.ftl"))}
+
 ${deConf.withCopyCreator().defaultApply()}
