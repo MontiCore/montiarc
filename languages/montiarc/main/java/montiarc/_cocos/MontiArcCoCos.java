@@ -5,6 +5,7 @@ import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
+import arcbasis._cocos.CheckNoFieldDependencyCycles;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.CompArgNoAssignmentExpr;
 import arcbasis._cocos.ComponentArgumentsOmitPortRef;
@@ -151,6 +152,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new ParameterNamedTick());
     checker.addCoCo(new PortNamedTick());
     checker.addCoCo(new RefinementPortsMatch());
+    checker.addCoCo(new CheckNoFieldDependencyCycles());
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
