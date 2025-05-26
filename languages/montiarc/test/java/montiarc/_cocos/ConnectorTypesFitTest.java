@@ -12,6 +12,7 @@ import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -296,6 +297,38 @@ public class ConnectorTypesFitTest extends MontiArcTestBase {
     assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  @Test
+  public void shouldNotReportConnectorTypeMismatchWhenPortTypeIsMissing() throws IOException {
+    String model = "component MissingPortType {\n" +
+      "  port in Missing i;\n" +
+      "  port out Missing o;\n" +
+      "\n" +
+      "  component Inner {\n" +
+      "    port in int i;\n" +
+      "    port out int o;\n" +
+      "  }\n" +
+      "\n" +
+      "  Inner sub;\n" +
+      "\n" +
+      "  i -> sub.i;\n" +
+      "  sub.o -> o;\n" +
+      "}";
+    Preconditions.checkNotNull(model);
+
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorTypesFit());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then: Should only report missing type, NOT type mismatch
+    assertThat(getLoggedErrorCodes())
+      .doesNotContain(ArcError.CONNECTOR_TYPE_MISMATCH.getErrorCode());
   }
 
   protected static Stream<Arguments> invalidModels() {

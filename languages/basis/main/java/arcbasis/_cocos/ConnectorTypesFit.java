@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeObscure;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -40,19 +41,27 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
     for (ASTPortAccess target : conn.getTargetList()) {
       Optional<SymTypeExpression> symTypeOfTarget = getTypeOfPortIfPresent(target);
       if (symTypeOfTarget.isPresent()) {
+        SymTypeExpression sourceType = symTypeOfSource.get();
+        SymTypeExpression targetType = symTypeOfTarget.get();
+
+        // Skip type checking if either source or target is Obscure
+        if (sourceType instanceof SymTypeObscure || targetType instanceof SymTypeObscure) {
+          Log.debug("Skip type check: One or both port types are 'Obscure'.", this.getClass().getSimpleName());
+          continue;
+        }
+
         // Perform type check
         try {
-          if (!SymTypeRelations.isCompatible(symTypeOfTarget.get(), symTypeOfSource.get())) {
+          if (!SymTypeRelations.isCompatible(targetType, sourceType)) {
             Log.error(
               ArcError.CONNECTOR_TYPE_MISMATCH.format(
-                symTypeOfTarget.get().print(), symTypeOfSource.get().print()),
+                targetType.print(), sourceType.print()),
               conn.get_SourcePositionStart());
-            continue;
           }
         } catch (ResolvedSeveralEntriesForSymbolException e) {
           Log.error(
             ArcError.CONNECTOR_TYPE_MISMATCH.format(
-              symTypeOfTarget.get().print(), symTypeOfSource.get().print()),
+              targetType.print(), sourceType.print()),
             conn.get_SourcePositionStart());
         }
       } else {
