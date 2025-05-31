@@ -2,9 +2,14 @@
 package montiarc.conformance.util;
 
 import de.monticore.ast.ASTNode;
+import de.monticore.interpreter.Value;
 import de.monticore.symboltable.IScope;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
+import de.monticore.symboltable.stereotypes.IStereotypeReference;
+
+import java.util.Map;
+import java.util.Optional;
 
 public final class VoidSymbol implements ISymbol {
 
@@ -47,5 +52,14 @@ public final class VoidSymbol implements ISymbol {
   @Override
   public ASTNode getAstNode() {
     return null;
+  }
+
+  Map<de.monticore.symboltable.stereotypes.IStereotypeReference, Optional<Value>> stereoinfo
+    = new java.util.HashMap<>()
+    ;
+
+  @Override
+  public Map<IStereotypeReference, Optional<Value>> getStereoinfo() {
+    return stereoinfo;
   }
 }
