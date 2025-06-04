@@ -30,7 +30,7 @@
     <#assign builderType><@Util.getCompTypeString subSymbol.getType() "${suffixes.comp()}${suffixes.builder()}"/></#assign>
 
     ${subCompName} = (${subCompType}) new ${builderType}()
-    .setName("${subSymbol.getName()}")
+    .setName(this.getName() + ".${mode.getName()}." + "${subSymbol.getName()}")
     .setScheduler(this.getScheduler())
       <#list helper.getArgNamesMappedToExpressions(subSymbol.getAstNode()) as name, expression>
         .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
