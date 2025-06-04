@@ -34,7 +34,6 @@ import arcbasis._cocos.PortNamedTick;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.RefinementRawType;
-import arcbasis._cocos.RefinementTypeBound;
 import arcbasis._cocos.RefinementPortsMatch;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
@@ -56,9 +55,8 @@ import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanTyp
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import arcbasis._cocos.ComponentHeritageRawType;
-import arcbasis._cocos.ComponentHeritageTypeBound;
+import arcbasis._cocos.TypeBound;
 import arcbasis._cocos.SubcomponentRawType;
-import arcbasis._cocos.SubcomponentTypeBound;
 import arcbasis._cocos.TypeParameterCapitalization;
 import arcbasis._cocos.TypeParameterNamedTick;
 import modes._cocos.MaxOneModeAutomaton;
@@ -156,7 +154,6 @@ public class MontiArcCoCos {
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
-    checker.addCoCo(new RefinementTypeBound());
     checker.addCoCo(new ComponentHeritageRawType());
     checker.addCoCo(new SubcomponentRawType());
     checker.addCoCo(new RefinementRawType());
@@ -204,8 +201,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new MaUnitTestConfiguredCorrectly());
 
     // MontiArc CoCos
-    checker.addCoCo(new ComponentHeritageTypeBound());
-    checker.addCoCo(new SubcomponentTypeBound());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
     checker.addCoCo(new RootNoInstance());
 
     // ComfortableArc Cocos

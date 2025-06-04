@@ -15,6 +15,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
+import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.se_rwth.commons.SourcePosition;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -28,7 +29,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests {@link RefinementTypeBound}.
+ * Tests {@link TypeBound}.
  */
 class RefinementTypeBoundTest extends ArcBasisTestBase {
 
@@ -62,8 +63,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError1() {
     // Given: A
     ASTArcComponentType refiningComp = buildCompWithRefinement("A");
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -76,8 +77,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: B<int>
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     ASTArcComponentType refiningComp = buildCompWithRefinement("B", intExpr);
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -89,8 +90,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError3() {
     // Given: B<Integer>
     ASTArcComponentType refiningComp = buildCompWithRefinement("B", integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -103,8 +104,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: C<int, int> 
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     ASTArcComponentType refiningComp = buildCompWithRefinement("C", intExpr.deepClone(), intExpr.deepClone());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -116,8 +117,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError5() {
     // Given: C<Integer, String> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("C", integerExpr(), stringExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -130,8 +131,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: D<int> 
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     ASTArcComponentType refiningComp = buildCompWithRefinement("D", intExpr);
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -143,8 +144,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError7() {
     // Given: E<Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -156,8 +157,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError8() {
     // Given: F<String, Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("F", stringExpr(), integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -170,8 +171,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: TypeVar T; reference B<T>
     TypeVarSymbol tTypeVar = typeVar("T");
     ASTArcComponentType refiningComp = buildCompWithRefinement("B", typeVarExpr(tTypeVar));
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -184,8 +185,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: TypeVar T; reference C<T, T>
     TypeVarSymbol tTypeVar = typeVar("T");
     ASTArcComponentType refiningComp = buildCompWithRefinement("C", typeVarExpr(tTypeVar), typeVarExpr(tTypeVar));
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -199,8 +200,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     TypeVarSymbol tTypeVar = typeVar("T");
     TypeVarSymbol uTypeVar = typeVar("U");
     ASTArcComponentType refiningComp = buildCompWithRefinement("C", typeVarExpr(tTypeVar), typeVarExpr(uTypeVar));
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -213,8 +214,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: TypeVar T extends Integer; reference E<T>
     TypeVarSymbol tTypeVar = typeVar("T", integerExpr());
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", typeVarExpr(tTypeVar));
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -226,8 +227,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError13() {
     // Given: B (raw)
     ASTArcComponentType refiningComp = buildCompWithRefinement("B");
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -239,8 +240,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldNotReportError14() {
     // Given: C (raw)
     ASTArcComponentType refiningComp = buildCompWithRefinement("C");
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -253,8 +254,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: D<boolean> 
     SymTypeExpression boolExpr = SymTypeExpressionFactory.createPrimitive("boolean");
     ASTArcComponentType refiningComp = buildCompWithRefinement("D", boolExpr);
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -268,8 +269,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError2() {
     // Given: E<String> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", stringExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -283,8 +284,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError3() {
     // Given: F<Integer, String> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("F", integerExpr(), stringExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -299,8 +300,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError4() {
     // Given: G<Integer, String> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("G", integerExpr(), stringExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -314,8 +315,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError5() {
     // Given: H<Integer, String> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("H", integerExpr(), stringExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -330,8 +331,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     // Given: TypeVar T extends String; reference E<T> 
     TypeVarSymbol tTypeVar = typeVar("T", stringExpr());
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", typeVarExpr(tTypeVar));
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -345,8 +346,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError7() {
     // Given: C<Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("C", integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -360,8 +361,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError8() {
     // Given: F<Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("F", integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -376,8 +377,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError9() {
     // Given: F<String> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("F", stringExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -391,8 +392,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError10() {
     // Given: A<Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("A", integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -406,8 +407,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError11() {
     // Given: B<Integer, Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("B", integerExpr(), integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -421,8 +422,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError12() {
     // Given: E<String, Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", stringExpr(), integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -437,8 +438,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError13() {
     // Given: E<Integer, Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", integerExpr(), integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -452,8 +453,8 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError14() {
     // Given: A<Integer>
     ASTArcComponentType refiningComp = buildCompWithRefinement("A", integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
-    
+    TypeBound coco = new TypeBound();
+
     // When
     coco.check(refiningComp);
 
@@ -467,7 +468,7 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   void shouldReportError15() {
     // Given: E<String, Integer> 
     ASTArcComponentType refiningComp = buildCompWithRefinement("E", stringExpr(), integerExpr());
-    RefinementTypeBound coco = new RefinementTypeBound();
+    TypeBound coco = new TypeBound();
 
     // When
     coco.check(refiningComp);
@@ -504,7 +505,7 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
     );
   }
 
-  /** Creates a {@link SymTypeExpression} that represents {@link String} . String's type symbol must already exist.*/
+  /** Creates a {@link SymTypeExpression} that represents {@link String} . String's type symbol must already exist. */
   protected static SymTypeExpression stringExpr() {
     return SymTypeExpressionFactory.createTypeObject(
       ArcBasisMill.globalScope().resolveType("String").orElseThrow()
@@ -514,8 +515,9 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
   /**
    * Creates a {@link ASTArcComponentType} with a symbol that refines the given abstraction with the given type
    * arguments
+   *
    * @param abstractionName Raw name of the component type to refine (must be resolvable from the global scope)
-   * @param typeArgs Type arguments to use in the refinement
+   * @param typeArgs        Type arguments to use in the refinement
    */
   protected static ASTArcComponentType buildCompWithRefinement(@NotNull String abstractionName,
                                                                @NotNull SymTypeExpression... typeArgs) {
@@ -524,9 +526,15 @@ class RefinementTypeBoundTest extends ArcBasisTestBase {
 
     ArcComponentTypeSymbol abstractionSym = ArcBasisMill.globalScope().resolveArcComponentType(abstractionName).orElseThrow();
 
+    ASTMCObjectType sourceNode = ArcBasisMill.mCQualifiedTypeBuilder()
+      .set_SourcePositionStart(SourcePosition.getDefaultSourcePosition())
+      .set_SourcePositionEnd(SourcePosition.getDefaultSourcePosition())
+      .uncheckedBuild();
+
     CompKindExpression compExpr = typeArgs.length == 0 ?
       new TypeExprOfComponent(abstractionSym) :
       new TypeExprOfGenericComponent(abstractionSym, Arrays.asList(typeArgs));
+    compExpr.setSourceNode(sourceNode);
 
     ArcComponentTypeSymbol concretizationSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
       .setName("Dummy")

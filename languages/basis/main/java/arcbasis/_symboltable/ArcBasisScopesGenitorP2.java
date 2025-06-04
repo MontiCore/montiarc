@@ -154,7 +154,9 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     Preconditions.checkArgument(node.isPresentSymbol());
 
     if (this.getCurrentCompInstanceType().isPresent()) {
-      node.getSymbol().setType(this.getCurrentCompInstanceType().get().deepClone());
+      CompKindExpression clonedTypeExpr = this.getCurrentCompInstanceType().get().deepClone();
+      clonedTypeExpr.setSourceNode(node);
+      node.getSymbol().setType(clonedTypeExpr);
       if (node.isPresentArcArguments() && node.getSymbol().getType() instanceof CompTypeExpression) {
         ((CompTypeExpression) node.getSymbol().getType()).addArcArguments(node.getArcArguments().getArcArgumentList());
         node.getSymbol().getType().bindParams();
