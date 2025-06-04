@@ -45,8 +45,9 @@ public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSym
     } else {
       VariableSymbol varSym = optVarSym.get();
       SymTypeExpression varType = varSym.getType();
-      varType.getSourceInfo().setSourceSymbol(varSym);
-      result = Optional.of(varType);
+      SymTypeExpression varTypeReplacedVariables = TypeParameterRelations.replaceFreeTypeVariables(varType, scope);
+      varTypeReplacedVariables.getSourceInfo().setSourceSymbol(varSym);
+      result = Optional.of(varTypeReplacedVariables);
     }
     return result;
   }

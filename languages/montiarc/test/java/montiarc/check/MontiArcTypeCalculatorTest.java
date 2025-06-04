@@ -298,18 +298,18 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   }
 
   public void setUpGenericFields() {
-    SymTypeExpression bufferArg = SymTypeExpressionFactory.createTypeVariable("String", this.getScope());
+    SymTypeExpression bufferArg = SymTypeExpressionFactory.createTypeObject("String", this.getScope());
     FieldSymbol buffer = ArcBasisMill.fieldSymbolBuilder().setName("strBuffer")
       .setType(SymTypeExpressionFactory.createGenerics("Buffer", this.getScope(), bufferArg)).build();
-    SymTypeExpression buffer2Arg = SymTypeExpressionFactory.createTypeVariable("Role", this.getScope());
+    SymTypeExpression buffer2Arg = SymTypeExpressionFactory.createTypeObject("Role", this.getScope());
     FieldSymbol buffer2 = ArcBasisMill.fieldSymbolBuilder().setName("roleBuffer")
       .setType(SymTypeExpressionFactory.createGenerics("Buffer", this.getScope(), buffer2Arg)).build();
-    SymTypeExpression storageArg = SymTypeExpressionFactory.createTypeVariable("Message", this.getScope());
+    SymTypeExpression storageArg = SymTypeExpressionFactory.createTypeObject("Message", this.getScope());
     FieldSymbol storage = ArcBasisMill.fieldSymbolBuilder().setName("msgStorage")
       .setType(SymTypeExpressionFactory.createGenerics("Storage", this.getScope(), storageArg)).build();
     List<SymTypeExpression> ma2javaArgs = Arrays.asList(
-      SymTypeExpressionFactory.createTypeVariable("Student", this.getScope()),
-      SymTypeExpressionFactory.createTypeVariable("Teacher", this.getScope()));
+      SymTypeExpressionFactory.createTypeObject("Student", this.getScope()),
+      SymTypeExpressionFactory.createTypeObject("Teacher", this.getScope()));
     FieldSymbol trafo = ArcBasisMill.fieldSymbolBuilder().setName("ma2java")
       .setType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), ma2javaArgs)).build();
     SymbolService.link(this.getScope(), buffer, buffer2, storage, trafo);
