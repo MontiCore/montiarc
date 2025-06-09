@@ -13,13 +13,28 @@ hide:
 
 # The MontiArc Architecture Description Language
 
-MontiArc is an architectural definition language for component and connector models with enhanced connection facilities,
-hierarchical decomposition, behavior description, and variability.
+MontiArc is a textual architecture description language (ADL) for the
+specification and modeling of cyber-physical systems.
+The architecture of a cyber-physical system is described as a [component](./Reference/Component/index.md) and 
+[connector](./Reference/Component/Connectors.md) (C&C) system, in which autonomously acting components perform computations.
+Components have clear defined [interfaces](./Reference/Component/Interfaces.md) that consists of stable, typed, directed ports.
 
-Architectures are described as [component](./Reference/Component/index.md) and [connector](./Reference/Component/Connectors.md) systems in which autonomously acting components 
-perform computations. Communication between components is regulated by connectors between the components’ [interfaces](./Reference/Component/Interfaces.md), which are stable and built up by typed, directed ports. Components are either atomic or composed
-of connected subcomponents. Atomic components yield [behavior descriptions](./Reference/Behavior/index.md). For [composed components](./Reference/Component/Decomposition.md), the behavior emerges from the behavior of their subcomponents. 
+Each component defines a cyber-physical function, which maps streams of input
+messages to stream of output messages.
+This function is the behavior of the corresponding cyber-physical systems.
+Behavior can be specified through atomic [behavior descriptions](./Reference/Behavior/index.md), 
+such as [statecharts](./Reference/Behavior/Automata.md), or through the 
+[composition](./Reference/Component/Decomposition.md) of subcomponents to form larger systems.
 
+The MontiArc infrastructure provides essential functionality for verifying the
+validity of component and connector models.
+Components can be translated into Java simulations to simulate, analyze,
+and validate their behavior, for example through automated tests.
+In addition to the basic modeling elements \- components, ports, and connectors \-
+MontiArc supports advanced modeling concepts such as component 
+[parameterization](./Reference/Component/Parameter.md),
+[variability](./Reference/Component/Variability.md), 
+dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
 
 <div class="grid cards" markdown>
 
@@ -108,6 +123,8 @@ of connected subcomponents. Atomic components yield [behavior descriptions](./Re
 
 ## Further Information
 
-* [MontiCore documentation](https://www.monticore.de/)
-* [Publications about MBSE, MontiCore, and MontiArc](https://www.se-rwth.de/publications/)
-* [License definition](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
+* [Setup](https://monticore.github.io/montiarc/v7.8/GettingStarted/Setup)
+* [Contributing](https://monticore.github.io/montiarc/v7.8/Contributing)
+* [FAQ](https://monticore.github.io/montiarc/v7.8/FAQ)
+* [Publications](https://www.se-rwth.de/publications/)
+* [License](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
