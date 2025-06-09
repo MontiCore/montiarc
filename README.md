@@ -13,34 +13,43 @@
 
 # The MontiArc Architecture Description Language
 
-MontiArc is an architectural definition language for component and connector models with enhanced connection facilities,
-hierarchical decomposition, behavior description, and variability.
+MontiArc is a textual architecture description language (ADL) for the 
+specification and modeling of cyber-physical systems. 
+The architecture of a cyber-physical system is described as a component and 
+connector (C&C) system, in which autonomously acting components perform computations. 
+Components have clear defined interfaces that consists of stable, typed, directed ports. 
+They communicate via these interface in the direction of connectors through streams of messages. 
 
-In MontiArc, architectures are described as component and connector systems in which autonomously acting components 
-perform computations. Communication between components is regulated by connectors between the components’ interfaces, 
-which are stable and built up by typed, directed ports. Components are either atomic or composed of connected 
-subcomponents. Atomic components yield behavior descriptions in the form of embedded time-synchronous port automata 
-or via integration of handcrafted code. For composed components, the behavior emerges from the behavior of their 
-subcomponents. 
+Each component defines a cyber-physical function, which maps streams of input 
+messages to stream of output messages. 
+This function is the behavior of the corresponding cyber-physical systems. 
+Behavior can be specified through atomic behavior descriptions, such as statecharts, 
+or through the composition of subcomponents to form larger systems.
+
+The MontiArc infrastructure provides essential functionality for verifying the 
+validity of component and connector models. 
+Components can also be translated into Java simulations to simulate, analyze, 
+and validate their behavior, for example through automated tests. 
+In addition to the basic modeling elements \- components, ports, and connectors \- 
+MontiArc supports advanced modeling concepts such as component parameterization, 
+variability and feature configuration, dynamic reconfiguration, and generics.
 
 © https://github.com/MontiCore/monticore
 
 ### Further Information
 
-* [MontiArc documentation](https://monticore.github.io/montiarc)
+* [Documentation](https://monticore.github.io/montiarc)
   * [Setup](https://monticore.github.io/montiarc/v7.8/GettingStarted/Setup)
   * [Contributing](https://monticore.github.io/montiarc/v7.8/Contributing)
   * [FAQ](https://monticore.github.io/montiarc/v7.8/FAQ)
-* [MontiCore documentation](https://www.monticore.de/)
-* [Publications about MBSE, MontiArc, and MontiCore](https://www.se-rwth.de/publications/)
-* [License definition](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
+* [Publications](https://www.se-rwth.de/publications/)
+* [License](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
 
 ## About MontiArc
-Language features of the ADL MontiArc include hierarchical decomposition of components, 
-subtyping by structural inheritance, component type definitions and reference declarations for reuse,
-generic component types and configurable components, syntactic sugar for connectors,
-static and dynamic variability,
-and controlled implicit creation of connections and subcomponent declarations.
+The MontiArc ADL features modeling elements for component type definitions and 
+reference declaration for component reuse, ports, connectors, structural 
+inheritance, implicit but controlled creation of connectors and subcomponent 
+declaration, component parameterization, embedded behavior descriptions, static 
 
 ### Model Cyber-Physical Systems
 Cyber-Physical Systems are inherently distributed, interacting in various ways using signals, messages and data. However, model-based development of Cyber-Physical Systems becomes particularly interesting, when modeling the context of the software control, i.e. electric and hydraulic signals as well as physical material 
