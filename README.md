@@ -1,11 +1,11 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 align="center">
+<div style="text-align: center;">
   <picture>
     <img width="400" src="./docs/img/Logo.png" alt="MontiArc">
   </picture>
-</h1>
+</div>
 
-<h4 align="center">
+<h4 style="text-align: center;">
   <a href="https://monticore.github.io/montiarc">Documentation</a> |
   <a href="https://monticore.github.io/montiarc/v7.8/GettingStarted">Getting Started</a> |
   <a href="https://www.monticore.de/">MontiCore</a>
