@@ -94,17 +94,6 @@ dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
 
     [:octicons-arrow-right-24: Read more](./FAQ/index.md)
 
--   :material-bug: &nbsp;
-    __Contributing__
-
-    ---
-
-    Have you found an issue in MontiArc or the documentation?
-
-    ---
-
-    [:octicons-arrow-right-24: Find out how to report issues](./Contributing/index.md)
-
 -   :material-license: &nbsp;
     __License__
 
@@ -118,13 +107,75 @@ dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
 
 </div>
 
+---
+
+## Found an issue?
+
+MontiArc is actively maintained by the [Chair of Software Engineering](https://www.se-rwth.de/). 
+
+There are multiple ways in which you can improve MontiArc to help you and others who might encounter the same issues in the future.
+
+<div class="grid cards" markdown>
+
+-   :material-bug-outline: &nbsp;
+    __Something is not working?__
+
+    ---
+
+    Report a bug by creating an issue with information on how to reproduce it
+    
+    ---
+
+    [:octicons-arrow-right-24: Report a bug](https://github.com/MontiCore/montiarc/issues/new?template=bug.yml)
+
+-   :material-file-document-remove-outline: &nbsp;
+    __Missing information in our docs?__
+
+    ---
+
+    Report missing information or potential inconsistencies in our
+    documentation
+
+    ---
+
+    [:octicons-arrow-right-24: Report a docs issue](https://github.com/MontiCore/montiarc/issues/new?template=docs.yml)
+
+-   :material-lightbulb-on-20: &nbsp;
+    __Want to submit an idea?__
+
+    ---
+
+    Propose a change, feature request, or suggest an improvement
+
+    ---
+
+    [:octicons-arrow-right-24: Request a change](https://github.com/MontiCore/montiarc/issues/new)
+
+-   :material-source-pull: &nbsp;
+    __Want to create a pull request?__
+
+    ---
+
+    Open an issue first and then create a comprehensive and useful pull request
+
+    ---
+
+    [:octicons-arrow-right-24: Set up your development environment](https://github.com/MontiCore/montiarc/blob/dev/CONTRIBUTING.md)<br/>
+    [:octicons-arrow-right-24: Create a pull request](https://github.com/MontiCore/montiarc/pulls)
+
+</div>
+
+!!! info "Hint"
+    Before submitting an issue, make sure to:
+
+    - Check that no similar issue already exists [here](https://github.com/MontiCore/montiarc/issues)
+    - You provided all information needed to understand the issue
 
 ---
 
 ## Further Information
 
-* [Setup](https://monticore.github.io/montiarc/v7.8/GettingStarted/Setup)
-* [Contributing](https://monticore.github.io/montiarc/v7.8/Contributing)
-* [FAQ](https://monticore.github.io/montiarc/v7.8/FAQ)
+* [Setup](./GettingStarted/Setup.md)
+* [FAQ](./FAQ/index.md)
 * [Publications](https://www.se-rwth.de/publications/)
 * [License](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)

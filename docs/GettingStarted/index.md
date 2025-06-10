@@ -13,5 +13,5 @@ Let's start your MontiArc journey! In this chapter, we will show you how to star
     Simply click on *next (Setup)* on the bottom right to go to the next step of installing MontiArc.
 
 !!! question "Found a problem with the documentation?"
-    If you find an error or something is not understandable, please file an [issue](../Contributing/index.md) for it.
+    If you find an error or something is not understandable, please file an [issue](../index.md#found-an-issue) for it.
     This will help others reading the documentation in the future.

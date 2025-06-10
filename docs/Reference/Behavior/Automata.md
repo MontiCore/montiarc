@@ -9,13 +9,21 @@ some output given current input and state.
 An automaton is defined inside the body of a component and consists of states 
 and transitions.
 
-```montiarc
-component Comp {
-  automaton {
-    // the state and transitions are defined here
-  }
-}
-```
+???+ example
+    ```montiarc
+    component Comp {
+      port in int i;
+
+      automaton {
+        // the state and transitions are defined here
+        initial state S1;
+        state S2;
+
+        S1 -> S2 / {};
+        S2 -> S1 [i > 0] i / {};
+      }
+    }
+    ```
 
 ## States
 
