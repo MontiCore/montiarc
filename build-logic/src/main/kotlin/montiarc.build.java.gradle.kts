@@ -35,4 +35,6 @@ dependencies {
   testImplementation(libs.junit.params.get())
   testRuntimeOnly(libs.junit.engine.get())
   testRuntimeOnly(libs.junit.platform.launcher.get())
+  // Include of API Guardian to avoid missing enum constant of junit annotation processors
+  testCompileOnly(libs.api.guardian.get())
 }
