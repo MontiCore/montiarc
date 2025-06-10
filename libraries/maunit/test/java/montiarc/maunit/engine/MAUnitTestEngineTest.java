@@ -6,6 +6,7 @@ import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.rte.behavior.AbstractBehavior;
 import montiarc.rte.component.AbstractComponent;
 import montiarc.rte.component.SimComponent;
+import montiarc.rte.oracle.OracleFactory;
 import montiarc.rte.port.InOutPort;
 import montiarc.rte.port.InPort;
 import montiarc.rte.port.OutPort;
@@ -36,7 +37,7 @@ public class MAUnitTestEngineTest {
 
     public static boolean isLifecycleTest = false;
 
-    public ExampleMaUnitTest(String name, Scheduler scheduler) {
+    public ExampleMaUnitTest(String name, Scheduler scheduler, OracleFactory oracleFactory) {
       super(name, scheduler);
       this.scheduler.register(this);
     }

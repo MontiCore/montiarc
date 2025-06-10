@@ -5,9 +5,10 @@
 public ${ast.getName()}${suffixes.comp()}<@Util.printTypeParameters ast false/> build() {
   assert isValid() : "Illegal builder configuration for component " + ((name == null || name.isBlank())? "ERR: no name given" : name);
 
-  ${ast.getName()}${suffixes.comp()}<@Util.printTypeParameters ast false/> component = new ${ast.getName()}${suffixes.compImpl()}<@Util.printTypeParameters ast false/>(
+  ${ast.getName()}${suffixes.compImpl()}<@Util.printTypeParameters ast false/> component = new ${ast.getName()}${suffixes.compImpl()}<@Util.printTypeParameters ast false/>(
     getName(),
-    getScheduler()
+    getScheduler(),
+    getOracleFactory()
     <#list ast.getHead().getArcParameterList()>, <#items as param>${prefixes.getterMethod()}${prefixes.parameter()}${param.getName()}()<#sep>, </#sep></#items></#list>
     <#list helper.getFeatures(ast)>, <#items as feature>${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}()<#sep>, </#sep></#items></#list>
   );

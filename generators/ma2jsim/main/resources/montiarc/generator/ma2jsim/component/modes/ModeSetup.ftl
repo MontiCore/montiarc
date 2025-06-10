@@ -31,6 +31,7 @@
 
     ${subCompName} = (${subCompType}) new ${builderType}()
     .setName(this.getName() + ".${mode.getName()}." + "${subSymbol.getName()}")
+    .setOracleFactory(oracleFactory)
     .setScheduler(this.getScheduler())
       <#list helper.getArgNamesMappedToExpressions(subSymbol.getAstNode()) as name, expression>
         .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})

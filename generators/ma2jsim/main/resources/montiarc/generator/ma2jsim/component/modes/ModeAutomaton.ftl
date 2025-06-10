@@ -42,6 +42,7 @@
 
   ${tc.include("montiarc.generator.ma2jsim.component.modes.TickBehavior.ftl")}
   ${tc.include("montiarc.generator.ma2jsim.component.modes.MessageBehavior.ftl")}
+  ${tc.include("montiarc.generator.ma2jsim.component.modes.TransitionMethods.ftl")}
 }
 
 <#macro logInitialMode mode>

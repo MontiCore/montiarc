@@ -11,6 +11,8 @@ ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/NameProperty.ftl"
 
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/schedule/SchedulerInCompBuilder.ftl", ast, [classNameWithGenerics])}
 
+${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/OracleElements.ftl", ast, [classNameWithGenerics])}
+
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/Constructors.ftl", ast, [classNameNoGenerics])}
 
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/Parameters.ftl", ast, [classNameWithGenerics])}

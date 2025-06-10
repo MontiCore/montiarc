@@ -6,6 +6,7 @@
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
 <#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
+<#assign hasModeAutomaton = helper.getModeAutomaton(ast).isPresent()>
 <#-- Usually, the constructor visibility is protected to force users to use the builder
   -- for instantiating components. However, MAUnit components must have public
   -- constructors so that the test engine can instantiate them.
@@ -18,7 +19,8 @@
 
 ${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}</#if>(
   String name,
-  montiarc.rte.scheduling.Scheduler scheduler
+  montiarc.rte.scheduling.Scheduler scheduler,
+  montiarc.rte.oracle.OracleFactory oracleFactory
   <#list ast.getHead().getArcParameterList()>,
     <#items as param><@Util.getTypeString param.getSymbol().getType()/> ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
   </#list>
@@ -26,7 +28,7 @@ ${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}
     <#items as feature>Boolean ${prefixes.feature()}${feature.getName()}<#sep>, </#items>
   </#list>
 ) {
-  super(name, scheduler);
+  super(name, scheduler <#if hasModeAutomaton>, oracleFactory</#if>);
 
   <#list ast.getHead().getArcParameterList() as param>
     this.${prefixes.parameter()}${param.getName()} = ${prefixes.parameter()}${param.getName()};
@@ -34,7 +36,7 @@ ${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}
   <#list helper.getFeatures(ast) as feature>
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
-  <#if helper.getModeAutomaton(ast).isPresent()>
+  <#if hasModeAutomaton>
     this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this, name);
   </#if>
 
@@ -67,25 +69,26 @@ ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
     }
   </#if>
 
-<#if helper.getModeAutomaton(ast).isPresent()>
+<#if hasModeAutomaton>
   this.modeAutomaton.setup();
 </#if>
 
 this.scheduler.register(this);
+this.oracle = oracleFactory.createOracleFor(this.getName());
 
 <@logInstantiation/>
 }
 
 <#macro variantSetup variant>
-  this.isAtomic = ${(variant.isAtomic() && !helper.getModeAutomaton(ast).isPresent())?c};
+  this.isAtomic = ${(variant.isAtomic() && !hasModeAutomaton)?c};
   <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
   <#if variant.isAtomic()>
     <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
   <#elseif variant.isDecomposed()>
-    <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}();
+    <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}(oracleFactory);
     <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}();
   </#if>
-  <#if !helper.getModeAutomaton(ast).isPresent()>
+  <#if !hasModeAutomaton>
     <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}();
   </#if>
 </#macro>
@@ -116,5 +119,6 @@ this.scheduler.register(this);
     + " variant hash = " + this.variantID + ";"
   </#if>
   + " scheduler type = " + this.scheduler.getClass().getSimpleName() + ";"
+  + " oracle type = " + this.oracle.getClass().getSimpleName() + ";"
 </@Log.info>
 </#macro>

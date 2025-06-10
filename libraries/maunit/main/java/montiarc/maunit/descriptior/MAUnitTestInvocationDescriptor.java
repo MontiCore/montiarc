@@ -6,7 +6,7 @@ import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.maunit.engine.MAUnitTestExecutionContext;
 import montiarc.rte.component.SimComponent;
-import montiarc.rte.port.ScheduledPort;
+import montiarc.rte.oracle.OracleFactory;
 import montiarc.rte.scheduling.CoordinatingScheduler;
 import org.junit.platform.engine.TestDescriptor;
 import org.junit.platform.engine.UniqueId;
@@ -51,7 +51,8 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
   @Override
   public MAUnitTestExecutionContext execute(MAUnitTestExecutionContext context, DynamicTestExecutor dynamicTestExecutor) throws Exception {
     CoordinatingScheduler scheduler = new CoordinatingScheduler();
-    SimComponent component = (SimComponent) testClass.getConstructors()[0].newInstance(getArguments(testClass.getConstructors()[0].getParameterCount(), scheduler));
+    OracleFactory oracleFactory = OracleFactory.withDefaultStrategy(OracleFactory.lowestHash());
+    SimComponent component = (SimComponent) testClass.getConstructors()[0].newInstance(getArguments(testClass.getConstructors()[0].getParameterCount(), scheduler, oracleFactory));
     boolean caughtException = false;
     try {
       Simulation.ticks = 0;
@@ -74,13 +75,15 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
     return context;
   }
 
-  protected Object[] getArguments(int size, CoordinatingScheduler scheduler) {
+  protected Object[] getArguments(int size, CoordinatingScheduler scheduler, OracleFactory oracleFactory) {
     Object[] arguments = new Object[size];
     for (int i = 0; i < size; i++) {
       if (i == 0) {
         arguments[i] = this.getDisplayName();
       } else if (i == 1) {
         arguments[i] = scheduler;
+      } else if (i == 2) {
+        arguments[i] = oracleFactory;
       } else {
         arguments[i] = invocationContext.resolveParameter(iteration, i);
       }

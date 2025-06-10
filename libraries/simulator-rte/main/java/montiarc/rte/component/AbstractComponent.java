@@ -1,10 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
+import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.rte.behavior.Behavior;
 import montiarc.rte.logging.Aspects;
 import montiarc.rte.logging.DataFormatter;
+import montiarc.rte.oracle.Oracle;
+import montiarc.rte.oracle.OracleOwner;
 import montiarc.rte.port.InOutPort;
 import montiarc.rte.port.InPort;
 import montiarc.rte.port.OutPort;
@@ -29,11 +32,13 @@ import java.util.Set;
  *            (containing a message for every port at the time of a synced tick)
  * @param <B> the class defining the interface of the behavior (accepting tick and message events)
  */
-public abstract class AbstractComponent<I, B extends Behavior<I>> implements SimComponent {
+public abstract class AbstractComponent<I, B extends Behavior<I>>
+  implements SimComponent, OracleOwner {
 
   protected final String name;
   protected Set<OutPort<?>> unconnectedOutputs;
   protected final Scheduler scheduler;
+  protected Oracle oracle;
 
   protected boolean isAtomic;
   protected B behavior;
@@ -53,6 +58,17 @@ public abstract class AbstractComponent<I, B extends Behavior<I>> implements Sim
 
   protected Scheduler getScheduler() {
     return this.scheduler;
+  }
+
+  // TODO: add this to SimComponent and add override annotation
+  public void setOracle(Oracle oracle) {
+    Preconditions.checkNotNull(oracle);
+    this.oracle = oracle;
+  }
+
+  @Override
+  public Oracle getOracle() {
+    return this.oracle;
   }
 
   protected B getBehavior() {

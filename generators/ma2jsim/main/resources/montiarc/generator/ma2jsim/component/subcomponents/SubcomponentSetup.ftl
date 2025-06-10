@@ -6,7 +6,7 @@
 
 <#list helper.getVariants(ast) as variant>
 <#if !variant.isAtomic()>
-protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}() {
+protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}(montiarc.rte.oracle.OracleFactory oracleFactory) {
     ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
     <#list variant.getSubcomponents() as subcomponent>
@@ -17,6 +17,7 @@ protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}() {
         this.${subCompFieldName} = (${subCompType}) new ${subCompBuilder}()
         .setName(this.getName() + "." + "${subcomponent.getName()}")
         .setScheduler(this.getScheduler())
+        .setOracleFactory(oracleFactory)
         <#list helper.getArgNamesMappedToExpressions(subcomponent.getAstNode()) as name, expression>
             .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
         </#list>

@@ -21,10 +21,10 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
 
   @Override
   public Object resolveParameter(int testIndex, int parameterIndex) {
-    // constructor parameter index 0 (name) and 1 (scheduler) are outside of this context's control
+    // constructor parameter index 0 (name), 1 (scheduler), and 2 (oracleFactory) are outside of this context's control
     switch (parameterIndex) {
     <#list ast.getHead().getArcParameterList() as param>
-      case ${param?index+2}: // ${param.getName()}
+      case ${param?index+3}: // ${param.getName()}
         <#if param.isPresentDefault()><#assign default = prettyPrinter.prettyprint(param.getDefault())></#if>
         <#if MaUnitHelper.isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
     </#list>

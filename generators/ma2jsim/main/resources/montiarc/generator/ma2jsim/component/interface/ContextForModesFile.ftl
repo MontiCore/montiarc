@@ -12,7 +12,8 @@ public interface ${comp.getName()}${suffixes.contextForModes()}<#if isTop>${suff
   extends ${comp.getName()}${suffixes.parameters()} <@Util.printTypeParameters comp false/>,
           ${comp.getName()}${suffixes.fields()} <@Util.printTypeParameters comp false/>,
           ${comp.getName()}${suffixes.features()} <@Util.printTypeParameters comp false/>,
-          ${comp.getName()}${suffixes.modes()} <@Util.printTypeParameters comp false/> {
+          ${comp.getName()}${suffixes.modes()} <@Util.printTypeParameters comp false/>,
+          montiarc.rte.oracle.OracleOwner {
   }
 
 ${tc.include("montiarc.generator.ma2jsim.component.interface.ModeInterface.ftl", ast.getArcComponentType())}

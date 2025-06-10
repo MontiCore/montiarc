@@ -26,57 +26,33 @@
   </#if>
 </#macro>
 
-<#-- Prints: The activation behavior of the transitions. An if-/else-Block will activate the first possible transition. -->
-<#-- ASTArcMode mode, ASTModeAutomaton modeAutomaton -->
-<#macro transitioningBehavior transitions>
+<#-- Prints: The activation behavior of the transitions. The oracle is queried to select an enabled one-->
+<#-- List<ASTSCTransition>, ASTModeAutomaton -->
+<#macro transitioningBehavior transitions, automaton>
   <#if transitions?size != 0>
+
+    <#-- We identify each transition by the index in the order in which they are declared in the model.
+      -- We query the oracle based on this identifier -->
+    java.util.Map<Integer, montiarc.rte.modes.ModeTransition> enabledTransitions = new java.util.LinkedHashMap<>();
+
     <#list transitions as transition>
       <#assign guardExpre = helper.getGuard(transition)>
       <#assign guardPrinted><#if guardExpre.isPresent()>${prettyPrinter.prettyprint(guardExpre.get())} <#else>true</#if></#assign>
+      <#assign transitionIndex = helper.getTransitionIndex(transition, automaton)>
 
+      // Transition: ${helper.printTransitionSignature(transition)}
       if (${guardPrinted}) {
-        <@logTransition transition/>
-
-        this.currentMode = Mode.${transition.getTargetName()};
-        this.context.<@MethodNames.modeTeardown transition.getSourceNameSymbol()/>();
-        this.context.<@MethodNames.modeSetup transition.getTargetNameSymbol()/>();
-        this.context.<@MethodNames.modeInit transition.getTargetNameSymbol()/>();
+        enabledTransitions.put(${transitionIndex}, this::transition_${transitionIndex});
       }
-      <#sep>else </#sep>
     </#list>
+
+    if (!enabledTransitions.isEmpty()) {
+      this.context.getOracle().decideAmong(enabledTransitions).execute();
+    }
   </#if>
 </#macro>
-
-
 
 <#-- Logging related stuff -->
-
-<#macro logTransition transition>
-<#assign source = transition.getSourceNameSymbol().getAstNode()>
-<#assign target = transition.getTargetNameSymbol().getAstNode()>
-<#assign removedSubs = helper.getInstancesFromMode(source)>
-<#assign removedConnectors = helper.getConnectors(source)>
-<#assign addedSubs = helper.getInstancesFromMode(target)>
-<#assign addedConnectors = helper.getConnectors(target)>
-
-<@Log.info log_aspects.modeChange() "this.compName">
-    "${source.getName()} -> ${target.getName()};"
-
-  <#if removedSubs?size != 0 || removedConnectors?size != 0>
-    + " Removing"
-    <#if removedSubs?size != 0>
-      + " subs = {<#list removedSubs as s>${s.getName()}<#sep>, </#list>}"
-    </#if>
-    <#if removedConnectors?size != 0>
-      + " connectors = {<#list removedConnectors as c>${c.getSourceName()} -> <@formatStringList c.getTargetsNames()/><#sep>, </#list>}"
-    </#if>
-    + ";"
-  </#if>
-  <#if addedSubs?size != 0 || addedConnectors?size != 0>
-    + <@printAddedModeElements addedSubs addedConnectors/>
-  </#if>
-</@Log.info>
-</#macro>
 
 <#macro printAddedModeElements addedSubs addedConnectors>
   " Adding"

@@ -2,6 +2,7 @@
 package montiarc.rte.component;
 
 import montiarc.rte.behavior.Behavior;
+import montiarc.rte.oracle.OracleFactory;
 import montiarc.rte.port.InPort;
 import montiarc.rte.scheduling.Scheduler;
 
@@ -17,6 +18,9 @@ public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC exte
 
   protected ModeC modeAutomaton;
 
+  /** Creates oracles for subcomponents in modes when newly instantiated on mode switches */
+  protected OracleFactory oracleFactory;
+
   protected ModeC getModeAutomaton() {
     return this.modeAutomaton;
   }
@@ -24,8 +28,9 @@ public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC exte
   @Override
   public boolean hasModeAutomaton() { return true; }
 
-  protected AbstractModeComponent(String name, Scheduler scheduler) {
+  protected AbstractModeComponent(String name, Scheduler scheduler, OracleFactory oracleFactory) {
     super(name, scheduler);
+    this.oracleFactory = oracleFactory;
   }
 
   @Override

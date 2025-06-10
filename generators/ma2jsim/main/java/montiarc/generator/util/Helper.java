@@ -303,6 +303,10 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
+  public int getTransitionIndex(ASTSCTransition transition, ASTModeAutomaton automaton) {
+    return getTransitions(automaton).indexOf(transition);
+  }
+
   public List<ASTComponentInstance> getInstancesFromMode(ASTArcMode ast) {
     return ast.getBody().getElementsOfType(ASTComponentInstantiation.class).stream()
       .flatMap(ASTComponentInstantiationTOP::streamComponentInstances)
@@ -322,6 +326,33 @@ public class Helper {
         this::getInstancesFromMode
       )
     );
+  }
+
+  /** Prints the transition signature: Source, Target, Guard, and Event. But not the action. */
+  public String printTransitionSignature(ASTSCTransition tr) {
+    StringBuilder builder = new StringBuilder(tr.getSourceName() + " -> " + tr.getTargetName());
+
+    if (tr.getSCTBody() instanceof ASTTransitionBody) {
+      IndentPrinter printer = new IndentPrinter();
+      MontiArcFullPrettyPrinter pp = new MontiArcFullPrettyPrinter(printer, false);
+
+      ASTTransitionBody body = (ASTTransitionBody) tr.getSCTBody();
+
+      if (body.isPresentPre()) {
+        builder
+          .append(" [")
+          .append(pp.prettyprint(((ASTTransitionBody) tr.getSCTBody()).getPre()))
+          .append("]");
+      }
+
+      if (body.isPresentSCEvent()) {
+        builder
+          .append(" ")
+          .append(pp.prettyprint(body.getSCEvent()));
+      }
+    }
+
+    return builder.toString();
   }
 
   public List<PortSymbol> getAllStronglyCausalOutPorts(ComponentTypeSymbol comp) {

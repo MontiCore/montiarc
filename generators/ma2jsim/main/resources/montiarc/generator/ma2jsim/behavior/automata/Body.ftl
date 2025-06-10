@@ -58,11 +58,21 @@ protected ${compAutomatonClass} (
 @Override
 public void tick(${syncMsgType} syncedInputs) {
   <#assign transitionArg =  hasSyncedPorts?then("syncedInputs", "null")/>
-  <#list transitionsForTickEvent as tr>
+  <#list transitionsForTickEvent>
+    java.util.Map<Integer, montiarc.rte.automaton.Transition<${tickMsgType}>> enabledTransitions = new java.util.LinkedHashMap<>(${transitionsForTickEvent?size});
+
+    <#items as tr>
     <#assign transition_field = prefixes.transition() + prefixes.tick() + tr?counter>
-    if(${transition_field}.isEnabled(state, ${transitionArg})) {
-      ${transition_field}.execute(this, ${transitionArg});
-    }<#sep> else </#sep>
+      if(${transition_field}.isEnabled(state, ${transitionArg})) {
+        enabledTransitions.put(enabledTransitions.size(), ${transition_field});
+      }
+    </#items>
+
+    if (!enabledTransitions.isEmpty()) {
+      getContext().getOracle()
+        .decideAmong(enabledTransitions)
+        .execute(this, ${transitionArg});
+    }
   </#list>
 
   this.getState().doActionWithSuper();
@@ -81,10 +91,22 @@ public void tick(${syncMsgType} syncedInputs) {
   <#-- Methods for the triggering input port, to execute matching transitions. -->
   @Override
   public void ${prefixes.message()}${portName}${helper.portVariantSuffix(ast, port)}(<@Util.getTypeString port.getType()/> msg) {
-  <#list transitions as tr>
-    if(${prefixes.transition()}${prefixes.message()}${portName}_${tr?counter}.isEnabled(state, msg)) {
-      ${prefixes.transition()}${prefixes.message()}${portName}_${tr?counter}.execute(this, msg);
-    }<#sep> else </#sep>
+
+  <#list transitions>
+    java.util.Map<Integer, montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>>> enabledTransitions = new java.util.LinkedHashMap<>(${transitions?size});
+
+    <#items as tr>
+    <#assign transition_field = prefixes.transition() + prefixes.message() + portName + "_" + tr?counter>
+      if(${transition_field}.isEnabled(state, msg)) {
+        enabledTransitions.put(enabledTransitions.size(), ${transition_field});
+      }
+    </#items>
+
+    if (!enabledTransitions.isEmpty()) {
+      getContext().getOracle()
+        .decideAmong(enabledTransitions)
+        .execute(this, msg);
+    }
   </#list>
   }
 </#list>

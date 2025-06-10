@@ -2,5 +2,5 @@
 <#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 public boolean isValid() {
-  return !(name == null || "".equals(name));
+  return !(name == null || "".equals(name) || oracleFactory == null);
   }

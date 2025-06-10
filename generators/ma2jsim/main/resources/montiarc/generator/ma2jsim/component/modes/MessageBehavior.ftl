@@ -20,9 +20,9 @@
       <#list modes as mode>
         <#assign takableTransitions = helper.filterTransitionsForSourceMode(transitions, mode.getName())>
 
-        case ${mode.getName()}:
-          <@ModeUtil.transitioningBehavior takableTransitions/>
-          break;
+        case ${mode.getName()}: {
+          <@ModeUtil.transitioningBehavior takableTransitions, modeAutomaton/>
+          } break;
       </#list>
       default: throw new IllegalStateException("Unknown current mode: " + currentMode.name);
     }

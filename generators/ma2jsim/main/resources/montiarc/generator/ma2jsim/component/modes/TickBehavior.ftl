@@ -27,9 +27,9 @@ protected void doTick(
     <#list modes as mode>
       <#assign transitions = helper.getTransitionsForTickEventFromState(modeAutomaton, mode)>
 
-      case ${mode.getName()}:
-        <@ModeUtil.transitioningBehavior transitions/>
-        break;
+      case ${mode.getName()}: {
+        <@ModeUtil.transitioningBehavior transitions, modeAutomaton/>
+        } break;
     </#list>
     default:
       throw new IllegalStateException("Unknown current mode: " + currentMode.name);
