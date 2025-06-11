@@ -66,6 +66,7 @@
 | ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |
 | ☑     | ☒           | RefinementPortsMatch                | ArcBasis | 0xC1184, 0xC1185, 0xC1186, 0xC1187, 0xC1188, 0xC1189          |
 | ☑     | ☒           | CheckNoFieldDependencyCycles        | ArcBasis | 0xC1190                                                       |
+| ☑     | ☒           | PortInheritanceTiming               | ArcBasis | 0xC1191                                                       |
 
 ## MontiArc CoCos
 

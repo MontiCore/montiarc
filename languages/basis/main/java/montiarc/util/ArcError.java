@@ -79,7 +79,8 @@ public enum ArcError implements Error {
   REFINEMENT_TIMING_MISMATCH_OUT("0xC1187","Timing mitmatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for outgoing ports."),
   REFINEMENT_IN_PORT_TYPE_MISMATCH("0xC1188", "Type mismatch, input port '%s' has type '%s', which is not a super type of the port's type '%s' in the abstraction '%s'."),
   REFINEMENT_OUT_PORT_TYPE_MISMATCH("0xC1189", "Type mismatch, output port '%s' has type '%s', which is not a sub type of the port's type '%s' in the abstraction '%s'."),
-  CIRCULAR_FIELDS_DEPENDENCY("0xC1190", "Circular fields dependency");
+  CIRCULAR_FIELDS_DEPENDENCY("0xC1190", "Circular fields dependency"),
+  INVALID_PORT_TIMING_OVERRIDE("0xC1191", "Port '%s' cannot override timing from '%s' to '%s'");
 
   private final String errorCode;
   private final String errorMessage;

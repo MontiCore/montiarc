@@ -29,6 +29,7 @@ import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.ParameterNamedTick;
 import arcbasis._cocos.PortHeritageTypeFits;
+import arcbasis._cocos.PortHeritageTimingFits;
 import arcbasis._cocos.PortNameCapitalization;
 import arcbasis._cocos.PortNamedTick;
 import arcbasis._cocos.PortUniqueSender;
@@ -203,6 +204,7 @@ public class MontiArcCoCos {
     // MontiArc CoCos
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
     checker.addCoCo(new RootNoInstance());
+    checker.addCoCo(new PortHeritageTimingFits());
 
     // ComfortableArc Cocos
     checker.addCoCo(new MaxOneAutoConnect());
