@@ -1,0 +1,20 @@
+{
+  "name": "ComponentTypeWithIntParameter",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "name": "ComponentTypeWithIntParameter",
+      "parameters": [
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "p",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        }
+      ]
+    }
+  ]
+}

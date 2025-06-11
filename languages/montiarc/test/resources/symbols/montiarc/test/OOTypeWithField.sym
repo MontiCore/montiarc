@@ -1,0 +1,34 @@
+{
+  "name": "OOTypeWithField",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithField",
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "v",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+            "name": "OOTypeWithField",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "montiarc.test.OOTypeWithField"
+            },
+            "isConstructor": true,
+            "isPublic": true,
+            "isStatic": true
+          }
+        ]
+      }
+    }
+  ]
+}

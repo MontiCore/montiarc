@@ -37,11 +37,9 @@ public enum ArcError implements Error {
   HERITAGE_IN_PORT_TYPE_MISMATCH("0xC1132", "Incompatible types, clash with port of super component"),
   HERITAGE_OUT_PORT_TYPE_MISMATCH("0xC1133", "Incompatible types, clash with port of super component"),
   HERITAGE_PORT_DIRECTION_MISMATCH("0xC1134", "Incompatible direction, clash with port of super component"),
-  PORT_REF_FIELD_INIT("0xC1135", "Port cannot be referenced in static context"),
+  PORT_REF_IN_STATIC_CONTEXT("0xC1135", "Value of port '%s' not available in static context."),
   FIELD_INIT_TYPE_MISMATCH("0xC1137", "Type mismatch, expected '%s' but provided '%s'"),
-  PORT_REF_DEFAULT_VALUE("0xC1138", "Port cannot be referenced in static context"),
   PARAM_DEFAULT_TYPE_MISMATCH("0xC1139", "Type mismatch, expected '%s' but provided '%s'"),
-  COMP_ARG_PORT_REF("0xC1141", "Port cannot be referenced in static context"),
   COMP_ARG_MULTI_ASSIGNMENT("0xC1142", "Invalid syntax, no assignment in default value"),
   COMPONENT_LOWER_CASE("0xC1143", "Convention violation, components should be upper case"),
   SUBCOMPONENT_UPPER_CASE("0xC1144", "Convention violation, subcomponents should be lower case"),
@@ -51,8 +49,8 @@ public enum ArcError implements Error {
   UNIQUE_IDENTIFIER_NAMES("0xC1148", "Multiple identifiers called '%s' in the same scope"),
   RESTRICTED_IDENTIFIER("0xC1149", "The identifier '%s' is restricted and cannot be used here"),
   UNSUPPORTED_MODEL_ELEMENT("0xC1150", "The usage of '%s' is unsupported and thus ignored"),
-  READ_FROM_OUTGOING_PORT("0xC1151", "Cannot read from the outgoing port '%s' of component '%s'."),
-  WRITE_TO_INCOMING_PORT("0xC1152", "Cannot write to the incoming port '%s' of component '%s'."),
+  READ_FROM_OUTGOING_PORT("0xC1151", "Cannot read from the outgoing port '%s'."),
+  WRITE_TO_INCOMING_PORT("0xC1152", "Cannot write to the incoming port '%s'."),
   WRITE_TO_READONLY_VARIABLE("0xC1153", "Cannot write to readonly variable '%s' of component '%s'."),
   INVALID_CONTEXT_ASSIGNMENT("0xC1154", "Invalid syntax, no assignments in this context"),
   INVALID_CONTEXT_INC_PREFIX("0xC1155", "Invalid syntax, no increment in this context"),
@@ -80,7 +78,9 @@ public enum ArcError implements Error {
   REFINEMENT_IN_PORT_TYPE_MISMATCH("0xC1188", "Type mismatch, input port '%s' has type '%s', which is not a super type of the port's type '%s' in the abstraction '%s'."),
   REFINEMENT_OUT_PORT_TYPE_MISMATCH("0xC1189", "Type mismatch, output port '%s' has type '%s', which is not a sub type of the port's type '%s' in the abstraction '%s'."),
   CIRCULAR_FIELDS_DEPENDENCY("0xC1190", "Circular fields dependency"),
-  INVALID_PORT_TIMING_OVERRIDE("0xC1191", "Port '%s' cannot override timing from '%s' to '%s'");
+  IN_PORT_REF_IN_INVALID_CONTEXT("0xC1191", "Value of port '%s' not available in %s."),
+  OUT_PORT_MEMBER_ACCESSED("0xC1192", "Cannot access port '%s' or any of its members; output ports are write-only"),
+  INVALID_PORT_TIMING_OVERRIDE("0xC1193", "Port '%s' cannot override timing from '%s' to '%s'");
 
   private final String errorCode;
   private final String errorMessage;

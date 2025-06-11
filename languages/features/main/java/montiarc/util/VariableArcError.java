@@ -14,8 +14,6 @@ public enum VariableArcError implements Error {
   FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
   SUBCOMPONENTS_NOT_CONSTRAINT("0xC1404", "Features %s are not correctly constraint by this component"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1404", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  PORT_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1413", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
-  PORT_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1414", "Messages are an element of the runtime, cannot read from port '%s' at design-time"),
   FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Variables are an element of the runtime, cannot use field '%s' at design-time"),
   FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Variables are an element of the runtime, cannot use field '%s' at design-time"),
   EXPRESSION_NOT_SMT_CONVERTIBLE("0xC1417", "Unsupported expression, cannot check '%s'");

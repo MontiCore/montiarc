@@ -1,0 +1,24 @@
+{
+  "name": "FunctionWithBooleanParameter",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+      "name": "FunctionWithBooleanParameter",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypePrimitive",
+        "primitiveName": "boolean",
+        "parameters": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+            "name": "p",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "boolean"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

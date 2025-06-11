@@ -12,6 +12,7 @@ dependencies {
   grammar(project(":languages:basis"))
 
   api(project(":languages:automaton"))
+  api(project(":languages:compute"))
 
   implementation(libs.guava)
   implementation(libs.janino)

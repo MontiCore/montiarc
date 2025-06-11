@@ -3,8 +3,8 @@ package generic;
 
 component OneGenericWithoutUpperBound<T> {
   port
-   in T i,
-   out T o;
+   sync in T i,
+   sync out T o;
 
   compute {
       o = i;

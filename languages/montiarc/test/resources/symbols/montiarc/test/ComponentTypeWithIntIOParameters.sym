@@ -1,0 +1,28 @@
+{
+  "name": "ComponentTypeWithIntIOParameters",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "name": "ComponentTypeWithIntIOParameters",
+      "parameters": [
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "i",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        },
+        {
+          "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+          "name": "o",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          }
+        }
+      ]
+    }
+  ]
+}

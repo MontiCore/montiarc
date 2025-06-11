@@ -5,8 +5,8 @@ import java.lang.Integer;
 
 component OneGenericWithUpperBound<T extends java.lang.Number> {
   port
-   in T i,
-   out Integer o;
+   sync in T i,
+   sync out Integer o;
 
   compute {
     Integer v = i.intValue();

@@ -1,0 +1,10 @@
+{
+  "name": "ComponentType",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "name": "ComponentType"
+    }
+  ]
+}

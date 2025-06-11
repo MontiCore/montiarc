@@ -1,0 +1,71 @@
+{
+  "name": "OOTypeWithStaticFunctionIO",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithStaticFunctionIO",
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "i",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "isStatic": true
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "i",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "isStatic": true,
+            "parameters": [
+              {
+                "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+                "name": "p",
+                "type": {
+                  "kind": "de.monticore.types.check.SymTypePrimitive",
+                  "primitiveName": "int"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "o",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "isStatic": true
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "o",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "isStatic": true,
+            "parameters": [
+              {
+                "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+                "name": "p",
+                "type": {
+                  "kind": "de.monticore.types.check.SymTypePrimitive",
+                  "primitiveName": "int"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

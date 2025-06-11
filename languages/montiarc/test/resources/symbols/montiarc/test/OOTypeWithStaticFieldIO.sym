@@ -1,0 +1,33 @@
+{
+  "name": "OOTypeWithStaticFieldIO",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithStaticFieldIO",
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "i",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "isStatic": true
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
+            "name": "o",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "isStatic": true
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -3,8 +3,8 @@ package generic;
 
 component Forwarder<T> {
   port
-   in T input,
-   out T output;
+   sync in T input,
+   sync out T output;
 
   compute {
     output = input;

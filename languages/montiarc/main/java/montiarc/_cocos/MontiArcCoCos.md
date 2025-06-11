@@ -79,7 +79,7 @@
 | in MA | CoCo(s)                        | Language    | Code                                        | Notes |
 |-------|--------------------------------|-------------|---------------------------------------------|-------|
 | ☑     | ConstraintSatisfied4Comp       | VariableArc | 0xC1401                                     |       |
-| ☑     | ConstraintsOmitPortReferences  | VariableArc | 0xC1408                                     |       |
+| ☑     | ConstraintsOmitPortReferences  | VariableArc | 0xC1175                                     |       |
 | ☑     | ConstraintsOmitFieldReferences | VariableArc | 0xC1415                                     |       |
 | ☑     | ConstraintIsBoolean            | VariableArc | 0xC1400                                     |       |
 | ☑     | ConstraintNoAssignmentExpr     | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |       |
@@ -87,7 +87,7 @@
 | ☑     | FeatureNameCapitalization      | VariableArc | 0xC1402                                     |       |
 | ☑     | FeatureUsage                   | VariableArc | 0xC1403                                     |       |
 | ☑     | SubcomponentsConstraint        | VariableArc | 0xC1404                                     |       |
-| ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1407                                     |       |
+| ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1175                                     |       |
 | ☑     | VarIfOmitFieldReferences       | VariableArc | 0xC1416                                     |       |
 | ☑     | VarIfIsBoolean                 | VariableArc | 0xC1404                                     |       |
 | ☑     | VarIfNoAssignmentExpr          | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |       |
@@ -106,20 +106,22 @@
 
 ## Automaton CoCos
 
-| in MA | CoCo(s)                                  | Language           | Notes                                                                                                                                               |
-|-------|------------------------------------------|--------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
-| ☑     | UniqueStates                             | SCBasis            |                                                                                                                                                     |
-| ☑     | TransitionSourceAndTargetExist           | SCBasis            |                                                                                                                                                     |
-| ☑     | AtLeastOneInitialState                   | SCBasis            |                                                                                                                                                     |
-| ☑     | MaxOneInitialState                       | SCBasis            | Checks that there is only one top-level state per automaton. (This coco does not check sub states.)                                                 |
-| ☑     | NoInputPortsInInitialOutputDecl          | ArcAutomaton       |                                                                                                                                                     |
-| ☑     | TransitionPreconditionsAreBoolean        | SCTransitions4Code |                                                                                                                                                     |
-| ☑     | AnteBlocksOnlyForInitialStates           | SCTransitions4Code | Checks that AnteBlocks in state declarations occur only for initial states, as they declare actions initially performed at component instantiation. |
-| ☑     | Unsupported automaton modeling elements: | MontiArc           | Finale states                                                                                                                                       |
-| ☒     | PackageCorrespondsToFolders              | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                |
-| ☒     | SCFileExtension\[is.sc\]                 | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                |
-| ☒     | SCNameIsArtifactName                     | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                |
-| ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                            |
+| in MA | CoCo(s)                                  | Language           | Notes                                                                                                                                                                  |
+|-------|------------------------------------------|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ☑     | UniqueStates                             | SCBasis            |                                                                                                                                                                        |
+| ☑     | TransitionSourceAndTargetExist           | SCBasis            |                                                                                                                                                                        |
+| ☑     | AtLeastOneInitialState                   | SCBasis            |                                                                                                                                                                        |
+| ☑     | MaxOneInitialState                       | SCBasis            | Checks that there is only one top-level state per automaton. (This coco does not check sub states.)                                                                    |
+| ☑     | NoInputPortsInInitialOutputDecl          | ArcAutomaton       |                                                                                                                                                                        |
+| ☑     | TransitionPreconditionsAreBoolean        | SCTransitions4Code |                                                                                                                                                                        |
+| ☑     | AnteBlocksOnlyForInitialStates           | SCTransitions4Code | Checks that AnteBlocks in state declarations occur only for initial states, as they declare actions initially performed at component instantiation.                    |
+| ☑     | Unsupported automaton modeling elements: | MontiArc           | Finale states                                                                                                                                                          |
+| ☒     | PackageCorrespondsToFolders              | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                   |
+| ☒     | SCFileExtension\[is.sc\]                 | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                   |
+| ☒     | SCNameIsArtifactName                     | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                   |
+| ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                                               |
+| ☑     | TransitionUsesEventDependentPorts        | ArcAutomaton       | Tick-triggered transitions must only access values of synced incoming ports; Message-event triggered transitions must only access values of event-based incoming ports |
+| ☑     | NoInputPortsInStateActions               | ArcAutomaton       | This regards state entry, do, and exit actions.                                                                                                                        |
 
 ## ComfortableArc Cocos
 

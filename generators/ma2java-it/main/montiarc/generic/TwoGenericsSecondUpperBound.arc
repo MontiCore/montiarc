@@ -3,10 +3,10 @@ package generic;
 
 component TwoGenericsSecondUpperBound<T, S extends java.lang.String> {
   port
-   in T i1,
-   in S i2,
-   out T o1,
-   out String o2;
+   sync in T i1,
+   sync in S i2,
+   sync out T o1,
+   sync out String o2;
 
   compute {
     o1 = i1;

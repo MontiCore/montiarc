@@ -1,14 +1,19 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcautomaton._cocos.NoInputPortsInInitialOutputDeclaration;
+import arcautomaton._cocos.NoInputPortInEntryAction;
+import arcautomaton._cocos.NoInputPortInExitAction;
+import arcautomaton._cocos.NoInputPortInInitialAction;
+import arcautomaton._cocos.NoNonSyncInputPortInDoAction;
+import arcautomaton._cocos.NoNonSyncInputPortInEpsilonTransition;
+import arcautomaton._cocos.NoOtherInputPortInMsgTransition;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
 import arcbasis._cocos.CheckNoFieldDependencyCycles;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.CompArgNoAssignmentExpr;
-import arcbasis._cocos.ComponentArgumentsOmitPortRef;
+import arcbasis._cocos.ComponentHeritageRawType;
 import arcbasis._cocos.ComponentInstantiationNamedTick;
 import arcbasis._cocos.ComponentNameCapitalization;
 import arcbasis._cocos.ComponentNamedTick;
@@ -17,14 +22,16 @@ import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
 import arcbasis._cocos.ConnectorTimingsFit;
 import arcbasis._cocos.FeedbackStrongCausality;
-import arcbasis._cocos.FieldInitOmitPortReferences;
 import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
 import arcbasis._cocos.FieldNamedTick;
+import arcbasis._cocos.NoPortInDefaultParameterValue;
+import arcbasis._cocos.NoPortInFieldDeclaration;
+import arcbasis._cocos.NoPortInSubcomponentArgument;
+import arcbasis._cocos.NoPortInSuperComponentArgument;
 import arcbasis._cocos.NoSubcomponentReferenceCycle;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
-import arcbasis._cocos.ParameterDefaultValueOmitsPortRef;
 import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.ParameterNamedTick;
@@ -38,6 +45,13 @@ import arcbasis._cocos.RefinementRawType;
 import arcbasis._cocos.RefinementPortsMatch;
 import arcbasis._cocos.SubPortsConnected;
 import arcbasis._cocos.SubcomponentNameCapitalization;
+import arcbasis._cocos.SubcomponentRawType;
+import arcbasis._cocos.TypeBound;
+import arcbasis._cocos.TypeParameterCapitalization;
+import arcbasis._cocos.TypeParameterNamedTick;
+import arccompute._cocos.NoInputPortsInInitialCompute;
+import arccompute._cocos.NoNonSyncInputPortInCompute;
+import arccompute._cocos.PortReadWriteInCompute;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
@@ -55,33 +69,39 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-import arcbasis._cocos.ComponentHeritageRawType;
-import arcbasis._cocos.TypeBound;
-import arcbasis._cocos.SubcomponentRawType;
-import arcbasis._cocos.TypeParameterCapitalization;
-import arcbasis._cocos.TypeParameterNamedTick;
 import modes._cocos.MaxOneModeAutomaton;
 import modes._cocos.ModeAutomatonContainsNoStates;
 import modes._cocos.ModeOmitPortDefinition;
 import modes._cocos.StatechartContainsNoMode;
 import montiarc.MontiArcMill;
-import montiarc._cocos.util.PortReferenceExtractor4CommonExpressions;
 import montiarc._visitor.MontiArcTraverser;
 import variablearc._cocos.ConstraintIsBoolean;
 import variablearc._cocos.ConstraintNoAssignmentExpr;
 import variablearc._cocos.ConstraintSatisfied4Comp;
 import variablearc._cocos.ConstraintSmtConvertible;
 import variablearc._cocos.ConstraintsOmitFieldReferences;
-import variablearc._cocos.ConstraintsOmitPortReferences;
 import variablearc._cocos.FeatureNameCapitalization;
 import variablearc._cocos.FeatureNamedTick;
 import variablearc._cocos.FeatureUsage;
+import variablearc._cocos.NoPortInConstraint;
+import variablearc._cocos.NoPortInVarIfCondition;
 import variablearc._cocos.SubcomponentsConstraint;
 import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfNoAssignmentExpr;
 import variablearc._cocos.VarIfOmitFieldReferences;
-import variablearc._cocos.VarIfOmitPortReferences;
 import variablearc._cocos.VarIfSmtConvertible;
+import variablearc._cocos.VariantAwareNoInputPortInEntryAction;
+import variablearc._cocos.VariantAwareNoInputPortInExitAction;
+import variablearc._cocos.VariantAwareNoInputPortInInitialAction;
+import variablearc._cocos.VariantAwareNoInputPortsInInitialCompute;
+import variablearc._cocos.VariantAwareNoNonSyncInputPortInCompute;
+import variablearc._cocos.VariantAwareNoNonSyncInputPortInDoAction;
+import variablearc._cocos.VariantAwareNoNonSyncInputPortInEpsilonTransition;
+import variablearc._cocos.VariantAwareNoOtherInputPortInMsgTransition;
+import variablearc._cocos.VariantAwareNoPortInDefaultParameterValue;
+import variablearc._cocos.VariantAwareNoPortInFieldDeclaration;
+import variablearc._cocos.VariantAwareNoPortInSubcomponentArgument;
+import variablearc._cocos.VariantAwareNoPortInSuperComponentArgument;
 
 import java.util.function.Consumer;
 
@@ -105,14 +125,15 @@ public class MontiArcCoCos {
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
     return checker;
   }
-  
+
   public static MontiArcCoCoChecker afterSymTab2() {
     return afterSymTab2(true);
   }
-    
+
   public static MontiArcCoCoChecker afterSymTab2(boolean checkVariants) {
     MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
     MontiArcCoCoChecker varChecker = checker.get4Variant();
+    MontiArcTraverser traverser;  // Will be used to as intermediate memory for initializing traversers with adequate handlers etc.
 
     if (!checkVariants) {
       checker.addCoCo(new UnsupportedVariability());
@@ -133,12 +154,20 @@ public class MontiArcCoCos {
     addCoCoAs(new FeedbackStrongCausality(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoSubcomponentReferenceCycle());
-    addCoCoAs(new PortHeritageTypeFits(),    checkVariants ? varChecker::addCoCo : checker::addCoCo);
-    checker.addCoCo(new FieldInitOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
+    addCoCoAs(new PortHeritageTypeFits(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new FieldInitTypeFits());
     checker.addCoCo(new ParameterDefaultValueTypeFits());
-    checker.addCoCo(new ParameterDefaultValueOmitsPortRef(new PortReferenceExtractor4CommonExpressions()));
-    checker.addCoCo(new ComponentArgumentsOmitPortRef(new PortReferenceExtractor4CommonExpressions()));
+    if (checkVariants) {
+      varChecker.addCoCo(new VariantAwareNoPortInDefaultParameterValue());
+      varChecker.addCoCo(new VariantAwareNoPortInFieldDeclaration());
+      varChecker.addCoCo(new VariantAwareNoPortInSubcomponentArgument());
+      varChecker.addCoCo(new VariantAwareNoPortInSuperComponentArgument());
+    } else {
+      checker.addCoCo(new NoPortInDefaultParameterValue());
+      checker.addCoCo(new NoPortInFieldDeclaration());
+      checker.addCoCo(new NoPortInSubcomponentArgument());
+      checker.addCoCo(new NoPortInSuperComponentArgument());
+    }
     checker.addCoCo(new ComponentNameCapitalization());
     checker.addCoCo(new SubcomponentNameCapitalization());
     checker.addCoCo(new PortNameCapitalization());
@@ -162,7 +191,6 @@ public class MontiArcCoCos {
 
     // VariableArc
     checker.addCoCo(new ConstraintsOmitFieldReferences());
-    checker.addCoCo(new ConstraintsOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
     checker.addCoCo(new ConstraintIsBoolean());
     checker.addCoCo(new ConstraintSmtConvertible());
     checker.addCoCo(new ConstraintSatisfied4Comp());
@@ -170,7 +198,8 @@ public class MontiArcCoCos {
     checker.addCoCo(new FeatureUsage());
     checker.addCoCo(new SubcomponentsConstraint());
     checker.addCoCo(new VarIfOmitFieldReferences());
-    checker.addCoCo(new VarIfOmitPortReferences(new PortReferenceExtractor4CommonExpressions()));
+    checker.addCoCo(new NoPortInConstraint());
+    checker.addCoCo(new NoPortInVarIfCondition());
     checker.addCoCo(new VarIfIsBoolean());
     checker.addCoCo(new VarIfSmtConvertible());
     checker.addCoCo(new FeatureNamedTick());
@@ -186,20 +215,47 @@ public class MontiArcCoCos {
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
     addCoCoAs(new TransitionPreconditionsAreBoolean(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
-    MontiArcTraverser traverser = MontiArcMill.inheritanceTraverser();
+    traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new AtLeastOneInitialState(traverser));
     checker.addCoCo(new AnteBlocksOnlyForInitialStates());
 
     // ArcAutomaton CoCos
     addCoCoAs(new variablearc._cocos.arcautomaton.EventTriggerExists(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
-    checker.addCoCo(new NoInputPortsInInitialOutputDeclaration());
     traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new MaxOneInitialState(traverser));
+    if (checkVariants) {
+      varChecker.addCoCo(new VariantAwareNoInputPortInEntryAction());
+      varChecker.addCoCo(new VariantAwareNoInputPortInExitAction());
+      varChecker.addCoCo(new VariantAwareNoInputPortInInitialAction());
+      varChecker.addCoCo(new VariantAwareNoNonSyncInputPortInDoAction());
+      varChecker.addCoCo(new VariantAwareNoNonSyncInputPortInEpsilonTransition());
+      varChecker.addCoCo(new VariantAwareNoOtherInputPortInMsgTransition());
+    } else {
+      checker.addCoCo(new NoInputPortInEntryAction());
+      checker.addCoCo(new NoInputPortInExitAction());
+      checker.addCoCo(new NoInputPortInInitialAction());
+      checker.addCoCo(new NoNonSyncInputPortInDoAction());
+      checker.addCoCo(new NoNonSyncInputPortInEpsilonTransition());
+      checker.addCoCo(new NoOtherInputPortInMsgTransition());
+    }
+    // ArcAutomaton CoCos adapted for MontiArc
+    addCoCoAs(new PortReadWriteInDoAction4MontiArc(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new PortReadWriteInTransition4MontiArc(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
 
     // Unit CoCos
     checker.addCoCo(new MaUnitTestConfiguredCorrectly());
+
+    // ArcCompute CoCos
+    if (checkVariants) {
+      varChecker.addCoCo(new VariantAwareNoInputPortsInInitialCompute());
+      varChecker.addCoCo(new VariantAwareNoNonSyncInputPortInCompute());
+    } else {
+      checker.addCoCo(new NoInputPortsInInitialCompute());
+      checker.addCoCo(new NoNonSyncInputPortInCompute());
+    }
+    addCoCoAs(new PortReadWriteInCompute4MontiArc(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
 
     // MontiArc CoCos
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());

@@ -2,8 +2,8 @@
 package montiarc.lang.string;
 
 component ToString() {
-  port in Object i;
-  port out String o;
+  port sync in Object i;
+  port sync out String o;
 
   compute {
     o = i.toString();

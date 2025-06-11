@@ -1,0 +1,52 @@
+{
+  "name": "OOTypeWithFunction",
+  "package": "montiarc.test",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithFunction",
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "f",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            }
+          },
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "f",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"int"
+            },
+            "parameters": [
+              {
+                "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+                "name": "p",
+                "type": {
+                  "kind": "de.monticore.types.check.SymTypePrimitive",
+                  "primitiveName": "int"
+                }
+              }
+            ]
+          },
+          {
+            "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+            "name": "OOTypeWithFunction",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "montiarc.test.OOTypeWithFunctionIO"
+            },
+            "isConstructor": true,
+            "isPublic": true,
+            "isStatic": true
+          }
+        ]
+      }
+    }
+  ]
+}
