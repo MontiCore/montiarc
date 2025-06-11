@@ -23,6 +23,9 @@ dependencies {
 
   testImplementation(project(":generators:cd2pojo"))
   testImplementation(libs.mockito)
+
+  // Provide API only for montiarc.generator.MA2JSimTest#testRun()
+  testRuntimeOnly(libs.api.guardian)
 }
 
 sourceSets["main"].java {
