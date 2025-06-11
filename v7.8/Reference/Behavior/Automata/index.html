@@ -372,27 +372,6 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href="../../../Contributing/" class="md-tabs__link">
-        
-  <!-- !! Removed icon in navigation content !! -->
-
-  <!-- Navigation link title -->
-  Contributing
-
-      </a>
-    </li>
-  
-
-      
-        
-
-  <!-- Determine classes -->
-  
-  
-
-  <!-- Navigation item with nested items -->
-  
-    <li class="md-tabs__item">
       <a href="https://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/" class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
@@ -2548,28 +2527,6 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Contributing/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    Contributing
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
       <a href="https://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/" class="md-nav__link">
         
   
@@ -2743,12 +2700,22 @@ component receives an input, the automata may execute a transition, producing
 some output given current input and state.</p>
 <p>An automaton is defined inside the body of a component and consists of states 
 and transitions.</p>
+<details class="example" open="open">
+<summary>Example</summary>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// the state and transitions are defined here</span>
+<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S1</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">state</span> <span class="nc">S2</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">    </span><span class="n">S2</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S1</span><span class="w"> </span><span class="o">[</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{};</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
+</details>
 <h2 id="states">States</h2>
 <p>An automaton has at least one state and exactly one initial state.</p>
 <p>A simple state declaration looks like</p>
