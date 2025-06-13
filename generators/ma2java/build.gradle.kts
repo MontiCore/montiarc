@@ -37,3 +37,15 @@ registerVersionInjectionForUpToDateChecks(
   subfolder = "montiarc/generator",
   fileName = "MA2JavaToolVersion.txt",
 )
+
+// Expose internal javac API for google-java-format
+tasks.test {
+  jvmArgs = listOf(
+    "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED",
+    "--add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED",
+    "--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED",
+    "--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED",
+    "--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED",
+    "--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+  )
+}
