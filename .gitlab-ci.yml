@@ -23,14 +23,14 @@ stages:
   - mirror
       
 Build:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   stage: build
   allow_failure: false
   script:
     - gradle clean assemble --stacktrace --build-cache
 
 Build LSP:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   stage: build
   needs: ["Build"]
   allow_failure: false
@@ -39,14 +39,14 @@ Build LSP:
 
 Verify Formatting:
   stage: test
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   needs: ["Build"]
   allow_failure: false
   script:
     - gradle spotlessCheck --build-cache
 
 Package:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   stage: post-build
   needs: ["Build"]
   allow_failure: false
@@ -73,7 +73,7 @@ Package:
     when: always
 
 Unit Test:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   allow_failure: false
   <<: *unit_test_definition
 
@@ -103,7 +103,7 @@ Test Coverage:
         path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   stage: post-test
   script:
     - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache
@@ -117,7 +117,7 @@ Deploy Nexus:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
@@ -147,7 +147,7 @@ Github Mirror:
       when: on_success
 
 Check Dependency Updates:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk17
   stage: check
   needs: []
   allow_failure: true
