@@ -26,4 +26,6 @@ public class Aspects {
   public static final String RECEIVE_EVENT = "receive";
 
   public static final String FIELD_VALUE = "field";
+
+  public static final String INIT = "init";
 }

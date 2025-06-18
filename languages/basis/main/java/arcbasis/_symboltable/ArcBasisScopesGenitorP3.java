@@ -46,8 +46,9 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
   protected boolean isHereditaryStronglyCausal(PortSymbol portSymbol, ArcComponentTypeSymbol componentTypeSymbol) {
     if (portSymbol.isOutgoing() && componentTypeSymbol.isAtomic()) {
       // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
-      return componentTypeSymbol.getBehavior().isPresent()
-        && componentTypeSymbol.getBehavior().get().isDelayed();
+      // or if the component has no incoming ports
+      return (componentTypeSymbol.getBehavior().isPresent()
+        && componentTypeSymbol.getBehavior().get().isDelayed()) || componentTypeSymbol.getAllIncomingPorts().isEmpty();
     } else if (portSymbol.isOutgoing() && componentTypeSymbol.isDecomposed()) {
       // outgoing ports of composed components are strongly causal if their composed behavior is strongly causal
       return isComposedStronglyCausal(portSymbol, componentTypeSymbol);

@@ -69,11 +69,11 @@ public class NoGuardTest {
    */
   protected static Stream<Arguments> expStatesProvider() {
     return Stream.of(
-      Arguments.of(0, new States[]{ States.A }),
-      Arguments.of(1, new States[]{ States.A, States.B }),
-      Arguments.of(2, new States[]{ States.A, States.B, States.C }),
-      Arguments.of(3, new States[]{ States.A, States.B, States.C, States.A }),
-      Arguments.of(4, new States[]{ States.A, States.B, States.C, States.A, States.B })
+      Arguments.of(0, new States[]{ States.B }),
+      Arguments.of(1, new States[]{ States.B, States.C }),
+      Arguments.of(2, new States[]{ States.B, States.C, States.A }),
+      Arguments.of(3, new States[]{ States.B, States.C, States.A, States.B }),
+      Arguments.of(4, new States[]{ States.B, States.C, States.A, States.B, States.C })
     );
   }
 }

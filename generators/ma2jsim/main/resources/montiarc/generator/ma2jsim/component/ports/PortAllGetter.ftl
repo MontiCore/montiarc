@@ -7,7 +7,6 @@
 
 <@allInPortsGetter/>
 <@allOutPortsGetter/>
-<@allDelayedOutPortsGetter/>
 <@allSyncedInPortsGetter/>
 <@allMsgEventInPortsGetter/>
 
@@ -66,34 +65,6 @@ public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllOutPorts() {
   </#if>
 }
 </#macro>
-
-<#macro allDelayedOutPortsGetter>
-@Override
-protected java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllStronglyCausalOutPorts() {
-  <#if hasOnlyOneVariant>
-    return java.util.List.of(
-    <#list helper.getAllStronglyCausalOutPorts(ast.getSymbol()) as port>
-        this.${prefixes.port()}${port.getName()}() <#sep>, </#sep>
-    </#list>
-    );
-  <#else>
-    switch (this.variantID) {
-      <#list helper.getVariants(ast) as variant>
-        case ${helper.variantSuffix(variant)}:
-        return java.util.List.of(
-        <#list helper.getAllStronglyCausalOutPorts(variant) as port>
-            this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}() <#sep>, </#sep>
-        </#list>
-        );
-      </#list>
-      default:
-        assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
-        return java.util.Collections.emptyList();
-    }
-  </#if>
-}
-</#macro>
-
 
 <#macro allSyncedInPortsGetter>
 @Override

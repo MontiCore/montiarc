@@ -13,6 +13,7 @@ import java.util.Set;
 
 public class ComponentScheduler {
 
+  protected final CoordinatingScheduler coordinator;
   protected final SimComponent component;
   protected final Set<InPort<?>> syncPorts;
   protected final Set<InPort<?>> msgEventPorts;
@@ -23,7 +24,8 @@ public class ComponentScheduler {
   protected boolean canExecuteTick;
   protected boolean isExecuting;
 
-  public ComponentScheduler(SimComponent component) {
+  public ComponentScheduler(SimComponent component, CoordinatingScheduler coordinator) {
+    this.coordinator = coordinator;
     this.component = component;
     this.msgEventPorts = Set.copyOf(component.getAllMsgEventInPorts());
     this.syncPorts = Set.copyOf(component.getAllSyncedInPorts());
@@ -44,7 +46,7 @@ public class ComponentScheduler {
 
   public void requestScheduling(InPort<?> port, Object newMsg) {
     if (newMsg instanceof Message) {
-      throw new IllegalArgumentException("Requested message object should be unwrapped and not instance of the rte class 'Message'");
+      throw new IllegalArgumentException("Requested message object should be unwrapped and not instance of the rte class 'Message'" );
     }
 
     if (!syncPorts.contains(port)) {
@@ -112,23 +114,21 @@ public class ComponentScheduler {
   public void executeNextSchedule() {
     if (isExecuting) {
       throw new IllegalStateException("Triggering the execution of a component that has not finished an already " +
-        "running execution is not allowed.");
+        "running execution is not allowed." );
     }
 
-    if (!scheduledMsgEventPorts.isEmpty()) {
+    if (!component.isInitialized() && (!component.isDelayed() || canExecuteTick)) {
+      executeInitSchedule();
+    } else if (!scheduledMsgEventPorts.isEmpty()) {
       executePortSchedule(scheduledMsgEventPorts.getFirst());
     } else if (isTickScheduled) {
-      canExecuteTick = false;
       executeTickSchedule();
-      if (allInPorts.isEmpty()) {
-        orderTickSchedule();
-      }
     }
   }
 
   protected void executePortSchedule(InPort<?> port) {
     if (!scheduledMsgEventPorts.contains(port)) {
-      throw new IllegalStateException("Can not execute unscheduled port.");
+      throw new IllegalStateException("Cannot execute unscheduled port." );
     }
 
     isExecuting = true;
@@ -143,10 +143,11 @@ public class ComponentScheduler {
   }
 
   protected void executeTickSchedule() {
-    if (!isTickScheduled) {
-      throw new IllegalStateException("Can not execute unscheduled tick.");
+    if (!isTickScheduled || !canExecuteTick) {
+      throw new IllegalStateException("Cannot execute unscheduled tick." );
     }
 
+    canExecuteTick = false;
     isExecuting = true;
     isTickScheduled = false;
     component.handleTick();
@@ -164,6 +165,43 @@ public class ComponentScheduler {
 
     if (allPortsHaveBufferedTick()) {
       requestSyncPortScheduling();
+    }
+
+    if (allInPorts.isEmpty()) {
+      orderTickSchedule();
+    }
+  }
+
+  protected void executeInitSchedule() {
+    if (component.isInitialized()) {
+      throw new IllegalStateException("Cannot execute init schedule for initialized component." );
+    }
+
+    // If delayed treat init as tick
+    if (component.isDelayed()) {
+      canExecuteTick = false;
+      isTickScheduled = false;
+    }
+
+    isExecuting = true;
+    component.init();
+    isExecuting = false;
+
+    if (component.isDelayed()) {
+      // Put ports that had messages buffered behind the tick into the scheduling queue again
+      for (InPort<?> p : msgEventPorts) {
+        if (!p.isBufferEmpty()) {
+          this.requestMsgEventPortScheduling(p);
+        }
+      }
+
+      if (allPortsHaveBufferedTick()) {
+        requestSyncPortScheduling();
+      }
+
+      if (allInPorts.isEmpty()) {
+        orderTickSchedule();
+      }
     }
   }
 
@@ -184,15 +222,14 @@ public class ComponentScheduler {
   }
 
   public boolean isReadyToExecute() {
-    return (isTickScheduled && canExecuteTick) || !scheduledMsgEventPorts.isEmpty();
+    return (isTickScheduled && canExecuteTick) || !scheduledMsgEventPorts.isEmpty() || (!component.isInitialized() && (!component.isDelayed() || canExecuteTick));
   }
 
-  protected void setCanExecuteTick(boolean canExecuteTick) {
-    this.canExecuteTick = canExecuteTick;
+  protected void coordinateNewTick() {
+    this.canExecuteTick = true;
   }
 
-
-  private boolean allPortsHaveBufferedTick() {
+  protected boolean allPortsHaveBufferedTick() {
     return allInPorts.stream().allMatch(InPort::hasBufferedTick);
   }
 

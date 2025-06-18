@@ -67,15 +67,19 @@ class SimpleTransitionTest {
       ),
       Arguments.of(
         List.of(msg(ON)),
-        List.of(msg(OFF))
+        List.of(msg(ON))
       ),
       Arguments.of(
         List.of(msg(ON), tk()),
-        List.of(msg(OFF), tk())
+        List.of(msg(ON), tk())
       ),
       Arguments.of(
-        List.of(msg(ON), tk(), msg(ON), msg(OFF)),
-        List.of(msg(OFF), tk(), msg(OFF), msg(OFF))
+        List.of(tk(), msg(ON), tk(), msg(ON), msg(OFF)),
+        List.of(tk(), msg(ON), tk(), msg(OFF), msg(ON))
+      ),
+      Arguments.of(
+        List.of(tk(), msg(ON), tk(), msg(ON), tk(), msg(OFF)),
+        List.of(tk(), msg(ON), tk(), msg(OFF), tk(), msg(OFF))
       )
     );
   }

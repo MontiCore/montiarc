@@ -3,12 +3,14 @@ package montiarc.timed.composition;
 
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import montiarc.types.OnOff;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static montiarc.rte.msg.MessageFactory.tk;
 
+@JSimTest
 public class FlatDelayedLoopTest {
     
     @Test
@@ -26,6 +28,6 @@ public class FlatDelayedLoopTest {
         }
         
         sut.runToCompletion();
-        Assertions.assertEquals(21, port.getObservedMessages().size());
+        Assertions.assertEquals(20, port.getObservedMessages().size());
     }
 }

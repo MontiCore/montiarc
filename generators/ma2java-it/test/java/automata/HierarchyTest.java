@@ -68,7 +68,7 @@ public class HierarchyTest {
     String path7 = path6 + "->e1Ex" + "->e1ToE2" + "->e2En";
     String path8 = path7 + "->e2Ex" + "->eEx" + "->eToF11" + "->fEn" + "->f1En" + "->f11En";
     String path9 = path8 + "->f11Ex" + "->f1Ex" + "->fEx" + "->fToA" + "->aEn" + "->a1Ini" + "->a1En";
-    return Stream.of(Arguments.of(0, path0),
+    return Stream.of(Arguments.of(0, path1),
       Arguments.of(1, path1),
       Arguments.of(2, path2),
       Arguments.of(3, path3),

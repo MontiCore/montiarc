@@ -69,11 +69,9 @@ class SimpleTransitionTest {
         List.of(msg(OFF)),
         List.of()
       ),
-      // Before the sub component can analyze anything, it is replaced by the mode switch.
-      // Consequently, the inverter processes the message and sends an ON as a reaction to OFF.
       Arguments.of(
         List.of(msg(OFF), tk()),
-        List.of(msg(ON), tk())
+        List.of(msg(OFF), tk())
       )
     );
   }

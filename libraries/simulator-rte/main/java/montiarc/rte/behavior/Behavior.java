@@ -24,4 +24,11 @@ public interface Behavior<T> {
    * both event and synchronous ticks - defined by this method.
    */
   void tick(T msg);
+
+  /**
+   * In delayed behaviors, {@code  init} takes the time of a tick and tick cannot be executed in the same timeframe anymore.
+   *
+   * @return if the behavior is delayed
+   */
+  boolean isDelayed();
 }

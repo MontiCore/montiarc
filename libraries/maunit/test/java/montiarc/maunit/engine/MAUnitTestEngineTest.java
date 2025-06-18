@@ -53,6 +53,7 @@ public class MAUnitTestEngineTest {
 
     @Override
     public void init() {
+      initialized = true;
     }
 
     @Override
@@ -87,9 +88,6 @@ public class MAUnitTestEngineTest {
     protected Object portValueOf(InPort<?> p) {
       return null;
     }
-
-    @Override
-    protected List<OutPort<?>> getAllStronglyCausalOutPorts() {return List.of(); }
 
     public static class ExampleMaUnitTestContext implements MaUnitTestContext {
 

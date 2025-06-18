@@ -55,6 +55,7 @@ class CompNamesTest {
     // When we switch to mode 2
     modeSubComp.port_i().receive(tk());
     modeSubComp.handleTick();
+    modeSubComp.handleTickReconfiguration();
 
     // Then
     assertAll(

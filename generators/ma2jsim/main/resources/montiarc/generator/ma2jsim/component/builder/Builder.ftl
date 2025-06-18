@@ -9,6 +9,8 @@ ${tc.include("montiarc/generator/ma2jsim/component/builder/Header.ftl", ast)}
 <#assign classNameWithGenerics>${classNameNoGenerics}<@Util.printTypeParameters ast false/></#assign>
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/NameProperty.ftl", ast, [classNameWithGenerics])}
 
+${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/SuperComponent.ftl", ast, [classNameWithGenerics])}
+
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/schedule/SchedulerInCompBuilder.ftl", ast, [classNameWithGenerics])}
 
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/OracleElements.ftl", ast, [classNameWithGenerics])}

@@ -56,8 +56,9 @@ public class VariantPortSymbol extends PortSymbol {
   protected boolean isHereditaryStronglyCausal() {
     if (this.isOutgoing() && this.component.isAtomic()) {
       // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
-      return component.getBehavior().isPresent()
-        && component.getBehavior().get().isDelayed();
+      // or if the component has no incoming ports
+      return (component.getBehavior().isPresent()
+        && component.getBehavior().get().isDelayed()) || component.getAllIncomingPorts().isEmpty();
     } else if (this.isOutgoing() && this.component.isDecomposed()) {
       // outgoing ports of composed components are strongly causal if their composed behavior is strongly causal
       return this.isComposedStronglyCausal();

@@ -1,19 +1,24 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.component;
 
+import com.google.common.base.Preconditions;
 import montiarc.rte.port.InPort;
-import montiarc.rte.port.NoMsgType;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Reflects the view of a scheduler on a component
  */
 public interface SimComponent extends Component {
 
+  boolean isInitialized();
+
   default boolean hasModeAutomaton() { return false; }
 
   List<? extends SimComponent> getAllSubcomponents();
+
+  Optional<? extends SimComponent> getSuperComponent();
 
   List<? extends InPort<?>> getAllInPorts();
 
@@ -34,4 +39,10 @@ public interface SimComponent extends Component {
   void init();
 
   void unregisterFromScheduler();
+
+  boolean isDelayed();
+
+  default void handleTickReconfiguration() {
+    Preconditions.checkState(hasModeAutomaton());
+  }
 }

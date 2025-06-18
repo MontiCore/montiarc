@@ -18,6 +18,8 @@ public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC exte
 
   protected ModeC modeAutomaton;
 
+  protected I lastSyncMessage;
+
   /** Creates oracles for subcomponents in modes when newly instantiated on mode switches */
   protected OracleFactory oracleFactory;
 
@@ -54,7 +56,12 @@ public abstract class AbstractModeComponent<I, B extends Behavior<I>, ModeC exte
 
   @Override
   protected void handleTickExecution() {
-    modeAutomaton.tick(buildSyncMessage());
+    lastSyncMessage = buildSyncMessage();
     super.handleTickExecution();
+  }
+
+  @Override
+  public void handleTickReconfiguration() {
+    modeAutomaton.tick(lastSyncMessage);
   }
 }

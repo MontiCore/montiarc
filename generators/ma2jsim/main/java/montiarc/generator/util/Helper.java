@@ -355,12 +355,6 @@ public class Helper {
     return builder.toString();
   }
 
-  public List<PortSymbol> getAllStronglyCausalOutPorts(ComponentTypeSymbol comp) {
-    return comp.getAllOutgoingPorts().stream()
-      .filter(PortSymbol::getStronglyCausal)
-      .collect(Collectors.toList());
-  }
-
   public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ArcComponentTypeSymbol comp) {
     Set<String> targets = comp.getAstNode().getConnectors().stream()
       .map(ASTConnector::getTargetsNames)

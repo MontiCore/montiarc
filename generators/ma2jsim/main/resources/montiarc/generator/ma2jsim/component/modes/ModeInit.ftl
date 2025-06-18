@@ -13,7 +13,6 @@
     <#list helper.getInstancesFromMode(mode) as sub>
       <#assign subSymbol = sub.getSymbol()>
       <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
-      ${subCompName}.init();
     </#list>
   }
 </#list>

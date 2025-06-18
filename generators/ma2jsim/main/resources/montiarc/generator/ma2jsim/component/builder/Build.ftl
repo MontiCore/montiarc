@@ -13,5 +13,7 @@ public ${ast.getName()}${suffixes.comp()}<@Util.printTypeParameters ast false/> 
     <#list helper.getFeatures(ast)>, <#items as feature>${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}()<#sep>, </#sep></#items></#list>
   );
 
+  component.setSuperComponent(superComponent);
+
   return component;
 }

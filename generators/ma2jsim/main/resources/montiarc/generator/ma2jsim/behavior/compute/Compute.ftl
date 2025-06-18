@@ -58,4 +58,6 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
       throw new UnsupportedOperationException("Message event method can not be invoked for sync behavior");
     }
   </#list>
+
+  ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.IsDelayed.ftl", [compute])}
 }

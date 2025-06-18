@@ -74,23 +74,24 @@ class DelayLogTest {
     return Stream.of(
       Arguments.of(
         List.of(),
-        List.of("[INFO]  sut.o#send OFF",
-          "[INFO]  sut#enter_state S",
-          "[INFO]  Scheduler --- Tick 1 ---")
+        List.of("[INFO]  sut#init ",
+          "[INFO]  sut.o#send OFF",
+          "[INFO]  sut#enter_state S")
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk()),
-        List.of("[INFO]  sut.o#send OFF",
+        List.of("[INFO]  sut#init ",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut.o#send ON",
-          "[INFO]  sut#enter_state S",
-          "[INFO]  Scheduler --- Tick 2 ---")
+          "[INFO]  sut#enter_state S")
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk()),
-        List.of("[INFO]  sut.o#send OFF",
+        List.of("[INFO]  sut#init ",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
@@ -99,12 +100,12 @@ class DelayLogTest {
           "[INFO]  Scheduler --- Tick 2 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut.o#send ON",
-          "[INFO]  sut#enter_state S",
-          "[INFO]  Scheduler --- Tick 3 ---")
+          "[INFO]  sut#enter_state S")
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
-        List.of("[INFO]  sut.o#send OFF",
+        List.of("[INFO]  sut#init ",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
@@ -117,12 +118,12 @@ class DelayLogTest {
           "[INFO]  Scheduler --- Tick 3 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut.o#send OFF",
-          "[INFO]  sut#enter_state S",
-          "[INFO]  Scheduler --- Tick 4 ---")
+          "[INFO]  sut#enter_state S")
       ),
       Arguments.of(
         List.of(tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk()),
-        List.of("[INFO]  sut.o#send OFF",
+        List.of("[INFO]  sut#init ",
+          "[INFO]  sut.o#send OFF",
           "[INFO]  sut#enter_state S",
           "[INFO]  Scheduler --- Tick 1 ---",
           "[INFO]  sut#receive Tick",
@@ -134,8 +135,7 @@ class DelayLogTest {
           "[INFO]  Scheduler --- Tick 3 ---",
           "[INFO]  sut#receive Tick",
           "[INFO]  sut.o#send OFF",
-          "[INFO]  sut#enter_state S",
-          "[INFO]  Scheduler --- Tick 4 ---")
+          "[INFO]  sut#enter_state S")
       )
     );
   }

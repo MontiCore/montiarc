@@ -24,6 +24,11 @@
      this.compName = compName;
   }
 
+  @Override
+  public boolean isDelayed() {
+    return false;
+  }
+
   ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeEnum.ftl")}
 
   <#assign initMode = helper.getInitialModes(modeAutomaton)[0]>

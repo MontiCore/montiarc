@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.modes.sync.composition;
+package montiarc.modes.timed;
 
 import com.google.common.base.Preconditions;
 import montiarc.rte.msg.Message;
@@ -21,8 +21,12 @@ import static montiarc.types.OnOff.OFF;
 import static montiarc.types.OnOff.ON;
 
 @JSimTest
-class ChangingUseOfOutPortsTest {
+class SimpleTransitionOnEveryMessageTest {
 
+  /**
+   * @param input    the input stream on port i
+   * @param expected the expected output stream on port o
+   */
   @ParameterizedTest
   @MethodSource("io")
   void testIO(@NotNull List<Message<OnOff>> input,
@@ -31,13 +35,15 @@ class ChangingUseOfOutPortsTest {
     Preconditions.checkNotNull(expected);
 
     // Given
-    ChangingUseOfOutPortsComp sut = new ChangingUseOfOutPortsCompBuilder().setName("sut").build();
+    SimpleTransitionOnEveryMessageComp sut = new SimpleTransitionOnEveryMessageCompBuilder().setName("sut").build();
     PortObserver<OnOff> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
 
     // When
-    input.forEach(sut.port_i()::receive);
+    for (Message<OnOff> msg : input) {
+      sut.port_i().receive(msg);
+    }
 
     sut.runToCompletion();
 
@@ -60,12 +66,20 @@ class ChangingUseOfOutPortsTest {
         List.of(tk(), tk())
       ),
       Arguments.of(
-        List.of(msg(ON), tk()),
-        List.of(msg(ON), tk())
+        List.of(msg(ON)),
+        List.of(msg(OFF))
       ),
       Arguments.of(
-        List.of(msg(ON), tk(), msg(OFF), tk(), msg(ON), tk()),
-        List.of(msg(ON), tk(), msg(OFF), tk(),          tk())
+        List.of(msg(ON), tk()),
+        List.of(msg(OFF), tk())
+      ),
+      Arguments.of(
+        List.of(msg(ON), tk(), msg(ON), msg(OFF)),
+        List.of(msg(OFF), tk(), msg(ON), msg(ON))
+      ),
+      Arguments.of(
+        List.of(msg(ON), tk(), msg(ON), tk(), msg(OFF)),
+        List.of(msg(OFF), tk(), msg(ON), tk(), msg(OFF))
       )
     );
   }

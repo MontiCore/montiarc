@@ -17,6 +17,7 @@ protected void <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}(mont
         this.${subCompFieldName} = (${subCompType}) new ${subCompBuilder}()
         .setName(this.getName() + "." + "${subcomponent.getName()}")
         .setScheduler(this.getScheduler())
+        .setSuperComponent(this)
         .setOracleFactory(oracleFactory)
         <#list helper.getArgNamesMappedToExpressions(subcomponent.getAstNode()) as name, expression>
             .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})

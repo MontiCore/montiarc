@@ -260,6 +260,7 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
   public void shouldNotVisitInnerCompTypeDefinitions() {
     // Given
     ASTMACompilationUnit compilationUnit = compile("component c1 {" +
+      "port in int i;" +
       "port out int o;" +
       "component Inner {" +
       "port out int o;" +

@@ -14,6 +14,7 @@ import montiarc.rte.port.OutPort;
 import montiarc.rte.scheduling.Scheduler;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -39,6 +40,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
   protected Set<OutPort<?>> unconnectedOutputs;
   protected final Scheduler scheduler;
   protected Oracle oracle;
+  protected SimComponent superComponent;
 
   protected boolean isAtomic;
   protected B behavior;
@@ -75,21 +77,27 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
     return this.behavior;
   }
 
+  public void setSuperComponent(SimComponent superComponent) {
+    this.superComponent = superComponent;
+  }
+
+  @Override
+  public Optional<SimComponent> getSuperComponent() {
+    return Optional.ofNullable(this.superComponent);
+  }
+
   @Override
   public void runToCompletion() {
-    ensureInitialized();
     this.scheduler.runToCompletion(this);
   }
 
   @Override
   public void run(long ticks) {
-    ensureInitialized();
     this.scheduler.runTicks(this, ticks);
   }
 
   @Override
   public void runIndefinitely(long simulationTickLength) {
-    ensureInitialized();
     this.scheduler.runIndefinitely(this, simulationTickLength);
   }
 
@@ -99,8 +107,6 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
   }
 
   protected abstract Object portValueOf(InPort<?> p);
-
-  protected abstract List<OutPort<?>> getAllStronglyCausalOutPorts();
 
   @Override
   public abstract List<? extends InOutPort<?, ?>> getAllSyncedInPorts();
@@ -120,34 +126,26 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
     }
   }
 
-  protected void sendTickOnAllStronglyCausalOutputs() {
-    for (OutPort<?> outP : this.getAllStronglyCausalOutPorts()) {
-      outP.sendTick();
-    }
-  }
-
-  protected void ensureInitialized() {
-    if (!initialized) {
-      init();
-    }
+  @Override
+  public boolean isInitialized() {
+    return this.initialized;
   }
 
   @Override
   public void init() {
     if (initialized) {
-      Log.info(() -> "Component already initialized", this.getName() + "#init");
+      Log.info(() -> "Component already initialized", this.getName() + "#" + Aspects.INIT);
       return;
     }
+    Log.info(() -> "", this.getName() + "#" + Aspects.INIT);
     this.initialized = true;
 
     if (this.isAtomic) {
       if (behavior != null) {
         behavior.init();
       }
-      sendTickOnAllStronglyCausalOutputs();
-    } else {
-      for (SimComponent comp : this.getAllSubcomponents()) {
-        comp.init();
+      if (isDelayed()) {
+        sendTickOnAllOutputs();
       }
     }
   }
@@ -204,5 +202,10 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
       // connectors. Therefore, we have to send ticks to them manually.
       this.sendTickOnAllUnconnectedOutputs();
     }
+  }
+
+  @Override
+  public boolean isDelayed() {
+    return this.behavior != null && this.behavior.isDelayed();
   }
 }

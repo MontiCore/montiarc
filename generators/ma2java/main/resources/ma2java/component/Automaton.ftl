@@ -231,7 +231,12 @@ ${tc.signature("comp")}
     this.init${state.getName()}();
     // transition to the initial state
     this.transitionTo${state.getName()}();
+
     // provide initial value for delay ports
+    <#if !ast.isDelayed() && !comp.getIncomingPorts()?has_content>
+      // component with no outgoing ports is implicitly delayed -> init needs to trigger compute
+      compute();
+    </#if>
     <#list comp.getOutgoingPorts() as port>
       <#if port.isStronglyCausal()>this.${port.getName()}.tick();</#if>
     </#list>

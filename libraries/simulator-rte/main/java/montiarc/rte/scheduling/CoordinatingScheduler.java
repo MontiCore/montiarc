@@ -1,18 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.scheduling;
 
-import com.google.common.collect.Comparators;
 import de.se_rwth.commons.logging.Log;
 import montiarc.lang.Simulation;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.msg.Message;
-import montiarc.rte.msg.Tick;
 import montiarc.rte.port.InPort;
-import montiarc.rte.port.ScheduledPort;
 
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -34,13 +32,13 @@ public class CoordinatingScheduler implements Scheduler {
   public void register(SimComponent component) {
     ComponentScheduler scheduler;
     if (component.hasModeAutomaton()) {
-      scheduler =  new ModeComponentScheduler(component, this);
+      scheduler = new ModeComponentScheduler(component, this);
     } else {
-      scheduler = new ComponentScheduler(component);
+      scheduler = new ComponentScheduler(component, this);
     }
-    if (Simulation.coordinatingScheduler == this) {
-      // Simulation is currently running
-      scheduler.setCanExecuteTick(true);
+    if (Simulation.coordinatingScheduler != this && component.isDelayed()) {
+      // Simulation is not currently running -> delayed components are allowed to init before first tick
+      scheduler.coordinateNewTick();
     }
     this.compToScheduler.put(component, scheduler);
   }
@@ -106,7 +104,7 @@ public class CoordinatingScheduler implements Scheduler {
     ComponentScheduler scheduler = compToScheduler.get(component);
 
     if (!this.isReadyToExecute() && (ticks > 0 || ticks == Long.MIN_VALUE)) {
-      this.compToScheduler.values().forEach(s -> s.setCanExecuteTick(true));
+      this.compToScheduler.values().forEach(ComponentScheduler::coordinateNewTick);
       if (!runToCompletion) {
         scheduler.triggerComponentInPorts();
       }
@@ -126,11 +124,11 @@ public class CoordinatingScheduler implements Scheduler {
 
       activeSchedulers = getActiveSchedulers();
       boolean tickTriggered = false; // End the simulation if after a tick no component can be scheduled
-      while (!tickTriggered && activeSchedulers.isEmpty() && (ticks > 0 || ticks == Long.MIN_VALUE)) {
+      while (!tickTriggered && activeSchedulers.isEmpty() && (ticks > 0 || ticks == Long.MIN_VALUE) && (!runToCompletion || this.compToScheduler.get(component).allPortsHaveBufferedTick())) {
         // This loop blocks the thread until a component can be scheduled (e.g. through an event outside the simulation)
         // simulationTickLength time has passed
         if (tickStart + simulationTickLength <= System.nanoTime()) {
-          this.compToScheduler.values().forEach(s -> s.setCanExecuteTick(true));
+          this.compToScheduler.values().forEach(ComponentScheduler::coordinateNewTick);
           if (!runToCompletion) {
             scheduler.triggerComponentInPorts();
           }

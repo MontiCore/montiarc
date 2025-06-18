@@ -44,7 +44,13 @@
 
 <#macro printInit>
   @Override
-  public void init() { }
+  public void init() {
+    <#if compHelper.getComputeBehavior(ast).isPresent() && !ast.getSymbol().getIncomingPorts()?has_content>
+      // component with no outgoing ports is implicitly delayed -> init needs to trigger compute
+      compute();
+      tick();
+    </#if>
+  }
 </#macro>
 
 <#macro printCompute>

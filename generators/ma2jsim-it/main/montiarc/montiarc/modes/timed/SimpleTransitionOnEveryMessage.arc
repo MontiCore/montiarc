@@ -4,7 +4,7 @@ package montiarc.modes.timed;
 import montiarc.modes.timed.subcomponents.*;
 import montiarc.types.OnOff;
 
-component SimpleTransition {
+component SimpleTransitionOnEveryMessage {
   port
    in OnOff i,
    out OnOff o;
@@ -22,8 +22,10 @@ component SimpleTransition {
       compInverted.o -> o;
     }
 
-    // Because we do not have any conditions, modes will switch with every tick.
+    // Because we do not have any conditions, modes will switch with every message or tick.
     Normal -> Inverted;
+    Normal -> Inverted i;
     Inverted -> Normal;
+    Inverted -> Normal i;
   }
 }

@@ -47,14 +47,14 @@ public class SourceTest {
     // When
     List<OnOff> actual = new ArrayList<>(cycles);
     for (int i = 0; i < cycles; i++) {
-      // tick
-      source.tick();
-
       // compute
       source.compute();
 
       // add the current value after computation
       actual.add(source.getO().getValue());
+
+      // tick
+      source.tick();
     }
 
     // Then
@@ -122,11 +122,11 @@ public class SourceTest {
    */
   protected static Stream<Arguments> expStatesProvider() {
     return Stream.of(
-      Arguments.of(0, new States[]{ States.A }),
-      Arguments.of(1, new States[]{ States.A, States.B }),
-      Arguments.of(2, new States[]{ States.A, States.B, States.A }),
-      Arguments.of(3, new States[]{ States.A, States.B, States.A, States.B }),
-      Arguments.of(4, new States[]{ States.A, States.B, States.A, States.B, States.A })
+      Arguments.of(0, new States[]{ States.B }),
+      Arguments.of(1, new States[]{ States.B, States.A }),
+      Arguments.of(2, new States[]{ States.B, States.A, States.B }),
+      Arguments.of(3, new States[]{ States.B, States.A, States.B, States.A }),
+      Arguments.of(4, new States[]{ States.B, States.A, States.B, States.A, States.B })
     );
   }
 }
