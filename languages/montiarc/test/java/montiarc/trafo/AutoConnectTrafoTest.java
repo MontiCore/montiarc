@@ -36,6 +36,50 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "}", 0),
       Arguments.of(
         "component Comp2 { " +
+          "  autoconnect off;" +
+          "  port in int i;" +
+          "  component Inner inner {" +
+          "    port in int i_inner;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp3 { " +
+          "  autoconnect off;" +
+          "  port out int o;" +
+          "  component Inner inner {" +
+          "    port out int o_inner;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp4 { " +
+          "  autoconnect off;" +
+          "  component Inner inner {" +
+          "    port in int i;" +
+          "    port out int o;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp5 { " +
+          "  autoconnect off;" +
+          "  port in int i;" +
+          "  port out boolean o;" +
+          "  component Inner inner {" +
+          "    port in int i;" +
+          "    port out int o;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp6 { " +
+          "  autoconnect off;" +
+          "  port in boolean i;" +
+          "  port out int o;" +
+          "  component Inner inner {" +
+          "    port in int i;" +
+          "    port out int o;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp7 { " +
           "  autoconnect type;" +
           "  port in int i;" +
           "  component Inner inner {" +
@@ -43,7 +87,7 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "  }" +
           "}", 1),
       Arguments.of(
-        "component Comp3 { " +
+        "component Comp8 { " +
           "  autoconnect type;" +
           "  port out int o;" +
           "  component Inner inner {" +
@@ -51,69 +95,28 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "  }" +
           "}", 1),
       Arguments.of(
-        "component Comp4 { " +
-          "  autoconnect type;" +
-          "  port in boolean i;" +
-          "  component Inner inner {" +
-          "    port in boolean i_inner;" +
-          "  }" +
-          "}", 1),
-      Arguments.of(
-        "component Comp5 { " +
-          "  autoconnect type;" +
-          "  port out boolean o;" +
-          "  component Inner inner {" +
-          "    port out boolean o_inner;" +
-          "  }" +
-          "}", 1),
-      Arguments.of(
-        "component Comp6 { " +
-          "  autoconnect type;" +
-          "  port in int i;" +
-          "  component Inner inner {" +
-          "    port in int i1;" +
-          "    port in int i2;" +
-          "  }" +
-          "}", 2),
-      Arguments.of(
-        "component Comp7 { " +
-          "  autoconnect type;" +
-          "  port out int o1, o2;" +
-          "  component Inner inner {" +
-          "    port out int o;" +
-          "  }" +
-          "}", 2),
-      Arguments.of(
-        "component Comp8 { " +
-          "  autoconnect type;" +
-          "  port out int o; " +
-          "  component Inner inner {" +
-          "    port in boolean o;" +
-          "  }" +
-          "}", 0),
-      Arguments.of(
         "component Comp9 { " +
           "  autoconnect type;" +
-          "  port out boolean o; " +
           "  component Inner inner {" +
-          "    port in int o;" +
+          "    port in int i;" +
+          "    port out int o;" +
           "  }" +
-          "}", 0),
+          "}", 1),
       Arguments.of(
         "component Comp10 { " +
           "  autoconnect type;" +
-          "  port in int i; " +
-          "  port out boolean o; " +
+          "  port in int i;" +
+          "  port out boolean o;" +
           "  component Inner inner {" +
           "    port in int i;" +
-          "    port out boolean o; " +
+          "    port out int o;" +
           "  }" +
           "}", 2),
       Arguments.of(
         "component Comp11 { " +
           "  autoconnect type;" +
           "  port in boolean i;" +
-          "  port out boolean o;" +
+          "  port out int o;" +
           "  component Inner inner {" +
           "    port in int i;" +
           "    port out int o;" +
@@ -122,41 +125,30 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
       Arguments.of(
         "component Comp12 { " +
           "  autoconnect type;" +
-          "  port in boolean i1, i2;" +
-          "  port out boolean o1, o2;" +
-          "  " +
-          "  i1 -> inner.i;" +
-          "  inner.o -> o1;" +
-          "  i2 -> o2;" +
-          "  " +
+          "  port in int i;" +
           "  component Inner inner {" +
-          "    port in int i;" +
-          "    port out int o;" +
+          "    port in int i1;" +
+          "    port in int i2;" +
           "  }" +
-          "}", 3),
+          "}", 2),
       Arguments.of(
-        "component Comp13 {" +
+        "component Comp13 { " +
           "  autoconnect type;" +
-          "  fullyConnected InnerSource source;" +
-          "  fullyConnected InnerTarget target;" +
-          "  " +
-          "  component InnerSource {" +
+          "  port out int o1, o2;" +
+          "  component Inner inner {" +
           "    port out int o;" +
           "  }" +
-          "  component InnerTarget {" +
-          "    port in int i;" +
-          "  }" +
-          "}", 0),
+          "}", 2),
       Arguments.of(
         "component Comp14 { " +
-          "  autoconnect off;" +
-          "  port in int i;" +
-          "  port out int o;" +
+          "  autoconnect type;" +
+          "  port in int i; " +
+          "  port out boolean o; " +
           "  component Inner inner {" +
           "    port in int i;" +
-          "    port out int o;" +
+          "    port out boolean o; " +
           "  }" +
-          "}", 0),
+          "}", 2),
       Arguments.of(
         "component Comp15 { " +
           "  autoconnect port;" +
@@ -176,13 +168,160 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
       Arguments.of(
         "component Comp17 { " +
           "  autoconnect port;" +
-          "  port in int i; " +
-          "  port out int o;" +
           "  component Inner inner {" +
-          "    port in int i; " +
+          "    port in int ip;" +
+          "    port out int ip;" +
+          "  }" +
+          "}", 1),
+      Arguments.of(
+        "component Comp18 { " +
+          "  autoconnect port;" +
+          "  port in int ip;" +
+          "  port out boolean o;" +
+          "  component Inner inner {" +
+          "    port in int ip;" +
+          "    port out int ip;" +
+          "  }" +
+          "}", 2),
+      Arguments.of(
+        "component Comp19 { " +
+          "  autoconnect port;" +
+          "  port in boolean i;" +
+          "  port out int op;" +
+          "  component Inner inner {" +
+          "    port in int op;" +
+          "    port out int op;" +
+          "  }" +
+          "}", 2),
+      Arguments.of(
+        "component Comp20 {" +
+          "  autoconnect type;" +
+          "  fullyConnected InnerSource source;" +
+          "  fullyConnected InnerTarget target;" +
+          "  " +
+          "  component InnerSource {" +
           "    port out int o;" +
           "  }" +
-          "}", 2)
+          "  component InnerTarget {" +
+          "    port in int i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp21 {" +
+          "  autoconnect port;" +
+          "  fullyConnected InnerSource source;" +
+          "  fullyConnected InnerTarget target;" +
+          "  " +
+          "  component InnerSource {" +
+          "    port out int o;" +
+          "  }" +
+          "  component InnerTarget {" +
+          "    port in int i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp22 {" +
+          "  autoconnect off;" +
+          "  fullyConnected InnerSource source;" +
+          "  fullyConnected InnerTarget target;" +
+          "  " +
+          "  component InnerSource {" +
+          "    port out int o;" +
+          "  }" +
+          "  component InnerTarget {" +
+          "    port in int i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp23 { " +
+          "  autoconnect port;" +
+          "  port in boolean i;" +
+          "  port out int o;" +
+          "  component Inner inner {" +
+          "    port in int i;" +
+          "    port out int op;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp24 { " +
+          "  autoconnect type;" +
+          "  port in boolean i;" +
+          "  port out int op;" +
+          "  component Inner inner {" +
+          "    port in String i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp25 { " +
+          "  autoconnect type;" +
+          "  port in boolean i;" +
+          "  port out int o;" +
+          "  component Inner inner {" +
+          "    port in int o;" +
+          "    port out boolean i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp26 { " +
+          "  autoconnect port;" +
+          "  port in boolean i;" +
+          "  port out int o;" +
+          "  component Inner inner {" +
+          "    port in boolean o;" +
+          "    port out int i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp27 { " +
+          "  autoconnect port;" +
+          "  port in boolean i;" +
+          "  port out int o;" +
+          "  component Inner inner {" +
+          "    port in int o;" +
+          "    port out boolean i;" +
+          "  }" +
+          "}", 0),
+      Arguments.of(
+        "component Comp28 { " +
+          "  autoconnect type;" +
+          "  port in boolean i1, i2;" +
+          "  port out boolean o1, o2;" +
+          "  " +
+          "  i1 -> inner.i;" +
+          "  inner.o -> o1;" +
+          "  i2 -> o2;" +
+          "  " +
+          "  component Inner inner {" +
+          "    port in int i;" +
+          "    port out int o;" +
+          "  }" +
+          "}", 3),
+      // some transitions already exists 
+      Arguments.of(
+        "component Comp29 { " +
+          "  autoconnect port;" +
+          "  port in boolean i;" +
+          "  port out int o1, o2;" +
+          "  " +
+          "  inner.o -> o1;" +
+          "  i -> o2;" +
+          "  " +
+          "  component Inner inner {" +
+          "    port in boolean i;" +
+          "    port out int o;" +
+          "  }" +
+          "}", 2),
+      // one source port matches multiple target ports
+      Arguments.of(
+        "component Comp30 { " +
+          "  autoconnect type;" +
+          "  port in boolean i;" +
+          "  port out boolean o;" +
+          "  component Inner inner {" +
+          "    port in int i, x;" +
+          "    port out int o;" +
+          "  }" +
+          "}", 3)
     );
   }
 
