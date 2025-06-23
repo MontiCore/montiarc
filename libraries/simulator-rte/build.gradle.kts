@@ -12,7 +12,7 @@ sourceSets {
     cd2pojo.srcDir("$projectDir/main/cd2pojo")
   }
   test {
-    cd2pojo.srcDir("$projectDir/main/cd2pojo")
+    cd2pojo.srcDir("$projectDir/test/cd2pojo")
   }
 }
 

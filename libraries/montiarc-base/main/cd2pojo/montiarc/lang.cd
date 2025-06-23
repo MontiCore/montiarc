@@ -6,4 +6,9 @@ classdiagram lang {
   public class Console {
     public static void printLn(String output);
   }
+
+  public class Signal {
+    protected Signal();
+    public static Signal get();
+  }
 }

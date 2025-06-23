@@ -17,6 +17,11 @@ public class Simulation extends SimulationTOP {
   public static long ticks = 0;
 
   /**
+   * The simulated time that passes with every tick in nanoseconds.
+   */
+  public static long nanosecondsPerTick = 0;
+
+  /**
    * Asks the scheduler to stop the simulation.
    * The currently scheduled components will complete their processing first.
    */

@@ -87,18 +87,18 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
   }
 
   @Override
-  public void runToCompletion() {
-    this.scheduler.runToCompletion(this);
+  public void runToCompletion(long simulatedTickLength) {
+    this.scheduler.runToCompletion(this, simulatedTickLength);
   }
 
   @Override
-  public void run(long ticks) {
-    this.scheduler.runTicks(this, ticks);
+  public void run(long ticks, long simulatedTickLength) {
+    this.scheduler.runTicks(this, ticks, simulatedTickLength);
   }
 
   @Override
-  public void runIndefinitely(long simulationTickLength) {
-    this.scheduler.runIndefinitely(this, simulationTickLength);
+  public void runIndefinitely(long simulationTickLength, long simulatedTickLength) {
+    this.scheduler.runIndefinitely(this, simulationTickLength, simulatedTickLength);
   }
 
   @Override

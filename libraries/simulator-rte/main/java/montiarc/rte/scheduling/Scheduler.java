@@ -15,15 +15,15 @@ public interface Scheduler {
 
   void requestSchedulingOfNewTick(InPort<?> port);
 
-  void runToCompletion(SimComponent component);
+  void runToCompletion(SimComponent component, long simulatedTickLength);
 
   /**
-   * Run the simulation indefinitly
+   * Run the simulation indefinitely
    *
    * @param component            the component to start the simulation with
    * @param simulationTickLength the length between ticks in nanoseconds
    */
-  void runIndefinitely(SimComponent component, long simulationTickLength);
+  void runIndefinitely(SimComponent component, long simulationTickLength, long simulatedTickLength);
 
-  void runTicks(SimComponent component, long ticks);
+  void runTicks(SimComponent component, long ticks, long simulatedTickLength);
 }

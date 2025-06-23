@@ -68,16 +68,19 @@ public class CoordinatingScheduler implements Scheduler {
       .collect(Collectors.toList());
   }
 
-  public void runToCompletion(SimComponent component) {
-    run(component, true, Long.MIN_VALUE, 0);
+  @Override
+  public void runToCompletion(SimComponent component, long simulatedTickLength) {
+    run(component, true, Long.MIN_VALUE, 0, simulatedTickLength);
   }
 
-  public void runIndefinitely(SimComponent component, long simulationTickLength) {
-    run(component, false, Long.MIN_VALUE, simulationTickLength);
+  @Override
+  public void runIndefinitely(SimComponent component, long simulationTickLength, long simulatedTickLength) {
+    run(component, false, Long.MIN_VALUE, simulationTickLength, simulatedTickLength);
   }
 
-  public void runTicks(SimComponent component, long ticks) {
-    run(component, false, ticks, 0);
+  @Override
+  public void runTicks(SimComponent component, long ticks, long simulatedTickLength) {
+    run(component, false, ticks, 0, simulatedTickLength);
   }
 
   /**
@@ -88,19 +91,24 @@ public class CoordinatingScheduler implements Scheduler {
    *                             and the simulation is run until no more messages can be handled
    * @param ticks                The maximum tick count to run the simulation for.
    *                             If it is {@code Long.MIN_VALUE} the simulation has no upper tick count bound.
-   * @param simulationTickLength The time the simulation takes for each tick.
+   * @param simulationTickLength The actual time the simulation takes for each tick in nanoseconds.
    *                             Can effectively slow the simulation down (e.g. to be interactive)
+   * @param simulatedTickLength  The simulated time between ticks in nanoseconds.
+   *                             If zero the simulationTickLength will be used.
+   *                             If that is also zero the actual computation time for each tick is used.
    */
   protected void run(SimComponent component,
                      boolean runToCompletion,
                      long ticks,
-                     long simulationTickLength) {
+                     long simulationTickLength,
+                     long simulatedTickLength) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
 
     requestedToStop = false;
     Simulation.coordinatingScheduler = this;
+    Simulation.nanosecondsPerTick = simulatedTickLength <= 0 ? simulationTickLength : simulatedTickLength;
     ComponentScheduler scheduler = compToScheduler.get(component);
 
     if (!this.isReadyToExecute() && (ticks > 0 || ticks == Long.MIN_VALUE)) {
