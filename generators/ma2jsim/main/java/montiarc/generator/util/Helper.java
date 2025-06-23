@@ -14,6 +14,7 @@ import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis._visitor.NameCollectorVisitor;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arccompute._ast.ASTArcCompute;

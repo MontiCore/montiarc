@@ -2,127 +2,77 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
+import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcFieldDeclaration;
-
+import arcbasis._visitor.NameCollectorVisitor;
+import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
-
-import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class CheckNoFieldDependencyCycles implements ArcBasisASTArcComponentTypeCoCo {
 
   @Override
   public void check(ASTArcComponentType comp) {
-    Map<String, Set<String>> deps = new LinkedHashMap<>();
+    List<VariableSymbol> fields = comp.getSymbol().getFields();
+    Map<VariableSymbol, Set<VariableSymbol>> deps = new LinkedHashMap<>();
 
     comp.getBody().getArcElementList().stream()
       .filter(ASTArcFieldDeclaration.class::isInstance)
       .map(ASTArcFieldDeclaration.class::cast)
       .forEach(fd -> {
-        fd.getArcFieldList().forEach(field -> {
+        for (ASTArcField field : fd.getArcFieldList()) {
           ASTExpression init = field.getInitial();
-          if (init != null) {
-            deps.put(field.getName(), extractNames(init));
-          }
-        });
+          Set<String> usedNames = extractNames(init);
+          Set<VariableSymbol> usedFields = fields.stream()
+            .filter(sym -> usedNames.contains(sym.getName()))
+            .collect(Collectors.toSet());
+          deps.put(field.getSymbol(), usedFields);
+        }
       });
 
-    boolean cycle = deps.keySet().stream()
-      .anyMatch(start -> hasCycle(start, deps, new HashSet<>()));
+    Map<VariableSymbol, Integer> inDegree = new HashMap<>();
+    for (VariableSymbol f : fields) {
+      inDegree.put(f, deps.getOrDefault(f, Collections.emptySet()).size());
+    }
+    Deque<VariableSymbol> queue = new ArrayDeque<>();
+    inDegree.forEach((f, deg) -> { if (deg == 0) queue.add(f); });
 
-    if (cycle) {
+    int removed = 0;
+    while (!queue.isEmpty()) {
+      VariableSymbol u = queue.remove();
+      removed++;
+      // for every field that depends on u, decrease its in-degree
+      for (Map.Entry<VariableSymbol, Set<VariableSymbol>> e : deps.entrySet()) {
+        if (e.getValue().contains(u)) {
+          int d2 = inDegree.get(e.getKey()) - 1;
+          inDegree.put(e.getKey(), d2);
+          if (d2 == 0) {
+            queue.add(e.getKey());
+          }
+        }
+      }
+    }
+
+    if (removed < fields.size()) {
       Log.error(ArcError.CIRCULAR_FIELDS_DEPENDENCY.format(),
         comp.get_SourcePositionStart());
     }
   }
 
+  /** Builds the set of simple names referenced anywhere inside a (possibly null) init-expr. */
   private Set<String> extractNames(ASTExpression expr) {
-    Set<String> names = new HashSet<>();
-    collectNames(expr, names);
-    return names;
-  }
-
-  private void collectNames(ASTExpression expr, Set<String> names) {
-    if (expr instanceof ASTNameExpression) {
-      names.add(((ASTNameExpression) expr).getName());
+    if (expr == null) {
+      return Collections.emptySet();
     }
-
-    for (Method m : expr.getClass().getMethods()) {
-      if (m.getParameterCount() != 0 || !m.getName().startsWith("get")) {
-        continue;
-      }
-
-      String attr = m.getName().substring(3);
-      try {
-        Method isPresent = expr.getClass().getMethod("isPresent" + attr);
-        Boolean present = (Boolean) isPresent.invoke(expr);
-        if (!present) {
-          continue;
-        }
-      } catch (NoSuchMethodException ignored) {
-      } catch (Exception e) {
-        continue;
-      }
-
-      Object child;
-      try {
-        child = m.invoke(expr);
-      } catch (Exception e) {
-        continue;
-      }
-
-      if (child instanceof Optional<?>) {
-        Optional<?> opt = (Optional<?>) child;
-        if (opt.isEmpty()) {
-          continue;
-        }
-        Object val = opt.get();
-        if (val instanceof ASTExpression) {
-          collectNames((ASTExpression) val, names);
-          continue;
-        }
-        if (val instanceof Collection<?>) {
-          for (Object o : (Collection<?>) val) {
-            if (o instanceof ASTExpression) {
-              collectNames((ASTExpression) o, names);
-            }
-          }
-          continue;
-        }
-      }
-
-      if (child instanceof ASTExpression) {
-        collectNames((ASTExpression) child, names);
-      } else if (child instanceof Collection<?>) {
-        for (Object o : (Collection<?>) child) {
-          if (o instanceof ASTExpression) {
-            collectNames((ASTExpression) o, names);
-          }
-        }
-      }
-    }
-  }
-
-  private boolean hasCycle(String current,
-                           Map<String, Set<String>> deps,
-                           Set<String> visited) {
-    Set<String> next = deps.get(current);
-    if (next == null) {
-      return false;
-    }
-    for (String nxt : next) {
-      if (visited.contains(nxt)) {
-        return true;
-      }
-      Set<String> nextVisited = new HashSet<>(visited);
-      nextVisited.add(current);
-      if (hasCycle(nxt, deps, nextVisited)) {
-        return true;
-      }
-    }
-    return false;
+    ExpressionsBasisTraverser traverser = ExpressionsBasisMill.traverser();
+    NameCollectorVisitor visitor = new NameCollectorVisitor();
+    traverser.add4ExpressionsBasis(visitor);
+    expr.accept(traverser);
+    return visitor.getNames();
   }
 }
