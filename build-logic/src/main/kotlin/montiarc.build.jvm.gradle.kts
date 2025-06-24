@@ -1,16 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
-val jvmversion: Int = 17
+val TARGET_JVM_VERSION: Int = 11
 
 pluginManager.withPlugin("java") {
   with (extensions.getByType(JavaPluginExtension::class.java)) {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(jvmversion))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(TARGET_JVM_VERSION))
   }
 }
 
 pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
   with (extensions.getByType(KotlinJvmProjectExtension::class.java)) {
-    jvmToolchain(jvmversion)
+    jvmToolchain(TARGET_JVM_VERSION)
   }
 }

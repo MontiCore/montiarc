@@ -23,12 +23,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 17
+          java-version: 11
           cache: gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 7.6.4
+          gradle-version: 7.5.1
 
       - name: Build with Gradle
         run: gradle shadowjar :tooling:language-server:build -PenableLanguageServer
@@ -137,20 +137,7 @@ jobs:
 
       - name: Package
         if: matrix.target != 'Jar'
-        run: >
-          jpackage -i dist/
-          --main-jar MontiArc-${{ steps.extract_version.outputs.version }}.jar
-          --name MontiArc
-          --app-version ${{ steps.extract_version.outputs.version }}
-          --vendor "SE at RWTH Aachen"
-          --copyright "(c) https://github.com/MontiCore/monticore"
-          ${{ matrix.package_settings }}
-          --java-options "--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
-                          --add-exports=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED \
-                          --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
-                          --add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
-                          --add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
-                          --add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED"
+        run: jpackage -i dist/ --main-jar MontiArc-${{ steps.extract_version.outputs.version }}.jar --name MontiArc --app-version ${{ steps.extract_version.outputs.version }} --vendor "SE at RWTH Aachen" --copyright "(c) https://github.com/MontiCore/monticore" ${{ matrix.package_settings }}
 
       # Rename and compress
       - name: Compress build for Linux
