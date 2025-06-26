@@ -2891,6 +2891,13 @@
 <td>ArcBasis</td>
 <td>0xC1190</td>
 </tr>
+<tr>
+<td>☑</td>
+<td>☒</td>
+<td>PortInheritanceTiming</td>
+<td>ArcBasis</td>
+<td>0xC1191</td>
+</tr>
 </tbody>
 </table>
 <h2 id="montiarc-cocos">MontiArc CoCos</h2>
@@ -2935,7 +2942,7 @@
 <td>☑</td>
 <td>ConstraintsOmitPortReferences</td>
 <td>VariableArc</td>
-<td>0xC1408</td>
+<td>0xC1175</td>
 <td></td>
 </tr>
 <tr>
@@ -2991,7 +2998,7 @@
 <td>☑</td>
 <td>VarIfOmitPortReferences</td>
 <td>VariableArc</td>
-<td>0xC1407</td>
+<td>0xC1175</td>
 <td></td>
 </tr>
 <tr>
@@ -3162,6 +3169,18 @@
 <td>CapitalStateNames</td>
 <td>SCBasis</td>
 <td>Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.</td>
+</tr>
+<tr>
+<td>☑</td>
+<td>TransitionUsesEventDependentPorts</td>
+<td>ArcAutomaton</td>
+<td>Tick-triggered transitions must only access values of synced incoming ports; Message-event triggered transitions must only access values of event-based incoming ports</td>
+</tr>
+<tr>
+<td>☑</td>
+<td>NoInputPortsInStateActions</td>
+<td>ArcAutomaton</td>
+<td>This regards state entry, do, and exit actions.</td>
 </tr>
 </tbody>
 </table>
