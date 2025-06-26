@@ -15,7 +15,7 @@
 
     ---
 
-    Time synchronous version of the delay.
+    Time synchronous version of the delay component.
 
 -   [ToSyncFirstIn<T\>](https://github.com/MontiCore/montiarc/blob/dev/libraries/montiarc-base/main/montiarc/montiarc/lang/ToSyncFirstIn.arc)
 
@@ -28,6 +28,18 @@
     ---
 
     Converts an event stream into a synchronous stream by discarding all events except the last received one.
+
+-   [Timer](https://github.com/MontiCore/montiarc/blob/dev/libraries/montiarc-base/main/montiarc/montiarc/lang/Timer.arc)
+
+    ---
+
+    Sends a signal once the received duration has elapsed.
+
+-   [ConstTimer](https://github.com/MontiCore/montiarc/blob/dev/libraries/montiarc-base/main/montiarc/montiarc/lang/ConstTimer.arc)
+
+    ---
+
+    Sends a signal once the constant duration has elapsed. Receives only a start signal.
 
 </div>
 

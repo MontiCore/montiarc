@@ -7,6 +7,19 @@ public class Duration extends DurationTOP {
     this.milliseconds = milliseconds;
   }
 
+  @Override
+  public Duration add(Duration other) {
+    return new Duration(milliseconds + other.milliseconds);
+  }
+
+  @Override
+  public Duration subtract(Duration other) {
+    if (milliseconds < other.milliseconds) {
+      return new Duration(0);
+    }
+    return new Duration(milliseconds - other.milliseconds);
+  }
+
   public static Duration ofMilliseconds(long milliseconds) {
     return new Duration(milliseconds);
   }

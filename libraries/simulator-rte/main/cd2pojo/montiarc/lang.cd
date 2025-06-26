@@ -23,6 +23,9 @@ classdiagram lang {
 
     protected Duration();
 
+    public Duration add(Duration other);
+    public Duration subtract(Duration other);
+
     public static Duration ofMilliseconds(long milliseconds);
     public static Duration ofSeconds(long seconds);
     public static Duration ofSeconds(long seconds, long milliseconds);
