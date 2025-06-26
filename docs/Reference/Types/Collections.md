@@ -70,7 +70,7 @@ import java.util.List;
 import java.util.LinkedList;
 
 component Dummy {
-  List<Integer> = LinkedList.LinkedList();
+  List<Integer> l = LinkedList.LinkedList();
 }
 ```
 
@@ -114,7 +114,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 component Dummy {
-  Set<Integer> = HashSet.HashSet();
+  Set<Integer> s = HashSet.HashSet();
 }
 ```
 
