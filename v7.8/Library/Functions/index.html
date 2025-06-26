@@ -2372,9 +2372,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#montiarclangduration" class="md-nav__link">
+    <span class="md-ellipsis">
+      montiarc.lang.Duration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#montiarclangsignal" class="md-nav__link">
+    <span class="md-ellipsis">
+      montiarc.lang.Signal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#montiarclangsimulation" class="md-nav__link">
     <span class="md-ellipsis">
       montiarc.lang.Simulation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#montiarclangtimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      montiarc.lang.Timer
     </span>
   </a>
   
@@ -2478,9 +2505,36 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#montiarclangduration" class="md-nav__link">
+    <span class="md-ellipsis">
+      montiarc.lang.Duration
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#montiarclangsignal" class="md-nav__link">
+    <span class="md-ellipsis">
+      montiarc.lang.Signal
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#montiarclangsimulation" class="md-nav__link">
     <span class="md-ellipsis">
       montiarc.lang.Simulation
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#montiarclangtimer" class="md-nav__link">
+    <span class="md-ellipsis">
+      montiarc.lang.Timer
     </span>
   </a>
   
@@ -2530,6 +2584,101 @@
 </tbody>
 </table>
 <hr />
+<h3 id="montiarclangduration">montiarc.lang.Duration</h3>
+<p>Used to specify durations.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>Duration add(Duration other)</code></strong></td>
+<td>Returns a new duration with other added to self</td>
+</tr>
+<tr>
+<td><strong><code>Duration subtract(Duration other)</code></strong></td>
+<td>Returns a new duration with other subtracted from self. If other is greater then self, returns a duration of 0</td>
+</tr>
+</tbody>
+</table>
+<details class="info">
+<summary>Instantiation Methods</summary>
+<table>
+<thead>
+<tr>
+<th>Creates a new duration with the specified length</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>static Duration ofMilliseconds(long milliseconds)</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofSeconds(long seconds)</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofSeconds(long seconds, long milliseconds);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofMinutes(long minutes);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofMinutes(long minutes, long seconds);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofMinutes(long minutes, long seconds, long milliseconds);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofHours(long hours);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofHours(long hours, long minutes);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofHours(long hours, long minutes, long seconds);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofHours(long hours, long minutes, long seconds, long milliseconds);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofDays(long days);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofDays(long days, long hours);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofDays(long days, long hours, long minutes);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofDays(long days, long hours, long minutes, long seconds);</code></strong></td>
+</tr>
+<tr>
+<td><strong><code>static Duration ofDays(long days, long hours, long minutes, long seconds, long milliseconds);</code></strong></td>
+</tr>
+</tbody>
+</table>
+</details>
+<hr />
+<h3 id="montiarclangsignal">montiarc.lang.Signal</h3>
+<p>Objects of this class represent a signal. Can be used for event ports that where only the event is relevant but not the value.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>static Signal get()</code></strong></td>
+<td>Returns a Signal object</td>
+</tr>
+</tbody>
+</table>
+<hr />
 <h3 id="montiarclangsimulation">montiarc.lang.Simulation</h3>
 <p>A class containing static methods for interacting with the simulation environment.</p>
 <p><em>It cannot be instantiated.</em> </p>
@@ -2551,6 +2700,31 @@
 <p class="admonition-title">Warning</p>
 <p>The simulation class is only available when using the MontiArc Java simulator</p>
 </div>
+<hr />
+<h3 id="montiarclangtimer">montiarc.lang.Timer</h3>
+<p>A timer object for interacting with time.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>static Timer start(Duration duration);</code></strong></td>
+<td>Starts a new timer. Returns the running timer object</td>
+</tr>
+<tr>
+<td><strong><code>boolean completed();</code></strong></td>
+<td>Returns <code>true</code> if the timer duration has elapsed</td>
+</tr>
+<tr>
+<td><strong><code>Duration startedAgo();</code></strong></td>
+<td>Return the duration of how long ago the timer was started</td>
+</tr>
+</tbody>
+</table>
 <hr />
 
 
