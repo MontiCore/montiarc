@@ -7,11 +7,10 @@ import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._ast.ASTSubcomponentArgument;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolSurrogate;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
-import arcbasis.check.CompTypeExpression;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
@@ -77,7 +76,7 @@ public class ComponentHelper {
     return this.getPrettyPrinter().prettyprint(statement);
   }
 
-  public static List<VariableSymbol> getComponentVariables(ArcComponentTypeSymbol comp) {
+  public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
     vss.removeAll(comp.getParameterList());
@@ -109,7 +108,7 @@ public class ComponentHelper {
   /**
    * Calculates the values of hierarchical parameter instantiations of a {@link ComponentTypeSymbol}.
    *
-   * @param comp The {@link CompTypeExpression} for which the parameters should be calculated.
+   * @param comp The {@link CompKindExpression} for which the parameters should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
@@ -128,7 +127,7 @@ public class ComponentHelper {
      * @param comp The {@link ComponentTypeSymbol} for which the parameters should be calculated.
      * @return The parameters.
      */
-  public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments, ComponentTypeSymbol comp) {
+  public Collection<String> getParamValues(Map<VariableSymbol, ASTSubcomponentArgument> configArguments, ComponentTypeSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();
 
@@ -176,8 +175,8 @@ public class ComponentHelper {
   public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
     ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
-    if (componentTypeReference instanceof ArcComponentTypeSymbolSurrogate) {
-      componentTypeReference = ((ArcComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
+    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
+      componentTypeReference = ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
     }
     String packageName = ComponentHelper.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
     if (packageName != null && !packageName.equals("")) {
@@ -196,13 +195,7 @@ public class ComponentHelper {
    * Helper function used to determine package names.
    */
   public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
-    if (MontiArcMill.typeDispatcher().isArcBasisArcComponentType(comp) && ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(comp).isInnerComponent()) {
-      //TODO add check for outermost component being TOP-Class or remove this function?
-      String outerPackage = printPackageWithoutKeyWordAndSemicolon(ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(comp).getOuterComponent().get());
-      return (outerPackage.isEmpty() ? "" : outerPackage + ".") + ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(comp).getOuterComponent().get().getName();
-    } else {
-      return comp.getPackageName();
-    }
+    return comp.getFullName().substring(0, comp.getFullName().length() - comp.getName().length() - 1);
   }
 
   public Optional<ASTArcStatechart> getAutomatonBehavior(ASTArcComponentType component) {

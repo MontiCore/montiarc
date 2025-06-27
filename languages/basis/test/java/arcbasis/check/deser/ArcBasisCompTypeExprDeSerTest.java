@@ -4,16 +4,16 @@ package arcbasis.check.deser;
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.TypeExprOfComponent;
-import arcbasis.check.TypeExprOfGenericComponent;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.CompKindExpressionDeSer;
+import de.monticore.types.check.CompKindOfComponentType;
+import de.monticore.types.check.CompKindOfGenericComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +35,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol sym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(ast.getName())
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -50,8 +50,8 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     SymbolService.link(scope, sym);
 
     ArcBasisMill.globalScope().addSubScope(scope);
-    CompKindExpression compTypeExpr = new TypeExprOfComponent(sym);
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+    CompKindExpression compTypeExpr = new CompKindOfComponentType(sym);
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
 
     // When
     String compAsJson = deser.serialize(compTypeExpr);
@@ -59,7 +59,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     // Then
     Assertions.assertEquals(
       "{" +
-        "\"kind\":\"arcbasis.check.TypeExprOfComponent\"," +
+        "\"kind\":\"de.monticore.types.check.CompKindOfComponentType\"," +
         "\"componentTypeName\":\"foo.bar.MyComp\"" +
         "}",
       compAsJson
@@ -75,7 +75,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol sym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol sym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(ast.getName())
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -85,8 +85,8 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     sym.setAstNode(ast);
 
     SymbolService.link(ArcBasisMill.globalScope(), sym);
-    CompKindExpression compTypeExpr = new TypeExprOfComponent(sym);
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+    CompKindExpression compTypeExpr = new CompKindOfComponentType(sym);
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
 
     // When
     String compAsJson = deser.serialize(compTypeExpr);
@@ -94,7 +94,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     // Then
     Assertions.assertEquals(
       "{" +
-        "\"kind\":\"arcbasis.check.TypeExprOfComponent\"," +
+        "\"kind\":\"de.monticore.types.check.CompKindOfComponentType\"," +
         "\"componentTypeName\":\"MyComp\"" +
         "}",
       compAsJson
@@ -104,10 +104,10 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
   @Test
   public void testDeserializeWithPackageName() {
     // Given
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(
       "{" +
-        "\"kind\":\"arcbasis.check.TypeExprOfComponent\"," +
+        "\"kind\":\"de.monticore.types.check.CompKindOfComponentType\"," +
         "\"componentTypeName\":\"foo.bar.MyComp\"" +
         "}"
     );
@@ -117,16 +117,16 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals("foo.bar.MyComp", deserializedExpr.printFullName());
-    Assertions.assertInstanceOf(TypeExprOfComponent.class, deserializedExpr);
+    Assertions.assertInstanceOf(CompKindOfComponentType.class, deserializedExpr);
   }
 
   @Test
   public void testDeserializeWithoutPackageName() {
     // Given
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(
       "{" +
-        "\"kind\":\"arcbasis.check.TypeExprOfComponent\"," +
+        "\"kind\":\"de.monticore.types.check.CompKindOfComponentType\"," +
         "\"componentTypeName\":\"MyComp\"" +
         "}"
     );
@@ -136,7 +136,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals("MyComp", deserializedExpr.printFullName());
-    Assertions.assertInstanceOf(TypeExprOfComponent.class, deserializedExpr);
+    Assertions.assertInstanceOf(CompKindOfComponentType.class, deserializedExpr);
   }
 
   @Test
@@ -148,7 +148,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol myComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(myCompAST.getName())
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -197,8 +197,8 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
     CompKindExpression compTypeExpr =
-      new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+      new CompKindOfGenericComponentType(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
 
     // When
     String compAsJson = deser.serialize(compTypeExpr);
@@ -216,7 +216,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol myComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(myCompAST.getName())
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -260,8 +260,8 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
     CompKindExpression compTypeExpr =
-      new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+      new CompKindOfGenericComponentType(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
 
     // When
     String compAsJson = deser.serialize(compTypeExpr);
@@ -273,7 +273,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
   @Test
   void testGenericDeserializeWithPackageName() {
     // Given
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITH_PACKAGE);
 
     OOTypeSymbol student = ArcBasisMill.oOTypeSymbolBuilder()
@@ -292,7 +292,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     CompKindExpression deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
-    Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, deserializedExpr);
     Assertions.assertEquals(
       "foo.bar.MyComp<int,noo.boo.Student,noo.boo.Student,int>",
       deserializedExpr.printFullName()
@@ -302,7 +302,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
   @Test
   void testGenericDeserializeWithoutPackageName() {
     // Given
-    CompKindExpressionDeSer deser = new ArcBasisCompTypeExprDeSer();
+    CompKindExpressionDeSer deser = new CompKindExpressionDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITHOUT_PACKAGE);
 
     OOTypeSymbol student = ArcBasisMill.oOTypeSymbolBuilder()
@@ -321,7 +321,7 @@ public class ArcBasisCompTypeExprDeSerTest extends ArcBasisTestBase {
     CompKindExpression deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
-    Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, deserializedExpr);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, deserializedExpr);
     Assertions.assertEquals(
       "MyComp<int,noo.boo.Student,noo.boo.Student,int>",
       deserializedExpr.printFullName()

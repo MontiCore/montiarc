@@ -4,13 +4,14 @@ package arcbasis.check.deser;
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
-import arcbasis.check.TypeExprOfGenericComponent;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.CompKindOfGenericComponentType;
+import de.monticore.types.check.CompKindOfGenericComponentTypeDeSer;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +23,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
 
   public static final String JSON_WITH_PACKAGE =
     "{" +
-      "\"kind\":\"arcbasis.check.TypeExprOfGenericComponent\"," +
+      "\"kind\":\"de.monticore.types.check.CompKindOfGenericComponentType\"," +
       "\"componentTypeName\":\"foo.bar.MyComp\"," +
       "\"typeVarBindings\":[" +
         "{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
@@ -34,7 +35,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
 
   public static final String JSON_WITHOUT_PACKAGE =
     "{" +
-    "\"kind\":\"arcbasis.check.TypeExprOfGenericComponent\"," +
+    "\"kind\":\"de.monticore.types.check.CompKindOfGenericComponentType\"," +
     "\"componentTypeName\":\"MyComp\"," +
     "\"typeVarBindings\":[" +
       "{\"kind\":\"de.monticore.types.check.SymTypePrimitive\",\"primitiveName\":\"int\"}," +
@@ -52,7 +53,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol myComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(myCompAST.getName())
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -100,9 +101,9 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
     SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(student);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
-    TypeExprOfGenericComponent compTypeExpr =
-      new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    TypeExprOfGenericComponentDeSer deser = new TypeExprOfGenericComponentDeSer();
+    CompKindOfGenericComponentType compTypeExpr =
+      new CompKindOfGenericComponentType(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
+    CompKindOfGenericComponentTypeDeSer deser = new CompKindOfGenericComponentTypeDeSer();
 
     // When
     String compAsJson = deser.serialize(compTypeExpr);
@@ -120,7 +121,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol myComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol myComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(myCompAST.getName())
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -167,9 +168,9 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
     SymTypeExpression studentExpr = SymTypeExpressionFactory.createTypeObject(student);
     SymTypeExpression intExpr = SymTypeExpressionFactory.createPrimitive("int");
 
-    TypeExprOfGenericComponent compTypeExpr =
-      new TypeExprOfGenericComponent(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
-    TypeExprOfGenericComponentDeSer deser = new TypeExprOfGenericComponentDeSer();
+    CompKindOfGenericComponentType compTypeExpr =
+      new CompKindOfGenericComponentType(myComp, List.of(intExpr, studentExpr, studentExpr, intExpr));
+    CompKindOfGenericComponentTypeDeSer deser = new CompKindOfGenericComponentTypeDeSer();
 
     // When
     String compAsJson = deser.serialize(compTypeExpr);
@@ -181,7 +182,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
   @Test
   void testDeserializeWithPackageName() {
     // Given
-    TypeExprOfGenericComponentDeSer deser = new TypeExprOfGenericComponentDeSer();
+    CompKindOfGenericComponentTypeDeSer deser = new CompKindOfGenericComponentTypeDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITH_PACKAGE);
 
     OOTypeSymbol student = ArcBasisMill.oOTypeSymbolBuilder()
@@ -197,7 +198,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(as);
 
     // When
-    TypeExprOfGenericComponent deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
+    CompKindOfGenericComponentType deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals(
@@ -209,7 +210,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
   @Test
   void testDeserializeWithoutPackageName() {
     // Given
-    TypeExprOfGenericComponentDeSer deser = new TypeExprOfGenericComponentDeSer();
+    CompKindOfGenericComponentTypeDeSer deser = new CompKindOfGenericComponentTypeDeSer();
     JsonObject serialized = JsonParser.parseJsonObject(JSON_WITHOUT_PACKAGE);
 
     OOTypeSymbol student = ArcBasisMill.oOTypeSymbolBuilder()
@@ -225,7 +226,7 @@ public class TypeExprOfGenericComponentDeSerTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(as);
 
     // When
-    TypeExprOfGenericComponent deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
+    CompKindOfGenericComponentType deserializedExpr = deser.deserialize(ArcBasisMill.globalScope(), serialized);
 
     // Then
     Assertions.assertEquals(

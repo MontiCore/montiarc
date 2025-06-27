@@ -17,6 +17,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolBuilder;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolBuilder;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbolBuilder;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -32,7 +33,7 @@ import java.util.Stack;
 
 public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
 
-  protected Stack<ArcComponentTypeSymbol> componentStack;
+  protected Stack<ComponentTypeSymbol> componentStack;
   protected ASTPortDirection currentPortDirection;
 
   public ArcBasisScopesGenitor() {
@@ -40,11 +41,11 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.componentStack = new Stack<>();
   }
 
-  protected Stack<ArcComponentTypeSymbol> getComponentStack() {
+  protected Stack<ComponentTypeSymbol> getComponentStack() {
     return this.componentStack;
   }
 
-  protected Optional<ArcComponentTypeSymbol> getCurrentComponent() {
+  protected Optional<ComponentTypeSymbol> getCurrentComponent() {
     return Optional.ofNullable(this.getComponentStack().peek());
   }
 
@@ -52,7 +53,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getComponentStack().pop();
   }
 
-  protected void putOnStack(@Nullable ArcComponentTypeSymbol symbol) {
+  protected void putOnStack(@Nullable ComponentTypeSymbol symbol) {
     this.getComponentStack().push(symbol);
   }
 
@@ -84,31 +85,19 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     this.getCurrentScope().get().add(symbol);
   }
 
-  protected ArcComponentTypeSymbolBuilder create_ComponentType(@NotNull ASTArcComponentType ast) {
-    ArcComponentTypeSymbolBuilder builder = ArcBasisMill.arcComponentTypeSymbolBuilder();
+  protected ComponentTypeSymbolBuilder create_ComponentType(@NotNull ASTArcComponentType ast) {
+    ComponentTypeSymbolBuilder builder = ArcBasisMill.componentTypeSymbolBuilder();
     builder.setName(ast.getName());
     IArcBasisScope scope = this.createScope(true);
     builder.setSpannedScope(scope);
     return builder;
   }
 
-  /**
-   * if this is an inner component, this method sets the outer component of this one
-   *
-   * @param symbol component to integrate into the structure
-   */
-  protected void setOuter(@NotNull ArcComponentTypeSymbol symbol) {
-    if (!componentStack.isEmpty()) {
-      symbol.setOuterComponent(componentStack.peek());
-    }
-  }
-
   @Override
   public void visit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkState(this.getCurrentScope().isPresent());
-    ArcComponentTypeSymbol symbol = this.create_ComponentType(node).build();
-    this.setOuter(symbol);
+    ComponentTypeSymbol symbol = this.create_ComponentType(node).build();
     node.setSymbol(symbol);
     node.setEnclosingScope(this.getCurrentScope().get());
     node.setSpannedScope(symbol.getSpannedScope());
@@ -116,7 +105,7 @@ public class ArcBasisScopesGenitor extends ArcBasisScopesGenitorTOP {
     symbol.setAstNode(node);
     symbol.setEnclosingScope(this.getCurrentScope().get());
     this.getCurrentScope().get().add(symbol);
-    this.putOnStack(symbol.getSpannedScope());
+    this.putOnStack((IArcBasisScope) symbol.getSpannedScope());
     this.putOnStack(symbol);
   }
 

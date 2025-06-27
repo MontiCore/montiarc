@@ -5,15 +5,14 @@ import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import de.monticore.expressions.expressionsbasis._ast.ASTLiteralExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
 import org.junit.jupiter.api.Assertions;
@@ -37,8 +36,8 @@ import java.util.Optional;
  */
 public class ComponentConverterTest extends VariableArcTestBase {
 
-  protected static SubcomponentSymbol createInstance(String name, ArcComponentTypeSymbol component) {
-    CompTypeExpression typeExpression = new TypeExprOfComponent(component);
+  protected static SubcomponentSymbol createInstance(String name, ComponentTypeSymbol component) {
+    CompKindExpression typeExpression = new CompKindOfComponentType(component);
     return VariableArcMill.subcomponentSymbolBuilder().setName(name).setType(typeExpression).build();
   }
 
@@ -68,7 +67,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
       scope.add(instance);
     }
 
-    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("C")
       .setSpannedScope(scope)
       .setAstNode(astComponentType)
@@ -86,7 +85,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
       scope.add(instance);
     }
 
-    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("C")
       .setSpannedScope(scope)
       .build();

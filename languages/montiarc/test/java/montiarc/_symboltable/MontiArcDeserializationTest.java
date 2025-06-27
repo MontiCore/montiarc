@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
@@ -39,8 +38,8 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     setUpParentComp();
   }
 
-  protected ArcComponentTypeSymbol setUpParentComp() {
-    return MontiArcMill.arcComponentTypeSymbolBuilder()
+  protected ComponentTypeSymbol setUpParentComp() {
+    return MontiArcMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(MontiArcMill.scope())
       .build();
@@ -1067,7 +1066,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(
@@ -1090,7 +1089,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(compWithRefPath.toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(
@@ -1143,7 +1142,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(
@@ -1166,7 +1165,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ArcComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // THen
     assertAll(
@@ -1189,7 +1188,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(
@@ -1212,7 +1211,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Paths.get(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(
@@ -1234,7 +1233,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(
@@ -1257,7 +1256,7 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final IMontiArcArtifactScope scope = Preconditions.checkNotNull(
       s2j.load(Path.of(TEST_RESOURCE, Names.getPathFromPackage(PACKAGE), fn).toString())
     );
-    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalArcComponentTypeSymbols().get(0));
+    final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
     assertAll(

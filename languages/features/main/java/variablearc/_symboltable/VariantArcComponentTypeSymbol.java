@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -21,12 +21,12 @@ import java.util.stream.Collectors;
  * An abstract component variant implementation.
  * Can be used as a starting point for implementing custom variants (e.g. {@link VariableArcVariantComponentTypeSymbol}).
  */
-public abstract class VariantArcComponentTypeSymbol extends ArcComponentTypeSymbol {
+public abstract class VariantArcComponentTypeSymbol extends ComponentTypeSymbol {
 
-  protected ArcComponentTypeSymbol typeSymbol;
+  protected ComponentTypeSymbol typeSymbol;
   protected Map<PortSymbol, VariantPortSymbol> portSymbolMap;
 
-  protected VariantArcComponentTypeSymbol(@NotNull ArcComponentTypeSymbol typeSymbol) {
+  protected VariantArcComponentTypeSymbol(@NotNull ComponentTypeSymbol typeSymbol) {
     super(typeSymbol.getName());
     Preconditions.checkNotNull(typeSymbol);
     this.typeSymbol = typeSymbol;
@@ -37,7 +37,6 @@ public abstract class VariantArcComponentTypeSymbol extends ArcComponentTypeSymb
     this.fullName = typeSymbol.getFullName();
     this.packageName = typeSymbol.getPackageName();
     this.refinements = typeSymbol.getRefinementsList();
-    this.outerComponent = typeSymbol.getOuterComponent().orElse(null);
     this.spannedScope = typeSymbol.getSpannedScope();
     this.enclosingScope = typeSymbol.getEnclosingScope();
     this.setAstNodeAbsent();
@@ -88,7 +87,7 @@ public abstract class VariantArcComponentTypeSymbol extends ArcComponentTypeSymb
     return typeSymbol.getFullName();
   }
 
-  public ArcComponentTypeSymbol getAdaptee() {
+  public ComponentTypeSymbol getAdaptee() {
     return this.typeSymbol;
   }
 }

@@ -4,7 +4,7 @@
   "package": "libpackage",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "LibComponent2"
     }
   ]

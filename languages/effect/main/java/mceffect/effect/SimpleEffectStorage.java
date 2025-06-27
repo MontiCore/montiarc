@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.effect;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -24,20 +24,20 @@ import java.util.function.Function;
 
 public class SimpleEffectStorage implements EffectStorage {
 
-  protected final Map<ArcComponentTypeSymbol, List<Effect>> effectMap = new HashMap<>();
-  private final Function<String, Optional<ArcComponentTypeSymbol>> compResolver;
+  protected final Map<ComponentTypeSymbol, List<Effect>> effectMap = new HashMap<>();
+  private final Function<String, Optional<ComponentTypeSymbol>> compResolver;
   private final Function<String, Optional<PortSymbol>> portResolver;
 
   public SimpleEffectStorage(
       ASTMCEffect ast,
-      Function<String, Optional<ArcComponentTypeSymbol>> componentResolver,
+      Function<String, Optional<ComponentTypeSymbol>> componentResolver,
       Function<String, Optional<PortSymbol>> portResolver) {
     this(Set.of(ast), componentResolver, portResolver);
   }
 
   public SimpleEffectStorage(
       Set<ASTMCEffect> asts,
-      Function<String, Optional<ArcComponentTypeSymbol>> componentResolver,
+      Function<String, Optional<ComponentTypeSymbol>> componentResolver,
       Function<String, Optional<PortSymbol>> portResolver) {
     this.compResolver = componentResolver;
     this.portResolver = portResolver;
@@ -53,7 +53,7 @@ public class SimpleEffectStorage implements EffectStorage {
       for (ASTComponentEffect compEffect : ast.getComponentEffectList()) {
 
         String cName = pName + "." + compEffect.getMCQualifiedName().getQName();
-        ArcComponentTypeSymbol cSymbol = resolveComponent(cName, compEffect.get_SourcePositionStart());
+        ComponentTypeSymbol cSymbol = resolveComponent(cName, compEffect.get_SourcePositionStart());
 
         for (ASTEffectRuleDeclaration decl : compEffect.getEffectRuleDeclarationList()) {
           for (ASTEffectRule rule : decl.getEffectRuleList()) {
@@ -75,7 +75,7 @@ public class SimpleEffectStorage implements EffectStorage {
   }
 
   @Override
-  public List<Effect> getEffectsOfComponent(ArcComponentTypeSymbol component) {
+  public List<Effect> getEffectsOfComponent(ComponentTypeSymbol component) {
     return effectMap.containsKey(component) ? effectMap.get(component) : new ArrayList<>();
   }
 
@@ -83,7 +83,7 @@ public class SimpleEffectStorage implements EffectStorage {
    * check if there are multiple effect rules for the same pair port.
    * @param effectMap map containing all the effects
    */
-  private void checkEffectStorage(Map<ArcComponentTypeSymbol, List<Effect>> effectMap) {
+  private void checkEffectStorage(Map<ComponentTypeSymbol, List<Effect>> effectMap) {
     for (List<Effect> compEffects : effectMap.values()) {
       List<Pair<PortSymbol, PortSymbol>> ports = new ArrayList<>();
 
@@ -108,7 +108,7 @@ public class SimpleEffectStorage implements EffectStorage {
     }
   }
 
-  public void addEffect(ArcComponentTypeSymbol symbol, Effect effect) {
+  public void addEffect(ComponentTypeSymbol symbol, Effect effect) {
     if (effectMap.containsKey(symbol)) {
       effectMap.get(symbol).add(effect);
     } else {
@@ -117,7 +117,7 @@ public class SimpleEffectStorage implements EffectStorage {
   }
 
   private Effect buildEffect(
-      ASTEffectRule rule, ASTEffectRuleDeclaration ruleDecl, ArcComponentTypeSymbol cSymbol) {
+      ASTEffectRule rule, ASTEffectRuleDeclaration ruleDecl, ComponentTypeSymbol cSymbol) {
 
     String fromPort = cSymbol.getFullName() + "." + rule.getFrom();
     String toPort = cSymbol.getFullName() + "." + rule.getTo();
@@ -145,8 +145,8 @@ public class SimpleEffectStorage implements EffectStorage {
     }
   }
 
-  private ArcComponentTypeSymbol resolveComponent(String qName, SourcePosition pos) {
-    Optional<ArcComponentTypeSymbol> c = compResolver.apply(qName);
+  private ComponentTypeSymbol resolveComponent(String qName, SourcePosition pos) {
+    Optional<ComponentTypeSymbol> c = compResolver.apply(qName);
     if (c.isEmpty()) {
       Log.error(
           String.format(

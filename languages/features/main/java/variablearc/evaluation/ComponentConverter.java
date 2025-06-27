@@ -7,6 +7,7 @@ import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._ast.ASTSubcomponentArgument;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
@@ -72,7 +73,7 @@ public class ComponentConverter {
     if (typeExpression.getTypeInfo().getSpannedScope() instanceof IVariableArcScope) {
       // Convert parameters
       for (VariableSymbol variable : typeExpression.getTypeInfo().getParameterList()) {
-        Optional<ASTExpression> bindingExpression = typeExpression.getParamBindingFor(variable);
+        Optional<ASTExpression> bindingExpression = typeExpression.getParamBindingFor(variable).map(ASTSubcomponentArgument::getExpression);
 
         // can only use default parameter value if ASTNode exists
         if (typeExpression.getTypeInfo().isPresentAstNode()) {

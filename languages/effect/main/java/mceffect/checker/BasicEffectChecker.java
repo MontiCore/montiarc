@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.checker;
 
+import arcbasis._ast.ASTArcComponentType;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
@@ -25,9 +26,9 @@ public class BasicEffectChecker implements EffectChecker {
     ASTMACompilationUnit ma;
     // create automata
     Context ctx = AutomataConfChecker.buildContext();
-    ISMTAutomaton aut = new SMTAutomaton(effect.getComponent().getAstNode(), null, s -> s, ctx);
+    ISMTAutomaton aut = new SMTAutomaton((ASTArcComponentType) effect.getComponent().getAstNode(), null, s -> s, ctx);
     ICompleteSMTAut completeSMTAut =
-        new ChaosComplete(effect.getComponent().getAstNode(), aut, ctx);
+        new ChaosComplete((ASTArcComponentType) effect.getComponent().getAstNode(), aut, ctx);
 
     // init states
     Expr<?> currState = ctx.mkConst("currState", aut.getStateSort());

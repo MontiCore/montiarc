@@ -1,8 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcBasisSymbols2Json;
+import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
 import de.monticore.symboltable.serialization.JsonDeSers;
 import de.monticore.symboltable.serialization.JsonPrinter;
 import de.monticore.symboltable.serialization.json.JsonElement;
@@ -29,7 +30,7 @@ public interface IVariableArcComponentTypeSymbolDeSer {
    * @param component the component that is serialized
    * @param s2j       the json printer that the constraints are serialized to
    */
-  default void serializeConstraints(@NotNull IVariableArcComponentTypeSymbol component, @NotNull ArcBasisSymbols2Json s2j) {
+  default void serializeConstraints(@NotNull IVariableArcComponentTypeSymbol component, @NotNull CompSymbolsSymbols2Json s2j) {
     Preconditions.checkNotNull(component);
     Preconditions.checkNotNull(s2j);
     if (component.getLocalConstraints().isEmpty()) return;
@@ -53,7 +54,7 @@ public interface IVariableArcComponentTypeSymbolDeSer {
     if (constraints.isPresent()) {
       String expressionSetJsonKind = JsonDeSers.getKind(constraints.get());
       if (expressionSetJsonKind.equals(expressionSetSerializeKind)) {
-        ExpressionSet expressionSet = getExpressionSetDeSer().deserialize(constraints.get(), component.getTypeInfo().getSpannedScope());
+        ExpressionSet expressionSet = getExpressionSetDeSer().deserialize(constraints.get(), (IArcBasisScope) component.getTypeInfo().getSpannedScope());
 
         component.setLocalConstraints(expressionSet);
 
@@ -73,7 +74,7 @@ public interface IVariableArcComponentTypeSymbolDeSer {
    * @param component the component that is serialized
    * @param s2j       the json printer that the variation points are serialized to
    */
-  default void serializeVariationPoint(@NotNull IVariableArcComponentTypeSymbol component, @NotNull ArcBasisSymbols2Json s2j) {
+  default void serializeVariationPoint(@NotNull IVariableArcComponentTypeSymbol component, @NotNull CompSymbolsSymbols2Json s2j) {
     Preconditions.checkNotNull(component);
     Preconditions.checkNotNull(s2j);
     JsonPrinter printer = s2j.getJsonPrinter();

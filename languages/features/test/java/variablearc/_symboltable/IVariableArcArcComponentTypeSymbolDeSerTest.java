@@ -1,12 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis._symboltable.ArcComponentTypeSymbolDeSer;
 import arcbasis._symboltable.IArcBasisScope;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolDeSer;
+import de.monticore.symbols.compsymbols._symboltable.ICompSymbolsScope;
 import de.monticore.symboltable.serialization.json.JsonObject;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -28,7 +29,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
   protected static final String JSON_WITH_ARC_FEATURES =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"spannedScope\":{\"symbols\":[{\"kind\":\"variablearc._symboltable.ArcFeatureSymbol\",\"name\":\"f1\",\"fullName\":\"Comp.f1\"}]}" +
@@ -36,7 +37,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
   protected static final String JSON_WITH_CONSTRAINTS =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"constraints\":{\"kind\":\"variablearc.evaluation.ExpressionSet\",\"expressions\":[{\"expression\":\"f1\"}]}" +
@@ -44,7 +45,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
   protected static final String JSON_WITH_VARIATION_POINTS_AND_VARIANTS =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"variationPoints\":[" +
@@ -62,11 +63,11 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
     ((IVariableArcScope) comp.getTypeInfo().getSpannedScope()).add(featureSymbol);
 
-    ArcComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.empty());
-    ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
+    ComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.empty());
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp.getTypeInfo(), arc2json);
+    String createdJson = deser.serialize(comp.getTypeInfo(), comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_ARC_FEATURES, createdJson);
@@ -75,10 +76,10 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
   @Test
   public void shouldDeserializeArcFeatures() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.empty());
+    ComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.empty());
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(JSON_WITH_ARC_FEATURES);
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_ARC_FEATURES);
 
     // Then
     Assertions.assertEquals(1, ((IVariableArcScope) comp.getSpannedScope()).getArcFeatureSymbols().size());
@@ -92,15 +93,15 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
     // Given
     IVariableArcComponentTypeSymbol comp = createSimpleComp();
     comp.setLocalConstraints(new ExpressionSet(List.of(
-      new Expression(createNameExpressionInScope("f1", comp.getTypeInfo().getSpannedScope()))
+      new Expression(createNameExpressionInScope("f1", (IArcBasisScope) comp.getTypeInfo().getSpannedScope()))
     )));
 
 
-    ArcComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.empty());
-    ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
+    ComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.empty());
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp.getTypeInfo(), arc2json);
+    String createdJson = deser.serialize(comp.getTypeInfo(), comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_CONSTRAINTS, createdJson);
@@ -109,7 +110,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
   @Test
   public void shouldDeserializeConstraints() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
+    ComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
 
     // When
     IVariableArcComponentTypeSymbol comp = (IVariableArcComponentTypeSymbol) deser.deserialize(JSON_WITH_CONSTRAINTS);
@@ -133,11 +134,11 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
     comp.add(vp2);
     comp.add(vp2vp1);
 
-    ArcComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
-    ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
+    ComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp.getTypeInfo(), arc2json);
+    String createdJson = deser.serialize(comp.getTypeInfo(), comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_VARIATION_POINTS_AND_VARIANTS, createdJson);
@@ -146,11 +147,11 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
   @Test
   public void shouldDeserializeVariationPoints() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
+    ComponentTypeSymbolDeSer deser = new VariableArcComponentTypeSymbolDeSer((s) -> Optional.of(VariableArcMill.nameExpressionBuilder().setName(s).build()));
 
     // When
     IVariableArcComponentTypeSymbol comp = (IVariableArcComponentTypeSymbol) deser.deserialize(JSON_WITH_VARIATION_POINTS_AND_VARIANTS);
-    ((ArcComponentTypeSymbol) comp).setEnclosingScope(VariableArcMill.globalScope()); // Is set by scope deserialization which is not used here
+    ((ComponentTypeSymbol) comp).setEnclosingScope(VariableArcMill.globalScope()); // Is set by scope deserialization which is not used here
 
     // Then
     Assertions.assertEquals(3, comp.getAllVariationPoints().size());
@@ -165,7 +166,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
   }
 
   protected static IVariableArcComponentTypeSymbol createSimpleComp() {
-    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(VariableArcMill.scope())
       .setEnclosingScope(VariableArcMill.globalScope())
@@ -173,7 +174,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
     return symbol;
   }
 
-  protected ASTNameExpression createNameExpressionInScope(String name, IArcBasisScope scope) {
+  protected ASTNameExpression createNameExpressionInScope(String name, ICompSymbolsScope scope) {
     ASTNameExpression expr = VariableArcMill.nameExpressionBuilder().setName(name).build();
     expr.setEnclosingScope(scope);
     return expr;
@@ -182,7 +183,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
   /**
    * Helper class that implements the interface under test
    */
-  public static class VariableArcComponentTypeSymbolDeSer extends ArcComponentTypeSymbolDeSer implements IVariableArcComponentTypeSymbolDeSer {
+  public static class VariableArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer implements IVariableArcComponentTypeSymbolDeSer {
 
     protected final ExpressionSetDeSer expressionSetDeSer;
     protected final VariableArcVariationPointDeSer variationPointDeSer;
@@ -193,7 +194,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
     }
 
     @Override
-    public String serialize(ArcComponentTypeSymbol toSerialize, ArcBasisSymbols2Json s2j) {
+    public String serialize(ComponentTypeSymbol toSerialize, CompSymbolsSymbols2Json s2j) {
       de.monticore.symboltable.serialization.JsonPrinter p = s2j.getJsonPrinter();
       p.beginObject();
       p.member(de.monticore.symboltable.serialization.JsonDeSers.KIND, getSerializedKind());
@@ -226,7 +227,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
     }
 
     @Override
-    protected void deserializeAddons(@NotNull ArcComponentTypeSymbol component, @NotNull JsonObject json) {
+    protected void deserializeAddons(@NotNull ComponentTypeSymbol component, @NotNull JsonObject json) {
       super.deserializeAddons(component, json);
       if (component instanceof IVariableArcComponentTypeSymbol) {
         deserializeConstraints((IVariableArcComponentTypeSymbol) component, json);

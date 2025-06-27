@@ -3,8 +3,9 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
@@ -83,7 +84,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
         return astPort.getComponentSymbol().getType().getTypeOfPort(astPort.getPort());
       }
     } else if (getEnclosingComponent(astPort).isPresent()) {
-      return getEnclosingComponent(astPort).get().getTypeOfPort(astPort.getPort());
+      return getEnclosingComponent(astPort).get().getPort(astPort.getPort()).map(PortSymbol::getType);
     } else if (astPort.isPresentPortSymbol() && astPort.getPortSymbol().isTypePresent()) {
       return Optional.ofNullable(astPort.getPortSymbol().getType());
     }
@@ -102,7 +103,7 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
    * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
    * does not belong to a component type.
    */
-  protected Optional<ArcComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
     if (portAccess.getEnclosingScope() == null) {
       return Optional.empty();
@@ -111,8 +112,8 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
       return Optional.empty();
     }
     IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
-    if (symbol instanceof ArcComponentTypeSymbol) {
-      return Optional.of((ArcComponentTypeSymbol) symbol);
+    if (symbol instanceof ComponentTypeSymbol) {
+      return Optional.of((ComponentTypeSymbol) symbol);
     } else {
       return Optional.empty();
     }

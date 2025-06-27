@@ -9,14 +9,14 @@ import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTComponentInterface;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -385,7 +385,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       .setHead(ArcBasisMill.componentHeadBuilder().build())
       .build();
 
-    ArcComponentTypeSymbol compSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -456,7 +456,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
     // Given
     RefinementPortsMatch coco = new RefinementPortsMatch();
 
-    ArcComponentTypeSymbol parentComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol parentComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -477,13 +477,13 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       .setType(astTypeFrom("Parent")).build()
     );
 
-    ArcComponentTypeSymbol compSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     compType.setSymbol(compSym);
     compSym.setAstNode(compType);
-    compSym.addSuperComponents(new TypeExprOfComponent(parentComp));
+    compSym.addSuperComponents(new CompKindOfComponentType(parentComp));
 
     for (String refined : refinedComponents) {
       compType.getHead().addSpec(compTypeReferenceFrom(refined));
@@ -581,11 +581,11 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
 
   protected CompKindExpression compTypeExprFrom(@NotNull String compName) {
     Preconditions.checkNotNull(compName);
-    ArcComponentTypeSymbol comp = ArcBasisMill.globalScope()
-      .resolveArcComponentType(compName)
+    ComponentTypeSymbol comp = ArcBasisMill.globalScope()
+      .resolveComponentType(compName)
       .orElseThrow(IllegalArgumentException::new);
 
-    return new TypeExprOfComponent(comp);
+    return new CompKindOfComponentType(comp);
   }
 
   protected SymTypeExpression typeExprFrom(@NotNull String typeName) {

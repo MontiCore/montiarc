@@ -11,9 +11,9 @@
   ${prettyPrinter.prettyprint(type, boxPrimitives)}
 </#macro>
 
-<#-- CompTypeExpression type -->
+<#-- CompKindExpression type -->
 <#macro getCompTypeString type suffix="">
-    <#if type.getTypeBindingsAsList()?has_content>
+    <#if type.isGenericComponentType() && type.getTypeBindingsAsList()?has_content>
         ${type.getTypeInfo().getFullName()}${suffix}<<#list type.getTypeBindingsAsList() as arg><@getPortTypeString arg/><#sep>, </#sep></#list>>
     <#else>${type.printFullName()}${suffix}</#if>
 </#macro>

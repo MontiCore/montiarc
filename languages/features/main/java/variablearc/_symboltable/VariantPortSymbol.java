@@ -1,11 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import variablearc.VariableArcMill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +19,9 @@ public class VariantPortSymbol extends PortSymbol {
 
   protected PortSymbol parent;
 
-  protected ArcComponentTypeSymbol component;
+  protected ComponentTypeSymbol component;
 
-  public VariantPortSymbol(PortSymbol parent, ArcComponentTypeSymbol component) {
+  public VariantPortSymbol(PortSymbol parent, ComponentTypeSymbol component) {
     super(parent.getName());
     this.parent = parent;
     this.setIncoming(parent.isIncoming());
@@ -54,11 +56,15 @@ public class VariantPortSymbol extends PortSymbol {
   }
 
   protected boolean isHereditaryStronglyCausal() {
+    if (!component.isPresentAstNode()) return false;
+
+    ASTArcComponentType astComponent = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(component.getAstNode());
+
     if (this.isOutgoing() && this.component.isAtomic()) {
       // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
       // or if the component has no incoming ports
-      return (component.getBehavior().isPresent()
-        && component.getBehavior().get().isDelayed()) || component.getAllIncomingPorts().isEmpty();
+      return (astComponent.getBehavior().isPresent()
+        && astComponent.getBehavior().get().isDelayed()) || this.component.getAllIncomingPorts().isEmpty();
     } else if (this.isOutgoing() && this.component.isDecomposed()) {
       // outgoing ports of composed components are strongly causal if their composed behavior is strongly causal
       return this.isComposedStronglyCausal();
@@ -67,12 +73,14 @@ public class VariantPortSymbol extends PortSymbol {
   }
 
   protected boolean isComposedStronglyCausal() {
-    if (!this.component.isDecomposed() || !this.isOutgoing()) {
+    if (!this.component.isDecomposed() || !this.isOutgoing() || !this.isPresentAstNode()) {
       return false;
     }
 
+    ASTArcComponentType astComponent = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(component.getAstNode());
+
     List<List<ASTConnector>> paths = new ArrayList<>();
-    paths.add(new ArrayList<>(this.component.getAstNode().getConnectorsMatchingTarget(this.getName())));
+    paths.add(new ArrayList<>(astComponent.getConnectorsMatchingTarget(this.getName())));
 
     while (!paths.isEmpty()) {
       List<List<ASTConnector>> newPaths = new ArrayList<>();
@@ -101,7 +109,7 @@ public class VariantPortSymbol extends PortSymbol {
         SubcomponentSymbol instance = lastSource.getComponentSymbol();
         if (!instance.isTypePresent()) continue; //Incomplete symboltable. See above.
         instance.getType().getTypeInfo().getAllIncomingPorts()
-          .forEach(incomingPortOfSubcomponent -> component.getAstNode()
+          .forEach(incomingPortOfSubcomponent -> astComponent
             .getConnectorsMatchingTarget(instance.getName() + "." + incomingPortOfSubcomponent.getName())
             .forEach(connector -> {
               List<ASTConnector> newPath = new ArrayList<>(path);

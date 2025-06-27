@@ -1,14 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._cocos;
 
-import arcbasis._ast.ASTArcArgument;
-import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis.check.CompTypeExpression;
+import arcbasis._ast.ASTComponentInstance;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._ast.ASTSubcomponentArgument;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
@@ -57,26 +56,22 @@ public class ConfigurationParameterAssignment
     ComponentTypeSymbol component = node.getSymbol();
 
     for (CompKindExpression parent : component.getSuperComponentsList()) {
-      if (!(parent instanceof CompTypeExpression)) continue;
-
       Optional<SourcePosition> srcStart = parent.getSourceNode().map(ASTNode::get_SourcePositionStart);
       Optional<SourcePosition> srcEnd = parent.getSourceNode().map(ASTNode::get_SourcePositionEnd);
 
       check(
-        (CompTypeExpression) parent,
+        parent,
         srcStart.isPresent() ? srcStart : getSrcStart(node.getHead().getArcParentList()),
         srcEnd.isPresent() ? srcEnd : getSrcEnd(node.getHead().getArcParentList())
       );
     }
 
     for (CompKindExpression refines : component.getRefinementsList()) {
-      if (!(refines instanceof CompTypeExpression)) continue;
-
       Optional<SourcePosition> srcStart = refines.getSourceNode().map(ASTNode::get_SourcePositionStart);
       Optional<SourcePosition> srcEnd = refines.getSourceNode().map(ASTNode::get_SourcePositionEnd);
 
       check(
-        (CompTypeExpression) refines,
+        refines,
         srcStart.isPresent() ? srcStart : getSrcStart(node.getHead().getSpecList()),
         srcEnd.isPresent() ? srcEnd : getSrcEnd(node.getHead().getSpecList())
       );
@@ -88,19 +83,19 @@ public class ConfigurationParameterAssignment
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    if (!node.getSymbol().isTypePresent() || !(node.getSymbol().getType() instanceof CompTypeExpression)) {
+    if (!node.getSymbol().isTypePresent()) {
       Log.debug(() -> "Skip coco check, the subcomponent's type is missing.", this.getClass().getCanonicalName());
       return;
     }
 
     check(
-      (CompTypeExpression) node.getSymbol().getType(),
+      node.getSymbol().getType(),
       Optional.of(node.get_SourcePositionStart()),
       Optional.of(node.get_SourcePositionEnd())
     );
   }
 
-  protected void check(@NotNull CompTypeExpression componentExpression,
+  protected void check(@NotNull CompKindExpression componentExpression,
                        @NotNull Optional<SourcePosition> sourcePositionStart,
                        @NotNull Optional<SourcePosition> sourcePositionEnd) {
     Preconditions.checkNotNull(componentExpression);
@@ -123,15 +118,15 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected void checkArgumentNotTooMany(@NotNull CompTypeExpression componentExpression) {
+  protected void checkArgumentNotTooMany(@NotNull CompKindExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
 
-    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     if (arguments.size() > parameters.size()) {
-      ASTArcArgument firstIllegalArg = componentExpression.getArcArguments().get(parameters.size());
-      ASTArcArgument lastIllegalArg = componentExpression.getArcArguments().get(arguments.size() - 1);
+      ASTSubcomponentArgument firstIllegalArg = componentExpression.getArguments().get(parameters.size());
+      ASTSubcomponentArgument lastIllegalArg = componentExpression.getArguments().get(arguments.size() - 1);
 
       Log.error(ArcError.TOO_MANY_ARGUMENTS.format(parameters.size(), arguments.size()),
         firstIllegalArg.get_SourcePositionStart(),
@@ -146,14 +141,14 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected void checkArgumentsBindAllMandatoryParameters(@NotNull CompTypeExpression componentExpression,
+  protected void checkArgumentsBindAllMandatoryParameters(@NotNull CompKindExpression componentExpression,
                                                           @NotNull Optional<SourcePosition> srcStart,
                                                           @NotNull Optional<SourcePosition> srcEnd) {
     Preconditions.checkNotNull(componentExpression);
     Preconditions.checkNotNull(srcStart);
     Preconditions.checkNotNull(srcEnd);
 
-    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     List<String> paramNames = parameters.stream()
@@ -161,14 +156,14 @@ public class ConfigurationParameterAssignment
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
-    List<ASTArcArgument> keywordArgs = arguments.stream()
-      .filter(ASTArcArgument::isPresentName)
+    List<ASTSubcomponentArgument> keywordArgs = arguments.stream()
+      .filter(ASTSubcomponentArgument::isPresentName)
       .collect(Collectors.toList());
 
     int mandatoryParamsAmount = parameters.size() - componentExpression.getTypeInfo().getNumOptParams();
     int defaultAssignedByKey = 0;
 
-    for (ASTArcArgument keywordArg : keywordArgs) {
+    for (ASTSubcomponentArgument keywordArg : keywordArgs) {
       String argumentKey = keywordArg.getName();
       int paramIndex = paramIndices.get(argumentKey);
       if (paramIndex >= mandatoryParamsAmount) {
@@ -193,10 +188,10 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected void checkInstantiationArgsHaveCorrectTypes(@NotNull CompTypeExpression componentExpression) {
+  protected void checkInstantiationArgsHaveCorrectTypes(@NotNull CompKindExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
 
-    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     List<String> paramNames = parameters.stream().map(VariableSymbol::getName).collect(Collectors.toList());
@@ -204,27 +199,27 @@ public class ConfigurationParameterAssignment
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
     List<ASTExpression> exprs = arguments.stream()
-      .map(ASTArcArgument::getExpression)
+      .map(ASTSubcomponentArgument::getExpression)
       .collect(Collectors.toList());
 
-    List<SymTypeExpression> paramTypes = componentExpression.getParameterTypes();
+    List<Optional<SymTypeExpression>> paramTypes = componentExpression.getParameterTypes();
 
     for (int i = 0; i < Math.min(exprs.size(), paramTypes.size()); i++) {
 
-      SymTypeExpression paramType = arguments.get(i).isPresentName() ?
+      Optional<SymTypeExpression> paramType = arguments.get(i).isPresentName() ?
         // get keyword parameter
         paramTypes.get(paramIndices.get(arguments.get(i).getName())) :
         // else get non-keyword parameter
         paramTypes.get(i);
 
-      SymTypeExpression argType = TypeCheck3.typeOf(exprs.get(i), paramType);
+      SymTypeExpression argType = paramType.isPresent() ? TypeCheck3.typeOf(exprs.get(i), paramType.get()) : TypeCheck3.typeOf(exprs.get(i));
 
-      if (!paramType.isObscureType()
+      if (paramType.isEmpty() || !paramType.get().isObscureType()
         && !argType.isObscureType()
-        && !SymTypeRelations.isCompatible(paramType, argType)) {
+        && !SymTypeRelations.isCompatible(paramType.get(), argType)) {
 
         Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
-            paramType.print(), argType.print()
+            paramType.map(SymTypeExpression::print).orElse(""), argType.print()
           ),
           exprs.get(i).get_SourcePositionStart(),
           exprs.get(i).get_SourcePositionEnd());
@@ -237,16 +232,16 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected boolean checkKeywordArgsUnique(@NotNull CompTypeExpression componentExpression) {
+  protected boolean checkKeywordArgsUnique(@NotNull CompKindExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
 
-    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
 
     Set<String> keyArguments = new HashSet<>();
     int keywordCounter;
 
     boolean isUnique = true;
-    for (ASTArcArgument argument : arguments) {
+    for (ASTSubcomponentArgument argument : arguments) {
       if (argument.isPresentName()) {
         keywordCounter = keyArguments.size();
         keyArguments.add(argument.getName());
@@ -268,10 +263,10 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected boolean checkArgValuesUnique(@NotNull CompTypeExpression componentExpression) {
+  protected boolean checkArgValuesUnique(@NotNull CompKindExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
 
-    List<ASTArcArgument> arguments = componentExpression.getArcArguments();
+    List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
 
     List<String> paramNames = componentExpression.getTypeInfo().getParameterList()
       .stream().map(VariableSymbol::getName).collect(Collectors.toList());
@@ -279,11 +274,11 @@ public class ConfigurationParameterAssignment
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
     long posArgsAmount = arguments.stream()
-      .filter(Predicate.not(ASTArcArgument::isPresentName))
+      .filter(Predicate.not(ASTSubcomponentArgument::isPresentName))
       .count();
 
     boolean isUnique = true;
-    for (ASTArcArgument argument : arguments) {
+    for (ASTSubcomponentArgument argument : arguments) {
       if (argument.isPresentName()) {
         String key = argument.getName();
         int paramIndex = paramIndices.get(key);
@@ -306,15 +301,15 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected boolean checkKeywordArgsLast(@NotNull CompTypeExpression componentExpression) {
+  protected boolean checkKeywordArgsLast(@NotNull CompKindExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
 
     boolean keywordAssignmentPresent = false;
     boolean rightArgumentOrder = true;
 
-    List<ASTArcArgument> instantiationArgs = componentExpression.getArcArguments();
+    List<ASTSubcomponentArgument> instantiationArgs = componentExpression.getArguments();
 
-    for (ASTArcArgument argument : instantiationArgs) {
+    for (ASTSubcomponentArgument argument : instantiationArgs) {
       if (argument.isPresentName()) {
         keywordAssignmentPresent = true;
       } else if (keywordAssignmentPresent) {
@@ -334,13 +329,13 @@ public class ConfigurationParameterAssignment
    *
    * @param componentExpression the component expression to check
    */
-  protected boolean checkKeywordsMustBeParameters(@NotNull CompTypeExpression componentExpression) {
+  protected boolean checkKeywordsMustBeParameters(@NotNull CompKindExpression componentExpression) {
     Preconditions.checkNotNull(componentExpression);
     ComponentTypeSymbol component = componentExpression.getTypeInfo();
 
     boolean keysAreParams = true;
 
-    for (ASTArcArgument argument : componentExpression.getArcArguments()) {
+    for (ASTSubcomponentArgument argument : componentExpression.getArguments()) {
       if (argument.isPresentName() && component.getParameter(argument.getName()).isEmpty()) {
         Log.error(ArcError.COMP_ARG_KEY_INVALID.format(argument.getName()),
           argument.get_SourcePositionStart(),

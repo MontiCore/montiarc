@@ -2,7 +2,7 @@
   "name": "ComponentParameters",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "Simple",
       "fullName": "Simple",
       "parameters": [
@@ -22,7 +22,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "Advanced",
       "fullName": "Advanced",
       "numOptParams": 2,
@@ -61,7 +61,7 @@
     },
 
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "AdvancedWithOneOptional",
       "fullName": "AdvancedWithOneOptional",
       "numOptParams": 1,

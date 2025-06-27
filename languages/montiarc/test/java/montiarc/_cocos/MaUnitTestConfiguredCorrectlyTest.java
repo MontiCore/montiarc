@@ -3,11 +3,11 @@ package montiarc._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTNatLiteral;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.se_rwth.commons.logging.Log;
@@ -209,7 +209,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()).
         build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
 
     // When
     new MaUnitTestConfiguredCorrectly().check(comp);
@@ -233,7 +233,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build())
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -260,7 +260,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build())
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -291,7 +291,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
             .setName("p2").setMCType(Mockito.mock(ASTMCType.class)).build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p1")
@@ -323,7 +323,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -351,7 +351,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -378,7 +378,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .build()))
         .build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder()
         .setName("p")
@@ -409,7 +409,7 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
           .setName("p2").setMCType(Mockito.mock(ASTMCType.class)).build()
       )).build())
       .setBody(Mockito.mock(ASTComponentBody.class)).build();
-    comp.setSymbol(Mockito.mock(ArcComponentTypeSymbol.class));
+    comp.setSymbol(Mockito.mock(ComponentTypeSymbol.class));
     comp.getHead().getArcParameter(0)
       .setSymbol(MontiArcMill.variableSymbolBuilder().setName("p1")
         .setType(SymTypeExpressionFactory.createPrimitive("int")).build());

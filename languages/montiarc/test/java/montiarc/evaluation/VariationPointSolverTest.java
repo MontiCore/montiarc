@@ -2,12 +2,12 @@
 package montiarc.evaluation;
 
 import arcbasis._ast.ASTArcArgument;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -64,7 +64,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
         .build());
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(originComponentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
         .setSpannedScope(scope)
         .setEnclosingScope(MontiArcMill.scope())
         .setEnclosingScope(MontiArcMill.scope())
@@ -91,7 +91,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
     bindings.forEach(e -> e.getExpression().setEnclosingScope(scope));
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(childComponentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(childComponentTypeName)
         .setSpannedScope(scope)
         .setEnclosingScope(MontiArcMill.scope())
         .build();
@@ -100,15 +100,15 @@ public class VariationPointSolverTest extends MontiArcTestBase {
 
     // Parent setup
     IVariableArcScope parentScope = MontiArcMill.scope();
-    TypeExprOfComponent typeExprOfComponent = new TypeExprOfComponent(typeSymbol.getTypeInfo());
-    typeExprOfComponent.addArcArguments(bindings);
+    CompKindOfComponentType typeExprOfComponent = new CompKindOfComponentType(typeSymbol.getTypeInfo());
+    typeExprOfComponent.addArgument(bindings);
     SubcomponentSymbol instanceSymbol =
       MontiArcMill.subcomponentSymbolBuilder().setName(childComponentName)
         .setType(typeExprOfComponent).build();
     instanceSymbol.getType().bindParams();
     parentScope.add(instanceSymbol);
 
-    return (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(originComponentTypeName)
+    return (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(originComponentTypeName)
       .setSpannedScope(parentScope)
       .setEnclosingScope(MontiArcMill.scope())
       .build();
@@ -123,7 +123,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
   public void shouldCreateOrigin() {
     // Given
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName("C")
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName("C")
         .setSpannedScope(MontiArcMill.scope())
         .setEnclosingScope(MontiArcMill.scope())
         .build();

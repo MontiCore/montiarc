@@ -14,14 +14,16 @@ import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisTraverser;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._ast.ASTSubcomponentArgument;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -31,6 +33,7 @@ import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.typeparameters._ast.ASTTypeParameter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
@@ -108,7 +111,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   @Test
   public void testVisitComponentHead1() {
     // Given
-    ArcComponentTypeSymbol symbol = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("SomeName")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -137,13 +140,13 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   public void testVisitComponentHead2() {
     // Given
     String parentCompName = "ParentComp";
-    ArcComponentTypeSymbol parent = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol parent = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(parentCompName)
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
 
     String childCompName = "ChildComp";
-    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(childCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -203,7 +206,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   public void testVisitComponentHead3() {
     // Given
     String childCompName = "ChildComp";
-    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(childCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -243,7 +246,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       () -> Assertions.assertTrue(child.isEmptySuperComponents()),
       () -> Assertions.assertFalse(head.getArcParent(0).getType().getDefiningSymbol().isPresent()),
       () -> Assertions.assertEquals(1, Log.getErrorCount()),
-      () -> Assertions.assertEquals(ArcError.MISSING_COMPONENT.getErrorCode(), Log.getFindings().get(0).getMsg().substring(0, 7))
+      () -> Assertions.assertEquals(MCError.MISSING_COMPONENT.getErrorCode(), Log.getFindings().get(0).getMsg().substring(0, 7))
     );
   }
 
@@ -258,17 +261,17 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   public void testVisitComponentHead4() {
     // Given
     String parentCompName = "ParentComp";
-    ArcComponentTypeSymbol ref1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol ref1 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(parentCompName)
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
-    ArcComponentTypeSymbol ref2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol ref2 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(parentCompName)
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
 
     String childCompName = "ChildComp";
-    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(childCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -309,7 +312,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
     // Then
     assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE));
+      .containsExactlyInAnyOrder(getErrorCodes(MCError.AMBIGUOUS_COMPONENT_REFERENCE));
   }
 
   /**
@@ -368,7 +371,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   void testVisitComponentHead6() {
     // Given
     String abstractionName = "Abstraction";
-    ArcComponentTypeSymbol abstraction = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol abstraction = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(abstractionName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -383,7 +386,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     abstraction.addParameter(param);
 
     String concretizationName = "Concretization";
-    ArcComponentTypeSymbol concretizationSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(concretizationName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -424,6 +427,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
       () -> Assertions.assertNotNull(concretizationSym.getRefinements(0)),
       () -> Assertions.assertEquals(abstraction, concretizationSym.getRefinements(0).getTypeInfo()),
       () -> assertThat(concretizationSym.getRefinements(0).getArguments())
+              .map(ASTSubcomponentArgument::getExpression)
               .containsExactly(argExpr)
     );
   }
@@ -438,7 +442,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   void testVisitComponentHead7() {
     // Given
     String concretizationName = "Concretization";
-    ArcComponentTypeSymbol concretizationSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(concretizationName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -473,7 +477,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     Assertions.assertAll(
       () -> Assertions.assertEquals(0, concretizationSym.getRefinementsList().size()),
       () -> assertThat(getLoggedErrorCodes())
-              .containsExactly(ArcError.MISSING_COMPONENT.getErrorCode())
+              .containsExactly(MCError.MISSING_COMPONENT.getErrorCode())
     );
   }
 
@@ -487,20 +491,20 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   void testVisitComponentHead8() {
     // Given
     String abstractionName = "Abstraction";
-    ArcComponentTypeSymbol abstraction1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol abstraction1 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(abstractionName)
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
     ArcBasisMill.globalScope().add(abstraction1);
 
-    ArcComponentTypeSymbol abstraction2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol abstraction2 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(abstractionName)
       .setSpannedScope(Mockito.mock(IArcBasisScope.class))
       .build();
     ArcBasisMill.globalScope().add(abstraction2);
 
     String concretizationName = "Concretization";
-    ArcComponentTypeSymbol concretizationSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(concretizationName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -535,7 +539,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     Assertions.assertAll(
       () -> Assertions.assertEquals(1, concretizationSym.getRefinementsList().size()),
       () -> assertThat(getLoggedErrorCodes())
-              .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE))
+              .containsExactlyInAnyOrder(getErrorCodes(MCError.AMBIGUOUS_COMPONENT_REFERENCE))
     );
   }
 
@@ -849,7 +853,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   public void shouldVisitComponentInstantiation() {
     // Given
     ASTComponentInstantiation ast = provideComponentInstantiation();
-    ArcComponentTypeSymbol comp = ArcBasisMill.globalScope().resolveArcComponentType("Comp").orElseThrow();
+    ComponentTypeSymbol comp = ArcBasisMill.globalScope().resolveComponentType("Comp").orElseThrow();
 
     // When
     getScopeGenP2().visit(ast);
@@ -865,12 +869,12 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
   public void shouldEndVisitComponentInstantiation() {
     // Given
     ASTComponentInstantiation instantiation = provideComponentInstantiation();
-    Optional<ArcComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveArcComponentType("Comp");
+    Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
     if (compTypeSym.isEmpty()) {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
     }
-    getScopeGenP2().setCurrentCompInstanceType(new TypeExprOfComponent(compTypeSym.get()));
+    getScopeGenP2().setCurrentCompInstanceType(new CompKindOfComponentType(compTypeSym.get()));
 
     // When
     getScopeGenP2().endVisit(instantiation);
@@ -892,18 +896,18 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     astInstance.setSymbol(symInstance);
     symInstance.setAstNode(astInstance);
 
-    ArcComponentTypeSymbol compType = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compType = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("CompType")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    getScopeGenP2().setCurrentCompInstanceType(new TypeExprOfComponent(compType));
+    getScopeGenP2().setCurrentCompInstanceType(new CompKindOfComponentType(compType));
 
     // When
     getScopeGenP2().visit(astInstance);
 
     // Then
     Assertions.assertDoesNotThrow(astInstance.getSymbol()::getType);
-    Assertions.assertTrue(astInstance.getSymbol().getType() instanceof TypeExprOfComponent);
+    Assertions.assertTrue(astInstance.getSymbol().getType() instanceof CompKindOfComponentType);
     Assertions.assertEquals(compType, astInstance.getSymbol().getType().getTypeInfo());
     Assertions.assertEquals(3, astInstance.getSymbol().getType().getArguments().size());
   }
@@ -921,7 +925,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     // Given
     ASTComponentInstantiation astInstantiation = provideComponentInstantiation();
     Preconditions.checkState(astInstantiation.getComponentInstanceList().size() > 0);
-    Optional<ArcComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveArcComponentType("Comp");
+    Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
     if (compTypeSym.isEmpty()) {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
         "provider of the ASTComponentInstantiation.");
@@ -936,7 +940,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     // Then
     for (ASTComponentInstance astInst : astInstantiation.getComponentInstanceList()) {
       Assertions.assertDoesNotThrow(astInst.getSymbol()::getType);
-      Assertions.assertTrue(astInst.getSymbol().getType() instanceof TypeExprOfComponent);
+      Assertions.assertTrue(astInst.getSymbol().getType() instanceof CompKindOfComponentType);
       Assertions.assertEquals(compTypeSym.get(), astInst.getSymbol().getType().getTypeInfo());
     }
   }
@@ -948,7 +952,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
    */
   protected ASTComponentInstantiation provideComponentInstantiation() {
     String compName = "Comp";
-    ArcComponentTypeSymbol compTypeSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compTypeSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -994,26 +998,26 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     VariableSymbol parameter2 = ArcBasisMill.variableSymbolBuilder()
       .setName("b").setEnclosingScope(scope).build();
     scope.add(parameter2);
-    ArcComponentTypeSymbol component = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setParameterList(Arrays.asList(parameter1, parameter2)) // List.of produces an
       .setName("C")
       .setSpannedScope(scope)
       .build();
     List<ASTArcArgument> bindings = Arrays.asList(Mockito.mock(ASTArcArgument.class), Mockito.mock(ASTArcArgument.class));
-    TypeExprOfComponent typeExpr = new TypeExprOfComponent(component);
-    typeExpr.addArcArguments(bindings);
+    CompKindOfComponentType typeExpr = new CompKindOfComponentType(component);
+    typeExpr.addArgument(bindings);
 
     SubcomponentSymbol symbol = ArcBasisMill.subcomponentSymbolBuilder().setType(typeExpr).setName("c1").build();
 
-    List<ASTArcArgument> bindingsBeforeCompletion = ((TypeExprOfComponent) symbol.getType()).getParamArcBindingsAsList();
+    List<ASTSubcomponentArgument> bindingsBeforeCompletion = symbol.getType().getParamBindingsAsList();
     // When
     getScopeGenP2().visit(symbol);
 
     // Then
-    Assertions.assertNotEquals(((TypeExprOfComponent) symbol.getType()).getParamArcBindingsAsList(),bindingsBeforeCompletion);
+    Assertions.assertNotEquals(symbol.getType().getParamBindingsAsList(), bindingsBeforeCompletion);
     Assertions.assertEquals(typeExpr.getTypeInfo(), symbol.getType()
       .getTypeInfo());
-    Assertions.assertIterableEquals(bindings, (((TypeExprOfComponent) symbol.getType()).getParamArcBindingsAsList()));
+    Assertions.assertIterableEquals(bindings, symbol.getType().getParamBindingsAsList());
   }
 
   @Test

@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
@@ -37,8 +37,8 @@ public class SymbolTableTest extends MontiArcTestBase {
     MontiArcMill.globalScope().add(setUpParentComp());
   }
 
-  protected ArcComponentTypeSymbol setUpParentComp() {
-    ArcComponentTypeSymbol parentComp = MontiArcMill.arcComponentTypeSymbolBuilder()
+  protected ComponentTypeSymbol setUpParentComp() {
+    ComponentTypeSymbol parentComp = MontiArcMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(MontiArcMill.scope())
       .build();

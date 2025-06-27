@@ -11,6 +11,7 @@ import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -340,7 +341,7 @@ public class TypeBoundTest extends MontiArcTestBase {
         ArcError.TOO_MANY_TYPE_ARGUMENTS,
         ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
       arg("component comp15 refines a.b.X<java.lang.String> { }",
-        ArcError.MISSING_COMPONENT)
+        MCError.MISSING_COMPONENT)
     );
   }
 

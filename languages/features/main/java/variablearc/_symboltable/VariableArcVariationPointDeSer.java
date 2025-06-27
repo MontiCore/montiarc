@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcBasisSymbols2Json;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.TransitiveNameExpressionScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.symboltable.serialization.ISymbolDeSer;
 import de.monticore.symboltable.serialization.JsonDeSers;
@@ -42,7 +43,7 @@ public class VariableArcVariationPointDeSer {
    * @param toSerialize the variation point that is serialized
    * @param s2j         the printer this variation point is serialized to
    */
-  public void serialize(@NotNull VariableArcVariationPoint toSerialize, @NotNull ArcBasisSymbols2Json s2j) {
+  public void serialize(@NotNull VariableArcVariationPoint toSerialize, @NotNull CompSymbolsSymbols2Json s2j) {
     Preconditions.checkNotNull(toSerialize);
     Preconditions.checkNotNull(s2j);
 
@@ -85,7 +86,7 @@ public class VariableArcVariationPointDeSer {
 
     String expressionJson = json.getStringMember(EXPRESSION);
     Optional<ASTExpression> expression = parseExpression.apply(expressionJson);
-    TransitiveNameExpressionScopeSetter scopeSetter = new TransitiveNameExpressionScopeSetter(component.getTypeInfo().getSpannedScope());
+    TransitiveNameExpressionScopeSetter scopeSetter = new TransitiveNameExpressionScopeSetter((IArcBasisScope) component.getTypeInfo().getSpannedScope());
     expression.ifPresent(scopeSetter::set);
 
     if (expression.isEmpty()) {

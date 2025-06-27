@@ -1,12 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.effect;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.SourcePosition;
 
 public class SimpleEffect implements Effect {
-  private final ArcComponentTypeSymbol componentSymbol;
+  private final ComponentTypeSymbol componentSymbol;
   private final PortSymbol from;
   private final PortSymbol to;
 
@@ -18,7 +18,7 @@ public class SimpleEffect implements Effect {
 
   private final SourcePosition sourcePosition;
 
-  public SimpleEffect(ArcComponentTypeSymbol componentSymbol, PortSymbol from, PortSymbol to, boolean isCheck, boolean isEnsure, EffectKind effectKind, SourcePosition sourcePosition) {
+  public SimpleEffect(ComponentTypeSymbol componentSymbol, PortSymbol from, PortSymbol to, boolean isCheck, boolean isEnsure, EffectKind effectKind, SourcePosition sourcePosition) {
     this.componentSymbol = componentSymbol;
     this.from = from;
     this.to = to;
@@ -30,7 +30,7 @@ public class SimpleEffect implements Effect {
 
 
   @Override
-  public ArcComponentTypeSymbol getComponent() {
+  public ComponentTypeSymbol getComponent() {
     return componentSymbol;
   }
 

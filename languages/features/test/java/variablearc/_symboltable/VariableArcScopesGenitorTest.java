@@ -40,7 +40,7 @@ public class VariableArcScopesGenitorTest extends VariableArcTestBase {
     IVariableArcScope scope = VariableArcMill.scope();
     this.getSymTab().putOnStack(scope);
     this.getSymTab().putOnStack(
-      (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
+      (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
         .setName("A")
         .setSpannedScope(scope)
         .build());
@@ -55,7 +55,7 @@ public class VariableArcScopesGenitorTest extends VariableArcTestBase {
   @Test
   public void shouldTraverseVarIf() {
     // Given
-    IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
+    IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("A")
       .setSpannedScope(this.getSymTab().createScope(false))
       .build();

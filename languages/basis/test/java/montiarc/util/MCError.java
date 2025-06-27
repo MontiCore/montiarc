@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
-import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
-
 import java.util.regex.Pattern;
 
 /**
@@ -10,16 +8,8 @@ import java.util.regex.Pattern;
  * combination with the existing test infrastructure
  */
 public enum MCError implements Error {
-  TYPE_REF_ASSIGNMENT_ERR(VarDeclarationInitializationHasCorrectType.TYPE_REF_ASSIGNMENT_ERROR_CODE),
-  INCOMPATIBLE_TYPE(VarDeclarationInitializationHasCorrectType.ERROR_CODE),
-  DIVIDE_EXPRESSION_ERR("0xA0168"),
-  CANT_FIND_SYMBOL("0xA0324"),
-  CANT_FIND_SYMBOL_IN_EXPRESSION("0xFD118"),
-  TYPE_STRING_NOT_RESOLVABLE("0xD02A6"),
-  FOUND_MULTIPLE_SYMBOLS("0xA4095"),
-  TARGET_TYPE_MISMATCH("0xFD451"),
-  EXPRESSION_LVALUE("0xFDD47"),
-  MISSING_COMPONENT("0xD0104");
+  MISSING_COMPONENT("0xD0104"),
+  AMBIGUOUS_COMPONENT_REFERENCE("0xD0105");
 
   public static final Pattern ERROR_CODE_PATTERN = Pattern.compile("0xA\\d{4}");
 

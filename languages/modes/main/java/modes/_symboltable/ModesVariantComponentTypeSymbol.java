@@ -1,10 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis._symboltable.Port2VariableAdapter;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 import modes._ast.ASTModeVariantComponentType;
@@ -22,7 +23,7 @@ public class ModesVariantComponentTypeSymbol extends VariantArcComponentTypeSymb
 
   protected ArcModeSymbol mode;
 
-  public ModesVariantComponentTypeSymbol(@NotNull ArcComponentTypeSymbol typeSymbol, @NotNull ArcModeSymbol mode) {
+  public ModesVariantComponentTypeSymbol(@NotNull ComponentTypeSymbol typeSymbol, @NotNull ArcModeSymbol mode) {
     super(typeSymbol);
     Preconditions.checkNotNull(typeSymbol);
     Preconditions.checkNotNull(mode);
@@ -31,7 +32,7 @@ public class ModesVariantComponentTypeSymbol extends VariantArcComponentTypeSymb
 
     if (typeSymbol.isPresentAstNode() && mode.isPresentAstNode()) {
       // Shadow the AST structure
-      this.setAstNode(new ASTModeVariantComponentType(typeSymbol.getAstNode(), this));
+      this.setAstNode(new ASTModeVariantComponentType((ASTArcComponentType) typeSymbol.getAstNode(), this));
     } else {
       this.setAstNodeAbsent();
     }

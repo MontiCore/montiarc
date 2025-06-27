@@ -3,11 +3,14 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolDeSer;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import org.junit.jupiter.api.Assertions;
@@ -17,36 +20,36 @@ import org.mockito.Mockito;
 import java.util.Collections;
 
 /**
- * Holds tests for {@link ArcComponentTypeSymbolDeSer}.
+ * Holds tests for {@link ComponentTypeSymbolDeSer}.
  */
-class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
+class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
   private static final String SIMPLE_JSON =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"" +
       "}";
 
   private static final String JSON_WITH_PARENT =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
-      "\"super\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
+      "\"super\":[{\"kind\":\"de.monticore.types.check.CompKindOfComponentType\",\"componentTypeName\":\"Parent\"}]" +
       "}";
 
   private static final String JSON_WITH_REFINEMENT =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
-      "\"refinements\":[{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Parent\"}]" +
+      "\"refinements\":[{\"kind\":\"de.monticore.types.check.CompKindOfComponentType\",\"componentTypeName\":\"Parent\"}]" +
       "}";
 
   private static final String JSON_WITH_TYPE_PARAMS =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"spannedScope\":{\"symbols\":[{" +
@@ -62,7 +65,7 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
   private static final String JSON_WITH_PARAMS =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"parameters\":[{" +
@@ -81,7 +84,7 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
   private static final String JSON_WITH_PORTS =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"spannedScope\":{\"symbols\":[{" +
@@ -103,23 +106,23 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
   private static final String JSON_WITH_SUB =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Parent\"," +
       "\"fullName\":\"Parent\"," +
-      "\"spannedScope\":{\"symbols\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"fullName\":\"Parent.inst\",\"type\":{\"kind\":\"arcbasis.check.TypeExprOfComponent\",\"componentTypeName\":\"Comp\"}}]}" +
+      "\"spannedScope\":{\"symbols\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol\",\"name\":\"inst\",\"fullName\":\"Parent.inst\",\"type\":{\"kind\":\"de.monticore.types.check.CompKindOfComponentType\",\"componentTypeName\":\"Comp\"}}]}" +
       "}";
 
   private static final String JSON_WITH_INNER =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
-      "\"spannedScope\":{\"symbols\":[{\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\"}]}" +
+      "\"spannedScope\":{\"symbols\":[{\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\"}]}" +
       "}";
 
   private static final String JSON_WITH_FIELD =
     "{" +
-      "\"kind\":\"arcbasis._symboltable.ArcComponentTypeSymbol\"," +
+      "\"kind\":\"de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol\"," +
       "\"name\":\"Comp\"," +
       "\"fullName\":\"Comp\"," +
       "\"spannedScope\":{\"symbols\":[{\"kind\":\"de.monticore.symbols.basicsymbols._symboltable.VariableSymbol\",\"name\":\"inst\",\"fullName\":\"Comp.inst\",\"type\":null}]}" +
@@ -128,16 +131,16 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializeParent() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
-    ArcComponentTypeSymbol parent = createParentComp();
-    CompTypeExpression parentType = new TypeExprOfComponent(parent);
+    ComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol parent = createParentComp();
+    CompKindExpression parentType = new CompKindOfComponentType(parent);
     comp.setSuperComponentsList(Collections.singletonList(parentType));
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_PARENT, createdJson);
@@ -146,16 +149,16 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializeSpec() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
-    ArcComponentTypeSymbol parent = createParentComp();
-    CompTypeExpression parentType = new TypeExprOfComponent(parent);
+    ComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol parent = createParentComp();
+    CompKindExpression parentType = new CompKindOfComponentType(parent);
     comp.setRefinementsList(Collections.singletonList(parentType));
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_REFINEMENT, createdJson);
@@ -164,13 +167,13 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldNotSerializeAbsentParent() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createSimpleComp();
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(SIMPLE_JSON, createdJson);
@@ -179,7 +182,7 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializeTypeParameters() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createSimpleComp();
     comp.getSpannedScope().add(
       ArcBasisMill.typeVarSymbolBuilder()
         .setName("A")
@@ -193,11 +196,11 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
         .build()
     );
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_TYPE_PARAMS, createdJson);
@@ -206,7 +209,7 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializeParameters() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createSimpleComp();
     VariableSymbol paramA = ArcBasisMill.variableSymbolBuilder()
       .setName("a")
       .setType(SymTypeExpressionFactory.createPrimitive("int"))
@@ -222,11 +225,11 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     comp.addParameter(paramB);
     comp.setNumOptParams(1);
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_PARAMS, createdJson);
@@ -235,7 +238,7 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializePorts() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createSimpleComp();
     PortSymbol portIncoming = ArcBasisMill.portSymbolBuilder()
       .setName("inc")
       .setIncoming(true)
@@ -254,11 +257,11 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     comp.getSpannedScope().add(portIncoming);
     comp.getSpannedScope().add(portOutgoing);
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_PORTS, createdJson);
@@ -267,10 +270,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeParent() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PARENT);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PARENT);
 
     // Then
     Assertions.assertFalse(comp.isEmptySuperComponents(), "Parent not present");
@@ -280,10 +283,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeSpec() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_REFINEMENT);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_REFINEMENT);
 
     // Then
     Assertions.assertFalse(comp.isEmptyRefinements(), "Refined component not present");
@@ -293,10 +296,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldNotDeserializeAbsentParent() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), SIMPLE_JSON);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), SIMPLE_JSON);
 
     // Then
     Assertions.assertTrue(comp.isEmptySuperComponents(), "Parent is present");
@@ -305,10 +308,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeTypeParameters() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_TYPE_PARAMS);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_TYPE_PARAMS);
 
     // Then
     Assertions.assertEquals(2, comp.getTypeParameters().size());
@@ -321,10 +324,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeParameters() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PARAMS);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PARAMS);
 
     // Then
     Assertions.assertEquals(2, comp.getParameterList().size());
@@ -338,10 +341,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializePorts() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PORTS);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_PORTS);
 
     // Then
     Assertions.assertEquals(2, comp.getPorts().size());
@@ -354,19 +357,19 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializeSubComponents() {
     // Given
-    ArcComponentTypeSymbol comp = createParentComp();
+    ComponentTypeSymbol comp = createParentComp();
     comp.getSpannedScope().add(
       ArcBasisMill.subcomponentSymbolBuilder()
         .setName("inst")
-        .setType(new TypeExprOfComponent(createSimpleComp()))
+        .setType(new CompKindOfComponentType(createSimpleComp()))
         .build()
     );
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_SUB, createdJson);
@@ -375,10 +378,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeSubComponents() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(JSON_WITH_SUB);
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_SUB);
 
     // Then
     Assertions.assertEquals(1, comp.getSubcomponents().size());
@@ -390,19 +393,19 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldSerializeInnerComponents() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createSimpleComp();
     comp.getSpannedScope().add(
-      ArcBasisMill.arcComponentTypeSymbolBuilder()
+      ArcBasisMill.componentTypeSymbolBuilder()
         .setName("inst")
         .setSpannedScope(ArcBasisMill.scope())
         .build()
     );
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_INNER, createdJson);
@@ -411,22 +414,22 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeInnerComponents() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(JSON_WITH_INNER);
+    ComponentTypeSymbol comp = deser.deserialize(JSON_WITH_INNER);
 
     // Then
-    Assertions.assertEquals(1, comp.getInnerComponents().size());
+    Assertions.assertEquals(1, comp.getSpannedScope().getLocalComponentTypeSymbols().size());
     Assertions.assertAll(
-      () -> Assertions.assertEquals("inst", comp.getInnerComponents().get(0).getName())
+      () -> Assertions.assertEquals("inst", comp.getSpannedScope().getLocalComponentTypeSymbols().get(0).getName())
     );
   }
 
   @Test
   void shouldSerializeFields() {
     // Given
-    ArcComponentTypeSymbol comp = createSimpleComp();
+    ComponentTypeSymbol comp = createSimpleComp();
     comp.getSpannedScope().add(
       ArcBasisMill.variableSymbolBuilder()
         .setName("inst")
@@ -434,11 +437,11 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
         .build()
     );
 
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
-    ArcBasisSymbols2Json arc2json = new ArcBasisSymbols2Json();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    String createdJson = deser.serialize(comp, arc2json);
+    String createdJson = deser.serialize(comp, comp2json);
 
     // Then
     Assertions.assertEquals(JSON_WITH_FIELD, createdJson);
@@ -447,10 +450,10 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
   @Test
   void shouldDeserializeFields() {
     // Given
-    ArcComponentTypeSymbolDeSer deser = new ArcComponentTypeSymbolDeSer();
+    ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
 
     // When
-    ArcComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_FIELD);
+    ComponentTypeSymbol comp = deser.deserialize(ArcBasisMill.globalScope(), JSON_WITH_FIELD);
 
     // Then
     Assertions.assertEquals(1, comp.getFields().size());
@@ -459,15 +462,15 @@ class ArcComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     );
   }
 
-  protected static ArcComponentTypeSymbol createSimpleComp() {
-    return ArcBasisMill.arcComponentTypeSymbolBuilder()
+  protected static ComponentTypeSymbol createSimpleComp() {
+    return ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
   }
 
-  protected static ArcComponentTypeSymbol createParentComp() {
-    return ArcBasisMill.arcComponentTypeSymbolBuilder()
+  protected static ComponentTypeSymbol createParentComp() {
+    return ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();

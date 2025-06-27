@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import com.microsoft.z3.Context;
 import de.monticore.types.check.CompKindExpressionDeSer;
 import montiarc._symboltable.MontiArcScopesGenitorP2;
@@ -74,7 +73,7 @@ public class MontiArcMill extends MontiArcMillTOP {
   }
 
   protected CompKindExpressionDeSer _compTypeExprDeSer() {
-    return new ArcBasisCompTypeExprDeSer();
+    return new CompKindExpressionDeSer();
   }
 
   public static void initMe(MontiArcMill a) {

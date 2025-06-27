@@ -2,9 +2,9 @@
 package variablearc._symboltable;
 
 import arcbasis.ArcBasisMill;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.types.check.CompKindOfComponentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -53,12 +53,12 @@ public class VariableArcResolvingTest extends VariableArcTestBase {
     IVariableArcScope scope = VariableArcMill.scope();
     IVariableArcScope parentScope = VariableArcMill.scope();
 
-    ArcComponentTypeSymbol parent =
-      VariableArcMill.arcComponentTypeSymbolBuilder().setName("Parent")
+    ComponentTypeSymbol parent =
+      VariableArcMill.componentTypeSymbolBuilder().setName("Parent")
         .setSpannedScope(parentScope).build();
-    ArcComponentTypeSymbol child = VariableArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
-      .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
+      .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
 
     ArcFeatureSymbol parentFeature = VariableArcMill.arcFeatureSymbolBuilder()
       .setName("f1").build();
@@ -83,12 +83,12 @@ public class VariableArcResolvingTest extends VariableArcTestBase {
     IVariableArcScope scope = VariableArcMill.scope();
     enclosingScope.addSubScope(scope);
 
-    ArcComponentTypeSymbol parent =
-      VariableArcMill.arcComponentTypeSymbolBuilder().setName("Parent")
+    ComponentTypeSymbol parent =
+      VariableArcMill.componentTypeSymbolBuilder().setName("Parent")
         .setSpannedScope(ArcBasisMill.scope()).build();
-    ArcComponentTypeSymbol child = VariableArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol child = VariableArcMill.componentTypeSymbolBuilder()
       .setName("Child").setSpannedScope(scope)
-      .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
+      .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
 
     ArcFeatureSymbol feature = VariableArcMill.arcFeatureSymbolBuilder()
       .setName("f1").build();

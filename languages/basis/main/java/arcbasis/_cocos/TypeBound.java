@@ -4,13 +4,12 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfGenericComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
@@ -47,14 +46,14 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
     Preconditions.checkArgument(
       node.streamComponentInstances().skip(1).allMatch(inst -> inst.getSymbol().getType().deepEquals(node.getComponentInstance(0).getSymbol().getType())),
       "Some instances of '%s' at '%s' have mismatching '%s's as their types. Your symbol table completion seems to " + "be inconsistent.",
-      ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(), CompTypeExpression.class.getSimpleName());
+      ASTComponentInstantiation.class.getSimpleName(), node.get_SourcePositionStart(), CompKindExpression.class.getSimpleName());
 
     CompKindExpression compTypeExpr = node.getComponentInstance(0).getSymbol().getType();
-    if (compTypeExpr instanceof TypeExprOfGenericComponent) {
-      checkTypeArgsAreNotTooFew((TypeExprOfGenericComponent) compTypeExpr);
+    if (compTypeExpr.isGenericComponentType()) {
+      checkTypeArgsAreNotTooFew(compTypeExpr.asGenericComponentType());
 
-      checkTypeArgsAreNotTooMany((TypeExprOfGenericComponent) compTypeExpr);
-      checkRespectsGenericTypeBounds((TypeExprOfGenericComponent) compTypeExpr, true);
+      checkTypeArgsAreNotTooMany(compTypeExpr.asGenericComponentType());
+      checkRespectsGenericTypeBounds(compTypeExpr.asGenericComponentType(), true);
     }
   }
 
@@ -65,18 +64,18 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
     Preconditions.checkArgument(node.isPresentSymbol());
 
     for (CompKindExpression compKindExpression : node.getSymbol().getSuperComponentsList()) {
-      if (compKindExpression instanceof TypeExprOfGenericComponent) {
-        checkTypeArgsAreNotTooFew((TypeExprOfGenericComponent) compKindExpression);
-        checkTypeArgsAreNotTooMany((TypeExprOfGenericComponent) compKindExpression);
-        checkRespectsGenericTypeBounds((TypeExprOfGenericComponent) compKindExpression, false);
+      if (compKindExpression.isGenericComponentType()) {
+        checkTypeArgsAreNotTooFew(compKindExpression.asGenericComponentType());
+        checkTypeArgsAreNotTooMany(compKindExpression.asGenericComponentType());
+        checkRespectsGenericTypeBounds(compKindExpression.asGenericComponentType(), false);
       }
     }
 
     for (CompKindExpression compExpr : node.getSymbol().getRefinementsList()) {
-      if (compExpr instanceof TypeExprOfGenericComponent) {
-        checkTypeArgsAreNotTooFew((TypeExprOfGenericComponent) compExpr);
-        checkTypeArgsAreNotTooMany((TypeExprOfGenericComponent) compExpr);
-        checkRespectsGenericTypeBounds((TypeExprOfGenericComponent) compExpr, false);
+      if (compExpr.isGenericComponentType()) {
+        checkTypeArgsAreNotTooFew(compExpr.asGenericComponentType());
+        checkTypeArgsAreNotTooMany(compExpr.asGenericComponentType());
+        checkRespectsGenericTypeBounds(compExpr.asGenericComponentType(), false);
       }
     }
   }
@@ -86,8 +85,8 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
    * Checks that there are enough type arguments provided to bind all mandatory type parameters of the
    * component type that should be instantiated.
    */
-  protected void checkTypeArgsAreNotTooFew(@NotNull TypeExprOfGenericComponent compTypeExpr) {
-    ArcComponentTypeSymbol compTypeSymbol = compTypeExpr.getTypeInfo();
+  protected void checkTypeArgsAreNotTooFew(@NotNull CompKindOfGenericComponentType compTypeExpr) {
+    ComponentTypeSymbol compTypeSymbol = compTypeExpr.getTypeInfo();
 
     List<TypeVarSymbol> parentSymTypeParameters = compTypeSymbol.getTypeParameters();
     List<SymTypeExpression> args = compTypeExpr.getTypeBindingsAsList();
@@ -105,8 +104,8 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
    * Checks that there are not more type arguments provided than there are type parameters in the
    * component type that should be instantiated.
    */
-  protected void checkTypeArgsAreNotTooMany(@NotNull TypeExprOfGenericComponent compTypeExpr) {
-    ArcComponentTypeSymbol compTypeSymbol = compTypeExpr.getTypeInfo();
+  protected void checkTypeArgsAreNotTooMany(@NotNull CompKindOfGenericComponentType compTypeExpr) {
+    ComponentTypeSymbol compTypeSymbol = compTypeExpr.getTypeInfo();
 
     List<TypeVarSymbol> parentSymTypeParameters = compTypeSymbol.getTypeParameters();
     List<SymTypeExpression> args = compTypeExpr.getTypeBindingsAsList();
@@ -120,10 +119,10 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
   }
 
 
-  protected void checkRespectsGenericTypeBounds(@NotNull TypeExprOfGenericComponent typeExpr, boolean checkMode) {
+  protected void checkRespectsGenericTypeBounds(@NotNull CompKindOfGenericComponentType typeExpr, boolean checkMode) {
     Preconditions.checkNotNull(typeExpr);
 
-    ArcComponentTypeSymbol typeSym = typeExpr.getTypeInfo();
+    ComponentTypeSymbol typeSym = typeExpr.getTypeInfo();
 
     for (TypeVarSymbol typeVar : typeSym.getTypeParameters()) {
       Optional<SymTypeExpression> typeVarBinding = typeExpr.getTypeBindingFor(typeVar);

@@ -6,13 +6,13 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis.check.TypeExprOfComponent;
-import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
+import de.monticore.types.check.CompKindOfGenericComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.SourcePosition;
@@ -149,13 +149,13 @@ class RefinementRawTypeTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(abstractionName);
     Preconditions.checkNotNull(typeArgs);
 
-    ArcComponentTypeSymbol abstractionSym = ArcBasisMill.globalScope().resolveArcComponentType(abstractionName).orElseThrow();
+    ComponentTypeSymbol abstractionSym = ArcBasisMill.globalScope().resolveComponentType(abstractionName).orElseThrow();
     
     CompKindExpression compExpr = typeArgs.length == 0 ?
-      new TypeExprOfComponent(abstractionSym) :
-      new TypeExprOfGenericComponent(abstractionSym, Arrays.asList(typeArgs));
+      new CompKindOfComponentType(abstractionSym) :
+      new CompKindOfGenericComponentType(abstractionSym, Arrays.asList(typeArgs));
 
-    ArcComponentTypeSymbol concretizationSym = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol concretizationSym = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Dummy")
       .setSpannedScope(ArcBasisMill.scope())
       .addRefinements(compExpr)

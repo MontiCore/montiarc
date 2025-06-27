@@ -2,13 +2,13 @@
 package arcbasis._cocos;
 
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis._symboltable.Port2VariableAdapter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisHandler;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;

@@ -5,6 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
 import de.monticore.types.check.SymTypeExpression;

@@ -5,7 +5,6 @@ import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
-import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import de.monticore.types.check.CompKindExpressionDeSer;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
@@ -72,7 +71,7 @@ public class ArcBasisMill extends ArcBasisMillTOP {
   }
 
   protected CompKindExpressionDeSer _compKindExprDeSer() {
-    return new ArcBasisCompTypeExprDeSer();
+    return new CompKindExpressionDeSer();
   }
 
   public static void initMe(ArcBasisMill a) {

@@ -2,12 +2,12 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
 import de.monticore.ast.ASTNode;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -22,7 +22,7 @@ import java.util.function.BiPredicate;
 /**
  * This coco assures that all identifier names within the scope of a component type are unique ([Hab16 B1], [RRW14 U3],
  * [Wo16r MU1]). If your language extends MontiArc and introduces new model elements with identifier names, you can
- * extend this class and overwrite {@link #getAllNameOccurrences(ArcComponentTypeSymbol)}} which collects all occurrences of
+ * extend this class and overwrite {@link #getAllNameOccurrences(ComponentTypeSymbol)}} which collects all occurrences of
  * identifier names.
  */
 public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
@@ -32,7 +32,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 
-    ArcComponentTypeSymbol component = astComp.getSymbol();
+    ComponentTypeSymbol component = astComp.getSymbol();
     Multimap<String, SourcePosition> allNameOccurrences = getAllNameOccurrences(component);
     for(String name : allNameOccurrences.keySet()) {
       Collection<SourcePosition> currentNameOccurrences = allNameOccurrences.get(name);
@@ -53,7 +53,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * {@link SourcePosition}s where the names occur. If you introduce new model elements with identifiers, overwrite this
    * method so that it also returns the source positions of your new identifiers.
    */
-  protected Multimap<String, SourcePosition> getAllNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getAllNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> innerCompNameOccurrences = getInnerComponentNameOccurrences(component);
@@ -80,11 +80,11 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * positions where they occur.
    * @param component The component type whose inner component type names should be collected.
    */
-  protected Multimap<String, SourcePosition> getInnerComponentNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getInnerComponentNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
-    component.getInnerComponents().forEach(
+    component.getSpannedScope().getLocalComponentTypeSymbols().forEach(
       innerT -> nameOccurrences.put(innerT.getName(), optSourcePosOf(innerT).orElse(new SourcePosition(-1, -1)))
     );
     return nameOccurrences;
@@ -94,7 +94,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * Collects all identifier names of the subcomponents of a component type and registers the source code positions
    * where they occur.
    */
-  protected Multimap<String, SourcePosition> getSubComponentNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getSubComponentNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
@@ -108,7 +108,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * Collects all identifier names of the ports of a component type and registers the source code positions where they
    * occur.
    */
-  protected Multimap<String, SourcePosition> getPortNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getPortNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
@@ -122,7 +122,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * Collects all identifier names of fields of a component type and registers the source
    * code positions where they occur.
    */
-  protected Multimap<String, SourcePosition> getFieldNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getFieldNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
@@ -136,7 +136,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * Collects all identifier names of configuration parameters of a component type and registers the source
    * code positions where they occur.
    */
-  protected Multimap<String, SourcePosition> getParameterNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getParameterNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();
@@ -150,7 +150,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    * Collects all identifier names of the type parameters of a component type and registers the source code positions
    * where they occur.
    */
-  protected Multimap<String, SourcePosition> getTypeParameterNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getTypeParameterNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();

@@ -3,11 +3,11 @@
   "package": "symboltable",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "ComponentWithRefinement",
       "refinements": [
         {
-          "kind" : "arcbasis.check.TypeExprOfComponent",
+          "kind" : "de.monticore.types.check.CompKindOfComponentType",
           "componentTypeName" : "Parent"
         }
       ],

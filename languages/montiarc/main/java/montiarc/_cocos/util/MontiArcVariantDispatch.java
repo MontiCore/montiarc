@@ -2,9 +2,9 @@
 package montiarc._cocos.util;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import modes._cocos.util.IgnoreASTArcModeHandler;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -41,8 +41,8 @@ public class MontiArcVariantDispatch extends MontiArcCoCoChecker implements ArcB
       VariableArcTypeCheck.setCurrentVariant(null);
     }
 
-    List<? extends ArcComponentTypeSymbol> variants = ((MontiArcComponentTypeSymbol) node.getSymbol()).getVariants();
-    for (ArcComponentTypeSymbol variant : variants) {
+    List<? extends ComponentTypeSymbol> variants = ((MontiArcComponentTypeSymbol) node.getSymbol()).getVariants();
+    for (ComponentTypeSymbol variant : variants) {
       MontiArcTypeCheck.enterContext(variant);
       long findings = Log.getFindingsCount();
       variant.getAstNode().accept(getTraverser());

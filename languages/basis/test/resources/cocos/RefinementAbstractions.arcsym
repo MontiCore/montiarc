@@ -2,7 +2,7 @@
   "name": "RefinementAbstractions",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "Restrictive",
       "fullName": "Restrictive",
       "spannedScope": {
@@ -34,7 +34,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "Liberal",
       "fullName": "Liberal",
       "spannedScope": {
@@ -66,7 +66,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "RestrictiveMorePorts",
       "fullName": "RestrictiveMorePorts",
       "spannedScope": {
@@ -120,7 +120,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "DuplicatePortAllDifferent",
       "fullName": "DuplicatePortAllDifferent",
       "spannedScope": {
@@ -152,7 +152,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "DuplicatePortSameDirection",
       "fullName": "DuplicatePortSameDirection",
       "spannedScope": {
@@ -184,7 +184,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "DuplicateSameDirectionTiming",
       "fullName": "DuplicateSameDirectionTiming",
       "spannedScope": {
@@ -216,7 +216,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "DuplicateSameTimingTypes",
       "fullName": "DuplicateSameTimingTypes",
       "spannedScope": {
@@ -248,7 +248,7 @@
       }
     },
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "DuplicateEverythingSame",
       "fullName": "DuplicateEverythingSame",
       "spannedScope": {

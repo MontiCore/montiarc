@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -30,8 +30,8 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
     MontiArcMill.globalScope().add(setUpParentComp());
   }
 
-  protected ArcComponentTypeSymbol setUpParentComp() {
-    ArcComponentTypeSymbol parentComp = MontiArcMill.arcComponentTypeSymbolBuilder()
+  protected ComponentTypeSymbol setUpParentComp() {
+    ComponentTypeSymbol parentComp = MontiArcMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(MontiArcMill.scope())
       .build();
@@ -77,7 +77,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       .isEqualTo(((IMontiArcArtifactScope) ast.getEnclosingScope()).getPackageName());
     assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName());
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName());
     assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
       .getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getArcComponentType().getName());
   }
@@ -208,7 +208,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
         .getMember("kind").getAsJsonString().getValue())
-        .isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName())
+        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
     );
   }
 
@@ -234,7 +234,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("kind").getAsJsonString().getValue()).isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName())
+        .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
     );
   }
 
@@ -284,7 +284,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       .isTrue();
     assertThat(refinement.getStringMember("kind"))
       .as("kind")
-      .isEqualTo("arcbasis.check.TypeExprOfComponent");
+      .isEqualTo("de.monticore.types.check.CompKindOfComponentType");
     assertThat(refinement.hasStringMember("componentTypeName"))
       .as("has 'componentTypeName' member of type String")
       .isTrue();
@@ -316,7 +316,7 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
         .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
-        .isEqualTo(ArcComponentTypeSymbol.class.getCanonicalName()),
+        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName()),
       () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
         .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
         .isEqualTo(ast.getArcComponentType().getInnerComponents().get(0).getName())

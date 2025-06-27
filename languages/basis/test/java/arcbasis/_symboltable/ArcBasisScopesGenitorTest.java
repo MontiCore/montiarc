@@ -18,6 +18,7 @@ import arcbasis.trafo.SeparateCompInstantiationFromTypeDeclTrafo;
 import com.google.common.collect.Lists;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes;
@@ -51,7 +52,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
 
   @Test
   public void shouldAddComponentSymbolToScope() {
-    ArcComponentTypeSymbol symbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp")
+    ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(ArcBasisMill.scope()).build();
     this.getSymTab().addToScope(symbol);
     Assertions.assertTrue(this.getSymTab().getCurrentScope().isPresent());
@@ -67,7 +68,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
       .setBody(Mockito.mock(ASTComponentBody.class))
       .setHead(Mockito.mock(ASTComponentHead.class))
       .build();
-    ArcComponentTypeSymbol symbol = this.getSymTab().create_ComponentType(ast).build();
+    ComponentTypeSymbol symbol = this.getSymTab().create_ComponentType(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
     Assertions.assertNotNull(symbol.getSpannedScope());
     Assertions.assertTrue(symbol.getSpannedScope().isShadowing());
@@ -83,10 +84,10 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
     this.getSymTab().putOnStack(scope);
     this.getSymTab().visit(ast);
     Assertions.assertEquals(scope, ast.getEnclosingScope());
-    Assertions.assertFalse(scope.getArcComponentTypeSymbols().isEmpty());
-    Assertions.assertEquals(1, scope.getArcComponentTypeSymbols().get("Comp").size());
-    Assertions.assertTrue(scope.getArcComponentTypeSymbols().get("Comp").get(0).getSpannedScope()
-      .getArcComponentTypeSymbols().isEmpty());
+    Assertions.assertFalse(scope.getComponentTypeSymbols().isEmpty());
+    Assertions.assertEquals(1, scope.getComponentTypeSymbols().get("Comp").size());
+    Assertions.assertTrue(scope.getComponentTypeSymbols().get("Comp").get(0).getSpannedScope()
+      .getComponentTypeSymbols().isEmpty());
   }
 
   @Test
@@ -113,11 +114,11 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
       .build();
     ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder()
       .setName("par").setMCType(type).build();
-    ArcComponentTypeSymbol enclosingComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol enclosingComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Encl")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    IArcBasisScope compScope = enclosingComp.getSpannedScope();
+    IArcBasisScope compScope = (IArcBasisScope) enclosingComp.getSpannedScope();
 
     this.getSymTab().putOnStack(enclosingComp);
     this.getSymTab().putOnStack(compScope);
@@ -150,11 +151,11 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
     // Given
     ASTArcParameter astParam = arcbasis.ArcBasisMill.arcParameterBuilder().setName("par")
       .setMCType(ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build()).build();
-    ArcComponentTypeSymbol enclosingComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol enclosingComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Encl")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    IArcBasisScope compScope = enclosingComp.getSpannedScope();
+    IArcBasisScope compScope = (IArcBasisScope) enclosingComp.getSpannedScope();
     this.getSymTab().putOnStack(enclosingComp);
     this.getSymTab().putOnStack(compScope);
 
@@ -344,11 +345,11 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertAll(
-      () -> Assertions.assertEquals(1, scope.getLocalArcComponentTypeSymbols().size()),
+      () -> Assertions.assertEquals(1, scope.getLocalComponentTypeSymbols().size()),
       () -> Assertions.assertEquals(1, scope.getLocalSubcomponentSymbols().size())
     );
 
-    ArcComponentTypeSymbol typeSym = scope.getLocalArcComponentTypeSymbols().get(0);
+    ComponentTypeSymbol typeSym = scope.getLocalComponentTypeSymbols().get(0);
     SubcomponentSymbol instSym = scope.getLocalSubcomponentSymbols().get(0);
 
     Assertions.assertAll(

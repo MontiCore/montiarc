@@ -9,6 +9,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -315,5 +316,16 @@ public class ASTArcComponentType extends ASTArcComponentTypeTOP {
   public List<String> getInstancesNames() {
     return this.getComponentInstanceList().stream().map(ASTComponentInstance::getName)
       .collect(Collectors.toList());
+  }
+
+  /**
+   * Returns a {@link ASTArcBehaviorElement} or empty none is in the body.
+   *
+   * @return A behavior for the component.
+   */
+  public Optional<ASTArcBehaviorElement> getBehavior() {
+    return this.getBody().streamArcElements()
+      .filter(e -> e instanceof ASTArcBehaviorElement)
+      .map(c -> (ASTArcBehaviorElement) c).findFirst();
   }
 }

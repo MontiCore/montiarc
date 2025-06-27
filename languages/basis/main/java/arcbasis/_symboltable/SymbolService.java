@@ -238,19 +238,6 @@ public final class SymbolService {
   }
 
   /**
-   * Adds the component type to the scope and sets the scope as the component type's enclosing scope.
-   *
-   * @param scope the scope to set as enclosing scope
-   * @param componentType the component type to add to the scope
-   */
-  public static void link(@NotNull IArcBasisScope scope, @NotNull ArcComponentTypeSymbol componentType) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(componentType);
-    scope.add(componentType);
-    componentType.setEnclosingScope(scope);
-  }
-
-  /**
    * Adds the components to the scope and sets the scope as enclosing scope for each component.
    *
    * @param scope the scope to set as enclosing scope

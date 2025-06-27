@@ -2,6 +2,7 @@
 package variablearc._symboltable;
 
 import arcbasis._symboltable.ArcBasisSymbols2Json;
+import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.serialization.JsonParser;
 import de.monticore.types.check.SymTypeExpressionFactory;
@@ -36,11 +37,11 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     VariableArcVariationPoint variationPoint = new VariableArcVariationPoint(new Expression(VariableArcMill.nameExpressionBuilder().setName("f1").build()));
 
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.empty());
-    ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    deser.serialize(variationPoint, arc2json);
-    String createdJson = arc2json.getJsonPrinter().getContent();
+    deser.serialize(variationPoint, comp2json);
+    String createdJson = comp2json.getJsonPrinter().getContent();
 
     // Then
     Assertions.assertEquals(JSON_EMPTY_VARIATION_POINT, createdJson);
@@ -73,11 +74,11 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     VariableArcVariationPoint childVariationPoint = new VariableArcVariationPoint(new Expression(VariableArcMill.nameExpressionBuilder().setName("f2").build()), variationPoint);
 
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.empty());
-    ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     // When
-    deser.serialize(variationPoint, arc2json);
-    String createdJson = arc2json.getJsonPrinter().getContent();
+    deser.serialize(variationPoint, comp2json);
+    String createdJson = comp2json.getJsonPrinter().getContent();
 
     // Then
     Assertions.assertEquals(JSON_NESTED_VARIATION_POINT, createdJson);
@@ -119,13 +120,13 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     VariableArcVariationPoint variationPoint = new VariableArcVariationPoint(new Expression(VariableArcMill.nameExpressionBuilder().setName("f1").build()));
 
     VariableArcVariationPointDeSer deser = new VariableArcVariationPointDeSer((s) -> Optional.empty());
-    ArcBasisSymbols2Json arc2json = (ArcBasisSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getArcBasisVisitorList().get(0);
+    CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new VariableArcSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
     variationPoint.add(VariableArcMill.portSymbolBuilder().setName("p1").setOutgoing(true).setIncoming(false).setStronglyCausal(false).setType(SymTypeExpressionFactory.createPrimitive("int")).setTiming(Timing.TIMED).build());
 
     // When
-    deser.serialize(variationPoint, arc2json);
-    String createdJson = arc2json.getJsonPrinter().getContent();
+    deser.serialize(variationPoint, comp2json);
+    String createdJson = comp2json.getJsonPrinter().getContent();
 
     // Then
     Assertions.assertEquals(JSON_VARIATION_POINT_WITH_SYMBOL, createdJson);
@@ -155,7 +156,7 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
   }
 
   protected static IVariableArcComponentTypeSymbol createSimpleComp() {
-    return (IVariableArcComponentTypeSymbol) VariableArcMill.arcComponentTypeSymbolBuilder()
+    return (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(VariableArcMill.scope())
       .build();

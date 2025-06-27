@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
 import mceffect._ast.ASTMCEffect;
@@ -30,8 +30,8 @@ public class MCFullEffectChecker {
     // init resolver
     Function<String, Optional<PortSymbol>> portResolver =
         s -> MontiArcMill.globalScope().resolvePort(s);
-    Function<String, Optional<ArcComponentTypeSymbol>> compResolver =
-        s -> MontiArcMill.globalScope().resolveArcComponentType(s);
+    Function<String, Optional<ComponentTypeSymbol>> compResolver =
+        s -> MontiArcMill.globalScope().resolveComponentType(s);
 
     // parse components
     new MontiArcTool().run(new String[] {"-i", mp});
@@ -43,7 +43,7 @@ public class MCFullEffectChecker {
 
     // resolve main component
 
-    ArcComponentTypeSymbol mainComp = compResolver.apply(main).orElse(null);
+    ComponentTypeSymbol mainComp = compResolver.apply(main).orElse(null);
     if (mainComp == null) {
       Log.error("Unable to resolve the main component " + main);
       assert false;

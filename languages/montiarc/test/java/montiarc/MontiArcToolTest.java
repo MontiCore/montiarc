@@ -3,7 +3,7 @@ package montiarc;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -565,8 +565,8 @@ public class MontiArcToolTest extends MontiArcTestBase {
     tool.runSymbolTablePhase3(astB);
 
     // Then
-    ArcComponentTypeSymbol aCompType = astA.getArcComponentType().getSymbol();
-    ArcComponentTypeSymbol bCompType = astB.getArcComponentType().getSymbol();
+    ComponentTypeSymbol aCompType = astA.getArcComponentType().getSymbol();
+    ComponentTypeSymbol bCompType = astB.getArcComponentType().getSymbol();
     PortSymbol aInPort = aCompType.getPort("inPortA").orElseThrow();
     PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
     SubcomponentSymbol aInstance = bCompType.getSubcomponents("a").orElseThrow();
@@ -772,10 +772,10 @@ public class MontiArcToolTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
     return Stream.of(
       Arguments.of("CircularInheritance.arc", new Error[]{ArcError.CIRCULAR_INHERITANCE}),
-      Arguments.of("MissingCompType1.arc", new Error[]{ArcError.MISSING_COMPONENT}),
-      Arguments.of("MissingCompType2.arc", new Error[]{ArcError.MISSING_COMPONENT}),
-      Arguments.of("MissingCompType3.arc", new Error[]{ArcError.MISSING_COMPONENT, ArcError.MISSING_COMPONENT}),
-      Arguments.of("MissingCompType4.arc", new Error[]{ArcError.MISSING_COMPONENT}),
+      Arguments.of("MissingCompType1.arc", new Error[]{MCError.MISSING_COMPONENT}),
+      Arguments.of("MissingCompType2.arc", new Error[]{MCError.MISSING_COMPONENT}),
+      Arguments.of("MissingCompType3.arc", new Error[]{MCError.MISSING_COMPONENT, MCError.MISSING_COMPONENT}),
+      Arguments.of("MissingCompType4.arc", new Error[]{MCError.MISSING_COMPONENT}),
       Arguments.of("MissingPortType1.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
       Arguments.of("MissingPortType2.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
       Arguments.of("MissingPortType3.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),

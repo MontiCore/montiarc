@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.conformance.expression2smt;
 
-
-import arcbasis._symboltable.Port2VariableAdapter;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
 import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
@@ -18,6 +16,7 @@ import de.monticore.ocl2smt.ocl2smt.expr2smt.expr2z3.Z3TypeFactory;
 import de.monticore.ocl2smt.ocl2smt.oclExpr2smt.OCLExprConverter;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;

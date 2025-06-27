@@ -9,7 +9,7 @@
 </#if>
 
 <#assign comp=variant!ast.getArcComponentType().getSymbol()/>
-<#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ArcComponentTypeSymbol" -->
+<#-- @ftlvariable name="comp" type=" arcbasis._symboltable.ComponentTypeSymbol" -->
 
 public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top()}</#if>
   extends montiarc.rte.deploy.MqttDeployment<${comp.getName()}${suffixes.comp()}> {

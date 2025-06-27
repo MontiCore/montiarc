@@ -3,11 +3,12 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis.check.CompTypeExpression;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -27,76 +28,16 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 import static org.mockito.Mockito.mock;
 
 /**
- * Holds tests for the handwritten methods of {@link ArcComponentTypeSymbol}.
+ * Holds tests for the handwritten methods of {@link ComponentTypeSymbol}.
  */
-public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
-
-  @ParameterizedTest
-  @MethodSource("innerComponentNamesProvider")
-  public void shouldFindInnerComponents(List<String> innerComponents) {
-    ArcComponentTypeSymbol symbol = this.builtTestComponentWithInnerComponents(innerComponents);
-    Assertions.assertEquals(symbol.getInnerComponents().size(), innerComponents.size());
-    Assertions.assertIterableEquals(symbol.getInnerComponents()
-      .stream().map(ArcComponentTypeSymbol::getName).collect(Collectors.toList()), innerComponents);
-  }
-
-  static Stream<Arguments> innerComponentNamesProvider() {
-    return Stream.of(
-      arguments(Collections.emptyList()),
-      arguments(Arrays.asList("A", "B", "c"))
-    );
-  }
-
-  @Test
-  public void shouldFindExpectedInnerComponent() {
-    List<String> innerComponents = Arrays.asList("A", "B", "C");
-    ArcComponentTypeSymbol symbol = this.builtTestComponentWithInnerComponents(innerComponents);
-    for (String innerComponent : innerComponents) {
-      Assertions.assertTrue(symbol.getInnerComponent(innerComponent).isPresent());
-      Assertions
-        .assertEquals(symbol.getInnerComponent(innerComponent).get().getName(), innerComponent);
-    }
-  }
-
-  @Test
-  public void shouldNotFindUnexpectedComponents() {
-    ArcComponentTypeSymbol symbol1 =
-      this.builtTestComponentWithInnerComponents(Collections.emptyList());
-    ArcComponentTypeSymbol symbol2 =
-      this.builtTestComponentWithInnerComponents(Arrays.asList("A", "B", "C"));
-    Assertions.assertFalse(symbol1.getInnerComponent("D").isPresent());
-    Assertions.assertFalse(symbol2.getInnerComponent("D").isPresent());
-  }
-
-  @Test
-  public void shouldStateIfIsInner() {
-    ArcComponentTypeSymbol outerCompSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp1")
-      .setSpannedScope(ArcBasisMill.scope()).build();
-    ArcComponentTypeSymbol innerCompSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp2")
-      .setSpannedScope(ArcBasisMill.scope()).build();
-    innerCompSymbol.setOuterComponent(outerCompSymbol);
-    Assertions.assertTrue(innerCompSymbol.isInnerComponent());
-    Assertions.assertFalse(outerCompSymbol.isInnerComponent());
-  }
-
-  private ArcComponentTypeSymbol builtTestComponentWithInnerComponents(List<String> innerComponents) {
-    ArcComponentTypeSymbol compSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp")
-      .setSpannedScope(ArcBasisMill.scope()).build();
-    for (String innerComponent : innerComponents) {
-      ArcComponentTypeSymbol innerCompSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder()
-        .setName(innerComponent)
-        .setSpannedScope(ArcBasisMill.scope()).build();
-      compSymbol.getSpannedScope().add(innerCompSymbol);
-    }
-    return compSymbol;
-  }
+public class ComponentTypeSymbolTest extends ArcBasisTestBase {
 
   @Test
   public void shouldStateIfHasParameters() {
     // Given
-    ArcComponentTypeSymbol compWithoutParameters = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp1")
+    ComponentTypeSymbol compWithoutParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    ArcComponentTypeSymbol compWithParameters = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp2")
+    ComponentTypeSymbol compWithParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(ArcBasisMill.scope()).build();
     List<VariableSymbol> params = Arrays.asList(
       mock(VariableSymbol.class),
@@ -106,7 +47,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
 
     // When
     params.forEach(compWithParameters.getSpannedScope()::add);
-    compWithParameters.addParameters(params);
+    compWithParameters.addAllParameter(params);
 
     // Then
     Assertions.assertFalse(compWithoutParameters.hasParameters());
@@ -117,9 +58,9 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @Test
   public void shouldReturnParametersIfPresent() {
     // Given
-    ArcComponentTypeSymbol compWithoutParameters = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp1")
+    ComponentTypeSymbol compWithoutParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    ArcComponentTypeSymbol compWithParameters = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp2")
+    ComponentTypeSymbol compWithParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(ArcBasisMill.scope()).build();
     List<VariableSymbol> params = Arrays.asList(
       ArcBasisMill.variableSymbolBuilder().setName("first").build(),
@@ -129,7 +70,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
 
     // When
     params.forEach(compWithParameters.getSpannedScope()::add);
-    compWithParameters.addParameters(params);
+    compWithParameters.addAllParameter(params);
 
     // Then
     for(VariableSymbol param : params) {
@@ -141,9 +82,9 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @Test
   public void shouldStateIfHasTypeParameters() {
     // Given
-    ArcComponentTypeSymbol compWithoutTypeParameters = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp1")
+    ComponentTypeSymbol compWithoutTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp1")
       .setSpannedScope(ArcBasisMill.scope()).build();
-    ArcComponentTypeSymbol compWithTypeParameters = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp2")
+    ComponentTypeSymbol compWithTypeParameters = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp2")
       .setSpannedScope(ArcBasisMill.scope()).build();
     List<TypeVarSymbol> typeParams = Arrays.asList(
       mock(TypeVarSymbol.class), mock(TypeVarSymbol.class), mock(TypeVarSymbol.class));
@@ -157,7 +98,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("portNameAndDirectionProvider")
   public void shouldReturnIncomingPortsOnly(HashMap<String, Boolean> ports) {
-    ArcComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
+    ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     Assertions.assertIterableEquals(ports.entrySet().stream()
         .filter(p -> p.getValue().equals(true)).map(Map.Entry::getKey).collect(Collectors.toList()),
       symbol.getIncomingPorts().stream().map(PortSymbol::getName).collect(Collectors.toList()));
@@ -166,7 +107,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("portNameAndDirectionProvider")
   public void shouldReturnOutgoingPortsOnly(HashMap<String, Boolean> ports) {
-    ArcComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
+    ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     Assertions.assertIterableEquals(ports.entrySet().stream()
         .filter(p -> p.getValue().equals(false)).map(Map.Entry::getKey).collect(Collectors.toList()),
       symbol.getOutgoingPorts().stream().map(PortSymbol::getName).collect(Collectors.toList()));
@@ -175,7 +116,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("portNameAndDirectionProvider")
   public void shouldFindPortWithExpectedDirection(HashMap<String, Boolean> ports) {
-    ArcComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
+    ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     for (String port : ports.keySet()) {
       if (ports.get(port)) {
         Assertions.assertTrue(symbol.getIncomingPort(port).isPresent());
@@ -191,7 +132,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("portNameAndDirectionProvider")
   public void shouldStateCorrectlyIFHasPorts(HashMap<String, Boolean> ports) {
-    ArcComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
+    ComponentTypeSymbol symbol = buildTestComponentWithPorts(ports);
     if (ports.isEmpty()) {
       Assertions.assertFalse(symbol.hasPorts());
     }
@@ -216,8 +157,8 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
     return Stream.of(arguments(ports1), arguments(ports2), arguments(ports3), arguments(ports4));
   }
 
-  private ArcComponentTypeSymbol buildTestComponentWithPorts(HashMap<String, Boolean> ports) {
-    ArcComponentTypeSymbol compSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp")
+  private ComponentTypeSymbol buildTestComponentWithPorts(HashMap<String, Boolean> ports) {
+    ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(ArcBasisMill.scope()).build();
     for (String port : ports.keySet()) {
       PortSymbol portSymbol = ArcBasisMill.portSymbolBuilder()
@@ -230,7 +171,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("instanceNamesProvider")
   public void shouldFindSubComponents(List<String> instances) {
-    ArcComponentTypeSymbol symbol = builtTestComponentWithInstances(instances);
+    ComponentTypeSymbol symbol = builtTestComponentWithInstances(instances);
     Assertions.assertEquals(symbol.getSubcomponents().size(), instances.size());
     Assertions.assertIterableEquals(symbol.getSubcomponents()
       .stream().map(SubcomponentSymbol::getName).collect(Collectors.toList()), instances);
@@ -245,7 +186,7 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
   @Test
   public void shouldFindExpectedSubComponent() {
     List<String> instances = Arrays.asList("sub1", "sub2", "sub3");
-    ArcComponentTypeSymbol symbol = this.builtTestComponentWithInstances(instances);
+    ComponentTypeSymbol symbol = this.builtTestComponentWithInstances(instances);
     for (String instance : instances) {
       Assertions.assertTrue(symbol.getSubcomponents(instance).isPresent());
       Assertions.assertEquals(symbol.getSubcomponents(instance).get().getName(), instance);
@@ -254,8 +195,8 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
 
   @Test
   public void shouldNotFindUnexpectedSubComponent() {
-    ArcComponentTypeSymbol symbol1 = this.builtTestComponentWithInstances(Collections.emptyList());
-    ArcComponentTypeSymbol symbol2 = this.builtTestComponentWithInstances(
+    ComponentTypeSymbol symbol1 = this.builtTestComponentWithInstances(Collections.emptyList());
+    ComponentTypeSymbol symbol2 = this.builtTestComponentWithInstances(
       Arrays.asList("sub1", "sub2", "sub3"));
     Assertions.assertFalse(symbol1.getSubcomponents("sub4").isPresent());
     Assertions.assertFalse(symbol2.getSubcomponents("sub4").isPresent());
@@ -263,9 +204,9 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
 
   @Test
   void shouldBeAtomicOrDecomposed() {
-    ArcComponentTypeSymbol composedComponent =
+    ComponentTypeSymbol composedComponent =
       builtTestComponentWithInstances(Arrays.asList("a", "b", "c"));
-    ArcComponentTypeSymbol atomicComponent =
+    ComponentTypeSymbol atomicComponent =
       builtTestComponentWithInstances(Collections.emptyList());
     Assertions.assertTrue(composedComponent.isDecomposed());
     Assertions.assertFalse(composedComponent.isAtomic());
@@ -273,12 +214,12 @@ public class ArcComponentTypeSymbolTest extends ArcBasisTestBase {
     Assertions.assertTrue(atomicComponent.isAtomic());
   }
 
-  private ArcComponentTypeSymbol builtTestComponentWithInstances(List<String> instances) {
-    ArcComponentTypeSymbol compSymbol = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Comp")
+  private ComponentTypeSymbol builtTestComponentWithInstances(List<String> instances) {
+    ComponentTypeSymbol compSymbol = ArcBasisMill.componentTypeSymbolBuilder().setName("Comp")
       .setSpannedScope(ArcBasisMill.scope()).build();
     for (String instance : instances) {
       SubcomponentSymbol subCompSymbol = ArcBasisMill.subcomponentSymbolBuilder()
-        .setName(instance).setType(mock(CompTypeExpression.class)).build();
+        .setName(instance).setType(mock(CompKindExpression.class)).build();
       compSymbol.getSpannedScope().add(subCompSymbol);
     }
     return compSymbol;

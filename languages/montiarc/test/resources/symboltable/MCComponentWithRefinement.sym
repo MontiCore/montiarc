@@ -7,7 +7,7 @@
       "name": "MCComponentWithRefinement",
       "refinements": [
         {
-          "kind" : "arcbasis.check.TypeExprOfComponent",
+          "kind" : "de.monticore.types.check.CompKindOfComponentType",
           "componentTypeName" : "Parent"
         }
       ],

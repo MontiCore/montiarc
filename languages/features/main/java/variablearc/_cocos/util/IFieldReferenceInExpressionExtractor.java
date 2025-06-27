@@ -1,9 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos.util;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -57,7 +57,7 @@ public interface IFieldReferenceInExpressionExtractor {
     /**
      * Creates {@link FieldReference}s that correspond to the ports of the given component type.
      */
-    public static Collection<FieldReference> ofComponentTypeFields(@NotNull ArcComponentTypeSymbol comp) {
+    public static Collection<FieldReference> ofComponentTypeFields(@NotNull ComponentTypeSymbol comp) {
       Preconditions.checkNotNull(comp);
 
       return comp.getFields().stream()

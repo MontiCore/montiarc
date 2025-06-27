@@ -3,15 +3,18 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolSurrogate;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
 import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
+import de.monticore.types.check.CompKindOfGenericComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypePrimitive;
@@ -35,18 +38,18 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentComponent() {
     // Given
-    ArcComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S");
-    ArcComponentTypeSymbol component = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     // Creating a typeExpr representing Parent<int> that is then set to be the parent of comp
-    CompTypeExpression parentTypeExpr = new TypeExprOfGenericComponent(parent,
+    CompKindExpression parentTypeExpr = new CompKindOfGenericComponentType(parent,
       Lists.newArrayList(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT)));
     component.setSuperComponentsList(Collections.singletonList(parentTypeExpr));
 
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
+    CompKindOfComponentType compTypeExpr = new CompKindOfComponentType(component);
 
     // When && Then
     Assertions.assertFalse(compTypeExpr.getSuperComponents().isEmpty());
@@ -56,21 +59,21 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVarPrimitive() {
     // Given
-    ArcComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
-    ArcComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
+    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
-    child.setSuperComponentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
+    child.setSuperComponentsList(Collections.singletonList(new CompKindOfGenericComponentType(parent, Lists.newArrayList(typeVar))));
 
     SymTypeExpression typeArg = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
-    CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
+    CompKindExpression bChild = new CompKindOfGenericComponentType(child, Lists.newArrayList(typeArg));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getSuperComponents().get(0));
+    CompKindOfGenericComponentType bParent = ((CompKindOfGenericComponentType) bChild.getSuperComponents().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
-    Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, bParent);
     Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
     Assertions.assertEquals(typeArg, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
   }
@@ -78,11 +81,11 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVarObject() {
     // Given
-    ArcComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
-    ArcComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
+    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
-    child.setSuperComponentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
+    child.setSuperComponentsList(Collections.singletonList(new CompKindOfGenericComponentType(parent, Lists.newArrayList(typeVar))));
 
     SymTypeExpression typeArg = SymTypeExpressionFactory
       .createTypeObject(ArcBasisMill.typeSymbolBuilder()
@@ -90,14 +93,14 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
         .setSpannedScope(ArcBasisMill.scope())
         .build()
       );
-    CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
+    CompKindExpression bChild = new CompKindOfGenericComponentType(child, Lists.newArrayList(typeArg));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getSuperComponents().get(0));
+    CompKindOfGenericComponentType bParent = ((CompKindOfGenericComponentType) bChild.getSuperComponents().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
-    Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, bParent);
     Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
     Assertions.assertEquals(typeArg, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
   }
@@ -105,12 +108,12 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVarObjects() {
     // Given
-    ArcComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S", "T");
-    ArcComponentTypeSymbol child = createComponentWithTypeVar("Child", "U", "V");
+    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S", "T");
+    ComponentTypeSymbol child = createComponentWithTypeVar("Child", "U", "V");
 
     SymTypeVariable typeVar1 = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
     SymTypeVariable typeVar2 = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(1));
-    child.setSuperComponentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar1, typeVar2))));
+    child.setSuperComponentsList(Collections.singletonList(new CompKindOfGenericComponentType(parent, Lists.newArrayList(typeVar1, typeVar2))));
 
     SymTypeExpression typeArg1 = SymTypeExpressionFactory
       .createTypeObject(ArcBasisMill.typeSymbolBuilder()
@@ -122,14 +125,14 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
         .setName("Second")
         .setSpannedScope(ArcBasisMill.scope())
         .build());
-    CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg1, typeArg2));
+    CompKindExpression bChild = new CompKindOfGenericComponentType(child, Lists.newArrayList(typeArg1, typeArg2));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getSuperComponents().get(0));
+    CompKindOfGenericComponentType bParent = ((CompKindOfGenericComponentType) bChild.getSuperComponents().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
-    Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, bParent);
     Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
     Assertions.assertEquals(typeArg1, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
     Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(1)).isPresent());
@@ -139,32 +142,32 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVar() {
     // Given
-    ArcComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
-    ArcComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
+    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
-    child.setSuperComponentsList(Collections.singletonList(new TypeExprOfGenericComponent(parent, Lists.newArrayList(typeVar))));
+    child.setSuperComponentsList(Collections.singletonList(new CompKindOfGenericComponentType(parent, Lists.newArrayList(typeVar))));
 
     TypeVarSymbol symbol = ArcBasisMill.typeVarSymbolBuilder().setName("A").build();
     SymTypeExpression typeArg = SymTypeExpressionFactory.createTypeVariable(symbol);
-    CompTypeExpression bChild = new TypeExprOfGenericComponent(child, Lists.newArrayList(typeArg));
+    CompKindExpression bChild = new CompKindOfGenericComponentType(child, Lists.newArrayList(typeArg));
 
     // When
-    TypeExprOfGenericComponent bParent = ((TypeExprOfGenericComponent) bChild.getSuperComponents().get(0));
+    CompKindOfGenericComponentType bParent = ((CompKindOfGenericComponentType) bChild.getSuperComponents().get(0));
 
     // Then
     Assertions.assertSame(parent, bParent.getTypeInfo());
-    Assertions.assertInstanceOf(TypeExprOfGenericComponent.class, bParent);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, bParent);
     Assertions.assertTrue(bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).isPresent());
     Assertions.assertEquals(typeArg, bParent.getTypeBindingFor(parent.getTypeParameters().get(0)).get());
   }
 
   protected static Stream<Arguments> compWithTypeParamAndOptionallySurrogateProvider() {
-    Named<ArcComponentTypeSymbol> original = Named.of(
+    Named<ComponentTypeSymbol> original = Named.of(
       "CompSymbol",
       createComponentWithTypeVar("Comp", "T")
     );
-    Named<ArcComponentTypeSymbol> surrogate = Named.of(
+    Named<ComponentTypeSymbol> surrogate = Named.of(
       "CompSurrogate",
       createSurrogateInGlobalScopeFor(original.getPayload())
     );
@@ -182,8 +185,8 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
    */
   @ParameterizedTest
   @MethodSource("compWithTypeParamAndOptionallySurrogateProvider")
-  public void shouldGetTypeExprOfPortWithOwnTypeVarReplaced(@NotNull ArcComponentTypeSymbol symbolWithDefinitions,
-                                                            @NotNull ArcComponentTypeSymbol symbolVersionForTypeExpr) {
+  public void shouldGetTypeExprOfPortWithOwnTypeVarReplaced(@NotNull ComponentTypeSymbol symbolWithDefinitions,
+                                                            @NotNull ComponentTypeSymbol symbolVersionForTypeExpr) {
     Preconditions.checkNotNull(symbolWithDefinitions);
     Preconditions.checkNotNull(symbolVersionForTypeExpr);
 
@@ -202,8 +205,8 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     symbolWithDefinitions.getSpannedScope().add(port);
 
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
-    TypeExprOfGenericComponent boundCompTypeExpr =
-      new TypeExprOfGenericComponent(symbolVersionForTypeExpr, Lists.newArrayList(intTypeExpr));
+    CompKindOfGenericComponentType boundCompTypeExpr =
+      new CompKindOfGenericComponentType(symbolVersionForTypeExpr, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> portsType = boundCompTypeExpr.getTypeOfPort(portName);
@@ -217,7 +220,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetTypeExprOfPortWithParentTypeVarReplaced() {
     // Given
-    ArcComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
     String portName = "porr";
     PortSymbol port = ArcBasisMill.portSymbolBuilder()
@@ -227,18 +230,18 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
       .build();
     parentCompDefinition.getSpannedScope().add(port);
 
-    ArcComponentTypeSymbol compDefinition = createComponentWithTypeVar("Comp", "T");
+    ComponentTypeSymbol compDefinition = createComponentWithTypeVar("Comp", "T");
     // bind parent's S with child's T to declare: Comp<T> extends Parent<T>
     TypeVarSymbol childTypeVar = compDefinition.getTypeParameters().get(0);
     SymTypeExpression childTypeVarExpr = SymTypeExpressionFactory.createTypeVariable(childTypeVar);
-    CompTypeExpression boundParentTypeExpr =
-      new TypeExprOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
+    CompKindExpression boundParentTypeExpr =
+      new CompKindOfGenericComponentType(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
     compDefinition.setSuperComponentsList(Collections.singletonList(boundParentTypeExpr));
 
     // create CompTypeExpr representing Comp<int>
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
-    TypeExprOfGenericComponent boundCompTypeExpr =
-      new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
+    CompKindOfGenericComponentType boundCompTypeExpr =
+      new CompKindOfGenericComponentType(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> portsType = boundCompTypeExpr.getTypeOfPort(portName);
@@ -256,8 +259,8 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
    */
   @ParameterizedTest
   @MethodSource("compWithTypeParamAndOptionallySurrogateProvider")
-  public void shouldGetTypeExprOfParameterWithOwnTypeVarReplaced(@NotNull ArcComponentTypeSymbol symbolWithDefinitions,
-                                                                 @NotNull ArcComponentTypeSymbol symbolVersionForTypeExpr) {
+  public void shouldGetTypeExprOfParameterWithOwnTypeVarReplaced(@NotNull ComponentTypeSymbol symbolWithDefinitions,
+                                                                 @NotNull ComponentTypeSymbol symbolVersionForTypeExpr) {
     Preconditions.checkNotNull(symbolWithDefinitions);
     Preconditions.checkNotNull(symbolVersionForTypeExpr);
 
@@ -276,8 +279,8 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     symbolWithDefinitions.addParameter(param);
 
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
-    TypeExprOfGenericComponent boundCompTypeExpr =
-      new TypeExprOfGenericComponent(symbolVersionForTypeExpr, Lists.newArrayList(intTypeExpr));
+    CompKindOfGenericComponentType boundCompTypeExpr =
+      new CompKindOfGenericComponentType(symbolVersionForTypeExpr, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getTypeOfParameter(paramName);
@@ -291,7 +294,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetTypeExprOfParameterWithParentTypeVarReplaced() {
     // Given
-    ArcComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol parentCompDefinition = createComponentWithTypeVar("Parent", "S");
     TypeVarSymbol parentTypeVar = parentCompDefinition.getTypeParameters().get(0);
     String name = "parr";
     VariableSymbol paramOfParent = ArcBasisMill.variableSymbolBuilder()
@@ -301,7 +304,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     parentCompDefinition.getSpannedScope().add(paramOfParent);
     parentCompDefinition.addParameter(paramOfParent);
 
-    ArcComponentTypeSymbol compDefinition = createComponentWithTypeVar("Comp", "T");
+    ComponentTypeSymbol compDefinition = createComponentWithTypeVar("Comp", "T");
     TypeVarSymbol childTypeVar = compDefinition.getTypeParameters().get(0);
     VariableSymbol paramOfComp = ArcBasisMill.variableSymbolBuilder()
       .setName(name)
@@ -311,14 +314,14 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     compDefinition.addParameter(paramOfComp);
     // bind parent's S with child's T to declare: Comp<T> extends Parent<T>
     SymTypeExpression childTypeVarExpr = SymTypeExpressionFactory.createTypeVariable(childTypeVar);
-    CompTypeExpression boundParentTypeExpr =
-      new TypeExprOfGenericComponent(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
+    CompKindExpression boundParentTypeExpr =
+      new CompKindOfGenericComponentType(parentCompDefinition, Lists.newArrayList(childTypeVarExpr));
     compDefinition.setSuperComponentsList(Collections.singletonList(boundParentTypeExpr));
 
     // create CompTypeExpr representing Comp<int>
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
-    TypeExprOfGenericComponent boundCompTypeExpr =
-      new TypeExprOfGenericComponent(compDefinition, Lists.newArrayList(intTypeExpr));
+    CompKindOfGenericComponentType boundCompTypeExpr =
+      new CompKindOfGenericComponentType(compDefinition, Lists.newArrayList(intTypeExpr));
 
     // When
     Optional<SymTypeExpression> paramTypeExpr = boundCompTypeExpr.getTypeOfParameter(name);
@@ -332,7 +335,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetBindingsAsListInCorrectOrder() {
     // Given
-    ArcComponentTypeSymbol comp = createComponentWithTypeVar("Comp", "A", "B", "C");
+    ComponentTypeSymbol comp = createComponentWithTypeVar("Comp", "A", "B", "C");
 
     SymTypeExpression floatTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.FLOAT);
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
@@ -340,7 +343,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     List<SymTypeExpression> typeExprList = Lists.newArrayList(floatTypeExpr, intTypeExpr, boolTypeExpr);
 
     // When
-    TypeExprOfGenericComponent compTypeExpr = new TypeExprOfGenericComponent(comp, typeExprList);
+    CompKindOfGenericComponentType compTypeExpr = new CompKindOfGenericComponentType(comp, typeExprList);
 
     // Then
     List<SymTypeExpression> returnedBindings = compTypeExpr.getTypeBindingsAsList();
@@ -350,9 +353,9 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetTypeParamBindingsSkippingSurrogate() {
     // Given
-    ArcComponentTypeSymbol comp = createComponentWithTypeVar("Comp", "A", "B", "C");
-    ArcComponentTypeSymbolSurrogate compSurrogate = ArcBasisMill
-      .arcComponentTypeSymbolSurrogateBuilder()
+    ComponentTypeSymbol comp = createComponentWithTypeVar("Comp", "A", "B", "C");
+    ComponentTypeSymbolSurrogate compSurrogate = ArcBasisMill
+      .componentTypeSymbolSurrogateBuilder()
       .setName("Comp")
       .setEnclosingScope(ArcBasisMill.globalScope()).build();
     SymbolService.link(ArcBasisMill.globalScope(), comp);
@@ -365,7 +368,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     List<SymTypeExpression> typeExprList = Lists.newArrayList(floatTypeExpr, intTypeExpr, boolTypeExpr);
 
     // When
-    TypeExprOfGenericComponent compTypeExpr = new TypeExprOfGenericComponent(compSurrogate, typeExprList);
+    CompKindOfGenericComponentType compTypeExpr = new CompKindOfGenericComponentType(compSurrogate, typeExprList);
 
     // Then
     Assertions.assertAll(
@@ -380,7 +383,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   /**
    * Beware that the created symbol is not enclosed by any scope yet.
    */
-  protected static ArcComponentTypeSymbol createComponentWithTypeVar(@NotNull String compName,
+  protected static ComponentTypeSymbol createComponentWithTypeVar(@NotNull String compName,
                                                                   @NotNull String... typeVarNames) {
     Preconditions.checkNotNull(compName);
     Preconditions.checkNotNull(typeVarNames);
@@ -393,7 +396,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
       typeVars.add(typeVar);
     }
 
-    return ArcBasisMill.arcComponentTypeSymbolBuilder()
+    return ArcBasisMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(ArcBasisMill.scope())
       .setTypeParameters(typeVars)
@@ -403,12 +406,13 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   /**
    * Beware that the created surrogate is not enclosed by any scope yet.
    */
-  protected static ArcComponentTypeSymbol createSurrogateInGlobalScopeFor(@NotNull ArcComponentTypeSymbol original) {
+  protected static ComponentTypeSymbol createSurrogateInGlobalScopeFor(@NotNull ComponentTypeSymbol original) {
     Preconditions.checkNotNull(original);
 
     return ArcBasisMill
-      .arcComponentTypeSymbolSurrogateBuilder()
+      .componentTypeSymbolSurrogateBuilder()
       .setName(original.getFullName())
+      .setEnclosingScope(ArcBasisMill.globalScope())
       .build();
   }
 }

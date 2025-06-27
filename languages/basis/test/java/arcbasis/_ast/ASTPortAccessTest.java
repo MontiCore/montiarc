@@ -3,12 +3,12 @@ package arcbasis._ast;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.IArcBasisScope;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -134,11 +134,11 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
     IArcBasisScope scope1 = ArcBasisMill.scope();
     IArcBasisScope scope2 = ArcBasisMill.scope();
     IArcBasisScope scope3 = ArcBasisMill.scope();
-    ArcComponentTypeSymbol compA = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compA = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("CompA").setSpannedScope(scope1).build();
-    ArcComponentTypeSymbol compB = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("CompB")
+    ComponentTypeSymbol compB = ArcBasisMill.componentTypeSymbolBuilder().setName("CompB")
       .setSpannedScope(scope2).build();
-    ArcComponentTypeSymbol compC = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("CompC")
+    ComponentTypeSymbol compC = ArcBasisMill.componentTypeSymbolBuilder().setName("CompC")
       .setSpannedScope(scope3).build();
     ArcBasisMill.globalScope().add(compA);
     ArcBasisMill.globalScope().add(compB);
@@ -171,11 +171,11 @@ public class ASTPortAccessTest extends ArcBasisTestBase {
     port6.setEnclosingScope(scope2);
 
     SubcomponentSymbol sub1 = ArcBasisMill.subcomponentSymbolBuilder()
-      .setName("sub1").setType(new TypeExprOfComponent(compB)).build();
+      .setName("sub1").setType(new CompKindOfComponentType(compB)).build();
     scope1.add(sub1);
     sub1.setEnclosingScope(scope1);
     SubcomponentSymbol sub2 = ArcBasisMill.subcomponentSymbolBuilder()
-      .setName("sub2").setEnclosingScope(scope1).setType(new TypeExprOfComponent(compC)).build();
+      .setName("sub2").setEnclosingScope(scope1).setType(new CompKindOfComponentType(compC)).build();
     scope1.add(sub2);
     sub2.setEnclosingScope(scope1);
     return scope1;

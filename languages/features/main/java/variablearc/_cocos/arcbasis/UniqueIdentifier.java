@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos.arcbasis;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcScope;
@@ -17,7 +17,7 @@ public class UniqueIdentifier extends arcbasis._cocos.UniqueIdentifier {
    * method so that it also returns the source positions of your new identifiers.
    */
   @Override
-  protected Multimap<String, SourcePosition> getAllNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getAllNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> featureNameOccurrences = getFeatureNameOccurrences(component);
@@ -35,7 +35,7 @@ public class UniqueIdentifier extends arcbasis._cocos.UniqueIdentifier {
    *
    * @param component The component type whose inner component type names should be collected.
    */
-  protected Multimap<String, SourcePosition> getFeatureNameOccurrences(@NotNull ArcComponentTypeSymbol component) {
+  protected Multimap<String, SourcePosition> getFeatureNameOccurrences(@NotNull ComponentTypeSymbol component) {
     Preconditions.checkNotNull(component);
 
     Multimap<String, SourcePosition> nameOccurrences = MultimapBuilder.hashKeys().arrayListValues().build();

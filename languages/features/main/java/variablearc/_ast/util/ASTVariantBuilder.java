@@ -99,9 +99,9 @@ public class ASTVariantBuilder implements ArcBasisHandler {
 
     if (node.isPresentComponent()) {
       if (node.isPresentComponentSymbol() && node.getComponentSymbol().isTypePresent() &&
-        node.getComponentSymbol().getType().getTypeInfo() != null && VariableArcMill.typeDispatcher().isArcBasisArcComponentType(node.getComponentSymbol().getType().getTypeInfo())
+        node.getComponentSymbol().getType().getTypeInfo() != null
       ) {
-        ArcBasisMill.typeDispatcher().asArcBasisArcComponentType(node.getComponentSymbol().getType().getTypeInfo()).getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
+        node.getComponentSymbol().getType().getTypeInfo().getPort(node.getPort(), true).ifPresent(node::setPortSymbol);
       }
     } else {
       variant.getPort(node.getPort(), true).ifPresent(node::setPortSymbol);

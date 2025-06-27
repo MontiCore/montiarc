@@ -2,8 +2,8 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.check.CompKindExpression;
@@ -20,7 +20,7 @@ public class PortHeritageTimingFits implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    ArcComponentTypeSymbol componentSymbol = node.getSymbol();
+    ComponentTypeSymbol componentSymbol = node.getSymbol();
 
     // Iterate over all ports in the current component
     for (PortSymbol port : componentSymbol.getPorts()) {
@@ -49,7 +49,7 @@ public class PortHeritageTimingFits implements ArcBasisASTArcComponentTypeCoCo {
     }
   }
 
-  protected Optional<PortSymbol> getInheritedPort(ArcComponentTypeSymbol componentSymbol, String portName) {
+  protected Optional<PortSymbol> getInheritedPort(ComponentTypeSymbol componentSymbol, String portName) {
     Preconditions.checkNotNull(componentSymbol);
     Preconditions.checkNotNull(portName);
 

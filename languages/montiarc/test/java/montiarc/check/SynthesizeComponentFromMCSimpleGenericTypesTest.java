@@ -1,14 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis.check.SynthesizeComponentFromMCSimpleGenericTypes;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.CompKindCheckResult;
+import de.monticore.types.check.CompKindOfGenericComponentType;
 import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.check.SymTypeOfObject;
+import de.monticore.types.check.SynthesizeCompKindFromMCSimpleGenericTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -18,11 +19,10 @@ import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericTypeBuilder;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCCustomTypeArgument;
 import de.se_rwth.commons.logging.Log;
-import arcbasis.check.TypeExprOfGenericComponent;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
-import montiarc.util.ArcError;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -41,7 +41,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     // First, we build OOSymbols for String and List<T> and a ComponentTypeSymbol for Comp<K,V>. We put them in a
     // common sub scope of the global scope.
     String compName = "Comp";
-    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -112,8 +112,8 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
 
     CompKindCheckResult result4normal = new CompKindCheckResult();
     CompKindCheckResult result4qual = new CompKindCheckResult();
-    SynthesizeComponentFromMCSimpleGenericTypes synth4normal = new SynthesizeComponentFromMCSimpleGenericTypes(result4normal);
-    SynthesizeComponentFromMCSimpleGenericTypes synth4qual = new SynthesizeComponentFromMCSimpleGenericTypes(result4qual);
+    SynthesizeCompKindFromMCSimpleGenericTypes synth4normal = new SynthesizeCompKindFromMCSimpleGenericTypes(result4normal);
+    SynthesizeCompKindFromMCSimpleGenericTypes synth4qual = new SynthesizeCompKindFromMCSimpleGenericTypes(result4qual);
 
     // When
     synth4normal.handle(astNormalComp);
@@ -126,14 +126,14 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     );
 
     Assertions.assertAll(
-      () -> Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfGenericComponent),
-      () -> Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfGenericComponent)
+      () -> Assertions.assertTrue(result4normal.getResult().get() instanceof CompKindOfGenericComponentType),
+      () -> Assertions.assertTrue(result4qual.getResult().get() instanceof CompKindOfGenericComponentType)
     );
 
-    TypeExprOfGenericComponent result4normalAsGeneric =
-      (TypeExprOfGenericComponent) result4normal.getResult().get();
-    TypeExprOfGenericComponent result4qualAsGeneric =
-      (TypeExprOfGenericComponent) result4qual.getResult().get();
+    CompKindOfGenericComponentType result4normalAsGeneric =
+      (CompKindOfGenericComponentType) result4normal.getResult().get();
+    CompKindOfGenericComponentType result4qualAsGeneric =
+      (CompKindOfGenericComponentType) result4qual.getResult().get();
 
     Assertions.assertAll(
       () -> Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo()),
@@ -187,7 +187,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     );
 
     CompKindCheckResult resultWrapper = new CompKindCheckResult();
-    SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeCompKindFromMCSimpleGenericTypes synth = new SynthesizeCompKindFromMCSimpleGenericTypes(resultWrapper);
 
     // When
     synth.handle(astComp);
@@ -195,14 +195,14 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
     assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MISSING_COMPONENT));
+      .containsExactlyInAnyOrder(getErrorCodes(MCError.MISSING_COMPONENT));
   }
 
   @Test
   public void shouldHandleMCBasicGenericTypeBecauseTypeArgumentUnresolvable() {
     // Given
     String compName = "Comp";
-    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -226,7 +226,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     );
 
     CompKindCheckResult resultWrapper = new CompKindCheckResult();
-    SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeCompKindFromMCSimpleGenericTypes synth = new SynthesizeCompKindFromMCSimpleGenericTypes(resultWrapper);
 
     // When
     synth.handle(astComp);
@@ -234,14 +234,14 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
     assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MISSING_COMPONENT));
+      .containsExactlyInAnyOrder(getErrorCodes(MCError.MISSING_COMPONENT));
   }
 
   @Test
   public void shouldHandleMCBasicGenericTypeBecauseNestedTypeArgumentUnresolvable() {
     // Given
     String compName = "Comp";
-    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -276,7 +276,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     );
 
     CompKindCheckResult resultWrapper = new CompKindCheckResult();
-    SynthesizeComponentFromMCSimpleGenericTypes synth = new SynthesizeComponentFromMCSimpleGenericTypes(resultWrapper);
+    SynthesizeCompKindFromMCSimpleGenericTypes synth = new SynthesizeCompKindFromMCSimpleGenericTypes(resultWrapper);
 
     // When
     synth.handle(astComp);
@@ -284,7 +284,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
     assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(ArcError.MISSING_COMPONENT));
+      .containsExactlyInAnyOrder(getErrorCodes(MCError.MISSING_COMPONENT));
   }
 
   /**

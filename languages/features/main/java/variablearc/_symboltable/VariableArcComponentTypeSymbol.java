@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.variability.VariableArcVariantCalculator;
 
@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class VariableArcComponentTypeSymbol extends ArcComponentTypeSymbol implements IVariableArcComponentTypeSymbol {
+public class VariableArcComponentTypeSymbol extends ComponentTypeSymbol implements IVariableArcComponentTypeSymbol {
 
   protected ExpressionSet localConstraints;
   protected ExpressionSet constraints;
@@ -29,7 +29,7 @@ public class VariableArcComponentTypeSymbol extends ArcComponentTypeSymbol imple
   }
 
   @Override
-  public ArcComponentTypeSymbol getTypeInfo() {
+  public ComponentTypeSymbol getTypeInfo() {
     return this;
   }
 

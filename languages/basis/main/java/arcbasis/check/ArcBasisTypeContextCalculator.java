@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import arcbasis._symboltable.Component2TypeSymbolAdapter;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentType2TypeSymbolAdapter;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.IScope;
 import de.monticore.types3.util.TypeContextCalculator;
@@ -25,7 +25,7 @@ public class ArcBasisTypeContextCalculator extends TypeContextCalculator {
         enclosingType = Optional.of(this.getTypeDispatcher().asBasicSymbolsType(scope.getSpanningSymbol()));
       } else if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof ComponentTypeSymbol) {
         // Enclosing scope is ComponentType
-        enclosingType = Optional.of(new Component2TypeSymbolAdapter((ComponentTypeSymbol) scope.getSpanningSymbol()));
+        enclosingType = Optional.of(new ComponentType2TypeSymbolAdapter((ComponentTypeSymbol) scope.getSpanningSymbol()));
       }
     }
 

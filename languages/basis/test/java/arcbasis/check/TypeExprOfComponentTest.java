@@ -3,12 +3,13 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arcbasis._symboltable.SymbolService;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypePrimitive;
@@ -22,18 +23,18 @@ import java.util.Optional;
 public class TypeExprOfComponentTest extends ArcBasisTestBase {
 
   /**
-   * Method under test {@link TypeExprOfComponent#getSuperComponents()}
+   * Method under test {@link CompKindOfComponentType#getSuperComponents()}
    */
   @Test
   public void getParentShouldReturnExpected() {
     // Given
-    ArcComponentTypeSymbol symbolWithDefinitions = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol symbolWithDefinitions = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    ArcComponentTypeSymbol symbolVersionForTypeExpr = ArcBasisMill
-      .arcComponentTypeSymbolSurrogateBuilder()
+    ComponentTypeSymbol symbolVersionForTypeExpr = ArcBasisMill
+      .componentTypeSymbolSurrogateBuilder()
       .setName(symbolWithDefinitions.getFullName())
       .build();
 
@@ -41,14 +42,14 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
     SymbolService.link(ArcBasisMill.globalScope(), symbolWithDefinitions);
     symbolVersionForTypeExpr.setEnclosingScope(ArcBasisMill.globalScope());
 
-    ArcComponentTypeSymbol parent = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol parent = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    TypeExprOfComponent parentTypeExpr = new TypeExprOfComponent(parent);
+    CompKindOfComponentType parentTypeExpr = new CompKindOfComponentType(parent);
 
     symbolWithDefinitions.setSuperComponentsList(Collections.singletonList(parentTypeExpr));
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
+    CompKindOfComponentType compTypeExpr = new CompKindOfComponentType(symbolVersionForTypeExpr);
 
     // When
     List<CompKindExpression> parentOfTypeExpr = compTypeExpr.getSuperComponents();
@@ -59,16 +60,16 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
   }
 
   /**
-   * Method under test {@link TypeExprOfComponent#getSuperComponents()}
+   * Method under test {@link CompKindOfComponentType#getSuperComponents()}
    */
   @Test
   public void getParentShouldReturnOptionalEmpty() {
     // Given
-    ArcComponentTypeSymbol component = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
+    CompKindOfComponentType compTypeExpr = new CompKindOfComponentType(component);
 
     // When
     List<CompKindExpression> parentOfTypeExpr = compTypeExpr.getSuperComponents();
@@ -80,13 +81,13 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetTypeExprOfPort() {
     // Given
-    ArcComponentTypeSymbol symbolWithDefinitions = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol symbolWithDefinitions = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    ArcComponentTypeSymbol symbolVersionForTypeExpr = ArcBasisMill
-      .arcComponentTypeSymbolSurrogateBuilder()
+    ComponentTypeSymbol symbolVersionForTypeExpr = ArcBasisMill
+      .componentTypeSymbolSurrogateBuilder()
       .setName(symbolWithDefinitions.getFullName())
       .build();
 
@@ -102,7 +103,7 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
       .build();
     symbolWithDefinitions.getSpannedScope().add(port);
 
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
+    CompKindOfComponentType compTypeExpr = new CompKindOfComponentType(symbolVersionForTypeExpr);
 
     // When
     Optional<SymTypeExpression> portsType = compTypeExpr.getTypeOfPort(portName);
@@ -116,7 +117,7 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetTypeExprOfInheritedPort() {
     // Given
-    ArcComponentTypeSymbol parent = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol parent = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Parent")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -128,13 +129,13 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
       .build();
     parent.getSpannedScope().add(port);
 
-    ArcComponentTypeSymbol component = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol component = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
-      .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent)))
+      .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent)))
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(component);
+    CompKindOfComponentType compTypeExpr = new CompKindOfComponentType(component);
 
     // When
     Optional<SymTypeExpression> portsType = compTypeExpr.getTypeOfPort(portName);
@@ -148,13 +149,13 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetTypeExprOfParameter() {
     // Given
-    ArcComponentTypeSymbol symbolWithDefinitions = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol symbolWithDefinitions = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
-    ArcComponentTypeSymbol symbolVersionForTypeExpr = ArcBasisMill
-      .arcComponentTypeSymbolSurrogateBuilder()
+    ComponentTypeSymbol symbolVersionForTypeExpr = ArcBasisMill
+      .componentTypeSymbolSurrogateBuilder()
       .setName(symbolWithDefinitions.getFullName())
       .build();
 
@@ -170,7 +171,7 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
     symbolWithDefinitions.getSpannedScope().add(param);
     symbolWithDefinitions.addParameter(param);
 
-    TypeExprOfComponent compTypeExpr = new TypeExprOfComponent(symbolVersionForTypeExpr);
+    CompKindOfComponentType compTypeExpr = new CompKindOfComponentType(symbolVersionForTypeExpr);
 
     // When
     Optional<SymTypeExpression> paramType = compTypeExpr.getTypeOfParameter(paramName);

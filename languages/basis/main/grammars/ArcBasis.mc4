@@ -57,7 +57,7 @@ component grammar ArcBasis extends
    * of this component type. Only available for inner components.
    * @attribute body Contains the architectural elements of this component.
    */
-  symbol scope ArcComponentType implements ComponentType, ArcElement =
+  scope ArcComponentType implements ComponentType, ArcElement =
     Stereotype? key("component") Name
     head:ComponentHead
     (ComponentInstance || ",")*
@@ -183,7 +183,7 @@ component grammar ArcBasis extends
 
   ArcArguments = "(" ( ArcArgument || ",")* ")";
 
-  ArcArgument = (Name "=")? Expression;
+  ArcArgument implements SubcomponentArgument = (Name "=")? Expression;
 
   /**
    * ASTConnector connects one source port with one or more target ports.

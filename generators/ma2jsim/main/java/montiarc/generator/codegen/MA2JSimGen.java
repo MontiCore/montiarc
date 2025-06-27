@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -10,6 +10,7 @@ import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedName;
 import de.monticore.types3.SymTypeRelations;
@@ -116,9 +117,9 @@ public class MA2JSimGen {
 
     ASTMCQualifiedName innerComponentPackage = ast.isPresentPackage() ? ast.getPackage().deepClone() : MontiArcMill.mCQualifiedNameBuilder().build();
     innerComponentPackage.addParts(ast.getArcComponentType().getName());
-    for (ArcComponentTypeSymbol innerComp : ast.getArcComponentType().getSymbol().getInnerComponents()) {
+    for (ComponentTypeSymbol innerComp : ast.getArcComponentType().getSymbol().getSpannedScope().getLocalComponentTypeSymbols()) {
       innerComp.setPackageName(ast.getArcComponentType().getSymbol().getFullName());
-      generate(MontiArcMill.mACompilationUnitBuilder().setArcComponentType(innerComp.getAstNode()).setPackage(innerComponentPackage).build());
+      generate(MontiArcMill.mACompilationUnitBuilder().setArcComponentType((ASTArcComponentType) innerComp.getAstNode()).setPackage(innerComponentPackage).build());
     }
 
     if (ast.getArcComponentType().getBody().streamArcElementsOfType(ASTModeAutomaton.class).findAny().isPresent()) {
@@ -217,11 +218,11 @@ public class MA2JSimGen {
       final String variantSuffix = helper.variantSuffix(variant);
 
       if (variant.isAtomic()) {
-        if (helper.getAutomatonBehavior(variant.getAstNode()).isPresent()) {
+        if (helper.getAutomatonBehavior((ASTArcComponentType) variant.getAstNode()).isPresent()) {
           generateAutomatonImplementation(ast, variantSuffix, variant);
           generateAutomatonBuilder(ast, variantSuffix, variant);
           generateStatesClass(ast, variantSuffix, variant);
-        } else if (helper.getComputeBehavior(variant.getAstNode()).isPresent()) {
+        } else if (helper.getComputeBehavior((ASTArcComponentType) variant.getAstNode()).isPresent()) {
           generateComputeImplementation(ast, variantSuffix, variant);
         }
       }
@@ -230,7 +231,7 @@ public class MA2JSimGen {
     this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
   }
 
-  protected void generateAutomatonImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
+  protected void generateAutomatonImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
@@ -243,7 +244,7 @@ public class MA2JSimGen {
     generate(template, ast, "", suffix, existsHwc, variant);
   }
 
-  protected void generateComputeImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
+  protected void generateComputeImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
@@ -256,7 +257,7 @@ public class MA2JSimGen {
     generate(template, ast, "", suffix, existsHwc, variant);
   }
 
-  protected void generateAutomatonBuilder(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
+  protected void generateAutomatonBuilder(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
@@ -269,7 +270,7 @@ public class MA2JSimGen {
     generate(template, ast, "", suffix, existsHwc, variant);
   }
 
-  protected void generateStatesClass(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ArcComponentTypeSymbol variant) {
+  protected void generateStatesClass(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(suffix);
     Preconditions.checkNotNull(variant);
@@ -371,7 +372,7 @@ public class MA2JSimGen {
     FileReaderWriter.storeInFile(outPath, formattedCode.orElse(code));
   }
 
-  protected Path getFileAsPath(@NotNull ArcComponentTypeSymbol comp,
+  protected Path getFileAsPath(@NotNull ComponentTypeSymbol comp,
                                @NotNull String prefix,
                                @NotNull String suffix) {
     Preconditions.checkNotNull(comp);
@@ -382,13 +383,13 @@ public class MA2JSimGen {
     return Paths.get(dir, file);
   }
 
-  protected boolean existsHWC(@NotNull ArcComponentTypeSymbol comp, @NotNull String suffix) {
+  protected boolean existsHWC(@NotNull ComponentTypeSymbol comp, @NotNull String suffix) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(suffix);
     return GeneratorEngine.existsHandwrittenClass(this.getSetup().getHandcodedPath(), comp.getFullName() + suffix);
   }
 
-  protected boolean existsHWC(@NotNull ArcComponentTypeSymbol comp,
+  protected boolean existsHWC(@NotNull ComponentTypeSymbol comp,
                               @NotNull String prefix,
                               @NotNull String suffix) {
     Preconditions.checkNotNull(comp);

@@ -10,16 +10,16 @@ import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._symboltable.ArcBasisSymbols2Json;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisArtifactScope;
 import arcbasis._symboltable.SymbolService;
 import arcbasis.check.ArcBasisTypeCheckTest;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import montiarc.util.ArcError;
@@ -484,10 +484,10 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
     Preconditions.checkNotNull(componentType);
     Preconditions.checkNotNull(arguments);
 
-    ArcComponentTypeSymbol instantiatedType = ArcBasisMill.globalScope().resolveArcComponentType(componentType).orElseThrow();
+    ComponentTypeSymbol instantiatedType = ArcBasisMill.globalScope().resolveComponentType(componentType).orElseThrow();
     
-    CompTypeExpression compExpr = new TypeExprOfComponent(instantiatedType);
-    compExpr.addArcArguments(Arrays.asList(arguments));
+    CompKindExpression compExpr = new CompKindOfComponentType(instantiatedType);
+    compExpr.addArgument(Arrays.asList(arguments));
     
     SubcomponentSymbol sym = ArcBasisMill.subcomponentSymbolBuilder()
       .setName("inst")
@@ -514,12 +514,12 @@ class ConfigurationParameterAssignmentCalculatorTest extends ArcBasisTypeCheckTe
     Preconditions.checkNotNull(args);
     Preconditions.checkArgument(Arrays.stream(args).noneMatch(Objects::isNull));
 
-    ArcComponentTypeSymbol abstraction = ArcBasisMill.globalScope().resolveArcComponentType(abstractionName).orElseThrow();
+    ComponentTypeSymbol abstraction = ArcBasisMill.globalScope().resolveComponentType(abstractionName).orElseThrow();
 
-    CompTypeExpression compExpr = new TypeExprOfComponent(abstraction);
-    compExpr.addArcArguments(Arrays.asList(args));
+    CompKindExpression compExpr = new CompKindOfComponentType(abstraction);
+    compExpr.addArgument(Arrays.asList(args));
 
-    ArcComponentTypeSymbol concretization = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol concretization = ArcBasisMill.componentTypeSymbolBuilder()
       .setName("Dummy")
       .setSpannedScope(ArcBasisMill.scope())
       .addRefinements(compExpr)

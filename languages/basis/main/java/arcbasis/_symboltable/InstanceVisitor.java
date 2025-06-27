@@ -34,10 +34,6 @@ public class InstanceVisitor implements ArcBasisHandler, CompSymbolsHandler {
     this.component = node;
   }
 
-  public void handle(ArcComponentTypeSymbol node) {
-    this.component = node;
-  }
-
   protected PortSymbol port;
 
   public Optional<PortSymbol> asPort(@NotNull ISymbol symbol) {

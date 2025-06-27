@@ -9,7 +9,6 @@ package montiarc.util;
  */
 public enum ArcError implements Error {
   CIRCULAR_INHERITANCE("0xC1100", "Circular inheritance of component '%s'"),
-  MISSING_COMPONENT("0xC1101", "Cannot resolve component '%s'"),
   AMBIGUOUS_REFERENCE("0xC1102", "Ambiguous reference, both '%s' and '%s' match"),
   IN_PORT_UNUSED("0xC1103", "Port '%s' is never used"),
   OUT_PORT_UNUSED("0xC1104", "Port '%s' is never used"),

@@ -2,8 +2,8 @@
 package variablearc._cocos.arcbasis;
 
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.check.VariableArcTypeCheck;
 
@@ -19,7 +19,7 @@ public class ConnectorTypesFit extends arcbasis._cocos.ConnectorTypesFit {
   }
 
   @Override
-  protected Optional<ArcComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
     if (VariableArcTypeCheck.getCurrentVariant().isPresent()) {
       return VariableArcTypeCheck.getCurrentVariant();

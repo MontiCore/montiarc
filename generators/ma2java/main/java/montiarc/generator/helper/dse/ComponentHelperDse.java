@@ -7,11 +7,10 @@ import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcParameter;
 import arcbasis._ast.ASTArcPort;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._ast.ASTSubcomponentArgument;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolSurrogate;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
-import arcbasis.check.CompTypeExpression;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
@@ -365,7 +364,7 @@ public class ComponentHelperDse {
     }
   }
 
-  public static List<VariableSymbol> getComponentVariables(ArcComponentTypeSymbol comp) {
+  public static List<VariableSymbol> getComponentVariables(ComponentTypeSymbol comp) {
     Preconditions.checkNotNull(comp);
     List<VariableSymbol> vss = new ArrayList<>(comp.getFields());
     vss.removeAll(comp.getParameterList());
@@ -393,9 +392,9 @@ public class ComponentHelperDse {
   public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
     ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
-    if (componentTypeReference instanceof ArcComponentTypeSymbolSurrogate) {
+    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
       componentTypeReference =
-        ((ArcComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
+        ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
     }
     String packageName =
       ComponentHelper.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
@@ -414,15 +413,8 @@ public class ComponentHelperDse {
   /**
    * Helper function used to determine package names.
    */
-  public static String printPackageWithoutKeyWordAndSemicolon(final ArcComponentTypeSymbol comp) {
-    if (comp.isInnerComponent()) {
-      //TODO add check for outermost component being TOP-Class or remove this function?
-      return printPackageWithoutKeyWordAndSemicolon(comp.getOuterComponent()
-        .get()) + "." + comp.getOuterComponent().get().getName();
-    }
-    else {
-      return comp.getPackageName();
-    }
+  public static String printPackageWithoutKeyWordAndSemicolon(final ComponentTypeSymbol comp) {
+    return comp.getFullName().substring(0, comp.getFullName().length() - comp.getName().length() - 1);
   }
 
   protected MA2JavaDseFullPrettyPrinter getPrettyPrinter() {
@@ -457,7 +449,7 @@ public class ComponentHelperDse {
    * Calculates the values of hierarchical parameter instantiations of a
    * {@link ComponentTypeSymbol}.
    *
-   * @param comp The {@link CompTypeExpression} for which the parameters should be calculated.
+   * @param comp The {@link CompKindExpression} for which the parameters should be calculated.
    * @return The parameters.
    */
   public Collection<String> getParentParamValues(ComponentTypeSymbol comp) {
@@ -481,7 +473,7 @@ public class ComponentHelperDse {
    *                        calculated.
    * @return The parameters.
    */
-  public Collection<String> getParamValues(Map<VariableSymbol, ASTExpression> configArguments,
+  public Collection<String> getParamValues(Map<VariableSymbol, ASTSubcomponentArgument> configArguments,
                                            ComponentTypeSymbol comp) {
 
     List<String> outputParameters = new ArrayList<>();

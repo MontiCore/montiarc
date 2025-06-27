@@ -2,8 +2,8 @@
 package variablearc._visitor;
 
 import arcbasis._visitor.NoNonSyncInputPortInContextVisitor;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 import variablearc.check.VariableArcTypeCheck;
@@ -23,7 +23,7 @@ public class VariantAwareNoNonSyncInputPortInContextVisitor extends NoNonSyncInp
 
   @Override
   protected Predicate<VariableSymbol> getVariablePredicate() {
-    Optional<ArcComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
+    Optional<ComponentTypeSymbol> variant = VariableArcTypeCheck.getCurrentVariant();
     if (variant.isEmpty() || !(variant.get() instanceof VariableArcVariantComponentTypeSymbol)) {
       return v -> true;
     } else {

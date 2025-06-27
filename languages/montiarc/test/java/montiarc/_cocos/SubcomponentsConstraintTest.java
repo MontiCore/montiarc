@@ -7,6 +7,7 @@ import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -113,7 +114,7 @@ public class SubcomponentsConstraintTest extends MontiArcTestBase {
         VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT),
       // Type not found (should not result in an error other than Missing Component -> Robustness)
       arg("component Comp4 { a.b.X x; }",
-        ArcError.MISSING_COMPONENT)
+        MCError.MISSING_COMPONENT)
     );
   }
 }

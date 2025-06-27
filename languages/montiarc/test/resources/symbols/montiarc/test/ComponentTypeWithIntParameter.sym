@@ -3,7 +3,7 @@
   "package": "montiarc.test",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "ComponentTypeWithIntParameter",
       "parameters": [
         {

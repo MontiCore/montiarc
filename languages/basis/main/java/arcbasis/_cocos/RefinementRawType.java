@@ -2,7 +2,6 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.types.check.CompKindExpression;
@@ -28,7 +27,7 @@ public class RefinementRawType implements ArcBasisASTArcComponentTypeCoCo {
     for (CompKindExpression compExpr : astCompType.getSymbol().getRefinementsList()) {
 
       boolean typeIsGeneric = compExpr.getTypeInfo().hasTypeParameter();
-      boolean typeExprIsRaw = !(compExpr instanceof TypeExprOfGenericComponent);
+      boolean typeExprIsRaw = !(compExpr.isGenericComponentType());
 
       if (typeIsGeneric && typeExprIsRaw) {
 

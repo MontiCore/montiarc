@@ -3,7 +3,7 @@
   "package": "symboltable",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "ComponentTypeWithPort",
       "spannedScope": {
         "symbols": [

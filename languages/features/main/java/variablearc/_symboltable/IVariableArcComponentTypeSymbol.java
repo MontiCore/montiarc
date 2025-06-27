@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.ISymbol;
@@ -15,11 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * A variable version of the {@link ArcComponentTypeSymbol}
+ * A variable version of the {@link ComponentTypeSymbol}
  */
 public interface IVariableArcComponentTypeSymbol {
 
-  ArcComponentTypeSymbol getTypeInfo();
+  ComponentTypeSymbol getTypeInfo();
 
   /**
    * @return a list of all possible variants this component can be

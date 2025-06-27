@@ -3,14 +3,15 @@ package arcbasis._symboltable;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis.check.CompTypeExpression;
-import arcbasis.check.TypeExprOfComponent;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.symboltable.modifiers.BasicAccessModifier;
+import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Assertions;
@@ -155,11 +156,11 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
                                          @NotNull String resolutionName) {
     //Given
     this.getScope().setName(scopeName);
-    this.getScope().add(ArcBasisMill.arcComponentTypeSymbolBuilder()
+    this.getScope().add(ArcBasisMill.componentTypeSymbolBuilder()
       .setName(typeName).setSpannedScope(ArcBasisMill.scope()).build());
 
     //When
-    Optional<ArcComponentTypeSymbol> symbol = this.getScope().resolveArcComponentType(resolutionName);
+    Optional<ComponentTypeSymbol> symbol = this.getScope().resolveComponentType(resolutionName);
 
     //Then
     Assertions.assertTrue(symbol.isPresent());
@@ -171,11 +172,11 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
                                             @NotNull String resolutionName) {
     //Given
     this.getScope().setName(scopeName);
-    this.getScope().add(ArcBasisMill.arcComponentTypeSymbolBuilder()
+    this.getScope().add(ArcBasisMill.componentTypeSymbolBuilder()
       .setName(typeName).setSpannedScope(ArcBasisMill.scope()).build());
 
     //When
-    Optional<ArcComponentTypeSymbol> symbol = this.getScope().resolveArcComponentType(resolutionName);
+    Optional<ComponentTypeSymbol> symbol = this.getScope().resolveComponentType(resolutionName);
 
     //Then
     Assertions.assertFalse(symbol.isPresent());
@@ -375,12 +376,12 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope parent1Scope = ArcBasisMill.scope();
     IArcBasisScope parent2Scope = ArcBasisMill.scope();
 
-    ArcComponentTypeSymbol parent1 =
-        ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
-    ArcComponentTypeSymbol parent2 =
-      ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
-    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setSuperComponentsList(List.of(new TypeExprOfComponent(parent1), new TypeExprOfComponent(parent2))).build();
+    ComponentTypeSymbol parent1 =
+        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
+    ComponentTypeSymbol parent2 =
+      ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+        .setSuperComponentsList(List.of(new CompKindOfComponentType(parent1), new CompKindOfComponentType(parent2))).build();
 
     PortSymbol port1 = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -421,10 +422,10 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope scope = ArcBasisMill.scope();
     IArcBasisScope parentScope = ArcBasisMill.scope();
 
-    ArcComponentTypeSymbol parent =
-        ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
-    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
+    ComponentTypeSymbol parent =
+        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+        .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
 
     PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -460,10 +461,10 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope scope = ArcBasisMill.scope();
     enclosingScope.addSubScope(scope);
 
-    ArcComponentTypeSymbol parent =
-        ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
-    ArcComponentTypeSymbol child = ArcBasisMill.arcComponentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setSuperComponentsList(Collections.singletonList(new TypeExprOfComponent(parent))).build();
+    ComponentTypeSymbol parent =
+        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
+    ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
+        .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
         .setType(Mockito.mock(SymTypeExpression.class)).build();
@@ -471,7 +472,7 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
 
     SubcomponentSymbol instance =
         ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
-            CompTypeExpression.class)).build();
+            CompKindExpression.class)).build();
     enclosingScope.add(instance);
 
     VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
@@ -502,7 +503,7 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
 
     SubcomponentSymbol instance =
         ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
-            CompTypeExpression.class)).build();
+            CompKindExpression.class)).build();
     enclosingScope.add(instance);
 
     VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(

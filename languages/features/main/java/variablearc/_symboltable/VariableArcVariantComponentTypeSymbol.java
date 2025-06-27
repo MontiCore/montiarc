@@ -2,7 +2,8 @@
 package variablearc._symboltable;
 
 import arcautomaton._symboltable.Port2EventDefAdapter;
-import arcbasis._symboltable.Port2VariableAdapter;
+import arcbasis._ast.ASTArcComponentType;
+import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 import de.monticore.types.check.CompKindExpression;
@@ -53,7 +54,7 @@ public class VariableArcVariantComponentTypeSymbol extends VariantArcComponentTy
 
     if (this.typeSymbol.getTypeInfo().isPresentAstNode()) {
       // Shadow the AST structure
-      this.setAstNode(new ASTVariableArcVariantComponentType(this.typeSymbol.getTypeInfo().getAstNode(), this));
+      this.setAstNode(new ASTVariableArcVariantComponentType((ASTArcComponentType) this.typeSymbol.getTypeInfo().getAstNode(), this));
     } else {
       this.setAstNodeAbsent();
     }

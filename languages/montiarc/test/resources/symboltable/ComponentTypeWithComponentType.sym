@@ -3,19 +3,19 @@
   "package": "symboltable",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "ComponentTypeWithComponentType",
       "spannedScope": {
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
             "name": "A"
           },
           {
             "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
             "name": "a",
             "type": {
-              "kind": "arcbasis.check.TypeExprOfComponent",
+              "kind": "de.monticore.types.check.CompKindOfComponentType",
               "componentTypeName": "Component.A"
             }
           },

@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import modes.variability.VariableArcModesVariantCalculator;
 import variablearc._symboltable.ArcFeature2VariableAdapter;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
@@ -17,11 +17,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class MontiArcComponentTypeSymbol extends ArcComponentTypeSymbol implements IVariableArcComponentTypeSymbol {
+public class MontiArcComponentTypeSymbol extends ComponentTypeSymbol implements IVariableArcComponentTypeSymbol {
 
   protected ExpressionSet localConstraints;
   protected ExpressionSet constraints;
-  protected List<? extends ArcComponentTypeSymbol> variants;
+  protected List<? extends ComponentTypeSymbol> variants;
   protected List<VariableArcVariantComponentTypeSymbol> variableArcVariants;
   protected List<VariableArcVariationPoint> variationPoints;
 
@@ -36,7 +36,7 @@ public class MontiArcComponentTypeSymbol extends ArcComponentTypeSymbol implemen
    *
    * @return Variants of this component
    */
-  public List<? extends ArcComponentTypeSymbol> getVariants() {
+  public List<? extends ComponentTypeSymbol> getVariants() {
     if (variants == null) {
       variants = new VariableArcModesVariantCalculator(this).calculateVariants();
     }
@@ -44,7 +44,7 @@ public class MontiArcComponentTypeSymbol extends ArcComponentTypeSymbol implemen
   }
 
   @Override
-  public ArcComponentTypeSymbol getTypeInfo() {
+  public ComponentTypeSymbol getTypeInfo() {
     return this;
   }
 

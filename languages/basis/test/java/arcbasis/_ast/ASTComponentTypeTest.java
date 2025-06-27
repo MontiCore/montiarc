@@ -21,7 +21,7 @@ import java.util.stream.Stream;
 /**
  * Holds test for the handwritten methods of {@link ASTArcComponentType}.
  */
-public class ComponentTest extends ArcBasisTestBase {
+public class ASTComponentTypeTest extends ArcBasisTestBase {
 
   @ParameterizedTest
   @MethodSource("sourceAndTargetsProvider")

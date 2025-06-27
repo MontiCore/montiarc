@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.variability;
 
-import arcbasis._symboltable.ArcComponentTypeSymbolSurrogate;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Z3Exception;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolSurrogate;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -75,8 +75,8 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
         // We need to recalculate the subcomponent variants to see which are still possible in this variant
         for (SubcomponentSymbol instance : subcomponents) {
           ComponentTypeSymbol subcomponentType = instance.getType().getTypeInfo();
-          if (subcomponentType instanceof ArcComponentTypeSymbolSurrogate) {
-            subcomponentType = ((ArcComponentTypeSymbolSurrogate) subcomponentType).lazyLoadDelegate();
+          if (subcomponentType instanceof ComponentTypeSymbolSurrogate) {
+            subcomponentType = ((ComponentTypeSymbolSurrogate) subcomponentType).lazyLoadDelegate();
           }
           if (subcomponentType instanceof IVariableArcComponentTypeSymbol) {
             IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) subcomponentType;

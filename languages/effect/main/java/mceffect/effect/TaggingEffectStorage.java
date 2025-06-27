@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package mceffect.effect;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.tagging.ISymbolTagger;
 import de.monticore.tagging.tags._ast.ASTTag;
@@ -22,7 +22,7 @@ public class TaggingEffectStorage implements EffectStorage {
   }
 
   @Override
-  public List<Effect> getEffectsOfComponent(ArcComponentTypeSymbol component) {
+  public List<Effect> getEffectsOfComponent(ComponentTypeSymbol component) {
     List<Effect> result = new ArrayList<>();
     for (PortSymbol port : component.getAllIncomingPorts()) {
       result.addAll(tags.getTags(port).stream().map(tag -> this.createEffect(tag, port, component)).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toUnmodifiableList()));
@@ -30,7 +30,7 @@ public class TaggingEffectStorage implements EffectStorage {
     return Collections.unmodifiableList(result);
   }
 
-  private Optional<Effect> createEffect(ASTTag tag, PortSymbol port, ArcComponentTypeSymbol component) {
+  private Optional<Effect> createEffect(ASTTag tag, PortSymbol port, ComponentTypeSymbol component) {
     Optional<Effect> result = Optional.empty();
     String name = ((ASTValuedTag) tag).getName();
     if (name.endsWith("_effect")) {

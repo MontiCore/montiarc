@@ -2,7 +2,6 @@
 package montiarc.conformance.automaton2smt.smtAutomaton;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.Port2VariableAdapter;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.DatatypeSort;
@@ -17,6 +16,7 @@ import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;

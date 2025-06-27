@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.check;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis.check.ArcBasisTypeCheck;
 import arcbasis.check.ArcBasisTypeContextCalculator;
 import arcbasis.check.util.ArcBasisTypeVisitorOperatorCalculator;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.monticore.types3.util.MapBasedTypeCheck3;
@@ -28,14 +28,14 @@ public class VariableArcTypeCheck extends ArcBasisTypeCheck {
   
   private static final String LOG_NAME = VariableArcTypeCheck.class.getSimpleName();
 
-  private static ArcComponentTypeSymbol currentVariant;
+  private static ComponentTypeSymbol currentVariant;
 
-  public static void setCurrentVariant(@Nullable ArcComponentTypeSymbol variant) {
+  public static void setCurrentVariant(@Nullable ComponentTypeSymbol variant) {
     Log.trace(() -> "Switch the context of the type-check", LOG_NAME);
     currentVariant = variant;
   }
 
-  public static Optional<ArcComponentTypeSymbol> getCurrentVariant() {
+  public static Optional<ComponentTypeSymbol> getCurrentVariant() {
     return Optional.ofNullable(currentVariant);
   }
 

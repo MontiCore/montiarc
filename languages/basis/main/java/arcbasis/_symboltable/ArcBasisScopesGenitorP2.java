@@ -15,8 +15,6 @@ import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
-import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.CompTypeExpression;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -26,6 +24,7 @@ import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symbols.compsymbols._visitor.CompSymbolsVisitor2;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
 import de.monticore.types.check.ISynthesizeComponent;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
@@ -47,7 +46,7 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
   protected ISynthesizeComponent componentSynthesizer;
 
   public ArcBasisScopesGenitorP2() {
-    this(new ArcBasisSynthesizeComponent());
+    this(new FullSynthesizeCompKindFromMCSimpleGenericTypes());
   }
 
   public ArcBasisScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer) {
@@ -97,8 +96,8 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
         if (parent.isPresent()) {
           astParent.getType().setDefiningSymbol(parent.get().getTypeInfo());
           listBuilder.add(parent.get());
-          if (!astParent.isEmptyArcArguments() && parent.get() instanceof CompTypeExpression) {
-            ((CompTypeExpression) parent.get()).addArcArguments(astParent.getArcArgumentList());
+          if (!astParent.isEmptyArcArguments()) {
+            parent.get().addArgument(astParent.getArcArgumentList());
             parent.get().bindParams();
           }
         }
@@ -121,9 +120,9 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
         if (spec.isPresent()) {
           astSpec.getType().setDefiningSymbol(spec.get().getTypeInfo());
           listBuilder.add(spec.get());
-          if (!astSpec.isEmptyArcArguments() && spec.get() instanceof CompTypeExpression) {
+          if (!astSpec.isEmptyArcArguments()) {
             List<ASTArcArgument> args = astSpec.getArcArgumentList();
-            ((CompTypeExpression) spec.get()).addArcArguments(args);
+            spec.get().addArgument(args);
             spec.get().bindParams();
           }
         }
@@ -154,11 +153,10 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
     Preconditions.checkArgument(node.isPresentSymbol());
 
     if (this.getCurrentCompInstanceType().isPresent()) {
-      CompKindExpression clonedTypeExpr = this.getCurrentCompInstanceType().get().deepClone();
-      clonedTypeExpr.setSourceNode(node);
-      node.getSymbol().setType(clonedTypeExpr);
-      if (node.isPresentArcArguments() && node.getSymbol().getType() instanceof CompTypeExpression) {
-        ((CompTypeExpression) node.getSymbol().getType()).addArcArguments(node.getArcArguments().getArcArgumentList());
+      node.getSymbol().setType(this.getCurrentCompInstanceType().get().deepClone());
+      node.getSymbol().getType().setSourceNode(node);
+      if (node.isPresentArcArguments()) {
+        node.getSymbol().getType().addArgument(node.getArcArguments().getArcArgumentList());
         node.getSymbol().getType().bindParams();
       }
     }

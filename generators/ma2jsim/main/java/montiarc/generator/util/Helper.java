@@ -13,8 +13,8 @@ import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._visitor.NameCollectorVisitor;
+import de.monticore.symbols.compsymbols._ast.ASTComponentType;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import arccompute._ast.ASTArcCompute;
@@ -356,8 +356,8 @@ public class Helper {
     return builder.toString();
   }
 
-  public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ArcComponentTypeSymbol comp) {
-    Set<String> targets = comp.getAstNode().getConnectors().stream()
+  public List<PortSymbol> getUnconnectedOutPortsWithoutModes(ComponentTypeSymbol comp) {
+    Set<String> targets = ((ASTArcComponentType) comp.getAstNode()).getConnectors().stream()
       .map(ASTConnector::getTargetsNames)
       .flatMap(Collection::stream)
       .collect(Collectors.toSet());
@@ -367,8 +367,8 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  public List<PortSymbol> getUnconnectedOutPortsIncludingMode(ArcComponentTypeSymbol comp, ASTArcMode mode) {
-    Set<String> classicalTargets = comp.getAstNode().getConnectors().stream()
+  public List<PortSymbol> getUnconnectedOutPortsIncludingMode(ComponentTypeSymbol comp, ASTArcMode mode) {
+    Set<String> classicalTargets = ((ASTArcComponentType) comp.getAstNode()).getConnectors().stream()
       .map(ASTConnector::getTargetsNames)
       .flatMap(Collection::stream)
       .collect(Collectors.toSet());
@@ -565,7 +565,7 @@ public class Helper {
     return subs.size() <= 1 ? "" : Integer.toString(subs.indexOf(subcomponent));
   }
 
-  public String portVariantSuffix(ASTArcComponentType comp, PortSymbol port) {
+  public String portVariantSuffix(ASTComponentType comp, PortSymbol port) {
     if (port instanceof VariantPortSymbol) {
       port = ((VariantPortSymbol) port).getOriginal();
     }
@@ -781,7 +781,7 @@ public class Helper {
         return astPort.getComponentSymbol().getType().getTypeOfPort(astPort.getPort());
       }
     } else if (getEnclosingComponent(astPort).isPresent()) {
-      return getEnclosingComponent(astPort).get().getTypeOfPort(astPort.getPort());
+      return getEnclosingComponent(astPort).get().getPort(astPort.getPort()).map(PortSymbol::getType);
     } else if (astPort.isPresentPortSymbol() && astPort.getPortSymbol().isTypePresent()) {
       return Optional.ofNullable(astPort.getPortSymbol().getType());
     }
@@ -792,7 +792,7 @@ public class Helper {
    * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
    * does not belong to a component type.
    */
-  protected Optional<ArcComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
+  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
     Preconditions.checkNotNull(portAccess);
     if (portAccess.getEnclosingScope() == null) {
       return Optional.empty();
@@ -801,8 +801,8 @@ public class Helper {
       return Optional.empty();
     }
     IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
-    if (symbol instanceof ArcComponentTypeSymbol) {
-      return Optional.of((ArcComponentTypeSymbol) symbol);
+    if (symbol instanceof ComponentTypeSymbol) {
+      return Optional.of((ComponentTypeSymbol) symbol);
     } else {
       return Optional.empty();
     }

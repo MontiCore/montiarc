@@ -4,11 +4,11 @@ package montiarc._symboltable;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcComponentType;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import arcbasis.check.TypeExprOfComponent;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindOfComponentType;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -66,13 +66,13 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
       .thenReturn(MontiArcMill.componentBodyBuilder().setArcElementsList(Collections.emptyList()).build());
 
     IVariableArcComponentTypeSymbol typeSymbol =
-      (IVariableArcComponentTypeSymbol) MontiArcMill.arcComponentTypeSymbolBuilder().setName(componentTypeName)
+      (IVariableArcComponentTypeSymbol) MontiArcMill.componentTypeSymbolBuilder().setName(componentTypeName)
         .setSpannedScope(scope)
         .setEnclosingScope(MontiArcMill.scope())
         .setAstNode(astComponentType)
         .build();
 
-    typeSymbol.getTypeInfo().addParameters(scope.getLocalVariableSymbols());
+    typeSymbol.getTypeInfo().addAllParameter(scope.getLocalVariableSymbols());
 
     variationPoints.forEach(typeSymbol::add);
 
@@ -113,8 +113,8 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
 
   protected static SubcomponentSymbol createInstance(String name, IVariableArcComponentTypeSymbol type,
                                                      List<ASTArcArgument> arguments) {
-    TypeExprOfComponent typeExprOfComponent = new TypeExprOfComponent(type.getTypeInfo());
-    typeExprOfComponent.addArcArguments(arguments);
+    CompKindOfComponentType typeExprOfComponent = new CompKindOfComponentType(type.getTypeInfo());
+    typeExprOfComponent.addArgument(arguments);
     return MontiArcMill.subcomponentSymbolBuilder().setName(name)
       .setType(typeExprOfComponent).build();
   }

@@ -3,13 +3,13 @@
   "package": "symboltable",
   "symbols": [
     {
-      "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
       "name": "ComponentWithGenericComponent",
       "spannedScope": {
         "isShadowingScope": true,
         "symbols": [
           {
-            "kind": "arcbasis._symboltable.ArcComponentTypeSymbol",
+            "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
             "name": "A",
             "fullName": "ComponentWithGenericComponent.A",
             "spannedScope": {
@@ -39,7 +39,7 @@
             "name": "a",
             "fullName": "ComponentWithGenericComponent.a",
             "type": {
-              "kind": "arcbasis.check.TypeExprOfGenericComponent",
+              "kind": "de.monticore.types.check.CompKindOfGenericComponentType",
               "componentTypeName": "ComponentWithGenericComponent.A",
               "typeVarBindings": [
                 {

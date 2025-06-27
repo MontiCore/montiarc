@@ -1,13 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcbasis._symboltable.ArcComponentTypeSymbol;
-import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.TypeExprOfGenericComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.CompKindExpression;
+import de.monticore.types.check.CompKindOfGenericComponentType;
+import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
 import de.monticore.types.check.SymTypeOfGenerics;
 import de.monticore.types.check.SymTypeOfObject;
 import de.monticore.types.mcbasictypes._ast.ASTMCPrimitiveType;
@@ -37,7 +37,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
   public void shouldSynthesizeFromMCQualifiedType() {
     // Given
     String compName = "Comp";
-    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .build();
@@ -52,7 +52,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
       .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
+    FullSynthesizeCompKindFromMCSimpleGenericTypes synth = new FullSynthesizeCompKindFromMCSimpleGenericTypes();
 
     // When
     Optional<CompKindExpression> result = synth.synthesize(astComp);
@@ -66,9 +66,9 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
   @Test
   public void shouldSynthesizeFromMCBasicGenericType() {
     // Given
-    // First, we build OOSymbols for String and List<T> and a ArcComponentTypeSymbol for Comp<K,V>.
+    // First, we build OOSymbols for String and List<T> and a ComponentTypeSymbol for Comp<K,V>.
     String compName = "Comp";
-    ArcComponentTypeSymbol compSym = MontiArcMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol compSym = MontiArcMill.componentTypeSymbolBuilder()
       .setName(compName)
       .setSpannedScope(MontiArcMill.scope())
       .setTypeParameters(ImmutableList.of(
@@ -114,15 +114,15 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
     );
     astNormalComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
+    FullSynthesizeCompKindFromMCSimpleGenericTypes synth = new FullSynthesizeCompKindFromMCSimpleGenericTypes();
 
     // When
     Optional<CompKindExpression> result = synth.synthesize(astNormalComp);
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get() instanceof TypeExprOfGenericComponent);
-    TypeExprOfGenericComponent resultAsGeneric = (TypeExprOfGenericComponent) result.get();
+    Assertions.assertTrue(result.get() instanceof CompKindOfGenericComponentType);
+    CompKindOfGenericComponentType resultAsGeneric = (CompKindOfGenericComponentType) result.get();
 
     Assertions.assertEquals(compSym, resultAsGeneric.getTypeInfo());
     Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject);
@@ -144,7 +144,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
       .build();
     astComp.setEnclosingScope(MontiArcMill.globalScope());
 
-    ArcBasisSynthesizeComponent synth = new ArcBasisSynthesizeComponent();
+    FullSynthesizeCompKindFromMCSimpleGenericTypes synth = new FullSynthesizeCompKindFromMCSimpleGenericTypes();
 
     // When
     Optional<CompKindExpression> result = synth.synthesize(astComp);

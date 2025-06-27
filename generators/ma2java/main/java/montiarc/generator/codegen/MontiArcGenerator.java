@@ -2,7 +2,6 @@
 package montiarc.generator.codegen;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
 import com.google.googlejavaformat.java.Formatter;
 import com.google.googlejavaformat.java.FormatterException;
@@ -12,6 +11,7 @@ import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.generating.templateengine.TemplateHookPoint;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.io.paths.MCPath;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.generator.helper.ArcAutomatonHelper;
@@ -175,14 +175,14 @@ public class MontiArcGenerator {
     }
   }
 
-  protected Path getFileAsPath(@NotNull ArcComponentTypeSymbol comp, @NotNull String addendum) {
+  protected Path getFileAsPath(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(addendum);
     return this.getFileAsPath(comp, "", addendum);
   }
 
   protected Path getFileAsPath(
-    @NotNull ArcComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
+    @NotNull ComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(addendum);
@@ -191,7 +191,7 @@ public class MontiArcGenerator {
         + "/" + prefix + comp.getName() + addendum + FILE_EXTENSION);
   }
 
-  protected boolean existsHandWrittenCodeFor(@NotNull ArcComponentTypeSymbol comp, @NotNull String addendum) {
+  protected boolean existsHandWrittenCodeFor(@NotNull ComponentTypeSymbol comp, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(addendum);
 
@@ -199,7 +199,7 @@ public class MontiArcGenerator {
   }
 
   protected boolean existsHandWrittenCodeFor(
-    @NotNull ArcComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
+    @NotNull ComponentTypeSymbol comp, @NotNull String prefix, @NotNull String addendum) {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(prefix);
     Preconditions.checkNotNull(addendum);

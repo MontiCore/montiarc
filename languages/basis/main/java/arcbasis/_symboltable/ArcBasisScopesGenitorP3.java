@@ -1,12 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._symboltable;
 
+import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._ast.ASTPort;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.IScopeSpanningSymbol;
@@ -33,8 +36,8 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
         node.getSymbol().setStronglyCausal(false);
       }
       IScopeSpanningSymbol symbol = node.getEnclosingScope().getSpanningSymbol();
-      if (symbol instanceof ArcComponentTypeSymbol) {
-        node.getSymbol().setStronglyCausal(isHereditaryStronglyCausal(node.getSymbol(), (ArcComponentTypeSymbol) symbol));
+      if (symbol instanceof ComponentTypeSymbol) {
+        node.getSymbol().setStronglyCausal(isHereditaryStronglyCausal(node.getSymbol(), (ComponentTypeSymbol) symbol));
       } else {
         node.getSymbol().setStronglyCausal(false);
       }
@@ -43,12 +46,13 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     return port.getStronglyCausal();
   }
 
-  protected boolean isHereditaryStronglyCausal(PortSymbol portSymbol, ArcComponentTypeSymbol componentTypeSymbol) {
+  protected boolean isHereditaryStronglyCausal(PortSymbol portSymbol, ComponentTypeSymbol componentTypeSymbol) {
     if (portSymbol.isOutgoing() && componentTypeSymbol.isAtomic()) {
       // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
       // or if the component has no incoming ports
-      return (componentTypeSymbol.getBehavior().isPresent()
-        && componentTypeSymbol.getBehavior().get().isDelayed()) || componentTypeSymbol.getAllIncomingPorts().isEmpty();
+      ASTArcComponentType astNode = ArcBasisMill.typeDispatcher().asArcBasisASTArcComponentType(componentTypeSymbol.getAstNode());
+      return astNode.getBehavior().isPresent()
+        && astNode.getBehavior().get().isDelayed() || componentTypeSymbol.getAllIncomingPorts().isEmpty();
     } else if (portSymbol.isOutgoing() && componentTypeSymbol.isDecomposed()) {
       // outgoing ports of composed components are strongly causal if their composed behavior is strongly causal
       return isComposedStronglyCausal(portSymbol, componentTypeSymbol);
@@ -56,13 +60,15 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     return false;
   }
 
-  protected boolean isComposedStronglyCausal(PortSymbol portSymbol, ArcComponentTypeSymbol componentTypeSymbol) {
+  protected boolean isComposedStronglyCausal(PortSymbol portSymbol, ComponentTypeSymbol componentTypeSymbol) {
     if (!componentTypeSymbol.isDecomposed() || !portSymbol.isOutgoing()) {
       return false;
     }
 
+    ASTArcComponentType astNode = ArcBasisMill.typeDispatcher().asArcBasisASTArcComponentType(componentTypeSymbol.getAstNode());
+
     List<List<ASTConnector>> paths = new ArrayList<>();
-    paths.add(new ArrayList<>(componentTypeSymbol.getAstNode().getConnectorsMatchingTarget(portSymbol.getName())));
+    paths.add(new ArrayList<>(astNode.getConnectorsMatchingTarget(portSymbol.getName())));
 
     while (!paths.isEmpty()) {
       List<List<ASTConnector>> newPaths = new ArrayList<>();
@@ -91,7 +97,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
         SubcomponentSymbol instance = lastSource.getComponentSymbol();
         if (!instance.isTypePresent()) continue; //Incomplete symboltable. See above.
         instance.getType().getTypeInfo().getAllIncomingPorts()
-          .forEach(incomingPortOfSubcomponent -> componentTypeSymbol.getAstNode()
+          .forEach(incomingPortOfSubcomponent -> astNode
             .getConnectorsMatchingTarget(instance.getName() + "." + incomingPortOfSubcomponent.getName())
             .forEach(connector -> {
               List<ASTConnector> newPath = new ArrayList<>(path);

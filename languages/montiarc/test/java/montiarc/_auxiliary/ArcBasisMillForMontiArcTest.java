@@ -2,10 +2,9 @@
 package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
-import arcbasis.check.ArcBasisSynthesizeComponent;
-import arcbasis.check.deser.ArcBasisCompTypeExprDeSer;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.CompKindExpressionDeSer;
+import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
 import de.monticore.types.check.ISynthesizeComponent;
 import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -21,8 +20,8 @@ public class ArcBasisMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForScopesGenitorP2Provider() {
     return Stream.of(
-      Arguments.of(arcBasisMillSetup(), ArcBasisSynthesizeComponent.class),
-      Arguments.of(montiArcMillSetup(), ArcBasisSynthesizeComponent.class)
+      Arguments.of(arcBasisMillSetup(), FullSynthesizeCompKindFromMCSimpleGenericTypes.class),
+      Arguments.of(montiArcMillSetup(), FullSynthesizeCompKindFromMCSimpleGenericTypes.class)
     );
   }
 
@@ -30,9 +29,9 @@ public class ArcBasisMillForMontiArcTest {
    * Ensures that the scopes genitor p2 is initialized with the expected type
    * printer and component synthesizer with respect to the initialized mill.
    * That is, the mill should provide a scopes genitor p2 that is initialized
-   * with a {@link ArcBasisSynthesizeComponent} when using the {@link ArcBasisMill},
+   * with a {@link FullSynthesizeCompKindFromMCSimpleGenericTypes} when using the {@link ArcBasisMill},
    * respectively provide a scopes genitor p2 that is initialized with a
-   * {@link ArcBasisSynthesizeComponent}, when using the {@link MontiArcMill}.
+   * {@link FullSynthesizeCompKindFromMCSimpleGenericTypes}, when using the {@link MontiArcMill}.
    *
    * @param setup                      The setup to execute, e.g., initialize the respective mill.
    * @param expectedCompSynthesizer    The expected class of the component synthesizer of the scopes genitor p2.
@@ -56,8 +55,8 @@ public class ArcBasisMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForCompKindExprDeSerProvider() {
     return Stream.of(
-      Arguments.of(arcBasisMillSetup(), ArcBasisCompTypeExprDeSer.class),
-      Arguments.of(montiArcMillSetup(), ArcBasisCompTypeExprDeSer.class)
+      Arguments.of(arcBasisMillSetup(), CompKindExpressionDeSer.class),
+      Arguments.of(montiArcMillSetup(), CompKindExpressionDeSer.class)
     );
   }
 

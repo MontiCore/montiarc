@@ -3,8 +3,8 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
@@ -34,7 +34,7 @@ public class ConstraintsOmitFieldReferences implements ArcBasisASTArcComponentTy
     Preconditions.checkNotNull(astComp);
     Preconditions.checkArgument(astComp.isPresentSymbol());
 
-    ArcComponentTypeSymbol comp = astComp.getSymbol();
+    ComponentTypeSymbol comp = astComp.getSymbol();
 
     HashSet<FieldReference> portReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
     IVariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();

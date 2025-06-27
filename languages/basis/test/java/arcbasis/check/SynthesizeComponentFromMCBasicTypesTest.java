@@ -3,14 +3,16 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
-import arcbasis._symboltable.ArcComponentTypeSymbol;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.CompKindCheckResult;
+import de.monticore.types.check.SynthesizeCompKindFromMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
+import montiarc.util.MCError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +25,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     // Given
     // First build some component type symbols which we refer to with the qualified type
     String normalCompName = "Comp1";
-    ArcComponentTypeSymbol normalComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol normalComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(normalCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -31,19 +33,19 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     ArcBasisMill.globalScope().addSubScope(normalComp.getSpannedScope());
 
     String qualifiedCompName = "Comp2";
-    ArcComponentTypeSymbol qualifiedComp = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol qualifiedComp = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(qualifiedCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
 
     String multipleNormalCompName = "Comp3";
-    ArcComponentTypeSymbol multipleNormalComp1 = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol multipleNormalComp1 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(multipleNormalCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
     ArcBasisMill.globalScope().add(multipleNormalComp1);
     ArcBasisMill.globalScope().addSubScope(multipleNormalComp1.getSpannedScope());
-    ArcComponentTypeSymbol multipleNormalComp2 = ArcBasisMill.arcComponentTypeSymbolBuilder()
+    ComponentTypeSymbol multipleNormalComp2 = ArcBasisMill.componentTypeSymbolBuilder()
       .setName(multipleNormalCompName)
       .setSpannedScope(ArcBasisMill.scope())
       .build();
@@ -81,9 +83,9 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     CompKindCheckResult result4normal = new CompKindCheckResult();
     CompKindCheckResult result4qual = new CompKindCheckResult();
     CompKindCheckResult result4multi = new CompKindCheckResult();
-    SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
-    SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
-    SynthesizeComponentFromMCBasicTypes synth4multi = new SynthesizeComponentFromMCBasicTypes(result4multi);
+    SynthesizeCompKindFromMCBasicTypes synth4normal = new SynthesizeCompKindFromMCBasicTypes(result4normal);
+    SynthesizeCompKindFromMCBasicTypes synth4qual = new SynthesizeCompKindFromMCBasicTypes(result4qual);
+    SynthesizeCompKindFromMCBasicTypes synth4multi = new SynthesizeCompKindFromMCBasicTypes(result4multi);
 
     // When
     synth4normal.handle(astNormalComp);
@@ -97,16 +99,13 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
       () -> Assertions.assertTrue(result4multi.getResult().isPresent())
     );
     Assertions.assertAll(
-      () -> Assertions.assertTrue(result4normal.getResult().get() instanceof TypeExprOfComponent),
-      () -> Assertions.assertTrue(result4qual.getResult().get() instanceof TypeExprOfComponent),
-      () -> Assertions.assertTrue(result4multi.getResult().get() instanceof TypeExprOfComponent),
       () -> Assertions.assertEquals(normalComp, result4normal.getResult().get().getTypeInfo()),
       () -> Assertions.assertEquals(qualifiedComp, result4qual.getResult().get().getTypeInfo()),
       () -> Assertions.assertTrue(
         result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp1)
           || result4multi.getResult().get().getTypeInfo().equals(multipleNormalComp2)),
       () -> assertThat(getLoggedErrorCodes())
-        .containsExactlyInAnyOrder(getErrorCodes(ArcError.AMBIGUOUS_REFERENCE)),
+        .containsExactlyInAnyOrder(getErrorCodes(MCError.AMBIGUOUS_COMPONENT_REFERENCE)),
 
       () -> assertThat(result4normal.getResult().get().getSourceNode()).contains(astNormalComp),
       () -> assertThat(result4qual.getResult().get().getSourceNode()).contains(astQualComp),
@@ -134,8 +133,8 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
 
     CompKindCheckResult result4normal = new CompKindCheckResult();
     CompKindCheckResult result4qual = new CompKindCheckResult();
-    SynthesizeComponentFromMCBasicTypes synth4normal = new SynthesizeComponentFromMCBasicTypes(result4normal);
-    SynthesizeComponentFromMCBasicTypes synth4qual = new SynthesizeComponentFromMCBasicTypes(result4qual);
+    SynthesizeCompKindFromMCBasicTypes synth4normal = new SynthesizeCompKindFromMCBasicTypes(result4normal);
+    SynthesizeCompKindFromMCBasicTypes synth4qual = new SynthesizeCompKindFromMCBasicTypes(result4qual);
 
     // When
     synth4normal.handle(astNormalComp);
@@ -147,8 +146,8 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(
         getErrorCodes(
-          ArcError.MISSING_COMPONENT,
-          ArcError.MISSING_COMPONENT
+          MCError.MISSING_COMPONENT,
+          MCError.MISSING_COMPONENT
         )
       );
   }
@@ -158,7 +157,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     // Given
     ASTMCVoidType voidType = ArcBasisMill.mCVoidTypeBuilder().build();
     CompKindCheckResult resultWrapper = new CompKindCheckResult();
-    SynthesizeComponentFromMCBasicTypes synth = new SynthesizeComponentFromMCBasicTypes(resultWrapper);
+    SynthesizeCompKindFromMCBasicTypes synth = new SynthesizeCompKindFromMCBasicTypes(resultWrapper);
 
     // Attach a traverser to the synth, as we do not override the handle method and thus the synth tries to traverse the
     // AST. In the end this should result in an empty synth result, however, if we do not attach a traverser, this will
