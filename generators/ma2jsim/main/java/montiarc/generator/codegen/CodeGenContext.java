@@ -6,20 +6,26 @@ package montiarc.generator.codegen;
  */
 public class CodeGenContext {
 
-  protected boolean isInGenericTypeExpression;
+  protected int inGenericTypeExpressionLevel;
 
   public CodeGenContext() {
-    isInGenericTypeExpression = false;
+    inGenericTypeExpressionLevel = 0;
   }
 
   /**
    * @return true if we are currently traversing a generic type expression
    */
   public boolean isInGenericTypeExpression() {
-    return isInGenericTypeExpression;
+    return inGenericTypeExpressionLevel > 0;
   }
 
-  public void setInGenericTypeExpression(boolean value) {
-    isInGenericTypeExpression = value;
+  public void pushInGenericTypeExpression() {
+    inGenericTypeExpressionLevel++;
+  }
+
+  public void popInGenericTypeExpression() {
+    if (inGenericTypeExpressionLevel > 0) {
+      inGenericTypeExpressionLevel--;
+    }
   }
 }

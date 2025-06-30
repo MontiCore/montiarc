@@ -32,7 +32,7 @@ public class MCSimpleGenericTypesJavaPrinter extends MCSimpleGenericTypesPrettyP
   @Override
   public void handle(@NotNull ASTMCBasicGenericType node) {
     Preconditions.checkNotNull(node);
-    getContext().setInGenericTypeExpression(true);
+    getContext().pushInGenericTypeExpression();
     if (node.getNameList().size() == 1) {
       Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(node.getNameList().get(0));
       if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
@@ -57,6 +57,6 @@ public class MCSimpleGenericTypesJavaPrinter extends MCSimpleGenericTypesPrettyP
       }
     }
     super.handle(node);
-    getContext().setInGenericTypeExpression(false);
+    getContext().popInGenericTypeExpression();
   }
 }

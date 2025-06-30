@@ -28,18 +28,18 @@ public class MCCollectionTypesJavaPrinter extends MCCollectionTypesPrettyPrinter
   @Override
   public void handle(@NotNull ASTMCListType node) {
     Preconditions.checkNotNull(node);
-    getContext().setInGenericTypeExpression(true);
+    getContext().pushInGenericTypeExpression();
     this.getPrinter().print("java.util.List<");
     node.getMCTypeArgument().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
     this.getPrinter().print(">");
-    getContext().setInGenericTypeExpression(false);
+    getContext().popInGenericTypeExpression();
   }
 
   @Override
   public void handle(@NotNull ASTMCMapType node) {
     Preconditions.checkNotNull(node);
-    getContext().setInGenericTypeExpression(true);
+    getContext().pushInGenericTypeExpression();
     this.getPrinter().print("java.util.Map<");
     node.getKey().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
@@ -47,28 +47,28 @@ public class MCCollectionTypesJavaPrinter extends MCCollectionTypesPrettyPrinter
     node.getValue().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
     this.getPrinter().print(">");
-    getContext().setInGenericTypeExpression(false);
+    getContext().popInGenericTypeExpression();
   }
 
   @Override
   public void handle(@NotNull ASTMCSetType node) {
     Preconditions.checkNotNull(node);
-    getContext().setInGenericTypeExpression(true);
+    getContext().pushInGenericTypeExpression();
     this.getPrinter().print("java.util.Set<");
     node.getMCTypeArgument().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
     this.getPrinter().print(">");
-    getContext().setInGenericTypeExpression(false);
+    getContext().popInGenericTypeExpression();
   }
 
   @Override
   public void handle(@NotNull ASTMCOptionalType node) {
     Preconditions.checkNotNull(node);
-    getContext().setInGenericTypeExpression(true);
+    getContext().pushInGenericTypeExpression();
     this.getPrinter().print("java.util.Optional<");
     node.getMCTypeArgument().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
     this.getPrinter().print(">");
-    getContext().setInGenericTypeExpression(false);
+    getContext().popInGenericTypeExpression();
   }
 }
