@@ -9,11 +9,13 @@ component PrimitiveGenerics<T> {
   port out List<T> o;
 
   List<int> v = [1, 2, 3];
+  Optional<int> oInt = Optional.empty();
 
   automaton {
     initial state S;
     S -> S / {
       List<int> x = v;
+      Optional<int> oIntLocalVar = oInt;
     };
   }
 }

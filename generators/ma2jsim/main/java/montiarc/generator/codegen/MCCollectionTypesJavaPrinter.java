@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.types.mccollectiontypes._ast.ASTMCListType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCMapType;
+import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCSetType;
 import de.monticore.types.mccollectiontypes._prettyprint.MCCollectionTypesPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -54,6 +55,17 @@ public class MCCollectionTypesJavaPrinter extends MCCollectionTypesPrettyPrinter
     Preconditions.checkNotNull(node);
     getContext().setInGenericTypeExpression(true);
     this.getPrinter().print("java.util.Set<");
+    node.getMCTypeArgument().accept(this.getTraverser());
+    this.getPrinter().stripTrailing();
+    this.getPrinter().print(">");
+    getContext().setInGenericTypeExpression(false);
+  }
+
+  @Override
+  public void handle(@NotNull ASTMCOptionalType node) {
+    Preconditions.checkNotNull(node);
+    getContext().setInGenericTypeExpression(true);
+    this.getPrinter().print("java.util.Optional<");
     node.getMCTypeArgument().accept(this.getTraverser());
     this.getPrinter().stripTrailing();
     this.getPrinter().print(">");
