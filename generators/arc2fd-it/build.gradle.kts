@@ -29,7 +29,14 @@ val genFdTask = tasks.register<JavaExec>("generateFD") {
   classpath(generateFD)
   mainClass.set("montiarc.arc2fd.FDGenerator")
 
-  args("$projectDir/main/resources/", genResourceDir)
+  val inputDir = file("$projectDir/main/resources/")
+  val outputDir = file(genResourceDir)
+
+  // Specify input and output for Gradle's up-to-date checks
+  inputs.dir(inputDir)
+  outputs.dir(outputDir)
+
+  args(inputDir, outputDir)
 }
 
 // Setting up task dependencies
