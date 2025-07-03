@@ -257,6 +257,11 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
     comp.getSpannedScope().add(portIncoming);
     comp.getSpannedScope().add(portOutgoing);
 
+    // Adapted symbols should not be present in deserialization
+    // Resolve ports as variables to create adapters
+    comp.getSpannedScope().resolveVariable(portIncoming.getName());
+    comp.getSpannedScope().resolveVariable(portOutgoing.getName());
+
     ComponentTypeSymbolDeSer deser = new ComponentTypeSymbolDeSer();
     CompSymbolsSymbols2Json comp2json = (CompSymbolsSymbols2Json) (new ArcBasisSymbols2Json()).getTraverser().getCompSymbolsVisitorList().get(0);
 
