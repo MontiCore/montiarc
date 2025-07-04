@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.incorrect;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+<<montiarc="test/resources/montiarc/SequentialComposition.arc">>
+sequencediagram SubcomponentExistsInEmbeddingComponent {
+  sub1;
+  inv; // inv does not exist in SequentialComposition.arc
+}

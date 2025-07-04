@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.incorrect;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+sequencediagram ObserveOnUnconnectedPort {
+  inv:Inverter;
+
+  -> inv.i : OnOff.ON; // not connected, can never be observed (missing trigger keyword)
+}

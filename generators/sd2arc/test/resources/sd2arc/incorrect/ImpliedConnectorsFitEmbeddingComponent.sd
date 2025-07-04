@@ -1,0 +1,13 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.incorrect;
+
+import montiarc.types.OnOff;
+import montiarc.timed.Inverter;
+
+<<montiarc="test/resources/montiarc/SequentialComposition.arc">>
+sequencediagram ImpliedConnectorsFitEmbeddingComponent {
+  sub1;
+  sub3;
+
+  sub1.o -> sub3.i : ...; // sub1.o -> sub3.i is not connected in SequentialComposition.arc
+}

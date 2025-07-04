@@ -1,0 +1,16 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.automata;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+import montiarc.timed.automata.Medium;
+
+complete sequencediagram InverterMediumSD1 {
+  inv:Inverter;
+  med:Medium;
+
+  -> inv.i : trigger OnOff.ON;
+  inv.o -> med.i : OnOff.OFF;
+  let OnOff m = med.i;
+  med.o -> : m;
+}

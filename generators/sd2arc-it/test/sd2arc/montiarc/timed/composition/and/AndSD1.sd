@@ -1,0 +1,17 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.composition.and;
+
+import montiarc.types.OnOff;
+
+<<montiarc="main/montiarc/montiarc/timed/composition/And.arc">>
+sequencediagram AndSD1 {
+  visible notA;
+  notB;
+  nor:Nor;
+
+  -> notA.a : trigger true ;
+  notA.q -> nor.a : false ;
+  nor.q -> : ... ;
+
+  assert (notA.a && notB.b) == nor.q;
+}

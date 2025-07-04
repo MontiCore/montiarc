@@ -1,0 +1,20 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.automata.inverter;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+
+complete sequencediagram InverterSD1 {
+  inv:Inverter;
+
+  let OnOff m = OnOff.ON;
+
+  -> inv.i : trigger OnOff.ON;
+  inv.o -> : OnOff.OFF;
+  -> inv.i : trigger inv.o;
+  inv.o -> : ...;
+  let OnOff m2 = inv.o;
+  assert m == OnOff.ON;
+  assert inv.o == OnOff.ON;
+  assert m2 == inv.o;
+}

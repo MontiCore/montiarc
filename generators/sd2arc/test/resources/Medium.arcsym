@@ -1,0 +1,48 @@
+{
+  "generated-using": "www.MontiCore.de technology",
+  "name": "Medium",
+  "package": "montiarc.timed",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "Medium",
+      "fullName": "montiarc.timed.Medium",
+      "packageName": "montiarc.timed",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "i",
+            "fullName": "montiarc.timed.Medium.i",
+            "packageName": "montiarc.timed",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "montiarc.types.OnOff"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "o",
+            "fullName": "montiarc.timed.Medium.o",
+            "packageName": "montiarc.timed",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "montiarc.types.OnOff"
+            },
+            "outgoing": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "de.monticore.scevents._symboltable.SCEventDefSymbol",
+            "name": "i",
+            "fullName": "montiarc.timed.Medium.i",
+            "packageName": "montiarc.timed"
+          }
+        ]
+      }
+    }
+  ]
+}

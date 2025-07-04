@@ -1,0 +1,21 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.composition.sequentialComposition;
+
+import montiarc.types.OnOff;
+
+<<montiarc="main/montiarc/montiarc/timed/composition/SequentialComposition.arc">>
+sequencediagram SequentialCompositionSD1 {
+  sub1:Medium;
+  sub3:Medium;
+
+  let OnOff m = OnOff.ON;
+
+  -> sub1.i : trigger OnOff.ON;
+  sub3.o -> : OnOff.OFF;
+  -> sub1.i : trigger OnOff.OFF;
+  sub3.o -> : ...;
+  let OnOff m2 = sub3.o;
+  assert m == OnOff.ON;
+  assert sub3.o == OnOff.ON;
+  assert m2 == sub3.o;
+}

@@ -1,0 +1,24 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.composition;
+
+import montiarc.types.OnOff;
+import montiarc.timed.automata.Inverter;
+import montiarc.timed.automata.Medium;
+
+component SequentialComposition {
+
+  port in OnOff i;
+  port out OnOff o;
+
+  Medium sub1;
+  Inverter sub2;
+  Medium sub3;
+
+  i -> sub1.i;
+
+  sub1.o -> sub2.i;
+
+  sub2.o -> sub3.i;
+
+  sub3.o -> o;
+}

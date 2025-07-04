@@ -1,0 +1,20 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.timed.composition.deploy;
+
+import montiarc.types.OnOff;
+
+<<montiarc="main/montiarc/montiarc/timed/composition/Deploy.arc">>
+sequencediagram DeployTest {
+  parallel;
+
+  parallel.o1 -> : OnOff.OFF;
+  parallel.o2 -> : OnOff.OFF;
+
+  parallel.o1 -> : OnOff.OFF;
+  parallel.o2 -> : OnOff.OFF;
+
+  parallel.o1 -> : OnOff.OFF;
+  parallel.o2 -> : OnOff.OFF;
+
+  parallel.o1 -> : OnOff.OFF;
+}

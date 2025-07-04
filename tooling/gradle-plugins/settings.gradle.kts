@@ -18,6 +18,7 @@ rootProject.name = "gradle-plugins"
 
 include(":cd2pojo")
 include(":cd4ma-dependencies")
+include(":sd2arc")
 include(":ma2java")
 include(":ma2jsim")
 include(":montiarc-base")
