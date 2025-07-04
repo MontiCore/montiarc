@@ -15,8 +15,6 @@ import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
-import de.monticore.types3.util.MapBasedTypeCheck3;
-import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
@@ -44,7 +42,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
   static SetExpressionsCTTIVisitor setExpressions;
 
   /**
-   * @see MapBasedTypeCheck3(ITraverser, Type4Ast, InferenceContext4Ast)
+   * @see de.monticore.types3.util.MapBasedTypeCheck3(de.monticore.visitor.ITraverser, Type4Ast, InferenceContext4Ast)
    */
   protected MontiArcTypeCheck(MontiArcTraverser typeTraverser,
                               Type4Ast type4Ast,

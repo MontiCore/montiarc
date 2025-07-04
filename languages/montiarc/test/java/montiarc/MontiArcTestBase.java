@@ -3,7 +3,6 @@ package montiarc;
 
 import arcautomaton.ArcAutomatonMill;
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;

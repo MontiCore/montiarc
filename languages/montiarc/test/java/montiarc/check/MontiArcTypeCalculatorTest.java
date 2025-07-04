@@ -8,7 +8,6 @@ import arcbasis._symboltable.SymbolService;
 import arcbasis.check.AbstractArcTypeCalculatorTest;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
@@ -508,7 +507,7 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   /**
    * Tests that in the case of a composed subexpression with invalid subexpressions every subexpression is type-checked.
    * However, there is one exception: if a {@link de.monticore.expressions.expressionsbasis._ast.ASTNameExpression} or
-   * {@link ASTFieldAccessExpression} represent the qualification of a method name or field, then the qualified name
+   * {@link de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression} represent the qualification of a method name or field, then the qualified name
    * parts will not be traversed by the type check. Therefore, they are unsuitable for being tested by
    * {@link #shouldEagerlyEvaluateSubExpressions(String)} that internally checks that all sub expressions have been
    * traversed.
