@@ -55,12 +55,12 @@ import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
 import de.monticore.expressions.assignmentexpressions.cocos.AssignmentExpressionsOnlyAssignToLValuesCoCo;
+import de.monticore.scbasis._cocos.AnteBlockOnlyWithInitialStateModifier;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.scstatehierarchy.NoSubstatesHandler;
-import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
@@ -217,7 +217,7 @@ public class MontiArcCoCos {
     traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new AtLeastOneInitialState(traverser));
-    checker.addCoCo(new AnteBlocksOnlyForInitialStates());
+    checker.addCoCo(new AnteBlockOnlyWithInitialStateModifier());
 
     // ArcAutomaton CoCos
     addCoCoAs(new variablearc._cocos.arcautomaton.EventTriggerExists(), checkVariants ? varChecker::addCoCo : checker::addCoCo);

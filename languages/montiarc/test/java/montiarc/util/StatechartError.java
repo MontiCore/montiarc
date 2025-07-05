@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import de.monticore.scbasis._cocos.AnteBlockOnlyWithInitialStateModifier;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.CapitalStateNames;
 import de.monticore.scbasis._cocos.PackageCorrespondsToFolders;
@@ -8,7 +9,6 @@ import de.monticore.scbasis._cocos.SCFileExtension;
 import de.monticore.scbasis._cocos.SCNameIsArtifactName;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
-import de.monticore.sctransitions4code._cocos.AnteBlocksOnlyForInitialStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 
 /**
@@ -25,7 +25,7 @@ public enum StatechartError implements Error {
   SC_NAME_IS_ARTIFACT_NAME(SCNameIsArtifactName.ERROR_CODE),
   PRECONDITION_IS_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE),
   MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE),
-  ANTE_NOT_AT_INITIAL(AnteBlocksOnlyForInitialStates.ERROR_CODE);
+  ANTE_NOT_AT_INITIAL(AnteBlockOnlyWithInitialStateModifier.ERROR_CODE);
 
   private final String errorCode;
 
