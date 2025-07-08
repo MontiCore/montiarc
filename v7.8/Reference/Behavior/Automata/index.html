@@ -1923,9 +1923,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#time-events" class="md-nav__link">
+  <a href="#time-events-epsilon-transitions" class="md-nav__link">
     <span class="md-ellipsis">
-      Time Events
+      Time Events (Epsilon Transitions)
     </span>
   </a>
   
@@ -2623,9 +2623,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#time-events" class="md-nav__link">
+  <a href="#time-events-epsilon-transitions" class="md-nav__link">
     <span class="md-ellipsis">
-      Time Events
+      Time Events (Epsilon Transitions)
     </span>
   </a>
   
@@ -2757,6 +2757,10 @@ transition is triggered by discrete time progress.</p>
 transition where <code>ACTION</code> is a list of statements.</p>
 </li>
 </ul>
+<div class="admonition info">
+<p class="admonition-title">Hint</p>
+<p>If a transition does <strong>not</strong> specify an event trigger (i.e., no port name is written after the guard or at all), then this transition is called an <em>epsilon transition</em> or <em>time-triggered transition</em>. It is executed at each simulation time step.</p>
+</div>
 <h2 id="entry-and-exit-actions">Entry and Exit Actions</h2>
 <p>A state may define entry and exit actions that are executed when entering 
 respectively exiting the state. A state with both entry and exit actions 
@@ -2816,17 +2820,17 @@ corresponding port.</p>
 <div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 <span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">};</span>
 </code></pre></div>
-<h2 id="time-events">Time Events</h2>
+<h2 id="time-events-epsilon-transitions">Time Events (Epsilon Transitions)</h2>
 <p>A time event, which we also call a tick, occurs at discrete points in time. 
 It is not specified how much time passes between two ticks, but it can be 
 assumed that any calculation can be computed between two successive ticks.</p>
-<p>If a transition does not specify a message event, it is implicitly triggered by a time event.</p>
+<p>If a transition does not specify a message event, it is implicitly triggered by a time event, it is what we call epsilon transition.</p>
 <p>The transition </p>
 <div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">};</span><span class="w"> </span><span class="c1">// for synchronous automata</span>
 </code></pre></div>
 <p>is executed at discrete equidistant points in time, i.e., whenever a time slice finishes. 
 Of course, as usual, the automaton has to be in state <code>S1</code> and the <code>CONDITION</code> evaluates to <code>true</code>.
-However, no explicit incoming trigger is needed; only the assumed internally or otherwise realized clock issues a 'TICK'.</p>
+However, no explicit incoming trigger is needed; only the assumed internally clock issues a 'TICK'.</p>
 <p>Given the port declarations</p>
 <div class="highlight"><pre><span></span><code><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
 <span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
