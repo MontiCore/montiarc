@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import arcautomaton.ArcAutomatonMill;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.se_rwth.commons.logging.Log;
@@ -43,7 +42,6 @@ public abstract class MontiArcTestBase extends ATestBase {
   protected void init() {
     MontiArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
-    ArcAutomatonMill.initializeTick();
     BasicSymbolsMill.initializeObject();
     BasicSymbolsMill.initializeString();
   }

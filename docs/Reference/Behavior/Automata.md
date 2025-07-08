@@ -67,6 +67,9 @@ transition is triggered by discrete time progress.
 * `/ { ACTION }` (optional) the actions that are executed when taking the 
 transition where `ACTION` is a list of statements.
 
+!!! info "Hint" 
+    If a transition does **not** specify an event trigger (i.e., no port name is written after the guard or at all), then this transition is called an _epsilon transition_ or _time-triggered transition_. It is executed at each simulation time step.
+
 ## Entry and Exit Actions
 
 A state may define entry and exit actions that are executed when entering 
@@ -150,13 +153,13 @@ S1 -> S2 [number >= 0] number / { int v = number; };
 S1 -> S2 [number < 0] number / { int v = -number; };
 ```
 
-## Time Events
+## Time Events (Epsilon Transitions)
 
 A time event, which we also call a tick, occurs at discrete points in time. 
 It is not specified how much time passes between two ticks, but it can be 
 assumed that any calculation can be computed between two successive ticks.
 
-If a transition does not specify a message event, it is implicitly triggered by a time event.
+If a transition does not specify a message event, it is implicitly triggered by a time event, it is what we call epsilon transition.
 
 The transition 
 
@@ -166,7 +169,7 @@ S1 -> S2 [CONDITION] / { ACTION }; // for synchronous automata
 
 is executed at discrete equidistant points in time, i.e., whenever a time slice finishes. 
 Of course, as usual, the automaton has to be in state `S1` and the `CONDITION` evaluates to `true`.
-However, no explicit incoming trigger is needed; only the assumed internally or otherwise realized clock issues a 'TICK'.
+However, no explicit incoming trigger is needed; only the assumed internally clock issues a 'TICK'.
 
 Given the port declarations
 

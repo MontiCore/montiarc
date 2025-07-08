@@ -10,9 +10,6 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTTransitionBodyCoCo;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import static arcautomaton.ArcAutomatonMill.TICK;
-import static arcautomaton.ArcAutomatonMillTOP.typeDispatcher;
-
 /**
  * Checks that transitions triggered by tick events do not contain references
  * to non-synchronous ports, as only synchronous ports are available during a
@@ -40,10 +37,7 @@ public class NoNonSyncInputPortInEpsilonTransition implements SCTransitions4Code
   public void check(@NotNull ASTTransitionBody node) {
     Preconditions.checkNotNull(node);
 
-    if (!node.isPresentSCEvent()
-        || (typeDispatcher().isArcAutomatonASTMsgEvent(node.getSCEvent())
-        && typeDispatcher().asArcAutomatonASTMsgEvent(node.getSCEvent())
-        .getName().equals(TICK))) {
+    if (!node.isPresentSCEvent()) {
       node.accept(this.traverser);
     }
   }

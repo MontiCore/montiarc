@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import arcautomaton.ArcAutomatonMill;
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
@@ -50,7 +49,6 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   protected void init() {
     MontiArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
-    ArcAutomatonMill.initializeTick();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     this.setUpScope();

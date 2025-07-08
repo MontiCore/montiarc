@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes;
 
-import arcautomaton.ArcAutomatonMill;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import montiarc.ATestBase;
 import org.junit.jupiter.api.BeforeAll;
@@ -37,6 +36,5 @@ public abstract class ModesTestBase extends ATestBase {
   protected void init() {
     VariableArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
-    ArcAutomatonMill.initializeTick();
   }
 }

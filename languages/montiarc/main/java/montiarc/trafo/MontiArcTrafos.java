@@ -25,7 +25,6 @@ public class MontiArcTrafos {
       new MAEnforceBlocksInVarIfTrafo()
         .andThen(new MASeparateCompInstantiationFromTypeDeclTrafo())
         .andThen(new MAConnectedToNormalCompInstanceTrafo())
-        .andThen(new MAReplaceAbsentTriggersByTicks())
         .apply(ast)
     );
   }

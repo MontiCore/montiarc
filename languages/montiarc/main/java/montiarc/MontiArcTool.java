@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
-import arcautomaton.ArcAutomatonMill;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.generating.templateengine.reporting.Reporting;
@@ -650,7 +649,6 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   protected void initBuildInSymbols(boolean c2mc) {
     BasicSymbolsMill.initializePrimitives();
-    ArcAutomatonMill.initializeTick();
     if (c2mc) {
       this.initializeClass2MC();
     } else {

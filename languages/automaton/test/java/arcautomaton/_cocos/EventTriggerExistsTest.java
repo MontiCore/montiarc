@@ -66,8 +66,6 @@ public class EventTriggerExistsTest extends ArcAutomatonTestBase {
   
   protected static Stream<Arguments> validParams() {
     return Stream.of(
-        Arguments.arguments("Tick", new String[0]),
-        Arguments.arguments("Tick", new String[] {"aPort"}),
         Arguments.arguments("aPort", new String[] {"aPort"}),
         Arguments.arguments("aPort", new String[] {"aPort", "bPort"}),
         Arguments.arguments("aPort", new String[] {"aPort", "aPort"})

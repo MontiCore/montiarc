@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.util;
 
-import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
 import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._symboltable.Port2EventDefAdapter;
@@ -135,38 +134,9 @@ public class Helper {
       .collect(Collectors.toList());
   }
 
-  /**
-   * Get all transitions from the given statechart that are triggered by a tick event.
-   *
-   * @param sc the statechart from which transitions should be extracted
-   * @return all transitions triggered by a tick event
-   */
-  public List<ASTSCTransition> getTransitionsForTickEvent(ASTArcStatechart sc) {
-    return filterTransitionsForTickTrigger(sc.streamTransitions());
-  }
-
-  public List<ASTSCTransition> getTransitionsForTickEvent(ASTModeAutomaton modeAutomaton) {
-    return filterTransitionsForTickTrigger(getTransitions(modeAutomaton).stream());
-  }
-
-  public List<ASTSCTransition> filterTransitionsForTickTrigger(Stream<ASTSCTransition> transitions) {
-    ArrayList<ASTSCTransition> result = new ArrayList<>();
-    transitions.forEach(tr -> {
-      Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
-      if (body.isPresent()
-        && body.get().isPresentSCEvent()
-        && body.get().getSCEvent() instanceof ASTMsgEvent
-        && ArcAutomatonMill.TICK.equals(((ASTMsgEvent) body.get().getSCEvent()).getName())
-      ) {
-        result.add(tr);
-      }
-    });
-    return result;
-  }
-
   public List<ASTSCTransition> getTransitionsForTickEventFromState(ASTModeAutomaton modeAutomaton, ASTArcMode srcMode) {
     Preconditions.checkArgument(srcMode.isPresentSymbol());
-    return getTransitionsForTickEvent(modeAutomaton).stream()
+    return getTransitionsWithoutEvent(modeAutomaton).stream()
       .filter(tr -> tr.getSourceNameSymbol().equals(srcMode.getSymbol()))
       .collect(Collectors.toList());
   }
@@ -223,7 +193,6 @@ public class Helper {
       .filter(ASTTransitionBody::isPresentSCEvent)
       .filter(bdy -> bdy.getSCEvent() instanceof ASTMsgEvent)
       .map(bdy -> (ASTMsgEvent) bdy.getSCEvent())
-      .filter(event -> !ArcAutomatonMill.TICK.equals(event.getName()))
       .map(event -> event.getEnclosingScope().resolveSCEventDefMany(event.getName(), predicate).stream().findFirst())
       .filter(Optional::isPresent)
       .filter(sym -> sym.get() instanceof Port2EventDefAdapter)

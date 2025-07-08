@@ -29,7 +29,7 @@ If it has an up command, the motor moves the elevator up; if it has a down comma
 Otherwise, it stays in the same position. The motor always outputs its current position.
 
 !!! info "Hint"
-    Inside tick transitions, we can only read from synchronous ports and not event ports. Since they only have a value once an event has been received.
+    Inside epsilon transitions, we can only read from synchronous ports and not event ports. Since they only have a value once an event has been received.
 
 === "Motor.arc"
     ```montiarc

@@ -9,8 +9,7 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTTransitionBodyCoCo;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import static arcautomaton.ArcAutomatonMill.TICK;
-import static arcautomaton.ArcAutomatonMillTOP.typeDispatcher;
+import static arcautomaton.ArcAutomatonMill.typeDispatcher;
 
 /**
  * Checks that transitions triggered by message events do not reference input
@@ -27,12 +26,9 @@ public class NoOtherInputPortInMsgTransition implements SCTransitions4CodeASTTra
     Preconditions.checkNotNull(node);
 
     if (node.isPresentSCEvent()
-      && typeDispatcher().isArcAutomatonASTMsgEvent(node.getSCEvent())
-      && !typeDispatcher().asArcAutomatonASTMsgEvent(node.getSCEvent())
-      .getName().equals(TICK)) {
+      && typeDispatcher().isArcAutomatonASTMsgEvent(node.getSCEvent())) {
 
       String event = typeDispatcher().asArcAutomatonASTMsgEvent(node.getSCEvent()).getName();
-
       ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
       traverser.add4ExpressionsBasis(createVisitor(event));
       node.accept(traverser);

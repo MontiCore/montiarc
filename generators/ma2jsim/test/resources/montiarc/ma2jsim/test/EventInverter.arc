@@ -21,7 +21,7 @@ component EventInverter {
       iOut = -1 * iIn;
     };
 
-    S -> S Tick / {
+    S -> S / {
       java.lang.System.out.println("Tick stimulus.");
     };
 

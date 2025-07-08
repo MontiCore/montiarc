@@ -36,6 +36,5 @@ public abstract class ArcAutomatonTestBase extends ATestBase {
   protected void init() {
     ArcBasisTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
-    ArcAutomatonMill.initializeTick();
   }
 }

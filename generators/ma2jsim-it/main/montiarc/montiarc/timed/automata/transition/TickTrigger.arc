@@ -10,6 +10,6 @@ component TickTrigger {
   automaton {
     initial state S;
     S -> S i / { o = OnOff.OFF; };
-    S -> S Tick / { o = OnOff.ON; };
+    S -> S / { o = OnOff.ON; };
   }
 }

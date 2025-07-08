@@ -17,7 +17,7 @@ component WithModes {
       Leaf sharedNameInModes;
     }
 
-      M1 -> M2 Tick;
-      M2 -> M1 Tick;
+      M1 -> M2;
+      M2 -> M1;
   }
 }

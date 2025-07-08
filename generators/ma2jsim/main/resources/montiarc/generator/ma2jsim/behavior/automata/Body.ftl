@@ -22,7 +22,7 @@ ${tc.signature("automaton")}
 protected ${ast.getName()}${suffixes.states()}${helper.variantSuffix(ast.getSymbol())}<@Util.printTypeParameters ast false/> states;
 
 <#-- Declaring transition fields for tick-triggered transitions -->
-<#assign transitionsForTickEvent = helper.getTransitionsForTickEvent(automaton)/>
+<#assign transitionsForTickEvent = helper.getTransitionsWithoutEvent(automaton)/>
 <#list transitionsForTickEvent as transition>
   protected montiarc.rte.automaton.Transition<${tickMsgType}> ${prefixes.transition()}tick_${transition?counter};
 </#list>

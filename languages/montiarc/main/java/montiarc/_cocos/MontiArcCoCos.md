@@ -53,17 +53,11 @@
 | ☑     | ☒           | CompArgNoAssignmentExpr             | ArcBasis | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158                   |
 | ☐     | ☒           | ImportsAreUnique                    |          |                                                               |
 | ☐     | ☒           | ImportsAreUsed                      |          |                                                               |
-| ☑     | ☒           | PortnamedTick                       | ArcBasis | 0xC1166                                                       |
-| ☑     | ☒           | ComponentNamedTick                  | ArcBasis | 0xC1168                                                       |
-| ☑     | ☒           | ComponentInstantiationNamedTick     | ArcBasis | 0xC1169                                                       |
-| ☑     | ☒           | ParameterNamedTick                  | ArcBasis | 0xC1170                                                       |
-| ☑     | ☒           | FieldNamedTick                      | ArcBasis | 0xC1171                                                       |
 | ☑     | ☑           | AtomicNoConnector                   | ArcBasis | 0xC1174                                                       |
 | ☑     | ☒           | TypeParameterCapitalization         | ArcBasis | 0xC1175                                                       |
 | ☑     | ☒           | TypeBound                           | ArcBasis | 0xC1176, 0xC1177, 0xC1178                                     |
 | ☑     | ☒           | ComponentHeritageRawType            | ArcBasis | 0xC1182                                                       |
 | ☑     | ☒           | RefinementRawType                   | ArcBasis | 0xC1182                                                       |
-| ☑     | ☒           | TypeParameterNamedTick              | ArcBasis | 0xC1172                                                       |
 | ☑     | ☒           | RefinementPortsMatch                | ArcBasis | 0xC1184, 0xC1185, 0xC1186, 0xC1187, 0xC1188, 0xC1189          |
 | ☑     | ☒           | CheckNoFieldDependencyCycles        | ArcBasis | 0xC1190                                                       |
 | ☑     | ☒           | PortInheritanceTiming               | ArcBasis | 0xC1191                                                       |

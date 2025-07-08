@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._lsp.language_access;
 
-import arcautomaton.ArcAutomatonMill;
+
 import arcbasis._symboltable.ArcBasisScopesGenitorP3;
 import de.monticore.cd4analysis.CD4AnalysisMill;
 import de.monticore.cd4analysis.resolver.CD4AnalysisResolver;
@@ -34,7 +34,6 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     setGlobalScope((MontiArcGlobalScope) gs);
     ensureAdapterPresent(gs);
     BasicSymbolsMill.initializePrimitives();
-    ArcAutomatonMill.initializeTick();
     MontiArcTypeCheck.init();
   }
 
