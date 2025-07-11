@@ -1,13 +1,15 @@
 ---
+template: landingpage.html
+title: The MontiArc Architecture Description Language
 hide:
   - navigation
   - toc
 ---
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 align="center">
+<h1 id="more" align="center">
   <picture>
-    <img width="400" src="img/Logo.png" alt="MontiArc">
+    <img width="400" src="assets/images/Logo.png" alt="MontiArc">
   </picture>
 </h1>
 
@@ -73,15 +75,15 @@ dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
     [:octicons-arrow-right-24: Read more](./Reference/index.md)
 
 -   :material-book-open-variant-outline: &nbsp;
-    __Library__
+    __Libraries__
 
     ---
 
-    A collection of standard components and functions included in every model.
+    Learn about library components and start publishing your own.
 
     ---
 
-    [:octicons-arrow-right-24: Read more](./Library/index.md)
+    [:octicons-arrow-right-24: Read more](./Libraries/index.md)
 
 -   :material-chat-question: &nbsp;
     __FAQ__
@@ -107,15 +109,13 @@ dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
 
 </div>
 
----
-
+<div class="section-card" markdown>
 ## Found an issue?
 
 MontiArc is actively maintained by the [Chair of Software Engineering](https://www.se-rwth.de/). 
-
 There are multiple ways in which you can improve MontiArc to help you and others who might encounter the same issues in the future.
 
-<div class="grid cards" markdown>
+<div class="grid cards cards-inverse" markdown>
 
 -   :material-bug-outline: &nbsp;
     __Something is not working?__
@@ -162,7 +162,6 @@ There are multiple ways in which you can improve MontiArc to help you and others
 
     [:octicons-arrow-right-24: Set up your development environment](https://github.com/MontiCore/montiarc/blob/dev/CONTRIBUTING.md)<br/>
     [:octicons-arrow-right-24: Create a pull request](https://github.com/MontiCore/montiarc/pulls)
-
 </div>
 
 !!! info "Hint"
@@ -171,7 +170,7 @@ There are multiple ways in which you can improve MontiArc to help you and others
     - Check that no similar issue already exists [here](https://github.com/MontiCore/montiarc/issues)
     - You provided all information needed to understand the issue
 
----
+</div>
 
 ## Further Information
 

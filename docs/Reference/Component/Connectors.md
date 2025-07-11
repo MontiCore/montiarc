@@ -103,7 +103,7 @@ Where the delay happens in the communication circle is irrelevant, just there
 needs to be some kind of delay. 
 
 Delay can be introduced directly on the [behavior](../Behavior/index.md) definition of an atomic component by marking it [delayed](../Behavior/Delay.md).
-Or using explicit delay components that delay all messages they receive. As part of the [standard language library](../../Library/Components.md), these components are available in all models.
+Or using explicit delay components that delay all messages they receive. As part of the [standard language library](../../Libraries/StandardLibrary/Components.md), these components are available in all models.
 
 === "Event-based"
     ```montiarc

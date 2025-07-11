@@ -17,8 +17,8 @@ theme:
     - social
     - content.code.copy
     - content.code.annotate
-  logo: img/icon-mono.png
-  favicon: img/icon.png
+  logo: assets/images/icon-mono.png
+  favicon: assets/images/icon.png
   icon:
     annotation: material/help-circle
 
@@ -83,12 +83,13 @@ nav:
     - Usage: 'Usage/index.md'
     - Gradle:
       - Gradle: 'Usage/Gradle/index.md'
-      - CD2Java: 'Usage/Gradle/CD2Pojo.md'
       - MontiArc: 'Usage/Gradle/MontiArc.md'
+      - CD2Java: 'Usage/Gradle/CD2Pojo.md'
+      - SD2Arc: 'Usage/Gradle/SD2Arc.md'
     - CLI:
       - CLI: 'Usage/CLI/index.md'
-      - CD2Java: 'Usage/CLI/CD2Pojo.md'
       - MontiArc: 'Usage/CLI/MontiArc.md'
+      - CD2Java: 'Usage/CLI/CD2Pojo.md'
     - Errors: 
         - Errors: 'Usage/Errors/index.md'
     - Simulation: 
@@ -127,9 +128,14 @@ nav:
       - Testing: 'Reference/Testing/index.md'
       - MaUnit: 'Reference/Testing/MaUnit.md'
       - JUnit: 'Reference/Testing/JUnit.md'
-  - Library:
-    - Library: 'Library/index.md'
-    - Components: 'Library/Components.md'
-    - Functions: 'Library/Functions.md'
+      - Sequence Diagrams: 'Reference/Testing/SequenceDiagrams.md'
+  - Libraries:
+    - Libraries: 'Libraries/index.md'
+    - Standard Library: 
+      - Standard Library: 'Libraries/StandardLibrary/index.md'
+      - Components: 'Libraries/StandardLibrary/Components.md'
+      - Functions: 'Libraries/StandardLibrary/TypesAndFunctions.md'
+    - Public Libraries: 
+      - Public Libraries: 'Libraries/PublicLibraries/index.md'
   - FAQ: 'FAQ/index.md'
   - License: https://monticore.github.io/monticore/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL/

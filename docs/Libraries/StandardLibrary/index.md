@@ -1,5 +1,5 @@
 ---
-icon: material/book-open-variant-outline
+icon: material/math-compass
 hide:
   - toc
 ---
@@ -22,14 +22,14 @@ The standard library is included in all MontiArc models and contains useful comp
     [:octicons-arrow-right-24: Read more](./Components.md)
 
 -   :material-function: &nbsp;
-    __Functions__
+    __Types & Functions__
 
     ---
 
-    Functions, which can be used in [expressions](../Reference/Concepts/Expressions.md#method-invocation)
+    Functions, which can be used in [expressions](../../Reference/Concepts/Expressions.md#method-invocation)
 
     ---
 
-    [:octicons-arrow-right-24: Read more](./Functions.md)
+    [:octicons-arrow-right-24: Read more](./TypesAndFunctions.md)
 
 </div>

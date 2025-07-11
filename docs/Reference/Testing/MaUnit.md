@@ -179,7 +179,7 @@ the latter for generating streams of messages. All assertion components share th
 have a single incoming port called `actual`, while all emitter components have one
 outgoing port called `out`. All components lie in the `montiarc.maunit.api` package.
 
-![EmitterAsserterOverview](../../img/EmitterAsserter.png){ width="600"}
+![EmitterAsserterOverview](../../assets/images/EmitterAsserter.png){ width="600"}
 
 ##### Asserter
 
