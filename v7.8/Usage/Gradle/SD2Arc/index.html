@@ -9,25 +9,25 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Library/Functions/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Usage/Gradle/SD2Arc/">
       
       
-        <link rel="prev" href="../Components/">
+        <link rel="prev" href="../CD2Pojo/">
       
       
-        <link rel="next" href="../../FAQ/">
+        <link rel="next" href="../../CLI/">
       
       
-      <link rel="icon" href="../../img/icon.png">
+      <link rel="icon" href="../../../assets/images/icon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
-        <title>Functions - MontiArc</title>
+        <title>SD2Arc - MontiArc</title>
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
       
       
 
@@ -52,9 +52,9 @@
       
     
     
-      <link rel="stylesheet" href="../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -91,7 +91,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#functions" class="md-skip">
+        <a href="#apply-it" class="md-skip">
           Skip to content
         </a>
       
@@ -105,47 +105,98 @@
       </div>
     
     
-      
+      <!--
+  Copyright (c) 2016-2025 Martin Donath <martin.donath@squidfunk.com>
 
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to
+  deal in the Software without restriction, including without limitation the
+  rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+  sell copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in
+  all copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+  IN THE SOFTWARE.
+-->
+
+<!-- Determine classes -->
+
+
+
+<!-- Header -->
 <header class="md-header" data-md-component="header">
-  <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="../.." title="MontiArc" class="md-header__button md-logo" aria-label="MontiArc" data-md-component="logo">
+  <nav
+    class="md-header__inner md-grid"
+    aria-label="Header"
+  >
+
+    <!-- Link to home -->
+    <a
+      href="../../.."
+      title="MontiArc"
+      class="md-header__button md-logo"
+      aria-label="MontiArc"
+      data-md-component="logo"
+    >
       
-  <img src="../../img/icon-mono.png" alt="logo">
+  <img src="../../../assets/images/icon-mono.png" alt="logo">
 
     </a>
+
+    <!-- Button to open drawer -->
     <label class="md-header__button md-icon" for="__drawer">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
     </label>
+
+    <!-- Header title -->
     <div class="md-header__title" data-md-component="header-title">
       <div class="md-header__ellipsis">
-        <div class="md-header__topic">
-          <span class="md-ellipsis">
-            MontiArc
-          </span>
+        <div class="md-header__topic md-header__topic__image">
+          <!-- Override to use Image -->
+          <img alt="MontiArc" style="height: 1.2em; margin: auto;" src="../../../assets/images/MontiArc_Text.svg">
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Functions
+              SD2Arc
             
           </span>
         </div>
       </div>
     </div>
+
+    <!-- Color palette toggle -->
     
+
+    <!-- User preference: color palette -->
     
       <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
     
+
+    <!-- Site language selector -->
     
+
+    <!-- Button to open search modal -->
     
       
+
+      <!-- Check if search is actually enabled - see https://t.ly/DT_0V -->
       
         <label class="md-header__button md-icon" for="__search">
           
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
         </label>
+
+        <!-- Search interface -->
         <div class="md-search" data-md-component="search" role="dialog">
   <label class="md-search__overlay" for="__search"></label>
   <div class="md-search__inner" role="search">
@@ -180,6 +231,8 @@
 </div>
       
     
+
+    <!-- Repository information -->
     
       <div class="md-header__source">
         <a href="https://github.com/MontiCore/montiarc/" title="Go to repository" class="md-source" data-md-component="source">
@@ -194,6 +247,8 @@
       </div>
     
   </nav>
+
+  <!-- Navigation tabs (sticky) -->
   
 </header>
     
@@ -216,7 +271,7 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href="../.." class="md-tabs__link">
+      <a href="../../.." class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
 
@@ -241,7 +296,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../../GettingStarted/" class="md-tabs__link">
+        <a href="../../../GettingStarted/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -261,6 +316,8 @@
   <!-- Determine classes -->
   
   
+    
+  
 
   <!-- Navigation item with nested items -->
   
@@ -268,8 +325,8 @@
 
     <!-- Recurse, if the first item has further nested items -->
     
-      <li class="md-tabs__item">
-        <a href="../../Usage/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -297,7 +354,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../../Reference/" class="md-tabs__link">
+        <a href="../../../Reference/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -317,8 +374,6 @@
   <!-- Determine classes -->
   
   
-    
-  
 
   <!-- Navigation item with nested items -->
   
@@ -326,13 +381,13 @@
 
     <!-- Recurse, if the first item has further nested items -->
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../../Libraries/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
   <!-- Navigation link title -->
-  Library
+  Libraries
 
         </a>
       </li>
@@ -351,7 +406,7 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href="../../FAQ/" class="md-tabs__link">
+      <a href="../../../FAQ/" class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
 
@@ -395,8 +450,6 @@
           
             
               
-                
-              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -408,9 +461,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../.." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
+    <a href="../../.." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
       
-  <img src="../../img/icon-mono.png" alt="logo">
+  <img src="../../../assets/images/icon-mono.png" alt="logo">
 
     </a>
     MontiArc
@@ -437,7 +490,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../.." class="md-nav__link">
+      <a href="../../.." class="md-nav__link">
         
   
   
@@ -492,7 +545,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../GettingStarted/" class="md-nav__link ">
+            <a href="../../../GettingStarted/" class="md-nav__link ">
               
   
   
@@ -529,7 +582,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/Setup/" class="md-nav__link">
+      <a href="../../../GettingStarted/Setup/" class="md-nav__link">
         
   
   
@@ -552,7 +605,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/Editor/" class="md-nav__link">
+      <a href="../../../GettingStarted/Editor/" class="md-nav__link">
         
   
   
@@ -575,7 +628,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/HelloWorld/" class="md-nav__link">
+      <a href="../../../GettingStarted/HelloWorld/" class="md-nav__link">
         
   
   
@@ -598,7 +651,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/HelloGradle/" class="md-nav__link">
+      <a href="../../../GettingStarted/HelloGradle/" class="md-nav__link">
         
   
   
@@ -654,7 +707,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../GettingStarted/ElevatorSystem/" class="md-nav__link ">
+            <a href="../../../GettingStarted/ElevatorSystem/" class="md-nav__link ">
               
   
   
@@ -691,7 +744,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/ElevatorSystem/Interfaces/" class="md-nav__link">
+      <a href="../../../GettingStarted/ElevatorSystem/Interfaces/" class="md-nav__link">
         
   
   
@@ -714,7 +767,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/ElevatorSystem/Connectors/" class="md-nav__link">
+      <a href="../../../GettingStarted/ElevatorSystem/Connectors/" class="md-nav__link">
         
   
   
@@ -737,7 +790,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/ElevatorSystem/Behavior/" class="md-nav__link">
+      <a href="../../../GettingStarted/ElevatorSystem/Behavior/" class="md-nav__link">
         
   
   
@@ -760,7 +813,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/ElevatorSystem/Types/" class="md-nav__link">
+      <a href="../../../GettingStarted/ElevatorSystem/Types/" class="md-nav__link">
         
   
   
@@ -783,7 +836,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../GettingStarted/ElevatorSystem/Simulating/" class="md-nav__link">
+      <a href="../../../GettingStarted/ElevatorSystem/Simulating/" class="md-nav__link">
         
   
   
@@ -818,6 +871,8 @@
       
   
   
+    
+  
   
   
     
@@ -839,20 +894,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Usage/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   
@@ -865,13 +923,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3" id="__nav_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3">
             <span class="md-nav__icon md-icon"></span>
             Usage
@@ -884,6 +942,8 @@
                 
   
   
+    
+  
   
   
     
@@ -897,24 +957,29 @@
       
         
       
+        
+      
     
     
     
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Usage/Gradle/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -929,13 +994,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_2" id="__nav_3_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_3_2">
             <span class="md-nav__icon md-icon"></span>
             Gradle
@@ -951,7 +1016,30 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Usage/Gradle/CD2Pojo/" class="md-nav__link">
+      <a href="../MontiArc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    MontiArc
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../CD2Pojo/" class="md-nav__link">
         
   
   
@@ -971,20 +1059,85 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../Usage/Gradle/MontiArc/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    SD2Arc
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
-    MontiArc
+    SD2Arc
     
   </span>
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#apply-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Apply it:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configure-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configure it:
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-options-in-detail" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration options in detail:
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1021,10 +1174,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1032,7 +1188,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Usage/CLI/" class="md-nav__link ">
+            <a href="../../CLI/" class="md-nav__link ">
               
   
   
@@ -1047,7 +1203,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_3_3" id="__nav_3_3_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -1069,12 +1225,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Usage/CLI/CD2Pojo/" class="md-nav__link">
+      <a href="../../CLI/MontiArc/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    CD2Java
+    MontiArc
     
   </span>
   
@@ -1092,12 +1248,12 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Usage/CLI/MontiArc/" class="md-nav__link">
+      <a href="../../CLI/CD2Pojo/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
-    MontiArc
+    CD2Java
     
   </span>
   
@@ -1135,10 +1291,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1146,7 +1305,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Usage/Errors/" class="md-nav__link ">
+            <a href="../../Errors/" class="md-nav__link ">
               
   
   
@@ -1198,10 +1357,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -1209,7 +1371,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Usage/Simulation/" class="md-nav__link ">
+            <a href="../../Simulation/" class="md-nav__link ">
               
   
   
@@ -1289,7 +1451,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Reference/" class="md-nav__link ">
+            <a href="../../../Reference/" class="md-nav__link ">
               
   
   
@@ -1355,7 +1517,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Reference/Concepts/" class="md-nav__link ">
+            <a href="../../../Reference/Concepts/" class="md-nav__link ">
               
   
   
@@ -1392,7 +1554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Concepts/Comments/" class="md-nav__link">
+      <a href="../../../Reference/Concepts/Comments/" class="md-nav__link">
         
   
   
@@ -1415,7 +1577,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Concepts/Expressions/" class="md-nav__link">
+      <a href="../../../Reference/Concepts/Expressions/" class="md-nav__link">
         
   
   
@@ -1438,7 +1600,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Concepts/Statements/" class="md-nav__link">
+      <a href="../../../Reference/Concepts/Statements/" class="md-nav__link">
         
   
   
@@ -1461,7 +1623,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Concepts/Timing/" class="md-nav__link">
+      <a href="../../../Reference/Concepts/Timing/" class="md-nav__link">
         
   
   
@@ -1529,7 +1691,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Reference/Component/" class="md-nav__link ">
+            <a href="../../../Reference/Component/" class="md-nav__link ">
               
   
   
@@ -1566,7 +1728,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Decomposition/" class="md-nav__link">
+      <a href="../../../Reference/Component/Decomposition/" class="md-nav__link">
         
   
   
@@ -1589,7 +1751,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Connectors/" class="md-nav__link">
+      <a href="../../../Reference/Component/Connectors/" class="md-nav__link">
         
   
   
@@ -1612,7 +1774,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Generics/" class="md-nav__link">
+      <a href="../../../Reference/Component/Generics/" class="md-nav__link">
         
   
   
@@ -1635,7 +1797,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Inheritance/" class="md-nav__link">
+      <a href="../../../Reference/Component/Inheritance/" class="md-nav__link">
         
   
   
@@ -1658,7 +1820,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Interfaces/" class="md-nav__link">
+      <a href="../../../Reference/Component/Interfaces/" class="md-nav__link">
         
   
   
@@ -1681,7 +1843,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Parameter/" class="md-nav__link">
+      <a href="../../../Reference/Component/Parameter/" class="md-nav__link">
         
   
   
@@ -1704,7 +1866,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Component/Variability/" class="md-nav__link">
+      <a href="../../../Reference/Component/Variability/" class="md-nav__link">
         
   
   
@@ -1768,7 +1930,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Reference/Behavior/" class="md-nav__link ">
+            <a href="../../../Reference/Behavior/" class="md-nav__link ">
               
   
   
@@ -1805,7 +1967,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Behavior/Automata/" class="md-nav__link">
+      <a href="../../../Reference/Behavior/Automata/" class="md-nav__link">
         
   
   
@@ -1828,7 +1990,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Behavior/Compute/" class="md-nav__link">
+      <a href="../../../Reference/Behavior/Compute/" class="md-nav__link">
         
   
   
@@ -1851,7 +2013,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Behavior/Delay/" class="md-nav__link">
+      <a href="../../../Reference/Behavior/Delay/" class="md-nav__link">
         
   
   
@@ -1874,7 +2036,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Behavior/Fields/" class="md-nav__link">
+      <a href="../../../Reference/Behavior/Fields/" class="md-nav__link">
         
   
   
@@ -1897,7 +2059,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Behavior/HWC/" class="md-nav__link">
+      <a href="../../../Reference/Behavior/HWC/" class="md-nav__link">
         
   
   
@@ -1959,7 +2121,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Reference/Types/" class="md-nav__link ">
+            <a href="../../../Reference/Types/" class="md-nav__link ">
               
   
   
@@ -1996,7 +2158,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Types/Primitives/" class="md-nav__link">
+      <a href="../../../Reference/Types/Primitives/" class="md-nav__link">
         
   
   
@@ -2019,7 +2181,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Types/Collections/" class="md-nav__link">
+      <a href="../../../Reference/Types/Collections/" class="md-nav__link">
         
   
   
@@ -2042,7 +2204,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Types/Classes/" class="md-nav__link">
+      <a href="../../../Reference/Types/Classes/" class="md-nav__link">
         
   
   
@@ -2065,7 +2227,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Types/JavaIntegration/" class="md-nav__link">
+      <a href="../../../Reference/Types/JavaIntegration/" class="md-nav__link">
         
   
   
@@ -2106,6 +2268,8 @@
       
         
       
+        
+      
     
     
     
@@ -2123,7 +2287,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../Reference/Testing/" class="md-nav__link ">
+            <a href="../../../Reference/Testing/" class="md-nav__link ">
               
   
   
@@ -2160,7 +2324,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Testing/MaUnit/" class="md-nav__link">
+      <a href="../../../Reference/Testing/MaUnit/" class="md-nav__link">
         
   
   
@@ -2183,12 +2347,35 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Reference/Testing/JUnit/" class="md-nav__link">
+      <a href="../../../Reference/Testing/JUnit/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     JUnit
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../Reference/Testing/SequenceDiagrams/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sequence Diagrams
     
   </span>
   
@@ -2218,8 +2405,6 @@
       
   
   
-    
-  
   
   
     
@@ -2237,30 +2422,25 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../../Libraries/" class="md-nav__link ">
               
   
   
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5m-1-14c-1.36-.6-3.16-1-4.5-1-1.2 0-2.4.15-3.5.5v11.5c1.1-.35 2.3-.5 3.5-.5 1.34 0 3.14.4 4.5 1zM13 19c1.36-.6 3.16-1 4.5-1 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.34 0-3.14.4-4.5 1zm1-2.65c.96-.35 2.12-.52 3.5-.52 1.04 0 1.88.08 2.5.24v-1.5a13.9 13.9 0 0 0-6 .19zm0-2.66c.96-.35 2.12-.53 3.5-.53 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23-1.28 0-2.45.15-3.5.45zM14 11c.96-.33 2.12-.5 3.5-.5.91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23-1.32 0-2.5.15-3.5.46z"/></svg>
-  
   <span class="md-ellipsis">
-    Library
+    Libraries
     
   </span>
   
@@ -2268,16 +2448,80 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
-            Library
+            Libraries
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_2" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../Libraries/StandardLibrary/" class="md-nav__link ">
+              
+  
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 19.88V22l-1.8-1.17-4.79-9c.66-.21 1.26-.55 1.78-1zM15 7a3 3 0 0 1-3 3h-.44L5.8 20.83 4 22v-2.12L9.79 9c-1.1-1.23-1-3.13.24-4.24C10.57 4.28 11.27 4 12 4V2a1 1 0 0 1 1 1v1.18c1.2.42 2 1.55 2 2.82m-2 0a1 1 0 0 0-1-1 1 1 0 0 0-1 1 1 1 0 0 0 1 1 1 1 0 0 0 1-1"/></svg>
+  
+  <span class="md-ellipsis">
+    Standard Library
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_2">
+            <span class="md-nav__icon md-icon"></span>
+            Standard Library
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
             
@@ -2290,7 +2534,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Components/" class="md-nav__link">
+      <a href="../../../Libraries/StandardLibrary/Components/" class="md-nav__link">
         
   
   
@@ -2310,32 +2554,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Functions
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../../Libraries/StandardLibrary/TypesAndFunctions/" class="md-nav__link">
         
   
   
@@ -2346,70 +2568,76 @@
   
 
       </a>
-      
-        
+    </li>
+  
 
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
   
   
   
     
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+    
       
-        <li class="md-nav__item">
-  <a href="#montiarclangconsole" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Console
-    </span>
-  </a>
-  
-</li>
+        
+          
+        
       
-        <li class="md-nav__item">
-  <a href="#montiarclangduration" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Duration
-    </span>
-  </a>
-  
-</li>
+    
+    
+    
       
-        <li class="md-nav__item">
-  <a href="#montiarclangsignal" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Signal
-    </span>
-  </a>
-  
-</li>
       
-        <li class="md-nav__item">
-  <a href="#montiarclangsimulation" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Simulation
-    </span>
-  </a>
-  
-</li>
+        
       
-        <li class="md-nav__item">
-  <a href="#montiarclangtimer" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Timer
-    </span>
-  </a>
-  
-</li>
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
       
-    </ul>
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../../../Libraries/PublicLibraries/" class="md-nav__link ">
+              
   
-</nav>
+  
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.5c-1.35-.85-3.8-1.5-5.5-1.5-1.65 0-3.35.3-4.75 1.05-.1.05-.15.05-.25.05-.25 0-.5-.25-.5-.5V6c.6-.45 1.25-.75 2-1 1.11-.35 2.33-.5 3.5-.5 1.95 0 4.05.4 5.5 1.5 1.45-1.1 3.55-1.5 5.5-1.5 1.17 0 2.39.15 3.5.5.75.25 1.4.55 2 1v14.6c0 .25-.25.5-.5.5-.1 0-.15 0-.25-.05-1.4-.75-3.1-1.05-4.75-1.05-1.7 0-4.15.65-5.5 1.5m-1-14c-1.36-.6-3.16-1-4.5-1-1.2 0-2.4.15-3.5.5v11.5c1.1-.35 2.3-.5 3.5-.5 1.34 0 3.14.4 4.5 1zM13 19c1.36-.6 3.16-1 4.5-1 1.2 0 2.4.15 3.5.5V7c-1.1-.35-2.3-.5-3.5-.5-1.34 0-3.14.4-4.5 1zm1-2.65c.96-.35 2.12-.52 3.5-.52 1.04 0 1.88.08 2.5.24v-1.5a13.9 13.9 0 0 0-6 .19zm0-2.66c.96-.35 2.12-.53 3.5-.53 1.04 0 1.88.08 2.5.24v-1.5c-.87-.16-1.71-.23-2.5-.23-1.28 0-2.45.15-3.5.45zM14 11c.96-.33 2.12-.5 3.5-.5.91 0 1.76.09 2.5.28V9.23c-.87-.15-1.71-.23-2.5-.23-1.32 0-2.5.15-3.5.46z"/></svg>
+  
+  <span class="md-ellipsis">
+    Public Libraries
+    
+  </span>
+  
+
+            </a>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5_3">
+            <span class="md-nav__icon md-icon"></span>
+            Public Libraries
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
       
     </li>
   
@@ -2430,7 +2658,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../FAQ/" class="md-nav__link">
+      <a href="../../../FAQ/" class="md-nav__link">
         
   
   
@@ -2475,9 +2703,7 @@
             
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -2485,8 +2711,6 @@
 <nav class="md-nav md-nav--secondary" aria-label="Table of contents">
   
   
-  
-    
   
   
     <label class="md-nav__title" for="__toc">
@@ -2496,45 +2720,27 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#montiarclangconsole" class="md-nav__link">
+  <a href="#apply-it" class="md-nav__link">
     <span class="md-ellipsis">
-      montiarc.lang.Console
+      Apply it:
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#montiarclangduration" class="md-nav__link">
+  <a href="#configure-it" class="md-nav__link">
     <span class="md-ellipsis">
-      montiarc.lang.Duration
+      Configure it:
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#montiarclangsignal" class="md-nav__link">
+  <a href="#configuration-options-in-detail" class="md-nav__link">
     <span class="md-ellipsis">
-      montiarc.lang.Signal
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#montiarclangsimulation" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Simulation
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#montiarclangtimer" class="md-nav__link">
-    <span class="md-ellipsis">
-      montiarc.lang.Timer
+      Configuration options in detail:
     </span>
   </a>
   
@@ -2553,179 +2759,166 @@
               <article class="md-content__inner md-typeset">
                 
                   
-  
-
 
 
   
   
 
+
+  <h1>SD2Arc</h1>
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="functions">Functions</h1>
-<p>These classes can be imported and used in <a href="../../Reference/Concepts/Expressions/#method-invocation">expressions</a>.</p>
+<p>This plugin generates MontiArc test models from sequence diagrams.
+See the <a href="../../../Reference/Testing/SequenceDiagrams/">testing</a> with sequence diagrams section about why this is useful. </p>
 <hr />
-<h3 id="montiarclangconsole">montiarc.lang.Console</h3>
-<p>A class containing static methods for interacting with the console.</p>
-<p><em>It cannot be instantiated.</em></p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>static void printLn(String value)</code></strong></td>
-<td>Prints the content of <code>value</code> to the <code>stdout</code> (i.e. the console)</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="montiarclangduration">montiarc.lang.Duration</h3>
-<p>Used to specify durations.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>Duration add(Duration other)</code></strong></td>
-<td>Returns a new duration with other added to self</td>
-</tr>
-<tr>
-<td><strong><code>Duration subtract(Duration other)</code></strong></td>
-<td>Returns a new duration with other subtracted from self. If other is greater then self, returns a duration of 0</td>
-</tr>
-</tbody>
-</table>
-<details class="info">
-<summary>Instantiation Methods</summary>
-<table>
-<thead>
-<tr>
-<th>Creates a new duration with the specified length</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>static Duration ofMilliseconds(long milliseconds)</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofSeconds(long seconds)</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofSeconds(long seconds, long milliseconds);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofMinutes(long minutes);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofMinutes(long minutes, long seconds);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofMinutes(long minutes, long seconds, long milliseconds);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofHours(long hours);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofHours(long hours, long minutes);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofHours(long hours, long minutes, long seconds);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofHours(long hours, long minutes, long seconds, long milliseconds);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofDays(long days);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofDays(long days, long hours);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofDays(long days, long hours, long minutes);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofDays(long days, long hours, long minutes, long seconds);</code></strong></td>
-</tr>
-<tr>
-<td><strong><code>static Duration ofDays(long days, long hours, long minutes, long seconds, long milliseconds);</code></strong></td>
-</tr>
-</tbody>
-</table>
-</details>
-<hr />
-<h3 id="montiarclangsignal">montiarc.lang.Signal</h3>
-<p>Objects of this class represent a signal. Can be used for event ports that where only the event is relevant but not the value.</p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>static Signal get()</code></strong></td>
-<td>Returns a Signal object</td>
-</tr>
-</tbody>
-</table>
-<hr />
-<h3 id="montiarclangsimulation">montiarc.lang.Simulation</h3>
-<p>A class containing static methods for interacting with the simulation environment.</p>
-<p><em>It cannot be instantiated.</em> </p>
-<table>
-<thead>
-<tr>
-<th>Method</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong><code>static void stop()</code></strong></td>
-<td>Stops the simulation after the current tick has been fully computed</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>The simulation class is only available when using the MontiArc Java simulator</p>
+<h2 id="apply-it">Apply it:</h2>
+<p>Within Gradle's settings script, you need to declare:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Kotlin</label><label for="__tabbed_1_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1">// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
+<span class="c1">// Therefore we have to make it available to our build process.</span>
+<span class="n">pluginManagement</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">repositories</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">maven</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="c1">// The plugin is in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
+<span class="c1">// Therefore we have to make it available to our build process.</span>
+<span class="n">pluginManagement</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">maven</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">  </span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Then, within the build script, you need to declare:</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Kotlin</label><label for="__tabbed_2_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;sd2arc&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="p">}</span>
+
+<span class="c1">// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen</span>
+<span class="n">repositories</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">maven</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="p">)</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;sd2arc&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="o">}</span>
+
+<span class="c1">// The generator is in the Maven repo of the chair of Software Engineering at RWTH Aachen</span>
+<span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">maven</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="o">)</span>
+<span class="w">  </span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+</div>
+</div>
 </div>
 <hr />
-<h3 id="montiarclangtimer">montiarc.lang.Timer</h3>
-<p>A timer object for interacting with time.</p>
+<h2 id="configure-it">Configure it:</h2>
+<p>The plugin adds a SD2ArcCompile task for every source set that exists.
+The name of that task is <code>compileSRC_SET_NAMEsd2arc</code>, omitting the name of the source set for the <em>main</em> source set.</p>
+<p>Note that MontiArc source files that the sd2arc generator produces are automatically added to the MontiArc source of the same source set.
+Therefore, the generated models are processed together with user created models in the source set.
+Hence, the sequence diagram can only reference MontiArc models not part of the same source set as they haven't been processed yet.</p>
+<div class="tabbed-set tabbed-alternate" data-tabs="3:2"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><input id="__tabbed_3_2" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">Kotlin</label><label for="__tabbed_3_2">Groovy</label></div>
+<div class="tabbed-content">
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">sourceSets</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">main</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">sd2arc</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">srcDir</span><span class="p">(</span><span class="s">&quot;where/your/sd2arc/models/are&quot;</span><span class="p">)</span><span class="w"> </span><span class="c1">// default value: $projectDir/src/SOURCE_SET_NAME/sd2arc</span>
+<span class="w">      </span><span class="n">destinationDirectory</span><span class="p">.</span><span class="na">fileValue</span><span class="p">(</span><span class="n">file</span><span class="p">(</span><span class="s">&quot;where/to/generate/the/code/to&quot;</span><span class="p">))</span><span class="w">  </span><span class="c1">// default value: $buildDir/sd2arc/SOURCE_SET_NAME</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+</div>
+<div class="tabbed-block">
+<div class="highlight"><pre><span></span><code><span class="n">sourceSets</span><span class="w"> </span><span class="o">{</span>
+<span class="w">  </span><span class="n">main</span><span class="w"> </span><span class="o">{</span>
+<span class="w">    </span><span class="n">sd2arc</span><span class="w"> </span><span class="o">{</span>
+<span class="w">      </span><span class="n">srcDir</span><span class="w"> </span><span class="s2">&quot;where/your/sd2arc/models/are&quot;</span><span class="w">  </span><span class="c1">// default value: $projectDir/src/SOURCE_SET_NAME/sd2arc</span>
+<span class="w">      </span><span class="n">destinationDirectory</span><span class="o">.</span><span class="na">fileValue</span><span class="o">(</span><span class="n">file</span><span class="o">(</span><span class="s2">&quot;where/to/generate/the/code/to&quot;</span><span class="o">))</span><span class="w">  </span><span class="c1">// default value: $buildDir/sd2arc/SOURCE_SET_NAME</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="w">  </span><span class="o">}</span>
+<span class="o">}</span>
+</code></pre></div>
+</div>
+</div>
+</div>
+<p>Note that the generated Java code will be generated to <code>$destinationDirectory/montiarc</code> 
+(<code>destinationDirectory</code> being defined in the <code>sd2arc</code> entry of the source set).</p>
+<h2 id="configuration-options-in-detail">Configuration options in detail:</h2>
+<p>Each SD2ArcCompile task has the following configuration options that can be set.
+Some configuration options only have default values if the task is created for a source set.</p>
 <table>
 <thead>
 <tr>
-<th>Method</th>
+<th>Option</th>
+<th>Default value</th>
 <th>Description</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong><code>static Timer start(Duration duration);</code></strong></td>
-<td>Starts a new timer. Returns the running timer object</td>
+<td>modelPath</td>
+<td><code>$projectDir/src/SOURCE_SET_NAME/sd2arc</code></td>
+<td>Where to find the sequence diagram models for which tests should be generated. You can specify multiple locations with multiple <code>modelPath.from(...)</code> statements.</td>
 </tr>
 <tr>
-<td><strong><code>boolean completed();</code></strong></td>
-<td>Returns <code>true</code> if the timer duration has elapsed</td>
+<td>symbolImportDir</td>
+<td>The <code>sd2arcSymbolDependencies</code> configuration</td>
+<td>If you want to use <code>.sym</code> files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple <code>symbolImportDir.from(...)</code> statements.</td>
 </tr>
 <tr>
-<td><strong><code>Duration startedAgo();</code></strong></td>
-<td>Return the duration of how long ago the timer was started</td>
+<td>useClass2Mc</td>
+<td><code>false</code></td>
+<td>If you intend to use Java types (or other JVM types) in your sequence diagram models, then you set this configuration parameter to <code>true</code>. By this, all JVM types that are on the class path of the generator (which is the configuration <code>sd2arcGenerator</code>) will be accessible from sequence diagram models. <em>Note</em>: This will be changed in the future.</td>
+</tr>
+<tr>
+<td>outputDir</td>
+<td><code>$buildDir/sd2arc/SOURCE_SET_NAME</code></td>
+<td>Where the generated files should be placed. Generated MontiArc files are placed in the <code>montiarc</code> subfolder, exported symbol files are put in the <code>symbols</code> subfolder.</td>
 </tr>
 </tbody>
 </table>
-<hr />
+<p>Moreover, there are the following options configurable in the <code>sd2arc</code> block:</p>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Default value</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>internalMontiArcTesting</td>
+<td><code>false</code></td>
+<td>If you are not a MontiArc developer, just ignore it (and omit the option, as its default value is <code>false</code>). Otherwise: if you want to apply the plugin from within the MontiArc project, e.g., to test the generator in an integration test, then set this to <code>true</code>. By this, the freshly compiled (unpublished) generator will be used instead of the one from the maven repository.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -2733,13 +2926,8 @@
 
 
 
-  
-  
 
 
-
-
-  
 
 
 
@@ -2759,12 +2947,10 @@
   
     
       
-        
-      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../Components/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Components">
+          <a href="../CD2Pojo/" class="md-footer__link md-footer__link--prev" aria-label="Previous: CD2Java">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -2774,20 +2960,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Components
+                CD2Java
               </div>
             </div>
           </a>
         
         
           
-          <a href="../../FAQ/" class="md-footer__link md-footer__link--next" aria-label="Next: FAQ">
+          <a href="../../CLI/" class="md-footer__link md-footer__link--next" aria-label="Next: CLI">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                FAQ
+                CLI
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -2852,10 +3038,10 @@
     
     
       
-      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      <script src="../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

@@ -9,25 +9,25 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/GettingStarted/ElevatorSystem/Behavior/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.8/Libraries/PublicLibraries/">
       
       
-        <link rel="prev" href="../Connectors/">
+        <link rel="prev" href="../StandardLibrary/TypesAndFunctions/">
       
       
-        <link rel="next" href="../Types/">
+        <link rel="next" href="../../FAQ/">
       
       
-      <link rel="icon" href="../../../assets/images/icon.png">
+      <link rel="icon" href="../../assets/images/icon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.15">
     
     
       
-        <title>Behavior - MontiArc</title>
+        <title>Public Libraries - MontiArc</title>
       
     
     
-      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.342714a4.min.css">
       
       
 
@@ -52,9 +52,9 @@
       
     
     
-      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -89,11 +89,6 @@
     <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
     <label class="md-overlay" for="__drawer"></label>
     <div data-md-component="skip">
-      
-        
-        <a href="#behavior" class="md-skip">
-          Skip to content
-        </a>
       
     </div>
     <div data-md-component="announce">
@@ -140,14 +135,14 @@
 
     <!-- Link to home -->
     <a
-      href="../../.."
+      href="../.."
       title="MontiArc"
       class="md-header__button md-logo"
       aria-label="MontiArc"
       data-md-component="logo"
     >
       
-  <img src="../../../assets/images/icon-mono.png" alt="logo">
+  <img src="../../assets/images/icon-mono.png" alt="logo">
 
     </a>
 
@@ -162,12 +157,12 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic md-header__topic__image">
           <!-- Override to use Image -->
-          <img alt="MontiArc" style="height: 1.2em; margin: auto;" src="../../../assets/images/MontiArc_Text.svg">
+          <img alt="MontiArc" style="height: 1.2em; margin: auto;" src="../../assets/images/MontiArc_Text.svg">
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Behavior
+              Public Libraries
             
           </span>
         </div>
@@ -271,7 +266,7 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href="../../.." class="md-tabs__link">
+      <a href="../.." class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
 
@@ -288,8 +283,6 @@
   <!-- Determine classes -->
   
   
-    
-  
 
   <!-- Navigation item with nested items -->
   
@@ -297,8 +290,8 @@
 
     <!-- Recurse, if the first item has further nested items -->
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../../" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../GettingStarted/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -326,7 +319,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../../../Usage/" class="md-tabs__link">
+        <a href="../../Usage/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -354,7 +347,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../../../Reference/" class="md-tabs__link">
+        <a href="../../Reference/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -374,6 +367,8 @@
   <!-- Determine classes -->
   
   
+    
+  
 
   <!-- Navigation item with nested items -->
   
@@ -381,8 +376,8 @@
 
     <!-- Recurse, if the first item has further nested items -->
     
-      <li class="md-tabs__item">
-        <a href="../../../Libraries/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -406,7 +401,7 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href="../../../FAQ/" class="md-tabs__link">
+      <a href="../../FAQ/" class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
 
@@ -450,6 +445,8 @@
           
             
               
+                
+              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -461,9 +458,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="../../.." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
+    <a href="../.." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
       
-  <img src="../../../assets/images/icon-mono.png" alt="logo">
+  <img src="../../assets/images/icon-mono.png" alt="logo">
 
     </a>
     MontiArc
@@ -490,7 +487,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../.." class="md-nav__link">
+      <a href="../.." class="md-nav__link">
         
   
   
@@ -509,8 +506,6 @@
       
   
   
-    
-  
   
   
     
@@ -534,23 +529,20 @@
     
     
       
-        
-        
-      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../" class="md-nav__link ">
+            <a href="../../GettingStarted/" class="md-nav__link ">
               
   
   
@@ -565,13 +557,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2" id="__nav_2_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             Getting Started
@@ -587,7 +579,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Setup/" class="md-nav__link">
+      <a href="../../GettingStarted/Setup/" class="md-nav__link">
         
   
   
@@ -610,7 +602,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../Editor/" class="md-nav__link">
+      <a href="../../GettingStarted/Editor/" class="md-nav__link">
         
   
   
@@ -633,7 +625,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../HelloWorld/" class="md-nav__link">
+      <a href="../../GettingStarted/HelloWorld/" class="md-nav__link">
         
   
   
@@ -656,7 +648,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../HelloGradle/" class="md-nav__link">
+      <a href="../../GettingStarted/HelloGradle/" class="md-nav__link">
         
   
   
@@ -676,8 +668,6 @@
                 
   
   
-    
-  
   
   
     
@@ -703,21 +693,18 @@
       
       
         
-          
-          
-        
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../" class="md-nav__link ">
+            <a href="../../GettingStarted/ElevatorSystem/" class="md-nav__link ">
               
   
   
@@ -732,13 +719,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_2_6" id="__nav_2_6_label" tabindex="">
+              <label class="md-nav__link " for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_2_6">
             <span class="md-nav__icon md-icon"></span>
             Your First System
@@ -754,7 +741,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Interfaces/" class="md-nav__link">
+      <a href="../../GettingStarted/ElevatorSystem/Interfaces/" class="md-nav__link">
         
   
   
@@ -777,7 +764,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Connectors/" class="md-nav__link">
+      <a href="../../GettingStarted/ElevatorSystem/Connectors/" class="md-nav__link">
         
   
   
@@ -797,32 +784,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    Behavior
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../GettingStarted/ElevatorSystem/Behavior/" class="md-nav__link">
         
   
   
@@ -833,62 +798,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#receiving" class="md-nav__link">
-    <span class="md-ellipsis">
-      Receiving
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sending-and-storing-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sending and Storing values
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#initial-entry-exit-do" class="md-nav__link">
-    <span class="md-ellipsis">
-      Initial, Entry, Exit, Do
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#hierarchical-states" class="md-nav__link">
-    <span class="md-ellipsis">
-      Hierarchical States
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -901,7 +810,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Types/" class="md-nav__link">
+      <a href="../../GettingStarted/ElevatorSystem/Types/" class="md-nav__link">
         
   
   
@@ -924,7 +833,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Simulating/" class="md-nav__link">
+      <a href="../../GettingStarted/ElevatorSystem/Simulating/" class="md-nav__link">
         
   
   
@@ -993,7 +902,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Usage/" class="md-nav__link ">
+            <a href="../../Usage/" class="md-nav__link ">
               
   
   
@@ -1057,7 +966,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Usage/Gradle/" class="md-nav__link ">
+            <a href="../../Usage/Gradle/" class="md-nav__link ">
               
   
   
@@ -1094,7 +1003,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Usage/Gradle/MontiArc/" class="md-nav__link">
+      <a href="../../Usage/Gradle/MontiArc/" class="md-nav__link">
         
   
   
@@ -1117,7 +1026,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Usage/Gradle/CD2Pojo/" class="md-nav__link">
+      <a href="../../Usage/Gradle/CD2Pojo/" class="md-nav__link">
         
   
   
@@ -1140,7 +1049,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Usage/Gradle/SD2Arc/" class="md-nav__link">
+      <a href="../../Usage/Gradle/SD2Arc/" class="md-nav__link">
         
   
   
@@ -1198,7 +1107,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Usage/CLI/" class="md-nav__link ">
+            <a href="../../Usage/CLI/" class="md-nav__link ">
               
   
   
@@ -1235,7 +1144,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Usage/CLI/MontiArc/" class="md-nav__link">
+      <a href="../../Usage/CLI/MontiArc/" class="md-nav__link">
         
   
   
@@ -1258,7 +1167,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Usage/CLI/CD2Pojo/" class="md-nav__link">
+      <a href="../../Usage/CLI/CD2Pojo/" class="md-nav__link">
         
   
   
@@ -1312,7 +1221,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Usage/Errors/" class="md-nav__link ">
+            <a href="../../Usage/Errors/" class="md-nav__link ">
               
   
   
@@ -1375,7 +1284,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Usage/Simulation/" class="md-nav__link ">
+            <a href="../../Usage/Simulation/" class="md-nav__link ">
               
   
   
@@ -1455,7 +1364,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Reference/" class="md-nav__link ">
+            <a href="../../Reference/" class="md-nav__link ">
               
   
   
@@ -1521,7 +1430,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Reference/Concepts/" class="md-nav__link ">
+            <a href="../../Reference/Concepts/" class="md-nav__link ">
               
   
   
@@ -1558,7 +1467,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Concepts/Comments/" class="md-nav__link">
+      <a href="../../Reference/Concepts/Comments/" class="md-nav__link">
         
   
   
@@ -1581,7 +1490,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Concepts/Expressions/" class="md-nav__link">
+      <a href="../../Reference/Concepts/Expressions/" class="md-nav__link">
         
   
   
@@ -1604,7 +1513,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Concepts/Statements/" class="md-nav__link">
+      <a href="../../Reference/Concepts/Statements/" class="md-nav__link">
         
   
   
@@ -1627,7 +1536,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Concepts/Timing/" class="md-nav__link">
+      <a href="../../Reference/Concepts/Timing/" class="md-nav__link">
         
   
   
@@ -1695,7 +1604,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Reference/Component/" class="md-nav__link ">
+            <a href="../../Reference/Component/" class="md-nav__link ">
               
   
   
@@ -1732,7 +1641,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Decomposition/" class="md-nav__link">
+      <a href="../../Reference/Component/Decomposition/" class="md-nav__link">
         
   
   
@@ -1755,7 +1664,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Connectors/" class="md-nav__link">
+      <a href="../../Reference/Component/Connectors/" class="md-nav__link">
         
   
   
@@ -1778,7 +1687,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Generics/" class="md-nav__link">
+      <a href="../../Reference/Component/Generics/" class="md-nav__link">
         
   
   
@@ -1801,7 +1710,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Inheritance/" class="md-nav__link">
+      <a href="../../Reference/Component/Inheritance/" class="md-nav__link">
         
   
   
@@ -1824,7 +1733,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Interfaces/" class="md-nav__link">
+      <a href="../../Reference/Component/Interfaces/" class="md-nav__link">
         
   
   
@@ -1847,7 +1756,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Parameter/" class="md-nav__link">
+      <a href="../../Reference/Component/Parameter/" class="md-nav__link">
         
   
   
@@ -1870,7 +1779,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Component/Variability/" class="md-nav__link">
+      <a href="../../Reference/Component/Variability/" class="md-nav__link">
         
   
   
@@ -1934,7 +1843,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Reference/Behavior/" class="md-nav__link ">
+            <a href="../../Reference/Behavior/" class="md-nav__link ">
               
   
   
@@ -1971,7 +1880,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Behavior/Automata/" class="md-nav__link">
+      <a href="../../Reference/Behavior/Automata/" class="md-nav__link">
         
   
   
@@ -1994,7 +1903,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Behavior/Compute/" class="md-nav__link">
+      <a href="../../Reference/Behavior/Compute/" class="md-nav__link">
         
   
   
@@ -2017,7 +1926,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Behavior/Delay/" class="md-nav__link">
+      <a href="../../Reference/Behavior/Delay/" class="md-nav__link">
         
   
   
@@ -2040,7 +1949,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Behavior/Fields/" class="md-nav__link">
+      <a href="../../Reference/Behavior/Fields/" class="md-nav__link">
         
   
   
@@ -2063,7 +1972,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Behavior/HWC/" class="md-nav__link">
+      <a href="../../Reference/Behavior/HWC/" class="md-nav__link">
         
   
   
@@ -2125,7 +2034,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Reference/Types/" class="md-nav__link ">
+            <a href="../../Reference/Types/" class="md-nav__link ">
               
   
   
@@ -2162,7 +2071,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Types/Primitives/" class="md-nav__link">
+      <a href="../../Reference/Types/Primitives/" class="md-nav__link">
         
   
   
@@ -2185,7 +2094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Types/Collections/" class="md-nav__link">
+      <a href="../../Reference/Types/Collections/" class="md-nav__link">
         
   
   
@@ -2208,7 +2117,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Types/Classes/" class="md-nav__link">
+      <a href="../../Reference/Types/Classes/" class="md-nav__link">
         
   
   
@@ -2231,7 +2140,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Types/JavaIntegration/" class="md-nav__link">
+      <a href="../../Reference/Types/JavaIntegration/" class="md-nav__link">
         
   
   
@@ -2291,7 +2200,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Reference/Testing/" class="md-nav__link ">
+            <a href="../../Reference/Testing/" class="md-nav__link ">
               
   
   
@@ -2328,7 +2237,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Testing/MaUnit/" class="md-nav__link">
+      <a href="../../Reference/Testing/MaUnit/" class="md-nav__link">
         
   
   
@@ -2351,7 +2260,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Testing/JUnit/" class="md-nav__link">
+      <a href="../../Reference/Testing/JUnit/" class="md-nav__link">
         
   
   
@@ -2374,7 +2283,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Reference/Testing/SequenceDiagrams/" class="md-nav__link">
+      <a href="../../Reference/Testing/SequenceDiagrams/" class="md-nav__link">
         
   
   
@@ -2409,6 +2318,8 @@
       
   
   
+    
+  
   
   
     
@@ -2426,20 +2337,23 @@
     
     
       
+        
+        
+      
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Libraries/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -2452,13 +2366,13 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5" id="__nav_5_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
           </div>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Libraries
@@ -2490,10 +2404,13 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
       
         
         
@@ -2501,7 +2418,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Libraries/StandardLibrary/" class="md-nav__link ">
+            <a href="../StandardLibrary/" class="md-nav__link ">
               
   
   
@@ -2516,7 +2433,7 @@
             </a>
             
               
-              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="0">
+              <label class="md-nav__link " for="__nav_5_2" id="__nav_5_2_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -2538,7 +2455,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Libraries/StandardLibrary/Components/" class="md-nav__link">
+      <a href="../StandardLibrary/Components/" class="md-nav__link">
         
   
   
@@ -2561,7 +2478,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../Libraries/StandardLibrary/TypesAndFunctions/" class="md-nav__link">
+      <a href="../StandardLibrary/TypesAndFunctions/" class="md-nav__link">
         
   
   
@@ -2589,6 +2506,8 @@
                 
   
   
+    
+  
   
   
     
@@ -2604,18 +2523,21 @@
       
       
         
+          
+          
+        
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../../../Libraries/PublicLibraries/" class="md-nav__link ">
+            <a href="./" class="md-nav__link md-nav__link--active">
               
   
   
@@ -2631,7 +2553,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_5_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_5_3">
             <span class="md-nav__icon md-icon"></span>
             Public Libraries
@@ -2662,7 +2584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../FAQ/" class="md-nav__link">
+      <a href="../../FAQ/" class="md-nav__link">
         
   
   
@@ -2707,7 +2629,9 @@
             
             
               
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -2716,52 +2640,6 @@
   
   
   
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#receiving" class="md-nav__link">
-    <span class="md-ellipsis">
-      Receiving
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#sending-and-storing-values" class="md-nav__link">
-    <span class="md-ellipsis">
-      Sending and Storing values
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#initial-entry-exit-do" class="md-nav__link">
-    <span class="md-ellipsis">
-      Initial, Entry, Exit, Do
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#hierarchical-states" class="md-nav__link">
-    <span class="md-ellipsis">
-      Hierarchical States
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
   
 </nav>
                   </div>
@@ -2774,246 +2652,23 @@
               <article class="md-content__inner md-typeset">
                 
                   
+  
+
 
 
   
   
 
+
+  <h1>Public Libraries</h1>
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="behavior">Behavior</h1>
-<p>As we have seen in the <a href="../../HelloWorld/">"Hello, World!"</a> model, atomic components can have behavior definitions.
-The behavior is defined using <a href="../../../Reference/Behavior/Automata/">statecharts</a>. In the following, you will see how we can use ports to react to the environment and send messages ourselves.</p>
-<p>In our elevator simulation, we use simplified behaviors and just interact with the console.</p>
-<h2 id="receiving">Receiving</h2>
-<p>Our <code>Door</code> component has two states, open and closed. Whenever we receive a message on <code>shouldOpen</code> we react to it by changing states if needed.</p>
-<div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Door.arc</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
 
-<span class="kd">component</span> <span class="nc">Door</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">shouldOpen</span><span class="p">;</span>
-
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Closed</span><span class="p">;</span>
-<span class="w">    </span><span class="kd">state</span> <span class="nc">Open</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">Closed</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Open</span><span class="w"> </span><span class="o">[</span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="w"> </span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Door has opened&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">Open</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Closed</span><span class="w"> </span><span class="o">[</span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="w"> </span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Door has closed&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>This automaton contains some new concepts. The transitions now have a guard and trigger.
-The guard can be identified by the rectangular brackets <code>[]</code> and contains a Boolean expression.
-The transition can only be taken if the condition inside the guard holds, i.e. evaluates to true.
-Following the guard is the trigger. Transition can only be taken if their trigger is activated. In this case, if a message on the <code>shouldOpen</code> port has been received.</p>
-<h2 id="sending-and-storing-values">Sending and Storing values</h2>
-<p>In the <code>Door</code> component, we have already seen how we can write stateful behaviors. In addition to multiple states, a behavior can also store information inside component fields.
-These can then be accessed in transitions and allow for another form of stateful behaviors.</p>
-<p>Since all the motor's ports are synchronous, the motor only uses tick transitions, too. A tick indicates one progress in time and is regularly triggered. 
-If it has an up command, the motor moves the elevator up; if it has a down command, it moves down.
-Otherwise, it stays in the same position. The motor always outputs its current position.</p>
-<div class="admonition info">
-<p class="admonition-title">Hint</p>
-<p>Inside epsilon transitions, we can only read from synchronous ports and not event ports. Since they only have a value once an event has been received.</p>
-</div>
-<div class="tabbed-set tabbed-alternate" data-tabs="2:1"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">Motor.arc</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">elevator.Commands.MotorCMD</span><span class="p">;</span>
-
-<span class="kd">component</span> <span class="nc">Motor</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">MotorCMD</span><span class="w"> </span><span class="n">command</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">position</span><span class="p">;</span>
-
-<span class="w">  </span><span class="c1">// Component fields</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-<span class="w">  </span><span class="kt">double</span><span class="w"> </span><span class="n">speed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.5</span><span class="p">;</span>
-
-<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
-<span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">command</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">UP</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">command</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">DOWN</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">speed</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-
-<span class="w">      </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currentPosition</span><span class="p">;</span>
-<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Elevator position: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">currentPosition</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>We model this using a combination of if statements and component fields. Fields can store persistent information over the lifetime of a component.
-They have a type and name followed by a mandatory default value. In our case, the motor's current position starts at <code>0</code> as set in:
-<div class="highlight"><pre><span></span><code><span class="kt">double</span><span class="w"> </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
-</code></pre></div></p>
-<h2 id="initial-entry-exit-do">Initial, Entry, Exit, Do</h2>
-<p>Finally, we have our controller, which is the heart of the system and provides most of the logic behind it.
-It reacts to the button presses, decides in which direction to move the elevator, and is responsible for opening and closing the door. </p>
-<div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">ControlStation.arc</label></div>
-<div class="tabbed-content">
-<div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">elevator.Commands.MotorCMD</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.TreeSet</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Optional</span><span class="p">;</span>
-
-<span class="kd">component</span> <span class="nc">ControlStation</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">openDoor</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">double</span><span class="w"> </span><span class="n">motorPosition</span><span class="p">;</span>
-<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">MotorCMD</span><span class="w"> </span><span class="n">motorCommand</span><span class="p">;</span>
-
-<span class="w">  </span><span class="n">TreeSet</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">pendingRequests</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TreeSet</span><span class="p">.</span><span class="na">TreeSet</span><span class="p">();</span>
-<span class="w">  </span><span class="n">Optional</span><span class="o">&lt;</span><span class="kt">int</span><span class="o">&gt;</span><span class="w"> </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-
-<span class="w">  </span><span class="o">&lt;&lt;</span><span class="n">delayed</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Idle</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="kd">state</span> <span class="nc">OpenDoor</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">openDoor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">      </span><span class="k">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">openDoor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-
-<span class="w">      </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">IdleOpenDoor</span><span class="p">;</span>
-
-<span class="w">      </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">      </span><span class="p">};</span>
-<span class="w">      </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
-<span class="w">        </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">        </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">      </span><span class="p">};</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="kd">state</span> <span class="nc">MovingUp</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">UP</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="kd">state</span> <span class="nc">MovingDown</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">DOWN</span><span class="p">;</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingUp</span><span class="w">   </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="p">;</span>
-<span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="p">;</span>
-
-<span class="w">    </span><span class="n">MovingUp</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w">     </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
-<span class="w">    </span><span class="n">MovingUp</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w">     </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
-<span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">MovingUp</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingUp</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-<span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingDown</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
-<span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
-
-<span class="w">    </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
-
-<span class="w">  </span><span class="p">}</span>
-<span class="p">}</span>
-</code></pre></div>
-</div>
-</div>
-</div>
-<p>The component uses all the features you have previously seen. In addition, we have initial, entry, exit, and do actions at states.</p>
-<p>Since the <code>motorCommand</code> port is <a href="../Interfaces/#delayed-ports">sync delayed</a>, we need to provide an initial value for it.
-In our example, this means the motor is initially not moving.</p>
-<div class="highlight"><pre><span></span><code><span class="k">initial</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
-<span class="p">}</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Idle</span><span class="w"> </span><span class="o">[</span><span class="p">...</span><span class="o">]</span>
-</code></pre></div>
-<p>The OpenDoor state shows the entry, exit, and do actions.
-<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">OpenDoor</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">openDoor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="w">  </span><span class="k">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">openDoor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
-<span class="w">  </span><span class="p">}</span>
-<span class="p">};</span>
-</code></pre></div>
-These are executed, as the name suggests, when we enter the state, stay in it, or leave it, respectively.
-In the context of the elevator, we open the door when we enter the state and close it when we leave it.
-When this state is active, the motor is always stopped.</p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
-<p>Note that exit and entry actions are also executed when a transition stays at the same state:
-<div class="highlight"><pre><span></span><code><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="p">;</span>
-</code></pre></div></p>
+<p>Want your library to be included on this list? 
+Let us know by creating an <a href="https://github.com/MontiCore/montiarc/issues/new?template=docs.yml">issue</a>.</p>
 </div>
-<h2 id="hierarchical-states">Hierarchical States</h2>
-<p>To avoid triggering exit and entry actions again when processing new incoming button presses we use hierarchical states.</p>
-<p>States can be composed of other states. Where the innermost initial state is visited when the state is reached.</p>
-<div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">OpenDoor</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">IdleOpenDoor</span><span class="p">;</span>
-
-<span class="w">  </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">  </span><span class="p">};</span>
-<span class="w">  </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
-<span class="w">    </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">    </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">  </span><span class="p">};</span>
-<span class="p">}</span>
-</code></pre></div>
-<p>For a complete look into hierarchical statecharts see <a href="https://mbse.se-rwth.de/book1/index.php?c=chapter5-3#x1-1250005.3.2">Modeling with UML</a>.</p>
-<hr />
-<p>A detailed behavior reference can be found <a href="../../../Reference/Behavior/">here</a></p>
 
 
 
@@ -3021,8 +2676,13 @@ When this state is active, the motor is always stopped.</p>
 
 
 
+  
+  
 
 
+
+
+  
 
 
 
@@ -3042,10 +2702,12 @@ When this state is active, the motor is always stopped.</p>
   
     
       
+        
+      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../Connectors/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Connectors">
+          <a href="../StandardLibrary/TypesAndFunctions/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Functions">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3055,20 +2717,20 @@ When this state is active, the motor is always stopped.</p>
                 Previous
               </span>
               <div class="md-ellipsis">
-                Connectors
+                Functions
               </div>
             </div>
           </a>
         
         
           
-          <a href="../Types/" class="md-footer__link md-footer__link--next" aria-label="Next: Types">
+          <a href="../../FAQ/" class="md-footer__link md-footer__link--next" aria-label="Next: FAQ">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Types
+                FAQ
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3133,10 +2795,10 @@ When this state is active, the motor is always stopped.</p>
     
     
       
-      <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../../assets/javascripts/bundle.56ea9cef.min.js"></script>
+      <script src="../../assets/javascripts/bundle.56ea9cef.min.js"></script>
       
     
   </body>

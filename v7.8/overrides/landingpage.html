@@ -1,0 +1,538 @@
+{% extends "main.html" %}
+
+<!-- Render hero under tabs -->
+{% block tabs %}
+{{ super() }}
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <h1 class="hero-title">
+          Modeling <span class="hero-title-highlight">Cyber-Physical Systems</span> with <img
+            alt="{{ config.site_name }}" style="height: .9em;" src="{{ 'assets/images/MontiArc_Text.svg' | url }}">
+        </h1>
+
+        <p class="hero-subtitle">
+          A textual architecture description language for modeling Component & Connector architectures with
+          enhanced connection facilities, hierarchical decomposition, strong type system, and product line variability
+          support.
+        </p>
+
+        <div class="hero-features">
+          <div class="hero-feature">
+            <svg class="hero-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 12l2 2 4-4" />
+              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+            </svg>
+            <span>Model validation</span>
+          </div>
+          <div class="hero-feature">
+            <svg class="hero-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 12l2 2 4-4" />
+              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+            </svg>
+            <span>Simulation Framework</span>
+          </div>
+          <div class="hero-feature">
+            <svg class="hero-feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M9 12l2 2 4-4" />
+              <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z" />
+            </svg>
+            <span>Language Extensibility</span>
+          </div>
+        </div>
+
+        <div class="hero-actions">
+          <a href="#more" class="btn btn-primary">
+            Read More
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </a>
+          <a href="{{ './Reference' | url }}" class="btn btn-secondary">
+            Reference
+          </a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="hero-stat-number">500+</div>
+            <div class="hero-stat-label">Models Created</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-number">50+</div>
+            <div class="hero-stat-label">Research Papers</div>
+          </div>
+          <div class="hero-stat">
+            <div class="hero-stat-number">10+</div>
+            <div class="hero-stat-label">Years Active</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-code-sample">
+          <div class="code-header">
+            <div class="code-dots">
+              <span class="code-dot code-dot-red"></span>
+              <span class="code-dot code-dot-yellow"></span>
+              <span class="code-dot code-dot-green"></span>
+            </div>
+            <div class="code-filename">Door.arc</div>
+          </div>
+          <div class="code-content highlight">
+            <pre><code><span class="kn">package</span><span class="w"> </span><span class="nn">elevator</span><span class="p">;</span>
+
+<span class="kd">component</span> <span class="nc">Door</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">shouldOpen</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Closed</span><span class="p">;</span>
+<span class="w">    </span><span class="kd">state</span> <span class="nc">Open</span><span class="p">;</span>
+
+<span class="w">    </span><span class="n">Closed</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Open</span><span class="w"> </span><span class="o">[</span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="w"> </span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Door has opened"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="n">Open</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Closed</span><span class="w"> </span><span class="o">[</span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="w"> </span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">"Door has closed"</span><span class="p">);</span>
+<span class="w">    </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span></code></pre>
+          </div>
+        </div>
+
+        <div class="hero-decorations">
+          <div class="decoration decoration-1"></div>
+          <div class="decoration decoration-2"></div>
+          <div class="decoration decoration-3"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Custom Styles -->
+<style>
+  /* Root styles for proper mobile handling */
+  .hero-section {
+    background: linear-gradient(#0067a7, #779ec9);
+    padding: 1rem 0 3rem;
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  .hero-container {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .hero-content {
+    display: grid;
+    grid-template-columns: 4fr 3fr;
+    gap: 3rem;
+    align-items: center;
+    max-width: 61rem;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .hero-text {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+  }
+
+  .hero-title {
+    font-size: clamp(1.75rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: white;
+    margin-bottom: 1.5rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+  }
+
+  .hero-title-highlight {
+    background: linear-gradient(45deg, #fff100 0%, #f8a61c 90%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    word-wrap: break-word;
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .hero-features {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-feature {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .hero-feature-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #fff100;
+    flex-shrink: 0;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    font-size: clamp(0.875rem, 2vw, 1rem);
+    white-space: nowrap;
+    min-width: 0;
+  }
+
+  .btn-primary {
+    background: linear-gradient(45deg, #fff100, #ffb347);
+    color: #333;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.3);
+  }
+
+  .btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(10px);
+  }
+
+  .btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+  }
+
+  .btn-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+
+  .hero-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: flex-start;
+  }
+
+  .hero-stat {
+    text-align: center;
+    min-width: 0;
+  }
+
+  .hero-stat-number {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+  }
+
+  .hero-stat-label {
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    color: rgba(255, 255, 255, 0.8);
+    word-wrap: break-word;
+  }
+
+  .hero-visual {
+    position: relative;
+    width: 140%;
+    min-width: 0;
+    box-sizing: border-box;
+    perspective: 1000px;
+  }
+
+  .hero-code-sample {
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-sizing: border-box;
+  }
+
+  .code-dots {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .code-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .code-dot-red {
+    background: #ff5f56;
+  }
+
+  .code-dot-yellow {
+    background: #ffbd2e;
+  }
+
+  .code-dot-green {
+    background: #27ca3f;
+  }
+
+  .code-filename {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    font-family: 'Monaco', 'Consolas', monospace;
+    word-wrap: break-word;
+  }
+
+  .code-content {
+    padding: 1.5rem;
+    box-sizing: border-box;
+    overflow-x: auto;
+    /* Allow horizontal scrolling for code */
+    overflow-y: hidden;
+    max-width: 100%;
+  }
+
+  .code-content pre {
+    margin: 0;
+    font-family: 'Monaco', 'Consolas', monospace;
+    font-size: clamp(0.7rem, 1.5vw, 0.875rem);
+    line-height: 1.5;
+    white-space: pre;
+    /* Prevent code wrapping */
+    overflow-x: visible;
+    min-width: max-content;
+    /* Ensure content doesn't compress */
+  }
+
+  .code-content code {
+    white-space: pre;
+    /* Prevent code wrapping */
+    display: block;
+    min-width: max-content;
+  }
+
+  .code-content .na,
+  .code-content .kc,
+  .code-content .p {
+    color: #bdbdbd;
+  }
+
+  .code-content .n {
+    color: #e6e6e6;
+  }
+
+  .code-content .o {
+    color: #84dce9;
+  }
+
+  .code-content .s {
+    color: #a3ce85;
+  }
+
+  .hero-decorations {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+  }
+
+  .decoration {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .decoration-1 {
+    width: 60px;
+    height: 60px;
+    top: 20%;
+    right: 10%;
+    animation-delay: 0s;
+  }
+
+  .decoration-2 {
+    width: 80px;
+    height: 80px;
+    top: 60%;
+    right: 20%;
+    animation-delay: 2s;
+  }
+
+  .decoration-3 {
+    width: 40px;
+    height: 40px;
+    top: 40%;
+    right: 5%;
+    animation-delay: 4s;
+  }
+
+  @keyframes float {
+
+    0%,
+    100% {
+      transform: translateY(0px);
+    }
+
+    50% {
+      transform: translateY(-20px);
+    }
+  }
+
+  /* Tablet breakpoint */
+  @media (max-width: 1200px) {
+    .hero-content {
+      grid-template-columns: 1fr 1fr;
+      /* Equal columns on medium screens */
+      gap: 2rem;
+    }
+  }
+
+  /* Mobile breakpoint */
+  @media (max-width: 968px) {
+    .hero-content {
+      grid-template-columns: 1fr;
+      /* Single column on mobile */
+      gap: 2rem;
+    }
+
+    .hero-actions {
+      justify-content: flex-start;
+    }
+
+    .hero-stats {
+      justify-content: center;
+    }
+
+    .code-content {
+      padding: 1rem;
+    }
+
+    .hero-visual {
+      width: 100%;
+    }
+  }
+
+  /* Small mobile breakpoint */
+  @media (max-width: 640px) {
+    .hero-section {
+      padding: 1.5rem 0 2rem;
+    }
+
+    .hero-container {
+      padding: 0 0.75rem;
+    }
+
+    .hero-content {
+      gap: 1.5rem;
+    }
+
+    .hero-actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .btn {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .hero-stats {
+      gap: 1rem;
+      justify-content: space-between;
+    }
+
+    .hero-stat {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .code-content {
+      padding: 0.75rem;
+    }
+
+    .hero-decorations {
+      display: none;
+    }
+  }
+
+  /* Extra small mobile devices */
+  @media (max-width: 480px) {
+    .hero-container {
+      padding: 0 0.5rem;
+    }
+
+    .hero-content {
+      gap: 1rem;
+    }
+
+    .hero-stats {
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .hero-stat {
+      width: 100%;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block footer %}
+<img style="width: 100vw;" src="{{ 'assets/images/waves.svg' | url }}" />
+{{ super() }}
+{% endblock %}
