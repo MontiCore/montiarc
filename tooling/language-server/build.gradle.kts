@@ -101,7 +101,7 @@ tasks.register("editPackageJson") {
 }
 
 tasks.register<Copy>("copyIcon") {
-  from(rootProject.projectDir.absolutePath + "/docs/img/icon.png")
+  from(rootProject.projectDir.absolutePath + "/docs/assets/images/icon.png")
   include("icon.png")
   into(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir() + "/icons")
 }

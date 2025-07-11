@@ -1,7 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 <h1 align="center">
   <picture>
-    <img width="400" src="./docs/img/Logo.png" alt="MontiArc">
+    <img width="400" src="./docs/assets/images/Logo.png" alt="MontiArc">
   </picture>
 </h1>
 

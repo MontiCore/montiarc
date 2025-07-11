@@ -72,26 +72,26 @@ jobs:
           - os: macos-latest
             target: macOS
             asset_extension: .pkg
-            package_settings: -t pkg --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
+            package_settings: -t pkg --icon docs/assets/images/icon.png --about-url "https://monticore.github.io/montiarc"
           - os: windows-latest
             target: Windows
             asset_extension: .exe
-            package_settings: --win-console --win-dir-chooser --icon docs/img/icon.ico --about-url "https://monticore.github.io/montiarc"
+            package_settings: --win-console --win-dir-chooser --icon docs/assets/images/icon.ico --about-url "https://monticore.github.io/montiarc"
           - os: ubuntu-latest
             target: Linux
             asset_extension: -Linux.tar.xz
-            package_settings: -t app-image --icon docs/img/icon.png
+            package_settings: -t app-image --icon docs/assets/images/icon.png
           - os: ubuntu-latest
             target: Debian
             asset_extension: .deb
-            package_settings: -t deb --linux-deb-maintainer "SE at RWTH" --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
+            package_settings: -t deb --linux-deb-maintainer "SE at RWTH" --icon docs/assets/images/icon.png --about-url "https://monticore.github.io/montiarc"
           - os: ubuntu-latest
             container:
               image: fedora:latest
               options: --group-add 135
             target: Fedora
             asset_extension: .rpm
-            package_settings: -t rpm --icon docs/img/icon.png --about-url "https://monticore.github.io/montiarc"
+            package_settings: -t rpm --icon docs/assets/images/icon.png --about-url "https://monticore.github.io/montiarc"
       # Disable fail-fast as we want results from all even if one fails.
       fail-fast: false
     steps:
