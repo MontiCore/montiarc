@@ -19,7 +19,7 @@ MontiArc is a textual architecture description language (ADL) for the
 specification and modeling of cyber-physical systems.
 The architecture of a cyber-physical system is described as a [component](./Reference/Component/index.md) and 
 [connector](./Reference/Component/Connectors.md) (C&C) system, in which autonomously acting components perform computations.
-Components have clear defined [interfaces](./Reference/Component/Interfaces.md) that consists of stable, typed, directed ports.
+Components have clearly defined [interfaces](./Reference/Component/Interfaces.md) that consist of stable, typed, directed ports.
 
 Each component defines a cyber-physical function, which maps streams of input
 messages to stream of output messages.
@@ -30,8 +30,8 @@ such as [statecharts](./Reference/Behavior/Automata.md), or through the
 
 The MontiArc infrastructure provides essential functionality for verifying the
 validity of component and connector models.
-Components can be translated into Java simulations to simulate, analyze,
-and validate their behavior, for example through automated tests.
+Due to the strong semantic foundations, components can be translated into Java simulations to simulate, analyze,
+and validate their behavior, for example, through automated tests.
 In addition to the basic modeling elements \- components, ports, and connectors \-
 MontiArc supports advanced modeling concepts such as component 
 [parameterization](./Reference/Component/Parameter.md),
@@ -109,13 +109,26 @@ dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
 
 </div>
 
-<div class="section-card" markdown>
+<div class="full-width bg-primary" markdown>
+<center markdown>
+<h2 style="margin: 0;">Get Started with MontiArc Today!</h2>
+Discover Component-Based Modeling
+
+<a href="./GettingStarted/" class="btn btn-primary">
+            Take the Tour
+<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+</svg>
+</a>
+</center>
+</div>
+
 ## Found an issue?
 
 MontiArc is actively maintained by the [Chair of Software Engineering](https://www.se-rwth.de/). 
 There are multiple ways in which you can improve MontiArc to help you and others who might encounter the same issues in the future.
 
-<div class="grid cards cards-inverse" markdown>
+<div class="grid cards" markdown>
 
 -   :material-bug-outline: &nbsp;
     __Something is not working?__
@@ -168,9 +181,7 @@ There are multiple ways in which you can improve MontiArc to help you and others
     Before submitting an issue, make sure to:
 
     - Check that no similar issue already exists [here](https://github.com/MontiCore/montiarc/issues)
-    - You provided all information needed to understand the issue
-
-</div>
+    - You provided all the information needed to understand the issue
 
 ## Further Information
 
