@@ -503,7 +503,7 @@
             <div class="hero-stat-label">Models Created</div>
           </div>
           <div class="hero-stat">
-            <div class="hero-stat-number">50+</div>
+            <div class="hero-stat-number">20+</div>
             <div class="hero-stat-label">Research Papers</div>
           </div>
           <div class="hero-stat">
@@ -552,6 +552,20 @@
       </div>
     </div>
   </div>
+  <div class="hero-scroll-indicator">
+    <svg width="256" height="75" viewBox="0 0 256 75">
+      <path
+     style="fill:#ffffff"
+     d="m 0,75.3 c 85,0 170,0 256,0 C 191,75.3 178,0 128,0 77,0 64,75.3 0,75.3 Z" />
+     <path
+     d="m 128,40.5 v 17.633752 m 0,0 -8.81688,-8.816876 M 128,58.133752 l 8.81688,-8.816876"
+     stroke="#0067a7"
+     stroke-width="5.87792"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     style="stroke:#779ec9;stroke-opacity:1" />
+    </svg>
+  </div>
 </section>
 
 <!-- Custom Styles -->
@@ -559,7 +573,7 @@
   /* Root styles for proper mobile handling */
   .hero-section {
     background: linear-gradient(#0067a7, #779ec9);
-    padding: 1rem 0 3rem;
+    padding: 1rem 0 0;
     width: 100%;
     overflow-x: hidden;
   }
@@ -567,7 +581,7 @@
   .hero-container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 1rem 1rem;
     box-sizing: border-box;
   }
 
@@ -664,7 +678,7 @@
 
   .btn-primary {
     background: linear-gradient(45deg, #fff100, #ffb347);
-    color: #333;
+    color: #333 !important;
   }
 
   .btn-primary:hover {
@@ -721,6 +735,12 @@
     min-width: 0;
     box-sizing: border-box;
     perspective: 1000px;
+  }
+
+  .hero-scroll-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .hero-code-sample {
@@ -890,6 +910,10 @@
       gap: 2rem;
     }
 
+    .hero-container {
+      padding: 0 1rem 2rem;
+    }
+
     .hero-actions {
       justify-content: flex-start;
     }
@@ -910,11 +934,11 @@
   /* Small mobile breakpoint */
   @media (max-width: 640px) {
     .hero-section {
-      padding: 1.5rem 0 2rem;
+      padding: 1.5rem 0 0;
     }
 
     .hero-container {
-      padding: 0 0.75rem;
+      padding: 0 0.75rem 2rem;
     }
 
     .hero-content {
@@ -1067,6 +1091,15 @@
       Table of contents
     </label>
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#get-started-with-montiarc-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Started with MontiArc Today!
+    </span>
+  </a>
+  
+</li>
       
         <li class="md-nav__item">
   <a href="#found-an-issue" class="md-nav__link">
@@ -3229,6 +3262,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#get-started-with-montiarc-today" class="md-nav__link">
+    <span class="md-ellipsis">
+      Get Started with MontiArc Today!
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#found-an-issue" class="md-nav__link">
     <span class="md-ellipsis">
       Found an issue?
@@ -3280,7 +3322,7 @@
 specification and modeling of cyber-physical systems.
 The architecture of a cyber-physical system is described as a <a href="Reference/Component/">component</a> and 
 <a href="Reference/Component/Connectors/">connector</a> (C&amp;C) system, in which autonomously acting components perform computations.
-Components have clear defined <a href="Reference/Component/Interfaces/">interfaces</a> that consists of stable, typed, directed ports.</p>
+Components have clearly defined <a href="Reference/Component/Interfaces/">interfaces</a> that consist of stable, typed, directed ports.</p>
 <p>Each component defines a cyber-physical function, which maps streams of input
 messages to stream of output messages.
 This function is the behavior of the corresponding cyber-physical systems.
@@ -3289,8 +3331,8 @@ such as <a href="Reference/Behavior/Automata/">statecharts</a>, or through the
 <a href="Reference/Component/Decomposition/">composition</a> of subcomponents to form larger systems.</p>
 <p>The MontiArc infrastructure provides essential functionality for verifying the
 validity of component and connector models.
-Components can be translated into Java simulations to simulate, analyze,
-and validate their behavior, for example through automated tests.
+Due to the strong semantic foundations, components can be translated into Java simulations to simulate, analyze,
+and validate their behavior, for example, through automated tests.
 In addition to the basic modeling elements - components, ports, and connectors -
 MontiArc supports advanced modeling concepts such as component 
 <a href="Reference/Component/Parameter/">parameterization</a>,
@@ -3349,11 +3391,22 @@ dynamic reconfiguration, and <a href="Reference/Component/Generics/">generics</a
 </li>
 </ul>
 </div>
-<div class="section-card">
+<div class="full-width bg-primary">
+<center>
+<h2 id="get-started-with-montiarc-today" style="margin: 0;">Get Started with MontiArc Today!</h2>
+<p>Discover Component-Based Modeling</p>
+<p><a href="./GettingStarted/" class="btn btn-primary">
+            Take the Tour
+<svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <path d="M5 12h14M12 5l7 7-7 7" />
+</svg>
+</a></p>
+</center>
+</div>
 <h2 id="found-an-issue">Found an issue?</h2>
 <p>MontiArc is actively maintained by the <a href="https://www.se-rwth.de/">Chair of Software Engineering</a>. 
 There are multiple ways in which you can improve MontiArc to help you and others who might encounter the same issues in the future.</p>
-<div class="grid cards cards-inverse">
+<div class="grid cards">
 <ul>
 <li>
 <p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 8h-2.81c-.45-.8-1.07-1.5-1.82-2L17 4.41 15.59 3l-2.17 2.17a6 6 0 0 0-2.83 0L8.41 3 7 4.41 8.62 6c-.75.5-1.36 1.21-1.81 2H4v2h2.09c-.06.33-.09.66-.09 1v1H4v2h2v1c0 .34.03.67.09 1H4v2h2.81A5.99 5.99 0 0 0 15 20.18c.91-.52 1.67-1.28 2.19-2.18H20v-2h-2.09c.06-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.03-.67-.09-1H20zm-4 7a4 4 0 0 1-4 4 4 4 0 0 1-4-4v-4a4 4 0 0 1 4-4 4 4 0 0 1 4 4zm-2-5v2h-4v-2zm-4 4h4v2h-4z"/></svg></span> &nbsp;
@@ -3396,9 +3449,8 @@ documentation</p>
 <p>Before submitting an issue, make sure to:</p>
 <ul>
 <li>Check that no similar issue already exists <a href="https://github.com/MontiCore/montiarc/issues">here</a></li>
-<li>You provided all information needed to understand the issue</li>
+<li>You provided all the information needed to understand the issue</li>
 </ul>
-</div>
 </div>
 <h2 id="further-information">Further Information</h2>
 <ul>

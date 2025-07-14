@@ -39,6 +39,18 @@ html {
   left: 50%;
   position: relative;
   margin-left: -50vw;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  padding: 1.5rem 0.8rem;
+}
+
+.bg-primary {
+  background-color: var(--md-primary-fg-color);
+  color: #fffffff0;
+  --md-default-fg-color--lightest: #ffffff12;
+  --md-admonition-bg-color: #ffffff08;
+  --md-admonition-fg-color: #fffffff0;
+  --md-typeset-a-color: #f8a61c;
 }
 
 .section-card {

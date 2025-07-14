@@ -62,7 +62,7 @@
             <div class="hero-stat-label">Models Created</div>
           </div>
           <div class="hero-stat">
-            <div class="hero-stat-number">50+</div>
+            <div class="hero-stat-number">20+</div>
             <div class="hero-stat-label">Research Papers</div>
           </div>
           <div class="hero-stat">
@@ -111,6 +111,20 @@
       </div>
     </div>
   </div>
+  <div class="hero-scroll-indicator">
+    <svg width="256" height="75" viewBox="0 0 256 75">
+      <path
+     style="fill:#ffffff"
+     d="m 0,75.3 c 85,0 170,0 256,0 C 191,75.3 178,0 128,0 77,0 64,75.3 0,75.3 Z" />
+     <path
+     d="m 128,40.5 v 17.633752 m 0,0 -8.81688,-8.816876 M 128,58.133752 l 8.81688,-8.816876"
+     stroke="#0067a7"
+     stroke-width="5.87792"
+     stroke-linecap="round"
+     stroke-linejoin="round"
+     style="stroke:#779ec9;stroke-opacity:1" />
+    </svg>
+  </div>
 </section>
 
 <!-- Custom Styles -->
@@ -118,7 +132,7 @@
   /* Root styles for proper mobile handling */
   .hero-section {
     background: linear-gradient(#0067a7, #779ec9);
-    padding: 1rem 0 3rem;
+    padding: 1rem 0 0;
     width: 100%;
     overflow-x: hidden;
   }
@@ -126,7 +140,7 @@
   .hero-container {
     max-width: 100%;
     margin: 0 auto;
-    padding: 0 1rem;
+    padding: 0 1rem 1rem;
     box-sizing: border-box;
   }
 
@@ -223,7 +237,7 @@
 
   .btn-primary {
     background: linear-gradient(45deg, #fff100, #ffb347);
-    color: #333;
+    color: #333 !important;
   }
 
   .btn-primary:hover {
@@ -280,6 +294,12 @@
     min-width: 0;
     box-sizing: border-box;
     perspective: 1000px;
+  }
+
+  .hero-scroll-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   .hero-code-sample {
@@ -449,6 +469,10 @@
       gap: 2rem;
     }
 
+    .hero-container {
+      padding: 0 1rem 2rem;
+    }
+
     .hero-actions {
       justify-content: flex-start;
     }
@@ -469,11 +493,11 @@
   /* Small mobile breakpoint */
   @media (max-width: 640px) {
     .hero-section {
-      padding: 1.5rem 0 2rem;
+      padding: 1.5rem 0 0;
     }
 
     .hero-container {
-      padding: 0 0.75rem;
+      padding: 0 0.75rem 2rem;
     }
 
     .hero-content {
