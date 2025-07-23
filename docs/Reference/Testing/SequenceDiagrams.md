@@ -2,7 +2,7 @@
 # Sequence Diagrams for Testing
 
 Sequence diagrams are well suited for the specification and testing of behavior.
-Here we will only focus on the testing part.
+Here we will only focus on the testing part. To enable this feature, use the [SD2Arc](../../Usage/Gradle/SD2Arc.md) Tool.
 
 MontiArc provides an integration for sequence diagrams. They look similar to
 UML sequence diagrams, only with some minor modifications.
@@ -26,6 +26,68 @@ sequencediagram SD1 {
   assert (emitterA.out && and.b) == and.q;
 }
 ```
+
+## Test
+Sequence diagrams have a package and a name like any other model in MontiArc.
+A sequence diagram starts with the listing of actors included in the sequence.
+This is a list of names and optionally a type. For tests that stand on their own
+the type is always required. 
+Next comes a list of interactions that have a source and target port and a message.
+If the source is omitted, the message is sent by the test coordinator.
+
+A test is considered successful if all interactions with the specified values
+were observed, and no assertions have failed.
+
+Given the following example. The test inputs `true` and `false` to the respective
+ports and asserts that an outgoing message `false` is observed.
+All of this should occur in one tick as specified by `<<ticks=1>>`.
+
+```sequencediagram
+package a.b;
+
+<<ticks=1>>
+complete sequencediagram AndScenario01Test {
+  and:And;
+
+  -> and.a : true;
+  -> and.b : false;
+  and.out -> : false;
+}
+```
+
+
+If a message value is not of interest or is unknown `...` can be used.
+Then only that the interaction occurs is asserted, but not its value.
+
+
+The last message of a port can always be referenced in expressions.
+Variables can be created at any point using the `var` keyword.
+Like `assert` statements, `var` statements are executed directly after
+the previous interaction has been observed.
+
+
+
+```sequencediagram
+package a.b;
+
+complete sequencediagram AndScenario02Test {
+  and:And;
+
+  -> and.a : true;
+  -> and.b : true;
+  and.out -> : ...; // Ignored
+  var boolean outFirst = and.out; // outFirst = true
+
+  -> and.a : outFirst; // true
+  -> and.b : and.out;  // true
+  and.out -> : ...;    // Ignored
+  assert and.out;      // assert last and.out == true
+}
+```
+
+
+Using multiple components and different [semantics](#semantics) allows the
+the specification of complex scenarios or requirements.
 
 ## Embedded
 

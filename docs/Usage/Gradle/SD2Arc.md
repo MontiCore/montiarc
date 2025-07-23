@@ -1,7 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
 This plugin generates MontiArc test models from sequence diagrams.
-See the [testing](../../Reference/Testing/SequenceDiagrams.md) with sequence diagrams section about why this is useful. 
+See the [testing](../../Reference/Testing/SequenceDiagrams.md) with sequence diagrams section for more information. 
 
 ---
 ## Apply it:
