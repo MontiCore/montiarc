@@ -20,16 +20,20 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
   }
 
   @Override
+  public long getSimulatedTickLength(int testIndex) {
+    <@returnStereoValue "simulatedTickLength" 0?c/>
+  }
+
+  @Override
   public Object resolveParameter(int testIndex, int parameterIndex) {
-    // constructor parameter index 0 (name), 1 (scheduler), and 2 (oracleFactory) are outside of this context's control
     switch (parameterIndex) {
     <#list ast.getHead().getArcParameterList() as param>
-      case ${param?index+3}: // ${param.getName()}
+      case ${param?index}: // ${param.getName()}
         <#if param.isPresentDefault()><#assign default = prettyPrinter.prettyprint(param.getDefault())></#if>
         <#if MaUnitHelper.isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
     </#list>
     <#list helper.getFeatures(ast) as feature>
-      case ${feature?index+2+ast.getHead().getArcParameterList()?size}: // ${feature.getName()}
+      case ${feature?index+ast.getHead().getArcParameterList()?size}: // ${feature.getName()}
         <@returnStereoValue feature.getName() false?c/>
     </#list>
     }

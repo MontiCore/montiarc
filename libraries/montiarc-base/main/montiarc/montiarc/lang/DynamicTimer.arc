@@ -6,7 +6,7 @@ package montiarc.lang;
  * once the specified duration has been exceeded.
  * Starting the timer again when it's already running does nothing.
  */
-component Timer {
+component DynamicTimer {
 
   port in  Duration start;
   port out Signal completed;

@@ -56,7 +56,7 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
     boolean caughtException = false;
     try {
       Simulation.ticks = 0;
-      component.run(getTickCount());
+      component.run(getTickCount(), getSimulatedTickLength());
     } catch (Throwable e) {
       caughtException = true;
       String schedulerTrace = "\nafter <" + Simulation.ticks + "> ticks.";
@@ -85,7 +85,7 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
       } else if (i == 2) {
         arguments[i] = oracleFactory;
       } else {
-        arguments[i] = invocationContext.resolveParameter(iteration, i);
+        arguments[i] = invocationContext.resolveParameter(iteration, i - 3);
       }
     }
     return arguments;
@@ -93,5 +93,9 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
 
   protected int getTickCount() {
     return invocationContext.getTickCount(iteration);
+  }
+
+  protected long getSimulatedTickLength() {
+    return invocationContext.getSimulatedTickLength(iteration);
   }
 }

@@ -26,6 +26,14 @@ public interface MaUnitTestContext {
   }
 
   /**
+   * @param testIndex the test case index.
+   * @return the simulated time between ticks in nanoseconds.
+   */
+  default long getSimulatedTickLength(int testIndex) {
+    return 0;
+  }
+
+  /**
    * Returns the component's constructor arguments.
    * {@param parameterIndex} one (Component name) and two (schedule) are not influenced by this method. They are part of the broader test execution and cannot be overridden.
    * <p>

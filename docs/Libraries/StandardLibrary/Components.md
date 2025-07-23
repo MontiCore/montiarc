@@ -29,7 +29,7 @@
 
     Converts an event stream into a synchronous stream by discarding all events except the last received one.
 
--   [Timer](https://github.com/MontiCore/montiarc/blob/dev/libraries/montiarc-base/main/montiarc/montiarc/lang/Timer.arc)
+-   [DynamicTimer](https://github.com/MontiCore/montiarc/blob/dev/libraries/montiarc-base/main/montiarc/montiarc/lang/DynamicTimer.arc)
 
     ---
 

@@ -76,6 +76,10 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
     "<<test={[false, 1],[true, 2]}>> component Comp13(boolean b, int i) { }",
     // 2 tests, test source, custom tick count, custom parameter values, default omitted
     "<<test={[false, 1],[true]}>> component Comp14(boolean b, int i = 0) { }",
+    // test, custom tick length
+    "<<test, simulatedTickLength=1000>> component Comp15() { }",
+    // 2 tests, custom ticks length
+    "<<test, simulatedTickLength=[1, 2]>> component Comp16() { }",
   })
   void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -187,7 +191,13 @@ class MaUnitTestConfiguredCorrectlyTest extends MontiArcTestBase {
         MontiArcError.UNIT_TYPE_MISMATCH),
       // 3 tests, missing values for tests
       arg("<<test={[], [0]}, ticks=[1,2,3]>> component Comp23(int i = 0, int j = 0) { }",
-        MontiArcError.UNIT_TEST_COUNT_MISMATCH)
+        MontiArcError.UNIT_TEST_COUNT_MISMATCH),
+      // test, ticks type mismatch
+      arg("<<test, simulatedTickLength=true>> component Comp25() { }",
+        MontiArcError.UNIT_TYPE_MISMATCH),
+      // 2 tests, tick length type mismatch in list
+      arg("<<test, simulatedTickLength=[1,true]>> component Comp26() { }",
+        MCError.TARGET_TYPE_MISMATCH)
     );
   }
 

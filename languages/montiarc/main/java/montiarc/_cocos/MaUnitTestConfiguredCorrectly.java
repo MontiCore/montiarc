@@ -73,6 +73,13 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
       checkTypeFits(tickStereo.get(), SymTypeExpressionFactory.createPrimitive("int"));
     }
 
+    // Check tick count
+    Optional<ASTStereoValue> simulatedTickStereo = getStereo(node, "simulatedTickLength");
+    if (simulatedTickStereo.isPresent()) {
+      checkTestCountFits(simulatedTickStereo.get(), testCount);
+      checkTypeFits(simulatedTickStereo.get(), SymTypeExpressionFactory.createPrimitive("long"));
+    }
+
     // Check expected outcome
     Optional<ASTStereoValue> expectedStereo = getStereo(node, "exception");
     if (expectedStereo.isPresent()) {
@@ -265,6 +272,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
     Set<String> names = node.getHead().getArcParameterList().stream().map(ASTArcParameter::getName).collect(Collectors.toSet());
     names.addAll(node.getBody().streamArcElementsOfType(ASTArcFeatureDeclaration.class).flatMap(ASTArcFeatureDeclaration::streamArcFeatures).map(ASTArcFeature::getName).collect(Collectors.toSet()));
     names.add("ticks");
+    names.add("simulatedTickLength");
 
     return Math.max(
       node.getStereotype().getValuesList().stream()

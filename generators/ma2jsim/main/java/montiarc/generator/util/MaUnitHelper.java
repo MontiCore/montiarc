@@ -31,6 +31,7 @@ public class MaUnitHelper {
     Set<String> names = node.getHead().getArcParameterList().stream().map(ASTArcParameter::getName).collect(Collectors.toSet());
     names.addAll(node.getBody().streamArcElementsOfType(ASTArcFeatureDeclaration.class).flatMap(ASTArcFeatureDeclaration::streamArcFeatures).map(ASTArcFeature::getName).collect(Collectors.toSet()));
     names.add("ticks");
+    names.add("simulatedTickLength");
 
     return Math.max(
       node.getStereotype().getValuesList().stream()

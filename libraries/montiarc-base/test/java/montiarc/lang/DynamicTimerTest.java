@@ -18,13 +18,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JSimTest
-class TimerTest {
+class DynamicTimerTest {
 
   @ParameterizedTest
   @MethodSource("absIntegerTestProvider")
   void test(int duration) {
     // Given
-    TimerComp sut = new TimerCompBuilder().setName("sut").build();
+    DynamicTimerComp sut = new DynamicTimerCompBuilder().setName("sut").build();
     PortObserver<Signal> port_completed = new PortObserver<>();
 
     sut.port_completed().connect(port_completed);
