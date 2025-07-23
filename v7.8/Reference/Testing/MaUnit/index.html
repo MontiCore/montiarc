@@ -2973,7 +2973,8 @@ tests than the list can be omitted, and a direct value can be assigned.</p>
 <p>More complex tests can be defined by using other library components that
 produce or assert streams of messages.
 The execution length of the test can be set with the <code>ticks</code> stereotype, which
-defines the number of ticks that the test should run for.</p>
+defines the number of ticks that the test should run for. Likewise, with
+<code>simulatedTickLength</code> the simulated time between ticks in nanoseconds can be set.</p>
 <p>The following test description targets an implementation of the binary AND gate.
 The test is parameterized by the input and output streams of the SUT.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Timed</label><label for="__tabbed_1_2">Sync</label></div>

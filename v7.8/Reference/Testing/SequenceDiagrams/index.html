@@ -2358,6 +2358,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#embedded" class="md-nav__link">
     <span class="md-ellipsis">
       Embedded
@@ -2753,6 +2762,15 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#test" class="md-nav__link">
+    <span class="md-ellipsis">
+      Test
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#embedded" class="md-nav__link">
     <span class="md-ellipsis">
       Embedded
@@ -2825,7 +2843,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 <h1 id="sequence-diagrams-for-testing">Sequence Diagrams for Testing</h1>
 <p>Sequence diagrams are well suited for the specification and testing of behavior.
-Here we will only focus on the testing part.</p>
+Here we will only focus on the testing part. To enable this feature, use the <a href="../../../Usage/Gradle/SD2Arc/">SD2Arc</a> Tool.</p>
 <p>MontiArc provides an integration for sequence diagrams. They look similar to
 UML sequence diagrams, only with some minor modifications.</p>
 <p>In general, sequence diagrams are exemplary and describe one possible interaction of a system.
@@ -2844,6 +2862,53 @@ For a detailed definition of sequence diagrams, read <a href="https://link.sprin
   assert (emitterA.out &amp;&amp; and.b) == and.q;
 }
 </code></pre></div>
+<h2 id="test">Test</h2>
+<p>Sequence diagrams have a package and a name like any other model in MontiArc.
+A sequence diagram starts with the listing of actors included in the sequence.
+This is a list of names and optionally a type. For tests that stand on their own
+the type is always required. 
+Next comes a list of interactions that have a source and target port and a message.
+If the source is omitted, the message is sent by the test coordinator.</p>
+<p>A test is considered successful if all interactions with the specified values
+were observed, and no assertions have failed.</p>
+<p>Given the following example. The test inputs <code>true</code> and <code>false</code> to the respective
+ports and asserts that an outgoing message <code>false</code> is observed.
+All of this should occur in one tick as specified by <code>&lt;&lt;ticks=1&gt;&gt;</code>.</p>
+<div class="highlight"><pre><span></span><code>package a.b;
+
+&lt;&lt;ticks=1&gt;&gt;
+complete sequencediagram AndScenario01Test {
+  and:And;
+
+  -&gt; and.a : true;
+  -&gt; and.b : false;
+  and.out -&gt; : false;
+}
+</code></pre></div>
+<p>If a message value is not of interest or is unknown <code>...</code> can be used.
+Then only that the interaction occurs is asserted, but not its value.</p>
+<p>The last message of a port can always be referenced in expressions.
+Variables can be created at any point using the <code>var</code> keyword.
+Like <code>assert</code> statements, <code>var</code> statements are executed directly after
+the previous interaction has been observed.</p>
+<div class="highlight"><pre><span></span><code>package a.b;
+
+complete sequencediagram AndScenario02Test {
+  and:And;
+
+  -&gt; and.a : true;
+  -&gt; and.b : true;
+  and.out -&gt; : ...; // Ignored
+  var boolean outFirst = and.out; // outFirst = true
+
+  -&gt; and.a : outFirst; // true
+  -&gt; and.b : and.out;  // true
+  and.out -&gt; : ...;    // Ignored
+  assert and.out;      // assert last and.out == true
+}
+</code></pre></div>
+<p>Using multiple components and different <a href="#semantics">semantics</a> allows the
+the specification of complex scenarios or requirements.</p>
 <h2 id="embedded">Embedded</h2>
 <p>Another possible way to use sequence diagrams is to specify an existing architecture.
 For that, an existing decomposed MontiArc model has to be specified for which an 
