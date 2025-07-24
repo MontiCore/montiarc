@@ -55,7 +55,7 @@ public class GlobalVariableTrafo {
 
   private static ASTTransitionAction buildTransitionAction(List<ASTExpressionStatement> actions) {
     return SCTransitions4CodeMill.transitionActionBuilder()
-        .setMCBlockStatement(
+        .setMCStatement(
             MCCommonStatementsMill.mCJavaBlockBuilder()
                 .setMCBlockStatementsList(new ArrayList<>(actions))
                 .build())
@@ -81,9 +81,9 @@ public class GlobalVariableTrafo {
       ASTTransitionBody body = (ASTTransitionBody) node.getSCTBody();
 
       if (body.isPresentTransitionAction()) {
-        if (body.getTransitionAction().getMCBlockStatement() instanceof ASTMCJavaBlock) {
+        if (body.getTransitionAction().getMCStatement() instanceof ASTMCJavaBlock) {
           ASTMCJavaBlock actionBody =
-              (ASTMCJavaBlock) body.getTransitionAction().getMCBlockStatement();
+              (ASTMCJavaBlock) body.getTransitionAction().getMCStatement();
 
           MontiArcTraverser traverser = MontiArcMill.traverser();
           AssignmentsFilter filter = new AssignmentsFilter(new HashMap<>(actions));

@@ -19,10 +19,10 @@ public class ActionsMustBeAssignmentsCoCo implements SCTransitions4CodeASTTransi
 
   @Override
   public void check(ASTTransitionAction node) {
-    if (node.isPresentMCBlockStatement()) {
+    if (node.isPresentMCStatement()) {
 
-      if (node.getMCBlockStatement() instanceof ASTMCJavaBlock) {
-        ASTMCJavaBlock javaBlock = (ASTMCJavaBlock) node.getMCBlockStatement();
+      if (node.getMCStatement() instanceof ASTMCJavaBlock) {
+        ASTMCJavaBlock javaBlock = (ASTMCJavaBlock) node.getMCStatement();
 
         for (ASTMCBlockStatement stmt : javaBlock.getMCBlockStatementList()) {
           if (stmt instanceof ASTExpressionStatement) {
@@ -36,7 +36,7 @@ public class ActionsMustBeAssignmentsCoCo implements SCTransitions4CodeASTTransi
         }
       } else {
         Log.error(
-            String.format(errorMessage, print(node.getMCBlockStatement()), printPosition(node)));
+            String.format(errorMessage, print(node.getMCStatement()), printPosition(node)));
       }
     }
   }

@@ -269,9 +269,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
 
     // Check reaction
     Assertions.assertTrue(((ASTTransitionBody) closed_opened.getSCTBody())
-      .getTransitionAction().getMCBlockStatement() instanceof ASTMCJavaBlock);
+      .getTransitionAction().getMCStatement() instanceof ASTMCJavaBlock);
     ASTMCJavaBlock closed_opened_action = (ASTMCJavaBlock)
-      ((ASTTransitionBody) closed_opened.getSCTBody()).getTransitionAction().getMCBlockStatement();
+      ((ASTTransitionBody) closed_opened.getSCTBody()).getTransitionAction().getMCStatement();
     Assertions.assertTrue(closed_opened_action.getMCBlockStatement(0) instanceof ASTExpressionStatement);
     Assertions.assertTrue(((ASTExpressionStatement) closed_opened_action
       .getMCBlockStatement(0)).getExpression() instanceof ASTAssignmentExpression);
@@ -289,9 +289,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
 
     // Check reaction
     Assertions.assertTrue(((ASTTransitionBody) closed_locked.getSCTBody())
-      .getTransitionAction().getMCBlockStatement() instanceof ASTMCJavaBlock);
+      .getTransitionAction().getMCStatement() instanceof ASTMCJavaBlock);
     ASTMCJavaBlock closed_locked_action = (ASTMCJavaBlock) ((ASTTransitionBody) closed_locked.getSCTBody())
-      .getTransitionAction().getMCBlockStatement();
+      .getTransitionAction().getMCStatement();
     Assertions.assertTrue(closed_locked_action.getMCBlockStatement(0) instanceof ASTExpressionStatement);
     Assertions.assertTrue(((ASTExpressionStatement) closed_locked_action.getMCBlockStatement(0))
       .getExpression() instanceof ASTCallExpression);
@@ -412,9 +412,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     ASTSCHierarchyBody opened_body = (ASTSCHierarchyBody) opened.getSCSBody();
     Assertions.assertTrue(opened_body.getSCStateElement(0) instanceof ASTSCEntryAction);
     Assertions.assertTrue(((ASTTransitionAction) ((ASTSCEntryAction) opened_body.getSCStateElement(0)).getSCABody())
-      .getMCBlockStatement() instanceof ASTMCJavaBlock);
+      .getMCStatement() instanceof ASTMCJavaBlock);
     ASTMCJavaBlock entryAction = (ASTMCJavaBlock) ((ASTTransitionAction) ((ASTSCEntryAction) opened_body.getSCStateElement(0))
-      .getSCABody()).getMCBlockStatement();
+      .getSCABody()).getMCStatement();
     Assertions.assertTrue(entryAction.getMCBlockStatement(0) instanceof ASTExpressionStatement);
     Assertions.assertTrue(((ASTExpressionStatement) entryAction.getMCBlockStatement(0))
       .getExpression() instanceof ASTCallExpression);
@@ -435,9 +435,9 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
 
     Assertions.assertTrue(opened_body.getSCStateElement(1) instanceof ASTSCExitAction);
     Assertions.assertTrue(((ASTTransitionAction) ((ASTSCExitAction) opened_body.getSCStateElement(1)).getSCABody())
-      .getMCBlockStatement() instanceof ASTMCJavaBlock);
+      .getMCStatement() instanceof ASTMCJavaBlock);
     ASTMCJavaBlock exitAction = (ASTMCJavaBlock) ((ASTTransitionAction) ((ASTSCExitAction) opened_body.getSCStateElement(1))
-      .getSCABody()).getMCBlockStatement();
+      .getSCABody()).getMCStatement();
     Assertions.assertTrue(exitAction.getMCBlockStatement(0) instanceof ASTExpressionStatement);
     Assertions.assertTrue(((ASTExpressionStatement) exitAction.getMCBlockStatement(0))
       .getExpression() instanceof ASTCallExpression);

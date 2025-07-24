@@ -13,6 +13,7 @@ import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._visitor.NameCollectorVisitor;
+import de.monticore.statements.mcstatementsbasis._ast.ASTMCStatement;
 import de.monticore.symbols.compsymbols._ast.ASTComponentType;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
@@ -640,13 +641,13 @@ public class Helper {
     return this.getAutomatonBehavior(component).get().getStates();
   }
 
-  public Optional<ASTMCBlockStatement> getEntryAction(ASTSCState state) {
+  public Optional<ASTMCStatement> getEntryAction(ASTSCState state) {
     for (ASTSCStateElement s : getHierarchyElementsOf(state)) {
       if (MontiArcMill.typeDispatcher().isSCActionsASTSCEntryAction(s)) {
         ASTSCABody actionBody = MontiArcMill.typeDispatcher()
           .asSCActionsASTSCEntryAction(s)
           .getSCABody();
-        return getBlockStatementOfAction(actionBody);
+        return getStatementOfAction(actionBody);
       }
     }
     return Optional.empty();
@@ -674,13 +675,13 @@ public class Helper {
     return "";
   }
 
-  public Optional<ASTMCBlockStatement> getExitAction(ASTSCState state) {
+  public Optional<ASTMCStatement> getExitAction(ASTSCState state) {
     for (ASTSCStateElement s : getHierarchyElementsOf(state)) {
       if (MontiArcMill.typeDispatcher().isSCActionsASTSCExitAction(s)) {
         ASTSCABody actionBody = MontiArcMill.typeDispatcher()
           .asSCActionsASTSCExitAction(s)
           .getSCABody();
-        return getBlockStatementOfAction(actionBody);
+        return getStatementOfAction(actionBody);
       }
     }
 
@@ -695,13 +696,13 @@ public class Helper {
     return MontiArcMill.typeDispatcher().asSCTransitions4CodeASTAnteAction(state.getSCSAnte()).getMCBlockStatementList();
   }
 
-  public Optional<ASTMCBlockStatement> getDoAction(ASTSCState state) {
+  public Optional<ASTMCStatement> getDoAction(ASTSCState state) {
     for (ASTSCStateElement s : getHierarchyElementsOf(state)) {
       if (MontiArcMill.typeDispatcher().isSCDoActionsASTSCDoAction(s)) {
         ASTSCABody actionBody = MontiArcMill.typeDispatcher()
           .asSCDoActionsASTSCDoAction(s)
           .getSCABody();
-        return getBlockStatementOfAction(actionBody);
+        return getStatementOfAction(actionBody);
       }
     }
 
@@ -728,10 +729,10 @@ public class Helper {
   }
 
   /** Return the block statement, given that the action body is an {@link ASTTransitionAction}. */
-  private Optional<ASTMCBlockStatement> getBlockStatementOfAction(ASTSCABody actionBody) {
+  private Optional<ASTMCStatement> getStatementOfAction(ASTSCABody actionBody) {
     if (MontiArcMill.typeDispatcher().isSCTransitions4CodeASTTransitionAction(actionBody)) {
       ASTTransitionAction actualAction = MontiArcMill.typeDispatcher().asSCTransitions4CodeASTTransitionAction(actionBody);
-      return Optional.of(actualAction.getMCBlockStatement());
+      return Optional.of(actualAction.getMCStatement());
     } else {
       return Optional.empty();
     }

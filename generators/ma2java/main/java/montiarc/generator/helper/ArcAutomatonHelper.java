@@ -17,6 +17,7 @@ import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
+import de.monticore.statements.mcstatementsbasis._ast.ASTMCStatement;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayDeque;
@@ -92,7 +93,7 @@ public class ArcAutomatonHelper {
       .anyMatch(elem -> elem instanceof ASTSCEntryAction);
   }
 
-  public ASTMCBlockStatement getEntryActionBlockStatement(@NotNull ASTSCState state) {
+  public ASTMCStatement getEntryActionBlockStatement(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     Preconditions.checkArgument(hasEntryAction(state));
 
@@ -100,7 +101,7 @@ public class ArcAutomatonHelper {
     ASTSCEntryAction entryAction = stateBody.getSCStateElementList().stream()
       .filter(elem -> elem instanceof ASTSCEntryAction).map(elem -> (ASTSCEntryAction) elem)
       .findFirst().get();
-    return scABodyToTransitionAction(entryAction.getSCABody()).getMCBlockStatement();
+    return scABodyToTransitionAction(entryAction.getSCABody()).getMCStatement();
   }
 
   public boolean hasExitAction(@NotNull ASTSCState state) {
@@ -113,7 +114,7 @@ public class ArcAutomatonHelper {
       .anyMatch(elem -> elem instanceof ASTSCExitAction);
   }
 
-  public ASTMCBlockStatement getExitActionBlockStatement(@NotNull ASTSCState state) {
+  public ASTMCStatement getExitActionBlockStatement(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
     Preconditions.checkArgument(hasExitAction(state));
 
@@ -121,7 +122,7 @@ public class ArcAutomatonHelper {
     ASTSCExitAction exitAction = stateBody.getSCStateElementList().stream()
       .filter(elem -> elem instanceof ASTSCExitAction).map(elem -> (ASTSCExitAction) elem)
       .findFirst().get();
-    return scABodyToTransitionAction(exitAction.getSCABody()).getMCBlockStatement();
+    return scABodyToTransitionAction(exitAction.getSCABody()).getMCStatement();
   }
 
   public boolean hasInitAction(@NotNull ASTSCState state) {
