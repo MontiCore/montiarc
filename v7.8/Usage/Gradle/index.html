@@ -2823,7 +2823,7 @@ You can also <a href="#further-references">change the location</a> in which mode
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle.kts</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// Optional, but recommended</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="p">}</span>
 
 <span class="c1">// Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
@@ -2838,7 +2838,7 @@ You can also <a href="#further-references">change the location</a> in which mode
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span><span class="w">  </span><span class="c1">// Optional, but recommended</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc-jsim&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="o">}</span>
 
 <span class="c1">// Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
@@ -2876,14 +2876,14 @@ Check that, as a result, the Java class <code>MyComp</code> should be generated 
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle.kts</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc-jsim&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
@@ -2897,7 +2897,7 @@ To do this, add the cd2pojo plugin to the <code>plugins</code> block within the 
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle.kts</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;cd2pojo&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -2905,7 +2905,7 @@ To do this, add the cd2pojo plugin to the <code>plugins</code> block within the 
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc-jsim&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;cd2pojo&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
 <span class="o">}</span>
 </code></pre></div>
