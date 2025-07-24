@@ -37,7 +37,7 @@ Then, within the build script, you need to declare:
 === "Kotlin"
     ```kotlin
     plugins {
-      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+      id("montiarc-jsim") version "VERSION_YOU_WANT_TO_USE"
     }
 
     // The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen
@@ -51,7 +51,7 @@ Then, within the build script, you need to declare:
 === "Groovy"
     ```groovy
     plugins {
-      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+      id "montiarc-jsim" version "VERSION_YOU_WANT_TO_USE"
     }
 
     // The generator and RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen

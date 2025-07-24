@@ -87,7 +87,7 @@ We can then apply the plugin by adding the following to Gradle's Build file:
     ```kotlin title="build.gradle.kts"
     plugins {
       id("java")  // Optional, but recommended
-      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+      id("montiarc-jsim") version "VERSION_YOU_WANT_TO_USE"
     }
 
     // Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.
@@ -102,7 +102,7 @@ We can then apply the plugin by adding the following to Gradle's Build file:
     ```groovy title="build.gradle"
     plugins {
       id "java"  // Optional, but recommended
-      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+      id "montiarc-jsim" version "VERSION_YOU_WANT_TO_USE"
     }
 
     // Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.
@@ -147,14 +147,14 @@ If you also want that the `build` task compiles the generated code, then also ap
     ```kotlin title="build.gradle.kts"
     plugins {
       id("java")
-      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+      id("montiarc-jsim") version "VERSION_YOU_WANT_TO_USE"
     }
     ```
 === "Groovy"
     ```groovy title="build.gradle"
     plugins {
       id "java"
-      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+      id "montiarc-jsim" version "VERSION_YOU_WANT_TO_USE"
     }
     ```
 
@@ -170,7 +170,7 @@ To do this, add the cd2pojo plugin to the `plugins` block within the build scrip
     ```kotlin title="build.gradle.kts"
     plugins {
       id("java")
-      id("montiarc") version "VERSION_YOU_WANT_TO_USE"
+      id("montiarc-jsim") version "VERSION_YOU_WANT_TO_USE"
       id("cd2pojo") version "VERSION_YOU_WANT_TO_USE"
     }
     ```
@@ -178,7 +178,7 @@ To do this, add the cd2pojo plugin to the `plugins` block within the build scrip
     ```groovy title="build.gradle"
     plugins {
       id "java"
-      id "montiarc" version "VERSION_YOU_WANT_TO_USE"
+      id "montiarc-jsim" version "VERSION_YOU_WANT_TO_USE"
       id "cd2pojo" version "VERSION_YOU_WANT_TO_USE"
     }
     ```
