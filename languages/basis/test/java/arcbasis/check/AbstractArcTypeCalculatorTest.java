@@ -68,10 +68,9 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisTestBase {
     OOTypeSymbol f =
       ArcBasisMill.oOTypeSymbolBuilder().setSpannedScope(ArcBasisMill.scope()).setName("FirstGrader").build();
     SymbolService.link(this.getScope(), p, r, t, s, f, str);
-    t.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
-    s.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Role", this.getScope())));
-    f.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject("Student",
-      this.getScope())));
+    t.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Role").orElseThrow())));
+    s.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Role").orElseThrow())));
+    f.setSuperTypesList(Collections.singletonList(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Student").orElseThrow())));
   }
 
   public void setUpFields() {
@@ -82,7 +81,7 @@ public abstract class AbstractArcTypeCalculatorTest extends ArcBasisTestBase {
     FieldSymbol c = ArcBasisMill.fieldSymbolBuilder().setName("c")
       .setType(SymTypeExpressionFactory.createPrimitive("int")).build();
     FieldSymbol s = ArcBasisMill.fieldSymbolBuilder().setName("s")
-      .setType(SymTypeExpressionFactory.createTypeObject("Student", this.getScope())).build();
+      .setType(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Student").orElseThrow())).build();
     SymbolService.link(scope, a, b, c, s);
   }
 

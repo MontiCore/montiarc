@@ -36,9 +36,9 @@ public interface SimComponent extends Component {
 
   void handleMessage(InPort<?> p);
 
-  void init();
-
   void unregisterFromScheduler();
+
+  void init();
 
   boolean isDelayed();
 

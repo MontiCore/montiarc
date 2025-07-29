@@ -58,6 +58,7 @@ public class SD2ArcTool extends SD4ComponentsTool {
   @Override
   public void init() {
     SD2ArcLog.init();
+    MontiArcMill.init();
     super.init();
   }
 

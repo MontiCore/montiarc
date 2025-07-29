@@ -76,6 +76,7 @@ public class SymTypeOfGenericsTest {
     scope2.setPackageName("d.e.f");
     scope2.setName("");
 
+
     // Create type symbol d.e.f.V
     TypeSymbol v = ArcBasisMill.typeSymbolBuilder().setName("V")
       .setEnclosingScope(scope2).setSpannedScope(ArcBasisMill.scope()).build();
@@ -126,13 +127,7 @@ public class SymTypeOfGenericsTest {
       Arguments.of(symTypes.get(8), "X<>"),
       Arguments.of(symTypes.get(9), "Y<V>"),
       Arguments.of(symTypes.get(10), "Z<V, W>"),
-      Arguments.of(symTypes.get(11), "X<Y<V>>"),
-      Arguments.of(symTypes.get(12), "M<>"),
-      Arguments.of(symTypes.get(13), "a.b.c.M<>"),
-      Arguments.of(symTypes.get(14), "M<N>"),
-      Arguments.of(symTypes.get(15), "a.b.c.M<d.e.f.N>"),
-      Arguments.of(symTypes.get(16), "M<N, O>"),
-      Arguments.of(symTypes.get(17), "a.b.c.M<d.e.f.N, g.h.i.O>")
+      Arguments.of(symTypes.get(11), "X<Y<V>>")
     );
   }
 
@@ -168,13 +163,7 @@ public class SymTypeOfGenericsTest {
       Arguments.of(symTypes.get(8), "a.b.c.X<>"),
       Arguments.of(symTypes.get(9), "a.b.c.Y<d.e.f.V>"),
       Arguments.of(symTypes.get(10), "a.b.c.Z<d.e.f.V, g.h.i.W>"),
-      Arguments.of(symTypes.get(11), "a.b.c.X<a.b.c.Y<d.e.f.V>>"),
-      Arguments.of(symTypes.get(12), "M<>"),
-      Arguments.of(symTypes.get(13), "a.b.c.M<>"),
-      Arguments.of(symTypes.get(14), "M<N>"),
-      Arguments.of(symTypes.get(15), "a.b.c.M<d.e.f.N>"),
-      Arguments.of(symTypes.get(16), "M<N, O>"),
-      Arguments.of(symTypes.get(17), "a.b.c.M<d.e.f.N, g.h.i.O>")
+      Arguments.of(symTypes.get(11), "a.b.c.X<a.b.c.Y<d.e.f.V>>")
     );
   }
 
@@ -186,7 +175,7 @@ public class SymTypeOfGenericsTest {
     Preconditions.checkState(ArcBasisMill.globalScope().resolveType("a.b.c.Z").isPresent());
 
     // Sym type without arguments where the type symbol was already resolved beforehand
-    SymTypeExpression x = SymTypeExpressionFactory.createGenerics(ArcBasisMill.globalScope()
+    SymTypeExpression x = SymTypeExpressionFactory.createGenericsDeclaredType(ArcBasisMill.globalScope()
       .resolveType("a.b.c.X").get());
 
     // Sym type with argument where the type symbol was already resolved beforehand
@@ -229,23 +218,23 @@ public class SymTypeOfGenericsTest {
     ));
 
     // Sym type without arguments where the type symbol is resolved via an import statement
-    SymTypeExpression x2 = SymTypeExpressionFactory.createGenerics("X", scope);
+    SymTypeExpression x2 = SymTypeExpressionFactory.createGenerics(scope.resolveType("X").orElseThrow(), List.of());
 
     // Sym type with argument where the type symbol is resolved via an import statement
-    SymTypeExpression y2 = SymTypeExpressionFactory.createGenerics("Y", scope,
-      SymTypeExpressionFactory.createTypeObject("V", scope)
+    SymTypeExpression y2 = SymTypeExpressionFactory.createGenerics( scope.resolveType("Y").orElseThrow(),
+      SymTypeExpressionFactory.createTypeObject(scope.resolveType("V").orElseThrow())
     );
 
     // Sym type with two arguments where the type symbol is resolved via an import statement
-    SymTypeExpression z2 = SymTypeExpressionFactory.createGenerics("Z", scope,
-      SymTypeExpressionFactory.createTypeObject("V", scope),
-      SymTypeExpressionFactory.createTypeObject("W", scope)
+    SymTypeExpression z2 = SymTypeExpressionFactory.createGenerics(scope.resolveType("Z").orElseThrow(),
+      SymTypeExpressionFactory.createTypeObject(scope.resolveType("V").orElseThrow()),
+      SymTypeExpressionFactory.createTypeObject(scope.resolveType("W").orElseThrow())
     );
 
     // Sym type X<Y<V>> with nested generics where the type symbol is resolved via an import statement
-    SymTypeExpression xy2 = SymTypeExpressionFactory.createGenerics("X", scope,
-      SymTypeExpressionFactory.createGenerics("Y", scope,
-        SymTypeExpressionFactory.createTypeObject("V", scope)
+    SymTypeExpression xy2 = SymTypeExpressionFactory.createGenerics(scope.resolveType("X").orElseThrow(),
+      SymTypeExpressionFactory.createGenerics(scope.resolveType("Y").orElseThrow(),
+        SymTypeExpressionFactory.createTypeObject(scope.resolveType("V").orElseThrow())
       )
     );
 
@@ -256,48 +245,26 @@ public class SymTypeOfGenericsTest {
     scope2.setName("");
 
     // Sym type without type arguments that states the type symbol's fully qualified name
-    SymTypeExpression x3 = SymTypeExpressionFactory.createGenerics("a.b.c.X", scope2);
+    SymTypeExpression x3 = SymTypeExpressionFactory.createGenerics(scope2.resolveType("a.b.c.X").orElseThrow(), List.of());
 
     // Sym type with type argument that states the type symbol's fully qualified name
-    SymTypeExpression y3 = SymTypeExpressionFactory.createGenerics("a.b.c.Y", scope2,
-      SymTypeExpressionFactory.createTypeObject("d.e.f.V", scope2)
+    SymTypeExpression y3 = SymTypeExpressionFactory.createGenerics(scope2.resolveType("a.b.c.Y").orElseThrow(),
+      SymTypeExpressionFactory.createTypeObject(scope2.resolveType("d.e.f.V").orElseThrow())
     );
 
     // Sym type with two type arguments that states the type symbol's fully qualified name
-    SymTypeExpression z3 = SymTypeExpressionFactory.createGenerics("a.b.c.Z", scope2,
-      SymTypeExpressionFactory.createTypeObject("d.e.f.V", scope2),
-      SymTypeExpressionFactory.createTypeObject("g.h.i.W", scope2)
+    SymTypeExpression z3 = SymTypeExpressionFactory.createGenerics(scope2.resolveType("a.b.c.Z").orElseThrow(),
+      SymTypeExpressionFactory.createTypeObject(scope2.resolveType("d.e.f.V").orElseThrow()),
+      SymTypeExpressionFactory.createTypeObject(scope2.resolveType("g.h.i.W").orElseThrow())
     );
 
     // Sym type X<Y<V>> with nested generics that state the type symbol's fully qualified name
-    SymTypeExpression xy3 = SymTypeExpressionFactory.createGenerics("a.b.c.X", scope,
-      SymTypeExpressionFactory.createGenerics("a.b.c.Y", scope,
-        SymTypeExpressionFactory.createTypeObject("d.e.f.V", scope)
+    SymTypeExpression xy3 = SymTypeExpressionFactory.createGenerics(scope.resolveType("a.b.c.X").orElseThrow(),
+      SymTypeExpressionFactory.createGenerics(scope.resolveType("a.b.c.Y").orElseThrow(),
+        SymTypeExpressionFactory.createTypeObject(scope.resolveType("d.e.f.V").orElseThrow())
       )
     );
 
-    // Sym type without type arguments where the type symbol cannot be resolved
-    SymTypeExpression m = SymTypeExpressionFactory.createGenerics("M", scope2);
-    SymTypeExpression m2 = SymTypeExpressionFactory.createGenerics("a.b.c.M", scope2);
-
-    // Sym type with type argument where the type symbol cannot be resolved
-    SymTypeExpression mn = SymTypeExpressionFactory.createGenerics("M", scope2,
-      SymTypeExpressionFactory.createTypeObject("N", scope2)
-    );
-    SymTypeExpression mn2 = SymTypeExpressionFactory.createGenerics("a.b.c.M", scope2,
-      SymTypeExpressionFactory.createTypeObject("d.e.f.N", scope2)
-    );
-
-    // Sym type with two type arguments where the type symbol cannot be resolved
-    SymTypeExpression mno = SymTypeExpressionFactory.createGenerics("M", scope2,
-      SymTypeExpressionFactory.createTypeObject("N", scope2),
-      SymTypeExpressionFactory.createTypeObject("O", scope2)
-    );
-    SymTypeExpression mno2 = SymTypeExpressionFactory.createGenerics("a.b.c.M", scope2,
-      SymTypeExpressionFactory.createTypeObject("d.e.f.N", scope2),
-      SymTypeExpressionFactory.createTypeObject("g.h.i.O", scope2)
-    );
-
-    return Arrays.asList(x, y, z, xy, x2, y2, z2, xy2, x3, y3, z3, xy3, m, m2, mn, mn2, mno, mno2);
+    return Arrays.asList(x, y, z, xy, x2, y2, z2, xy2, x3, y3, z3, xy3);
   }
 }

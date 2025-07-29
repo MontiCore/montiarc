@@ -37,7 +37,7 @@ public class ComponentsTest {
   @BeforeAll
   static void setUp() {
     controller = new MockTestController();
-    controller.init();
+    MockTestController.init();
     assertThat(controller).isNotNull();
 
     ctx = controller.getCtx();
@@ -252,10 +252,8 @@ public class ComponentsTest {
     tran3.init();
 
     Expr<IntSort> output1Tran3 = ctx.mkAdd(input_0, ctx.mkInt(1));
-    Expr<IntSort> output2Tran3 = ctx.mkAdd(input_1, ctx.mkInt(1));
     AnnotatedValue<Expr<IntSort>, Integer> in2Tran3 = AnnotatedValue.newAnnoValue(input_1, 2);
     AnnotatedValue<Expr<IntSort>, Integer> out1Tran3 = AnnotatedValue.newAnnoValue(output1Tran3, 5);
-    AnnotatedValue<Expr<IntSort>, Integer> out2Tran3 = AnnotatedValue.newAnnoValue(output2Tran3, 5);
 
     result.add(
       Arguments.of(
@@ -633,14 +631,14 @@ public class ComponentsTest {
     );
 
     AnnotatedValue<Expr<IntSort>, Long> parameterLong = AnnotatedValue.newAnnoValue(ctx.mkInt(42)
-      , 42l);
+      , 42L);
 
     LongComponent longComponent = new LongComponent(parameterLong);
     longComponent.setUp();
     longComponent.init();
 
-    AnnotatedValue<Expr<IntSort>, Long> inLong = AnnotatedValue.newAnnoValue(input_0, 6l);
-    AnnotatedValue<Expr<IntSort>, Long> inLong2 = AnnotatedValue.newAnnoValue(input_0, 3l);
+    AnnotatedValue<Expr<IntSort>, Long> inLong = AnnotatedValue.newAnnoValue(input_0, 6L);
+    AnnotatedValue<Expr<IntSort>, Long> inLong2 = AnnotatedValue.newAnnoValue(input_0, 3L);
 
     result.add(
       Arguments.of(
@@ -722,7 +720,7 @@ public class ComponentsTest {
           @NotNull List<Integer> pathControl) {
 
     Preconditions.checkNotNull(in);
-    Preconditions.checkArgument(in.size() > 0);
+    Preconditions.checkArgument(!in.isEmpty());
     Preconditions.checkArgument(out.size() == in.size());
 
     for (int i = 0; i < in.size(); i++) {

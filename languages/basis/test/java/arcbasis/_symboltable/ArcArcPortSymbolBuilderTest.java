@@ -39,7 +39,7 @@ public class ArcArcPortSymbolBuilderTest extends ArcBasisTestBase {
 
   @Test
   public void shouldBuildWithExpectedType() {
-    SymTypeExpression typeExpression = SymTypeExpressionFactory.createTypeExpression("int", ArcBasisMill.scope());
+    SymTypeExpression typeExpression = SymTypeExpressionFactory.createPrimitive("int");
     PortSymbol symbol = ArcBasisMill.portSymbolBuilder()
       .setName("in2").setType(typeExpression)
       .setIncoming(true)

@@ -23,6 +23,11 @@ public class MAOOWithinTypeBasicSymbolsResolver extends VariableArcVariantOOWith
   }
 
   @Override
+  @SuppressWarnings("removal")
+  /* Since the methods #resolveConstructorLocally and #resolveConstructors perform different tasks, it is not advisable to exchange them.
+  Furthermore, the access modifier of #resolveConstructorLocally is likely to change to protected and not to private, which would not affect our current implementation.
+  Therefore, the deprecation warning can be suppressed.
+  */
   protected List<FunctionSymbol> resolveFunctionLocally(@NotNull IBasicSymbolsScope scope,
                                                         @NotNull String name,
                                                         @NotNull AccessModifier accessModifier,

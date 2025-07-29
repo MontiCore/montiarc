@@ -17,6 +17,9 @@ import java.util.Optional;
  */
 public class MontiArcParser extends MontiArcParserTOP {
 
+  @SuppressWarnings("deprecation")
+  public MontiArcParser() { }
+
   /**
    * Parses the file behind the string argument as a MontiArc compilation unit. The string argument
    * must conform to the relative path, consisting a model path, package, and filename. The file

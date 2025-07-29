@@ -25,7 +25,7 @@ public class EmptyTest {
   @BeforeAll
   static void setUp() {
     controller = new MockTestController();
-    controller.init();
+    MockTestController.init();
     assertThat(controller).isNotNull();
 
     ctx = controller.getCtx();

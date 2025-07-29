@@ -86,7 +86,7 @@ public class TypeCheckCollectionsTest extends MontiArcTestBase {
     SymbolService.link(setScope, setTypeVar);
     OOTypeSymbol setType = MontiArcMill.oOTypeSymbolBuilder()
         .setName("Set")
-        .addSuperTypes(createGenerics("Collection", setScope, List.of(createFromSymbol(setTypeVar))))
+        .addSuperTypes(createGenerics(setScope.resolveType("Collection").orElseThrow(), List.of(createFromSymbol(setTypeVar))))
         .setSpannedScope(setScope)
         .build();
     SymbolService.link(MontiArcMill.globalScope(), setType);
@@ -98,7 +98,7 @@ public class TypeCheckCollectionsTest extends MontiArcTestBase {
     SymbolService.link(listScope, listTypeVar);
     OOTypeSymbol listType = MontiArcMill.oOTypeSymbolBuilder()
         .setName("List")
-        .addSuperTypes(createGenerics("Collection", listScope, List.of(createFromSymbol(listTypeVar))))
+        .addSuperTypes(createGenerics(listScope.resolveType("Collection").orElseThrow(), List.of(createFromSymbol(listTypeVar))))
         .setSpannedScope(listScope)
         .build();
     SymbolService.link(MontiArcMill.globalScope(), listType);
@@ -144,82 +144,82 @@ public class TypeCheckCollectionsTest extends MontiArcTestBase {
     SymbolService.link(this.scope, aDouble);
     FieldSymbol listOfBool = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfBool")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(BOOLEAN))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(BOOLEAN))))
       .build();
     SymbolService.link(this.scope, listOfBool);
     FieldSymbol setOfBool = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfBool")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(BOOLEAN))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(BOOLEAN))))
       .build();
     SymbolService.link(this.scope, setOfBool);
     FieldSymbol listOfChar = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfChar")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(CHAR))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(CHAR))))
       .build();
     SymbolService.link(this.scope, listOfChar);
     FieldSymbol setOfChar = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfChar")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(CHAR))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(CHAR))))
       .build();
     SymbolService.link(this.scope, setOfChar);
     FieldSymbol listOfByte = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfByte")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(BYTE))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(BYTE))))
       .build();
     SymbolService.link(this.scope, listOfByte);
     FieldSymbol setOfByte = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfByte")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(BYTE))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(BYTE))))
       .build();
     SymbolService.link(this.scope, setOfByte);
     FieldSymbol listOfShort = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfShort")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(SHORT))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(SHORT))))
       .build();
     SymbolService.link(this.scope, listOfShort);
     FieldSymbol setOfShort = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfShort")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(SHORT))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(SHORT))))
       .build();
     SymbolService.link(this.scope, setOfShort);
     FieldSymbol listOfInt = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfInt")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(INT))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(INT))))
       .build();
     SymbolService.link(this.scope, listOfInt);
     FieldSymbol setOfInt = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfInt")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(INT))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(INT))))
       .build();
     SymbolService.link(this.scope, setOfInt);
     FieldSymbol listOfLong = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfLong")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(LONG))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(LONG))))
       .build();
     SymbolService.link(this.scope, listOfLong);
     FieldSymbol setOfLong = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfLong")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(LONG))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(LONG))))
       .build();
     SymbolService.link(this.scope, setOfLong);
     FieldSymbol listOfFloat = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfFloat")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(FLOAT))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(FLOAT))))
       .build();
     SymbolService.link(this.scope, listOfFloat);
     FieldSymbol setOfFloat = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfFloat")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(FLOAT))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(FLOAT))))
       .build();
     SymbolService.link(this.scope, setOfFloat);
     FieldSymbol listOfDouble = MontiArcMill.fieldSymbolBuilder()
       .setName("listOfDouble")
-      .setType(createGenerics("List", this.scope, List.of(createPrimitive(DOUBLE))))
+      .setType(createGenerics(this.scope.resolveType("List").orElseThrow(), List.of(createPrimitive(DOUBLE))))
       .build();
     SymbolService.link(this.scope, listOfDouble);
     FieldSymbol setOfDouble = MontiArcMill.fieldSymbolBuilder()
       .setName("setOfDouble")
-      .setType(createGenerics("Set", this.scope, List.of(createPrimitive(DOUBLE))))
+      .setType(createGenerics(this.scope.resolveType("Set").orElseThrow(), List.of(createPrimitive(DOUBLE))))
       .build();
     SymbolService.link(this.scope, setOfDouble);
   }

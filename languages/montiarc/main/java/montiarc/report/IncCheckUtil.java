@@ -115,7 +115,7 @@ public final class IncCheckUtil {
       config.getToolVersion()
     );
 
-    Reporting.init(config.getReportingBaseDir(), config.getConcreteReportingSubDir(), reporterFactory);
+    Reporting.init(config.getConcreteReportingSubDir(), reporterFactory);
   }
 
   /**

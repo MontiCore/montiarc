@@ -22,7 +22,7 @@ import static montiarc.rte.msg.MessageFactory.tk;
 class DelayedByBehaviorTest {
 
   /**
-   * @param input the input stream on port i
+   * @param input    the input stream on port i
    * @param expected the expected output stream on port o
    */
   @ParameterizedTest
@@ -37,9 +37,6 @@ class DelayedByBehaviorTest {
     PortObserver<OnOff> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
-
-    // When
-    sut.init();
 
     for (Message<OnOff> msg : input) {
       sut.port_i().receive(msg);

@@ -243,24 +243,24 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     IOOSymbolsScope getHeaderScope = MontiArcMill.scope();
     FunctionSymbol getHeader = MontiArcMill.functionSymbolBuilder().setName("getHeader")
       .setAccessModifier(AccessModifier.ALL_INCLUSION)
-      .setType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
+      .setType(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("String").orElseThrow()))
       .setSpannedScope(getHeaderScope).build();
     getHeaderScope.setSpanningSymbol(getHeader);
     getHeader.setSpannedScope(getHeaderScope);
     IOOSymbolsScope setHeaderScope = MontiArcMill.scope();
     VariableSymbol setHeaderPara = ArcBasisMill.variableSymbolBuilder().setName("content")
-      .setType(SymTypeExpressionFactory.createTypeExpression("String", setHeaderScope)).build();
+      .setType(SymTypeExpressionFactory.createTypeObject(getScope().resolveType("String").orElseThrow())).build();
     setHeaderScope.add(setHeaderPara);
     FunctionSymbol setHeader = MontiArcMill.functionSymbolBuilder().setName("setHeader")
       .setAccessModifier(AccessModifier.ALL_INCLUSION)
-      .setType(SymTypeExpressionFactory.createTypeExpression("String", this.getScope()))
+      .setType(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("String").orElseThrow()))
       .setSpannedScope(setHeaderScope).build();
     setHeaderScope.setSpanningSymbol(setHeader);
     setHeader.setSpannedScope(setHeaderScope);
     IOOSymbolsScope constructorScope = MontiArcMill.scope();
     MethodSymbol constructor = MontiArcMill.methodSymbolBuilder().setName("Message")
       .setAccessModifier(AccessModifier.ALL_INCLUSION)
-      .setType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope()))
+      .setType(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("String").orElseThrow()))
       .setSpannedScope(constructorScope).setIsConstructor(true).setIsStatic(false).build();
     constructorScope.setSpanningSymbol(constructor);
     constructor.setSpannedScope(constructorScope);
@@ -278,11 +278,11 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   public void setUpTrafoBuilderType() {
     IOOSymbolsScope buildScope = OOSymbolsMillForMontiArc.scope();
     List<SymTypeExpression> trafoArgs = Arrays.asList(
-      SymTypeExpressionFactory.createTypeObject("Student", this.getScope()),
-      SymTypeExpressionFactory.createTypeObject("Teacher", this.getScope()));
+      SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Student").orElseThrow()),
+      SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Teacher").orElseThrow()));
     FunctionSymbol build = MontiArcMill.functionSymbolBuilder().setName("build")
       .setAccessModifier(AccessModifier.ALL_INCLUSION)
-      .setType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), trafoArgs))
+      .setType(SymTypeExpressionFactory.createGenerics(this.getScope().resolveType("Trafo").orElseThrow(), trafoArgs))
       .setSpannedScope(buildScope).build();
     buildScope.setSpanningSymbol(build);
     build.setSpannedScope(buildScope);
@@ -295,32 +295,32 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
   }
 
   public void setUpGenericFields() {
-    SymTypeExpression bufferArg = SymTypeExpressionFactory.createTypeObject("String", this.getScope());
+    SymTypeExpression bufferArg = SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("String").orElseThrow());
     FieldSymbol buffer = ArcBasisMill.fieldSymbolBuilder().setName("strBuffer")
-      .setType(SymTypeExpressionFactory.createGenerics("Buffer", this.getScope(), bufferArg)).build();
-    SymTypeExpression buffer2Arg = SymTypeExpressionFactory.createTypeObject("Role", this.getScope());
+      .setType(SymTypeExpressionFactory.createGenerics(this.getScope().resolveType("Buffer").orElseThrow(), bufferArg)).build();
+    SymTypeExpression buffer2Arg = SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Role").orElseThrow());
     FieldSymbol buffer2 = ArcBasisMill.fieldSymbolBuilder().setName("roleBuffer")
-      .setType(SymTypeExpressionFactory.createGenerics("Buffer", this.getScope(), buffer2Arg)).build();
-    SymTypeExpression storageArg = SymTypeExpressionFactory.createTypeObject("Message", this.getScope());
+      .setType(SymTypeExpressionFactory.createGenerics(this.getScope().resolveType("Buffer").orElseThrow(), buffer2Arg)).build();
+    SymTypeExpression storageArg = SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Message").orElseThrow());
     FieldSymbol storage = ArcBasisMill.fieldSymbolBuilder().setName("msgStorage")
-      .setType(SymTypeExpressionFactory.createGenerics("Storage", this.getScope(), storageArg)).build();
+      .setType(SymTypeExpressionFactory.createGenerics(this.getScope().resolveType("Storage").orElseThrow(), storageArg)).build();
     List<SymTypeExpression> ma2javaArgs = Arrays.asList(
-      SymTypeExpressionFactory.createTypeObject("Student", this.getScope()),
-      SymTypeExpressionFactory.createTypeObject("Teacher", this.getScope()));
+      SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Student").orElseThrow()),
+      SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Teacher").orElseThrow()));
     FieldSymbol trafo = ArcBasisMill.fieldSymbolBuilder().setName("ma2java")
-      .setType(SymTypeExpressionFactory.createGenerics("Trafo", this.getScope(), ma2javaArgs)).build();
+      .setType(SymTypeExpressionFactory.createGenerics(this.getScope().resolveType("Trafo").orElseThrow(), ma2javaArgs)).build();
     SymbolService.link(this.getScope(), buffer, buffer2, storage, trafo);
   }
 
   public void setUpMsgFields() {
     FieldSymbol msg = ArcBasisMill.fieldSymbolBuilder().setName("msg")
-      .setType(SymTypeExpressionFactory.createTypeExpression("Message", this.getScope())).build();
+      .setType(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("Message").orElseThrow())).build();
     SymbolService.link(this.getScope(), msg);
   }
 
   public void setUpTrafoBuilderFields() {
     FieldSymbol builder = ArcBasisMill.fieldSymbolBuilder().setName("trafoBuilder")
-      .setType(SymTypeExpressionFactory.createTypeExpression("TrafoBuilder", this.getScope())).build();
+      .setType(SymTypeExpressionFactory.createTypeObject(this.getScope().resolveType("TrafoBuilder").orElseThrow())).build();
     SymbolService.link(this.getScope(), builder);
   }
 
@@ -359,7 +359,7 @@ public class MontiArcTypeCalculatorTest extends AbstractArcTypeCalculatorTest {
     // Create instance of this type
     FieldSymbol instanceWithMethods = MontiArcMill.fieldSymbolBuilder()
       .setName("instanceWithMethods")
-      .setType(SymTypeExpressionFactory.createTypeExpression(type))
+      .setType(SymTypeExpressionFactory.createTypeObject(type))
       .build();
     SymbolService.link(this.getScope(), instanceWithMethods);
   }

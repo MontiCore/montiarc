@@ -94,7 +94,5 @@ public interface Component {
 
     return allPorts;
   }
-
-  @Deprecated(forRemoval = true)
-  void init();
+  
 }

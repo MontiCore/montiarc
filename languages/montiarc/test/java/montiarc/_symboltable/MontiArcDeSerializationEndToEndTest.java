@@ -470,7 +470,7 @@ class MontiArcDeSerializationEndToEndTest extends MontiArcTestBase {
     return MontiArcMill.variableSymbolBuilder()
       .setName(name)
       .setFullName(name)
-      .setType(SymTypeExpressionFactory.createTypeExpression(type))
+      .setType(SymTypeExpressionFactory.createTypeObject(type))
       .setEnclosingScope(MontiArcMill.globalScope())
       .setAccessModifier(AccessModifier.ALL_INCLUSION)
       .build();

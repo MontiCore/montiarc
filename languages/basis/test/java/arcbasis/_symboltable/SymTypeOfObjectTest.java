@@ -59,7 +59,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setName("Y");
     as.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
 
-    SymTypeExpression type = createTypeObject("X", as);
+    SymTypeExpression type = createTypeObject(as.resolveType("X").orElseThrow());
 
     // When && Then
     Assertions.assertThat(type.print()).isEqualTo("X");
@@ -76,7 +76,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setPackageName("d.e.f");
     as.setName("Z");
 
-    SymTypeExpression type = createTypeObject("a.b.c.X", as);
+    SymTypeExpression type = createTypeObject(as.resolveType("a.b.c.X").orElseThrow());
 
     // When && Then
     Assertions.assertThat(type.print()).isEqualTo("X");
@@ -93,7 +93,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setEnclosingScope(ArcBasisMill.globalScope());
     as.setPackageName("d.e.f");
     as.setName("Y");
-    SymTypeExpression type = createTypeObject("W", as);
+    SymTypeExpression type = createTypeObject(ArcBasisMill.typeSymbolSurrogateBuilder().setName("W").setEnclosingScope(as).build());
 
     // When && Then
     Assertions.assertThat(type.print()).isEqualTo("W");
@@ -110,7 +110,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setEnclosingScope(ArcBasisMill.globalScope());
     as.setPackageName("d.e.f");
     as.setName("Y");
-    SymTypeExpression type = createTypeObject("a.b.c.W", as);
+    SymTypeExpression type = createTypeObject(ArcBasisMill.typeSymbolSurrogateBuilder().setName("a.b.c.W").setEnclosingScope(as).build());
 
     // When && Then
     Assertions.assertThat(type.print()).isEqualTo("a.b.c.W");
@@ -141,7 +141,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setName("Y");
     as.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
 
-    SymTypeExpression type = createTypeObject("X", as);
+    SymTypeExpression type = createTypeObject(as.resolveType("X").orElseThrow());
 
     // When && Then
     Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.X");
@@ -160,7 +160,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setName("Y");
     as.setImportsList(Collections.singletonList(new ImportStatement("a.b.c.X", false)));
 
-    SymTypeExpression type = createTypeObject("a.b.c.X", as);
+    SymTypeExpression type = createTypeObject(as.resolveType("a.b.c.X").orElseThrow());
 
     // When && Then
     Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.X");
@@ -177,7 +177,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setEnclosingScope(ArcBasisMill.globalScope());
     as.setPackageName("d.e.f");
     as.setName("Y");
-    SymTypeExpression type = createTypeObject("W", as);
+    SymTypeExpression type = createTypeObject(ArcBasisMill.typeSymbolSurrogateBuilder().setName("W").setEnclosingScope(as).build());
 
     // When && Then
     Assertions.assertThat(type.printFullName()).isEqualTo("W");
@@ -194,7 +194,7 @@ public class SymTypeOfObjectTest extends ArcBasisTestBase {
     as.setEnclosingScope(ArcBasisMill.globalScope());
     as.setPackageName("d.e.f");
     as.setName("Y");
-    SymTypeExpression type = createTypeObject("a.b.c.W", as);
+    SymTypeExpression type = createTypeObject(ArcBasisMill.typeSymbolSurrogateBuilder().setName("a.b.c.W").setEnclosingScope(as).build());
 
     // When && Then
     Assertions.assertThat(type.printFullName()).isEqualTo("a.b.c.W");
