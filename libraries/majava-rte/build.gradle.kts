@@ -2,17 +2,10 @@
 
 plugins {
   id("montiarc.build.java-library")
-  id("montiarc.build.shadow")
 }
 
 dependencies {
   implementation(libs.se.logging)
 
   testImplementation(libs.mockito)
-}
-
-tasks.shadowJar {
-  minimize()
-  archiveBaseName.set("maJava-rte")
-  isZip64 = true
 }

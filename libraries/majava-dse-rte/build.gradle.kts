@@ -2,7 +2,6 @@
 
 plugins {
   id("montiarc.build.java-library")
-  id("montiarc.build.shadow")
 }
 
 dependencies {
@@ -16,10 +15,4 @@ dependencies {
   implementation(libs.janino)
 
   testImplementation(libs.mockito)
-}
-
-tasks.shadowJar {
-  minimize()
-  archiveBaseName.set("ma2Java-symbolic-rte")
-  isZip64 = true
 }

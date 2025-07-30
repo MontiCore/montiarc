@@ -3,7 +3,6 @@
 plugins {
   id("montiarc.build.java-library")
   id("montiarc.build.java-test-fixtures")
-  id("montiarc.build.shadow")
   id("cd2pojo")
 }
 
@@ -29,10 +28,4 @@ dependencies {
 
 cd2pojo {
   internalMontiArcTesting.set(true)
-}
-
-tasks.shadowJar {
-  minimize()
-  archiveBaseName.set("simulator-rte")
-  isZip64 = true
 }

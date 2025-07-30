@@ -3,7 +3,6 @@ import montiarc.build.VersionInjection.Companion.registerVersionInjectionForUpTo
 
 plugins {
   id("montiarc.build.java-library")
-  id("montiarc.build.shadow")
 }
 
 dependencies {
@@ -16,18 +15,6 @@ dependencies {
   testImplementation(project(":generators:cd2pojo"))
   testImplementation(libs.mc.c2mc)
   testImplementation(libs.mockito)
-}
-
-// All in one tool-jar
-tasks.shadowJar {
-  //minimize()
-  manifest {
-    attributes["Main-Class"] = "montiarc.generator.MA2JavaTool"
-  }
-  isZip64 = true
-  archiveClassifier.set("mc-tool")
-  archiveBaseName.set("MontiArc2Java")
-  archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
 
 // Inject generator version information into java code for up to date checks

@@ -2,7 +2,6 @@
 
 plugins {
   id("montiarc.build.java-library")
-  id("montiarc.build.shadow")
   id("montiarc-jsim")
   id("cd2pojo")
 }
@@ -55,12 +54,6 @@ tasks.compileMontiarc {
 tasks.compileTestMontiarc {
   symbolImportDir.from(tasks.compileCd2pojo.get().symbolOutputDir())
   useClass2Mc.set(true)
-}
-
-tasks.shadowJar {
-  minimize()
-  archiveBaseName.set("maunit")
-  isZip64 = true
 }
 
 tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }
