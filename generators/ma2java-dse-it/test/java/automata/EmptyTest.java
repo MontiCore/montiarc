@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class EmptyTest {
 
@@ -55,12 +54,8 @@ public class EmptyTest {
 
     comp.compute();
 
-    assertAll(
-      () -> assertThat(comp.getIn().getValue()
-        .getValue()).isEqualTo(in.getValue()),
-      () -> assertThat(comp.getIn().getValue().getExpr()
-        .toString()).isEqualTo(in.getExpr().toString()),
-      () -> assertThat(comp.getOut().getValue()).isEqualTo(out)
-    );
+    assertThat(comp.getIn().getValue().getValue()).isEqualTo(in.getValue());
+    assertThat(comp.getIn().getValue().getExpr().toString()).isEqualTo(in.getExpr().toString());
+    assertThat(comp.getOut().getValue()).isEqualTo(out);
   }
 }

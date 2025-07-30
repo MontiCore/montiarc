@@ -116,12 +116,8 @@ public class VariableArcResolvingTest extends VariableArcTestBase {
     Optional<ArcFeatureSymbol> resolvedFeature = scope.resolveArcFeature("f1");
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertFalse(resolvedFeature.isEmpty(),
-        "Failed to resolve the feature symbol.")
-    );
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(feature, resolvedFeature.get())
-    );
+    Assertions.assertFalse(resolvedFeature.isEmpty(),
+        "Failed to resolve the feature symbol.");
+    Assertions.assertEquals(feature, resolvedFeature.get());
   }
 }

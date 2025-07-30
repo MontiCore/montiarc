@@ -30,7 +30,6 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SmallModelTest {
 
@@ -53,7 +52,7 @@ public class SmallModelTest {
     List<Arguments> result = new ArrayList<>();
 
     AnnotatedValue<Expr<IntSort>, Integer> parameterSmallModel
-            = AnnotatedValue.newAnnoValue(ctx.mkInt(400000), 400000);
+      = AnnotatedValue.newAnnoValue(ctx.mkInt(400000), 400000);
 
     Expr<IntSort> input_mtrNr1 = ctx.mkConst("input_MtrNr1", ctx.mkIntSort());
     Expr<IntSort> input_mtrNr2 = ctx.mkConst("input_MtrNr2", ctx.mkIntSort());
@@ -66,14 +65,14 @@ public class SmallModelTest {
     smallModel.init();
 
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr1 = AnnotatedValue.newAnnoValue(input_mtrNr1,
-            422400);
+      422400);
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr2 = AnnotatedValue.newAnnoValue(input_mtrNr2,
-            422401);
+      422401);
 
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule1 =
-            AnnotatedValue.newAnnoValue(input_module1, "MBSE");
+      AnnotatedValue.newAnnoValue(input_module1, "MBSE");
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule2 =
-            AnnotatedValue.newAnnoValue(input_module2, "SA");
+      AnnotatedValue.newAnnoValue(input_module2, "SA");
 
     IInPort<AnnotatedValue<Expr<IntSort>, Integer>> portMtrNr1 = new InPort<>();
     portMtrNr1.update(inMtrNr1);
@@ -88,14 +87,14 @@ public class SmallModelTest {
     portModule2.update(inModule2);
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE1 = AnnotatedValue.newAnnoValue(ctx.mkReal(
-            "0.0"), 0.0);
+      "0.0"), 0.0);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA1 = AnnotatedValue.newAnnoValue(ctx.mkReal("0" +
-            ".0"), 0.0);
+      ".0"), 0.0);
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE2 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("1.0")), 1.0);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("1.0")), 1.0);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA2 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("0.0")), 0.0);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("0.0")), 0.0);
 
     IOutPort<AnnotatedValue<Expr<RealSort>, Double>> portVoteMBSE1 = new OutPort<>();
     portVoteMBSE1.setValue(outVoteMBSE1);
@@ -110,23 +109,23 @@ public class SmallModelTest {
     portVoteSA2.setValue(outVoteSA2);
 
     result.add(Arguments.of(
-                    List.of(new ListerInSmallModel(portModule1, portMtrNr1),
-                            new ListerInSmallModel(portModule2, portMtrNr2)),
-                    List.of(new ListerOutSmallModel(portVoteMBSE1, portVoteSA1),
-                            new ListerOutSmallModel(portVoteMBSE2, portVoteSA2)),
-                    (Function<ListerInSmallModel, ListerOutSmallModel>) (input) -> {
-                      smallModel.getMtrNr().update(input.getmtrNr().getValue());
-                      smallModel.getModule().update(input.getmodule().getValue());
-                      smallModel.compute();
-                      ListerOutSmallModel outSmallModel
-                              = new ListerOutSmallModel(smallModel.getVoteMBSE(),
-                              smallModel.getVoteSA());
-                      smallModel.getComponentCounterSA().getOut().tick();
-                      smallModel.getComponentCounterMBSE().getOut().tick();
-                      return outSmallModel;
-                    },
-                    List.of(1, 1)
-            )
+        List.of(new ListerInSmallModel(portModule1, portMtrNr1),
+          new ListerInSmallModel(portModule2, portMtrNr2)),
+        List.of(new ListerOutSmallModel(portVoteMBSE1, portVoteSA1),
+          new ListerOutSmallModel(portVoteMBSE2, portVoteSA2)),
+        (Function<ListerInSmallModel, ListerOutSmallModel>) (input) -> {
+          smallModel.getMtrNr().update(input.getmtrNr().getValue());
+          smallModel.getModule().update(input.getmodule().getValue());
+          smallModel.compute();
+          ListerOutSmallModel outSmallModel
+            = new ListerOutSmallModel(smallModel.getVoteMBSE(),
+            smallModel.getVoteSA());
+          smallModel.getComponentCounterSA().getOut().tick();
+          smallModel.getComponentCounterMBSE().getOut().tick();
+          return outSmallModel;
+        },
+        List.of(1, 1)
+      )
     );
 
     SmallModel smallModel1 = new SmallModel(parameterSmallModel);
@@ -142,53 +141,53 @@ public class SmallModelTest {
     Expr<SeqSort<CharSort>> input_module5 = ctx.mkConst("input_Module5", ctx.mkStringSort());
 
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr3 = AnnotatedValue.newAnnoValue(input_mtrNr1,
-            350001);
+      350001);
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr4 = AnnotatedValue.newAnnoValue(input_mtrNr2,
-            350002);
+      350002);
 
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr5 = AnnotatedValue.newAnnoValue(input_mtrNr3,
-            350003);
+      350003);
 
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr6 = AnnotatedValue.newAnnoValue(input_mtrNr4,
-            350004);
+      350004);
     AnnotatedValue<Expr<IntSort>, Integer> inMtrNr7 = AnnotatedValue.newAnnoValue(input_mtrNr5,
-            422401);
+      422401);
 
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule3
-            = AnnotatedValue.newAnnoValue(input_module1, "MBSE");
+      = AnnotatedValue.newAnnoValue(input_module1, "MBSE");
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule4
-            = AnnotatedValue.newAnnoValue(input_module2, "SA");
+      = AnnotatedValue.newAnnoValue(input_module2, "SA");
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule5
-            = AnnotatedValue.newAnnoValue(input_module3, "MBSE");
+      = AnnotatedValue.newAnnoValue(input_module3, "MBSE");
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule6
-            = AnnotatedValue.newAnnoValue(input_module4, "mbse");
+      = AnnotatedValue.newAnnoValue(input_module4, "mbse");
     AnnotatedValue<Expr<SeqSort<CharSort>>, String> inModule7
-            = AnnotatedValue.newAnnoValue(input_module5, "SA");
+      = AnnotatedValue.newAnnoValue(input_module5, "SA");
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE3 = AnnotatedValue.newAnnoValue(ctx.mkReal(
-            "0.0"), 0.0);
+      "0.0"), 0.0);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA3
-            = AnnotatedValue.newAnnoValue(ctx.mkReal("0" + ".0"), 0.0);
+      = AnnotatedValue.newAnnoValue(ctx.mkReal("0" + ".0"), 0.0);
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE4 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("1.5")), 1.5);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("1.5")), 1.5);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA4 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("0.0")), 0.0);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(ctx.mkReal("0.0"), ctx.mkReal("0.0")), 0.0);
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE5 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteMBSE4.getExpr(), ctx.mkReal("0.0")), 1.5);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteMBSE4.getExpr(), ctx.mkReal("0.0")), 1.5);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA5 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteSA4.getExpr(), ctx.mkReal("1.0")), 1.0);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteSA4.getExpr(), ctx.mkReal("1.0")), 1.0);
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE6 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteMBSE5.getExpr(), ctx.mkReal("1.0")), 2.5);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteMBSE5.getExpr(), ctx.mkReal("1.0")), 2.5);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA6 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteSA5.getExpr(), ctx.mkReal("0.0")), 1.0);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteSA5.getExpr(), ctx.mkReal("0.0")), 1.0);
 
     AnnotatedValue<Expr<RealSort>, Double> outVoteMBSE7 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteMBSE6.getExpr(), ctx.mkReal("0.0")), 2.5);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteMBSE6.getExpr(), ctx.mkReal("0.0")), 2.5);
     AnnotatedValue<Expr<RealSort>, Double> outVoteSA7 =
-            AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteSA6.getExpr(), ctx.mkReal("0.0")), 1.0);
+      AnnotatedValue.newAnnoValue(ctx.mkAdd(outVoteSA6.getExpr(), ctx.mkReal("0.0")), 1.0);
 
     IInPort<AnnotatedValue<Expr<IntSort>, Integer>> portMtrNr3 = new InPort<>();
     portMtrNr3.update(inMtrNr3);
@@ -251,30 +250,30 @@ public class SmallModelTest {
     portVoteSA7.setValue(outVoteSA7);
 
     result.add(
-            Arguments.of(
-                    List.of(new ListerInSmallModel(portModule3, portMtrNr3),
-                            new ListerInSmallModel(portModule4, portMtrNr4),
-                            new ListerInSmallModel(portModule5, portMtrNr5),
-                            new ListerInSmallModel(portModule6, portMtrNr6),
-                            new ListerInSmallModel(portModule7, portMtrNr7)),
-                    List.of(new ListerOutSmallModel(portVoteMBSE3, portVoteSA3),
-                            new ListerOutSmallModel(portVoteMBSE4, portVoteSA4),
-                            new ListerOutSmallModel(portVoteMBSE5, portVoteSA5),
-                            new ListerOutSmallModel(portVoteMBSE6, portVoteSA6),
-                            new ListerOutSmallModel(portVoteMBSE7, portVoteSA7)),
-                    (Function<ListerInSmallModel, ListerOutSmallModel>) (input) -> {
-                      smallModel1.getMtrNr().update(input.getmtrNr().getValue());
-                      smallModel1.getModule().update(input.getmodule().getValue());
-                      smallModel1.compute();
-                      ListerOutSmallModel outSmallModel
-                              = new ListerOutSmallModel(smallModel1.getVoteMBSE(),
-                              smallModel1.getVoteSA());
-                      smallModel1.getComponentCounterMBSE().getOut().tick();
-                      smallModel1.getComponentCounterSA().getOut().tick();
-                      return outSmallModel;
-                    },
-                    List.of(1, 2, 2, 1, 1)
-            )
+      Arguments.of(
+        List.of(new ListerInSmallModel(portModule3, portMtrNr3),
+          new ListerInSmallModel(portModule4, portMtrNr4),
+          new ListerInSmallModel(portModule5, portMtrNr5),
+          new ListerInSmallModel(portModule6, portMtrNr6),
+          new ListerInSmallModel(portModule7, portMtrNr7)),
+        List.of(new ListerOutSmallModel(portVoteMBSE3, portVoteSA3),
+          new ListerOutSmallModel(portVoteMBSE4, portVoteSA4),
+          new ListerOutSmallModel(portVoteMBSE5, portVoteSA5),
+          new ListerOutSmallModel(portVoteMBSE6, portVoteSA6),
+          new ListerOutSmallModel(portVoteMBSE7, portVoteSA7)),
+        (Function<ListerInSmallModel, ListerOutSmallModel>) (input) -> {
+          smallModel1.getMtrNr().update(input.getmtrNr().getValue());
+          smallModel1.getModule().update(input.getmodule().getValue());
+          smallModel1.compute();
+          ListerOutSmallModel outSmallModel
+            = new ListerOutSmallModel(smallModel1.getVoteMBSE(),
+            smallModel1.getVoteSA());
+          smallModel1.getComponentCounterMBSE().getOut().tick();
+          smallModel1.getComponentCounterSA().getOut().tick();
+          return outSmallModel;
+        },
+        List.of(1, 2, 2, 1, 1)
+      )
     );
 
     return result.stream();
@@ -283,10 +282,10 @@ public class SmallModelTest {
   @ParameterizedTest
   @MethodSource("histories")
   public <T extends Sort, X, G extends Sort, Z> void testCompute(
-          @NotNull List<ListerInSmallModel> in,
-          @NotNull List<ListerOutSmallModel> out,
-          @NotNull Function<ListerInSmallModel, ListerOutSmallModel> component,
-          @NotNull List<Integer> pathControl) {
+    @NotNull List<ListerInSmallModel> in,
+    @NotNull List<ListerOutSmallModel> out,
+    @NotNull Function<ListerInSmallModel, ListerOutSmallModel> component,
+    @NotNull List<Integer> pathControl) {
 
     Preconditions.checkNotNull(in);
     Preconditions.checkArgument(!in.isEmpty());
@@ -297,20 +296,10 @@ public class SmallModelTest {
       ListerOutSmallModel actOut = component.apply(in.get(i));
 
       int finalI = i;
-      assertAll(
-              () -> assertThat(
-                      actOut.getvoteMBSE().getValue().getValue())
-                      .isEqualTo(out.get(finalI).getvoteMBSE().getValue().getValue()),
-              () -> assertThat(
-                      actOut.getvoteMBSE().getValue().getExpr().toString())
-                      .isEqualTo(out.get(finalI).getvoteMBSE().getValue().getExpr().toString()),
-              () -> assertThat(
-                      actOut.getvoteSA().getValue().getValue())
-                      .isEqualTo(out.get(finalI).getvoteSA().getValue().getValue()),
-              () -> assertThat(
-                      actOut.getvoteSA().getValue().getExpr().toString())
-                      .isEqualTo(out.get(finalI).getvoteSA().getValue().getExpr().toString())
-      );
+      assertThat(actOut.getvoteMBSE().getValue().getValue()).isEqualTo(out.get(finalI).getvoteMBSE().getValue().getValue());
+      assertThat(actOut.getvoteMBSE().getValue().getExpr().toString()).isEqualTo(out.get(finalI).getvoteMBSE().getValue().getExpr().toString());
+      assertThat(actOut.getvoteSA().getValue().getValue()).isEqualTo(out.get(finalI).getvoteSA().getValue().getValue());
+      assertThat(actOut.getvoteSA().getValue().getExpr().toString()).isEqualTo(out.get(finalI).getvoteSA().getValue().getExpr().toString());
     }
   }
 }

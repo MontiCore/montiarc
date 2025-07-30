@@ -9,7 +9,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Class under test {@link InPort}
@@ -24,11 +23,9 @@ public class InPortTest {
     InPort<Object> port = new InPort<>(name);
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(name),
-      () -> assertThat(port.synced).isFalse(),
-      () -> assertThat(port.value).isNull()
-    );
+    assertThat(port.name).isEqualTo(name);
+    assertThat(port.synced).isFalse();
+    assertThat(port.value).isNull();
   }
 
   @Test
@@ -38,11 +35,9 @@ public class InPortTest {
     InPort<Object> port = new InPort<>();
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEmpty(),
-      () -> assertThat(port.synced).isFalse(),
-      () -> assertThat(port.value).isNull()
-    );
+    assertThat(port.name).isEmpty();
+    assertThat(port.synced).isFalse();
+    assertThat(port.value).isNull();
   }
 
   @ParameterizedTest
@@ -65,11 +60,9 @@ public class InPortTest {
     port.tick();
 
     // Then
-    Assertions.assertAll(
-      () -> assertThat(port.name).isEqualTo(name),
-      () -> assertThat(port.synced).isFalse(),
-      () -> assertThat(port.value).isNull()
-    );
+    assertThat(port.name).isEqualTo(name);
+    assertThat(port.synced).isFalse();
+    assertThat(port.value).isNull();
   }
 
   @Test

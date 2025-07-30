@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /** Tests {@link PreferUnexploredOracle} */
 class PreferUnexploredOracleTest {
@@ -30,7 +29,7 @@ class PreferUnexploredOracleTest {
     // Then should apply the default strategy (prefer first = obj1)
     assertThat(decision).isSameAs(obj1);
   }
-  
+
   @Test
   void testDecideAmongCompletelyExploredList() {
     // Given
@@ -51,7 +50,7 @@ class PreferUnexploredOracleTest {
     // Then should apply the default strategy (prefer first = obj1)
     assertThat(decision).isSameAs(obj1);
   }
-  
+
   @Test
   void testDecideAmongPartiallyExploredList() {
     // Given
@@ -67,10 +66,8 @@ class PreferUnexploredOracleTest {
     OptionMock decisionOnAll = oracle.decideAmong(List.of(obj1, obj2, obj3));
 
     // Then
-    assertAll(
-      () -> assertThat(decisionOnObj1and3).isSameAs(obj3),
-      () -> assertThat(decisionOnAll).isSameAs(obj2)  
-    );
+    assertThat(decisionOnObj1and3).isSameAs(obj3);
+    assertThat(decisionOnAll).isSameAs(obj2);
   }
 
   @Test
@@ -123,10 +120,8 @@ class PreferUnexploredOracleTest {
     OptionMock decisionOnAll = oracle.decideAmong(Set.of(obj1, obj2, obj3));
 
     // Then
-    assertAll(
-      () -> assertThat(decisionOnObj1and3).isSameAs(obj3),
-      () -> assertThat(decisionOnAll).isSameAs(obj2)
-    );
+    assertThat(decisionOnObj1and3).isSameAs(obj3);
+    assertThat(decisionOnAll).isSameAs(obj2);
   }
 
   @Test
@@ -179,9 +174,7 @@ class PreferUnexploredOracleTest {
     OptionMock decisionOnAll = oracle.decideAmong(Map.of(obj1, obj1, obj2, obj2, obj3, obj3));
 
     // Then
-    assertAll(
-      () -> assertThat(decisionOnObj1and3).isSameAs(obj3),
-      () -> assertThat(decisionOnAll).isSameAs(obj2)
-    );
+    assertThat(decisionOnObj1and3).isSameAs(obj3);
+    assertThat(decisionOnAll).isSameAs(obj2);
   }
 }

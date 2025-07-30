@@ -32,7 +32,6 @@ import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCType;
 import de.monticore.types.typeparameters._ast.ASTTypeParameter;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.ArcError;
 import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -123,10 +122,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(ast.isEmptyArcParents()),
-      () -> Assertions.assertTrue(symbol.isEmptySuperComponents())
-    );
+    Assertions.assertTrue(ast.isEmptyArcParents());
+    Assertions.assertTrue(symbol.isEmptySuperComponents());
   }
 
   /**
@@ -184,15 +181,11 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     getScopeGenP2().visit(head);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertFalse(child.isEmptySuperComponents()),
-      () -> Assertions.assertEquals(1, child.getSuperComponentsList().size()),
-      () -> Assertions.assertTrue(head.getArcParent(0).getType().getDefiningSymbol().isPresent())
-    );
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(parent, child.getSuperComponents(0).getTypeInfo()),
-      () -> Assertions.assertEquals(parent, head.getArcParent(0).getType().getDefiningSymbol().get())
-    );
+    Assertions.assertFalse(child.isEmptySuperComponents());
+    Assertions.assertEquals(1, child.getSuperComponentsList().size());
+    Assertions.assertTrue(head.getArcParent(0).getType().getDefiningSymbol().isPresent());
+    Assertions.assertEquals(parent, child.getSuperComponents(0).getTypeInfo());
+    Assertions.assertEquals(parent, head.getArcParent(0).getType().getDefiningSymbol().get());
   }
 
   /**
@@ -242,12 +235,10 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     getScopeGenP2().visit(head);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(child.isEmptySuperComponents()),
-      () -> Assertions.assertFalse(head.getArcParent(0).getType().getDefiningSymbol().isPresent()),
-      () -> Assertions.assertEquals(1, Log.getErrorCount()),
-      () -> Assertions.assertEquals(MCError.MISSING_COMPONENT.getErrorCode(), Log.getFindings().get(0).getMsg().substring(0, 7))
-    );
+    Assertions.assertTrue(child.isEmptySuperComponents());
+    Assertions.assertFalse(head.getArcParent(0).getType().getDefiningSymbol().isPresent());
+    Assertions.assertEquals(1, Log.getErrorCount());
+    Assertions.assertEquals(MCError.MISSING_COMPONENT.getErrorCode(), Log.getFindings().get(0).getMsg().substring(0, 7));
   }
 
   /**
@@ -414,8 +405,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     ref.setEnclosingScope(compScope);
 
     ASTComponentHead concretizationAst = ArcBasisMill.componentHeadBuilder()
-        .addSpec(ref)
-        .build();
+      .addSpec(ref)
+      .build();
     concretizationAst.setEnclosingScope(compScope);
 
     // When
@@ -423,13 +414,11 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(1, concretizationSym.getRefinementsList().size());
-    Assertions.assertAll(
-      () -> Assertions.assertNotNull(concretizationSym.getRefinements(0)),
-      () -> Assertions.assertEquals(abstraction, concretizationSym.getRefinements(0).getTypeInfo()),
-      () -> assertThat(concretizationSym.getRefinements(0).getArguments())
-              .map(ASTSubcomponentArgument::getExpression)
-              .containsExactly(argExpr)
-    );
+    Assertions.assertNotNull(concretizationSym.getRefinements(0));
+    Assertions.assertEquals(abstraction, concretizationSym.getRefinements(0).getTypeInfo());
+    assertThat(concretizationSym.getRefinements(0).getArguments())
+      .map(ASTSubcomponentArgument::getExpression)
+      .containsExactly(argExpr);
   }
 
   /**
@@ -474,11 +463,9 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     getScopeGenP2().visit(headAst);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(0, concretizationSym.getRefinementsList().size()),
-      () -> assertThat(getLoggedErrorCodes())
-              .containsExactly(MCError.MISSING_COMPONENT.getErrorCode())
-    );
+    Assertions.assertEquals(0, concretizationSym.getRefinementsList().size());
+    assertThat(getLoggedErrorCodes())
+      .containsExactly(MCError.MISSING_COMPONENT.getErrorCode());
   }
 
   /**
@@ -536,11 +523,9 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     getScopeGenP2().visit(headAst);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(1, concretizationSym.getRefinementsList().size()),
-      () -> assertThat(getLoggedErrorCodes())
-              .containsExactlyInAnyOrder(getErrorCodes(MCError.AMBIGUOUS_COMPONENT_REFERENCE))
-    );
+    Assertions.assertEquals(1, concretizationSym.getRefinementsList().size());
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(MCError.AMBIGUOUS_COMPONENT_REFERENCE));
   }
 
   @Test
@@ -609,12 +594,10 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("a.b.X", ast.getArcPort(0).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
-    );
+    Assertions.assertEquals("a.b.X", ast.getArcPort(0).getSymbol().getType().printFullName());
+    Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming());
+    Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming());
+    Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString());
   }
 
   /**
@@ -663,15 +646,13 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("a.b.Y", ast.getArcPort(0).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals("a.b.Y", ast.getArcPort(1).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(t, ast.getArcPort(1).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(i, ast.getArcPort(1).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
-    );
+    Assertions.assertEquals("a.b.Y", ast.getArcPort(0).getSymbol().getType().printFullName());
+    Assertions.assertEquals("a.b.Y", ast.getArcPort(1).getSymbol().getType().printFullName());
+    Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming());
+    Assertions.assertEquals(t, ast.getArcPort(1).getSymbol().getTiming());
+    Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming());
+    Assertions.assertEquals(i, ast.getArcPort(1).getSymbol().isIncoming());
+    Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString());
   }
 
   /**
@@ -712,12 +693,10 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(ast.getArcPort(0).getSymbol().getType().isObscureType()),
-      () -> Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming()),
-      () -> Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming()),
-      () -> Assertions.assertEquals(1, Log.getFindingsCount(), Log.getFindings().toString())
-    );
+    Assertions.assertTrue(ast.getArcPort(0).getSymbol().getType().isObscureType());
+    Assertions.assertEquals(t, ast.getArcPort(0).getSymbol().getTiming());
+    Assertions.assertEquals(i, ast.getArcPort(0).getSymbol().isIncoming());
+    Assertions.assertEquals(1, Log.getFindingsCount(), Log.getFindings().toString());
   }
 
   /**
@@ -757,10 +736,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("a.b.X", ast.getArcField(0).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
-    );
+    Assertions.assertEquals("a.b.X", ast.getArcField(0).getSymbol().getType().printFullName());
+    Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString());
   }
 
   /**
@@ -804,11 +781,9 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("a.b.Y", ast.getArcField(0).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals("a.b.Y", ast.getArcField(1).getSymbol().getType().printFullName()),
-      () -> Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString())
-    );
+    Assertions.assertEquals("a.b.Y", ast.getArcField(0).getSymbol().getType().printFullName());
+    Assertions.assertEquals("a.b.Y", ast.getArcField(1).getSymbol().getType().printFullName());
+    Assertions.assertEquals(0, Log.getFindingsCount(), Log.getFindings().toString());
   }
 
   /**
@@ -840,10 +815,8 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     this.getScopeGenP2().visit(ast);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(ast.getArcField(0).getSymbol().getType().isObscureType()),
-      () -> Assertions.assertEquals(1, Log.getFindingsCount(), Log.getFindings().toString())
-    );
+    Assertions.assertTrue(ast.getArcField(0).getSymbol().getType().isObscureType());
+    Assertions.assertEquals(1, Log.getFindingsCount(), Log.getFindings().toString());
   }
 
   /**
@@ -907,7 +880,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
 
     // Then
     Assertions.assertDoesNotThrow(astInstance.getSymbol()::getType);
-    Assertions.assertTrue(astInstance.getSymbol().getType() instanceof CompKindOfComponentType);
+    Assertions.assertInstanceOf(CompKindOfComponentType.class, astInstance.getSymbol().getType());
     Assertions.assertEquals(compType, astInstance.getSymbol().getType().getTypeInfo());
     Assertions.assertEquals(3, astInstance.getSymbol().getType().getArguments().size());
   }
@@ -920,11 +893,12 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     }
     return values;
   }
+
   @Test
   public void shouldHandleComponentInstantiationByCompletingSubcomponentSymbols() {
     // Given
     ASTComponentInstantiation astInstantiation = provideComponentInstantiation();
-    Preconditions.checkState(astInstantiation.getComponentInstanceList().size() > 0);
+    Preconditions.checkState(!astInstantiation.getComponentInstanceList().isEmpty());
     Optional<ComponentTypeSymbol> compTypeSym = ArcBasisMill.globalScope().resolveComponentType("Comp");
     if (compTypeSym.isEmpty()) {
       throw new IllegalStateException("We expect the component type 'Comp' to be added to the global scope by the " +
@@ -940,7 +914,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     // Then
     for (ASTComponentInstance astInst : astInstantiation.getComponentInstanceList()) {
       Assertions.assertDoesNotThrow(astInst.getSymbol()::getType);
-      Assertions.assertTrue(astInst.getSymbol().getType() instanceof CompKindOfComponentType);
+      Assertions.assertInstanceOf(CompKindOfComponentType.class, astInst.getSymbol().getType());
       Assertions.assertEquals(compTypeSym.get(), astInst.getSymbol().getType().getTypeInfo());
     }
   }
@@ -1069,9 +1043,7 @@ public class ArcBasisScopesGenitorP2Test extends ArcBasisTestBase {
     ASTTypeParameter param = ArcBasisMill.typeParameterBuilder().setName("A").build();
 
     // When & Then
-    Assertions.assertAll(
-      () -> Assertions.assertThrows(NullPointerException.class, () -> this.getScopeGenP2().visit((ASTTypeParameter) null)),
-      () -> Assertions.assertThrows(IllegalArgumentException.class, () -> this.getScopeGenP2().visit(param))
-    );
+    Assertions.assertThrows(NullPointerException.class, () -> this.getScopeGenP2().visit((ASTTypeParameter) null));
+    Assertions.assertThrows(IllegalArgumentException.class, () -> this.getScopeGenP2().visit(param));
   }
 }

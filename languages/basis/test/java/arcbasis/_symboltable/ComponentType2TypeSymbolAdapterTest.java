@@ -25,20 +25,19 @@ public class ComponentType2TypeSymbolAdapterTest extends ArcBasisTestBase {
     ComponentType2TypeSymbolAdapter adapter = new ComponentType2TypeSymbolAdapter(adaptee);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(adaptee.getName(), adapter.getName(),
-        "The adapter's name should match the adaptee's name."),
-      () -> Assertions.assertEquals(adaptee.getFullName(), adapter.getFullName(),
-        "The adapter's full name should match the adaptee's full name."),
-      () -> Assertions.assertEquals(adaptee.getSpannedScope(), adapter.getSpannedScope(),
-        "The adapter's spanned scope should match the adaptee's enclosing scope."),
-      () -> Assertions.assertEquals(adaptee.getEnclosingScope(), adapter.getEnclosingScope(),
-        "The adapter's enclosing scope should match the adaptee's enclosing scope."),
-      () -> Assertions.assertEquals(adaptee.getSourcePosition(), adapter.getSourcePosition(),
-        "The adapter's source position should match the adaptee's source position."),
-      () -> Assertions.assertEquals(BasicAccessModifier.PUBLIC, adapter.getAccessModifier(),
-        "The adapter should have a public access modifier as ports are the public interface of a component.")
-    );
+
+    Assertions.assertEquals(adaptee.getName(), adapter.getName(),
+      "The adapter's name should match the adaptee's name.");
+    Assertions.assertEquals(adaptee.getFullName(), adapter.getFullName(),
+      "The adapter's full name should match the adaptee's full name.");
+    Assertions.assertEquals(adaptee.getSpannedScope(), adapter.getSpannedScope(),
+      "The adapter's spanned scope should match the adaptee's enclosing scope.");
+    Assertions.assertEquals(adaptee.getEnclosingScope(), adapter.getEnclosingScope(),
+      "The adapter's enclosing scope should match the adaptee's enclosing scope.");
+    Assertions.assertEquals(adaptee.getSourcePosition(), adapter.getSourcePosition(),
+      "The adapter's source position should match the adaptee's source position.");
+    Assertions.assertEquals(BasicAccessModifier.PUBLIC, adapter.getAccessModifier(),
+      "The adapter should have a public access modifier as ports are the public interface of a component.");
   }
 
   protected static Stream<ComponentTypeSymbol> componentTypeSymbolProvider() {

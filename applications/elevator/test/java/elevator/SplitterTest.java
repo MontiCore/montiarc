@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class SplitterTest {
 
@@ -27,13 +26,11 @@ public class SplitterTest {
     splitter.setUp();
 
     // Then
-    assertAll(
-      () -> assertThat(splitter.getI()).isNotNull(),
-      () -> assertThat(splitter.getO1()).isNotNull(),
-      () -> assertThat(splitter.getO2()).isNotNull(),
-      () -> assertThat(splitter.getO3()).isNotNull(),
-      () -> assertThat(splitter.getO4()).isNotNull()
-    );
+    assertThat(splitter.getI()).isNotNull();
+    assertThat(splitter.getO1()).isNotNull();
+    assertThat(splitter.getO2()).isNotNull();
+    assertThat(splitter.getO3()).isNotNull();
+    assertThat(splitter.getO4()).isNotNull();
   }
 
   @Test
@@ -47,13 +44,11 @@ public class SplitterTest {
     splitter.init();
 
     // Then
-    assertAll(
-      () -> assertThat(splitter.getI().getValue()).isNull(),
-      () -> assertThat(splitter.getO1().getValue()).isNull(),
-      () -> assertThat(splitter.getO2().getValue()).isNull(),
-      () -> assertThat(splitter.getO3().getValue()).isNull(),
-      () -> assertThat(splitter.getO4().getValue()).isNull()
-    );
+    assertThat(splitter.getI().getValue()).isNull();
+    assertThat(splitter.getO1().getValue()).isNull();
+    assertThat(splitter.getO2().getValue()).isNull();
+    assertThat(splitter.getO3().getValue()).isNull();
+    assertThat(splitter.getO4().getValue()).isNull();
   }
 
   @Order(3)
@@ -75,13 +70,11 @@ public class SplitterTest {
     splitter.compute();
 
     // Then
-    assertAll(
-      () -> assertThat(splitter.getI().getValue()).isEqualTo(i),
-      () -> assertThat(splitter.getO1().getValue()).isEqualTo(o1),
-      () -> assertThat(splitter.getO2().getValue()).isEqualTo(o2),
-      () -> assertThat(splitter.getO3().getValue()).isEqualTo(o3),
-      () -> assertThat(splitter.getO4().getValue()).isEqualTo(o4)
-    );
+    assertThat(splitter.getI().getValue()).isEqualTo(i);
+    assertThat(splitter.getO1().getValue()).isEqualTo(o1);
+    assertThat(splitter.getO2().getValue()).isEqualTo(o2);
+    assertThat(splitter.getO3().getValue()).isEqualTo(o3);
+    assertThat(splitter.getO4().getValue()).isEqualTo(o4);
   }
 
   public static Stream<Arguments> relations() {
@@ -114,15 +107,12 @@ public class SplitterTest {
     splitter.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(splitter.getI().getValue()).isNotNull().isEqualTo(i),
-      () -> assertThat(splitter.getO1().getValue()).isNull(),
-      () -> assertThat(splitter.getO2().getValue()).isNull(),
-      () -> assertThat(splitter.getO3().getValue()).isNull(),
-      () -> assertThat(splitter.getO4().getValue()).isNull()
-    );
+    assertThat(splitter.getI().getValue()).isNotNull().isEqualTo(i);
+    assertThat(splitter.getO1().getValue()).isNull();
+    assertThat(splitter.getO2().getValue()).isNull();
+    assertThat(splitter.getO3().getValue()).isNull();
+    assertThat(splitter.getO4().getValue()).isNull();
   }
-
 
   @Order(5)
   @ParameterizedTest
@@ -162,12 +152,10 @@ public class SplitterTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actO1).containsExactly(o1),
-      () -> assertThat(actO2).containsExactly(o2),
-      () -> assertThat(actO3).containsExactly(o3),
-      () -> assertThat(actO4).containsExactly(o4)
-    );
+    assertThat(actO1).containsExactly(o1);
+    assertThat(actO2).containsExactly(o2);
+    assertThat(actO3).containsExactly(o3);
+    assertThat(actO4).containsExactly(o4);
   }
 
   public static Stream<Arguments> histories() {

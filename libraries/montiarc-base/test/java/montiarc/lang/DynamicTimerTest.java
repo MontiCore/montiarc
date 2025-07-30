@@ -15,7 +15,6 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JSimTest
 class DynamicTimerTest {
@@ -43,9 +42,7 @@ class DynamicTimerTest {
     // Then
     expected.add(msg(Signal.get()));
     expected.add(tk());
-    assertAll(
-      () -> assertThat(port_completed.getObservedMessages()).containsExactlyElementsOf(expected)
-    );
+    assertThat(port_completed.getObservedMessages()).containsExactlyElementsOf(expected);
   }
 
   static Stream<Arguments> absIntegerTestProvider() {

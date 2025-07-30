@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JSimTest
 class AddTest {
@@ -37,10 +36,8 @@ class AddTest {
     sut.runToCompletion();
 
     // Then
-    assertAll(
-      () -> assertThat(port_r.getObservedValues()).containsExactly(r),
-      () -> assertThat(port_of.getObservedValues()).containsExactly(of)
-    );
+    assertThat(port_r.getObservedValues()).containsExactly(r);
+    assertThat(port_of.getObservedValues()).containsExactly(of);
   }
 
   static Stream<Arguments> addIntegerTestProvider() {
@@ -93,10 +90,8 @@ class AddTest {
     sut.runToCompletion();
 
     // Then
-    assertAll(
-      () -> assertThat(port_r.getObservedValues()).containsExactly(r),
-      () -> assertThat(port_of.getObservedValues()).containsExactly(of)
-    );
+    assertThat(port_r.getObservedValues()).containsExactly(r);
+    assertThat(port_of.getObservedValues()).containsExactly(of);
   }
 
   static Stream<Arguments> addLongTestProvider() {

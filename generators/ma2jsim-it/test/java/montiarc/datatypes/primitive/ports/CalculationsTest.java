@@ -4,7 +4,6 @@ package montiarc.datatypes.primitive.ports;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -29,16 +28,16 @@ class CalculationsTest {
     List<Message<Short>> expectedShortOut =
       List.of(msg((short) 1), tk(), msg((short) -2), tk(), msg((short) 0), tk());
 
-    List<Message<Integer>> intInput          = List.of(msg(1), tk(), msg(-2), tk(), msg(0), tk());
+    List<Message<Integer>> intInput = List.of(msg(1), tk(), msg(-2), tk(), msg(0), tk());
     List<Message<Integer>> expectedIntOutput = List.of(msg(-1), tk(), msg(2), tk(), msg(0), tk());
 
-    List<Message<Long>> longInput          = List.of(msg(1L), tk(), msg(-2L), tk(), msg(0L), tk());
+    List<Message<Long>> longInput = List.of(msg(1L), tk(), msg(-2L), tk(), msg(0L), tk());
     List<Message<Long>> expectedLongOutput = List.of(msg(-1L), tk(), msg(2L), tk(), msg(0L), tk());
 
-    List<Message<Float>> floatInput          = List.of(msg(1.0f), tk(), msg(-2.0f), tk(), msg(0.0f), tk());
+    List<Message<Float>> floatInput = List.of(msg(1.0f), tk(), msg(-2.0f), tk(), msg(0.0f), tk());
     List<Message<Float>> expectedFloatOutput = List.of(msg(-1.0f), tk(), msg(2.0f), tk(), msg(-0.0f), tk());
 
-    List<Message<Double>> doubleInput          = List.of(msg(1.0), tk(), msg(-2.0), tk(), msg(0.0), tk());
+    List<Message<Double>> doubleInput = List.of(msg(1.0), tk(), msg(-2.0), tk(), msg(0.0), tk());
     List<Message<Double>> expectedDoubleOutput = List.of(msg(-1.0), tk(), msg(2.0), tk(), msg(-0.0), tk());
 
     List<Message<Character>> charInput =
@@ -46,7 +45,7 @@ class CalculationsTest {
     List<Message<Character>> expectedCharOut =
       List.of(msg('a'), tk(), msg('-'), tk(), msg('0'), tk());
 
-    List<Message<Boolean>> boolInput       = List.of(msg(true), tk(), msg(false), tk(), msg(false), tk());
+    List<Message<Boolean>> boolInput = List.of(msg(true), tk(), msg(false), tk(), msg(false), tk());
     List<Message<Boolean>> expectedBoolOut = List.of(msg(false), tk(), msg(true), tk(), msg(true), tk());
 
     PortObserver<Byte> port_byte = new PortObserver<>();
@@ -84,15 +83,13 @@ class CalculationsTest {
     sut.runToCompletion();
 
     // Then
-    Assertions.assertAll(
-      () -> assertThat(port_byte.getObservedMessages()).as("bytes").containsExactlyElementsOf(expectedByteOut),
-      () -> assertThat(port_short.getObservedMessages()).as("shorts").containsExactlyElementsOf(expectedShortOut),
-      () -> assertThat(port_int.getObservedMessages()).as("ints").containsExactlyElementsOf(expectedIntOutput),
-      () -> assertThat(port_long.getObservedMessages()).as("longs").containsExactlyElementsOf(expectedLongOutput),
-      () -> assertThat(port_float.getObservedMessages()).as("floats").containsExactlyElementsOf(expectedFloatOutput),
-      () -> assertThat(port_double.getObservedMessages()).as("doubles").containsExactlyElementsOf(expectedDoubleOutput),
-      () -> assertThat(port_char.getObservedMessages()).as("chars").containsExactlyElementsOf(expectedCharOut),
-      () -> assertThat(port_boolean.getObservedMessages()).as("booleans").containsExactlyElementsOf(expectedBoolOut)
-    );
+    assertThat(port_byte.getObservedMessages()).as("bytes").containsExactlyElementsOf(expectedByteOut);
+    assertThat(port_short.getObservedMessages()).as("shorts").containsExactlyElementsOf(expectedShortOut);
+    assertThat(port_int.getObservedMessages()).as("ints").containsExactlyElementsOf(expectedIntOutput);
+    assertThat(port_long.getObservedMessages()).as("longs").containsExactlyElementsOf(expectedLongOutput);
+    assertThat(port_float.getObservedMessages()).as("floats").containsExactlyElementsOf(expectedFloatOutput);
+    assertThat(port_double.getObservedMessages()).as("doubles").containsExactlyElementsOf(expectedDoubleOutput);
+    assertThat(port_char.getObservedMessages()).as("chars").containsExactlyElementsOf(expectedCharOut);
+    assertThat(port_boolean.getObservedMessages()).as("booleans").containsExactlyElementsOf(expectedBoolOut);
   }
 }

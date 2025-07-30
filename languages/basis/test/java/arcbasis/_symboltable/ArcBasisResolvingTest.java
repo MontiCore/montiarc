@@ -238,7 +238,7 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertFalse(variables.isEmpty(),
-      "Failed to resolve the port to variable symbol adapter." );
+      "Failed to resolve the port to variable symbol adapter.");
     Assertions.assertEquals(1, variables.size(),
       "Failed to resolve only the single port to variable symbol adapter.");
   }
@@ -265,7 +265,7 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertFalse(variables.isEmpty(),
-      "Failed to resolve the port to variable symbol adapter." );
+      "Failed to resolve the port to variable symbol adapter.");
     Assertions.assertEquals(1, variables.size(),
       "Failed to resolve only the single port to variable symbol adapter.");
   }
@@ -312,18 +312,14 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     List<VariableSymbol> variables2 = scope.resolveVariableMany("port");
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertFalse(variables1.isEmpty(),
-        "The first call failed to resolve the port to variable symbol adapter."),
-      () -> Assertions.assertFalse(variables2.isEmpty(),
-        "The second call failed to resolve the port to variable symbol adapter.")
-    );
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(1, variables1.size(),
-        "The first call failed to resolve only the single port to variable symbol adapter."),
-      () -> Assertions.assertEquals(1, variables2.size(),
-        "The second call failed to resolve only the single port to variable symbol adapter.")
-    );
+    Assertions.assertFalse(variables1.isEmpty(),
+      "The first call failed to resolve the port to variable symbol adapter.");
+    Assertions.assertFalse(variables2.isEmpty(),
+      "The second call failed to resolve the port to variable symbol adapter.");
+    Assertions.assertEquals(1, variables1.size(),
+      "The first call failed to resolve only the single port to variable symbol adapter.");
+    Assertions.assertEquals(1, variables2.size(),
+      "The second call failed to resolve only the single port to variable symbol adapter.");
   }
 
   @Test
@@ -351,22 +347,18 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     List<VariableSymbol> variables3 = scope.resolveVariableMany("port", BasicAccessModifier.ALL_INCLUSION);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertFalse(variables1.isEmpty(),
-        "The first call failed to resolve the variable symbols."),
-      () -> Assertions.assertFalse(variables2.isEmpty(),
-        "The second call failed to resolve the variable symbol."),
-      () -> Assertions.assertFalse(variables3.isEmpty(),
-        "The third call failed to resolve the variable symbols.")
-    );
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(2, variables1.size(),
-        "The first call failed to resolve both the variable symbol and the port to variable symbol adapter."),
-      () -> Assertions.assertEquals(1, variables2.size(),
-        "The second call failed to resolve only the port to variable symbol adapter."),
-      () -> Assertions.assertEquals(2, variables3.size(),
-        "The third call failed to resolve both the variable symbol and the port to variable symbol adapter.")
-    );
+    Assertions.assertFalse(variables1.isEmpty(),
+      "The first call failed to resolve the variable symbols.");
+    Assertions.assertFalse(variables2.isEmpty(),
+      "The second call failed to resolve the variable symbol.");
+    Assertions.assertFalse(variables3.isEmpty(),
+      "The third call failed to resolve the variable symbols.");
+    Assertions.assertEquals(2, variables1.size(),
+      "The first call failed to resolve both the variable symbol and the port to variable symbol adapter.");
+    Assertions.assertEquals(1, variables2.size(),
+      "The second call failed to resolve only the port to variable symbol adapter.");
+    Assertions.assertEquals(2, variables3.size(),
+      "The third call failed to resolve both the variable symbol and the port to variable symbol adapter.");
   }
 
   @Test
@@ -377,18 +369,18 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope parent2Scope = ArcBasisMill.scope();
 
     ComponentTypeSymbol parent1 =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
+      ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent1Scope).build();
     ComponentTypeSymbol parent2 =
       ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parent2Scope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setSuperComponentsList(List.of(new CompKindOfComponentType(parent1), new CompKindOfComponentType(parent2))).build();
+      .setSuperComponentsList(List.of(new CompKindOfComponentType(parent1), new CompKindOfComponentType(parent2))).build();
 
     PortSymbol port1 = ArcBasisMill.portSymbolBuilder().setName("p1")
-        .setType(Mockito.mock(SymTypeExpression.class)).build();
+      .setType(Mockito.mock(SymTypeExpression.class)).build();
     parent1Scope.add(port1);
 
     VariableSymbol variable1 = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
-        SymTypeExpression.class)).build();
+      SymTypeExpression.class)).build();
     parent1Scope.add(variable1);
 
     PortSymbol port2 = ArcBasisMill.portSymbolBuilder().setName("p2")
@@ -423,24 +415,24 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     IArcBasisScope parentScope = ArcBasisMill.scope();
 
     ComponentTypeSymbol parent =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
+      ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(parentScope).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
+      .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
 
     PortSymbol parentPort = ArcBasisMill.portSymbolBuilder().setName("p1")
-        .setType(Mockito.mock(SymTypeExpression.class)).build();
+      .setType(Mockito.mock(SymTypeExpression.class)).build();
     parentScope.add(parentPort);
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
-        .setType(Mockito.mock(SymTypeExpression.class)).build();
+      .setType(Mockito.mock(SymTypeExpression.class)).build();
     scope.add(port);
 
     VariableSymbol parentVariable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
-        SymTypeExpression.class)).build();
+      SymTypeExpression.class)).build();
     parentScope.add(parentVariable);
 
     VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
-        SymTypeExpression.class)).build();
+      SymTypeExpression.class)).build();
     scope.add(variable);
 
     // When
@@ -462,21 +454,21 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     enclosingScope.addSubScope(scope);
 
     ComponentTypeSymbol parent =
-        ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
+      ArcBasisMill.componentTypeSymbolBuilder().setName("Parent").setSpannedScope(ArcBasisMill.scope()).build();
     ComponentTypeSymbol child = ArcBasisMill.componentTypeSymbolBuilder().setName("Child").setSpannedScope(scope)
-        .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
+      .setSuperComponentsList(Collections.singletonList(new CompKindOfComponentType(parent))).build();
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
-        .setType(Mockito.mock(SymTypeExpression.class)).build();
+      .setType(Mockito.mock(SymTypeExpression.class)).build();
     enclosingScope.add(port);
 
     SubcomponentSymbol instance =
-        ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
-            CompKindExpression.class)).build();
+      ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
+        CompKindExpression.class)).build();
     enclosingScope.add(instance);
 
     VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
-        SymTypeExpression.class)).build();
+      SymTypeExpression.class)).build();
     enclosingScope.add(variable);
 
     // When
@@ -498,16 +490,16 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     enclosingScope.addSubScope(scope);
 
     PortSymbol port = ArcBasisMill.portSymbolBuilder().setName("p1")
-        .setType(Mockito.mock(SymTypeExpression.class)).build();
+      .setType(Mockito.mock(SymTypeExpression.class)).build();
     enclosingScope.add(port);
 
     SubcomponentSymbol instance =
-        ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
-            CompKindExpression.class)).build();
+      ArcBasisMill.subcomponentSymbolBuilder().setName("ins1").setType(Mockito.mock(
+        CompKindExpression.class)).build();
     enclosingScope.add(instance);
 
     VariableSymbol variable = ArcBasisMill.variableSymbolBuilder().setName("var1").setType(Mockito.mock(
-        SymTypeExpression.class)).build();
+      SymTypeExpression.class)).build();
     enclosingScope.add(variable);
 
     // When
@@ -516,18 +508,14 @@ public class ArcBasisResolvingTest extends ArcBasisTestBase {
     Optional<VariableSymbol> resolvedVariable = scope.resolveVariable("var1");
 
     // Then
-    Assertions.assertAll(
-        () -> Assertions.assertFalse(resolvedPort.isEmpty(),
-            "Failed to resolve the port symbol."),
-        () -> Assertions.assertFalse(resolvedInstance.isEmpty(),
-            "Failed to resolve the component instance symbol."),
-        () -> Assertions.assertFalse(resolvedVariable.isEmpty(),
-            "Failed to resolve the variable symbol.")
-    );
-    Assertions.assertAll(
-        () -> Assertions.assertEquals(port, resolvedPort.get()),
-        () -> Assertions.assertEquals(instance, resolvedInstance.get()),
-        () -> Assertions.assertEquals(variable, resolvedVariable.get())
-    );
+    Assertions.assertFalse(resolvedPort.isEmpty(),
+      "Failed to resolve the port symbol.");
+    Assertions.assertFalse(resolvedInstance.isEmpty(),
+      "Failed to resolve the component instance symbol.");
+    Assertions.assertFalse(resolvedVariable.isEmpty(),
+      "Failed to resolve the variable symbol.");
+    Assertions.assertEquals(port, resolvedPort.get());
+    Assertions.assertEquals(instance, resolvedInstance.get());
+    Assertions.assertEquals(variable, resolvedVariable.get());
   }
 }

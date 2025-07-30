@@ -125,12 +125,10 @@ class SeparateCompInstantiationFromTypeDeclTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    org.junit.jupiter.api.Assertions.assertAll(
-      () -> Mockito.verify(spyBody, Mockito.never()).addArcElement(Mockito.any()),
-      () -> Mockito.verify(spyBody, Mockito.never()).addArcElement(Mockito.anyInt(), Mockito.any()),
-      () -> Mockito.verify(spyBody, Mockito.never()).addAllArcElements(Mockito.anyCollection()),
-      () -> Mockito.verify(spyBody, Mockito.never()).addAllArcElements(Mockito.anyInt(), Mockito.anyCollection())
-    );
+    Mockito.verify(spyBody, Mockito.never()).addArcElement(Mockito.any());
+    Mockito.verify(spyBody, Mockito.never()).addArcElement(Mockito.anyInt(), Mockito.any());
+    Mockito.verify(spyBody, Mockito.never()).addAllArcElements(Mockito.anyCollection());
+    Mockito.verify(spyBody, Mockito.never()).addAllArcElements(Mockito.anyInt(), Mockito.anyCollection());
   }
 
   @Test

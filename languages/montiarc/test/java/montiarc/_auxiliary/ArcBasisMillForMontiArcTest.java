@@ -33,13 +33,13 @@ public class ArcBasisMillForMontiArcTest {
    * respectively provide a scopes genitor p2 that is initialized with a
    * {@link FullSynthesizeCompKindFromMCSimpleGenericTypes}, when using the {@link MontiArcMill}.
    *
-   * @param setup                      The setup to execute, e.g., initialize the respective mill.
-   * @param expectedCompSynthesizer    The expected class of the component synthesizer of the scopes genitor p2.
+   * @param setup                   The setup to execute, e.g., initialize the respective mill.
+   * @param expectedCompSynthesizer The expected class of the component synthesizer of the scopes genitor p2.
    */
   @ParameterizedTest
   @MethodSource("setupAndExpectedClassForScopesGenitorP2Provider")
   void shouldProvideCompleterAsExpected(@NotNull Runnable setup,
-                                               @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer) {
+                                        @NotNull Class<ISynthesizeComponent> expectedCompSynthesizer) {
     Preconditions.checkNotNull(setup);
     Preconditions.checkNotNull(expectedCompSynthesizer);
 
@@ -47,10 +47,8 @@ public class ArcBasisMillForMontiArcTest {
     setup.run();
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(expectedCompSynthesizer,
-        ArcBasisMill.scopesGenitorP2().getComponentSynthesizer().getClass())
-    );
+    Assertions.assertEquals(expectedCompSynthesizer,
+      ArcBasisMill.scopesGenitorP2().getComponentSynthesizer().getClass());
   }
 
   protected static Stream<Arguments> setupAndExpectedClassForCompKindExprDeSerProvider() {

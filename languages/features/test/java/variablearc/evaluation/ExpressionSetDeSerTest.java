@@ -58,14 +58,12 @@ public class ExpressionSetDeSerTest extends VariableArcTestBase {
     Assertions.assertEquals(1, expressionSet.getExpressions().size());
     Assertions.assertEquals(2, expressionSet.getNegatedConjunctions().size());
     Assertions.assertEquals(2, expressionSet.getNegatedConjunctions().get(0).size());
-    Assertions.assertEquals(1, expressionSet.getNegatedConjunctions().get(1).size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("a", expressionSet.getExpressions().get(0).print()),
-      () -> Assertions.assertEquals(scope, expressionSet.getExpressions().get(0).getAstExpression().getEnclosingScope()),
-      () -> Assertions.assertEquals("b", expressionSet.getNegatedConjunctions().get(0).get(0).print()),
-      () -> Assertions.assertEquals("c", expressionSet.getNegatedConjunctions().get(0).get(1).print()),
-      () -> Assertions.assertEquals("d", expressionSet.getNegatedConjunctions().get(1).get(0).print())
-    );
+    Assertions.assertEquals(1, expressionSet.getNegatedConjunctions().get(1).size());;
+    Assertions.assertEquals("a", expressionSet.getExpressions().get(0).print());
+    Assertions.assertEquals(scope, expressionSet.getExpressions().get(0).getAstExpression().getEnclosingScope());
+    Assertions.assertEquals("b", expressionSet.getNegatedConjunctions().get(0).get(0).print());
+    Assertions.assertEquals("c", expressionSet.getNegatedConjunctions().get(0).get(1).print());
+    Assertions.assertEquals("d", expressionSet.getNegatedConjunctions().get(1).get(0).print());
   }
 
 }

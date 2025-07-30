@@ -60,16 +60,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, variables);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalVariableSymbols().containsAll(Arrays.asList(variables)),
-        "The scope does not contain all expected variables."),
-      () -> {
-        for (VariableSymbol variable : variables) {
-          Assertions.assertEquals(scope, variable.getEnclosingScope(),
-            "The variable's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalVariableSymbols().containsAll(Arrays.asList(variables)),
+      "The scope does not contain all expected variables.");
+    for (VariableSymbol variable : variables) {
+      Assertions.assertEquals(scope, variable.getEnclosingScope(),
+        "The variable's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -90,16 +86,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, variables);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalVariableSymbols().containsAll(Arrays.asList(variables)),
-        "The scope does not contain all expected variables."),
-      () -> {
-        for (VariableSymbol variable : variables) {
-          Assertions.assertEquals(scope, variable.getEnclosingScope(),
-            "The variable's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalVariableSymbols().containsAll(Arrays.asList(variables)),
+      "The scope does not contain all expected variables.");
+    for (VariableSymbol variable : variables) {
+      Assertions.assertEquals(scope, variable.getEnclosingScope(),
+        "The variable's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -116,12 +108,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, variable);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalVariableSymbols().contains(variable),
-        "The scope does not contain the expected variable."),
-      () -> Assertions.assertEquals(scope, variable.getEnclosingScope(),
-        "The variable's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalVariableSymbols().contains(variable),
+      "The scope does not contain the expected variable.");
+    Assertions.assertEquals(scope, variable.getEnclosingScope(),
+      "The variable's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -158,16 +148,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, fields);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalFieldSymbols().containsAll(Arrays.asList(fields)),
-        "The scope does not contain all expected fields."),
-      () -> {
-        for (FieldSymbol field : fields) {
-          Assertions.assertEquals(scope, field.getEnclosingScope(),
-            "The field's enclosing scope do not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalFieldSymbols().containsAll(Arrays.asList(fields)),
+      "The scope does not contain all expected fields.");
+    for (FieldSymbol field : fields) {
+      Assertions.assertEquals(scope, field.getEnclosingScope(),
+        "The field's enclosing scope do not match the expected scope.");
+    }
   }
 
   /**
@@ -188,16 +174,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, fields);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalFieldSymbols().containsAll(Arrays.asList(fields)),
-        "The scope does not contain all expected fields."),
-      () -> {
-        for (FieldSymbol field : fields) {
-          Assertions.assertEquals(scope, field.getEnclosingScope(),
-            "The field's enclosing scope do not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalFieldSymbols().containsAll(Arrays.asList(fields)),
+      "The scope does not contain all expected fields.");
+    for (FieldSymbol field : fields) {
+      Assertions.assertEquals(scope, field.getEnclosingScope(),
+        "The field's enclosing scope do not match the expected scope.");
+    }
   }
 
   /**
@@ -214,12 +196,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, field);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalFieldSymbols().contains(field),
-        "The scope does not contain the expected field."),
-      () -> Assertions.assertEquals(scope, field.getEnclosingScope(),
-        "The field's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalFieldSymbols().contains(field),
+      "The scope does not contain the expected field.");
+    Assertions.assertEquals(scope, field.getEnclosingScope(),
+      "The field's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -254,16 +234,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, types);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalTypeSymbols().containsAll(Arrays.asList(types)),
-        "The scope does not contain all expected types."),
-      () -> {
-        for (TypeSymbol type : types) {
-          Assertions.assertEquals(scope, type.getEnclosingScope(),
-            "The type's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalTypeSymbols().containsAll(Arrays.asList(types)),
+      "The scope does not contain all expected types.");
+    for (TypeSymbol type : types) {
+      Assertions.assertEquals(scope, type.getEnclosingScope(),
+        "The type's enclosing scope does not match the expected scope.");
+    }
   }
 
 
@@ -283,16 +259,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, types);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalTypeSymbols().containsAll(Arrays.asList(types)),
-        "The scope does not contain all expected types."),
-      () -> {
-        for (TypeSymbol type : types) {
-          Assertions.assertEquals(scope, type.getEnclosingScope(),
-            "The type's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalTypeSymbols().containsAll(Arrays.asList(types)),
+      "The scope does not contain all expected types.");
+    for (TypeSymbol type : types) {
+      Assertions.assertEquals(scope, type.getEnclosingScope(),
+        "The type's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -308,12 +280,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, type);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalTypeSymbols().contains(type),
-        "The scope does not contain the expected type."),
-      () -> Assertions.assertEquals(scope, type.getEnclosingScope(),
-        "The type's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalTypeSymbols().contains(type),
+      "The scope does not contain the expected type.");
+    Assertions.assertEquals(scope, type.getEnclosingScope(),
+      "The type's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -348,16 +318,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, ooTypes);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalOOTypeSymbols().containsAll(Arrays.asList(ooTypes)),
-        "The scope does not contain all expected oo-types."),
-      () -> {
-        for (OOTypeSymbol ooType : ooTypes) {
-          Assertions.assertEquals(scope, ooType.getEnclosingScope(),
-            "The oo-type's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalOOTypeSymbols().containsAll(Arrays.asList(ooTypes)),
+      "The scope does not contain all expected oo-types.");
+    for (OOTypeSymbol ooType : ooTypes) {
+      Assertions.assertEquals(scope, ooType.getEnclosingScope(),
+        "The oo-type's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -376,16 +342,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, ooTypes);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalOOTypeSymbols().containsAll(Arrays.asList(ooTypes)),
-        "The scope does not contain all expected oo-types."),
-      () -> {
-        for (OOTypeSymbol ooType : ooTypes) {
-          Assertions.assertEquals(scope, ooType.getEnclosingScope(),
-            "The oo-type's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalOOTypeSymbols().containsAll(Arrays.asList(ooTypes)),
+      "The scope does not contain all expected oo-types.");
+    for (OOTypeSymbol ooType : ooTypes) {
+      Assertions.assertEquals(scope, ooType.getEnclosingScope(),
+        "The oo-type's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -401,12 +363,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, ooType);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalOOTypeSymbols().contains(ooType),
-        "The scope does not contain the expected oo-type."),
-      () -> Assertions.assertEquals(scope, ooType.getEnclosingScope(),
-        "The oo-type's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalOOTypeSymbols().contains(ooType),
+      "The scope does not contain the expected oo-type.");
+    Assertions.assertEquals(scope, ooType.getEnclosingScope(),
+      "The oo-type's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -441,16 +401,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, functions);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalFunctionSymbols().containsAll(Arrays.asList(functions)),
-        "The scope does not contain all expected functions."),
-      () -> {
-        for (FunctionSymbol function : functions) {
-          Assertions.assertEquals(scope, function.getEnclosingScope(),
-            "The function's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalFunctionSymbols().containsAll(Arrays.asList(functions)),
+      "The scope does not contain all expected functions.");
+    for (FunctionSymbol function : functions) {
+      Assertions.assertEquals(scope, function.getEnclosingScope(),
+        "The function's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -469,16 +425,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, functions);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalFunctionSymbols().containsAll(Arrays.asList(functions)),
-        "The scope does not contain all expected functions."),
-      () -> {
-        for (FunctionSymbol function : functions) {
-          Assertions.assertEquals(scope, function.getEnclosingScope(),
-            "The function's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalFunctionSymbols().containsAll(Arrays.asList(functions)),
+      "The scope does not contain all expected functions.");
+    for (FunctionSymbol function : functions) {
+      Assertions.assertEquals(scope, function.getEnclosingScope(),
+        "The function's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -494,12 +446,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, function);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalFunctionSymbols().contains(function),
-        "The scope does not contain the expected function."),
-      () -> Assertions.assertEquals(scope, function.getEnclosingScope(),
-        "The function's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalFunctionSymbols().contains(function),
+      "The scope does not contain the expected function.");
+    Assertions.assertEquals(scope, function.getEnclosingScope(),
+      "The function's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -534,16 +484,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, methods);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalMethodSymbols().containsAll(Arrays.asList(methods)),
-        "The scope does not contain all expected methods."),
-      () -> {
-        for (MethodSymbol method : methods) {
-          Assertions.assertEquals(scope, method.getEnclosingScope(),
-            "The method's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalMethodSymbols().containsAll(Arrays.asList(methods)),
+      "The scope does not contain all expected methods.");
+    for (MethodSymbol method : methods) {
+      Assertions.assertEquals(scope, method.getEnclosingScope(),
+        "The method's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -562,16 +508,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, methods);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalMethodSymbols().containsAll(Arrays.asList(methods)),
-        "The scope does not contain all expected methods."),
-      () -> {
-        for (MethodSymbol method : methods) {
-          Assertions.assertEquals(scope, method.getEnclosingScope(),
-            "The method's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalMethodSymbols().containsAll(Arrays.asList(methods)),
+      "The scope does not contain all expected methods.");
+    for (MethodSymbol method : methods) {
+      Assertions.assertEquals(scope, method.getEnclosingScope(),
+        "The method's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -587,12 +529,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, method);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalMethodSymbols().contains(method),
-        "The scope does not contain the expected method."),
-      () -> Assertions.assertEquals(scope, method.getEnclosingScope(),
-        "The method's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalMethodSymbols().contains(method),
+      "The scope does not contain the expected method.");
+    Assertions.assertEquals(scope, method.getEnclosingScope(),
+      "The method's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -627,16 +567,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, typeVariables);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalTypeVarSymbols().containsAll(Arrays.asList(typeVariables)),
-        "The scope does not contain all expected type variables."),
-      () -> {
-        for (TypeVarSymbol typeVariable : typeVariables) {
-          Assertions.assertEquals(scope, typeVariable.getEnclosingScope(),
-            "The type variable's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalTypeVarSymbols().containsAll(Arrays.asList(typeVariables)),
+      "The scope does not contain all expected type variables.");
+    for (TypeVarSymbol typeVariable : typeVariables) {
+      Assertions.assertEquals(scope, typeVariable.getEnclosingScope(),
+        "The type variable's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -655,16 +591,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, typeVariables);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalTypeVarSymbols().containsAll(Arrays.asList(typeVariables)),
-        "The scope does not contain all expected type variables."),
-      () -> {
-        for (TypeVarSymbol typeVariable : typeVariables) {
-          Assertions.assertEquals(scope, typeVariable.getEnclosingScope(),
-            "The type variable's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalTypeVarSymbols().containsAll(Arrays.asList(typeVariables)),
+      "The scope does not contain all expected type variables.");
+    for (TypeVarSymbol typeVariable : typeVariables) {
+      Assertions.assertEquals(scope, typeVariable.getEnclosingScope(),
+        "The type variable's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -680,12 +612,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, typeVariable);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalTypeVarSymbols().contains(typeVariable),
-        "The scope does not contain the expected type variable."),
-      () -> Assertions.assertEquals(scope, typeVariable.getEnclosingScope(),
-        "The type variable's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalTypeVarSymbols().contains(typeVariable),
+      "The scope does not contain the expected type variable.");
+    Assertions.assertEquals(scope, typeVariable.getEnclosingScope(),
+      "The type variable's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -721,16 +651,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, componentTypes);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalComponentTypeSymbols().containsAll(Arrays.asList(componentTypes)),
-        "The scope does not contain all expected component types."),
-      () -> {
-        for (ComponentTypeSymbol componentType : componentTypes) {
-          Assertions.assertEquals(scope, componentType.getEnclosingScope(),
-            "The component type's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalComponentTypeSymbols().containsAll(Arrays.asList(componentTypes)),
+      "The scope does not contain all expected component types.");
+    for (ComponentTypeSymbol componentType : componentTypes) {
+      Assertions.assertEquals(scope, componentType.getEnclosingScope(),
+        "The component type's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -751,16 +677,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, componentTypes);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalComponentTypeSymbols().containsAll(Arrays.asList(componentTypes)),
-        "The scope does not contain all expected component types."),
-      () -> {
-        for (ComponentTypeSymbol componentType : componentTypes) {
-          Assertions.assertEquals(scope, componentType.getEnclosingScope(),
-            "The component type's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalComponentTypeSymbols().containsAll(Arrays.asList(componentTypes)),
+      "The scope does not contain all expected component types.");
+    for (ComponentTypeSymbol componentType : componentTypes) {
+      Assertions.assertEquals(scope, componentType.getEnclosingScope(),
+        "The component type's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -778,12 +700,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, componentType);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalComponentTypeSymbols().contains(componentType),
-        "The scope does not contain the expected component type."),
-      () -> Assertions.assertEquals(scope, componentType.getEnclosingScope(),
-        "The component type's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalComponentTypeSymbols().contains(componentType),
+      "The scope does not contain the expected component type.");
+    Assertions.assertEquals(scope, componentType.getEnclosingScope(),
+      "The component type's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -818,16 +738,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, components);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalSubcomponentSymbols().containsAll(Arrays.asList(components)),
-        "The scope does not contain all expected components."),
-      () -> {
-        for (SubcomponentSymbol component : components) {
-          Assertions.assertEquals(scope, component.getEnclosingScope(),
-            "The component's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalSubcomponentSymbols().containsAll(Arrays.asList(components)),
+      "The scope does not contain all expected components.");
+    for (SubcomponentSymbol component : components) {
+      Assertions.assertEquals(scope, component.getEnclosingScope(),
+        "The component's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -846,16 +762,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, components);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalSubcomponentSymbols().containsAll(Arrays.asList(components)),
-        "The scope does not contain all expected components."),
-      () -> {
-        for (SubcomponentSymbol component : components) {
-          Assertions.assertEquals(scope, component.getEnclosingScope(),
-            "The component's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalSubcomponentSymbols().containsAll(Arrays.asList(components)),
+      "The scope does not contain all expected components.");
+    for (SubcomponentSymbol component : components) {
+      Assertions.assertEquals(scope, component.getEnclosingScope(),
+        "The component's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -872,12 +784,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, component);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalSubcomponentSymbols().contains(component),
-        "The scope does not contain the expected component."),
-      () -> Assertions.assertEquals(scope, component.getEnclosingScope(),
-        "The component's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalSubcomponentSymbols().contains(component),
+      "The scope does not contain the expected component.");
+    Assertions.assertEquals(scope, component.getEnclosingScope(),
+      "The component's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -895,12 +805,10 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, port);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalPortSymbols().contains(port),
-        "The scope does not contain the expected port."),
-      () -> Assertions.assertEquals(scope, port.getEnclosingScope(),
-        "The port's enclosing scope does not match the expected scope.")
-    );
+    Assertions.assertTrue(scope.getLocalPortSymbols().contains(port),
+      "The scope does not contain the expected port.");
+    Assertions.assertEquals(scope, port.getEnclosingScope(),
+      "The port's enclosing scope does not match the expected scope.");
   }
 
   /**
@@ -937,16 +845,12 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, ports);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
-        "The scope does not contain all expected ports."),
-      () -> {
-        for (PortSymbol port : ports) {
-          Assertions.assertEquals(scope, port.getEnclosingScope(),
-            "The port's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
+      "The scope does not contain all expected ports.");
+    for (PortSymbol port : ports) {
+      Assertions.assertEquals(scope, port.getEnclosingScope(),
+        "The port's enclosing scope does not match the expected scope.");
+    }
   }
 
   /**
@@ -966,15 +870,11 @@ public class SymbolServiceTest extends ArcBasisTestBase {
     SymbolService.link(scope, ports);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
-        "The scope does not contain all expected ports."),
-      () -> {
-        for (PortSymbol port : ports) {
-          Assertions.assertEquals(scope, port.getEnclosingScope(),
-            "The port's enclosing scope does not match the expected scope.");
-        }
-      }
-    );
+    Assertions.assertTrue(scope.getLocalPortSymbols().containsAll(Arrays.asList(ports)),
+      "The scope does not contain all expected ports.");
+    for (PortSymbol port : ports) {
+      Assertions.assertEquals(scope, port.getEnclosingScope(),
+        "The port's enclosing scope does not match the expected scope.");
+    }
   }
 }

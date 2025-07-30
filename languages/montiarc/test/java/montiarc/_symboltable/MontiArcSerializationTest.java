@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class MontiArcSerializationTest extends MontiArcTestBase {
 
@@ -203,13 +202,11 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
-    assertAll(
-      () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("kind").getAsJsonString().getValue())
-        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
-    );
+    assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName());
+    assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+      .getMember("kind").getAsJsonString().getValue())
+      .isEqualTo(ComponentTypeSymbol.class.getCanonicalName());
   }
 
   @Test
@@ -230,12 +227,10 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
-    assertAll(
-      () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName())
-    );
+    assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName());
+    assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+      .getMember("kind").getAsJsonString().getValue()).isEqualTo(ComponentTypeSymbol.class.getCanonicalName());
   }
 
   @Test
@@ -257,12 +252,10 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
-    assertAll(
-      () -> assertThat(json.hasStringMember("name"))
-            .as("name is present as string").isTrue(),
-      () -> assertThat(json.hasArrayMember("symbols"))
-            .as("symbols is present as array").isTrue()
-    );
+    assertThat(json.hasStringMember("name"))
+      .as("name is present as string").isTrue();
+    assertThat(json.hasArrayMember("symbols"))
+      .as("symbols is present as array").isTrue();
     assertThat(json.getArrayMember("symbols")).as("symbols").hasSize(1);
     assertThat(json.getArrayMember("symbols").get(0).isJsonObject()).isTrue();
 
@@ -271,12 +264,10 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
       .as("refinements is present as array").isTrue();
 
     final List<JsonElement> refinements = compSym.getArrayMember("refinements");
-    assertAll(
-      () -> assertThat(json.getStringMember("name"))
-            .isEqualTo(ast.getEnclosingScope().getName()),
-      () -> assertThat(refinements).hasSize(1),
-      () -> assertThat(refinements).allMatch(JsonElement::isJsonObject, "is JsonObject")
-    );
+    assertThat(json.getStringMember("name"))
+      .isEqualTo(ast.getEnclosingScope().getName());
+    assertThat(refinements).hasSize(1);
+    assertThat(refinements).allMatch(JsonElement::isJsonObject, "is JsonObject");
 
     final JsonObject refinement = refinements.get(0).getAsJsonObject();
     assertThat(refinement.hasStringMember("kind"))
@@ -311,16 +302,14 @@ public class MontiArcSerializationTest extends MontiArcTestBase {
 
     // Then
     final JsonObject json = JsonParser.parseJsonObject(s);
-    assertAll(
-      () -> assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName()),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
-        .isEqualTo(ComponentTypeSymbol.class.getCanonicalName()),
-      () -> assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
-        .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
-        .isEqualTo(ast.getArcComponentType().getInnerComponents().get(0).getName())
-    );
+    assertThat(json.getMember("name").getAsJsonString().getValue()).isEqualTo(ast.getEnclosingScope().getName());
+    assertThat(json.getMember("symbols").getAsJsonArray().size()).isEqualTo(1);
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+      .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("kind").getAsJsonString().getValue())
+      .isEqualTo(ComponentTypeSymbol.class.getCanonicalName());
+    assertThat(json.getMember("symbols").getAsJsonArray().get(0).getAsJsonObject()
+      .getMember("spannedScope").getAsJsonObject().getMember("symbols").getAsJsonArray().get(0).getAsJsonObject().getMember("name").getAsJsonString().getValue())
+      .isEqualTo(ast.getArcComponentType().getInnerComponents().get(0).getName());
   }
 
   @Test

@@ -12,7 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * The system under test is the component {@code Transition}. The white-box
@@ -65,10 +64,8 @@ public class TransitionTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actStates).containsExactly(expStates),
-      () -> assertThat(actOutputs).containsExactly(expOutputs)
-    );
+    assertThat(actStates).containsExactly(expStates);
+    assertThat(actOutputs).containsExactly(expOutputs);
   }
 
   /**
@@ -76,11 +73,11 @@ public class TransitionTest {
    */
   protected static Stream<Arguments> expBehaviorProvider() {
     return Stream.of(
-      Arguments.of(new int[]{1, 1}, new int[]{1, 1}, new States[] { States.start, States.s1, States.end1}),
-      Arguments.of(new int[]{2, 2}, new int[]{2, 2}, new States[] { States.start, States.s2, States.end2}),
-      Arguments.of(new int[]{3, 3}, new int[]{3, 1}, new States[] { States.start, States.s3, States.end1}),
-      Arguments.of(new int[]{4, 4}, new int[]{4, 2}, new States[] { States.start, States.s4_1, States.end2}),
-      Arguments.of(new int[]{5, 5}, new int[]{5, 1}, new States[] { States.start, States.s5_1, States.end1})
+      Arguments.of(new int[]{1, 1}, new int[]{1, 1}, new States[]{States.start, States.s1, States.end1}),
+      Arguments.of(new int[]{2, 2}, new int[]{2, 2}, new States[]{States.start, States.s2, States.end2}),
+      Arguments.of(new int[]{3, 3}, new int[]{3, 1}, new States[]{States.start, States.s3, States.end1}),
+      Arguments.of(new int[]{4, 4}, new int[]{4, 2}, new States[]{States.start, States.s4_1, States.end2}),
+      Arguments.of(new int[]{5, 5}, new int[]{5, 1}, new States[]{States.start, States.s5_1, States.end1})
     );
   }
 }

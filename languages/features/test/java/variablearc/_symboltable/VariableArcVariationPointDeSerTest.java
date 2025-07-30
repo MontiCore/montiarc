@@ -61,10 +61,8 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     Assertions.assertEquals(1, variationPoint.getAllConditions().size());
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
-      () -> Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0))
-    );
+    Assertions.assertEquals("f1", variationPoint.getCondition().print());
+    Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0));
   }
 
   @Test
@@ -104,14 +102,12 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
 
     Assertions.assertEquals(childVariationPoint, componentTypeSymbol.getAllVariationPoints().get(1));
     Assertions.assertEquals(0, childVariationPoint.getArcElements().size());
-    Assertions.assertEquals(2, childVariationPoint.getAllConditions().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
-      () -> Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0)),
-      () -> Assertions.assertEquals("f2", childVariationPoint.getCondition().print()),
-      () -> Assertions.assertEquals(variationPoint.getCondition(), childVariationPoint.getAllConditions().get(0)),
-      () -> Assertions.assertEquals(childVariationPoint.getCondition(), childVariationPoint.getAllConditions().get(1))
-    );
+    Assertions.assertEquals(2, childVariationPoint.getAllConditions().size());;
+    Assertions.assertEquals("f1", variationPoint.getCondition().print());
+    Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0));
+    Assertions.assertEquals("f2", childVariationPoint.getCondition().print());
+    Assertions.assertEquals(variationPoint.getCondition(), childVariationPoint.getAllConditions().get(0));
+    Assertions.assertEquals(childVariationPoint.getCondition(), childVariationPoint.getAllConditions().get(1));
   }
 
   @Test
@@ -147,12 +143,10 @@ public class VariableArcVariationPointDeSerTest extends VariableArcTestBase {
     Assertions.assertEquals(1, componentTypeSymbol.getAllVariationPoints().size());
     Assertions.assertEquals(variationPoint, componentTypeSymbol.getAllVariationPoints().get(0));
     Assertions.assertEquals(1, componentTypeSymbol.getTypeInfo().getPorts().size());
-    Assertions.assertEquals(1, variationPoint.getSymbols().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("f1", variationPoint.getCondition().print()),
-      () -> Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0)),
-      () -> Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getPorts().get(0))
-    );
+    Assertions.assertEquals(1, variationPoint.getSymbols().size());;
+    Assertions.assertEquals("f1", variationPoint.getCondition().print());
+    Assertions.assertEquals(variationPoint.getCondition(), variationPoint.getAllConditions().get(0));
+    Assertions.assertEquals(variationPoint.getSymbols().get(0), componentTypeSymbol.getTypeInfo().getPorts().get(0));
   }
 
   protected static IVariableArcComponentTypeSymbol createSimpleComp() {

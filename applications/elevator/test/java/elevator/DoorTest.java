@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class DoorTest {
 
@@ -28,15 +27,13 @@ public class DoorTest {
     door.setUp();
 
     // Then
-    assertAll(
-      () -> assertThat(door.getCmd()).isNotNull(),
-      () -> assertThat(door.getIsClosed()).isNotNull(),
-      () -> assertThat(door.getIsOpen()).isNotNull(),
-      () -> assertThat(door.getIsObstacle()).isNotNull(),
-      () -> assertThat(door.getOpen()).isNotNull(),
-      () -> assertThat(door.getClose()).isNotNull(),
-      () -> assertThat(door.getClosed()).isNotNull()
-    );
+    assertThat(door.getCmd()).isNotNull();
+    assertThat(door.getIsClosed()).isNotNull();
+    assertThat(door.getIsOpen()).isNotNull();
+    assertThat(door.getIsObstacle()).isNotNull();
+    assertThat(door.getOpen()).isNotNull();
+    assertThat(door.getClose()).isNotNull();
+    assertThat(door.getClosed()).isNotNull();
   }
 
   @Test
@@ -49,11 +46,9 @@ public class DoorTest {
     door.init();
 
     // Then
-    assertAll(
-      () -> assertThat(door.getOpen().getValue()).isNull(),
-      () -> assertThat(door.getClose().getValue()).isNull(),
-      () -> assertThat(door.getClosed().getValue()).isNotNull().isFalse()
-    );
+    assertThat(door.getOpen().getValue()).isNull();
+    assertThat(door.getClose().getValue()).isNull();
+    assertThat(door.getClosed().getValue()).isNotNull().isFalse();
   }
 
   @Order(3)
@@ -89,11 +84,9 @@ public class DoorTest {
     door.getClosed().tick();
 
     // Then
-    assertAll(
-      () -> assertThat(door.getOpen().getValue()).isEqualTo(open),
-      () -> assertThat(door.getClose().getValue()).isEqualTo(close),
-      () -> assertThat(door.getClosed().getValue()).isEqualTo(closed)
-    );
+    assertThat(door.getOpen().getValue()).isEqualTo(open);
+    assertThat(door.getClose().getValue()).isEqualTo(close);
+    assertThat(door.getClosed().getValue()).isEqualTo(closed);
   }
 
   public static Stream<Arguments> transitions() {
@@ -218,12 +211,10 @@ public class DoorTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actStates).containsExactly(expStates),
-      () -> assertThat(actOpen).containsExactly(expOpen),
-      () -> assertThat(actClose).containsExactly(expClose),
-      () -> assertThat(actClosed).containsExactly(expClosed)
-    );
+    assertThat(actStates).containsExactly(expStates);
+    assertThat(actOpen).containsExactly(expOpen);
+    assertThat(actClose).containsExactly(expClose);
+    assertThat(actClosed).containsExactly(expClosed);
   }
 
   public static Stream<Arguments> transitionsFromWait() {
@@ -256,10 +247,10 @@ public class DoorTest {
   @Order(5)
   @MethodSource("transitionsFromDoorIsOpen")
   public void testDoorIsOpen(@NotNull int ticks,
-                            @NotNull States[] expStates,
-                            @NotNull boolean[] expOpen,
-                            @NotNull boolean[] expClose,
-                            @NotNull boolean[] expClosed) {
+                             @NotNull States[] expStates,
+                             @NotNull boolean[] expOpen,
+                             @NotNull boolean[] expClose,
+                             @NotNull boolean[] expClosed) {
     Preconditions.checkNotNull(expStates);
     Preconditions.checkNotNull(expOpen);
     Preconditions.checkNotNull(expClose);
@@ -296,12 +287,10 @@ public class DoorTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actStates).containsExactly(expStates),
-      () -> assertThat(actOpen).containsExactly(expOpen),
-      () -> assertThat(actClose).containsExactly(expClose),
-      () -> assertThat(actClosed).containsExactly(expClosed)
-    );
+    assertThat(actStates).containsExactly(expStates);
+    assertThat(actOpen).containsExactly(expOpen);
+    assertThat(actClose).containsExactly(expClose);
+    assertThat(actClosed).containsExactly(expClosed);
   }
 
   public static Stream<Arguments> transitionsFromDoorIsOpen() {
@@ -350,15 +339,13 @@ public class DoorTest {
     door.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(door.getCmd().getValue()).isNotNull().isEqualTo(cmd),
-      () -> assertThat(door.getIsOpen().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(door.getIsClosed().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(door.getIsObstacle().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(door.getOpen().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(door.getClose().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(door.getClosed().getValue()).isNotNull().isEqualTo(true)
-    );
+    assertThat(door.getCmd().getValue()).isNotNull().isEqualTo(cmd);
+    assertThat(door.getIsOpen().getValue()).isNotNull().isEqualTo(true);
+    assertThat(door.getIsClosed().getValue()).isNotNull().isEqualTo(true);
+    assertThat(door.getIsObstacle().getValue()).isNotNull().isEqualTo(true);
+    assertThat(door.getOpen().getValue()).isNotNull().isEqualTo(true);
+    assertThat(door.getClose().getValue()).isNotNull().isEqualTo(true);
+    assertThat(door.getClosed().getValue()).isNotNull().isEqualTo(true);
   }
 
   @Order(7)
@@ -401,7 +388,6 @@ public class DoorTest {
     boolean[] actClose = new boolean[expClose.length];
     boolean[] actClosed = new boolean[expClosed.length];
 
-
     // When
     door.init();
     actStates[0] = door.getCurrentState();
@@ -424,12 +410,10 @@ public class DoorTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actStates).containsExactly(expStates),
-      () -> assertThat(actOpen).containsExactly(expOpen),
-      () -> assertThat(actClose).containsExactly(expClose),
-      () -> assertThat(actClosed).containsExactly(expClosed)
-    );
+    assertThat(actStates).containsExactly(expStates);
+    assertThat(actOpen).containsExactly(expOpen);
+    assertThat(actClose).containsExactly(expClose);
+    assertThat(actClosed).containsExactly(expClosed);
   }
 
   public static Stream<Arguments> runs() {

@@ -41,7 +41,7 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
 
     // Then
     Assertions.assertTrue(sort.isPresent());
-    Assertions.assertTrue(sort.get() instanceof BoolSort);
+    Assertions.assertInstanceOf(BoolSort.class, sort.get());
   }
 
   @Test
@@ -58,18 +58,16 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
     Optional<Sort> sortLong = calculator.toSort(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.LONG));
 
     // Then
-    Assertions.assertAll(() -> {
-      Assertions.assertTrue(sortByte.isPresent());
-      Assertions.assertTrue(sortByte.get() instanceof IntSort);
-      Assertions.assertTrue(sortInt.isPresent());
-      Assertions.assertTrue(sortInt.get() instanceof IntSort);
-      Assertions.assertTrue(sortShort.isPresent());
-      Assertions.assertTrue(sortShort.get() instanceof IntSort);
-      Assertions.assertTrue(sortChar.isPresent());
-      Assertions.assertTrue(sortChar.get() instanceof IntSort);
-      Assertions.assertTrue(sortLong.isPresent());
-      Assertions.assertTrue(sortLong.get() instanceof IntSort);
-    });
+    Assertions.assertTrue(sortByte.isPresent());
+    Assertions.assertInstanceOf(IntSort.class, sortByte.get());
+    Assertions.assertTrue(sortInt.isPresent());
+    Assertions.assertInstanceOf(IntSort.class, sortInt.get());
+    Assertions.assertTrue(sortShort.isPresent());
+    Assertions.assertInstanceOf(IntSort.class, sortShort.get());
+    Assertions.assertTrue(sortChar.isPresent());
+    Assertions.assertInstanceOf(IntSort.class, sortChar.get());
+    Assertions.assertTrue(sortLong.isPresent());
+    Assertions.assertInstanceOf(IntSort.class, sortLong.get());
   }
 
   @Test
@@ -83,7 +81,7 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
 
     // Then
     Assertions.assertTrue(sort.isPresent());
-    Assertions.assertTrue(sort.get() instanceof RealSort);
+    Assertions.assertInstanceOf(RealSort.class, sort.get());
   }
 
   @Test
@@ -97,6 +95,6 @@ public class VariableArcSortCalculatorTest extends VariableArcTestBase {
 
     // Then
     Assertions.assertTrue(sort.isPresent());
-    Assertions.assertTrue(sort.get() instanceof RealSort);
+    Assertions.assertInstanceOf(RealSort.class, sort.get());
   }
 }

@@ -74,12 +74,10 @@ class MediumTest {
     sut.runToCompletion();
 
     // Then
-    org.junit.jupiter.api.Assertions.assertAll(
-      () -> Assertions.assertThat(port_outA.getObservedMessages()).as("outA").containsExactlyElementsOf(outA),
-      () -> Assertions.assertThat(port_outB.getObservedMessages()).as("outB").containsExactlyElementsOf(outB),
-      () -> Assertions.assertThat(port_outY.getObservedMessages()).as("outY").containsExactlyElementsOf(outY),
-      () -> Assertions.assertThat(port_outZ.getObservedMessages()).as("outZ").containsExactlyElementsOf(outZ)
-    );
+    Assertions.assertThat(port_outA.getObservedMessages()).as("outA").containsExactlyElementsOf(outA);
+    Assertions.assertThat(port_outB.getObservedMessages()).as("outB").containsExactlyElementsOf(outB);
+    Assertions.assertThat(port_outY.getObservedMessages()).as("outY").containsExactlyElementsOf(outY);
+    Assertions.assertThat(port_outZ.getObservedMessages()).as("outZ").containsExactlyElementsOf(outZ);
   }
 
   static Stream<Arguments> io() {

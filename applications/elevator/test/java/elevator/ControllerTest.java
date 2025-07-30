@@ -16,7 +16,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ControllerTest {
 
@@ -30,20 +29,18 @@ public class ControllerTest {
     ctrl.setUp();
 
     // Then
-    assertAll(
-      () -> assertThat(ctrl.getAt1()).isNotNull(),
-      () -> assertThat(ctrl.getAt2()).isNotNull(),
-      () -> assertThat(ctrl.getAt3()).isNotNull(),
-      () -> assertThat(ctrl.getAt4()).isNotNull(),
-      () -> assertThat(ctrl.getReq1()).isNotNull(),
-      () -> assertThat(ctrl.getReq2()).isNotNull(),
-      () -> assertThat(ctrl.getReq3()).isNotNull(),
-      () -> assertThat(ctrl.getReq4()).isNotNull(),
-      () -> assertThat(ctrl.getIsClosed()).isNotNull(),
-      () -> assertThat(ctrl.getDoor()).isNotNull(),
-      () -> assertThat(ctrl.getLift()).isNotNull(),
-      () -> assertThat(ctrl.getClear()).isNotNull()
-    );
+    assertThat(ctrl.getAt1()).isNotNull();
+    assertThat(ctrl.getAt3()).isNotNull();
+    assertThat(ctrl.getAt2()).isNotNull();
+    assertThat(ctrl.getAt4()).isNotNull();
+    assertThat(ctrl.getReq1()).isNotNull();
+    assertThat(ctrl.getReq2()).isNotNull();
+    assertThat(ctrl.getReq3()).isNotNull();
+    assertThat(ctrl.getReq4()).isNotNull();
+    assertThat(ctrl.getIsClosed()).isNotNull();
+    assertThat(ctrl.getDoor()).isNotNull();
+    assertThat(ctrl.getLift()).isNotNull();
+    assertThat(ctrl.getClear()).isNotNull();
   }
 
   @Test
@@ -57,11 +54,9 @@ public class ControllerTest {
     ctrl.init();
 
     // Then
-    assertAll(
-      () -> assertThat(ctrl.getDoor().getValue()).isNull(),
-      () -> assertThat(ctrl.getLift().getValue()).isNull(),
-      () -> assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0)
-    );
+    assertThat(ctrl.getDoor().getValue()).isNull();
+    assertThat(ctrl.getLift().getValue()).isNull();
+    assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0);
   }
 
   @Order(3)
@@ -103,12 +98,10 @@ public class ControllerTest {
     ctrl.getClear().tick();
 
     // Then
-    assertAll(
-      () -> assertThat(ctrl.getCurrentState()).isEqualTo(targetState),
-      () -> assertThat(ctrl.getDoor().getValue()).isEqualTo(door),
-      () -> assertThat(ctrl.getLift().getValue()).isEqualTo(lift),
-      () -> assertThat(ctrl.getClear().getValue()).isEqualTo(clear)
-    );
+    assertThat(ctrl.getCurrentState()).isEqualTo(targetState);
+    assertThat(ctrl.getDoor().getValue()).isEqualTo(door);
+    assertThat(ctrl.getLift().getValue()).isEqualTo(lift);
+    assertThat(ctrl.getClear().getValue()).isEqualTo(clear);
   }
 
   public static Stream<Arguments> transitions() {
@@ -219,20 +212,18 @@ public class ControllerTest {
     ctrl.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(ctrl.getReq1().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getReq2().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getReq3().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getReq4().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getAt1().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getAt2().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getAt3().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getAt4().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getIsClosed().getValue()).isNotNull().isTrue(),
-      () -> assertThat(ctrl.getDoor().getValue()).isNotNull().isEqualTo(DoorCMD.OPEN),
-      () -> assertThat(ctrl.getLift().getValue()).isNotNull().isEqualTo(LiftCMD.STOP),
-      () -> assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0)
-    );
+    assertThat(ctrl.getReq1().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getReq2().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getReq3().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getReq4().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getAt1().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getAt2().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getAt3().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getAt4().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getIsClosed().getValue()).isNotNull().isTrue();
+    assertThat(ctrl.getDoor().getValue()).isNotNull().isEqualTo(DoorCMD.OPEN);
+    assertThat(ctrl.getLift().getValue()).isNotNull().isEqualTo(LiftCMD.STOP);
+    assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0);
   }
 
 }

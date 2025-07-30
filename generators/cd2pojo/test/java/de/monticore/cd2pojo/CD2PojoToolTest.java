@@ -13,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  */
 class CD2PojoToolTest {
 
-  protected static final String[] EXAMPLE_ARGS_WITHOUT_CONFIG_TEMPLATE = new String[] {
+  protected static final String[] EXAMPLE_ARGS_WITHOUT_CONFIG_TEMPLATE = new String[]{
     "--checkcococs",
     "--input", "some_path",
     "--output", "other/path",
@@ -40,12 +39,10 @@ class CD2PojoToolTest {
     CommandLine cmd = parseCliOptions(augmentedArgs);
 
     // Then
-    assertAll(
-      () -> assertThat(augmentedArgs).hasSize(args.length + 2),
-      () -> assertThat(augmentedArgs).startsWith(args),
-      () -> assertThat(augmentedArgs).endsWith("-ct", "cd2pojo.init.CD2Java"),
-      () -> assertThat(cmd.hasOption("ct")).isTrue()
-    );
+    assertThat(augmentedArgs).hasSize(args.length + 2);
+    assertThat(augmentedArgs).startsWith(args);
+    assertThat(augmentedArgs).endsWith("-ct", "cd2pojo.init.CD2Java");
+    assertThat(cmd.hasOption("ct")).isTrue();
 
   }
 
@@ -64,10 +61,8 @@ class CD2PojoToolTest {
     CommandLine cmd = parseCliOptions(augmentedArgs);
 
     // Then
-    assertAll(
-      () -> assertThat(augmentedArgs).containsExactly(args),
-      () -> assertThat(cmd.hasOption("ct")).isTrue()
-    );
+    assertThat(augmentedArgs).containsExactly(args);
+    assertThat(cmd.hasOption("ct")).isTrue();
   }
 
   @Test
@@ -85,10 +80,8 @@ class CD2PojoToolTest {
     CommandLine cmd = parseCliOptions(augmentedArgs);
 
     // Then
-    assertAll(
-      () -> assertThat(augmentedArgs).containsExactly(args),
-      () -> assertThat(cmd.hasOption("ct")).isTrue()
-    );
+    assertThat(augmentedArgs).containsExactly(args);
+    assertThat(cmd.hasOption("ct")).isTrue();
   }
 
   protected CommandLine parseCliOptions(@NotNull String[] args) {
@@ -104,7 +97,7 @@ class CD2PojoToolTest {
 
     try {
       return parser.parse(options, args);
-    } catch(ParseException e) {
+    } catch (ParseException e) {
       fail(e.getMessage());
       return null;
     }

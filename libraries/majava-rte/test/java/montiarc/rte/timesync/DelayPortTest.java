@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Class under test {@link DelayPort}
@@ -23,12 +22,10 @@ public class DelayPortTest {
     DelayPort<Object> port = new DelayPort<>(name);
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(name),
-      () -> assertThat(port.observers).isNotNull(),
-      () -> assertThat(port.value).isNull(),
-      () -> assertThat(port.nextValue).isNull()
-    );
+    assertThat(port.name).isEqualTo(name);
+    assertThat(port.observers).isNotNull();
+    assertThat(port.value).isNull();
+    assertThat(port.nextValue).isNull();
     assertThat(port.observers).isEmpty();
   }
 
@@ -39,12 +36,10 @@ public class DelayPortTest {
     DelayPort<Object> port = new DelayPort<>();
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(""),
-      () -> assertThat(port.observers).isNotNull(),
-      () -> assertThat(port.value).isNull(),
-      () -> assertThat(port.nextValue).isNull()
-    );
+    assertThat(port.name).isEqualTo("");
+    assertThat(port.observers).isNotNull();
+    assertThat(port.value).isNull();
+    assertThat(port.nextValue).isNull();
     assertThat(port.observers).isEmpty();
   }
 
@@ -66,11 +61,9 @@ public class DelayPortTest {
     port.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(name),
-      () -> assertThat(port.value).isEqualTo(value),
-      () -> assertThat(port.nextValue).isNull()
-    );
+    assertThat(port.name).isEqualTo(name);
+    assertThat(port.value).isEqualTo(value);
+    assertThat(port.nextValue).isNull();
   }
 
   @ParameterizedTest
@@ -99,12 +92,10 @@ public class DelayPortTest {
     out.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isEqualTo(objOut),
-      () -> assertThat(out.nextValue).isNull(),
-      () -> assertThat(in.value).isEqualTo(objOut),
-      () -> assertThat(in.synced).isTrue()
-    );
+    assertThat(out.value).isEqualTo(objOut);
+    assertThat(out.nextValue).isNull();
+    assertThat(in.value).isEqualTo(objOut);
+    assertThat(in.synced).isTrue();
   }
 
   @ParameterizedTest
@@ -153,14 +144,12 @@ public class DelayPortTest {
     out.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isEqualTo(objOut),
-      () -> assertThat(out.nextValue).isNull(),
-      () -> assertThat(in1.value).isEqualTo(objOut),
-      () -> assertThat(in1.synced).isTrue(),
-      () -> assertThat(in2.value).isEqualTo(objOut),
-      () -> assertThat(in2.synced).isTrue()
-    );
+    assertThat(out.value).isEqualTo(objOut);
+    assertThat(out.nextValue).isNull();
+    assertThat(in1.value).isEqualTo(objOut);
+    assertThat(in1.synced).isTrue();
+    assertThat(in2.value).isEqualTo(objOut);
+    assertThat(in2.synced).isTrue();
   }
 
   @ParameterizedTest
@@ -188,10 +177,8 @@ public class DelayPortTest {
     out.setValue(objNext);
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isEqualTo(objOut),
-      () -> assertThat(in.value).isEqualTo(objIn)
-    );
+    assertThat(out.value).isEqualTo(objOut);
+    assertThat(in.value).isEqualTo(objIn);
   }
 
   @ParameterizedTest
@@ -229,11 +216,9 @@ public class DelayPortTest {
     out.setValue(objNext);
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isEqualTo(objOut),
-      () -> assertThat(out.nextValue).isEqualTo(objNext),
-      () -> assertThat(in1.value).isEqualTo(objIn1),
-      () -> assertThat(in2.value).isEqualTo(objIn2)
-    );
+    assertThat(out.value).isEqualTo(objOut);
+    assertThat(out.nextValue).isEqualTo(objNext);
+    assertThat(in1.value).isEqualTo(objIn1);
+    assertThat(in2.value).isEqualTo(objIn2);
   }
 }

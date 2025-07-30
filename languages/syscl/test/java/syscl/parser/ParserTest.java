@@ -14,7 +14,6 @@ import java.nio.file.Paths;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class ParserTest extends SysCLTestBase {
 
@@ -41,10 +40,8 @@ public class ParserTest extends SysCLTestBase {
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    assertAll(
-      () -> assertThat(optAst.isPresent()).isTrue(),
-      () -> assertThat(parser.hasErrors()).isFalse(),
-      () -> assertThat(Log.getFindings()).isEmpty()
-    );
+    assertThat(optAst.isPresent()).isTrue();
+    assertThat(parser.hasErrors()).isFalse();
+    assertThat(Log.getFindings()).isEmpty();
   }
 }

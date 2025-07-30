@@ -21,10 +21,8 @@ class TransitiveConsumerTest {
     lastConsumer.firstConsumer =firstConsumer;
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(11, intHolder.someInt),
-      () -> Assertions.assertSame(intHolder, firstConsumer.intHolder),
-      () -> Assertions.assertSame(firstConsumer, lastConsumer.firstConsumer)
-    );
+    Assertions.assertEquals(11, intHolder.someInt);
+    Assertions.assertSame(intHolder, firstConsumer.intHolder);
+    Assertions.assertSame(firstConsumer, lastConsumer.firstConsumer);
   }
 }

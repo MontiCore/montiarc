@@ -575,18 +575,13 @@ public class MontiArcToolTest extends MontiArcTestBase {
     ASTPortAccess bAccess = connector.getSource();
     ASTPortAccess aAccess = connector.getTarget(0);
 
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(bAccess.isPresentPortSymbol(), "Port of b should be present."),
-      () -> Assertions.assertTrue(aAccess.isPresentPortSymbol(), "Port of a should be present."),
-      () -> Assertions.assertTrue(aAccess.isPresentComponentSymbol(), "Comp of a should be present."),
-      () -> Assertions.assertFalse(bAccess.isPresentComponentSymbol(), "Comp of b should not be present.")
-    );
-
-    Assertions.assertAll(
-      () -> Assertions.assertSame(bInPort, bAccess.getPortSymbol(), "B Port mismatch"),
-      () -> Assertions.assertSame(aInPort, aAccess.getPortSymbol(), "A Port mismatch"),
-      () -> Assertions.assertSame(aInstance, aAccess.getComponentSymbol(), "B component mismatch")
-    );
+    Assertions.assertTrue(bAccess.isPresentPortSymbol(), "Port of b should be present.");
+    Assertions.assertTrue(aAccess.isPresentPortSymbol(), "Port of a should be present.");
+    Assertions.assertTrue(aAccess.isPresentComponentSymbol(), "Comp of a should be present.");
+    Assertions.assertFalse(bAccess.isPresentComponentSymbol(), "Comp of b should not be present.");
+    Assertions.assertSame(bInPort, bAccess.getPortSymbol(), "B Port mismatch");
+    Assertions.assertSame(aInPort, aAccess.getPortSymbol(), "A Port mismatch");
+    Assertions.assertSame(aInstance, aAccess.getComponentSymbol(), "B component mismatch");
   }
 
   @Test

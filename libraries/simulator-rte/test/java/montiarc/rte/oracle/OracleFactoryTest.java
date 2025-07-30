@@ -7,7 +7,6 @@ import org.mockito.Mockito;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /** Tests {@link OracleFactory} */
 class OracleFactoryTest {
@@ -136,10 +135,8 @@ class OracleFactoryTest {
     Oracle producedOracle2 = factory.createOracleFor("compThatIsRegistered");
 
     // Then
-    assertAll(
-      () -> assertThat(oracle).isSameAs(producedOracle1),
-      () -> assertThat(oracle).isSameAs(producedOracle2)
-    );
+    assertThat(oracle).isSameAs(producedOracle1);
+    assertThat(oracle).isSameAs(producedOracle2);
   }
 
   /**

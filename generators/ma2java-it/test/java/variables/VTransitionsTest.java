@@ -14,8 +14,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 /**
  * The system under test is the component {@code VTransitions}. The black-box
  * tests ensure that the system produces the expected outputs in order. The
@@ -27,11 +25,11 @@ public class VTransitionsTest {
   /**
    * Black-box test: Ensures that the automaton produces the expected output.
    *
-   * @param input the inputs given to the component under test in order
+   * @param input   the inputs given to the component under test in order
    * @param output1 the expected output messages on the first output port in
-   * order, its length should match the number of input messages
+   *                order, its length should match the number of input messages
    * @param output2 the expected output messages on the second output port in
-   * order, its length should match the number of input messages
+   *                order, its length should match the number of input messages
    */
   @ParameterizedTest
   @Order(3)
@@ -85,27 +83,27 @@ public class VTransitionsTest {
     return Stream.of(
       // 1
       Arguments.of(
-        new Direction[]{ Direction.FORWARDS },
-        new Direction[]{ Direction.LEFT },
-        new Direction[]{ Direction.FORWARDS }
+        new Direction[]{Direction.FORWARDS},
+        new Direction[]{Direction.LEFT},
+        new Direction[]{Direction.FORWARDS}
       ),
       // 2
       Arguments.of(
-        new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
-          Direction.FORWARDS },
-        new Direction[]{ Direction.LEFT, Direction.FORWARDS,
-          Direction.FORWARDS },
-        new Direction[]{ Direction.FORWARDS, Direction.FORWARDS,
-          Direction.FORWARDS }
+        new Direction[]{Direction.FORWARDS, Direction.FORWARDS,
+          Direction.FORWARDS},
+        new Direction[]{Direction.LEFT, Direction.FORWARDS,
+          Direction.FORWARDS},
+        new Direction[]{Direction.FORWARDS, Direction.FORWARDS,
+          Direction.FORWARDS}
       ),
       // 3
       Arguments.of(
-        new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
-          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
-        new Direction[]{ Direction.LEFT, Direction.RIGHT,
-          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS },
-        new Direction[]{ Direction.FORWARDS, Direction.BACKWARDS,
-          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS }
+        new Direction[]{Direction.FORWARDS, Direction.BACKWARDS,
+          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS},
+        new Direction[]{Direction.LEFT, Direction.RIGHT,
+          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS},
+        new Direction[]{Direction.FORWARDS, Direction.BACKWARDS,
+          Direction.LEFT, Direction.RIGHT, Direction.FORWARDS}
       )
     );
   }
@@ -125,12 +123,10 @@ public class VTransitionsTest {
     component.init();
 
     // Then
-    assertAll(() -> {
-      Assertions.assertThat(component.v1).isEqualTo(Direction.LEFT);
-      Assertions.assertThat(component.v2).isEqualTo(Direction.RIGHT);
-      Assertions.assertThat(component.v3).isEqualTo(Direction.LEFT);
-      Assertions.assertThat(component.v4).isEqualTo(Direction.RIGHT);
-    });
+    Assertions.assertThat(component.v1).isEqualTo(Direction.LEFT);
+    Assertions.assertThat(component.v2).isEqualTo(Direction.RIGHT);
+    Assertions.assertThat(component.v3).isEqualTo(Direction.LEFT);
+    Assertions.assertThat(component.v4).isEqualTo(Direction.RIGHT);
   }
 
   /**
@@ -156,11 +152,9 @@ public class VTransitionsTest {
     component.tick();
 
     // Then
-    assertAll(() -> {
-      Assertions.assertThat(component.v1).isEqualTo(Direction.FORWARDS);
-      Assertions.assertThat(component.v2).isEqualTo(Direction.BACKWARDS);
-      Assertions.assertThat(component.v3).isEqualTo(Direction.LEFT);
-      Assertions.assertThat(component.v4).isEqualTo(Direction.RIGHT);
-    });
+    Assertions.assertThat(component.v1).isEqualTo(Direction.FORWARDS);
+    Assertions.assertThat(component.v2).isEqualTo(Direction.BACKWARDS);
+    Assertions.assertThat(component.v3).isEqualTo(Direction.LEFT);
+    Assertions.assertThat(component.v4).isEqualTo(Direction.RIGHT);
   }
 }

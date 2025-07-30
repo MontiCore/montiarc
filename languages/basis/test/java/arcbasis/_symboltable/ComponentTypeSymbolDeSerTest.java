@@ -320,10 +320,8 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(2, comp.getTypeParameters().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("A", comp.getTypeParameters().get(0).getName()),
-      () -> Assertions.assertEquals("B", comp.getTypeParameters().get(1).getName())
-    );
+    Assertions.assertEquals("A", comp.getTypeParameters().get(0).getName());
+    Assertions.assertEquals("B", comp.getTypeParameters().get(1).getName());
   }
 
   @Test
@@ -336,11 +334,9 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(2, comp.getParameterList().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("a", comp.getParameterList().get(0).getName()),
-      () -> Assertions.assertEquals("b", comp.getParameterList().get(1).getName()),
-      () -> Assertions.assertEquals(1, comp.getNumOptParams())
-    );
+    Assertions.assertEquals("a", comp.getParameterList().get(0).getName());
+    Assertions.assertEquals("b", comp.getParameterList().get(1).getName());
+    Assertions.assertEquals(1, comp.getNumOptParams());
   }
 
   @Test
@@ -353,10 +349,8 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(2, comp.getPorts().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("inc", comp.getPorts().get(0).getName()),
-      () -> Assertions.assertEquals("outg", comp.getPorts().get(1).getName())
-    );
+    Assertions.assertEquals("inc", comp.getPorts().get(0).getName());
+    Assertions.assertEquals("outg", comp.getPorts().get(1).getName());
   }
 
   @Test
@@ -390,9 +384,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(1, comp.getSubcomponents().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("inst", comp.getSubcomponents().get(0).getName())
-    );
+    Assertions.assertEquals("inst", comp.getSubcomponents().get(0).getName());
   }
 
   @Test
@@ -426,9 +418,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(1, comp.getSpannedScope().getLocalComponentTypeSymbols().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("inst", comp.getSpannedScope().getLocalComponentTypeSymbols().get(0).getName())
-    );
+    Assertions.assertEquals("inst", comp.getSpannedScope().getLocalComponentTypeSymbols().get(0).getName());
   }
 
   @Test
@@ -462,9 +452,7 @@ class ComponentTypeSymbolDeSerTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(1, comp.getFields().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("inst", comp.getFields().get(0).getName())
-    );
+    Assertions.assertEquals("inst", comp.getFields().get(0).getName());
   }
 
   protected static ComponentTypeSymbol createSimpleComp() {

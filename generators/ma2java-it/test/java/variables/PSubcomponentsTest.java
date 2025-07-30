@@ -12,8 +12,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 /**
  * The system under test is the component {@code PSubcomponents}. The black-box
  * tests ensure that the system produces the expected outputs.
@@ -25,9 +23,9 @@ public class PSubcomponentsTest {
    * expected outputs.
    *
    * @param cycles the number of computation cycles to run the simulation
-   * @param p1 the first argument for instantiating the component
-   * @param p2 the second argument for instantiating the component
-   * @param p3 the third argument for instantiating the component
+   * @param p1     the first argument for instantiating the component
+   * @param p2     the second argument for instantiating the component
+   * @param p3     the third argument for instantiating the component
    */
   @ParameterizedTest
   @MethodSource("argumentsProvider")
@@ -89,13 +87,11 @@ public class PSubcomponentsTest {
     }
 
     // Then
-    assertAll(() -> {
-      Assertions.assertThat(actual1).containsExactly(expected1);
-      Assertions.assertThat(actual2).containsExactly(expected2);
-      Assertions.assertThat(actual3).containsExactly(expected3);
-      Assertions.assertThat(actual4).containsExactly(expected4);
-      Assertions.assertThat(actual5).containsExactly(expected5);
-    });
+    Assertions.assertThat(actual1).containsExactly(expected1);
+    Assertions.assertThat(actual2).containsExactly(expected2);
+    Assertions.assertThat(actual3).containsExactly(expected3);
+    Assertions.assertThat(actual4).containsExactly(expected4);
+    Assertions.assertThat(actual5).containsExactly(expected5);
   }
 
   /**

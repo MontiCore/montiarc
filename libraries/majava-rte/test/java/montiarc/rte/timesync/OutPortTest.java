@@ -8,7 +8,6 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 /**
  * Class under test {@link OutPort}
@@ -17,17 +16,15 @@ public class OutPortTest {
 
   @ParameterizedTest
   @Order(1)
-  @ValueSource(strings = { "", "i", "o", "port" })
+  @ValueSource(strings = {"", "i", "o", "port"})
   public void testConstructor(String name) {
     // When
     OutPort<Object> port = new OutPort<>(name);
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(name),
-      () -> assertThat(port.observers).isNotNull(),
-      () -> assertThat(port.value).isNull()
-    );
+    assertThat(port.name).isEqualTo(name);
+    assertThat(port.observers).isNotNull();
+    assertThat(port.value).isNull();
     assertThat(port.observers).isEmpty();
   }
 
@@ -38,11 +35,9 @@ public class OutPortTest {
     OutPort<Object> port = new OutPort<>();
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(""),
-      () -> assertThat(port.observers).isNotNull(),
-      () -> assertThat(port.value).isNull()
-    );
+    assertThat(port.name).isEqualTo("");
+    assertThat(port.observers).isNotNull();
+    assertThat(port.value).isNull();
     assertThat(port.observers).isEmpty();
   }
 
@@ -111,10 +106,8 @@ public class OutPortTest {
     port.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(port.name).isEqualTo(name),
-      () -> assertThat(port.value).isNull()
-    );
+    assertThat(port.name).isEqualTo(name);
+    assertThat(port.value).isNull();
   }
 
   @ParameterizedTest
@@ -142,11 +135,9 @@ public class OutPortTest {
     out.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isNull(),
-      () -> assertThat(in.value).isNull(),
-      () -> assertThat(in.synced).isFalse()
-    );
+    assertThat(out.value).isNull();
+    assertThat(in.value).isNull();
+    assertThat(in.synced).isFalse();
   }
 
   @ParameterizedTest
@@ -194,13 +185,11 @@ public class OutPortTest {
     out.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isNull(),
-      () -> assertThat(in1.value).isNull(),
-      () -> assertThat(in1.synced).isFalse(),
-      () -> assertThat(in2.value).isNull(),
-      () -> assertThat(in2.synced).isFalse()
-    );
+    assertThat(out.value).isNull();
+    assertThat(in1.value).isNull();
+    assertThat(in1.synced).isFalse();
+    assertThat(in2.value).isNull();
+    assertThat(in2.synced).isFalse();
   }
 
   @Test
@@ -233,11 +222,9 @@ public class OutPortTest {
     out.setValue(object);
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isEqualTo(object),
-      () -> assertThat(in.value).isEqualTo(object),
-      () -> assertThat(in.synced).isTrue()
-    );
+    assertThat(out.value).isEqualTo(object);
+    assertThat(in.value).isEqualTo(object);
+    assertThat(in.synced).isTrue();
   }
 
   @Test
@@ -258,12 +245,10 @@ public class OutPortTest {
     out.setValue(object);
 
     // Then
-    assertAll(
-      () -> assertThat(out.value).isEqualTo(object),
-      () -> assertThat(in1.value).isEqualTo(object),
-      () -> assertThat(in1.synced).isTrue(),
-      () -> assertThat(in2.value).isEqualTo(object),
-      () -> assertThat(in2.synced).isTrue()
-    );
+    assertThat(out.value).isEqualTo(object);
+    assertThat(in1.value).isEqualTo(object);
+    assertThat(in1.synced).isTrue();
+    assertThat(in2.value).isEqualTo(object);
+    assertThat(in2.synced).isTrue();
   }
 }

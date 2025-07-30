@@ -59,7 +59,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVarPrimitive() {
     // Given
-    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S");
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
@@ -81,7 +81,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVarObject() {
     // Given
-    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S");
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
@@ -108,7 +108,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVarObjects() {
     // Given
-    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S", "T");
+    ComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S", "T");
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "U", "V");
 
     SymTypeVariable typeVar1 = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
@@ -142,7 +142,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   @Test
   public void shouldGetParentWithTypeVar() {
     // Given
-    ComponentTypeSymbol parent =  createComponentWithTypeVar("Parent", "S");
+    ComponentTypeSymbol parent = createComponentWithTypeVar("Parent", "S");
     ComponentTypeSymbol child = createComponentWithTypeVar("Child", "T");
 
     SymTypeVariable typeVar = SymTypeExpressionFactory.createTypeVariable(child.getTypeParameters().get(0));
@@ -179,7 +179,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
   }
 
   /**
-   * @param symbolWithDefinitions Provide a component type symbol in which ports will be added in this test.
+   * @param symbolWithDefinitions    Provide a component type symbol in which ports will be added in this test.
    * @param symbolVersionForTypeExpr Set this to {@code symbolWithDefinitions}, or to a surrogate pointing to that
    *                                 symbol. This object will be used to create The ComponentTypeExpression.
    */
@@ -248,12 +248,12 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
-    Assertions.assertTrue(portsType.get() instanceof SymTypePrimitive);
+    Assertions.assertInstanceOf(SymTypePrimitive.class, portsType.get());
     Assertions.assertEquals(BasicSymbolsMill.INT, portsType.get().print());
   }
 
   /**
-   * @param symbolWithDefinitions Provide a component type symbol in which parameters will be added in this test.
+   * @param symbolWithDefinitions    Provide a component type symbol in which parameters will be added in this test.
    * @param symbolVersionForTypeExpr Set this to {@code symbolWithDefinitions}, or to a surrogate pointing to that
    *                                 symbol. This object will be used to create The ComponentTypeExpression.
    */
@@ -328,7 +328,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertTrue(paramTypeExpr.isPresent());
-    Assertions.assertTrue(paramTypeExpr.get() instanceof SymTypePrimitive);
+    Assertions.assertInstanceOf(SymTypePrimitive.class, paramTypeExpr.get());
     Assertions.assertEquals(BasicSymbolsMill.INT, paramTypeExpr.get().print());
   }
 
@@ -361,7 +361,6 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     SymbolService.link(ArcBasisMill.globalScope(), comp);
 
 
-
     SymTypeExpression floatTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.FLOAT);
     SymTypeExpression intTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.INT);
     SymTypeExpression boolTypeExpr = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.BOOLEAN);
@@ -371,12 +370,10 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     CompKindOfGenericComponentType compTypeExpr = new CompKindOfGenericComponentType(compSurrogate, typeExprList);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(floatTypeExpr, compTypeExpr.getTypeBindingFor("A").orElseThrow()),
-      () -> Assertions.assertEquals(intTypeExpr, compTypeExpr.getTypeBindingFor("B").orElseThrow()),
-      () -> Assertions.assertEquals(boolTypeExpr, compTypeExpr.getTypeBindingFor("C").orElseThrow()),
-      () -> Assertions.assertEquals(3, compTypeExpr.getTypeVarBindings().size())
-    );
+    Assertions.assertEquals(floatTypeExpr, compTypeExpr.getTypeBindingFor("A").orElseThrow());
+    Assertions.assertEquals(intTypeExpr, compTypeExpr.getTypeBindingFor("B").orElseThrow());
+    Assertions.assertEquals(boolTypeExpr, compTypeExpr.getTypeBindingFor("C").orElseThrow());
+    Assertions.assertEquals(3, compTypeExpr.getTypeVarBindings().size());
 
   }
 
@@ -389,7 +386,7 @@ public class TypeExprOfGenericComponentTest extends ArcBasisTestBase {
     Preconditions.checkNotNull(typeVarNames);
 
     List<TypeVarSymbol> typeVars = new ArrayList<>(typeVarNames.length);
-    for(String typeVarName : typeVarNames) {
+    for (String typeVarName : typeVarNames) {
       TypeVarSymbol typeVar = ArcBasisMill.typeVarSymbolBuilder()
         .setName(typeVarName)
         .build();

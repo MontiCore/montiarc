@@ -24,14 +24,14 @@ import static montiarc.types.OnOff.ON;
 class WithMediumSubTest {
 
   /**
-   * @param inA       the input stream on port 'inA'
-   * @param inB       the input stream on port 'inB'
-   * @param inY       the input stream on port 'inY'
-   * @param inZ       the input stream on port 'inZ'
-   * @param outA      the expected output stream on port 'outA'
-   * @param outB      the expected output stream on port 'outB'
-   * @param outY      the expected output stream on port 'outY'
-   * @param outZ      the expected output stream on port 'outZ'
+   * @param inA  the input stream on port 'inA'
+   * @param inB  the input stream on port 'inB'
+   * @param inY  the input stream on port 'inY'
+   * @param inZ  the input stream on port 'inZ'
+   * @param outA the expected output stream on port 'outA'
+   * @param outB the expected output stream on port 'outB'
+   * @param outY the expected output stream on port 'outY'
+   * @param outZ the expected output stream on port 'outZ'
    */
   @ParameterizedTest
   @MethodSource("io")
@@ -74,12 +74,10 @@ class WithMediumSubTest {
     sut.runToCompletion();
 
     // Then
-    org.junit.jupiter.api.Assertions.assertAll(
-      () -> Assertions.assertThat(port_outA.getObservedMessages()).as("outA").containsExactlyElementsOf(outA),
-      () -> Assertions.assertThat(port_outB.getObservedMessages()).as("outB").containsExactlyElementsOf(outB),
-      () -> Assertions.assertThat(port_outY.getObservedMessages()).as("outY").containsExactlyElementsOf(outY),
-      () -> Assertions.assertThat(port_outZ.getObservedMessages()).as("outZ").containsExactlyElementsOf(outZ)
-    );
+    Assertions.assertThat(port_outA.getObservedMessages()).as("outA").containsExactlyElementsOf(outA);
+    Assertions.assertThat(port_outB.getObservedMessages()).as("outB").containsExactlyElementsOf(outB);
+    Assertions.assertThat(port_outY.getObservedMessages()).as("outY").containsExactlyElementsOf(outY);
+    Assertions.assertThat(port_outZ.getObservedMessages()).as("outZ").containsExactlyElementsOf(outZ);
   }
 
   static Stream<Arguments> io() {
@@ -135,34 +133,34 @@ class WithMediumSubTest {
         /* oZ*/ List.of(msg(ON), tk())
       ),
       Arguments.of(
-        /*inA*/ List.of(msg(ON),  tk()),
+        /*inA*/ List.of(msg(ON), tk()),
         /*inB*/ List.of(tk()),
         /*inY*/ List.of(msg(OFF), tk()),
-        /*inZ*/ List.of(msg(ON),  tk()),
-        /* oA*/ List.of(msg(ON),  tk()),
+        /*inZ*/ List.of(msg(ON), tk()),
+        /* oA*/ List.of(msg(ON), tk()),
         /* oB*/ List.of(tk()),
         /* oY*/ List.of(msg(OFF), tk()),
-        /* oZ*/ List.of(msg(ON),  tk())
+        /* oZ*/ List.of(msg(ON), tk())
       ),
       Arguments.of(
         /*inA*/ List.of(tk()),
         /*inB*/ List.of(msg(OFF), tk()),
         /*inY*/ List.of(msg(OFF), tk()),
-        /*inZ*/ List.of(msg(ON),  tk()),
+        /*inZ*/ List.of(msg(ON), tk()),
         /* oA*/ List.of(tk()),
         /* oB*/ List.of(msg(OFF), tk()),
         /* oY*/ List.of(msg(OFF), tk()),
-        /* oZ*/ List.of(msg(ON),  tk())
+        /* oZ*/ List.of(msg(ON), tk())
       ),
       Arguments.of(
-        /*inA*/ List.of(msg(ON),  tk()),
+        /*inA*/ List.of(msg(ON), tk()),
         /*inB*/ List.of(msg(OFF), tk()),
         /*inY*/ List.of(msg(OFF), tk()),
-        /*inZ*/ List.of(msg(ON),  tk()),
-        /* oA*/ List.of(msg(ON),  tk()),
+        /*inZ*/ List.of(msg(ON), tk()),
+        /* oA*/ List.of(msg(ON), tk()),
         /* oB*/ List.of(msg(OFF), tk()),
         /* oY*/ List.of(msg(OFF), tk()),
-        /* oZ*/ List.of(msg(ON),  tk())
+        /* oZ*/ List.of(msg(ON), tk())
       ),
       Arguments.of(
         /*inA*/ List.of(msg(ON), msg(OFF), msg(OFF), tk()),
@@ -185,14 +183,14 @@ class WithMediumSubTest {
         /* oZ*/ List.of(msg(ON), tk())
       ),
       Arguments.of(
-        /*inA*/ List.of(msg(ON),  tk(),                   tk(), msg(OFF), msg(OFF), msg(ON), tk()),
-        /*inB*/ List.of(          tk(), msg(ON), msg(ON), tk(), msg(ON), tk()),
-        /*inY*/ List.of(msg(OFF), tk(), msg(OFF),         tk(), msg(ON), tk()),
-        /*inZ*/ List.of(msg(ON),  tk(), msg(OFF),         tk(), msg(ON), tk()),
-        /* oA*/ List.of(msg(ON),  tk(),                   tk(), msg(OFF), msg(OFF), msg(ON), tk()),
-        /* oB*/ List.of(          tk(), msg(ON), msg(ON), tk(), msg(ON), tk()),
-        /* oY*/ List.of(msg(OFF), tk(), msg(OFF),         tk(), msg(ON), tk()),
-        /* oZ*/ List.of(msg(ON),  tk(), msg(OFF),         tk(), msg(ON), tk())
+        /*inA*/ List.of(msg(ON), tk(), tk(), msg(OFF), msg(OFF), msg(ON), tk()),
+        /*inB*/ List.of(tk(), msg(ON), msg(ON), tk(), msg(ON), tk()),
+        /*inY*/ List.of(msg(OFF), tk(), msg(OFF), tk(), msg(ON), tk()),
+        /*inZ*/ List.of(msg(ON), tk(), msg(OFF), tk(), msg(ON), tk()),
+        /* oA*/ List.of(msg(ON), tk(), tk(), msg(OFF), msg(OFF), msg(ON), tk()),
+        /* oB*/ List.of(tk(), msg(ON), msg(ON), tk(), msg(ON), tk()),
+        /* oY*/ List.of(msg(OFF), tk(), msg(OFF), tk(), msg(ON), tk()),
+        /* oZ*/ List.of(msg(ON), tk(), msg(OFF), tk(), msg(ON), tk())
       )
     );
   }

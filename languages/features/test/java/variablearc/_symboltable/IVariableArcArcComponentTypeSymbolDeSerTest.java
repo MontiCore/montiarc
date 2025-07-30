@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.IArcBasisScope;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
@@ -83,9 +82,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
     // Then
     Assertions.assertEquals(1, ((IVariableArcScope) comp.getSpannedScope()).getArcFeatureSymbols().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("f1", ((IVariableArcScope) comp.getSpannedScope()).getArcFeatureSymbols().values().get(0).getName())
-    );
+    Assertions.assertEquals("f1", ((IVariableArcScope) comp.getSpannedScope()).getArcFeatureSymbols().values().get(0).getName());
   }
 
   @Test
@@ -93,7 +90,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
     // Given
     IVariableArcComponentTypeSymbol comp = createSimpleComp();
     comp.setLocalConstraints(new ExpressionSet(List.of(
-      new Expression(createNameExpressionInScope("f1", (IArcBasisScope) comp.getTypeInfo().getSpannedScope()))
+      new Expression(createNameExpressionInScope("f1", comp.getTypeInfo().getSpannedScope()))
     )));
 
 
@@ -117,9 +114,7 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
     // Then
     Assertions.assertEquals(1, comp.getConstraints().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("f1", comp.getLocalConstraints().getExpressions().get(0).print())
-    );
+    Assertions.assertEquals("f1", comp.getLocalConstraints().getExpressions().get(0).print());
   }
 
   @Test
@@ -155,23 +150,20 @@ public class IVariableArcArcComponentTypeSymbolDeSerTest extends VariableArcTest
 
     // Then
     Assertions.assertEquals(3, comp.getAllVariationPoints().size());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("f1", comp.getAllVariationPoints().get(0).getCondition().print()),
-      () -> Assertions.assertEquals("f2", comp.getAllVariationPoints().get(1).getCondition().print()),
-      () -> Assertions.assertEquals(1, comp.getAllVariationPoints().get(1).getChildVariationPoints().size()),
-      () -> Assertions.assertEquals("f3", comp.getAllVariationPoints().get(2).getCondition().print()),
-      () -> Assertions.assertTrue(comp.getAllVariationPoints().get(2).getDependsOn().isPresent())
-    );
+    Assertions.assertEquals("f1", comp.getAllVariationPoints().get(0).getCondition().print());
+    Assertions.assertEquals("f2", comp.getAllVariationPoints().get(1).getCondition().print());
+    Assertions.assertEquals(1, comp.getAllVariationPoints().get(1).getChildVariationPoints().size());
+    Assertions.assertEquals("f3", comp.getAllVariationPoints().get(2).getCondition().print());
+    Assertions.assertTrue(comp.getAllVariationPoints().get(2).getDependsOn().isPresent());
     Assertions.assertEquals(8, comp.getVariableArcVariants().size());
   }
 
   protected static IVariableArcComponentTypeSymbol createSimpleComp() {
-    IVariableArcComponentTypeSymbol symbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
+    return (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
       .setName("Comp")
       .setSpannedScope(VariableArcMill.scope())
       .setEnclosingScope(VariableArcMill.globalScope())
       .build();
-    return symbol;
   }
 
   protected ASTNameExpression createNameExpressionInScope(String name, ICompSymbolsScope scope) {

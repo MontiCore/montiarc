@@ -9,11 +9,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
 import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class FloorControlTest {
 
@@ -28,12 +25,10 @@ public class FloorControlTest {
     floor.setUp();
 
     // Then
-    assertAll(
-      () -> assertThat(floor.getBtn()).isNotNull(),
-      () -> assertThat(floor.getLight()).isNotNull(),
-      () -> assertThat(floor.getClear()).isNotNull(),
-      () -> assertThat(floor.getReq()).isNotNull()
-    );
+    assertThat(floor.getBtn()).isNotNull();
+    assertThat(floor.getLight()).isNotNull();
+    assertThat(floor.getClear()).isNotNull();
+    assertThat(floor.getReq()).isNotNull();
   }
 
   @Test
@@ -47,10 +42,8 @@ public class FloorControlTest {
     floor.init();
 
     // Then
-    assertAll(
-      () -> assertThat(floor.getBtn().getValue()).isNull(),
-      () -> assertThat(floor.getLight().getValue()).isNull()
-    );
+    assertThat(floor.getBtn().getValue()).isNull();
+    assertThat(floor.getLight().getValue()).isNull();
   }
 
   @Order(3)
@@ -78,11 +71,9 @@ public class FloorControlTest {
     floor.compute();
 
     // Then
-    assertAll(
-      () -> assertThat(floor.getCurrentState()).isEqualTo(targetState),
-      () -> assertThat(floor.getLight().getValue()).isEqualTo(light),
-      () -> assertThat(floor.getReq().getValue()).isEqualTo(req)
-    );
+    assertThat(floor.getCurrentState()).isEqualTo(targetState);
+    assertThat(floor.getLight().getValue()).isEqualTo(light);
+    assertThat(floor.getReq().getValue()).isEqualTo(req);
   }
 
   public static Stream<Arguments> transitions() {
@@ -114,12 +105,10 @@ public class FloorControlTest {
     floor.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(floor.getBtn().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(floor.getClear().getValue()).isNotNull().isEqualTo(true),
-      () -> assertThat(floor.getLight().getValue()).isNull(),
-      () -> assertThat(floor.getReq().getValue()).isNull()
-    );
+    assertThat(floor.getBtn().getValue()).isNotNull().isEqualTo(true);
+    assertThat(floor.getClear().getValue()).isNotNull().isEqualTo(true);
+    assertThat(floor.getLight().getValue()).isNull();
+    assertThat(floor.getReq().getValue()).isNull();
   }
 
   @Order(5)
@@ -164,11 +153,9 @@ public class FloorControlTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actStates).containsExactly(expStates),
-      () -> assertThat(actLight).containsExactly(expLight),
-      () -> assertThat(actReq).containsExactly(expReq)
-    );
+    assertThat(actStates).containsExactly(expStates);
+    assertThat(actLight).containsExactly(expLight);
+    assertThat(actReq).containsExactly(expReq);
   }
 
   public static Stream<Arguments> runs() {

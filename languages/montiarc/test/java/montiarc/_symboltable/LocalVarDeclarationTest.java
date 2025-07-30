@@ -35,7 +35,7 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {"UsesLocalVarCorrectly.arc"})
-  void shouldCreateResolvableLocalVariableSymbols(@NotNull String model) {
+  void shouldCreateResolvableLocalVariableSymbols(@NotNull String model) throws Throwable {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -54,21 +54,17 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
 
     // Then
     // Check that all NameExpressions representing local variables resolve to a variable symbol
-    Executable[] localVarReferencesResolvableTests =
-      NameExpressionCollector.collectNamesIn(ast)
-        .stream()
-        .filter(expr -> localVarNames.contains(expr.getName()))
-        .map(ref -> getVariableResolvabilityTest(ref, true))
-        .toArray(Executable[]::new);
-
-    Assertions.assertAll("All references to local variables in NameExpressions should resolve to a variable symbol",
-      localVarReferencesResolvableTests
-    );
+    for (ASTNameExpression expr : NameExpressionCollector.collectNamesIn(ast)) {
+      if (localVarNames.contains(expr.getName())) {
+        Executable a = getVariableResolvabilityTest(expr, true);
+        a.execute();
+      }
+    }
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"UsesLocalVarOutOfScope.arc"})
-  void shouldCreateUnresolvableLocalVariableReferences(@NotNull String model) {
+  void shouldCreateUnresolvableLocalVariableReferences(@NotNull String model) throws Throwable {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -87,16 +83,12 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
 
     // Then
     // Check that all NameExpressions representing local variables resolve to a variable symbol
-    Executable[] localVarReferencesResolvableTests =
-      NameExpressionCollector.collectNamesIn(ast)
-        .stream()
-        .filter(expr -> localVarNames.contains(expr.getName()))
-        .map(ref -> getVariableResolvabilityTest(ref, false))
-        .toArray(Executable[]::new);
-
-    Assertions.assertAll("No reference to local variables in NameExpressions should resolve to a variable symbol",
-      localVarReferencesResolvableTests
-    );
+    for (ASTNameExpression expr : NameExpressionCollector.collectNamesIn(ast)) {
+      if (localVarNames.contains(expr.getName())) {
+        Executable a = getVariableResolvabilityTest(expr, false);
+        a.execute();
+      }
+    }
   }
 
   /**
@@ -112,12 +104,12 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
     IMontiArcScope scope = (IMontiArcScope) expr.getEnclosingScope();
     Optional<VariableSymbol> optSym = scope.resolveVariable(expr.getName());
 
-    if(shouldResolve) {
-      return () -> Assertions.assertTrue( optSym.isPresent(),
+    if (shouldResolve) {
+      return () -> Assertions.assertTrue(optSym.isPresent(),
         "ASTExpression " + expr.getName() + " at " + expr.get_SourcePositionStart() + " should have been resolved " +
           "to a variable symbol, but was not. ");
     } else {
-      return () -> Assertions.assertFalse( optSym.isPresent(),
+      return () -> Assertions.assertFalse(optSym.isPresent(),
         "ASTExpression " + expr.getName() + " at " + expr.get_SourcePositionStart() + " was resolved to a variable " +
           "symbol which should not have been possible.");
     }

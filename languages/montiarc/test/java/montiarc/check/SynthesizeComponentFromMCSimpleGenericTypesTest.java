@@ -85,7 +85,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
         .addParts(nameOfCompScope)
         .addParts(stringName)
         .build())
-        .build();
+      .build();
     astString.setEnclosingScope(scopeOfComp);
     astString.getMCQualifiedName().setEnclosingScope(scopeOfComp);
     astQualString.setEnclosingScope(MontiArcMill.globalScope());
@@ -120,45 +120,36 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     synth4qual.handle(astQualComp);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(result4normal.getResult().isPresent()),
-      () -> Assertions.assertTrue(result4qual.getResult().isPresent())
-    );
+    Assertions.assertTrue(result4normal.getResult().isPresent());
+    Assertions.assertTrue(result4qual.getResult().isPresent());
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, result4normal.getResult().get());
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, result4qual.getResult().get());
 
-    Assertions.assertAll(
-      () -> Assertions.assertTrue(result4normal.getResult().get() instanceof CompKindOfGenericComponentType),
-      () -> Assertions.assertTrue(result4qual.getResult().get() instanceof CompKindOfGenericComponentType)
-    );
 
     CompKindOfGenericComponentType result4normalAsGeneric =
       (CompKindOfGenericComponentType) result4normal.getResult().get();
     CompKindOfGenericComponentType result4qualAsGeneric =
       (CompKindOfGenericComponentType) result4qual.getResult().get();
 
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo()),
-      () -> Assertions.assertEquals(compSym, result4qual.getResult().get().getTypeInfo()),
-
-      () -> Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject),
-      () -> Assertions.assertTrue(result4normalAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics),
-      () -> Assertions.assertEquals(stringSym, result4normalAsGeneric.getTypeBindingFor("K").get().getTypeInfo()),
-      () -> Assertions.assertEquals(listSym, result4normalAsGeneric.getTypeBindingFor("V").get().getTypeInfo()),
-      () -> Assertions.assertEquals(stringSym,
-          ((SymTypeOfGenerics) result4normalAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
-        ),
-
-      () -> Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfGenerics),
-      () -> Assertions.assertTrue(result4qualAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfObject),
-      () -> Assertions.assertEquals(stringSym, result4qualAsGeneric.getTypeBindingFor("V").get().getTypeInfo()),
-      () -> Assertions.assertEquals(listSym, result4qualAsGeneric.getTypeBindingFor("K").get().getTypeInfo()),
-      () -> Assertions.assertEquals(stringSym,
-          ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
-        ),
-      () -> assertThat(Log.getFindings()).isEmpty(),
-
-      () -> assertThat(result4normalAsGeneric.getSourceNode()).contains(astNormalComp),
-      () -> assertThat(result4qualAsGeneric.getSourceNode()).contains(astQualComp)
+    Assertions.assertEquals(compSym, result4normal.getResult().get().getTypeInfo());
+    Assertions.assertEquals(compSym, result4qual.getResult().get().getTypeInfo());
+    Assertions.assertInstanceOf(SymTypeOfObject.class, result4normalAsGeneric.getTypeBindingFor("K").get());
+    Assertions.assertInstanceOf(SymTypeOfGenerics.class, result4normalAsGeneric.getTypeBindingFor("V").get());
+    Assertions.assertEquals(stringSym, result4normalAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
+    Assertions.assertEquals(listSym, result4normalAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
+    Assertions.assertEquals(stringSym,
+      ((SymTypeOfGenerics) result4normalAsGeneric.getTypeBindingFor("V").get()).getArgument(0).getTypeInfo()
     );
+    Assertions.assertInstanceOf(SymTypeOfGenerics.class, result4qualAsGeneric.getTypeBindingFor("K").get());
+    Assertions.assertInstanceOf(SymTypeOfObject.class, result4qualAsGeneric.getTypeBindingFor("V").get());
+    Assertions.assertEquals(stringSym, result4qualAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
+    Assertions.assertEquals(listSym, result4qualAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
+    Assertions.assertEquals(stringSym,
+      ((SymTypeOfGenerics) result4qualAsGeneric.getTypeBindingFor("K").get()).getArgument(0).getTypeInfo()
+    );
+    assertThat(Log.getFindings()).isEmpty();
+    assertThat(result4normalAsGeneric.getSourceNode()).contains(astNormalComp);
+    assertThat(result4qualAsGeneric.getSourceNode()).contains(astQualComp);
   }
 
   @Test
@@ -302,15 +293,15 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
     ASTMCBasicGenericTypeBuilder builder = MontiArcMill.mCBasicGenericTypeBuilder()
       .setNamesList(nameParts);
 
-    for(ASTMCType typeArg : typeArgs) {
-      if(typeArg instanceof ASTMCPrimitiveType) {
+    for (ASTMCType typeArg : typeArgs) {
+      if (typeArg instanceof ASTMCPrimitiveType) {
         ASTMCPrimitiveType asPrimitiveType = (ASTMCPrimitiveType) typeArg;
         ASTMCPrimitiveTypeArgument asArg = MontiArcMill.mCPrimitiveTypeArgumentBuilder()
           .setMCPrimitiveType(asPrimitiveType).build();
         asArg.setEnclosingScope(enclScope);
         builder.addMCTypeArgument(asArg);
 
-      } else if(typeArg instanceof ASTMCQualifiedType) {
+      } else if (typeArg instanceof ASTMCQualifiedType) {
         ASTMCQualifiedType asQualType = (ASTMCQualifiedType) typeArg;
         ASTMCBasicTypeArgument asArg = MontiArcMill.mCBasicTypeArgumentBuilder().setMCQualifiedType(asQualType).build();
         asArg.setEnclosingScope(enclScope);

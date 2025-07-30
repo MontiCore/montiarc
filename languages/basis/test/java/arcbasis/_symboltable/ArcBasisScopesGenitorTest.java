@@ -245,7 +245,7 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
     ASTComponentInstance ast = arcbasis.ArcBasisMill.componentInstanceBuilder().setName("sub").build();
     SubcomponentSymbol symbol = this.getSymTab().create_ComponentInstance(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
-//    Assertions.assertThrows(IllegalStateException.class, symbol::getType); Todo change upstream behavior
+    //    Assertions.assertThrows(IllegalStateException.class, symbol::getType); Todo change upstream behavior
   }
 
   @Test
@@ -344,22 +344,18 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
     this.getSymTab().handle(body);
 
     // Then
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(1, scope.getLocalComponentTypeSymbols().size()),
-      () -> Assertions.assertEquals(1, scope.getLocalSubcomponentSymbols().size())
-    );
+    Assertions.assertEquals(1, scope.getLocalComponentTypeSymbols().size());
+    Assertions.assertEquals(1, scope.getLocalSubcomponentSymbols().size());
 
     ComponentTypeSymbol typeSym = scope.getLocalComponentTypeSymbols().get(0);
     SubcomponentSymbol instSym = scope.getLocalSubcomponentSymbols().get(0);
 
-    Assertions.assertAll(
-      () -> Assertions.assertEquals("Foo", typeSym.getName()),
-      () -> Assertions.assertEquals("fooInst", instSym.getName()),
-      () -> Assertions.assertEquals(scope, typeSym.getEnclosingScope()),
-      () -> Assertions.assertEquals(scope, instSym.getEnclosingScope()),
-      () -> Assertions.assertEquals(scope, typeSym.getAstNode().getEnclosingScope()),
-      () -> Assertions.assertEquals(scope, instSym.getAstNode().getEnclosingScope())
-    );
+    Assertions.assertEquals("Foo", typeSym.getName());
+    Assertions.assertEquals("fooInst", instSym.getName());
+    Assertions.assertEquals(scope, typeSym.getEnclosingScope());
+    Assertions.assertEquals(scope, instSym.getEnclosingScope());
+    Assertions.assertEquals(scope, typeSym.getAstNode().getEnclosingScope());
+    Assertions.assertEquals(scope, instSym.getAstNode().getEnclosingScope());
   }
 
   protected ASTArcArgument[] argumentMockValues(int length) {

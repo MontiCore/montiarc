@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 @JSimTest
 class CompNamesTest {
@@ -19,12 +18,10 @@ class CompNamesTest {
     RootCompCompImpl sut = (RootCompCompImpl) new RootCompCompBuilder().setName("sut").build();
 
     // Then
-    assertAll(
-      () -> assertThat(sut.getName()).isEqualTo("sut"),
-      () -> assertThat(sut.getAllSubcomponents())
-              .map(Component::getName)
-              .containsExactlyInAnyOrder("sut.directLeaf", "sut.withModes")
-    );
+    assertThat(sut.getName()).isEqualTo("sut");
+    assertThat(sut.getAllSubcomponents())
+      .map(Component::getName)
+      .containsExactlyInAnyOrder("sut.directLeaf", "sut.withModes");
 
     SimComponent modeSubComp =
       sut.getAllSubcomponents()
@@ -58,12 +55,11 @@ class CompNamesTest {
     modeSubComp.handleTickReconfiguration();
 
     // Then
-    assertAll(
-      () -> assertThat(sut.getName()).isEqualTo("sut"),
-      () -> assertThat(sut.getAllSubcomponents())
-        .map(Component::getName)
-        .containsExactlyInAnyOrder("sut.directLeaf", "sut.withModes")
-    );
+
+    assertThat(sut.getName()).isEqualTo("sut");
+    assertThat(sut.getAllSubcomponents())
+      .map(Component::getName)
+      .containsExactlyInAnyOrder("sut.directLeaf", "sut.withModes");
 
     assertThat(modeSubComp.getAllSubcomponents())
       .map(Component::getName)

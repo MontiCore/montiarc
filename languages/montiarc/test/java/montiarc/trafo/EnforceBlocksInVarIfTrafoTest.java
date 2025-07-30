@@ -88,9 +88,10 @@ public class EnforceBlocksInVarIfTrafoTest extends MontiArcTestBase {
           "}")
     );
   }
+
   @ParameterizedTest
   @MethodSource("validModelsWithNoTrafo")
-  void shouldNotApplyTrafo(@NotNull String model) throws IOException{
+  void shouldNotApplyTrafo(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
     // Given
     ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
@@ -106,10 +107,8 @@ public class EnforceBlocksInVarIfTrafoTest extends MontiArcTestBase {
     trafo.apply(ast);
 
     // Then
-    org.junit.jupiter.api.Assertions.assertAll(
-      () -> Mockito.verify(spyVarIf, Mockito.never()).setThen(Mockito.any()),
-      () -> Mockito.verify(spyVarIf, Mockito.never()).setOtherwise(Mockito.any()),
-      () -> Mockito.verify(spyVarIf, Mockito.never()).setOtherwiseAbsent()
-    );
+    Mockito.verify(spyVarIf, Mockito.never()).setThen(Mockito.any());
+    Mockito.verify(spyVarIf, Mockito.never()).setOtherwise(Mockito.any());
+    Mockito.verify(spyVarIf, Mockito.never()).setOtherwiseAbsent();
   }
 }

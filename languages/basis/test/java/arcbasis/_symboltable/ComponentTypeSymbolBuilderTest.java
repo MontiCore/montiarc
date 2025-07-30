@@ -109,10 +109,8 @@ class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertEquals(2, child.sizeRefinements());
-    Assertions.assertAll(
-      () -> Assertions.assertEquals(parentExpr1, child.getRefinements(0)),
-      () -> Assertions.assertEquals(parentExpr2, child.getRefinements(1))
-    );
+    Assertions.assertEquals(parentExpr1, child.getRefinements(0));
+    Assertions.assertEquals(parentExpr2, child.getRefinements(1));
   }
 
   @Test
@@ -173,7 +171,7 @@ class ComponentTypeSymbolBuilderTest extends ArcBasisTestBase {
   @ParameterizedTest
   @MethodSource("compNameAndTypeParametersProvider")
   void shouldBuildWithExpectedTypeParameters(String name,
-    List<TypeVarSymbol> typeParameters) {
+                                             List<TypeVarSymbol> typeParameters) {
     ComponentTypeSymbol symbol = ArcBasisMill.componentTypeSymbolBuilder().setName(name)
       .setSpannedScope(ArcBasisMill.scope()).setTypeParameters(typeParameters).build();
     Assertions.assertEquals(symbol.getName(), name);

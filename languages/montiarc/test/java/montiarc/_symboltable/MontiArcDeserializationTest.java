@@ -27,7 +27,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class MontiArcDeserializationTest extends MontiArcTestBase {
 
@@ -72,13 +71,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0))
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0));
   }
 
   @Test
@@ -96,11 +93,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
   }
 
   @Test
@@ -118,12 +113,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.Type"),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(1);
+    assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.Type");
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
   }
 
   @Test
@@ -141,13 +134,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.Type"),
-      () -> assertThat(symbol.getSuperTypesList().get(1).getTypeInfo().getName()).isEqualTo("symboltable.Type"),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(2);
+    assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.Type");
+    assertThat(symbol.getSuperTypesList().get(1).getTypeInfo().getName()).isEqualTo("symboltable.Type");
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
   }
 
   @Test
@@ -165,12 +156,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("f"),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(1);
+    assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("f");
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
   }
 
   @Test
@@ -188,13 +177,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("g"),
-      () -> assertThat(symbol.getFunctionList().get(1).getName()).isEqualTo("h"),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(2);
+    assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("g");
+    assertThat(symbol.getFunctionList().get(1).getName()).isEqualTo("h");
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
   }
 
   @Test
@@ -212,12 +199,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("a")
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(1);
+    assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("a");
   }
 
   @Test
@@ -235,13 +220,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final TypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("b"),
-      () -> assertThat(symbol.getVariableList().get(1).getName()).isEqualTo("c")
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(2);
+    assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("b");
+    assertThat(symbol.getVariableList().get(1).getName()).isEqualTo("c");
   }
 
   @ParameterizedTest
@@ -275,13 +258,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0))
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0));
   }
 
   @ParameterizedTest
@@ -320,22 +301,20 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(index));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0),
-      () -> assertThat(symbol.isIsClass()).isEqualTo(isClass),
-      () -> assertThat(symbol.isIsInterface()).isEqualTo(isInterface),
-      () -> assertThat(symbol.isIsEnum()).isEqualTo(isEnum),
-      () -> assertThat(symbol.isIsAbstract()).isEqualTo(isAbstract),
-      () -> assertThat(symbol.isIsFinal()).isEqualTo(isFinal),
-      () -> assertThat(symbol.isIsStatic()).isEqualTo(isStatic),
-      () -> assertThat(symbol.isIsPublic()).isEqualTo(isPublic),
-      () -> assertThat(symbol.isIsProtected()).isEqualTo(isProtected),
-      () -> assertThat(symbol.isIsPrivate()).isEqualTo(isPrivate)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
+    assertThat(symbol.isIsClass()).isEqualTo(isClass);
+    assertThat(symbol.isIsInterface()).isEqualTo(isInterface);
+    assertThat(symbol.isIsEnum()).isEqualTo(isEnum);
+    assertThat(symbol.isIsAbstract()).isEqualTo(isAbstract);
+    assertThat(symbol.isIsFinal()).isEqualTo(isFinal);
+    assertThat(symbol.isIsStatic()).isEqualTo(isStatic);
+    assertThat(symbol.isIsPublic()).isEqualTo(isPublic);
+    assertThat(symbol.isIsProtected()).isEqualTo(isProtected);
+    assertThat(symbol.isIsPrivate()).isEqualTo(isPrivate);
   }
 
   @Test
@@ -353,14 +332,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.OOType"),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(1);
+    assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.OOType");
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -378,15 +355,13 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.OOType"),
-      () -> assertThat(symbol.getSuperTypesList().get(1).getTypeInfo().getName()).isEqualTo("symboltable.OOType"),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(2);
+    assertThat(symbol.getSuperTypesList().get(0).getTypeInfo().getName()).isEqualTo("symboltable.OOType");
+    assertThat(symbol.getSuperTypesList().get(1).getTypeInfo().getName()).isEqualTo("symboltable.OOType");
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -404,14 +379,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("f"),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(1);
+    assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("f");
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -429,15 +402,13 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("g"),
-      () -> assertThat(symbol.getFunctionList().get(1).getName()).isEqualTo("h"),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(2);
+    assertThat(symbol.getFunctionList().get(0).getName()).isEqualTo("g");
+    assertThat(symbol.getFunctionList().get(1).getName()).isEqualTo("h");
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -455,14 +426,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getMethodList().get(0).getName()).isEqualTo("f"),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(1);
+    assertThat(symbol.getMethodList().get(0).getName()).isEqualTo("f");
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -480,15 +449,13 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getMethodList().get(0).getName()).isEqualTo("g"),
-      () -> assertThat(symbol.getMethodList().get(1).getName()).isEqualTo("h"),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(2);
+    assertThat(symbol.getMethodList().get(0).getName()).isEqualTo("g");
+    assertThat(symbol.getMethodList().get(1).getName()).isEqualTo("h");
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -506,14 +473,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("a"),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(1);
+    assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("a");
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -531,15 +496,13 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("b"),
-      () -> assertThat(symbol.getVariableList().get(1).getName()).isEqualTo("c"),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(0)
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(2);
+    assertThat(symbol.getVariableList().get(0).getName()).isEqualTo("b");
+    assertThat(symbol.getVariableList().get(1).getName()).isEqualTo("c");
+    assertThat(symbol.getFieldList().size()).isEqualTo(0);
   }
 
   @Test
@@ -557,14 +520,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getFieldList().get(0).getName()).isEqualTo("a")
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(1);
+    assertThat(symbol.getFieldList().get(0).getName()).isEqualTo("a");
   }
 
   @Test
@@ -582,15 +543,13 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final OOTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalOOTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getSuperTypesList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFunctionList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getMethodList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getVariableList().size()).isEqualTo(0),
-      () -> assertThat(symbol.getFieldList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getFieldList().get(0).getName()).isEqualTo("b"),
-      () -> assertThat(symbol.getFieldList().get(1).getName()).isEqualTo("c")
-    );
+    assertThat(symbol.getSuperTypesList().size()).isEqualTo(0);
+    assertThat(symbol.getFunctionList().size()).isEqualTo(0);
+    assertThat(symbol.getMethodList().size()).isEqualTo(0);
+    assertThat(symbol.getVariableList().size()).isEqualTo(0);
+    assertThat(symbol.getFieldList().size()).isEqualTo(2);
+    assertThat(symbol.getFieldList().get(0).getName()).isEqualTo("b");
+    assertThat(symbol.getFieldList().get(1).getName()).isEqualTo("c");
   }
 
   @ParameterizedTest
@@ -617,13 +576,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0))
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0));
   }
 
   @Test
@@ -641,10 +598,8 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList()).isEmpty(),
-      () -> assertThat(symbol.isIsElliptic()).isFalse()
-    );
+    assertThat(symbol.getParameterList()).isEmpty();
+    assertThat(symbol.isIsElliptic()).isFalse();
   }
 
   @Test
@@ -662,11 +617,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p"),
-      () -> assertThat(symbol.isIsElliptic()).isFalse()
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(1);
+    assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p");
+    assertThat(symbol.isIsElliptic()).isFalse();
   }
 
   @Test
@@ -684,12 +637,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p1"),
-      () -> assertThat(symbol.getParameterList().get(1).getName()).isEqualTo("p2"),
-      () -> assertThat(symbol.isIsElliptic()).isFalse()
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(2);
+    assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p1");
+    assertThat(symbol.getParameterList().get(1).getName()).isEqualTo("p2");
+    assertThat(symbol.isIsElliptic()).isFalse();
   }
 
   @Test
@@ -707,11 +658,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FunctionSymbol symbol = Preconditions.checkNotNull(scope.getLocalFunctionSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p"),
-      () -> assertThat(symbol.isIsElliptic()).isTrue()
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(1);
+    assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p");
+    assertThat(symbol.isIsElliptic()).isTrue();
   }
 
   @ParameterizedTest
@@ -739,14 +688,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(scope.getSubScopes().get(0)).isEqualTo(symbol.getSpannedScope()),
-      () -> assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0))
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(scope.getSubScopes().get(0)).isEqualTo(symbol.getSpannedScope());
+    assertThat(symbol.getSpannedScope().getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSpannedScope()).isEqualTo(scope.getSubScopes().get(0));
   }
 
   @ParameterizedTest
@@ -783,17 +730,15 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(index));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(0),
-      () -> assertThat(symbol.isIsElliptic()).isFalse(),
-      () -> assertThat(symbol.isIsStatic()).isEqualTo(isStatic),
-      () -> assertThat(symbol.isIsFinal()).isEqualTo(isFinal),
-      () -> assertThat(symbol.isIsMethod()).isEqualTo(isMethod),
-      () -> assertThat(symbol.isIsConstructor()).isEqualTo(isConstructor),
-      () -> assertThat(symbol.isIsPublic()).isEqualTo(isPublic),
-      () -> assertThat(symbol.isIsProtected()).isEqualTo(isProtected),
-      () -> assertThat(symbol.isIsPrivate()).isEqualTo(isPrivate)
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(0);
+    assertThat(symbol.isIsElliptic()).isFalse();
+    assertThat(symbol.isIsStatic()).isEqualTo(isStatic);
+    assertThat(symbol.isIsFinal()).isEqualTo(isFinal);
+    assertThat(symbol.isIsMethod()).isEqualTo(isMethod);
+    assertThat(symbol.isIsConstructor()).isEqualTo(isConstructor);
+    assertThat(symbol.isIsPublic()).isEqualTo(isPublic);
+    assertThat(symbol.isIsProtected()).isEqualTo(isProtected);
+    assertThat(symbol.isIsPrivate()).isEqualTo(isPrivate);
   }
 
   @Test
@@ -811,11 +756,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p"),
-      () -> assertThat(symbol.isIsElliptic()).isFalse()
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(1);
+    assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p");
+    assertThat(symbol.isIsElliptic()).isFalse();
   }
 
   @Test
@@ -833,12 +776,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(2),
-      () -> assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p1"),
-      () -> assertThat(symbol.getParameterList().get(1).getName()).isEqualTo("p2"),
-      () -> assertThat(symbol.isIsElliptic()).isFalse()
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(2);
+    assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p1");
+    assertThat(symbol.getParameterList().get(1).getName()).isEqualTo("p2");
+    assertThat(symbol.isIsElliptic()).isFalse();
   }
 
   @Test
@@ -856,11 +797,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final MethodSymbol symbol = Preconditions.checkNotNull(scope.getLocalMethodSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getParameterList().size()).isEqualTo(1),
-      () -> assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p"),
-      () -> assertThat(symbol.isIsElliptic()).isTrue()
-    );
+    assertThat(symbol.getParameterList().size()).isEqualTo(1);
+    assertThat(symbol.getParameterList().get(0).getName()).isEqualTo("p");
+    assertThat(symbol.isIsElliptic()).isTrue();
   }
 
   @Test
@@ -881,11 +820,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final VariableSymbol symbol = Preconditions.checkNotNull(scope.getLocalVariableSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
   }
 
   @ParameterizedTest
@@ -929,11 +866,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FieldSymbol symbol = Preconditions.checkNotNull(scope.getLocalFieldSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
   }
 
 
@@ -974,15 +909,13 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final FieldSymbol symbol = Preconditions.checkNotNull(scope.getLocalFieldSymbols().get(index));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.isIsReadOnly()).isEqualTo(isReadOnly),
-      () -> assertThat(symbol.isIsStatic()).isEqualTo(isStatic),
-      () -> assertThat(symbol.isIsFinal()).isEqualTo(isFinal),
-      () -> assertThat(symbol.isIsDerived()).isEqualTo(isDerived),
-      () -> assertThat(symbol.isIsPublic()).isEqualTo(isPublic),
-      () -> assertThat(symbol.isIsProtected()).isEqualTo(isProtected),
-      () -> assertThat(symbol.isIsPrivate()).isEqualTo(isPrivate)
-    );
+    assertThat(symbol.isIsReadOnly()).isEqualTo(isReadOnly);
+    assertThat(symbol.isIsStatic()).isEqualTo(isStatic);
+    assertThat(symbol.isIsFinal()).isEqualTo(isFinal);
+    assertThat(symbol.isIsDerived()).isEqualTo(isDerived);
+    assertThat(symbol.isIsPublic()).isEqualTo(isPublic);
+    assertThat(symbol.isIsProtected()).isEqualTo(isProtected);
+    assertThat(symbol.isIsPrivate()).isEqualTo(isPrivate);
   }
 
   @Test
@@ -1001,11 +934,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final SCStateSymbol symbol = Preconditions.checkNotNull(scope.getLocalSCStateSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
   }
 
   @Test
@@ -1023,11 +954,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
   }
 
   @Test
@@ -1045,12 +974,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getPorts().size()).isEqualTo(1)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getPorts().size()).isEqualTo(1);
   }
 
   @Test
@@ -1069,12 +996,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getEnclosingScope().resolveComponentType("j").isPresent()).isTrue()
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getEnclosingScope().resolveComponentType("j").isPresent()).isTrue();
   }
 
   @Test
@@ -1092,14 +1017,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getRefinementsList())
-        .extracting(ref -> ref.getTypeInfo().getName())
-        .as("refined components")
-        .containsExactly("Parent")
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getRefinementsList())
+      .extracting(ref -> ref.getTypeInfo().getName())
+      .as("refined components")
+      .containsExactly("Parent");
   }
 
   @Test
@@ -1119,14 +1042,12 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getRefinementsList())
-        .extracting(ref -> ref.getTypeInfo().getName())
-        .as("refined components")
-        .containsExactly("Parent")
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getRefinementsList())
+      .extracting(ref -> ref.getTypeInfo().getName())
+      .as("refined components")
+      .containsExactly("Parent");
   }
 
   @Test
@@ -1145,12 +1066,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getEnclosingScope().resolveComponentType("j").isPresent()).isTrue()
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getEnclosingScope().resolveComponentType("j").isPresent()).isTrue();
   }
 
   @Test
@@ -1168,12 +1087,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // THen
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getFields().size()).isEqualTo(1)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getFields().size()).isEqualTo(1);
   }
 
   @Test
@@ -1191,12 +1108,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getSubcomponents().size()).isEqualTo(1)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getSubcomponents().size()).isEqualTo(1);
   }
 
   @Test
@@ -1214,11 +1129,9 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
   }
 
   @Test
@@ -1236,12 +1149,10 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getAllPorts().size()).isEqualTo(1)
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getAllPorts().size()).isEqualTo(1);
   }
 
   @Test
@@ -1259,13 +1170,11 @@ public class MontiArcDeserializationTest extends MontiArcTestBase {
     final ComponentTypeSymbol symbol = Preconditions.checkNotNull(scope.getLocalComponentTypeSymbols().get(0));
 
     // Then
-    assertAll(
-      () -> assertThat(symbol.getPackageName()).isEqualTo(PACKAGE),
-      () -> assertThat(symbol.getName()).isEqualTo(name),
-      () -> assertThat(symbol.getEnclosingScope()).isEqualTo(scope),
-      () -> assertThat(symbol.getAllPorts().size()).isEqualTo(0),
-      () -> assertThat(symbol.getSubcomponents().size()).isEqualTo(1),
-      () -> assertThat(symbol.getSubcomponents("a").get().getType().getTypeOfPort("out").get().getTypeInfo().getName()).isEqualTo("int")
-    );
+    assertThat(symbol.getPackageName()).isEqualTo(PACKAGE);
+    assertThat(symbol.getName()).isEqualTo(name);
+    assertThat(symbol.getEnclosingScope()).isEqualTo(scope);
+    assertThat(symbol.getAllPorts().size()).isEqualTo(0);
+    assertThat(symbol.getSubcomponents().size()).isEqualTo(1);
+    assertThat(symbol.getSubcomponents("a").get().getType().getTypeOfPort("out").get().getTypeInfo().getName()).isEqualTo("int");
   }
 }

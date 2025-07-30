@@ -15,7 +15,6 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
 
 public class LiftTest {
 
@@ -29,11 +28,9 @@ public class LiftTest {
     lift.setUp();
 
     // Then
-    assertAll(
-      () -> assertThat(lift.getCmd()).isNotNull(),
-      () -> assertThat(lift.getUp()).isNotNull(),
-      () -> assertThat(lift.getDown()).isNotNull()
-    );
+    assertThat(lift.getCmd()).isNotNull();
+    assertThat(lift.getUp()).isNotNull();
+    assertThat(lift.getDown()).isNotNull();
   }
 
   @Test
@@ -47,10 +44,8 @@ public class LiftTest {
     lift.init();
 
     // Then
-    assertAll(
-      () -> assertThat(lift.getUp().getValue()).isNull(),
-      () -> assertThat(lift.getDown().getValue()).isNull()
-    );
+    assertThat(lift.getUp().getValue()).isNull();
+    assertThat(lift.getDown().getValue()).isNull();
   }
 
   @Order(3)
@@ -76,11 +71,9 @@ public class LiftTest {
     lift.compute();
 
     // Then
-    assertAll(
-      () -> assertThat(lift.getCurrentState()).isEqualTo(targetState),
-      () -> assertThat(lift.getUp().getValue()).isEqualTo(up),
-      () -> assertThat(lift.getDown().getValue()).isEqualTo(down)
-    );
+    assertThat(lift.getCurrentState()).isEqualTo(targetState);
+    assertThat(lift.getUp().getValue()).isEqualTo(up);
+    assertThat(lift.getDown().getValue()).isEqualTo(down);
   }
 
   public static Stream<Arguments> transitions() {
@@ -116,11 +109,9 @@ public class LiftTest {
     lift.tick();
 
     // Then
-    assertAll(
-      () -> assertThat(lift.getCmd().getValue()).isNotNull().isEqualTo(cmd),
-      () -> assertThat(lift.getUp().getValue()).isNull(),
-      () -> assertThat(lift.getDown().getValue()).isNull()
-    );
+    assertThat(lift.getCmd().getValue()).isNotNull().isEqualTo(cmd);
+    assertThat(lift.getUp().getValue()).isNull();
+    assertThat(lift.getDown().getValue()).isNull();
   }
 
   @Order(5)
@@ -164,11 +155,9 @@ public class LiftTest {
     }
 
     // Then
-    assertAll(
-      () -> assertThat(actStates).containsExactly(expStates),
-      () -> assertThat(actUp).containsExactly(expUp),
-      () -> assertThat(actDown).containsExactly(expDown)
-    );
+    assertThat(actStates).containsExactly(expStates);
+    assertThat(actUp).containsExactly(expUp);
+    assertThat(actDown).containsExactly(expDown);
   }
 
   public static Stream<Arguments> runs() {
