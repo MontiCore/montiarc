@@ -359,7 +359,7 @@ public class MA2JSimGen {
     Optional<String> formattedCode = Optional.empty();
     try {
       formattedCode = Optional.of(this.getFormatter().formatSource(code));
-    } catch (FormatterException e) {
+    } catch (FormatterException | java.lang.Error e) {
       Log.warn(MASimError.POST_GENERATION_FORMATTING_FAIL.format(
         outPath, template, ast.getArcComponentType().getSymbol().getFullName(), e.getMessage()));
     }
