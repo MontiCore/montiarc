@@ -456,6 +456,12 @@ public class Helper {
         return "(char) 0";
       } else if (BasicSymbolsMill.BOOLEAN.equals(type.asPrimitive().getPrimitiveName())) {
         return "false";
+      } else if (BasicSymbolsMill.LONG.equals(type.asPrimitive().getPrimitiveName())) {
+        return "0L";
+      } else if (BasicSymbolsMill.FLOAT.equals(type.asPrimitive().getPrimitiveName())) {
+        return "0.0f";
+      } else if (BasicSymbolsMill.DOUBLE.equals(type.asPrimitive().getPrimitiveName())) {
+        return "0.0";
       } else return "0";
     } else return "null";
   }

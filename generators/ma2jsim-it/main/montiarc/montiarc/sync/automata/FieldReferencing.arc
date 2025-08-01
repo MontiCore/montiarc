@@ -1,8 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.sync.automata;
 
-import montiarc.types.OnOff;
-
 component FieldReferencing {
   int x = 1;
   int z = x + y;

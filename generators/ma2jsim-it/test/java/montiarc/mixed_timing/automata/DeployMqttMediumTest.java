@@ -9,6 +9,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
 
 @JSimTest
 public class DeployMqttMediumTest {
@@ -19,20 +20,22 @@ public class DeployMqttMediumTest {
 
     final MediumComp[] component = new MediumComp[1];
 
-    DeployMqttMedium deployment = new DeployMqttMedium() {
+    DeployMedium deployment = new DeployMedium(new DeployMqttMedium() {
       @Override
-      protected SimpleMqtt initMqtt() {
+      protected SimpleMqtt initMqtt(Map<String, String> options) throws MqttException {
         return client;
       }
-
+    }) {
       @Override
-      protected void runSimulation(MediumComp c) {
-        component[0] = c;
+      protected MediumComp buildComponent(
+        montiarc.rte.scheduling.CoordinatingScheduler scheduler,
+        java.util.Map<String, String> parameters) {
+        component[0] = super.buildComponent(scheduler, parameters);
+        return component[0];
       }
     };
 
-    deployment.deploy(null);
-
+    deployment.deploy(new String[]{"--tickCount", "0"});
 
     client.publish("/Medium/inY", createOnOffMsg(OnOff.ON));
     client.publish("/Medium/inZ", createOnOffMsg(OnOff.ON));

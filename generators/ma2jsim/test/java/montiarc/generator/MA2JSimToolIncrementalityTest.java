@@ -275,9 +275,6 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateCompBuilder.java").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdateCompBuilder.java"));
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateContext.java").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdateContext.java"));
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdateEvents.java").toFile().lastModified()).isNotEqualTo(lastModified.get("CompToUpdateEvents.java"));
-
-    // Should delete generated deploy class, modified input model is no longer a deploy component
-    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile()).doesNotExist();
   }
 
   @Test
@@ -460,9 +457,6 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ModifiedCompBuilder.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ModifiedCompBuilder.java"));
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ModifiedContext.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ModifiedContext.java"));
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ModifiedEvents.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ModifiedEvents.java"));
-
-    // Should delete generated deploy class, modified input model is no longer a deploy component
-    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployModified.java").toFile()).doesNotExist();
   }
 
   @Test
@@ -659,9 +653,6 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMovedCompBuilder.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ChangedAndMovedCompBuilder.java"));
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMovedContext.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ChangedAndMovedContext.java"));
     assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMovedEvents.java").toFile().lastModified()).isNotEqualTo(lastModified.get("ChangedAndMovedEvents.java"));
-
-    // Should delete generated deploy class, modified input model is no longer a deploy component
-    assertThat(javaOutDir.resolve(usedPackageAsPath).resolve("DeployChangedAndMoved.java").toFile()).doesNotExist();
   }
 
   @Test

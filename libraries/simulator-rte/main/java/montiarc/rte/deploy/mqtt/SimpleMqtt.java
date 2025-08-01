@@ -82,4 +82,14 @@ public class SimpleMqtt implements MqttCallback {
       client.publish(topic, msg);
     }
   }
+
+  public void disconnect() throws MqttException {
+    if (isAsync) {
+      asyncClient.disconnect();
+      asyncClient.close();
+    } else {
+      client.disconnect();
+      client.close();
+    }
+  }
 }

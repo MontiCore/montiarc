@@ -30,4 +30,9 @@ public class MockSimpleMqtt extends SimpleMqtt {
     publishedMessages.put(topic, msg);
     messageArrived(topic, msg);
   }
+
+  @Override
+  public void disconnect() {
+    //noop
+  }
 }

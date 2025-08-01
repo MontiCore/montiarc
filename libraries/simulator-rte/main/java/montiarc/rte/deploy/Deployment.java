@@ -3,22 +3,125 @@ package montiarc.rte.deploy;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
+import montiarc.rte.component.SimComponent;
+import montiarc.rte.deploy.util.DeSerializer;
+import montiarc.rte.scheduling.CoordinatingScheduler;
+import org.apache.commons.cli.*;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public abstract class Deployment<T extends Component> {
 
-  protected long msPerStep = 1000;
+  protected DeSerializer deSerializer;
+  protected DeploymentStrategy<T> strategy = null;
+
+  public Deployment() {
+    deSerializer = new DeSerializer();
+  }
+
+  public Deployment(DeploymentStrategy<T> strategy) {
+    this();
+    this.strategy = strategy;
+    strategy.setDeSerializer(deSerializer);
+  }
 
   public void deploy(String[] args) {
     Log.initWARN();
+    Log.enableFailQuick(false);
 
-    final T component = buildComponent();
+    DefaultParser parser = DefaultParser.builder().setStripLeadingAndTrailingQuotes(false).build();
+    long tickCount = Long.MIN_VALUE;
+    long simulationTickLength = 1000000;
+    long simulatedTickLength = 0;
+    Map<String, String> parameters = new HashMap<>();
 
-    runSimulation(component);
+    try {
+      CommandLine cmd = parser.parse(buildOptions(), args);
+
+      if (cmd.hasOption("help")) {
+        printHelp();
+        return;
+      }
+      if (cmd.hasOption("tickCount")) {
+        tickCount = Long.parseLong(cmd.getOptionValue("tickCount"));
+      }
+      if (cmd.hasOption("simulationTickLength")) {
+        simulationTickLength = Long.parseLong(cmd.getOptionValue("simulationTickLength"));
+      }
+      if (cmd.hasOption("simulatedTickLength")) {
+        simulationTickLength = Long.parseLong(cmd.getOptionValue("simulatedTickLength"));
+      }
+
+      for (Option opt : cmd.getOptions()) {
+        parameters.put(opt.getLongOpt(), cmd.getOptionValue(opt.getLongOpt()));
+      }
+    } catch (ParseException | NumberFormatException e) {
+      Log.error(e.getMessage());
+      printHelp();
+      return;
+    }
+
+    // Setup
+    CoordinatingScheduler scheduler = buildCoordinatingScheduler();
+    T component = Objects.requireNonNull(buildComponent(scheduler, parameters));
+    if (strategy != null) {
+      strategy.connect(component, parameters);
+    }
+
+    // Execution
+    scheduler.run((SimComponent) component, false, tickCount, simulationTickLength, simulatedTickLength);
+
+    // Cleanup
+    if (strategy != null) {
+      strategy.disconnect();
+    }
   }
 
-  protected void runSimulation(T component) {
-    component.runIndefinitely(msPerStep * 1000000);
+  protected CoordinatingScheduler buildCoordinatingScheduler() {
+    return new CoordinatingScheduler();
   }
 
-  protected abstract T buildComponent();
+  protected abstract T buildComponent(CoordinatingScheduler scheduler, Map<String, String> parameters);
+
+  protected Options buildOptions() {
+    // Default Options
+    Options options = new Options();
+    options.addOption(Option.builder()
+      .required(false)
+      .longOpt("tickCount")
+      .desc("Sets the length of the simulation, i.e. how many ticks are executed (by default runs indefinitely)")
+      .hasArg().argName("count")
+      .build());
+    options.addOption(Option.builder().longOpt("simulationTickLength")
+      .required(false)
+      .desc("Sets the real-world tick interval in milliseconds (by default: 1 ms). Use a value of 0 to run the simulation as fast as possible")
+      .hasArg().argName("length")
+      .build());
+    options.addOption(Option.builder().longOpt("simulatedTickLength")
+      .required(false)
+      .desc("Sets the simulation-world tick interval in milliseconds (by default: same as the simulationTickLength)")
+      .hasArg().argName("length")
+      .build());
+    options.addOption(Option.builder().longOpt("help")
+      .required(false)
+      .desc("Displays this help message")
+      .build());
+
+    // Parameter Options
+    addOptionsForParameters(options);
+
+    if (strategy != null) {
+      strategy.addCLIOptions(options);
+    }
+
+    return options;
+  }
+
+  protected void addOptionsForParameters(Options options) { }
+
+  protected void printHelp() {
+    new HelpFormatter().printHelp("java " + this.getClass().getSimpleName(), buildOptions());
+  }
 }

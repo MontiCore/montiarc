@@ -1,73 +1,71 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.deploy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
 import montiarc.rte.deploy.mqtt.SimpleMqtt;
+import montiarc.rte.deploy.util.DeSerializer;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 import org.eclipse.paho.client.mqttv3.IMqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
-import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
-public abstract class MqttDeployment<T extends Component> extends Deployment<T> {
+public abstract class MqttDeployment<T extends Component> implements DeploymentStrategy<T> {
+
+  protected SimpleMqtt mqtt;
+  protected DeSerializer deSerializer;
 
   @Override
-  public void deploy(String[] args) {
-    Log.ensureInitialization();
+  public void setDeSerializer(DeSerializer deSerializer) {
+    this.deSerializer = deSerializer;
+  }
 
-    final T component = Objects.requireNonNull(buildComponent());
-    final SimpleMqtt mqtt;
+  @Override
+  public void connect(T component, Map<String, String> options) {
     try {
-      mqtt = Objects.requireNonNull(initMqtt());
-      connect(component, mqtt);
+      this.mqtt = Objects.requireNonNull(initMqtt(options));
+      setupMqttConnections(component);
     } catch (MqttException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Failed to initialize MQTT client", e);
     }
-
-    runSimulation(component);
   }
 
-  @Override
-  protected void runSimulation(T component) {
-    component.runIndefinitely(msPerStep * 1000000);
-  }
+  protected abstract void setupMqttConnections(T component) throws MqttException;
 
-  protected SimpleMqtt initMqtt() throws MqttException {
+  protected SimpleMqtt initMqtt(Map<String, String> options) throws MqttException {
     IMqttAsyncClient client = new MqttAsyncClient(
-      System.getenv().getOrDefault("MQTT_BROKER_ADDRESS", "tcp://127.0.0.1:1883"),
+      options.getOrDefault("MQTT_BROKER_ADDRESS", "tcp://127.0.0.1:1883").replace("\"", ""),
       "MontiArcSimulation"
     );
     client.connect();
-    while (!client.isConnected()) {}
+    while (!client.isConnected()) { }
 
     return new SimpleMqtt(client);
   }
 
-  protected abstract void connect(T component, SimpleMqtt mqtt) throws MqttException;
-
-  public String serialize(Object o) {
-    ObjectMapper om = new ObjectMapper();
-    try {
-      return om.writeValueAsString(o);
-    } catch (IOException ignored) {}
-
-    return "";
-  }
-
-  public <R> Optional<R> deserialize(String s, Class<R> clazz) {
-    ObjectMapper om = new ObjectMapper();
-
-    try {
-      return Optional.of(om.readValue(s, clazz));
-    } catch (IOException ignored) {}
-    return Optional.empty();
-  }
-
   protected String getTopic(String componentType, String portName) {
     return "/" + componentType + "/" + portName;
+  }
+
+  @Override
+  public void disconnect() {
+    try {
+      this.mqtt.disconnect();
+    } catch (MqttException e) {
+      throw new RuntimeException("Failed to disconnect MQTT client", e);
+    }
+    mqtt = null;
+  }
+
+  @Override
+  public void addCLIOptions(Options options) {
+    options.addOption(Option.builder().longOpt("mqttBroker")
+      .required(false)
+      .desc("Sets the mqtt broker address (by default: \"tcp://127.0.0.1:1883\")")
+      .hasArg().argName("url")
+      .build());
   }
 }

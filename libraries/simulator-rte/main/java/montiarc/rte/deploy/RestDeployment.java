@@ -1,47 +1,47 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.deploy;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sun.net.httpserver.HttpServer;
 import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
 import montiarc.rte.deploy.rest.SimpleRest;
+import montiarc.rte.deploy.util.DeSerializer;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
-public abstract class RestDeployment<T extends Component> extends Deployment<T> {
+public abstract class RestDeployment<T extends Component> implements DeploymentStrategy<T> {
+
+  protected SimpleRest server;
+  protected DeSerializer deSerializer;
 
   @Override
-  public void deploy(String[] args) {
-    Log.ensureInitialization();
+  public void setDeSerializer(DeSerializer deSerializer) {
+    this.deSerializer = deSerializer;
+  }
 
-    final T component = Objects.requireNonNull(buildComponent());
-    SimpleRest server = null;
+  @Override
+  public void connect(T component, Map<String, String> options) {
     try {
-      server = Objects.requireNonNull(initRest());
+      this.server = Objects.requireNonNull(initRest(options));
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new RuntimeException("Failed to start REST server", e);
     }
-    connect(component, server);
-
-    server.start();
-    runSimulation(component);
+    setupEndpoints(component);
   }
 
-  @Override
-  protected void runSimulation(T component) {
-    component.runIndefinitely(msPerStep * 1000000);
-  }
+  protected abstract void setupEndpoints(T component);
 
-  protected SimpleRest initRest() throws IOException {
-    String host = System.getenv().getOrDefault("REST_SERVER_HOST", "127.0.0.1");
+  protected SimpleRest initRest(Map<String, String> options) throws IOException {
+    String host = options.getOrDefault("serverHost", "127.0.0.1").replace("\"", "");
     int port = 8020;
     try {
-      port = Integer.parseInt(System.getenv().getOrDefault("REST_SERVER_PORT", "8020"));
-    } catch (NumberFormatException ignored) {}
+      port = Integer.parseInt(options.getOrDefault("serverPort", "8020"));
+    } catch (NumberFormatException ignored) { }
     Log.info("Serving on http://" + host + ":" + port, "RestDeployment");
     HttpServer server = HttpServer.create(new InetSocketAddress(host, port), 0);
     server.setExecutor(null);
@@ -49,23 +49,23 @@ public abstract class RestDeployment<T extends Component> extends Deployment<T> 
     return new SimpleRest(server);
   }
 
-  protected abstract void connect(T component, SimpleRest server);
-
-  public String serialize(Object o) {
-    ObjectMapper om = new ObjectMapper();
-    try {
-      return om.writeValueAsString(o);
-    } catch (IOException ignored) {}
-
-    return "";
+  @Override
+  public void disconnect() {
+    server.stop();
+    server = null;
   }
 
-  public <R> Optional<R> deserialize(String s, Class<R> clazz) {
-    ObjectMapper om = new ObjectMapper();
-
-    try {
-      return Optional.of(om.readValue(s, clazz));
-    } catch (IOException ignored) {}
-    return Optional.empty();
+  @Override
+  public void addCLIOptions(Options options) {
+    options.addOption(Option.builder().longOpt("serverHost")
+      .required(false)
+      .desc("Sets the rest server host (by default: 127.0.0.1)")
+      .hasArg().argName("host")
+      .build());
+    options.addOption(Option.builder().longOpt("serverPort")
+      .required(false)
+      .desc("Sets the rest server port (by default: 8020)")
+      .hasArg().argName("port")
+      .build());
   }
 }

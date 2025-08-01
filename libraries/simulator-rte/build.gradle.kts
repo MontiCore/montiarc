@@ -18,8 +18,9 @@ sourceSets {
 dependencies {
   api(libs.se.logging)
   api(libs.mqtt)
+  api(libs.commons.cli)
+  api(libs.jackson)
   implementation(libs.guava)
-  implementation(libs.jackson)
   testFixturesImplementation(libs.guava)
   testFixturesImplementation(libs.mqtt)
 

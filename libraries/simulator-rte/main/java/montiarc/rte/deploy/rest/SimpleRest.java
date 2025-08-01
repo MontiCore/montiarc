@@ -22,6 +22,10 @@ public class SimpleRest {
     server.start();
   }
 
+  public void stop() {
+    server.stop(0);
+  }
+
   public void subscribe(String path, Function<String, Boolean> action) {
     server.createContext(path, new SimpleHandler(action));
   }

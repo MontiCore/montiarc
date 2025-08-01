@@ -97,7 +97,7 @@ public class CoordinatingScheduler implements Scheduler {
    *                             If zero the simulationTickLength will be used.
    *                             If that is also zero the actual computation time for each tick is used.
    */
-  protected void run(SimComponent component,
+  public void run(SimComponent component,
                      boolean runToCompletion,
                      long ticks,
                      long simulationTickLength,

@@ -127,18 +127,13 @@ public class MA2JSimGen {
       generateModeAutomaton(ast);
     }
 
-    if (ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getArcComponentType().getSymbol().getParameterList().isEmpty()
-      && helper.getVariants(ast.getArcComponentType()).size() <= 1
+    if (helper.getVariants(ast.getArcComponentType()).size() <= 1
       && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
-    }
-    if (!ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()
-      && ast.getArcComponentType().getSymbol().getParameterList().isEmpty()
-      && helper.getVariants(ast.getArcComponentType()).size() <= 1
-      && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
-      this.generateComponentMqttDeployment(ast);
-      this.generateComponentRestDeployment(ast);
+      if (!ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()) {
+        this.generateComponentMqttDeployment(ast);
+        this.generateComponentRestDeployment(ast);
+      }
     }
   }
 
