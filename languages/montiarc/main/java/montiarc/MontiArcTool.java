@@ -550,7 +550,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void storeSymbols(@NotNull Collection<IMontiArcArtifactScope> scopes,
                            @NotNull String[] input,
                            @NotNull String symboltableDir,
-                           @NotNull String reports) {
+                           @Nullable String reports) {
     Preconditions.checkNotNull(scopes);
     Preconditions.checkNotNull(symboltableDir);
 

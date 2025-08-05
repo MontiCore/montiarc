@@ -61,11 +61,11 @@ public abstract class RestDeployment<T extends Component> implements DeploymentS
       .required(false)
       .desc("Sets the rest server host (by default: 127.0.0.1)")
       .hasArg().argName("host")
-      .build());
+      .get());
     options.addOption(Option.builder().longOpt("serverPort")
       .required(false)
       .desc("Sets the rest server port (by default: 8020)")
       .hasArg().argName("port")
-      .build());
+      .get());
   }
 }

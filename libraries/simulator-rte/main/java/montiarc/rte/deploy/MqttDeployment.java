@@ -66,6 +66,6 @@ public abstract class MqttDeployment<T extends Component> implements DeploymentS
       .required(false)
       .desc("Sets the mqtt broker address (by default: \"tcp://127.0.0.1:1883\")")
       .hasArg().argName("url")
-      .build());
+      .get());
   }
 }

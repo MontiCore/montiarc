@@ -60,7 +60,7 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
-  public void run(String[] args) {
+  public void run(@NotNull String[] args) {
     try {
       //parse input options from the command line
       CommandLineParser cliParser = new DefaultParser();
@@ -94,13 +94,13 @@ public class MA2JSimTool extends MontiArcTool {
       .desc("Generates java code to the specified directory")
       .hasArg()
       .argName("dir")
-      .build());
+      .get());
     options.addOption(org.apache.commons.cli.Option.builder("hwc")
       .longOpt("handwritten-code")
       .desc("Sets the artifact path for handwritten code, space separated")
       .hasArgs()
       .argName("paths")
-      .build());
+      .get());
     return options;
   }
 
@@ -267,7 +267,7 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
-  public void defaultImportTrafo(ASTMACompilationUnit ast, boolean c2mc) {
+  public void defaultImportTrafo(@NotNull ASTMACompilationUnit ast, boolean c2mc) {
     super.defaultImportTrafo(ast, c2mc);
     ast.addImportStatement(MontiArcMill.mCImportStatementBuilder()
       .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
@@ -283,20 +283,23 @@ public class MA2JSimTool extends MontiArcTool {
       .hasArgs()
       .longOpt("classpath")
       .desc("Additional java user classes added to the simulation runtime classpath.")
-      .build());
+      .get());
     return options;
   }
 
   protected void printHelp() {
-    org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
-    formatter.setWidth(80);
-    formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
-    formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
-    formatter.printHelp("MontiArcTool run <DeployComp.java>",
-      " Run the simulator for a generated DeployComp.java file. Additional parameters are forwarded to the Component. This commands needs Java installed on the system.",
-      initRunSimulationOptions(),
-      "",
-      true);
+    org.apache.commons.cli.help.HelpFormatter formatter = org.apache.commons.cli.help.HelpFormatter.builder().get();
+    try {
+      formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
+      formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
+      formatter.printHelp("MontiArcTool run <DeployComp.java>",
+        " Run the simulator for a generated DeployComp.java file. Additional parameters are forwarded to the Component. This commands needs Java installed on the system.",
+        initRunSimulationOptions(),
+        "",
+        true);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   protected void runSimulation(String name, CommandLine options) throws InterruptedException, IOException {

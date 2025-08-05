@@ -6,8 +6,14 @@ import montiarc.rte.component.Component;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.deploy.util.DeSerializer;
 import montiarc.rte.scheduling.CoordinatingScheduler;
-import org.apache.commons.cli.*;
+import org.apache.commons.cli.CommandLine;
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Option;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -31,7 +37,7 @@ public abstract class Deployment<T extends Component> {
     Log.initWARN();
     Log.enableFailQuick(false);
 
-    DefaultParser parser = DefaultParser.builder().setStripLeadingAndTrailingQuotes(false).build();
+    DefaultParser parser = DefaultParser.builder().setStripLeadingAndTrailingQuotes(false).get();
     long tickCount = Long.MIN_VALUE;
     long simulationTickLength = 1000000;
     long simulatedTickLength = 0;
@@ -93,21 +99,21 @@ public abstract class Deployment<T extends Component> {
       .longOpt("tickCount")
       .desc("Sets the length of the simulation, i.e. how many ticks are executed (by default runs indefinitely)")
       .hasArg().argName("count")
-      .build());
+      .get());
     options.addOption(Option.builder().longOpt("simulationTickLength")
       .required(false)
       .desc("Sets the real-world tick interval in milliseconds (by default: 1 ms). Use a value of 0 to run the simulation as fast as possible")
       .hasArg().argName("length")
-      .build());
+      .get());
     options.addOption(Option.builder().longOpt("simulatedTickLength")
       .required(false)
       .desc("Sets the simulation-world tick interval in milliseconds (by default: same as the simulationTickLength)")
       .hasArg().argName("length")
-      .build());
+      .get());
     options.addOption(Option.builder().longOpt("help")
       .required(false)
       .desc("Displays this help message")
-      .build());
+      .get());
 
     // Parameter Options
     addOptionsForParameters(options);
@@ -122,6 +128,10 @@ public abstract class Deployment<T extends Component> {
   protected void addOptionsForParameters(Options options) { }
 
   protected void printHelp() {
-    new HelpFormatter().printHelp("java " + this.getClass().getSimpleName(), buildOptions());
+    try {
+      HelpFormatter.builder().get().printHelp("java " + this.getClass().getSimpleName(), "", buildOptions(), "", true);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
