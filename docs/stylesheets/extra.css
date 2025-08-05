@@ -3,11 +3,35 @@ html {
 }
 
 :root {
-  --md-primary-fg-color: #0067a7;
-  --md-primary-fg-color--light: #0067a7;
-  --md-primary-fg-color--dark: #0067a7;
-  --md-accent-fg-color: #048bdf;
-  --md-accent-fg-color--transparent: #048bdf19;
+  --rwth-blau: #00549F;
+  --rwth-blau-50: #8EBAE5;
+  --rwth-blau-10: #E8F1FA;
+  --rwth-magenta: #E30066;
+  --rwth-gelb: #FFED00;
+  --rwth-petrol: #006165;
+  --rwth-tuerkis: #0098A1;
+  --rwth-gruen: #57AB27;
+  --rwth-maigruen: #BDCD00;
+  --rwth-orange: #F6A800;
+  --rwth-rot: #CC071E;
+  --rwth-bordeaux: #A11035;
+  --rwth-violet: #612158;
+  --rwth-lila: #7A6FAC;
+
+  --md-primary-fg-color: var(--rwth-blau);
+  --md-primary-fg-color--light: var(--rwth-blau);
+  --md-primary-fg-color--dark: var(--rwth-blau);
+  --md-accent-fg-color: var(--rwth-blau-50);
+  --md-accent-fg-color--transparent: #00549F25;
+
+  --md-code-hl-color: var(--rwth-blau-50);
+  --md-code-hl-color--light: var(--rwth-blau-50);
+  --md-code-hl-number-color: var(--rwth-rot);
+  --md-code-hl-special-color: var(--rwth-bordeaux);
+  --md-code-hl-function-color: var(--rwth-violet);
+  --md-code-hl-constant-color: var(--rwth-lila);
+  --md-code-hl-keyword-color: var(--rwth-blau);
+  --md-code-hl-string-color: var(--rwth-gruen);
 }
 
 .md-main {
@@ -21,7 +45,7 @@ html {
 
 .md-typeset .info>.admonition-title,
 .md-typeset .info>summary {
-  background-color: #048bdf1a;
+  background-color: var(--rwth-blau-10);
 }
 
 .md-typeset .info>.admonition-title::before,
@@ -50,7 +74,21 @@ html {
   --md-default-fg-color--lightest: #ffffff12;
   --md-admonition-bg-color: #ffffff08;
   --md-admonition-fg-color: #fffffff0;
-  --md-typeset-a-color: #f8a61c;
+  --md-typeset-a-color: var(--rwth-orange);
+}
+
+.bg-arc {
+  background-image: url(../assets/images/arc.png);
+  background-position-x: 5%;
+  background-position-y: bottom;
+  background-repeat: no-repeat;
+  background-size: auto 20vw;
+}
+
+@media (max-width: 968px) {
+  .bg-arc {
+    background-image: none;
+  }
 }
 
 .section-card {
@@ -64,10 +102,10 @@ html {
   --md-default-fg-color--lightest: #ffffff12;
   --md-admonition-bg-color: #ffffff08;
   --md-admonition-fg-color: #fffffff0;
-  --md-typeset-a-color: #f8a61c;
+  --md-typeset-a-color: var(--rwth-orange);
 }
 
-.section-card a:hover, 
+.section-card a:hover,
 .section-card a:focus {
-	color: #fff100;
+  color: var(--rwth-gelb);
 }

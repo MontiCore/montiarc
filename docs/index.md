@@ -109,7 +109,7 @@ dynamic reconfiguration, and [generics](./Reference/Component/Generics.md).
 
 </div>
 
-<div class="full-width bg-primary" markdown>
+<div class="full-width bg-primary bg-arc" markdown>
 <center markdown>
 <h2 style="margin: 0;">Get Started with MontiArc Today!</h2>
 Discover Component-Based Modeling
