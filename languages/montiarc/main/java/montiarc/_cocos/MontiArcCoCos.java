@@ -62,6 +62,7 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
+import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
 import modes._cocos.MaxOneModeAutomaton;
 import modes._cocos.ModeAutomatonContainsNoStates;
 import modes._cocos.ModeOmitPortDefinition;
@@ -168,6 +169,7 @@ public class MontiArcCoCos {
     addCoCoAs(new variablearc._cocos.arcbasis.UniqueIdentifier(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
     checker.addCoCo(new RefinementPortsMatch());
     checker.addCoCo(new CheckNoFieldDependencyCycles());
+    checker.addCoCo(new VarDeclarationNameAlreadyDefinedInScope());
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
