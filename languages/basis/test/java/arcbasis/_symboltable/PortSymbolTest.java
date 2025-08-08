@@ -15,8 +15,6 @@ import org.mockito.Mockito;
 
 import java.util.Collections;
 
-import static org.mockito.Mockito.mock;
-
 /**
  * Holds tests for the handwritten methods of {@link PortSymbol}.
  */

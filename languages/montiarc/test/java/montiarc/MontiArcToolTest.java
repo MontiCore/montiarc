@@ -6,7 +6,6 @@ import arcbasis._ast.ASTPortAccess;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.se_rwth.commons.logging.Log;
@@ -197,9 +196,10 @@ public class MontiArcToolTest extends MontiArcTestBase {
   protected static Stream<Arguments> parseDirectoriesExpectedExceptionProvider() {
     String modelPath = Paths.get(TEST_RESOURCE, TEST_DIR, "validFileStructureMock/validPackageMock").toString();
 
+    Path path = Paths.get(modelPath);
     return Stream.of(
-      Arguments.of(null, new Path[]{Paths.get(modelPath)}, NullPointerException.class),
-      Arguments.of("", new Path[]{Paths.get(modelPath)}, IllegalArgumentException.class),
+      Arguments.of(null, new Path[]{path}, NullPointerException.class),
+      Arguments.of("", new Path[]{path}, IllegalArgumentException.class),
       Arguments.of(".arc", null, NullPointerException.class)
     );
   }

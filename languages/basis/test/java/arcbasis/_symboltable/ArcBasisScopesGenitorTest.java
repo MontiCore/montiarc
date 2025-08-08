@@ -303,7 +303,6 @@ public class ArcBasisScopesGenitorTest extends ArcBasisTestBase {
   public void shouldCreateField() {
     ASTArcField ast = arcbasis.ArcBasisMill.arcFieldBuilder().setName("var")
       .setInitial(Mockito.mock(ASTExpression.class)).build();
-    ASTMCType type = ArcBasisMill.mCPrimitiveTypeBuilder().setPrimitive(ASTConstantsMCBasicTypes.BYTE).build();
     VariableSymbol symbol = this.getSymTab().create_ArcField(ast).build();
     Assertions.assertEquals(ast.getName(), symbol.getName());
   }

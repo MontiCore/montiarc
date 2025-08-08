@@ -3,7 +3,6 @@ package arcbasis.check;
 
 import arcbasis.ArcBasisMill;
 import arcbasis._symboltable.IArcBasisScope;
-import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.BeforeEach;
 
 /**

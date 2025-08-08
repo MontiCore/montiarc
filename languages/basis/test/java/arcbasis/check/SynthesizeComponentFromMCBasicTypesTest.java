@@ -11,7 +11,6 @@ import de.monticore.types.check.SynthesizeCompKindFromMCBasicTypes;
 import de.monticore.types.mcbasictypes._ast.ASTMCQualifiedType;
 import de.monticore.types.mcbasictypes._ast.ASTMCVoidType;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.ArcError;
 import montiarc.util.MCError;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
