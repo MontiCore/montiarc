@@ -6,12 +6,12 @@ plugins {
 }
 
 dependencies {
-  api(libs.mc.cd4a)
-  implementation(libs.mc.runtime)
-  implementation(libs.mc.grammar)
+  api(seLibs.mc.cd4a)
+  implementation(seLibs.mc.runtime)
+  implementation(seLibs.mc.grammar)
   implementation(libs.janino)
   implementation(libs.guava)
-  implementation(libs.mc.c2mc)
+  implementation(seLibs.mc.c2mc)
 }
 
 tasks.shadowJar {

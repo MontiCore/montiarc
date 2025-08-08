@@ -17,8 +17,8 @@ cd2pojo {
 dependencies {
   cd2pojo(project(":tooling:cd2pojo-plugin-itest:produces-library"))
 
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
+  implementation(seLibs.se.commons.logging)
+  implementation(seLibs.se.commons.utilities)
 }
 
 tasks.getByName<Test>("test") {

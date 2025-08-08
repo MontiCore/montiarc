@@ -4,13 +4,29 @@ pluginManagement {
   includeBuild("./build-logic")
 
   repositories {
-    if(("true").equals(System.getProperty("useLocalRepo"))){
+    if (("true").equals(System.getProperty("useLocalRepo"))) {
       mavenLocal()
     }
     maven {
       url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
     }
     gradlePluginPortal()
+  }
+}
+
+dependencyResolutionManagement {
+  repositories {
+    if (("true").equals(System.getProperty("useLocalRepo"))) {
+      mavenLocal()
+    }
+    maven {
+      url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+    }
+  }
+  versionCatalogs {
+    create("seLibs") {
+      from("de.se_rwth.commons:se-commons-catalog:7.8.0-SNAPSHOT")
+    }
   }
 }
 

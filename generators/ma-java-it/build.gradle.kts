@@ -42,8 +42,8 @@ configurations {
 dependencies {
   implementation(sourceSets["base"].output)
   implementation(project(":languages:montiarc"))
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
+  implementation(seLibs.se.commons.logging)
+  implementation(seLibs.se.commons.utilities)
   implementation(libs.guava)
   implementation(libs.janino)
 }

@@ -16,7 +16,7 @@ sourceSets {
 }
 
 dependencies {
-  api(libs.se.logging)
+  api(seLibs.se.commons.logging)
   api(libs.mqtt)
   api(libs.commons.cli)
   api(libs.jackson)

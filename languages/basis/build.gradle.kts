@@ -7,10 +7,10 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar(libs.mc.grammar)
+  grammar(seLibs.mc.grammar)
 
-  api(libs.mc.grammar)
-  api(libs.se.logging)
+  api(seLibs.mc.grammar)
+  api(seLibs.se.commons.logging)
 
   implementation(libs.apache.commons)
   implementation(libs.guava)

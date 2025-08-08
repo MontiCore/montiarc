@@ -12,7 +12,7 @@ dependencies {
   implementation(libs.format)
   implementation(libs.guava)
   implementation(libs.janino)
-  implementation(libs.mc.ocl)
+  implementation(seLibs.mc.ocl)
 
   testImplementation((project(":languages:basis"))) {
     capabilities {

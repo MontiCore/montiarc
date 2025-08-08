@@ -8,13 +8,13 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar(libs.mc.grammar)
-  grammar(libs.mc.sc)
+  grammar(seLibs.mc.grammar)
+  grammar(seLibs.mc.statecharts)
 
   api(project(":languages:montiarc"))
   api(project(":languages:basis"))
   api(project(":languages:conformance"))
-  api(libs.mc.sc) {
+  api(seLibs.mc.statecharts) {
     exclude("org.apache.groovy", "groovy")
   }
 
@@ -24,7 +24,7 @@ dependencies {
   implementation(libs.jgrapht.ext)
   implementation(libs.guava)
   implementation(libs.z3)
-  implementation(libs.mc.cd4a)
-  implementation(libs.mc.ocl.ocl2smt)
-  implementation(variantOf(libs.mc.cd4a) { classifier("cd2smt") })
+  implementation(seLibs.mc.cd4a)
+  implementation(seLibs.mc.ocl.ocl2smt)
+  implementation(variantOf(seLibs.mc.cd4a) { classifier("cd2smt") })
 }

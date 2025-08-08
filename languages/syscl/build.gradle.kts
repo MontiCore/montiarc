@@ -7,7 +7,7 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar(libs.mc.grammar)
+  grammar(seLibs.mc.grammar)
   grammar(project(":languages:ag"))
   grammar(project(":languages:prepost"))
   grammar(project(":languages:syscl-basis"))
@@ -25,7 +25,7 @@ dependencies {
   implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
-  implementation(libs.mc.ocl)
+  implementation(seLibs.mc.ocl)
 }
 
 java.registerFeature("tests") {

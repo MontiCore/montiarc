@@ -5,7 +5,7 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.se.logging)
+  implementation(seLibs.se.commons.logging)
 
   testImplementation(libs.mockito)
 }

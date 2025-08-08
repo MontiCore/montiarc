@@ -20,8 +20,8 @@ sourceSets {
 dependencies {
   implementation(libs.guava)
   implementation(libs.janino)
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
+  implementation(seLibs.se.commons.logging)
+  implementation(seLibs.se.commons.utilities)
 }
 
 cd2pojo {

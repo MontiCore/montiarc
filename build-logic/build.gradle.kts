@@ -13,9 +13,9 @@ dependencies {
   implementation(libs.shadow)
   implementation(libs.spotless)
   implementation(libs.kotlin)
-  implementation(libs.se.commons)
-  implementation(libs.mc.generator)
-  implementation(libs.mc.language.server)
+  implementation(seLibs.se.commons.gradle)
+  implementation(seLibs.mc.generator)
+  implementation(seLibs.mc.language.server)
   implementation(libs.node.gradle)
   //https://github.com/gradle/gradle/issues/15383
   implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))

@@ -21,7 +21,7 @@ dependencies {
       requireCapability("montiarc.languages:basis-tests")
     }
   }
-  testImplementation(libs.mc.fd)
+  testImplementation(seLibs.mc.fd)
 }
 
 tasks.shadowJar {

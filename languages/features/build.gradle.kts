@@ -7,8 +7,8 @@ plugins {
 buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
 
 dependencies {
-  grammar(libs.mc.grammar)
-  grammar(libs.mc.sc)
+  grammar(seLibs.mc.grammar)
+  grammar(seLibs.mc.statecharts)
   grammar(project(":languages:basis"))
 
   api(project(":languages:automaton"))

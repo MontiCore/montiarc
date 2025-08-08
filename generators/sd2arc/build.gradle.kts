@@ -7,12 +7,12 @@ plugins {
 
 dependencies {
   implementation(project(":languages:montiarc"))
-  implementation(libs.mc.sd)
-  implementation(libs.mc.runtime)
-  implementation(libs.mc.grammar)
+  implementation(seLibs.mc.sd)
+  implementation(seLibs.mc.runtime)
+  implementation(seLibs.mc.grammar)
   implementation(libs.janino)
   implementation(libs.guava)
-  implementation(libs.mc.c2mc)
+  implementation(seLibs.mc.c2mc)
 }
 
 tasks.shadowJar {

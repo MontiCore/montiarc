@@ -9,15 +9,15 @@ configurations {
 
 dependencies {
   grammar(project(":languages:montiarc"))
-  grammar(libs.mc.grammar)
-  grammar(libs.mc.cd4a)
-  grammar(libs.mc.sc)
+  grammar(seLibs.mc.grammar)
+  grammar(seLibs.mc.cd4a)
+  grammar(seLibs.mc.statecharts)
 
   implementation(project(":languages:montiarc"))
-  implementation(libs.mc.grammar)
-  implementation(libs.mc.lsp)
-  implementation(libs.mc.cd4a)
-  implementation(libs.mc.c2mc)
+  implementation(seLibs.mc.grammar)
+  implementation(seLibs.mc.lsp)
+  implementation(seLibs.mc.cd4a)
+  implementation(seLibs.mc.c2mc)
 }
 
 tasks.configureEach {

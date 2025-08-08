@@ -9,8 +9,8 @@ plugins {
 }
 
 dependencies {
-  implementation(libs.se.logging)
-  implementation(libs.se.utilities)
+  implementation(seLibs.se.commons.logging)
+  implementation(seLibs.se.commons.utilities)
 }
 
 group = "montiarc.tooling.cd2pojo-plugin-itest"

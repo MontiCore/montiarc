@@ -24,25 +24,9 @@ jgrapht-ext = "org.jgrapht:jgrapht-ext:1.5.2"
 mqtt = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 commons-cli = "commons-cli:commons-cli:1.10.0"
 
-mc-lsp = "de.monticore.language-server:monticore-language-server-runtime:7.8.0-SNAPSHOT"
-mc-grammar = "de.monticore:monticore-grammar:7.8.0-SNAPSHOT"
-mc-runtime = "de.monticore:monticore-runtime:7.8.0-SNAPSHOT"
-mc-c2mc = "de.monticore:class2mc:7.8.0-SNAPSHOT"
-se-logging = "de.se_rwth.commons:se-commons-logging:7.8.0-SNAPSHOT"
-se-utilities = "de.se_rwth.commons:se-commons-utilities:7.8.0-SNAPSHOT"
-mc-cd4a = "de.monticore.lang:cd4analysis:7.8.0-SNAPSHOT"
-mc-ocl = "de.monticore.lang:ocl:7.8.0-SNAPSHOT"
-mc-ocl-ocl2smt = "de.monticore.lang.ocl:ocl2smt:7.8.0-SNAPSHOT"
-mc-sc = "de.monticore.lang:statecharts:7.8.0-SNAPSHOT"
-mc-fd = "de.monticore.lang:fd-lang:7.8.0-SNAPSHOT"
-mc-sd = "de.monticore.lang:sd-language:7.8.0-SNAPSHOT"
-
 shadow = "gradle.plugin.com.github.johnrengelman:shadow:7.1.2" # Plugin is renamed, requires gradle 8
 spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.18.0"
 kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21"
-se-commons = "de.se_rwth.commons:se-commons-gradle:7.8.0-SNAPSHOT"
-mc-generator = "de.monticore.generator:de.monticore.generator.gradle.plugin:7.8.0-SNAPSHOT"
-mc-language-server = "de.monticore.language-server:de.monticore.language-server.gradle.plugin:7.8.0-SNAPSHOT"
 node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
 
 [plugins]
