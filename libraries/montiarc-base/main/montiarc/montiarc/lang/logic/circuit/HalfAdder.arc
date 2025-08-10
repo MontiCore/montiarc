@@ -27,7 +27,7 @@ component HalfAdder {
   And and;
 
   a -> and.a;
-  a -> and.b;
+  b -> and.b;
   and.q -> ca;
 
 }
