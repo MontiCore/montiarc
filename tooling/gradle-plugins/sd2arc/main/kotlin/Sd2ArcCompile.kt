@@ -1,18 +1,26 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.sd2arc
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.IgnoreEmptyDirectories
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.SkipWhenEmpty
+import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.options.Option
 
 /**
  * A task that generates MontiArc components from sequence diagrams, using sd2arc.
  */
-abstract class Sd2ArcCompile : JavaExec() {
+abstract class Sd2ArcCompile : DefaultTask() {
 
   @get:InputFiles
   @get:SkipWhenEmpty
@@ -34,13 +42,37 @@ abstract class Sd2ArcCompile : JavaExec() {
   @get:Optional
   abstract val defaultTicks : Property<Long>
 
+  /** Enable debugging of the CD2PojoTool while executing*/
+  @get:Input
+  @get:Option(
+    option = "debugTask",
+    description = "Enable debugging of the CD2PojoTool while executing. " +
+        "Set a the port to which the debugger listens with '--debugPort=...'"
+  )
+  abstract val debugTask : Property<Boolean>
+
+  @get:Input
+  @get:Option(
+    option = "debugPort",
+    description = "If '--debugTask' is specified, use this option to specify " +
+        "to which port the debugger shall listen. Defaults to 5005."
+  )
+  abstract val debugPort : Property<String>
+
+  @get:Input
+  abstract val printTaskInfo : Property<Boolean>
+
   init {
     description = "Generates .arc components from sequence diagrams using sd2arc."
 
-    classpath(project.configurations.getByName(GENERATOR_DEPENDENCY_CONFIG_NAME))
-    mainClass.convention(SD2ARC_TOOL_CLASS)
-
     useClass2Mc.convention(false)
+
+    printTaskInfo.convention(false)
+
+    debugTask.convention(false)
+    debugPort.convention("5005")
+
+    dependsOn(getClassPath())
   }
 
   fun montiarcOutputDir(): Provider<Directory> {
@@ -48,35 +80,51 @@ abstract class Sd2ArcCompile : JavaExec() {
   }
 
   @TaskAction
-  override fun exec() {
+  fun exec() {
 
-    // printInfo()
+    if (printTaskInfo.get()) {
+      printInfo()
+    }
+
+    // For directories: filter out entries that do not exist
+    val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
+    val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
 
     // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
     project.delete(outputDir)
 
-    // 1) For directories: filter out entries that do not exist
-    val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
-    val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
-
-    // 2) Build args for the sd2arc generator
-    args("--coco")
-    args("--input", cleanModelPath.asPath)
-    args("--output", this.montiarcOutputDir().get().asFile.path)
-
-    if (!cleanSymbolImportDirs.isEmpty) {
-      args("-path", cleanSymbolImportDirs.asPath)
-    }
-
-    if(useClass2Mc.get()) { args("--class2mc"); }
-
-    if(defaultTicks.isPresent) { args("--defaultTicks", defaultTicks.get()); }
-
-    // 3) Execute
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
-    } else {
-      super.exec()
+      return
+    }
+
+    project.javaexec {
+      it.classpath(getClassPath())
+      it.mainClass.convention(getMainClass())
+
+      if (debugTask.get()) {
+        it.jvmArgs(
+          "-Xdebug",
+          "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
+        )
+      }
+
+      // Set build args for the sd2arc generator
+      it.args("--coco")
+      it.args("--input", cleanModelPath.asPath)
+      it.args("--output", this.montiarcOutputDir().get().asFile.path)
+
+      if (!cleanSymbolImportDirs.isEmpty) {
+        it.args("-path", cleanSymbolImportDirs.asPath)
+      }
+
+      if (useClass2Mc.get()) {
+        it.args("--class2mc")
+      }
+
+      if (defaultTicks.isPresent) {
+        it.args("--defaultTicks", defaultTicks.get())
+      }
     }
   }
 
@@ -85,6 +133,10 @@ abstract class Sd2ArcCompile : JavaExec() {
       fileCollection.files.filter { it.exists() }
     )
   }
+
+  private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)
+
+  private fun getMainClass() = SD2ARC_TOOL_CLASS
 
   private fun printInfo() {
     println("Trying generation")
@@ -101,8 +153,8 @@ abstract class Sd2ArcCompile : JavaExec() {
 
     println("OutDir: " + outputDir.get())
 
-    println("MainClass:" + mainClass.get())
+    println("MainClass:" + getMainClass())
     println("ClassPath:")
-    classpath.asPath.split(":").forEach { println("  $it") }
+    getClassPath().get().asPath.split(":").forEach { println("  $it") }
   }
 }

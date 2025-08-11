@@ -53,35 +53,28 @@ val enableAttachDebugger = false
 
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
+
+  debugTask.set(enableAttachDebugger)
 }
 
 tasks.compileMontiarc {
   useClass2Mc.set(true)
 
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
+  debugTask.set(enableAttachDebugger)
 }
 
 tasks.compileTestMontiarc {
   useClass2Mc.set(true)
 
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
+  debugTask.set(enableAttachDebugger)
 }
 
 tasks.compileTestSd2arc {
-
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
+  debugTask.set(enableAttachDebugger)
 }
 
 tasks.compileTestMontiarc {
   useClass2Mc.set(true)
 
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
+  debugTask.set(enableAttachDebugger)
 }

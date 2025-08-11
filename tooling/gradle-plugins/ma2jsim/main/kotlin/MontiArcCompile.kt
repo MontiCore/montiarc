@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2jsim
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -12,7 +13,6 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
@@ -26,7 +26,7 @@ import org.gradle.api.tasks.options.Option
  * A task that generates Java code from MontiArc models.
  */
 @CacheableTask
-abstract class MontiArcCompile : JavaExec() {
+abstract class MontiArcCompile : DefaultTask() {
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
@@ -70,7 +70,7 @@ abstract class MontiArcCompile : JavaExec() {
   @get:Option(
     option = "debugTask",
     description = "Enable debugging of the MA2JsimTool while executing. " +
-            "Set a the port to which the debugger listens with '--debugPort=...'"
+        "Set a the port to which the debugger listens with '--debugPort=...'"
   )
   abstract val debugTask : Property<Boolean>
 
@@ -78,17 +78,12 @@ abstract class MontiArcCompile : JavaExec() {
   @get:Option(
     option = "debugPort",
     description = "If '--debugTask' is specified, use this option to specify " +
-            "to which port the debugger shall listen. Defaults to 5005."
+        "to which port the debugger shall listen. Defaults to 5005."
   )
   abstract val debugPort : Property<String>
 
   init {
     description = "Generates .java code from MontiArc models."
-
-    classpath(project.configurations.getByName(GENERATOR_DEPENDENCY_CONFIG_NAME))
-    mainClass.convention(MA_TOOL_CLASS)
-
-    this.setIgnoreExitValue(true)
 
     useClass2Mc.convention(false)
     checkVariability.convention(false)
@@ -99,6 +94,8 @@ abstract class MontiArcCompile : JavaExec() {
     printTaskInfo.convention(false)
     debugTask.convention(false)
     debugPort.convention("5005")
+
+    dependsOn(getClassPath())
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -114,63 +111,67 @@ abstract class MontiArcCompile : JavaExec() {
   }
 
   @TaskAction
-  override fun exec() {
-
+  fun exec() {
     if (printTaskInfo.get()) {
       printInfo()
     }
 
-    // Enable remote debugging when option is set
-    if (debugTask.get()) {
-      enableDebugging()
-    }
-
-    // 1) For directories: filter out entries that do not exist
+    // For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
     val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
-    // 2) Build args for the montiarc generator
-    args("--input", cleanModelPath.asPath)
-    args("--output", this.javaOutputDir().get().asFile.path)
-    args("--symboltable", this.symbolOutputDir().get().asFile.path)
-    args("--report", this.reportsOutputDir().get().asFile.path)
-
-    if (debugLog.get()) {args("--debug");}
-    if (traceLog.get()) {args("--trace");}
-    if(fileLog.get()) {args("--file");}
-
-    if(useClass2Mc.get()) { args("--class2mc"); }
-
-    if (!cleanHwcPath.isEmpty) { args("--handwritten-code", cleanHwcPath.asPath); }
-    if (!cleanSymbolImportDirs.isEmpty) {
-      args("-path", cleanSymbolImportDirs.asPath)
-    }
-
-    if(!checkVariability.get()) { args("--no-variability-checks"); }
-
-    // 3) Execute
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
-    } else {
-      super.exec()
+      return
+    }
 
-      if (executionResult.get().exitValue != 0) {
-        throw GradleException("There are compile errors.")
+    val exec = project.javaexec {
+      it.classpath(getClassPath())
+      it.mainClass.set(getMainClass())
+
+      it.setIgnoreExitValue(true)
+
+      // Enable remote debugging when option is set
+      if (debugTask.get()) {
+        it.jvmArgs(
+          "-Xdebug",
+          "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
+        )
       }
+
+      // Set build args for the montiarc generator
+      it.args("--input", cleanModelPath.asPath)
+      it.args("--output", this.javaOutputDir().get().asFile.path)
+      it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
+      it.args("--report", this.reportsOutputDir().get().asFile.path)
+
+      if (debugLog.get()) { it.args("--debug") }
+      if (traceLog.get()) { it.args("--trace") }
+      if (fileLog.get()) { it.args("--file") }
+
+      if(useClass2Mc.get()) { it.args("--class2mc") }
+
+      if (!cleanHwcPath.isEmpty) { it.args("--handwritten-code", cleanHwcPath.asPath); }
+      if (!cleanSymbolImportDirs.isEmpty) {
+        it.args("-path", cleanSymbolImportDirs.asPath)
+      }
+
+      if(!checkVariability.get()) { it.args("--no-variability-checks"); }
+    }
+
+    if (exec.exitValue != 0) {
+      throw GradleException("There are compile errors.")
     }
   }
+
+  private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)
+
+  private fun getMainClass() = MA_TOOL_CLASS
 
   private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {
     return project.files(
       fileCollection.files.filter { it.exists() }
-    )
-  }
-
-  private fun enableDebugging() {
-    jvmArgs(
-      "-Xdebug",
-      "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
     )
   }
 
@@ -197,9 +198,9 @@ abstract class MontiArcCompile : JavaExec() {
     println("OutDir: " + outputDir.get())
     println("Reports out dir: " + reportsOutputDir().get())
 
-    println("MainClass:" + mainClass.get())
+    println("MainClass:" + getMainClass())
     println("ClassPath:")
-    classpath.asPath.split(":").forEach { println("  $it") }
+    getClassPath().get().asPath.split(":").forEach { println("  $it") }
   }
 }
 

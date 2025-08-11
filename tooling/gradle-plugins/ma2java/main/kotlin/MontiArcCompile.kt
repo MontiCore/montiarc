@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2java
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -11,7 +12,6 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
@@ -19,12 +19,13 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.options.Option
 
 /**
  * A task that generates Java code from MontiArc models.
  */
 @CacheableTask
-abstract class MontiArcCompile : JavaExec() {
+abstract class MontiArcCompile : DefaultTask() {
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
@@ -58,20 +59,39 @@ abstract class MontiArcCompile : JavaExec() {
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
 
+  /** Enable debugging of the CD2PojoTool while executing. */
+  @get:Input
+  @get:Option(
+    option = "debugTask",
+    description = "Enable debugging of the MA2JsimTool while executing. " +
+        "Set a the port to which the debugger listens with '--debugPort=...'"
+  )
+  abstract val debugTask : Property<Boolean>
+
+  @get:Input
+  @get:Option(
+    option = "debugPort",
+    description = "If '--debugTask' is specified, use this option to specify " +
+        "to which port the debugger shall listen. Defaults to 5005."
+  )
+  abstract val debugPort : Property<String>
+
   @get:Input
   abstract val printTaskInfo : Property<Boolean>
 
   init {
     description = "Generates .java code from MontiArc models."
 
-    classpath(project.configurations.getByName(GENERATOR_DEPENDENCY_CONFIG_NAME))
-    mainClass.convention(MA_TOOL_CLASS)
-
     useClass2Mc.convention(false)
     dse.convention(false)
     printTaskInfo.convention(false)
     debugLog.convention(false)
     traceLog.convention(false)
+
+    debugTask.convention(false)
+    debugPort.convention("5005")
+
+    dependsOn(getClassPath())
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -87,41 +107,52 @@ abstract class MontiArcCompile : JavaExec() {
   }
 
   @TaskAction
-  override fun exec() {
+  fun exec() {
 
     if (printTaskInfo.get()) {
       printInfo()
     }
 
-    // 1) For directories: filter out entries that do not exist
+    // For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
     val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
-    // 2) Build args for the montiarc generator
-    args("--input", cleanModelPath.asPath)
-    args("--output", this.javaOutputDir().get().asFile.path)
-    args("--symboltable", this.symbolOutputDir().get().asFile.path)
-    args("--report", this.reportsOutputDir().get().asFile.path)
-
-    if(useClass2Mc.get()) { args("--class2mc"); }
-
-    if (debugLog.get()) {args("--debug");}
-    if (traceLog.get()) {args("--trace");}
-
-    if (!cleanHwcPath.isEmpty) { args("--handwritten-code", cleanHwcPath.asPath); }
-    if (!cleanSymbolImportDirs.isEmpty) {
-      args("-path", cleanSymbolImportDirs.asPath)
-    }
-
-    if(dse.get()){args("-dse");}
-
-
-    // 3) Execute
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
-    } else {
-      super.exec()
+      return
+    }
+
+    project.javaexec {
+      it.mainClass.set(getMainClass())
+      it.classpath(getClassPath())
+
+      // Enable remote debugging when option is set
+      if (debugTask.get()) {
+        it.jvmArgs(
+          "-Xdebug",
+          "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
+        )
+      }
+
+      // Set build args for the montiarc generator
+      it.args("--input", cleanModelPath.asPath)
+      it.args("--output", this.javaOutputDir().get().asFile.path)
+      it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
+      it.args("--report", this.reportsOutputDir().get().asFile.path)
+
+      if (useClass2Mc.get()) { it.args("--class2mc") }
+      if (debugLog.get()) { it.args("--debug") }
+      if (traceLog.get()) { it.args("--trace") }
+
+      if (!cleanHwcPath.isEmpty) {
+        it.args("--handwritten-code", cleanHwcPath.asPath)
+      }
+      if (!cleanSymbolImportDirs.isEmpty) {
+        it.args("-path", cleanSymbolImportDirs.asPath)
+      }
+
+      if (dse.get()) { it.args("-dse") }
     }
   }
 
@@ -130,6 +161,10 @@ abstract class MontiArcCompile : JavaExec() {
       fileCollection.files.filter { it.exists() }
     )
   }
+
+  private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)
+
+  private fun getMainClass() = MA_TOOL_CLASS
 
   private fun printInfo() {
     println("Trying generation")
@@ -152,9 +187,11 @@ abstract class MontiArcCompile : JavaExec() {
     println("OutDir: " + outputDir.get())
     println("Reports out dir: " + reportsOutputDir().get())
 
-    println("MainClass:" + mainClass.get())
+    println("MainClass:" + getMainClass())
     println("ClassPath:")
-    classpath.asPath.split(":").forEach { println("  $it") }
+    getClassPath().get().asPath.split(":").forEach { println("  $it") }
+
+    println("DSE: ${dse.get()}")
   }
 }
 

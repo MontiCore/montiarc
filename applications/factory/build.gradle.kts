@@ -42,8 +42,12 @@ tasks.compileTestCd2pojo {
 
 tasks.compileMontiarc {
   useClass2Mc.set(true)
+
+  debugTask.set(false)
 }
 
 tasks.compileTestMontiarc {
   useClass2Mc.set(true)
+
+  debugTask.set(false)
 }

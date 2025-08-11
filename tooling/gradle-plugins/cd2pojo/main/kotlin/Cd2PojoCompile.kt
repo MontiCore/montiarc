@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.cd2pojo
 
+import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
@@ -11,7 +12,6 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.JavaExec
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
@@ -24,7 +24,7 @@ import org.gradle.api.tasks.options.Option
  * A task that generates Java code from class diagrams, using cd2pojo.
  */
 @CacheableTask
-abstract class Cd2PojoCompile : JavaExec() {
+abstract class Cd2PojoCompile : DefaultTask() {
 
   // Unimplemented options: help / version / prettyprint / reports / turning cocos off / configtemplate /templatepath
   // see CD4CodeTool#addStandartOptions
@@ -70,16 +70,20 @@ abstract class Cd2PojoCompile : JavaExec() {
   )
   abstract val debugPort : Property<String>
 
+  @get:Input
+  abstract val printTaskInfo : Property<Boolean>
+
   init {
     description = "Generates .java code from class diagrams using cd2pojo."
 
-    classpath(project.configurations.getByName(GENERATOR_DEPENDENCY_CONFIG_NAME))
-    mainClass.convention(CD2POJO_TOOL_CLASS)
-
     useClass2Mc.convention(false)
+
+    printTaskInfo.convention(false)
 
     debugTask.convention(false)
     debugPort.convention("5005")
+
+    dependsOn(getClassPath())
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -91,41 +95,52 @@ abstract class Cd2PojoCompile : JavaExec() {
   }
 
   @TaskAction
-  override fun exec() {
+  fun exec() {
 
-    // printInfo()
-
-    // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
-    project.delete(outputDir)
-
-    // Enable remote debugging when option is set
-    if (debugTask.get()) {
-      enableDebugging()
+    if (printTaskInfo.get()) {
+      printInfo()
     }
 
-    // 1) For directories: filter out entries that do not exist
+    // For directories: filter out entries that do not exist
     val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
     val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
 
-    // 2) Build args for the cd2pojo generator
-    args("--checkcococs")
-    args("--input", cleanModelPath.asPath)
-    args("--output", this.javaOutputDir().get().asFile.path)
-    args("--symboltable", this.symbolOutputDir().get().asFile.path)
-
-    if(useClass2Mc.get()) { args("--class2mc"); }
-
-    if (!cleanHwcPath.isEmpty) { args("--handwrittencode", cleanHwcPath.asPath); }
-    if (!cleanSymbolImportDirs.isEmpty) {
-      args("-path", cleanSymbolImportDirs.asPath)
-    }
-
-    // 3) Execute
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
-    } else {
-      super.exec()
+      return
+    }
+
+    // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
+    project.delete(outputDir)
+
+    project.javaexec {
+      it.classpath(getClassPath())
+      it.mainClass.set(getMainClass())
+
+      if (debugTask.get()) {
+        it.jvmArgs(
+          "-Xdebug",
+          "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
+        )
+      }
+
+      // Set build args for the cd2pojo generator
+      it.args("--checkcococs")
+      it.args("--input", cleanModelPath.asPath)
+      it.args("--output", this.javaOutputDir().get().asFile.path)
+      it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
+
+      if (useClass2Mc.get()) {
+        it.args("--class2mc")
+      }
+
+      if (!cleanHwcPath.isEmpty) {
+        it.args("--handwrittencode", cleanHwcPath.asPath)
+      }
+      if (!cleanSymbolImportDirs.isEmpty) {
+        it.args("-path", cleanSymbolImportDirs.asPath)
+      }
     }
   }
 
@@ -135,12 +150,9 @@ abstract class Cd2PojoCompile : JavaExec() {
     )
   }
 
-  private fun enableDebugging() {
-    jvmArgs(
-      "-Xdebug",
-      "-Xrunjdwp:transport=dt_socket,server=y,address=${debugPort.get()},suspend=y"
-    )
-  }
+  private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)
+
+  private fun getMainClass() = CD2POJO_TOOL_CLASS
 
   private fun printInfo() {
     println("Trying generation")
@@ -162,9 +174,9 @@ abstract class Cd2PojoCompile : JavaExec() {
 
     println("OutDir: " + outputDir.get())
 
-    println("MainClass:" + mainClass.get())
+    println("MainClass:" + getMainClass())
     println("ClassPath:")
-    classpath.asPath.split(":").forEach { println("  $it") }
+    getClassPath().get().asPath.split(":").forEach { println("  $it") }
 
     println("Debugging infos: isEnabled=${debugTask.get()}; port=${debugPort.get()}")
   }

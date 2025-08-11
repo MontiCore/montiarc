@@ -32,13 +32,12 @@ montiarc {
 
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
+
+  debugTask.set(false)
 }
 
 tasks.compileMontiarc {
   useClass2Mc.set(true)
 
-  val enableAttachDebugger = false
-  if(enableAttachDebugger) {
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,address=5005,suspend=y")
-  }
+  debugTask.set(false)
 }
