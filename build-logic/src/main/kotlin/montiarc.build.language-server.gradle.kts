@@ -8,5 +8,5 @@ plugins {
 
 node {
   download.set(true)
-  version.set("18.16.1")
+  version.set("20.19.4")
 }
