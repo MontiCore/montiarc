@@ -275,7 +275,7 @@ public class MontiArcGenerator {
     try {
       formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
     }
-    catch (FormatterException e) {
+    catch (FormatterException | java.lang.Error e) {
       Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
         outPath, templateName, comp.getSymbol().getFullName(), e.getMessage()));
     }
