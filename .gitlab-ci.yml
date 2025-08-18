@@ -27,7 +27,7 @@ Build:
   stage: build
   allow_failure: false
   script:
-    - gradle clean assemble --stacktrace --build-cache -PenableLanguageServer
+    - gradle clean assemble --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
 
 Build LSP:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
@@ -35,7 +35,7 @@ Build LSP:
   needs: ["Build"]
   allow_failure: false
   script:
-    - gradle tooling:language-server:build --stacktrace --build-cache -PenableLanguageServer
+    - gradle tooling:language-server:build --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
 
 Verify Formatting:
   stage: test
