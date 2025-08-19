@@ -58,19 +58,19 @@ class SendMessagesOnConditionTest {
       ),
       Arguments.of(
         List.of(tk(), msg(ON)),
-        List.of(tk(), msg(ON))
+        List.of(tk(), msg(ON), msg(ON))
       ),
       Arguments.of(
         List.of(msg(ON), tk()),
-        List.of(msg(ON), tk())
+        List.of(msg(ON), msg(ON), tk())
       ),
       Arguments.of(
         List.of(tk(), msg(ON), tk()),
-        List.of(tk(), msg(ON), tk())
+        List.of(tk(), msg(ON), msg(ON), tk())
       ),
       Arguments.of(
         List.of(msg(ON), tk(), msg(ON)),
-        List.of(msg(ON), tk(), msg(ON))
+        List.of(msg(ON), msg(ON), tk(), msg(ON), msg(ON))
       )
     );
   }

@@ -11,8 +11,11 @@ component SendMessagesOnCondition {
     initial state S;
 
     S -> S p / {
-     if(p==OnOff.ON) o = p;
-     if(p!=OnOff.ON) o = p;
-   };
+      if (p==OnOff.ON) o = p;
+      if (p!=OnOff.ON) o = p;
+
+      if (p==OnOff.ON) o = p;
+      else o = p;
+    };
   }
 }

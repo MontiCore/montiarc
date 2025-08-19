@@ -36,7 +36,13 @@ public class MCCommonStatementsJavaPrinter extends MCCommonStatementsPrettyPrint
 
     if (node.isPresentElseStatement()) {
       this.getPrinter().print("else ");
-      node.getElseStatement().accept(this.getTraverser());
+      if (MontiArcMill.typeDispatcher().isMCCommonStatementsASTMCJavaBlock(node.getElseStatement())) {
+        node.getElseStatement().accept(this.getTraverser());
+      } else {
+        this.getPrinter().print("{");
+        node.getElseStatement().accept(this.getTraverser());
+        this.getPrinter().print("}");
+      }
     }
 
     if (this.isPrintComments()) {
