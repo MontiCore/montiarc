@@ -304,6 +304,7 @@ component B {
 
 ##### Description  
 Occurs when a model contains a feedback loop without any form of delay, causing signals to propagate instantaneously in a cycle. This leads to undefined or nondeterministic behavior because there is no defined ordering for updates.
+Read more about causality and feedback loops [here](../../Reference/Component/Connectors.md#feedback).
 
 ##### Example
 
@@ -311,28 +312,36 @@ Occurs when a model contains a feedback loop without any form of delay, causing 
 component A { 
   port in Integer i; 
   port out Integer o;
+  
+  automaton {
+    initial state S;
+    S -> S / { o = i; };
+  }
 }
 
 component B {
-  port in Integer i;
   A sub;
-  sub.o -> i;
-  o -> sub.i;
+  sub.o -> sub.i;
 }
-//Here, sub.o drives i and o drives sub.i within the same tick, forming a zero-delay feedback loop.
+// Here, sub.o drives sub.i within the same tick, forming a zero-delay feedback loop.
 ```
 
 ##### How to fix
-Add a delay: annotate one port with `<<delayed>>` to enforce at least one clock tick between signal propagation:
+Add a delay anywhere in the loop: annotate the behavior (e.g., automaton or compute block) with `<<delayed>>` to enforce at least one clock tick between signal propagations for this component:
 ```montiarc
 component A { 
   port in Integer i; 
-  port <<delayed>> out Integer o;
+  port out Integer o;
+
+  <<delayed>> automaton { 
+    initial state S;
+    S -> S / { o = i; };
+  }
 }
+
 component B {
   A sub;
-  sub.o -> i;
-  o -> sub.i;
+  sub.o -> sub.i;
 }
 ```
 
