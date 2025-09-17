@@ -57,6 +57,12 @@ html {
   height: inherit;
 }
 
+@media screen and (min-width:60em) {
+  .md-search__form {
+    border-radius: 500px;
+  }
+}
+
 .full-width {
   width: 100vw;
   max-width: 100vw;
