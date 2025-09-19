@@ -30,7 +30,7 @@ public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top(
     </#list>
     <#list comp.getAllOutgoingPorts() as port>
       component.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(comp.getAstNode(), port)}()
-        .connect(new montiarc.rte.deploy.mqtt.MqttPort<>(mqtt, getTopic("${comp.getName()}", "${port.getName()}${helper.portVariantSuffix(comp.getAstNode(), port)}"), deSerializer));
+        .connect(new montiarc.rte.deploy.mqtt.MqttOutPort<>(mqtt, getTopic("${comp.getName()}", "${port.getName()}${helper.portVariantSuffix(comp.getAstNode(), port)}"), deSerializer));
     </#list>
   }
 }

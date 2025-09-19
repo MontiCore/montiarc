@@ -11,14 +11,7 @@ import java.util.Objects;
  *
  * @param <T> the message's data type
  */
-public interface InPort<T> extends Port {
-
-  /**
-   * Receive a message on this port.
-   *
-   * @param message the received message
-   */
-  void receive(Message<? extends T> message);
+public interface InPort<T> extends Port, Receiver<T> {
   
   /**
    * Peek the next message in the buffer.

@@ -26,7 +26,7 @@ public class AbstractOutPort<T> implements OutPort<T> {
    * <br>
    * Implemented as a list rather than a set because this allows for constant iteration (and thus message sending) order.
    */
-  protected List<InPort<? super T>> recipients = new ArrayList<>();
+  protected List<Receiver<? super T>> recipients = new ArrayList<>();
 
   public AbstractOutPort(String qualifiedName, Component owner) {
     this.qualifiedName = qualifiedName;
@@ -50,7 +50,7 @@ public class AbstractOutPort<T> implements OutPort<T> {
    * @return true iff the given port is connected to this port when this method finishes
    */
   @Override
-  public boolean connect(InPort<? super T> recipient) {
+  public boolean connect(Receiver<? super T> recipient) {
     if (recipient == null) {
       return false;
     }
@@ -69,7 +69,7 @@ public class AbstractOutPort<T> implements OutPort<T> {
    * @return true iff the given port is not connected to this port when this method finishes
    */
   @Override
-  public boolean disconnect(InPort<? super T> recipient) {
+  public boolean disconnect(Receiver<? super T> recipient) {
     return recipients.remove(recipient) || !recipients.contains(recipient);
   }
 
@@ -93,7 +93,7 @@ public class AbstractOutPort<T> implements OutPort<T> {
    */
   @Override
   public void send(Message<? extends T> message) {
-    for (InPort<? super T> recipient : recipients) {
+    for (Receiver<? super T> recipient : recipients) {
       recipient.receive(message);
     }
   }
