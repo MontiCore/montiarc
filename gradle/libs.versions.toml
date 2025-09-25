@@ -1,9 +1,9 @@
 # (c) https://github.com/MontiCore/monticore
 [libraries]
-apache-commons = "org.apache.commons:commons-lang3:3.18.0"
+apache-commons = "org.apache.commons:commons-lang3:3.19.0"
 apache-poi = "org.apache.poi:poi:5.4.1"
 api-guardian = "org.apiguardian:apiguardian-api:1.1.2"
-assertj = "org.assertj:assertj-core:3.27.5"
+assertj = "org.assertj:assertj-core:3.27.6"
 freemarker = "org.freemarker:freemarker:2.3.34"
 format = "com.google.googlejavaformat:google-java-format:1.9" # >1.24.0 requires Java 17, >1.9 requires JVM flags
 guava = "com.google.guava:guava:33.5.0-jre"
@@ -15,8 +15,8 @@ junit-params = "org.junit.jupiter:junit-jupiter-params:5.13.4"
 junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.13.4"
 junit-platform-testkit = "org.junit.platform:junit-platform-testkit:1.13.4"
 smt = "org.sosy-lab:java-smt:5.0.1"
-mockito = "org.mockito:mockito-core:5.19.0"
-mockito-junit = "org.mockito:mockito-junit-jupiter:5.19.0"
+mockito = "org.mockito:mockito-core:5.20.0"
+mockito-junit = "org.mockito:mockito-junit-jupiter:5.20.0"
 z3 = "tools.aqua:z3-turnkey:4.14.1"
 jgrapht-core = "org.jgrapht:jgrapht-core:1.5.2"
 jgrapht-jgraphx = "org.tinyjee.jgraphx:jgraphx:3.4.1.3"
