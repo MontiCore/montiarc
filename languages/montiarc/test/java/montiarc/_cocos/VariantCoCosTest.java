@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
+import arcbasis._cocos.BehaviorInDecomposed;
 import arcbasis._cocos.ConnectorDirectionsFit;
 import arcbasis._cocos.ConnectorPortsExist;
 import arcbasis._cocos.ConnectorTimingsFit;
@@ -633,6 +634,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
     checker.get4Variant().addCoCo(new SwitchStatementValid());
     checker.get4Variant().addCoCo(new EventTriggerExists());
+    checker.get4Variant().addCoCo(new BehaviorInDecomposed());
 
     // When
     checker.checkAll(ast);
@@ -671,6 +673,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
     checker.get4Variant().addCoCo(new SwitchStatementValid());
     checker.get4Variant().addCoCo(new EventTriggerExists());
+    checker.get4Variant().addCoCo(new BehaviorInDecomposed());
 
     // When
     checker.checkAll(ast);
@@ -1256,7 +1259,8 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "compute { } " +
           "compute { } " +
           "}",
-        ArcError.MULTIPLE_BEHAVIOR),
+        ArcError.MULTIPLE_BEHAVIOR,
+        ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR),
       // out port forward, subcomponent with variable generic interface type (deselected feature)
       arg("component Comp61<T> { " +
           "port out T o; " +
@@ -1410,6 +1414,21 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}" +
           "}",
         ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL
+      ),
+      // Automaton with missing trigger symbol in one variant
+      arg("component Comp75 { " +
+          "feature f;" +
+          "varif(f) {" +
+          "a.b.B sub;" +
+          "port out int o;" +
+          "sub.o -> o;" +
+          "}" +
+          "automaton {" +
+          "initial state A;" +
+          "A -> A;" +
+          "}" +
+          "}",
+        ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR
       )
     );
   }

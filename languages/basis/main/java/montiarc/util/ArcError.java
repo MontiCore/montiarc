@@ -23,6 +23,7 @@ public enum ArcError implements Error {
   CONNECTOR_TIMING_MISMATCH("0xC1113", "Timing mismatch, expected '%s' but provided '%s'"),
   MULTIPLE_TIMING_ANNOTATIONS("0xC1114", "Annotation error, multiple timing annotations"),
   MULTIPLE_BEHAVIOR("0xC1115", "Multiple conflicting behavior descriptions"),
+  DECOMPOSED_COMPONENT_WITH_BEHAVIOR("0xC1116","Cannot use behavior description in decomposed component"),
   FEEDBACK_CAUSALITY("0xC1117", "Feedback loop without strong causality"),
   TOO_FEW_ARGUMENTS("0xC1119", "Too few arguments, expected '%s' but provided '%S'"),
   TOO_MANY_ARGUMENTS("0xC1120", "Too many arguments, expected '%s' but provided '%s'"),

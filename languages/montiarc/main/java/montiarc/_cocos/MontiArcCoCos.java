@@ -10,6 +10,7 @@ import arcautomaton._cocos.NoOtherInputPortInMsgTransition;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
+import arcbasis._cocos.BehaviorInDecomposed;
 import arcbasis._cocos.CheckNoFieldDependencyCycles;
 import arcbasis._cocos.CircularInheritance;
 import arcbasis._cocos.CompArgNoAssignmentExpr;
@@ -170,6 +171,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new RefinementPortsMatch());
     checker.addCoCo(new CheckNoFieldDependencyCycles());
     checker.addCoCo(new VarDeclarationNameAlreadyDefinedInScope());
+    addCoCoAs(new BehaviorInDecomposed(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
