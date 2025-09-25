@@ -111,7 +111,7 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "    port in int i;" +
           "    port out int o;" +
           "  }" +
-          "}", 2),
+          "}", 0),
       Arguments.of(
         "component Comp11 { " +
           "  autoconnect type;" +
@@ -182,7 +182,7 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "    port in int ip;" +
           "    port out int ip;" +
           "  }" +
-          "}", 2),
+          "}", 0),
       Arguments.of(
         "component Comp19 { " +
           "  autoconnect port;" +
@@ -296,7 +296,7 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "    port out int o;" +
           "  }" +
           "}", 3),
-      // some transitions already exists 
+      // some transitions already exists
       Arguments.of(
         "component Comp29 { " +
           "  autoconnect port;" +
@@ -321,7 +321,21 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
           "    port in int i, x;" +
           "    port out int o;" +
           "  }" +
-          "}", 3)
+          "}", 3),
+      // usage of autoconnect port and autconnect type
+      Arguments.of(
+        "component Comp30 { " +
+          "  autoconnect type;" +
+          "  autoconnect port; " +
+          "  port in int a;" +
+          "  port in int b;" +
+          "  port in int c;" +
+          "  port out String y;" +
+          "  component Inner inner {" +
+          "    port in int a, b, c;" +
+          "    port out String x;" +
+          "  }" +
+          "}", 4)
     );
   }
 
@@ -361,56 +375,6 @@ public class AutoConnectTrafoTest extends MontiArcTestBase {
     });
     assertThat(Log.getFindings()).isEmpty();
 
-  }
-
-  protected static Stream<Arguments> invalidModels() {
-    return Stream.of(
-      arg("component Comp1 {" +
-          "  autoconnect type;" +
-          "  port in int i1, i2;" +
-          "  port out int o;" +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      arg("component Comp2 {" +
-          "  autoconnect type;" +
-          "  port in int i1, i2;" +
-          "  port out int o1, o2;" +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER,
-        ArcError.PORT_MULTIPLE_SENDER),
-      arg("component Comp3 {" +
-          "  autoconnect type;" +
-          "  port in int a, b, c;" +
-          "  port out int x;" +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER,
-        ArcError.PORT_MULTIPLE_SENDER)
-    );
-  }
-
-  @MethodSource("invalidModels")
-  @ParameterizedTest
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-
-    // Given
-    ASTMACompilationUnit ast = MontiArcMill.parser().parse_StringMACompilationUnit(model).orElseThrow();
-    MontiArcTrafos.afterParsing().applyAll(ast);
-    MontiArcMill.scopesGenitorDelegator().createFromAST(ast);
-    MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
-
-    MAAutoConnectTrafo trafo = new MAAutoConnectTrafo();
-
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortUniqueSender());
-
-    // When
-    trafo.apply(ast);
-    checker.checkAll(ast);
-
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   @ValueSource(strings = {"type", "port"})

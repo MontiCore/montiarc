@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import comfortablearc._ast.ASTArcACMode;
 import comfortablearc._ast.ASTArcAutoConnect;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
@@ -57,15 +58,22 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
       .map(subComp -> getUnconnectedTargetPorts(subComp, this.comps.peek().getSymbol()))
       .forEach(unconnectedTargets::addAll);
 
-    Map<ASTPortAccess, List<ASTPortAccess>> matches = this.findMatches(unconnectedSources, unconnectedTargets, node.getArcACMode());
+    List<ASTPortAccess> connectedTargets = new ArrayList<>();
 
-    List<ASTArcElement> connectors = new ArrayList<>(matches.size());
+    List<ASTArcElement> connectors = new ArrayList<>();
+    for (ASTPortAccess target : new ArrayList<>(unconnectedTargets)) {
+      List<ASTPortAccess> matches = findMatches(target, unconnectedSources, node.getArcACMode());
 
-    for (ASTPortAccess source : matches.keySet()) {
-      for (ASTPortAccess target : matches.get(source)) {
-        source.setEnclosingScope(node.getEnclosingScope());
-        target.setEnclosingScope(node.getEnclosingScope());
-        connectors.add(node.connectPorts(source, target));
+      if (matches.size() == 1) {
+        ASTPortAccess source = matches.get(0);
+        if (!connectedTargets.contains(target)) {
+          source.setEnclosingScope(node.getEnclosingScope());
+          target.setEnclosingScope(node.getEnclosingScope());
+          connectors.add(node.connectPorts(source, target));
+          connectedTargets.add(target);
+        }
+      } else if (matches.size() > 1) {
+        Log.debug("Multiple matching source ports found for target port: " + target.getQName(), this.getClass().getName());
       }
     }
 
@@ -129,21 +137,21 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
    * Find to the given source all the targets that are matches in the context
    * of the given auto-connect mode.
    *
-   * @param source  the source to match
-   * @param targets the targets to match
+   * @param sources the source to match
+   * @param target  the targets to match
    * @param mode    the matching condition
    * @return the matches to the source
    */
-  protected List<ASTPortAccess> findMatches(@NotNull ASTPortAccess source,
-                                            @NotNull List<ASTPortAccess> targets,
+  protected List<ASTPortAccess> findMatches(@NotNull ASTPortAccess target,
+                                            @NotNull List<ASTPortAccess> sources,
                                             @NotNull ASTArcACMode mode) {
-    Preconditions.checkNotNull(source);
-    Preconditions.checkNotNull(targets);
+    Preconditions.checkNotNull(target);
+    Preconditions.checkNotNull(sources);
 
     List<ASTPortAccess> matches = new ArrayList<>();
 
-    for (ASTPortAccess target : targets) {
-      if (mode.matches(source.getPortSymbol(), target.getPortSymbol())) matches.add(target);
+    for (ASTPortAccess source : sources) {
+      if (mode.matches(source.getPortSymbol(), target.getPortSymbol())) matches.add(source);
     }
 
     return matches;
