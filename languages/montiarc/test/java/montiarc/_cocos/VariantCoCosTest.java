@@ -12,6 +12,8 @@ import arcbasis._cocos.PortHeritageTypeFits;
 import arcbasis._cocos.PortUniqueSender;
 import arcbasis._cocos.PortsConnected;
 import arcbasis._cocos.SubPortsConnected;
+import arccompute._cocos.MaxOneInit;
+import arccompute._cocos.NoInitWithoutCompute;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
@@ -28,6 +30,7 @@ import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcAutomataError;
+import montiarc.util.ArcComputeError;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -635,6 +638,8 @@ public class VariantCoCosTest extends MontiArcTestBase {
     checker.get4Variant().addCoCo(new SwitchStatementValid());
     checker.get4Variant().addCoCo(new EventTriggerExists());
     checker.get4Variant().addCoCo(new BehaviorInDecomposed());
+    checker.get4Variant().addCoCo(new NoInitWithoutCompute());
+    checker.get4Variant().addCoCo(new MaxOneInit());
 
     // When
     checker.checkAll(ast);
@@ -674,6 +679,8 @@ public class VariantCoCosTest extends MontiArcTestBase {
     checker.get4Variant().addCoCo(new SwitchStatementValid());
     checker.get4Variant().addCoCo(new EventTriggerExists());
     checker.get4Variant().addCoCo(new BehaviorInDecomposed());
+    checker.get4Variant().addCoCo(new NoInitWithoutCompute());
+    checker.get4Variant().addCoCo(new MaxOneInit());
 
     // When
     checker.checkAll(ast);
@@ -1429,6 +1436,29 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}" +
           "}",
         ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR
+      ),
+      // Two Initial for compute
+      arg("component Comp76 { " +
+          "feature f1, f2;" +
+          "varif(f1) {" +
+          "init {}" +
+          "}" +
+          "varif(f2) {" +
+          "init {}" +
+          "}" +
+          "compute {}" +
+          "}",
+        ArcComputeError.MULTIPLE_INIT
+      ),
+      // Init without compute
+      arg("component Comp77 { " +
+          "feature f;" +
+          "varif(f) {" +
+          "compute {}" +
+          "}" +
+          "init {}" +
+          "}",
+        ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE
       )
     );
   }

@@ -10,14 +10,16 @@
 
 #### Code Ranges
 
-| Language                                       | Range             |
-|------------------------------------------------|-------------------|
-| [MontiArc](#montiarc-cocos)                    | 0xC1000 - 0xC1099 |
-| [ArcBasis](#arcbasis-cocos)                    | 0xC1100 - 0xC1249 |
-| [Modes](#mode-automata)                        | 0xC1350 - 0xC1399 |
-| [VariableArc](#variablearc-cocos)              | 0xC1400 - 0xC1449 |
-| [ComfortableArc](#comfortablearc-cocos)        | 0xC1450 - 0xC1499 |
-| [Unit](#maunit-cocos)                          | 0xC1500 - 0xC1549 |
+| Language                                | Range             |
+|-----------------------------------------|-------------------|
+| [MontiArc](#montiarc-cocos)             | 0xC1000 - 0xC1099 |
+| [ArcBasis](#arcbasis-cocos)             | 0xC1100 - 0xC1299 |
+| [Automaton](#automaton-cocos)           | 0xC1300 - 0xC1349 |
+| [Modes](#mode-automata)                 | 0xC1350 - 0xC1399 |
+| [VariableArc](#variablearc-cocos)       | 0xC1400 - 0xC1449 |
+| [ComfortableArc](#comfortablearc-cocos) | 0xC1450 - 0xC1499 |
+| [Unit](#maunit-cocos)                   | 0xC1500 - 0xC1549 |
+| [ArcCompute](#arccompute-cocos)         | 0xC1550 - 0xC1599 |
 
 ## ArcBasis CoCos
 
@@ -114,9 +116,16 @@
 | ☒     | PackageCorrespondsToFolders              | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                   |
 | ☒     | SCFileExtension\[is.sc\]                 | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                   |
 | ☒     | SCNameIsArtifactName                     | SCBasis            | Not applicable - we do not have statechart artifacts                                                                                                                   |
-| ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unneccessary.                                                               |
+| ☒     | CapitalStateNames                        | SCBasis            | Warns if a state name starts with a lower case letter. At a discussion we found this to be unnecessary.                                                                |
 | ☑     | TransitionUsesEventDependentPorts        | ArcAutomaton       | Tick-triggered transitions must only access values of synced incoming ports; Message-event triggered transitions must only access values of event-based incoming ports |
 | ☑     | NoInputPortsInStateActions               | ArcAutomaton       | This regards state entry, do, and exit actions.                                                                                                                        |
+
+## ArcCompute CoCos
+
+| in MA | VariantCoCo | CoCo(s)                   | Language   | Code(s) |
+|-------|-------------|---------------------------|------------|---------|
+| ☑     | ☑           | NoInitBlockWithoutCompute | ArcCompute | 0xC1550 |
+| ☑     | ☑           | MaxOneInit                | ArcCompute | 0xC1551 |
 
 ## ComfortableArc Cocos
 

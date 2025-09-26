@@ -5,7 +5,7 @@ package montiarc.util;
  * The enum of all arc basis errors. Implements the mixing
  * interface {@link Error}.
  * <p>
- * Assigned code range: 0xC1100 - 0xC1199
+ * Assigned code range: 0xC1100 - 0xC1299
  */
 public enum ArcError implements Error {
   CIRCULAR_INHERITANCE("0xC1100", "Circular inheritance of component '%s'"),

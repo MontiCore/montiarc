@@ -44,6 +44,8 @@ import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.SubcomponentRawType;
 import arcbasis._cocos.TypeBound;
 import arcbasis._cocos.TypeParameterCapitalization;
+import arccompute._cocos.MaxOneInit;
+import arccompute._cocos.NoInitWithoutCompute;
 import arccompute._cocos.NoInputPortsInInitialCompute;
 import arccompute._cocos.NoNonSyncInputPortInCompute;
 import comfortablearc._cocos.AtomicNoAutoConnect;
@@ -245,6 +247,8 @@ public class MontiArcCoCos {
       checker.addCoCo(new NoNonSyncInputPortInCompute());
     }
     addCoCoAs(new PortReadWriteInCompute4MontiArc(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new NoInitWithoutCompute(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    addCoCoAs(new MaxOneInit(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
 
     // MontiArc CoCos
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
