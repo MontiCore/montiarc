@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package indexing;
 
+import de.mclsg.lsp.modelpath.multiproject.ProjectLayoutBuilder;
 import de.mclsg.lsp.util.AsyncUtilWithSyncExec;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
@@ -18,7 +19,7 @@ public class IndexingTest {
   public void testTypesAfterIndexing(){
     AsyncUtilWithSyncExec.init();
     var languageServer = new MontiArcLanguageServerBuilder()
-        .modelPath(new MCPath("test/resources/indexing/")).build();
+        .layout(new ProjectLayoutBuilder().projectpath("test/resources/indexing/").build()).build();
 
     languageServer.connect(new MockLanguageClient());
     languageServer.initialized(new InitializedParams());
