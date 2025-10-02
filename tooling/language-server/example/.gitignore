@@ -1,0 +1,24 @@
+.gradle
+**/build/
+target
+gradle
+gradlew
+gradlew.bat
+
+# Cache of project
+.gradletasknamecache
+
+# Eclipse Gradle plugin generated files
+# Eclipse Core
+.project
+# JDT-specific (Eclipse Java Development Tools)
+.classpath
+
+# IDE
+.vscode
+.theia
+.idea
+.settings
+*.iml
+*.hprof
+.DS_Store

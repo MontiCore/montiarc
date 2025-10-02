@@ -1,0 +1,115 @@
+/* (c) https://github.com/MontiCore/monticore */
+import groovy.json.JsonBuilder
+
+import java.nio.file.Paths
+import java.nio.file.Path
+
+// this init script adapts the original logic to collect montiarc source information
+// and store it using the structure provided by MCLSMultiprojectPluginExtension,
+// writing the final aggregated result to a JSON file specified by a property.
+
+// ========================================================================
+// Root Project Configuration: Aggregation and File Writing
+// ========================================================================
+gradle.rootProject { root ->
+  root.ext.subprojectCollection = []
+
+  // Define the task that aggregates all collected information and writes the JSON file
+  root.task('aggregateAndProcessInfo') {
+    description = 'Aggregates montiarc source information from all projects and writes it to a JSON manifest file.'
+    doLast {
+      // Get the target file path from a Gradle property
+      File target = new File(Objects.requireNonNull(
+          root.findProperty("lsp.manifest.file"),
+          "Property 'lsp.manifest.file' must be set!"
+      ))
+
+      def generator = new groovy.json.JsonGenerator.Options()
+          .excludeFieldsByName('class', 'metaClass', 'contentHash', 'originalClassName', )
+          .build()
+
+      def allInfo = root.ext.subprojectCollection
+      def res = new MCLSMultiprojectPluginExtension()
+
+      allInfo.unique { it.projectpath }.each { subprojectData ->
+        res.addSubprojectDirect(subprojectData)
+      }
+
+      res.ignoredDirectories = ["build", ".gradle", ".git", "target", "node_modules", "out"]
+      target.getParentFile().mkdirs()
+      target.write(new JsonBuilder(res, generator).toPrettyString(), 'UTF-8')
+
+      println "Manifest written to: ${target.absolutePath}" // Optional: Inform user where file was written
+    }
+  }
+}
+
+// ========================================================================
+// All Projects Configuration: Data Collection
+// ========================================================================
+allprojects { project ->
+  task collectMontiArcInfoTask {
+    description = "Collects montiarc source paths for project ${project.path}."
+    doLast {
+      def projectDir = project.projectDir.toPath()
+      def paths = [] as Set<String>
+      def cdOutputPaths = [] as Set<Path>
+      def symbolPaths = [] as Set<String>
+      boolean relevant = false
+
+      if (project.extensions.getExtraProperties().has("MATaskType")) {
+        project.tasks.withType(project.extensions.getExtraProperties().get("MATaskType")) { task ->
+          task.modelPath.each { dir ->
+            relevant = true
+            paths.add(projectDir.relativize(dir.toPath()).toString())
+          }
+          task.symbolImportDir.each { dir ->
+            symbolPaths.add(dir.toPath().toString())
+          }
+        }
+      }
+
+      if (project.extensions.getExtraProperties().has("CDTaskType")) {
+        project.tasks.withType(project.extensions.getExtraProperties().get("CDTaskType")) { task ->
+          task.modelPath.each { dir ->
+            relevant = true
+            paths.add(projectDir.relativize(dir.toPath()).toString())
+          }
+          task.symbolImportDir.each { dir ->
+            symbolPaths.add(dir.toPath().toString())
+          }
+          cdOutputPaths.add(task.outputDir.get().getAsFile().toPath())
+        }
+      }
+
+      // If any relevant montiarc information was found, create the data structure and add it to the root collection
+      if (relevant && !paths.isEmpty()) {
+        // Assumes the SubprojectLayoutExtension class is available
+        def projData = new MCLSMultiprojectPluginExtension.SubprojectLayoutExtension()
+
+        projData.name = project.path // Use Gradle project path as name
+        projData.projectpath = project.projectDir.toString() // Absolute path to the project directory
+
+        projData.modelDirs = paths.unique().sort().toArray(new String[0])
+        projData.symbolPath = symbolPaths.unique()
+                // filter out symbol paths created by CD2PojoCompile,
+                // since we use symbol table adapters to provide more features
+                .findAll { sp ->
+                  !cdOutputPaths.any {
+                    Paths.get(sp).toAbsolutePath().startsWith(it.toAbsolutePath())
+                  }
+                }
+                .sort().toArray(new String[0])
+
+        // Initialize other fields as empty if not populated by this logic
+        projData.resources = [] as String[]
+
+        // Add the structured data to the collection in the root project
+        rootProject.ext.subprojectCollection << projData
+      }
+    }
+  }
+
+  // Ensure the aggregation task runs only after all collection tasks have completed
+  rootProject.tasks.aggregateAndProcessInfo.dependsOn project.tasks.collectMontiArcInfoTask
+}

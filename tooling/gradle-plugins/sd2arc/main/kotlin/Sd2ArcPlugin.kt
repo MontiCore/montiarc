@@ -35,6 +35,8 @@ class Sd2ArcPlugin : Plugin<Project> {
     this.project = project
     this.sdExtension = project.extensions.create(DSL_EXTENSION_NAME, Sd2ArcExtension::class.java)
 
+    this.project.extensions.extraProperties.set("SDTaskType", Sd2ArcCompile::class.java)
+
     with (project) {
       pluginManager.apply("java-base")
 

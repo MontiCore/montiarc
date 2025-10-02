@@ -95,7 +95,7 @@
       "name": "storage.type.primitive.montiarc"
     },
     "keywords": {
-      "match": "\\b(autoconnect|->|constraint|varif|extends|refines|compute|init|automaton|initial|do|entry|exit)\\b",
+      "match": "\\b(autoconnect|->|constraint|varif|extends|refines|compute|init|feature|automaton|initial|do|entry|exit)\\b",
       "name": "keyword.montiarc"
     },
     "object-types": {

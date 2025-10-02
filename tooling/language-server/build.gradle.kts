@@ -1,4 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
+import de.mclsg.task.RunVscodePluginAttachedTask
+import de.mclsg.task.VscodePluginTask
+
 plugins {
   id("montiarc.build.language-server")
 }
@@ -14,10 +17,12 @@ dependencies {
   grammar(seLibs.mc.statecharts)
 
   implementation(project(":languages:montiarc"))
+  implementation(libs.gradle.tooling.api)
   implementation(seLibs.mc.grammar)
   implementation(seLibs.mc.lsp)
   implementation(seLibs.mc.cd4a)
   implementation(seLibs.mc.c2mc)
+  implementation(variantOf(seLibs.mc.cd4a) { classifier("language-server") })
 }
 
 tasks.configureEach {
@@ -33,7 +38,7 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
     setHandCodedDirBase("${projectDir}/main")
 
     member("MontiArc", "arc", true)
-    member("de.monticore.CD4Analysis", "cd", true)
+    member("de.monticore.CD4Analysis", "cd", false)
   }
   including(
     //de.mclsg.TaskTypes.INTELLIJ_PLUGIN,
@@ -96,6 +101,16 @@ tasks.register("editPackageJson") {
       )
     )
 
+    (content["contributes"] as MutableMap<String, Any>)["menus"] = mapOf(
+      "editor/title" to listOf(
+        mapOf(
+          "when" to "editorLangId == 'MontiArcWithCD4A'",
+          "command" to "gradle.runBuild",
+          "group" to "navigation@1",
+        )
+      )
+    )
+
     file.writeText(json.toPrettyString())
   }
 }
@@ -120,8 +135,13 @@ tasks.register<Copy>("copyReadme") {
   into(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir())
 }
 
-tasks.named("generateMontiArcWithCD4AVscodePlugin") {
+tasks.named<VscodePluginTask>("generateMontiArcWithCD4AVscodePlugin") {
+  this.getAdditionalCliArgs().add("-mup")
   finalizedBy("editPackageJson", "copyIcon", "copyConfiguration", "copyReadme")
+}
+
+tasks.named<RunVscodePluginAttachedTask>("runMontiArcWithCD4AVscodePluginAttached") {
+  this.args("-mup")
 }
 
 tasks.named<Exec>("buildMontiArcWithCD4AVscodePlugin") {

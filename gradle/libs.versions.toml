@@ -23,6 +23,7 @@ jgrapht-jgraphx = "org.tinyjee.jgraphx:jgraphx:3.4.1.3"
 jgrapht-ext = "org.jgrapht:jgrapht-ext:1.5.2"
 mqtt = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 commons-cli = "commons-cli:commons-cli:1.10.0"
+gradle-tooling-api = "org.gradle:gradle-tooling-api:7.3-20210825160000+0000"
 
 shadow = "gradle.plugin.com.github.johnrengelman:shadow:7.1.2" # Plugin is renamed, requires gradle 8
 spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.18.0"

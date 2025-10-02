@@ -1,13 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._lsp.language_access;
 
-
 import arcbasis._symboltable.ArcBasisScopesGenitorP3;
-import de.monticore.cd4analysis.CD4AnalysisMill;
-import de.monticore.cd4analysis.resolver.CD4AnalysisResolver;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
@@ -19,22 +18,33 @@ import montiarc.check.MontiArcTypeCheck;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
 
-  private final CD4AnalysisResolver cd4AnalysisResolver = new CD4AnalysisResolver(CD4AnalysisMill.globalScope());
-  private final OOClass2MCResolver ooClass2MCResolver = new OOClass2MCResolver();
-  private final MontiArcTool tool = new MontiArcTool();
+  private OOClass2MCResolver ooClass2MCResolver;
+  private MontiArcTool tool;
 
   @Override
-  public void initGlobalScope(MCPath modelPath) {
-    MontiArcMill.init();
+  public void initGlobalScope(MCPath symbolPath) {
+    if (ooClass2MCResolver == null) {
+      ooClass2MCResolver = new OOClass2MCResolver();
+    }
+
+    if (tool == null) {
+      tool = new MontiArcTool();
+    }
+
     IMontiArcGlobalScope gs = MontiArcMill.globalScope();
     setGlobalScope((MontiArcGlobalScope) gs);
+    gs.setSymbolPath(new MCPath(symbolPath.getEntries().stream().filter(p -> p.toString().endsWith(".jar")).collect(Collectors.toList())));
     ensureAdapterPresent(gs);
     BasicSymbolsMill.initializePrimitives();
     MontiArcTypeCheck.init();
+    SymTypeRelations.init();
+    MCCollectionSymTypeRelations.init();
   }
 
   /**
@@ -55,10 +65,7 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     throw new IllegalStateException("Currently not supported for the complex symbol table of MontiArc");
   }
 
-  private void ensureAdapterPresent(IMontiArcGlobalScope gs) {
-    if (!gs.containsAdaptedTypeSymbolResolver(cd4AnalysisResolver)) {
-      gs.addAdaptedTypeSymbolResolver(cd4AnalysisResolver);
-    }
+  protected void ensureAdapterPresent(IMontiArcGlobalScope gs) {
     if (!gs.containsAdaptedTypeSymbolResolver(ooClass2MCResolver)) {
       gs.addAdaptedTypeSymbolResolver(ooClass2MCResolver);
     }
@@ -74,6 +81,14 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
     syncAccessGlobalScope(gs -> {
       for (ASTMACompilationUnit node : astNodes) {
         Log.clearFindings();
+        tool.defaultImportTrafo(node, true);
+        node.addImportStatement(MontiArcMill.mCImportStatementBuilder()
+          .setMCQualifiedName(MontiArcMill.mCQualifiedNameBuilder()
+            .setPartsList(List.of("montiarc", "lang"))
+            .build())
+          .setStar(true)
+          .build());
+        tool.runAfterParsingTrafos(node);
         var as = tool.createSymbolTable(node);
         res.put(node, new MontiArcArtifactScopeWithFindings(node, as, Log.getFindings()));
       }
@@ -82,6 +97,13 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
         Log.clearFindings();
         tool.runSymbolTablePhase2(node);
         tool.runAfterSymbolTablePhase2Trafos(node);
+        if (res.containsKey(node)) {
+          res.get(node).findings.addAll(Log.getFindings());
+        }
+      }
+
+      for (ASTMACompilationUnit node : astNodes) {
+        Log.clearFindings();
         tool.runSymbolTablePhase3(node);
         if (res.containsKey(node)) {
           res.get(node).findings.addAll(Log.getFindings());

@@ -34,6 +34,8 @@ class Cd2PojoPlugin : Plugin<Project> {
     this.project = project
     this.cdExtension = project.extensions.create(DSL_EXTENSION_NAME, Cd2PojoExtension::class.java)
 
+    this.project.extensions.extraProperties.set("CDTaskType", Cd2PojoCompile::class.java)
+
     with (project) {
       pluginManager.apply("java-base")
 

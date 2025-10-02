@@ -12,6 +12,12 @@ public class MontiArcLspCoCoRunner extends MontiArcLspCoCoRunnerTOP {
   }
 
   @Override
+  public void runAllCoCos(ASTMACompilationUnit ast) {
+    tool.runAfterParserCoCos(ast);
+    super.runAllCoCos(ast);
+  }
+
+  @Override
   public boolean needsSymbols() {
     return true;
   }

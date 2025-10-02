@@ -51,6 +51,8 @@ class MA2JSimPlugin : Plugin<Project> {
     this.project.pluginManager.apply(MontiarcBasePlugin::class.java)
     this.maExtension = project.extensions.getByType(MAExtension::class.java)
 
+    this.project.extensions.extraProperties.set("MATaskType", MontiArcCompile::class.java)
+
     with (project) {
       addGeneratorDependency()
 

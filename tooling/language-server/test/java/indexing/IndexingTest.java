@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class IndexingTest {
 
   @Test
-  public void testTypesAfterIndexing(){
+  public void testTypesAfterIndexing() {
     AsyncUtilWithSyncExec.init();
     var languageServer = new MontiArcLanguageServerBuilder()
         .layout(new ProjectLayoutBuilder().projectpath("test/resources/indexing/").build()).build();
@@ -35,6 +35,5 @@ public class IndexingTest {
       assertTrue(instanceSymbol.isTypePresent());
       assertEquals("B", instanceSymbol.getType().getTypeInfo().getName());
     });
-
   }
 }
