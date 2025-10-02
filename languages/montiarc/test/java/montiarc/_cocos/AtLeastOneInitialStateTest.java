@@ -98,7 +98,7 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
     // Then
     assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes()).as(Log.getFindings().toString())
-      .containsExactlyInAnyOrder(this.getErrorCodes(errors));
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {

@@ -248,6 +248,7 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
     Assertions.assertEquals(expectedNumberOfVariants, variants.size());
   }
 
+  @SafeVarargs
   static protected <E> ArrayList<E> arrayListOf(E... elements) {
     return new ArrayList<>(List.of(elements));
   }
@@ -267,8 +268,9 @@ public class IVariableArcComponentTypeSymbolTest extends MontiArcTestBase {
       "<<delayed>> compute {}" +
       "}}");
 
-    PortSymbol portSymbol = compilationUnit.getArcComponentType().getSymbol().getPort("o").get();
-    PortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getArcComponentType().getSymbol()).getVariants().get(0).getPort("o").get();
+
+    PortSymbol portSymbol = compilationUnit.getArcComponentType().getSymbol().getPort("o").orElseThrow(() -> new IllegalStateException("Port 'o' not found."));
+    PortSymbol portVariantSymbol = ((MontiArcComponentTypeSymbol) compilationUnit.getArcComponentType().getSymbol()).getVariants().get(0).getPort("o").orElseThrow(() -> new IllegalStateException("Port 'o' not found."));
 
     // Then
     Assertions.assertEquals(portSymbol.getStronglyCausal(), portVariantSymbol.getStronglyCausal());

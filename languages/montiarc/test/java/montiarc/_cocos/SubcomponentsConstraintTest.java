@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import montiarc.util.MCError;
 import montiarc.util.VariableArcError;

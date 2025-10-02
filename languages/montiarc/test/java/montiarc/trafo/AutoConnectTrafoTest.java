@@ -3,15 +3,11 @@ package montiarc.trafo;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._cocos.PortUniqueSender;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._cocos.MontiArcCoCoChecker;
-import montiarc.util.ArcError;
-import montiarc.util.Error;
 import org.assertj.core.api.SoftAssertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
