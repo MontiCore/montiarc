@@ -9,11 +9,11 @@ format = "com.google.googlejavaformat:google-java-format:1.9" # >1.24.0 requires
 guava = "com.google.guava:guava:33.5.0-jre"
 jackson = "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 janino = "org.codehaus.janino:janino:3.1.12"
-junit-api = "org.junit.jupiter:junit-jupiter-api:5.13.4"
-junit-engine = "org.junit.jupiter:junit-jupiter-engine:5.13.4"
-junit-params = "org.junit.jupiter:junit-jupiter-params:5.13.4"
-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.13.4"
-junit-platform-testkit = "org.junit.platform:junit-platform-testkit:1.13.4"
+junit-api = "org.junit.jupiter:junit-jupiter-api:5.13.4" # >=6.0.0 requires Java 17
+junit-engine = "org.junit.jupiter:junit-jupiter-engine:5.13.4" # >=6.0.0 requires Java 17
+junit-params = "org.junit.jupiter:junit-jupiter-params:5.13.4" # >=6.0.0 requires Java 17
+junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.13.4" # >=6.0.0 requires Java 17
+junit-platform-testkit = "org.junit.platform:junit-platform-testkit:1.13.4" # >=6.0.0 requires Java 17
 smt = "org.sosy-lab:java-smt:5.0.1"
 mockito = "org.mockito:mockito-core:5.20.0"
 mockito-junit = "org.mockito:mockito-junit-jupiter:5.20.0"
