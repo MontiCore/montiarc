@@ -185,7 +185,10 @@ There are multiple ways in which you can improve MontiArc to help you and others
 
 ## Further Information
 
+Find more information about MontiArc and other projects and publications by the Chair of Software Engineering under the following links:
+
 * [Setup](./GettingStarted/Setup.md)
 * [FAQ](./FAQ/index.md)
 * [Publications](https://www.se-rwth.de/publications/)
+* [SysML v2](https://github.com/MontiCore/sysmlv2)
 * [License](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
