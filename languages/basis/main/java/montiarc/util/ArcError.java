@@ -73,7 +73,8 @@ public enum ArcError implements Error {
   CIRCULAR_FIELDS_DEPENDENCY("0xC1190", "Circular dependency concerning fields '%s'."),
   IN_PORT_REF_IN_INVALID_CONTEXT("0xC1191", "Value of port '%s' not available in %s."),
   OUT_PORT_MEMBER_ACCESSED("0xC1192", "Cannot access port '%s' or any of its members; output ports are write-only"),
-  INVALID_PORT_TIMING_OVERRIDE("0xC1193", "Port '%s' cannot override timing from '%s' to '%s'");
+  INVALID_PORT_TIMING_OVERRIDE("0xC1193", "Port '%s' cannot override timing from '%s' to '%s'"),
+  INVALID_STATEMENT("0xC1194", "This Expression is not a valid statement; Only assignments or method calls are allowed as statements");
 
   private final String errorCode;
   private final String errorMessage;

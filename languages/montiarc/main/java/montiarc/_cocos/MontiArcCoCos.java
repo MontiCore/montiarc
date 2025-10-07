@@ -28,6 +28,7 @@ import arcbasis._cocos.NoPortInFieldDeclaration;
 import arcbasis._cocos.NoPortInSubcomponentArgument;
 import arcbasis._cocos.NoPortInSuperComponentArgument;
 import arcbasis._cocos.NoSubcomponentReferenceCycle;
+import arcbasis._cocos.OnlyAssignmentOrCallExpressionStatement;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis._cocos.ParameterDefaultValueTypeFits;
@@ -174,6 +175,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new CheckNoFieldDependencyCycles());
     checker.addCoCo(new VarDeclarationNameAlreadyDefinedInScope());
     addCoCoAs(new BehaviorInDecomposed(), checkVariants ? varChecker::addCoCo : checker::addCoCo);
+    checker.addCoCo(new OnlyAssignmentOrCallExpressionStatement());
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());
