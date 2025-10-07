@@ -16,7 +16,7 @@ public class OnlyAssignmentOrCallExpressionStatement implements MCCommonStatemen
   public void check(ASTExpressionStatement node) {
     Preconditions.checkNotNull(node);
 
-    if (!( node.getExpression() instanceof ASTAssignmentExpressionsNode || node.getExpression() instanceof ASTCallExpression )) {
+    if (!(node.getExpression() instanceof ASTAssignmentExpressionsNode || node.getExpression() instanceof ASTCallExpression)) {
       Log.error(
         ArcError.INVALID_STATEMENT.toString(),
         node.get_SourcePositionStart(), node.get_SourcePositionEnd()
