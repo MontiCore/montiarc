@@ -54,7 +54,8 @@ public class FieldInitTypeFits implements ArcBasisASTArcFieldCoCo {
       Log.error(ArcError.FIELD_INIT_TYPE_MISMATCH.format(
           fieldSymType.printFullName(), exprSymType.printFullName()
         ),
-        expr.get_SourcePositionStart());
+        astField.get_SourcePositionStart(),
+        astField.get_SourcePositionEnd());
     }
     Log.trace(() -> "Finished the context-condition check.", LOG_NAME);
   }

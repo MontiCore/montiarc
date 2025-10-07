@@ -22,7 +22,8 @@ public class ConstraintSmtConvertible implements VariableArcASTArcConstraintDecl
     Context context = new Context();
     IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
     if (converter.toBool(node.getExpression()).isEmpty()) {
-      Log.warn(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE.format(VariableArcMill.prettyPrint(node.getExpression(), false)), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+      Log.warn(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE.format(VariableArcMill.prettyPrint(node.getExpression(), false)),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }
     context.close();
   }

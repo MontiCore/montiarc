@@ -59,7 +59,12 @@ public class CheckNoFieldDependencyCycles implements ArcBasisASTArcComponentType
     }
 
     if (removed < fields.size()) {
-      Log.error(ArcError.CIRCULAR_FIELDS_DEPENDENCY.format(),
+      String circularVars = inDegree.entrySet().stream()
+        .filter(e -> e.getValue() > 0)
+        .map(e -> e.getKey().getName())
+        .collect(Collectors.joining(", "));
+
+      Log.error(ArcError.CIRCULAR_FIELDS_DEPENDENCY.format(circularVars),
         comp.get_SourcePositionStart());
     }
   }

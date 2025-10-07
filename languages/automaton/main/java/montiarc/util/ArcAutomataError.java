@@ -8,13 +8,13 @@ package montiarc.util;
  * Assigned code range: 0xC1300 - 0xC1349
  */
 public enum ArcAutomataError implements Error {
-  MALFORMED_EXPRESSION("0xC1301", "The expression at '%s' is malformed and can not be evaluated."),
+  MALFORMED_EXPRESSION("0xC1301", "The expression at '%s' is malformed and cannot be evaluated"),
   INPUT_PORT_IN_INITIAL_OUT_DECL("0xC1303", "Input port '%s' is referenced in the initial output declaration. This " +
-      "is illegal as input port values are undefined at the point of component initialization."),
-  PORT_NOT_WRITTEN_IN_TRANSITION("0xC1304", "There is a transition, which, when followed, leaves port '%s' without a value."),
-  PORT_NOT_WRITTEN_IN_STATE("0xC1305", "When staying in state '%s' (which might happen, because there is no unconditional" +
+      "is illegal, as input port values are undefined at the point of component initialization"),
+  PORT_NOT_WRITTEN_IN_TRANSITION("0xC1304", "There is a transition, which, when followed, leaves port '%s' without a value"),
+  PORT_NOT_WRITTEN_IN_STATE("0xC1305", "When staying in state '%s' (which might happen because there is no unconditional " +
       "transition leaving that state), port '%s' is left without a value"),
-  MSG_EVENT_WITHOUT_SYMBOL("0xC1306", "Could not resolve a symbol for a message event.");
+  MSG_EVENT_WITHOUT_SYMBOL("0xC1306", "Could not resolve a symbol for a message event");
 
   private final String errorCode;
   private final String errorMessage;

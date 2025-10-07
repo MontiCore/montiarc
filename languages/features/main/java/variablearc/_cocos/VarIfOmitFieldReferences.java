@@ -36,12 +36,12 @@ public class VarIfOmitFieldReferences implements ArcBasisASTArcComponentTypeCoCo
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 
-    HashSet<FieldReference> portReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
+    HashSet<FieldReference> fieldReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
 
     ComponentVarIfHandler handler = new ComponentVarIfHandler(astComp, (varif) -> {
       Preconditions.checkNotNull(varif);
       HashMap<FieldReference, SourcePosition> foundPortReferences =
-        this.fieldRefExtractor.findFieldReferences(varif.getCondition(), portReferencesToLookFor,
+        this.fieldRefExtractor.findFieldReferences(varif.getCondition(), fieldReferencesToLookFor,
           VariableArcMill.traverser());
 
       for (FieldReference illegalFieldRef : foundPortReferences.keySet()) {

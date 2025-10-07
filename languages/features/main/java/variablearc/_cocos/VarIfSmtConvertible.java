@@ -22,7 +22,8 @@ public class VarIfSmtConvertible implements VariableArcASTArcVarIfCoCo {
     Context context = new Context();
     IDeriveSMTExpr converter = VariableArcMill.fullConverter(context);
     if (converter.toBool(node.getCondition()).isEmpty()) {
-      Log.warn(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE.format(VariableArcMill.prettyPrint(node.getCondition(), false)), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+      Log.warn(VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE.format(VariableArcMill.prettyPrint(node.getCondition(), false)),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }
     context.close();
   }

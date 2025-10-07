@@ -39,7 +39,8 @@ import org.codehaus.commons.nullanalysis.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVisitor2, TypeParametersVisitor2, ArcBasisHandler {
+public class ArcBasisScopesGenitorP2
+  implements ArcBasisVisitor2, CompSymbolsVisitor2, TypeParametersVisitor2, ArcBasisHandler {
 
   protected CompKindExpression currentCompInstanceType;
   protected ArcBasisTraverser traverser;
@@ -214,7 +215,8 @@ public class ArcBasisScopesGenitorP2 implements ArcBasisVisitor2, CompSymbolsVis
       try {
         typeParamSym.addSuperTypes(TypeCheck3.symTypeFromAST(upperBound));
       } catch (ResolvedSeveralEntriesForSymbolException e) {
-        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(ArcBasisMill.prettyPrint(upperBound, false)), upperBound.get_SourcePositionStart());
+        Log.error(ArcError.AMBIGUOUS_REFERENCE.format(ArcBasisMill.prettyPrint(upperBound, false)),
+          upperBound.get_SourcePositionStart(), upperBound.get_SourcePositionEnd());
       }
     }
   }

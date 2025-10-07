@@ -36,8 +36,8 @@ public class NoPortInStaticContextVisitor implements ExpressionsBasisVisitor2 {
     List<VariableSymbol> ports = scope.resolveVariableMany(name, getVariablePredicate());
 
     if (ports.size() == 1 && ports.get(0) instanceof Port2VariableAdapter) {
-      SourcePosition sourcePosition = expr.get_SourcePositionStart();
-      Log.error(PORT_REF_IN_STATIC_CONTEXT.format(name), sourcePosition);
+      Log.error(PORT_REF_IN_STATIC_CONTEXT.format(name),
+        expr.get_SourcePositionStart(), expr.get_SourcePositionEnd());
     }
   }
 

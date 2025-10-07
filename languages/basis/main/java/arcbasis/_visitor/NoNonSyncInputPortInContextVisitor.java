@@ -51,8 +51,8 @@ public class NoNonSyncInputPortInContextVisitor implements ExpressionsBasisVisit
     if (!ports.isEmpty() && ports.get(0) instanceof Port2VariableAdapter) {
       PortSymbol port = ((Port2VariableAdapter) ports.get(0)).getAdaptee();
       if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
-        SourcePosition sourcePosition = node.get_SourcePositionStart();
-        Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(name, this.context), sourcePosition);
+        Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(name, this.context),
+          node.get_SourcePositionStart(), node.get_SourcePositionEnd());
       }
     }
   }

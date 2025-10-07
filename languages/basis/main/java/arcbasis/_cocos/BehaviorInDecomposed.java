@@ -21,8 +21,8 @@ public class BehaviorInDecomposed implements ArcBasisASTArcComponentTypeCoCo {
     if (node.getSymbol().isDecomposed() && node.getBehavior().isPresent()) {
       Log.warn(
         ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR.toString(),
-        node.get_SourcePositionStart(),
-        node.get_SourcePositionEnd()
+        node.getBehavior().get().get_SourcePositionStart(),
+        node.getBehavior().get().get_SourcePositionEnd()
       );
     }
   }
