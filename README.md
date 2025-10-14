@@ -49,7 +49,7 @@ variability and feature configuration, dynamic reconfiguration, and generics.
 The MontiArc ADL features modeling elements for component type definitions and 
 reference declaration for component reuse, ports, connectors, structural 
 inheritance, implicit but controlled creation of connectors and subcomponent 
-declaration, component parameterization, embedded behavior descriptions, static 
+declaration, component parameterization, embedded behavior descriptions, refinement, and static type checking.
 
 ### Model Cyber-Physical Systems
 Cyber-Physical Systems are inherently distributed, interacting in various ways using signals, messages and data. However, model-based development of Cyber-Physical Systems becomes particularly interesting, when modeling the context of the software control, i.e. electric and hydraulic signals as well as physical material 
