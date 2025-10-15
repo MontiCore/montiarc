@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.deploy;
 
+import com.google.common.base.Preconditions;
 import com.sun.net.httpserver.HttpServer;
 import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
@@ -27,7 +28,7 @@ public abstract class RestDeployment<T extends Component> implements DeploymentS
   @Override
   public void connect(T component, Map<String, String> options) {
     try {
-      this.server = Objects.requireNonNull(initRest(options));
+      this.server = Preconditions.checkNotNull(initRest(options));
     } catch (IOException e) {
       throw new RuntimeException("Failed to start REST server", e);
     }

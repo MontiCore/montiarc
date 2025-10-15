@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.deploy;
 
+import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.rte.component.Component;
 import montiarc.rte.component.SimComponent;
@@ -86,7 +87,7 @@ public abstract class Deployment<T extends Component> {
 
     // Setup
     CoordinatingScheduler scheduler = buildCoordinatingScheduler();
-    T component = Objects.requireNonNull(buildComponent(scheduler, parameters));
+    T component = Preconditions.checkNotNull(buildComponent(scheduler, parameters));
     if (strategy != null) {
       strategy.connect(component, parameters);
     }

@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
+import com.google.common.base.Preconditions;
+import com.google.common.base.Verify;
 import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
@@ -15,12 +17,12 @@ public class Char2DoublePort extends AbstractOutPort<Double> implements InOutPor
 
   @Override
   public void receive(Message<? extends Character> message) {
-    Objects.requireNonNull(message);
+    Preconditions.checkNotNull(message);
     // Directly forward the message
     if (Tick.get().equals(message)) {
       this.sendTick();
     } else {
-      Objects.requireNonNull(message.getData());
+      Verify.verifyNotNull(message.getData());
       this.send((double) (message.getData().charValue()));
     }
   }
