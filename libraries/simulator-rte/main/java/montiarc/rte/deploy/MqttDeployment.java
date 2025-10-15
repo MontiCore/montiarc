@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.deploy;
 
+import com.google.common.base.Preconditions;
 import montiarc.rte.component.Component;
 import montiarc.rte.deploy.mqtt.SimpleMqtt;
 import montiarc.rte.deploy.util.DeSerializer;
@@ -26,7 +27,7 @@ public abstract class MqttDeployment<T extends Component> implements DeploymentS
   @Override
   public void connect(T component, Map<String, String> options) {
     try {
-      this.mqtt = Objects.requireNonNull(initMqtt(options));
+      this.mqtt = Preconditions.checkNotNull(initMqtt(options));
       setupMqttConnections(component);
     } catch (MqttException e) {
       throw new RuntimeException("Failed to initialize MQTT client", e);

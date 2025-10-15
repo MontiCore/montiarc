@@ -3,6 +3,7 @@ package montiarc.visitor;
 
 import arcautomaton._visitor.NamesInExpressionsVisitor;
 import com.google.common.base.Preconditions;
+import com.google.common.base.Verify;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -34,7 +35,7 @@ public class NamesInExpressionsVisitorTest extends MontiArcTestBase {
     NamesInExpressionsVisitor visitor = new NamesInExpressionsVisitor();
     MontiArcTraverser traverser = MontiArcMill.traverser();
     visitor.registerTo(traverser);
-    Objects.requireNonNull(parser.parse_StringExpression(expression).orElse(null)).accept(traverser);
+    Verify.verifyNotNull(parser.parse_StringExpression(expression).orElse(null)).accept(traverser);
     Map<ASTNameExpression, VarAccessKind> map
       = visitor.getFoundNames();
     List<ASTNameExpression> found = sort(map.keySet(), names);
