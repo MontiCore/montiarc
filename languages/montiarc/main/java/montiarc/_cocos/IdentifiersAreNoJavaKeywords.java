@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.cocos;
+package montiarc._cocos;
 
 import arcautomaton._cocos.StateNameIsNoReservedKeyword;
 import arcbasis._cocos.ComponentNoReservedKeyword;

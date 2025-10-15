@@ -8,6 +8,8 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc._cocos.IdentifiersAreNoJavaKeywords;
+import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.generator.codegen.MA2JSimGen;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
@@ -264,6 +266,22 @@ public class MA2JSimTool extends MontiArcTool {
     List<Path> hwcsAsPaths = Arrays.stream(hwc).map(Paths::get).collect(Collectors.toList());
     MA2JSimGen generator = new MA2JSimGen(Paths.get(target), hwcsAsPaths);
     generator.generate(ast);
+  }
+
+  @Override
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(ast);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ComponentInstanceNamesAreNoJavaKeywords());
+
+    checker.checkAll(ast);
   }
 
   @Override

@@ -9,6 +9,7 @@ import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.cocos.DseSupportedTypes;
+import montiarc._cocos.IdentifiersAreNoJavaKeywords;
 import montiarc.generator.codegen.MontiArcGenerator;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
@@ -30,13 +31,7 @@ import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentInstanceNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords;
-import static montiarc.cocos.IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords;
+
 
 public class MA2JavaTool extends MontiArcTool {
 
@@ -291,13 +286,13 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkNotNull(ast);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortNoNamesAreNoJavaKeywords());
-    checker.addCoCo(new ParameterNamesAreNoJavaKeywords());
-    checker.addCoCo(new TypeParameterNamesAreNoJavaKeywords());
-    checker.addCoCo(new FieldNamesAreNoJavaKeywords());
-    checker.addCoCo(new AutomatonStateNamesAreNoJavaKeywords());
-    checker.addCoCo(new ComponentTypeNamesAreNoJavaKeywords());
-    checker.addCoCo(new ComponentInstanceNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords());
+    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ComponentInstanceNamesAreNoJavaKeywords());
 
     checker.checkAll(ast);
   }

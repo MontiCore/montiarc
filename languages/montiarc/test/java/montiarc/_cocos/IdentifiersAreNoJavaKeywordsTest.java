@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.cocos;
+package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
@@ -8,7 +8,6 @@ import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.check.MontiArcTypeCheck;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
