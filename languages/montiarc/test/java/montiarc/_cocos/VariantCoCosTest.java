@@ -1369,7 +1369,8 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "}" +
           "}",
         new InternalError("0xB0166"), // equal not applicable
-        new InternalError("0xCC111") // int not boolean
+        new InternalError("0xCC111"), // Obscure not boolean
+        new InternalError("0xCC111")  // int not boolean
       ),
       // Enum constants map to same value
       arg("component Comp70(OnOff onOff) { " +
