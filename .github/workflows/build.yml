@@ -116,7 +116,7 @@ jobs:
         if: matrix.target == 'Fedora'
         run: |
           sudo dnf update -y
-          sudo dnf install -y rpm-build java-latest-openjdk-*
+          sudo dnf install -y rpm-build java-latest-openjdk-devel java-latest-openjdk-static-libs java-latest-openjdk-jmods
       - name: Install Linux dependencies
         if: matrix.target == 'Linux' || matrix.target == 'Debian'
         run: |
