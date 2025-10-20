@@ -13,10 +13,13 @@ See the [testing](../../Reference/Testing/index.md) chapter for more information
 
 ## Interactive
 On the other hand, the simulator can also be run interactively.
-This might be useful for prototyping your models. You control how fast the simulation is running by
+This might be useful for prototyping your models. You can control how fast the simulation is running by
 setting the tick length. 
 
-Two different backends are available to interact with it.
+Two different backends are available to interact with the simulation.
+For every backend and component a java class with a main method is generated.
+These can be found in your build folder. 
+To run the simulation simply execute the main method using your IDE. 
 
 #### REST
 

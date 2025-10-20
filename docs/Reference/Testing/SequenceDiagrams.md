@@ -10,7 +10,7 @@ UML sequence diagrams, only with some minor modifications.
 In general, sequence diagrams are exemplary and describe one possible interaction of a system.
 For a detailed definition of sequence diagrams, read [Modeling with UML](https://link.springer.com/book/10.1007/978-3-319-33933-7).
 
-<center>
+<center markdown>
 ![EmitterAsserterOverview](../../assets/images/SequenceDiagram.png){ width="600"}
 </center>
 
