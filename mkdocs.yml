@@ -102,7 +102,7 @@ nav:
       - Expressions: 'Reference/Concepts/Expressions.md'
       - Statements: 'Reference/Concepts/Statements.md'
       - Timing: 'Reference/Concepts/Timing.md'
-    - Component: 
+    - Component:
       - Component: 'Reference/Component/index.md'
       - Decomposition: 'Reference/Component/Decomposition.md'
       - Connectors: 'Reference/Component/Connectors.md'
@@ -111,6 +111,7 @@ nav:
       - Interfaces: 'Reference/Component/Interfaces.md'
       - Parameters: 'Reference/Component/Parameter.md'
       - Variability: 'Reference/Component/Variability.md'
+      - Autoconnect: 'Reference/Component/Autoconnect.md'
     - Behavior: 
       - Behavior: 'Reference/Behavior/index.md'
       - Automata: 'Reference/Behavior/Automata.md'
