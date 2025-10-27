@@ -4,6 +4,7 @@ package montiarc.arc2fd;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.arc2fd.fd.FDConfiguration;
 import montiarc.arc2fd.fd.FDConstructionStorage;
@@ -30,8 +31,10 @@ public class FDGenerator {
    *             .arc-Files
    */
   public static void main(String[] args) {
+    MontiArcMill.init();
     Log.init();
     Log.enableFailQuick(false);
+
 
     // Get the model path (to find the correct MontiArc model files)
     List<Path> modelPath =
