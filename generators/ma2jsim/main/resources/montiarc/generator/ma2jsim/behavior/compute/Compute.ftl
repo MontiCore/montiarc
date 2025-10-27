@@ -55,7 +55,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
     <#assign methodName = prefixes.message() + portSym.getName() + helper.portVariantSuffix(ast, portSym)>
     @Override
     public void ${methodName}(<@Util.getTypeString portSym.getType()/> msg) {
-      throw new UnsupportedOperationException("Message event method can not be invoked for sync behavior");
+      de.se_rwth.commons.logging.Log.warn("The message cannot be handled by compute behavior and will be ignored");
     }
   </#list>
 
