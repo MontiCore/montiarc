@@ -13,7 +13,7 @@ dependencyResolutionManagement {
       from(files("../gradle/libs.versions.toml"))
     }
     create("seLibs") {
-      from("de.se_rwth.commons:se-commons-catalog:7.8.0-SNAPSHOT")
+      from("de.se_rwth.commons:se-commons-catalog:7.8.0")
     }
   }
 }
