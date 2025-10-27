@@ -35,14 +35,16 @@ jobs:
 
       - name: Extract version name
         shell: bash
-        run: echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
+        run: |
+          echo "version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
+          echo "full_version=$(grep -Eo '[0-9]\.[0-9]+\.[0-9]+(-[a-zA-Z]+)?' build-logic/src/main/kotlin/montiarc/build/BuildConstants.kt)" >> $GITHUB_OUTPUT
         id: extract_version
 
       - name: Rename and move artifacts
         run: |
           mkdir dist
           mv tooling/Ma2JsimCLI/build/libs/MontiArc.jar dist/MontiArc-${{ steps.extract_version.outputs.version }}.jar
-          mv tooling/language-server/build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-vscode-plugin/montiarc-${{ steps.extract_version.outputs.version }}-SNAPSHOT.vsix dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
+          mv tooling/language-server/build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-vscode-plugin/montiarc-${{ steps.extract_version.outputs.full_version }}.vsix dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
 
 
       # Upload the build.
