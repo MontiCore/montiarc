@@ -15,7 +15,7 @@ public class MontiArcLog extends Log {
     MontiArcLog log = new MontiArcLog();
     log.isTRACE = false;
     log.isDEBUG = false;
-    log.isINFO = true;
+    log.isINFO = false;
     log.logHooks = new ArrayList<>();
     log.logHooks.add(new RichConsoleLogHook());
     log.errorHook = getDefaultErrorHook();
