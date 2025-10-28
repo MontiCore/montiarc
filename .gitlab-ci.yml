@@ -3,9 +3,12 @@
 
 # Store the local Gradle build cache
 cache:
-  key: gradle-cache-key
+  key: gradle-$CI_COMMIT_REF_SLUG
+  fallback_keys:
+    - gradle-$CI_DEFAULT_BRANCH
+    - gradle-fallback
   paths:
-    - .gradle/caches
+    - .gradle/caches/
   policy: pull-push
 
 # Set up environment variables and configurations to be executed before each job
