@@ -2826,10 +2826,10 @@ The behavior is defined using <a href="../../../Reference/Behavior/Automata/">st
 
 <span class="w">    </span><span class="n">Closed</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Open</span><span class="w"> </span><span class="o">[</span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="w"> </span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Door has opened&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">Open</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Closed</span><span class="w"> </span><span class="o">[</span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="w"> </span><span class="n">shouldOpen</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Door has closed&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -2876,7 +2876,7 @@ Otherwise, it stays in the same position. The motor always outputs its current p
 
 <span class="w">      </span><span class="n">position</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">currentPosition</span><span class="p">;</span>
 <span class="w">      </span><span class="n">System</span><span class="p">.</span><span class="na">out</span><span class="p">.</span><span class="na">println</span><span class="p">(</span><span class="s">&quot;Elevator position: &quot;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">currentPosition</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
@@ -2915,7 +2915,7 @@ It reacts to the button presses, decides in which direction to move the elevator
 <span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">STOP</span><span class="p">;</span>
 <span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="kd">state</span> <span class="nc">OpenDoor</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
@@ -2932,24 +2932,24 @@ It reacts to the button presses, decides in which direction to move the elevator
 
 <span class="w">      </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">      </span><span class="p">};</span>
+<span class="w">      </span><span class="p">}</span>
 <span class="w">      </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
 <span class="w">        </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
 <span class="w">        </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">      </span><span class="p">};</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="kd">state</span> <span class="nc">MovingUp</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">UP</span><span class="p">;</span>
 <span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="kd">state</span> <span class="nc">MovingDown</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="k">do</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">        </span><span class="n">motorCommand</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">MotorCMD</span><span class="p">.</span><span class="na">DOWN</span><span class="p">;</span>
 <span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingUp</span><span class="w">   </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="p">;</span>
 <span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="p">;</span>
@@ -2957,31 +2957,31 @@ It reacts to the button presses, decides in which direction to move the elevator
 <span class="w">    </span><span class="n">MovingUp</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w">     </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
 <span class="w">    </span><span class="n">MovingUp</span><span class="w">   </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w">     </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
 <span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">get</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">motorPosition</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">empty</span><span class="p">();</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">MovingUp</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingUp</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">MovingDown</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">MovingDown</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">Idle</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
 <span class="w">      </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
 <span class="w">      </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">    </span><span class="p">};</span>
+<span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Idle</span><span class="w"> </span><span class="o">[</span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isPresent</span><span class="p">()</span><span class="o">]</span><span class="p">;</span>
 
@@ -3009,7 +3009,7 @@ In our example, this means the motor is initially not moving.</p>
 <span class="w">  </span><span class="k">exit</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">openDoor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
-<span class="p">};</span>
+<span class="p">}</span>
 </code></pre></div>
 These are executed, as the name suggests, when we enter the state, stay in it, or leave it, respectively.
 In the context of the elevator, we open the door when we enter the state and close it when we leave it.
@@ -3028,12 +3028,12 @@ When this state is active, the motor is always stopped.</p>
 
 <span class="w">  </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="n">requestOnFloor</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">requestOnFloor</span><span class="p">);</span>
-<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="w">  </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">IdleOpenDoor</span><span class="w"> </span><span class="o">[!</span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">targetFloor</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">()</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="kt">int</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">first</span><span class="p">();</span>
 <span class="w">    </span><span class="n">pendingRequests</span><span class="p">.</span><span class="na">remove</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
 <span class="w">    </span><span class="n">targetFloor</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Optional</span><span class="p">.</span><span class="na">of</span><span class="p">(</span><span class="n">next</span><span class="p">);</span>
-<span class="w">  </span><span class="p">};</span>
+<span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>For a complete look into hierarchical statecharts see <a href="https://mbse.se-rwth.de/book1/index.php?c=chapter5-3#x1-1250005.3.2">Modeling with UML</a>.</p>
