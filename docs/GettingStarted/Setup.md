@@ -6,11 +6,11 @@ MontiArc runs on any platform. In the following tutorials, we will use both the 
 #### Gradle
 
 If you only ever want to use the [Gradle plugin](./HelloGradle.md), the only thing you need is Java 11.
-So if you haven't already, now is the right time to [install Java 11](https://www.oracle.com/de/java/technologies/javase/jdk11-archive-downloads.html).
+So if you haven't already, now is the right time to [install Java 21](https://www.oracle.com/de/java/technologies/downloads/#java21).
 
 #### Run the CLI Manually
 
-To run the CLI manually, you need to have [Java 11](https://www.oracle.com/de/java/technologies/javase/jdk11-archive-downloads.html) installed.
+To run the CLI manually, you need to have [Java 21](https://www.oracle.com/de/java/technologies/downloads/#java21) installed.
 Next, download the [MontiArc-7.9.0.jar](https://github.com/MontiCore/montiarc/releases/tag/snapshot).
 
 You can then run the tool with:
@@ -57,7 +57,7 @@ You can then run the tool by running:
 MontiArc
 ```
 
-When you intend to run the simulation using the CLI, you'll need [Java 11](https://www.oracle.com/de/java/technologies/javase/jdk11-archive-downloads.html) anyway.
+When you intend to run the simulation using the CLI, you'll need [Java 21](https://www.oracle.com/de/java/technologies/downloads/#java21) anyway.
 
 ---
 

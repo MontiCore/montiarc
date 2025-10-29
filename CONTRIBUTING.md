@@ -19,8 +19,8 @@ This guide comprises the following steps:
 
 #### Prerequisites 
 - Git (for checking out the project)
-- Gradle 7.6.4 (for building the project)
-- Java 11 (for building and executing the project)
+- Gradle 8.5 (for building the project)
+- Java 21 (for building and executing the project)
 
 #### Cloning the Project
 This project uses Git as its version control system. A repository can be cloned with:

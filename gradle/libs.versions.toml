@@ -5,15 +5,15 @@ apache-poi = "org.apache.poi:poi:5.4.1"
 api-guardian = "org.apiguardian:apiguardian-api:1.1.2"
 assertj = "org.assertj:assertj-core:3.27.6"
 freemarker = "org.freemarker:freemarker:2.3.34"
-format = "com.google.googlejavaformat:google-java-format:1.9" # >1.24.0 requires Java 17, >1.9 requires JVM flags
+format = "org.eclipse.jdt:org.eclipse.jdt.core:3.43.0"
 guava = "com.google.guava:guava:33.5.0-jre"
 jackson = "com.fasterxml.jackson.core:jackson-databind:2.20.0"
 janino = "org.codehaus.janino:janino:3.1.12"
-junit-api = "org.junit.jupiter:junit-jupiter-api:5.13.4" # >=6.0.0 requires Java 17
-junit-engine = "org.junit.jupiter:junit-jupiter-engine:5.13.4" # >=6.0.0 requires Java 17
-junit-params = "org.junit.jupiter:junit-jupiter-params:5.13.4" # >=6.0.0 requires Java 17
-junit-platform-launcher = "org.junit.platform:junit-platform-launcher:1.13.4" # >=6.0.0 requires Java 17
-junit-platform-testkit = "org.junit.platform:junit-platform-testkit:1.13.4" # >=6.0.0 requires Java 17
+junit-api = "org.junit.jupiter:junit-jupiter-api:6.0.0"
+junit-engine = "org.junit.jupiter:junit-jupiter-engine:6.0.0"
+junit-params = "org.junit.jupiter:junit-jupiter-params:6.0.0"
+junit-platform-launcher = "org.junit.platform:junit-platform-launcher:6.0.0"
+junit-platform-testkit = "org.junit.platform:junit-platform-testkit:6.0.0"
 smt = "org.sosy-lab:java-smt:5.0.1"
 mockito = "org.mockito:mockito-core:5.20.0"
 mockito-junit = "org.mockito:mockito-junit-jupiter:5.20.0"
@@ -25,10 +25,10 @@ mqtt = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 commons-cli = "commons-cli:commons-cli:1.10.0"
 gradle-tooling-api = "org.gradle:gradle-tooling-api:7.3-20210825160000+0000"
 
-shadow = "gradle.plugin.com.github.johnrengelman:shadow:7.1.2" # Plugin is renamed, requires gradle 8
+shadow = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:8.3.6"
 spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.18.0"
-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.21"
+kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
 node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
 
 [plugins]
-versions = { id = "com.github.ben-manes.versions", version = "0.51.0" } # >0.51.0 requires Kotlin 2.x
+versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }

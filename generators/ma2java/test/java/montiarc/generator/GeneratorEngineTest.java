@@ -2,12 +2,13 @@
 package montiarc.generator;
 
 import com.google.common.base.Preconditions;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.ast.ASTCNode;
 import de.monticore.ast.ASTNode;
 import org.apache.commons.io.FileUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -55,11 +56,11 @@ public class GeneratorEngineTest {
   }
 
   /**
-   * Method under test {@link GeneratorEngine#generate(String, Formatter, Path, ASTNode, Object...)}
+   * Method under test {@link GeneratorEngine#generate(String, CodeFormatter, Path, ASTNode, Object...)}
    */
   @ParameterizedTest
   @MethodSource("targetAndExpectedFileProvider")
-  public void shouldGenerateFile(@NotNull String target, @NotNull String expected) throws FormatterException {
+  public void shouldGenerateFile(@NotNull String target, @NotNull String expected) throws BadLocationException {
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(!target.isEmpty());
@@ -68,18 +69,18 @@ public class GeneratorEngineTest {
     GeneratorEngine engine = new GeneratorEngine(this.getSetup());
 
     // When
-    engine.generate("Empty.ftl", new Formatter(), Paths.get(target), Mockito.mock(ASTCNode.class));
+    engine.generate("Empty.ftl", new DefaultCodeFormatter(), Paths.get(target), Mockito.mock(ASTCNode.class));
 
     // Then
     Assertions.assertTrue(Paths.get(expected).toFile().exists());
   }
 
   /**
-   * Method under test {@link GeneratorEngine#generateNoA(String, Formatter, Path, Object...)}
+   * Method under test {@link GeneratorEngine#generateNoA(String, CodeFormatter, Path, Object...)}
    */
   @ParameterizedTest
   @MethodSource("targetAndExpectedFileProvider")
-  public void shouldGenerateFileNoA(@NotNull String target, @NotNull String expected) throws FormatterException {
+  public void shouldGenerateFileNoA(@NotNull String target, @NotNull String expected) throws BadLocationException {
     Preconditions.checkNotNull(target);
     Preconditions.checkNotNull(expected);
     Preconditions.checkArgument(!target.isEmpty());
@@ -88,7 +89,7 @@ public class GeneratorEngineTest {
     GeneratorEngine engine = new GeneratorEngine(this.getSetup());
 
     // When
-    engine.generateNoA("Empty.ftl", new Formatter(), Paths.get(target));
+    engine.generateNoA("Empty.ftl", new DefaultCodeFormatter(), Paths.get(target));
 
     // Then
     Assertions.assertTrue(Paths.get(expected).toFile().exists());
@@ -103,7 +104,7 @@ public class GeneratorEngineTest {
   }
 
   /**
-   * Method under test {@link GeneratorEngine#generate(String, Formatter, Path, ASTNode, Object...)}
+   * Method under test {@link GeneratorEngine#generate(String, CodeFormatter, Path, ASTNode, Object...)}
    */
   @Test
   public void generateShouldThrowException() {
@@ -112,21 +113,21 @@ public class GeneratorEngineTest {
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generate(null, new Formatter(), Paths.get("A"), Mockito.mock(ASTCNode.class)));
+      () -> engine.generate(null, new DefaultCodeFormatter(), Paths.get("A"), Mockito.mock(ASTCNode.class)));
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generate("Empty.ftl", (Formatter) null, Paths.get("A"), Mockito.mock(ASTCNode.class)));
+      () -> engine.generate("Empty.ftl", (CodeFormatter) null, Paths.get("A"), Mockito.mock(ASTCNode.class)));
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generate("Empty.ftl", new Formatter(), null, Mockito.mock(ASTCNode.class)));
+      () -> engine.generate("Empty.ftl", new DefaultCodeFormatter(), null, Mockito.mock(ASTCNode.class)));
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generate("Empty.ftl", new Formatter(), Paths.get("A"), null));
+      () -> engine.generate("Empty.ftl", new DefaultCodeFormatter(), Paths.get("A"), null));
     Assertions.assertThrows(IllegalArgumentException.class,
-      () -> engine.generate("", new Formatter(), Paths.get("A"), Mockito.mock(ASTCNode.class)));
+      () -> engine.generate("", new DefaultCodeFormatter(), Paths.get("A"), Mockito.mock(ASTCNode.class)));
     Assertions.assertThrows(IllegalArgumentException.class,
-      () -> engine.generate("Empty.ftl", new Formatter(), Paths.get(""), Mockito.mock(ASTCNode.class)));
+      () -> engine.generate("Empty.ftl", new DefaultCodeFormatter(), Paths.get(""), Mockito.mock(ASTCNode.class)));
   }
 
   /**
-   * Method under test {@link GeneratorEngine#generateNoA(String, Formatter, Path, Object...)}
+   * Method under test {@link GeneratorEngine#generateNoA(String, CodeFormatter, Path, Object...)}
    */
   @Test
   public void generateNoAShouldThrowException() {
@@ -135,15 +136,15 @@ public class GeneratorEngineTest {
 
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generateNoA(null, new Formatter(), Paths.get("A")));
+      () -> engine.generateNoA(null, new DefaultCodeFormatter(), Paths.get("A")));
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generateNoA("Empty.ftl", (Formatter) null, Paths.get("A")));
+      () -> engine.generateNoA("Empty.ftl", (CodeFormatter) null, Paths.get("A")));
     Assertions.assertThrows(NullPointerException.class,
-      () -> engine.generateNoA("Empty.ftl", new Formatter(), null));
+      () -> engine.generateNoA("Empty.ftl", new DefaultCodeFormatter(), null));
     Assertions.assertThrows(IllegalArgumentException.class,
-      () -> engine.generateNoA("", new Formatter(), Paths.get("A")));
+      () -> engine.generateNoA("", new DefaultCodeFormatter(), Paths.get("A")));
     Assertions.assertThrows(IllegalArgumentException.class,
-      () -> engine.generateNoA("Empty.ftl", new Formatter(), Paths.get("")));
+      () -> engine.generateNoA("Empty.ftl", new DefaultCodeFormatter(), Paths.get("")));
   }
 
   /**

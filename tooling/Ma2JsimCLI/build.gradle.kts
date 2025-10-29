@@ -29,33 +29,25 @@ tasks.shadowJar {
   archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
 
-tasks.register<Copy>("copyMontiArcBaseResources") {
-  val libraryName = "montiarc-base"
-  dependsOn(rootProject.project(":libraries:${libraryName}").tasks.named("assemble"))
-  from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
-  include("*Symbols.jar")
-  rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
-  into("${buildDir}/generated/resources/montiarc")
+fun registerSymbolCopyTask(taskName: String, libraryName: String) {
+  tasks.register<Copy>(taskName) {
+    val libProject = rootProject.project(":libraries:${libraryName}")
+    dependsOn(libProject.tasks.named("assemble"))
+    from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
+    include("*Symbols.jar")
+    rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
+    into("${buildDir}/generated/resources/montiarc")
+  }
 }
 
-tasks.register<Copy>("copySimulatorResources") {
-  val libraryName = "simulator-rte"
-  dependsOn(rootProject.project(":libraries:${libraryName}").tasks.named("assemble"))
-  from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
-  include("*Symbols.jar")
-  rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
-  into("${buildDir}/generated/resources/montiarc")
-}
-
-tasks.register<Copy>("copyMaUnitResources") {
-  val libraryName = "maunit"
-  dependsOn(rootProject.project(":libraries:${libraryName}").tasks.named("assemble"))
-  from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
-  include("*Symbols.jar")
-  rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
-  into("${buildDir}/generated/resources/montiarc")
-}
+registerSymbolCopyTask("copyMontiArcBaseResources", "montiarc-base")
+registerSymbolCopyTask("copySimulatorResources", "simulator-rte")
+registerSymbolCopyTask("copyMaUnitResources", "maunit")
 
 tasks.named("processResources") {
   dependsOn("copyMontiArcBaseResources", "copySimulatorResources", "copyMaUnitResources")
+}
+
+tasks.named("sourcesJar") {
+  dependsOn("processResources")
 }

@@ -3,8 +3,6 @@ package montiarc.generator.codegen;
 
 import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
@@ -26,6 +24,10 @@ import montiarc.generator.util.MaUnitHelper;
 import montiarc.util.LogAspects;
 import montiarc.util.MASimError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 
 import java.nio.file.Path;
@@ -34,18 +36,20 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import static org.eclipse.jdt.core.formatter.CodeFormatter.K_COMPILATION_UNIT;
+
 public class MA2JSimGen {
 
   protected static String FILE_EXTENSION = "java";
   protected GeneratorEngine engine;
   protected GeneratorSetup setup;
-  protected Formatter formatter;
+  protected CodeFormatter formatter;
   protected Helper helper;
 
   public MA2JSimGen(@NotNull GeneratorSetup setup) {
     this.setup = Preconditions.checkNotNull(setup);
     this.engine = new GeneratorEngine(this.setup);
-    this.formatter = new Formatter();
+    this.formatter = new DefaultCodeFormatter();
     this.helper = (Helper) setup.getGlex().getGlobalVar("helper");
   }
 
@@ -99,7 +103,7 @@ public class MA2JSimGen {
     return this.setup;
   }
 
-  protected Formatter getFormatter() {
+  protected CodeFormatter getFormatter() {
     return this.formatter;
   }
 
@@ -358,8 +362,10 @@ public class MA2JSimGen {
 
     Optional<String> formattedCode = Optional.empty();
     try {
-      formattedCode = Optional.of(this.getFormatter().formatSource(code));
-    } catch (FormatterException | java.lang.Error e) {
+      Document document = new Document(code);
+      formatter.format(K_COMPILATION_UNIT, code, 0, code.length(), 0, null).apply(document);
+      formattedCode = Optional.of(document.get());
+    } catch (BadLocationException | java.lang.Error e) {
       Log.warn(MASimError.POST_GENERATION_FORMATTING_FAIL.format(
         outPath, template, ast.getArcComponentType().getSymbol().getFullName(), e.getMessage()));
     }

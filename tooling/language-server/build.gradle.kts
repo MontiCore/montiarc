@@ -145,17 +145,37 @@ tasks.named<RunVscodePluginAttachedTask>("runMontiArcWithCD4AVscodePluginAttache
 }
 
 tasks.named<Exec>("buildMontiArcWithCD4AVscodePlugin") {
-  dependsOn(project.tasks.npmInstall)
+  dependsOn(project.tasks.npmInstall, "packageMontiArcWithCD4AVscodePlugin")
   addNpmToPath(this)
 }
 
 tasks.named<Exec>("packageMontiArcWithCD4AVscodePlugin") {
-  dependsOn(project.tasks.npmInstall)
+  dependsOn(project.tasks.npmInstall, "editPackageJson", "copyIcon", "copyConfiguration", "copyReadme")
   addNpmToPath(this)
 }
 
+tasks.named("generateMontiArcWithCD4ALanguageServer") {
+  dependsOn(tasks.generateMCGrammars)
+}
+
+tasks.named("sourcesJar") {
+  dependsOn(tasks.named("generateMontiArcWithCD4ALanguageServer"))
+}
+
+tasks.named("packMontiArcWithCD4ALanguageServer") {
+  dependsOn(
+    ":languages:montiarc:jar",
+    ":languages:basis:jar",
+    ":languages:automaton:jar",
+    ":languages:comfy:jar",
+    ":languages:compute:jar",
+    ":languages:features:jar",
+    ":languages:modes:jar"
+  )
+}
+
 fun addNpmToPath(task: Exec) {
-  val isWindows = System.getProperty("os.name").toLowerCase().startsWith("win")
+  val isWindows = System.getProperty("os.name").lowercase().startsWith("win")
   if (isWindows) {
     task.environment(
       "PATH",

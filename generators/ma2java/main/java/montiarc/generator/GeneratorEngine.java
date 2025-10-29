@@ -2,12 +2,12 @@
 package montiarc.generator;
 
 import com.google.common.base.Preconditions;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.ast.ASTCNode;
 import de.monticore.ast.ASTNode;
 import de.monticore.symboltable.IScope;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
 
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -33,11 +33,11 @@ public class GeneratorEngine extends de.monticore.generating.GeneratorEngine {
    * @param filePath          the file path in which the content is to be written
    * @param node              the ast node
    * @param templateArguments additional template arguments (if needed).
-   * @throws FormatterException if the content could not be parsed by the java parser of the provided formatter
+   * @throws BadLocationException if the content could not be parsed by the java parser of the provided formatter
    * @see this#generate(String, Path, ASTNode, Object...)
    */
-  public void generate(@NotNull String templateName, @NotNull Formatter formatter, @NotNull Path filePath,
-                       @NotNull ASTNode node, @NotNull Object... templateArguments) throws FormatterException {
+  public void generate(@NotNull String templateName, @NotNull CodeFormatter formatter, @NotNull Path filePath,
+                       @NotNull ASTNode node, @NotNull Object... templateArguments) throws BadLocationException {
     Preconditions.checkNotNull(templateName);
     Preconditions.checkNotNull(formatter);
     Preconditions.checkNotNull(filePath);
@@ -58,11 +58,11 @@ public class GeneratorEngine extends de.monticore.generating.GeneratorEngine {
    * @param formatter         the formatter to use for formatting the content
    * @param filePath          the file path in which the content is to be written
    * @param templateArguments additional template arguments (if needed).
-   * @throws FormatterException if the content could not be parsed by the java parser of the provided formatter
+   * @throws BadLocationException if the content could not be parsed by the java parser of the provided formatter
    * @see this#generateNoA(String, Path, Object...)
    */
-  public void generateNoA(@NotNull String templateName, @NotNull Formatter formatter, @NotNull Path filePath,
-                          @NotNull Object... templateArguments) throws FormatterException {
+  public void generateNoA(@NotNull String templateName, @NotNull CodeFormatter formatter, @NotNull Path filePath,
+                          @NotNull Object... templateArguments) throws BadLocationException {
     this.generate(templateName, formatter, filePath, this.createDummyAST(), Arrays.asList(templateArguments));
   }
 

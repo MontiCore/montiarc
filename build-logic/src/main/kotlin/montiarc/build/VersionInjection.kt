@@ -72,6 +72,7 @@ class VersionInjection {
         javaExtension.sourceSets.named("main").configure { resources.srcDir(genDir) }
         tasks.named("compileJava").configure { finalizedBy(copyTask) }
         tasks.named("processResources").configure { dependsOn(copyTask) }
+        tasks.named("sourcesJar").configure { dependsOn(copyTask) }
 
         copyTask.configure {
           onlyIf { tasks.getByName("compileJava").state.upToDate.not() }

@@ -2,8 +2,6 @@
 package montiarc.generator.codegen;
 
 import com.google.common.base.Preconditions;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.ast.ASTNode;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.reporting.Reporting;
@@ -11,10 +9,15 @@ import de.monticore.io.FileReaderWriter;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.MASimError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+
+import static org.eclipse.jdt.core.formatter.CodeFormatter.K_COMPILATION_UNIT;
 
 public class MA2JSimTemplateCtrl extends de.monticore.generating.templateengine.TemplateController {
 
@@ -31,8 +34,8 @@ public class MA2JSimTemplateCtrl extends de.monticore.generating.templateengine.
     );
   }
 
-  public void writeArgs(@NotNull String templateName, @NotNull Formatter formatter, @NotNull Path filePath,
-                        @NotNull ASTNode ast, @NotNull List<Object> templateArguments) throws FormatterException {
+  public void writeArgs(@NotNull String templateName, @NotNull CodeFormatter formatter, @NotNull Path filePath,
+                        @NotNull ASTNode ast, @NotNull List<Object> templateArguments) throws BadLocationException {
     Preconditions.checkNotNull(templateName);
     Preconditions.checkNotNull(formatter);
     Preconditions.checkNotNull(filePath);
@@ -60,8 +63,8 @@ public class MA2JSimTemplateCtrl extends de.monticore.generating.templateengine.
     Reporting.reportFileFinalization(qualifiedTemplateName, filePath, ast);
   }
 
-  protected String processTemplate(@NotNull String templateName, @NotNull Formatter formatter, @NotNull ASTNode ast,
-                                   @NotNull List<Object> templateArguments) throws FormatterException {
+  protected String processTemplate(@NotNull String templateName, @NotNull CodeFormatter formatter, @NotNull ASTNode ast,
+                                   @NotNull List<Object> templateArguments) throws BadLocationException {
     Preconditions.checkNotNull(templateName);
     Preconditions.checkNotNull(formatter);
     Preconditions.checkNotNull(ast);
@@ -82,7 +85,9 @@ public class MA2JSimTemplateCtrl extends de.monticore.generating.templateengine.
     return this.format(formatter, builder.toString());
   }
 
-  protected String format(@NotNull Formatter formatter, @NotNull String content) throws FormatterException {
-    return formatter.formatSource(content);
+  protected String format(@NotNull CodeFormatter formatter, @NotNull String content) throws BadLocationException {
+    Document document = new Document(content);
+    formatter.format(K_COMPILATION_UNIT, content, 0, content.length(), 0, null).apply(document);
+    return document.get();
   }
 }

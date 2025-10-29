@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
-val TARGET_JVM_VERSION: Int = 11
+val TARGET_JVM_VERSION: Int = 21
 
 pluginManager.withPlugin("java") {
   with (extensions.getByType(JavaPluginExtension::class.java)) {

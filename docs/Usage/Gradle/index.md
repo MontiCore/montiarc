@@ -10,8 +10,8 @@ Using [Gradle] to process MontiArc models brings some advantages, such as:
 * Automatic compilation of MontiArc's generated code (if the [_java_][Java Gradle Plugin] plugin is also applied)
 
 ## Perquisites
-* Gradle 7.6 (or a [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) with that version) is required to execute the MontiArc build process.
-* Java 11 is the version of the code produced by the MontiArc generator.
+* Gradle 8.5 (or a [Gradle wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) with that version) is required to execute the MontiArc build process.
+* Java 21 is the version of the code produced by the MontiArc generator.
 
 ## MontiArc Project Structure
 When using Gradle to build MontiArc applications, the default project structure looks like the following:

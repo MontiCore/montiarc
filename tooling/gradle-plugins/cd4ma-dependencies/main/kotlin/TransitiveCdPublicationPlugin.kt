@@ -91,6 +91,6 @@ class TransitiveCdPublicationPlugin : Plugin<Project> {
    * Gets the [LazyPublishArtifact] representation of the jar tasks output.
    */
   private fun jarTaskToPublishArtifact(task: TaskProvider<Jar>): LazyPublishArtifact {
-    return LazyPublishArtifact(task, project.version.toString(), (project as ProjectInternal).fileResolver)
+    return LazyPublishArtifact(task, (project as ProjectInternal).fileResolver, (project as ProjectInternal).taskDependencyFactory)
   }
 }

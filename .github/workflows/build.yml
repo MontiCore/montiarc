@@ -23,12 +23,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 11
+          java-version: 21
           cache: gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: 7.5.1
+          gradle-version: 8.5
 
       - name: Build with Gradle
         run: gradle shadowjar :tooling:language-server:build -PenableLanguageServer

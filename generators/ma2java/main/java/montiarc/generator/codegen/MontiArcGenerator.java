@@ -3,8 +3,6 @@ package montiarc.generator.codegen;
 
 import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
-import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
@@ -21,12 +19,18 @@ import montiarc.generator.helper.dse.ComponentHelperDseValue;
 import montiarc.generator.util.Identifier;
 import montiarc.util.MA2JavaError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.eclipse.jdt.core.formatter.CodeFormatter;
+import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
+import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jface.text.Document;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+
+import static org.eclipse.jdt.core.formatter.CodeFormatter.K_COMPILATION_UNIT;
 
 public class MontiArcGenerator {
 
@@ -37,12 +41,12 @@ public class MontiArcGenerator {
   protected static String FILE_EXTENSION = ".java";
   protected GeneratorEngine engine;
   protected GeneratorSetup engineSetup;
-  protected Formatter codeFormatter;
+  protected CodeFormatter codeFormatter;
 
   public MontiArcGenerator(@NotNull GeneratorSetup setup) {
     this.engineSetup = Preconditions.checkNotNull(setup);
     this.engine = new GeneratorEngine(this.engineSetup);
-    this.codeFormatter = new Formatter();
+    this.codeFormatter = new DefaultCodeFormatter();
   }
 
   public MontiArcGenerator(@NotNull Path targetDir, @NotNull Path hwcPath) {
@@ -86,7 +90,7 @@ public class MontiArcGenerator {
     return this.engineSetup;
   }
 
-  protected Formatter getCodeFormatter() {
+  protected CodeFormatter getCodeFormatter() {
     return this.codeFormatter;
   }
 
@@ -273,9 +277,11 @@ public class MontiArcGenerator {
     Optional<String> formattedCode = Optional.empty();
 
     try {
-      formattedCode = Optional.of(this.getCodeFormatter().formatSource(generatedCode));
+      Document document = new Document(generatedCode);
+      codeFormatter.format(K_COMPILATION_UNIT, generatedCode, 0, generatedCode.length(), 0, null).apply(document);
+      formattedCode = Optional.of(document.get());
     }
-    catch (FormatterException | java.lang.Error e) {
+    catch (BadLocationException | java.lang.Error e) {
       Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
         outPath, templateName, comp.getSymbol().getFullName(), e.getMessage()));
     }

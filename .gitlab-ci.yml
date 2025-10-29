@@ -26,14 +26,14 @@ stages:
   - mirror
 
 Build:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   stage: build
   allow_failure: false
   script:
     - gradle clean assemble --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
 
 Build LSP:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   stage: build
   needs: ["Build"]
   allow_failure: false
@@ -42,14 +42,14 @@ Build LSP:
 
 Verify Formatting:
   stage: test
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   needs: ["Build"]
   allow_failure: false
   script:
     - gradle spotlessCheck --build-cache -PenableLanguageServer
 
 Package:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   stage: post-build
   needs: ["Build"]
   allow_failure: false
@@ -76,7 +76,7 @@ Package:
     when: always
 
 Unit Test:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   allow_failure: false
   <<: *unit_test_definition
 
@@ -106,7 +106,7 @@ Test Coverage:
         path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   stage: post-test
   script:
     - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache -PenableLanguageServer
@@ -120,7 +120,7 @@ Deploy Nexus:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
@@ -150,7 +150,7 @@ Github Mirror:
       when: on_success
 
 Check Dependency Updates:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:7.6.4-jdk11
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   stage: check
   needs: []
   allow_failure: true
@@ -166,7 +166,7 @@ Check Dependency Updates:
       
       OUTDATED_BLOCK=$(sed -n '/"outdated": {/,/}/p' build/versions/dependency-updates.json)
       OUTDATED_COUNT=$(echo "$OUTDATED_BLOCK" | grep -oP '"count":\s*\K\d+' | head -1)
-      if [ "$OUTDATED_COUNT" -gt 7 ]; then
+      if [ "$OUTDATED_COUNT" -gt 0 ]; then
         echo "Found $OUTDATED_COUNT outdated dependencies."
         exit 1
       else
