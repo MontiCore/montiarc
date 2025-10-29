@@ -21,7 +21,7 @@ component ControlStation {
       do / {
         motorCommand = MotorCMD.STOP;
       }
-    };
+    }
 
     state OpenDoor {
       entry / {
@@ -38,24 +38,24 @@ component ControlStation {
 
       IdleOpenDoor -> IdleOpenDoor requestOnFloor / {
         pendingRequests.add(requestOnFloor);
-      };
+      }
       IdleOpenDoor -> IdleOpenDoor [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
         int next = pendingRequests.first();
         pendingRequests.remove(next);
         targetFloor = Optional.of(next);
-      };
-    };
+      }
+    }
 
     state MovingUp {
       do / {
         motorCommand = MotorCMD.UP;
       }
-    };
+    }
     state MovingDown {
       do / {
         motorCommand = MotorCMD.DOWN;
       }
-    };
+    }
 
     Idle -> MovingUp   [targetFloor.isPresent() && targetFloor.get() > motorPosition];
     Idle -> MovingDown [targetFloor.isPresent() && targetFloor.get() < motorPosition];
@@ -63,31 +63,31 @@ component ControlStation {
     MovingUp   -> Idle     [targetFloor.isEmpty()];
     MovingUp   -> OpenDoor [targetFloor.isPresent() && targetFloor.get() == motorPosition] / {
       targetFloor = Optional.empty();
-    };
+    }
     MovingDown -> Idle     [targetFloor.isEmpty()];
     MovingDown -> OpenDoor [targetFloor.isPresent() && targetFloor.get() == motorPosition] / {
       targetFloor = Optional.empty();
-    };
+    }
 
     Idle -> OpenDoor [targetFloor.isPresent() && targetFloor.get() == motorPosition] / {
       targetFloor = Optional.empty();
-    };
+    }
 
     Idle -> Idle requestOnFloor / {
       pendingRequests.add(requestOnFloor);
-    };
+    }
     MovingUp -> MovingUp requestOnFloor / {
       pendingRequests.add(requestOnFloor);
-    };
+    }
     MovingDown -> MovingDown requestOnFloor / {
       pendingRequests.add(requestOnFloor);
-    };
+    }
 
     Idle -> Idle [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
       int next = pendingRequests.first();
       pendingRequests.remove(next);
       targetFloor = Optional.of(next);
-    };
+    }
 
     OpenDoor -> Idle [targetFloor.isPresent()];
 

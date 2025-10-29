@@ -8,6 +8,6 @@ component WithPersonIn {
 
   automaton {
     initial state S;
-    S -> S / { };
+    S -> S / { }
   }
 }

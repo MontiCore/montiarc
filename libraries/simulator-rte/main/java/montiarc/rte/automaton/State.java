@@ -141,11 +141,11 @@ public class State {
    *   initial state B {
    *     initial state C;
    *     state X;
-   *     };
+   *     }
    *   state Y;
-   *   };
+   *   }
    * state Z
-   * };
+   * }
    * </pre>
    * <ul>
    *   <li>{@code A.getInitialSubstate()} returns {@code C}</li>

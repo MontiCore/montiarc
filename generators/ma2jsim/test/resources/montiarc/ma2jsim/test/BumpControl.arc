@@ -19,6 +19,6 @@ component BumpControl {
     Idle -> Driving / {
       right = 0;
       left = 3;
-    };
+    }
   }
 }

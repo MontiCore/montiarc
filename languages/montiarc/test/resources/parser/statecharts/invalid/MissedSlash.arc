@@ -13,6 +13,6 @@ component MissedSlash {
     state Locked;
 
     // invalid: there is a '/' missing
-    Closed -> Open {ringing = true};
+    Closed -> Open {ringing = true}
   }
 }

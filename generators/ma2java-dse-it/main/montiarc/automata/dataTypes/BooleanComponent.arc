@@ -13,6 +13,6 @@ component BooleanComponent {
 
     Idle -> Idle /{
       out = in || false;
-    };
+    }
   }
 }

@@ -6,6 +6,6 @@ component IntWrapperIn {
 
   automaton {
     initial state S;
-    S -> S / { int foo = p; };
+    S -> S / { int foo = p; }
   }
 }

@@ -41,10 +41,10 @@ component SumUp {
     initial state S;
     S -> S i / {
       sum = sum + i;
-    };
+    }
     S -> S r / {
       o = sum;
-    };
+    }
   }
 }
 ```

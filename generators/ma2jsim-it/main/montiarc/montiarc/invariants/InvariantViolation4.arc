@@ -19,8 +19,8 @@ component InvariantViolation4 {
       initial { v = 11; }
       state S11 [v == 11] {
         entry / { o = 11; }
-      };
-    };
+      }
+    }
 
     S1 -> S2 [i == 2] i;
     S1 -> S21 [i == 21] i;
@@ -33,18 +33,18 @@ component InvariantViolation4 {
       // before the invariant is evaluated
       initial state S21 [v == 21] {
         entry / { o = 21; }
-      };
+      }
       // The invariant of both the super- and substate are violated
       // as the entry action sets the wrong value
       // before the invariants are evaluated
       state S22 [v == 22 || v == -22] {
         entry / { v = -22; o = 22; }
-      };
-    };
+      }
+    }
 
-    S1 -> S3 [i == 3] i / { v = 30; };
-    S1 -> S31 [i == 31] i / { v = 30; };
-    S1 -> S32 [i == 32] i / { v = -32; };
+    S1 -> S3 [i == 3] i / { v = 30; }
+    S1 -> S31 [i == 31] i / { v = 30; }
+    S1 -> S32 [i == 32] i / { v = -32; }
 
     state S3 [v >= 30 && v < 40] {
       // The invariant of the substate is violated
@@ -52,14 +52,14 @@ component InvariantViolation4 {
       // before the invariant is evaluated
       initial state S31 [v == 31] {
         entry / { o = 31; }
-      };
+      }
       // The invariant of both the super- and substate are violated
       // as the transition actions set the wrong value
       // before the invariants are evaluated
       state S32 [v == 32 || v == -32] {
         entry / { o = 32; }
-      };
-    };
+      }
+    }
 
     S1 -> S4 [i == 4] i;
     S1 -> S41 [i == 41] i;
@@ -72,8 +72,8 @@ component InvariantViolation4 {
       initial state S41 [v == 41] {
         entry / { v = 41; o = 41; }
         do / { v = 40; }
-      };
-    };
+      }
+    }
 
     S1 -> S5 [i == 5] i;
     S1 -> S51 [i == 51] i;
@@ -86,8 +86,8 @@ component InvariantViolation4 {
       // before the invariant is evaluated
       initial state S51 [v == 51] {
         entry / { v = 51; o = 51; }
-      };
-    };
+      }
+    }
 
     S1 -> S6 [i == 6] i;
 
@@ -99,7 +99,7 @@ component InvariantViolation4 {
       initial state S61 [v == 61] {
         entry / { v = 61; o = 61; }
         do / { v = -61; }
-      };
-    };
+      }
+    }
   }
 }

@@ -10,6 +10,6 @@ component AssertEquals<T>(T expected, String message = "") {
     initial state S;
     S -> S actual / {
       Assertions.assertTrue(expected == actual, message);
-    };
+    }
   }
 }

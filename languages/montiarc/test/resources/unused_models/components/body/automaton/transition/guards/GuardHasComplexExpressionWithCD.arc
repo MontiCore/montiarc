@@ -16,6 +16,6 @@ component GuardHasComplexExpressionWithCD {
     state A,B;
     initial A;
 
-    A -> B [input.get(0) == MotorCommand.FORWARD]/ {s="Hello World"};
+    A -> B [input.get(0) == MotorCommand.FORWARD]/ {s="Hello World"}
   }
 }

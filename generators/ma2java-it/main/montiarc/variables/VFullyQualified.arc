@@ -13,6 +13,6 @@ component VFullyQualified(Types.Direction p) {
     S -> S / {
       Types.Direction v = f;
       o = v;
-    };
+    }
   }
 }

@@ -13,6 +13,6 @@ component AssignmentLiteral {
 
     Idle -> Idle /{
       out = 1;
-    };
+    }
   }
 }

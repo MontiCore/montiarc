@@ -13,6 +13,6 @@ component MinusExpression {
 
     Idle -> Idle /{
       out = in - 1;
-    };
+    }
   }
 }

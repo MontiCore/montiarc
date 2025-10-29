@@ -16,6 +16,6 @@ component Counter {
     Idle -> Idle /{
       counter = counter + factor;
       out = counter;
-    };
+    }
   }
 }

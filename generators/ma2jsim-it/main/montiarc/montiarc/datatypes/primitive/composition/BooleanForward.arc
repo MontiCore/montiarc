@@ -10,6 +10,6 @@ component BooleanForward {
     S -> S / {
       boolean intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

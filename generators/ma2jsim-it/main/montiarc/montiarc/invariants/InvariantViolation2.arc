@@ -17,7 +17,7 @@ component InvariantViolation2 {
     initial { v = 1; }
     state S1 [v == 1] {
       entry / { o = 1; }
-    };
+    }
 
     S1 -> S2 [i == 2] i;
 
@@ -25,15 +25,15 @@ component InvariantViolation2 {
     // value before the invariant is evaluated
     state S2 [v == 2] {
       entry / { v = -2; o = 2; }
-    };
+    }
 
-    S1 -> S3 [i == 3] i / { v = -3; };
+    S1 -> S3 [i == 3] i / { v = -3; }
 
    // The invariant is violated as the transition action sets the wrong
    // value before the invariant is evaluated
     state S3 [v == 3] {
       entry / { o = 3; }
-    };
+    }
 
     S1 -> S4 [i == 4] i;
 
@@ -42,6 +42,6 @@ component InvariantViolation2 {
     state S4 [v == 4] {
       entry / { v = 4; o = 4; }
       do / { v = -4; }
-    };
+    }
   }
 }

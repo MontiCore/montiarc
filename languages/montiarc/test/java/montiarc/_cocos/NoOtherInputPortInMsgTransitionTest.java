@@ -40,7 +40,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = 0; }; " +
+      "    S -> S / { o = 0; } " +
       "  } " +
       "}",
     // 2 - Write literal to output port in message-event triggered transition
@@ -49,7 +49,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S;" +
-      "    S -> S i / { o = 0; }; " +
+      "    S -> S i / { o = 0; } " +
       "  } " +
       "}",
     // 3 - Write value of component variable to output port in time-event triggered transition
@@ -58,7 +58,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  int v = 0; " +
       "  automaton { " +
       "    state S;" +
-      "    S -> S / { o = v; }; " +
+      "    S -> S / { o = v; } " +
       "  } " +
       "}",
     // 4 - Write value of component variable to output port in message-event triggered transition
@@ -68,7 +68,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  int v = 0; " +
       "  automaton { " +
       "    state S;" +
-      "    S -> S i / { o = v; }; " +
+      "    S -> S i / { o = v; } " +
       "  } " +
       "}",
     // 5 - Write value of message to output port in time-event triggered transition
@@ -77,7 +77,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S;" +
-      "    S -> S / { o = i; }; " +
+      "    S -> S / { o = i; } " +
       "  } " +
       "}",
     // 6 - Write value of message to output port in message-event triggered transition
@@ -86,7 +86,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S;" +
-      "    S -> S i / { o = i; }; " +
+      "    S -> S i / { o = i; } " +
       "  } " +
       "}",
     // 7 - Write value of message to output port in message-event triggered transition
@@ -95,8 +95,8 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S;" +
-      "    S -> S i1 / { o = i1; }; " +
-      "    S -> S i2 / { o = i2; }; " +
+      "    S -> S i1 / { o = i1; } " +
+      "    S -> S i2 / { o = i2; } " +
       "  } " +
       "}",
     // 8 - Read value from and write to field in time-event triggered transition
@@ -111,7 +111,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "      o = v.i; o = v.o; " +
       "      v.i = 0; v.i +=1; v.i++; --v.i; " +
       "      v.o = 0; v.o +=1; v.o++; --v.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 9 - Read value from and write to field in message-event triggered transition
@@ -126,7 +126,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "      o = v.i; o = v.o; " +
       "      v.i = 0; v.i +=1; v.i++; --v.i; " +
       "      v.o = 0; v.o +=1; v.o++; --v.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 10 - Read value from method call in time-event triggered transition
@@ -139,7 +139,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    state S;" +
       "    S -> S / { " +
       "      o = v.i(); o = v.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 11 - Read value from method call in message-event triggered transition
@@ -152,7 +152,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    state S;" +
       "    S -> S j / { " +
       "      o = v.i(); o = v.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 12 - Read value from and write to static field in time-event triggered transition
@@ -165,7 +165,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    S -> S / { " +
       "      o = OOTypeWithStaticFieldIO.i; " +
       "      o = OOTypeWithStaticFieldIO.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 13 - Read value from and write to static field in message-event triggered transition
@@ -178,7 +178,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    S -> S j / { " +
       "      o = OOTypeWithStaticFieldIO.i; " +
       "      o = OOTypeWithStaticFieldIO.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 14 - Read value from static method call in time-event triggered transition
@@ -191,7 +191,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    S -> S / { " +
       "      o = OOTypeWithStaticFunctionIO.i(); " +
       "      o = OOTypeWithStaticFunctionIO.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 15 - Read value from static method call in message-event triggered transition
@@ -204,7 +204,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    S -> S j / { " +
       "      o = OOTypeWithStaticFunctionIO.i(); " +
       "      o = OOTypeWithStaticFunctionIO.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 16 - Variable declaration shadows port in time-event triggered transition
@@ -216,7 +216,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    S -> S / { " +
       "      int i = 0; " +
       "      o = i; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 17 - Variable declaration shadows port in message-event triggered transition
@@ -228,7 +228,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "    S -> S j / { " +
       "      int i = 0; " +
       "      o = i; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 18 - For control shadows port in time-event triggered transition
@@ -241,7 +241,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "      for (int i = 0; i < 10; i++) { " +
       "        o = i; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 19 - For control shadows port in message-event triggered transition
@@ -254,7 +254,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       "      for (int i = 0; i < 10; i++) { " +
       "        o = i; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}"
   })
@@ -304,7 +304,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      int x = i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -317,7 +317,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -329,7 +329,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      ++i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -341,7 +341,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      --i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -353,7 +353,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      i2++; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -365,7 +365,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      i2--; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -378,7 +378,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      boolean x = true; " +
           "      x = ~i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -391,7 +391,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      boolean x = true; " +
           "      x = !i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -404,7 +404,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = 2 * i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -417,7 +417,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = i2 * 2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -430,7 +430,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = i2 * i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT
@@ -443,7 +443,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i2 / { " +
           "      int x = 0; " +
           "      x = i1 * i1; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT
@@ -467,11 +467,11 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "      y = i2 > 2;  y = 2 > i2; " +
           "      y = i2 == 2; y = 2 == i2; " +
           "      y = i2 != 2; y = 2 != i2; " +
-          "    }; " +
+          "    } " +
           "    S -> S i3 / { " +
           "      y = i4 && 2; y = 2 && i4; " +
           "      y = i4 || 2; y = 2 || i4; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -495,7 +495,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = i2 ? -2 : 2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -508,7 +508,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = true ? i2 : 2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -521,7 +521,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int x = 0; " +
           "      x = true ? -2 : i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -533,7 +533,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      int x = (i2); " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -548,7 +548,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "      x = i2 << 1;  x = 1 << i2; " +
           "      x = i2 >> 1;  x = 1 >> i2; " +
           "      x = i2 >>> 1; x = 1 >>> i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -565,7 +565,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "      x = i2 & true; x = true & i2; " +
           "      x = i2 ^ true; x = true ^ i2; " +
           "      x = i2 | true; x = true | i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -579,7 +579,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      if (i2) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -591,7 +591,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      if (true) { int x = i2; } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -603,7 +603,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      if (true) { } else { int x = i2; } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -615,7 +615,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      for (int j = i2; j > 10; j++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -628,7 +628,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    S -> S i1 / { " +
           "      int j = 0; " +
           "      for (j = i2; j > 10; j++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -640,7 +640,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      for (int j = 1; i2 > 10; j++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -652,7 +652,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      for (int j = 0; j > 10; i2++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -664,7 +664,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
           "    state S;" +
           "    S -> S i1 / { " +
           "      for (int j = 0; j > 10; i1++, i2++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT

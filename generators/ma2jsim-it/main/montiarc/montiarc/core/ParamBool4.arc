@@ -13,6 +13,6 @@ component ParamBool4(boolean p) {
       if (p) {
         o = i;
       }
-    };
+    }
   }
 }

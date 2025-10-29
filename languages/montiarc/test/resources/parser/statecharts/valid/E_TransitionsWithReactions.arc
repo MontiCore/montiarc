@@ -16,8 +16,8 @@ component E_TransitionsWithReactions {
     state Opened;
 
     Opened -> Closed;
-    Closed -> Opened [open] / {ringing = true;};
-    Closed -> Locked        / {System.out.println("Door locked now.");};
+    Closed -> Opened [open] / {ringing = true;}
+    Closed -> Locked        / {System.out.println("Door locked now.");}
     Locked -> Closed [unlock == true];
 
   }

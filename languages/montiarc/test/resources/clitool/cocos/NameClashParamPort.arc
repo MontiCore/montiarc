@@ -15,6 +15,6 @@ component NameClashParamPort(int p) {
 
   automaton {
     initial state S;
-    S -> S [p > p] p / { o = p; };
+    S -> S [p > p] p / { o = p; }
   }
 }

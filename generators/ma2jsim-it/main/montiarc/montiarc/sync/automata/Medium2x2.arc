@@ -14,6 +14,6 @@ component Medium2x2 {
     S -> S / {
       o1 = i1;
       o2 = i2;
-    };
+    }
   }
 }

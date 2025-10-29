@@ -10,6 +10,6 @@ component NoTrigger {
 
   automaton {
     initial state S;
-    S -> S / { o = OnOff.ON; };
+    S -> S / { o = OnOff.ON; }
   }
 }

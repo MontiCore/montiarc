@@ -29,7 +29,7 @@ component Medium {
 
     S -> S / {
       o = i;
-    };
+    }
   }
 }
 

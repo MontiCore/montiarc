@@ -11,9 +11,9 @@ component ToSyncFirstIn<T>(T fallback) {
     initial state Waiting;
     state Sent;
 
-    Waiting -> Sent i / { o = i; };
-    Sent -> Sent i / {}; // discard
-    Sent -> Waiting / {}; // reset
-    Waiting -> Waiting / { o = fallback; };
+    Waiting -> Sent i / { o = i; }
+    Sent -> Sent i / {} // discard
+    Sent -> Waiting / {} // reset
+    Waiting -> Waiting / { o = fallback; }
   }
 }

@@ -27,6 +27,6 @@ component MultipleAssignmentsToSamePort {
                               o=3,
                               o=4,
                               x=1,
-                              x=5};
+                              x=5}
     }
 }

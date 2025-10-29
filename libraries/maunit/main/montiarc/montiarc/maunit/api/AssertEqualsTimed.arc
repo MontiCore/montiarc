@@ -21,13 +21,13 @@ component AssertEqualsTimed<T>(List<List<T>> expected, String message = "") {
       }
       tick++;
       index = 0;
-    };
+    }
     S -> S actual / {
       if (tick >= expected.size() || index >= expected.get(tick).size()) {
         Assertions.fail("Unexpected additional message received in tick: " + tick + " with value: " + actual);
       }
       Assertions.assertTrue(expected.get(tick).get(index) == actual, message);
       index++;
-    };
+    }
   }
 }

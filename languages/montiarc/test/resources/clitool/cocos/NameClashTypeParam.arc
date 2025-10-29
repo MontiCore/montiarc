@@ -14,7 +14,7 @@ component NameClashTypeParam<T, T>(T tp) {
 
   automaton {
     initial state S;
-    S -> S i / {o = i; };
+    S -> S i / {o = i; }
   }
 
 }

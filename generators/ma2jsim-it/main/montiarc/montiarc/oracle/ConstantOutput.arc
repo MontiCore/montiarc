@@ -8,6 +8,6 @@ component ConstantOutput(int value) {
 
   automaton {
     initial state S;
-    S -> S / o = value;;
+    S -> S / o = value;
   }
 }

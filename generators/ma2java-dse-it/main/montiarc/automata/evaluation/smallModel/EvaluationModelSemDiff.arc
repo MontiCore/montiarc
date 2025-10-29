@@ -32,7 +32,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     mbse -> mbse [module == "mbse&sa"]/{
       mbseCounter = 2.0;
@@ -41,7 +41,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = true;
       chaosSA = true;
-    };
+    }
 
     mbse -> sa [module == "SA"] /{
       mbseCounter = 0.0;
@@ -50,7 +50,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     sa -> sa [module == "SA"] /{
       mbseCounter = 0.0;
@@ -59,7 +59,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     sa -> sa [module == "mbse&sa"] /{
       mbseCounter = 2.0;
@@ -68,7 +68,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = true;
       chaosSA = true;
-    };
+    }
 
     sa -> mbse [module == "MBSE"]/{
       mbseCounter = factor;
@@ -77,7 +77,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     nonModule -> mbse [module == "MBSE"]/{
       mbseCounter = factor;
@@ -86,7 +86,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     nonModule -> sa [module == "SA"] /{
       mbseCounter = 0.0;
@@ -95,7 +95,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     mbse -> nonModule [module != "MBSE" && module != "SA" && module != "mbse&sa"]/{
       mbseCounter = 0.0;
@@ -104,7 +104,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     sa -> nonModule [module != "MBSE" && module != "SA" && module != "mbse&sa"]/{
       mbseCounter = 0.0;
@@ -113,7 +113,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     nonModule -> nonModule [module != "MBSE" && module != "SA" && module != "mbse&sa"]/{
       mbseCounter = 0.0;
@@ -122,7 +122,7 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = false;
       chaosSA = false;
-    };
+    }
 
     nonModule -> nonModule [module == "mbse&sa"]/{
       mbseCounter = 2.0;
@@ -131,6 +131,6 @@ component EvaluationModelSemDiff {
       voteSA = saCounted;
       chaosMBSE = true;
       chaosSA = true;
-    };
+    }
   }
 }

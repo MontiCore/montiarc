@@ -18,13 +18,13 @@ component List6() {
 
     Empty -> Full / {
       //l.addAll([NORTH, EAST, SOUTH, WEST]);
-    };
+    }
     Full -> Full [l.size() > 1] i / {
       o = l.get(l.size());
-    };
+    }
     Full -> Empty [l.size() == 1] i / {
       o = l.get(l.size());
-    };
+    }
   }
 
 }

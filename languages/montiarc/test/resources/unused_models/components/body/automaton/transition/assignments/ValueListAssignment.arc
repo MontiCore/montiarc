@@ -13,6 +13,6 @@ component ValueListAssignment {
       state S;
       initial S;
 
-      S -> S / {b = [true, false, true]};
+      S -> S / {b = [true, false, true]}
     }
 }

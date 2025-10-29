@@ -315,7 +315,7 @@ component A {
   
   automaton {
     initial state S;
-    S -> S / { o = i; };
+    S -> S / { o = i; }
   }
 }
 
@@ -335,7 +335,7 @@ component A {
 
   <<delayed>> automaton { 
     initial state S;
-    S -> S / { o = i; };
+    S -> S / { o = i; }
   }
 }
 

@@ -6,6 +6,6 @@ component ByteIn {
 
   automaton {
     initial state S;
-    S -> S / { byte foo = p; };
+    S -> S / { byte foo = p; }
   }
 }

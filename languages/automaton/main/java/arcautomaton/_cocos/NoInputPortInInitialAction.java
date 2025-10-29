@@ -36,6 +36,6 @@ public class NoInputPortInInitialAction implements SCBasisASTSCStateCoCo {
   @Override
   public void check(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-    state.getSCSAnte().accept(this.traverser);
+    if (state.isPresentSCSAnte()) state.getSCSAnte().accept(this.traverser);
   }
 }

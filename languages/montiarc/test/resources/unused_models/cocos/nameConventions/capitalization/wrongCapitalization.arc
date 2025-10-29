@@ -34,9 +34,9 @@ component wrongCapitalization { // ERROR: Component names have to start with a c
   java inv BigLetterInvariant: {
       // ERROR: Invariant names have to start with a lowercase letter
     1 == 1;
-  };
+  }
 
   java inv smallLetterInvariant: {
     1 == 1;
-  };
+  }
 }

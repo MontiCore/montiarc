@@ -11,6 +11,6 @@ component IncompleteCondition {
   automaton {
     initial state S;
 
-    S -> S [i > 0] / { o = OnOff.ON; };
+    S -> S [i > 0] / { o = OnOff.ON; }
   }
 }

@@ -12,7 +12,7 @@ component ToSyncLastIn<T>(T fallback) {
   automaton {
     initial state S;
 
-    S -> S i / { lastReceived = i; };
-    S -> S / { o = lastReceived; lastReceived = fallback; };
+    S -> S i / { lastReceived = i; }
+    S -> S / { o = lastReceived; lastReceived = fallback; }
   }
 }

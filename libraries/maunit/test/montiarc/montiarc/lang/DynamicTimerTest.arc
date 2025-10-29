@@ -24,7 +24,7 @@ component DynamicTimerTest(int ticks) {
       S -> S / {
         tickExecutions++;
         if (tickExecutions > ticks) Assertions.fail();
-      };
+      }
     }
   }
 }

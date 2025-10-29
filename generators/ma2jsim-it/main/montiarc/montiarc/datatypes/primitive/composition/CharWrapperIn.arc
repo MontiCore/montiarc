@@ -6,6 +6,6 @@ component CharWrapperIn {
 
   automaton {
     initial state S;
-    S -> S / { char foo = p; };
+    S -> S / { char foo = p; }
   }
 }

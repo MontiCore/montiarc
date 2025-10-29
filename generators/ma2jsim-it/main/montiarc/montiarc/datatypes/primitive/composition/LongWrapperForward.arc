@@ -10,6 +10,6 @@ component LongWrapperForward {
     S -> S / {
       long intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

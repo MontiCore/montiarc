@@ -10,6 +10,6 @@ component FloatForward {
     S -> S / {
       float intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

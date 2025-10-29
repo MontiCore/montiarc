@@ -42,6 +42,6 @@ component Calculations {
       outDouble  = interDouble;
       outChar    = interChar;
       outBoolean = interBoolean;
-    };
+    }
   }
 }

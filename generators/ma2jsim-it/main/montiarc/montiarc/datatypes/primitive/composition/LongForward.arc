@@ -10,6 +10,6 @@ component LongForward {
     S -> S / {
       long intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

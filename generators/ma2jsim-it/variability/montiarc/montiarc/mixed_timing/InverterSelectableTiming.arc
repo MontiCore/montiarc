@@ -16,11 +16,11 @@ component InverterSelectableTiming {
 
         S -> S [i == OnOff.ON] / {
           o = OnOff.OFF;
-        };
+        }
 
         S -> S [i == OnOff.OFF] / {
           o = OnOff.ON;
-        };
+        }
       }
   } else {
     port in OnOff i;
@@ -29,11 +29,11 @@ component InverterSelectableTiming {
 
       S -> S [i == OnOff.ON] i / {
         o = OnOff.OFF;
-      };
+      }
 
       S -> S [i == OnOff.OFF] i / {
         o = OnOff.ON;
-      };
+      }
     }
   }
 }

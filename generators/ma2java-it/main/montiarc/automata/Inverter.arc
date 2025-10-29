@@ -20,7 +20,7 @@ component Inverter {
     initial state S;
 
     // emit received message
-    S -> S [ i == OnOff.ON ] / { o = OnOff.OFF; };
-    S -> S [ i == OnOff.OFF ] / { o = OnOff.ON; };
+    S -> S [ i == OnOff.ON ] / { o = OnOff.OFF; }
+    S -> S [ i == OnOff.OFF ] / { o = OnOff.ON; }
   }
 }

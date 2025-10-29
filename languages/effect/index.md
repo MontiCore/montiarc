@@ -43,8 +43,8 @@ component Controller {
       <<delayed>> automaton  {
               initial state Anon;
 
-              Anon -> Anon [waterLevel == 0 ]/{signal = false;};
-              Anon -> Anon [waterLevel != 0 ]/{signal = true;};
+              Anon -> Anon [waterLevel == 0 ]/{signal = false;}
+              Anon -> Anon [waterLevel != 0 ]/{signal = true;}
       }}
 ```
 **Heater**,

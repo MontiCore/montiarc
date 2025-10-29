@@ -12,7 +12,7 @@ component ParamsBool1(boolean p1, boolean p2) {
     S -> S i / {
       o1 = p1;
       o2 = p2;
-    };
+    }
   }
 }
 

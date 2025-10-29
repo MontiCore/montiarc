@@ -10,6 +10,6 @@ component CharForward {
     S -> S / {
       char intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

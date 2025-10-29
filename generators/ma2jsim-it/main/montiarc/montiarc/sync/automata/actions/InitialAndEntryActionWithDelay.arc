@@ -9,14 +9,14 @@ component InitialAndEntryActionWithDelay {
     initial { o = "INIT"; } state A {
       entry / o = "Enter A";
       do / o = "Do A";
-    };
+    }
 
     state B {
       entry / o = "Enter B";
       do / o = "Do B";
-    };
+    }
 
-    A -> B / o = "A -> B";;
-    B -> A / o = "B -> A";;
+    A -> B / o = "A -> B";
+    B -> A / o = "B -> A";
   }
 }

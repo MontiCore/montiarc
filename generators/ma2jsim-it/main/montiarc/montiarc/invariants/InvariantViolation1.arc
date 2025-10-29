@@ -19,6 +19,6 @@ component InvariantViolation1 {
     initial { v = -1; }
     state S1 [v == 1] {
       entry / { o = 1; }
-    };
+    }
   }
 }

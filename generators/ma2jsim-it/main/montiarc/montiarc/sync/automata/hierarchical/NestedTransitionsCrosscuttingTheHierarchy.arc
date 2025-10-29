@@ -34,34 +34,34 @@ component NestedTransitionsCrosscuttingTheHierarchy {
     // Example: aaa_ba has the following ancestors: aaa_b, aaa, aa, a (moving up the state hierarchy to the root)
 
     // Transitions for identifying the reached leaf state that the component is in at a given time:
-    aaa_aaa -> aaa_aaa [i.equals("check")] / o = "aaa_aaa";;
-    aaa_aab -> aaa_aab [i.equals("check")] / o = "aaa_aab";;
-    aaa_aba -> aaa_aba [i.equals("check")] / o = "aaa_aba";;
-    aaa_abb -> aaa_abb [i.equals("check")] / o = "aaa_abb";;
-    aaa_baa -> aaa_baa [i.equals("check")] / o = "aaa_baa";;
-    aaa_bab -> aaa_bab [i.equals("check")] / o = "aaa_bab";;
-    aaa_bba -> aaa_bba [i.equals("check")] / o = "aaa_bba";;
-    aaa_bb -> aaa_bb   [i.equals("check")] / o = "aaa_bb";;
-    aab_aaa -> aab_aaa [i.equals("check")] / o = "aab_aaa";;
-    aab_aba -> aab_aba [i.equals("check")] / o = "aab_aba";;
-    aab_ab -> aab_ab   [i.equals("check")] / o = "aab_ab";;
-    aba_aaa -> aba_aaa [i.equals("check")] / o = "aba_aaa";;
-    baa -> baa         [i.equals("check")] / o = "baa";;
+    aaa_aaa -> aaa_aaa [i.equals("check")] / o = "aaa_aaa";
+    aaa_aab -> aaa_aab [i.equals("check")] / o = "aaa_aab";
+    aaa_aba -> aaa_aba [i.equals("check")] / o = "aaa_aba";
+    aaa_abb -> aaa_abb [i.equals("check")] / o = "aaa_abb";
+    aaa_baa -> aaa_baa [i.equals("check")] / o = "aaa_baa";
+    aaa_bab -> aaa_bab [i.equals("check")] / o = "aaa_bab";
+    aaa_bba -> aaa_bba [i.equals("check")] / o = "aaa_bba";
+    aaa_bb -> aaa_bb   [i.equals("check")] / o = "aaa_bb";
+    aab_aaa -> aab_aaa [i.equals("check")] / o = "aab_aaa";
+    aab_aba -> aab_aba [i.equals("check")] / o = "aab_aba";
+    aab_ab -> aab_ab   [i.equals("check")] / o = "aab_ab";
+    aba_aaa -> aba_aaa [i.equals("check")] / o = "aba_aaa";
+    baa -> baa         [i.equals("check")] / o = "baa";
 
     // Transitions to the initial state of every test case:
-    INIT -> aaa_aaa [i.equals("aaa_aaa")] / o = "-> aaa_aaa";;
+    INIT -> aaa_aaa [i.equals("aaa_aaa")] / o = "-> aaa_aaa";
 
     // Test case transitions:
-    aaa_aaa -> aaa_aab [i.equals("aaa_aaa -> aaa_aab")] / o = "aaa_aaa -> aaa_aab";;  // 5., 14.
-    aaa_aaa -> aaa_aba [i.equals("aaa_aaa -> aaa_aba")] / o = "aaa_aaa -> aaa_aba";;  // 6., 15.
-    aaa_aaa -> aaa_baa [i.equals("aaa_aaa -> aaa_baa")] / o = "aaa_aaa -> aaa_baa";;  // 7., 16.
-    aaa_aa -> aaa_ab   [i.equals("aaa_aa -> aaa_ab")]   / o = "aaa_aa -> aaa_ab";;    // 8., 17.
-    aaa_aa -> aaa_ba   [i.equals("aaa_aa -> aaa_ba")]   / o = "aaa_aa -> aaa_ba";;    // 9., 18.
-    aaa_aa -> aab_aa   [i.equals("aaa_aa -> aab_aa")]   / o = "aaa_aa -> aab_aa";;    // 10., 19.
-    aaa_a -> aaa_b     [i.equals("aaa_a -> aaa_b")]     / o = "aaa_a -> aaa_b";;  // 11., 20., 4.
-    aaa_a -> aab_a     [i.equals("aaa_a -> aab_a")]     / o = "aaa_a -> aab_a";;  // 12., 21., 3.
-    aaa_a -> aba_a     [i.equals("aaa_a -> aba_a")]     / o = "aaa_a -> aba_a";;  // 13., 22., 2.
-    aa -> baa          [i.equals("aa -> baa")]          / o = "aa -> baa";;  // 1.
+    aaa_aaa -> aaa_aab [i.equals("aaa_aaa -> aaa_aab")] / o = "aaa_aaa -> aaa_aab";  // 5., 14.
+    aaa_aaa -> aaa_aba [i.equals("aaa_aaa -> aaa_aba")] / o = "aaa_aaa -> aaa_aba";  // 6., 15.
+    aaa_aaa -> aaa_baa [i.equals("aaa_aaa -> aaa_baa")] / o = "aaa_aaa -> aaa_baa";  // 7., 16.
+    aaa_aa -> aaa_ab   [i.equals("aaa_aa -> aaa_ab")]   / o = "aaa_aa -> aaa_ab";    // 8., 17.
+    aaa_aa -> aaa_ba   [i.equals("aaa_aa -> aaa_ba")]   / o = "aaa_aa -> aaa_ba";    // 9., 18.
+    aaa_aa -> aab_aa   [i.equals("aaa_aa -> aab_aa")]   / o = "aaa_aa -> aab_aa";    // 10., 19.
+    aaa_a -> aaa_b     [i.equals("aaa_a -> aaa_b")]     / o = "aaa_a -> aaa_b";  // 11., 20., 4.
+    aaa_a -> aab_a     [i.equals("aaa_a -> aab_a")]     / o = "aaa_a -> aab_a";  // 12., 21., 3.
+    aaa_a -> aba_a     [i.equals("aaa_a -> aba_a")]     / o = "aaa_a -> aba_a";  // 13., 22., 2.
+    aa -> baa          [i.equals("aa -> baa")]          / o = "aa -> baa";  // 1.
 
 
     // States:
@@ -78,30 +78,30 @@ component NestedTransitionsCrosscuttingTheHierarchy {
               state aaa_aaa;
               state aaa_aab;
 
-            };
+            }
             state aaa_ab {
               state aaa_aba;
               initial state aaa_abb;
-            };
-          };
+            }
+          }
           state aaa_b {
             state aaa_ba {
               state aaa_baa;
               initial state aaa_bab;
-            };
-            initial state aaa_bb { initial state aaa_bba; };
-          };
-        };
+            }
+            initial state aaa_bb { initial state aaa_bba; }
+          }
+        }
         state aab {
           initial state aab_bystander;
           state aab_a {
             state aab_aa {
               initial state aab_aaa;
-            };
-            initial state aab_ab { initial state aab_aba; };
-          };
-        };
-      };
+            }
+            initial state aab_ab { initial state aab_aba; }
+          }
+        }
+      }
       state ab {
         initial state ab_bystander;
         state aba {
@@ -109,18 +109,18 @@ component NestedTransitionsCrosscuttingTheHierarchy {
           state aba_a {
             initial state aba_aa {
               initial state aba_aaa;
-            };
-         };
-        };
-      };
-    };
+            }
+         }
+        }
+      }
+    }
 
     state b {
       initial state b_bystander;
       state ba {
         initial state ba_bystander;
         state baa;
-      };
-    };
+      }
+    }
   }
 }

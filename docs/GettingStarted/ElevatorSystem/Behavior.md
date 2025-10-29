@@ -76,7 +76,7 @@ state OpenDoor {
   exit / {
     openDoor = false;
   }
-};
+}
 ```
 These are executed, as the name suggests, when we enter the state, stay in it, or leave it, respectively.
 In the context of the elevator, we open the door when we enter the state and close it when we leave it.
@@ -100,12 +100,12 @@ state OpenDoor {
 
   IdleOpenDoor -> IdleOpenDoor requestOnFloor / {
     pendingRequests.add(requestOnFloor);
-  };
+  }
   IdleOpenDoor -> IdleOpenDoor [!pendingRequests.isEmpty() && targetFloor.isEmpty()] / {
     int next = pendingRequests.first();
     pendingRequests.remove(next);
     targetFloor = Optional.of(next);
-  };
+  }
 }
 ```
 

@@ -58,6 +58,5 @@ Comments // line comment after component name
     o1 = i // line comment after expression
     ; // line comment after expression statement
     } // line comment after transition action closing bracket
-    ; // line comment after transition
   }
 }

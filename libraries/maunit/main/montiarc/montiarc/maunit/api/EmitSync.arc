@@ -16,6 +16,6 @@ component EmitSync<T>(List<T> output) {
         out = output.get(index);
         index++;
       }
-    };
+    }
   }
 }

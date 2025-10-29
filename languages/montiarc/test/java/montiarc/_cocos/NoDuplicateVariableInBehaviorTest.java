@@ -55,9 +55,9 @@ public class NoDuplicateVariableInBehaviorTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> validModels() {
     return Stream.of(
-      arg("component Comp1 { int i = 1; automaton { initial state S; S -> S / { int i = 1; }; } }"),
+      arg("component Comp1 { int i = 1; automaton { initial state S; S -> S / { int i = 1; } } }"),
       arg("component Comp2 { int i = 1; compute { int i = 1; } }"),
-      arg("component Comp3 { int i = 0; automaton { initial state S; S -> S / { int i = 1;}; S -> S / { int i = 1; }; } }")
+      arg("component Comp3 { int i = 0; automaton { initial state S; S -> S / { int i = 1;} S -> S / { int i = 1; } } }")
     );
   }
 
@@ -66,7 +66,7 @@ public class NoDuplicateVariableInBehaviorTest extends MontiArcTestBase {
       arg("component Comp1 { compute { int i = 1; int i = 1; } }", new String[] {
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
-      arg("component Comp2 { automaton { initial state S; S -> S / { int i = 1; int i = 1; }; } }", new String[] {
+      arg("component Comp2 { automaton { initial state S; S -> S / { int i = 1; int i = 1; } } }", new String[] {
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
       arg("component Comp3 { compute { boolean a = 1 == 0; int a = 1; double a = 1; long a = 1; } }", new String[] {

@@ -6,6 +6,6 @@ component BooleanWrapperIn {
 
   automaton {
     initial state S;
-    S -> S / { boolean foo = p; };
+    S -> S / { boolean foo = p; }
   }
 }

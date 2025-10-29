@@ -120,7 +120,7 @@ public class UniqueStatesTest extends MontiArcTestBase {
           "state s1; " +
           "state s2 { " +
           "state s1; " +
-          "}; " +
+          "} " +
           "} " +
           "}",
         SCError.DUPLICATE_STATE)

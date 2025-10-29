@@ -19,25 +19,22 @@ public class ActionsMustBeAssignmentsCoCo implements SCTransitions4CodeASTTransi
 
   @Override
   public void check(ASTTransitionAction node) {
-    if (node.isPresentMCStatement()) {
+    if (node.getMCStatement() instanceof ASTMCJavaBlock) {
+      ASTMCJavaBlock javaBlock = (ASTMCJavaBlock) node.getMCStatement();
 
-      if (node.getMCStatement() instanceof ASTMCJavaBlock) {
-        ASTMCJavaBlock javaBlock = (ASTMCJavaBlock) node.getMCStatement();
-
-        for (ASTMCBlockStatement stmt : javaBlock.getMCBlockStatementList()) {
-          if (stmt instanceof ASTExpressionStatement) {
-            if (!(((ASTExpressionStatement) stmt).getExpression()
-                instanceof ASTAssignmentExpression)) {
-              Log.error(String.format(errorMessage, print(stmt), printPosition(node)));
-            }
-          } else {
+      for (ASTMCBlockStatement stmt : javaBlock.getMCBlockStatementList()) {
+        if (stmt instanceof ASTExpressionStatement) {
+          if (!(((ASTExpressionStatement) stmt).getExpression()
+            instanceof ASTAssignmentExpression)) {
             Log.error(String.format(errorMessage, print(stmt), printPosition(node)));
           }
+        } else {
+          Log.error(String.format(errorMessage, print(stmt), printPosition(node)));
         }
-      } else {
-        Log.error(
-            String.format(errorMessage, print(node.getMCStatement()), printPosition(node)));
       }
+    } else {
+      Log.error(
+        String.format(errorMessage, print(node.getMCStatement()), printPosition(node)));
     }
   }
 

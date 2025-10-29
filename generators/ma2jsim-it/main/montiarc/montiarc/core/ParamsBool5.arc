@@ -16,6 +16,6 @@ component ParamsBool5(boolean p1, boolean p2) {
       if (p1 && p2) {
         o = p1 && p2;
       }
-    };
+    }
   }
 }

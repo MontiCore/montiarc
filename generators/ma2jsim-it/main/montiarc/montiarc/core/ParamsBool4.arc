@@ -20,7 +20,7 @@ component ParamsBool4(boolean p1, boolean p2) {
       } else if (!p1 && !p2) {
 
       }
-    };
+    }
   }
 }
 

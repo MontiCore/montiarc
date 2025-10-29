@@ -13,6 +13,6 @@ component Send2MessagesInitially {
       o = OnOff.OFF;
     } state S;
 
-    S -> S p / { o = p; };
+    S -> S p / { o = p; }
   }
 }

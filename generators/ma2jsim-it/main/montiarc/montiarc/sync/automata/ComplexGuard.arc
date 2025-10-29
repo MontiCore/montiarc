@@ -17,6 +17,6 @@ component ComplexGuard {
         nameToWhatever.containsKey(person.name) &&
         nameToWhatever.get(person.name)
                       .equals("Foo")
-      ] / o = "success";;
+      ] / o = "success";
     }
 }

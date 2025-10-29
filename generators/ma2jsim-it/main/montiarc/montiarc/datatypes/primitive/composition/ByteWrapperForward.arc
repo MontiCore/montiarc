@@ -10,6 +10,6 @@ component ByteWrapperForward {
     S -> S / {
       byte intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

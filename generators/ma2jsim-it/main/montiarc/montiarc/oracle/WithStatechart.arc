@@ -9,7 +9,7 @@ component WithStatechart {
 
   automaton {
     initial state S;
-    S -> S i / o = 1;;
-    S -> S i / o = 2;;
+    S -> S i / o = 1;
+    S -> S i / o = 2;
   }
 }

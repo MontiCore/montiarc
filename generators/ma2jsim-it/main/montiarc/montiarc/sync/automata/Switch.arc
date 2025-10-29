@@ -12,7 +12,7 @@ component Switch {
   automaton {
     initial state S;
 
-    S -> S [i1 == OnOff.ON] / { o = i2; };
-    S -> S [i1 == OnOff.OFF] / { o = OnOff.OFF; };
+    S -> S [i1 == OnOff.ON] / { o = i2; }
+    S -> S [i1 == OnOff.OFF] / { o = OnOff.OFF; }
   }
 }

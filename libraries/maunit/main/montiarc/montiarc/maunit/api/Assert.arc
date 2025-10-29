@@ -8,6 +8,6 @@ component Assert<T>(java.util.function.Consumer<T> assertion) {
     initial state S;
     S -> S actual / {
       assertion.accept(actual);
-    };
+    }
   }
 }

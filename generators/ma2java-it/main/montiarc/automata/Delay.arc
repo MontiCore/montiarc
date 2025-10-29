@@ -15,6 +15,6 @@ component Delay {
     initial state S;
 
     // emit received messages, the port delays
-    S -> S / { o = i; };
+    S -> S / { o = i; }
   }
 }

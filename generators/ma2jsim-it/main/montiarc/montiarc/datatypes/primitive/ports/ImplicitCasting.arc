@@ -40,7 +40,7 @@ component ImplicitCasting {
       outDouble = inByte;
       outChar = 'a';       // Not assignable from byte
       outBoolean = false;  // Not assignable from byte
-    };
+    }
 
     S -> S inByte / {
       byte interByte = inByte;
@@ -58,7 +58,7 @@ component ImplicitCasting {
       outDouble = interByte;
       outChar = 'a';       // Not assignable from byte
       outBoolean = false;  // Not assignable from byte
-    };
+    }
 
     S -> S inShort / {
       // Leaving out outByte as it is not assignable from short,
@@ -71,7 +71,7 @@ component ImplicitCasting {
       outDouble = inShort;
       outChar = 'a';       // Not assignable from short
       outBoolean = false;  // Not assignable from short
-    };
+    }
 
     S -> S inShort / {
       short interShort = inShort;
@@ -88,7 +88,7 @@ component ImplicitCasting {
       outDouble = interShort;
       outChar = 'a';       // Not assignable from short
       outBoolean = false;  // Not assignable from short
-    };
+    }
 
     S -> S inInt / {
       // See a inShort-triggered transition for a reason to leave out outShort and outByte
@@ -98,7 +98,7 @@ component ImplicitCasting {
       outDouble = inInt;
       outChar = 'a';       // Not assignable from int
       outBoolean = false;  // Not assignable from int
-    };
+    }
 
     S -> S inInt / {
       int interInt = inInt;
@@ -113,7 +113,7 @@ component ImplicitCasting {
       outDouble = interInt;
       outChar = 'a';       // Not assignable from int
       outBoolean = false;  // Not assignable from int
-    };
+    }
 
     S -> S inLong / {
       // See a inShort-triggered transition for a reason to leave out outShort and outByte
@@ -123,7 +123,7 @@ component ImplicitCasting {
       outDouble = inLong;
       outChar = 'a';       // Not assignable from long
       outBoolean = false;  // Not assignable from long
-    };
+    }
 
     S -> S inLong / {
       long interLong = inLong;
@@ -137,7 +137,7 @@ component ImplicitCasting {
       outDouble = interLong;
       outChar = 'a';       // Not assignable from long
       outBoolean = false;  // Not assignable from long
-    };
+    }
 
     S -> S inFloat / {
       // See a inShort-triggered transition for a reason to leave out outShort and outByte
@@ -147,7 +147,7 @@ component ImplicitCasting {
       outDouble = inFloat;
       outChar = 'a';       // Not assignable from float
       outBoolean = false;  // Not assignable from float
-    };
+    }
 
     S -> S inFloat / {
       float interFloat = inFloat;
@@ -160,7 +160,7 @@ component ImplicitCasting {
       outDouble = interFloat;
       outChar = 'a';       // Not assignable from float
       outBoolean = false;  // Not assignable from float
-    };
+    }
 
     S -> S inDouble / {
       // See a inShort-triggered transition for a reason to leave out outShort and outByte
@@ -170,7 +170,7 @@ component ImplicitCasting {
       outDouble = inDouble;
       outChar = 'a';       // Not assignable from double
       outBoolean = false;  // Not assignable from double
-    };
+    }
 
     S -> S inDouble / {
       double interDouble = inDouble;
@@ -182,7 +182,7 @@ component ImplicitCasting {
       outDouble = interDouble;
       outChar = 'a';       // Not assignable from double
       outBoolean = false;  // Not assignable from double
-    };
+    }
 
     S -> S inChar / {
       // See a inShort-triggered transition for a reason to leave out outShort and outByte
@@ -192,7 +192,7 @@ component ImplicitCasting {
       outDouble = inChar;
       outChar = inChar;
       outBoolean = false;  // Not assignable from char
-    };
+    }
 
     S -> S inChar / {
       char interChar = inChar;
@@ -208,7 +208,7 @@ component ImplicitCasting {
       outDouble = interChar;
       outChar = interChar;
       outBoolean = false;  // Not assignable from char
-    };
+    }
 
     S -> S inBool / {
       // See a inShort-triggered transition for a reason to leave out outShort and outByte
@@ -218,7 +218,7 @@ component ImplicitCasting {
       outDouble = 0.0;   // Not assignable from boolean
       outChar = 'a';     // Not assignable from boolean
       outBoolean = inBool;
-    };
+    }
 
     S -> S inBool / {
       boolean interBool = inBool;
@@ -230,6 +230,6 @@ component ImplicitCasting {
       outDouble = 0.0;   // Not assignable from boolean
       outChar = 'a';     // Not assignable from boolean
       outBoolean = interBool;
-    };
+    }
   }
 }

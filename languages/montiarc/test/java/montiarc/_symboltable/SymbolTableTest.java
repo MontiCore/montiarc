@@ -148,8 +148,8 @@ public class SymbolTableTest extends MontiArcTestBase {
           + "state s3;\n"
           + "s1 -> s1 [ true ];\n"
           + "s1 -> s2 i;\n"
-          + "s1 -> s3 / { o = 3; };\n"
-          + "s2 -> s2 [ true ] i / { o = 2; };\n"
+          + "s1 -> s3 / { o = 3; }\n"
+          + "s2 -> s2 [ true ] i / { o = 2; }\n"
           + "s2 -> s3;\n"
           + "state s4 {\n"
           + "state s5;\n"
@@ -157,7 +157,7 @@ public class SymbolTableTest extends MontiArcTestBase {
           + "entry / { o = 3; }\n"
           + "exit / { o = 4; }\n"
           + "s5 -> s6;\n"
-          + "};\n"
+          + "}\n"
           + "}\n"
           + "}"
       );
@@ -257,7 +257,7 @@ public class SymbolTableTest extends MontiArcTestBase {
           + "case 2 : b = 2;\n"
           + "default : b = 0;\n"
           + "}\n"
-          + "};\n"
+          + "}\n"
           + "}\n"
           + "}"
       );

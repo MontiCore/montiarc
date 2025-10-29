@@ -13,6 +13,6 @@ component MissedSlashButGuard {
     state Locked;
 
     // invalid: there is a '/' missing
-    Closed -> Open [unlock] {ringing = true};
+    Closed -> Open [unlock] {ringing = true}
   }
 }

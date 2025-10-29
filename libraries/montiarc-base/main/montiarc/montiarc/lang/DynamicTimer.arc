@@ -21,9 +21,9 @@ component DynamicTimer {
 
     idle -> running start / {
       timer = Timer.start(start);
-    };
+    }
     running -> idle [timer.completed()] / {
       completed = Signal.get();
-    };
+    }
   }
 }

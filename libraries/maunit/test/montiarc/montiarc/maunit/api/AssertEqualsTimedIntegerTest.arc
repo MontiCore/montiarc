@@ -18,7 +18,7 @@ component AssertEqualsTimedIntegerTest(List<List<Integer>> expected) {
          o = 2;
         }
         i++;
-      };
+      }
     }
   }
 

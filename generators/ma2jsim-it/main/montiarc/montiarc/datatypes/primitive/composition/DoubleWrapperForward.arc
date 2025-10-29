@@ -10,6 +10,6 @@ component DoubleWrapperForward {
     S -> S / {
       double intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

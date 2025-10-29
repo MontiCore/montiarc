@@ -14,7 +14,7 @@ component OptionalDelay {
 
         S -> S i / {
           o = i;
-        };
+        }
       }
   } else {
     port out OnOff o;
@@ -23,7 +23,7 @@ component OptionalDelay {
 
         S -> S i / {
           o = i;
-        };
+        }
       }
   }
 }

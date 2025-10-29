@@ -57,7 +57,7 @@ public class ExpressionRootFinderTest extends MontiArcTestBase {
             .is(ASTPlusExpression.class)
             .is(ASTBracketExpression.class)
             .is(ASTAssignmentExpression.class),
-        new Argument(PARSER.parse_StringSCTransition("A -> B [x==y] / {x++; y--;};"))
+        new Argument(PARSER.parse_StringSCTransition("A -> B [x==y] / {x++; y--;}"))
             .is(ASTEqualsExpression.class)
             .is(ASTIncSuffixExpression.class)
             .is(ASTDecSuffixExpression.class),

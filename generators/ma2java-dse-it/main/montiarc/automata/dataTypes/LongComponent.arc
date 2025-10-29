@@ -13,10 +13,10 @@ component LongComponent(Long parameter) {
 
     Idle -> Idle [in /2 == 3]/{
       out = in;
-    };
+    }
 
     Idle -> Idle /{
       out = parameter;
-    };
+    }
   }
 }

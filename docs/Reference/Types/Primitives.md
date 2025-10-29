@@ -52,6 +52,6 @@ While the `void` type is not usable as a type of values, it is recognized as the
 ```montiarc
 automaton {
   // ...
-  A -> B / { executeVoidMethod(); };
+  A -> B / { executeVoidMethod(); }
 }
 ```

@@ -19,7 +19,7 @@ component AndSimpleTest {
       S -> S / {
         a = true;
         b = false;
-      };
+      }
     }
   }
 
@@ -30,7 +30,7 @@ component AndSimpleTest {
       initial state S;
       S -> S / {
         Assertions.assertEquals(a && b, q);
-      };
+      }
     }
   }
 }

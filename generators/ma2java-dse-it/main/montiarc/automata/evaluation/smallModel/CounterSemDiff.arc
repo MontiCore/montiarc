@@ -17,20 +17,20 @@ component CounterSemDiff {
      Idle -> Idle [chaos == false]/{
       counter = counter + factor;
       out = counter;
-    };
+    }
 
     Idle -> Idle [chaos == true && counter < 1]/{
       out = counter;
-    };
+    }
 
     Idle -> Chaos [chaos == true && counter >= 1]/{
       counter = 0.0;
       out = counter;
-    };
+    }
 
     Chaos -> Chaos /{
       counter = factor * 1.5;
       out = counter;
-    };
+    }
   }
 }

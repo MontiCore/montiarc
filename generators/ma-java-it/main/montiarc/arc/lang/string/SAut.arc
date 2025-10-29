@@ -11,18 +11,18 @@ component SAut() {
 
     s1 -> s1 [i.isBlank()] / {
       o = "inBlank";
-    };
+    }
 
     s1 -> s2 [!i.isBlank()] / {
       o = i;
-    };
+    }
 
     s2 -> s2 [!i.isBlank()] / {
       o = i;
-    };
+    }
 
     s2 -> s1 [i.isBlank()] / {
       o = "toBlank";
-    };
+    }
   }
 }

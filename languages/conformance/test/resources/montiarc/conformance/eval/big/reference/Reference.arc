@@ -18,19 +18,19 @@ component Reference {
 
     LoggedIn -> LoggedIn [input == Input.POST_LOGIN_ACTION] input/ {
       output = Output.RESPONSE;
-    };
+    }
 
     LoggedIn -> LoggedIn [input == Input.PRE_LOGIN_ACTION] input/ {
       output = Output.ERROR;
-    };
+    }
 
 
     LoggedOut -> LoggedOut [input == Input.PRE_LOGIN_ACTION] input/ {
       output = Output.RESPONSE ;
-    };
+    }
 
     LoggedOut -> LoggedOut [input == Input.POST_LOGIN_ACTION] input/ {
       output = Output.ERROR ;
-    };
+    }
   }
 }

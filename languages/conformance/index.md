@@ -118,7 +118,7 @@ state leads again to the Logged-Out state. Applying the conformance checker now 
 
 ```
 [WARN]  Transition is *NOT* conform!
-Concrete.arc:<28,2>: Anon->Known[input==Input.GET_VALUE]/{};
+Concrete.arc:<28,2>: Anon->Known[input==Input.GET_VALUE]/{}
 
 Possible Transition in Concrete Model(Concrete):
 		From State: 	Anon{counter=2}

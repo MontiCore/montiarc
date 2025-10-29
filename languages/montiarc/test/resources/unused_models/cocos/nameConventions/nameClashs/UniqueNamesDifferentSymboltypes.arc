@@ -27,6 +27,6 @@ component UniqueNamesDifferentSymboltypes<myName>(int myName) {
 
     java inv myName: { // Error: Ambiguous name
         assert x==1;
-    };
+    }
 
 }

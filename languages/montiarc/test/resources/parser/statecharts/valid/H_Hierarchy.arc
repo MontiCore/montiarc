@@ -21,7 +21,7 @@ component H_Hierarchy {
         pCounter = counter;
         counter++;
       }
-    };
+    }
     state B {
       entry / {
         pCounter = counter;
@@ -31,7 +31,7 @@ component H_Hierarchy {
         pCounter = counter;
         counter++;
       }
-    };
+    }
     state C {
       entry / {
         pCounter = counter;
@@ -50,7 +50,7 @@ component H_Hierarchy {
           pCounter = counter;
           counter++;
         }
-      };
+      }
       state C2 {
         entry / {
           pCounter = counter;
@@ -60,10 +60,10 @@ component H_Hierarchy {
           pCounter = counter;
           counter++;
         }
-      };
+      }
 
       C1 -> C2;
-    };
+    }
     state D {
       entry / {
         pCounter = counter;
@@ -82,7 +82,7 @@ component H_Hierarchy {
           pCounter = counter;
           counter++;
         }
-      };
+      }
       initial state D2 {
         entry / {
           pCounter = counter;
@@ -92,8 +92,8 @@ component H_Hierarchy {
           pCounter = counter;
           counter++;
         }
-      };
-    };
+      }
+    }
     state E {
       entry / {
         pCounter = counter;
@@ -112,7 +112,7 @@ component H_Hierarchy {
           pCounter = counter;
           counter++;
         }
-      };
+      }
       initial state E2 {
         entry / {
           pCounter = counter;
@@ -122,8 +122,8 @@ component H_Hierarchy {
           pCounter = counter;
           counter++;
         }
-      };
-    };
+      }
+    }
     state F {
       entry / {
         pCounter = counter;
@@ -151,14 +151,14 @@ component H_Hierarchy {
             pCounter = counter;
             counter++;
           }
-        };
-      };
-    };
+        }
+      }
+    }
 
     A -> B / {
       pCounter = counter;
       counter++;
-    };
+    }
     B -> C;
     C -> D;
     D2 -> D1;

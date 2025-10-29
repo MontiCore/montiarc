@@ -199,6 +199,6 @@ component ImplicitWrapper {
       aCpaDouble = +0.1; // box double in Double, assign to Comparable<Double> (signed literal)
       aCpaDouble = -0.1; // box double in Double, assign to Comparable<Double> (signed literal)
       aCpaDouble = aWDouble; // assign Double to Comparable<Double> (variable)
-    };
+    }
   }
 }

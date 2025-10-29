@@ -41,7 +41,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "  automaton { " +
       "    state S { " +
       "      do / { o = 0; } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 2 - Write literal to synchronous output port in do action
@@ -50,7 +50,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "  automaton { " +
       "    state S { " +
       "      do / { o = 0; } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 3 - Write value of component variable to output port in do action
@@ -60,7 +60,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "  automaton { " +
       "    state S { " +
       "      do / { o = v; } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 5 - Write value of synchronous port to output port in do action
@@ -70,7 +70,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "  automaton { " +
       "    state S { " +
       "      do / { o = i; } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 5 - Write value of synchronous ports to output port in do action
@@ -80,7 +80,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "  automaton { " +
       "    state S { " +
       "      do / { o = i1 + i2; } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 6 - Read value from and write to field in do action
@@ -96,7 +96,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "        v.i = 0; v.i +=1; v.i++; --v.i; " +
       "        v.o = 0; v.o +=1; v.o++; --v.o; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 7 - Read value from method call in do action
@@ -110,7 +110,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "      do / { " +
       "        o = v.i(); o = v.o(); " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 8 - Read value from and write to static field in do action
@@ -124,7 +124,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "        o = OOTypeWithStaticFieldIO.i; " +
       "        o = OOTypeWithStaticFieldIO.o; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 9 - Read value from static method call in do action
@@ -138,7 +138,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "        o = OOTypeWithStaticFunctionIO.i(); " +
       "        o = OOTypeWithStaticFunctionIO.o(); " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 10 - Variable declaration shadows port in do action
@@ -151,7 +151,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "        int i = 0; " +
       "        o = i; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 11 - For control shadows port in do action
@@ -165,7 +165,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
       "          o = i; " +
       "        } " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
   })
@@ -216,7 +216,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        int x = i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -230,7 +230,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -243,7 +243,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        ++i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -256,7 +256,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        --i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -269,7 +269,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        i++; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -282,7 +282,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        i--; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -296,7 +296,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        boolean x = true; " +
           "        x = ~i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -310,7 +310,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        boolean x = true; " +
           "        x = !i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -324,7 +324,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = 2 * i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -338,7 +338,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = i * 2; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -352,7 +352,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = i * i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT
@@ -367,7 +367,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = i1 * i2; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -394,7 +394,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        y = i2 && 2; y = 2 && i2; " +
           "        y = i2 || 2; y = 2 || i2; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -419,7 +419,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = i ? -2 : 2; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -433,7 +433,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = true ? i : 2; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -447,7 +447,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int x = 0; " +
           "        x = true ? -2 : i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -460,7 +460,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        int x = (i); " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -476,7 +476,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        x = i >> 1;  x = 1 >> i; " +
           "        x = i >>> 1; x = 1 >>> i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -494,7 +494,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        x = i ^ true; x = true ^ i; " +
           "        x = i | true; x = true | i; " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -509,7 +509,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        if (i) { } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -522,7 +522,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        if (true) { int x = i; } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -535,7 +535,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        if (true) { } else { int x = i; } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -548,7 +548,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        for (int j = i; j > 10; j++) { } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -562,7 +562,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "        int j = 0; " +
           "        for (j = i; j > 10; j++) { } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -575,7 +575,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        for (int j = 1; i > 10; j++) { } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -588,7 +588,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        for (int j = 0; j > 10; i++) { } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -601,7 +601,7 @@ class NoNonSyncInputPortInDoActionTest extends MontiArcTestBase {
           "      do / { " +
           "        for (int j = 0; j > 10; j++, i++) { } " +
           "      } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT

@@ -22,6 +22,6 @@ component Motor {
 
       position = currentPosition;
       System.out.println("Elevator position: " + currentPosition);
-    };
+    }
   }
 }

@@ -15,10 +15,10 @@ component DoubleComponentParameter(Double parameter) {
 
     Idle -> Idle [in /2 == 3.2]/{
       out = in + doubler;
-    };
+    }
 
     Idle -> Idle /{
       out = parameter;
-    };
+    }
   }
 }

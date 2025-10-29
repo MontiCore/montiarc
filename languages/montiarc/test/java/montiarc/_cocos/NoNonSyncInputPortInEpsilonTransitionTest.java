@@ -40,7 +40,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = 0; }; " +
+      "    S -> S / { o = 0; } " +
       "  } " +
       "}",
     // 2 - Write literal to synchronous output port in timed-event triggered transition
@@ -48,7 +48,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "  port sync out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = 0; }; " +
+      "    S -> S / { o = 0; } " +
       "  } " +
       "}",
     // 3 - Write value of component variable to output port in timed-event triggered transition
@@ -57,7 +57,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "  int v = 0; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = v; }; " +
+      "    S -> S / { o = v; } " +
       "  } " +
       "}",
     // 5 - Write value of synchronous port to output port in timed-event triggered transition
@@ -66,7 +66,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = i; }; " +
+      "    S -> S / { o = i; } " +
       "  } " +
       "}",
     // 5 - Write value of synchronous ports to output port in timed-event triggered transition
@@ -75,7 +75,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = i1 + i2; }; " +
+      "    S -> S / { o = i1 + i2; } " +
       "  } " +
       "}",
     // 6 - Read value from and write to field in timed-event triggered transition
@@ -90,7 +90,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "      o = v.i; o = v.o; " +
       "      v.i = 0; v.i +=1; v.i++; --v.i; " +
       "      v.o = 0; v.o +=1; v.o++; --v.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 7 - Read value from method call in timed-event triggered transition
@@ -103,7 +103,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "    state S; " +
       "    S -> S / { " +
       "      o = v.i(); o = v.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 8 - Read value from and write to static field in timed-event triggered transition
@@ -116,7 +116,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "    S -> S / { " +
       "      o = OOTypeWithStaticFieldIO.i; " +
       "      o = OOTypeWithStaticFieldIO.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 9 - Read value from static method call in timed-event triggered transition
@@ -129,7 +129,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "    S -> S / { " +
       "      o = OOTypeWithStaticFunctionIO.i(); " +
       "      o = OOTypeWithStaticFunctionIO.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 10 - Variable declaration shadows port in timed-event triggered transition
@@ -141,7 +141,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "    S -> S / { " +
       "      int i = 0; " +
       "      o = i; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 11 - For control shadows port in timed-event triggered transition
@@ -154,7 +154,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
       "      for (int i = 0; i < 10; i++) { " +
       "        o = i; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
   })
@@ -204,7 +204,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      int x = i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -217,7 +217,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -229,7 +229,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      ++i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -241,7 +241,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      --i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -253,7 +253,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      i++; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -265,7 +265,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      i--; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -278,7 +278,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      boolean x = true; " +
           "      x = ~i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -291,7 +291,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      boolean x = true; " +
           "      x = !i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -304,7 +304,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = 2 * i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -317,7 +317,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = i * 2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -330,7 +330,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = i * i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT
@@ -344,7 +344,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = i1 * i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -370,7 +370,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "      y = i1 != 2; y = 2 != i1; " +
           "      y = i2 && 2; y = 2 && i2; " +
           "      y = i2 || 2; y = 2 || i2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -394,7 +394,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = i ? -2 : 2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -407,7 +407,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = true ? i : 2; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -420,7 +420,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int x = 0; " +
           "      x = true ? -2 : i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -432,7 +432,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      int x = (i); " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -447,7 +447,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "      x = i << 1;  x = 1 << i; " +
           "      x = i >> 1;  x = 1 >> i; " +
           "      x = i >>> 1; x = 1 >>> i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -464,7 +464,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "      x = i & true; x = true & i; " +
           "      x = i ^ true; x = true ^ i; " +
           "      x = i | true; x = true | i; " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT, IN_PORT_REF_IN_INVALID_CONTEXT,
@@ -478,7 +478,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      if (i) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -490,7 +490,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      if (true) { int x = i; } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -502,7 +502,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      if (true) { } else { int x = i; } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -514,7 +514,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      for (int j = i; j > 10; j++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -527,7 +527,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    S -> S / { " +
           "      int j = 0; " +
           "      for (j = i; j > 10; j++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -539,7 +539,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      for (int j = 1; i > 10; j++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -551,7 +551,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      for (int j = 0; j > 10; i++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT
@@ -563,7 +563,7 @@ class NoNonSyncInputPortInEpsilonTransitionTest extends MontiArcTestBase {
           "    state S; " +
           "    S -> S / { " +
           "      for (int j = 0; j > 10; j++, i++) { } " +
-          "    }; " +
+          "    } " +
           "  } " +
           "}",
         IN_PORT_REF_IN_INVALID_CONTEXT

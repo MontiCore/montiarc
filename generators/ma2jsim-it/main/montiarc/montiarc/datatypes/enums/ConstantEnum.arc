@@ -10,6 +10,6 @@ component ConstantEnum {
     initial state S;
     S -> S / {
       off = OFF;
-    };
+    }
   }
 }

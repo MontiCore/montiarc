@@ -14,6 +14,6 @@ component FieldReferencing {
 
     S -> S / {
       o = z;
-    };
+    }
   }
 }

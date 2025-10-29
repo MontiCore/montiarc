@@ -15,6 +15,6 @@ component SetIntersection {
 
     S -> S / {
       out = a intersect b;
-    };
+    }
   }
 }

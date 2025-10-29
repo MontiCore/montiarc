@@ -10,7 +10,7 @@ component DelayedCombiner {
 
   <<delayed>> automaton {
     initial state S;
-    S -> S i1 / { o = i1; };
-    S -> S i2 / { o = i2; };
+    S -> S i1 / { o = i1; }
+    S -> S i2 / { o = i2; }
   }
 }

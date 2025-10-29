@@ -13,6 +13,6 @@ component DivExpression {
 
     Idle -> Idle /{
       out = in / 2;
-    };
+    }
   }
 }

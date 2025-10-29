@@ -10,6 +10,6 @@ component ByteForward {
     S -> S / {
       byte intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

@@ -17,22 +17,22 @@ component Nor {
 
     None -> A a / {
       aLast = a;
-    };
+    }
     A -> A a / {
       aLast = a;
-    };
+    }
     A -> None b / {
       q = !(aLast || b);
-    };
+    }
 
     None -> B b / {
       bLast = b;
-    };
+    }
     B -> B b / {
       bLast = b;
-    };
+    }
     B -> None a / {
       q = !(a || bLast);
-    };
+    }
   }
 }

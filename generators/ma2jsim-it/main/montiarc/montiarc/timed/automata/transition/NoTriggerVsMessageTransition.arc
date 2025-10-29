@@ -12,7 +12,7 @@ component NoTriggerVsMessageTransition {
 
   automaton {
     initial state S;
-    S -> S [i > 0] i / { o = OnOff.ON; };
-    S -> S / { o = OnOff.OFF; };
+    S -> S [i > 0] i / { o = OnOff.ON; }
+    S -> S / { o = OnOff.OFF; }
   }
 }

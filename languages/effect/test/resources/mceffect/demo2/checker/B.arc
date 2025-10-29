@@ -12,7 +12,7 @@ component B {
     initial state Anon;
     state Known;
 
-    Anon -> Anon [i1 == true] i1 / { o1 = true; };
-    Anon -> Anon [i1 == false] i1 / { o1 = false; };
+    Anon -> Anon [i1 == true] i1 / { o1 = true; }
+    Anon -> Anon [i1 == false] i1 / { o1 = false; }
   }
 }

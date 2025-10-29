@@ -13,6 +13,6 @@ component GenericMedium<T> {
 
     S -> S i / {
       o = i;
-    };
+    }
   }
 }

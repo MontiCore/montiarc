@@ -6,6 +6,6 @@ component LongWrapperOut {
 
   automaton {
     initial state S;
-    S -> S / { p = 1L; };
+    S -> S / { p = 1L; }
   }
 }

@@ -8,6 +8,6 @@ component Comp {
   port out Color o;
   automaton {
     initial state X;
-    X -> X i / { o = i; };
+    X -> X i / { o = i; }
   }
 }

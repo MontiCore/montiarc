@@ -10,6 +10,6 @@ component Source {
   automaton {
     initial state S;
 
-    S -> S / { o = OnOff.ON; };
+    S -> S / { o = OnOff.ON; }
   }
 }

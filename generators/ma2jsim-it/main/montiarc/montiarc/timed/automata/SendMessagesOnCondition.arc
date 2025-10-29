@@ -16,6 +16,6 @@ component SendMessagesOnCondition {
 
       if (p==OnOff.ON) o = p;
       else o = p;
-    };
+    }
   }
 }

@@ -6,6 +6,6 @@ component FloatWrapperOut {
 
   automaton {
     initial state S;
-    S -> S / { p = 0.1f; };
+    S -> S / { p = 0.1f; }
   }
 }

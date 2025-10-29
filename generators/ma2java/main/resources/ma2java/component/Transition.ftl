@@ -12,7 +12,7 @@ this.exit(this.get${identifier.getCurrentStateName()?cap_first}(), States.${stat
 // output
 ${output}
 // reaction
-<#if ast.getSCTBody().isPresentTransitionAction() && ast.getSCTBody().getTransitionAction().isPresentMCStatement()>
+<#if ast.getSCTBody().isPresentTransitionAction()>
   ${compHelper.printStatement(ast.getSCTBody().getTransitionAction().getMCStatement())}
 </#if>
 // result

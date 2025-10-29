@@ -11,8 +11,8 @@ boolean bs = false;
 
 automaton {
   initial state S;
-  S -> S a / { as = a; };
-  S -> S b / { bs = b; };
-  S -> S / { q = as && bs; };
+  S -> S a / { as = a; }
+  S -> S b / { bs = b; }
+  S -> S / { q = as && bs; }
   }
 }

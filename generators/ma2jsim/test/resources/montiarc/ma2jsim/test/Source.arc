@@ -8,6 +8,6 @@ component Source {
     initial {
       o = 0;
     } state S;
-    S -> S / { o = 1; };
+    S -> S / { o = 1; }
   }
 }

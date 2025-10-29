@@ -12,17 +12,17 @@ component ParamsBool3(boolean p1, boolean p2) {
     S -> S [p1 && p2] i / {
       o1 = i;
       o2 = i;
-    };
+    }
 
     S -> S [p1 && !p2] i / {
       o1 = i;
-    };
+    }
 
     S -> S [!p1 && p2] i / {
       o2 = i;
-    };
+    }
 
-    S -> S [!p1 && !p2] i / { };
+    S -> S [!p1 && !p2] i / { }
   }
 }
 

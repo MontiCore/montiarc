@@ -21,6 +21,6 @@ component SCD {
       o3 = vsfs.v2;
       vsf = sf;
       vsfs = sfs;
-    };
+    }
   }
 }

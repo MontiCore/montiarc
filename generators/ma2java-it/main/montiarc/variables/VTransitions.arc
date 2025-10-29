@@ -26,15 +26,15 @@ component VTransitions {
     initial state S;
 
     // assign v1, emit FORWARDS, initial assignment has no effect
-    S -> S [ i == Direction.FORWARDS ] / { o1 = v1; v1 = Direction.FORWARDS; o2 = v1; };
+    S -> S [ i == Direction.FORWARDS ] / { o1 = v1; v1 = Direction.FORWARDS; o2 = v1; }
 
     // assign v2, emit BACKWARDS, initial assignment has no effect
-    S -> S [ i == Direction.BACKWARDS ] / { o1 = v2; v2 = Direction.BACKWARDS; o2 = v2; };
+    S -> S [ i == Direction.BACKWARDS ] / { o1 = v2; v2 = Direction.BACKWARDS; o2 = v2; }
 
     // assign v3, emit LEFT, initial assignment has no effect
-    S -> S [ i == Direction.LEFT ] / { o1 = v3; v3 = Direction.LEFT; o2 = v3; };
+    S -> S [ i == Direction.LEFT ] / { o1 = v3; v3 = Direction.LEFT; o2 = v3; }
 
     // assign v4, emit RIGHT, initial assignment to p1 has no effect
-    S -> S [ i == Direction.RIGHT ] / { o1 = v4; v4 = Direction.RIGHT; o2 = v4; };
+    S -> S [ i == Direction.RIGHT ] / { o1 = v4; v4 = Direction.RIGHT; o2 = v4; }
   }
 }

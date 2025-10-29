@@ -13,10 +13,10 @@ component CharactersComponent {
 
     Idle -> Idle [in == 'c'] /{
       out = 'd';
-    };
+    }
 
     Idle -> Idle /{
       out = 'z';
-    };
+    }
   }
 }

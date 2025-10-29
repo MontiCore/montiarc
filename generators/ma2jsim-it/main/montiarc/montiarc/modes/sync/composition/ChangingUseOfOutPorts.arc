@@ -12,7 +12,7 @@ component ChangingUseOfOutPorts {
     port sync out OnOff oSub;
     automaton {
       initial state X;
-      X -> X / oSub = iSub;;
+      X -> X / oSub = iSub;
     }
   }
 

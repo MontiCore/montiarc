@@ -626,7 +626,7 @@ public class Helper {
   }
 
   public List<ASTSCState> getSubstates(ASTSCState state) {
-    if (MontiArcMill.typeDispatcher().isSCBasisASTSCEmptyBody(state.getSCSBody()))
+    if (!state.isPresentSCSBody())
       return new ArrayList<>();
 
     List<ASTSCState> list = new ArrayList<>();
@@ -695,7 +695,7 @@ public class Helper {
   }
 
   public List<ASTMCBlockStatement> getInitAction(ASTSCState state) {
-    if (!MontiArcMill.typeDispatcher().isSCTransitions4CodeASTAnteAction(state.getSCSAnte())
+    if (!state.isPresentSCSAnte() || !MontiArcMill.typeDispatcher().isSCTransitions4CodeASTAnteAction(state.getSCSAnte())
       || MontiArcMill.typeDispatcher().asSCTransitions4CodeASTAnteAction(state.getSCSAnte()).isEmptyMCBlockStatements())
       return Collections.emptyList();
 
@@ -727,7 +727,7 @@ public class Helper {
 
   /** Return the body of a hierarchical state, given that the state body is an {@link ASTSCHierarchyBody}. */
   private Optional<ASTSCHierarchyBody> getBodyOfHierarchicalState(ASTSCState state) {
-    if (MontiArcMill.typeDispatcher().isSCStateHierarchyASTSCHierarchyBody(state.getSCSBody())) {
+    if (state.isPresentSCSBody() && MontiArcMill.typeDispatcher().isSCStateHierarchyASTSCHierarchyBody(state.getSCSBody())) {
       return Optional.of(MontiArcMill.typeDispatcher().asSCStateHierarchyASTSCHierarchyBody(state.getSCSBody()));
     } else {
       return Optional.empty();

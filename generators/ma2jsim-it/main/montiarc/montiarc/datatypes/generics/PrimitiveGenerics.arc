@@ -19,6 +19,6 @@ component PrimitiveGenerics<T> {
       List<int> x = v;
       Optional<int> oIntLocalVar = oInt;
       Map<Optional<int>, int> mapIntLocalVar = mapInt;
-    };
+    }
   }
 }

@@ -16,11 +16,11 @@ component G_Actions {
     state Opened {
       entry / {System.out.println("door opens");}
       exit / {System.out.println("door closes");}
-    };
+    }
 
     Opened -> Closed;
-    Closed -> Opened [open] / {ringing = true;};
-    Closed -> Locked        / {System.out.println("Door locked now.");};
+    Closed -> Opened [open] / {ringing = true;}
+    Closed -> Locked        / {System.out.println("Door locked now.");}
     Locked -> Closed [unlock == true];
 
   }

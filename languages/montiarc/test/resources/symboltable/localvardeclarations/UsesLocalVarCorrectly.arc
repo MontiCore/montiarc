@@ -30,6 +30,6 @@ component UsesLocalVarCorrectly {
         int c = b;
         pOut = c;
       }
-    };
+    }
   }
 }

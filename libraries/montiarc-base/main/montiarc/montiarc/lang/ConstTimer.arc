@@ -22,9 +22,9 @@ component ConstTimer(Duration duration) {
 
     idle -> running start / {
       timer = Timer.start(duration);
-    };
+    }
     running -> idle [timer.completed()] / {
       completed = Signal.get();
-    };
+    }
   }
 }

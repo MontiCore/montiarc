@@ -6,6 +6,6 @@ component ShortWrapperIn {
 
   automaton {
     initial state S;
-    S -> S / { short foo = p; };
+    S -> S / { short foo = p; }
   }
 }

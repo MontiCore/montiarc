@@ -10,6 +10,6 @@ component Forward<T> {
     S -> S pIn / {
       T intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

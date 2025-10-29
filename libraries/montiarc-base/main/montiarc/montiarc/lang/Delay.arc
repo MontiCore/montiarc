@@ -15,7 +15,7 @@ component Delay<T> {
     initial state S;
     S -> S i / {
       o = i;
-    };
+    }
   }
 
 }

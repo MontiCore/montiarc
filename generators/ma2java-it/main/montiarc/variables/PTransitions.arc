@@ -22,9 +22,9 @@ component PTransitions(Direction p1,
     state B;
 
     // transition to B, emit p3 and p4
-    A -> B / { o1 = p3; o2 = p4;};
+    A -> B / { o1 = p3; o2 = p4;}
 
     // transition to A, emit p1 and p2
-    B -> A / { o1 = p1; o2 = p2;};
+    B -> A / { o1 = p1; o2 = p2;}
   }
 }

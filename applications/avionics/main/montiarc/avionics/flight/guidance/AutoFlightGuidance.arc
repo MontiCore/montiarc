@@ -28,15 +28,15 @@ component AutoFlightGuidance {
       state NonCriticalModeFailure;
       state CriticalModeFailure;
 
-      Operational -> Operational / {gc = cmd.calc(pos);};
-      Operational -> NonCriticalModeFailure [pos.lowPrec] / {gc = cmd.calc(pos);};
-      Operational -> CriticalModeFailure [pow == Power.OFF] / {gc = CMD.NONE;};
+      Operational -> Operational / {gc = cmd.calc(pos);}
+      Operational -> NonCriticalModeFailure [pos.lowPrec] / {gc = cmd.calc(pos);}
+      Operational -> CriticalModeFailure [pow == Power.OFF] / {gc = CMD.NONE;}
 
-      NonCriticalModeFailure -> NonCriticalModeFailure / {gc = cmd.calc(pos);};
-      NonCriticalModeFailure -> Operational [!pos.lowPrec] / {gc = cmd.calc(pos);};
-      NonCriticalModeFailure -> CriticalModeFailure [pow == Power.OFF] / {gc = CMD.NONE;};
+      NonCriticalModeFailure -> NonCriticalModeFailure / {gc = cmd.calc(pos);}
+      NonCriticalModeFailure -> Operational [!pos.lowPrec] / {gc = cmd.calc(pos);}
+      NonCriticalModeFailure -> CriticalModeFailure [pow == Power.OFF] / {gc = CMD.NONE;}
 
-      CriticalModeFailure -> CriticalModeFailure / {gc = CMD.NONE;};
+      CriticalModeFailure -> CriticalModeFailure / {gc = CMD.NONE;}
     }
   }
 }

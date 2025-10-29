@@ -25,6 +25,6 @@ component UsesLocalVarOutOfScope {
       pOut2 = localBlock1;          // illegal
 
       pOut = innerLocalBlock2;      // illegal
-    };
+    }
   }
 }

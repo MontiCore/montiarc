@@ -20,16 +20,16 @@ component Concrete {
     Known -> Known [input == Input.INCREASE_VALUE] input / {
       counter = counter + 1 ;
       output = Output.DONE;
-    };
+    }
 
     Known -> Anon [input == Input.LOGOUT] input;
 
     Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
-    };
+    }
 
     Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
-    };
+    }
   }
 }

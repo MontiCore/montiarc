@@ -15,6 +15,6 @@ component ParamBool5(boolean p) {
       if (p) {
         o = p;
       }
-    };
+    }
   }
 }

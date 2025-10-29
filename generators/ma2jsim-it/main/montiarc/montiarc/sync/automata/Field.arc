@@ -16,11 +16,11 @@ component Field {
     S -> S [i == OnOff.ON] / {
       o = v;
       v = i;
-    };
+    }
 
     S -> S [i == OnOff.OFF] / {
       o = v;
       v = i;
-    };
+    }
   }
 }

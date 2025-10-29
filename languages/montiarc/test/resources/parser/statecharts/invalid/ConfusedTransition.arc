@@ -13,6 +13,6 @@ component ConfusedTransition {
     state Locked;
 
     // invalid: guard is defined in the wrong position
-    Closed -> [unlock] Open / {ringing = true};
+    Closed -> [unlock] Open / {ringing = true}
   }
 }

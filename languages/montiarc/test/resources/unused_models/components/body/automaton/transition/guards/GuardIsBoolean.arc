@@ -17,7 +17,7 @@ component GuardIsBoolean {
     state A,B;
     initial A;
 
-    A -> B [input.get()==0] / {y = new ArrayList<String>(), x = new ArrayList<String>()};
-    B -> A [true] / {call y.add("bu")};
+    A -> B [input.get()==0] / {y = new ArrayList<String>(), x = new ArrayList<String>()}
+    B -> A [true] / {call y.add("bu")}
   }
 }

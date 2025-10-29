@@ -6,6 +6,6 @@ component Delay<T> {
 
   <<delayed>> automaton {
     initial state S;
-    S -> S / { o = i; };
+    S -> S / { o = i; }
   }
 }

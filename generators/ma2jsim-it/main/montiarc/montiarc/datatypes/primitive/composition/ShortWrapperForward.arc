@@ -10,6 +10,6 @@ component ShortWrapperForward {
     S -> S / {
       short intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

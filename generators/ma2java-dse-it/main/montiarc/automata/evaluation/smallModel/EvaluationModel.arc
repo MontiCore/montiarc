@@ -27,62 +27,62 @@ component EvaluationModel {
       saCounter = 0.0;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     mbse -> sa [module == "SA"] /{
       mbseCounter = 0.0;
       saCounter = factor;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     sa -> sa [module == "SA"] /{
       mbseCounter = 0.0;
       saCounter = factor;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     sa -> mbse [module == "MBSE"]/{
       mbseCounter = factor;
       saCounter = 0.0;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     nonModule -> mbse [module == "MBSE"]/{
       mbseCounter = factor;
       saCounter = 0.0;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     nonModule -> sa [module == "SA"] /{
       mbseCounter = 0.0;
       saCounter = factor;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     mbse -> nonModule [module != "MBSE" && module != "SA"]/{
       mbseCounter = 0.0;
       saCounter = 0.0;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     sa -> nonModule [module != "MBSE" && module != "SA"]/{
       mbseCounter = 0.0;
       saCounter = 0.0;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
 
     nonModule -> nonModule [module != "MBSE" && module != "SA"]/{
       mbseCounter = 0.0;
       saCounter = 0.0;
       voteMBSE = mbseCounted;
       voteSA = saCounted;
-    };
+    }
   }
 }

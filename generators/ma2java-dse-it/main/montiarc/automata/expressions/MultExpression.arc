@@ -13,6 +13,6 @@ component MultExpression {
 
     Idle -> Idle /{
       out = in * 2;
-    };
+    }
   }
 }

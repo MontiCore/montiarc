@@ -18,6 +18,6 @@ component PSource(Direction p) {
     initial state A;
 
     // emit p
-    A -> A / { o = p; };
+    A -> A / { o = p; }
   }
 }

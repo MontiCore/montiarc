@@ -10,6 +10,6 @@ component Parameter(OnOff p) {
   automaton {
     initial state S;
 
-    S -> S / { o = p; };
+    S -> S / { o = p; }
   }
 }

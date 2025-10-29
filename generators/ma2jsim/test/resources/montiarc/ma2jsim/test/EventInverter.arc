@@ -14,19 +14,19 @@ component EventInverter {
     S -> S [bIn != null] bIn / {
       java.lang.System.out.println("Message stimulus bIn.");
       bOut = !bIn;
-    };
+    }
 
     S -> S [iIn != null] iIn / {
       java.lang.System.out.println("Message stimulus iIn.");
       iOut = -1 * iIn;
-    };
+    }
 
     S -> S / {
       java.lang.System.out.println("Tick stimulus.");
-    };
+    }
 
     S -> S / {
       java.lang.System.out.println("Stimulus-free transition.");
-    };
+    }
   }
 }

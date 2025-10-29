@@ -15,6 +15,6 @@ component AssignmentTypeConflict {
     automaton {
       state S;
       initial S;
-      S -> S / {b = 5}; // Error
+      S -> S / {b = 5} // Error
     }
 }

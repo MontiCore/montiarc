@@ -13,6 +13,6 @@ component AssignmentName {
 
     Idle -> Idle /{
       out = in;
-    };
+    }
   }
 }

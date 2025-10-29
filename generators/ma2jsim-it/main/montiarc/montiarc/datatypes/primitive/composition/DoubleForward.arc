@@ -10,6 +10,6 @@ component DoubleForward {
     S -> S / {
       double intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

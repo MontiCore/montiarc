@@ -10,6 +10,6 @@ component FullQualifiedEnum {
     initial state S;
     S -> S / {
       off = montiarc.types.OnOff.OFF;
-    };
+    }
   }
 }

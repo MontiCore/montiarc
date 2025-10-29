@@ -15,10 +15,10 @@ component DoubleComponent {
 
     Idle -> Idle [in*2 == 4.2]/{
       out = in + doubler;
-    };
+    }
 
     Idle -> Idle /{
       out = 1.0;
-    };
+    }
   }
 }

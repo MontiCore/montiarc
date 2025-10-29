@@ -13,10 +13,10 @@ component DistinctionModel(Integer parameter) {
 
     Idle -> Idle [mtrNr < parameter] /{
       factor = 1.5;
-    };
+    }
 
     Idle -> Idle [mtrNr > 350000] /{
       factor = 1.0;
-    };
+    }
   }
 }

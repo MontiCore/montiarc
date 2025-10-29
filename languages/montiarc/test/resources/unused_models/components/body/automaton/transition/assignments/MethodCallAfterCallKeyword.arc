@@ -16,7 +16,7 @@ component MethodCallAfterCallKeyword {
         state A;
         initial A;
 
-        A -> A /{c.toString(), b = a.toString()}; //wrong: there must be the call keyword before the method call
+        A -> A /{c.toString(), b = a.toString()} //wrong: there must be the call keyword before the method call
 
     }
 }

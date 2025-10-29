@@ -29,27 +29,27 @@ component BumpControl {
       left = MotorCmd.FORWARD;
       speed = 30;
       log = "Driving";
-    };
+    }
 
     Driving -> Backing [distance < 5] / {
       right = MotorCmd.BACKWARD;
       left = MotorCmd.BACKWARD;
       timer = TimerCmd.SINGLE;
       log = "Backing";
-    };
+    }
 
     Backing -> Turning [signal == TimerSignal.ALERT] / {
       right = MotorCmd.BACKWARD;
       left = MotorCmd.FORWARD;
       timer = TimerCmd.DOUBLE;
       log = "Turning";
-    };
+    }
 
     Turning -> Driving [signal == TimerSignal.ALERT] / {
       left = MotorCmd.FORWARD;
       right = MotorCmd.FORWARD;
       log = "Driving";
-    };
+    }
   }
 
 }

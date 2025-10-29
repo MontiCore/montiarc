@@ -35,7 +35,7 @@
         port_${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()};
     <#-- Observe interaction -->
     <#elseif typeDispatcher.isSDBasisASTSDSendMessage(element) && element.isPresentSDSource()>
-      }<#if !(stateCount == 0)>;</#if>
+      }
       <#assign portVarName>${element.getSDSource().getName()}_${element.getSDSource().getPort()}</#assign>
       <#assign portName>port_${portVarName}</#assign>
       state S${stateCount};
@@ -55,17 +55,17 @@
         ${element.getName()} = ${prettyPrinter.prettyprint(element.getAssignment())};
     </#if>
   </#list>
-      }<#if !(stateCount == 0)>;</#if>
+      }
       state S${stateCount} {
         entry / {
           montiarc.lang.Simulation.stop();
         }
-      };
+      }
       state Failed {
         entry / {
           montiarc.maunit.api.Assertions.fail();
         }
-      };
+      }
 
   <#-- manual star transiton -->
   <#list 0..stateCount-1 as i>
@@ -75,13 +75,13 @@
           <#if !helper.isPortSourceAtObserveInteractionIndex(i, ast, comp, portSymbol) && !helper.isFree(ast, comp, portSymbol)>
       S${i} -> Failed port_${comp.getName()}_${portSymbol.getName()};
           <#else>
-      S${i} -> S${i} port_${comp.getName()}_${portSymbol.getName()} / {${comp.getName()}_${portSymbol.getName()} = port_${comp.getName()}_${portSymbol.getName()};};
+      S${i} -> S${i} port_${comp.getName()}_${portSymbol.getName()} / {${comp.getName()}_${portSymbol.getName()} = port_${comp.getName()}_${portSymbol.getName()};}
           </#if>
         </#if>
       </#list>
     </#list>
       S${i} -> Failed [countedTicks >= ${helper.tickLength(ast)}];
-      S${i} -> S${i} [countedTicks < ${helper.tickLength(ast)}] / {countedTicks = countedTicks + 1;};
+      S${i} -> S${i} [countedTicks < ${helper.tickLength(ast)}] / {countedTicks = countedTicks + 1;}
 
   </#list>
     }

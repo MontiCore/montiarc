@@ -50,6 +50,6 @@ component MethodCaller {
 
       //  --- Ambiguous method call  ---
       AmbiguousMethodProvider.call(number, 1);
-    };
+    }
   }
 }

@@ -11,17 +11,17 @@ component Hierarchy {
       state A2;
       state A3{
         initial state A31;
-      };
-    };
+      }
+    }
     state B{
     initial state B1;
     state B2;
     state B3;
-    };
+    }
     state C{
       initial state C1{
         initial state C11;
-      };
-    };
+      }
+    }
   }
 }

@@ -11,6 +11,6 @@ component DelayedByBehavior {
   <<delayed>> automaton {
     initial { o = OnOff.OFF; } state S;
 
-    S -> S / { o = i; };
+    S -> S / { o = i; }
   }
 }

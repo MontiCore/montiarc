@@ -24,7 +24,7 @@ component InvariantViolation3 {
       initial { v2 = -11; }
       state S11 [v2 == 11] {
         entry / { o = 11; }
-      };
-    };
+      }
+    }
   }
 }

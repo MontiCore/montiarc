@@ -8,6 +8,6 @@ component Emit<T>(T output) {
     initial state S;
     S -> S / {
       out = output;
-    };
+    }
   }
 }

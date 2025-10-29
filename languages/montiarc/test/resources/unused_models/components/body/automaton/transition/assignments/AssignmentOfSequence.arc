@@ -15,6 +15,6 @@ package components.body.automaton.transition.assignments;
         state S;
         initial S;
 
-        S  / {buffer = [1,1]};
+        S  / {buffer = [1,1]}
     }
  }

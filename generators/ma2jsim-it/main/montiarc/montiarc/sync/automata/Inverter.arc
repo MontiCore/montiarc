@@ -13,10 +13,10 @@ component Inverter {
 
     S -> S [i == OnOff.ON] / {
       o = OnOff.OFF;
-    };
+    }
 
     S -> S [i == OnOff.OFF] / {
       o = OnOff.ON;
-    };
+    }
   }
 }

@@ -27,7 +27,7 @@ component InnerComponent {
 
         S -> S / {
           o = i;
-        };
+        }
       }
     }
   }

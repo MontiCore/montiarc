@@ -6,6 +6,6 @@ component ByteWrapperOut {
 
   automaton {
     initial state S;
-    S -> S / { int foo = 1; };
+    S -> S / { int foo = 1; }
   }
 }

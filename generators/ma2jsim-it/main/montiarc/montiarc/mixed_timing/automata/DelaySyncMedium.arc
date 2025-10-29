@@ -15,9 +15,9 @@ component DelaySyncMedium {
 
     S -> S / {
       oSync = inSync;
-    };
+    }
     S -> S inEvent / {
       oEvent = inEvent;
-    };
+    }
   }
 }

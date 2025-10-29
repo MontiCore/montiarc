@@ -14,7 +14,7 @@ component List2(List<CardinalDirection> p) {
     initial state S;
     S -> S [i >= 0 && l.size() > i] i / {
       o = l.get(i);
-    };
+    }
   }
 
 }

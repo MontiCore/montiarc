@@ -16,14 +16,14 @@ component Transitions {
 
     Idle -> Idle/{
       out = 100;
-    };
+    }
 
     Idle -> Second [in > 2] /{
       out = in+1;
-    };
+    }
 
     Second -> Idle [in == 100] /{
       out = in*2;
-    };
+    }
   }
 }

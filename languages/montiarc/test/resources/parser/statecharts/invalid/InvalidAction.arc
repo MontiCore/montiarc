@@ -13,7 +13,7 @@ component InvalidAction {
     state Locked {
       entry / {ringing = true;}
       fish / {ringing = false;}
-    };
+    }
     // invalid: there is no fish-action
   }
 }

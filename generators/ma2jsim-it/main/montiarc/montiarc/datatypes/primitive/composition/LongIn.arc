@@ -6,6 +6,6 @@ component LongIn {
 
   automaton {
     initial state S;
-    S -> S / { long foo = p; };
+    S -> S / { long foo = p; }
   }
 }

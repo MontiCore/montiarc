@@ -9,6 +9,6 @@ component Number2Int<T extends Number> {
   automaton {
     initial state S;
 
-    S -> S / { o = i.intValue(); };
+    S -> S / { o = i.intValue(); }
   }
 }

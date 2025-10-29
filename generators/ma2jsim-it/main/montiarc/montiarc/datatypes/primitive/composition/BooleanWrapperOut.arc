@@ -6,6 +6,6 @@ component BooleanWrapperOut {
 
   automaton {
     initial state S;
-    S -> S / { p = true; };
+    S -> S / { p = true; }
   }
 }

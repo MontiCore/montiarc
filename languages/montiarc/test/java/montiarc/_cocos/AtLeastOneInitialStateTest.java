@@ -161,7 +161,7 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
           "automaton { "  +
           "state s { "+
           "initial state inners;" +
-          "};" +
+          "}" +
           "}" +
           "}",
         SCError.NO_INITIAL_STATE)

@@ -86,7 +86,7 @@ public class ArcAutomatonHelper {
   public boolean hasEntryAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
 
-    if (!(state.getSCSBody() instanceof ASTSCHierarchyBody))
+    if (!state.isPresentSCSBody() || !(state.getSCSBody() instanceof ASTSCHierarchyBody))
       return false;
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
@@ -107,7 +107,7 @@ public class ArcAutomatonHelper {
   public boolean hasExitAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
 
-    if (!(state.getSCSBody() instanceof ASTSCHierarchyBody))
+    if (!state.isPresentSCSBody() || !(state.getSCSBody() instanceof ASTSCHierarchyBody))
       return false;
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
@@ -127,7 +127,7 @@ public class ArcAutomatonHelper {
 
   public boolean hasInitAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-    return state.getSCModifier().isInitial() && isAnteAction(state.getSCSAnte());
+    return state.getSCModifier().isInitial() && state.isPresentSCSAnte() && isAnteAction(state.getSCSAnte());
   }
 
   public List<ASTMCBlockStatement> getInitActionStatementList(@NotNull ASTSCState state) {
@@ -138,13 +138,13 @@ public class ArcAutomatonHelper {
 
   public boolean hasSubStates(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-    return state.getSCSBody() instanceof ASTSCHierarchyBody
+    return state.isPresentSCSBody() && state.getSCSBody() instanceof ASTSCHierarchyBody
       && ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().anyMatch(ASTSCState.class::isInstance);
   }
 
   public Stream<ASTSCState> getSubStatesStream(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-    if (state.getSCSBody() instanceof ASTSCHierarchyBody) {
+    if (state.isPresentSCSBody() && state.getSCSBody() instanceof ASTSCHierarchyBody) {
       return ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().filter(ASTSCState.class::isInstance)
         .map(ASTSCState.class::cast);
     }

@@ -10,6 +10,6 @@ component ShortForward {
     S -> S / {
       short intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

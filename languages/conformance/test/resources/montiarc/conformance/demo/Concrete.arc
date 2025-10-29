@@ -22,22 +22,22 @@ component Concrete {
 
     Known -> Known [input == Input.GET_VALUE] input / {
       value = counter;
-    };
+    }
 
     Known -> Known [input == Input.INCREASE_VALUE] input / {
       counter = counter+1 ;
       value = counter;
-    };
+    }
 
-    Known -> Anon [input == Input.LOGOUT] input / {counter = counter;};
+    Known -> Anon [input == Input.LOGOUT] input / {counter = counter;}
 
     Anon -> Anon [input == Input.INCREASE_VALUE] input / {
       output = Output.ERROR;
-    };
+    }
 
     Anon -> Anon [input == Input.GET_VALUE] input / {
       output = Output.ERROR;
-    };
+    }
 
     // Comment in the following line to see non-conformance:
     // Anon -> Known [password == "wrong"] password;

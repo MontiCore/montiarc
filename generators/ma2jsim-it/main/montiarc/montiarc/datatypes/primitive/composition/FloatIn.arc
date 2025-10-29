@@ -6,6 +6,6 @@ component FloatIn {
 
   automaton {
     initial state S;
-    S -> S / { float foo = p; };
+    S -> S / { float foo = p; }
   }
 }

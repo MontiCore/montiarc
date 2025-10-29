@@ -14,6 +14,6 @@ component DefaultEventOutputs {
 
   automaton {
     initial state S;
-    S -> S / { };
+    S -> S / { }
   }
 }

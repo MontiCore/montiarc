@@ -9,11 +9,11 @@ component InitialAndEntryAction {
 
     initial { o = "INIT"; } state A {
       entry / o = "Enter A";
-    };
+    }
 
-    state B { entry / o = "Enter B"; };
+    state B { entry / o = "Enter B"; }
 
-    A -> B i / o = "A -> B";;
-    B -> A i / o = "B -> A";;
+    A -> B i / o = "A -> B";
+    B -> A i / o = "B -> A";
   }
 }

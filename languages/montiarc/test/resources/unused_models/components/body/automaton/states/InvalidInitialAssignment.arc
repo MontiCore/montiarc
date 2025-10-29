@@ -19,7 +19,7 @@ component InvalidInitialAssignment {
 
   automaton {
     state A,B;
-    initial A /{v = false, s = 255 }; // 2 errors
+    initial A /{v = false, s = 255 } // 2 errors
     A->B;
   }
 }

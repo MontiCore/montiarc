@@ -21,6 +21,6 @@ component Generics<T, U extends Person>(T parameter, List<U> listParameter, List
       T variable = field;
       List<U> listVariable = listField;
       List<Person> boundListVariable = boundListField;
-    };
+    }
   }
 }

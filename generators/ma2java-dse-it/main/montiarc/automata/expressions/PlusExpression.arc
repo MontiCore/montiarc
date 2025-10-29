@@ -13,6 +13,6 @@ component PlusExpression {
 
     Idle -> Idle /{
       out = in + 1;
-    };
+    }
   }
 }

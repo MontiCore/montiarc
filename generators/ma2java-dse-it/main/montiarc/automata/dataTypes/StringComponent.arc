@@ -13,10 +13,10 @@ component StringComponent {
 
     Idle -> Idle [in == "helloWorld"]/{
       out = "moin";
-    };
+    }
 
     Idle -> Idle /{
       out = "helloWorld";
-    };
+    }
   }
 }

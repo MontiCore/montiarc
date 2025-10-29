@@ -10,17 +10,17 @@ component InitialNestedState_OnLevel_1 {
     initial state A {
       initial state AA;  // <- We want to check that this state is entered
       state AB;
-    };
+    }
 
     state B {
       initial state BA;
       state BB;
-    };
+    }
 
-    AA -> AA / o = "AA";;
-    AB -> AB / o = "AB";;
-    BA -> BA / o = "BA";;
-    BB -> BB / o = "BB";;
+    AA -> AA / o = "AA";
+    AB -> AB / o = "AB";
+    BA -> BA / o = "BA";
+    BB -> BB / o = "BB";
 
   }
 }

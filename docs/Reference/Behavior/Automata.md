@@ -19,8 +19,8 @@ and transitions.
         initial state S1;
         state S2;
 
-        S1 -> S2 / {};
-        S2 -> S1 [i > 0] i / {};
+        S1 -> S2 / {}
+        S2 -> S1 [i > 0] i / {}
       }
     }
     ```
@@ -48,7 +48,7 @@ An automaton can have any number of transitions between states.
 A simple transition looks like
 
 ```montiarc
-S1 -> S2 [CONDITION] EVENT / { ACTION };
+S1 -> S2 [CONDITION] EVENT / { ACTION }
 ```
 
 where 
@@ -80,7 +80,7 @@ looks like
 state S {
   entry / { ACTION1 }
   exit / { ACTION2 }
-};
+}
 ```
 
 where `ACTION1` and `ACTION2` are each a list of statements.
@@ -109,9 +109,9 @@ state HS {
   state Sub1 {
     state SubSub1;
     state SubSub2;  
-  };
+  }
   state Sub2; 
-};
+}
 ```
 
 where 
@@ -141,7 +141,7 @@ port in int number;
 the transition 
 
 ```montiarc
-S1 -> S2 [CONDITION] number / { ACTION };
+S1 -> S2 [CONDITION] number / { ACTION }
 ```
 
 is executed when the port `number` receives a message (an `int`) and if the automaton is currently in state `S1` and if the `CONDITION` evaluates to `true`.
@@ -149,8 +149,8 @@ is executed when the port `number` receives a message (an `int`) and if the auto
 The transition's guard can then reason about the properties of the received message and use the message in the transition action.
 
 ```montiarc
-S1 -> S2 [number >= 0] number / { int v = number; };
-S1 -> S2 [number < 0] number / { int v = -number; };
+S1 -> S2 [number >= 0] number / { int v = number; }
+S1 -> S2 [number < 0] number / { int v = -number; }
 ```
 
 ## Time Events (Epsilon Transitions)
@@ -164,7 +164,7 @@ If a transition does not specify a message event, it is implicitly triggered by 
 The transition 
 
 ```montiarc
-S1 -> S2 [CONDITION] / { ACTION }; // for synchronous automata
+S1 -> S2 [CONDITION] / { ACTION } // for synchronous automata
 ```
 
 is executed at discrete equidistant points in time, i.e., whenever a time slice finishes. 
@@ -183,7 +183,7 @@ The current message on each synchronous port is available for the time event.
 A transition triggered by a time event can reason about properties of messages on all incoming, synchronous ports, and use the messages in the transition action.
 
 ```montiarc
-S1 -> S2 [b != 0] / { int v = a / b; };
+S1 -> S2 [b != 0] / { int v = a / b; }
 ```
 
 ## Output 
@@ -202,7 +202,7 @@ port out long result;
 and the transition
 
 ```montiarc
-S1 -> S2 [number != 0] number / { result = 100 / number; };
+S1 -> S2 [number != 0] number / { result = 100 / number; }
 ```
 
 a message (the result of the expression `100 / number`) is sent via port 
@@ -217,7 +217,7 @@ Given the transition
 S1 -> S2 [number != 0] number / { 
   result = 100 / number; 
   result = 100 * number;
-};
+}
 ```
 
 Two messages are sent via port `result` every time the transition is executed. 
@@ -253,24 +253,24 @@ component TrafficLight {
     // tell the cars to stop (car light becomes yellow)
     Green -> Yellow reqL / {
       carLight = Color.Yellow;
-    };
+    }
     Green -> Yellow reqR / {
       carLight = Color.Yellow;
-    };
+    }
     
     // After some time, the car light becomes red and the light for the 
     // pedestrians becomes green
     Yellow -> Red / {
       carLight = Color.RED;
       pedLight = Color.Green; 
-    };
+    }
     
     // After some time, the cars are allowed to drive again. The car light 
     // becomes green, the pedestrian light becomes red
     Red -> Green / {
       carLight = Color.Green;
       pedLight = Color.Red;
-    };
+    }
   }
 }
 ```
@@ -295,14 +295,14 @@ component Divide {
       r = r_pre;
       // no error, send ok
       of = true;
-    };
+    }
 
     S -> S [b == 0] / {
       // send the previous result
       r = r_pre;
       // send error
       of = false;
-    };
+    }
   }
 }
 ```

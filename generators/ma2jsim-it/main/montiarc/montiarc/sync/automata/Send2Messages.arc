@@ -10,6 +10,6 @@ component Send2Messages {
   automaton {
     initial state S;
 
-    S -> S / { o = p; o = p; };
+    S -> S / { o = p; o = p; }
   }
 }

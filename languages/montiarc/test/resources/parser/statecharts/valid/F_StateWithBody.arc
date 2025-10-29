@@ -13,11 +13,11 @@ component F_StateWithBody {
   automaton {
     initial state Closed;
     state Locked;
-    state Opened { };
+    state Opened { }
 
     Opened -> Closed;
-    Closed -> Opened [open] / {ringing = true;};
-    Closed -> Locked        / {System.out.println("Door locked now.");};
+    Closed -> Opened [open] / {ringing = true;}
+    Closed -> Locked        / {System.out.println("Door locked now.");}
     Locked -> Closed [unlock == true];
 
   }

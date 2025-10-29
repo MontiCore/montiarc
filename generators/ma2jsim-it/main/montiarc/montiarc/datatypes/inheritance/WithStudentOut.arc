@@ -10,6 +10,6 @@ component WithStudentOut {
     initial state S;
     S -> S / {
       student = Student.Student();
-    };
+    }
   }
 }

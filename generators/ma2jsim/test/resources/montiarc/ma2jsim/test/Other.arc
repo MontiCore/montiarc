@@ -11,7 +11,7 @@ component Other(int first, int second, int withDefault = 3) {
       initial state S;
 
       // emit received message
-      S -> S [ i > 0 ] / { o = i; b = true; };
-      S -> S [ i <= 0 ] / { o = i; b = false; };
+      S -> S [ i > 0 ] / { o = i; b = true; }
+      S -> S [ i <= 0 ] / { o = i; b = false; }
     }
 }

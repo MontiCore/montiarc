@@ -14,15 +14,15 @@ component Medium {
 
     S -> S inA / {
       outA = inA;
-    };
+    }
 
     S -> S inB / {
       outB = inB;
-    };
+    }
 
     S -> S / {
       outY = inY;
       outZ = inZ;
-    };
+    }
   }
 }

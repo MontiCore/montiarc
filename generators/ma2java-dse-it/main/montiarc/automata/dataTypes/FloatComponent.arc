@@ -15,10 +15,10 @@ component FloatComponent {
 
     Idle -> Idle [in /2 == 3.2f]/{
       out = in + floater;
-    };
+    }
 
     Idle -> Idle /{
       out = 1.0f;
-    };
+    }
   }
 }

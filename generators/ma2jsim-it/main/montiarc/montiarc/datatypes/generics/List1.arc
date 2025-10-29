@@ -16,10 +16,10 @@ component List1 {
     initial state S;
     S -> S i / {
       l.add(i);
-    };
+    }
     S -> S [l.size() > 0] i2 / {
       o = l.remove(l.size() - 1);
-    };
+    }
   }
 
 }

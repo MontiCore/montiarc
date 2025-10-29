@@ -23,7 +23,7 @@ component GuardUsesUndeclaredField{
 
     state Initial, Second, Third;
     initial Initial / {time=0, strings = new HashMap<String, String>(),
-      stringList = new ArrayList<String>()};
+      stringList = new ArrayList<String>()}
 
     Initial -> Second [intVariable == 0];
       // Error: intVariable is not declared

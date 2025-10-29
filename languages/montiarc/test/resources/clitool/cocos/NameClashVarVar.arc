@@ -15,6 +15,6 @@ component NameClashVarVar {
 
   automaton {
     initial state S;
-    S -> S [i > v] i / { o = v; };
+    S -> S [i > v] i / { o = v; }
   }
 }

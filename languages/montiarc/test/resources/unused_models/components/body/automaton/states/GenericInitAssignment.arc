@@ -12,6 +12,6 @@ component GenericInitAssignment<T> {
 
   automaton {
     state Idle;
-    initial Idle / {t = 10};
+    initial Idle / {t = 10}
   }
 }

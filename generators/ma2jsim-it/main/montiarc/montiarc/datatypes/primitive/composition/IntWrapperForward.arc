@@ -10,6 +10,6 @@ component IntWrapperForward {
     S -> S / {
       int intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

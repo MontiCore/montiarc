@@ -40,7 +40,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = 0; }; " +
+      "    S -> S / { o = 0; } " +
       "  } " +
       "}",
     // 2 - Write input to output port in transition action
@@ -49,7 +49,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S i / { o = i; }; " +
+      "    S -> S i / { o = i; } " +
       "  } " +
       "}",
     // 3 - Write value of variable to output port in transition action
@@ -58,7 +58,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "  int v = 0; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S / { o = v; }; " +
+      "    S -> S / { o = v; } " +
       "  } " +
       "}",
     // 4 - Write value of input port to variable in transition action
@@ -67,7 +67,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "  int v = 0; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S i / { v = i; }; " +
+      "    S -> S i / { v = i; } " +
       "  } " +
       "}",
     // 5 - Read value from and write to field in transition action
@@ -82,7 +82,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "      o = v.i; o = v.o; " +
       "      v.i = 0; v.i +=1; v.i++; --v.i; " +
       "      v.o = 0; v.o +=1; v.o++; --v.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 6 - Read value from method call in transition action
@@ -95,7 +95,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "    state S;" +
       "    S -> S i / { " +
       "      o = v.i(); o = v.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 7 - Read value from and write to static field in transition action
@@ -108,7 +108,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "    S -> S i / { " +
       "      o = OOTypeWithStaticFieldIO.i; " +
       "      o = OOTypeWithStaticFieldIO.o; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 8 - Read value from static method call in transition action
@@ -121,7 +121,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "    S -> S i / { " +
       "      o = OOTypeWithStaticFunctionIO.i(); " +
       "      o = OOTypeWithStaticFunctionIO.o(); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 9 - Pass input as argument to static method call in transition action
@@ -134,7 +134,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "    S -> S i / { " +
       "      o = OOTypeWithStaticFunctionIO.i(i); " +
       "      o = OOTypeWithStaticFunctionIO.o(i); " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 10 - Variable declaration shadows port in transition action
@@ -146,7 +146,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "    S -> S i / { " +
       "      int i = 0; " +
       "      o = i; " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 11 - For control shadows port in transition action
@@ -159,7 +159,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "      for (int i = 0; i < 10; i++) { " +
       "        o = i; " +
       "      } " +
-      "    }; " +
+      "    } " +
       "  } " +
       "}",
     // 12 - Write input to output in transition action
@@ -168,7 +168,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
       "  port out int o; " +
       "  automaton { " +
       "    state S; " +
-      "    S -> S i / { o = i; }; " +
+      "    S -> S i / { o = i; } " +
       "  } " +
       "}",
     // 13 - Read input port in transition guard
@@ -224,7 +224,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in int i; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { i = 0; }; " +
+          "    S -> S i / { i = 0; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT
@@ -234,7 +234,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in montiarc.test.OOTypeWithField i; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { i.v = 0; }; " +
+          "    S -> S i / { i.v = 0; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT),
@@ -243,7 +243,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out montiarc.test.OOTypeWithField o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S / { o.v = 0; }; " +
+          "    S -> S / { o.v = 0; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -252,7 +252,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out montiarc.test.OOTypeWithFunction o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S / { o.f(); }; " +
+          "    S -> S / { o.f(); } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -262,7 +262,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out int o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { i.f(o); }; " +
+          "    S -> S i / { i.f(o); } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -271,7 +271,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in int i; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { i++; }; " +
+          "    S -> S i / { i++; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT),
@@ -280,7 +280,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out int o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S / { o++; }; " +
+          "    S -> S / { o++; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -289,7 +289,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in int i; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { i--; }; " +
+          "    S -> S i / { i--; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT),
@@ -298,7 +298,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out int o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S / { o--; }; " +
+          "    S -> S / { o--; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -307,7 +307,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in int i; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { ++i; }; " +
+          "    S -> S i / { ++i; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT),
@@ -316,7 +316,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out int o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S / { ++o; }; " +
+          "    S -> S / { ++o; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -325,7 +325,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in int i; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { --i; }; " +
+          "    S -> S i / { --i; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT),
@@ -334,7 +334,7 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port out int o; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S / { --o; }; " +
+          "    S -> S / { --o; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT),
@@ -344,17 +344,17 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "port in boolean i2; " +
           "  automaton { " +
           "    state S; " +
-          "    S -> S i / { i1 += 1; }; " +
-          "    S -> S i / { i1 -= 1; }; " +
-          "    S -> S i / { i1 *= 1; }; " +
-          "    S -> S i / { i1 /= 1; }; " +
-          "    S -> S i / { i1 %= 1; }; " +
-          "    S -> S i / { i1 >>= 1; }; " +
-          "    S -> S i / { i1 >>>= 1; }; " +
-          "    S -> S i / { i1 <<= 1; }; " +
-          "    S -> S i / { i2 &= true; }; " +
-          "    S -> S i / { i2 |= true; }; " +
-          "    S -> S i / { i2 ^= true; }; " +
+          "    S -> S i / { i1 += 1; } " +
+          "    S -> S i / { i1 -= 1; } " +
+          "    S -> S i / { i1 *= 1; } " +
+          "    S -> S i / { i1 /= 1; } " +
+          "    S -> S i / { i1 %= 1; } " +
+          "    S -> S i / { i1 >>= 1; } " +
+          "    S -> S i / { i1 >>>= 1; } " +
+          "    S -> S i / { i1 <<= 1; } " +
+          "    S -> S i / { i2 &= true; } " +
+          "    S -> S i / { i2 |= true; } " +
+          "    S -> S i / { i2 ^= true; } " +
           "  }" +
           "}",
         WRITE_TO_INCOMING_PORT, WRITE_TO_INCOMING_PORT, WRITE_TO_INCOMING_PORT,
@@ -371,17 +371,17 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "  automaton { " +
           "    state S; " +
           "    state S; " +
-          "    S -> S i / { v1 += o1; }; " +
-          "    S -> S i / { v1 -= o1; }; " +
-          "    S -> S i / { v1 *= o1; }; " +
-          "    S -> S i / { v1 /= o1; }; " +
-          "    S -> S i / { v1 %= o1; }; " +
-          "    S -> S i / { v1 >>= o1; }; " +
-          "    S -> S i / { v1 >>>= o1; }; " +
-          "    S -> S i / { v1 <<= o1; }; " +
-          "    S -> S i / { v2 &= o2; }; " +
-          "    S -> S i / { v2 |= o2; }; " +
-          "    S -> S i / { v2 ^= o2; }; " +
+          "    S -> S i / { v1 += o1; } " +
+          "    S -> S i / { v1 -= o1; } " +
+          "    S -> S i / { v1 *= o1; } " +
+          "    S -> S i / { v1 /= o1; } " +
+          "    S -> S i / { v1 %= o1; } " +
+          "    S -> S i / { v1 >>= o1; } " +
+          "    S -> S i / { v1 >>>= o1; } " +
+          "    S -> S i / { v1 <<= o1; } " +
+          "    S -> S i / { v2 &= o2; } " +
+          "    S -> S i / { v2 |= o2; } " +
+          "    S -> S i / { v2 ^= o2; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT, READ_FROM_OUTGOING_PORT, READ_FROM_OUTGOING_PORT,
@@ -396,19 +396,19 @@ class PortReadWriteInTransition4MontiArcTest extends MontiArcTestBase {
           "  automaton { " +
           "    state S; " +
           "    state S; " +
-          "    S -> S i / { o1 + 1; }; " +
-          "    S -> S i / { o1 - 1; }; " +
-          "    S -> S i / { o1 * 1; }; " +
-          "    S -> S i / { o1 / 1; }; " +
-          "    S -> S i / { o1 % 1; }; " +
-          "    S -> S i / { o1 <= 1; }; " +
-          "    S -> S i / { o1 >= 1; }; " +
-          "    S -> S i / { o1 < 1; }; " +
-          "    S -> S i / { o1 > 1; }; " +
-          "    S -> S i / { o1 == 1; }; " +
-          "    S -> S i / { o1 != 1; }; " +
-          "    S -> S i / { o2 && true; }; " +
-          "    S -> S i / { o2 || true; }; " +
+          "    S -> S i / { o1 + 1; } " +
+          "    S -> S i / { o1 - 1; } " +
+          "    S -> S i / { o1 * 1; } " +
+          "    S -> S i / { o1 / 1; } " +
+          "    S -> S i / { o1 % 1; } " +
+          "    S -> S i / { o1 <= 1; } " +
+          "    S -> S i / { o1 >= 1; } " +
+          "    S -> S i / { o1 < 1; } " +
+          "    S -> S i / { o1 > 1; } " +
+          "    S -> S i / { o1 == 1; } " +
+          "    S -> S i / { o1 != 1; } " +
+          "    S -> S i / { o2 && true; } " +
+          "    S -> S i / { o2 || true; } " +
           "  }" +
           "}",
         READ_FROM_OUTGOING_PORT, READ_FROM_OUTGOING_PORT, READ_FROM_OUTGOING_PORT,

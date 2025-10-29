@@ -18,6 +18,6 @@ component EmitTimed<T>(List<List<T>> output) {
         }
         index++;
       }
-    };
+    }
   }
 }

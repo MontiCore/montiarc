@@ -16,10 +16,10 @@ component EnumComponent {
 
     Idle -> Idle [in == TimerSignal.ALERT]/{
       out = MotorCmd.FORWARD;
-    };
+    }
 
     Idle -> Second [in == TimerSignal.SLEEP]/{
        out = MotorCmd.STOP;
-    };
+    }
   }
 }

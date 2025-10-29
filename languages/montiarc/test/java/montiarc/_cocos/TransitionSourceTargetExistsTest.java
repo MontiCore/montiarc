@@ -84,7 +84,7 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
       "state s2; " +
       "state s3; " +
       "s2 -> s3; " +
-      "}; " +
+      "} " +
       "} " +
       "}",
     // single transition up hierarchy
@@ -92,7 +92,7 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
       "automaton { " +
       "initial state s1 { " +
       "state s2; " +
-      "}; " +
+      "} " +
       "s1 -> s2; " +
       "} " +
       "}",
@@ -101,7 +101,7 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
       "automaton { " +
       "initial state s1 { " +
       "state s2; " +
-      "}; " +
+      "} " +
       "s2 -> s1; " +
       "} " +
       "}"

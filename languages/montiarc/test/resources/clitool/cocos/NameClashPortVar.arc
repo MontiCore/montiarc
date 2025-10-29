@@ -15,6 +15,6 @@ component NameClashPortVar {
 
   automaton {
     initial state S;
-    S -> S [i > 1] i / { o = i; };
+    S -> S [i > 1] i / { o = i; }
   }
 }

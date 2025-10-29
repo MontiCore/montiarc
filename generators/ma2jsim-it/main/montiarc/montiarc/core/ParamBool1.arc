@@ -11,6 +11,6 @@ component ParamBool1(boolean p) {
 
     S -> S i / {
       o = p;
-    };
+    }
   }
 }

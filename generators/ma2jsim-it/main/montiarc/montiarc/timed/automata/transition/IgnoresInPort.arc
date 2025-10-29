@@ -11,6 +11,6 @@ component IgnoresInPort {
 
   automaton {
     initial state S;
-    S -> S i1 / { o = i1; };
+    S -> S i1 / { o = i1; }
   }
 }

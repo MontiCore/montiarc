@@ -16,13 +16,13 @@ component Reference {
 
     <<n="1">> LoggedIn -> LoggedIn [input == Input.ACTION] input / {
       output = Output.RESPONSE;
-    };
+    }
 
     <<n="2">> LoggedIn -> NotLoggedIn [input == Input.LOGOUT] input;
 
     <<n="3">> NotLoggedIn -> NotLoggedIn [input == Input.ACTION] input / {
       output = Output.ERROR;
-    };
+    }
 
     <<n="4">> NotLoggedIn -> NotLoggedIn [input == Input.LOGOUT] input;
   }

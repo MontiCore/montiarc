@@ -30,7 +30,7 @@ protected void from${state.getName()}To${ast.targetName}NoGuard${counter}() {
   // output
   ${output}
   // reaction
-  <#if ast.getSCTBody().isPresentTransitionAction() && ast.getSCTBody().getTransitionAction().isPresentMCStatement()>
+  <#if ast.getSCTBody().isPresentTransitionAction()>
     ${compHelperDse.printStatement(ast.getSCTBody().getTransitionAction().getMCStatement())}
   </#if>
   // result

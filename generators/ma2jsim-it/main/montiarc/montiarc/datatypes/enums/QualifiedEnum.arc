@@ -10,6 +10,6 @@ component QualifiedEnum {
     initial state S;
     S -> S / {
       off = OnOff.OFF;
-    };
+    }
   }
 }

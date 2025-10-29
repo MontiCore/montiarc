@@ -10,8 +10,8 @@ component ConditionedTransitions {
   automaton {
     initial state S;
 
-    S -> S [i > 0] / { o = NumberSign.POSITIVE; };
-    S -> S [i < 0] / { o = NumberSign.NEGATIVE; };
-    S -> S [i == 0] / { o = NumberSign.ZERO; };
+    S -> S [i > 0] / { o = NumberSign.POSITIVE; }
+    S -> S [i < 0] / { o = NumberSign.NEGATIVE; }
+    S -> S [i == 0] / { o = NumberSign.ZERO; }
   }
 }

@@ -13,7 +13,6 @@ import de.monticore.literals.mccommonliterals._ast.ASTBooleanLiteral;
 import de.monticore.literals.mccommonliterals._ast.ASTStringLiteral;
 import de.monticore.scactions._ast.ASTSCEntryAction;
 import de.monticore.scactions._ast.ASTSCExitAction;
-import de.monticore.scbasis._ast.ASTSCEmptyBody;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
@@ -353,14 +352,14 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     Assertions.assertEquals("Closed", closed.getName());
     Assertions.assertTrue(closed.getSCModifier().isInitial());
     Assertions.assertFalse(closed.getSCModifier().isFinal());
-    Assertions.assertTrue(closed.getSCSBody() instanceof ASTSCEmptyBody);
+    Assertions.assertFalse(closed.isPresentSCSBody());
 
     Assertions.assertTrue(statechart.getSCStatechartElement(1) instanceof ASTSCState);
     ASTSCState locked = (ASTSCState) statechart.getSCStatechartElement(1);
     Assertions.assertEquals("Locked", locked.getName());
     Assertions.assertFalse(locked.getSCModifier().isInitial());
     Assertions.assertFalse(locked.getSCModifier().isFinal());
-    Assertions.assertTrue(locked.getSCSBody() instanceof ASTSCEmptyBody);
+    Assertions.assertFalse(locked.isPresentSCSBody());
 
     Assertions.assertTrue(statechart.getSCStatechartElement(2) instanceof ASTSCState);
     ASTSCState opened = (ASTSCState) statechart.getSCStatechartElement(2);
@@ -392,20 +391,21 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     Assertions.assertEquals("Closed", closed.getName());
     Assertions.assertTrue(closed.getSCModifier().isInitial());
     Assertions.assertFalse(closed.getSCModifier().isFinal());
-    Assertions.assertTrue(closed.getSCSBody() instanceof ASTSCEmptyBody);
+    Assertions.assertFalse(closed.isPresentSCSBody());
 
     Assertions.assertTrue(statechart.getSCStatechartElement(1) instanceof ASTSCState);
     ASTSCState locked = (ASTSCState) statechart.getSCStatechartElement(1);
     Assertions.assertEquals("Locked", locked.getName());
     Assertions.assertFalse(locked.getSCModifier().isInitial());
     Assertions.assertFalse(locked.getSCModifier().isFinal());
-    Assertions.assertTrue(locked.getSCSBody() instanceof ASTSCEmptyBody);
+    Assertions.assertFalse(locked.isPresentSCSBody());
 
     Assertions.assertTrue(statechart.getSCStatechartElement(2) instanceof ASTSCState);
     ASTSCState opened = (ASTSCState) statechart.getSCStatechartElement(2);
     Assertions.assertEquals("Opened", opened.getName());
     Assertions.assertFalse(opened.getSCModifier().isInitial());
     Assertions.assertFalse(opened.getSCModifier().isFinal());
+    Assertions.assertTrue(opened.isPresentSCSBody());
     Assertions.assertTrue(opened.getSCSBody() instanceof ASTSCHierarchyBody);
 
     // Check actions

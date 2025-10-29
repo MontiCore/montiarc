@@ -11,8 +11,8 @@ component Inverter {
   automaton {
     initial state S;
     S -> S i / {
-      if (i == OnOff.ON) { o = OnOff.OFF; };
-      if (i == OnOff.OFF) { o = OnOff.ON; };
-    };
+      if (i == OnOff.ON) { o = OnOff.OFF; }
+      if (i == OnOff.OFF) { o = OnOff.ON; }
+    }
   }
 }

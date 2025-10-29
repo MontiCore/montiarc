@@ -12,6 +12,6 @@ component AutomatonWithGenerics extends HasGenericInputAndOutputPort<String> {
         state State1, State2;
         initial State1;
 
-        State1 -> State2 [tIn != null] / {tOut = tIn};
+        State1 -> State2 [tIn != null] / {tOut = tIn}
     }
 }

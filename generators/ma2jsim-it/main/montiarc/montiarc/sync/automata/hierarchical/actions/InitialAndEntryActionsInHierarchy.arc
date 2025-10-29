@@ -9,13 +9,13 @@ component InitialAndEntryActionsInHierarchy {
 
     initial { o = "INIT A"; } state A {
       entry / o = "-> A";
-      initial { o = "INIT AA"; } state AA { entry / o = "-> AA"; } ;
-    };
+      initial { o = "INIT AA"; } state AA { entry / o = "-> AA"; }
+    }
 
     state B;
 
-    A -> B / o = "A -> B";;
-    B -> A / o = "B -> A";;
+    A -> B / o = "A -> B";
+    B -> A / o = "B -> A";
 
   }
 }

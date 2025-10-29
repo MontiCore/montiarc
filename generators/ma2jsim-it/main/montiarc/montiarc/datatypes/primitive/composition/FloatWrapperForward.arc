@@ -10,6 +10,6 @@ component FloatWrapperForward {
     S -> S / {
       float intermediate = pIn;
       pOut = intermediate;
-    };
+    }
   }
 }

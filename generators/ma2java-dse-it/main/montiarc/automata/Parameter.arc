@@ -14,6 +14,6 @@ component Parameter (Integer parameter) {
 
     Idle -> Idle /{
         out = parameter;
-    };
+    }
   }
 }

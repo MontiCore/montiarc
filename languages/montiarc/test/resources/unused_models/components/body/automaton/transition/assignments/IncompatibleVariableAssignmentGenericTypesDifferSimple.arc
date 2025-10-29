@@ -18,7 +18,7 @@ component IncompatibleVariableAssignmentGenericTypesDifferSimple {
 
   automaton BumpControl {
     state Idle;
-    initial Idle / {stateChanges = new HashMap<String, Integer>(), call stateChanges.put(5, "foo")}; //ERROR
-    Idle -> Idle / {call stateChanges.put("asd", 4)}; //ERROR
+    initial Idle / {stateChanges = new HashMap<String, Integer>(), call stateChanges.put(5, "foo")} //ERROR
+    Idle -> Idle / {call stateChanges.put("asd", 4)} //ERROR
   }
 }

@@ -13,7 +13,7 @@ component MissingPortType15 {
 
   automaton {
     initial state S;
-    S -> S i / { o = i; };
+    S -> S i / { o = i; }
   }
 
 }

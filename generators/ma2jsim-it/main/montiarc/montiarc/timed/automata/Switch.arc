@@ -13,8 +13,8 @@ component Switch {
     initial state Off;
     state On;
 
-    Off -> Off i2 / { o = OnOff.OFF; };
-    On -> On i2 / { o = i2; };
+    Off -> Off i2 / { o = OnOff.OFF; }
+    On -> On i2 / { o = i2; }
 
     Off -> On [i1 == OnOff.ON] i1;
     Off -> Off [i1 == OnOff.OFF] i1;

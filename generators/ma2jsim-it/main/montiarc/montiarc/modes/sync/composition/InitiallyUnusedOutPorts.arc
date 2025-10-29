@@ -14,7 +14,7 @@ component InitiallyUnusedOutPorts {
     port sync out OnOff o;
     automaton {
       initial state X;
-      X -> X / o = i;;
+      X -> X / o = i;
     }
   }
 

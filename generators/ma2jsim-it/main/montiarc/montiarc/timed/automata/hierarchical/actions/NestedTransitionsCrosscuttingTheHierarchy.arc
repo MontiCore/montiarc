@@ -34,85 +34,85 @@ component NestedTransitionsCrosscuttingTheHierarchy {
     // Example: aaa_ba has the following ancestors: aaa_b, aaa, aa, a (moving up the state hierarchy to the root)
 
     // Transitions to the initial state of every test case:
-    INIT -> aaa_aaa [i.equals("aaa_aaa")] i / o = "INIT -> aaa_aaa";;
+    INIT -> aaa_aaa [i.equals("aaa_aaa")] i / o = "INIT -> aaa_aaa";
 
     // Test case transitions:
-    aaa_aaa -> aaa_aab [i.equals("aaa_aaa -> aaa_aab")] i / o = "aaa_aaa -> aaa_aab";;  // 5., 14.
-    aaa_aaa -> aaa_aba [i.equals("aaa_aaa -> aaa_aba")] i / o = "aaa_aaa -> aaa_aba";;  // 6., 15.
-    aaa_aaa -> aaa_baa [i.equals("aaa_aaa -> aaa_baa")] i / o = "aaa_aaa -> aaa_baa";;  // 7., 16.
-    aaa_aa -> aaa_ab   [i.equals("aaa_aa -> aaa_ab")]   i / o = "aaa_aa -> aaa_ab";;    // 8., 17.
-    aaa_aa -> aaa_ba   [i.equals("aaa_aa -> aaa_ba")]   i / o = "aaa_aa -> aaa_ba";;    // 9., 18.
-    aaa_aa -> aab_aa   [i.equals("aaa_aa -> aab_aa")]   i / o = "aaa_aa -> aab_aa";;    // 10., 19.
-    aaa_a -> aaa_b     [i.equals("aaa_a -> aaa_b")]     i / o = "aaa_a -> aaa_b";;  // 11., 20., 4.
-    aaa_a -> aab_a     [i.equals("aaa_a -> aab_a")]     i / o = "aaa_a -> aab_a";;  // 12., 21., 3.
-    aaa_a -> aba_a     [i.equals("aaa_a -> aba_a")]     i / o = "aaa_a -> aba_a";;  // 13., 22., 2.
-    aa -> baa          [i.equals("aa -> baa")]          i / o = "aa -> baa";;  // 1.
+    aaa_aaa -> aaa_aab [i.equals("aaa_aaa -> aaa_aab")] i / o = "aaa_aaa -> aaa_aab";  // 5., 14.
+    aaa_aaa -> aaa_aba [i.equals("aaa_aaa -> aaa_aba")] i / o = "aaa_aaa -> aaa_aba";  // 6., 15.
+    aaa_aaa -> aaa_baa [i.equals("aaa_aaa -> aaa_baa")] i / o = "aaa_aaa -> aaa_baa";  // 7., 16.
+    aaa_aa -> aaa_ab   [i.equals("aaa_aa -> aaa_ab")]   i / o = "aaa_aa -> aaa_ab";    // 8., 17.
+    aaa_aa -> aaa_ba   [i.equals("aaa_aa -> aaa_ba")]   i / o = "aaa_aa -> aaa_ba";    // 9., 18.
+    aaa_aa -> aab_aa   [i.equals("aaa_aa -> aab_aa")]   i / o = "aaa_aa -> aab_aa";    // 10., 19.
+    aaa_a -> aaa_b     [i.equals("aaa_a -> aaa_b")]     i / o = "aaa_a -> aaa_b";  // 11., 20., 4.
+    aaa_a -> aab_a     [i.equals("aaa_a -> aab_a")]     i / o = "aaa_a -> aab_a";  // 12., 21., 3.
+    aaa_a -> aba_a     [i.equals("aaa_a -> aba_a")]     i / o = "aaa_a -> aba_a";  // 13., 22., 2.
+    aa -> baa          [i.equals("aa -> baa")]          i / o = "aa -> baa";  // 1.
 
 
     // States:
     state a { entry / o = "-> a";   do / o = "~ a";   exit / o = "a ->";
-      initial state a_bystander { entry / o = "-> a_by";   do / o = "~ a_by";   exit / o = "a_by ->"; };
+      initial state a_bystander { entry / o = "-> a_by";   do / o = "~ a_by";   exit / o = "a_by ->"; }
       state aa { entry / o = "-> aa";   do / o = "~ aa";   exit / o = "aa ->";
-        initial state aa_bystander { entry / o = "-> aa_by";   do / o = "~ aa_by";   exit / o = "aa_by ->"; };
+        initial state aa_bystander { entry / o = "-> aa_by";   do / o = "~ aa_by";   exit / o = "aa_by ->"; }
         state aaa { entry / o = "-> aaa";   do / o = "~ aaa";   exit / o = "aaa ->";
-          initial state aaa_bystander { entry / o = "-> aaa_by";   do / o = "~ aaa_by";   exit / o = "aaa_by ->"; };
+          initial state aaa_bystander { entry / o = "-> aaa_by";   do / o = "~ aaa_by";   exit / o = "aaa_by ->"; }
           state aaa_a { entry / o = "-> aaa_a";   do / o = "~ aaa_a";   exit / o = "aaa_a ->";
-            initial state aaa_a_bystander { entry / o = "-> aaa_a_by";   do / o = "~ aaa_a_by";   exit / o = "aaa_a_by ->"; };
+            initial state aaa_a_bystander { entry / o = "-> aaa_a_by";   do / o = "~ aaa_a_by";   exit / o = "aaa_a_by ->"; }
             state aaa_aa { entry / o = "-> aaa_aa";   do / o = "~ aaa_aa";   exit / o = "aaa_aa ->";
-              initial state aaa_aa_bystander { entry / o = "-> aaa_aa_by";   do / o = "~ aaa_aa_by";   exit / o = "aaa_aa_by ->"; };
-              state aaa_aaa { entry / o = "-> aaa_aaa";   do / o = "~ aaa_aaa";   exit / o = "aaa_aaa ->"; };
-              state aaa_aab { entry / o = "-> aaa_aab";   do / o = "~ aaa_aab";   exit / o = "aaa_aab ->"; };
-            };
+              initial state aaa_aa_bystander { entry / o = "-> aaa_aa_by";   do / o = "~ aaa_aa_by";   exit / o = "aaa_aa_by ->"; }
+              state aaa_aaa { entry / o = "-> aaa_aaa";   do / o = "~ aaa_aaa";   exit / o = "aaa_aaa ->"; }
+              state aaa_aab { entry / o = "-> aaa_aab";   do / o = "~ aaa_aab";   exit / o = "aaa_aab ->"; }
+            }
 
             state aaa_ab { entry / o = "-> aaa_ab";   do / o = "~ aaa_ab";   exit / o = "aaa_ab ->";
-              state aaa_aba { entry / o = "-> aaa_aba";   do / o = "~ aaa_aba";   exit / o = "aaa_aba ->"; };
-              initial state aaa_abb { entry / o = "-> aaa_abb";   do / o = "~ aaa_abb";   exit / o = "aaa_abb ->"; };
-            };
-          };
+              state aaa_aba { entry / o = "-> aaa_aba";   do / o = "~ aaa_aba";   exit / o = "aaa_aba ->"; }
+              initial state aaa_abb { entry / o = "-> aaa_abb";   do / o = "~ aaa_abb";   exit / o = "aaa_abb ->"; }
+            }
+          }
 
           state aaa_b { entry / o = "-> aaa_b";   do / o = "~ aaa_b";   exit / o = "aaa_b ->";
             state aaa_ba { entry / o = "-> aaa_ba";   do / o = "~ aaa_ba";   exit / o = "aaa_ba ->";
-              state aaa_baa { entry / o = "-> aaa_baa";   do / o = "~ aaa_baa";   exit / o = "aaa_baa ->"; };
-              initial state aaa_bab { entry / o = "-> aaa_bab";   do / o = "~ aaa_bab";   exit / o = "aaa_bab ->"; };
-            };
+              state aaa_baa { entry / o = "-> aaa_baa";   do / o = "~ aaa_baa";   exit / o = "aaa_baa ->"; }
+              initial state aaa_bab { entry / o = "-> aaa_bab";   do / o = "~ aaa_bab";   exit / o = "aaa_bab ->"; }
+            }
             initial state aaa_bb { entry / o = "-> aaa_bb";   do / o = "~ aaa_bb";   exit / o = "aaa_bb ->";
-              initial state aaa_bba { entry / o = "-> aaa_bba";   do / o = "~ aaa_bba";   exit / o = "aaa_bba ->"; };
-            };
-          };
-        };
+              initial state aaa_bba { entry / o = "-> aaa_bba";   do / o = "~ aaa_bba";   exit / o = "aaa_bba ->"; }
+            }
+          }
+        }
 
         state aab { entry / o = "-> aab";   do / o = "~ aab";   exit / o = "aab ->";
-          initial state aab_bystander { entry / o = "-> aab_by";   do / o = "~ aab_by";   exit / o = "aab_by ->"; };
+          initial state aab_bystander { entry / o = "-> aab_by";   do / o = "~ aab_by";   exit / o = "aab_by ->"; }
           state aab_a { entry / o = "-> aab_a";   do / o = "~ aab_a";   exit / o = "aab_a ->";
             state aab_aa { entry / o = "-> aab_aa";   do / o = "~ aab_aa";   exit / o = "aab_aa ->";
-              initial state aab_aaa { entry / o = "-> aab_aaa";   do / o = "~ aab_aaa";   exit / o = "aab_aaa ->"; };
-            };
+              initial state aab_aaa { entry / o = "-> aab_aaa";   do / o = "~ aab_aaa";   exit / o = "aab_aaa ->"; }
+            }
             initial state aab_ab { entry / o = "-> aab_ab";   do / o = "~ aab_ab";   exit / o = "aab_ab ->";
-              initial state aab_aba { entry / o = "-> aab_aba";   do / o = "~ aab_aba";   exit / o = "aab_aba ->"; };
-            };
-          };
-        };
-      };
+              initial state aab_aba { entry / o = "-> aab_aba";   do / o = "~ aab_aba";   exit / o = "aab_aba ->"; }
+            }
+          }
+        }
+      }
 
       state ab { entry / o = "-> ab";   do / o = "~ ab";   exit / o = "ab ->";
-        initial state ab_bystander { entry / o = "-> ab_by";   do / o = "~ ab_by";   exit / o = "ab_by ->"; };
+        initial state ab_bystander { entry / o = "-> ab_by";   do / o = "~ ab_by";   exit / o = "ab_by ->"; }
         state aba { entry / o = "-> aba";   do / o = "~ aba";   exit / o = "aba ->";
-          initial state aba_bystander { entry / o = "-> aba_by";   do / o = "~ aba_by";   exit / o = "aba_by ->"; };
+          initial state aba_bystander { entry / o = "-> aba_by";   do / o = "~ aba_by";   exit / o = "aba_by ->"; }
           state aba_a { entry / o = "-> aba_a";   do / o = "~ aba_a";   exit / o = "aba_a ->";
             initial state aba_aa { entry / o = "-> aba_aa";   do / o = "~ aba_aa";   exit / o = "aba_aa ->";
-              initial state aba_aaa { entry / o = "-> aba_aaa";   do / o = "~ aba_aaa";   exit / o = "aba_aaa ->"; };
-            };
-          };
-        };
-      };
-    };
+              initial state aba_aaa { entry / o = "-> aba_aaa";   do / o = "~ aba_aaa";   exit / o = "aba_aaa ->"; }
+            }
+          }
+        }
+      }
+    }
 
     state b { entry / o = "-> b";   do / o = "~ b";   exit / o = "b ->";
-      initial state b_bystander { entry / o = "-> b_by";   do / o = "~ b_by";   exit / o = "b_by ->"; };
+      initial state b_bystander { entry / o = "-> b_by";   do / o = "~ b_by";   exit / o = "b_by ->"; }
       state ba { entry / o = "-> ba";   do / o = "~ ba";   exit / o = "ba ->";
-        initial state ba_bystander { entry / o = "-> ba_by";   do / o = "~ ba_by";   exit / o = "ba_by ->"; };
-        state baa { entry / o = "-> baa";   do / o = "~ baa";   exit / o = "baa ->"; };
-      };
-    };
+        initial state ba_bystander { entry / o = "-> ba_by";   do / o = "~ ba_by";   exit / o = "ba_by ->"; }
+        state baa { entry / o = "-> baa";   do / o = "~ baa";   exit / o = "baa ->"; }
+      }
+    }
   }
 }

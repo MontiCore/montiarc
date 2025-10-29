@@ -35,7 +35,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "p = 1; " +
-      "}; " +
+      "} " +
       "}}",
     // assignment expression with field
     "component Comp3 { " +
@@ -44,7 +44,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "f = 1; " +
-      "}; " +
+      "} " +
       "}}",
     // assignment expression with local variable
     "component Comp4 { " +
@@ -53,7 +53,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "s -> s / { " +
       "int v = 1; " +
       "v = 2; " +
-      "}; " +
+      "} " +
       "}}",
     // assignment expression with port
     "component Comp5 { " +
@@ -62,7 +62,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "o = 2; " +
-      "}; " +
+      "} " +
       "}}",
     // increment expression with parameter
     "component Comp6(int p) { " +
@@ -70,7 +70,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "p++; " +
-      "}; " +
+      "} " +
       "}}",
     // increment expression with field
     "component Comp7 { " +
@@ -79,7 +79,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "f++; " +
-      "}; " +
+      "} " +
       "}}",
     // increment expression with local variable
     "component Comp8 { " +
@@ -88,7 +88,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "s -> s / { " +
       "int v = 1; " +
       "v++; " +
-      "}; " +
+      "} " +
       "}}",
     // decrement expression with parameter
     "component Comp9(int p) { " +
@@ -96,7 +96,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "p--; " +
-      "}; " +
+      "} " +
       "}}",
     // decrement expression with field
     "component Comp10 { " +
@@ -105,7 +105,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "f--; " +
-      "}; " +
+      "} " +
       "}}",
     // decrement expression with local variable
     "component Comp11 { " +
@@ -114,7 +114,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "s -> s / { " +
       "int v = 1; " +
       "v--; " +
-      "}; " +
+      "} " +
       "}}",
     // prefix increment expression with parameter
     "component Comp12(int p) { " +
@@ -122,7 +122,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "++p; " +
-      "}; " +
+      "} " +
       "}}",
     // prefix increment expression with field
     "component Comp13 { " +
@@ -131,7 +131,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "++f; " +
-      "}; " +
+      "} " +
       "}}",
     // prefix increment expression with local variable
     "component Comp14 { " +
@@ -140,7 +140,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "s -> s / { " +
       "int v = 1; " +
       "++v; " +
-      "}; " +
+      "} " +
       "}}",
     // prefix decrement expression with parameter
     "component Comp15(int p) { " +
@@ -148,7 +148,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "--p; " +
-      "}; " +
+      "} " +
       "}}",
     // prefix decrement expression with field
     "component Comp16 { " +
@@ -157,7 +157,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "initial state s; " +
       "s -> s / { " +
       "--f; " +
-      "}; " +
+      "} " +
       "}}",
     // prefix decrement expression with local variable
     "component Comp17 { " +
@@ -166,7 +166,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "s -> s / { " +
       "int v = 1; " +
       "--v; " +
-      "}; " +
+      "} " +
       "}}",
     // assignment expression in compute
     "component Comp18(int p) {" +
@@ -194,7 +194,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
       "o = ++v;" +
       "o = --v;" +
       "o = o = v = v;" +
-      "}; " +
+      "} " +
       "}}"
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
@@ -241,7 +241,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "0 = 1; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE),
       // inc expression with literal value
@@ -250,7 +250,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "0++; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE),
       // dec expression with literal value
@@ -259,7 +259,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "0--; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE),
       // prefix inc expression with literal value
@@ -268,7 +268,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "--0; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE),
       // prefix dec expression with literal value
@@ -277,7 +277,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "--0; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE),
       // nested assignment expression with literal value
@@ -286,7 +286,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "int i = 1++; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE),
       // multiple nested assignment expression with literal value
@@ -295,7 +295,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "1++ = 1 = 1; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE,
         MCError.EXPRESSION_LVALUE,
@@ -306,7 +306,7 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
           "initial state s; " +
           "s -> s / { " +
           "func() = 1; " +
-          "}; " +
+          "} " +
           "}}",
         MCError.EXPRESSION_LVALUE)
     );

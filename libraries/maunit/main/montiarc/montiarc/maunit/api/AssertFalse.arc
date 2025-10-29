@@ -10,6 +10,6 @@ component AssertFalse(String message = "") {
     initial state S;
     S -> S actual / {
       Assertions.assertFalse(actual, message);
-    };
+    }
   }
 }

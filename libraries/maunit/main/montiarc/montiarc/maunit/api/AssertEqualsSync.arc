@@ -15,6 +15,6 @@ component AssertEqualsSync<T>(List<T> expected, String message = "") {
       if (index >= expected.size()) Assertions.fail("Unexpected additional message received with value: " + actual);
       Assertions.assertTrue(expected.get(index) == actual, message);
       index++;
-    };
+    }
   }
 }

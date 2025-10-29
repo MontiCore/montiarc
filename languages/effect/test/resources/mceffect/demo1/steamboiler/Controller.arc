@@ -8,7 +8,7 @@ component Controller {
 
   <<delayed>> automaton {
     initial state Anon;
-    Anon -> Anon [waterLevel == 0 ] waterLevel / { signal = false; };
-    Anon -> Anon [waterLevel != 0 ] waterLevel / { signal = true; };
+    Anon -> Anon [waterLevel == 0 ] waterLevel / { signal = false; }
+    Anon -> Anon [waterLevel != 0 ] waterLevel / { signal = true; }
   }
 }

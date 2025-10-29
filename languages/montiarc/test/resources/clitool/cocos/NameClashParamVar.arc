@@ -15,6 +15,6 @@ component NameClashParamVar(int p) {
 
   automaton {
     initial state S;
-    S -> S [i > p] i / { o = p; };
+    S -> S [i > p] i / { o = p; }
   }
 }

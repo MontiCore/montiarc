@@ -6,6 +6,6 @@ component DoubleWrapperOut {
 
   automaton {
     initial state S;
-    S -> S / { p = 0.1; };
+    S -> S / { p = 0.1; }
   }
 }

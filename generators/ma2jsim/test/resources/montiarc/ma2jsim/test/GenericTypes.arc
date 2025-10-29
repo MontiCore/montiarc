@@ -16,7 +16,7 @@ component GenericTypes {
       initial state S;
 
       // emit received message
-      S -> S [ iOpt.isPresent() ] / { iBuf = iOpt; o = iBuf.get(); };
-      S -> S [ iOpt.isEmpty() ] / { o = iBuf.orElse(-1); };
+      S -> S [ iOpt.isPresent() ] / { iBuf = iOpt; o = iBuf.get(); }
+      S -> S [ iOpt.isEmpty() ] / { o = iBuf.orElse(-1); }
     }
 }

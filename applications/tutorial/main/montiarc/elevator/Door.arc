@@ -10,9 +10,9 @@ component Door {
 
     Closed -> Open [shouldOpen == true] shouldOpen / {
       System.out.println("Door has opened");
-    };
+    }
     Open -> Closed [shouldOpen == false] shouldOpen / {
       System.out.println("Door has closed");
-    };
+    }
   }
 }

@@ -5,19 +5,15 @@ import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcautomaton._visitor.SCTransitionsCollector;
 import arcbasis._ast.ASTPortDeclaration;
-import de.monticore.scbasis._ast.ASTSCEmptyBody;
-import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -32,15 +28,6 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     traverser.add4SCBasis(collector);
     this.accept(traverser);
     return collector.getTransitions().stream();
-  }
-
-  /**
-   * @return all initial states together with their init-action. Note that if one initial state is declared multiple
-   * times (probably by mistake) then all its declarations are contained in the stream, together with their
-   * corresponding init action.
-   */
-  public Stream<Pair<ASTSCState, ASTSCSAnte>> streamInitialOutput() {
-    return streamInitialStates().map(state -> Pair.of(state, state.getSCSAnte()));
   }
 
   /**
@@ -128,7 +115,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     List<ASTSCState> path = new ArrayList<>();
     path.add(state);
     for (ASTSCState s : getStates()) {
-      if (s.getSCSBody() instanceof ASTSCEmptyBody)
+      if (!s.isPresentSCSBody())
         continue;
       for (ASTSCStateElement body : ((ASTSCHierarchyBody) s.getSCSBody()).getSCStateElementList()) {
         if (ArcAutomatonMill.typeDispatcher().isSCBasisASTSCState(body) && ArcAutomatonMill.typeDispatcher().asSCBasisASTSCState(body).getName().equals(state.getName()))

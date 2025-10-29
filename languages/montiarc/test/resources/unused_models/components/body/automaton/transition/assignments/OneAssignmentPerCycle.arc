@@ -26,8 +26,8 @@ component OneAssignmentPerCycle {
                               o=3,
                               o=3,
                               x=1,
-                              x=5};
+                              x=5}
 
-        S / { x = [5,2,4,3,1]};
+        S / { x = [5,2,4,3,1]}
     }
 }

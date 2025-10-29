@@ -6,6 +6,6 @@ component DoubleIn {
 
   automaton {
     initial state S;
-    S -> S / { double foo = p; };
+    S -> S / { double foo = p; }
   }
 }

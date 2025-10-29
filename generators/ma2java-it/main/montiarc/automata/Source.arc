@@ -20,9 +20,9 @@ component Source {
     state B;
 
     // transition to B, emit ON
-    A -> B / { o = OnOff.ON; };
+    A -> B / { o = OnOff.ON; }
 
     // transition to A, emit OFF
-    B -> A / { o = OnOff.OFF; };
+    B -> A / { o = OnOff.OFF; }
   }
 }

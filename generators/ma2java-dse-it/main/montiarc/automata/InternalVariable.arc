@@ -16,6 +16,6 @@ component InternalVariable {
     Idle -> Idle /{
       intern = intern + 1;
       out = intern;
-    };
+    }
   }
 }

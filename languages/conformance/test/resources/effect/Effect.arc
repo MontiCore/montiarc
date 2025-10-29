@@ -8,7 +8,7 @@ component Effect {
 
   automaton {
     initial state S;
-    S -> S input / { output = input; };
-    S -> S [input==1337] input / { output = 4000; };
+    S -> S input / { output = input; }
+    S -> S [input==1337] input / { output = 4000; }
   }
 }
