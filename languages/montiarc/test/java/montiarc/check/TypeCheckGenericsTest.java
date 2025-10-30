@@ -565,7 +565,7 @@ public class TypeCheckGenericsTest extends MontiArcTestBase {
     "aGenericFloat = aBool, 0xA0179",
     "aGenericDouble = aBool, 0xA0179"
   })
-  public void testValidExpression(@NotNull String expr, @NotNull String error) throws IOException {
+  public void testInvalidExpression(@NotNull String expr, @NotNull String error) throws IOException {
 
     Preconditions.checkNotNull(expr);
     Preconditions.checkNotNull(error);
