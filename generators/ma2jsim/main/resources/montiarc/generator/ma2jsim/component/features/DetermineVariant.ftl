@@ -14,7 +14,11 @@ protected int determineVariant() {
 
   <#list helper.getVariants(ast) as variant>
     if (${prettyPrinter.prettyprintCondition(variant)}) {
+      <#if hasOnlyOneVariant>
+      return 0;
+      <#else>
       return ${helper.variantSuffix(variant)};
+      </#if>
     }
   <#sep> else </#sep>
   </#list>
