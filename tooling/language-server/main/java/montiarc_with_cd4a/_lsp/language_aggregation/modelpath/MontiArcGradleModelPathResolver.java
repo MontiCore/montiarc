@@ -21,8 +21,10 @@ public class MontiArcGradleModelPathResolver extends ModelPathResolver<MultiProj
         new MultiProjectLanguageServerGradleModelPathResolver(rootDir) {
           @Override
           protected CompletableFuture<MultiProjectLayout> loadModelPaths() {
-            gradleVersion = "7.6";
+            gradleVersion = "8.5";
             gradleTaskName = "aggregateAndProcessInfo";
+            minimumJavaVersion = 21;
+            maximumJavaVersion = 24;
             return super.loadModelPaths();
           }
 
