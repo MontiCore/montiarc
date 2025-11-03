@@ -19,7 +19,7 @@
       
       
       <link rel="icon" href="../../../assets/images/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.22">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
     
     
       
@@ -3005,27 +3005,26 @@ The test is parameterized by the input and output streams of the SUT.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Timed</label><label for="__tabbed_1_2">Sync</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.AssertEqualsTimed</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.AssertEqualsTimed</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.EmitTimed</span><span class="p">;</span>
 
 <span class="o">&lt;&lt;</span><span class="n">test</span><span class="p">,</span>
 <span class="w">  </span><span class="n">ticks</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
 <span class="w">  </span><span class="n">a</span><span class="o">=[</span>
-<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span><span class="p">,</span>
-<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]]</span>
+<span class="w">    </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="o">&gt;</span>
 <span class="w">  </span><span class="o">]</span><span class="p">,</span>
 <span class="w">  </span><span class="n">b</span><span class="o">=[</span>
-<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span><span class="p">,</span>
-<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]]</span>
+<span class="w">    </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="o">&gt;</span>
 <span class="w">  </span><span class="o">]</span><span class="p">,</span>
 <span class="w">  </span><span class="n">expected</span><span class="o">=[</span>
-<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span><span class="p">,</span>
-<span class="w">    </span><span class="o">[[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">false</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="o">[</span><span class="kc">true</span><span class="o">]]</span>
-<span class="w">  </span><span class="o">]&gt;&gt;</span>
-<span class="w">  </span><span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Event</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="n">Tick</span><span class="o">&gt;</span>
+<span class="o">]&gt;&gt;</span>
+<span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">EventStream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">EventStream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">EventStream</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 
 <span class="w">    </span><span class="n">And</span><span class="w"> </span><span class="n">sut</span><span class="p">;</span>
 
@@ -3036,41 +3035,36 @@ The test is parameterized by the input and output streams of the SUT.</p>
 <span class="w">    </span><span class="n">AssertEqualsTimed</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">assertEquals</span><span class="p">(</span><span class="n">expected</span><span class="p">);</span>
 <span class="w">    </span><span class="n">EmitTimed</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterA</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
 <span class="w">    </span><span class="n">EmitTimed</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterB</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.AssertEqualsSync</span><span class="p">;</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.EmitSync</span><span class="p">;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.EmitSync</span><span class="p">;</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.maunit.api.AssertEqualsUntimed</span><span class="p">;</span>
 
-<span class="o">&lt;&lt;</span><span class="n">test</span><span class="p">,</span>
-<span class="w">  </span><span class="n">ticks</span><span class="o">=[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">]</span><span class="p">,</span>
-<span class="w">  </span><span class="n">a</span><span class="o">=[</span>
-<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span>
-<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span>
-<span class="w">  </span><span class="o">]</span><span class="p">,</span>
-<span class="w">  </span><span class="n">b</span><span class="o">=[</span>
-<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span>
-<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span>
-<span class="w">  </span><span class="o">]</span><span class="p">,</span>
-<span class="w">  </span><span class="n">expected</span><span class="o">=[</span>
-<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span><span class="p">,</span>
-<span class="w">    </span><span class="o">[</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">]</span>
-<span class="w">  </span><span class="o">]&gt;&gt;</span>
-<span class="w">  </span><span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span><span class="w"> </span>
-<span class="w">                    </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="o">&lt;&lt;</span><span class="n">test</span><span class="p">,</span><span class="w"> </span><span class="n">ticks</span><span class="o">=[</span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">5</span><span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">a</span><span class="o">=[</span>
+<span class="w">    </span><span class="n">Sync</span><span class="o">&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Sync</span><span class="o">&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">&gt;</span>
+<span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="o">=[</span>
+<span class="w">    </span><span class="n">Sync</span><span class="o">&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Sync</span><span class="o">&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">&gt;</span>
+<span class="o">]</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span><span class="o">=[</span>
+<span class="w">    </span><span class="n">Untimed</span><span class="o">&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">&gt;</span><span class="p">,</span>
+<span class="w">    </span><span class="n">Untimed</span><span class="o">&lt;</span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w"> </span><span class="kc">true</span><span class="o">&gt;</span>
+<span class="o">]&gt;&gt;</span>
+<span class="kd">component</span> <span class="nf">AndTest</span><span class="p">(</span><span class="n">SyncStream</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">a</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">SyncStream</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">UntimedStream</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="n">expected</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">And</span><span class="w"> </span><span class="n">sut</span><span class="p">;</span>
 
 <span class="w">    </span><span class="n">emitterA</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">a</span><span class="p">;</span>
 <span class="w">    </span><span class="n">emitterB</span><span class="p">.</span><span class="na">out</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">sut</span><span class="p">.</span><span class="na">b</span><span class="p">;</span>
 <span class="w">    </span><span class="n">sut</span><span class="p">.</span><span class="na">q</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">assertEquals</span><span class="p">.</span><span class="na">actual</span><span class="p">;</span>
 
-<span class="w">    </span><span class="n">AssertEqualsSync</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">assertEquals</span><span class="p">(</span><span class="n">expected</span><span class="p">);</span>
-<span class="w">    </span><span class="n">EmitSync</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterA</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
-<span class="w">    </span><span class="n">EmitSync</span><span class="o">&lt;</span><span class="n">Boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterB</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
-<span class="w">  </span><span class="p">}</span>
+<span class="w">    </span><span class="n">AssertEqualsUntimed</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">assertEquals</span><span class="p">(</span><span class="n">expected</span><span class="p">);</span>
+<span class="w">    </span><span class="n">EmitSync</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterA</span><span class="p">(</span><span class="n">a</span><span class="p">);</span>
+<span class="w">    </span><span class="n">EmitSync</span><span class="o">&lt;</span><span class="kt">boolean</span><span class="o">&gt;</span><span class="w"> </span><span class="nf">emitterB</span><span class="p">(</span><span class="n">b</span><span class="p">);</span>
+<span class="p">}</span>
 </code></pre></div>
 </div>
 </div>
@@ -3161,27 +3155,23 @@ outgoing port called <code>out</code>. All components lie in the <code>montiarc.
   The expected value is specified by the parameter <code>expected</code>. 
   This is a generic component with a single input port T actual that asserts 
   all incoming messages are equal to that parameter expected.</li>
-<li><strong><code>AssertEqualsSync&lt;T&gt;(List&lt;T&gt; expected)</code></strong>
+<li><strong><code>AssertEqualsSync&lt;T&gt;(SyncStream&lt;T&gt; expected)</code></strong>
   A component with a single input port, of type T called <code>actual</code>, that asserts 
-  the stream of incoming messages is equal to expected interpreted as a 
-  synchronous stream.
+  the stream of incoming messages is equal to expected synchronous stream.
   It also fails the test if more messages are received than what was expected.</li>
-<li><strong><code>AssertEqualsUntimed&lt;T&gt;(List&lt;T&gt; expected)</code></strong>
+<li><strong><code>AssertEqualsUntimed&lt;T&gt;(UntimedStream&lt;T&gt; expected)</code></strong>
   A component with a single input port of type T called actual, that asserts 
   the stream of incoming messages is equal to expected while ignoring ticks in 
   the stream. 
   It fails the test if more messages are received than what was expected.</li>
-<li><strong><code>AssertEqualsTimed&lt;T&gt;(List&lt;List&lt;T&gt;&gt; expected)</code></strong>
+<li><strong><code>AssertEqualsTimed&lt;T&gt;(EventStream&lt;T&gt; expected)</code></strong>
   Like the <code>AssertEqualsUntimed</code>, this is a component with a single input port 
   T actual. 
-  But, instead of ignoring ticks, the expected values are grouped by ticks, 
-  and after every tick, the next sublist is expected. 
+  But, instead of ignoring ticks, they are asserted, too. 
   If more messages arrive in one tick than are declared in the corresponding 
-  sublist the test fails. 
+  stream the test fails. 
   Likewise, if fewer messages arrive than were expected, the test also fails. 
-  All received messages have to be equal to the expected messages. 
-  For example, a list of <code>[[x, y], [z]]</code> would be interpreted as an expected 
-  stream of <code>〈x, y, Tick, z, Tick〉</code>.</li>
+  All received messages have to be equal to the expected messages.</li>
 </ul>
 <h5 id="emitter">Emitter</h5>
 <ul>
@@ -3192,19 +3182,19 @@ outgoing port called <code>out</code>. All components lie in the <code>montiarc.
   <code>〈output, Tick, output, Tick, output, Tick, ...〉</code>. 
   It can be used to generate a mock message every tick to drive a test for 
   sync or timed components.</li>
-<li><strong><code>EmitList&lt;T&gt;(List&lt;T&gt; output)</code></strong> 
+<li><strong><code>EmitList&lt;T&gt;(UntimedStream&lt;T&gt; output)</code></strong> 
   A timed variant of the Emit component. 
   Instead of a single message, all elements <code>ei</code> of output are emitted in one 
   time slice. 
   The resulting output is an infinite stream of the form 
   <code>〈e1 , e2 , ..., en , Tick, e1 , e2 , ..., en , Tick, ...〉</code>.</li>
-<li><strong><code>EmitSync&lt;T&gt;(List&lt;T&gt; output)</code></strong> 
+<li><strong><code>EmitSync&lt;T&gt;(SyncStream&lt;T&gt; output)</code></strong> 
   A component that will send the elements of output on the sync port out with 
   a tick after each. 
   After all elements have been sent, the output stream is repeated. 
   Consequently, it gives an infinite output stream of the form 
   <code>〈e1 , Tick, e2 , Tick, ..., en , Tick, e1 , ...〉</code>.</li>
-<li><strong><code>EmitTimed&lt;T&gt;(List&lt;List&lt;T&gt;&gt; output)</code></strong> 
+<li><strong><code>EmitTimed&lt;T&gt;(EventStream&lt;T&gt; output)</code></strong> 
   Similarly to <code>EmitSync</code>, this component will emit messages on port out. 
   The messages are timed, the sublists are grouped by ticks, and all elements 
   are sent out as individual messages. 
