@@ -2,6 +2,7 @@
 import montiarc.build.BuildConstants
 
 plugins {
+  id("montiarc.build.jvm")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 

@@ -4,6 +4,7 @@ import montiarc.gradle.montiarc.cd2pojo4MaDeclarationConfigName
 import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
 
 plugins {
+  id("montiarc.build.jvm")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 

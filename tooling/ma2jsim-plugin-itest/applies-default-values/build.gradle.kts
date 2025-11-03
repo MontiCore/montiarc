@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
+  id("montiarc.build.jvm")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 

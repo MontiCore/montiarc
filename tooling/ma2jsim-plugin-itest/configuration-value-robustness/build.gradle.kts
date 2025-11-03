@@ -8,6 +8,7 @@ import montiarc.gradle.ma2jsim.compileMontiarcTaskName
  */
 
 plugins {
+  id("montiarc.build.jvm")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
 
