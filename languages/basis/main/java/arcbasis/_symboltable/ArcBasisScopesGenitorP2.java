@@ -15,6 +15,7 @@ import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._visitor.ArcBasisHandler;
 import arcbasis._visitor.ArcBasisTraverser;
 import arcbasis._visitor.ArcBasisVisitor2;
+import arcbasis.check.ArcBasisFullSynthesizeCompKind;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -47,7 +48,7 @@ public class ArcBasisScopesGenitorP2
   protected ISynthesizeComponent componentSynthesizer;
 
   public ArcBasisScopesGenitorP2() {
-    this(new FullSynthesizeCompKindFromMCSimpleGenericTypes());
+    this(new ArcBasisFullSynthesizeCompKind());
   }
 
   public ArcBasisScopesGenitorP2(@NotNull ISynthesizeComponent componentSynthesizer) {
