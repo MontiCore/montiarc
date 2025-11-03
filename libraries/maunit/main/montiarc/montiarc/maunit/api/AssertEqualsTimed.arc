@@ -2,32 +2,29 @@
 package montiarc.maunit.api;
 
 import montiarc.maunit.api.Assertions;
-import java.util.List;
 
-component AssertEqualsTimed<T>(List<List<T>> expected, String message = "") {
+component AssertEqualsTimed<T>(EventStream<T> expected, String message = "") {
   port in T actual;
 
-  int tick = 0;
-  int index = 0;
+  UntimedStream<T> remainingTick = expected.isEmpty() ? Untimed<T><> : expected.first();
+  EventStream<T> remaining = expected.isEmpty() ? expected : expected.dropFirst();
 
   automaton {
     initial state S;
     S -> S / {
-      if (tick >= expected.size()) {
-        Assertions.fail("Unexpected additional tick: " + tick);
+      if (!remainingTick.isEmpty()) {
+        Assertions.fail("Not all messages received in time slice");
       }
-      if (index < expected.get(tick).size()) {
-        Assertions.fail("Not all expected messages received in tick: " + tick);
+      if (remaining.isEmpty()) {
+        Assertions.fail("Unexpected additional tick");
       }
-      tick++;
-      index = 0;
+      remainingTick = remaining.first();
+      remaining = remaining.dropFirst();
     }
     S -> S actual / {
-      if (tick >= expected.size() || index >= expected.get(tick).size()) {
-        Assertions.fail("Unexpected additional message received in tick: " + tick + " with value: " + actual);
-      }
-      Assertions.assertTrue(expected.get(tick).get(index) == actual, message);
-      index++;
+      if (remainingTick.isEmpty()) Assertions.fail("Unexpected additional message received with value: " + actual);
+      Assertions.assertTrue(remainingTick.first() == actual, message);
+      remainingTick = remainingTick.dropFirst();
     }
   }
 }

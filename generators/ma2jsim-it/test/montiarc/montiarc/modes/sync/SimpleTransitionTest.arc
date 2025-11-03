@@ -4,16 +4,15 @@ package montiarc.modes.sync;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 
 <<test, ticks=[0,1], input=[
-  [],
-  [OnOff.OFF]
+  Sync<OnOff><>,
+  Sync<OnOff.OFF>
 ], output=[
-  [],
-  [[OnOff.OFF]]
+  <OnOff><>,
+  <OnOff.OFF, Tick>
 ]>>
-component SimpleTransitionTest(List<OnOff> input, List<List<OnOff>> output) {
+component SimpleTransitionTest(SyncStream<OnOff> input, EventStream<OnOff> output) {
   SimpleTransition sut;
 
   generator.out -> sut.i;

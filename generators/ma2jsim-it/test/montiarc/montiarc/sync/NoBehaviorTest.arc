@@ -4,26 +4,25 @@ package montiarc.sync;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 
 <<test, ticks=[1,1,2,2,2,2,3], input=[
-  [OnOff.OFF],
-  [OnOff.ON],
-  [OnOff.ON, OnOff.ON],
-  [OnOff.OFF, OnOff.OFF],
-  [OnOff.ON, OnOff.OFF],
-  [OnOff.OFF, OnOff.ON],
-  [OnOff.ON, OnOff.ON, OnOff.ON]
+  Sync<OnOff.OFF>,
+  Sync<OnOff.ON>,
+  Sync<OnOff.ON, OnOff.ON>,
+  Sync<OnOff.OFF, OnOff.OFF>,
+  Sync<OnOff.ON, OnOff.OFF>,
+  Sync<OnOff.OFF, OnOff.ON>,
+  Sync<OnOff.ON, OnOff.ON, OnOff.ON>
 ], output=[
-  [[]],
-  [[]],
-  [[], []],
-  [[], []],
-  [[], []],
-  [[], []],
-  [[], [], []]
+  <OnOff><Tick>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff><Tick, Tick, Tick>
 ]>>
-component NoBehaviorTest(List<OnOff> input, List<List<OnOff>> output) {
+component NoBehaviorTest(SyncStream<OnOff> input, EventStream<OnOff> output) {
   NoBehavior sut();
 
   generator.out -> sut.i;

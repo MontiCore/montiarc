@@ -3,10 +3,9 @@ package montiarc.timed.composition;
 
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.Emit;
-import java.util.List;
 
-<<test, ticks=[0,1,2,3], expected=[[], [[]], [[],[]], [[],[],[]]]>>
-component UnusedInPortsTest(List<List<Boolean>> expected) {
+<<test, ticks=[0,1,2,3], expected=[<Boolean><>, <Boolean><Tick>, <Boolean><Tick, Tick>, <Boolean><Tick, Tick, Tick>]>>
+component UnusedInPortsTest(EventStream<Boolean> expected) {
   UnusedInPorts sut();
 
   emitter.out -> sut.i1, sut.i2;

@@ -3,20 +3,19 @@ package montiarc.lang.logic.gate;
 
 import montiarc.maunit.api.EmitSync;
 import montiarc.maunit.api.AssertEqualsUntimed;
-import java.util.List;
 
 <<test, ticks=[4, 5], a=[
- [false, false, true, true],
- [false, false, false, false, true]
+ Sync<false, false, true, true>,
+ Sync<false, false, false, false, true>
 ], b=[
- [false, true, false, true],
- [false, true, false, true, true]
+ Sync<false, true, false, true>,
+ Sync<false, true, false, true, true>
 ], expected=[
- [false, false, false, true],
- [false, false, false, false, true]
+ Untimed<false, false, false, true>,
+ Untimed<false, false, false, false, true>
 ]>>
-component AndTest(List<boolean> a, List<boolean> b,
- List<boolean> expected) {
+component AndTest(SyncStream<boolean> a, SyncStream<boolean> b,
+ UntimedStream<boolean> expected) {
  And sut;
 
  emitterA.out -> sut.a;

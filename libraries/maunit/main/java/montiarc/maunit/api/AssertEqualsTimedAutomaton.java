@@ -14,29 +14,28 @@ public class AssertEqualsTimedAutomaton<T> extends AssertEqualsTimedAutomatonTOP
       .setGuard((actual) -> true)
       .setAction(
         (actual) -> {
-          java.util.List<java.util.List<T>> expected = context.param_expected();
+          this.states.state_S.exitSub(state);
+
+          de.monticore.rte.streams.EventStream<T> expected = context.param_expected();
           java.lang.String message = context.param_message();
 
-          int tick = context.field_tick();
-          int index = context.field_index();
+          de.monticore.rte.streams.UntimedStream<T> remainingTick =
+            context.field_remainingTick();
+          de.monticore.rte.streams.EventStream<T> remaining = context.field_remaining();
 
-          if (tick >= expected.size() || index >= expected.get(tick).size()) {
-            Assertions.fail(
-              "Unexpected additional message received in tick: "
-                + tick
-                + " with value: "
-                + actual);
+          if (remainingTick.isEmpty()) {
+            montiarc.maunit.api.Assertions.fail(
+              "Unexpected additional message received with value: " + actual);
           }
-
           // Override assertEquals since == compares object hashes (not desired for Wrapped primitives and Strings)
           // Cannot do this directly in MontiArc since there T does not inherit from Object
-          Assertions.assertEquals(
-            expected.get(tick).get(index), actual, message);
-          index++;
+          montiarc.maunit.api.Assertions.assertEquals(remainingTick.first(), actual, message);
+          remainingTick = remainingTick.dropFirst();
 
-          context.set_field_tick(tick);
-          context.set_field_index(index);
-          this.states.state_S.doAction();
+          if (remainingTick != null) context.set_field_remainingTick(remainingTick);
+          if (remaining != null) context.set_field_remaining(remaining);
+
+          this.states.state_S.enterWithSub();
         })
       .build();
   }

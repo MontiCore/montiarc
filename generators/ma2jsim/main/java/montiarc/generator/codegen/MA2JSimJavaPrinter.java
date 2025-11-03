@@ -2,11 +2,10 @@
 package montiarc.generator.codegen;
 
 import com.google.common.base.Preconditions;
-import de.monticore.ocl.codegen.util.VariableNaming;
-import de.monticore.ocl.codegen.visitors.SetExpressionsPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
+import de.se_rwth.commons.Names;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
@@ -22,6 +21,8 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
 
+  SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter;
+
   public MA2JSimJavaPrinter() {
     this(new IndentPrinter());
   }
@@ -36,8 +37,7 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
 
   public MA2JSimJavaPrinter(@NotNull IndentPrinter printer, boolean printComments, @Nullable ComponentTypeSymbol currentVariant) {
     super(Preconditions.checkNotNull(printer), printComments);
-
-    CodeGenContext context = new CodeGenContext();
+    symTypeExpressionJavaPrinter = new SymTypeExpressionJavaPrinter();
 
     CommonExpressionsJavaPrinter commonExpressionsJavaPrinter = new CommonExpressionsJavaPrinter(printer, printComments);
     this.traverser.setCommonExpressionsHandler(commonExpressionsJavaPrinter);
@@ -49,17 +49,17 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.getExpressionsBasisVisitorList().clear();
     this.traverser.add4ExpressionsBasis(expressionsBasisJavaPrinter);
 
-    MCBasicTypesJavaPrinter mcBasicTypesJavaPrinter = new MCBasicTypesJavaPrinter(printer, context, printComments);
+    MCBasicTypesJavaPrinter mcBasicTypesJavaPrinter = new MCBasicTypesJavaPrinter(printer, symTypeExpressionJavaPrinter, printComments);
     this.traverser.setMCBasicTypesHandler(mcBasicTypesJavaPrinter);
     this.traverser.getMCBasicTypesVisitorList().clear();
     this.traverser.add4MCBasicTypes(mcBasicTypesJavaPrinter);
 
-    MCSimpleGenericTypesJavaPrinter mcSimpleGenericTypesJavaPrinter = new MCSimpleGenericTypesJavaPrinter(printer, context, printComments);
+    MCSimpleGenericTypesJavaPrinter mcSimpleGenericTypesJavaPrinter = new MCSimpleGenericTypesJavaPrinter(printer, symTypeExpressionJavaPrinter, printComments);
     this.traverser.setMCSimpleGenericTypesHandler(mcSimpleGenericTypesJavaPrinter);
     this.traverser.getMCSimpleGenericTypesVisitorList().clear();
     this.traverser.add4MCSimpleGenericTypes(mcSimpleGenericTypesJavaPrinter);
 
-    MCCollectionTypesJavaPrinter mcCollectionTypesJavaPrinter = new MCCollectionTypesJavaPrinter(printer, context, printComments);
+    MCCollectionTypesJavaPrinter mcCollectionTypesJavaPrinter = new MCCollectionTypesJavaPrinter(printer, symTypeExpressionJavaPrinter, printComments);
     this.traverser.setMCCollectionTypesHandler(mcCollectionTypesJavaPrinter);
     this.traverser.getMCCollectionTypesVisitorList().clear();
     this.traverser.add4MCCollectionTypes(mcCollectionTypesJavaPrinter);
@@ -70,7 +70,7 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.getAssignmentExpressionsVisitorList().clear();
     this.traverser.add4AssignmentExpressions(assignmentExpressionsPrinter);
 
-    SetExpressionsPrinter setExpressionsPrinter = new SetExpressionsPrinter(printer, new VariableNaming());
+    SetExpressionJavaPrinter setExpressionsPrinter = new SetExpressionJavaPrinter(printer, symTypeExpressionJavaPrinter);
     this.traverser.setSetExpressionsHandler(setExpressionsPrinter);
     this.traverser.getSetExpressionsVisitorList().clear();
     this.traverser.add4SetExpressions(setExpressionsPrinter);
@@ -84,6 +84,11 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
     this.traverser.setMCVarDeclarationStatementsHandler(mcVarDeclarationStatementsJavaPrinter);
     this.traverser.getMCVarDeclarationStatementsVisitorList().clear();
     this.traverser.add4MCVarDeclarationStatements(mcVarDeclarationStatementsJavaPrinter);
+
+    StreamExpressionsJavaPrinter streamExpressionsJavaPrinter = new StreamExpressionsJavaPrinter(printer, printComments);
+    this.traverser.setStreamExpressionsHandler(streamExpressionsJavaPrinter);
+    this.traverser.getStreamExpressionsVisitorList().clear();
+    this.traverser.add4StreamExpressions(streamExpressionsJavaPrinter);
   }
 
   public String prettyprint(List<Expression> expressions) {
@@ -132,27 +137,6 @@ public class MA2JSimJavaPrinter extends MontiArcFullPrettyPrinter {
   }
 
   public String prettyprint(SymTypeExpression expression, boolean boxPrimitives) {
-    if (expression.isPrimitive()) {
-      if (boxPrimitives) {
-        return expression.asPrimitive().getBoxedPrimitiveName();
-      } else {
-        return expression.asPrimitive().getPrimitiveName();
-      }
-    }
-    if (expression.isTypeVariable()) {
-      return expression.print();
-    }
-    if (expression.isGenericType()) {
-      StringBuilder r = new StringBuilder(expression.asGenericType().getTypeConstructorFullName()).append('<');
-      for (int i = 0; i < expression.asGenericType().getArgumentList().size(); i++) {
-        r.append(prettyprint(expression.asGenericType().getArgument(i), true));
-        if (i < expression.asGenericType().getArgumentList().size() - 1) {
-          r.append(',');
-        }
-      }
-      return r.append('>').toString();
-    }
-
-    return expression.printFullName();
+    return symTypeExpressionJavaPrinter.prettyprint(expression, boxPrimitives);
   }
 }

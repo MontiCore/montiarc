@@ -23,64 +23,24 @@ import static de.monticore.types.mcbasictypes._ast.ASTConstantsMCBasicTypes.SHOR
 
 public class MCBasicTypesJavaPrinter extends MCBasicTypesPrettyPrinter {
 
-  protected CodeGenContext context;
+  protected SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter;
 
   public MCBasicTypesJavaPrinter(@NotNull IndentPrinter printer,
-                                 @NotNull CodeGenContext context,
+                                 @NotNull SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter,
                                  boolean printComments) {
     super(printer, printComments);
-    this.context = Preconditions.checkNotNull(context);
-  }
-
-  protected CodeGenContext getContext() {
-    return this.context;
+    this.symTypeExpressionJavaPrinter = Preconditions.checkNotNull(symTypeExpressionJavaPrinter);
   }
 
   @Override
   public void handle(@NotNull ASTMCQualifiedName node) {
     Preconditions.checkNotNull(node);
-    if (!node.isQualified()) {
-      TypeSymbol type = TypeCheck3.symTypeFromAST(node).getTypeInfo();
-      if (MontiArcMill.typeDispatcher().isOOSymbolsOOType(type)) {
-        getPrinter().print(type.getFullName() + " ");
-        return;
-      }
-    }
-    super.handle(node);
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)) + " ");
   }
 
   @Override
   public void handle(@NotNull ASTMCPrimitiveType node) {
     Preconditions.checkNotNull(node);
-    if (!getContext().isInGenericTypeExpression()) {
-      super.handle(node);
-    } else {
-      // Box primitives when InGenericTypeExpression
-      if (this.isPrintComments()) {
-        CommentPrettyPrinter.printPreComments(node, this.getPrinter());
-      }
-
-      if (node.getPrimitive() == BOOLEAN) {
-        getPrinter().print("Boolean ");
-      } else if (node.getPrimitive() == BYTE) {
-        getPrinter().print("Byte ");
-      } else if (node.getPrimitive() == SHORT) {
-        getPrinter().print("Short ");
-      } else if (node.getPrimitive() == INT) {
-        getPrinter().print("Integer ");
-      } else if (node.getPrimitive() == LONG) {
-        getPrinter().print("Long ");
-      } else if (node.getPrimitive() == CHAR) {
-        getPrinter().print("Character ");
-      } else if (node.getPrimitive() == FLOAT) {
-        getPrinter().print("Float ");
-      } else if (node.getPrimitive() == DOUBLE) {
-        getPrinter().print("Double ");
-      }
-
-      if (this.isPrintComments()) {
-        CommentPrettyPrinter.printPostComments(node, this.getPrinter());
-      }
-    }
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)) + " ");
   }
 }

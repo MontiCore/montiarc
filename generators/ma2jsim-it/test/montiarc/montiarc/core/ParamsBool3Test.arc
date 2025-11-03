@@ -3,35 +3,34 @@ package montiarc.core;
 
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitList;
-import java.util.List;
 
 <<test={
-  [true, true, [true], [true], [true]],
-  [true, true, [false], [false], [false]],
-  [true, false, [true], [true], []],
-  [true, false, [false], [false], []],
-  [false, true, [true], [], [true]],
-  [false, true, [false], [], [false]],
-  [false, false, [true], [], []],
-  [false, false, [false], [], []],
-  [true, true, [true, true], [true, true], [true, true]],
-  [true, true, [true, false], [true, false], [true, false]],
-  [true, true, [false, true], [false, true], [false, true]],
-  [true, true, [false, false], [false, false], [false, false]],
-  [true, false, [true, true], [true, true], []],
-  [true, false, [true, false], [true, false], []],
-  [true, false, [false, true], [false, true], []],
-  [true, false, [false, false], [false, false], []],
-  [false, true, [true, true], [], [true, true]],
-  [false, true, [true, false], [], [true, false]],
-  [false, true, [false, true], [], [false, true]],
-  [false, true, [false, false], [], [false, false]],
-  [false, false, [true, true], [], []],
-  [false, false, [true, false], [], []],
-  [false, false, [false, true], [], []],
-  [false, false, [false, false], [], []]
+  [true, true, Untimed<true>, Untimed<true>, Untimed<true>],
+  [true, true, Untimed<false>, Untimed<false>, Untimed<false>],
+  [true, false, Untimed<true>, Untimed<true>, Untimed<boolean><>],
+  [true, false, Untimed<false>, Untimed<false>, Untimed<boolean><>],
+  [false, true, Untimed<true>, Untimed<boolean><>, Untimed<true>],
+  [false, true, Untimed<false>, Untimed<boolean><>, Untimed<false>],
+  [false, false, Untimed<true>, Untimed<boolean><>, Untimed<boolean><>],
+  [false, false, Untimed<false>, Untimed<boolean><>, Untimed<boolean><>],
+  [true, true, Untimed<true, true>, Untimed<true, true>, Untimed<true, true>],
+  [true, true, Untimed<true, false>, Untimed<true, false>, Untimed<true, false>],
+  [true, true, Untimed<false, true>, Untimed<false, true>, Untimed<false, true>],
+  [true, true, Untimed<false, false>, Untimed<false, false>, Untimed<false, false>],
+  [true, false, Untimed<true, true>, Untimed<true, true>, Untimed<boolean><>],
+  [true, false, Untimed<true, false>, Untimed<true, false>, Untimed<boolean><>],
+  [true, false, Untimed<false, true>, Untimed<false, true>, Untimed<boolean><>],
+  [true, false, Untimed<false, false>, Untimed<false, false>, Untimed<boolean><>],
+  [false, true, Untimed<true, true>, Untimed<boolean><>, Untimed<true, true>],
+  [false, true, Untimed<true, false>, Untimed<boolean><>, Untimed<true, false>],
+  [false, true, Untimed<false, true>, Untimed<boolean><>, Untimed<false, true>],
+  [false, true, Untimed<false, false>, Untimed<boolean><>, Untimed<false, false>],
+  [false, false, Untimed<true, true>, Untimed<boolean><>, Untimed<boolean><>],
+  [false, false, Untimed<true, false>, Untimed<boolean><>, Untimed<boolean><>],
+  [false, false, Untimed<false, true>, Untimed<boolean><>, Untimed<boolean><>],
+  [false, false, Untimed<false, false>, Untimed<boolean><>, Untimed<boolean><>]
 }>>
-component ParamsBool3Test(boolean p1, boolean p2, List<boolean> input, List<boolean> expected1, List<boolean> expected2) {
+component ParamsBool3Test(boolean p1, boolean p2, UntimedStream<boolean> input, UntimedStream<boolean> expected1, UntimedStream<boolean> expected2) {
   ParamsBool3 sut(p1, p2);
 
   generator.out -> sut.i;

@@ -3,14 +3,13 @@ package montiarc.sync.composition;
 
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsUntimed;
-import java.util.List;
 
 <<test, ticks=[1,2,3], input=[
-  [OnOff.ON],
-  [OnOff.ON, OnOff.ON],
-  [OnOff.ON, OnOff.ON, OnOff.ON]
+  Untimed<OnOff.ON>,
+  Untimed<OnOff.ON, OnOff.ON>,
+  Untimed<OnOff.ON, OnOff.ON, OnOff.ON>
 ]>>
-component SourceEncapsulationTest(List<OnOff> input) {
+component SourceEncapsulationTest(UntimedStream<OnOff> input) {
   SourceEncapsulation sut();
 
   sut.o -> assertions.actual;

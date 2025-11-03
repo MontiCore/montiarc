@@ -25,6 +25,8 @@ dependencies {
   implementation(libs.janino)
   implementation(libs.z3)
 
+  runtimeOnly(seLibs.mc.stream.symbols)
+
   testImplementation((project(":languages:basis"))) {
     capabilities {
       requireCapability("montiarc.languages:basis-tests")

@@ -4,15 +4,14 @@ package montiarc.timed.automata.transition;
 import montiarc.types.NumberSign;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 
 <<test, ticks=2,
 input=[
-  [[1,2], [-3,0], [0]]
+  <1,2, Tick, -3,0, Tick, 0>
 ], expected=[
-  [[NumberSign.POSITIVE, NumberSign.POSITIVE], [NumberSign.NEGATIVE, NumberSign.ZERO], [NumberSign.ZERO]]
+  <NumberSign.POSITIVE, NumberSign.POSITIVE, Tick, NumberSign.NEGATIVE, NumberSign.ZERO, Tick, NumberSign.ZERO>
 ]>>
-component ConditionedTransitionsTest(List<List<int>> input, List<List<NumberSign>> expected) {
+component ConditionedTransitionsTest(EventStream<int> input, EventStream<NumberSign> expected) {
   ConditionedTransitions sut();
 
   generator.out -> sut.i;

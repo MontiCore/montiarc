@@ -4,7 +4,6 @@ package montiarc.sync.automata;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.Emit;
-import java.util.List;
 
 <<test, ticks=[1,1], input=[OnOff.OFF, OnOff.ON]>>
 component Send2MessagesInitiallyTest(OnOff input) {
@@ -15,5 +14,5 @@ component Send2MessagesInitiallyTest(OnOff input) {
 
   Emit<OnOff> generator(input);
 
-  AssertEqualsUntimed<OnOff> assertions([OnOff.OFF, OnOff.OFF, input, input]);
+  AssertEqualsUntimed<OnOff> assertions(Untimed<OnOff><OnOff.OFF, OnOff.OFF, input, input>);
 }

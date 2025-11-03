@@ -4,24 +4,23 @@ package montiarc.untimed;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 
 <<test, ticks=[0,1,2,0,1,2], input=[
-  [],
-  [],
-  [],
-  [[OnOff.ON]],
-  [[OnOff.ON],  [OnOff.ON]],
-  [[OnOff.ON],  [OnOff.ON],  [OnOff.ON]]
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff.ON, Tick>,
+  <OnOff.ON, Tick, OnOff.ON, Tick>,
+  <OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON, Tick>
 ], expected=[
-  [],
-  [[]],
-  [[], []],
-  [],
-  [[]],
-  [[], []]
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>
 ]>>
-component AtomicComponentTest(List<List<OnOff>> input, List<List<OnOff>> expected) {
+component AtomicComponentTest(EventStream<OnOff> input, EventStream<OnOff> expected) {
   AtomicComponent sut();
 
   generator.out -> sut.i;

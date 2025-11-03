@@ -3,23 +3,23 @@ package montiarc.core;
 
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitList;
-import java.util.List;
+
 
 <<test, p1=[
   true, true, true, true, false, false, false, false, true, true, false, false
 ], p2=[
   true, true, false, false, true, true, false, false, true, false, true, false
 ], input=[
-  [true], [false], [true], [false], [true], [false], [true], [false],
-  [true, true], [true, true], [true, true], [true, true]
+  Untimed<true>, Untimed<false>, Untimed<true>, Untimed<false>, Untimed<true>, Untimed<false>, Untimed<true>, Untimed<false>,
+  Untimed<true, true>, Untimed<true, true>, Untimed<true, true>, Untimed<true, true>
 ], expected1=[
-  [true], [true], [true], [true], [false], [false], [false], [false],
-  [true, true], [true, true], [false, false], [false, false]
+  Untimed<true>, Untimed<true>, Untimed<true>, Untimed<true>, Untimed<false>, Untimed<false>, Untimed<false>, Untimed<false>,
+  Untimed<true, true>, Untimed<true, true>, Untimed<false, false>, Untimed<false, false>
 ], expected2=[
-  [true], [true], [false], [false], [true], [true], [false], [false],
-  [true, true], [false, false], [true, true], [false, false]
+  Untimed<true>, Untimed<true>, Untimed<false>, Untimed<false>, Untimed<true>, Untimed<true>, Untimed<false>, Untimed<false>,
+  Untimed<true, true>, Untimed<false, false>, Untimed<true, true>, Untimed<false, false>
 ]>>
-component ParamsBool1Test(boolean p1, boolean p2, List<boolean> input, List<boolean> expected1, List<boolean> expected2) {
+component ParamsBool1Test(boolean p1, boolean p2, UntimedStream<boolean> input, UntimedStream<boolean> expected1, UntimedStream<boolean> expected2) {
   ParamsBool1 sut(p1, p2);
 
   generator.out -> sut.i;

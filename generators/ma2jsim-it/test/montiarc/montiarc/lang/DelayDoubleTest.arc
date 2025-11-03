@@ -3,33 +3,32 @@ package montiarc.lang;
 
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 import java.lang.Double;
 
 <<test, ticks=[1,1,1,1,1,1,2,2,2,2], input=[
-  [[Double.MIN_VALUE]],
-  [[Double.MAX_VALUE]],
-  [[Double.MIN_VALUE, Double.MIN_VALUE]],
-  [[Double.MIN_VALUE, Double.MAX_VALUE]],
-  [[Double.MAX_VALUE, Double.MIN_VALUE]],
-  [[Double.MAX_VALUE, Double.MAX_VALUE]],
-  [[Double.MIN_VALUE], [Double.MIN_VALUE]],
-  [[Double.MIN_VALUE], [Double.MAX_VALUE]],
-  [[Double.MAX_VALUE], [Double.MIN_VALUE]],
-  [[Double.MAX_VALUE], [Double.MAX_VALUE]]
+  <Double.MIN_VALUE>,
+  <Double.MAX_VALUE>,
+  <Double.MIN_VALUE, Double.MIN_VALUE>,
+  <Double.MIN_VALUE, Double.MAX_VALUE>,
+  <Double.MAX_VALUE, Double.MIN_VALUE>,
+  <Double.MAX_VALUE, Double.MAX_VALUE>,
+  <Double.MIN_VALUE, Tick, Double.MIN_VALUE>,
+  <Double.MIN_VALUE, Tick, Double.MAX_VALUE>,
+  <Double.MAX_VALUE, Tick, Double.MIN_VALUE>,
+  <Double.MAX_VALUE, Tick, Double.MAX_VALUE>
 ], output=[
-  [[], [Double.MIN_VALUE]],
-  [[], [Double.MAX_VALUE]],
-  [[], [Double.MIN_VALUE, Double.MIN_VALUE]],
-  [[], [Double.MIN_VALUE, Double.MAX_VALUE]],
-  [[], [Double.MAX_VALUE, Double.MIN_VALUE]],
-  [[], [Double.MAX_VALUE, Double.MAX_VALUE]],
-  [[], [Double.MIN_VALUE], [Double.MIN_VALUE]],
-  [[], [Double.MIN_VALUE], [Double.MAX_VALUE]],
-  [[], [Double.MAX_VALUE], [Double.MIN_VALUE]],
-  [[], [Double.MAX_VALUE], [Double.MAX_VALUE]]
+  <Tick, Double.MIN_VALUE>,
+  <Tick, Double.MAX_VALUE>,
+  <Tick, Double.MIN_VALUE, Double.MIN_VALUE>,
+  <Tick, Double.MIN_VALUE, Double.MAX_VALUE>,
+  <Tick, Double.MAX_VALUE, Double.MIN_VALUE>,
+  <Tick, Double.MAX_VALUE, Double.MAX_VALUE>,
+  <Tick, Double.MIN_VALUE, Tick, Double.MIN_VALUE>,
+  <Tick, Double.MIN_VALUE, Tick, Double.MAX_VALUE>,
+  <Tick, Double.MAX_VALUE, Tick, Double.MIN_VALUE>,
+  <Tick, Double.MAX_VALUE, Tick, Double.MAX_VALUE>
 ]>>
-component DelayDoubleTest(List<List<double>> input, List<List<double>> output) {
+component DelayDoubleTest(EventStream<double> input, EventStream<double> output) {
   DelayDouble sut;
 
   generator.out -> sut.i;

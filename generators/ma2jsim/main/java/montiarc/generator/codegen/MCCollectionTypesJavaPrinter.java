@@ -8,67 +8,41 @@ import de.monticore.types.mccollectiontypes._ast.ASTMCMapType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCOptionalType;
 import de.monticore.types.mccollectiontypes._ast.ASTMCSetType;
 import de.monticore.types.mccollectiontypes._prettyprint.MCCollectionTypesPrettyPrinter;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class MCCollectionTypesJavaPrinter extends MCCollectionTypesPrettyPrinter {
 
-  protected CodeGenContext context;
+  protected SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter;
 
   public MCCollectionTypesJavaPrinter(@NotNull IndentPrinter printer,
-                                      @NotNull CodeGenContext context,
+                                      @NotNull SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter,
                                       boolean printComments) {
     super(printer, printComments);
-    this.context =  Preconditions.checkNotNull(context);
-  }
-
-  protected CodeGenContext getContext() {
-    return this.context;
+    this.symTypeExpressionJavaPrinter = Preconditions.checkNotNull(symTypeExpressionJavaPrinter);
   }
 
   @Override
   public void handle(@NotNull ASTMCListType node) {
     Preconditions.checkNotNull(node);
-    getContext().pushInGenericTypeExpression();
-    this.getPrinter().print("java.util.List<");
-    node.getMCTypeArgument().accept(this.getTraverser());
-    this.getPrinter().stripTrailing();
-    this.getPrinter().print(">");
-    getContext().popInGenericTypeExpression();
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)));
   }
 
   @Override
   public void handle(@NotNull ASTMCMapType node) {
     Preconditions.checkNotNull(node);
-    getContext().pushInGenericTypeExpression();
-    this.getPrinter().print("java.util.Map<");
-    node.getKey().accept(this.getTraverser());
-    this.getPrinter().stripTrailing();
-    this.getPrinter().print(",");
-    node.getValue().accept(this.getTraverser());
-    this.getPrinter().stripTrailing();
-    this.getPrinter().print(">");
-    getContext().popInGenericTypeExpression();
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)));
   }
 
   @Override
   public void handle(@NotNull ASTMCSetType node) {
     Preconditions.checkNotNull(node);
-    getContext().pushInGenericTypeExpression();
-    this.getPrinter().print("java.util.Set<");
-    node.getMCTypeArgument().accept(this.getTraverser());
-    this.getPrinter().stripTrailing();
-    this.getPrinter().print(">");
-    getContext().popInGenericTypeExpression();
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)));
   }
 
   @Override
   public void handle(@NotNull ASTMCOptionalType node) {
     Preconditions.checkNotNull(node);
-    getContext().pushInGenericTypeExpression();
-    this.getPrinter().print("java.util.Optional<");
-    node.getMCTypeArgument().accept(this.getTraverser());
-    this.getPrinter().stripTrailing();
-    this.getPrinter().print(">");
-    getContext().popInGenericTypeExpression();
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)));
   }
 }

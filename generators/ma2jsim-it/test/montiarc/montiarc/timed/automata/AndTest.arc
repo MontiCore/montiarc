@@ -1,26 +1,25 @@
 package montiarc.timed.automata;
 
-import java.util.List;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
 
 <<test,
-  ticks=2,
+  ticks=3,
   a=[
-    [[false, false], [true], [true]],
-    [[false, false], [false], [false, true]]
+    Event<Boolean><false, false, Tick, true, Tick, true, Tick>,
+    Event<Boolean><false, false, Tick, false, Tick, false, true, Tick>
   ],
   b=[
-    [[false, true], [false], [true]],
-    [[false, true], [false], [true, true]]
+    Event<Boolean><false, true, Tick, false, Tick, true, Tick>,
+    Event<Boolean><false, true, Tick, false, Tick, true, true, Tick>
   ],
   expected=[
-    [[false], [false], [true]],
-    [[false], [false], [true]]
+    Event<Boolean><false, Tick, false, Tick, true, Tick>,
+    Event<Boolean><false, Tick, false, Tick, true, Tick>
   ]>>
-  component AndTest(List<List<Boolean>> a,
-                    List<List<Boolean>> b,
-                    List<List<Boolean>> expected) {
+  component AndTest(EventStream<Boolean> a,
+                    EventStream<Boolean> b,
+                    EventStream<Boolean> expected) {
 
   And sut;
 

@@ -29,6 +29,7 @@ grammar MontiArc extends
             de.monticore.expressions.CommonExpressions,
             de.monticore.expressions.AssignmentExpressions,
             de.monticore.expressions.BitExpressions,
+            de.monticore.expressions.StreamExpressions,
             de.monticore.types.MCSimpleGenericTypes,
             de.monticore.statements.MCCommonStatements,
             de.monticore.statements.MCVarDeclarationStatements,

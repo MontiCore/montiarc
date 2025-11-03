@@ -4,23 +4,22 @@ package montiarc.timed.automata.transition;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 
 <<test, ticks=[1,1,2],
 input1=[
-  [[OnOff.ON, OnOff.ON], [OnOff.ON, OnOff.ON]],
-  [[], [OnOff.ON]],
-  [[OnOff.ON], [OnOff.ON], [OnOff.ON]]
+  <OnOff.ON, OnOff.ON, Tick, OnOff.ON, OnOff.ON>,
+  <Tick, OnOff.ON>,
+  <OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON>
 ], input2=[
-  [[OnOff.OFF], []],
-  [[OnOff.OFF, OnOff.OFF], []],
-  [[OnOff.ON], [OnOff.ON], []]
+  <OnOff.OFF, Tick>,
+  <OnOff.OFF, OnOff.OFF, Tick>,
+  <OnOff.ON, Tick, OnOff.ON, Tick>
 ], expected=[
-  [[OnOff.ON, OnOff.ON], [OnOff.ON, OnOff.ON]],
-  [[], [OnOff.ON]],
-  [[OnOff.ON], [OnOff.ON], [OnOff.ON]]
+  <OnOff.ON, OnOff.ON, Tick, OnOff.ON, OnOff.ON>,
+  <Tick, OnOff.ON>,
+  <OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON>
 ]>>
-component IgnoresInPortTest(List<List<OnOff>> input1, List<List<OnOff>> input2, List<List<OnOff>> expected) {
+component IgnoresInPortTest(EventStream<OnOff> input1, EventStream<OnOff> input2, EventStream<OnOff> expected) {
   IgnoresInPort sut();
 
   generatorI1.out -> sut.i1;

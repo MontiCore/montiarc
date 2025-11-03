@@ -3,11 +3,10 @@ package montiarc.datatypes.primitive.composition;
 
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 import java.lang.Integer;
 
-<<test, testStream=[[1], [1, 2, Integer.MAX_VALUE]]>>
-component IntForwardTest(List<int> testStream) {
+<<test, testStream=[Sync<1>, Sync<1, 2, Integer.MAX_VALUE>]>>
+component IntForwardTest(SyncStream<int> testStream) {
   IntForward sut;
 
   generator.out -> sut.pIn;
@@ -15,5 +14,5 @@ component IntForwardTest(List<int> testStream) {
 
   EmitSync<Integer> generator(testStream);
 
-  AssertEqualsUntimed<Integer> assert(testStream);
+  AssertEqualsUntimed<Integer> assert(testStream.untimed());
 }

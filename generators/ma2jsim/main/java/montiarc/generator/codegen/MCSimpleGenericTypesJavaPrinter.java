@@ -7,6 +7,7 @@ import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._prettyprint.MCSimpleGenericTypesPrettyPrinter;
+import de.monticore.types3.TypeCheck3;
 import montiarc.MontiArcMill;
 import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -16,47 +17,18 @@ import java.util.Optional;
 
 public class MCSimpleGenericTypesJavaPrinter extends MCSimpleGenericTypesPrettyPrinter {
 
-  protected CodeGenContext context;
+  protected SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter;
 
   public MCSimpleGenericTypesJavaPrinter(@NotNull IndentPrinter printer,
-                                         @NotNull CodeGenContext context,
+                                         @NotNull SymTypeExpressionJavaPrinter symTypeExpressionJavaPrinter,
                                          boolean printComments) {
     super(printer, printComments);
-    this.context = Preconditions.checkNotNull(context);
-  }
-
-  protected CodeGenContext getContext() {
-    return this.context;
+    this.symTypeExpressionJavaPrinter = Preconditions.checkNotNull(symTypeExpressionJavaPrinter);
   }
 
   @Override
   public void handle(@NotNull ASTMCBasicGenericType node) {
     Preconditions.checkNotNull(node);
-    getContext().pushInGenericTypeExpression();
-    if (node.getNameList().size() == 1) {
-      Optional<TypeSymbol> type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(node.getNameList().get(0));
-      if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
-        getPrinter().print(type.get().getFullName());
-
-        // Append generics
-        Iterator<ASTMCTypeArgument> iter_mCTypeArgument = node.getMCTypeArgumentList().iterator();
-        this.getPrinter().print("<");
-        if (iter_mCTypeArgument.hasNext()) {
-          iter_mCTypeArgument.next().accept(this.getTraverser());
-
-          while (iter_mCTypeArgument.hasNext()) {
-            this.getPrinter().stripTrailing();
-            this.getPrinter().print(",");
-            iter_mCTypeArgument.next().accept(this.getTraverser());
-          }
-        }
-
-        this.getPrinter().stripTrailing();
-        this.getPrinter().print(">");
-        return;
-      }
-    }
-    super.handle(node);
-    getContext().popInGenericTypeExpression();
+    this.getPrinter().print(symTypeExpressionJavaPrinter.prettyprint(TypeCheck3.symTypeFromAST(node)));
   }
 }

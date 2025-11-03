@@ -4,24 +4,23 @@ package montiarc.modes.timed.composition;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 
 <<test, ticks=[0,1,2,0,1,2], input=[
-  [],
-  [[]],
-  [[], []],
-  [[OnOff.ON]],
-  [[OnOff.ON]],
-  [[OnOff.ON], [OnOff.OFF], [OnOff.ON, OnOff.OFF]]
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff.ON>,
+  <OnOff.ON>,
+  <OnOff.ON, Tick, OnOff.OFF, Tick, OnOff.ON, OnOff.OFF>
 ], output=[
-  [],
-  [[]],
-  [[], []],
-  [[OnOff.ON]],
-  [[OnOff.ON]],
-  [[OnOff.ON], [], [OnOff.ON]]
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff.ON>,
+  <OnOff.ON, Tick>,
+  <OnOff.ON, Tick, Tick, OnOff.ON>
 ]>>
-component ChangingUseOfOutPortsTest(List<List<OnOff>> input, List<List<OnOff>> output) {
+component ChangingUseOfOutPortsTest(EventStream<OnOff> input, EventStream<OnOff> output) {
   ChangingUseOfOutPorts sut;
 
   generator.out -> sut.i;

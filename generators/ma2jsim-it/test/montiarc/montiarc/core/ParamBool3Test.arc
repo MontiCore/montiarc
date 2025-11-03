@@ -3,16 +3,15 @@ package montiarc.core;
 
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitList;
-import java.util.List;
 
 <<test, p=[
   true, true, false, false, true, true, true, true, false, false, false, false
 ], input=[
-  [true], [false], [true], [false],
-  [true, true], [true, false], [false, true], [false, false],
-  [true, true], [true, false], [false, true], [false, false]
+  Untimed<true>, Untimed<false>, Untimed<true>, Untimed<false>,
+  Untimed<true, true>, Untimed<true, false>, Untimed<false, true>, Untimed<false, false>,
+  Untimed<true, true>, Untimed<true, false>, Untimed<false, true>, Untimed<false, false>
 ]>>
-component ParamBool3Test(boolean p, List<boolean> input) {
+component ParamBool3Test(boolean p, UntimedStream<boolean> input) {
   ParamBool3 sut(p);
 
   generator.out -> sut.i;

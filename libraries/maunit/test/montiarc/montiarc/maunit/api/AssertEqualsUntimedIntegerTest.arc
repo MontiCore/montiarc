@@ -3,8 +3,8 @@ package montiarc.maunit.api;
 
 import java.util.List;
 
-<<test={[[5, -1, 100, 2]]}, ticks=3>>
-component AssertEqualsUntimedIntegerTest(List<Integer> values) {
+<<test={[Untimed<5, -1, 100, 2>]}, ticks=3>>
+component AssertEqualsUntimedIntegerTest(UntimedStream<Integer> values) {
   component Source source {
     port out Integer o;
     int i = 0;

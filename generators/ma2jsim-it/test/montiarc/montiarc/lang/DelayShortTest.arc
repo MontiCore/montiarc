@@ -3,33 +3,32 @@ package montiarc.lang;
 
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 import java.lang.Short;
 
 <<test, ticks=[1,1,1,1,1,1,2,2,2,2], input=[
-  [[Short.MIN_VALUE]],
-  [[Short.MAX_VALUE]],
-  [[Short.MIN_VALUE, Short.MIN_VALUE]],
-  [[Short.MIN_VALUE, Short.MAX_VALUE]],
-  [[Short.MAX_VALUE, Short.MIN_VALUE]],
-  [[Short.MAX_VALUE, Short.MAX_VALUE]],
-  [[Short.MIN_VALUE], [Short.MIN_VALUE]],
-  [[Short.MIN_VALUE], [Short.MAX_VALUE]],
-  [[Short.MAX_VALUE], [Short.MIN_VALUE]],
-  [[Short.MAX_VALUE], [Short.MAX_VALUE]]
+  <Short.MIN_VALUE>,
+  <Short.MAX_VALUE>,
+  <Short.MIN_VALUE, Short.MIN_VALUE>,
+  <Short.MIN_VALUE, Short.MAX_VALUE>,
+  <Short.MAX_VALUE, Short.MIN_VALUE>,
+  <Short.MAX_VALUE, Short.MAX_VALUE>,
+  <Short.MIN_VALUE, Tick, Short.MIN_VALUE>,
+  <Short.MIN_VALUE, Tick, Short.MAX_VALUE>,
+  <Short.MAX_VALUE, Tick, Short.MIN_VALUE>,
+  <Short.MAX_VALUE, Tick, Short.MAX_VALUE>
 ], output=[
-  [[], [Short.MIN_VALUE]],
-  [[], [Short.MAX_VALUE]],
-  [[], [Short.MIN_VALUE, Short.MIN_VALUE]],
-  [[], [Short.MIN_VALUE, Short.MAX_VALUE]],
-  [[], [Short.MAX_VALUE, Short.MIN_VALUE]],
-  [[], [Short.MAX_VALUE, Short.MAX_VALUE]],
-  [[], [Short.MIN_VALUE], [Short.MIN_VALUE]],
-  [[], [Short.MIN_VALUE], [Short.MAX_VALUE]],
-  [[], [Short.MAX_VALUE], [Short.MIN_VALUE]],
-  [[], [Short.MAX_VALUE], [Short.MAX_VALUE]]
+  <Tick, Short.MIN_VALUE>,
+  <Tick, Short.MAX_VALUE>,
+  <Tick, Short.MIN_VALUE, Short.MIN_VALUE>,
+  <Tick, Short.MIN_VALUE, Short.MAX_VALUE>,
+  <Tick, Short.MAX_VALUE, Short.MIN_VALUE>,
+  <Tick, Short.MAX_VALUE, Short.MAX_VALUE>,
+  <Tick, Short.MIN_VALUE, Tick, Short.MIN_VALUE>,
+  <Tick, Short.MIN_VALUE, Tick, Short.MAX_VALUE>,
+  <Tick, Short.MAX_VALUE, Tick, Short.MIN_VALUE>,
+  <Tick, Short.MAX_VALUE, Tick, Short.MAX_VALUE>
 ]>>
-component DelayShortTest(List<List<short>> input, List<List<short>> output) {
+component DelayShortTest(EventStream<short> input, EventStream<short> output) {
   DelayShort sut;
 
   generator.out -> sut.i;

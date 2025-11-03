@@ -4,18 +4,17 @@ package montiarc.sync.composition;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 
 <<test, ticks=[1,1,2,2,2,2,3], input=[
-  [OnOff.OFF],
-  [OnOff.ON],
-  [OnOff.ON, OnOff.ON],
-  [OnOff.OFF, OnOff.OFF],
-  [OnOff.ON, OnOff.OFF],
-  [OnOff.OFF, OnOff.ON],
-  [OnOff.ON, OnOff.ON, OnOff.ON]
+  Sync<OnOff.OFF>,
+  Sync<OnOff.ON>,
+  Sync<OnOff.ON, OnOff.ON>,
+  Sync<OnOff.OFF, OnOff.OFF>,
+  Sync<OnOff.ON, OnOff.OFF>,
+  Sync<OnOff.OFF, OnOff.ON>,
+  Sync<OnOff.ON, OnOff.ON, OnOff.ON>
 ]>>
-component GenericSequentialCompositionTest(List<OnOff> input) {
+component GenericSequentialCompositionTest(SyncStream<OnOff> input) {
   GenericSequentialComposition sut();
 
   generator.out -> sut.i;
@@ -23,5 +22,5 @@ component GenericSequentialCompositionTest(List<OnOff> input) {
 
   EmitSync<OnOff> generator(input);
 
-  AssertEqualsUntimed<OnOff> assertions(input);
+  AssertEqualsUntimed<OnOff> assertions(input.untimed());
 }

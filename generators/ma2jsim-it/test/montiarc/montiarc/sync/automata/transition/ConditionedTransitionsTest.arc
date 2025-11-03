@@ -4,16 +4,15 @@ package montiarc.sync.automata.transition;
 import montiarc.types.NumberSign;
 import montiarc.maunit.api.AssertEqualsUntimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 
 <<test={
-// input                 output
-  [[1, -3, 0],  [NumberSign.POSITIVE, NumberSign.NEGATIVE, NumberSign.ZERO]],
-  [[-5, -3, -1],  [NumberSign.NEGATIVE, NumberSign.NEGATIVE, NumberSign.NEGATIVE]],
-  [[100, 3, 1],  [NumberSign.POSITIVE, NumberSign.POSITIVE, NumberSign.POSITIVE]],
-  [[0, 0, 0],  [NumberSign.ZERO, NumberSign.ZERO, NumberSign.ZERO]]
+  // input                 output
+  [Sync<1, -3, 0>,   Untimed<NumberSign.POSITIVE, NumberSign.NEGATIVE, NumberSign.ZERO>],
+  [Sync<-5, -3, -1>, Untimed<NumberSign.NEGATIVE, NumberSign.NEGATIVE, NumberSign.NEGATIVE>],
+  [Sync<100, 3, 1>,  Untimed<NumberSign.POSITIVE, NumberSign.POSITIVE, NumberSign.POSITIVE>],
+  [Sync<0, 0, 0>,    Untimed<NumberSign.ZERO, NumberSign.ZERO, NumberSign.ZERO>]
 }, ticks=3>>
-component ConditionedTransitionsTest(List<int> input, List<NumberSign> output) {
+component ConditionedTransitionsTest(SyncStream<int> input, UntimedStream<NumberSign> output) {
   ConditionedTransitions sut();
 
   generator.out -> sut.i;

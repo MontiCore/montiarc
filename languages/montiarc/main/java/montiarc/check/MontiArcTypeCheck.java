@@ -9,6 +9,7 @@ import de.monticore.expressions.assignmentexpressions.types3.AssignmentExpressio
 import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
 import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
 import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
+import de.monticore.expressions.streamexpressions.types3.StreamExpressionsTypeVisitor;
 import de.monticore.ocl.setexpressions.types3.SetExpressionsCTTIVisitor;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
@@ -40,6 +41,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
   static MCCollectionTypesTypeVisitor mcCollectionTypes;
   static MCSimpleGenericTypesTypeVisitor mcGenericTypes;
   static SetExpressionsCTTIVisitor setExpressions;
+  static StreamExpressionsTypeVisitor streamExpressions;
 
   /**
    * @see de.monticore.types3.util.MapBasedTypeCheck3(de.monticore.visitor.ITraverser, Type4Ast, InferenceContext4Ast)
@@ -103,6 +105,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     initMCCollectionTypesTypeVisitor(traverser, type4Ast, ctx4Ast);
     initMCSimpleGenericTypesTypeVisitor(traverser, type4Ast, ctx4Ast);
     initSetExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
+    initStreamExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
     Log.trace(() -> "Finish initializing the visitors of the type-check delegate", LOG_NAME);
   }
 
@@ -191,6 +194,20 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     traverser.add4SetExpressions(setExpressions);
     traverser.setSetExpressionsHandler(setExpressions);
     Log.trace(() -> "Finish initializing the SetExpressionsType visitor of the type-check delegate", LOG_NAME);
+  }
+
+  protected static void initStreamExpressionsTypeVisitor(@NotNull MontiArcTraverser traverser,
+                                                         @NotNull Type4Ast type4Ast,
+                                                         @NotNull InferenceContext4Ast ctx4Ast) {
+    Preconditions.checkNotNull(traverser);
+    Preconditions.checkNotNull(type4Ast);
+    Preconditions.checkNotNull(ctx4Ast);
+    Log.trace(() -> "Start initializing the StreamExpressionsType visitor of the type-check delegate", LOG_NAME);
+    streamExpressions = new StreamExpressionsTypeVisitor();
+    streamExpressions.setType4Ast(type4Ast);
+    streamExpressions.setContext4Ast(ctx4Ast);
+    traverser.add4StreamExpressions(streamExpressions);
+    Log.trace(() -> "Finish initializing the StreamExpressionsType visitor of the type-check delegate", LOG_NAME);
   }
 
   static Map<ComponentTypeSymbol, Type4Ast> context2Type4AST;

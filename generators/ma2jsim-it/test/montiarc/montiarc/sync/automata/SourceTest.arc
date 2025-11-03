@@ -3,14 +3,13 @@ package montiarc.sync.automata;
 
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsUntimed;
-import java.util.List;
 
 <<test, ticks=[1,2,3], output=[
-  [OnOff.ON],
-  [OnOff.ON, OnOff.ON],
-  [OnOff.ON, OnOff.ON, OnOff.ON]
+  Untimed<OnOff.ON>,
+  Untimed<OnOff.ON, OnOff.ON>,
+  Untimed<OnOff.ON, OnOff.ON, OnOff.ON>
 ]>>
-component SourceTest(List<OnOff> output) {
+component SourceTest(UntimedStream<OnOff> output) {
   Source sut();
 
   sut.o -> assertions.actual;

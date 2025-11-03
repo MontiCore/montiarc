@@ -4,26 +4,25 @@ package montiarc.modes.timed;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 
 <<test, ticks=[0,1,2,0,1,1,2], input=[
-  [],
-  [[]],
-  [[], []],
-  [[OnOff.ON]],
-  [[OnOff.ON]],
-  [[OnOff.ON], [OnOff.ON, OnOff.OFF]],
-  [[OnOff.ON], [OnOff.ON], [OnOff.OFF]]
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff.ON>,
+  <OnOff.ON, Tick>,
+  <OnOff.ON, Tick, OnOff.ON, OnOff.OFF>,
+  <OnOff.ON, Tick, OnOff.ON, Tick, OnOff.OFF>
 ], output=[
-  [],
-  [[]],
-  [[], []],
-  [[OnOff.ON]],
-  [[OnOff.ON]],
-  [[OnOff.ON], [OnOff.OFF, OnOff.ON]],
-  [[OnOff.ON], [OnOff.OFF], [OnOff.ON]]
+  <OnOff><>,
+  <OnOff><Tick>,
+  <OnOff><Tick, Tick>,
+  <OnOff.ON>,
+  <OnOff.ON, Tick>,
+  <OnOff.ON, Tick, OnOff.OFF, OnOff.ON>,
+  <OnOff.ON, Tick, OnOff.OFF, Tick, OnOff.ON>
 ]>>
-component SimpleTransitionTest(List<List<OnOff>> input, List<List<OnOff>> output) {
+component SimpleTransitionTest(EventStream<OnOff> input, EventStream<OnOff> output) {
   SimpleTransition sut;
 
   generator.out -> sut.i;

@@ -2,19 +2,18 @@
 package montiarc.maunit.api;
 
 import montiarc.maunit.api.Assertions;
-import java.util.List;
 
-component AssertEqualsUntimed<T>(List<T> expected, String message = "") {
+component AssertEqualsUntimed<T>(UntimedStream<T> expected, String message = "") {
   port in T actual;
 
-  int index = 0;
+  UntimedStream<T> remaining = expected;
 
   automaton {
     initial state S;
     S -> S actual / {
-      if (index >= expected.size()) Assertions.fail("Unexpected additional message received with value: " + actual);
-      Assertions.assertTrue(expected.get(index) == actual, message);
-      index++;
+      if (remaining.isEmpty()) Assertions.fail("Unexpected additional message received with value: " + actual);
+      Assertions.assertTrue(remaining.first() == actual, message);
+      remaining = remaining.dropFirst();
     }
   }
 }

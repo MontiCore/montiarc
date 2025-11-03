@@ -4,17 +4,16 @@ package montiarc.timed.automata.transition;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitTimed;
-import java.util.List;
 
 <<test, ticks=[4,5],
 input=[
-  [[1, 2], [-2], [0, -1], []],
-  [[1, 2], [], [-2], [], []]
+  <1, 2, Tick, -2, Tick, 0, -1, Tick, Tick>,
+  <1, 2, Tick, Tick, -2, Tick, Tick, Tick>
 ], expected=[
-  [[OnOff.ON], [OnOff.ON], [OnOff.ON], [OnOff.ON]],
-  [[OnOff.ON], [OnOff.ON], [OnOff.ON], [OnOff.ON], [OnOff.ON]]
+  <OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON, Tick>,
+  <OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON, Tick, OnOff.ON, Tick>
 ]>>
-component NoTriggerTest(List<List<int>> input, List<List<OnOff>> expected) {
+component NoTriggerTest(EventStream<int> input, EventStream<OnOff> expected) {
   NoTrigger sut();
 
   generator.out -> sut.i;

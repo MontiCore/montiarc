@@ -3,8 +3,8 @@ package montiarc.maunit.api;
 
 import java.util.List;
 
-<<test, ticks=2, expected=[[[5], [-1], [100, 2]]]>>
-component AssertEqualsTimedIntegerTest(List<List<Integer>> expected) {
+<<test, ticks=2, expected=[<5, Tick, -1, Tick, 100, 2, Tick>]>>
+component AssertEqualsTimedIntegerTest(EventStream<Integer> expected) {
   component Source source {
     port out Integer o;
     int i = 0;

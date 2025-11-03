@@ -4,18 +4,17 @@ package montiarc.modes.sync.composition;
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 
 <<test, ticks=[0,1,2], input=[
-  [],
-  [OnOff.ON],
-  [OnOff.ON, OnOff.OFF]
+  Sync<OnOff><>,
+  Sync<OnOff.ON>,
+  Sync<OnOff.ON, OnOff.OFF>
 ], output=[
-  [],
-  [[OnOff.ON]],
-  [[OnOff.ON], [OnOff.OFF]]
+  <OnOff><>,
+  <OnOff.ON, Tick>,
+  <OnOff.ON, Tick, OnOff.OFF, Tick>
 ]>>
-component InitiallyUnusedOutPortsTest(List<OnOff> input, List<List<OnOff>> output) {
+component InitiallyUnusedOutPortsTest(SyncStream<OnOff> input, EventStream<OnOff> output) {
   InitiallyUnusedOutPorts sut;
 
   generator.out -> sut.i;

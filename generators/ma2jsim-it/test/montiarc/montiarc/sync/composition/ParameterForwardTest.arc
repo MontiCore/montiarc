@@ -3,7 +3,6 @@ package montiarc.sync.composition;
 
 import montiarc.types.OnOff;
 import montiarc.maunit.api.AssertEquals;
-import java.util.List;
 
 <<test, ticks=1, p=[
   OnOff.OFF,

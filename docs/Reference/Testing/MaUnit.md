@@ -88,27 +88,26 @@ The test is parameterized by the input and output streams of the SUT.
 
 === "Timed"
     ```montiarc
-    import java.util.List;
     import montiarc.maunit.api.AssertEqualsTimed;
     import montiarc.maunit.api.EmitTimed;
-
+    
     <<test,
       ticks=3,
       a=[
-        [[false, false], [true], [true]],
-        [[false, false], [false], [false, true]]
+        Event<Boolean><false, false, Tick, true, Tick, true, Tick>,
+        Event<Boolean><false, false, Tick, false, Tick, false, true, Tick>
       ],
       b=[
-        [[false, true], [false], [true]],
-        [[false, true], [false], [true, true]]
+        Event<Boolean><false, true, Tick, false, Tick, true, Tick>,
+        Event<Boolean><false, true, Tick, false, Tick, true, true, Tick>
       ],
       expected=[
-        [[false], [false], [true]],
-        [[false], [false], [true]]
-      ]>>
-      component AndTest(List<List<Boolean>> a, 
-                        List<List<Boolean>> b, 
-                        List<List<Boolean>> expected) {
+        Event<Boolean><false, Tick, false, Tick, true, Tick>,
+        Event<Boolean><false, Tick, false, Tick, true, Tick>
+    ]>>
+    component AndTest(EventStream<Boolean> a,
+                      EventStream<Boolean> b,
+                      EventStream<Boolean> expected) {
       
         And sut;
 
@@ -119,42 +118,37 @@ The test is parameterized by the input and output streams of the SUT.
         AssertEqualsTimed<Boolean> assertEquals(expected);
         EmitTimed<Boolean> emitterA(a);
         EmitTimed<Boolean> emitterB(b);
-      }
+    }
     ```
 
 === "Sync"
     ```montiarc
-    import java.util.List;
-    import montiarc.maunit.api.AssertEqualsSync;
     import montiarc.maunit.api.EmitSync;
+    import montiarc.maunit.api.AssertEqualsUntimed;
 
-    <<test,
-      ticks=[4, 5],
-      a=[
-        [false, false, true, true],
-        [false, false, false, false, true]
-      ],
-      b=[
-        [false, true, false, true],
-        [false, true, false, true, true]
-      ],
-      expected=[
-        [false, false, false, true],
-        [false, false, false, false, true]
-      ]>>
-      component AndTest(List<Boolean> a, 
-                        List<Boolean> b, 
-                        List<Boolean> expected) {
+    <<test, ticks=[4, 5], a=[
+        Sync<false, false, true, true>,
+        Sync<false, false, false, false, true>
+    ], b=[
+        Sync<false, true, false, true>,
+        Sync<false, true, false, true, true>
+    ], expected=[
+        Untimed<false, false, false, true>,
+        Untimed<false, false, false, false, true>
+    ]>>
+    component AndTest(SyncStream<boolean> a,
+                      SyncStream<boolean> b,
+                      UntimedStream<boolean> expected) {
         And sut;
 
         emitterA.out -> sut.a;
         emitterB.out -> sut.b;
         sut.q -> assertEquals.actual;
 
-        AssertEqualsSync<Boolean> assertEquals(expected);
-        EmitSync<Boolean> emitterA(a);
-        EmitSync<Boolean> emitterB(b);
-      }
+        AssertEqualsUntimed<boolean> assertEquals(expected);
+        EmitSync<boolean> emitterA(a);
+        EmitSync<boolean> emitterB(b);
+    }
     ```
 
 Resulting in the following test cases:
@@ -198,27 +192,23 @@ outgoing port called `out`. All components lie in the `montiarc.maunit.api` pack
   The expected value is specified by the parameter `expected`. 
   This is a generic component with a single input port T actual that asserts 
   all incoming messages are equal to that parameter expected.
-- **`AssertEqualsSync<T>(List<T> expected)`**
+- **`AssertEqualsSync<T>(SyncStream<T> expected)`**
   A component with a single input port, of type T called `actual`, that asserts 
-  the stream of incoming messages is equal to expected interpreted as a 
-  synchronous stream.
+  the stream of incoming messages is equal to expected synchronous stream.
   It also fails the test if more messages are received than what was expected.
-- **`AssertEqualsUntimed<T>(List<T> expected)`**
+- **`AssertEqualsUntimed<T>(UntimedStream<T> expected)`**
   A component with a single input port of type T called actual, that asserts 
   the stream of incoming messages is equal to expected while ignoring ticks in 
   the stream. 
   It fails the test if more messages are received than what was expected.
-- **`AssertEqualsTimed<T>(List<List<T>> expected)`**
+- **`AssertEqualsTimed<T>(EventStream<T> expected)`**
   Like the `AssertEqualsUntimed`, this is a component with a single input port 
   T actual. 
-  But, instead of ignoring ticks, the expected values are grouped by ticks, 
-  and after every tick, the next sublist is expected. 
+  But, instead of ignoring ticks, they are asserted, too. 
   If more messages arrive in one tick than are declared in the corresponding 
-  sublist the test fails. 
+  stream the test fails. 
   Likewise, if fewer messages arrive than were expected, the test also fails. 
-  All received messages have to be equal to the expected messages. 
-  For example, a list of `[[x, y], [z]]` would be interpreted as an expected 
-  stream of `〈x, y, Tick, z, Tick〉`.
+  All received messages have to be equal to the expected messages.
 
 ##### Emitter
 
@@ -229,19 +219,19 @@ outgoing port called `out`. All components lie in the `montiarc.maunit.api` pack
   `〈output, Tick, output, Tick, output, Tick, ...〉`. 
   It can be used to generate a mock message every tick to drive a test for 
   sync or timed components.
-- **`EmitList<T>(List<T> output)`** 
+- **`EmitList<T>(UntimedStream<T> output)`** 
   A timed variant of the Emit component. 
   Instead of a single message, all elements `ei` of output are emitted in one 
   time slice. 
   The resulting output is an infinite stream of the form 
   `〈e1 , e2 , ..., en , Tick, e1 , e2 , ..., en , Tick, ...〉`.
-- **`EmitSync<T>(List<T> output)`** 
+- **`EmitSync<T>(SyncStream<T> output)`** 
   A component that will send the elements of output on the sync port out with 
   a tick after each. 
   After all elements have been sent, the output stream is repeated. 
   Consequently, it gives an infinite output stream of the form 
   `〈e1 , Tick, e2 , Tick, ..., en , Tick, e1 , ...〉`.
-- **`EmitTimed<T>(List<List<T>> output)`** 
+- **`EmitTimed<T>(EventStream<T> output)`** 
   Similarly to `EmitSync`, this component will emit messages on port out. 
   The messages are timed, the sublists are grouped by ticks, and all elements 
   are sent out as individual messages. 

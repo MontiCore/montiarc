@@ -3,39 +3,38 @@ package montiarc.lang;
 
 import montiarc.maunit.api.AssertEqualsTimed;
 import montiarc.maunit.api.EmitSync;
-import java.util.List;
 import java.lang.Double;
 
 <<test, ticks=[0,0,0,0, 1,1,1,1,1,1,1,1],
 init=[Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MIN_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE],
 input=[
-  [Double.MIN_VALUE],
-  [Double.MAX_VALUE],
-  [Double.MIN_VALUE],
-  [Double.MAX_VALUE],
-  [Double.MIN_VALUE, Double.MIN_VALUE],
-  [Double.MIN_VALUE, Double.MAX_VALUE],
-  [Double.MAX_VALUE, Double.MIN_VALUE],
-  [Double.MAX_VALUE, Double.MAX_VALUE],
-  [Double.MIN_VALUE, Double.MIN_VALUE],
-  [Double.MIN_VALUE, Double.MAX_VALUE],
-  [Double.MAX_VALUE, Double.MIN_VALUE],
-  [Double.MAX_VALUE, Double.MAX_VALUE]
+  Sync<Double.MIN_VALUE>,
+  Sync<Double.MAX_VALUE>,
+  Sync<Double.MIN_VALUE>,
+  Sync<Double.MAX_VALUE>,
+  Sync<Double.MIN_VALUE, Double.MIN_VALUE>,
+  Sync<Double.MIN_VALUE, Double.MAX_VALUE>,
+  Sync<Double.MAX_VALUE, Double.MIN_VALUE>,
+  Sync<Double.MAX_VALUE, Double.MAX_VALUE>,
+  Sync<Double.MIN_VALUE, Double.MIN_VALUE>,
+  Sync<Double.MIN_VALUE, Double.MAX_VALUE>,
+  Sync<Double.MAX_VALUE, Double.MIN_VALUE>,
+  Sync<Double.MAX_VALUE, Double.MAX_VALUE>
 ], output=[
-  [[Double.MIN_VALUE]],
-  [[Double.MIN_VALUE]],
-  [[Double.MAX_VALUE]],
-  [[Double.MAX_VALUE]],
-  [[Double.MIN_VALUE], [Double.MIN_VALUE]],
-  [[Double.MIN_VALUE], [Double.MIN_VALUE]],
-  [[Double.MIN_VALUE], [Double.MAX_VALUE]],
-  [[Double.MIN_VALUE], [Double.MAX_VALUE]],
-  [[Double.MAX_VALUE], [Double.MIN_VALUE]],
-  [[Double.MAX_VALUE], [Double.MIN_VALUE]],
-  [[Double.MAX_VALUE], [Double.MAX_VALUE]],
-  [[Double.MAX_VALUE], [Double.MAX_VALUE]]
+  <Double.MIN_VALUE>,
+  <Double.MIN_VALUE>,
+  <Double.MAX_VALUE>,
+  <Double.MAX_VALUE>,
+  <Double.MIN_VALUE, Tick, Double.MIN_VALUE>,
+  <Double.MIN_VALUE, Tick, Double.MIN_VALUE>,
+  <Double.MIN_VALUE, Tick, Double.MAX_VALUE>,
+  <Double.MIN_VALUE, Tick, Double.MAX_VALUE>,
+  <Double.MAX_VALUE, Tick, Double.MIN_VALUE>,
+  <Double.MAX_VALUE, Tick, Double.MIN_VALUE>,
+  <Double.MAX_VALUE, Tick, Double.MAX_VALUE>,
+  <Double.MAX_VALUE, Tick, Double.MAX_VALUE>
 ]>>
-component TSDelayDoubleTest(double init, List<double> input, List<List<double>> output) {
+component TSDelayDoubleTest(double init, SyncStream<double> input, EventStream<double> output) {
   TSDelayDouble sut(init);
 
   generator.out -> sut.i;

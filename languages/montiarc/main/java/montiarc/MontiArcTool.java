@@ -6,6 +6,9 @@ import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
+import de.monticore.symboltable.modifiers.AccessModifier;
+import de.monticore.symboltable.modifiers.BasicAccessModifier;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
@@ -36,6 +39,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.JarURLConnection;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -51,6 +55,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -642,6 +647,18 @@ public class MontiArcTool extends MontiArcToolTOP {
     entries.forEach(entry -> MontiArcMill.globalScope().getSymbolPath().addEntry(entry));
   }
 
+  public void initializeStreams() {
+    URL streamURL = MontiArcTool.class.getClassLoader().getResource("Stream.symtabdefinitionsym");
+    if (streamURL == null) return;
+    try {
+      JarURLConnection urlConnection = (JarURLConnection) streamURL.openConnection();
+      JarFile jar = urlConnection.getJarFile();
+      Path jarPath = Path.of(jar.getName());
+      MontiArcMill.globalScope().getSymbolPath().addEntry(jarPath);
+    } catch (IOException ignored) {}
+  }
+
+
   public void initializeClass2MC() {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
@@ -649,6 +666,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   protected void initBuildInSymbols(boolean c2mc) {
     BasicSymbolsMill.initializePrimitives();
+    initializeStreams();
     if (c2mc) {
       this.initializeClass2MC();
     } else {

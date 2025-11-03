@@ -6,7 +6,7 @@ import montiarc.maunit.api.EmitTimed;
 
 <<test, ticks=[1,2,3,4], simulatedTickLength=1000000000>>
 component DynamicTimerTest(int ticks) {
-  EmitTimed<Duration> emitter([[Duration.ofSeconds(ticks)], [], [], [], [], []]);
+  EmitTimed<Duration> emitter(<Duration.ofSeconds(ticks), Tick, Tick, Tick, Tick>);
   DynamicTimer sut;
 
   emitter.out -> sut.start;
