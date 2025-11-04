@@ -132,7 +132,9 @@ public class NoInputPortInInitialAction4Family implements ArcBasisASTArcComponen
       MontiArcTraverser nameTraverser = MontiArcMill.traverser();
       ASTNameCollector nameCollector = new ASTNameCollector();
       nameTraverser.add4ExpressionsBasis(nameCollector);
-      stateEntry.getKey().getSCSAnte().accept(nameTraverser);
+      if (stateEntry.getKey().isPresentSCSAnte()) {
+        stateEntry.getKey().getSCSAnte().accept(nameTraverser);
+      }
       List<String> variableNames = new ArrayList<>();
 
       for (ASTNameExpression nameExpression : nameCollector.getExpressions()) {
@@ -142,7 +144,9 @@ public class NoInputPortInInitialAction4Family implements ArcBasisASTArcComponen
       MontiArcTraverser variableTraverser = MontiArcMill.traverser();
       ASTVariableDeclaratorCollector variableCollector = new ASTVariableDeclaratorCollector();
       variableTraverser.add4MCVarDeclarationStatements(variableCollector);
-      stateEntry.getKey().getSCSAnte().accept(variableTraverser);
+      if (stateEntry.getKey().isPresentSCSAnte()) {
+        stateEntry.getKey().getSCSAnte().accept(variableTraverser);
+      }
 
       // Step 3: Check if there is a potential violation
       if (!variableNames.isEmpty()) {
