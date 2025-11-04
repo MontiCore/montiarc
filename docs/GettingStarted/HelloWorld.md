@@ -18,7 +18,7 @@ montiarc --input HelloWorld.arc --output . # (1)!
 montiarc run DeployHelloWorld.java
 ```
 
-1.  If you've downloaded the jar directly, run `java -jar MontiArc-7.8.0.jar --input HelloWorld.arc --output .`
+1.  If you've downloaded the jar directly, run `java -jar MontiArc-7.8.1.jar --input HelloWorld.arc --output .`
 
 A `Hello, World!` should print to the terminal. If it did, congrats! You're now a MontiArc modeler.
 

@@ -107,7 +107,7 @@ class Cd2PojoPlugin : Plugin<Project> {
 
   private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with (project) {
     dependencies.addProvider(sourceSet.implementationConfigurationName, provider {
-      "${SE_LOGGING_PROJECT_REF}:${GENERATOR_VERSION}"
+      "${SE_LOGGING_PROJECT_REF}:7.8.0"
     })
   }
 

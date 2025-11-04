@@ -2,8 +2,8 @@
 plugins {
   java
   application
-  id("montiarc-jsim") version "7.8.0"
-  id("cd2pojo") version "7.8.0"
+  id("montiarc-jsim") version "7.8.1"
+  id("cd2pojo") version "7.8.1"
 }
 
 application {
