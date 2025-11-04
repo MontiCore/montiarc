@@ -1,3 +1,4 @@
+/* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
 import com.google.common.base.Preconditions;
