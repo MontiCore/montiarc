@@ -27,4 +27,11 @@ dependencies {
   implementation(seLibs.mc.cd4a)
   implementation(seLibs.mc.ocl.ocl2smt)
   implementation(variantOf(seLibs.mc.cd4a) { classifier("cd2smt") })
+
+  testImplementation((project(":languages:basis"))) {
+    capabilities {
+      requireCapability("montiarc.languages:basis-tests")
+    }
+  }
+
 }
