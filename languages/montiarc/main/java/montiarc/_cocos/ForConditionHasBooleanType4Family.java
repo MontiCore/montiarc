@@ -180,7 +180,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
               if (ExpressionSolverService.solve(forStatementEntryExpressionList) == Status.SATISFIABLE) {
                 var field = entry.getKey();
                 expressionFields.add(entry.getKey());
-                createdVariablesConditions.put(field.getName() + "_" + field.getSymbol().getType().print(), entry.getValue());
+                createdVariablesConditions.put(field.getName() + "_" + (field.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
               forStatementEntryExpressionList.clear();
             }
@@ -191,7 +191,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
               if (ExpressionSolverService.solve(forStatementEntryExpressionList) == Status.SATISFIABLE) {
                 var port = entry.getKey();
                 expressionPorts.add(port);
-                createdVariablesConditions.put(port.getName() + "_" + port.getSymbol().getType().print(), entry.getValue());
+                createdVariablesConditions.put(port.getName() + "_" + (port.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
               forStatementEntryExpressionList.clear();
             }

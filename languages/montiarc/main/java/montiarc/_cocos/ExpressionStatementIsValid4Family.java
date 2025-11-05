@@ -174,7 +174,7 @@ public class ExpressionStatementIsValid4Family implements ArcBasisASTArcComponen
                 if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE) {
                   var field = entry.getKey();
                   expressionFields.add(entry.getKey());
-                  createdVariablesConditions.put(field.getName() + "_" + field.getSymbol().getType().print(), entry.getValue());
+                  createdVariablesConditions.put(field.getName() + "_" + (field.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
                 }
                 expressionEntryExpressionList.clear();
               }
@@ -186,7 +186,7 @@ public class ExpressionStatementIsValid4Family implements ArcBasisASTArcComponen
                 if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE) {
                   var port = entry.getKey();
                   expressionPorts.add(port);
-                  createdVariablesConditions.put(port.getName() + "_" + port.getSymbol().getType().print(), entry.getValue());
+                  createdVariablesConditions.put(port.getName() + "_" + (port.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
                 }
                 expressionEntryExpressionList.clear();
               }

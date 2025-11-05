@@ -229,7 +229,7 @@ public class ExpressionBuildHelper {
 
     PortSymbol createdSymbol = null;
     if (!portType.isNullType() && !portType.isObscureType()) {
-      createdSymbol = MontiArcMill.portSymbolBuilder().setType(portType).setEnclosingScope(portSymbol.getEnclosingScope()).setName(portSymbol.getName() + "_" + portType.print()).build();
+      createdSymbol = MontiArcMill.portSymbolBuilder().setType(portType).setEnclosingScope(portSymbol.getEnclosingScope()).setName(portSymbol.getName() + "_" + (portType.print().hashCode() & 0x7fffffff)).build();
     }
 
     if (createdSymbol == null) return null;
@@ -252,7 +252,7 @@ public class ExpressionBuildHelper {
     var fieldType = variableSymbol.getType();
     VariableSymbol createdSymbol = null;
     if (!fieldType.isNullType() && !fieldType.isObscureType()) {
-      createdSymbol = MontiArcMill.variableSymbolBuilder().setType(fieldType).setEnclosingScope(variableSymbol.getEnclosingScope()).setName(variableSymbol.getAstNode().getName() + "_" + fieldType.print()).build();
+      createdSymbol = MontiArcMill.variableSymbolBuilder().setType(fieldType).setEnclosingScope(variableSymbol.getEnclosingScope()).setName(variableSymbol.getAstNode().getName() + "_" + (fieldType.print().hashCode() & 0x7fffffff)).build();
     }
     if (createdSymbol == null) return null;
     scope.add(createdSymbol);
@@ -271,7 +271,7 @@ public class ExpressionBuildHelper {
     var parameterType = parameter.getSymbol().getType();
     VariableSymbol createdSymbol = null;
     if (!parameterType.isNullType() && !parameterType.isObscureType()) {
-      createdSymbol = MontiArcMill.variableSymbolBuilder().setType(parameterType).setEnclosingScope(parameter.getEnclosingScope()).setName(parameter.getName() + "_" + parameterType.print()).build();
+      createdSymbol = MontiArcMill.variableSymbolBuilder().setType(parameterType).setEnclosingScope(parameter.getEnclosingScope()).setName(parameter.getName() + "_" + (parameterType.print().hashCode() & 0x7fffffff)).build();
     }
     if (createdSymbol == null) return null;
     scope.add(createdSymbol);

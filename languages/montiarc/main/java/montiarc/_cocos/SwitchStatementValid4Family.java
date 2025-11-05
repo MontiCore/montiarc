@@ -183,7 +183,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
               if (ExpressionSolverService.solve(switchStatementEntryExpressionList) == Status.SATISFIABLE) {
                 var field = entry.getKey();
                 expressionFields.add(entry.getKey());
-                createdVariablesConditions.put(field.getName() + "_" + field.getSymbol().getType().print(), entry.getValue());
+                createdVariablesConditions.put(field.getName() + "_" + (field.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
               switchStatementEntryExpressionList.clear();
             }
@@ -194,7 +194,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
               if (ExpressionSolverService.solve(switchStatementEntryExpressionList) == Status.SATISFIABLE) {
                 var port = entry.getKey();
                 expressionPorts.add(port);
-                createdVariablesConditions.put(port.getName() + "_" + port.getSymbol().getType().print(), entry.getValue());
+                createdVariablesConditions.put(port.getName() + "_" + (port.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
               switchStatementEntryExpressionList.clear();
             }

@@ -177,7 +177,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
               if (ExpressionSolverService.solve(declaratorEntryExpressionList) == Status.SATISFIABLE) {
                 var field = entry.getKey();
                 expressionFields.add(entry.getKey());
-                createdVariablesConditions.put(field.getName() + "_" + field.getSymbol().getType().print(), entry.getValue());
+                createdVariablesConditions.put(field.getName() + "_" + (field.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
               declaratorEntryExpressionList.clear();
             }
@@ -188,7 +188,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
               if (ExpressionSolverService.solve(declaratorEntryExpressionList) == Status.SATISFIABLE) {
                 var port = entry.getKey();
                 expressionPorts.add(port);
-                createdVariablesConditions.put(port.getName() + "_" + port.getSymbol().getType().print(), entry.getValue());
+                createdVariablesConditions.put(port.getName() + "_" + (port.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
               declaratorEntryExpressionList.clear();
             }

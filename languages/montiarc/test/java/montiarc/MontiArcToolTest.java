@@ -788,7 +788,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
       //Arguments.of("MissingPortType15.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
       //Arguments.of("MissingPortType16.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
       Arguments.of("NameClashParamPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashParamVar.arc", new Error[]{ArcError.CIRCULAR_FIELDS_DEPENDENCY, ArcError.UNIQUE_IDENTIFIER_NAMES}),
+      Arguments.of("NameClashParamVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashPortPort1.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashPortPort2.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashPortVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),

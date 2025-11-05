@@ -11,7 +11,7 @@ component NameClashParamPort(int p) {
   port in int p;
   port out int o;
 
-  int v = p;
+  int v = 0;
 
   automaton {
     initial state S;

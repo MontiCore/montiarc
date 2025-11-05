@@ -55,37 +55,16 @@ public class NoNonSyncInputPortInEpsilonTransition4FamilyTest extends MontiArcTe
   private static Stream<Arguments> provideUniqueSenderModel() {
     List<Arguments> componentList = new ArrayList<>();
     Arguments simpleModel = arg(
-      "package montiarc.ma2jsim.test;\n" +
-        "\n" +
-        "component EventInverter {\n" +
-        "  port in Boolean bIn;\n" +
-        "  port in Integer iIn;\n" +
-        "\n" +
-        "  port out Boolean bOut;\n" +
-        "  port out Integer iOut;\n" +
-        "\n" +
-        "  automaton {\n" +
-        "    initial state S;\n" +
-        "\n" +
-        "    S -> S [bIn != null] bIn / {\n" +
-        "      java.lang.System.out.println(\"Message stimulus bIn.\");\n" +
-        "      bOut = !bIn;\n" +
-        "    }\n" +
-        "\n" +
-        "    S -> S [iIn != null] iIn / {\n" +
-        "      java.lang.System.out.println(\"Message stimulus iIn.\");\n" +
-        "      iOut = -1 * iIn;\n" +
-        "    }\n" +
-        "\n" +
-        "    S -> S / {\n" +
-        "      java.lang.System.out.println(\"Tick stimulus.\");\n" +
-        "    }\n" +
-        "\n" +
-        "    S -> S / {\n" +
-        "      java.lang.System.out.println(\"Stimulus-free transition.\");\n" +
-        "    }\n" +
-        "  }\n" +
-        "}\n");
+      "component Comp3 {" +
+        "feature f1,f2; " +
+        "varif(f1){  port out int o; " +
+        "  int v = 0; }" +
+        "varif(f2){  automaton { " +
+        "    state S; " +
+        "    S -> S / { o = v; } " +
+        "  } }" +
+        "constraint(f1);" +
+        "}");
     componentList.add(simpleModel);
     return componentList.stream();
   }

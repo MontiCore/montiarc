@@ -162,10 +162,14 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
 
             if (node instanceof ASTVariableArcFullVariantComponentType) {
 
-              var varSymbol = ports.get(0);
-              doEntryExpressionList.clear();
+              for(VariableSymbol portSymbol : ports){
 
-              var portConditions = portsymbolConditions.entrySet().stream().filter(e -> e.getKey().getFullName().equals(varSymbol.getFullName())).map(Map.Entry::getValue).collect(Collectors.toList());
+                if(!(portSymbol instanceof Port2VariableAdapter))
+                  continue;
+
+              doEntryExpressionList.clear();
+              
+              var portConditions = portsymbolConditions.entrySet().stream().filter(e -> e.getKey().equals(((Port2VariableAdapter) portSymbol).getAdaptee())).map(Map.Entry::getValue).collect(Collectors.toList());
               if (portConditions.isEmpty())
                 continue;
 
@@ -175,7 +179,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
                 if (ExpressionSolverService.solve(doEntryExpressionList) == Status.UNSATISFIABLE)
                   continue;
 
-                PortSymbol port = ((Port2VariableAdapter) ports.get(0)).getAdaptee();
+                PortSymbol port = ((Port2VariableAdapter) portSymbol).getAdaptee();
                 if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
                   if (shadowingFields.isEmpty()) {
                     SourcePosition sourcePosition = node.get_SourcePositionStart();
@@ -183,6 +187,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
                   }
                 }
               }
+            }
             } else {
               if (!ports.isEmpty() && ports.get(0) instanceof Port2VariableAdapter) {
                 PortSymbol port = ((Port2VariableAdapter) ports.get(0)).getAdaptee();
