@@ -89,8 +89,8 @@ public abstract class ATestBase {
 
   /**
    * Factory method creating {@code Arguments} of the given {@code objects}
-   * and {@code errors}s that can be used as result of a method source of a
-   * parameterized test.
+   * and {@code errors} that can be provided inside a stream as arguments
+   * (junit method source) to a parameterized test.
    *
    * <p>This method is an <em>alias</em> and shorthand notation for
    * {@link Arguments#of} and {@link Arguments#arguments}.
@@ -112,7 +112,7 @@ public abstract class ATestBase {
    * @see ATestBase#arg(Object, Error...)
    */
   public static Arguments arg(Object obj1, Object obj2,
-                                 Object obj3, Error... errors) {
+                              Object obj3, Error... errors) {
     return Arguments.of(obj1, obj2, obj3, errors);
   }
 
@@ -120,7 +120,7 @@ public abstract class ATestBase {
    * @see ATestBase#arg(Object, Error...)
    */
   public static Arguments arg(Object obj1, Object obj2, Object obj3,
-                                 Object obj4, Error... errors) {
+                              Object obj4, Error... errors) {
     return Arguments.of(obj1, obj2, obj3, obj4, errors);
   }
 
@@ -128,7 +128,7 @@ public abstract class ATestBase {
    * @see ATestBase#arg(Object, Error...)
    */
   public static Arguments arg(Object obj1, Object obj2, Object obj3,
-                                 Object obj4, Object obj5, Error... errors) {
+                              Object obj4, Object obj5, Error... errors) {
     return Arguments.of(obj1, obj2, obj3, obj4, obj5, errors);
   }
 }
