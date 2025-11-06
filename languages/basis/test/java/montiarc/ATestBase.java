@@ -134,7 +134,7 @@ public abstract class ATestBase {
 
   /**
    * Factory method creating {@code Arguments} of the given {@code objects}
-   * and {@code findings} that can be provided inside a stream as arguments
+   * and {@code Finding} that can be provided inside a stream as arguments
    * (junit method source) to a parameterized test.
    *
    * <p>This method is an <em>alias</em> and shorthand notation for
@@ -142,38 +142,38 @@ public abstract class ATestBase {
    *
    * @return an instance of {@link Arguments} of the given arguments
    */
-  public static Arguments arg_f(Object obj, Finding... findings) {
-    return Arguments.of(obj, findings);
+  public static Arguments arg(Object obj, Finding first, Finding... rest) {
+    return Arguments.of(obj, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg_f(Object, Finding...)
+   * @see ATestBase#arg(Object, Finding, Finding...)
    */
-  public static Arguments arg_f(Object obj1, Object obj2, Finding... findings) {
-    return Arguments.of(obj1, obj2, findings);
+  public static Arguments arg(Object obj1, Object obj2, Finding first, Finding... rest) {
+    return Arguments.of(obj1, obj2, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg_f(Object, Finding...)
+   * @see ATestBase#arg(Object, Finding, Finding...)
    */
-  public static Arguments arg_f(Object obj1, Object obj2,
-                                Object obj3, Finding... findings) {
-    return Arguments.of(obj1, obj2, obj3, findings);
+  public static Arguments arg(Object obj1, Object obj2,
+                              Object obj3, Finding first, Finding... rest) {
+    return Arguments.of(obj1, obj2, obj3, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg_f(Object, Finding...)
+   * @see ATestBase#arg(Object, Finding, Finding...)
    */
-  public static Arguments arg_f(Object obj1, Object obj2, Object obj3,
-                                Object obj4, Finding... findings) {
-    return Arguments.of(obj1, obj2, obj3, obj4, findings);
+  public static Arguments arg(Object obj1, Object obj2, Object obj3,
+                              Object obj4, Finding first, Finding... rest) {
+    return Arguments.of(obj1, obj2, obj3, obj4, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg_f(Object, Finding...)
+   * @see ATestBase#arg(Object, Finding, Finding...)
    */
-  public static Arguments arg_f(Object obj1, Object obj2, Object obj3,
-                                Object obj4, Object obj5, Finding... findings) {
-    return Arguments.of(obj1, obj2, obj3, obj4, obj5, findings);
+  public static Arguments arg(Object obj1, Object obj2, Object obj3,
+                              Object obj4, Object obj5, Finding first, Finding... rest) {
+    return Arguments.of(obj1, obj2, obj3, obj4, obj5, ArrayUtils.insert(0, rest, first));
   }
 }
