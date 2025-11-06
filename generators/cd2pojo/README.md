@@ -45,4 +45,3 @@ Output: POJOs in folder "out".
 * [Best Practices](https://github.com/MontiCore/monticore/blob/HEAD/docs/BestPractices.md)
 * [Publications about MBSE and MontiCore](https://www.se-rwth.de/publications/)
 * [Licence definition](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
-

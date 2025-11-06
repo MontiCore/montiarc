@@ -17,7 +17,7 @@ component NoEnabledTransition {
         entry / o = "-> aa";   do / o = "~ aa";   exit / o = "aa ->";
       }
     }
-    
+
     state b {
       entry / o = "-> b";   do / o = "~ b";   exit / o = "b ->";
       initial state bb {
@@ -27,7 +27,7 @@ component NoEnabledTransition {
         }
       }
     }
-    
+
     state c {
       entry / o = "-> c";   do / o = "~ c";   exit / o = "c ->";
       initial state cc {
@@ -40,7 +40,7 @@ component NoEnabledTransition {
         }
       }
     }
-    
+
     state d {
       entry / o = "-> d";   do / o = "~ d";   exit / o = "d ->";
       initial state dd {

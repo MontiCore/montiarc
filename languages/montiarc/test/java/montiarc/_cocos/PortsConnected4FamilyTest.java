@@ -408,4 +408,3 @@ public class PortsConnected4FamilyTest extends MontiArcTestBase {
     );}
 
 }
-

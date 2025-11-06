@@ -13,4 +13,3 @@ component ParamsBool2(boolean p1, boolean p2) {
     initial state S;
   }
 }
-

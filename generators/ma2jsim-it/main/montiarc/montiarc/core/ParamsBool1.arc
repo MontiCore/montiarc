@@ -15,4 +15,3 @@ component ParamsBool1(boolean p1, boolean p2) {
     }
   }
 }
-

@@ -39,4 +39,3 @@ public class MontiArcGradleModelPathResolver extends ModelPathResolver<MultiProj
     );
   }
 }
-

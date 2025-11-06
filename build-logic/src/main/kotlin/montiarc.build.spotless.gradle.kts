@@ -11,28 +11,35 @@ spotless {
     targetExclude(fileTree("$buildDir") { include("**/*.java") })
 
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */")
+    endWithNewline()
   }
   kotlin {
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */")
+    endWithNewline()
   }
   kotlinGradle {
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", ".")
+    endWithNewline()
   }
   format("montiArc") {
     target("**/*.arc")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", ".")
+    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(package|import|component) ")
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+  format("classDiagram") {
+    target("**/*.cd")
+    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(package|import|classdiagram) ")
     trimTrailingWhitespace()
     indentWithSpaces(2)
     endWithNewline()
   }
   format("markdown") {
-    target("**/*.md")
-    licenseHeader("<!-- (c) https://github.com/MontiCore/monticore -->", ".")
+    target("docs/**/*.md", "README.md")
     endWithNewline()
   }
   format("montiCore") {
     target("**/*.mc4")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", ".")
     indentWithSpaces(2)
     endWithNewline()
   }

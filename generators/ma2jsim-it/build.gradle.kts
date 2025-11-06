@@ -68,4 +68,3 @@ tasks.withType(MontiArcCompile::class.java) {
 tasks.named(variabilitySources!!.compileMontiarcTaskName, MontiArcCompile::class.java) {
   checkVariability.set(true)
 }
-

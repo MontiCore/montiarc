@@ -1,10 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
-/**
- * The model is invalid. Variable v is defined multiple times inside the
- * same scope. The tool should report an error for v being defined multiple
- * times inside the same scope but no subsequent errors.
- */
 component NameClashVarVar {
 
   port in int i;

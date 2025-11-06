@@ -145,5 +145,3 @@ public class Tuple2<T0, T1> {
   }
 
 }
-
-

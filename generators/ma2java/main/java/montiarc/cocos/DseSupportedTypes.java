@@ -129,5 +129,3 @@ public abstract class DseSupportedTypes {
     }
   }
 }
-
-

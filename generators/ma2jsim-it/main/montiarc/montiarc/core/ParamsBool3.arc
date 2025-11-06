@@ -25,4 +25,3 @@ component ParamsBool3(boolean p1, boolean p2) {
     S -> S [!p1 && !p2] i / { }
   }
 }
-

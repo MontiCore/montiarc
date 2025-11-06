@@ -184,4 +184,3 @@ public class ExpressionToFDHelper<T extends Formula> {
     return false;
   }
 }
-

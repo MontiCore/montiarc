@@ -23,4 +23,3 @@ component ParamsBool4(boolean p1, boolean p2) {
     }
   }
 }
-

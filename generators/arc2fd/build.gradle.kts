@@ -34,4 +34,3 @@ tasks.shadowJar {
   archiveBaseName.set("Arc2FD")
   archiveFileName.set("${archiveBaseName.get()}.${archiveExtension.get()}")
 }
-

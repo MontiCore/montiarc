@@ -112,13 +112,13 @@ component NestedTransitionsInSameHierarchy {
     state Neutral;
 
     state a;
-    
+
     // "b" goes down to level 1 (starting at 0)
     state b {
       initial state bb;
       state bz { initial state bzz { initial state bzz_z { initial state bzz_zz { initial state bzz_zzz; } } } }
     }
-        
+
     // "c" goes down to level 2 (starting at 0)
     state c {
       initial state cc {
@@ -127,7 +127,7 @@ component NestedTransitionsInSameHierarchy {
       }
       state cz { initial state czz { initial state czz_z { initial state czz_zz { initial state czz_zzz; } } } }
     }
-            
+
     // "d" goes down to level 3 (starting at 0)
     state d {
       initial state dd {
@@ -139,7 +139,7 @@ component NestedTransitionsInSameHierarchy {
       }
       state dz { initial state dzz { initial state dzz_z { initial state dzz_zz {initial state dzz_zzz; } } } }
     }
-    
+
     // "e" goes down to level 4 (starting at 0)
     state e {
       initial state ee {
@@ -154,7 +154,7 @@ component NestedTransitionsInSameHierarchy {
       }
       state ez { initial state ezz { initial state ezz_z { initial state ezz_zz { initial state ezz_zzz; } } } }
     }
-        
+
     // "f" goes down to level 5 (starting at 0)
     state f {
       initial state ff {

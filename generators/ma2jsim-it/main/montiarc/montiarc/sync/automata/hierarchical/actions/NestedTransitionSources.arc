@@ -52,7 +52,7 @@ component NestedTransitionSources {
     state a {
       entry / o = "-> a";   do / o = "~ a";   exit / o = "a ->";
     }
-    
+
     // "b" goes down to level 1 (starting at 0)
     state b {
       entry / o = "-> b";   do / o = "~ b";   exit / o = "b ->";
@@ -61,7 +61,7 @@ component NestedTransitionSources {
       }
       state bz { initial state bzz { initial state bzz_z { initial state bzz_zz { initial state bzz_zzz; } } } }
     }
-        
+
     // "c" goes down to level 2 (starting at 0)
     state c {
       entry / o = "-> c";   do / o = "~ c";   exit / o = "c ->";
@@ -74,7 +74,7 @@ component NestedTransitionSources {
       }
       state cz { initial state czz { initial state czz_z { initial state czz_zz { initial state czz_zzz; } } } }
     }
-            
+
     // "d" goes down to level 3 (starting at 0)
     state d {
       entry / o = "-> d";   do / o = "~ d";   exit / o = "d ->";
@@ -91,7 +91,7 @@ component NestedTransitionSources {
       }
       state dz { initial state dzz { initial state dzz_z { initial state dzz_zz {initial state dzz_zzz; } } } }
     }
-    
+
     // "e" goes down to level 4 (starting at 0)
     state e {
       entry / o = "-> e";   do / o = "~ e";   exit / o = "e ->";
@@ -112,7 +112,7 @@ component NestedTransitionSources {
       }
       state ez { initial state ezz { initial state ezz_z { initial state ezz_zz { initial state ezz_zzz; } } } }
     }
-        
+
     // "f" goes down to level 5 (starting at 0)
     state f {
       entry / o = "-> f";   do / o = "~ f";   exit / o = "f ->";

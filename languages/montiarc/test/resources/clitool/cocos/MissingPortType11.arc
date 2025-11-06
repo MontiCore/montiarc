@@ -1,12 +1,4 @@
 /* (c) https://github.com/MontiCore/monticore */
-
-/**
- * The model is invalid. The type of the incoming port of an inner component
- * and the type of the outgoing port of another inner component cannot be
- * resolved. The ports are used as source and target of a hidden connector.
- * The tool should report an error for the missing types but no type mismatch
- * error, as source and target are of the same (missing) type.
- */
 component MissingPortType11 {
 
   port in int i;

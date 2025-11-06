@@ -286,4 +286,3 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
   }
 
 }
-

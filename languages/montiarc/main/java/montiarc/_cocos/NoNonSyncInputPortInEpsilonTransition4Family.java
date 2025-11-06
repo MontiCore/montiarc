@@ -209,4 +209,3 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
     return v -> true;
   }
 }
-

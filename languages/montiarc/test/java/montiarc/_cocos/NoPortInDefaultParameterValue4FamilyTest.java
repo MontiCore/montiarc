@@ -876,5 +876,3 @@ public class NoPortInDefaultParameterValue4FamilyTest extends MontiArcTestBase {
       );
     }
   }
-
-
