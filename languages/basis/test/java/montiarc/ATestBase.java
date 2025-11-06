@@ -14,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -63,15 +64,22 @@ public abstract class ATestBase {
   }
 
   public static String[] getLoggedErrorCodes() {
-    return Log.getFindings().stream()
-      .map(Finding::getMsg)
+    return getErrorCodes(Log.getFindings().stream());
+  }
+
+  public static String[] getErrorCodes(@NotNull Error... errors) {
+    return Arrays.stream(errors).map(Error::getErrorCode).toArray(String[]::new);
+  }
+
+  public static String[] getErrorCodes(@NotNull Finding... findings) {
+    return getErrorCodes(Arrays.stream(findings));
+  }
+
+  protected static String[] getErrorCodes(@NotNull Stream<Finding> findings) {
+    return findings.map(Finding::getMsg)
       .map(msg -> msg.substring(0, 7))
       .filter(Error.ERROR_CODE_PATTERN.asPredicate())
       .toArray(String[]::new);
-  }
-
-  public static String[] getErrorCodes(@NotNull Error... e) {
-    return Arrays.stream(e).map(Error::getErrorCode).toArray(String[]::new);
   }
 
   /**
