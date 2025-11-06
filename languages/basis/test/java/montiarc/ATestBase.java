@@ -6,6 +6,7 @@ import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc.util.Error;
+import org.apache.commons.lang3.ArrayUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.provider.Arguments;
 
 import java.util.Arrays;
-import java.util.regex.Pattern;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -89,7 +89,7 @@ public abstract class ATestBase {
 
   /**
    * Factory method creating {@code Arguments} of the given {@code objects}
-   * and {@code errors} that can be provided inside a stream as arguments
+   * and {@code rest} that can be provided inside a stream as arguments
    * (junit method source) to a parameterized test.
    *
    * <p>This method is an <em>alias</em> and shorthand notation for
@@ -97,39 +97,39 @@ public abstract class ATestBase {
    *
    * @return an instance of {@link Arguments} of the given arguments
    */
-  public static Arguments arg(Object obj, Error... errors) {
-    return Arguments.of(obj, errors);
+  public static Arguments arg(Object obj, Error first, Error... rest) {
+    return Arguments.of(obj, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg(Object, Error...)
+   * @see ATestBase#arg(Object, Error, Error...)
    */
-  public static Arguments arg(Object obj1, Object obj2, Error... errors) {
-    return Arguments.of(obj1, obj2, errors);
+  public static Arguments arg(Object obj1, Object obj2, Error first, Error... rest) {
+    return Arguments.of(obj1, obj2, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg(Object, Error...)
+   * @see ATestBase#arg(Object, Error, Error...)
    */
   public static Arguments arg(Object obj1, Object obj2,
-                              Object obj3, Error... errors) {
-    return Arguments.of(obj1, obj2, obj3, errors);
+                              Object obj3, Error first, Error... rest) {
+    return Arguments.of(obj1, obj2, obj3, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg(Object, Error...)
+   * @see ATestBase#arg(Object, Error, Error...)
    */
   public static Arguments arg(Object obj1, Object obj2, Object obj3,
-                              Object obj4, Error... errors) {
-    return Arguments.of(obj1, obj2, obj3, obj4, errors);
+                              Object obj4, Error first, Error... rest) {
+    return Arguments.of(obj1, obj2, obj3, obj4, ArrayUtils.insert(0, rest, first));
   }
 
   /**
-   * @see ATestBase#arg(Object, Error...)
+   * @see ATestBase#arg(Object, Error, Error...)
    */
   public static Arguments arg(Object obj1, Object obj2, Object obj3,
-                              Object obj4, Object obj5, Error... errors) {
-    return Arguments.of(obj1, obj2, obj3, obj4, obj5, errors);
+                              Object obj4, Object obj5, Error first, Error... rest) {
+    return Arguments.of(obj1, obj2, obj3, obj4, obj5, ArrayUtils.insert(0, rest, first));
   }
 
   /**

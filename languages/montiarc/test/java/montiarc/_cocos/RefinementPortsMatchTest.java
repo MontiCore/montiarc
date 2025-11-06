@@ -320,13 +320,14 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
         "component Comp1 refines RestrictedChild {" +
         "  port      in OOType i;" +
         "  port sync out SubType o;" +
-        "}"),
+        "}", new Error[0]),
       // Refining a component validly with all ports inherited
       arg("component Super2 {" +
         "  port      in  OOType i;" +
         "  port sync out SubType o;" +
         "}",
-        "component Comp2 extends Super2 refines Restrictive { }"),
+        "component Comp2 extends Super2 refines Restrictive { }",
+        new Error[0]),
       // Super comp misses one of the ports
       arg("component Super3 {" +
         "  port sync out SubType o;" +
@@ -391,14 +392,14 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
       // But the presence of a similarly named port is checked
       arg("component Comp1 refines DuplicatePortAllDifferent {" +
         "  port in OOType a;" +
-        "}"),
+        "}", new Error[0]),
       // Missing port
       arg("component Comp2 refines DuplicatePortAllDifferent { }",
         ArcError.REFINEMENT_PORT_NAME_MISMATCH),
       // Ambiguous port timing -> own timing is not checked
       arg("component Comp3 refines DuplicatePortSameDirection {" +
         "  port in long a;" +
-        "}"),
+        "}", new Error[0]),
       // Ambiguous port timing -> own timing is not checked
       // But direction is unambiguous -> is checked
       arg("component Comp4 refines DuplicatePortSameDirection {" +
@@ -413,7 +414,7 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
       // Types are different -> Our type must be a subtype of both
       arg("component Comp6 refines DuplicateSameDirectionTiming {" +
         "  port in long a;" +
-        "}"),
+        "}", new Error[0]),
       // Unambiguous direction -> Timing and types are checked
       // Should find timing change
       arg("component Comp7 refines DuplicateSameDirectionTiming {" +
@@ -428,22 +429,22 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
       // -> Coco should not check timing nor port type
       arg("component Comp9 refines DuplicateSameTimingTypes {" +
         "  port in OOType a;" +
-        "}"),
+        "}", new Error[0]),
       // Ambiguous directions in abstraction's ports
       // -> Coco should not find timing change
       arg("component Comp10 refines DuplicateSameTimingTypes {" +
         "  port sync in OOType a;" +
-        "}"),
+        "}", new Error[0]),
       // Ambiguous directions in abstraction's ports
       // -> Coco should not find type change
       arg("component Comp11 refines DuplicateSameTimingTypes {" +
         "  port in SubType a;" +
-        "}"),
+        "}", new Error[0]),
       // Abstraction has a duplicate port, but the direction, type, and timing
       // is unambiguous -> should still find nothing, due to no error
       arg("component Comp12 refines DuplicateEverythingSame {" +
         "  port in OOType a;" +
-        "}"),
+        "}", new Error[0]),
       // Abstraction has a duplicate port, but the direction, type, and timing
       // is unambiguous -> should identify changed direction
       arg("component Comp13 refines DuplicateEverythingSame {" +
@@ -465,7 +466,7 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
         "  port      in  OOType i;" +
         "  port      in  OOType i;" +
         "  port sync out SubType o;" +
-        "}"),
+        "}", new Error[0]),
       // Abstraction is correct, but refinement has duplicate
       // Timing is changed once -> One error
       arg("component Comp16 refines Restrictive {" +

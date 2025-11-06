@@ -77,34 +77,40 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       // Nothing refined
       arg(refines(), withPorts(
         port(TIMED, IN, "OOType", "i"),
-        port(SYNC, OUT, "SubType", "o"))
+        port(SYNC, OUT, "SubType", "o")),
+        new Error[0]
       ),
       // No interface change
       arg(refines("Liberal"), withPorts(
         port(SYNC, IN, "SubType", "i"),
-        port(TIMED, OUT, "OOType", "o")
-      )),
+        port(TIMED, OUT, "OOType", "o")),
+        new Error[0]
+      ),
       // No interface change
       arg(refines("Restrictive"), withPorts(
         port(TIMED, IN, "OOType", "i"),
-        port(SYNC, OUT, "SubType", "o")
-      )),
+        port(SYNC, OUT, "SubType", "o")),
+        new Error[0]
+      ),
       // Changing the timing legally
       arg(refines("Liberal"), withPorts(
         port(TIMED, IN, "SubType", "i"),
-        port(SYNC, OUT, "OOType", "o")
-      )),
+        port(SYNC, OUT, "OOType", "o")),
+        new Error[0]
+      ),
       // Changing the types legally
       arg(refines("Liberal"), withPorts(
         port(SYNC, IN, "OOType", "i"),
-        port(TIMED, OUT, "SubType", "o")
-      )),
+        port(TIMED, OUT, "SubType", "o")),
+        new Error[0]
+      ),
       // Refining the liberal interface with time and type changes,
       // maintaining the restrictive interface
       arg(refines("Liberal", "Restrictive"), withPorts(
         port(TIMED, IN, "OOType", "i"),
-        port(SYNC, OUT, "SubType", "o")
-      ))
+        port(SYNC, OUT, "SubType", "o")),
+        new Error[0]
+      )
     );
   }
 
@@ -224,13 +230,13 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       // Ambiguous port direction in abstraction, so type / timing is ignored
       // But the presence of a similarly named port is checked
       arg(refines("DuplicatePortAllDifferent"), withPorts(
-        port(TIMED, IN, "OOType", "a"))),
+        port(TIMED, IN, "OOType", "a")), new Error[0]),
       // Missing port
       arg(refines("DuplicatePortAllDifferent"), withPorts(),
         ArcError.REFINEMENT_PORT_NAME_MISMATCH),
       // Ambiguous port timing -> own timing is not checked
       arg(refines("DuplicatePortSameDirection"), withPorts(
-        port(TIMED, IN, "long", "a"))),
+        port(TIMED, IN, "long", "a")), new Error[0]),
       // Ambiguous port timing -> own timing is not checked
       // But direction is unambiguous -> is checked
       arg(refines("DuplicatePortSameDirection"), withPorts(
@@ -244,7 +250,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       // Unambiguous abstraction port direction -> Timing and types are checked
       // Types are different -> Our type must be a subtype of both
       arg(refines("DuplicateSameDirectionTiming"), withPorts(
-        port(TIMED, IN, "long", "a"))),
+        port(TIMED, IN, "long", "a")), new Error[0]),
       // Unambiguous direction -> Timing and types are checked
       // Should find timing change
       arg(refines("DuplicateSameDirectionTiming"), withPorts(
@@ -258,19 +264,19 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       // Ambiguous directions in abstraction's ports
       // -> Coco should not check timing nor port type
       arg(refines("DuplicateSameTimingTypes"), withPorts(
-        port(TIMED, IN, "OOType", "a"))),
+        port(TIMED, IN, "OOType", "a")), new Error[0]),
       // Ambiguous directions in abstraction's ports
       // -> Coco should not find timing change
       arg(refines("DuplicateSameTimingTypes"), withPorts(
-        port(SYNC, IN, "OOType", "a"))),
+        port(SYNC, IN, "OOType", "a")), new Error[0]),
       // Ambiguous directions in abstraction's ports
       // -> Coco should not find type change
       arg(refines("DuplicateSameTimingTypes"), withPorts(
-        port(TIMED, IN, "SubType", "a"))),
+        port(TIMED, IN, "SubType", "a")), new Error[0]),
       // Abstraction has a duplicate port, but the direction, type, and timing
       // is unambiguous -> should still find nothing, due to no error
       arg(refines("DuplicateEverythingSame"), withPorts(
-        port(TIMED, IN, "OOType", "a"))),
+        port(TIMED, IN, "OOType", "a")), new Error[0]),
       // Abstraction has a duplicate port, but the direction, type, and timing
       // is unambiguous -> should identify changed direction
       arg(refines("DuplicateEverythingSame"), withPorts(
@@ -290,7 +296,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       arg(refines("Restrictive"), withPorts(
         port(TIMED, IN, "OOType", "i"),
         port(TIMED, IN, "OOType", "i"),
-        port(SYNC, OUT, "SubType", "o"))),
+        port(SYNC, OUT, "SubType", "o")), new Error[0]),
       // Abstraction is correct, but refinement has duplicate
       // Timing is changed once -> One error
       arg(refines("Restrictive"), withPorts(
@@ -415,7 +421,7 @@ class RefinementPortsMatchTest extends ArcBasisTestBase {
       // Refining a component that has got its ports inherited
       arg(refines("Restrictive"), withPorts(
         port(TIMED, IN, "OOType", "i"),
-        port(SYNC, OUT, "SubType", "o"))),
+        port(SYNC, OUT, "SubType", "o")), new Error[0]),
       // Super comp misses one of the ports
       arg(refines("Restrictive"), withPorts(
         port(SYNC, OUT, "SubType", "o")),
