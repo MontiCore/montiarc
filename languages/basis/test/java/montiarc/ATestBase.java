@@ -66,7 +66,7 @@ public abstract class ATestBase {
     return Log.getFindings().stream()
       .map(Finding::getMsg)
       .map(msg -> msg.substring(0, 7))
-      .filter(Pattern.compile("0x[0-9a-fA-F]{5}").asPredicate())
+      .filter(Error.ERROR_CODE_PATTERN.asPredicate())
       .toArray(String[]::new);
   }
 

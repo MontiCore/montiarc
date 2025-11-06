@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
  */
 public interface Error {
 
-  Pattern ERROR_CODE_PATTERN = Pattern.compile("0xC\\d{4}");
+  Pattern ERROR_CODE_PATTERN = Pattern.compile("0x[0-9a-fA-F]{5}");
 
   /**
    * @return The unique error code of this error.
