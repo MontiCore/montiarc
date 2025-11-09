@@ -213,8 +213,9 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
         continue;
       BoolExpr portisConnected = portConnected.get(port) != null ? portConnected.get(port) : ctx.mkFalse();
       BoolExpr portUnConnected = ctx.mkNot(portisConnected);
-      List<BoolExpr> expressionList = new ArrayList<>(List.of(portisPresent, featureConstraints, portUnConnected));
+      BoolExpr portConnectsTo = !portisConnected.equals(ctx.mkFalse()) ? ctx.mkImplies(ctx.mkBoolConst(port + "_active"), portisConnected) : ctx.mkTrue();
 
+      List<BoolExpr> expressionList = new ArrayList<>(List.of(portisPresent,(ctx.mkEq(ctx.mkBoolConst(port + "_active"),ctx.mkTrue())), featureConstraints, portUnConnected,portConnectsTo));
 
       if (ExpressionSolverService.solve(expressionList) == Status.SATISFIABLE) {
         PortSymbol portSymbol = portSymbols.get(port);
