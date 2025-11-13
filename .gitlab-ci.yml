@@ -75,7 +75,7 @@ Unit Test:
         path: build/reports/test-coverage/jacocoAggregated.xml
       junit: ./**/test-results/test/**/TEST-*.xml
     paths:
-      - ./**/build/reports/test-coverage/jacoco.xml
+      - ./**/build/**/reports/test-coverage/jacoco.xml
     when: always
 
 Deploy Nexus:
