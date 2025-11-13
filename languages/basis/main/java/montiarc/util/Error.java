@@ -18,7 +18,7 @@ public interface Error {
 
   /**
    *
-   * @return The error message of this error.
+   * @return The msg format of this error.
    */
-  String printErrorMessage();
+  String getErrorMsgFormat();
 }

@@ -1479,7 +1479,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
     }
 
     @Override
-    public String printErrorMessage() {
+    public String getErrorMsgFormat() {
       return "";
     }
   }

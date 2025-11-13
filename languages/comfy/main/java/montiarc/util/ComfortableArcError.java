@@ -15,14 +15,14 @@ public enum ComfortableArcError implements Error {
     "instantiation may only reference the component instance they belong to. -> '%s' is disallowed.");
 
   private final String errorCode;
-  private final String errorMessage;
+  private final String errorMsgFormat;
 
-  ComfortableArcError(String errorCode, String errorMessage) {
+  ComfortableArcError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
-    assert (errorMessage != null);
+    assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+    this.errorMsgFormat = errorMsgFormat;
   }
 
   /**
@@ -37,20 +37,20 @@ public enum ComfortableArcError implements Error {
    * @return The error message of this error.
    */
   @Override
-  public String printErrorMessage() {
-    return this.errorMessage;
+  public String getErrorMsgFormat() {
+    return this.errorMsgFormat;
   }
 
   @Override
   public String toString() {
-    return this.getErrorCode() + ": " + this.printErrorMessage();
+    return this.getErrorCode() + ": " + this.getErrorMsgFormat();
   }
 
   /**
    * Calls {@link String#format(String, Object...)} with this error message as template
    *
    * @param args arguments for the format-call. The number of arguments has to
-   *             match the string defined in {@link #printErrorMessage()}
+   *             match the string defined in {@link #getErrorMsgFormat()}
    * @return properly formatted error message
    */
   public String format(Object... args) {

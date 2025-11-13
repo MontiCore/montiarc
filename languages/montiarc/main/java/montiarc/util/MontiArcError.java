@@ -36,14 +36,14 @@ public enum MontiArcError implements Error {
   TOOL_CREATE_TEMPLATE_NOT_EXIST("0xC1023", "The template '%s' does not exist");
 
   private final String errorCode;
-  private final String errorMessage;
+  private final String errorMsgFormat;
 
-  MontiArcError(String errorCode, String errorMessage) {
+  MontiArcError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
-    assert (errorMessage != null);
+    assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+    this.errorMsgFormat = errorMsgFormat;
   }
 
   /**
@@ -58,20 +58,20 @@ public enum MontiArcError implements Error {
    * @return The error message of this error.
    */
   @Override
-  public String printErrorMessage() {
-    return this.errorMessage;
+  public String getErrorMsgFormat() {
+    return this.errorMsgFormat;
   }
 
   @Override
   public String toString() {
-    return this.errorCode + ": " + this.printErrorMessage();
+    return this.errorCode + ": " + this.getErrorMsgFormat();
   }
 
   /**
    * Calls {@link String#format(String, Object...)} with this error message as template
    *
    * @param args arguments for the format-call. The number of arguments has to
-   *             match the string defined in {@link #printErrorMessage()}
+   *             match the string defined in {@link #getErrorMsgFormat()}
    * @return properly formatted error message
    */
   public String format(Object... args) {

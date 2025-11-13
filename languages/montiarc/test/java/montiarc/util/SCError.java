@@ -36,7 +36,7 @@ public enum SCError implements Error {
   }
 
   @Override
-  public String printErrorMessage() {
+  public String getErrorMsgFormat() {
     throw new UnsupportedOperationException();
   }
 }

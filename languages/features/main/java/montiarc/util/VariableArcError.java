@@ -19,14 +19,14 @@ public enum VariableArcError implements Error {
   EXPRESSION_NOT_SMT_CONVERTIBLE("0xC1417", "Unsupported expression, cannot solve '%s', this will lead to problems with variability");
 
   private final String errorCode;
-  private final String errorMessage;
+  private final String errorMsgFormat;
 
-  VariableArcError(String errorCode, String errorMessage) {
+  VariableArcError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
-    assert (errorMessage != null);
+    assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+    this.errorMsgFormat = errorMsgFormat;
   }
 
   /**
@@ -41,20 +41,20 @@ public enum VariableArcError implements Error {
    * @return The error message of this error.
    */
   @Override
-  public String printErrorMessage() {
-    return this.errorMessage;
+  public String getErrorMsgFormat() {
+    return this.errorMsgFormat;
   }
 
   @Override
   public String toString() {
-    return this.errorCode + ": " + this.printErrorMessage();
+    return this.errorCode + ": " + this.getErrorMsgFormat();
   }
 
   /**
    * Calls {@link String#format(String, Object...)} with this error message as template
    *
    * @param args arguments for the format-call. The number of arguments has to
-   *             match the string defined in {@link #printErrorMessage()}
+   *             match the string defined in {@link #getErrorMsgFormat()}
    * @return properly formatted error message
    */
   public String format(Object... args) {

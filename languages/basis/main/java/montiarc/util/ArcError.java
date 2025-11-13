@@ -23,7 +23,7 @@ public enum ArcError implements Error {
   CONNECTOR_TIMING_MISMATCH("0xC1113", "Timing mismatch, expected '%s' but provided '%s'"),
   MULTIPLE_TIMING_ANNOTATIONS("0xC1114", "Annotation error, multiple timing annotations"),
   MULTIPLE_BEHAVIOR("0xC1115", "Multiple conflicting behavior descriptions"),
-  DECOMPOSED_COMPONENT_WITH_BEHAVIOR("0xC1116","Cannot use behavior description in decomposed component"),
+  DECOMPOSED_COMPONENT_WITH_BEHAVIOR("0xC1116", "Cannot use behavior description in decomposed component"),
   FEEDBACK_CAUSALITY("0xC1117", "Feedback loop without strong causality"),
   TOO_FEW_ARGUMENTS("0xC1119", "Too few arguments, expected '%s' but provided '%S'"),
   TOO_MANY_ARGUMENTS("0xC1120", "Too many arguments, expected '%s' but provided '%s'"),
@@ -58,7 +58,7 @@ public enum ArcError implements Error {
   INVALID_CONTEXT_INC_SUFFIX("0xC1157", "Invalid syntax, no increment in this context"),
   INVALID_CONTEXT_DEC_SUFFIX("0xC1158", "Invalid syntax, no decrement in this context"),
   KEY_NOT_UNIQUE("0xC1159", "Cannot use key '%s' multiple times to set parameters."),
-  CONNECTORS_IN_ATOMIC("0xC1174","Connectors cannot be used inside atomic components"),
+  CONNECTORS_IN_ATOMIC("0xC1174", "Connectors cannot be used inside atomic components"),
   TYPE_PARAMETER_UPPER_CASE("0xC1175", "Type parameters should start with an uppercase letter"),
   TYPE_ARG_IGNORES_UPPER_BOUND("0xC1176", "Type parameter '%s' does not respect its upper bound, should extend '%s'"),
   TOO_FEW_TYPE_ARGUMENTS("0xC1177", "Too few type arguments, expected `%s` but provided `%s`"),
@@ -66,8 +66,8 @@ public enum ArcError implements Error {
   RAW_USE_OF_PARAMETRIZED_TYPE("0xC1182", "Raw usage of generic component type `%s`"),
   REFINEMENT_PORT_NAME_MISMATCH("0xC1184", "Interface mismatch during refinement, port '%s' exists in '%s' but not in '%s'."),
   REFINEMENT_PORT_DIRECTION_CHANGED("0xC1185", "Direction mismatch, port '%s' has direction '%s', mismatching the direction in the abstraction '%s'"),
-  REFINEMENT_TIMING_MISMATCH_IN("0xC1186","Timing mismatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for incoming ports"),
-  REFINEMENT_TIMING_MISMATCH_OUT("0xC1187","Timing mismatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for outgoing ports"),
+  REFINEMENT_TIMING_MISMATCH_IN("0xC1186", "Timing mismatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for incoming ports"),
+  REFINEMENT_TIMING_MISMATCH_OUT("0xC1187", "Timing mismatch, port '%s' changes timing from '%s' in the abstraction '%s' to '%s' which is illegal for outgoing ports"),
   REFINEMENT_IN_PORT_TYPE_MISMATCH("0xC1188", "Type mismatch, input port '%s' has type '%s', which is not a supertype of the port's type '%s' in the abstraction '%s'"),
   REFINEMENT_OUT_PORT_TYPE_MISMATCH("0xC1189", "Type mismatch, output port '%s' has type '%s', which is not a subtype of the port's type '%s' in the abstraction '%s'"),
   CIRCULAR_FIELDS_DEPENDENCY("0xC1190", "Circular dependency concerning fields '%s'."),
@@ -77,14 +77,14 @@ public enum ArcError implements Error {
   INVALID_STATEMENT("0xC1194", "The expression is not a valid statement; only assignments or method calls are allowed as statements");
 
   private final String errorCode;
-  private final String errorMessage;
+  private final String errorMsgFormat;
 
-  ArcError(String errorCode, String errorMessage) {
+  ArcError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
-    assert (errorMessage != null);
+    assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+    this.errorMsgFormat = errorMsgFormat;
   }
 
   /**
@@ -99,20 +99,20 @@ public enum ArcError implements Error {
    * @return The error message of this error.
    */
   @Override
-  public String printErrorMessage() {
-    return this.errorMessage;
+  public String getErrorMsgFormat() {
+    return this.errorMsgFormat;
   }
 
   @Override
   public String toString() {
-    return this.getErrorCode() + ": " + this.printErrorMessage();
+    return this.getErrorCode() + ": " + this.getErrorMsgFormat();
   }
 
   /**
    * Calls {@link String#format(String, Object...)} with this error message as template
    *
    * @param args arguments for the format-call. The number of arguments has to
-   *             match the string defined in {@link #printErrorMessage()}
+   *             match the string defined in {@link #getErrorMsgFormat()}
    * @return properly formatted error message
    */
   public String format(Object... args) {

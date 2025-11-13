@@ -42,14 +42,14 @@ public enum MAProcessingError implements Error {
 
   private final String errorCode;
 
-  private final String errorMessage;
+  private final String errorMsgFormat;
 
-  MAProcessingError(String errorCode, String errorMessage) {
+  MAProcessingError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
-    assert (errorMessage != null);
+    assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
-    this.errorMessage = errorMessage;
+    this.errorMsgFormat = errorMsgFormat;
   }
 
   /**
@@ -64,13 +64,13 @@ public enum MAProcessingError implements Error {
    * @return The error message of this error.
    */
   @Override
-  public String printErrorMessage() {
-    return this.errorMessage;
+  public String getErrorMsgFormat() {
+    return this.errorMsgFormat;
   }
 
   @Override
   public String toString() {
-    return this.errorCode + ": " + this.printErrorMessage();
+    return this.errorCode + ": " + this.getErrorMsgFormat();
   }
 
   /**
@@ -78,7 +78,7 @@ public enum MAProcessingError implements Error {
    * as template
    *
    * @param args arguments for the format-call. The number of arguments has to
-   *             match the string defined in {@link #printErrorMessage()}
+   *             match the string defined in {@link #getErrorMsgFormat()}
    * @return properly formatted error message
    */
   public String format(Object... args) {
