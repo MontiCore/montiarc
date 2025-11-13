@@ -56,9 +56,11 @@ Package:
   script:
     - gradle shadowjar --build-cache -PenableLanguageServer
 
-.unit_test_template: &unit_test_definition
+Unit Test:
   stage: test
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   needs: ["Build"]
+  allow_failure: false
   script:
     - gradle test jacocoAggregatedTestReport --stacktrace --build-cache -PenableLanguageServer
     - awk -F","
@@ -68,42 +70,13 @@ Package:
   coverage: '/\d+.\d+ \% covered/'
   artifacts:
     reports:
+      coverage_report:
+        coverage_format: jacoco
+        path: build/reports/test-coverage/jacocoAggregated.xml
       junit: ./**/test-results/test/**/TEST-*.xml
     paths:
-      - generators/ma2java/build/reports/test-coverage/jacoco.xml
-      - languages/build/basis/reports/test-coverage/jacoco.xml
-      - languages/build/montiarc/reports/test-coverage/jacoco.xml
+      - ./**/build/reports/test-coverage/jacoco.xml
     when: always
-
-Unit Test:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  allow_failure: false
-  <<: *unit_test_definition
-
-Test Coverage:
-  stage: post-test
-  image: registry.gitlab.com/haynes/jacoco2cobertura:1.0.7
-  script:
-    - python /opt/cover2cover.py
-      generators/ma2java/build/reports/test-coverage/jacoco.xml
-      generators/ma2java/main/java/
-      > generators/ma2java/build/reports/test-coverage/cobertura.xml
-    - python /opt/cover2cover.py
-      languages/build/basis/reports/test-coverage/jacoco.xml
-      languages/basis/main/java/
-      > languages/build/basis/reports/test-coverage/cobertura.xml
-    - python /opt/cover2cover.py
-      languages/build/montiarc/reports/test-coverage/jacoco.xml
-      languages/montiarc/main/java/
-      > languages/build/montiarc/reports/test-coverage/cobertura.xml
-  dependencies:
-    - Unit Test
-  needs: ["Unit Test"]
-  artifacts:
-    reports:
-      coverage_report:
-        coverage_format: cobertura
-        path: "**/reports/test-coverage/cobertura.xml"
 
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21

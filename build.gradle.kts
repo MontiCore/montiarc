@@ -23,7 +23,7 @@ reporting.reports.register("jacocoAggregatedTestReport", JacocoCoverageReport::c
 tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports {
   csv.required.set(true)
   html.required.set(false)
-  xml.required.set(false)
+  xml.required.set(true)
   csv.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated.csv"))
   html.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated/html"))
   xml.outputLocation.set(file("$buildDir/reports/test-coverage/jacocoAggregated.xml"))
