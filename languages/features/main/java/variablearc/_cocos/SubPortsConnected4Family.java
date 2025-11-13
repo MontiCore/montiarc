@@ -177,7 +177,11 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
             continue;
 
           for (ASTConnector portConnector : subCompNameToConnectors.get(node.getSymbol().getFullName() + "." + sub.getName())) {
-            portConnectors = ctx.mkOr(portConnectors, ctx.mkEq(ctx.mkBoolConst("From_" + portConnector.getSource().getPort() + "_To_" + variationPort), connectorConditions.get(portConnector)));
+            for(var target : portConnector.getTargetsNames()){
+              if((node.getSymbol().getFullName() + "." + sub.getName()+"."+target).equals(variationPort)){
+                portConnectors = ctx.mkOr(portConnectors, ctx.mkEq(ctx.mkBoolConst("From_" + portConnector.getSource().getPort() + "_To_" + variationPort), connectorConditions.get(portConnector)));
+              }
+            }
           }
           portConnected.put(variationPort, portConnectors);
         }
@@ -210,12 +214,12 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
 
       BoolExpr portisPresent = portNameConditions.get(port);
       if (portisPresent == null)
-        continue;
+        portisPresent = ctx.mkFalse();
       BoolExpr portisConnected = portConnected.get(port) != null ? portConnected.get(port) : ctx.mkFalse();
       BoolExpr portUnConnected = ctx.mkNot(portisConnected);
       BoolExpr portConnectsTo = !portisConnected.equals(ctx.mkFalse()) ? ctx.mkImplies(ctx.mkBoolConst(port + "_active"), portisConnected) : ctx.mkTrue();
 
-      List<BoolExpr> expressionList = new ArrayList<>(List.of(portisPresent,(ctx.mkEq(ctx.mkBoolConst(port + "_active"),ctx.mkTrue())), featureConstraints, portUnConnected,portConnectsTo));
+      List<BoolExpr> expressionList = new ArrayList<>(List.of(portisPresent, featureConstraints, portUnConnected,portConnectsTo));
 
       if (ExpressionSolverService.solve(expressionList) == Status.SATISFIABLE) {
         PortSymbol portSymbol = portSymbols.get(port);
