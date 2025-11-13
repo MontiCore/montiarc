@@ -27,10 +27,6 @@ dependencies {
   testRuntimeOnly(libs.api.guardian)
 }
 
-sourceSets["main"].java {
-  srcDir("${buildDir}/montiarc/main/java")
-}
-
 // Inject generator version information into java code for up to date checks
 registerVersionInjectionForUpToDateChecks(
   taskName = "injectGeneratorVersion",
