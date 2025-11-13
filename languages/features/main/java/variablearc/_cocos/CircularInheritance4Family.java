@@ -229,7 +229,8 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
       // Checking for direct extension
       if (ExpressionSolverService.solve(expressionList_DirectExtension) == Status.SATISFIABLE) {
         Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-          comp.getAstNode().get_SourcePositionStart(), comp.getAstNode().get_SourcePositionEnd());
+          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
+          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
       }
 
       // Checking for transitive extension
@@ -245,7 +246,8 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
 
       if (ExpressionSolverService.solve(expressionList_TransitiveExtension) == Status.SATISFIABLE) {
         Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-          comp.getAstNode().get_SourcePositionStart(), comp.getAstNode().get_SourcePositionEnd());
+          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
+          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
       }
     }
     alreadyCheckedComponents.addAll(componentConditions.keySet());
