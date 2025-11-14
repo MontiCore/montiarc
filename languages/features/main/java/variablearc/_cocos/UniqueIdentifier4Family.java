@@ -13,7 +13,9 @@ import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.BoolSort;
 import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
 import com.microsoft.z3.Model;
 import com.microsoft.z3.Status;
 import de.monticore.ast.ASTNode;
@@ -160,29 +162,31 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding all constraints for the possible conflicts to the solver
-    List<BoolExpr> nameConflictExpressionList = new ArrayList<>(nameConflicts.values());
-    nameConflictExpressionList.add(featureConstraints);
+    List<BoolExpr> nameConflictExpressionList = new ArrayList<>(List.of(ctx.mkOr(nameConflicts.values().toArray(new BoolExpr[0])),featureConstraints));
 
     if (nameConflicts.isEmpty()) {
       return;
     }
 
-    if (ExpressionSolverService.solve(nameConflictExpressionList) == Status.SATISFIABLE) {
-      Model model = ExpressionSolverService.getModel();
+    for(Map.Entry<String, BoolExpr> potentialConflict : nameConflicts.entrySet()) {
 
-      for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet()) {
-        List<ElementCondition> group = entry.getValue();
-        List<ElementCondition> active = new ArrayList<>();
-        for (ElementCondition element : group) {
-          if (model.evaluate(element.condition, false).isTrue()) {
-            active.add(element);
+      if (ExpressionSolverService.solve(List.of(potentialConflict.getValue(),featureConstraints)) == Status.SATISFIABLE) {
+
+        for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet().stream().filter(e -> e.getKey().equals(potentialConflict.getKey())).collect(Collectors.toList())) {
+          List<ElementCondition> group = entry.getValue();
+          List<ElementCondition> active = new ArrayList<>();
+          for (ElementCondition element : group) {
+            if(ExpressionSolverService.solve(List.of(element.condition,featureConstraints)) == Status.SATISFIABLE)
+            {
+              active.add(element);
+            }
           }
-        }
 
-        if (active.size() > 1) {
-          DuplicateElementsService.setComponent(node,true);
-          Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
-            node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
+          if (active.size() > 1) {
+            DuplicateElementsService.setComponent(node,true);
+            Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
+              node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
+          }
         }
       }
     }
