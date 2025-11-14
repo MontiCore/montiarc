@@ -1,6 +1,5 @@
-import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-
 /* (c) https://github.com/MontiCore/monticore */
+import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
 
 plugins {
   id("base")
@@ -11,7 +10,7 @@ plugins {
 }
 
 dependencies {
-  jacocoAggregation(project(":generators:ma2java"))
+  jacocoAggregation(project(":generators:ma2jsim"))
   jacocoAggregation(project(":languages:basis"))
   jacocoAggregation(project(":languages:montiarc"))
 }
