@@ -57,11 +57,11 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 
-tasks.withType(Cd2PojoCompile::class.java) {
+tasks.withType(Cd2PojoCompile::class).configureEach {
   useClass2Mc.set(true)
 }
 
-tasks.withType(MontiArcCompile::class.java) {
+tasks.withType(MontiArcCompile::class).configureEach  {
   useClass2Mc.set(true)
 }
 
