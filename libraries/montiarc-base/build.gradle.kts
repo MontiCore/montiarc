@@ -28,10 +28,10 @@ sourceSets {
 // The MontiArc plugin always adds montiarc-base as a dependency to the montiarc configuration.
 // We want to avoid this for the montiarc-base project itself.
 // Therefore, we add an exclusion rule.
-configurations.montiarc.get()
-  .exclude("montiarc.libraries", "montiarc-base")
-configurations.montiarc.get()
-  .exclude("montiarc.libraries", "maunit")
+configurations.named("montiarc") {
+  exclude(group = "montiarc.libraries", module = "montiarc-base")
+  exclude(group = "montiarc.libraries", module = "maunit")
+}
 
 dependencies {
   testImplementation(libs.guava)

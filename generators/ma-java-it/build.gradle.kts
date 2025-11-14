@@ -1,4 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.gradle.ma2java.MontiArcCompile
 
 plugins {
   id("montiarc.build.integration-test")
@@ -40,8 +41,9 @@ configurations {
 }
 
 dependencies {
+  cd2pojoSymbolDependencies(sourceSets["base"].output)
+  montiarcSymbolDependencies(sourceSets["base"].output)
   implementation(sourceSets["base"].output)
-  implementation(project(":languages:montiarc"))
   implementation(seLibs.se.commons.logging)
   implementation(seLibs.se.commons.utilities)
   implementation(libs.guava)
@@ -56,18 +58,17 @@ montiarc {
   internalMontiArcTesting.set(true)
 }
 
-tasks.compileCd2pojo {
-  symbolImportDir.setFrom(compileBaseJava.outputs.files)
-  useClass2Mc.set(true)
+val compileBaseMontiArc : TaskProvider<MontiArcCompile> = tasks.named<MontiArcCompile>("compileBaseMontiarc")
+
+val compileBaseJava: TaskProvider<JavaCompile> = tasks.named<JavaCompile>("compileBaseJava") {
+  dependsOn(compileBaseMontiArc)
 }
 
-val compileBaseJava: Task by tasks.getting
+tasks.compileCd2pojo {
+  dependsOn(compileBaseJava)
+  useClass2Mc.set(true)
+}
 
 tasks.compileMontiarc {
-  symbolImportDir.from(compileBaseJava.property("destinationDirectory"))
   useClass2Mc.set(true)
 }
-
-compileBaseJava.dependsOn(tasks["compileBaseMontiarc"])
-tasks.compileCd2pojo { dependsOn(compileBaseJava) }
-tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }

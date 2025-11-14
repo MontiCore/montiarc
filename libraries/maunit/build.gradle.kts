@@ -21,8 +21,9 @@ dependencies {
 // The MontiArc plugin always adds maunit as a dependency to the montiarc configuration.
 // We want to avoid this for the maunit project itself.
 // Therefore, we add an exclusion rule.
-configurations.montiarc.get()
-  .exclude("montiarc.libraries", "maunit")
+configurations.named("montiarc") {
+  exclude(group = "montiarc.libraries", module = "maunit")
+}
 
 sourceSets {
   main {
