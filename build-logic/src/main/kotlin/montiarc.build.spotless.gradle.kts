@@ -8,7 +8,7 @@ plugins {
 spotless {
   isEnforceCheck = false
   java {
-    targetExclude(fileTree("$buildDir") { include("**/*.java") })
+    targetExclude(fileTree(layout.buildDirectory) { include("**/*.java") })
 
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */")
     endWithNewline()

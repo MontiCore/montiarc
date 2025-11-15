@@ -23,7 +23,7 @@ sourceSets {
 
 tasks.test {
   useJUnitPlatform()
-  systemProperty("buildDir", layout.buildDirectory.get().toString())
+  systemProperty("buildDir", layout.buildDirectory.get().asFile.absolutePath)
 }
 
 //https://github.com/gradle/gradle/issues/15383

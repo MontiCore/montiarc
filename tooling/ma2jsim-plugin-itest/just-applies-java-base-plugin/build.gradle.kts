@@ -21,15 +21,15 @@ val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesAre
   dependsOn(tasks.named("compileFooMontiarc"))
   group = "verification"
 
-  val expectedGenDir = "$buildDir/montiarc/foo"
-  val expectedJavaGenDir = "$expectedGenDir/java"
-  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+  val expectedGenDir = layout.buildDirectory.dir("montiarc/foo")
+  val expectedJavaGenDir = expectedGenDir.map { it.dir("java") }
+  val expectedSymbolGenDir = expectedGenDir.map { it.dir("symbols") }
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/foopackage/FooComp.java",
-    "$expectedJavaGenDir/barpackage/BarCompImplTOP.java",
-    "$expectedSymbolGenDir/foopackage/Foo.arcsym",
-    "$expectedSymbolGenDir/barpackage/Bar.arcsym"
+    expectedJavaGenDir.map { it.file("foopackage/FooComp.java") },
+    expectedJavaGenDir.map { it.file("barpackage/BarCompImplTOP.java") },
+    expectedSymbolGenDir.map { it.file("foopackage/Foo.arcsym") },
+    expectedSymbolGenDir.map { it.file("barpackage/Bar.arcsym") }
   )
 }
 tasks.check.configure { dependsOn(checkGenerationTask) }

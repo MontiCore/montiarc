@@ -5,7 +5,7 @@ plugins {
   id("montiarc.build.language")
 }
 
-buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
+layout.buildDirectory.set(project(":languages").layout.buildDirectory.dir("${project.name}"))
 
 dependencies {
   grammar(seLibs.mc.grammar)
@@ -39,7 +39,7 @@ dependencies {
 // Inject generator version information into java code for up to date checks
 registerVersionInjectionForUpToDateChecks(
   taskName = "injectGeneratorVersion",
-  genDir = "${project.buildDir}/generated-resources/main",
+  genDir = layout.buildDirectory.dir("generated-resources/main").get().asFile.absolutePath,
   subfolder = "montiarc",
   fileName = "MontiArcToolVersion.txt",
 )

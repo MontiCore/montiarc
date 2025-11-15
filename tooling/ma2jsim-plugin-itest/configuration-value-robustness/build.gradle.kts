@@ -41,15 +41,15 @@ val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesA
   dependsOn(tasks.named(alteredConfigValuesSrcSet.compileMontiarcTaskName))
   group = "verification"
 
-  val expectedGenDir = "$buildDir/montiarc-for-altered-destination"
-  val expectedJavaGenDir = "$expectedGenDir/java"
-  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+  val expectedGenDir = layout.buildDirectory.dir("montiarc-for-altered-destination")
+  val expectedJavaGenDir = expectedGenDir.map { it.dir("java") }
+  val expectedSymbolGenDir = expectedGenDir.map { it.dir("symbols") }
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentCompImplTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
-    "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym",
+    expectedJavaGenDir.map { it.file("mainpackage/HwcComponentCompImplTOP.java") },
+    expectedJavaGenDir.map { it.file("mainpackage/UsingImportedSymbolsComp.java") },
+    expectedSymbolGenDir.map { it.file("mainpackage/HwcComponent.arcsym") },
+    expectedSymbolGenDir.map { it.file("mainpackage/UsingImportedSymbols.arcsym") }
   )
 }
 tasks.check.configure { dependsOn(alteredConfigCheck) }
@@ -80,21 +80,21 @@ val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePrese
   dependsOn(tasks.named(multiplePathsSrcSet.compileMontiarcTaskName))
   group = "verification"
 
-  val expectedGenDir = "$buildDir/montiarc/${multiplePathsSrcSet.name}"
-  val expectedJavaGenDir = "$expectedGenDir/java"
-  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+  val expectedGenDir = layout.buildDirectory.dir("montiarc/${multiplePathsSrcSet.name}")
+  val expectedJavaGenDir = expectedGenDir.map { it.dir("java") }
+  val expectedSymbolGenDir = expectedGenDir.map { it.dir("symbols") }
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentCompImplTOP.java",
-    "$expectedJavaGenDir/mainpackage/HwcComponent2CompTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingComponentFromOtherModelPathComp.java",
-    "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
-    "$expectedJavaGenDir/mainpackage/ComponentFromModelPath2Comp.java",
-    "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
-    "$expectedSymbolGenDir/mainpackage/HwcComponent2.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingComponentFromOtherModelPath.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym",
-    "$expectedSymbolGenDir/mainpackage/ComponentFromModelPath2.arcsym"
+    expectedJavaGenDir.map { it.file("mainpackage/HwcComponentCompImplTOP.java") },
+    expectedJavaGenDir.map { it.file("mainpackage/HwcComponent2CompTOP.java") },
+    expectedJavaGenDir.map { it.file("mainpackage/UsingComponentFromOtherModelPathComp.java") },
+    expectedJavaGenDir.map { it.file("mainpackage/UsingImportedSymbolsComp.java") },
+    expectedJavaGenDir.map { it.file("mainpackage/ComponentFromModelPath2Comp.java") },
+    expectedSymbolGenDir.map { it.file("mainpackage/HwcComponent.arcsym") },
+    expectedSymbolGenDir.map { it.file("mainpackage/HwcComponent2.arcsym") },
+    expectedSymbolGenDir.map { it.file("mainpackage/UsingComponentFromOtherModelPath.arcsym") },
+    expectedSymbolGenDir.map { it.file("mainpackage/UsingImportedSymbols.arcsym") },
+    expectedSymbolGenDir.map { it.file("mainpackage/ComponentFromModelPath2.arcsym") }
   )
 }
 tasks.check.configure { dependsOn(multiplePathsCheck) }
@@ -125,15 +125,15 @@ val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", 
   dependsOn(tasks.named(mixedPathsExistanceSrcSet.compileMontiarcTaskName))
   group = "verification"
 
-  val expectedGenDir = "$buildDir/montiarc/${mixedPathsExistanceSrcSet.name}"
-  val expectedJavaGenDir = "$expectedGenDir/java"
-  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+  val expectedGenDir = layout.buildDirectory.dir("montiarc/${mixedPathsExistanceSrcSet.name}")
+  val expectedJavaGenDir = expectedGenDir.map { it.dir("java") }
+  val expectedSymbolGenDir = expectedGenDir.map { it.dir("symbols") }
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/HwcComponentCompImplTOP.java",
-    "$expectedJavaGenDir/mainpackage/UsingImportedSymbolsComp.java",
-    "$expectedSymbolGenDir/mainpackage/HwcComponent.arcsym",
-    "$expectedSymbolGenDir/mainpackage/UsingImportedSymbols.arcsym"
+    expectedJavaGenDir.map { it.file("mainpackage/HwcComponentCompImplTOP.java") },
+    expectedJavaGenDir.map { it.file("mainpackage/UsingImportedSymbolsComp.java") },
+    expectedSymbolGenDir.map { it.file("mainpackage/HwcComponent.arcsym") },
+    expectedSymbolGenDir.map { it.file("mainpackage/UsingImportedSymbols.arcsym") }
   )
 }
 tasks.check.configure { dependsOn(mixedPathExistenceCheck) }
@@ -152,13 +152,13 @@ val removingDefaultValuesCheck = tasks.register("checkRemovingDefaultValues", Ch
   dependsOn(tasks.named(removingSrcSet.getCompileMontiarcTaskName()))
   group = "verification"
 
-  val expectedGenDir = "$buildDir/montiarc/${removingSrcSet.name}"
-  val expectedJavaGenDir = "$expectedGenDir/java"
-  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+  val expectedGenDir = layout.buildDirectory.dir("montiarc/${removingSrcSet.name}")
+  val expectedJavaGenDir = expectedGenDir.map { it.dir("java") }
+  val expectedSymbolGenDir = expectedGenDir.map { it.dir("symbols") }
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/NoHwcComponent.java",
-    "$expectedSymbolGenDir/mainpackage/NoHwcComponent.arcsym"
+    expectedJavaGenDir.map { it.file("mainpackage/NoHwcComponent.java") },
+    expectedSymbolGenDir.map { it.file("mainpackage/NoHwcComponent.arcsym") }
   )
 }
 tasks.check.configure { dependsOn(removingDefaultValuesCheck) }
@@ -178,13 +178,13 @@ val unusedConfigValuesCheck = tasks.register("checkUnusedConfigValues", CheckFil
   dependsOn(tasks.named(unusedConfigValuesSrcSet.compileMontiarcTaskName))
   group = "verification"
 
-  val expectedGenDir = "$buildDir/montiarc/${unusedConfigValuesSrcSet.name}"
-  val expectedJavaGenDir = "$expectedGenDir/java"
-  val expectedSymbolGenDir = "$expectedGenDir/symbols"
+  val expectedGenDir = layout.buildDirectory.dir("montiarc/${unusedConfigValuesSrcSet.name}")
+  val expectedJavaGenDir = expectedGenDir.map { it.dir("java") }
+  val expectedSymbolGenDir = expectedGenDir.map { it.dir("symbols") }
 
   mandatoryFiles.from(
-    "$expectedJavaGenDir/mainpackage/NoHwcComponentComp.java",
-    "$expectedSymbolGenDir/mainpackage/NoHwcComponent.arcsym"
+    expectedJavaGenDir.map { it.file("mainpackage/NoHwcComponentComp.java") },
+    expectedSymbolGenDir.map { it.file("mainpackage/NoHwcComponent.arcsym") }
   )
 }
 tasks.check.configure { dependsOn(unusedConfigValuesCheck) }

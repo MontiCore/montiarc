@@ -14,7 +14,7 @@ dependencies {
 sourceSets {
   main {
     resources {
-      srcDir("${buildDir}/generated/resources")
+      srcDir(layout.buildDirectory.dir("generated/resources"))
     }
   }
 }
@@ -36,7 +36,7 @@ fun registerSymbolCopyTask(taskName: String, libraryName: String) {
     from(rootProject.projectDir.absolutePath + "/libraries/${libraryName}/build/libs")
     include("*Symbols.jar")
     rename("${libraryName}-${version}-(.*)\\.jar", "${libraryName}-$1.zip")
-    into("${buildDir}/generated/resources/montiarc")
+    into(layout.buildDirectory.dir("generated/resources/montiarc"))
   }
 }
 

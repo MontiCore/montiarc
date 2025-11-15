@@ -5,7 +5,7 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-buildDir = file(project(":languages").buildDir.toString() + "/${project.name}")
+layout.buildDirectory.set(project(":languages").layout.buildDirectory.dir("${project.name}"))
 
 dependencies {
   grammar(seLibs.mc.grammar)

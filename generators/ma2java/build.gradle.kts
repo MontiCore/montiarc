@@ -20,7 +20,7 @@ dependencies {
 // Inject generator version information into java code for up to date checks
 registerVersionInjectionForUpToDateChecks(
   taskName = "injectGeneratorVersion",
-  genDir = "${project.buildDir}/generated-resources/main",
+  genDir = layout.buildDirectory.dir("generated-resources/main").get().asFile.absolutePath,
   subfolder = "montiarc/generator",
   fileName = "MA2JavaToolVersion.txt",
 )

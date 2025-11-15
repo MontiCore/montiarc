@@ -23,7 +23,7 @@ gradlePlugin {
   }
 }
 
-val genDir4GeneratorVersionInjection = "${project.buildDir}/generatedKotlin"
+val genDir4GeneratorVersionInjection = layout.buildDirectory.dir("generatedKotlin")
 
 sourceSets {
   main {
@@ -33,7 +33,7 @@ sourceSets {
 
 registerVersionInjectionForPlugins(
   taskName = "injectGeneratorVersion",
-  genDir = genDir4GeneratorVersionInjection,
+  genDir = genDir4GeneratorVersionInjection.get().asFile.absolutePath,
   packageName = "montiarc.gradle.sd2arc",
   constantName = "GENERATOR_VERSION"
 )

@@ -4,11 +4,11 @@ plugins {
   id("montiarc.build.java-library")
 }
 
-val genDir = "$buildDir/generated-sources"
-val genResourceDir = "$buildDir/resources/main/"
+val genDir = layout.buildDirectory.dir("generated-sources")
+val genResourceDir = layout.buildDirectory.dir("resources/main/")
 
 val generatorLogbackConfig = "$projectDir/logback.xml"
-val generatorLogbackOutDir = "$buildDir/logs"
+val generatorLogbackOutDir = layout.buildDirectory.dir("logs")
 
 sourceSets["main"].java {
   srcDir(genDir)
