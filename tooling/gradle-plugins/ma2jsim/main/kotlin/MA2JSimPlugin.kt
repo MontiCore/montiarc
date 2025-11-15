@@ -213,9 +213,9 @@ class MA2JSimPlugin : Plugin<Project> {
       )
 
       sourceSet.java.srcDir(genTask.javaOutputDir())
-      genTask.hwcPath.from( provider {
+      genTask.hwcPath.setFrom(provider {
         sourceSet.allJava.sourceDirectories.files
-        .filter { !it.startsWith(buildDir)}
+          .filter { !it.startsWith(layout.buildDirectory.get().asFile) }
       })
     }
 
@@ -259,9 +259,9 @@ class MA2JSimPlugin : Plugin<Project> {
   }
 
   private fun addLoggingEnvVarToTestTask() = with (project) {
-    val logDir = "$buildDir/montiarc/test/logs"
+    val logDir = layout.buildDirectory.dir("montiarc/test/logs")
     tasks.withType(Test::class.java).forEach {
-      it.environment(MA2JSIM_LOGGING_ENV_VAR, logDir)
+      it.environment(MA2JSIM_LOGGING_ENV_VAR, logDir.get().asFile.absolutePath)
       it.outputs.dir(logDir)
     }
   }

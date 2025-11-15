@@ -130,7 +130,7 @@ class Cd2PojoPlugin : Plugin<Project> {
       sourceSet.java.srcDir(genTask.javaOutputDir())
       genTask.hwcPath.setFrom(provider {
         sourceSet.allJava.sourceDirectories.files
-          .filter { !it.startsWith(buildDir)}
+          .filter { !it.startsWith(layout.buildDirectory.get().asFile) }
       })
     }
 

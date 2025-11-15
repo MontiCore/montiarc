@@ -142,9 +142,9 @@ class Ma2JavaPlugin : Plugin<Project> {
       )
 
       sourceSet.java.srcDir(genTask.javaOutputDir())
-      genTask.hwcPath.from( provider {
+      genTask.hwcPath.setFrom(provider {
         sourceSet.allJava.sourceDirectories.files
-        .filter { !it.startsWith(buildDir)}
+          .filter { !it.startsWith(layout.buildDirectory.get().asFile) }
       })
     }
 
