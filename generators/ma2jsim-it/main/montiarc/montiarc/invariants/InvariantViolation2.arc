@@ -14,9 +14,11 @@ component InvariantViolation2 {
     out int o;
 
   automaton {
-    initial { v = 1; }
-    state S1 [v == 1] {
-      entry / { o = 1; }
+    initial state S1 [v == 1] {
+      entry / {
+        v = 1;
+        o = 1;
+      }
     }
 
     S1 -> S2 [i == 2] i;

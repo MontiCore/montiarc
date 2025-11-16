@@ -9,7 +9,13 @@ component Delay {
   port sync out OnOff o;
 
   <<delayed>> automaton {
-    initial { o = OnOff.OFF; } state S;
+    initial state Init {
+      entry / { o = OnOff.OFF; }
+    }
+
+    Init -> S / { o = i; }
+
+    state S;
 
     S -> S / { o = i; }
   }

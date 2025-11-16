@@ -7,7 +7,6 @@ ${tc.signature("automaton")}
 
 @Override
 public void init() {
-  state.initWithSub();
   state.enterWithSub();
   setState(state.getInitialSubstate());
 }

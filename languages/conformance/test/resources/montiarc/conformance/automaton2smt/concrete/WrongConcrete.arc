@@ -14,7 +14,7 @@ component WrongConcrete {
   int counter = 0;
 
   automaton {
-    initial {} state Anon;
+    initial state Anon;
     state Known;
 
     <<n="0">> Anon -> Known [password == "correct"] password / {

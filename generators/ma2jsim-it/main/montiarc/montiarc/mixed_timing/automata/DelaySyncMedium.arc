@@ -11,12 +11,19 @@ component DelaySyncMedium {
   port out OnOff oEvent;
 
   <<delayed>> automaton {
-    initial { oSync=OnOff.OFF; } state S;
+    initial state S1 {
+      initial state S11 {
+        entry / {
+          oSync=OnOff.OFF;
+        }
+      }
+      state S12;
+    }
 
-    S -> S / {
+    S1 -> S12 / {
       oSync = inSync;
     }
-    S -> S inEvent / {
+    S1 -> S12 inEvent / {
       oEvent = inEvent;
     }
   }

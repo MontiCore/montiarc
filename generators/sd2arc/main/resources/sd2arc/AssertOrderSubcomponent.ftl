@@ -26,19 +26,28 @@
 
     <<delayed>> automaton {
     <#assign stateCount = 0>
-      initial {
+      initial state Init {
+        entry / {
   <#list ast.getSDBody().getSDElementList() as element>
     <#-- Trigger interaction -->
     <#if typeDispatcher.isSDBasisASTSDSendMessage(element) && element.isPresentSDTarget() && typeDispatcher.isSD4ComponentsASTSDMessage(element.getSDAction()) && element.getSDAction().isTrigger()>
         <#-- TODO in embedded send to all ports this target's source is connected to -->
-        ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${prettyPrinter.prettyprint(element.getSDAction().getExpression())};
-        port_${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()};
+          ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${prettyPrinter.prettyprint(element.getSDAction().getExpression())};
+          port_${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()};
     <#-- Observe interaction -->
     <#elseif typeDispatcher.isSDBasisASTSDSendMessage(element) && element.isPresentSDSource()>
+      <#if (stateCount == 0)>
+        }
       }
+      <#else>
+      }
+      </#if>
       <#assign portVarName>${element.getSDSource().getName()}_${element.getSDSource().getPort()}</#assign>
       <#assign portName>port_${portVarName}</#assign>
       state S${stateCount};
+      <#if (stateCount == 0)>
+      Init -> S0;
+      </#if>
       <#-- Transition to failed state if wrong message and not free -->
       <#if !typeDispatcher.isSD4ComponentsASTSDIncompleteAction(element.getSDAction()) && helper.isFree(ast, element)>
       S${stateCount} -> Failed [${portName} != (${prettyPrinter.prettyprint(element.getSDAction().getExpression())})] ${portName};

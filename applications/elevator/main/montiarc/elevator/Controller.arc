@@ -21,7 +21,15 @@ component Controller {
   boolean stopNext = false;
 
   <<delayed>> automaton {
-    initial { clear = 0; } state Init {
+    initial state Init {
+      entry / {
+        clear = 0;
+      }
+    }
+
+    Init -> Wait;
+
+    state Wait {
 
       initial state WaitTimer;
 

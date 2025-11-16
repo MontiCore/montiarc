@@ -11,9 +11,14 @@ component Counter {
   Double counter = 0.0;
 
   <<delayed>> automaton{
-    initial {out = 0.0;} state Idle;
+    initial state IdleS {
+      initial state IdleInit {
+        entry / { out = 0.0; }
+      }
+      state Idle;
+    }
 
-    Idle -> Idle /{
+    IdleS -> Idle / {
       counter = counter + factor;
       out = counter;
     }

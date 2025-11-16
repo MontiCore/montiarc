@@ -43,15 +43,6 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
         state_${substate.getName()} <#sep >, </#sep>
       </#items>
     ))
-  </#list>
-  <#list helper.getInitAction(state)>
-  .setInitAction((in) -> {
-    <@executeAction>
-      <#items as initStatement>
-        ${prettyPrinter.prettyprint(initStatement)}
-      </#items>
-    </@executeAction>
-  })
 
   </#list>
   <#if helper.getEntryAction(state).isPresent()>

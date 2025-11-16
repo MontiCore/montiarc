@@ -13,7 +13,6 @@ public class State {
   protected State superState;
   protected List<State> substates;
   protected List<State> initialSubstates;
-  protected Action<NoInput> initAction;
   protected Action<NoInput> entryAction;
   protected Action<NoInput> exitAction;
   protected Action<NoInput> doAction;
@@ -22,13 +21,11 @@ public class State {
   public State(String name,
                List<State> substates,
                List<State> initialSubstates,
-               Action<NoInput> initAction,
                Action<NoInput> entryAction,
                Action<NoInput> exitAction,
                Action<NoInput> doAction) {
     this.name = name;
     this.substates = substates;
-    this.initAction = initAction;
     this.entryAction = entryAction;
     this.exitAction = exitAction;
     this.doAction = doAction;
@@ -50,16 +47,6 @@ public class State {
 
   public String name() {
     return this.name;
-  }
-
-  public void init() {
-    if (initAction != null) this.initAction.execute(null);
-  }
-
-  public void initWithSub() {
-    init();
-    if (!initialSubstates.isEmpty())
-      getInitialSubstate().initWithSub();
   }
 
   /** Executes the entry action of exactly this state (and no sub states) */

@@ -9,9 +9,7 @@ component Hierarchy {
   String path = "";
 
   automaton {
-    initial {
-      path = path + "aIni";
-    } state A {
+    initial state A {
       entry / {
         path = path + "->aEn";
         oPath = path;
@@ -19,9 +17,7 @@ component Hierarchy {
       exit / {
         path = path + "->aEx";
       }
-      initial {
-          path = path + "->a1Ini";
-        } state A1 {
+      initial state A1 {
           entry / {
             path = path + "->a1En";
             oPath = path;
@@ -102,9 +98,7 @@ component Hierarchy {
       exit / {
         path = path + "->eEx";
       }
-      initial {
-        path = path + "->e1Ini";
-      } state E1 {
+      initial state E1 {
         entry / {
           path = path + "->e1En";
           oPath = path;
@@ -113,9 +107,7 @@ component Hierarchy {
           path = path + "->e1Ex";
         }
       }
-      initial { // This should not be called coming from E1
-        path = path + "->e2Ini";
-      } state E2 {
+      initial state E2 {
         entry / {
           path = path + "->e2En";
           oPath = path;
@@ -141,9 +133,7 @@ component Hierarchy {
         exit / {
           path = path + "->f1Ex";
         }
-        initial { // This should not be called coming from E
-          path = path + "->f11Ini";
-        } state F11 {
+        initial state F11 {
           entry / {
             path = path + "->f11En";
             oPath = path;

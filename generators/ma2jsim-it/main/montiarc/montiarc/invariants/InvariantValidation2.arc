@@ -7,7 +7,7 @@ package montiarc.invariants;
  */
 component InvariantValidation2 {
 
-  int v1 = 0;
+  int v1 = 10;
   int v2 = 0;
 
   port
@@ -15,13 +15,12 @@ component InvariantValidation2 {
     out int o;
 
   automaton {
-    // The invariant should hold as the initial action is executed beforehand
-    initial { v1 = 10; }
-    state S1 [v1 == 10] {
-      // The invariant should hold as the initial action is executed beforehand
-      initial { v2 = 11; }
-      state S11 [v2 == 11] {
-        entry / { o = 11; }
+    initial state S1 [v1 == 10] {
+      initial state S11 {
+        entry / {
+          v2 = 11;
+          o = 11;
+        }
       }
     }
 

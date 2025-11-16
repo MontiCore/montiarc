@@ -16,15 +16,25 @@ component InvariantViolation3 {
     out int o;
 
   automaton {
-    initial { v1 = 10; }
+    initial state Init1 {
+      entry / {
+         v1 = 10;
+      }
+    }
     state S1 [v1 == 10] {
       entry / { o = 10; }
-      // The invariant is violated as the initial action sets the wrong value
-      // before the invariant is evaluated
-      initial { v2 = -11; }
+
+      initial state Init2 {
+        entry / {
+          v2 = -11;
+        }
+      }
       state S11 [v2 == 11] {
         entry / { o = 11; }
       }
     }
+
+    Init1 -> S1;
+    Init2 -> S11;
   }
 }

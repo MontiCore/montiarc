@@ -11,19 +11,26 @@ component CounterSemDiff {
   Double counter = 0.0;
 
   <<delayed>> automaton{
-    initial {out = 0.0;} state Idle;
+    initial state IdleS {
+      initial state IdleInit {
+        entry / { out = 0.0; }
+      }
+      state Idle;
+    }
+
+
     state Chaos;
 
-     Idle -> Idle [chaos == false]/{
+     IdleS -> Idle [chaos == false]/{
       counter = counter + factor;
       out = counter;
     }
 
-    Idle -> Idle [chaos == true && counter < 1]/{
+    IdleS -> Idle [chaos == true && counter < 1]/{
       out = counter;
     }
 
-    Idle -> Chaos [chaos == true && counter >= 1]/{
+    IdleS -> Chaos [chaos == true && counter >= 1]/{
       counter = 0.0;
       out = counter;
     }

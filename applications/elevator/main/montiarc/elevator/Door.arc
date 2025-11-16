@@ -16,12 +16,15 @@ component Door {
   int timer = 5;
 
   <<delayed>> automaton {
-    initial { closed = false; } state Wait;
+    initial state Wait {
+      entry / {
+        closed = false;
+      }
+    }
 
     Wait -> Wait [timer > 0] / {
       open = false;
       close = false;
-      closed = false;
       timer = timer - 1;
     }
     Wait -> CloseDoor [timer == 0] / {

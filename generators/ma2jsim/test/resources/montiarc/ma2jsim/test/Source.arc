@@ -5,9 +5,11 @@ component Source {
   port sync out Integer o;
 
   automaton {
-    initial {
-      o = 0;
-    } state S;
-    S -> S / { o = 1; }
+    initial state S {
+      entry / {
+        o = 0;
+      }
+      -> / { o = 1; }
+    }
   }
 }

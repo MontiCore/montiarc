@@ -16,7 +16,17 @@ component Door {
   Double timer = 5.0;
 
   <<delayed>> automaton {
-    initial { closed = false; } state Wait;
+    initial state Init {
+      entry / {
+        closed = false;
+      }
+    }
+
+    Init -> Wait / {
+      closed = false;
+    }
+
+    state Wait;
 
     Wait -> Wait [timer >= 0.625] / {
       open = false;

@@ -9,10 +9,14 @@ component H_Hierarchy {
   int counter = 0;
 
   automaton {
-    initial {
-      pCounter = counter;
-      counter++;
-    } state A {
+    initial state Init {
+      entry / {
+        pCounter = counter;
+        counter++;
+      }
+    }
+
+    state A {
       entry / {
         pCounter = counter;
         counter++;
@@ -155,6 +159,7 @@ component H_Hierarchy {
       }
     }
 
+    Init -> A;
     A -> B / {
       pCounter = counter;
       counter++;

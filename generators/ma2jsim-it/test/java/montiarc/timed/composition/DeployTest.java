@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.OnOff.OFF;
+import static montiarc.types.OnOff.ON;
 
 @JSimTest
 class DeployTest {
@@ -52,7 +53,7 @@ class DeployTest {
   static Stream<Arguments> expected() {
     return Stream.of(
       Arguments.of(
-        List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF)),
+        List.of(msg(ON), tk(), msg(ON), tk(), msg(ON), tk(), msg(ON), tk()),
         List.of(msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk(), msg(OFF), tk())
       ));
   }

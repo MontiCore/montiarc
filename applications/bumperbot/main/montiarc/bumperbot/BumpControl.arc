@@ -14,11 +14,13 @@ component BumpControl {
      sync out String log;
 
   automaton {
-    initial {
-      right = MotorCmd.STOP;
-      left = MotorCmd.STOP;
-      log = "Idle";
-    } state Idle;
+    initial state Idle {
+      entry / {
+        right = MotorCmd.STOP;
+        left = MotorCmd.STOP;
+        log = "Idle";
+      }
+    }
 
     state Driving;
     state Backing;

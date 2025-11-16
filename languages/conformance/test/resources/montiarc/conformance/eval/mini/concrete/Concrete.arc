@@ -12,7 +12,7 @@ component Concrete {
 
   automaton {
 
-    initial {} state Anon;
+    initial state Anon;
     state Known;
 
     Anon -> Known [input == Input.PASSWORD] input;

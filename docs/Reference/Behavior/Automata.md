@@ -85,20 +85,6 @@ state S {
 
 where `ACTION1` and `ACTION2` are each a list of statements.
 
-## Initial-Action
-
-An initial state may define an initial action that is executed when entering 
-the state for the very first time at the start of a run of the automaton. 
-Therefore, the initial action is executed at most once during a run of an 
-automaton. An initial state with an initializer action looks like 
-
-```montiarc
-initial { ACTION } state S;
-```
-
-where `{ ACTION }` is the initial action and `ACTION` a list of statements.
-
-
 ## Hierarchical States
 
 A state may be hierarchically decomposed into substates. A state can have any 

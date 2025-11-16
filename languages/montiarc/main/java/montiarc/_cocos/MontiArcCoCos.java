@@ -3,10 +3,10 @@ package montiarc._cocos;
 
 import arcautomaton._cocos.NoInputPortInEntryAction;
 import arcautomaton._cocos.NoInputPortInExitAction;
-import arcautomaton._cocos.NoInputPortInInitialAction;
 import arcautomaton._cocos.NoNonSyncInputPortInDoAction;
 import arcautomaton._cocos.NoNonSyncInputPortInEpsilonTransition;
 import arcautomaton._cocos.NoOtherInputPortInMsgTransition;
+import arcautomaton._cocos.NoStatechartAnteAction;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.AtomicMaxOneBehavior;
 import arcbasis._cocos.AtomicNoConnector;
@@ -247,8 +247,10 @@ public class MontiArcCoCos {
     // ArcAutomaton CoCos
     if (checkVariants) {
       varChecker.get4FullVariant().addCoCo(new EventTriggerExists4Family());
+      varChecker.get4FullVariant().addCoCo(new NoStatechartAnteAction());
     } else {
       checker.addCoCo(new EventTriggerExists());
+      checker.addCoCo(new NoStatechartAnteAction());
     }
     traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
@@ -256,7 +258,6 @@ public class MontiArcCoCos {
     if (checkVariants) {
       varChecker.get4FullVariant().addCoCo(new NoInputPortInEntryAction4Family());
       varChecker.get4FullVariant().addCoCo(new NoInputPortInExitAction4Family());
-      varChecker.get4FullVariant().addCoCo(new NoInputPortInInitialAction4Family());
       varChecker.get4FullVariant().addCoCo(new NoNonSyncInputPortInDoAction4Family());
       varChecker.get4FullVariant().addCoCo(new NoNonSyncInputPortInEpsilonTransition4Family());
       varChecker.get4FullVariant().addCoCo(new NoOtherInputPortInMsgTransition4Family());
@@ -265,7 +266,6 @@ public class MontiArcCoCos {
     } else {
       checker.addCoCo(new NoInputPortInEntryAction());
       checker.addCoCo(new NoInputPortInExitAction());
-      checker.addCoCo(new NoInputPortInInitialAction());
       checker.addCoCo(new NoNonSyncInputPortInDoAction());
       checker.addCoCo(new NoNonSyncInputPortInEpsilonTransition());
       checker.addCoCo(new NoOtherInputPortInMsgTransition());

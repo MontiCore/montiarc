@@ -11,19 +11,21 @@ component UsesLocalVarOutOfScope {
 
   automaton {
 
-    initial {
-      { int innerLocalBlock1 = 12; }
-      int localBlock1;
-      pOut2 = localBlock2;          // illegal
-
-      pOut = innerLocalBlock1;      // illegal
-    } state A;
+    initial state A {
+      entry / {
+        {
+          { int innerLocalBlock1 = 12; }
+          int localBlock1;
+          pOut2 = localBlock2;          // illegal
+          pOut = innerLocalBlock1;      // illegal
+         }
+      }
+    }
 
     A -> A / {
       { int innerLocalBlock2 = 12; }
       int localBlock2;
       pOut2 = localBlock1;          // illegal
-
       pOut = innerLocalBlock2;      // illegal
     }
   }

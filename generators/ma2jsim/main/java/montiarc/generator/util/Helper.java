@@ -694,14 +694,6 @@ public class Helper {
     return Optional.empty();
   }
 
-  public List<ASTMCBlockStatement> getInitAction(ASTSCState state) {
-    if (!state.isPresentSCSAnte() || !MontiArcMill.typeDispatcher().isSCTransitions4CodeASTAnteAction(state.getSCSAnte())
-      || MontiArcMill.typeDispatcher().asSCTransitions4CodeASTAnteAction(state.getSCSAnte()).isEmptyMCBlockStatements())
-      return Collections.emptyList();
-
-    return MontiArcMill.typeDispatcher().asSCTransitions4CodeASTAnteAction(state.getSCSAnte()).getMCBlockStatementList();
-  }
-
   public Optional<ASTMCStatement> getDoAction(ASTSCState state) {
     for (ASTSCStateElement s : getHierarchyElementsOf(state)) {
       if (MontiArcMill.typeDispatcher().isSCDoActionsASTSCDoAction(s)) {

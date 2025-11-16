@@ -7,10 +7,12 @@ component BumpControl {
     sync out int left;
 
   automaton {
-    initial {
-      right = 1;
-      left = 2;
-    } state Idle;
+    initial state Idle {
+      entry / {
+        right = 1;
+        left = 2;
+      }
+    }
 
     state Driving;
     state Backing;

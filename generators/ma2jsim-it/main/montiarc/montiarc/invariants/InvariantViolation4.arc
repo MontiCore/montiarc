@@ -14,11 +14,15 @@ component InvariantViolation4 {
     out int o;
 
   automaton {
-    initial { v = 10; }
-    state S1 [v >= 10 && v < 20] {
-      initial { v = 11; }
-      state S11 [v == 11] {
-        entry / { o = 11; }
+    initial state S1 [v >= 10 && v < 20] {
+      entry / {
+        v = 10;
+      }
+      initial state S11 [v == 11] {
+        entry / {
+          v = 11;
+          o = 11;
+        }
       }
     }
 

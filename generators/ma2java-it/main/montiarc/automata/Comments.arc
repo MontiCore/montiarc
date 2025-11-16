@@ -41,8 +41,6 @@ Comments // line comment after component name
 
     // line comment before first state declaration
     initial // line comment after initial keyword
-    { // line comment after ante opening bracket
-    } // line comment after ante closing bracket
     state // line comment after state keyword
     S // line comment after state name
     ; // line comment after first state declaration

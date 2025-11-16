@@ -67,7 +67,6 @@ public class NoInputPortInEntryAction4FamilyTest extends MontiArcTestBase {
     var varchecker = checker.get4FullVariant();
     varchecker.addCoCo(new NoInputPortInEntryAction4Family());
     varchecker.addCoCo(new NoInputPortInExitAction4Family());
-    varchecker.addCoCo(new NoInputPortInInitialAction4Family());
     varchecker.addCoCo(new NoNonSyncInputPortInDoAction4Family());
     varchecker.addCoCo(new NoNonSyncInputPortInEpsilonTransition4Family());
     varchecker.addCoCo(new NoOtherInputPortInMsgTransition4Family());

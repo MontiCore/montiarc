@@ -9,14 +9,11 @@ import com.google.common.base.Preconditions;
 import de.monticore.scactions._ast.ASTSCABody;
 import de.monticore.scactions._ast.ASTSCEntryAction;
 import de.monticore.scactions._ast.ASTSCExitAction;
-import de.monticore.scbasis._ast.ASTSCSAnte;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
-import de.monticore.sctransitions4code._ast.ASTAnteAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
-import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCStatement;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -55,16 +52,6 @@ public class ArcAutomatonHelper {
   public ASTTransitionAction scABodyToTransitionAction(@NotNull ASTSCABody action) {
     Preconditions.checkNotNull(action);
     return (ASTTransitionAction) action;
-  }
-
-  public boolean isAnteAction(@NotNull ASTSCSAnte ante) {
-    Preconditions.checkNotNull(ante);
-    return ante instanceof ASTAnteAction;
-  }
-
-  public ASTAnteAction asAnteAction(@NotNull ASTSCSAnte ante) {
-    Preconditions.checkNotNull(ante);
-    return (ASTAnteAction) ante;
   }
 
   public boolean hasTransitionWithoutGuardFrom(@NotNull ASTArcStatechart automaton, @NotNull ASTSCState srcState) {
@@ -123,17 +110,6 @@ public class ArcAutomatonHelper {
       .filter(elem -> elem instanceof ASTSCExitAction).map(elem -> (ASTSCExitAction) elem)
       .findFirst().get();
     return scABodyToTransitionAction(exitAction.getSCABody()).getMCStatement();
-  }
-
-  public boolean hasInitAction(@NotNull ASTSCState state) {
-    Preconditions.checkNotNull(state);
-    return state.getSCModifier().isInitial() && state.isPresentSCSAnte() && isAnteAction(state.getSCSAnte());
-  }
-
-  public List<ASTMCBlockStatement> getInitActionStatementList(@NotNull ASTSCState state) {
-    Preconditions.checkNotNull(state);
-    Preconditions.checkArgument(hasInitAction(state));
-    return asAnteAction(state.getSCSAnte()).getMCBlockStatementList();
   }
 
   public boolean hasSubStates(@NotNull ASTSCState state) {

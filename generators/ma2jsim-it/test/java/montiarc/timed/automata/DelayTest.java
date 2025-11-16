@@ -53,55 +53,55 @@ class DelayTest {
     return Stream.of(
       Arguments.of(
         List.of(),
-        List.of(msg(OnOff.OFF), tk())
+        List.of(tk())
       ),
       Arguments.of(
         List.of(msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON))
+        List.of(tk(), msg(OnOff.ON))
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk()),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk())
+        List.of(tk(), msg(OnOff.ON), tk())
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk()),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk())
+        List.of(tk(), msg(OnOff.OFF), tk())
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
+        List.of(tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF))
+        List.of(tk(), msg(OnOff.ON), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON))
+        List.of(tk(), msg(OnOff.OFF), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
+        List.of(tk(), msg(OnOff.ON), tk(), msg(OnOff.ON), tk(), msg(OnOff.ON))
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(msg(OnOff.OFF), tk(), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), msg(OnOff.OFF), tk(), tk(), msg(OnOff.OFF))
+        List.of(tk(), msg(OnOff.OFF), tk(), tk(), msg(OnOff.OFF))
       ),
       Arguments.of(
         List.of(tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF)),
-        List.of(msg(OnOff.OFF), tk(), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
+        List.of(tk(), tk(), msg(OnOff.OFF), tk(), msg(OnOff.OFF))
       )
     );
   }

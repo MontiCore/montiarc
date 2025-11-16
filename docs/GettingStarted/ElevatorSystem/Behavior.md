@@ -58,9 +58,11 @@ Since the `motorCommand` port is [sync delayed](./Interfaces.md#delayed-ports), 
 In our example, this means the motor is initially not moving.
 
 ```montiarc
-initial {
-  motorCommand = MotorCMD.STOP;
-} state Idle [...]
+initial state Init {
+  entry / {
+    motorCommand = MotorCMD.STOP;
+  }
+}
 ```
 
 

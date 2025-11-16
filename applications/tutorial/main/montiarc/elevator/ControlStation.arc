@@ -15,9 +15,11 @@ component ControlStation {
   Optional<int> targetFloor = Optional.empty();
 
   <<delayed>> automaton {
-    initial {
-      motorCommand = MotorCMD.STOP;
-    } state Idle {
+
+    initial state Idle {
+      entry / {
+        motorCommand = MotorCMD.STOP;
+      }
       do / {
         motorCommand = MotorCMD.STOP;
       }
@@ -90,6 +92,5 @@ component ControlStation {
     }
 
     OpenDoor -> Idle [targetFloor.isPresent()];
-
   }
 }

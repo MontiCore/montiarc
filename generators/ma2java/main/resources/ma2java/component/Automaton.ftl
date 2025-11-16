@@ -19,8 +19,6 @@ ${tc.signature("comp")}
 
   <@printExit state comp/>
 
-  <@printInitState state comp/>
-
 </#list>
 
 <@printInit ast comp/>
@@ -133,7 +131,6 @@ ${tc.signature("comp")}
     <#if autHelper.hasSubStates(state)>
       // transition to sub-state
       <#assign substate = autHelper.getInitialSubStatesStream(state).findFirst().get()>
-      this.init${substate.getName()}();
       this.transitionTo${substate.getName()}();
     </#if>
   }
@@ -175,26 +172,6 @@ ${tc.signature("comp")}
   }
 </#macro>
 
-<#macro printInitState state comp>
-  protected void init${state.getName()}() {
-    <#if autHelper.hasInitAction(state)>
-      // inputs
-      <@printLocalInputVariables comp/>
-
-      // outputs
-      <@printLocalOutputVariables comp/>
-
-      // initial action
-      <#list autHelper.getInitActionStatementList(state) as initAction>
-        ${compHelper.printStatement(initAction)}
-      </#list>
-
-      // result
-      <@printSetOutput comp/>
-    </#if>
-  }
-</#macro>
-
 <#macro printLocalInputVariables comp>
   <#list comp.getAllIncomingPorts() as port>
     final <@printType port.getType()/> ${port.getName()} = this.get${port.getName()?cap_first}().getValue();
@@ -227,8 +204,6 @@ ${tc.signature("comp")}
   @Override
   public void init() {
     <#assign state = automaton.streamInitialOuterStates().findFirst().get()>
-    // execute the initial action
-    this.init${state.getName()}();
     // transition to the initial state
     this.transitionTo${state.getName()}();
 

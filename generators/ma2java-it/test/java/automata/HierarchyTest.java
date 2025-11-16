@@ -58,16 +58,16 @@ public class HierarchyTest {
    * automaton should produce for the given input.
    */
   protected static Stream<Arguments> inputAndExpectedOutputProvider() {
-    String path0 = "aIni->aEn->a1Ini->a1En";
+    String path0 = "->aEn->a1En";
     String path1 = path0 + "->a1Ex" + "->aEx" + "->aToB" + "->bEn";
     String path2 = path1 + "->bEx" + "->bToC" + "->cEn" + "->c1En";
     String path3 = path2 + "->c1Ex" + "->c1ToC2" + "->c2En";
     String path4 = path3 + "->c2Ex" + "->cEx" + "->cToD" + "->dEn" + "->d2En";
     String path5 = path4 + "->d2Ex" + "->d2ToD1" + "->d1En";
-    String path6 = path5 + "->d1Ex" + "->dEx" + "->d1ToE" + "->eEn" + "->e1Ini" + "->e1En";
+    String path6 = path5 + "->d1Ex" + "->dEx" + "->d1ToE" + "->eEn" + "->e1En";
     String path7 = path6 + "->e1Ex" + "->e1ToE2" + "->e2En";
     String path8 = path7 + "->e2Ex" + "->eEx" + "->eToF11" + "->fEn" + "->f1En" + "->f11En";
-    String path9 = path8 + "->f11Ex" + "->f1Ex" + "->fEx" + "->fToA" + "->aEn" + "->a1Ini" + "->a1En";
+    String path9 = path8 + "->f11Ex" + "->f1Ex" + "->fEx" + "->fToA" + "->aEn" + "->a1En";
     return Stream.of(Arguments.of(0, path1),
       Arguments.of(1, path1),
       Arguments.of(2, path2),

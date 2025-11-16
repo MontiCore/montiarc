@@ -10,16 +10,18 @@ component UsesLocalVarCorrectly {
 
   automaton {
 
-    initial {
-      int a;
-      a = 15;
-      int b = a;
-      compVar = b;
-      { // let's also try deeper nesting .1)
-        int c = b;
-        pOut = c;
+    initial state A {
+      entry / {
+        int a;
+        a = 15;
+        int b = a;
+        compVar = b;
+        { // let's also try deeper nesting .1)
+          int c = b;
+          pOut = c;
+        }
       }
-    } state A;
+    }
 
     A -> A / {
       int a;

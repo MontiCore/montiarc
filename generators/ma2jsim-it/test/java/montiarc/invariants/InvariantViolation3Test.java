@@ -20,10 +20,10 @@ class InvariantViolation3Test {
     sut.port_o().connect(port_o);
 
     // When
-    sut.run(1);
+    sut.run(4);
 
     // Then
     assertThat(Log.getFindings()).isNotEmpty();
-    assertThat(Log.getFindings().size()).isEqualTo(2);
+    assertThat(Log.getFindings().size()).isEqualTo(4);
   }
 }

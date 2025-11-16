@@ -7,7 +7,6 @@ import java.util.List;
 public class StateBuilder {
 
   protected String name;
-  protected Action<NoInput> initAction;
   protected Action<NoInput> entryAction;
   protected Action<NoInput> exitAction;
   protected Action<NoInput> doAction;
@@ -59,15 +58,6 @@ public class StateBuilder {
     return this;
   }
 
-  public Action<NoInput> getInitAction() {
-    return initAction;
-  }
-
-  public StateBuilder setInitAction(Action<NoInput> entryAction) {
-    this.initAction = entryAction;
-    return this;
-  }
-
   public String getName() {
     return name;
   }
@@ -90,7 +80,6 @@ public class StateBuilder {
       this.getName(),
       this.getSubstates(),
       this.getInitialSubstates(),
-      this.getInitAction(),
       this.getEntryAction(),
       this.getExitAction(),
       this.getDoAction()
