@@ -20,7 +20,7 @@ component AtomicComp {
       if (i > 2) {
         p1 = i;
       }
-    };
+    }
     A -> B p;
     A -> B;
   }
