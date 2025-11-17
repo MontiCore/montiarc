@@ -11,10 +11,6 @@ plugins {
 
 group = "montiarc.tooling.ma2jsim-plugin-itest"
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 dependencies {
   montiarc(project(":tooling:ma2jsim-plugin-itest:consumes-library"))
 

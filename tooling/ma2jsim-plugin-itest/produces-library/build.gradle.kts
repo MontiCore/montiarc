@@ -11,10 +11,6 @@ plugins {
 
 group = "montiarc.tooling.ma2jsim-plugin-itest"
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 tasks.getByName<Test>("test") {
   this.enabled = false
 }

@@ -13,10 +13,6 @@ group = "montiarc.tooling.ma2jsim-plugin-itest"
 val fooSourceSet = sourceSets.create("foo")
 val fooImplConfig = configurations.getByName(fooSourceSet.implementationConfigurationName)
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 val checkGenerationTask = tasks.register("checkCorrectGeneration", CheckFilesArePresent::class.java) {
   dependsOn(tasks.named("compileFooMontiarc"))
   group = "verification"

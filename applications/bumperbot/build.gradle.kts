@@ -22,14 +22,6 @@ dependencies {
   implementation(seLibs.se.commons.utilities)
 }
 
-cd2pojo {
-  internalMontiArcTesting.set(true)
-}
-
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
 

@@ -14,18 +14,15 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.tasks.Jar
 
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JavaTool"
 
-const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:ma2java"
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java:${GENERATOR_VERSION}"
 
-const val INTERNAL_RTE_PROJECT_REF = ":libraries:majava-rte"
-const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte"
+const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte:${GENERATOR_VERSION}"
 
 /**
  * Enables the integration of montiarc models into a project build:
@@ -82,20 +79,14 @@ class Ma2JavaPlugin : Plugin<Project> {
       it.isCanBeConsumed = false  // We do not use this configuration for publishing
     }
 
-    // Add a dependency on the ma2java jar. Depending on what the user wishes, ma2java may be drawn from maven
-    // (default), or it may be an internal project dependency. This only makes sense for us, the MontiArc
-    // developers, because this way we can directly test the freshly compiled version of ma2java.
+    // Add a dependency on the ma2java jar
     dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider {
-      if(maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_GENERATOR_PROJECT_REF)
-      } else {
-        "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
+      MAVEN_GENERATOR_PROJECT_REF
     })
   }
 
   private fun addRuntimeEnvironmentDependencyForApiOf(sourceSet: SourceSet) = with(project) {
-    addRuntimeEnvironmentDependencyFor(sourceSet.implementationConfigurationName)
+    dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
     // too. Therefore, we want to put the dependency on the api configuration. However, the api configuration only
@@ -103,22 +94,9 @@ class Ma2JavaPlugin : Plugin<Project> {
     // have api configurations. It only has implementation configurations which we then alternatively use.
     pluginManager.withPlugin("java-library") {
       if (SourceSet.isMain(sourceSet)) {
-        addRuntimeEnvironmentDependencyFor(sourceSet.apiConfigurationName)
+        dependencies.addProvider(sourceSet.apiConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
       }
     }
-  }
-
-  private fun addRuntimeEnvironmentDependencyFor(configName: String) = with (project) {
-    // Depending on what the user wishes, majava-rte may be drawn from maven (default), or it may be an internal project
-    // dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test the
-    // freshly compiled version of majava-rte.
-    dependencies.addProvider(configName, provider {
-      if (maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_RTE_PROJECT_REF)
-      } else {
-        "${MAVEN_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
   }
 
   /**
@@ -149,22 +127,9 @@ class Ma2JavaPlugin : Plugin<Project> {
     }
 
     sourceSet.montiarc.get().compiledBy(generateTask, MontiArcCompile::outputDir)
-    setTaskOrderAfterMaGenerator(generateTask)
     tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
-  }
-
-  /**
-   * If [MAExtension.internalMontiArcTesting] is true, then this method schedules the [MontiArcCompile] task to run
-   * after the tests of the generator finished.
-   */
-  private fun setTaskOrderAfterMaGenerator(generateTask: TaskProvider<MontiArcCompile>) = with (project) {
-    generateTask.configure { genTask ->
-      if (maExtension.internalMontiArcTesting.get()) {
-        genTask.mustRunAfter(project(INTERNAL_GENERATOR_PROJECT_REF).tasks.withType(Test::class.java))
-      }
-    }
   }
 
   /**

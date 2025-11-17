@@ -50,14 +50,6 @@ dependencies {
   implementation(libs.janino)
 }
 
-cd2pojo {
-  internalMontiArcTesting.set(true)
-}
-
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 val compileBaseMontiArc : TaskProvider<MontiArcCompile> = tasks.named<MontiArcCompile>("compileBaseMontiarc")
 
 val compileBaseJava: TaskProvider<JavaCompile> = tasks.named<JavaCompile>("compileBaseJava") {

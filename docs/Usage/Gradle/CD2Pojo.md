@@ -91,12 +91,6 @@ Therefore, the generated source code will automatically be compiled by `compileJ
       symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
       useClass2Mc.set(true)  // Default value is false
     }
-
-    cd2pojo {
-      // Only use the following option if you build the MontiArc project itself!
-      // Else ignore it (You can just omit the option).
-      internalMontiArcTesting.set(true)
-    }
     ```
 
 === "Groovy"
@@ -120,12 +114,6 @@ Therefore, the generated source code will automatically be compiled by `compileJ
       symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
       useClass2Mc.set(true)  // Default value is false
     }
-
-    cd2pojo {
-      // Only use the following option if you build the MontiArc project itself!
-      // Else ignore it (You can just omit the option).
-      internalMontiArcTesting.set(true)
-    }
     ```
 
 Note that the generated Java code will be generated to `$destinationDirectory/java` and created `.cdsym` files are
@@ -145,12 +133,6 @@ Some configuration options only have default values if the task is created for a
 | symbolImportDir | The `cd2pojoSymbolDependencies` configuration                | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolImportDir.from(...)` statements.                                                                                                                                  |
 | useClass2Mc     | `false`                                                      | If you intend to use Java types (or other JVM types) in your class diagram models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `cd2pojoGenerator`) will be accessible from class diagram models. *Note*: This will be changed in the future. |
 | outputDir       | `$buildDir/cd2pojo/SOURCE_SET_NAME`                          | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                                        |
-
-Moreover, there are the following options configurable in the `cd2pojo` block:
-
-| Option                  | Default value | Description                                                                                                                                                                                                                                                                                                                                                                            |
-| ----------------------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| internalMontiArcTesting | `false`       | If you are not a MontiArc developer, just ignore it (and omit the option, as its default value is `false`). Otherwise: if you want to apply the plugin from within the MontiArc project, e.g., to test the generator in an integration test, then set this to `true`. By this, the freshly compiled (unpublished) generator will be used instead of the one from the maven repository. |
 
 ---
 ## Added build elements

@@ -18,12 +18,6 @@ plugins {
 
 group = "montiarc.tooling.ma2jsim-plugin-itest"
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
-
-
 // Testing correct behavior in the case of fully altered configuration values
 val alteredConfigValuesSrcSet = sourceSets.create("alteringAndUsingConfigValues") {
   montiarc.setSrcDirs(listOf("$projectDir/src/${this.name}/alteredMontiarc"))

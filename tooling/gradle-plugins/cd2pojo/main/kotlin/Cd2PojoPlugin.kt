@@ -11,15 +11,13 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.api.tasks.testing.Test
 
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "cd2pojoGenerator"
 const val DSL_EXTENSION_NAME = "cd2pojo"
 
 const val CD2POJO_TOOL_CLASS = "de.monticore.cd2pojo.CD2PojoTool"
 
-const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:cd2pojo"
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:cd2pojo"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:cd2pojo:${GENERATOR_VERSION}"
 
 const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging"
 
@@ -59,16 +57,8 @@ class Cd2PojoPlugin : Plugin<Project> {
       it.isCanBeConsumed = false  // We do not use this configuration for publishing
     }
 
-    // Add a dependency on the cd2pojo jar. Depending on what the user wishes, cd2pojo may be drawn from maven
-    // (default), or it may be an internal project dependency. This only makes sense for us, the MontiArc
-    // developers, because this way we can directly test the freshly compiled version of cd2pojo.
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider {
-      if(cdExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_GENERATOR_PROJECT_REF)
-      } else {
-        "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
+    // Add a dependency on the cd2pojo jar
+    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
   private fun getSourceSetsOf(project: Project): SourceSetContainer {
@@ -135,21 +125,8 @@ class Cd2PojoPlugin : Plugin<Project> {
     }
 
     sourceSet.cd2pojo.get().compiledBy(generateTask, Cd2PojoCompile::outputDir)
-    setTaskOrderAfterCdGenerator(generateTask)
     tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
-  }
-
-  /**
-   * If [Cd2PojoExtension.internalMontiArcTesting] is true, then this method schedules the [Cd2PojoCompile] task to run
-   * after the tests of the generator finished.
-   */
-  private fun setTaskOrderAfterCdGenerator(generateTask: TaskProvider<Cd2PojoCompile>) = with (project) {
-    generateTask.configure { genTask ->
-      if (cdExtension.internalMontiArcTesting.get()) {
-        genTask.mustRunAfter(project(INTERNAL_GENERATOR_PROJECT_REF).tasks.withType(Test::class.java))
-      }
-    }
   }
 }

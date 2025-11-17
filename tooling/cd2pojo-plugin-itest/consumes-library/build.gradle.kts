@@ -11,10 +11,6 @@ plugins {
 
 group = "montiarc.tooling.cd2pojo-plugin-itest"
 
-cd2pojo {
-  internalMontiArcTesting.set(true)
-}
-
 dependencies {
   cd2pojo(project(":tooling:cd2pojo-plugin-itest:produces-library"))
 

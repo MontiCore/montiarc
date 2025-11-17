@@ -26,7 +26,3 @@ dependencies {
 
   testImplementation(libs.mockito)
 }
-
-cd2pojo {
-  internalMontiArcTesting.set(true)
-}

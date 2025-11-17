@@ -13,10 +13,6 @@ plugins {
 group = "montiarc.tooling.ma2jsim-plugin-itest.cd4montiarc-dependencies"
 version = BuildConstants.VERSION
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 dependencies {
   cd2pojo4montiarc(project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:cd-a"))
 }

@@ -49,14 +49,6 @@ dependencies {
   testImplementation(testFixtures(project(":libraries:simulator-rte")))
 }
 
-cd2pojo {
-  internalMontiArcTesting.set(true)
-}
-
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 tasks.withType(Cd2PojoCompile::class).configureEach {
   useClass2Mc.set(true)
 }

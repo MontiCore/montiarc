@@ -12,14 +12,12 @@ import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
-import org.gradle.api.tasks.testing.Test
 
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "sd2arcGenerator"
 const val DSL_EXTENSION_NAME = "sd2arc"
 
 const val SD2ARC_TOOL_CLASS = "de.monticore.sd2arc.SD2ArcTool"
 
-const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:sd2arc"
 const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:sd2arc"
 
 const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging"
@@ -66,16 +64,8 @@ class Sd2ArcPlugin : Plugin<Project> {
       it.isCanBeConsumed = false  // We do not use this configuration for publishing
     }
 
-    // Add a dependency on the sd2arc jar. Depending on what the user wishes, sd2arc may be drawn from maven
-    // (default), or it may be an internal project dependency. This only makes sense for us, the MontiArc
-    // developers, because this way we can directly test the freshly compiled version of sd2arc.
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider {
-      if(sdExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_GENERATOR_PROJECT_REF)
-      } else {
-        "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
+    // Add a dependency on the sd2arc jar
+    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}" })
   }
 
   private fun getSourceSetsOf(project: Project): SourceSetContainer {
@@ -138,21 +128,8 @@ class Sd2ArcPlugin : Plugin<Project> {
     }
 
     sourceSet.sd2arc.get().compiledBy(generateTask, Sd2ArcCompile::outputDir)
-    setTaskOrderAfterSdGenerator(generateTask)
     tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
-  }
-
-  /**
-   * If [Sd2ArcExtension.internalMontiArcTesting] is true, then this method schedules the [Sd2ArcCompile] task to run
-   * after the tests of the generator finished.
-   */
-  private fun setTaskOrderAfterSdGenerator(generateTask: TaskProvider<Sd2ArcCompile>) = with (project) {
-    generateTask.configure { genTask ->
-      if (sdExtension.internalMontiArcTesting.get()) {
-        genTask.mustRunAfter(project(INTERNAL_GENERATOR_PROJECT_REF).tasks.withType(Test::class.java))
-      }
-    }
   }
 }

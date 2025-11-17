@@ -11,10 +11,6 @@ plugins {
 
 group = "montiarc.tooling.ma2java-plugin-itest"
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 dependencies {
   testImplementation(libs.junit.api)
   testRuntimeOnly(libs.junit.engine)

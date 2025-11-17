@@ -30,6 +30,34 @@ dependencyResolutionManagement {
   }
 }
 
+gradle.beforeProject {
+  configurations.all {
+    resolutionStrategy.dependencySubstitution {
+      // The montiarc gradle-plugins declare external dependencies.
+      // We substitute these with local project dependencies here
+      // so that tests and applications run on the latest local changes.
+      substitute(module("montiarc.generators:cd2pojo"))
+        .using(project(":generators:cd2pojo"))
+      substitute(module("montiarc.generators:ma2java"))
+        .using(project(":generators:ma2java"))
+      substitute(module("montiarc.generators:ma2jsim"))
+        .using(project(":generators:ma2jsim"))
+      substitute(module("montiarc.generators:sd2arc"))
+        .using(project(":generators:sd2arc"))
+      substitute(module("montiarc.libraries:majava-rte"))
+        .using(project(":libraries:majava-rte"))
+      substitute(module("montiarc.libraries:simulator-rte"))
+        .using(project(":libraries:simulator-rte"))
+      substitute(module("montiarc.libraries:simulator-test-rte"))
+        .using(project(":libraries:simulator-test-rte"))
+      substitute(module("montiarc.libraries:montiarc-base"))
+        .using(project(":libraries:montiarc-base"))
+      substitute(module("montiarc.libraries:maunit"))
+        .using(project(":libraries:maunit"))
+    }
+  }
+}
+
 rootProject.name = "montiarc"
 
 includeBuild("build-logic")

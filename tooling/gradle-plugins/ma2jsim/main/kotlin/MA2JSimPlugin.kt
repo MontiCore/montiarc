@@ -17,22 +17,18 @@ const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JSimTool"
 
-const val INTERNAL_GENERATOR_PROJECT_REF = ":generators:ma2jsim"
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2jsim"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2jsim:${GENERATOR_VERSION}"
 
-const val INTERNAL_RTE_PROJECT_REF = ":libraries:simulator-rte"
-const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte"
+const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte:${GENERATOR_VERSION}"
 
-const val INTERNAL_TEST_RTE_PROJECT_REF = ":libraries:simulator-test-rte"
-const val MAVEN_TEST_RTE_PROJECT_REF = "montiarc.libraries:simulator-test-rte"
+const val MAVEN_TEST_RTE_PROJECT_REF = "montiarc.libraries:simulator-test-rte:${GENERATOR_VERSION}"
 
-const val INTERNAL_MA_BASE_PROJECT_REF = ":libraries:montiarc-base"
-const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base"
+const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base:${GENERATOR_VERSION}"
+
+const val MAVEN_MAUNIT_PROJECT_REF = "montiarc.libraries:maunit:${GENERATOR_VERSION}"
 
 const val MA2JSIM_LOGGING_ENV_VAR = "MA2JSIM_LOGGING_BASE_PATH"
 
-const val INTERNAL_MAUNIT_PROJECT_REF = ":libraries:maunit"
-const val MAVEN_MAUNIT_PROJECT_REF = "montiarc.libraries:maunit"
 
 /**
  * Enables the integration of montiarc models into a project build:
@@ -60,8 +56,8 @@ class MA2JSimPlugin : Plugin<Project> {
         // Enabling the declaration of model dependencies and prepare their extraction
         createCompileMontiarcTask(sourceSet)
         addRuntimeEnvironmentDependencyFor(sourceSet)
-        addMontiArcBaseDependencyFor(sourceSet)
-        addMaUnitDependencyFor(sourceSet)
+        dependencies.addProvider(sourceSet.montiarcDependencyDeclarationConfigName, provider { MAVEN_MA_BASE_PROJECT_REF })
+        dependencies.addProvider(sourceSet.montiarcDependencyDeclarationConfigName, provider { MAVEN_MAUNIT_PROJECT_REF })
       }
 
       // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
@@ -72,7 +68,7 @@ class MA2JSimPlugin : Plugin<Project> {
         putCompiledSymbolsIntoJarOf(mainSourceSet)
 
         val testSourceSet = sourceSetsOf(project).getByName(SourceSet.TEST_SOURCE_SET_NAME)
-        addTestRteDependencyFor(testSourceSet)
+        dependencies.addProvider(testSourceSet.implementationConfigurationName, provider { MAVEN_TEST_RTE_PROJECT_REF })
 
         // Also special treatment for the test task
         addLoggingEnvVarToTestTask()
@@ -101,21 +97,13 @@ class MA2JSimPlugin : Plugin<Project> {
       it.isCanBeConsumed = false  // We do not use this configuration for publishing
     }
 
-    // Add a dependency on the ma2java jar. Depending on what the user wishes, ma2java may be drawn from maven
-    // (default), or it may be an internal project dependency. This only makes sense for us, the MontiArc
-    // developers, because this way we can directly test the freshly compiled version of ma2java.
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider {
-      if(maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_GENERATOR_PROJECT_REF)
-      } else {
-        "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
+    // Add a dependency on the ma2java jar
+    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
   private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {
-    addRuntimeEnvironmentDependencyFor(sourceSet.implementationConfigurationName)
-    addRuntimeEnvironmentDependencyFor(sourceSet.cd2pojo4MaDeclarationConfigName)
+    dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
+    dependencies.addProvider(sourceSet.cd2pojo4MaDeclarationConfigName, provider { MAVEN_RTE_PROJECT_REF })
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
     // too. Therefore, we want to put the dependency on the api configuration. However, the api configuration only
@@ -123,73 +111,9 @@ class MA2JSimPlugin : Plugin<Project> {
     // have api configurations. It only has implementation configurations which we then alternatively use.
     pluginManager.withPlugin("java-library") {
       if (SourceSet.isMain(sourceSet)) {
-        addRuntimeEnvironmentDependencyFor(sourceSet.apiConfigurationName)
+        dependencies.addProvider(sourceSet.apiConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
       }
     }
-  }
-
-  private fun addRuntimeEnvironmentDependencyFor(configName: String) = with (project) {
-    // Depending on what the user wishes, ma2jsim-rte may be drawn from maven (default), or it may be an internal project
-    // dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test the
-    // freshly compiled version of ma2jsim-rte.
-    dependencies.addProvider(configName, provider {
-      if (maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_RTE_PROJECT_REF)
-      } else {
-        "${MAVEN_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
-  }
-
-  /**
-   * Adds the library montiarc.libraries:montiarc-test-rte as implementation dependency for the source set
-   */
-  private fun addTestRteDependencyFor(sourceSet: SourceSet) = with (project) {
-    val configName = sourceSet.implementationConfigurationName
-    // Depending on what the user wishes, ma2jsim-test-rte may be drawn from maven (default), or it may be an internal project
-    // dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test the
-    // freshly compiled version of ma2jsim-test-rte.
-    dependencies.addProvider(configName, provider {
-      if (maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_TEST_RTE_PROJECT_REF)
-      } else {
-        "${MAVEN_TEST_RTE_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
-  }
-
-  /**
-   * Adds the library montiarc.libraries:montiarc-base as montiarc dependency for the source set
-   */
-  private fun addMontiArcBaseDependencyFor(sourceSet: SourceSet) = with(project) {
-    // Depending on what the user wishes, montiarc-base may be drawn from maven (default), or it may be an internal
-    // project dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test
-    // the freshly compiled version of montiarc-base.
-
-    dependencies.addProvider(sourceSet.montiarcDependencyDeclarationConfigName, provider {
-      if (maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_MA_BASE_PROJECT_REF)
-      } else {
-        "${MAVEN_MA_BASE_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
-  }
-
-  /**
-   * Adds the library montiarc.libraries:maunit as montiarc dependency for the source set
-   */
-  private fun addMaUnitDependencyFor(sourceSet: SourceSet) = with(project) {
-    // Depending on what the user wishes, montiarc-base may be drawn from maven (default), or it may be an internal
-    // project dependency. This only makes sense for us, the MontiArc developers, because this way we can directly test
-    // the freshly compiled version of montiarc-base.
-
-    dependencies.addProvider(sourceSet.montiarcDependencyDeclarationConfigName, provider {
-      if (maExtension.internalMontiArcTesting.get()) {
-        project(INTERNAL_MAUNIT_PROJECT_REF)
-      } else {
-        "${MAVEN_MAUNIT_PROJECT_REF}:${GENERATOR_VERSION}"
-      }
-    })
   }
 
   /**
@@ -220,22 +144,9 @@ class MA2JSimPlugin : Plugin<Project> {
     }
 
     sourceSet.montiarc.get().compiledBy(generateTask, MontiArcCompile::outputDir)
-    setTaskOrderAfterMaGenerator(generateTask)
     tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
-  }
-
-  /**
-   * If [MAExtension.internalMontiArcTesting] is true, then this method schedules the [MontiarcCompile] task to run
-   * after the tests of the generator finished.
-   */
-  private fun setTaskOrderAfterMaGenerator(generateTask: TaskProvider<MontiArcCompile>) = with (project) {
-    generateTask.configure { genTask ->
-      if (maExtension.internalMontiArcTesting.get()) {
-        genTask.mustRunAfter(project(INTERNAL_GENERATOR_PROJECT_REF).tasks.withType(Test::class.java))
-      }
-    }
   }
 
   /**

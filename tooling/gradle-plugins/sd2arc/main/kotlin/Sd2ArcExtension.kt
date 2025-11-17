@@ -8,6 +8,7 @@ import org.gradle.api.provider.Property
  */
 abstract class Sd2ArcExtension {
 
+  @Deprecated("do not use")
   abstract val internalMontiArcTesting: Property<Boolean>
 
   init {

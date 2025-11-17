@@ -8,6 +8,7 @@ import org.gradle.api.provider.Property
  */
 abstract class MAExtension {
 
+  @Deprecated("do not use")
   abstract val internalMontiArcTesting: Property<Boolean>
 
   init {

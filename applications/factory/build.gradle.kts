@@ -24,14 +24,6 @@ sourceSets {
   }
 }
 
-cd2pojo {
-  internalMontiArcTesting.set(true)
-}
-
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
 }

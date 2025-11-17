@@ -16,10 +16,6 @@ plugins {
 group = "montiarc.tooling.ma2jsim-plugin-itest.cd4montiarc-dependencies"
 version = BuildConstants.VERSION
 
-montiarc {
-  internalMontiArcTesting.set(true)
-}
-
 tasks.getByName<Test>("test") {
   enabled = false
 }
