@@ -10,8 +10,10 @@ In this chapter, you will learn how to use the MontiArc tooling and go over the 
 
 
 <div class="grid cards" markdown>
+  
   - [:simple-gradle: __Gradle Plugin__](./Gradle/index.md)
   - [:material-console: __CLI__](./CLI/index.md)
+
 </div>
 
 
