@@ -79,6 +79,11 @@ abstract class MontiArcCompile : DefaultTask() {
   @get:Input
   abstract val printTaskInfo : Property<Boolean>
 
+  @get:InputFiles
+  @get:IgnoreEmptyDirectories
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  abstract val classPath : ConfigurableFileCollection
+
   init {
     description = "Generates .java code from MontiArc models."
 
@@ -91,7 +96,7 @@ abstract class MontiArcCompile : DefaultTask() {
     debugTask.convention(false)
     debugPort.convention("5005")
 
-    dependsOn(getClassPath())
+    classPath.setFrom(project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME))
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -125,7 +130,7 @@ abstract class MontiArcCompile : DefaultTask() {
 
     project.javaexec {
       it.mainClass.set(getMainClass())
-      it.classpath(getClassPath())
+      it.classpath(this.classPath)
 
       // Enable remote debugging when option is set
       if (debugTask.get()) {
@@ -162,8 +167,6 @@ abstract class MontiArcCompile : DefaultTask() {
     )
   }
 
-  private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)
-
   private fun getMainClass() = MA_TOOL_CLASS
 
   private fun printInfo() {
@@ -189,7 +192,7 @@ abstract class MontiArcCompile : DefaultTask() {
 
     println("MainClass:" + getMainClass())
     println("ClassPath:")
-    getClassPath().get().asPath.split(":").forEach { println("  $it") }
+    this.classPath.asPath.split(":").forEach { println("  $it") }
 
     println("DSE: ${dse.get()}")
   }
