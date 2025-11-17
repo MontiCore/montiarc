@@ -71,11 +71,12 @@ class VersionInjection {
         val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
         javaExtension.sourceSets.named("main").configure { resources.srcDir(genDir) }
         tasks.named("compileJava").configure { finalizedBy(copyTask) }
-        tasks.named("processResources").configure { dependsOn(copyTask) }
+        tasks.named("processResources").configure { finalizedBy(copyTask) }
         tasks.named("sourcesJar").configure { dependsOn(copyTask) }
 
         copyTask.configure {
-          onlyIf { tasks.getByName("compileJava").state.upToDate.not() }
+          onlyIf { tasks.getByName("compileJava").state.upToDate.not()
+              || tasks.getByName("processResources").state.upToDate.not() }
         }
       }
     }
