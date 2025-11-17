@@ -10,6 +10,7 @@ site
 .project
 .settings
 .vscode
+.kotlin
 
 *.iml
 *.hprof
