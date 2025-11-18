@@ -36,7 +36,7 @@ import java.util.stream.Collectors;
 public class MA2JavaTool extends MontiArcTool {
 
   public static final String MA2JAVA_INC_CHECK_REPORT_DIR = "ma2java-inc-data";
-  public static final String MA2JAVA_INC_CHECK_VERSION_PATH = "montiarc/generator/MA2JavaToolVersion.txt";
+  public static final String MA2JAVA_INC_CHECK_VERSION_PATH = "buildInfo.properties";
 
   /*
    * We do not use MontiarcTool#version because when there are only code changes in the generator,

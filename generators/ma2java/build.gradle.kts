@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.build.VersionInjection.Companion.registerVersionInjectionForUpToDateChecks
 
 plugins {
+  id("montiarc.build.build-info")
   id("montiarc.build.java-library")
 }
 
@@ -16,11 +16,3 @@ dependencies {
   testImplementation(seLibs.mc.c2mc)
   testImplementation(libs.mockito)
 }
-
-// Inject generator version information into java code for up to date checks
-registerVersionInjectionForUpToDateChecks(
-  taskName = "injectGeneratorVersion",
-  genDir = layout.buildDirectory.dir("generated-resources/main").get().asFile.absolutePath,
-  subfolder = "montiarc/generator",
-  fileName = "MA2JavaToolVersion.txt",
-)

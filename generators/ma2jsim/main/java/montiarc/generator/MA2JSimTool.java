@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
 public class MA2JSimTool extends MontiArcTool {
 
   public static final String MA2JSIM_INC_CHECK_REPORT_DIR = "ma2jsim-inc-data";
-  public static final String MA2JSIM_INC_CHECK_VERSION_PATH = "montiarc/generator/Ma2JsimToolVersion.txt";
+  public static final String MA2JSIM_INC_CHECK_VERSION_PATH = "buildinfo.properties";
 
   /*
    * We do not use MontiarcTool#version because when there are only code changes in the generator,

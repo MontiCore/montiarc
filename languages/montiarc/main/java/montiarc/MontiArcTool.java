@@ -64,8 +64,7 @@ import java.util.zip.ZipFile;
 public class MontiArcTool extends MontiArcToolTOP {
 
   public static final String SYMBOLS_REPORT_DIR = "symbols-inc-data";
-
-  public static final String INC_CHECK_VERSION_PATH = "montiarc/MontiArcToolVersion.txt";
+  public static final String INC_CHECK_VERSION_PATH = "buildInfo.properties";
 
   private Supplier<String> versionSupplier =
     new VersionFileDeserializer(INC_CHECK_VERSION_PATH)::loadVersion;

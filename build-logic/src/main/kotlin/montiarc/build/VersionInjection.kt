@@ -44,41 +44,5 @@ class VersionInjection {
         into(project.file(genDir))
       }
     }
-
-    fun Project.registerVersionInjectionForUpToDateChecks(taskName: String,
-                                                          genDir: String,
-                                                          subfolder: String,
-                                                          fileName: String) {
-      var versionString = project.version.toString()
-      if (project.version.toString().contains("SNAPSHOT")) {
-        versionString += "#" + ZonedDateTime.now().hashCode()
-      }
-
-      val copyTask = tasks.register<Copy>(taskName) {
-        description = "Serializes the version number of the generator to a resource file so that it can be read during" +
-          "the runtime of the tool, e.g. to consider it during up to date checking"
-
-        // First write the version into a temporary file. This task will then copy it into the build dir of the project.
-        // This solution is a bit hacky, but it automatically utilizes gradle's UP-TO-DATE checks.
-        val tempDir = Files.createTempDirectory("montiarc")
-        Files.write(tempDir.resolve(fileName), versionString.lines())
-
-        from(tempDir)
-        into(project.file(Path.of(genDir).resolve(subfolder)))
-      }
-
-      pluginManager.withPlugin("java") {
-        val javaExtension = project.extensions.getByType(JavaPluginExtension::class.java)
-        javaExtension.sourceSets.named("main").configure { resources.srcDir(genDir) }
-        tasks.named("compileJava").configure { finalizedBy(copyTask) }
-        tasks.named("processResources").configure { finalizedBy(copyTask) }
-        tasks.named("sourcesJar").configure { dependsOn(copyTask) }
-
-        copyTask.configure {
-          onlyIf { tasks.getByName("compileJava").state.upToDate.not()
-              || tasks.getByName("processResources").state.upToDate.not() }
-        }
-      }
-    }
   }
 }
