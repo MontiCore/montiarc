@@ -69,6 +69,21 @@ public abstract class Deployment<T extends Component> {
       return;
     }
 
+    deploy(
+      tickCount,
+      simulationTickLength,
+      simulatedTickLength,
+      parameters
+    );
+  }
+
+  public void deploy(
+    Long tickCount,
+    Long simulationTickLength,
+    Long simulatedTickLength,
+    Map<String, String> parameters
+  ) {
+
     // Setup
     CoordinatingScheduler scheduler = buildCoordinatingScheduler();
     T component = Objects.requireNonNull(buildComponent(scheduler, parameters));
