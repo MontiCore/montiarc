@@ -18,9 +18,9 @@ const val DSL_EXTENSION_NAME = "sd2arc"
 
 const val SD2ARC_TOOL_CLASS = "de.monticore.sd2arc.SD2ArcTool"
 
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:sd2arc"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:sd2arc:${VERSION}"
 
-const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging"
+const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERSION}"
 
 @Suppress("unused")
 @Incubating
@@ -44,7 +44,7 @@ class Sd2ArcPlugin : Plugin<Project> {
         // Adding an entry for sd2arc to all source sets and creating compile tasks from them
         addSd2ArcEntryToSourceSet(sourceSet)
         createCompileSd2ArcTask(sourceSet)
-        addRuntimeEnvironmentDependencyFor(sourceSet)
+        dependencies.addProvider(sourceSet.implementationConfigurationName, provider { SE_LOGGING_PROJECT_REF })
       }
 
       pluginManager.withPlugin("cd2pojo") {
@@ -65,7 +65,7 @@ class Sd2ArcPlugin : Plugin<Project> {
     }
 
     // Add a dependency on the sd2arc jar
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { "${MAVEN_GENERATOR_PROJECT_REF}:${GENERATOR_VERSION}" })
+    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
   private fun getSourceSetsOf(project: Project): SourceSetContainer {
@@ -100,12 +100,6 @@ class Sd2ArcPlugin : Plugin<Project> {
     val srcDirectorySetAsFileCollection = srcDirSet as FileCollection
     sourceSet.resources.exclude(SerializableLambdas.spec { el -> srcDirectorySetAsFileCollection.contains(el.file) })
     sourceSet.allSource.source(srcDirSet)
-  }
-
-  private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with (project) {
-    dependencies.addProvider(sourceSet.implementationConfigurationName, provider {
-      "${SE_LOGGING_PROJECT_REF}:${GENERATOR_VERSION}"
-    })
   }
 
   /**

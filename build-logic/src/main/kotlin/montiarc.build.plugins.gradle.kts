@@ -1,4 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
+import montiarc.build.InjectVersionTask
 
 plugins {
   id("java-gradle-plugin")
@@ -11,6 +12,7 @@ plugins {
 sourceSets {
   main {
     java.setSrcDirs(setOf("main/kotlin"))
+    kotlin.srcDir(layout.buildDirectory.dir("montiarc-build/main/kotlin"))
     resources.setSrcDirs(setOf("main/resources"))
   }
   test {
@@ -18,3 +20,11 @@ sourceSets {
     resources.setSrcDirs(setOf("test/resources"))
   }
 }
+
+val injectVersion by tasks.registering(InjectVersionTask::class) {
+  version.set("${project.version}")
+  target.set(layout.buildDirectory.dir("montiarc-build/main/kotlin"))
+  pkg.set("montiarc.gradle.${project.name.replace("-", ".")}")
+}
+
+tasks.compileKotlin { dependsOn(injectVersion) }

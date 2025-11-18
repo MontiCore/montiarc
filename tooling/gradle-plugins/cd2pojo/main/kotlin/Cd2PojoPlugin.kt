@@ -17,9 +17,9 @@ const val DSL_EXTENSION_NAME = "cd2pojo"
 
 const val CD2POJO_TOOL_CLASS = "de.monticore.cd2pojo.CD2PojoTool"
 
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:cd2pojo:${GENERATOR_VERSION}"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:cd2pojo:${VERSION}"
 
-const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging"
+const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERSION}"
 
 @Suppress("unused")
 @Incubating
@@ -43,7 +43,7 @@ class Cd2PojoPlugin : Plugin<Project> {
         // Adding an entry for cd2pojo to all source sets and creating compile tasks from them
         addCd2PojoEntryToSourceSet(sourceSet)
         createCompileCd2PojoTask(sourceSet)
-        addRuntimeEnvironmentDependencyFor(sourceSet)
+        dependencies.addProvider(sourceSet.implementationConfigurationName, provider { SE_LOGGING_PROJECT_REF })
       }
 
       pluginManager.apply(Cd2PojoDistributionPlugin::class.java)
@@ -93,12 +93,6 @@ class Cd2PojoPlugin : Plugin<Project> {
     val srcDirectorySetAsFileCollection = srcDirSet as FileCollection
     sourceSet.resources.exclude(SerializableLambdas.spec { el -> srcDirectorySetAsFileCollection.contains(el.file) })
     sourceSet.allSource.source(srcDirSet)
-  }
-
-  private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with (project) {
-    dependencies.addProvider(sourceSet.implementationConfigurationName, provider {
-      "${SE_LOGGING_PROJECT_REF}:${GENERATOR_VERSION}"
-    })
   }
 
   /**

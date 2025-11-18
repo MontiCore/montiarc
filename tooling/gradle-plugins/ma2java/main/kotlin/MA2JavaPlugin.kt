@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2java
 
+import montiarc.gradle.cd2pojo.VERSION
 import montiarc.gradle.montiarc.MAExtension
 import montiarc.gradle.montiarc.MontiarcBasePlugin
 import montiarc.gradle.montiarc.cd2Pojo4MaSymbolDependencyConfigName
@@ -20,9 +21,9 @@ const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JavaTool"
 
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java:${GENERATOR_VERSION}"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2java:${VERSION}"
 
-const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte:${GENERATOR_VERSION}"
+const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte:${VERSION}"
 
 /**
  * Enables the integration of montiarc models into a project build:

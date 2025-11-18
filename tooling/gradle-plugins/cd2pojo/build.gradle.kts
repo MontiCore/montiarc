@@ -1,5 +1,6 @@
+import montiarc.build.InjectVersionTask
+
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.build.VersionInjection.Companion.registerVersionInjectionForPlugins
 
 plugins {
   id("montiarc.build.plugins")
@@ -15,20 +16,3 @@ gradlePlugin {
     }
   }
 }
-
-val genDir4GeneratorVersionInjection = layout.buildDirectory.dir("generatedKotlin")
-
-sourceSets {
-  main {
-    kotlin.srcDir(genDir4GeneratorVersionInjection)
-  }
-}
-
-registerVersionInjectionForPlugins(
-  taskName = "injectGeneratorVersion",
-  genDir = genDir4GeneratorVersionInjection.get().asFile.absolutePath,
-  packageName = "montiarc.gradle.cd2pojo",
-  constantName = "GENERATOR_VERSION"
-)
-
-tasks.compileKotlin { dependsOn(tasks.getByName("injectGeneratorVersion")) }

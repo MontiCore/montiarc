@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2jsim
 
+import montiarc.gradle.cd2pojo.VERSION
 import montiarc.gradle.montiarc.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -17,15 +18,15 @@ const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JSimTool"
 
-const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2jsim:${GENERATOR_VERSION}"
+const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:ma2jsim:${VERSION}"
 
-const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte:${GENERATOR_VERSION}"
+const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte:${VERSION}"
 
-const val MAVEN_TEST_RTE_PROJECT_REF = "montiarc.libraries:simulator-test-rte:${GENERATOR_VERSION}"
+const val MAVEN_TEST_RTE_PROJECT_REF = "montiarc.libraries:simulator-test-rte:${VERSION}"
 
-const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base:${GENERATOR_VERSION}"
+const val MAVEN_MA_BASE_PROJECT_REF = "montiarc.libraries:montiarc-base:${VERSION}"
 
-const val MAVEN_MAUNIT_PROJECT_REF = "montiarc.libraries:maunit:${GENERATOR_VERSION}"
+const val MAVEN_MAUNIT_PROJECT_REF = "montiarc.libraries:maunit:${VERSION}"
 
 const val MA2JSIM_LOGGING_ENV_VAR = "MA2JSIM_LOGGING_BASE_PATH"
 
