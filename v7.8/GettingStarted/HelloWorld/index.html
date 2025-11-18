@@ -2908,14 +2908,13 @@
 </code></pre></div>
 <p>Save the file and open a terminal window inside your folder and enter the following commands (one by one) to compile and run the model:</p>
 <div class="highlight"><pre><span></span><code>montiarc<span class="w"> </span>--input<span class="w"> </span>HelloWorld.arc<span class="w"> </span>--output<span class="w"> </span>.<span class="w"> </span><span class="c1"># (1)!</span>
-montiarc<span class="w"> </span>run<span class="w"> </span>DeployHelloWorld.java
 </code></pre></div>
 <ol>
 <li>If you've downloaded the jar directly, run <code>java -jar MontiArc-7.8.1.jar --input HelloWorld.arc --output .</code></li>
 </ol>
-<p>A <code>Hello, World!</code> should print to the terminal. If it did, congrats! You're now a MontiArc modeler.</p>
+<p>You should now find compiled MontiArc models in your folder. If it did, congrats! You're now a MontiArc modeler.</p>
 <h2 id="anatomy-of-a-component-model">Anatomy of a Component Model</h2>
-<p>Let's review the model you've just run.</p>
+<p>Let's review the model you've just compiled.</p>
 <h4 id="import">Import</h4>
 <p><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.lang.*</span><span class="p">;</span>
 </code></pre></div>
@@ -2963,23 +2962,17 @@ This statement interacts with the simulation we are executing and stops it after
 </code></pre></div>
 Here, you used the MontiArc command-line tooling to compile MontiArc models into Java code. This creates the following files:</p>
 <div class="highlight"><pre><span></span><code>DeployHelloWorld.java
-DeployMqttHelloWorld.java
-DeployRestHelloWorld.java
-HelloWorldComponent.java
+HelloWorldComp.java
+HelloWorldCompBuilder.java
+HelloWorldCompImpl.java
 HelloWorldContext.java
-HelloWorldBehavior.java
 HelloWorldAutomaton.java
+HelloWorldAutomatonBuilder.java
 HelloWorldStates.java
 HelloWorldEvents.java
 HelloWorldSyncMsg.java
 </code></pre></div>
 <p>Most of which are needed to simulate the model using Java.</p>
-<p><div class="highlight"><pre><span></span><code>montiarc<span class="w"> </span>run<span class="w"> </span>DeployHelloWorld.java
-</code></pre></div>
-This executes the Java main method of the <code>DeployHelloWorld</code> class, which in turn sets up the <a href="../../Usage/Simulation/">simulation</a> and starts it.
-The run command is shorthand for calling Java with the correct class path. It requires Java to be installed on your system.</p>
-<p>By default the simulation is non-interactive and input streams have to be provided for it to be useful (See <a href="../../Reference/Testing/">testing</a>).
-We provide two interactive simulation deployments where the simulation reads and writes to <a href="../../Usage/Simulation/#mqtt">MQTT</a> or has a <a href="../../Usage/Simulation/#rest">Rest API</a>.</p>
 <hr />
 <p>Now that you have a basic overview, let's look at how to make the project easier.</p>
 
