@@ -3334,12 +3334,6 @@ etc. )</p>
 <span class="w">  </span><span class="n">symbolImportDir</span><span class="p">.</span><span class="na">from</span><span class="p">(</span><span class="s">&quot;</span><span class="si">${</span><span class="n">projectDir</span><span class="si">}</span><span class="s">/src/SRC_SET_NAME/more_symbols&quot;</span><span class="p">)</span>
 <span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w">  </span><span class="c1">// Default value is false</span>
 <span class="p">}</span>
-
-<span class="n">montiarc</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="c1">// Only use the following option if you build the MontiArc project itself!</span>
-<span class="w">  </span><span class="c1">// Else ignore it (You can just omit the option).</span>
-<span class="w">  </span><span class="n">internalMontiArcTesting</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
@@ -3362,12 +3356,6 @@ etc. )</p>
 <span class="n">task</span><span class="o">.</span><span class="na">compileMontiarc</span><span class="w"> </span><span class="o">{</span><span class="w">  </span><span class="c1">// compile task for other sourceSets: &quot;compile{SRC_SET_NAME}Montiarc&quot;</span>
 <span class="w">  </span><span class="n">symbolImportDir</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="s2">&quot;${projectDir}/src/SRC_SET_NAME/more_symbols&quot;</span><span class="o">)</span>
 <span class="w">  </span><span class="n">useClass2Mc</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span><span class="w">  </span><span class="c1">// Default value is false</span>
-<span class="o">}</span>
-
-<span class="n">montiarc</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="c1">// Only use the following option if you build the MontiArc project itself!</span>
-<span class="w">  </span><span class="c1">// Else ignore it (You can just omit the option).</span>
-<span class="w">  </span><span class="n">internalMontiArcTesting</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
@@ -3412,23 +3400,6 @@ Some configuration options only have default values, if the task is created for 
 <td>outputDir</td>
 <td><code>$buildDir/montiarc/SOURCE_SET_NAME</code></td>
 <td>Where the generated files should be placed. Generated Java code ist placed in the <code>java</code> subfolder, exported symbol files are put in the <code>symbols</code> subfolder.</td>
-</tr>
-</tbody>
-</table>
-<p>Moreover, there are the following options configurable in the <code>montiarc</code> block:</p>
-<table>
-<thead>
-<tr>
-<th>Option</th>
-<th>Default value</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>internalMontiArcTesting</td>
-<td><code>false</code></td>
-<td>If you are not a MontiArc developer, just ignore it (and omit the option, as its default value is <code>false</code>). Otherwise: if you want to apply the plugin from within the MontiArc project, e.g., to test the generator in an integration test, then set this to <code>true</code>. By this, the freshly compiled (unpublished) generator will be used instead of the one from the maven repository.</td>
 </tr>
 </tbody>
 </table>
