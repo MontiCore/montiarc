@@ -22,14 +22,14 @@ spotless {
   }
   format("montiArc") {
     target("**/*.arc")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(package|import|component) ")
+    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(\\/\\*|\\/\\/|package|import|component)")
     trimTrailingWhitespace()
     indentWithSpaces(2)
     endWithNewline()
   }
   format("classDiagram") {
     target("**/*.cd")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(package|import|classdiagram) ")
+    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(\\/\\*|\\/\\/|package|import|classdiagram)")
     trimTrailingWhitespace()
     indentWithSpaces(2)
     endWithNewline()
