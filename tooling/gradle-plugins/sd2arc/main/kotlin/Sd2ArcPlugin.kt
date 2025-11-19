@@ -8,6 +8,7 @@ import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.lambdas.SerializableLambdas
+import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
@@ -81,7 +82,7 @@ class Sd2ArcPlugin : Plugin<Project> {
       Sd2ArcSourceDirectorySet::class.java, "sd2arc",
       DefaultSd2ArcSourceDirectorySet::class.java,
       project.objects.sourceDirectorySet("sd2arc", "${sourceSet.name} sd2arc source"),
-      // DefaultTaskDependencyFactory.withNoAssociatedProject()  // Needed starting with Gradle v.8
+      DefaultTaskDependencyFactory.withNoAssociatedProject()
     )
 
     // Setting default values for the SourceDirectorySet
