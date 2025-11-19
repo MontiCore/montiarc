@@ -5,6 +5,7 @@ import java.util.Optional
 import javax.inject.Inject
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
+import org.gradle.api.internal.tasks.TaskDependencyFactory
 import org.gradle.api.tasks.SourceSet
 
 /**
@@ -14,8 +15,8 @@ interface MontiarcSourceDirectorySet : SourceDirectorySet
 
 abstract class DefaultMontiarcSourceDirectorySet @Inject constructor(
   sourceDirectorySet: SourceDirectorySet,
-  // taskDependencyFactory: TaskDependencyFactory  // Needed starting with gradle v.8 */
-) : DefaultSourceDirectorySet(sourceDirectorySet), MontiarcSourceDirectorySet
+  taskDependencyFactory: TaskDependencyFactory
+) : DefaultSourceDirectorySet(sourceDirectorySet, taskDependencyFactory), MontiarcSourceDirectorySet
 
 val SourceSet.montiarc
   get(): Optional<SourceDirectorySet> = Optional.ofNullable(

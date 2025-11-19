@@ -7,6 +7,7 @@ import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.lambdas.SerializableLambdas
+import org.gradle.api.internal.tasks.DefaultTaskDependencyFactory
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
@@ -74,7 +75,7 @@ class Cd2PojoPlugin : Plugin<Project> {
       Cd2PojoSourceDirectorySet::class.java, "cd2pojo",
       DefaultCd2PojoSourceDirectorySet::class.java,
       project.objects.sourceDirectorySet("cd2pojo", "${sourceSet.name} cd2pojo source"),
-      // DefaultTaskDependencyFactory.withNoAssociatedProject()  // Needed starting with Gradle v.8
+      DefaultTaskDependencyFactory.withNoAssociatedProject()
     )
 
     // Setting default values for the SourceDirectorySet
