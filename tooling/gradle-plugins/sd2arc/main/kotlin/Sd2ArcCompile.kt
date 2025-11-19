@@ -16,6 +16,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.work.InputChanges
 
 /**
  * A task that generates MontiArc components from sequence diagrams, using sd2arc.
@@ -80,7 +81,11 @@ abstract class Sd2ArcCompile : DefaultTask() {
   }
 
   @TaskAction
-  fun exec() {
+  fun exec(changes : InputChanges) {
+    // We clean the output directory if the task cannot be run incrementally
+    if (!changes.isIncremental) {
+      this.outputDir.get().asFile.deleteRecursively()
+    }
 
     if (printTaskInfo.get()) {
       printInfo()
