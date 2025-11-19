@@ -13,7 +13,6 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "cd2pojoGenerator"
-const val DSL_EXTENSION_NAME = "cd2pojo"
 
 const val CD2POJO_TOOL_CLASS = "de.monticore.cd2pojo.CD2PojoTool"
 
@@ -26,11 +25,9 @@ const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERS
 class Cd2PojoPlugin : Plugin<Project> {
 
   private lateinit var project: Project
-  private lateinit var cdExtension: Cd2PojoExtension
 
   override fun apply(project: Project) {
     this.project = project
-    this.cdExtension = project.extensions.create(DSL_EXTENSION_NAME, Cd2PojoExtension::class.java)
 
     this.project.extensions.extraProperties.set("CDTaskType", Cd2PojoCompile::class.java)
 

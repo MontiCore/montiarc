@@ -14,7 +14,6 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
 const val GENERATOR_DEPENDENCY_CONFIG_NAME = "sd2arcGenerator"
-const val DSL_EXTENSION_NAME = "sd2arc"
 
 const val SD2ARC_TOOL_CLASS = "de.monticore.sd2arc.SD2ArcTool"
 
@@ -27,11 +26,9 @@ const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERS
 class Sd2ArcPlugin : Plugin<Project> {
 
   private lateinit var project: Project
-  private lateinit var sdExtension: Sd2ArcExtension
 
   override fun apply(project: Project) {
     this.project = project
-    this.sdExtension = project.extensions.create(DSL_EXTENSION_NAME, Sd2ArcExtension::class.java)
 
     this.project.extensions.extraProperties.set("SDTaskType", Sd2ArcCompile::class.java)
 

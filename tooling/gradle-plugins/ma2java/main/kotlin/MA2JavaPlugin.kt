@@ -2,7 +2,6 @@
 package montiarc.gradle.ma2java
 
 import montiarc.gradle.cd2pojo.VERSION
-import montiarc.gradle.montiarc.MAExtension
 import montiarc.gradle.montiarc.MontiarcBasePlugin
 import montiarc.gradle.montiarc.cd2Pojo4MaSymbolDependencyConfigName
 import montiarc.gradle.montiarc.montiarc
@@ -35,12 +34,10 @@ const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte:${VERSION}"
 class Ma2JavaPlugin : Plugin<Project> {
 
   private lateinit var project: Project
-  private lateinit var maExtension: MAExtension
 
   override fun apply(project: Project){
     this.project = project
     this.project.pluginManager.apply(MontiarcBasePlugin::class.java)
-    this.maExtension = project.extensions.getByType(MAExtension::class.java)
 
     this.project.extensions.extraProperties.set("MATaskType", MontiArcCompile::class.java)
 

@@ -41,12 +41,10 @@ const val MA2JSIM_LOGGING_ENV_VAR = "MA2JSIM_LOGGING_BASE_PATH"
 class MA2JSimPlugin : Plugin<Project> {
 
   private lateinit var project: Project
-  private lateinit var maExtension: MAExtension
 
   override fun apply(project: Project){
     this.project = project
     this.project.pluginManager.apply(MontiarcBasePlugin::class.java)
-    this.maExtension = project.extensions.getByType(MAExtension::class.java)
 
     this.project.extensions.extraProperties.set("MATaskType", MontiArcCompile::class.java)
 
