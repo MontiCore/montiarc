@@ -17,7 +17,6 @@ import montiarc._cocos.util.ExpressionBuildHelper;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
-import variablearc._cocos.UniqueIdentifier4Family;
 import variablearc._cocos.util.DuplicateElementsService;
 import variablearc._cocos.util.ExpressionSolverService;
 import variablearc._cocos.util.VariationConditionHelper;

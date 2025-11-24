@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import montiarc._cocos.util.MontiArcFullVariantDispatch;
-import montiarc._cocos.util.MontiArcVariantDispatch;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 public class MontiArcFullVariantCoCoChecker extends MontiArcCoCoChecker{

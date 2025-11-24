@@ -3,10 +3,10 @@ package montiarc.gradle.sd2arc
 
 import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.internal.file.DefaultSourceDirectorySet
+import org.gradle.api.internal.tasks.TaskDependencyFactory
 import org.gradle.api.tasks.SourceSet
 import java.util.Optional
 import javax.inject.Inject
-import org.gradle.api.internal.tasks.TaskDependencyFactory
 
 /**
  * [SourceDirectorySet] for class diagram sources, used for sd2arc

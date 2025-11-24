@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;

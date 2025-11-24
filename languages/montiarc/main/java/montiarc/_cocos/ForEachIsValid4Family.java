@@ -241,8 +241,8 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
       for (ASTExpression possibleExpression : possibleExpressions) {
         SymTypeExpression expression = TypeCheck3.typeOf(possibleExpression);
 
-        SymTypeExpression arrays = SymTypeExpressionFactory.createTypeObjectViaSurrogate("java.util.Arrays", node.getEnclosingScope());
-        SymTypeExpression lists = SymTypeExpressionFactory.createTypeObjectViaSurrogate("java.lang.Iterable", node.getEnclosingScope());
+        SymTypeExpression arrays = SymTypeExpressionFactory.createTypeObject(MontiArcMill.typeSymbolBuilder().setName("java.util.Arrays").setSpannedScope(MontiArcMill.scope()).setEnclosingScope(node.getEnclosingScope()).build());
+        SymTypeExpression lists = SymTypeExpressionFactory.createTypeObject(MontiArcMill.typeSymbolBuilder().setName("java.lang.Iterable").setSpannedScope(MontiArcMill.scope()).setEnclosingScope(node.getEnclosingScope()).build());
 
         if (!SymTypeRelations.isSubTypeOf(expression, arrays)) {
           if (!SymTypeRelations.isSubTypeOf(expression, lists)) {

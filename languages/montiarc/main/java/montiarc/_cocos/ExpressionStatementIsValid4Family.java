@@ -14,7 +14,6 @@ import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Status;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
 import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
@@ -23,7 +22,6 @@ import montiarc.MontiArcMill;
 import montiarc._cocos.util.ExpressionBuildHelper;
 import montiarc._cocos.util.ExpressionStatementCollector;
 import montiarc._visitor.MontiArcTraverser;
-import montiarc.check.MontiArcTypeCheck;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
@@ -38,7 +36,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ExpressionStatementIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {

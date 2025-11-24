@@ -1,11 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.PortHeritageTypeFits;
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.ArcError;
@@ -16,7 +13,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import variablearc._cocos.FeedbackStrongCausality4Family;
 import variablearc._cocos.PortHeritageTypeFits4Family;
 
 import java.io.IOException;

@@ -13,10 +13,8 @@ import variablearc._ast.ASTVariableArcFullVariantComponentType;
 import variablearc._cocos.util.IgnoreASTArcVarIfHandler;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcFullVariantComponentTypeSymbol;
-import variablearc._symboltable.VariableArcVariationPoint;
 
 import java.util.HashSet;
-import java.util.stream.Collectors;
 
 public class MontiArcFullVariantDispatch extends MontiArcCoCoChecker implements ArcBasisVisitor2 {
 

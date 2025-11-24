@@ -10,13 +10,11 @@ import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpress
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsHandler;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisHandler;
 import de.monticore.statements.mccommonstatements._visitor.MCCommonStatementsHandler;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
-import java.util.Map;
 
 public class PortReadWriteInCompute4FamilyCollector extends PortReadWriteInCompute {
 

@@ -6,9 +6,6 @@ import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
-import de.monticore.symboltable.modifiers.AccessModifier;
-import de.monticore.symboltable.modifiers.BasicAccessModifier;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.Names;
@@ -40,6 +37,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.JarURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -277,7 +276,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       File file = new File(System.getProperty("java.io.tmpdir") + "MontiArcTemplateProject.zip");
       String gitTag = this.versionSupplier.get().contains("SNAPSHOT") ? "heads/main" : ("tags/" + this.versionSupplier.get().substring(0, 5));
       Log.info(() -> "Downloading template...", "MontiArcTool");
-      FileUtils.copyURLToFile(new URL("https://github.com/MontiCore/montiarc-templates/archive/refs/" + gitTag + ".zip"), file);
+      FileUtils.copyURLToFile(new URI("https://github.com/MontiCore/montiarc-templates/archive/refs/" + gitTag + ".zip").toURL(), file);
       Log.info(() -> "Creating Project " + name, "MontiArcTool");
       boolean foundTemplate = false;
       try (java.util.zip.ZipFile zipFile = new ZipFile(file)) {
@@ -301,6 +300,8 @@ public class MontiArcTool extends MontiArcToolTOP {
       if (!foundTemplate) Log.error(MontiArcError.TOOL_CREATE_TEMPLATE_NOT_EXIST.format(cl.getOptionValue("t")));
     } catch (IOException | SecurityException e) {
       Log.error(e.getMessage());
+    } catch (URISyntaxException e) {
+      throw new RuntimeException(e);
     }
   }
 

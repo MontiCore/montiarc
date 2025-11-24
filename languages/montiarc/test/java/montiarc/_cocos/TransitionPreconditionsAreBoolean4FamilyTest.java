@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;

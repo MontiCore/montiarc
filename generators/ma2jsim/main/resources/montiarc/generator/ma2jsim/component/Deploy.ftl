@@ -68,7 +68,7 @@ protected ${comp.getName()}${suffixes.comp()} buildComponent(montiarc.rte.schedu
             .argName("${param.getName()}")
             .desc("Parameter ${param.getName()}, Type: ${param.getType().printFullName()}")
             .required(${isRequired?c})
-            .build();
+            .get();
     options.addOption(option_${param.getName()});
   </#list>
 }

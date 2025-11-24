@@ -3,7 +3,6 @@ package montiarc._cocos;
 
 import arcautomaton._ast.ASTArcStatechart;
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTArcPort;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;

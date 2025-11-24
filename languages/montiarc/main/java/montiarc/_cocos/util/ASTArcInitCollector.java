@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos.util;
 
-import arcbasis._visitor.ArcBasisVisitor2;
 import arccompute._ast.ASTArcInit;
 import arccompute._visitor.ArcComputeVisitor2;
 

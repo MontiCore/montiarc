@@ -12,9 +12,7 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Predicate;
 
 import static arcbasis._cocos.PortReadWriteHandler4ExpressionsBasis.ContextState;
