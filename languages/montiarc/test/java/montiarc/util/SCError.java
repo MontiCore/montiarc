@@ -2,41 +2,65 @@
 package montiarc.util;
 
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
+import de.monticore.scbasis._cocos.CapitalStateNames;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
 import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
-
-import java.util.regex.Pattern;
 
 /**
  * Wraps statechart errors into enum values so that they can be used in combination with the existing testing
  * infrastructure
  */
 public enum SCError implements Error {
-  MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE),
-  NO_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE),
-  DUPLICATE_STATE(UniqueStates.ERROR_CODE),
-  PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE),
-  MISSING_SOURCE_STATE(TransitionSourceTargetExists.SOURCE_ERROR_CODE),
-  MISSING_TARGET_STATE(TransitionSourceTargetExists.TARGET_ERROR_CODE);
-
-  public static final Pattern ERROR_CODE_PATTERN = Pattern.compile("0xCC\\d{3}");
+  DUPLICATE_STATE(UniqueStates.ERROR_CODE, ""),
+  MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE, ""),
+  MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE, ""),
+  STATE_NAME_NOT_CAPITAL(CapitalStateNames.ERROR_CODE, ""),
+  PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE, ""),
+  MISSING_SOURCE_STATE(TransitionSourceTargetExists.SOURCE_ERROR_CODE, ""),
+  MISSING_TARGET_STATE(TransitionSourceTargetExists.TARGET_ERROR_CODE, "");
 
   private final String errorCode;
+  private final String errorMsgFormat;
 
-  SCError(String errorCode) {
+  SCError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
+    assert (errorMsgFormat != null);
+    assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());
     this.errorCode = errorCode;
+    this.errorMsgFormat = errorMsgFormat;
   }
 
+  /**
+   * @return The unique error code of this error.
+   */
   @Override
   public String getErrorCode() {
-    return errorCode;
+    return this.errorCode;
+  }
+
+  /**
+   * @return The error message of this error.
+   */
+  @Override
+  public String getErrorMsgFormat() {
+    return this.errorMsgFormat;
   }
 
   @Override
-  public String getErrorMsgFormat() {
-    throw new UnsupportedOperationException();
+  public String toString() {
+    return this.errorCode + " " + this.getErrorMsgFormat();
+  }
+
+  /**
+   * Calls {@link String#format(String, Object...)} with this error message as template
+   *
+   * @param args arguments for the format-call. The number of arguments has to
+   *             match the string defined in {@link #getErrorMsgFormat()}
+   * @return properly formatted error message
+   */
+  public String format(Object... args) {
+    return String.format(toString(), args);
   }
 }

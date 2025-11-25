@@ -107,14 +107,14 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
       arg("component Comp1 { " +
           "automaton { } " +
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // inner automaton no initial state
       arg("component Comp2 { " +
           "component Inner { " +
           "automaton { } " +
           "} " +
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // inner with initial state and outer automaton
       arg("component Comp3 { " +
           "automaton { } " +
@@ -124,7 +124,7 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
           "} " +
           "} " +
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // outer with initial state and inner automaton
       arg("component Comp4 { " +
           "automaton { " +
@@ -134,12 +134,12 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
           "automaton { } " +
           "} " +
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // mode automaton no initial state
       arg("component Comp5 { " +
           "mode automaton { } " +
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // mode automaton no initial state and automaton
       arg("component Comp6 { " +
           "mode automaton { } " +
@@ -147,7 +147,7 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
           "initial state s; " +
           "} "+
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // automaton no initial state and mode automaton
       arg("component Comp7 { " +
           "automaton { } " +
@@ -155,7 +155,7 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
           "initial mode s { } " +
           "} "+
           "}",
-        SCError.NO_INITIAL_STATE),
+        SCError.MISSING_INITIAL_STATE),
       // automaton no initial state, but inner initial state
       arg("component Comp8 { " +
           "automaton { "  +
@@ -164,7 +164,7 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
           "}" +
           "}" +
           "}",
-        SCError.NO_INITIAL_STATE)
+        SCError.MISSING_INITIAL_STATE)
     );
   }
 }
