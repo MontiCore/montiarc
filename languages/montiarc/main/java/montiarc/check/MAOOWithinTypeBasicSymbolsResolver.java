@@ -28,21 +28,17 @@ public class MAOOWithinTypeBasicSymbolsResolver extends VariableArcVariantOOWith
   Furthermore, the access modifier of #resolveConstructorLocally is likely to change to protected and not to private, which would not affect our current implementation.
   Therefore, the deprecation warning can be suppressed.
   */
-  protected List<FunctionSymbol> resolveFunctionLocally(@NotNull IBasicSymbolsScope scope,
-                                                        @NotNull String name,
-                                                        @NotNull AccessModifier accessModifier,
-                                                        @NotNull Predicate<FunctionSymbol> predicate) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(name);
-    Preconditions.checkNotNull(accessModifier);
-    Preconditions.checkNotNull(predicate);
+  protected List<FunctionSymbol> resolveFunctionLocallyMany(@NotNull IBasicSymbolsScope scope,
+                                                            @NotNull String name,
+                                                            @NotNull AccessModifier accessModifier,
+                                                            @NotNull Predicate<FunctionSymbol> predicate) {
 
-    List<FunctionSymbol> f = super.resolveFunctionLocally(scope, name, accessModifier, predicate);
-    String s = StaticAccessModifier.STATIC.getDimensionToModifierMap().keySet().stream().findFirst().get();
-    if (accessModifier.getDimensionToModifierMap().containsKey(s)
-      && accessModifier.getDimensionToModifierMap().get(s) == StaticAccessModifier.STATIC) {
-      f.addAll(super.resolveConstructorLocally(scope, name, accessModifier, predicate));
+    List<FunctionSymbol> resolved = super.resolveFunctionLocallyMany(scope, name, accessModifier, predicate);
+
+    if (accessModifier.getDimensionToModifierMap().containsKey(StaticAccessModifier.DIMENSION)) {
+      resolved.addAll(super.resolveConstructorLocally(scope, name, accessModifier, predicate));
     }
-    return f;
+
+    return resolved;
   }
 }

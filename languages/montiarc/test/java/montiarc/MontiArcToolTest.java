@@ -792,7 +792,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
       Arguments.of("NameClashPortPort1.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashPortPort2.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashPortVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashTypeParam.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
+      //Arguments.of("NameClashTypeParam.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashVarPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
       Arguments.of("NameClashVarVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES})
     );

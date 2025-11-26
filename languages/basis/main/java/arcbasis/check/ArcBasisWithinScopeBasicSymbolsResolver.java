@@ -1,21 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis.check;
 
-import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.types.check.SymTypeExpression;
-import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types3.generics.TypeParameterRelations;
+import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types3.util.WithinScopeBasicSymbolsResolver;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Optional;
-
-import static de.monticore.symboltable.modifiers.AccessModifier.ALL_INCLUSION;
+import java.util.function.Predicate;
 
 public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSymbolsResolver {
 
@@ -27,80 +23,23 @@ public class ArcBasisWithinScopeBasicSymbolsResolver extends WithinScopeBasicSym
   }
 
   @Override
-  protected Optional<SymTypeExpression> resolveVariableWithoutSuperTypes(@NotNull IBasicSymbolsScope scope,
-                                                                         @NotNull String name) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(name);
-    Optional<SymTypeExpression> result;
-    // modified, here do not fail if two types are found
-    Optional<VariableSymbol> optVarSym = scope.resolveVariableMany(name, ALL_INCLUSION, getVariablePredicate())
-      .stream().findFirst();
-    if (optVarSym.isEmpty()) {
-      result = Optional.empty();
-    } else if (optVarSym.get().getType() == null) {
-      Log.error("0xFD489 internal error: incorrect symbol table, "
-        + "variable symbol " + optVarSym.get().getFullName()
-        + " has no type set.");
-      return Optional.empty();
-    } else {
-      VariableSymbol varSym = optVarSym.get();
-      SymTypeExpression varType = varSym.getType();
-      SymTypeExpression varTypeReplacedVariables = TypeParameterRelations.replaceFreeTypeVariables(varType, scope);
-      varTypeReplacedVariables.getSourceInfo().setSourceSymbol(varSym);
-      result = Optional.of(varTypeReplacedVariables);
-    }
-    return result;
+  protected Optional<VariableSymbol> resolveVariable(@NotNull IBasicSymbolsScope enclosingScope,
+                                                     @NotNull String name, AccessModifier accessModifier,
+                                                     @NotNull Predicate<VariableSymbol> predicate) {
+    // we do not log an error if multiple symbols are found (avoid redundant error logging)
+    return enclosingScope.resolveVariableMany(name, accessModifier, predicate).stream().findFirst();
   }
 
   @Override
-  protected Optional<SymTypeExpression> _resolveType(@NotNull IBasicSymbolsScope scope,
-                                                     @NotNull String name) {
-    Preconditions.checkNotNull(scope);
-    Preconditions.checkNotNull(name);
+  protected Optional<TypeSymbol> resolveType(IBasicSymbolsScope enclosingScope, String name, AccessModifier accessModifier, Predicate<TypeSymbol> typeSymbolPredicate) {
+    // we do not log an error if multiple symbols are found (avoid redundant error logging)
+    // also we do not resolve type var symbols as type symbols
+    return enclosingScope.resolveTypeMany(name, accessModifier, typeSymbolPredicate.and(v -> !(v instanceof TypeVarSymbol))).stream().findFirst();
+  }
 
-    Optional<SymTypeExpression> type;
-    Optional<TypeVarSymbol> optTypeVar;
-
-    // Java-esque languages do not allow
-    // to resolve type variables using qualified names, e.g.,
-    // class C<T> {C.T t = null;} // invalid Java
-    if (isNameWithQualifier(name)) {
-      optTypeVar = Optional.empty();
-    } else {
-      // modified, here do not fail if two types are found
-      optTypeVar = resolverHotfix(() ->
-        scope.resolveTypeVarMany(
-            name, ALL_INCLUSION, getTypeVarPredicate())
-          .stream().findFirst()
-      );
-    }
-    // object, modified, here do not fail if two types are found
-    Optional<TypeSymbol> optObj = resolverHotfix(() ->
-      scope.resolveTypeMany(name, ALL_INCLUSION,
-          getTypePredicate().and((t -> optTypeVar.map(tv -> tv != t).orElse(true))))
-        .stream().findFirst()
-    );
-    // in Java the type variable is preferred
-    // e.g. class C<U>{class U{} U v;} //new C<Float>().v has type Float
-    if (optTypeVar.isPresent() && optObj.isPresent()) {
-      Log.trace(() -> "found type variable and object type for \""
-          + name
-          + "\", selecting type variable",
-        "TypeVisitor");
-    }
-    if (optTypeVar.isPresent()) {
-      type = Optional.of(SymTypeExpressionFactory
-        .createTypeVariable(optTypeVar.get()));
-    } else if (optObj.isPresent()) {
-      type = Optional.of(SymTypeExpressionFactory
-        .createFromSymbol(optObj.get())
-      );
-    } else {
-      type = Optional.empty();
-    }
-    // replace free type variables
-    Optional<SymTypeExpression> typeReplacedVars = type
-      .map(t -> TypeParameterRelations.replaceFreeTypeVariables(t, scope));
-    return typeReplacedVars;
+  @Override
+  protected Optional<TypeVarSymbol> resolveTypeVar(IBasicSymbolsScope enclosingScope, String name, AccessModifier accessModifier, Predicate<TypeVarSymbol> predicate) {
+    // we do not log an error if multiple symbols are found (avoid redundant error logging)
+    return enclosingScope.resolveTypeVarMany(name, accessModifier, predicate).stream().findFirst();
   }
 }
