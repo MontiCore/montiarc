@@ -14,8 +14,8 @@ import variablearc._cocos.util.FieldReferenceExtractor4ExpressionBasis;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor.FieldReference;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 /**
  * As a convention, we require that instantiations are performed prior to any
@@ -36,11 +36,11 @@ public class VarIfOmitFieldReferences implements ArcBasisASTArcComponentTypeCoCo
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 
-    HashSet<FieldReference> fieldReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
+    LinkedHashSet<FieldReference> fieldReferencesToLookFor = new LinkedHashSet<>(FieldReference.ofComponentTypeFields(comp));
 
     ComponentVarIfHandler handler = new ComponentVarIfHandler(astComp, (varif) -> {
       Preconditions.checkNotNull(varif);
-      HashMap<FieldReference, SourcePosition> foundPortReferences =
+      LinkedHashMap<FieldReference, SourcePosition> foundPortReferences =
         this.fieldRefExtractor.findFieldReferences(varif.getCondition(), fieldReferencesToLookFor,
           VariableArcMill.traverser());
 

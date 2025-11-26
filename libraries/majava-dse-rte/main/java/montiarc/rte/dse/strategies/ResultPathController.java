@@ -7,17 +7,17 @@ import montiarc.rte.dse.ResultI;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ResultPathController<In, Out> implements ResultI<In, Out> {
 
-  private Set<InputAndCondition<In, Out>> inputsAndConditions = new HashSet<>();
+  private Set<InputAndCondition<In, Out>> inputsAndConditions = new LinkedHashSet<>();
 
   @Override
   public Set<Pair<In, Out>> getInterestingInputs() {
 
-    Set<Pair<In,Out>> interestingInputs = new HashSet<>();
+    Set<Pair<In,Out>> interestingInputs = new LinkedHashSet<>();
     for(InputAndCondition<In,Out> condition : inputsAndConditions){
       interestingInputs.add(ImmutablePair.of(condition.getInput(), condition.getOutput()));
     }

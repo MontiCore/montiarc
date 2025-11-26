@@ -10,7 +10,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
@@ -24,7 +24,7 @@ public class FeedbackStrongCausality implements ArcBasisASTArcComponentTypeCoCo 
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    Set<SubcomponentSymbol> visited = new HashSet<>();
+    Set<SubcomponentSymbol> visited = new LinkedHashSet<>();
 
     for (SubcomponentSymbol vertex : node.getSymbol().getSubcomponents()) {
       if (!visited.contains(vertex)) {

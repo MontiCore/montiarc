@@ -33,7 +33,7 @@ import org.mockito.Mockito;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -309,7 +309,7 @@ public class UniqueIdentifierTest extends ArcBasisTestBase {
 
   protected static <X> Collection<Pair<X, X>> permutePairs(@NotNull List<X> baseSet) {
     Preconditions.checkNotNull(baseSet);
-    Set<Pair<X, X>> pairs = new HashSet<>(baseSet.size());
+    Set<Pair<X, X>> pairs = new LinkedHashSet<>(baseSet.size());
 
     for(int i = 0; i < baseSet.size(); i++) {
       for(int j = 0; j < baseSet.size(); j++) {

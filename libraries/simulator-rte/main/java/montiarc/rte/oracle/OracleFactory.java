@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.oracle;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -28,7 +28,7 @@ import java.util.function.Supplier;
 public class OracleFactory {
 
   protected Supplier<Oracle> defaultStrategy = LowestHashValueOracle::new;
-  protected Map<String, Supplier<Oracle>> subCompToOracleMap = new HashMap<>();
+  protected Map<String, Supplier<Oracle>> subCompToOracleMap = new LinkedHashMap<>();
 
   /**
    * Create an oracle strategy with a given default oracle strategy that is used

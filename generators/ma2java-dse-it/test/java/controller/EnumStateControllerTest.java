@@ -32,7 +32,7 @@ class EnumStateControllerTest {
 
   @Test
   public void testCompareStates() {
-    Set<Pair<StatesList, Integer>> visitedStates = new HashSet<>();
+    Set<Pair<StatesList, Integer>> visitedStates = new LinkedHashSet<>();
 
     StateInfo stateInfoCSRwth = StateInfo.newStateInfo(EnumStateControllerTest.TestEnum2.COMPUTERSCIENCE,
             Arrays.asList("university : RWTH"), "testComponent2");

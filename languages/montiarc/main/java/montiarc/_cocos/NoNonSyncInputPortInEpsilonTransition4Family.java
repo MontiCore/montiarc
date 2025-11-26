@@ -33,7 +33,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -64,8 +64,8 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    transitionConditions = new HashMap<>();
-    portsymbolConditions = new HashMap<>();
+    transitionConditions = new LinkedHashMap<>();
+    portsymbolConditions = new LinkedHashMap<>();
 
     MontiArcTraverser nodeTraverser = MontiArcMill.traverser();
     ASTTransitionBodyCollector transitionCollector = new ASTTransitionBodyCollector();

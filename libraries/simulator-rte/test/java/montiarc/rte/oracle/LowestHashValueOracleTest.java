@@ -7,7 +7,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -51,7 +51,7 @@ class LowestHashValueOracleTest {
   void testDecideAmongSet(OptionMock[] options, OptionMock expectedDecision) {
     // Given
     Oracle randomOracle = new LowestHashValueOracle();
-    Collection<OptionMock> optionsAsCollection = new HashSet<>(Arrays.asList(options));
+    Collection<OptionMock> optionsAsCollection = new LinkedHashSet<>(Arrays.asList(options));
 
     // When
     OptionMock decision = randomOracle.decideAmong(optionsAsCollection);

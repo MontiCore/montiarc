@@ -7,7 +7,7 @@ import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.sosy_lab.common.configuration.InvalidConfigurationException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -39,7 +39,7 @@ public class MAExpressionsFullVisitor {
    * MA2SMTFormulaConverter.
    */
   public MAExpressionsFullVisitor(@NotNull MA2SMTFormulaConverter fc) {
-    this(fc, new HashMap<>());
+    this(fc, new LinkedHashMap<>());
   }
 
   /**

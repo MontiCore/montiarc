@@ -35,7 +35,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import scmapping.util.SCZ3TypeFactory;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -109,7 +109,7 @@ public class SMTAutomaton implements ISMTAutomaton {
       ASTSCTransition trans, Expr<?> in, Expr<?> src, Expr<?> tgt, Expr<?> out) {
 
     exprConv = new AutExpression2smt(eFactory, tFactory, this, src, tgt, in, out);
-    Map<PortSymbol, Expr<?>> outputActions = new HashMap<>();
+    Map<PortSymbol, Expr<?>> outputActions = new LinkedHashMap<>();
     BoolExpr res = ctx.mkTrue();
 
     for (ASTAssignmentExpression act : AutomataUtils.getActionList(trans)) {
@@ -201,15 +201,15 @@ public class SMTAutomaton implements ISMTAutomaton {
   @Override
   public Expr<?> mkConst(ISymbol constrSymbol, Map<ISymbol, Expr<?>> args) {
     if (constrSymbol instanceof SCStateSymbol) {
-      Map<VariableSymbol, Expr<?>> sArgs = new HashMap<>();
+      Map<VariableSymbol, Expr<?>> sArgs = new LinkedHashMap<>();
       args.forEach((key, value) -> sArgs.put((VariableSymbol) key, value));
       return smtState.mkConst((SCStateSymbol) constrSymbol, sArgs);
     } else if (SymbolTableUtil.isInPort(constrSymbol)) {
-      Map<PortSymbol, Expr<?>> sArgs = new HashMap<>();
+      Map<PortSymbol, Expr<?>> sArgs = new LinkedHashMap<>();
       args.forEach((key, value) -> sArgs.put((PortSymbol) key, value));
       return inputPort.mkConst((PortSymbol) constrSymbol, sArgs);
     } else if (SymbolTableUtil.isOutPort(constrSymbol)) {
-      Map<PortSymbol, Expr<?>> sArgs = new HashMap<>();
+      Map<PortSymbol, Expr<?>> sArgs = new LinkedHashMap<>();
       args.forEach((key, value) -> sArgs.put((PortSymbol) key, value));
       return outputPort.mkConst(VoidSymbol.getInstance(), sArgs);
     } else {

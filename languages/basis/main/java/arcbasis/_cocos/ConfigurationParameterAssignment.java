@@ -18,7 +18,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -237,7 +237,7 @@ public class ConfigurationParameterAssignment
 
     List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
 
-    Set<String> keyArguments = new HashSet<>();
+    Set<String> keyArguments = new LinkedHashSet<>();
     int keywordCounter;
 
     boolean isUnique = true;

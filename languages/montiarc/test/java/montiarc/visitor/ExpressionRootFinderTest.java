@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -67,7 +67,7 @@ public class ExpressionRootFinderTest extends MontiArcTestBase {
 
   private static class Argument implements Arguments {
     final Object[] arguments;
-    final Set<Class<?>> set = new HashSet<>();
+    final Set<Class<?>> set = new LinkedHashSet<>();
 
     private Argument(@NotNull Optional<? extends ASTNode> node) {
       Preconditions.checkNotNull(node);

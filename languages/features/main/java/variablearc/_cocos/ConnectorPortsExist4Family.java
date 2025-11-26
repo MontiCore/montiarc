@@ -29,7 +29,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -45,10 +45,10 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     Context ctx = ExpressionSolverService.getContext();
 
     // Data Structures for components, features and ports
-    Map<String, Map<String, BoolExpr>> portDeclared = new HashMap<>();
-    Map<ASTArcPort, BoolExpr> portConditions = new HashMap<>();
-    Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
-    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
+    Map<String, Map<String, BoolExpr>> portDeclared = new LinkedHashMap<>();
+    Map<ASTArcPort, BoolExpr> portConditions = new LinkedHashMap<>();
+    Map<ASTConnector, BoolExpr> connectorConditions = new LinkedHashMap<>();
+    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new LinkedHashMap<>();
 
     List<String> allFeatures;
     List<ExpressionSet> allConstraints;
@@ -63,8 +63,8 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     allConnectors = new ArrayList<>();
 
     // Initialize Z3 variables
-    Map<String, BoolExpr> portExistsVars = new HashMap<>();
-    Map<String, BoolExpr> componentExistsVars = new HashMap<>();
+    Map<String, BoolExpr> portExistsVars = new LinkedHashMap<>();
+    Map<String, BoolExpr> componentExistsVars = new LinkedHashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
@@ -74,7 +74,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
 
-      Map<String, BoolExpr> mainPortsDefined = new HashMap<>();
+      Map<String, BoolExpr> mainPortsDefined = new LinkedHashMap<>();
       for (Map.Entry<ASTArcPort, BoolExpr> portEntry : portConditions.entrySet()) {
         String portName = (node.getSymbol().getFullName() + "." + portEntry.getKey().getSymbol().getName());
         mainPortsDefined.merge(portName, portEntry.getValue(), (oldVal, newVal) -> ctx.mkOr(oldVal, newVal));
@@ -100,7 +100,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
 
       ArrayList<String> mainPorts = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(l -> node.getSymbol().getFullName() + "." + l.getSymbol().getName()).collect(Collectors.toList());
 
-      Map<String, BoolExpr> mainPortsDefined = new HashMap<>();
+      Map<String, BoolExpr> mainPortsDefined = new LinkedHashMap<>();
       for (String port : mainPorts) {
         mainPortsDefined.put(port, ctx.mkTrue());
         portExistsVars.put(port, ctx.mkBool(true));
@@ -108,7 +108,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
       portDeclared.put(node.getSymbol().getFullName(), mainPortsDefined);
     }
 
-    Map<String, BoolExpr> subcomponentportsDefined = new HashMap<>();
+    Map<String, BoolExpr> subcomponentportsDefined = new LinkedHashMap<>();
     for (Map.Entry<ASTComponentInstance, BoolExpr> entry : subcomponentConditions.entrySet()) {
 
       var sub = entry.getKey().getSymbol();
@@ -120,15 +120,15 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
       //Objects.requireNonNull(Objects.requireNonNull(subcomponentConditions.entrySet().stream().filter(e -> e.getKey().getSymbol().getFullName().equals(sub.getFullName())).findFirst().orElse(null))).getValue();
 
       if (sub.isTypePresent()) {
-        Map<String, BoolExpr> varsubcomponentportsDefined = new HashMap<>();
+        Map<String, BoolExpr> varsubcomponentportsDefined = new LinkedHashMap<>();
         for (PortSymbol port : sub.getType().getTypeInfo().getAllPorts()) {
           varsubcomponentportsDefined.put(node.getSymbol().getFullName() + "." + sub.getName() + "." + port.getName(), subComponentExpr);
         }
 
         // Ensure the inner map exists
-        Map<String, BoolExpr> innerMap = portDeclared.computeIfAbsent(sub.getFullName(), k -> new HashMap<>());
+        Map<String, BoolExpr> innerMap = portDeclared.computeIfAbsent(sub.getFullName(), k -> new LinkedHashMap<>());
         if (innerMap == null) {
-          innerMap = new HashMap<>();
+          innerMap = new LinkedHashMap<>();
           portDeclared.put(sub.getFullName(), innerMap);
         }
         // Merge all entries from flatMap

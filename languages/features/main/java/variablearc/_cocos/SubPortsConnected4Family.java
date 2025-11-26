@@ -30,8 +30,8 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -63,14 +63,14 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     allConstraints = new ArrayList<>();
     allConnectors = new ArrayList<>();
 
-    Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
-    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
+    Map<ASTConnector, BoolExpr> connectorConditions = new LinkedHashMap<>();
+    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new LinkedHashMap<>();
 
-    Map<String, BoolExpr> ports = new HashMap<>();
-    Map<String, PortSymbol> portSymbols = new HashMap<>();
-    Map<String, BoolExpr> portNameConditions = new HashMap<>();
-    Map<String, BoolExpr> portConnected = new HashMap<>();
-    Map<String, Set<ASTConnector>> subCompNameToConnectors = new HashMap<>();
+    Map<String, BoolExpr> ports = new LinkedHashMap<>();
+    Map<String, PortSymbol> portSymbols = new LinkedHashMap<>();
+    Map<String, BoolExpr> portNameConditions = new LinkedHashMap<>();
+    Map<String, BoolExpr> portConnected = new LinkedHashMap<>();
+    Map<String, Set<ASTConnector>> subCompNameToConnectors = new LinkedHashMap<>();
 
     if(node instanceof ASTVariableArcFullVariantComponentType){
       ExpressionSet mainConstraintSet =  ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
@@ -80,7 +80,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
         allConnectors.add(connector);
         for (ASTPortAccess target : connector.getTargetList()) {
           if (target.isPresentComponent())
-            subCompNameToConnectors.computeIfAbsent(node.getSymbol().getFullName() + "." + target.getComponent(), k -> new HashSet<>()).add(connector);
+            subCompNameToConnectors.computeIfAbsent(node.getSymbol().getFullName() + "." + target.getComponent(), k -> new LinkedHashSet<>()).add(connector);
         }
       }
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
@@ -95,7 +95,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
         connectorConditions.put(connector, ctx.mkTrue());
         for (ASTPortAccess target : connector.getTargetList()) {
           if (target.isPresentComponent())
-            subCompNameToConnectors.computeIfAbsent(node.getSymbol().getFullName() + "." + target.getComponent(), k -> new HashSet<>()).add(connector);
+            subCompNameToConnectors.computeIfAbsent(node.getSymbol().getFullName() + "." + target.getComponent(), k -> new LinkedHashSet<>()).add(connector);
         }
       }
       ArrayList<ASTComponentInstance> mainSubComps = (ArrayList<ASTComponentInstance>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());

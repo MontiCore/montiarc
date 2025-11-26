@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -419,7 +419,7 @@ public class SMT2FDVisitor implements BooleanFormulaVisitor<BooleanFormula> {
         appeared in simpleOrs or XORs (since or/xor
         has higher importance than optionals)
          */
-    Set<String> allFeaturesUsed = new HashSet<>();
+    Set<String> allFeaturesUsed = new LinkedHashSet<>();
     this.simpleOrs.getRelationsHashMap().values().forEach(val -> val.forEach(f -> {
       analyzer.analyze(f);
       analyzer.getAllAtoms().forEach(a -> allFeaturesUsed.add(a.toString()));
@@ -598,8 +598,8 @@ public class SMT2FDVisitor implements BooleanFormulaVisitor<BooleanFormula> {
 
     AtomicInteger index = new AtomicInteger();
     helper.forEach((t) -> {
-      Set<Set<BooleanFormula>> required_atoms = new HashSet<>();
-      Set<Set<BooleanFormula>> required_formulas = new HashSet<>();
+      Set<Set<BooleanFormula>> required_atoms = new LinkedHashSet<>();
+      Set<Set<BooleanFormula>> required_formulas = new LinkedHashSet<>();
 
       // Construct List of Required Formulas
       for (BooleanFormula atom1 : t.getXorAtoms()) {
@@ -609,11 +609,11 @@ public class SMT2FDVisitor implements BooleanFormulaVisitor<BooleanFormula> {
             continue;
 
           // Add the required Atom
-          required_atoms.add(new HashSet<>(Arrays.asList(atom1, atom2)));
+          required_atoms.add(new LinkedHashSet<>(Arrays.asList(atom1, atom2)));
 
           // Add the required formulas (could be (atom1 || atom2) or (atom2
           // || atom1)) => add both
-          required_formulas.add(new HashSet<>(Arrays.asList(
+          required_formulas.add(new LinkedHashSet<>(Arrays.asList(
               bmgr.or(bmgr.not(atom1), bmgr.not(atom2)),
               bmgr.or(bmgr.not(atom2), bmgr.not(atom1)))));
         }
@@ -622,7 +622,7 @@ public class SMT2FDVisitor implements BooleanFormulaVisitor<BooleanFormula> {
 
       // If all of our required_atoms are included in the candidate set,
       // we've found a XOR
-      if (new HashSet<>(xorCandidateSet).containsAll(required_atoms)) {
+      if (new LinkedHashSet<>(xorCandidateSet).containsAll(required_atoms)) {
         // For each required atom, remove exactly one instance (and NOT use
         // removeAll)
         required_atoms.forEach(xorCandidateSet::remove);

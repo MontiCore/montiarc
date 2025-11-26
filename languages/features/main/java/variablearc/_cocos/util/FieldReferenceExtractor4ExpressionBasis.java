@@ -11,14 +11,14 @@ import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 public class FieldReferenceExtractor4ExpressionBasis
   implements ExpressionsBasisHandler, IFieldReferenceInExpressionExtractor {
 
-  protected HashSet<FieldReference> fieldReferencesToLookFor;
-  protected final HashMap<FieldReference, SourcePosition> foundFieldReferences;
+  protected LinkedHashSet<FieldReference> fieldReferencesToLookFor;
+  protected final LinkedHashMap<FieldReference, SourcePosition> foundFieldReferences;
   protected ExpressionsBasisTraverser traverser;
 
   public FieldReferenceExtractor4ExpressionBasis() {
@@ -27,8 +27,8 @@ public class FieldReferenceExtractor4ExpressionBasis
 
   public FieldReferenceExtractor4ExpressionBasis(@NotNull ExpressionsBasisTraverser traverser) {
     Preconditions.checkNotNull(traverser);
-    this.fieldReferencesToLookFor = new HashSet<>();
-    this.foundFieldReferences = new HashMap<>();
+    this.fieldReferencesToLookFor = new LinkedHashSet<>();
+    this.foundFieldReferences = new LinkedHashMap<>();
     this.setTraverser(traverser);
   }
 
@@ -43,7 +43,7 @@ public class FieldReferenceExtractor4ExpressionBasis
     this.traverser = traverser;
   }
 
-  public HashMap<FieldReference, SourcePosition> getFoundFieldReferences() {
+  public LinkedHashMap<FieldReference, SourcePosition> getFoundFieldReferences() {
     return this.foundFieldReferences;
   }
 
@@ -51,11 +51,11 @@ public class FieldReferenceExtractor4ExpressionBasis
     this.foundFieldReferences.clear();
   }
 
-  public HashSet<FieldReference> getFieldReferencesToLookFor() {
+  public LinkedHashSet<FieldReference> getFieldReferencesToLookFor() {
     return this.fieldReferencesToLookFor;
   }
 
-  protected void setFieldReferencesToLookFor(@NotNull HashSet<FieldReference> fieldReferencesToLookFor) {
+  protected void setFieldReferencesToLookFor(@NotNull LinkedHashSet<FieldReference> fieldReferencesToLookFor) {
     Preconditions.checkNotNull(fieldReferencesToLookFor);
     this.fieldReferencesToLookFor = fieldReferencesToLookFor;
   }
@@ -70,8 +70,8 @@ public class FieldReferenceExtractor4ExpressionBasis
   }
 
   @Override
-  public HashMap<FieldReference, SourcePosition> findFieldReferences(@NotNull ASTExpression expr,
-                                                                     @NotNull HashSet<FieldReference> fieldReferencesToLookFor,
+  public LinkedHashMap<FieldReference, SourcePosition> findFieldReferences(@NotNull ASTExpression expr,
+                                                                     @NotNull LinkedHashSet<FieldReference> fieldReferencesToLookFor,
                                                                      @NotNull ITraverser traverser) {
     Preconditions.checkNotNull(expr);
     Preconditions.checkNotNull(fieldReferencesToLookFor);

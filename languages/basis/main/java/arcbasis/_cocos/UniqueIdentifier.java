@@ -15,7 +15,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.function.BiPredicate;
 
@@ -168,7 +168,7 @@ public class UniqueIdentifier implements ArcBasisASTArcComponentTypeCoCo {
    *              exception to the rule that there should not be name duplicates.
    */
   protected Collection<BiPredicate<String, Collection<SourcePosition>>> getAllowedExceptions(@NotNull IArcBasisScope scope) {
-    HashSet<BiPredicate<String, Collection<SourcePosition>>> allowedExceptions = new HashSet<>();
+    LinkedHashSet<BiPredicate<String, Collection<SourcePosition>>> allowedExceptions = new LinkedHashSet<>();
     // This method currently does nothing but is a possible extension point to declare Exceptions.
 
     return allowedExceptions;

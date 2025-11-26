@@ -21,7 +21,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.nio.file.Paths;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -116,7 +116,7 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
   }
 
   static class NameExpressionCollector implements ExpressionsBasisVisitor2 {
-    private final Collection<ASTNameExpression> foundNameExpressions = new HashSet<>();
+    private final Collection<ASTNameExpression> foundNameExpressions = new LinkedHashSet<>();
 
     private NameExpressionCollector() {}
 

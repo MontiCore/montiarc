@@ -27,7 +27,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,7 +44,7 @@ public class PortHeritageTypeFits4Family implements ArcBasisASTArcComponentTypeC
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
     Context ctx = ExpressionSolverService.getContext();
 
-    Map<ASTArcPort, BoolExpr> portConditions = new HashMap<>();
+    Map<ASTArcPort, BoolExpr> portConditions = new LinkedHashMap<>();
     Map<BoolExpr, ArcError> violationExprToError = new LinkedHashMap<>();
 
     ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());

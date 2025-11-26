@@ -30,7 +30,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -59,8 +59,8 @@ public class NoInputPortInEntryAction4Family implements ArcBasisASTArcComponentT
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    portConditions = new HashMap<>();
-    actionConditions = new HashMap<>();
+    portConditions = new LinkedHashMap<>();
+    actionConditions = new LinkedHashMap<>();
 
     MontiArcTraverser nodeTraverser = MontiArcMill.traverser();
     ASTSCEntryActionCollector entryActionCollector = new ASTSCEntryActionCollector();

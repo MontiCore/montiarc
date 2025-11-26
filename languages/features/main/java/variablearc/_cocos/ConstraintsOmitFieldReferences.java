@@ -14,8 +14,8 @@ import variablearc._cocos.util.IFieldReferenceInExpressionExtractor;
 import variablearc._cocos.util.IFieldReferenceInExpressionExtractor.FieldReference;
 import variablearc._util.IVariableArcTypeDispatcher;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 
 /**
  * As a convention, we require that instantiations are performed prior to any
@@ -36,7 +36,7 @@ public class ConstraintsOmitFieldReferences implements ArcBasisASTArcComponentTy
 
     ComponentTypeSymbol comp = astComp.getSymbol();
 
-    HashSet<FieldReference> portReferencesToLookFor = new HashSet<>(FieldReference.ofComponentTypeFields(comp));
+    LinkedHashSet<FieldReference> portReferencesToLookFor = new LinkedHashSet<>(FieldReference.ofComponentTypeFields(comp));
     IVariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();
 
     astComp.getBody().getArcElementList().stream()
@@ -44,7 +44,7 @@ public class ConstraintsOmitFieldReferences implements ArcBasisASTArcComponentTy
       .map(typeDispatcher::asVariableArcASTArcConstraintDeclaration)
       .forEach((constraint) -> {
         Preconditions.checkNotNull(constraint);
-        HashMap<FieldReference, SourcePosition> foundPortReferences =
+        LinkedHashMap<FieldReference, SourcePosition> foundPortReferences =
           this.fieldRefExtractor.findFieldReferences(constraint.getExpression(), portReferencesToLookFor,
             VariableArcMill.traverser());
 

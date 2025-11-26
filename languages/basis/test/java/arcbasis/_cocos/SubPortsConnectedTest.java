@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mockito;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class SubPortsConnectedTest extends ArcBasisTestBase {
 
-  HashMap<String, ASTArcComponentType> components;
+  LinkedHashMap<String, ASTArcComponentType> components;
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
@@ -138,7 +138,7 @@ public class SubPortsConnectedTest extends ArcBasisTestBase {
     scopesGenP3.createFromAST(comp2);
     scopesGenP3.createFromAST(comp3);
 
-    components = new HashMap<>();
+    components = new LinkedHashMap<>();
     components.put(comp1.getName(), comp1);
     components.put(comp2.getName(), comp2);
     components.put(comp3.getName(), comp3);

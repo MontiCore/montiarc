@@ -13,7 +13,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class SMTFormulaAnalyzerTest {
@@ -256,7 +256,7 @@ public class SMTFormulaAnalyzerTest {
 
     // When && Then (negative test)
     analyzer.analyze(noNnfFormula);
-    Assertions.assertEquals(new HashSet<>(), analyzer.getNegatedAtoms());
+    Assertions.assertEquals(new LinkedHashSet<>(), analyzer.getNegatedAtoms());
   }
 
   /**
@@ -348,7 +348,7 @@ public class SMTFormulaAnalyzerTest {
 
     // When && Then (negative test)
     analyzer.analyze(orFormula);
-    Assertions.assertEquals(new HashSet<>(), analyzer.getAllNegatedFormulas());
+    Assertions.assertEquals(new LinkedHashSet<>(), analyzer.getAllNegatedFormulas());
   }
 
   /**
@@ -363,6 +363,6 @@ public class SMTFormulaAnalyzerTest {
 
     // When && Then (negative test)
     analyzer.analyze(noNnfFormula);
-    Assertions.assertEquals(new HashSet<>(), analyzer.getAllPositiveFormulas());
+    Assertions.assertEquals(new LinkedHashSet<>(), analyzer.getAllPositiveFormulas());
   }
 }

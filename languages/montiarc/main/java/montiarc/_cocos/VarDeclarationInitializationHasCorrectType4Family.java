@@ -38,7 +38,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -69,13 +69,13 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    varDeclaratorConditions = new HashMap<>();
+    varDeclaratorConditions = new LinkedHashMap<>();
     createdVariableSymbols = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
-    fieldConditions = new HashMap<>();
-    portConditions = new HashMap<>();
-    createdVariablesConditions = new HashMap<>();
-    fieldNameVariations = new HashMap<>();
+    fieldConditions = new LinkedHashMap<>();
+    portConditions = new LinkedHashMap<>();
+    createdVariablesConditions = new LinkedHashMap<>();
+    fieldNameVariations = new LinkedHashMap<>();
     allParameters = new ArrayList<>();
     if (!mainParameters.isEmpty())
       allParameters = new ArrayList<>(mainParameters);

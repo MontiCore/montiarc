@@ -48,11 +48,11 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     Context ctx = ExpressionSolverService.getContext();
 
     // Data Structures for ports, connectors and subcomponents.
-    Map<String, Set<ASTConnector>> portNameConnectorMap = new HashMap<>();
-    Map<String, BoolExpr> portNameConditions = new HashMap<>();
-    Map<SubcomponentSymbol, BoolExpr> subcomponentSymbolCondition = new HashMap<>();
-    Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
-    Map<ASTArcPort, BoolExpr> portConditions = new HashMap<>();
+    Map<String, Set<ASTConnector>> portNameConnectorMap = new LinkedHashMap<>();
+    Map<String, BoolExpr> portNameConditions = new LinkedHashMap<>();
+    Map<SubcomponentSymbol, BoolExpr> subcomponentSymbolCondition = new LinkedHashMap<>();
+    Map<ASTConnector, BoolExpr> connectorConditions = new LinkedHashMap<>();
+    Map<ASTArcPort, BoolExpr> portConditions = new LinkedHashMap<>();
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions;
 
     List<String> allFeatures;
@@ -159,7 +159,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
 
       for (String connectorName : connectorNames) {
         String portName = connectorName.substring("connectorTo_".length());
-        portNameConnectorMap.computeIfAbsent(portName, k -> new HashSet<>()).add(connector);
+        portNameConnectorMap.computeIfAbsent(portName, k -> new LinkedHashSet<>()).add(connector);
       }
     }
 

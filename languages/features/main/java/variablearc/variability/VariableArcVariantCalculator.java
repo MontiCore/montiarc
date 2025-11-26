@@ -16,7 +16,7 @@ import variablearc.evaluation.VariationPointSolver;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -57,7 +57,7 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
     Preconditions.checkNotNull(vpSolver);
     // iterate over all possible variants of this component and expand with subcomponent variants
     for (VariableArcVariantComponentTypeSymbolBuilder variantBuilder : vpSolver.getCombinations(parentVariant)) {
-      HashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants = new HashMap<>();
+      LinkedHashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants = new LinkedHashMap<>();
       // filter out subcomponents not included in this variant
       List<SubcomponentSymbol> subcomponents =
         componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
@@ -105,7 +105,7 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
    * @return a list of all possible instance variant combinations
    */
   protected List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> expandCombinations(
-    @NotNull HashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants
+    @NotNull LinkedHashMap<SubcomponentSymbol, List<VariableArcVariantComponentTypeSymbol>> subComponentVariants
   ) {
     Preconditions.checkNotNull(subComponentVariants);
     // Base case #1: no subcomponents
@@ -118,7 +118,7 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
       // Base case #2: One subcomponent
       List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> res = new ArrayList<>();
       for (VariableArcVariantComponentTypeSymbol variant : variants) {
-        HashMap<SubcomponentSymbol, VariantSubcomponentSymbol> pre = new HashMap<>();
+        LinkedHashMap<SubcomponentSymbol, VariantSubcomponentSymbol> pre = new LinkedHashMap<>();
         pre.put(instance, new VariantSubcomponentSymbol(instance, instance.getType().deepClone(variant)));
         res.add(pre);
       }
@@ -129,8 +129,8 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
         expandCombinations(subComponentVariants);
       List<HashMap<SubcomponentSymbol, VariantSubcomponentSymbol>> res = new ArrayList<>();
       for (VariableArcVariantComponentTypeSymbol variant : variants) {
-        for (HashMap<SubcomponentSymbol, VariantSubcomponentSymbol> pre : prev) {
-          pre = new HashMap<>(pre);
+        for (Map<SubcomponentSymbol, VariantSubcomponentSymbol> pre : prev) {
+          pre = new LinkedHashMap<>(pre);
           pre.put(instance, new VariantSubcomponentSymbol(instance,
             instance.getType().deepClone(variant)));
           res.add(pre);

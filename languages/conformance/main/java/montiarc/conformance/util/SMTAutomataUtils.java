@@ -12,7 +12,7 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.conformance.automaton2smt.cd.CD2SMT;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -74,7 +74,7 @@ public class SMTAutomataUtils {
   }
 
   public static Map<String, Sort> typeMap(Context ctx) {
-    Map<String, Sort> typeMap = new HashMap<>();
+    Map<String, Sort> typeMap = new LinkedHashMap<>();
     typeMap.put("Boolean", ctx.mkBoolSort());
     typeMap.put("Double", ctx.getRealSort());
     typeMap.put("Integer", ctx.mkIntSort());

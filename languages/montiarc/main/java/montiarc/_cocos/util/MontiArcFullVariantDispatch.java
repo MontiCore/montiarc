@@ -14,7 +14,7 @@ import variablearc._cocos.util.IgnoreASTArcVarIfHandler;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.VariableArcFullVariantComponentTypeSymbol;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class MontiArcFullVariantDispatch extends MontiArcCoCoChecker implements ArcBasisVisitor2 {
 
@@ -32,7 +32,7 @@ public class MontiArcFullVariantDispatch extends MontiArcCoCoChecker implements 
 
     if (node.getSymbol() instanceof MontiArcComponentTypeSymbol) {
       var nodeSymbol = (MontiArcComponentTypeSymbol) node.getSymbol();
-      var variationPoints = new HashSet<>(nodeSymbol.getAllVariationPoints());
+      var variationPoints = new LinkedHashSet<>(nodeSymbol.getAllVariationPoints());
       var conditions = nodeSymbol.getConstraints();
       MontiArcTypeCheck.enterContext(node.getSymbol());
       VariableArcFullVariantComponentTypeSymbol fullVariantComponentTypeSymbol = new VariableArcFullVariantComponentTypeSymbol((IVariableArcComponentTypeSymbol) nodeSymbol.getTypeInfo(), variationPoints, conditions, nodeSymbol.getSuperComponentsList());

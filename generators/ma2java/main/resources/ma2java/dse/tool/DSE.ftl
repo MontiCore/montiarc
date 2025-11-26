@@ -13,7 +13,7 @@ ${tc.signature("ast", "isTop","lister")}
 import com.microsoft.z3.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -215,7 +215,7 @@ public class DSE${comp.getName()}{
 		</#list>
 	</#if>
 
-Set<montiarc.rte.timesync.IOutPort> delayedPorts = new HashSet<>();
+Set<montiarc.rte.timesync.IOutPort> delayedPorts = new LinkedHashSet<>();
 
 	<#list tickStatementList?reverse as item>
 		delayedPorts.add(${item});

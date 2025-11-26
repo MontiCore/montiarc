@@ -2,7 +2,7 @@
 package montiarc.rte.timesync;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public abstract class NumericOutPort extends PrimitivePort implements INumericOutPort {
   
@@ -14,7 +14,7 @@ public abstract class NumericOutPort extends PrimitivePort implements INumericOu
   
   public NumericOutPort(String name) {
     this.name = name;
-    this.observers = new HashSet<>(1);
+    this.observers = new LinkedHashSet<>(1);
   }
   
   public NumericOutPort() {

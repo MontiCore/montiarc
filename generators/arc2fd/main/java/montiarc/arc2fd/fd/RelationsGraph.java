@@ -3,8 +3,8 @@ package montiarc.arc2fd.fd;
 
 import montiarc.arc2fd.smt.FDRelation;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -32,13 +32,13 @@ public class RelationsGraph<G> {
    */
   private final Map<G, LinkedList<G>> adj;
 
-  private final Set<G> allNodes = new HashSet<>();
+  private final Set<G> allNodes = new LinkedHashSet<>();
 
   /**
    * Construct an empty graph
    */
   RelationsGraph() {
-    adj = new HashMap<>();
+    adj = new LinkedHashMap<>();
   }
 
   /**
@@ -48,7 +48,7 @@ public class RelationsGraph<G> {
    *              we want to add to the graph.
    */
   RelationsGraph(List<FDRelation<G>> edges) {
-    adj = new HashMap<>();
+    adj = new LinkedHashMap<>();
     edges.stream().filter(Objects::nonNull).forEach(edge -> edge.getRelationsHashMap().forEach(this::addEdges));
   }
 
@@ -61,7 +61,7 @@ public class RelationsGraph<G> {
    * @return Set of all visited nodes during our BFS.
    */
   public Set<G> getUnusedNodes(G startNode) {
-    Set<G> unusedNodes = new HashSet<>(allNodes);
+    Set<G> unusedNodes = new LinkedHashSet<>(allNodes);
     unusedNodes.removeAll(BFS(startNode));
     return unusedNodes;
   }
@@ -108,10 +108,10 @@ public class RelationsGraph<G> {
    */
   public Set<G> BFS(G startingNode) {
     if (Objects.isNull(startingNode) || !adj.containsKey(startingNode))
-      return new HashSet<>();
+      return new LinkedHashSet<>();
 
     // Mark all the vertices as not visited (= false)
-    Map<G, Boolean> visited = new HashMap<>();
+    Map<G, Boolean> visited = new LinkedHashMap<>();
 
     // Mark all nodes as un-visited
     adj.forEach((key, values) -> {
@@ -144,7 +144,7 @@ public class RelationsGraph<G> {
     // of the BFS and thus
     // aren't connected to our root node. Thus, we can remove them at a later
     // point in time...
-    Set<G> visitedKeys = new HashSet<>();
+    Set<G> visitedKeys = new LinkedHashSet<>();
     adj.forEach((key, values) -> {
       if (visited.get(key))
         visitedKeys.add(key);

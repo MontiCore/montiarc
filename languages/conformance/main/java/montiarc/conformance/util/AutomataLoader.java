@@ -38,7 +38,7 @@ import scmapping._cocos.ValueRightInNotEqualExpressionsCoCo;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -132,7 +132,7 @@ public class AutomataLoader {
   public static Pair<ASTCDCompilationUnit, ASTMACompilationUnit> loadModels(
       File maFile, File cdFile) {
     initMills();
-    Set<List<?>> m = new HashSet<>();
+    Set<List<?>> m = new LinkedHashSet<>();
     boolean t = m.containsAll((Collection<?>) List.of(1));
 
     ASTCDCompilationUnit cdAST = loadCD(cdFile);

@@ -20,8 +20,8 @@ import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -51,7 +51,7 @@ public class VariationPointSolver {
    */
   public Set<VariableArcVariantComponentTypeSymbolBuilder> getCombinations(@Nullable VariableArcVariantComponentTypeSymbol parentVariant) {
 
-    Set<VariableArcVariantComponentTypeSymbolBuilder> res = new HashSet<>();
+    Set<VariableArcVariantComponentTypeSymbolBuilder> res = new LinkedHashSet<>();
     for (Set<VariableArcVariationPoint> includedVPs : Sets.powerSet(ImmutableSet.copyOf(origin.getAllVariationPoints()))) {
       ExpressionSet expressions = getConditionsForVariationPoints(includedVPs);
       expressions.add(origin.getConstraints());
@@ -61,7 +61,7 @@ public class VariationPointSolver {
 
       Optional<Solver> smtSolver = expressionSolver.getSolver(expressions);
       if (smtSolver.map(Solver::check).map(status -> status == Status.SATISFIABLE || (INCLUDE_INCONVERTIBLE_VARIATIONS && status == Status.UNKNOWN)).orElse(INCLUDE_INCONVERTIBLE_VARIATIONS)) {
-        HashMap<ArcFeatureSymbol, Boolean> featureSymbolBooleanMap = new HashMap<>();
+        LinkedHashMap<ArcFeatureSymbol, Boolean> featureSymbolBooleanMap = new LinkedHashMap<>();
         Optional<Model> model = smtSolver.map(Solver::getModel);
         for (ArcFeatureSymbol feature : ((IVariableArcScope) origin.getTypeInfo().getSpannedScope()).getLocalArcFeatureSymbols()) {
           featureSymbolBooleanMap.put(feature, model.map(m -> m.getConstInterp(expressionSolver.getContext().mkBoolConst(feature.getName()))).map(v -> v.getBoolValue() == Z3_lbool.Z3_L_TRUE).orElse(true));
@@ -119,7 +119,7 @@ public class VariationPointSolver {
   public ExpressionSet getConditionsForVariationPoints(@NotNull Collection<VariableArcVariationPoint> includedVPs) {
     Preconditions.checkNotNull(includedVPs);
 
-    Set<VariableArcVariationPoint> excludedVPs = new HashSet<>(origin.getAllVariationPoints());
+    Set<VariableArcVariationPoint> excludedVPs = new LinkedHashSet<>(origin.getAllVariationPoints());
     excludedVPs.removeAll(includedVPs);
     return new ExpressionSet(getConditionsCombined(includedVPs), getConditions(excludedVPs));
   }

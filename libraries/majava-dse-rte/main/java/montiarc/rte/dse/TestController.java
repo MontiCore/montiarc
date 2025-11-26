@@ -6,7 +6,7 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.EnumSort;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,7 +18,7 @@ public class TestController {
 
   public static void init(TestControllerI controller) {
     TestController.controller = controller;
-    enumSorts = new HashMap<>();
+    enumSorts = new LinkedHashMap<>();
   }
 
   public static TestControllerI getController() {

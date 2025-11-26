@@ -12,7 +12,7 @@ import montiarc.rte.log.LogException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
@@ -28,7 +28,7 @@ public class TerminationConditionController<In, Out> extends AbstractController<
   //protected List<BoolExpr> branchingConditions = new ArrayList<>();
 
   // list of bool conditions that have to be set in order not to visit aborted states twice
-  protected Set<BoolExpr> abortConditions = new HashSet<>();
+  protected Set<BoolExpr> abortConditions = new LinkedHashSet<>();
 
   // Number of times a transition or a state may be taken
   protected int maxNum = 10;

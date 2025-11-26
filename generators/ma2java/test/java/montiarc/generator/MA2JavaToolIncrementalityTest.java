@@ -11,7 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -103,7 +103,7 @@ class MA2JavaToolIncrementalityTest {
     addPortModel("Foo", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
 
     // When
@@ -121,7 +121,7 @@ class MA2JavaToolIncrementalityTest {
     addPortModel("Foo", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
 
     Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("AddedComp.java").toFile().exists());
@@ -146,7 +146,7 @@ class MA2JavaToolIncrementalityTest {
     addDeployModel("CompToRemove", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
 
     Preconditions.checkState(javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToRemove.java").toFile().exists());
@@ -173,7 +173,7 @@ class MA2JavaToolIncrementalityTest {
     addDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
     lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
 
@@ -204,7 +204,7 @@ class MA2JavaToolIncrementalityTest {
     addDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
     lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
 
@@ -236,7 +236,7 @@ class MA2JavaToolIncrementalityTest {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java"));
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
     lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
     lastModified.put("DeployCompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java").toFile().lastModified());
@@ -268,7 +268,7 @@ class MA2JavaToolIncrementalityTest {
     addDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
     lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
     lastModified.put("DeployCompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
@@ -294,7 +294,7 @@ class MA2JavaToolIncrementalityTest {
     addPortModel("Modified", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
     lastModified.put("Modified.java", javaOutDir.resolve(usedPackageAsPath).resolve("Modified.java").toFile().lastModified());
 
@@ -328,7 +328,7 @@ class MA2JavaToolIncrementalityTest {
     addPortModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.java", javaOutDir.resolve(usedPackageAsPath).resolve("Foo.java").toFile().lastModified());
     lastModified.put("CompToUpdate.java", javaOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.java").toFile().lastModified());
 
@@ -362,7 +362,7 @@ class MA2JavaToolIncrementalityTest {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("HasMovingHwc.java"));
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployHasUnchangedHwcTOP.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasUnchangedHwcTOP.java").toFile().lastModified());
     lastModified.put("HasUnchangedHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasUnchangedHwc.java").toFile().lastModified());
 
@@ -413,7 +413,7 @@ class MA2JavaToolIncrementalityTest {
     addPortModel("ChangedAndMoved", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Unchanged.java", javaOutDir.resolve(usedPackageAsPath).resolve("Unchanged.java").toFile().lastModified());
     lastModified.put("UnchangedButMoved.java", javaOutDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.java").toFile().lastModified());
     lastModified.put("ChangedAndMoved.java", javaOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.java").toFile().lastModified());
@@ -460,7 +460,7 @@ class MA2JavaToolIncrementalityTest {
     Files.writeString(modelDir.resolve("NoPackageModified.arc"), "component NoPackageModified { port in int i; }");
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("NoPackage.java", javaOutDir.resolve("NoPackage.java").toFile().lastModified());
     lastModified.put("NoPackageModified.java", javaOutDir.resolve("NoPackageModified.java").toFile().lastModified());
 
@@ -486,7 +486,7 @@ class MA2JavaToolIncrementalityTest {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("WithHwc.java"));
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("WithoutHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("WithoutHwc.java").toFile().lastModified());
 
     Preconditions.checkState(!javaOutDir.resolve(usedPackageAsPath).resolve("WithHwc.java").toFile().exists());

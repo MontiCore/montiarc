@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +39,7 @@ public class RelationsGraphTest {
   @Test
   public void addEdge() {
     // Given
-    Map<String, LinkedList<String>> trueAdj = new HashMap<>();
+    Map<String, LinkedList<String>> trueAdj = new LinkedHashMap<>();
     trueAdj.put("a", new LinkedList<>(Set.of("b")));
     trueAdj.put("b", new LinkedList<>());
 
@@ -56,7 +56,7 @@ public class RelationsGraphTest {
   @Test
   public void addEdges() {
     // Given
-    Map<String, LinkedList<String>> trueAdj = new HashMap<>();
+    Map<String, LinkedList<String>> trueAdj = new LinkedHashMap<>();
     trueAdj.put("a", new LinkedList<>(Set.of("b", "c", "d")));
     trueAdj.put("b", new LinkedList<>());
     trueAdj.put("c", new LinkedList<>());

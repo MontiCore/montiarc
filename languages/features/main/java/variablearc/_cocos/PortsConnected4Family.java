@@ -27,7 +27,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -61,11 +61,11 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
     allConnectors = new ArrayList<>();
     allConstraints = new ArrayList<>();
 
-    Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
-    Map<ASTArcPort, BoolExpr> portConditions = new HashMap<>();
+    Map<ASTConnector, BoolExpr> connectorConditions = new LinkedHashMap<>();
+    Map<ASTArcPort, BoolExpr> portConditions = new LinkedHashMap<>();
 
-    Map<String, BoolExpr> portNameConditions = new HashMap<>();
-    Map<String, BoolExpr> portConnected = new HashMap<>();
+    Map<String, BoolExpr> portNameConditions = new LinkedHashMap<>();
+    Map<String, BoolExpr> portConnected = new LinkedHashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();

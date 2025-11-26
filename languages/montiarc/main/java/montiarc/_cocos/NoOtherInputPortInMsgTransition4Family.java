@@ -32,7 +32,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -62,8 +62,8 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    portConditions = new HashMap<>();
-    transitionConditions = new HashMap<>();
+    portConditions = new LinkedHashMap<>();
+    transitionConditions = new LinkedHashMap<>();
 
     ArcAutomatonTraverser automatonTraverser = ArcAutomatonMill.traverser();
     ASTTransitionBodyCollector transitionCollector = new ASTTransitionBodyCollector();

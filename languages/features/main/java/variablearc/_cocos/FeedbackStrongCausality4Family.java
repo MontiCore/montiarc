@@ -27,8 +27,8 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -60,8 +60,8 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
 
     List<ConnectorInfo> connectorInfos = new ArrayList<>();
     Map<ASTConnector, BoolExpr> connectorConditions;
-    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
-    Map<SubcomponentSymbol, Integer> subcomponentToInt = new HashMap<>();
+    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new LinkedHashMap<>();
+    Map<SubcomponentSymbol, Integer> subcomponentToInt = new LinkedHashMap<>();
 
     // Reading and processing parts of the Main-Component
     ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
@@ -127,7 +127,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     // Saving all connectors, that are active, when a feedback-loop exists
     List<BoolExpr> activeConnectorExprs = new ArrayList<>();
     // Mapping each connector with an id
-    Map<Integer, ConnectorInfo> indexToConnector = new HashMap<>();
+    Map<Integer, ConnectorInfo> indexToConnector = new LinkedHashMap<>();
     int connectorIndex = 0;
     for (ConnectorInfo connectorInfo : connectorInfos) {
       for (ASTPortAccess target : connectorInfo.connector.getTargetList()) {
@@ -210,7 +210,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
         }
       }
 
-      Set<SubcomponentSymbol> visited = new HashSet<>();
+      Set<SubcomponentSymbol> visited = new LinkedHashSet<>();
 
       for (SubcomponentSymbol vertex : allSubComponents) {
         if (!visited.contains(vertex)) {

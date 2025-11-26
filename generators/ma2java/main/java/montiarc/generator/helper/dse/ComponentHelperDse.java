@@ -33,7 +33,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -484,7 +484,7 @@ public class ComponentHelperDse {
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
-      Map<String, ASTExpression> defaultValues = new HashMap<>();
+      Map<String, ASTExpression> defaultValues = new LinkedHashMap<>();
       for (ASTArcParameter parameter : parameters) {
         if (parameter.isPresentDefault()) {
           defaultValues.put(parameter.getName(), parameter.getDefault());

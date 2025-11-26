@@ -8,7 +8,7 @@ import montiarc.rte.msg.Message;
 import montiarc.rte.port.InPort;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,7 +25,7 @@ public class CoordinatingScheduler implements Scheduler {
   protected boolean requestedToStop = false;
 
   public CoordinatingScheduler() {
-    this.compToScheduler = new HashMap<>();
+    this.compToScheduler = new LinkedHashMap<>();
   }
 
   @Override

@@ -14,7 +14,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTSort;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,7 +28,7 @@ public final class VariableArcDeriveSMTSort implements IDeriveSMTSort {
   private final Map<String, Sort> sortMap;
 
   public VariableArcDeriveSMTSort(Context context) {
-    sortMap = new HashMap<>();
+    sortMap = new LinkedHashMap<>();
     this.context = context;
   }
 

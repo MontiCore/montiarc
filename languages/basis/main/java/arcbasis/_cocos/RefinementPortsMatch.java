@@ -17,7 +17,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -516,7 +516,7 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(baseSet);
     Preconditions.checkNotNull(cuttingSet);
 
-    Set<String> differenceSet = new HashSet<>(baseSet);
+    Set<String> differenceSet = new LinkedHashSet<>(baseSet);
     differenceSet.removeAll(cuttingSet);
 
     return differenceSet;
@@ -526,7 +526,7 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(a);
     Preconditions.checkNotNull(b);
 
-    Set<String> intersection = new HashSet<>(a);
+    Set<String> intersection = new LinkedHashSet<>(a);
     intersection.retainAll(b);
 
     return intersection;

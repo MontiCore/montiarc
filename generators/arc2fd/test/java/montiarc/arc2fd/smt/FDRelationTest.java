@@ -4,7 +4,7 @@ package montiarc.arc2fd.smt;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -21,7 +21,7 @@ public class FDRelationTest {
     // Given
     relation.addRelation(a, b);
     relation.addRootRelation(c);
-    Map<String, Set<String>> expectedMap = new HashMap<>();
+    Map<String, Set<String>> expectedMap = new LinkedHashMap<>();
     expectedMap.put(a, Set.of(b));
     expectedMap.put(root, Set.of(c));
 
@@ -58,7 +58,7 @@ public class FDRelationTest {
     relation.addRelations(root, Set.of(b, c));
     Set<String> expectedRelationsB = Set.of(b);
     Set<String> expectedRelationsC = Set.of(b, c);
-    Map<String, Set<String>> expectedMap = new HashMap<>();
+    Map<String, Set<String>> expectedMap = new LinkedHashMap<>();
     expectedMap.put(a, expectedRelationsB);
     expectedMap.put(root, expectedRelationsC);
 
@@ -79,7 +79,7 @@ public class FDRelationTest {
     // Given
     Set<String> expectedSet = Set.of(a, b, c);
     relation.addRootRelations(expectedSet);
-    Map<String, Set<String>> expectedMap = new HashMap<>();
+    Map<String, Set<String>> expectedMap = new LinkedHashMap<>();
     expectedMap.put(root, expectedSet);
 
     // When && Then
@@ -99,7 +99,7 @@ public class FDRelationTest {
     relation.addRelation(root, c);
     Set<String> expectedRelationsB = Set.of(b);
     Set<String> expectedRelationsC = Set.of(c);
-    Map<String, Set<String>> expectedMap = new HashMap<>();
+    Map<String, Set<String>> expectedMap = new LinkedHashMap<>();
     expectedMap.put(a, expectedRelationsB);
     expectedMap.put(root, expectedRelationsC);
 

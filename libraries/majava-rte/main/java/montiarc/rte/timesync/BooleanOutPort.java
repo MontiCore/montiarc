@@ -4,7 +4,7 @@ package montiarc.rte.timesync;
 import montiarc.rte.log.Log;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class BooleanOutPort extends PrimitivePort {
   
@@ -13,7 +13,7 @@ public class BooleanOutPort extends PrimitivePort {
   
   public BooleanOutPort(String name) {
     this.name = name;
-    this.observers = new HashSet<>(1);
+    this.observers = new LinkedHashSet<>(1);
   }
   
   public BooleanOutPort() {

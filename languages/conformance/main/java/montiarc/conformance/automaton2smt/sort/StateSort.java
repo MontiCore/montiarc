@@ -20,7 +20,7 @@ import montiarc.conformance.util.SMTAutomataUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +29,7 @@ import java.util.function.Function;
 public class StateSort implements SMTSort<SCStateSymbol, VariableSymbol> {
   private final DatatypeSort<?> sort;
   protected Context ctx;
-  protected Map<SCStateSymbol, Constructor<?>> stateConstrMap = new HashMap<>();
+  protected Map<SCStateSymbol, Constructor<?>> stateConstrMap = new LinkedHashMap<>();
   protected BiMap<VariableSymbol, String> varAccessor = HashBiMap.create();
   protected Constructor<?> constructor;
   protected ASTArcComponentType comp;

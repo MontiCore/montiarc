@@ -14,14 +14,14 @@ import montiarc.conformance.util.AutomataUtils;
 import montiarc.conformance.util.SMTAutomataUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 
 public class InputSort implements SMTSort<PortSymbol, PortSymbol> {
-  protected final Map<PortSymbol, Constructor<?>> constructors = new HashMap<>();
+  protected final Map<PortSymbol, Constructor<?>> constructors = new LinkedHashMap<>();
   private final DatatypeSort<?> sort;
 
   public InputSort(

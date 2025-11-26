@@ -10,8 +10,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.ArcFeature2VariableAdapter;
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.stream.Collectors;
 
 /**
@@ -25,8 +25,8 @@ public interface IFieldReferenceInExpressionExtractor {
    * @param traverser The traverser to use while searching for port references
    * @see IFieldReferenceInExpressionExtractor
    */
-  HashMap<FieldReference, SourcePosition> findFieldReferences(@NotNull ASTExpression expr,
-                                                              @NotNull HashSet<FieldReference> fieldReferencesToLookFor,
+  LinkedHashMap<FieldReference, SourcePosition> findFieldReferences(@NotNull ASTExpression expr,
+                                                              @NotNull LinkedHashSet<FieldReference> fieldReferencesToLookFor,
                                                               @NotNull ITraverser traverser);
 
   /**

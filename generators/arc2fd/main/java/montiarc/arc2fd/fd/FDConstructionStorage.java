@@ -15,7 +15,7 @@ import org.sosy_lab.java_smt.api.FormulaManager;
 
 import java.util.Arrays;
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -97,30 +97,30 @@ public class FDConstructionStorage<T extends Formula> {
    * String Representation(only after buildStringRepresentation!) of Optional
    * Formulas
    */
-  private Set<String> stringOptionals = new HashSet<>();
+  private Set<String> stringOptionals = new LinkedHashSet<>();
   /**
    * String Representation (only after buildStringRepresentation!) of
    * Formulas we can simply Disjunct
    */
-  private Set<String> stringSimpleOr = new HashSet<>();
+  private Set<String> stringSimpleOr = new LinkedHashSet<>();
   /**
    * String Representation (only after buildStringRepresentation!) of
    * Formulas we can XOR together
    */
-  private Set<String> stringXor = new HashSet<>();
+  private Set<String> stringXor = new LinkedHashSet<>();
   /**
    * String Representation (only after buildStringRepresentation!) of
    * remaining Conjunctions (= AND)
    */
-  private Set<String> stringRemainingConjunctions = new HashSet<>();
+  private Set<String> stringRemainingConjunctions = new LinkedHashSet<>();
   /**
    * String Representation (only after buildStringRepresentation!) of Requires
    */
-  private Set<String> stringRequires = new HashSet<>();
+  private Set<String> stringRequires = new LinkedHashSet<>();
   /**
    * String Representation (only after buildStringRepresentation!) of Excludes
    */
-  private Set<String> stringExcludes = new HashSet<>();
+  private Set<String> stringExcludes = new LinkedHashSet<>();
 
 
   public FDConstructionStorage(@NotNull FormulaManager fmgr,
@@ -245,7 +245,7 @@ public class FDConstructionStorage<T extends Formula> {
 
   // Get all distinct atoms on the left side of all (passed) relations
   private Set<T> getAllLeftSideAtoms(List<FDRelation<T>> relations) {
-    Set<T> distinctValues = new HashSet<>();
+    Set<T> distinctValues = new LinkedHashSet<>();
     relations.forEach(r -> distinctValues.addAll(r.getRelationsHashMap().keySet()));
     return getAllVariables(distinctValues);
   }
@@ -259,14 +259,14 @@ public class FDConstructionStorage<T extends Formula> {
 
   // Get all distinct atoms on the right side of all (passed) relations
   private Set<T> getAllRightSideAtoms(List<FDRelation<T>> relations) {
-    Set<T> distinctValues = new HashSet<>();
+    Set<T> distinctValues = new LinkedHashSet<>();
     relations.forEach(r -> r.getRelationsHashMap().values().forEach(distinctValues::addAll));
     return getAllVariables(distinctValues);
   }
 
   @SuppressWarnings("unchecked")
   private Set<T> getAllVariables(Set<T> relations) {
-    Set<T> variables = new HashSet<>();
+    Set<T> variables = new LinkedHashSet<>();
 
     // Explicit Typecast casts from "Formula" to "<T extends Formula>" => no
     // problem!
@@ -316,7 +316,7 @@ public class FDConstructionStorage<T extends Formula> {
     Preconditions.checkNotNull(relations);
     Preconditions.checkNotNull(assignmentSeparator);
     Preconditions.checkNotNull(separators);
-    Set<String> finalJoin = new HashSet<>();
+    Set<String> finalJoin = new LinkedHashSet<>();
 
     // Iterate over all keys (= one "AND" Formula in the final result)
     for (Map.Entry<T, Set<T>> entry :

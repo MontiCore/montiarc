@@ -5,12 +5,12 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class EffectNode {
 
-  public static Map<PortSymbol, Map<ISymbol, EffectNode>> instances = new HashMap<>();
+  public static Map<PortSymbol, Map<ISymbol, EffectNode>> instances = new LinkedHashMap<>();
   protected PortSymbol port;
   protected ISymbol component;
 

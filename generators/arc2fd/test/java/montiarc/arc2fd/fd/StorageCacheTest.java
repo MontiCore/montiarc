@@ -17,7 +17,7 @@ import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -76,7 +76,7 @@ public class StorageCacheTest extends ArcBasisTestBase {
   @Test
   public void addRelation() {
     // Given
-    Map<BooleanFormula, Set<BooleanFormula>> trueHashMap = new HashMap<>();
+    Map<BooleanFormula, Set<BooleanFormula>> trueHashMap = new LinkedHashMap<>();
     trueHashMap.put(a, Set.of(b));
     trueHashMap.put(b, Set.of(c));
 
@@ -108,7 +108,7 @@ public class StorageCacheTest extends ArcBasisTestBase {
       new StorageCache<>(constructionStorage);
     secondStorageCache.addRelation(c, b);
 
-    Map<BooleanFormula, Set<BooleanFormula>> trueHashMap = new HashMap<>();
+    Map<BooleanFormula, Set<BooleanFormula>> trueHashMap = new LinkedHashMap<>();
     trueHashMap.put(a, Set.of(b));
     trueHashMap.put(b, Set.of(c));
     trueHashMap.put(c, Set.of(b));

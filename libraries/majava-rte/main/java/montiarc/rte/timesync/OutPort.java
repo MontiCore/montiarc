@@ -4,7 +4,7 @@ package montiarc.rte.timesync;
 import montiarc.rte.log.Log;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class OutPort<T> extends Port<T> implements IOutPort<T> {
 
@@ -16,7 +16,7 @@ public class OutPort<T> extends Port<T> implements IOutPort<T> {
 
   public OutPort(String name) {
     this.name = name;
-    this.observers = new HashSet<>(1);
+    this.observers = new LinkedHashSet<>(1);
   }
 
   public OutPort() {

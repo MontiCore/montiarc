@@ -6,7 +6,7 @@ import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -20,10 +20,10 @@ import java.util.Set;
 public class Boring_Interesting_Transitions<In, Out> extends TransitionsController<In, Out> {
 
   // Set of transition names that are classified as boring from the user
-  protected Set<String> boring = new HashSet<>();
+  protected Set<String> boring = new LinkedHashSet<>();
 
   // Set of transition names that are classified as interesting from the user
-  protected Set<String> interesting = new HashSet<>();
+  protected Set<String> interesting = new LinkedHashSet<>();
 
   // number of how often a boring transition can be taken
   protected int boringCount = 1;

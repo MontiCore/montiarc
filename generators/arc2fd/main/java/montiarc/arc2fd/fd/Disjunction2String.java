@@ -17,7 +17,7 @@ import org.sosy_lab.java_smt.api.visitors.BooleanFormulaVisitor;
 import org.sosy_lab.java_smt.utils.PrettyPrinter;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -74,15 +74,15 @@ public class Disjunction2String implements BooleanFormulaVisitor<BooleanFormula>
    */
   public Set<String> convertAllToStrings(@NotNull Set<? extends Formula> formulas) {
     Preconditions.checkNotNull(formulas);
-    Set<String> tmp = new HashSet<>();
+    Set<String> tmp = new LinkedHashSet<>();
 
     formulas.forEach(f -> {
       if (!(f instanceof BooleanFormula))
         return;
       // By applying "Optional.ofNullable().orElse()" we implicitly check for
       // null-values and replace them
-      // by an empty HashSet
-      tmp.addAll(Optional.ofNullable(convertFormulaToString((BooleanFormula) f)).orElse(new HashSet<>()));
+      // by an empty LinkedHashSet
+      tmp.addAll(Optional.ofNullable(convertFormulaToString((BooleanFormula) f)).orElse(new LinkedHashSet<>()));
     });
 
     // Remove empty elements from the set and return it
@@ -105,7 +105,7 @@ public class Disjunction2String implements BooleanFormulaVisitor<BooleanFormula>
 
     // Sort the list (only for nice output)
     constructedStringArray.sort(String::compareTo);
-    return new HashSet<>(constructedStringArray);
+    return new LinkedHashSet<>(constructedStringArray);
   }
 
   /**

@@ -17,7 +17,7 @@ import variablearc._ast.ASTVariableArcFullVariantComponentType;
 import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.expressions.Expression;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -44,7 +44,7 @@ public class VariableArcFullVariantComponentTypeSymbol extends ComponentTypeSymb
     super(typeSymbol.getTypeInfo().getName());
     Preconditions.checkNotNull(typeSymbol);
     this.typeSymbol = typeSymbol;
-    this.portSymbolMap = new HashMap<>();
+    this.portSymbolMap = new LinkedHashMap<>();
     this.parameter = typeSymbol.getTypeInfo().getParameterList();
     this.superComponents = typeSymbol.getTypeInfo().getSuperComponentsList();
     this.accessModifier = typeSymbol.getTypeInfo().getAccessModifier();

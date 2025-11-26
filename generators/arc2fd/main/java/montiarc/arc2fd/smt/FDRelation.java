@@ -4,8 +4,8 @@ package montiarc.arc2fd.smt;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  * feature diagram and this also allows
  * us to have subtrees.
  * <p>
- * For example, if we have "X" as a key in the hashmap (= left side), and
+ * For example, if we have "X" as a key in the LinkedHashMap (= left side), and
  * ["Y", "Z"] as a Value-Set ( = right side)
  * of the relation, this would mean that we have the relations "X -> Y" and
  * "X -> Z".
@@ -41,7 +41,7 @@ public class FDRelation<T> {
    * Typically, the key is the formula, but for "start at root", the key is
    * START_AT_ROOT
    */
-  private HashMap<T, Set<T>> relations = new HashMap<>();
+  private LinkedHashMap<T, Set<T>> relations = new LinkedHashMap<>();
 
   /**
    * Creates a FDRelation with the given root.
@@ -51,7 +51,7 @@ public class FDRelation<T> {
   public FDRelation(@NotNull T root) {
     Preconditions.checkNotNull(root);
     this.root = root;
-    relations = new HashMap<>();
+    relations = new LinkedHashMap<>();
   }
 
   /**
@@ -118,7 +118,7 @@ public class FDRelation<T> {
   /**
    * @return The Hash-Map
    */
-  public HashMap<T, Set<T>> getRelationsHashMap() {
+  public LinkedHashMap<T, Set<T>> getRelationsHashMap() {
     return relations;
   }
 
@@ -155,8 +155,8 @@ public class FDRelation<T> {
     Preconditions.checkNotNull(key);
     Preconditions.checkNotNull(newRelations);
 
-    // If we have no entry in our Hashmap so far, we want to add it
-    relations.putIfAbsent(key, new HashSet<>());
+    // If we have no entry in our LinkedHashMap so far, we want to add it
+    relations.putIfAbsent(key, new LinkedHashSet<>());
 
     // Add the relation by merging with existing values
     Set<T> combinedRelations = relations.get(key);
@@ -269,7 +269,7 @@ public class FDRelation<T> {
   public FDRelation<T> getDeepCopy() {
     FDRelation<T> copy = new FDRelation<>(this.root);
     for (Map.Entry<T, Set<T>> entry : relations.entrySet()) {
-      copy.addRelations(entry.getKey(), new HashSet<>(entry.getValue()));
+      copy.addRelations(entry.getKey(), new LinkedHashSet<>(entry.getValue()));
     }
     return copy;
   }
@@ -277,7 +277,7 @@ public class FDRelation<T> {
   /**
    * Overwrite toString method for a nice output
    *
-   * @return String-Variant of the HashMap
+   * @return String-Variant of the LinkedHashMap
    */
   @Override
   public String toString() {

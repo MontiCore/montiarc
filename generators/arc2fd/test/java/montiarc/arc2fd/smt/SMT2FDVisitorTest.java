@@ -14,7 +14,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -120,7 +120,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // Given
     BooleanFormula trivialCase = bmgr.and(a, b);
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapTrivialCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapTrivialCase.put(root, Set.of(a, b));
 
     // When
@@ -134,7 +134,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // COMPLEX CASE
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapComplexCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapComplexCase.put(root, Set.of(a, b));
 
     // When
@@ -155,7 +155,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // Given
     BooleanFormula trivialCase = bmgr.or(a, b);
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapTrivialCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapTrivialCase.put(root, Set.of(trivialCase));
 
     // When
@@ -169,7 +169,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // COMPLEX CASE
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapComplexCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapComplexCase.put(root, Set.of(bmgr.or(b, c), bmgr.or(e, f)));
 
     // When
@@ -190,7 +190,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     BooleanFormula trivialCase = bmgr.and(bmgr.or(a, b), bmgr.or(bmgr.not(a),
         bmgr.not(b)));
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapTrivialCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapTrivialCase.put(root, Set.of(bmgr.xor(a, b)));
 
     // When
@@ -204,7 +204,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // COMPLEX CASE
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapComplexCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapComplexCase.put(root, Set.of(bmgr.xor(c, d)));
 
     // When
@@ -225,7 +225,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // Given
     BooleanFormula trivialCase = bmgr.or(bmgr.not(a), a);
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapTrivialCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapTrivialCase.put(root, Set.of(a));
 
     // When
@@ -239,7 +239,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // COMPLEX CASE
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapComplexCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapComplexCase.put(root, Set.of(a, f, c, o, e));
 
     // When
@@ -260,7 +260,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // Given
     BooleanFormula trivialCase = bmgr.or(bmgr.not(a), b);
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapTrivialCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapTrivialCase.put(a, Set.of(b));
 
     // When
@@ -274,7 +274,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // COMPLEX CASE
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapComplexCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapComplexCase.put(a, Set.of(f));
 
     // When
@@ -295,7 +295,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // Given
     BooleanFormula trivialCase = bmgr.or(bmgr.not(a), bmgr.not(b));
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapTrivialCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapTrivialCase.put(a, Set.of(b));
 
     // When
@@ -309,7 +309,7 @@ public class SMT2FDVisitorTest extends ArcBasisTestBase {
     // COMPLEX CASE
     // Given
     Map<BooleanFormula, Set<BooleanFormula>> expectedMapComplexCase =
-        new HashMap<>();
+        new LinkedHashMap<>();
     expectedMapComplexCase.put(c, Set.of(e));
 
     // When

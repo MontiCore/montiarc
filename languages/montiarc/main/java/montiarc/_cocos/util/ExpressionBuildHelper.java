@@ -141,7 +141,7 @@ public class ExpressionBuildHelper {
   public static List<ASTConnector> createPossibleConnectors(ASTConnector connector, Map<String, List<String>> portNameVariations) {
     List<ASTConnector> possibleConnectors = new ArrayList<>();
     List<String> presentPorts = getPortNames(connector);
-    Map<String, String> alreadyCreated = new HashMap<>();
+    Map<String, String> alreadyCreated = new LinkedHashMap<>();
     generateVariableCombinations(presentPorts, portNameVariations, combination -> {
 
       if (alreadyCreated.entrySet().contains(combination))

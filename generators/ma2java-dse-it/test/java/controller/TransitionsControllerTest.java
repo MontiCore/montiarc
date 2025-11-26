@@ -16,7 +16,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -112,7 +112,7 @@ class TransitionsControllerTest {
     expectedTransitionsAll.add(MutablePair.of(branchId4, 4));
     expectedTransitionsAll.add(MutablePair.of(branchId3, 5));
 
-    Set<BoolExpr> expectedAbortConditions = new HashSet<>();
+    Set<BoolExpr> expectedAbortConditions = new LinkedHashSet<>();
     expectedAbortConditions.add(controller.getCtx().mkNot(expr3));
 
     assertThat(controller.getTransitionsAll().containsAll(expectedTransitionsAll));

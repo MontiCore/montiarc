@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -124,7 +124,7 @@ class StateControllerTest {
     controller.currentBranches = new PathCondition();
 
     controller.aborted = true;
-    controller.abortConditions = new HashSet<>();
+    controller.abortConditions = new LinkedHashSet<>();
     controller.abortConditions.add(controller.getCtx().mkBool(false));
     controller.saveInformation();
 

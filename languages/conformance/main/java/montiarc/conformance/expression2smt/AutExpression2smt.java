@@ -27,7 +27,7 @@ import montiarc.conformance.util.SymbolTableUtil;
 import scmapping.util.MappingUtil;
 import scmapping.util.SCZ3TypeFactory;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 
 public class AutExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
@@ -119,7 +119,7 @@ public class AutExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
 
     // case state
     if (symbol instanceof SCStateSymbol) {
-      Expr<?> expr = smtAut.mkConst(symbol, new HashMap<>());
+      Expr<?> expr = smtAut.mkConst(symbol, new LinkedHashMap<>());
       return new Z3ExprAdapter(expr, tFactory.mkType("State", expr.getSort(), ExprKind.ENUM));
     }
 

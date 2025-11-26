@@ -15,7 +15,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverContext;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Set;
 
 public class FDConstructionStorageTest {
@@ -89,8 +89,8 @@ public class FDConstructionStorageTest {
     // Given
     FDConstructionStorage<BooleanFormula> copy = storage1;
     copy.extractDataFromVisitor(this.smt2FDVisitor);
-    HashMap<BooleanFormula, Set<BooleanFormula>> conjunctionsHashMap =
-        new HashMap<>();
+    LinkedHashMap<BooleanFormula, Set<BooleanFormula>> conjunctionsHashMap =
+        new LinkedHashMap<>();
     conjunctionsHashMap.put(root, Set.of(a, b));
 
 //         When && Then

@@ -2,7 +2,7 @@
 package montiarc.rte.timesync;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public class InPort<T> extends Port<T> implements IInPort<T> {
 
@@ -17,7 +17,7 @@ public class InPort<T> extends Port<T> implements IInPort<T> {
   public InPort(String name) {
     this.name = name;
     this.synced = false;
-    this.observers = new HashSet<>(1);
+    this.observers = new LinkedHashSet<>(1);
   }
 
   public InPort() {

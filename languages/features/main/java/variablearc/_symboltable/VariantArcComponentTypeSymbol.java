@@ -10,7 +10,7 @@ import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +30,7 @@ public abstract class VariantArcComponentTypeSymbol extends ComponentTypeSymbol 
     super(typeSymbol.getName());
     Preconditions.checkNotNull(typeSymbol);
     this.typeSymbol = typeSymbol;
-    this.portSymbolMap = new HashMap<>();
+    this.portSymbolMap = new LinkedHashMap<>();
     this.parameter = typeSymbol.getParameterList();
     this.superComponents = typeSymbol.getSuperComponentsList();
     this.accessModifier = typeSymbol.getAccessModifier();

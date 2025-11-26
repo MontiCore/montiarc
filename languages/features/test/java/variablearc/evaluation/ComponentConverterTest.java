@@ -27,7 +27,7 @@ import variablearc.evaluation.expressions.Expression;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -111,7 +111,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
     // Given
     ComponentConverter converter = new ComponentConverter();
     IVariableArcComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.emptyList());
-    HashSet<ComponentTypeSymbol> visited = new HashSet<>();
+    LinkedHashSet<ComponentTypeSymbol> visited = new LinkedHashSet<>();
 
     // When
     ExpressionSet exprs = converter.convert(component, visited);
@@ -134,7 +134,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
     IVariableArcComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(Collections.singletonList(
       subcomponent
     ));
-    HashSet<ComponentTypeSymbol> visited = new HashSet<>();
+    LinkedHashSet<ComponentTypeSymbol> visited = new LinkedHashSet<>();
 
     ArcBasisScopesGenitorP2 scopesGenP2 = new ArcBasisScopesGenitorP2();
     for (SubcomponentSymbol subcomponentSymbol : component.getTypeInfo().getSubcomponents()) {

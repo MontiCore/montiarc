@@ -5,7 +5,7 @@ import montiarc.rte.dse.InputAndCondition;
 import montiarc.rte.dse.ResultI;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -13,10 +13,10 @@ import java.util.Set;
  */
 public class ResultSemDiff<In, Out> implements ResultI<In, Out> {
 
-  private Set<Pair<In, Out>> interestingInputs = new HashSet<>();
-  private Set<InputAndCondition<In, Out>> inputsAndConditions = new HashSet<>();
+  private Set<Pair<In, Out>> interestingInputs = new LinkedHashSet<>();
+  private Set<InputAndCondition<In, Out>> inputsAndConditions = new LinkedHashSet<>();
 
-  private Set<Pair<In, Out>> semDiff = new HashSet<>();
+  private Set<Pair<In, Out>> semDiff = new LinkedHashSet<>();
 
   public void addSemDiffPair(Pair<In, Out> semDiff) {
     this.semDiff.add(semDiff);

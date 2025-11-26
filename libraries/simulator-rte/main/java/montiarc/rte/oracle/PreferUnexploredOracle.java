@@ -3,7 +3,7 @@ package montiarc.rte.oracle;
 
 import com.google.common.base.Preconditions;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 public class PreferUnexploredOracle implements Oracle {
 
-  private final Set<Object> exploredOptions = new HashSet<>();
+  private final Set<Object> exploredOptions = new LinkedHashSet<>();
 
   private final Oracle discriminator;
 

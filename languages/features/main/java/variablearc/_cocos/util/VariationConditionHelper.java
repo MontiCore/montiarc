@@ -26,10 +26,10 @@ import java.util.stream.Collectors;
 
 public class VariationConditionHelper {
 
-  private static Map<String, ICommonExpressionsScope> fieldAccessScopes = new HashMap<>();
+  private static Map<String, ICommonExpressionsScope> fieldAccessScopes = new LinkedHashMap<>();
 
   public static void resetFieldAccessScopeMap(){
-    fieldAccessScopes = new HashMap<>();
+    fieldAccessScopes = new LinkedHashMap<>();
   }
   public static ExpressionSet getExpressionSetCopyWithContext(ExpressionSet exprSet) {
 

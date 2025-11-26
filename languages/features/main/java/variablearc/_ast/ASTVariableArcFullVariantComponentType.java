@@ -46,7 +46,7 @@ import variablearc.evaluation.expressions.Expression;
 import javax.sound.sampled.Port;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -116,7 +116,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
   public Map<ASTArcPort, BoolExpr> getPortConditions() {
 
     if (portConditions == null) {
-      portConditions = new HashMap<>();
+      portConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -163,7 +163,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTConnector, BoolExpr> getConnectorConditions() {
     if (connectorConditions == null) {
-      connectorConditions = new HashMap<>();
+      connectorConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -201,7 +201,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTComponentInstance, BoolExpr> getSubcomponentConditions() {
     if (subcomponentConditions == null) {
-      subcomponentConditions = new HashMap<>();
+      subcomponentConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -239,7 +239,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTArcComponentType, BoolExpr> getComponentConditions() {
     if (componentConditions == null) {
-      componentConditions = new HashMap<>();
+      componentConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -279,7 +279,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTArcBehaviorElement, BoolExpr> getBehaviorConditions() {
     if (behaviorConditions == null) {
-      behaviorConditions = new HashMap<>();
+      behaviorConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -316,7 +316,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTArcField, BoolExpr> getFieldConditions() {
     if (fieldConditions == null) {
-      fieldConditions = new HashMap<>();
+      fieldConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -353,7 +353,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTArcElement, BoolExpr> getElementConditions() {
     if (elementConditions == null) {
-      elementConditions = new HashMap<>();
+      elementConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -390,7 +390,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTArcStatechart, BoolExpr> getStateChartConditions() {
     if (statechartConditions == null) {
-      statechartConditions = new HashMap<>();
+      statechartConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -427,7 +427,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<ASTMsgEvent, BoolExpr> getMessageEventConditions() {
     if (messageeventConditions == null) {
-      messageeventConditions = new HashMap<>();
+      messageeventConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();
@@ -464,7 +464,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
   public Map<PortSymbol, BoolExpr> getPortSymbolConditions() {
     if (portsymbolConditions == null) {
-      portsymbolConditions = new HashMap<>();
+      portsymbolConditions = new LinkedHashMap<>();
 
       ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
       Context ctx = ExpressionSolverService.getContext();

@@ -8,7 +8,7 @@ import montiarc.rte.port.InPort;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class ComponentScheduler {
@@ -30,7 +30,7 @@ public class ComponentScheduler {
     this.msgEventPorts = Set.copyOf(component.getAllMsgEventInPorts());
     this.syncPorts = Set.copyOf(component.getAllSyncedInPorts());
 
-    this.allInPorts = new HashSet<>(msgEventPorts.size() + syncPorts.size());
+    this.allInPorts = new LinkedHashSet<>(msgEventPorts.size() + syncPorts.size());
     this.allInPorts.addAll(msgEventPorts);
     this.allInPorts.addAll(syncPorts);
 

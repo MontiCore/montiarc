@@ -113,7 +113,7 @@ public class Helper {
   }
 
   protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(ASTArcComponentType enclosingComponent, Stream<ASTSCTransition> transitions) {
-    Map<PortSymbol, List<ASTSCTransition>> result = new HashMap<>();
+    Map<PortSymbol, List<ASTSCTransition>> result = new LinkedHashMap<>();
     transitions.forEach(tr -> {
       Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
       if (body.isEmpty()) return;
@@ -378,14 +378,14 @@ public class Helper {
   }
 
   public Map<String, ASTExpression> getArgNamesMappedToExpressions(ASTComponentInstance instance) {
-    if (!instance.isPresentArcArguments()) return new HashMap<>();
+    if (!instance.isPresentArcArguments()) return new LinkedHashMap<>();
 
     ComponentTypeSymbol type = instance.getSymbol().getType().getTypeInfo();
 
     List<String> unsetParams = type.getParameterList().stream()
       .map(VariableSymbolTOP::getName).collect(Collectors.toList());
 
-    Map<String, ASTExpression> result = new HashMap<>();
+    Map<String, ASTExpression> result = new LinkedHashMap<>();
     instance.getArcArguments().streamArcArguments()
       .filter(ASTArcArgument::isPresentName)
       .forEach(arg -> {
@@ -576,7 +576,7 @@ public class Helper {
     List<VariableArcVariantComponentTypeSymbol> varsWithPort = new ArrayList<>(variants.size());
 
     for (VariableArcVariantComponentTypeSymbol variant : variants) {
-      Collection<PortSymbol> allVariantPorts = new HashSet<>();
+      Collection<PortSymbol> allVariantPorts = new LinkedHashSet<>();
       allVariantPorts.addAll(variant.getAllIncomingPorts());
       allVariantPorts.addAll(variant.getAllOutgoingPorts());
 
@@ -806,7 +806,7 @@ public class Helper {
       deps.put(f, usedFields);
     }
 
-    Map<VariableSymbol, List<VariableSymbol>> rev = new HashMap<>();
+    Map<VariableSymbol, List<VariableSymbol>> rev = new LinkedHashMap<>();
     for (VariableSymbol f : fields) {
       rev.put(f, new ArrayList<>());
     }
@@ -816,7 +816,7 @@ public class Helper {
       }
     }
 
-    Map<VariableSymbol, Integer> inDeg = new HashMap<>();
+    Map<VariableSymbol, Integer> inDeg = new LinkedHashMap<>();
     for (Map.Entry<VariableSymbol, Set<VariableSymbol>> e : deps.entrySet()) {
       inDeg.put(e.getKey(), e.getValue().size());
     }

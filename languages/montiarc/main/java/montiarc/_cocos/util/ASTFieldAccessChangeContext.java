@@ -5,12 +5,12 @@ import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisitor2;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class ASTFieldAccessChangeContext implements CommonExpressionsVisitor2 {
 
-  private Map<String, IExpressionsBasisScope> scopeMap = new HashMap<>();
+  private Map<String, IExpressionsBasisScope> scopeMap = new LinkedHashMap<>();
 
   @Override
   public void visit(ASTFieldAccessExpression node) {

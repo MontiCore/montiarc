@@ -26,7 +26,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -55,8 +55,8 @@ public class NoPortInSuperComponentArgument4Family implements ArcBasisASTArcComp
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    portConditions = new HashMap<>();
-    parentConditions = new HashMap<>();
+    portConditions = new LinkedHashMap<>();
+    parentConditions = new LinkedHashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       ExpressionSet mainConstraintSet = null;

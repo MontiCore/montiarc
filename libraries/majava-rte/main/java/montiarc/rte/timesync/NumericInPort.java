@@ -2,7 +2,7 @@
 package montiarc.rte.timesync;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 public abstract class NumericInPort extends PrimitivePort implements INumericInPort {
 
@@ -17,7 +17,7 @@ public abstract class NumericInPort extends PrimitivePort implements INumericInP
   public NumericInPort(String name) {
     this.name = name;
     this.synced = false;
-    this.observers = new HashSet<>(1);
+    this.observers = new LinkedHashSet<>(1);
   }
   
   public NumericInPort() {

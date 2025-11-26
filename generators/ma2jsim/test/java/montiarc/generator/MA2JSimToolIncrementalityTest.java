@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -109,7 +109,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAutomatonModel("Foo", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
     lastModified.put("FooContext.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified());
@@ -139,7 +139,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAutomatonModel("Foo", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
     lastModified.put("FooContext.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified());
@@ -188,7 +188,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAutomatonModel("CompToRemove", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
     lastModified.put("FooContext.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified());
@@ -237,7 +237,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAtomicDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
     lastModified.put("FooContext.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified());
@@ -285,7 +285,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAtomicDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployFoo.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployFoo.java").toFile().lastModified());
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
@@ -330,7 +330,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("DeployCompToUpdate.java"));
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployFoo.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployFoo.java").toFile().lastModified());
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
@@ -374,7 +374,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAtomicDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployFoo.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployFoo.java").toFile().lastModified());
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
@@ -416,7 +416,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAtomicDeployModel("Modified", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployFoo.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployFoo.java").toFile().lastModified());
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
@@ -467,7 +467,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAtomicDeployModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployFoo.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployFoo.java").toFile().lastModified());
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
@@ -517,7 +517,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("HasMovingHwcComp.java"));
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployHasUnchangedHwcTOP.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployHasUnchangedHwcTOP.java").toFile().lastModified());
     lastModified.put("HasUnchangedHwcComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasUnchangedHwcComp.java").toFile().lastModified());
     lastModified.put("HasUnchangedHwcCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("HasUnchangedHwcCompBuilder.java").toFile().lastModified());
@@ -591,7 +591,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAtomicDeployModel("ChangedAndMoved", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployUnchanged.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployUnchanged.java").toFile().lastModified());
     lastModified.put("UnchangedComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("UnchangedComp.java").toFile().lastModified());
     lastModified.put("UnchangedCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("UnchangedCompBuilder.java").toFile().lastModified());
@@ -663,7 +663,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     Files.writeString(modelDir.resolve("NoPackageModified.arc"), "component NoPackageModified { port in int i; }");
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("NoPackageComp.java", javaOutDir.resolve("NoPackageComp.java").toFile().lastModified());
     lastModified.put("NoPackageCompBuilder.java", javaOutDir.resolve("NoPackageCompBuilder.java").toFile().lastModified());
     lastModified.put("NoPackageContext.java", javaOutDir.resolve("NoPackageContext.java").toFile().lastModified());
@@ -702,7 +702,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     Files.createFile(hwcDir.resolve(usedPackageAsPath).resolve("WithHwcComp.java"));
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("DeployWithoutHwc.java", javaOutDir.resolve(usedPackageAsPath).resolve("DeployWithoutHwc.java").toFile().lastModified());
     lastModified.put("WithoutHwcComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("WithoutHwcComp.java").toFile().lastModified());
     lastModified.put("WithoutHwcCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("WithoutHwcCompBuilder.java").toFile().lastModified());
@@ -749,7 +749,7 @@ class MA2JSimToolIncrementalityTest extends MA2JSimTestBase {
     addAutomatonModel("Foo", modelDir);
     invokeToolWithVersion("1.0.0");
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("FooComp.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooComp.java").toFile().lastModified());
     lastModified.put("FooCompBuilder.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooCompBuilder.java").toFile().lastModified());
     lastModified.put("FooContext.java", javaOutDir.resolve(usedPackageAsPath).resolve("FooContext.java").toFile().lastModified());

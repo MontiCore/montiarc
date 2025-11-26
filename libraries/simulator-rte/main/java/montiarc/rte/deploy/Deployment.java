@@ -14,7 +14,7 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.cli.help.HelpFormatter;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -41,7 +41,7 @@ public abstract class Deployment<T extends Component> {
     long tickCount = Long.MIN_VALUE;
     long simulationTickLength = 1000000;
     long simulatedTickLength = 0;
-    Map<String, String> parameters = new HashMap<>();
+    Map<String, String> parameters = new LinkedHashMap<>();
 
     try {
       CommandLine cmd = parser.parse(buildOptions(), args);

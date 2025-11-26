@@ -9,7 +9,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -23,7 +23,7 @@ import java.util.Set;
  */
 public class ExpressionRootFinder implements ExpressionsBasisVisitor2 {
 
-  protected final Set<ASTExpression> expressionRoots = new HashSet<>();
+  protected final Set<ASTExpression> expressionRoots = new LinkedHashSet<>();
   protected final Deque<ASTExpression> expressionTrace = new ArrayDeque<>();
 
   @Override

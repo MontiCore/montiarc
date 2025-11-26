@@ -17,7 +17,7 @@ import montiarc._symboltable.MontiArcGlobalScope;
 import montiarc.check.MontiArcTypeCheck;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -77,7 +77,7 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
   @Override
   public Map<ASTMACompilationUnit, MontiArcArtifactScopeWithFindings> createAllArtifactScopes(Collection<ASTMACompilationUnit> astNodes) {
     // Run completeSymbolTable after symbol table scaffolding for all components exist
-    var res = new HashMap<ASTMACompilationUnit, MontiArcArtifactScopeWithFindings>();
+    var res = new LinkedHashMap<ASTMACompilationUnit, MontiArcArtifactScopeWithFindings>();
     syncAccessGlobalScope(gs -> {
       for (ASTMACompilationUnit node : astNodes) {
         Log.clearFindings();

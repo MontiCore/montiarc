@@ -35,7 +35,7 @@ public class CheckNoFieldDependencyCycles implements ArcBasisASTArcComponentType
         }
       });
 
-    Map<VariableSymbol, Integer> inDegree = new HashMap<>();
+    Map<VariableSymbol, Integer> inDegree = new LinkedHashMap<>();
     for (VariableSymbol f : fields) {
       inDegree.put(f, deps.getOrDefault(f, Collections.emptySet()).size());
     }

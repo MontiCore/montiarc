@@ -15,7 +15,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -87,7 +87,7 @@ public class NamesInExpressionsVisitorTest extends MontiArcTestBase {
     Preconditions.checkNotNull(toSort);
     Preconditions.checkNotNull(reference);
 
-    Set<ASTNameExpression> set = new HashSet<>(toSort);
+    Set<ASTNameExpression> set = new LinkedHashSet<>(toSort);
     List<ASTNameExpression> sorted = new ArrayList<>();
     for(String name : reference) {
       set.removeIf(ex -> {

@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -88,14 +88,14 @@ public class MAExtractionHelper<T extends Formula> {
    * constraints & features are
    * satisfiable or not)
    */
-  Set<ASTExpression> totalASTExpressions = new HashSet<>();
+  Set<ASTExpression> totalASTExpressions = new LinkedHashSet<>();
 
   /**
    * Stores a List of all ASTArcFeatures to recognize Conflicts (i.e.,
    * multiple use of the same formula
    * across subcomponents).
    */
-  Set<String> featureList = new HashSet<>();
+  Set<String> featureList = new LinkedHashSet<>();
 
   /**
    * Stores a Map which maps ASTExpressions (as Strings) to different
@@ -104,7 +104,7 @@ public class MAExtractionHelper<T extends Formula> {
    * will replace all occurrences
    * of (keys) by the corresponding (values).
    */
-  Map<String, String> variableRemapping = new HashMap<>();
+  Map<String, String> variableRemapping = new LinkedHashMap<>();
 
   /**
    * Initialize the Extraction Helper
@@ -167,9 +167,9 @@ public class MAExtractionHelper<T extends Formula> {
 
     asts.forEach(a -> {
       // Reset Values for each AST (to start fresh)
-      totalASTExpressions = new HashSet<>();
-      this.variableRemapping = new HashMap<>();
-      this.featureList = new HashSet<>();
+      totalASTExpressions = new LinkedHashSet<>();
+      this.variableRemapping = new LinkedHashMap<>();
+      this.featureList = new LinkedHashSet<>();
 
       // Process the AST
       ASTArcComponentType comp = a.getArcComponentType();
@@ -387,8 +387,8 @@ public class MAExtractionHelper<T extends Formula> {
     for (ASTArcComponentType c : innerComponents) {
       // Store & Reset the current variable mapping, since each component
       // should have its own mapping
-      Map<String, String> backupMapping = new HashMap<>(this.variableRemapping);
-      this.variableRemapping = new HashMap<>();
+      Map<String, String> backupMapping = new LinkedHashMap<>(this.variableRemapping);
+      this.variableRemapping = new LinkedHashMap<>();
 
       // Process inner component recursively
       StorageCache<T> res = processASTComponentType(c);
@@ -429,8 +429,8 @@ public class MAExtractionHelper<T extends Formula> {
     for (ASTComponentInstance c : componentInstances) {
       // Store & Reset the current variable mapping, since each component
       // should have its own mapping
-      Map<String, String> backupMapping = new HashMap<>(this.variableRemapping);
-      this.variableRemapping = new HashMap<>();
+      Map<String, String> backupMapping = new LinkedHashMap<>(this.variableRemapping);
+      this.variableRemapping = new LinkedHashMap<>();
       String newRootName = c.getName();
 
       // Get the Feature Bindings and replace add the bindings to our mapping
@@ -530,8 +530,8 @@ public class MAExtractionHelper<T extends Formula> {
       condExpBuilder.setTrueExpression(ALWAYS_TRUE_EXPRESSION);
       condExpBuilder.setFalseExpression(ALWAYS_TRUE_EXPRESSION);
       Set<String> featureListBackup = featureList;
-      Set<String> ifFeatureList = new HashSet<>();
-      Set<String> elseFeatureList = new HashSet<>();
+      Set<String> ifFeatureList = new LinkedHashSet<>();
+      Set<String> elseFeatureList = new LinkedHashSet<>();
 
       // Process If-Statement
       if (varif.getThen() instanceof ASTComponentBody) {
@@ -539,7 +539,7 @@ public class MAExtractionHelper<T extends Formula> {
           (T) bmgr.makeVariable(root + "_If" + ((varifs.size() > 1) ? ifCounter : ""));
         List<ASTArcElement> elements =
           ((ASTComponentBody) varif.getThen()).getArcElementList();
-        featureList = new HashSet<>();
+        featureList = new LinkedHashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         ifFeatureList = featureList;
         condExpBuilder.setTrueExpression(MontiArcMill.nameExpressionBuilder().setName(root + "_If").build());
@@ -552,7 +552,7 @@ public class MAExtractionHelper<T extends Formula> {
           (T) bmgr.makeVariable(root + "_Else" + ((varifs.size() > 1) ? ifCounter : ""));
         List<ASTArcElement> elements =
           ((ASTComponentBody) varif.getThen()).getArcElementList();
-        featureList = new HashSet<>();
+        featureList = new LinkedHashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         elseFeatureList = featureList;
 

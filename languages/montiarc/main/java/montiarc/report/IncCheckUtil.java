@@ -16,8 +16,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -158,7 +158,7 @@ public final class IncCheckUtil {
       return Collections.emptyMap();
     }
 
-    Map<String, IncCheckData> result = new HashMap<>();
+    Map<String, IncCheckData> result = new LinkedHashMap<>();
     Path reportDirPath = Path.of(fullReportDir);
 
     List<Path> incCheckFiles;
@@ -228,7 +228,7 @@ public final class IncCheckUtil {
     Preconditions.checkNotNull(astByQName);
 
     Set<ASTMACompilationUnit> result =
-      new HashSet<>(upToDateInfo.addedModels.size() + upToDateInfo.updatedModels.size());
+      new LinkedHashSet<>(upToDateInfo.addedModels.size() + upToDateInfo.updatedModels.size());
     upToDateInfo.addedModels.forEach(addedName -> result.add(astByQName.get(addedName)));
     upToDateInfo.updatedModels.keySet().forEach(addedName -> result.add(astByQName.get(addedName)));
 

@@ -31,7 +31,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,8 +60,8 @@ public class NoInputPortsInInitialCompute4Family implements ArcBasisASTArcCompon
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    portConditions = new HashMap<>();
-    initConditions = new HashMap<>();
+    portConditions = new LinkedHashMap<>();
+    initConditions = new LinkedHashMap<>();
 
     ArcComputeTraverser computeTraverser = ArcComputeMill.traverser();
     ASTArcInitCollector initCollector = new ASTArcInitCollector();

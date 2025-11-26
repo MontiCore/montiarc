@@ -33,7 +33,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -66,9 +66,9 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     createdVariableSymbols = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
     allGuards = new ArrayList<>();
-    fieldConditions = new HashMap<>();
-    portConditions = new HashMap<>();
-    fieldNameVariations = new HashMap<>();
+    fieldConditions = new LinkedHashMap<>();
+    portConditions = new LinkedHashMap<>();
+    fieldNameVariations = new LinkedHashMap<>();
     allParameters = new ArrayList<>(mainParameters);
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
@@ -191,7 +191,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
               }
 
               guardExpressions.addAll(ExpressionBuildHelper.createPossibleGuardExpressions(guard.expression, fieldNameVariations));
-              fieldNameVariations = new HashMap<>();
+              fieldNameVariations = new LinkedHashMap<>();
           }
         } else {
           guardExpressions.add(guard.expression);

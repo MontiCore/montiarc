@@ -38,7 +38,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -67,7 +67,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<PortInformation, BoolExpr> portInfoConditions;
     Map<ASTConnector, BoolExpr> connectorConditions;
     Map<String, List<String>> portNameVariations;
-    Map<ASTComponentInstance, BoolExpr> subcomponentCondition = new HashMap<>();
+    Map<ASTComponentInstance, BoolExpr> subcomponentCondition = new LinkedHashMap<>();
 
     // Reading and processing parts of the Main-Component
     ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
@@ -76,9 +76,9 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
-    portInfoConditions = new HashMap<>();
-    connectorConditions = new HashMap<>();
-    portNameVariations = new HashMap<>();
+    portInfoConditions = new LinkedHashMap<>();
+    connectorConditions = new LinkedHashMap<>();
+    portNameVariations = new LinkedHashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
@@ -185,7 +185,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
       }
 
       createdPortSymbols = new  ArrayList<>();
-      portNameVariations = new HashMap<>();
+      portNameVariations = new LinkedHashMap<>();
       ExpressionBuildHelper.setScope(null);
     }
   }

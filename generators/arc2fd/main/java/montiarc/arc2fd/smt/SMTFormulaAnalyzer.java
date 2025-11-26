@@ -16,7 +16,7 @@ import org.sosy_lab.java_smt.api.visitors.BooleanFormulaVisitor;
 import org.sosy_lab.java_smt.utils.PrettyPrinter;
 
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -52,17 +52,17 @@ public class SMTFormulaAnalyzer implements BooleanFormulaVisitor<BooleanFormula>
   private boolean isCNF = true;
   private boolean hasConjunctions = false;
   private boolean hasDisjunctions = false;
-  private Set<BooleanFormula> allPositiveAtoms = new HashSet<>();
+  private Set<BooleanFormula> allPositiveAtoms = new LinkedHashSet<>();
   // Shouldn't really be of our interest I guess
-  private Set<BooleanFormula> allPositiveFormulas = new HashSet<>();
-  private Set<BooleanFormula> allNegatedAtoms = new HashSet<>();
+  private Set<BooleanFormula> allPositiveFormulas = new LinkedHashSet<>();
+  private Set<BooleanFormula> allNegatedAtoms = new LinkedHashSet<>();
   // Shouldn't really be of our interest I guess
-  private Set<BooleanFormula> allNegatedFormulas = new HashSet<>(); //
+  private Set<BooleanFormula> allNegatedFormulas = new LinkedHashSet<>(); //
   // Negated Formulas (also includes negated atoms!)
-  private Set<BooleanFormula> allConjunctions = new HashSet<>(); // Stores
+  private Set<BooleanFormula> allConjunctions = new LinkedHashSet<>(); // Stores
   // all conjunctions (after simplifying / extracting things like simple or
   // and XOR)
-  private Set<BooleanFormula> allDisjunctions = new HashSet<>(); // Stores
+  private Set<BooleanFormula> allDisjunctions = new LinkedHashSet<>(); // Stores
   // all conjunctions (after simplifying / extracting things like simple or
   // and XOR)
 
@@ -309,12 +309,12 @@ public class SMTFormulaAnalyzer implements BooleanFormulaVisitor<BooleanFormula>
     isNegationPreceding = false;
 
     // Reset all Sets
-    allPositiveAtoms = new HashSet<>();
-    allPositiveFormulas = new HashSet<>();
-    allNegatedAtoms = new HashSet<>();
-    allNegatedFormulas = new HashSet<>();
-    allConjunctions = new HashSet<>();
-    allDisjunctions = new HashSet<>();
+    allPositiveAtoms = new LinkedHashSet<>();
+    allPositiveFormulas = new LinkedHashSet<>();
+    allNegatedAtoms = new LinkedHashSet<>();
+    allNegatedFormulas = new LinkedHashSet<>();
+    allConjunctions = new LinkedHashSet<>();
+    allDisjunctions = new LinkedHashSet<>();
   }
 
   /* ############################################# */

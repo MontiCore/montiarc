@@ -29,7 +29,7 @@ import variablearc.evaluation.ExpressionSet;
 import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -56,8 +56,8 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
-    portConditions = new HashMap<>();
-    transitionConditions = new HashMap<>();
+    portConditions = new LinkedHashMap<>();
+    transitionConditions = new LinkedHashMap<>();
 
     MontiArcTraverser nodeTraverser = MontiArcMill.traverser();
     ASTTransitionBodyCollector transitionCollector = new ASTTransitionBodyCollector();

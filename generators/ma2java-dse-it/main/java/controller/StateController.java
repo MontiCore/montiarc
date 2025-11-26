@@ -7,7 +7,7 @@ import montiarc.rte.dse.StatesList;
 import org.apache.commons.lang3.tuple.MutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -16,10 +16,10 @@ import java.util.Set;
 public class StateController<In, Out> extends TerminationConditionController<In, Out> {
 
   // set of all visitedStates in the current computation of the component
-  protected Set<Pair<StatesList, Integer>> visitedStates = new HashSet<>();
+  protected Set<Pair<StatesList, Integer>> visitedStates = new LinkedHashSet<>();
 
   // set of all visited states in the whole dse calculation
-  protected Set<Pair<StatesList, Integer>> visitedStatesAll = new HashSet<>();
+  protected Set<Pair<StatesList, Integer>> visitedStatesAll = new LinkedHashSet<>();
 
   // the current state of the component, holds only for the current input element
   protected StatesList currentState;
@@ -47,7 +47,7 @@ public class StateController<In, Out> extends TerminationConditionController<In,
       abortConditions.add(ctx.mkNot(currentBranches.getBranchConditions()));
     }
 
-    visitedStates = new HashSet<>();
+    visitedStates = new LinkedHashSet<>();
     currentBranches = new PathCondition();
   }
 
@@ -102,7 +102,7 @@ public class StateController<In, Out> extends TerminationConditionController<In,
 
   @Override
   public Set<StatesList> getVisitedStates() {
-    HashSet<StatesList> result = new HashSet<>();
+    LinkedHashSet<StatesList> result = new LinkedHashSet<>();
 
     for (Pair<StatesList, Integer> state : visitedStatesAll) {
       result.add(state.getLeft());
@@ -130,7 +130,7 @@ public class StateController<In, Out> extends TerminationConditionController<In,
   }
 
   public Set<StatesList> getCurrentVisitedStates() {
-    Set<StatesList> result = new HashSet<>();
+    Set<StatesList> result = new LinkedHashSet<>();
     for (Pair<StatesList, Integer> states : visitedStates) {
       result.add(states.getLeft());
     }

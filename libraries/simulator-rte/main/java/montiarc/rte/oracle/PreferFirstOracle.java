@@ -3,7 +3,7 @@ package montiarc.rte.oracle;
 
 import com.google.common.base.Preconditions;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -12,7 +12,7 @@ import java.util.List;
  * {@link #decideAmong(java.util.Collection)} and
  * {@link #decideAmong(java.util.Map)} return the first element
  * of the iterator obtained by {@link java.util.Collection#iterator()} / the
- * iterator of {@link HashMap#keySet()}.
+ * iterator of {@link LinkedHashMap#keySet()}.
  * Thus, if an internally ordered data structure that upholds its order in its
  * iterator is passed as an argument, then the corresponding methods will return
  * the first element in that order. Examples for such ordered data structures

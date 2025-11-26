@@ -20,8 +20,8 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class GlobalVariableTrafo {
    * before building the symbol table.
    */
   public static void transform(ASTMACompilationUnit aut) {
-    Map<String, ASTExpressionStatement> actions = new HashMap<>();
+    Map<String, ASTExpressionStatement> actions = new LinkedHashMap<>();
     getGlobalVarNames(aut).forEach(name -> actions.put(name, buildAssignmentStatement(name, name)));
     if (!actions.isEmpty()) {
       MontiArcTraverser traverser = MontiArcMill.traverser();
@@ -86,7 +86,7 @@ public class GlobalVariableTrafo {
               (ASTMCJavaBlock) body.getTransitionAction().getMCStatement();
 
           MontiArcTraverser traverser = MontiArcMill.traverser();
-          AssignmentsFilter filter = new AssignmentsFilter(new HashMap<>(actions));
+          AssignmentsFilter filter = new AssignmentsFilter(new LinkedHashMap<>(actions));
           traverser.add4AssignmentExpressions(filter);
           actionBody.accept(traverser);
 
@@ -113,7 +113,7 @@ public class GlobalVariableTrafo {
       }
 
       public Set<ASTExpressionStatement> getActions() {
-        return new HashSet<>(actions.values());
+        return new LinkedHashSet<>(actions.values());
       }
     }
   }

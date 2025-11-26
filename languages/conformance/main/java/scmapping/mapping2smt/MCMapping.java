@@ -11,7 +11,7 @@ import scmapping._ast.ASTMappingRule;
 import scmapping._ast.ASTSCMapping;
 import scmapping.util.SCZ3TypeFactory;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class MCMapping implements AutomataMapping {
@@ -37,7 +37,7 @@ public class MCMapping implements AutomataMapping {
       Expr<?> tgt,
       Context ctx) {
 
-    Set<BoolExpr> mappingRules = new HashSet<>();
+    Set<BoolExpr> mappingRules = new LinkedHashSet<>();
 
     // build mapping functions
     mapInput = ctx.mkFuncDecl("map_input", con.getInputSort(), ref.getInputSort());

@@ -46,8 +46,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -350,7 +350,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkNotNull(paths);
     Preconditions.checkArgument(!fileExt.isEmpty());
 
-    Set<ASTMACompilationUnit> asts = new HashSet<>();
+    Set<ASTMACompilationUnit> asts = new LinkedHashSet<>();
     for (Path path : paths) {
       asts.addAll(this.parse(fileExt, path));
     }
@@ -370,7 +370,7 @@ public class MontiArcTool extends MontiArcToolTOP {
       return Collections.emptySet();
     }
 
-    Set<ASTMACompilationUnit> asts = new HashSet<>();
+    Set<ASTMACompilationUnit> asts = new LinkedHashSet<>();
     if (filepath.isFile()) {
       this.parse(filepath, filepath).ifPresent(asts::add);
     } else if (filepath.isDirectory()) {
@@ -584,7 +584,7 @@ public class MontiArcTool extends MontiArcToolTOP {
           .collect(Collectors.toList());
     } else {
       scopes4NewSerialization = scopes;
-      scopeToAst = new HashMap<>(0);
+      scopeToAst = new LinkedHashMap<>(0);
     }
 
     MCPath modelPaths = new MCPath(input);

@@ -49,7 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -236,7 +236,7 @@ public class Evaluation {
 
     fillCell(sheetSmallModel, row, 1, timeEndNano - timeStartNano);
 
-    Set<List<ListerI>> simplifiedIInputs = new HashSet<>();
+    Set<List<ListerI>> simplifiedIInputs = new LinkedHashSet<>();
 
     // extract the simplified outputs
     for (Pair<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>,
@@ -273,7 +273,7 @@ public class Evaluation {
     fillCell(sheetSmallModel, row, 5, allTransitions.size());
 
     //evaluation completeness -  states (enums)
-    Set<StatesList> visitedStates = new HashSet<>();
+    Set<StatesList> visitedStates = new LinkedHashSet<>();
 
     if (TestController.getController() instanceof EvaluationControllerI) {
       EvaluationControllerI evaluationControllerI
@@ -288,13 +288,13 @@ public class Evaluation {
     assertThat(visitedStates).isNotNull();
 
 
-    Set<Enum<?>> visitedEnumsDistinctionModel = new HashSet<>();
-    Set<Enum<?>> visitedEnumsEvaluationModel = new HashSet<>();
-    Set<Enum<?>> visitedEnumsCounterMDSE = new HashSet<>();
-    Set<Enum<?>> visitedEnumsCounterSA = new HashSet<>();
+    Set<Enum<?>> visitedEnumsDistinctionModel = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsEvaluationModel = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsCounterMDSE = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsCounterSA = new LinkedHashSet<>();
 
     // fill expectedStates
-    Set<StateInfo> expectedStatesDistinctionModel = new HashSet<>();
+    Set<StateInfo> expectedStatesDistinctionModel = new LinkedHashSet<>();
     expectedStatesDistinctionModel.add(StateInfo.newStateInfo(DistinctionModel.States.valueOf(
             "Idle"), new ArrayList<>(), "distinction"));
 
@@ -302,10 +302,10 @@ public class Evaluation {
     Set<StateInfo> expectedStatesCounterSA = fillExpectedStatesCounterSA();
     Set<StateInfo> expectedStatesCounterMDSE = fillExpectedStatesCounterMDSE();
 
-    Set<StateInfo> visitedStatesCompareDistinctionModel = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareEvaluationModel = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareCounterMDSE = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareCounterSA = new HashSet<>();
+    Set<StateInfo> visitedStatesCompareDistinctionModel = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareEvaluationModel = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareCounterMDSE = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareCounterSA = new LinkedHashSet<>();
 
     int missedEnumStates = 0;
 
@@ -406,7 +406,7 @@ public class Evaluation {
     }
 
     //check existence of redundant paths
-    Set<Pair<List<ListerI>, Expr<BoolSort>>> output = new HashSet<>();
+    Set<Pair<List<ListerI>, Expr<BoolSort>>> output = new LinkedHashSet<>();
 
     // extract the simplified output with the corresponding branchConditions
     for (InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>> temp : condition) {
@@ -479,7 +479,7 @@ public class Evaluation {
    * creates a set of StateInfo, used to define the expected states
    */
   private Set<StateInfo> fillExpectedStatesCounterMDSE() {
-    Set<StateInfo> expectedStatesCounterMDSE = new HashSet<>();
+    Set<StateInfo> expectedStatesCounterMDSE = new LinkedHashSet<>();
 
     expectedStatesCounterMDSE.add(StateInfo.newStateInfo(Counter.States.valueOf("Idle"),
             new ArrayList<>(Collections.singleton("counter: " +
@@ -498,7 +498,7 @@ public class Evaluation {
    * creates a set of StateInfo, used to define the expected states
    */
   private Set<StateInfo> fillExpectedStatesCounterSA() {
-    Set<StateInfo> expectedStatesCounterSA = new HashSet<>();
+    Set<StateInfo> expectedStatesCounterSA = new LinkedHashSet<>();
 
     expectedStatesCounterSA.add(StateInfo.newStateInfo(Counter.States.valueOf("Idle"),
             new ArrayList<>(Collections.singleton("counter: " +
@@ -517,7 +517,7 @@ public class Evaluation {
    * creates a set of StateInfo, used to define the expected states
    */
   private Set<StateInfo> fillExpectedStatesEvaluationModel() {
-    Set<StateInfo> expectedStatesEvaluationModel = new HashSet<>();
+    Set<StateInfo> expectedStatesEvaluationModel = new LinkedHashSet<>();
     expectedStatesEvaluationModel.add(StateInfo.newStateInfo(EvaluationModel.States.valueOf("mbse"),
             new ArrayList<>(), "evaluation"));
     expectedStatesEvaluationModel.add(StateInfo.newStateInfo(EvaluationModel.States.valueOf("sa"),
@@ -565,7 +565,7 @@ public class Evaluation {
     int redundantPaths = 0;
 
     Set<Pair<List<ListerI>, Expr<BoolSort>>> deletesOutput =
-            new HashSet<>(output);
+            new LinkedHashSet<>(output);
 
     for (Pair<List<ListerI>, Expr<BoolSort>> element : output) {
 
@@ -660,7 +660,7 @@ public class Evaluation {
 
     int duplicates = 0;
 
-    Set<List<ListerI>> noDuplicates = new HashSet<>();
+    Set<List<ListerI>> noDuplicates = new LinkedHashSet<>();
 
     for (List<ListerI> element : simplifiedIInputs) {
 
@@ -732,7 +732,7 @@ public class Evaluation {
 
     fillCell(sheetBigModel, row, 1, timeEndNano - timeStartNano);
 
-    Set<List<ListerI>> simplifiedIInputs = new HashSet<>();
+    Set<List<ListerI>> simplifiedIInputs = new LinkedHashSet<>();
 
     // extract the simplified outputs
     for (Pair<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>,
@@ -770,7 +770,7 @@ public class Evaluation {
     fillCell(sheetBigModel, row, 5, allTransitions.size());
 
     //evaluation completeness -  states (enums)
-    Set<StatesList> visitedStates = new HashSet<>();
+    Set<StatesList> visitedStates = new LinkedHashSet<>();
 
     if (TestController.getController() instanceof EvaluationControllerI) {
       EvaluationControllerI evaluationControllerI = (EvaluationControllerI) TestController.getController();
@@ -782,14 +782,14 @@ public class Evaluation {
 
     assertThat(visitedStates).isNotNull();
 
-    Set<Enum<?>> visitedEnumsController = new HashSet<>();
-    Set<Enum<?>> visitedEnumsDoor = new HashSet<>();
-    Set<Enum<?>> visitedEnumsLift = new HashSet<>();
-    Set<Enum<?>> visitedEnumsSplitter = new HashSet<>();
-    Set<Enum<?>> visitedEnumsFloor1 = new HashSet<>();
-    Set<Enum<?>> visitedEnumsFloor2 = new HashSet<>();
-    Set<Enum<?>> visitedEnumsFloor3 = new HashSet<>();
-    Set<Enum<?>> visitedEnumsFloor4 = new HashSet<>();
+    Set<Enum<?>> visitedEnumsController = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsDoor = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsLift = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsSplitter = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsFloor1 = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsFloor2 = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsFloor3 = new LinkedHashSet<>();
+    Set<Enum<?>> visitedEnumsFloor4 = new LinkedHashSet<>();
 
     // Controller component
     Set<StateInfo> expectedStatesController = fillExpectedSatesController();
@@ -801,46 +801,46 @@ public class Evaluation {
     Set<StateInfo> expectedStatesLift = fillExpectedStatesLift();
 
     // Splitter component
-    Set<StateInfo> expectedStatesSplitter = new HashSet<>();
+    Set<StateInfo> expectedStatesSplitter = new LinkedHashSet<>();
     expectedStatesSplitter.add(StateInfo.newStateInfo(Splitter.States.valueOf("Idle"),
             new ArrayList<>(), "control.splitter"));
 
     // Floor1 component
-    Set<StateInfo> expectedStatesFloor1 = new HashSet<>();
+    Set<StateInfo> expectedStatesFloor1 = new LinkedHashSet<>();
     expectedStatesFloor1.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOff"),
             new ArrayList<>(), "control.floor1"));
     expectedStatesFloor1.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOn"),
             new ArrayList<>(), "control.floor1"));
 
     // Floor2 component
-    Set<StateInfo> expectedStatesFloor2 = new HashSet<>();
+    Set<StateInfo> expectedStatesFloor2 = new LinkedHashSet<>();
     expectedStatesFloor2.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOff"),
             new ArrayList<>(), "control.floor2"));
     expectedStatesFloor2.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOn"),
             new ArrayList<>(), "control.floor2"));
 
     // Floor3 component
-    Set<StateInfo> expectedStatesFloor3 = new HashSet<>();
+    Set<StateInfo> expectedStatesFloor3 = new LinkedHashSet<>();
     expectedStatesFloor3.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOff"),
             new ArrayList<>(), "control.floor3"));
     expectedStatesFloor3.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOn"),
             new ArrayList<>(), "control.floor3"));
 
     // Floor4 component
-    Set<StateInfo> expectedStatesFloor4 = new HashSet<>();
+    Set<StateInfo> expectedStatesFloor4 = new LinkedHashSet<>();
     expectedStatesFloor4.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOff"),
             new ArrayList<>(), "control.floor4"));
     expectedStatesFloor4.add(StateInfo.newStateInfo(FloorControl.States.valueOf("LightOn"),
             new ArrayList<>(), "control.floor4"));
 
-    Set<StateInfo> visitedStatesCompareController = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareDoor = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareLift = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareSplitter = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareFloor1 = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareFloor2 = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareFloor3 = new HashSet<>();
-    Set<StateInfo> visitedStatesCompareFloor4 = new HashSet<>();
+    Set<StateInfo> visitedStatesCompareController = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareDoor = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareLift = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareSplitter = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareFloor1 = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareFloor2 = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareFloor3 = new LinkedHashSet<>();
+    Set<StateInfo> visitedStatesCompareFloor4 = new LinkedHashSet<>();
 
     int missedEnumStats = 0;
 
@@ -983,7 +983,7 @@ public class Evaluation {
     }
 
     //check existence of redundant paths
-    Set<Pair<List<ListerI>, Expr<BoolSort>>> output = new HashSet<>();
+    Set<Pair<List<ListerI>, Expr<BoolSort>>> output = new LinkedHashSet<>();
 
     // extract the simplified output with the corresponding branchConditions
     for (InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>,
@@ -1069,7 +1069,7 @@ public class Evaluation {
    * creates a set of StateInfo, used to define the expected states
    */
   private Set<StateInfo> fillExpectedStatesLift() {
-    Set<StateInfo> expectedStatesLift = new HashSet<>();
+    Set<StateInfo> expectedStatesLift = new LinkedHashSet<>();
 
     expectedStatesLift.add(StateInfo.newStateInfo(Lift.States.valueOf("Wait"),
             new ArrayList<>(), "elevator.lift"));
@@ -1086,7 +1086,7 @@ public class Evaluation {
    */
   private Set<String> setTransitionsBM() {
 
-    Set<String> allTransitions = new HashSet<>();
+    Set<String> allTransitions = new LinkedHashSet<>();
 
     // Splitter component
     allTransitions.add("control.splitterFromIdleToIdle0");
@@ -1202,7 +1202,7 @@ public class Evaluation {
    * creates a set of Strings, used to define the expected transitions of the small model
    */
   private Set<String> setTransitionsSM() {
-    Set<String> allTransitions = new HashSet<>();
+    Set<String> allTransitions = new LinkedHashSet<>();
 
     allTransitions.add("counterMBSEFromIdleToIdleNoGuard0");
     allTransitions.add("counterSAFromIdleToIdleNoGuard0");
@@ -1227,7 +1227,7 @@ public class Evaluation {
    * creates a set of StateInfo, used to define the expected states
    */
   private Set<StateInfo> fillExpectedStatesDoor() {
-    Set<StateInfo> expectedStatesDoor = new HashSet<>();
+    Set<StateInfo> expectedStatesDoor = new LinkedHashSet<>();
 
     expectedStatesDoor.add(StateInfo.newStateInfo(Door.States.valueOf("Wait"),
             new ArrayList<>(Collections.singleton("timer: " +
@@ -1307,7 +1307,7 @@ public class Evaluation {
    * creates a set of StateInfo, used to define the expected states
    */
   private Set<StateInfo> fillExpectedSatesController() {
-    Set<StateInfo> expectedStatesController = new HashSet<>();
+    Set<StateInfo> expectedStatesController = new LinkedHashSet<>();
 
     List<String> boolList = Arrays.asList("true", "false");
     List<String> enumList = Arrays.asList("UP", "DOWN");
@@ -1623,7 +1623,7 @@ public class Evaluation {
    */
   private int evaluateTransitionsSM(Set<InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>,
           List<ListerOutSmallModel>>> condition, Set<String> allTransitions) {
-    Set<String> takenTransitions = new HashSet<>();
+    Set<String> takenTransitions = new LinkedHashSet<>();
     for (InputAndCondition<Pair<List<ListerInSmallModel>, ListerParameterSmallModel>, List<ListerOutSmallModel>> temp : condition) {
       takenTransitions.addAll(temp.getBranches().getBranchIds());
     }
@@ -1635,7 +1635,7 @@ public class Evaluation {
    */
   private int evaluateTransitionsBM(Set<InputAndCondition<Pair<List<ListerInElevatorSystem>,
           ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>>> condition, Set<String> allTransitions) {
-    Set<String> takenTransitions = new HashSet<>();
+    Set<String> takenTransitions = new LinkedHashSet<>();
     for (InputAndCondition<Pair<List<ListerInElevatorSystem>, ListerParameterElevatorSystem>, List<ListerOutElevatorSystem>> temp : condition) {
       takenTransitions.addAll(temp.getBranches().getBranchIds());
     }

@@ -12,7 +12,7 @@ import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import montiarc.conformance.util.SMTAutomataUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -21,8 +21,8 @@ import static montiarc.conformance.util.SMTAutomataUtils.mkConstructor;
 
 public class CD2SMT {
   private final Context ctx;
-  private final Map<FieldSymbol, Constructor<?>> enumConstantMap = new HashMap<>();
-  private final Map<ASTCDEnum, Sort> enumSortMap = new HashMap<>();
+  private final Map<FieldSymbol, Constructor<?>> enumConstantMap = new LinkedHashMap<>();
+  private final Map<ASTCDEnum, Sort> enumSortMap = new LinkedHashMap<>();
   private final ASTCDCompilationUnit ast;
 
   public CD2SMT(ASTCDCompilationUnit cd, Function<String, String> ident, Context ctx) {

@@ -18,7 +18,7 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.umlstereotype._ast.ASTStereoValue;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,7 +38,7 @@ public class SDHelper {
   }
 
   public Map<String, String> getImpliedConnectors(ASTSequenceDiagram diagram) {
-    Map<String, String> targetSource = new HashMap<>();
+    Map<String, String> targetSource = new LinkedHashMap<>();
     for (ASTSDSendMessage connector : diagram.getSDBody().streamSDElements()
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
@@ -176,7 +176,7 @@ public class SDHelper {
   }
 
   public Map<String, String> getStereotypes(ASTSequenceDiagram diagram) {
-    Map<String, String> stereotypes = new HashMap<>();
+    Map<String, String> stereotypes = new LinkedHashMap<>();
     stereotypes.put("ticks", String.valueOf(defaultTicks));
     stereotypes.put("test", null);
 

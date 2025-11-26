@@ -28,7 +28,7 @@ import variablearc.evaluation.VariationPointSolver;
 import variablearc.evaluation.expressions.Expression;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -239,7 +239,7 @@ public class VariationPointSolverTest extends MontiArcTestBase {
     Set<Set<VariableArcVariationPoint>> actual =
       variationPointSolver.getSubComponentVariants(
         (IVariableArcComponentTypeSymbol) originSymbol.getTypeInfo().getSubcomponents(childComponentName).get().getType().getTypeInfo(),
-        childComponentName, new HashSet<>(originSymbol.getAllVariationPoints()), null).stream().map(
+        childComponentName, new LinkedHashSet<>(originSymbol.getAllVariationPoints()), null).stream().map(
         VariableArcVariantComponentTypeSymbol::getIncludedVariationPoints).collect(Collectors.toSet());
     variationPointSolver.close();
 

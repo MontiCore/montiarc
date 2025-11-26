@@ -17,7 +17,7 @@ import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -37,7 +37,7 @@ public class MCFullEffectChecker {
     new MontiArcTool().run(new String[] {"-i", mp});
 
     // parse and effect
-    Set<ASTMCEffect> effectSet = new HashSet<>();
+    Set<ASTMCEffect> effectSet = new LinkedHashSet<>();
     effects.forEach(eff -> effectSet.add(parseEffect(mp + eff)));
     SimpleEffectStorage storage = new SimpleEffectStorage(effectSet, compResolver, portResolver);
 
@@ -54,7 +54,7 @@ public class MCFullEffectChecker {
     EffectChecker checker = new FullEffectChecker(graph);
 
     // check all effects
-    Set<EffectCheckResult> resSet = new HashSet<>();
+    Set<EffectCheckResult> resSet = new LinkedHashSet<>();
     for (Effect effect : storage.getEffectsOfComponent(mainComp)) {
       EffectCheckResult res = checker.check(effect);
       resSet.add(res);
@@ -72,7 +72,7 @@ public class MCFullEffectChecker {
       String mp, String main, Set<String> effects, boolean showGraph) {
     Log.error("Checker for SysML Component not implemented yet.");
     assert false;
-    return new HashSet<>();
+    return new LinkedHashSet<>();
   }
 
   public static ASTMCEffect parseEffect(String path) {

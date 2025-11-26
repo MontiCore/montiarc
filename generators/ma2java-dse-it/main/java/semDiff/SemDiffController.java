@@ -17,8 +17,8 @@ import org.apache.commons.lang3.tuple.Pair;
 import results.ResultSemDiff;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -34,7 +34,7 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
   protected List<Boolean> oracles = new ArrayList<>();
   protected List<Boolean> oraclesRun = new ArrayList<>();
   protected PathCondition takenBranches;
-  protected Set<StatesList> visitedStates = new HashSet<>();
+  protected Set<StatesList> visitedStates = new LinkedHashSet<>();
 
   // converts the input of the first component to the inputType of the second component
   protected Function<Pair<In1, Out1>, In2> converter;
@@ -256,7 +256,7 @@ public class SemDiffController<In1, Out1, In2, Out2> implements TestControllerI,
   }
 
   public void init(Context ctx) {
-    Map<String, String> cfg = new HashMap<>();
+    Map<String, String> cfg = new LinkedHashMap<>();
     cfg.put("model", "true");
 
     this.ctx = ctx;

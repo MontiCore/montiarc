@@ -19,14 +19,14 @@ import montiarc.conformance.util.AutomataUtils;
 import scmapping.mapping2smt.AutomataMapping;
 import scmapping.mapping2smt.IDMapping;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 public class AutomataConfChecker {
 
   public static Context buildContext() {
-    Map<String, String> cfg = new HashMap<>();
+    Map<String, String> cfg = new LinkedHashMap<>();
     cfg.put("model", "true");
     return new Context(cfg);
   }

@@ -23,7 +23,7 @@ import scmapping.mapping2smt.MCMapping;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -108,7 +108,7 @@ class MappingTest extends AutomatonAbstractTest {
 
   public String getRefInput(String conInputName) {
     PortSymbol port;
-    Map<ISymbol, Expr<?>> args = new HashMap<>();
+    Map<ISymbol, Expr<?>> args = new LinkedHashMap<>();
 
     if (conInputName.equals("correct") || conInputName.equals("not_correct")) {
       port = getInputPort("password", conAut);
@@ -126,7 +126,7 @@ class MappingTest extends AutomatonAbstractTest {
 
   public String getRefOutput(String conOutputName) {
     PortSymbol port;
-    Map<ISymbol, Expr<?>> args = new HashMap<>();
+    Map<ISymbol, Expr<?>> args = new LinkedHashMap<>();
 
     if (conOutputName.equals("0")) {
       port = getOutputPort("value", conAut);

@@ -24,11 +24,11 @@ public abstract class AbstractController<In, Out> implements ControllerI<In, Out
    * of several models, the overall state must be stored. The total state consists of lists of
    * StateInfos, each of which reflects the state of the individual components.
    */
-  protected Set<StatesList> visitedStates = new HashSet<>();
+  protected Set<StatesList> visitedStates = new LinkedHashSet<>();
 
   @Override
   public void init() {
-    Map<String, String> cfg = new HashMap<>();
+    Map<String, String> cfg = new LinkedHashMap<>();
     cfg.put("model", "true");
 
     ctx = new Context(cfg);

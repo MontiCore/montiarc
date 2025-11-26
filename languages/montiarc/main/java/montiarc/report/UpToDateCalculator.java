@@ -8,8 +8,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.nio.file.Path;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -63,14 +63,14 @@ public final class UpToDateCalculator {
     // Will be built:
     // We will collect go through the incCheckData and when we realize that it relates to a deleted / modified /
     // untouched model, then we will add it to one of the following collections
-    Map<String, IncCheckData> deletedModels = new HashMap<>();
-    Map<String, IncCheckData> modifiedModels = new HashMap<>();
-    Map<String, IncCheckData> untouchedModels = new HashMap<>();
+    Map<String, IncCheckData> deletedModels = new LinkedHashMap<>();
+    Map<String, IncCheckData> modifiedModels = new LinkedHashMap<>();
+    Map<String, IncCheckData> untouchedModels = new LinkedHashMap<>();
 
     // Will be reduced:
     // First we assume that every parsed model is new and when we encounter incCheckData
     // that belongs to one of the parsed models, we will remove the model from this collection.
-    Set<String> addedModels = new HashSet<>(namesOfParsedModels);
+    Set<String> addedModels = new LinkedHashSet<>(namesOfParsedModels);
 
     for (Map.Entry<String, IncCheckData> incDataOfModel : incDataByQName.entrySet()) {
       String qualifiedModelName = incDataOfModel.getKey();

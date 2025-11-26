@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.ParseException;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -36,9 +36,9 @@ public final class IncCheckDataParser {
   private static final String GEN_PREFIX = "gen:";
 
   private IncCheckDataParser() {
-    this.usedHwcFiles = new HashSet<>();
-    this.absentHwcFiles = new HashSet<>();
-    this.outFiles = new HashSet<>();
+    this.usedHwcFiles = new LinkedHashSet<>();
+    this.absentHwcFiles = new LinkedHashSet<>();
+    this.outFiles = new LinkedHashSet<>();
     this.versionInfo = "";
   }
 

@@ -13,7 +13,7 @@ import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -124,7 +124,7 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
     Preconditions.checkNotNull(targets);
     Preconditions.checkNotNull(mode);
 
-    Map<ASTPortAccess, List<ASTPortAccess>> matches = new HashMap<>();
+    Map<ASTPortAccess, List<ASTPortAccess>> matches = new LinkedHashMap<>();
 
     for (ASTPortAccess source : sources) {
       matches.put(source, this.findMatches(source, targets, mode));

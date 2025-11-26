@@ -24,7 +24,7 @@ import variablearc.check.VariableArcTypeCheck;
 import variablearc.check.VariableArcVariantWithinScopeBasicSymbolsResolver;
 import variablearc.check.VariableArcVariantWithinTypeBasicSymbolsResolver;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -96,7 +96,7 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     Log.trace(() -> "Start initializing the visitors of the type-check delegate", LOG_NAME);
     defaultContext = MontiArcMill.componentTypeSymbolBuilder()
       .setName("?DEFAULT_CONTEXT?").setSpannedScope(MontiArcMill.scope()).build();
-    context2Type4AST = new HashMap<>();
+    context2Type4AST = new LinkedHashMap<>();
     context2Type4AST.put(defaultContext, type4Ast);
     ArcBasisTypeCheck.initTypeVisitors(traverser, type4Ast, ctx4Ast);
     initCommonExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);

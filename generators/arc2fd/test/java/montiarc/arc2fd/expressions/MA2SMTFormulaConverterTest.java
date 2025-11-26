@@ -12,7 +12,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.FormulaManager;
 import org.sosy_lab.java_smt.api.SolverException;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -61,7 +61,7 @@ public class MA2SMTFormulaConverterTest {
   @Test
   public void convert() {
     // When
-    Map<String, String> variableRemapping = new HashMap<>();
+    Map<String, String> variableRemapping = new LinkedHashMap<>();
     BooleanFormula f1 = ma2smtConverter.convert(a_and_b, variableRemapping);
 
     variableRemapping.put("a", "z");

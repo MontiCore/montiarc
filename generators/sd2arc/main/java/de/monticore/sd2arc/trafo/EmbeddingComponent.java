@@ -14,12 +14,12 @@ import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 
 public class EmbeddingComponent implements SDBasisVisitor2 {
 
-  final static HashMap<ASTSequenceDiagram, ASTArcComponentType> tmp = new HashMap<>();
+  final static LinkedHashMap<ASTSequenceDiagram, ASTArcComponentType> tmp = new LinkedHashMap<>();
 
   protected static String STEREOTYPE_KEY = "montiarc";
 

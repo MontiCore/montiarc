@@ -13,7 +13,7 @@ import org.sosy_lab.java_smt.api.BooleanFormulaManager;
 import org.sosy_lab.java_smt.api.Formula;
 import org.sosy_lab.java_smt.api.FormulaManager;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -54,7 +54,7 @@ public class ExpressionToFDHelperTest extends ArcBasisTestBase {
 
     // CHECK a && b EXPRESSION (everything is ok)
     BooleanFormula root = bmgr.makeVariable("root");
-    Map<String, String> variableRemapping = new HashMap<>();
+    Map<String, String> variableRemapping = new LinkedHashMap<>();
     Optional<FDConstructionStorage<BooleanFormula>> storage;
     storage = expressionToFDHelper.convertASTExpressionToFD(a_and_b, root,
         variableRemapping);
@@ -74,8 +74,8 @@ public class ExpressionToFDHelperTest extends ArcBasisTestBase {
 
     // Check that the "Remaining Conjunctions" have the correct, expected
     // hash map
-    HashMap<BooleanFormula, Set<BooleanFormula>> expectedHashMap =
-        new HashMap<>();
+    LinkedHashMap<BooleanFormula, Set<BooleanFormula>> expectedHashMap =
+        new LinkedHashMap<>();
     expectedHashMap.put(root, Set.of(a, b));
     Assertions.assertEquals(expectedHashMap,
         storage.get().getRemainingConjunctions().getRelationsHashMap());

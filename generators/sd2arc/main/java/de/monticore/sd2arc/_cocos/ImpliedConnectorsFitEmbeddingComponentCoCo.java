@@ -10,7 +10,7 @@ import de.monticore.lang.sdbasis._cocos.SDBasisASTSequenceDiagramCoCo;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
 import de.se_rwth.commons.logging.Log;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -41,7 +41,7 @@ public class ImpliedConnectorsFitEmbeddingComponentCoCo implements SDBasisASTSeq
   }
 
   protected Map<ASTSDPort, ASTSDPort> getImpliedConnectors(ASTSequenceDiagram diagram) {
-    Map<ASTSDPort, ASTSDPort> targetSource = new HashMap<>();
+    Map<ASTSDPort, ASTSDPort> targetSource = new LinkedHashMap<>();
     for (ASTSDSendMessage connector : diagram.getSDBody().streamSDElements()
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)

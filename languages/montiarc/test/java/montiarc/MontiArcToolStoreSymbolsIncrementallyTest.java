@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -92,7 +92,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("Foo", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
 
     // When
@@ -110,7 +110,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("Foo", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
 
     Preconditions.checkState(!symbolsOutDir.resolve(usedPackageAsPath).resolve("AddedComp.arcsym").toFile().exists());
@@ -135,7 +135,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("CompToRemove", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
 
     Preconditions.checkState(symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToRemove.arcsym").toFile().exists());
@@ -160,7 +160,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
     lastModified.put("CompToUpdate.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym").toFile().lastModified());
 
@@ -186,7 +186,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("CompToUpdate", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
     lastModified.put("CompToUpdate.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("CompToUpdate.arcsym").toFile().lastModified());
 
@@ -210,7 +210,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("Modified", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Foo.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Foo.arcsym").toFile().lastModified());
     lastModified.put("Modified.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Modified.arcsym").toFile().lastModified());
 
@@ -245,7 +245,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     addModel("ChangedAndMoved", modelDir);
     invokeTool();
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("Unchanged.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("Unchanged.arcsym").toFile().lastModified());
     lastModified.put("UnchangedButMoved.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("UnchangedButMoved.arcsym").toFile().lastModified());
     lastModified.put("ChangedAndMoved.arcsym", symbolsOutDir.resolve(usedPackageAsPath).resolve("ChangedAndMoved.arcsym").toFile().lastModified());
@@ -290,7 +290,7 @@ class MontiArcToolStoreSymbolsIncrementallyTest extends MontiArcTestBase {
     invokeTool();
 
 
-    Map<String, Long> lastModified = new HashMap<>();
+    Map<String, Long> lastModified = new LinkedHashMap<>();
     lastModified.put("NoPackage.arcsym", symbolsOutDir.resolve("NoPackage.arcsym").toFile().lastModified());
     lastModified.put("NoPackageModified.arcsym", symbolsOutDir.resolve("NoPackageModified.arcsym").toFile().lastModified());
 

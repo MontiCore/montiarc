@@ -2,12 +2,12 @@
 package variablearc._cocos.util;
 
 import arcbasis._ast.ASTArcComponentType;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class DuplicateElementsService {
 
-  static Map<ASTArcComponentType,Boolean> duplicateElementForComponent = new HashMap<>();
+  static Map<ASTArcComponentType,Boolean> duplicateElementForComponent = new LinkedHashMap<>();
 
   public static boolean duplicateElementPresent(ASTArcComponentType node){
     return duplicateElementForComponent.getOrDefault(node, false);

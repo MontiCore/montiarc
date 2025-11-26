@@ -2,7 +2,7 @@
 package controller;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -22,10 +22,10 @@ public class Boring_Interesting_EnumState_SM<In, Out>
     super.init();
 
     // define 'boring' enum states
-    Set<String> boring = new HashSet<>(Arrays.asList("nonModuleevaluation"));
+    Set<String> boring = new LinkedHashSet<>(Arrays.asList("nonModuleevaluation"));
 
     // define 'interesting' enum states
-    Set<String> interesting = new HashSet<>(Arrays.asList("IdlecounterSA", "IdlecounterMDSE"));
+    Set<String> interesting = new LinkedHashSet<>(Arrays.asList("IdlecounterSA", "IdlecounterMDSE"));
 
     this.boring = boring;
     this.interesting = interesting;

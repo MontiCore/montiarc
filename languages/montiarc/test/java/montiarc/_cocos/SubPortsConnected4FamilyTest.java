@@ -29,7 +29,7 @@ import variablearc._cocos.SubPortsConnected4Family;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -334,7 +334,7 @@ public class SubPortsConnected4FamilyTest extends MontiArcTestBase {
         );
     }
 
-  HashMap<String, ASTArcComponentType> components;
+  LinkedHashMap<String, ASTArcComponentType> components;
 
   @ParameterizedTest
   @MethodSource("componentAndErrorCodeProvider")
@@ -528,7 +528,7 @@ public class SubPortsConnected4FamilyTest extends MontiArcTestBase {
     scopesGenP3.createFromAST(comp2);
     scopesGenP3.createFromAST(comp3);
 
-    components = new HashMap<>();
+    components = new LinkedHashMap<>();
     components.put(comp1.getName(), comp1);
     components.put(comp2.getName(), comp2);
     components.put(comp3.getName(), comp3);

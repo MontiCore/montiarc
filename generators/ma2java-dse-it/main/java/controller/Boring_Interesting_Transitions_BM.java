@@ -2,7 +2,7 @@
 package controller;
 
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -22,11 +22,11 @@ public class Boring_Interesting_Transitions_BM<In, Out>
     super.init();
 
     // define 'boring' transitions
-    Set<String> boring = new HashSet<>(Arrays.asList("elevator.doorFromDoorIsOpenToCloseDoor1",
+    Set<String> boring = new LinkedHashSet<>(Arrays.asList("elevator.doorFromDoorIsOpenToCloseDoor1",
             "elevator.doorFromDoorIsOpenToCloseDoor0"));
 
     // define 'interesting' transitions
-    Set<String> interesting = new HashSet<>(Arrays.asList("elevator.ctrlFromWaitTimerToWaitTimer0"));
+    Set<String> interesting = new LinkedHashSet<>(Arrays.asList("elevator.ctrlFromWaitTimerToWaitTimer0"));
 
     this.boring = boring;
     this.interesting = interesting;

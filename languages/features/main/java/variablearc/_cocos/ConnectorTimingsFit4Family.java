@@ -45,10 +45,10 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
         ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
         Context ctx = ExpressionSolverService.getContext();
 
-        Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
-        Map<ASTArcPort, BoolExpr> portConditions = new HashMap<>();
-        Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
-        Map<String, PortInfo> portNameInfos = new HashMap<>();
+        Map<ASTConnector, BoolExpr> connectorConditions = new LinkedHashMap<>();
+        Map<ASTArcPort, BoolExpr> portConditions = new LinkedHashMap<>();
+        Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new LinkedHashMap<>();
+        Map<String, PortInfo> portNameInfos = new LinkedHashMap<>();
 
         // Reading and processing parts of the Main-Component
         ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());

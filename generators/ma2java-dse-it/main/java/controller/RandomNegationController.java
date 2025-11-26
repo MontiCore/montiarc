@@ -12,7 +12,7 @@ import montiarc.rte.log.LogException;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
@@ -27,7 +27,7 @@ public class RandomNegationController<In, Out> extends AbstractController<In, Ou
   protected Function<In, Out> sut;
   protected Function<Model, In> evalModel;
 
-  protected Set<List<BoolExpr>> checkedBranches = new HashSet<>();
+  protected Set<List<BoolExpr>> checkedBranches = new LinkedHashSet<>();
 
   // for evaluation purpose, to track the number of solver calls
   protected int solverCalls = 0;
@@ -90,7 +90,7 @@ public class RandomNegationController<In, Out> extends AbstractController<In, Ou
 
       int currentNegation;
 
-      Set<Integer> currentAllNegations = new HashSet<>();
+      Set<Integer> currentAllNegations = new LinkedHashSet<>();
 
 
       int randomIn = new Random().nextInt();

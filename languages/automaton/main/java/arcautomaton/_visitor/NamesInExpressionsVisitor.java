@@ -22,7 +22,7 @@ import de.monticore.symboltable.ISymbol;
 import de.monticore.visitor.ITraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -90,7 +90,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
   /**
    * Lists all names that are found in the expression, and how the variables are accessed
    */
-  protected HashMap<ASTNameExpression, VarAccessKind> foundNames = new HashMap<>();
+  protected LinkedHashMap<ASTNameExpression, VarAccessKind> foundNames = new LinkedHashMap<>();
 
   /**
    * @return {@link #foundNames all variables} that were found.
@@ -105,7 +105,7 @@ public class NamesInExpressionsVisitor implements AssignmentExpressionsVisitor2,
    * because that would also affect any previous {@link #getFoundNames() output}
    */
   public void reset() {
-    this.foundNames = new HashMap<>();
+    this.foundNames = new LinkedHashMap<>();
   }
 
   /**

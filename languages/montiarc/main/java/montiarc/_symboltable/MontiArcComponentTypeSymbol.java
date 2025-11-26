@@ -13,7 +13,7 @@ import variablearc.variability.VariableArcVariantCalculator;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,7 +65,7 @@ public class MontiArcComponentTypeSymbol extends ComponentTypeSymbol implements 
   @Override
   public ExpressionSet getConstraints() {
     if (constraints == null) {
-      constraints = getConstraints(new HashSet<>());
+      constraints = getConstraints(new LinkedHashSet<>());
     }
     return constraints;
   }

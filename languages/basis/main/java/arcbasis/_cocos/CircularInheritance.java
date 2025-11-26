@@ -11,7 +11,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * This context-condition checks that no component extends itself either
@@ -31,7 +31,7 @@ public class CircularInheritance implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    this.check(node, node.getSymbol(), new HashSet<>());
+    this.check(node, node.getSymbol(), new LinkedHashSet<>());
   }
 
   /**

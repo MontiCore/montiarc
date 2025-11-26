@@ -15,7 +15,7 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import java.util.function.Function;
 
 public class SimpleEffectStorage implements EffectStorage {
 
-  protected final Map<ComponentTypeSymbol, List<Effect>> effectMap = new HashMap<>();
+  protected final Map<ComponentTypeSymbol, List<Effect>> effectMap = new LinkedHashMap<>();
   private final Function<String, Optional<ComponentTypeSymbol>> compResolver;
   private final Function<String, Optional<PortSymbol>> portResolver;
 

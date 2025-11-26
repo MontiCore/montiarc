@@ -36,7 +36,7 @@ import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -127,12 +127,12 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
 
     // Grouping elements by name
-    Map<String, List<ElementCondition>> grouped = new HashMap<>();
+    Map<String, List<ElementCondition>> grouped = new LinkedHashMap<>();
     for (ElementCondition element : allElementList) {
       grouped.computeIfAbsent(element.name, e -> new ArrayList<>()).add(element);
     }
 
-    Map<String, List<ElementCondition>> nameToConditions = new HashMap<>();
+    Map<String, List<ElementCondition>> nameToConditions = new LinkedHashMap<>();
 
     // Grouping the entries by name
     for (ElementCondition entry : allElementList) {
@@ -141,7 +141,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding overlapping constraints for each name that has more than 1 entry
-    Map<String, BoolExpr> nameConflicts = new HashMap<>();
+    Map<String, BoolExpr> nameConflicts = new LinkedHashMap<>();
     for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet()) {
       List<ElementCondition> group = entry.getValue();
       if (group.size() <= 1) continue; // No conflict possible

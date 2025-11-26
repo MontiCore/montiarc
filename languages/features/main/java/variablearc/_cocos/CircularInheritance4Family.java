@@ -28,7 +28,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
   static List<ASTArcComponentType> alreadyCheckedComponents = new ArrayList<>();
 
   public static Set<BoolExpr> extractExtends(BoolExpr expr) {
-    Set<BoolExpr> result = new HashSet<>();
+    Set<BoolExpr> result = new LinkedHashSet<>();
     extract(expr, result);
     return result;
   }
@@ -111,7 +111,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
     Context ctx = ExpressionSolverService.getContext();
 
-    Map<ASTArcComponentType, BoolExpr> componentConditions = new HashMap<>();
+    Map<ASTArcComponentType, BoolExpr> componentConditions = new LinkedHashMap<>();
 
     List<String> allFeatures;
     List<ExpressionSet> allConstraints;
@@ -189,7 +189,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     int componentCount = components.size();
 
     // Mapping the symbols of components to indices
-    Map<ComponentTypeSymbol, Integer> compIndex = new HashMap<>();
+    Map<ComponentTypeSymbol, Integer> compIndex = new LinkedHashMap<>();
     int compId = 0;
     for (ComponentTypeSymbol component : components) {
       compIndex.put(component, compId++);
