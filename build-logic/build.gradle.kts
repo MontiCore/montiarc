@@ -17,8 +17,10 @@ dependencies {
   implementation(seLibs.mc.generator)
   implementation(seLibs.mc.language.server)
   implementation(libs.node.gradle)
+  implementation(libs.intellij)
   //https://github.com/gradle/gradle/issues/15383
   implementation(files(libs.javaClass.superclass.protectionDomain.codeSource.location))
+  implementation(files(seLibs.javaClass.superclass.protectionDomain.codeSource.location))
 }
 
 publishing {

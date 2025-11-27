@@ -25,6 +25,19 @@ dependencies {
   implementation(variantOf(seLibs.mc.cd4a) { classifier("language-server") })
 }
 
+val languageServerJarArtifactConfig = configurations.register("languageServerJar") {
+  isCanBeConsumed = true
+  isCanBeResolved = false
+}
+
+// 2. Configure the artifact strictly after the project is evaluated
+afterEvaluate {
+  languageServerJarArtifactConfig.configure {
+    // Now the task is guaranteed to exist (if it's defined in this project)
+    outgoing.artifact(tasks.named("packMontiArcWithCD4ALanguageServer"))
+  }
+}
+
 tasks.configureEach {
   enabled = enabled && project.hasProperty("enableLanguageServer")
 }
@@ -41,7 +54,7 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
     member("de.monticore.CD4Analysis", "cd", false)
   }
   including(
-    //de.mclsg.TaskTypes.INTELLIJ_PLUGIN,
+    de.mclsg.TaskTypes.LANGUAGE_SERVER,
     de.mclsg.TaskTypes.VSCODE_PLUGIN
   )
   autoconfigureLspTasks()

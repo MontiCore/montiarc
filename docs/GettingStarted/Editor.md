@@ -13,7 +13,11 @@ Though there are some editors that provide a better experience for Gradle and Mo
 ## IntelliJ
 
 1. To install IntelliJ IDEA, follow their [instructions](https://www.jetbrains.com/idea/download/).
-2. IntelliJ has native support for Gradle projects. Simply open any MontiArc project using `File > Open`.
+2. Install the MontiArc extension.
+    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/snapshot) the `montiarc-intellij-plugin-*.zip` extension.
+    2. Start IntelliJ.
+    3. Go to File → Settings → Plugins → Click the settings wheel → Install Plugin from disk... → Select the previously downloaded zip.
+3. IntelliJ has native support for Gradle projects. Simply open any MontiArc project using `File > Open`.
 
 ## Visual Studio Code
 

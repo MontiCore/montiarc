@@ -45,6 +45,7 @@ jobs:
           mkdir dist
           mv tooling/Ma2JsimCLI/build/libs/MontiArc.jar dist/MontiArc-${{ steps.extract_version.outputs.version }}.jar
           mv tooling/language-server/build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-vscode-plugin/montiarc-${{ steps.extract_version.outputs.full_version }}.vsix dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
+          mv tooling/montiarc-intellij-plugin/build/distributions/montiarc-intellij-plugin-${{ steps.extract_version.outputs.full_version }}.zip dist/MontiArc-Intellij-Plugin-${{ steps.extract_version.outputs.version }}.zip
 
 
       # Upload the build.
@@ -59,6 +60,12 @@ jobs:
         with:
           name: MontiArc-${{ steps.extract_version.outputs.version }}.vsix
           path: dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
+          if-no-files-found: warn
+      - name: 'Upload Intellij Artifact'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MontiArc-Intellij-Plugin-${{ steps.extract_version.outputs.version }}.zip
+          path: dist/MontiArc-Intellij-Plugin-${{ steps.extract_version.outputs.version }}.zip
           if-no-files-found: warn
 
 

@@ -30,6 +30,7 @@ shadow = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:8.3.6"
 spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.18.0"
 kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
 node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
+intellij = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:2.6.0"
 
 [plugins]
 versions = { id = "com.github.ben-manes.versions", version = "0.53.0" }

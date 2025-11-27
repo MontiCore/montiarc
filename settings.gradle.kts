@@ -101,6 +101,7 @@ include(":languages:conformance")
 include(":languages:effect")
 //include(":applications:avionics")
 include(":tooling:language-server")
+include(":tooling:montiarc-intellij-plugin")
 include(":tooling:Ma2JsimCLI")
 includeBuild("tooling/gradle-plugins")
 
