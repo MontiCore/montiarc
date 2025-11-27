@@ -31,7 +31,7 @@ jobs:
           gradle-version: 8.5
 
       - name: Build with Gradle
-        run: gradle shadowjar :tooling:language-server:build -PenableLanguageServer
+        run: gradle shadowjar :tooling:language-server:build :tooling:montiarc-intellij-plugin:build -PenableLanguageServer
 
       - name: Extract version name
         shell: bash
