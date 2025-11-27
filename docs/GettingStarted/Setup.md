@@ -5,7 +5,7 @@ MontiArc runs on any platform. In the following tutorials, we will use both the 
 
 #### Gradle
 
-If you only ever want to use the [Gradle plugin](./HelloGradle.md), the only thing you need is Java 11.
+If you only ever want to use the [Gradle plugin](./HelloGradle.md), the only thing you need is Java 21.
 So if you haven't already, now is the right time to [install Java 21](https://www.oracle.com/de/java/technologies/downloads/#java21).
 
 #### Run the CLI Manually
