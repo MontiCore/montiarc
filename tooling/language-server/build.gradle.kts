@@ -30,11 +30,11 @@ val languageServerJarArtifactConfig = configurations.register("languageServerJar
   isCanBeResolved = false
 }
 
-// 2. Configure the artifact strictly after the project is evaluated
 afterEvaluate {
   languageServerJarArtifactConfig.configure {
-    // Now the task is guaranteed to exist (if it's defined in this project)
-    outgoing.artifact(tasks.named("packMontiArcWithCD4ALanguageServer"))
+    outgoing.artifact(tasks.named("packMontiArcWithCD4ALanguageServer")) {
+      builtBy(tasks.named("packMontiArcWithCD4ALanguageServer"))
+    }
   }
 }
 

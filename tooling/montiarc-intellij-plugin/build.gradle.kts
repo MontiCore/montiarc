@@ -101,3 +101,7 @@ tasks.named<org.jetbrains.intellij.platform.gradle.tasks.PrepareSandboxTask>("pr
   }
   dependsOn("copyMontiArcWithCD4AJarIntoIntellijPlugin")
 }
+
+tasks.named("copyMontiArcWithCD4AJarIntoIntellijPlugin"){
+  dependsOn(":tooling:language-server:packMontiArcWithCD4ALanguageServer")
+}
