@@ -51,7 +51,7 @@ are forwarded to the Component. This command needs Java installed on the
 system.
 
 ```bash
-montiarc run <DeployComp.java> [-cp <arg>]
+montiarc run <CompName.arc> [-cp <arg>]
 ```
 
 | Option                  | Description                                                              |

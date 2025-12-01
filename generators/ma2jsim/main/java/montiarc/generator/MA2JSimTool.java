@@ -25,6 +25,7 @@ import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MA2JSimTool extends MontiArcTool {
 
@@ -310,8 +312,8 @@ public class MA2JSimTool extends MontiArcTool {
     try {
       formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
       formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
-      formatter.printHelp("MontiArcTool run <DeployComp.java>",
-        " Run the simulator for a generated DeployComp.java file. Additional parameters are forwarded to the Component. This commands needs Java installed on the system.",
+      formatter.printHelp("MontiArcTool run <CompName.arc>",
+        " Run the simulator for a component. Additional parameters are forwarded to the Component. This commands needs Java installed on the system.",
         initRunSimulationOptions(),
         "",
         true);
@@ -320,7 +322,15 @@ public class MA2JSimTool extends MontiArcTool {
     }
   }
 
-  protected void runSimulation(String name, CommandLine options) throws InterruptedException, IOException {
+  protected void runSimulation(String inputPath, CommandLine options) throws InterruptedException, IOException {
+    Path path = Paths.get(inputPath);
+    String dir = path.getParent() != null ? path.getParent().toString() : ".";
+    String fileName = path.getFileName().toString();
+    int dotIndex = fileName.lastIndexOf('.');
+    String name = (dotIndex > 0)
+      ? fileName.substring(0, dotIndex)
+      : fileName;
+
     StringBuilder classpath = new StringBuilder(System.getProperty("java.class.path"));
     if (options.hasOption("cp")) {
       String[] additionalCPValues = splitPathEntries(options.getOptionValues("cp"));
@@ -329,18 +339,45 @@ public class MA2JSimTool extends MontiArcTool {
       }
     }
 
-    List<String> command = new ArrayList<>();
-    command.add("java");
-    command.add("-cp");
-    command.add(classpath.toString());
-    command.add(name);
-    command.addAll(options.getArgList().subList(2, options.getArgList().size()));
+    List<String> javacCommand = new ArrayList<>();
+    javacCommand.add("javac");
+    javacCommand.add("-cp");
+    javacCommand.add(classpath.toString());
+    javacCommand.add("-d");
+    javacCommand.add(dir + File.separator + "build");
 
-    ProcessBuilder builder = new ProcessBuilder(command);
-    Process process = builder.inheritIO().start();
+    try (Stream<Path> walk = Files.list(Path.of(dir))) {
+      List<String> javaFiles = walk
+        .map(Path::toString)
+        .filter(s -> s.endsWith(".java"))
+        .collect(Collectors.toList());
+      javacCommand.addAll(javaFiles);
+    }
+
+    ProcessBuilder builder = new ProcessBuilder(javacCommand);
+    Process process = builder.redirectErrorStream(true).start();
+    String processOutput = new String(process.getInputStream().readAllBytes());
     process.waitFor();
     if (process.exitValue() != 0) {
-      Log.error(MontiArcError.TOOL_SIMULATION_FAILED.format(process.exitValue(), process.getOutputStream().toString()));
+      Log.error(MontiArcError.TOOL_SIMULATION_FAILED.format(process.exitValue(), processOutput));
+      return;
+    }
+
+    classpath.append(File.pathSeparator).append(dir).append(File.separator).append("build");
+
+    List<String> runCommand = new ArrayList<>();
+    runCommand.add("java");
+    runCommand.add("-cp");
+    runCommand.add(classpath.toString());
+    runCommand.add("Deploy" + name);
+    runCommand.addAll(options.getArgList().subList(2, options.getArgList().size()));
+
+    builder = new ProcessBuilder(runCommand);
+    process = builder.redirectErrorStream(true).start();
+    processOutput = new String(process.getInputStream().readAllBytes());
+    process.waitFor();
+    if (process.exitValue() != 0) {
+      Log.error(MontiArcError.TOOL_SIMULATION_FAILED.format(process.exitValue(), processOutput));
     }
   }
 }

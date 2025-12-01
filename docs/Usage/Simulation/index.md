@@ -26,14 +26,6 @@ To run the simulation simply execute the main method using your IDE.
 Due to the nature of REST, this backend can only be used to write to ports,
 but not read from them. To see how the systems behaves, you will have to look at the log.
 
-```bash
-montiarc run path/to/DeployRest<CompName>.java
-```
-
 #### MQTT
 
 The [MQTT](https://mqtt.org/) backend requires a running MQTT broker. The simulator connects to it and reads from and writes to topics.
-
-```bash
-montiarc run path/to/DeployMqtt<CompName>.java
-```

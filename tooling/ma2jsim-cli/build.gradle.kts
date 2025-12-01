@@ -21,7 +21,7 @@ sourceSets {
 
 tasks.shadowJar {
   manifest {
-    attributes["Main-Class"] = "montiarc.Ma2JsimToolCLI"
+    attributes["Main-Class"] = "montiarc.MA2JSimToolCLI"
   }
   isZip64 = true
   archiveClassifier.set("mc-tool")

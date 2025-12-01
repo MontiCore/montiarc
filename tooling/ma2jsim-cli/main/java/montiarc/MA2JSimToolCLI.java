@@ -10,18 +10,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
 import java.util.Optional;
 
-public class Ma2JsimToolCLI extends MA2JSimTool {
+public class MA2JSimToolCLI extends MA2JSimTool {
 
   public static void main(String[] args) {
     Preconditions.checkNotNull(args);
-    Ma2JsimToolCLI tool = new Ma2JsimToolCLI();
+    MA2JSimToolCLI tool = new MA2JSimToolCLI();
     tool.init();
     tool.run(args);
   }
@@ -46,34 +45,24 @@ public class Ma2JsimToolCLI extends MA2JSimTool {
       Log.warn("Ressource not found " + ressourceName);
       return Optional.empty();
     }
-    if (url.toString().startsWith("jar:")) {
-      try {
-        InputStream input = getClass().getResourceAsStream(ressourceName);
-        File file = File.createTempFile(new Date().getTime() + "", ".jar");
-        OutputStream out = new FileOutputStream(file);
-        int read;
-        byte[] bytes = new byte[1024];
+    try {
+      InputStream input = getClass().getResourceAsStream(ressourceName);
+      File file = File.createTempFile(new Date().getTime() + "", ".jar");
+      OutputStream out = new FileOutputStream(file);
+      int read;
+      byte[] bytes = new byte[1024];
 
-        while ((read = input.read(bytes)) != -1) {
-          out.write(bytes, 0, read);
-        }
-        out.flush();
-        out.close();
-        input.close();
-        file.deleteOnExit();
-        return Optional.of(Paths.get(file.toURI()));
-      } catch (IOException e) {
-        Log.error(e.toString());
-        return Optional.empty();
+      while ((read = input.read(bytes)) != -1) {
+        out.write(bytes, 0, read);
       }
-    } else {
-      //this will work in the IDE, but not from a JAR
-      try {
-        return Optional.of(Paths.get(url.toURI()));
-      } catch (URISyntaxException e) {
-        Log.error(e.toString());
-        return Optional.empty();
-      }
+      out.flush();
+      out.close();
+      input.close();
+      file.deleteOnExit();
+      return Optional.of(Paths.get(file.toURI()));
+    } catch (IOException e) {
+      Log.error(e.toString());
+      return Optional.empty();
     }
   }
 }

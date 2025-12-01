@@ -2,9 +2,12 @@
 package montiarc.generator;
 
 import de.se_rwth.commons.logging.Log;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -39,10 +42,10 @@ public class MA2JSimTest extends MA2JSimTestBase {
   }
 
   @Test
-  public void testRun() {
+  public void testRun() throws IOException {
     // Given
     String[] args = new String[] {
-      "run", "test/resources/MA2JSimToolTestRunFile.java",
+      "run", "test/resources/MA2JSimToolTestRunFile",
       "-t", "test",
     };
 
@@ -51,5 +54,8 @@ public class MA2JSimTest extends MA2JSimTestBase {
 
     // Then
     Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
+
+    // Cleanup
+    FileUtils.deleteDirectory(new File("test/resources/build"));
   }
 }

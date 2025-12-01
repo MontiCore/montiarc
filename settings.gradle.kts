@@ -102,7 +102,7 @@ include(":languages:effect")
 //include(":applications:avionics")
 include(":tooling:language-server")
 include(":tooling:montiarc-intellij-plugin")
-include(":tooling:Ma2JsimCLI")
+include(":tooling:ma2jsim-cli")
 includeBuild("tooling/gradle-plugins")
 
 // Integration test projects for the built gradle plugins

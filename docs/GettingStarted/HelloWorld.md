@@ -15,7 +15,7 @@ Save the file and open a terminal window inside your folder and enter the follow
 
 ```bash
 montiarc --input HelloWorld.arc --output . # (1)!
-montiarc run DeployHelloWorld.java
+montiarc run HelloWorld.arc
 ```
 
 1.  If you've downloaded the jar directly, run `java -jar MontiArc-7.9.0.jar --input HelloWorld.arc --output .`
@@ -98,28 +98,27 @@ Here, you used the MontiArc command-line tooling to compile MontiArc models into
 
 ```bash
 DeployHelloWorld.java
-DeployMqttHelloWorld.java
-DeployRestHelloWorld.java
-HelloWorldComponent.java
-HelloWorldContext.java
-HelloWorldBehavior.java
 HelloWorldAutomaton.java
-HelloWorldStates.java
+HelloWorldAutomatonBuilder.java
+HelloWorldComp.java
+HelloWorldCompBuilder.java
+HelloWorldCompImpl.java
+HelloWorldContext.java
 HelloWorldEvents.java
+HelloWorldStates.java
 HelloWorldSyncMsg.java
 ```
 
 Most of which are needed to simulate the model using Java.
 
 ```bash
-montiarc run DeployHelloWorld.java
+montiarc run HelloWorld.arc
 ```
 This executes the Java main method of the `DeployHelloWorld` class, which in turn sets up the [simulation](../Usage/Simulation/index.md) and starts it.
-The run command is shorthand for calling Java with the correct class path. It requires Java to be installed on your system.
+The run command is shorthand for calling the Java with the correct class path to compile and execute. It requires Java to be installed on your system.
 
-By default the simulation is non-interactive and input streams have to be provided for it to be useful (See [testing](../Reference/Testing/index.md)).
+By default, the simulation is non-interactive and input streams have to be provided for it to be useful (See [testing](../Reference/Testing/index.md)).
 We provide two interactive simulation deployments where the simulation reads and writes to [MQTT](../Usage/Simulation/index.md#mqtt) or has a [Rest API](../Usage/Simulation/index.md#rest).
-
 
 ---
 
