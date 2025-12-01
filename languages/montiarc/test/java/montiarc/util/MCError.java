@@ -11,7 +11,7 @@ public enum MCError implements Error {
   TYPE_REF_ASSIGNMENT_ERR(VarDeclarationInitializationHasCorrectType.TYPE_REF_ASSIGNMENT_ERROR_CODE, ""),
   INCOMPATIBLE_TYPE(VarDeclarationInitializationHasCorrectType.ERROR_CODE, ""),
   DIVIDE_EXPRESSION_ERR("0xA0168", ""),
-  CANT_FIND_SYMBOL("0xA0324", ""),
+  CANT_FIND_SYMBOL("0xA0324", "Cannot find symbol %s"),
   CANT_FIND_SYMBOL_IN_EXPRESSION("0xFD118", ""),
   TYPE_STRING_NOT_RESOLVABLE("0xD02A6", ""),
   FOUND_MULTIPLE_SYMBOLS("0xA4095", ""),

@@ -17,7 +17,7 @@ public enum SCError implements Error {
   MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE, ""),
   MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE, ""),
   STATE_NAME_NOT_CAPITAL(CapitalStateNames.ERROR_CODE, ""),
-  PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE, ""),
+  PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE, "Guard expressions must be boolean. Your guard expression is of type '%s'."),
   MISSING_SOURCE_STATE(TransitionSourceTargetExists.SOURCE_ERROR_CODE, ""),
   MISSING_TARGET_STATE(TransitionSourceTargetExists.TARGET_ERROR_CODE, "");
 

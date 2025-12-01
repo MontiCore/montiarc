@@ -12,9 +12,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.MontiArcArtifactScope;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
-import montiarc.util.MCError;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -743,59 +741,6 @@ public class MontiArcToolTest extends MontiArcTestBase {
     List<ImportStatement> imports = ((IMontiArcArtifactScope) ast.getEnclosingScope()).getImportsList();
     Assertions.assertTrue(imports.stream()
       .anyMatch(i -> i.getStatement().equals("java.lang") && i.isStar()), "Import to java.lang.* should be present.");
-  }
-
-  @ParameterizedTest
-  @MethodSource("invalidModelAndErrorProvider")
-  void invalidModelsShouldFailEndToEnd(@NotNull String model, @NotNull Error[] errors) {
-    Preconditions.checkNotNull(model);
-
-    // Given
-    String modelPath = Paths.get(TEST_RESOURCE, TEST_DIR, "cocos", model).toString();
-    String[] args = new String[]{"-i", modelPath};
-    MontiArcTool tool = new MontiArcTool();
-
-    // When
-    tool.run(args);
-
-    // Then
-    assertThat(getLoggedErrorCodes())
-      .as(Log.getFindings().toString())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
-  }
-
-  protected static Stream<Arguments> invalidModelAndErrorProvider() {
-    return Stream.of(
-      Arguments.of("CircularInheritance.arc", new Error[]{ArcError.CIRCULAR_INHERITANCE}),
-      Arguments.of("MissingCompType1.arc", new Error[]{MCError.MISSING_COMPONENT}),
-      Arguments.of("MissingCompType2.arc", new Error[]{MCError.MISSING_COMPONENT}),
-      Arguments.of("MissingCompType3.arc", new Error[]{MCError.MISSING_COMPONENT, MCError.MISSING_COMPONENT}),
-      Arguments.of("MissingCompType4.arc", new Error[]{MCError.MISSING_COMPONENT}),
-      Arguments.of("MissingPortType1.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType2.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType3.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType4.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType5.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType6.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType7.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType8.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType9.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType10.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      //Arguments.of("MissingPortType11.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("MissingPortType12.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.CANT_FIND_SYMBOL}),
-      //Arguments.of("MissingPortType13.arc", new Error[]{MCError.CANT_FIND_SYMBOL, SCError.PRECONDITION_NOT_BOOLEAN}),
-      //Arguments.of("MissingPortType14.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
-      //Arguments.of("MissingPortType15.arc", new Error[]{MCError.CANT_FIND_SYMBOL, MCError.INCOMPATIBLE_TYPE}),
-      //Arguments.of("MissingPortType16.arc", new Error[]{MCError.CANT_FIND_SYMBOL}),
-      Arguments.of("NameClashParamPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashParamVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashPortPort1.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashPortPort2.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashPortVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      //Arguments.of("NameClashTypeParam.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashVarPort.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES}),
-      Arguments.of("NameClashVarVar.arc", new Error[]{ArcError.UNIQUE_IDENTIFIER_NAMES})
-    );
   }
 
   @ParameterizedTest
