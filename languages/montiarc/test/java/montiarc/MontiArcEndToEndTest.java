@@ -184,10 +184,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("MissingComponent5.arc"),
         fn(ERROR, "MissingComponent5.arc", 13, 5, 13, 12, MISSING_COMPONENT, "Missing")
       ),
-      arg("MissingComponentTest6",
-        mp("MissingComponent6.arc"),
-        fn(ERROR, "MissingComponent6.arc", 12, 3, 12, 10, MISSING_COMPONENT, "Missing")
-      ),
       arg("MissingComponentTest7",
         mp("MissingComponent7.arc"),
         fn(ERROR, "MissingComponent7.arc", 9, 3, 9, 10, MISSING_COMPONENT, "Missing")
@@ -224,22 +220,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, "MissingPortType4.arc", 13, 13, 13, 20, CANT_FIND_SYMBOL, "Missing"),
         fn(ERROR, "MissingPortType4.arc", 14, 14, 14, 21, CANT_FIND_SYMBOL, "Missing")
       ),
-      arg("MissingPortTypeTest5",
-        mp("MissingPortType5.arc"),
-        fn(ERROR, "MissingPortType5.arc", 9, 11, 9, 18, CANT_FIND_SYMBOL, "Missing")
-      ),
-      arg("MissingPortTypeTest6",
-        mp("MissingPortType6.arc"),
-        fn(ERROR, "MissingPortType6.arc", 10, 12, 10, 19, CANT_FIND_SYMBOL, "Missing")
-      ),
-      arg("MissingPortTypeTest7",
-        mp("MissingPortType7.arc"),
-        fn(ERROR, "MissingPortType7.arc", 14, 13, 14, 20, CANT_FIND_SYMBOL, "Missing")
-      ),
-      arg("MissingPortTypeTest8",
-        mp("MissingPortType8.arc"),
-        fn(ERROR, "MissingPortType8.arc", 15, 14, 15, 21, CANT_FIND_SYMBOL, "Missing")
-      ),
       arg("MissingPortTypeTest9",
         mp("MissingPortType9.arc"),
         fn(ERROR, "MissingPortType9.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing"),
@@ -257,22 +237,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("MissingPortType12.arc"),
         fn(ERROR, "MissingPortType12.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing"),
         fn(ERROR, "MissingPortType12.arc", 11, 12, 11, 19, CANT_FIND_SYMBOL, "Missing")
-      ),
-      arg("MissingPortTypeTest13",
-        mp("MissingPortType13.arc", "MissingPortType1.arc"),
-        fn(ERROR, "MissingPortType1.arc", 9, 11, 9, 18, CANT_FIND_SYMBOL, "Missing")
-      ),
-      arg("MissingPortTypeTest14",
-        mp("MissingPortType14.arc", "MissingPortType2.arc"),
-        fn(ERROR, "MissingPortType2.arc", 10, 12, 10, 19, CANT_FIND_SYMBOL, "Missing")
-      ),
-      arg("MissingPortTypeTest15",
-        mp("MissingPortType15A.arc"),
-        fn(ERROR, "MissingPortType15A.arc", 16, 3, 16, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int")
-      ),
-      arg("MissingPortTypeTest16",
-        mp("MissingPortType16A.arc"),
-        fn(ERROR, "MissingPortType16A.arc", 17, 3, 17, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
       ),
       arg("NameClashParamParamTest",
         mp("NameClashParamParam.arc"),
@@ -309,6 +273,30 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("NameClashVarVarTest",
         mp("NameClashVarVar.arc"),
         fn(ERROR, "NameClashVarVar.arc", 13, 7, 13, 8, UNIQUE_IDENTIFIER_NAMES, "v")
+      ),
+      arg("MissingSymbolsInConnectorTest1",
+        mp("MissingSymbolsInConnector1.arc"),
+        fn(ERROR, "MissingSymbolsInConnector1.arc", 12, 3, 12, 10, MISSING_COMPONENT, "Missing")
+      ),
+      arg("MissingSymbolsInConnectorTest2",
+        mp("MissingSymbolsInConnector2.arc"),
+        fn(ERROR, "MissingSymbolsInConnector2.arc", 9, 11, 9, 18, CANT_FIND_SYMBOL, "Missing"),
+        fn(ERROR, "MissingSymbolsInConnector2.arc", 10, 12, 10, 19, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingSymbolsInConnectorTest3",
+        mp("MissingSymbolsInConnector3.arc"),
+        fn(ERROR, "MissingSymbolsInConnector3.arc", 14, 13, 14, 20, CANT_FIND_SYMBOL, "Missing"),
+        fn(ERROR, "MissingSymbolsInConnector3.arc", 15, 14, 15, 21, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingSymbolsInConnectorTest4",
+        mp("MissingSymbolsInConnector4.arc", "MissingPortType3.arc"),
+        fn(ERROR, "MissingPortType3.arc", 9, 11, 9, 18, CANT_FIND_SYMBOL, "Missing"),
+        fn(ERROR, "MissingPortType3.arc", 10, 12, 10, 19, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingSymbolsInConnectorTest5",
+        mp("MissingSymbolsInConnector5A.arc"),
+        fn(ERROR, "MissingSymbolsInConnector5A.arc", 18, 3, 18, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
+        fn(ERROR, "MissingSymbolsInConnector5A.arc", 19, 3, 19, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
       )
     );
   }

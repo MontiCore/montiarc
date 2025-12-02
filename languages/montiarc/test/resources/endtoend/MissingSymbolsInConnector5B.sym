@@ -1,9 +1,9 @@
 {
-  "name": "MissingPortType15B",
+  "name": "MissingSymbolsInConnector5B",
   "symbols": [
     {
       "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
-      "name": "MissingPortType15B",
+      "name": "MissingSymbolsInConnector5B",
       "spannedScope": {
         "isShadowingScope": true,
         "symbols": [
@@ -21,8 +21,8 @@
             "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
             "name": "o",
             "type": {
-              "kind": "de.monticore.types.check.SymTypePrimitive",
-              "primitiveName": "int"
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "Missing"
             },
             "outgoing": true,
             "timing": "timed"
