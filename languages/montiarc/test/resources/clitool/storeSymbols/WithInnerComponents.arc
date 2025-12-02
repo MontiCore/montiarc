@@ -1,4 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
+
 component WithInnerComponents {
   component Inner1 {}
   Inner1 inr1;

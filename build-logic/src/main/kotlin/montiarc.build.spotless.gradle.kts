@@ -1,3 +1,6 @@
+import com.diffplug.spotless.generic.LicenseHeaderStep
+import java.util.regex.Pattern
+
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
@@ -22,14 +25,20 @@ spotless {
   }
   format("montiArc") {
     target("**/*.arc")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(\\/\\*|\\/\\/|package|import|component)")
-    trimTrailingWhitespace()
+    targetExclude("**main/montiarc/automata/Comments.arc")
+    addStep(LicenseHeaderStep.headerDelimiter(
+      "/* (c) https://github.com/MontiCore/monticore */\n", "package|import"
+    ).withName("LicenseHeaderWithPackageOrImport")
+      .withContentPattern("(?s)^(?=.*(?m)(?:^package.*;$|^import.*;$)).+$").build())
+    addStep(LicenseHeaderStep.headerDelimiter(
+      "/* (c) https://github.com/MontiCore/monticore */\n\n", "/\\*(?! \\(c\\))|component|<<"
+    ).withName("LicenseHeaderWithoutPackageOrImport")
+      .withContentPattern("(?s)^(?!.*(?m)(?:^package.*;$|^import.*;$)).+$").build())
     leadingTabsToSpaces(2)
     endWithNewline()
   }
   format("classDiagram") {
     target("**/*.cd")
-    licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(\\/\\*|\\/\\/|package|import|classdiagram)")
     trimTrailingWhitespace()
     leadingTabsToSpaces(2)
     endWithNewline()
