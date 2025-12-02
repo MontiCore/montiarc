@@ -27,7 +27,7 @@ commons-cli = "commons-cli:commons-cli:1.11.0"
 gradle-tooling-api = "org.gradle:gradle-tooling-api:7.3-20210825160000+0000"
 
 shadow = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:8.3.6"
-spotless = "com.diffplug.spotless:spotless-plugin-gradle:6.18.0"
+spotless = "com.diffplug.spotless:spotless-plugin-gradle:8.1.0"
 kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
 node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
 intellij = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:2.6.0"

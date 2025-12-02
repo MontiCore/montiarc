@@ -24,14 +24,14 @@ spotless {
     target("**/*.arc")
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(\\/\\*|\\/\\/|package|import|component)")
     trimTrailingWhitespace()
-    indentWithSpaces(2)
+    leadingTabsToSpaces(2)
     endWithNewline()
   }
   format("classDiagram") {
     target("**/*.cd")
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */", "(\\/\\*|\\/\\/|package|import|classdiagram)")
     trimTrailingWhitespace()
-    indentWithSpaces(2)
+    leadingTabsToSpaces(2)
     endWithNewline()
   }
   format("markdown") {
@@ -40,7 +40,7 @@ spotless {
   }
   format("montiCore") {
     target("**/*.mc4")
-    indentWithSpaces(2)
+    leadingTabsToSpaces(2)
     endWithNewline()
   }
 }
