@@ -20,6 +20,7 @@ import java.util.stream.Stream;
 
 import static de.se_rwth.commons.logging.Finding.Type.ERROR;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
+import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -256,6 +257,22 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("MissingPortType12.arc"),
         fn(ERROR, "MissingPortType12.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing"),
         fn(ERROR, "MissingPortType12.arc", 11, 12, 11, 19, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingPortTypeTest13",
+        mp("MissingPortType13.arc", "MissingPortType1.arc"),
+        fn(ERROR, "MissingPortType1.arc", 9, 11, 9, 18, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingPortTypeTest14",
+        mp("MissingPortType14.arc", "MissingPortType2.arc"),
+        fn(ERROR, "MissingPortType2.arc", 10, 12, 10, 19, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingPortTypeTest15",
+        mp("MissingPortType15A.arc"),
+        fn(ERROR, "MissingPortType15A.arc", 16, 3, 16, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int")
+      ),
+      arg("MissingPortTypeTest16",
+        mp("MissingPortType16A.arc"),
+        fn(ERROR, "MissingPortType16A.arc", 17, 3, 17, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
       ),
       arg("NameClashParamParamTest",
         mp("NameClashParamParam.arc"),

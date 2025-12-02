@@ -58,14 +58,14 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
               ArcError.CONNECTOR_TYPE_MISMATCH.format(
                 targetType.print(), sourceType.print()),
               conn.get_SourcePositionStart(),
-              conn.get_SourcePositionEnd());
+              target.get_SourcePositionEnd());
           }
         } catch (ResolvedSeveralEntriesForSymbolException e) {
           Log.error(
             ArcError.CONNECTOR_TYPE_MISMATCH.format(
               targetType.print(), sourceType.print()),
             conn.get_SourcePositionStart(),
-            conn.get_SourcePositionEnd());
+            target.get_SourcePositionEnd());
         }
       } else {
         logInfoThatCoCoIsNotChecked4TargetPort(target);
