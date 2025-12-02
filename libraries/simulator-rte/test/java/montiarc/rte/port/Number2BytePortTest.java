@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.port;
 
-import de.se_rwth.commons.Symbol;
 import montiarc.TestBase;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

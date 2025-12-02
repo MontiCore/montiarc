@@ -8,7 +8,6 @@ import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisito
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 

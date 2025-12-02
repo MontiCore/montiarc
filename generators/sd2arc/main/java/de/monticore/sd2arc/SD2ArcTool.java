@@ -17,8 +17,6 @@ import de.monticore.sd2arc.trafo.AddAdjacentSubcomponents;
 import de.monticore.sd2arc.trafo.AddDefaultMatchToComponents;
 import de.monticore.sd2arc.trafo.CompleteInteractionsTrafo;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
-import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolDeSer;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbolDeSer;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbolDeSer;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbolDeSer;
 import de.monticore.symbols.oosymbols._symboltable.MethodSymbolDeSer;

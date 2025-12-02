@@ -18,7 +18,6 @@ import java.util.stream.Stream;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.OnOff.OFF;
-import static montiarc.types.OnOff.ON;
 
 @JSimTest
 class SimpleTransitionTest {

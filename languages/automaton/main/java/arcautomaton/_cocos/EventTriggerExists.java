@@ -4,8 +4,6 @@ package arcautomaton._cocos;
 import arcautomaton._ast.ASTMsgEvent;
 import com.google.common.base.Preconditions;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
-import de.monticore.symboltable.modifiers.AccessModifier;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcAutomataError;
 import org.codehaus.commons.nullanalysis.NotNull;

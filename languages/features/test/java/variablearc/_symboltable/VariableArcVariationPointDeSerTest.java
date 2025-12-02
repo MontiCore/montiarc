@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
-import arcbasis._symboltable.ArcBasisSymbols2Json;
 import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 import de.monticore.symboltable.serialization.JsonParser;

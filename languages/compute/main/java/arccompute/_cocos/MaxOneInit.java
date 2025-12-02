@@ -8,7 +8,6 @@ import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcComputeError;
-import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 /**

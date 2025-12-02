@@ -3,17 +3,11 @@ package montiarc.generator.codegen;
 
 import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
-import de.monticore.types.mccollectiontypes._ast.ASTMCTypeArgument;
 import de.monticore.types.mcsimplegenerictypes._ast.ASTMCBasicGenericType;
 import de.monticore.types.mcsimplegenerictypes._prettyprint.MCSimpleGenericTypesPrettyPrinter;
 import de.monticore.types3.TypeCheck3;
-import montiarc.MontiArcMill;
-import montiarc._symboltable.IMontiArcScope;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.util.Iterator;
-import java.util.Optional;
 
 public class MCSimpleGenericTypesJavaPrinter extends MCSimpleGenericTypesPrettyPrinter {
 

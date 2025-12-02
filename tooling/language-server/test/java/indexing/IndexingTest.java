@@ -3,11 +3,9 @@ package indexing;
 
 import de.mclsg.lsp.modelpath.multiproject.ProjectLayoutBuilder;
 import de.mclsg.lsp.util.AsyncUtilWithSyncExec;
-import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import montiarc._lsp.MontiArcLanguageServerBuilder;
 import org.eclipse.lsp4j.InitializedParams;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import util.MockLanguageClient;
 

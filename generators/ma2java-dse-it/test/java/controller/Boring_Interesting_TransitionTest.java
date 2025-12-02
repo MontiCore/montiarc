@@ -3,7 +3,6 @@ package controller;
 
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
-import controller.Boring_Interesting_Transitions_SM;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.timesync.IInPort;
 import montiarc.rte.timesync.IOutPort;

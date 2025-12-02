@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package comfortablearc.trafo;
 
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
 import comfortablearc.ComfortableArcMill;

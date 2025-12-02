@@ -2,7 +2,6 @@
 package montiarc.generator.helper;
 
 import arcautomaton._ast.ASTArcStatechart;
-import arcbasis.ArcBasisMill;
 import arcbasis._ast.ASTArcArgument;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;

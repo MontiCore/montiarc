@@ -2,7 +2,6 @@
 package montiarc.variability.timed.composition;
 
 import com.google.common.base.Preconditions;
-import de.se_rwth.commons.logging.Log;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
@@ -19,7 +18,6 @@ import java.util.stream.Stream;
 
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @JSimTest

@@ -3,7 +3,6 @@ package montiarc._lsp.language_access;
 
 import de.mclsg.lsp.document_management.DocumentManager;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc._cocos.MontiArcCoCos;
 
 public class MontiArcLspCoCoRunner extends MontiArcLspCoCoRunnerTOP {
 

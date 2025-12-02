@@ -10,7 +10,6 @@ import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsL
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
-import de.monticore.types3.util.MapBasedTypeCheck3;
 import de.monticore.visitor.ITraverser;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;

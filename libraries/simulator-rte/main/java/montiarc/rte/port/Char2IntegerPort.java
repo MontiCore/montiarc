@@ -7,7 +7,6 @@ import montiarc.rte.component.Component;
 import montiarc.rte.msg.Message;
 import montiarc.rte.msg.Tick;
 
-import java.util.Objects;
 
 public class Char2IntegerPort extends AbstractOutPort<Integer> implements InOutPort<Character, Integer> {
 

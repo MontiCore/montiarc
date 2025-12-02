@@ -4,7 +4,6 @@ package montiarc.sync.automata;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.ILogHook;
 import de.se_rwth.commons.logging.Log;
-import montiarc.lang.Simulation;
 import montiarc.rte.msg.Message;
 import montiarc.rte.tests.JSimTest;
 import montiarc.types.OnOff;

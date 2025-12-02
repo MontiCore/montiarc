@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.maunit.api;
 
-import de.monticore.rte.streams.UntimedStream;
 import montiarc.rte.automaton.State;
 
 public class AssertEqualsUntimedAutomaton<T> extends AssertEqualsUntimedAutomatonTOP<T> {

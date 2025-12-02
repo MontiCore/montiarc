@@ -4,7 +4,6 @@ package variablearc._cocos.util;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisitor2;
 import de.monticore.expressions.expressionsbasis._symboltable.IExpressionsBasisScope;
-import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 
 import java.util.HashMap;
 import java.util.Map;

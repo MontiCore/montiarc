@@ -2,7 +2,6 @@
 package arcbasis._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
 import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpressionsNode;
 import de.monticore.expressions.commonexpressions._ast.ASTCallExpression;
 import de.monticore.statements.mccommonstatements._ast.ASTExpressionStatement;

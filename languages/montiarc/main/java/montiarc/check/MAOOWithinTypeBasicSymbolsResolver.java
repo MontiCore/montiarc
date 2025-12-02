@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.check;
 
-import com.google.common.base.Preconditions;
 import de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.IBasicSymbolsScope;
 import de.monticore.symboltable.modifiers.AccessModifier;

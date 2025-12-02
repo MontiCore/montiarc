@@ -4,7 +4,6 @@ package controller;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
-import controller.StateController;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.dse.PathCondition;
 import montiarc.rte.dse.StateInfo;

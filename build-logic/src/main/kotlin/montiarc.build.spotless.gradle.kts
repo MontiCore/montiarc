@@ -1,7 +1,5 @@
-import com.diffplug.spotless.generic.LicenseHeaderStep
-import java.util.regex.Pattern
-
 /* (c) https://github.com/MontiCore/monticore */
+import com.diffplug.spotless.generic.LicenseHeaderStep
 
 plugins {
   java
@@ -14,6 +12,7 @@ spotless {
     targetExclude(fileTree(layout.buildDirectory) { include("**/*.java") })
 
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */")
+    removeUnusedImports()
     endWithNewline()
   }
   kotlin {

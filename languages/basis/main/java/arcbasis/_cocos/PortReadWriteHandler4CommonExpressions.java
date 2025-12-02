@@ -2,18 +2,9 @@
 package arcbasis._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.assignmentexpressions._ast.ASTAssignmentExpression;
-import de.monticore.expressions.assignmentexpressions._ast.ASTConstantsAssignmentExpressions;
-import de.monticore.expressions.assignmentexpressions._ast.ASTDecPrefixExpression;
-import de.monticore.expressions.assignmentexpressions._ast.ASTDecSuffixExpression;
-import de.monticore.expressions.assignmentexpressions._ast.ASTIncPrefixExpression;
-import de.monticore.expressions.assignmentexpressions._ast.ASTIncSuffixExpression;
-import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsHandler;
-import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsTraverser;
 import de.monticore.expressions.commonexpressions._ast.ASTFieldAccessExpression;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsHandler;
 import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsTraverser;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import static arcbasis._cocos.PortReadWriteHandler4ExpressionsBasis.ContextState;

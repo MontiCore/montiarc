@@ -2,7 +2,6 @@
 package evaluation.helper;
 
 import automata.evaluation.smallModel.*;
-import montiarc.rte.dse.ListerI;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 

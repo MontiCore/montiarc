@@ -7,13 +7,11 @@ import arcbasis._ast.ASTArcPort;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
 import arcbasis._visitor.ArcBasisVisitor2;
-import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._ast.ASTPort;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.IScopeSpanningSymbol;
-import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;

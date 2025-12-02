@@ -13,7 +13,6 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTVariantPortAccess;
 import variablearc._symboltable.VariableArcFullVariantComponentTypeSymbol;
-import variablearc._symboltable.VariantArcComponentTypeSymbol;
 
 import java.util.stream.Collectors;
 

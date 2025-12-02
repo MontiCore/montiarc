@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
-import de.se_rwth.commons.Names;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;

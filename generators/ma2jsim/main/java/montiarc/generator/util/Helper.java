@@ -33,7 +33,6 @@ import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.scstateinvariants._ast.ASTSCInvState;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
-import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbolTOP;

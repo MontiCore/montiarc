@@ -13,7 +13,6 @@ import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
-import montiarc.util.Error;
 import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;

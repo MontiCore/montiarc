@@ -12,7 +12,6 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 
 import java.util.Map;
-import java.util.Objects;
 
 public abstract class MqttDeployment<T extends Component> implements DeploymentStrategy<T> {
 

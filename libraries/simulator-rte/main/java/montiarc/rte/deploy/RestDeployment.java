@@ -13,7 +13,6 @@ import org.apache.commons.cli.Options;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.Map;
-import java.util.Objects;
 
 public abstract class RestDeployment<T extends Component> implements DeploymentStrategy<T> {
 

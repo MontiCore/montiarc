@@ -4,7 +4,6 @@ package controller;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntSort;
-import controller.TransitionsController;
 import montiarc.rte.dse.AnnotatedValue;
 import montiarc.rte.timesync.IInPort;
 import montiarc.rte.timesync.IOutPort;

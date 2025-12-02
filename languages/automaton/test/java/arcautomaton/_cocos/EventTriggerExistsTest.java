@@ -5,7 +5,6 @@ import arcautomaton.ArcAutomatonMill;
 import arcautomaton.ArcAutomatonTestBase;
 import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._symboltable.IArcAutomatonScope;
-import arcautomaton._visitor.ArcAutomatonTraverser;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbolBuilder;
 import com.google.common.base.Preconditions;
@@ -17,7 +16,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collections;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
