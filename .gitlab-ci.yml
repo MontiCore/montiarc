@@ -1,32 +1,43 @@
 # (c) https://github.com/MontiCore/monticore  
 # Build JAVA applications using Gradle (https://gradle.org/)
 
-# Store the local Gradle build cache
-cache:
-  key: gradle-$CI_COMMIT_REF_SLUG
-  fallback_keys:
-    - gradle-$CI_DEFAULT_BRANCH
-    - gradle-fallback
-  paths:
-    - .gradle/caches/
-  policy: pull-push
-
 # Set up environment variables and configurations to be executed before each job
 before_script:
   # Set Gradle user home to the current directory's .gradle folder
   - export GRADLE_USER_HOME=`pwd`/.gradle
 
+# Store the local Gradle build cache
+.cache_gradle_pull_push: &cache_gradle_pull_push
+  cache:
+    key: gradle-$CI_COMMIT_REF_SLUG
+    fallback_keys:
+      - gradle-$CI_DEFAULT_BRANCH
+      - gradle-fallback
+    paths:
+      - .gradle/caches/
+    policy: pull-push
+
+.cache_gradle_pull_only: &cache_gradle_pull_only
+  cache:
+    key: gradle-$CI_COMMIT_REF_SLUG
+    fallback_keys:
+      - gradle-$CI_DEFAULT_BRANCH
+      - gradle-fallback
+    paths:
+      - .gradle/caches/
+    policy: pull-push
+
 stages:
   - build
-  - post-build
   - test
-  - post-test
-  - report
   - check
+  - deploy
+  - downstream
   - mirror
 
 Build:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  <<: *cache_gradle_pull_push
   stage: build
   allow_failure: false
   script:
@@ -34,32 +45,17 @@ Build:
 
 Build LSP:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  <<: *cache_gradle_pull_push
   stage: build
   needs: ["Build"]
   allow_failure: false
   script:
     - gradle tooling:language-server:build --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
 
-Verify Formatting:
-  stage: test
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  needs: ["Build"]
-  allow_failure: false
-  script:
-    - gradle spotlessCheck --build-cache -PenableLanguageServer
-
-Package:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  stage: post-build
-  needs: ["Build"]
-  allow_failure: false
-  script:
-    - gradle shadowjar --build-cache -PenableLanguageServer
-
 Unit Test:
   stage: test
+  <<: *cache_gradle_pull_push
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  needs: ["Build"]
   allow_failure: false
   script:
     - gradle test jacocoAggregatedTestReport --stacktrace --build-cache -PenableLanguageServer
@@ -78,9 +74,18 @@ Unit Test:
       - ./**/build/**/reports/test-coverage/jacoco.xml
     when: always
 
+Verify Formatting:
+  stage: check
+  <<: *cache_gradle_pull_only
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  allow_failure: false
+  script:
+    - gradle spotlessCheck --build-cache -PenableLanguageServer
+
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  stage: post-test
+  <<: *cache_gradle_pull_only
+  stage: deploy
   script:
     - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache -PenableLanguageServer
   rules:
@@ -88,7 +93,7 @@ Deploy Nexus:
       when: on_success
 
 Trigger Digital Twin:
-  stage: post-test
+  stage: downstream
   needs: 
    - job: "Deploy Nexus"
      optional: true
