@@ -1,5 +1,3 @@
-import montiarc.build.InjectVersionTask
-
 /* (c) https://github.com/MontiCore/monticore */
 
 plugins {
