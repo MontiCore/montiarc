@@ -28,7 +28,7 @@ import arcbasis._cocos.NoPortInDefaultParameterValue;
 import arcbasis._cocos.NoPortInFieldDeclaration;
 import arcbasis._cocos.NoPortInSubcomponentArgument;
 import arcbasis._cocos.NoPortInSuperComponentArgument;
-import arcbasis._cocos.NoSubcomponentReferenceCycle;
+import arcbasis._cocos.NoComponentReferenceCycle;
 import arcbasis._cocos.OnlyAssignmentOrCallExpressionStatement;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
@@ -165,7 +165,7 @@ public class MontiArcCoCos {
       checker.addCoCo(new FeedbackStrongCausality());
     }
     checker.addCoCo(new OptionalConfigurationParametersLast());
-    checker.addCoCo(new NoSubcomponentReferenceCycle());
+    checker.addCoCo(new NoComponentReferenceCycle());
     if (checkVariants) {
       varChecker.get4FullVariant().addCoCo(new PortHeritageTypeFits4Family());
     } else {

@@ -32,7 +32,7 @@ public enum ArcError implements Error {
   COMP_ARG_KEY_INVALID("0xC1124", "Unexpected key argument '%s'"),
   COMP_ARG_VALUE_AFTER_KEY("0xC1125", "Positional assignments after key argument"),
   OPTIONAL_PARAMS_LAST("0xC1126", "Mandatory parameter '%s' proceeds optional parameter '%s'"),
-  SUBCOMPONENT_REFERENCE_CYCLE("0xC1127", "Infinite recursion, subcomponent reference cycle"),
+  COMPONENT_REFERENCE_CYCLE("0xC1127", "Component '%s' instantiates itself in a self-referential cycle:\n%s"),
   TYPE_REF_NO_EXPRESSION2("0xC1131", "Expected an expression"),
   HERITAGE_IN_PORT_TYPE_MISMATCH("0xC1132", "Incompatible types, clash with port of super component"),
   HERITAGE_OUT_PORT_TYPE_MISMATCH("0xC1133", "Incompatible types, clash with port of super component"),
@@ -105,7 +105,7 @@ public enum ArcError implements Error {
 
   @Override
   public String toString() {
-    return this.getErrorCode() + ": " + this.getErrorMsgFormat();
+    return this.getErrorCode() + ": " + this.getErrorMsgFormat().replaceAll("\n", System.lineSeparator());
   }
 
   /**

@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static de.se_rwth.commons.logging.Finding.Type.ERROR;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
+import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -81,7 +82,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingPortTypeTest10",
     "MissingPortTypeTest11",
     "MissingPortTypeTest12",
-    "NameClash"
+    "NameClash",
+    "SelfReferentialComponent"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -297,6 +299,25 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("MissingSymbolsInConnector5A.arc"),
         fn(ERROR, "MissingSymbolsInConnector5A.arc", 18, 3, 18, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
         fn(ERROR, "MissingSymbolsInConnector5A.arc", 19, 3, 19, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
+      ),
+      arg("SelfReferentialComponentTest1",
+        mp("SelfReferentialComponent1.arc"),
+        fn(ERROR, "SelfReferentialComponent1.arc", 9, 29, 9, 32, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent1", "SelfReferentialComponent1 -> SelfReferentialComponent1")
+      ),
+      arg("SelfReferentialComponentTest2",
+        mp("SelfReferentialComponent2.arc"),
+        fn(ERROR, "SelfReferentialComponent2.arc", 9, 29, 9, 33, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent2", "SelfReferentialComponent2 -> SelfReferentialComponent2"),
+        fn(ERROR, "SelfReferentialComponent2.arc", 10, 29, 10, 33, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent2", "SelfReferentialComponent2 -> SelfReferentialComponent2")
+      ),
+      arg("SelfReferentialComponentTest3",
+        mp("SelfReferentialComponent3A.arc"),
+        fn(ERROR, "SelfReferentialComponent3A.arc", 13, 30, 13, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent3A", "SelfReferentialComponent3A -> SelfReferentialComponent3B -> SelfReferentialComponent3A"),
+        fn(ERROR, "SelfReferentialComponent3A.arc", 16, 32, 16, 36, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent3B", "SelfReferentialComponent3B -> SelfReferentialComponent3A -> SelfReferentialComponent3B")
+      ),
+      arg("SelfReferentialComponentTest4",
+        mp("SelfReferentialComponent4A.arc", "SelfReferentialComponent4B.arc"),
+        fn(ERROR, "SelfReferentialComponent4A.arc", 11, 30, 11, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent4A", "SelfReferentialComponent4A -> SelfReferentialComponent4B -> SelfReferentialComponent4A"),
+        fn(ERROR, "SelfReferentialComponent4B.arc", 11, 30, 11, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent4B", "SelfReferentialComponent4B -> SelfReferentialComponent4A -> SelfReferentialComponent4B")
       )
     );
   }
