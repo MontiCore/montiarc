@@ -40,7 +40,7 @@ variability and feature configuration, dynamic reconfiguration, and generics.
 
 * [Documentation](https://monticore.github.io/montiarc)
   * [Setup](https://monticore.github.io/montiarc/v7.9/GettingStarted/Setup)
-  * [Contributing](https://monticore.github.io/montiarc/v7.9/Contributing)
+  * [Contributing](https://github.com/MontiCore/montiarc/blob/dev/CONTRIBUTING.md)
   * [FAQ](https://monticore.github.io/montiarc/v7.9/FAQ)
 * [Publications](https://www.se-rwth.de/publications/)
 * [License](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
