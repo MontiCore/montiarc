@@ -129,8 +129,8 @@ public class MontiArcCoCos {
   }
 
   public static MontiArcCoCoChecker afterSymTab2(boolean checkVariants) {
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     MontiArcFullVariantCoCoChecker varChecker = new MontiArcFullVariantCoCoChecker();
+    MontiArcCoCoChecker checker = checkVariants ? varChecker : new MontiArcCoCoChecker();
     MontiArcTraverser traverser;  // Will be used to as intermediate memory for initializing traversers with adequate handlers etc.
 
     if (!checkVariants) {

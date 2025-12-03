@@ -82,8 +82,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingPortTypeTest10",
     "MissingPortTypeTest11",
     "MissingPortTypeTest12",
-    "NameClash",
-    "SelfReferentialComponent"
+    "NameClash"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
