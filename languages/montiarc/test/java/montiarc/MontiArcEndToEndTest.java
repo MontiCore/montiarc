@@ -317,6 +317,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("SelfReferentialComponent4A.arc", "SelfReferentialComponent4B.arc"),
         fn(ERROR, "SelfReferentialComponent4A.arc", 11, 30, 11, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent4A", "SelfReferentialComponent4A -> SelfReferentialComponent4B -> SelfReferentialComponent4A"),
         fn(ERROR, "SelfReferentialComponent4B.arc", 11, 30, 11, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent4B", "SelfReferentialComponent4B -> SelfReferentialComponent4A -> SelfReferentialComponent4B")
+      ),
+      arg("SelfReferentialComponentTest5",
+        mp("SelfReferentialComponent5A.arc"),
+        fn(ERROR, "SelfReferentialComponent5A.arc", 12, 30, 12, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent5A", "SelfReferentialComponent5A -> SelfReferentialComponent5B -> SelfReferentialComponent5A")
       )
     );
   }
