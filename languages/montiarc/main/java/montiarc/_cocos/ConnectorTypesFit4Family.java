@@ -217,15 +217,17 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
             Log.error(
               ArcError.CONNECTOR_TYPE_MISMATCH.format(
                 targetType.print(), sourceType.print()),
-              conn.get_SourcePositionStart(),
-              target.get_SourcePositionEnd());
+              target.get_SourcePositionStart(),
+              target.get_SourcePositionEnd()
+            );
           }
         } catch (ResolvedSeveralEntriesForSymbolException e) {
           Log.error(
             ArcError.CONNECTOR_TYPE_MISMATCH.format(
               targetType.print(), sourceType.print()),
-            conn.get_SourcePositionStart(),
-            target.get_SourcePositionEnd());
+            target.get_SourcePositionStart(),
+            target.get_SourcePositionEnd()
+          );
         }
       } else {
         logInfoThatCoCoIsNotChecked4TargetPort(target);

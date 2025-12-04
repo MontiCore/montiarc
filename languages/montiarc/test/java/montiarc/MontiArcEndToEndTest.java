@@ -309,8 +309,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("MissingSymbolsInConnectorTest5",
         mp("MissingSymbolsInConnector5A.arc"),
-        fn(ERROR, "MissingSymbolsInConnector5A.arc", 18, 3, 18, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
-        fn(ERROR, "MissingSymbolsInConnector5A.arc", 19, 3, 19, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
+        fn(ERROR, "MissingSymbolsInConnector5A.arc", 18, 8, 18, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
+        fn(ERROR, "MissingSymbolsInConnector5A.arc", 19, 12, 19, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
       ),
       arg("SelfReferentialComponentTest1",
         mp("SelfReferentialComponent1.arc"),
@@ -441,6 +441,33 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, "ConnectorMismatchDirection4A.arc", 20, 8, 20, 13, TARGET_DIRECTION_MISMATCH, "sub.o"),
         fn(ERROR, "ConnectorMismatchDirection4A.arc", 21, 3, 21, 8, SOURCE_DIRECTION_MISMATCH, "sub.i"),
         fn(ERROR, "ConnectorMismatchDirection4A.arc", 21, 12, 21, 13, TARGET_DIRECTION_MISMATCH, "i")
+      ),
+      arg("ConnectorMismatchTypeTest1",
+        mp("ConnectorMismatchType1.arc"),
+        fn(ERROR, "ConnectorMismatchType1.arc", 26, 8, 26, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType1.arc", 28, 13, 28, 19, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType1.arc", 30, 13, 30, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean")
+      ),
+      arg("ConnectorMismatchTypeTest2",
+        mp("ConnectorMismatchType2.arc"),
+        fn(ERROR, "ConnectorMismatchType2.arc", 32, 8, 32, 15, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType2.arc", 32, 17, 32, 24, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType2.arc", 34, 13, 34, 20, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType2.arc", 34, 22, 34, 29, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType2.arc", 36, 13, 36, 15, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType2.arc", 36, 17, 36, 19, CONNECTOR_TYPE_MISMATCH, "int", "boolean")
+      ),
+      arg("ConnectorMismatchTypeTest3",
+        mp("ConnectorMismatchType3A.arc", "ConnectorMismatchType3B.arc"),
+        fn(ERROR, "ConnectorMismatchType3A.arc", 21, 8, 21, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType3A.arc", 23, 13, 23, 19, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType3A.arc", 25, 13, 25, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean")
+      ),
+      arg("ConnectorMismatchTypeTest4",
+        mp("ConnectorMismatchType4A.arc"),
+        fn(ERROR, "ConnectorMismatchType4A.arc", 22, 8, 22, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType4A.arc", 24, 13, 24, 19, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
+        fn(ERROR, "ConnectorMismatchType4A.arc", 26, 13, 26, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean")
       )
     );
     return arg;
