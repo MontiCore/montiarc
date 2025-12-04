@@ -23,7 +23,9 @@ import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
+import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
+import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
@@ -87,7 +89,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingPortTypeTest11",
     "MissingPortTypeTest12",
     "NameClash",
-    "SelfReferentialComponentInConnectorTest"
+    "SelfReferentialComponentInConnectorTest",
+    "PortNotConnectedTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -354,6 +357,43 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(WARNING, "PortUnused5.arc", 13, 21, 13, 23, IN_PORT_UNUSED, "i2"),
         fn(WARNING, "PortUnused5.arc", 14, 18, 14, 20, OUT_PORT_UNUSED, "o1"),
         fn(WARNING, "PortUnused5.arc", 14, 22, 14, 24, OUT_PORT_UNUSED, "o2")
+      ),
+      arg("PortNotConnectedTest1",
+        mp("PortNotConnected1.arc"),
+        fn(ERROR, "PortNotConnected1.arc", 17, 9, 17, 12, IN_PORT_NOT_CONNECTED, "sub.i1")
+      ),
+      arg("PortNotConnectedTest2",
+        mp("PortNotConnected2.arc"),
+        fn(ERROR, "PortNotConnected2.arc", 17, 9, 17, 12, IN_PORT_NOT_CONNECTED, "sub.i2")
+      ),
+      arg("PortNotConnectedTest3",
+        mp("PortNotConnected3.arc"),
+        fn(WARNING, "PortNotConnected3.arc", 17, 9, 17, 12, OUT_PORT_NOT_CONNECTED, "sub.o1")
+      ),
+      arg("PortNotConnectedTest4",
+        mp("PortNotConnected4.arc"),
+        fn(WARNING, "PortNotConnected4.arc", 17, 9, 17, 12, OUT_PORT_NOT_CONNECTED, "sub.o2")
+      ),
+      arg("PortNotConnectedTest5",
+        mp("PortNotConnected5.arc"),
+        fn(ERROR, "PortNotConnected5.arc", 23, 22, 23, 26, IN_PORT_NOT_CONNECTED, "sub2.i1"),
+        fn(ERROR, "PortNotConnected5.arc", 23, 22, 23, 26, IN_PORT_NOT_CONNECTED, "sub2.i2"),
+        fn(WARNING, "PortNotConnected5.arc", 23, 22, 23, 26, OUT_PORT_NOT_CONNECTED, "sub2.o1"),
+        fn(WARNING, "PortNotConnected5.arc", 23, 22, 23, 26, OUT_PORT_NOT_CONNECTED, "sub2.o2")
+      ),
+      arg("PortNotConnectedTest6",
+        mp("PortNotConnected6A.arc", "PortNotConnected6B.arc"),
+        fn(ERROR, "PortNotConnected6A.arc", 11, 22, 11, 25, IN_PORT_NOT_CONNECTED, "sub.i1"),
+        fn(ERROR, "PortNotConnected6A.arc", 11, 22, 11, 25, IN_PORT_NOT_CONNECTED, "sub.i2"),
+        fn(WARNING, "PortNotConnected6A.arc", 11, 22, 11, 25, OUT_PORT_NOT_CONNECTED, "sub.o1"),
+        fn(WARNING, "PortNotConnected6A.arc", 11, 22, 11, 25, OUT_PORT_NOT_CONNECTED, "sub.o2")
+      ),
+      arg("PortNotConnectedTest7",
+        mp("PortNotConnected7A.arc"),
+        fn(ERROR, "PortNotConnected7A.arc", 12, 22, 12, 25, IN_PORT_NOT_CONNECTED, "sub.i1"),
+        fn(ERROR, "PortNotConnected7A.arc", 12, 22, 12, 25, IN_PORT_NOT_CONNECTED, "sub.i2"),
+        fn(WARNING, "PortNotConnected7A.arc", 12, 22, 12, 25, OUT_PORT_NOT_CONNECTED, "sub.o1"),
+        fn(WARNING, "PortNotConnected7A.arc", 12, 22, 12, 25, OUT_PORT_NOT_CONNECTED, "sub.o2")
       )
     );
     return arg;

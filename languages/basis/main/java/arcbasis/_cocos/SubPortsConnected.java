@@ -53,7 +53,10 @@ public class SubPortsConnected implements ArcBasisASTArcComponentTypeCoCo {
       subInputPorts.removeAll(targets);
       for (String port : subInputPorts) {
         if (!sources.contains(port)) {
-          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(port), subSymbol.getSourcePosition());
+          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(port),
+            subSymbol.getAstNode().get_SourcePositionStart(),
+            subSymbol.getAstNode().get_SourcePositionEnd()
+          );
         }
       }
 
@@ -65,7 +68,10 @@ public class SubPortsConnected implements ArcBasisASTArcComponentTypeCoCo {
       subOutputPorts.removeAll(sources);
       for (String port : subOutputPorts) {
         if (!targets.contains(port)) {
-          Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(port), subSymbol.getSourcePosition());
+          Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(port),
+            subSymbol.getAstNode().get_SourcePositionStart(),
+            subSymbol.getAstNode().get_SourcePositionEnd()
+          );
         }
       }
     }
