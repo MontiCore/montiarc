@@ -146,7 +146,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   }
 
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
-    Stream<Arguments> arg = Stream.of(
+    return Stream.of(
       arg("CircularInheritanceTest1",
         mp("CircularInheritance1.arc"),
         fn(ERROR, "CircularInheritance1.arc", 6, 32, 6, 60, CIRCULAR_INHERITANCE, "CircularInheritance1")
@@ -498,7 +498,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, "ConnectorMismatchTiming4A.arc", 26, 13, 26, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed")
       )
     );
-    return arg;
   }
 
   protected static Stream<Arguments> invalidModelAndError4VariabilityProvider() {
