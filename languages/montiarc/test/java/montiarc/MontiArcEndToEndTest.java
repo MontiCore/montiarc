@@ -57,7 +57,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingComponentTest8",
     "MissingComponentTest9",
     "NameClash",
-    "SelfReferentialComponentInConnectorTest"
+    "SelfReferentialComponentInConnectorTest",
+    "CircularInheritanceWithCompositionTest3"
   })
   void invalidModelsShouldFailEndToEnd(@NotNull String name,
                                        @NotNull String modelPath,
@@ -99,7 +100,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "PortMultipleSender",
     "ConnectorMismatchDirectionTest4",
     "MissingSymbolsInConnectorTest6",
-    "MissingSymbolsInConnectorTest7"
+    "MissingSymbolsInConnectorTest7",
+    "CircularInheritanceWithCompositionTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -180,6 +182,21 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("CircularInheritanceTest7",
         mp("CircularInheritance7A.arc"),
         fn(ERROR, "CircularInheritance7A.arc", 7, 33, 7, 62, CIRCULAR_INHERITANCE, "CircularInheritance7A")
+      ),
+      arg("CircularInheritanceWithCompositionTest1",
+        mp("CircularInheritanceWithComposition1.arc"),
+        fn(ERROR, "CircularInheritanceWithComposition1.arc", 7, 47, 7, 90, CIRCULAR_INHERITANCE, "CircularInheritanceWithComposition1"),
+        fn(ERROR, "CircularInheritanceWithComposition1.arc", 12, 20, 12, 34, CIRCULAR_INHERITANCE, "Inner1"),
+        fn(ERROR, "CircularInheritanceWithComposition1.arc", 17, 20, 17, 34, CIRCULAR_INHERITANCE, "Inner2")
+      ),
+      arg("CircularInheritanceWithCompositionTest2",
+        mp("CircularInheritanceWithComposition2A.arc", "CircularInheritanceWithComposition2B.arc", "CircularInheritanceWithComposition2C.arc"),
+        fn(ERROR, "CircularInheritanceWithComposition2B.arc", 6, 48, 6, 92, CIRCULAR_INHERITANCE, "CircularInheritanceWithComposition2B"),
+        fn(ERROR, "CircularInheritanceWithComposition2C.arc", 6, 48, 6, 92, CIRCULAR_INHERITANCE, "CircularInheritanceWithComposition2C")
+      ),
+      arg("CircularInheritanceWithCompositionTest3",
+        mp("CircularInheritanceWithComposition3A.arc"),
+        new Finding[]{}
       ),
       arg("MissingComponentTest1",
         mp("MissingComponent1.arc"),
