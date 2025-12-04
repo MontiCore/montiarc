@@ -3,6 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTPortAccess;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
@@ -24,12 +25,14 @@ public class PortUniqueSender implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(node);
     List<String> targets = new ArrayList<>();
     for (ASTConnector connector : node.getConnectors()) {
-      for (String target : connector.getTargetsNames()) {
-        if (targets.contains(target)) {
-          Log.error(ArcError.PORT_MULTIPLE_SENDER.format(target),
-            connector.get_SourcePositionStart(), connector.get_SourcePositionEnd());
+      for (ASTPortAccess target : connector.getTargetList()) {
+        if (targets.contains(target.getQName())) {
+          Log.error(ArcError.PORT_MULTIPLE_SENDER.format(target.getQName()),
+            target.get_SourcePositionStart(),
+            target.get_SourcePositionEnd()
+          );
         } else {
-          targets.add(target);
+          targets.add(target.getQName());
         }
       }
     }

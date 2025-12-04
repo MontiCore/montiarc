@@ -27,6 +27,7 @@ import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
+import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -90,7 +91,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingPortTypeTest12",
     "NameClash",
     "SelfReferentialComponentInConnectorTest",
-    "PortNotConnectedTest"
+    "PortNotConnectedTest",
+    "PortMultipleSender"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -394,6 +396,18 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, "PortNotConnected7A.arc", 12, 22, 12, 25, IN_PORT_NOT_CONNECTED, "sub.i2"),
         fn(WARNING, "PortNotConnected7A.arc", 12, 22, 12, 25, OUT_PORT_NOT_CONNECTED, "sub.o1"),
         fn(WARNING, "PortNotConnected7A.arc", 12, 22, 12, 25, OUT_PORT_NOT_CONNECTED, "sub.o2")
+      ),
+      arg("PortMultipleSenderTest1",
+        mp("PortMultipleSender1.arc"),
+        fn(ERROR, "PortMultipleSender1.arc", 21, 13, 21, 14, PORT_MULTIPLE_SENDER, "o")
+      ),
+      arg("PortMultipleSenderTest2",
+        mp("PortMultipleSender2.arc"),
+        fn(ERROR, "PortMultipleSender2.arc", 20, 15, 20, 16, PORT_MULTIPLE_SENDER, "o")
+      ),
+      arg("PortMultipleSenderTest3",
+        mp("PortMultipleSender3.arc"),
+        fn(ERROR, "PortMultipleSender3.arc", 20, 9, 20, 14, PORT_MULTIPLE_SENDER, "sub.i")
       )
     );
     return arg;
