@@ -46,7 +46,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingComponentTest7",
     "MissingComponentTest8",
     "MissingComponentTest9",
-    "NameClash"
+    "NameClash",
+    "SelfReferentialComponentInConnectorTest"
   })
   void invalidModelsShouldFailEndToEnd(@NotNull String name,
                                        @NotNull String modelPath,
@@ -82,7 +83,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingPortTypeTest10",
     "MissingPortTypeTest11",
     "MissingPortTypeTest12",
-    "NameClash"
+    "NameClash",
+    "SelfReferentialComponentInConnectorTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -321,6 +323,11 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("SelfReferentialComponentTest5",
         mp("SelfReferentialComponent5A.arc"),
         fn(ERROR, "SelfReferentialComponent5A.arc", 12, 30, 12, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent5A", "SelfReferentialComponent5A -> SelfReferentialComponent5B -> SelfReferentialComponent5A")
+      ),
+      arg("SelfReferentialComponentInConnectorTest",
+        mp("SelfReferentialComponentInConnector.arc"),
+        fn(ERROR, "SelfReferentialComponentInConnector.arc", 12, 39, 12, 43, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentInConnector", "SelfReferentialComponentInConnector -> SelfReferentialComponentInConnector"),
+        fn(ERROR, "SelfReferentialComponentInConnector.arc", 12, 45, 12, 49, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentInConnector", "SelfReferentialComponentInConnector -> SelfReferentialComponentInConnector")
       )
     );
   }
