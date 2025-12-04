@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 import static de.se_rwth.commons.logging.Finding.Type.ERROR;
 import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
+import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
@@ -468,6 +469,33 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, "ConnectorMismatchType4A.arc", 22, 8, 22, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
         fn(ERROR, "ConnectorMismatchType4A.arc", 24, 13, 24, 19, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
         fn(ERROR, "ConnectorMismatchType4A.arc", 26, 13, 26, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean")
+      ),
+      arg("ConnectorMismatchTimingTest1",
+        mp("ConnectorMismatchTiming1.arc"),
+        fn(ERROR, "ConnectorMismatchTiming1.arc", 26, 8, 26, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming1.arc", 28, 13, 28, 19, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming1.arc", 30, 13, 30, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed")
+      ),
+      arg("ConnectorMismatchTimingTest2",
+        mp("ConnectorMismatchTiming2.arc"),
+        fn(ERROR, "ConnectorMismatchTiming2.arc", 26, 8, 26, 15, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming2.arc", 26, 17, 26, 24, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming2.arc", 28, 13, 28, 20, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming2.arc", 28, 22, 28, 29, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming2.arc", 30, 13, 30, 15, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming2.arc", 30, 17, 30, 19, CONNECTOR_TIMING_MISMATCH, "sync", "timed")
+      ),
+      arg("ConnectorMismatchTimingTest3",
+        mp("ConnectorMismatchTiming3A.arc", "ConnectorMismatchTiming3B.arc"),
+        fn(ERROR, "ConnectorMismatchTiming3A.arc", 21, 8, 21, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming3A.arc", 23, 13, 23, 19, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming3A.arc", 25, 13, 25, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed")
+      ),
+      arg("ConnectorMismatchTimingTest4",
+        mp("ConnectorMismatchTiming4A.arc"),
+        fn(ERROR, "ConnectorMismatchTiming4A.arc", 22, 8, 22, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming4A.arc", 24, 13, 24, 19, CONNECTOR_TIMING_MISMATCH, "sync", "timed"),
+        fn(ERROR, "ConnectorMismatchTiming4A.arc", 26, 13, 26, 14, CONNECTOR_TIMING_MISMATCH, "sync", "timed")
       )
     );
     return arg;
