@@ -26,6 +26,8 @@ import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
+import static montiarc.util.ArcError.MISSING_PORT;
+import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
@@ -96,7 +98,9 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "SelfReferentialComponentInConnectorTest",
     "PortNotConnectedTest",
     "PortMultipleSender",
-    "ConnectorMismatchDirectionTest4"
+    "ConnectorMismatchDirectionTest4",
+    "MissingSymbolsInConnectorTest6",
+    "MissingSymbolsInConnectorTest7"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -312,6 +316,31 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("MissingSymbolsInConnector5A.arc"),
         fn(ERROR, "MissingSymbolsInConnector5A.arc", 18, 8, 18, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
         fn(ERROR, "MissingSymbolsInConnector5A.arc", 19, 12, 19, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
+      ),
+      arg("MissingSymbolsInConnectorTest6",
+        mp("MissingSymbolsInConnector6.arc"),
+        fn(ERROR, "MissingSymbolsInConnector6.arc", 16, 8, 16, 14, MISSING_SUBCOMPONENT, "subA"),
+        fn(ERROR, "MissingSymbolsInConnector6.arc", 17, 3, 17, 9, MISSING_SUBCOMPONENT, "subA")
+      ),
+      arg("MissingSymbolsInConnectorTest7",
+        mp("MissingSymbolsInConnector7.arc"),
+        fn(ERROR, "MissingSymbolsInConnector7.arc", 16, 3, 16, 4, MISSING_PORT, "i"),
+        fn(ERROR, "MissingSymbolsInConnector7.arc", 17, 12, 17, 13, MISSING_PORT, "o")
+      ),
+      arg("MissingSymbolsInConnectorTest8",
+        mp("MissingSymbolsInConnector8.arc"),
+        fn(ERROR, "MissingSymbolsInConnector8.arc", 18, 8, 18, 13, MISSING_PORT, "sub.i"),
+        fn(ERROR, "MissingSymbolsInConnector8.arc", 19, 3, 19, 8, MISSING_PORT, "sub.o")
+      ),
+      arg("MissingSymbolsInConnectorTest9",
+        mp("MissingSymbolsInConnector9A.arc", "MissingSymbolsInConnector9B.arc"),
+        fn(ERROR, "MissingSymbolsInConnector9A.arc", 16, 8, 16, 13, MISSING_PORT, "sub.i"),
+        fn(ERROR, "MissingSymbolsInConnector9A.arc", 17, 3, 17, 8, MISSING_PORT, "sub.o")
+      ),
+      arg("MissingSymbolsInConnectorTest10",
+        mp("MissingSymbolsInConnector10A.arc"),
+        fn(ERROR, "MissingSymbolsInConnector10A.arc", 17, 8, 17, 13, MISSING_PORT, "sub.i"),
+        fn(ERROR, "MissingSymbolsInConnector10A.arc", 18, 3, 18, 8, MISSING_PORT, "sub.o")
       ),
       arg("SelfReferentialComponentTest1",
         mp("SelfReferentialComponent1.arc"),
