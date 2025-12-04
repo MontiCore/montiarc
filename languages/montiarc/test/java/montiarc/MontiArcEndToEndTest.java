@@ -28,6 +28,8 @@ import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
+import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -92,7 +94,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "NameClash",
     "SelfReferentialComponentInConnectorTest",
     "PortNotConnectedTest",
-    "PortMultipleSender"
+    "PortMultipleSender",
+    "ConnectorMismatchDirectionTest4"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -408,6 +411,36 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("PortMultipleSenderTest3",
         mp("PortMultipleSender3.arc"),
         fn(ERROR, "PortMultipleSender3.arc", 20, 9, 20, 14, PORT_MULTIPLE_SENDER, "sub.i")
+      ),
+      arg("ConnectorMismatchDirectionTest1",
+        mp("ConnectorMismatchDirection1.arc"),
+        fn(ERROR, "ConnectorMismatchDirection1.arc", 24, 3, 24, 4, SOURCE_DIRECTION_MISMATCH, "o"),
+        fn(ERROR, "ConnectorMismatchDirection1.arc", 24, 8, 24, 13, TARGET_DIRECTION_MISMATCH, "sub.o"),
+        fn(ERROR, "ConnectorMismatchDirection1.arc", 25, 3, 25, 8, SOURCE_DIRECTION_MISMATCH, "sub.i"),
+        fn(ERROR, "ConnectorMismatchDirection1.arc", 25, 12, 25, 13, TARGET_DIRECTION_MISMATCH, "i")
+      ),
+      arg("ConnectorMismatchDirectionTest2",
+        mp("ConnectorMismatchDirection2.arc"),
+        fn(ERROR, "ConnectorMismatchDirection2.arc", 26, 3, 26, 4, SOURCE_DIRECTION_MISMATCH, "o"),
+        fn(ERROR, "ConnectorMismatchDirection2.arc", 26, 8, 26, 14, TARGET_DIRECTION_MISMATCH, "sub.o1"),
+        fn(ERROR, "ConnectorMismatchDirection2.arc", 26, 16, 26, 22, TARGET_DIRECTION_MISMATCH, "sub.o2"),
+        fn(ERROR, "ConnectorMismatchDirection2.arc", 27, 3, 27, 8, SOURCE_DIRECTION_MISMATCH, "sub.i"),
+        fn(ERROR, "ConnectorMismatchDirection2.arc", 27, 12, 27, 14, TARGET_DIRECTION_MISMATCH, "i1"),
+        fn(ERROR, "ConnectorMismatchDirection2.arc", 27, 16, 27, 18, TARGET_DIRECTION_MISMATCH, "i2")
+      ),
+      arg("ConnectorMismatchDirectionTest3",
+        mp("ConnectorMismatchDirection3A.arc", "ConnectorMismatchDirection3B.arc"),
+        fn(ERROR, "ConnectorMismatchDirection3A.arc", 19, 3, 19, 4, SOURCE_DIRECTION_MISMATCH, "o"),
+        fn(ERROR, "ConnectorMismatchDirection3A.arc", 19, 8, 19, 13, TARGET_DIRECTION_MISMATCH, "sub.o"),
+        fn(ERROR, "ConnectorMismatchDirection3A.arc", 20, 3, 20, 8, SOURCE_DIRECTION_MISMATCH, "sub.i"),
+        fn(ERROR, "ConnectorMismatchDirection3A.arc", 20, 12, 20, 13, TARGET_DIRECTION_MISMATCH, "i")
+      ),
+      arg("ConnectorMismatchDirectionTest4",
+        mp("ConnectorMismatchDirection4A.arc"),
+        fn(ERROR, "ConnectorMismatchDirection4A.arc", 20, 3, 20, 4, SOURCE_DIRECTION_MISMATCH, "o"),
+        fn(ERROR, "ConnectorMismatchDirection4A.arc", 20, 8, 20, 13, TARGET_DIRECTION_MISMATCH, "sub.o"),
+        fn(ERROR, "ConnectorMismatchDirection4A.arc", 21, 3, 21, 8, SOURCE_DIRECTION_MISMATCH, "sub.i"),
+        fn(ERROR, "ConnectorMismatchDirection4A.arc", 21, 12, 21, 13, TARGET_DIRECTION_MISMATCH, "i")
       )
     );
     return arg;
