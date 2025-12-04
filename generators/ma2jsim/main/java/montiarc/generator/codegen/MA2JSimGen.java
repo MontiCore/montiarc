@@ -24,10 +24,6 @@ import montiarc.generator.util.MaUnitHelper;
 import montiarc.util.LogAspects;
 import montiarc.util.MASimError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 
 import java.nio.file.Path;
@@ -36,20 +32,18 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import static org.eclipse.jdt.core.formatter.CodeFormatter.K_COMPILATION_UNIT;
-
 public class MA2JSimGen {
 
   protected static String FILE_EXTENSION = "java";
   protected GeneratorEngine engine;
   protected GeneratorSetup setup;
-  protected CodeFormatter formatter;
+  protected MA2JSimCodeFormatter formatter;
   protected Helper helper;
 
   public MA2JSimGen(@NotNull GeneratorSetup setup) {
     this.setup = Preconditions.checkNotNull(setup);
     this.engine = new GeneratorEngine(this.setup);
-    this.formatter = new DefaultCodeFormatter();
+    this.formatter = new MA2JSimCodeFormatter();
     this.helper = (Helper) setup.getGlex().getGlobalVar("helper");
   }
 
@@ -103,7 +97,7 @@ public class MA2JSimGen {
     return this.setup;
   }
 
-  protected CodeFormatter getFormatter() {
+  protected MA2JSimCodeFormatter getFormatter() {
     return this.formatter;
   }
 
@@ -360,16 +354,11 @@ public class MA2JSimGen {
     String code = getEngine().generate(template, ast, templateArguments).toString();
     this.setup.getGlex().setGlobalValue("isTop", null);  // Reset
 
-    Optional<String> formattedCode = Optional.empty();
-    try {
-      Document document = new Document(code);
-      formatter.format(K_COMPILATION_UNIT, code, 0, code.length(), 0, null).apply(document);
-      formattedCode = Optional.of(document.get());
-    } catch (BadLocationException | java.lang.Error e) {
+    Optional<String> formattedCode = formatter.format(code);
+    if (formattedCode.isEmpty()) {
       Log.warn(MASimError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, template, ast.getArcComponentType().getSymbol().getFullName(), e.getMessage()));
+        outPath, template, ast.getArcComponentType().getSymbol().getFullName()));
     }
-
     FileReaderWriter.storeInFile(outPath, formattedCode.orElse(code));
   }
 

@@ -12,6 +12,7 @@ import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.generator.MA2JavaCodeFormatter;
 import montiarc.generator.helper.ArcAutomatonHelper;
 import montiarc.generator.helper.ComponentHelper;
 import montiarc.generator.helper.dse.ComponentHelperDse;
@@ -19,18 +20,12 @@ import montiarc.generator.helper.dse.ComponentHelperDseValue;
 import montiarc.generator.util.Identifier;
 import montiarc.util.MA2JavaError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jdt.internal.formatter.DefaultCodeFormatter;
-import org.eclipse.jface.text.BadLocationException;
-import org.eclipse.jface.text.Document;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-
-import static org.eclipse.jdt.core.formatter.CodeFormatter.K_COMPILATION_UNIT;
 
 public class MontiArcGenerator {
 
@@ -41,12 +36,12 @@ public class MontiArcGenerator {
   protected static String FILE_EXTENSION = ".java";
   protected GeneratorEngine engine;
   protected GeneratorSetup engineSetup;
-  protected CodeFormatter codeFormatter;
+  protected MA2JavaCodeFormatter formatter;
 
   public MontiArcGenerator(@NotNull GeneratorSetup setup) {
     this.engineSetup = Preconditions.checkNotNull(setup);
     this.engine = new GeneratorEngine(this.engineSetup);
-    this.codeFormatter = new DefaultCodeFormatter();
+    this.formatter = new MA2JavaCodeFormatter();
   }
 
   public MontiArcGenerator(@NotNull Path targetDir, @NotNull Path hwcPath) {
@@ -90,8 +85,8 @@ public class MontiArcGenerator {
     return this.engineSetup;
   }
 
-  protected CodeFormatter getCodeFormatter() {
-    return this.codeFormatter;
+  protected MA2JavaCodeFormatter getCodeFormatter() {
+    return this.formatter;
   }
 
   public void generate(@NotNull ASTMACompilationUnit ast, boolean dse) {
@@ -274,16 +269,10 @@ public class MontiArcGenerator {
    */
   protected void formatFile(String generatedCode, Path outPath, String templateName,
                             @NotNull ASTArcComponentType comp) {
-    Optional<String> formattedCode = Optional.empty();
-
-    try {
-      Document document = new Document(generatedCode);
-      codeFormatter.format(K_COMPILATION_UNIT, generatedCode, 0, generatedCode.length(), 0, null).apply(document);
-      formattedCode = Optional.of(document.get());
-    }
-    catch (BadLocationException | java.lang.Error e) {
+    Optional<String> formattedCode = formatter.format(generatedCode);
+    if (formattedCode.isEmpty()) {
       Log.warn(MA2JavaError.POST_GENERATION_FORMATTING_FAIL.format(
-        outPath, templateName, comp.getSymbol().getFullName(), e.getMessage()));
+        outPath, templateName, comp.getSymbol().getFullName()));
     }
     FileReaderWriter.storeInFile(outPath, formattedCode.orElse(generatedCode));
   }

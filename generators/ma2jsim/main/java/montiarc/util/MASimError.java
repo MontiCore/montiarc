@@ -9,8 +9,7 @@ package montiarc.util;
  */
 public enum MASimError implements Error {
 
-  POST_GENERATION_FORMATTING_FAIL("0xC9000", " Could not format '%s' produced by template '%s' on '%s'. Reason: %s"),
-  TEMPLATE_OUTPUT_EMPTY("0xC9001", "Template %s produced no content.");
+  POST_GENERATION_FORMATTING_FAIL("0xC9000", " Could not format '%s' produced by template '%s' on '%s'.");
 
   private final String errorCode;
   private final String errorMsgFormat;
