@@ -137,11 +137,11 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
 
       if (ExpressionSolverService.solve(expressionList) == Status.SATISFIABLE) {
         if (portSymbol.isIncoming()) {
-          Log.warn(ArcError.IN_PORT_UNUSED.format(portSymbol),
+          Log.warn(ArcError.IN_PORT_UNUSED.format(portSymbol.getName()),
             portSymbol.getAstNode().get_SourcePositionStart(), portSymbol.getAstNode().get_SourcePositionEnd()
           );
         } else {
-          Log.warn(ArcError.OUT_PORT_UNUSED.format(portSymbol),
+          Log.warn(ArcError.OUT_PORT_UNUSED.format(portSymbol.getName()),
             portSymbol.getAstNode().get_SourcePositionStart(), portSymbol.getAstNode().get_SourcePositionEnd());
         }
       }

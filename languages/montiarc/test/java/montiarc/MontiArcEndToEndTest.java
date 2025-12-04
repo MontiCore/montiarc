@@ -19,9 +19,12 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static de.se_rwth.commons.logging.Finding.Type.ERROR;
+import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
+import static montiarc.util.ArcError.IN_PORT_UNUSED;
+import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -134,7 +137,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   }
 
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
-    return Stream.of(
+    Stream<Arguments> arg = Stream.of(
       arg("CircularInheritanceTest1",
         mp("CircularInheritance1.arc"),
         fn(ERROR, "CircularInheritance1.arc", 6, 32, 6, 60, CIRCULAR_INHERITANCE, "CircularInheritance1")
@@ -328,8 +331,32 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mp("SelfReferentialComponentInConnector.arc"),
         fn(ERROR, "SelfReferentialComponentInConnector.arc", 12, 39, 12, 43, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentInConnector", "SelfReferentialComponentInConnector -> SelfReferentialComponentInConnector"),
         fn(ERROR, "SelfReferentialComponentInConnector.arc", 12, 45, 12, 49, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentInConnector", "SelfReferentialComponentInConnector -> SelfReferentialComponentInConnector")
+      ),
+      arg("PortUnusedTest1",
+        mp("PortUnused1.arc"),
+        fn(WARNING, "PortUnused1.arc", 8, 15, 8, 17, IN_PORT_UNUSED, "i1")
+      ),
+      arg("PortUnusedTest2",
+        mp("PortUnused2.arc"),
+        fn(WARNING, "PortUnused2.arc", 8, 19, 8, 21, IN_PORT_UNUSED, "i2")
+      ),
+      arg("PortUnusedTest3",
+        mp("PortUnused3.arc"),
+        fn(WARNING, "PortUnused3.arc", 9, 16, 9, 18, OUT_PORT_UNUSED, "o1")
+      ),
+      arg("PortUnusedTest4",
+        mp("PortUnused4.arc"),
+        fn(WARNING, "PortUnused4.arc", 9, 20, 9, 22, OUT_PORT_UNUSED, "o2")
+      ),
+      arg("PortUnusedTest5",
+        mp("PortUnused5.arc"),
+        fn(WARNING, "PortUnused5.arc", 13, 17, 13, 19, IN_PORT_UNUSED, "i1"),
+        fn(WARNING, "PortUnused5.arc", 13, 21, 13, 23, IN_PORT_UNUSED, "i2"),
+        fn(WARNING, "PortUnused5.arc", 14, 18, 14, 20, OUT_PORT_UNUSED, "o1"),
+        fn(WARNING, "PortUnused5.arc", 14, 22, 14, 24, OUT_PORT_UNUSED, "o2")
       )
     );
+    return arg;
   }
 
   protected static Stream<Arguments> invalidModelAndError4VariabilityProvider() {
