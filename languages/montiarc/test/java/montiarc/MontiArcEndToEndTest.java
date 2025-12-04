@@ -53,7 +53,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("invalidModelAndErrorProvider")
   @DisableIfDisplayName(contains = {
-    "CircularInheritanceTest7",
     "MissingComponentTest7",
     "MissingComponentTest8",
     "MissingComponentTest9",
