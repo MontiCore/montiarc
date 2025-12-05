@@ -152,7 +152,7 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
           "s1 -> s2; " +
           "} " +
           "}",
-        SCError.MISSING_SOURCE_STATE),
+        SCError.CANT_FIND_SOURCE),
       // single transition missing target state
       arg("component Comp2 { " +
         "automaton { " +
@@ -160,23 +160,23 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
         "s1 -> s2; " +
         "} " +
         "}",
-        SCError.MISSING_TARGET_STATE),
+        SCError.CANT_FIND_TARGET),
       // single transition missing source and target states
       arg("component Comp3 { " +
           "automaton { " +
           "s1 -> s2; " +
           "} " +
           "}",
-        SCError.MISSING_SOURCE_STATE,
-        SCError.MISSING_TARGET_STATE),
+        SCError.CANT_FIND_SOURCE,
+        SCError.CANT_FIND_TARGET),
       // single-loop missing state
       arg("component Comp4 { " +
           "automaton { " +
           "s -> s; " +
           "} " +
           "}",
-        SCError.MISSING_SOURCE_STATE,
-        SCError.MISSING_TARGET_STATE),
+        SCError.CANT_FIND_SOURCE,
+        SCError.CANT_FIND_TARGET),
       // multiple transitions missing source state
       arg("component Comp5 { " +
           "automaton { " +
@@ -185,8 +185,8 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
           "s1 -> s2; " +
           "} " +
           "}",
-        SCError.MISSING_SOURCE_STATE,
-        SCError.MISSING_SOURCE_STATE),
+        SCError.CANT_FIND_SOURCE,
+        SCError.CANT_FIND_SOURCE),
       // multiple transitions missing target state
       arg("component Comp6 { " +
           "automaton { " +
@@ -195,8 +195,8 @@ public class TransitionSourceTargetExistsTest extends MontiArcTestBase {
           "s1 -> s2; " +
           "} " +
           "}",
-        SCError.MISSING_TARGET_STATE,
-        SCError.MISSING_TARGET_STATE)
+        SCError.CANT_FIND_TARGET,
+        SCError.CANT_FIND_TARGET)
     );
   }
 }

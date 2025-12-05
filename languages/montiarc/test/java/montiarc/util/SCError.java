@@ -4,9 +4,13 @@ package montiarc.util;
 import de.monticore.scbasis._cocos.AtLeastOneInitialState;
 import de.monticore.scbasis._cocos.CapitalStateNames;
 import de.monticore.scbasis._cocos.MaxOneInitialState;
-import de.monticore.scbasis._cocos.TransitionSourceTargetExists;
 import de.monticore.scbasis._cocos.UniqueStates;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
+
+import static de.monticore.scbasis._cocos.TransitionSourceTargetExists.CANT_FIND_SOURCE_ERROR_CODE;
+import static de.monticore.scbasis._cocos.TransitionSourceTargetExists.CANT_FIND_SOURCE_ERROR_MSG;
+import static de.monticore.scbasis._cocos.TransitionSourceTargetExists.CANT_FIND_TARGET_ERROR_CODE;
+import static de.monticore.scbasis._cocos.TransitionSourceTargetExists.CANT_FIND_TARGET_ERROR_MSG;
 
 /**
  * Wraps statechart errors into enum values so that they can be used in combination with the existing testing
@@ -18,8 +22,8 @@ public enum SCError implements Error {
   MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE, ""),
   STATE_NAME_NOT_CAPITAL(CapitalStateNames.ERROR_CODE, ""),
   PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE, "Guard expressions must be boolean. Your guard expression is of type '%s'."),
-  MISSING_SOURCE_STATE(TransitionSourceTargetExists.SOURCE_ERROR_CODE, ""),
-  MISSING_TARGET_STATE(TransitionSourceTargetExists.TARGET_ERROR_CODE, "");
+  CANT_FIND_SOURCE(CANT_FIND_SOURCE_ERROR_CODE, CANT_FIND_SOURCE_ERROR_MSG),
+  CANT_FIND_TARGET(CANT_FIND_TARGET_ERROR_CODE, CANT_FIND_TARGET_ERROR_MSG);
 
   private final String errorCode;
   private final String errorMsgFormat;

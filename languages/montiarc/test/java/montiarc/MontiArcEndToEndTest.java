@@ -6,7 +6,6 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.Error;
-import montiarc.util.SCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,6 +35,8 @@ import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.MISSING_COMPONENT;
+import static montiarc.util.SCError.CANT_FIND_SOURCE;
+import static montiarc.util.SCError.CANT_FIND_TARGET;
 import static montiarc.util.SCError.PRECONDITION_NOT_BOOLEAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -158,6 +159,33 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_AUT, "MissingEvent6.arc", 12, 16, 12, 20, CANT_FIND_MSG_EVENT_SYMBOL, "msg1"),
         fn(ERROR, PKG_AUT, "MissingEvent6.arc", 16, 16, 16, 20, CANT_FIND_MSG_EVENT_SYMBOL, "msg2"),
         fn(ERROR, PKG_AUT, "MissingEvent6.arc", 18, 18, 18, 22, CANT_FIND_MSG_EVENT_SYMBOL, "msg3")
+      ),
+      arg("MissingStateTest1",
+        mpk(PKG_AUT, "MissingState1.arc"),
+        fn(ERROR, PKG_AUT, "MissingState1.arc", 12, 5, 12, 12, CANT_FIND_SOURCE, "M")
+      ),
+      arg("MissingStateTest2",
+        mpk(PKG_AUT, "MissingState2.arc"),
+        fn(ERROR, PKG_AUT, "MissingState2.arc", 12, 5, 12, 12, CANT_FIND_TARGET, "M")
+      ),
+      arg("MissingStateTest3",
+        mpk(PKG_AUT, "MissingState3.arc"),
+        fn(ERROR, PKG_AUT, "MissingState3.arc", 12, 5, 12, 14, CANT_FIND_SOURCE, "M1"),
+        fn(ERROR, PKG_AUT, "MissingState3.arc", 12, 5, 12, 14, CANT_FIND_TARGET, "M2")
+      ),
+      arg("MissingStateTest4",
+        mpk(PKG_AUT, "MissingState4.arc"),
+        fn(ERROR, PKG_AUT, "MissingState4.arc", 12, 5, 12, 13, CANT_FIND_SOURCE, "M1"),
+        fn(ERROR, PKG_AUT, "MissingState4.arc", 13, 5, 13, 13, CANT_FIND_TARGET, "M2")
+      ),
+      arg("MissingStateTest5",
+        mpk(PKG_AUT, "MissingState5.arc"),
+        fn(ERROR, PKG_AUT, "MissingState5.arc", 12, 7, 12, 16, CANT_FIND_SOURCE, "M1"),
+        fn(ERROR, PKG_AUT, "MissingState5.arc", 12, 7, 12, 16, CANT_FIND_TARGET, "M2"),
+        fn(ERROR, PKG_AUT, "MissingState5.arc", 16, 7, 16, 16, CANT_FIND_SOURCE, "M3"),
+        fn(ERROR, PKG_AUT, "MissingState5.arc", 16, 7, 16, 16, CANT_FIND_TARGET, "M4"),
+        fn(ERROR, PKG_AUT, "MissingState5.arc", 18, 9, 18, 18, CANT_FIND_SOURCE, "M5"),
+        fn(ERROR, PKG_AUT, "MissingState5.arc", 18, 9, 18, 18, CANT_FIND_TARGET, "M6")
       ),
       arg("CircularInheritanceTest1",
         mpk(PKG_COMP, "CircularInheritance1.arc"),
