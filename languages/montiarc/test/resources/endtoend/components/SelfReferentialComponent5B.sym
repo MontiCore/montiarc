@@ -1,0 +1,23 @@
+{
+  "name": "SelfReferentialComponent5B",
+  "package": "components",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "SelfReferentialComponent5B",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol",
+            "name": "subA",
+            "type": {
+              "kind": "de.monticore.types.check.CompKindOfComponentType",
+              "componentTypeName": "SelfReferentialComponent5A"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

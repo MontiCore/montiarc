@@ -1,0 +1,38 @@
+{
+  "name": "CircularInheritanceWithComposition3B",
+  "package": "composition",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "CircularInheritanceWithComposition3B",
+      "super": [
+        {
+          "kind": "de.monticore.types.check.CompKindOfComponentType",
+          "componentTypeName": "CircularInheritanceWithComposition3C"
+        }
+      ],
+      "symbols": [
+        {
+          "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+          "name": "i1",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          },
+          "incoming": true,
+          "timing": "timed"
+        },
+        {
+          "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+          "name": "o1",
+          "type": {
+            "kind": "de.monticore.types.check.SymTypePrimitive",
+            "primitiveName": "int"
+          },
+          "outgoing": true,
+          "timing": "timed"
+        }
+      ]
+    }
+  ]
+}

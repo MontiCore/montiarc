@@ -1,0 +1,35 @@
+{
+  "name": "ConnectorMismatchType4B",
+  "package": "composition",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "ConnectorMismatchType4B",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "i",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "o",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "boolean"
+            },
+            "outgoing": true,
+            "timing": "timed"
+          }
+        ]
+      }
+    }
+  ]
+}

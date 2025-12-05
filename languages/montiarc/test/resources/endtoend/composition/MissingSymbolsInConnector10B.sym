@@ -1,0 +1,14 @@
+{
+  "name": "MissingSymbolsInConnector10B",
+  "package": "composition",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "MissingSymbolsInConnector10B",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": []
+      }
+    }
+  ]
+}
