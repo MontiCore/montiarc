@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponentTypeCoCo {
@@ -203,16 +204,16 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
           } else {
             ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
             for (ASTArcField expressionField : expressionFields) {
-              createdVariableSymbols.add(ExpressionBuildHelper.createVariableSymbol(expressionField.getSymbol(), fieldNameVariations));
+              Optional.ofNullable(ExpressionBuildHelper.createVariableSymbol(expressionField.getSymbol(), fieldNameVariations)).ifPresent(createdVariableSymbols::add);
             }
             for (ASTArcPort expressionPort : expressionPorts) {
-              createdPortSymbols.add(ExpressionBuildHelper.createPortSymbol(expressionPort.getSymbol(), fieldNameVariations));
+              Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(expressionPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
             }
           }
 
           if (!allParameters.isEmpty()) {
             for (ASTArcParameter parameter : allParameters) {
-              createdVariableSymbols.add(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations));
+              Optional.ofNullable(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations)).ifPresent(createdVariableSymbols::add);
             }
           }
 
@@ -247,11 +248,11 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
     }
     // Remove created variable-symbols
     for (VariableSymbol variableSymbol : createdVariableSymbols) {
-      ExpressionBuildHelper.getScope().remove(variableSymbol);
+        ExpressionBuildHelper.getScope().remove(variableSymbol);
     }
 
     for (PortSymbol portSymbol : createdPortSymbols) {
-      ExpressionBuildHelper.getScope().remove(portSymbol);
+        ExpressionBuildHelper.getScope().remove(portSymbol);
     }
   }
 }

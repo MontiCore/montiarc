@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcComponentTypeCoCo {
@@ -88,7 +89,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
           if (!body.isPresentPre()) continue;
           var guardExpression = body.getPre();
-          Guard variationGuard = new Guard(guardExpression, chartEntry.getValue());
+          Guard variationGuard = new Guard(guardExpression, chartEntry.getValue(),body);
           allGuards.add(variationGuard);
         }
       }
@@ -117,7 +118,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
           if (!body.isPresentPre()) continue;
           var guardExpression = body.getPre();
-          Guard mainGuard = new Guard(guardExpression, ctx.mkTrue());
+          Guard mainGuard = new Guard(guardExpression, ctx.mkTrue(),body);
           allGuards.add(mainGuard);
         }
       }
@@ -164,7 +165,6 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
               guardExpressionList.clear();
             }
 
-
               if (guardFields.isEmpty() && guardPorts.isEmpty()) {
                 guardExpressions.add(guard.expression);
                 break;
@@ -173,20 +173,20 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
               if (!guardFields.isEmpty()) {
                 ExpressionBuildHelper.setScope(guardFields.get(0).getEnclosingScope());
                 for (ASTArcField guardField : guardFields) {
-                  createdVariableSymbols.add(ExpressionBuildHelper.createVariableSymbol(guardField.getSymbol(), fieldNameVariations));
+                  Optional.ofNullable(ExpressionBuildHelper.createVariableSymbol(guardField.getSymbol(), fieldNameVariations)).ifPresent(createdVariableSymbols::add);
                 }
               }
 
               if (!guardPorts.isEmpty()) {
                 ExpressionBuildHelper.setScope(guardPorts.get(0).getEnclosingScope());
                 for (ASTArcPort guardPort : guardPorts) {
-                  createdPortSymbols.add(ExpressionBuildHelper.createPortSymbol(guardPort.getSymbol(), fieldNameVariations));
+                  Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(guardPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
                 }
               }
 
               if (!allParameters.isEmpty()) {
                 for (ASTArcParameter parameter : allParameters) {
-                  createdVariableSymbols.add(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations));
+                  Optional.ofNullable(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations)).ifPresent(createdVariableSymbols::add);
                 }
               }
 
@@ -201,21 +201,23 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
       }
 
       for (ASTExpression guardExpression : guardExpressions) {
-        SymTypeExpression guardType = TypeCheck3.typeOf(guardExpression);
-        if (guardType.isObscureType()) {
-          Log.debug(String.format("Coco '%s' is not checked on transition guard expression at %s, because the expression is malformed.", this.getClass().getSimpleName(), node.get_SourcePositionStart()), "Cocos");
-        } else if (!SymTypeRelations.isBoolean(guardType)) {
-          Log.error(String.format("0xCC111 Guard expressions must be boolean. Your guard expression is of type '%s'.", guardType.print()), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
-        }
+          SymTypeExpression preType = TypeCheck3.typeOf(guardExpression);
+          if (preType.isObscureType()) {
+            Log.debug(() -> String.format("Coco '%s' is not checked on transition guard expression at %s, because the expression is malformed.", this.getClass().getSimpleName(), guard.getTransitionBody().get_SourcePositionStart()), "Cocos");
+          }
+
+          if (!SymTypeRelations.isBoolean(preType)) {
+            Log.error(String.format("0xCC111 Guard expressions must be boolean. Your guard expression is of type '%s'.", preType.print()),  guard.getTransitionBody().getPre().get_SourcePositionStart(), guard.getTransitionBody().getPre().get_SourcePositionEnd());
+          }
       }
       // Remove created variable-symbols
       for (VariableSymbol variableSymbol : createdVariableSymbols) {
-        variableSymbol.getEnclosingScope().remove(variableSymbol);
+          variableSymbol.getEnclosingScope().remove(variableSymbol);
       }
 
       // Remove created port-Symbols
       for (PortSymbol portSymbol : createdPortSymbols) {
-        portSymbol.getEnclosingScope().remove(portSymbol);
+          portSymbol.getEnclosingScope().remove(portSymbol);
       }
     }
   }
@@ -224,10 +226,12 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
     private final ASTExpression expression;
     private final BoolExpr requiredFeatures;
+    private final ASTTransitionBody transitionBody;
 
-    Guard(ASTExpression expression, BoolExpr requiredFeatures) {
+    Guard(ASTExpression expression, BoolExpr requiredFeatures, ASTTransitionBody transitionBody) {
       this.expression = expression;
       this.requiredFeatures = requiredFeatures;
+      this.transitionBody = transitionBody;
     }
 
     public ASTExpression getExpression() {
@@ -237,6 +241,8 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     public BoolExpr getRequiredFeatures() {
       return requiredFeatures;
     }
+
+    public ASTTransitionBody getTransitionBody() {return transitionBody;}
 
   }
 }

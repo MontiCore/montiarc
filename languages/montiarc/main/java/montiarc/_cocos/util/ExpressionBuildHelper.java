@@ -157,6 +157,10 @@ public class ExpressionBuildHelper {
 
   public static List<ASTExpression> createPossibleGuardExpressions(ASTExpression expr, Map<String, List<String>> fieldNameVariations) {
     List<ASTExpression> guardExpressions = new ArrayList<>();
+    if(fieldNameVariations.isEmpty()){
+      guardExpressions.add(expr);
+      return guardExpressions;
+    }
     List<String> presentVariables = new ArrayList<>();
     collectVariableNames(expr, presentVariables,false);
     int entryCounter = 1;

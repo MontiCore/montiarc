@@ -53,12 +53,21 @@ public class TransitionPreconditionsAreBoolean4FamilyTest extends MontiArcTestBa
     private static Stream<Arguments> provideUniqueSenderModel()
     {
         List<Arguments> componentList = new ArrayList<>();
-        Arguments simpleModel = arg(     "component Comp2 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s [true]; " +
-          "s -> s [1]; " +
-          "} " +
+        Arguments simpleModel = arg(     "component MultipleAutomaton {\n" +
+          "  feature f;\n" +
+          "  varif(f){\n" +
+          "    port sync in int i;\n" +
+          "    automaton {\n" +
+          "      initial state A;\n" +
+          "      A -> A [i > 1];\n" +
+          "    }\n" +
+          "  } else {\n" +
+          "    port sync in String i;\n" +
+          "    automaton {\n" +
+          "      initial state A;\n" +
+          "      A -> A [i == \"a\"];\n" +
+          "    }\n" +
+          "  }\n" +
           "}");
         componentList.add(simpleModel);
         return componentList.stream();
