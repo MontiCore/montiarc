@@ -234,7 +234,7 @@ public class ExpressionStatementIsValid4Family implements ArcBasisASTArcComponen
         }
         // Step 4: TypeCheck possible Expressions
         for (ASTExpression expression : possibleExpressions) {
-          var typeCheckResult = TypeCheck3.typeOf(expression);
+          TypeCheck3.typeOf(expression);
         }
 
         // Remove created variable-symbols

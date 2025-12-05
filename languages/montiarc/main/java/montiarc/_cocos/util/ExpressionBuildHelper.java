@@ -33,7 +33,7 @@ public class ExpressionBuildHelper {
       this.arcPort = arcPort;
     }
 
-    public PortInformation(String portName, PortSymbol arcPort,SubcomponentSymbol subcomponentSymbol) {
+    public PortInformation(String portName, PortSymbol arcPort, SubcomponentSymbol subcomponentSymbol) {
       this.portName = portName;
       this.arcPort = arcPort;
       this.subcomponentSymbol = subcomponentSymbol;
@@ -47,7 +47,9 @@ public class ExpressionBuildHelper {
       return this.arcPort;
     }
 
-    public SubcomponentSymbol getSubcomponentSymbol() {return this.subcomponentSymbol; }
+    public SubcomponentSymbol getSubcomponentSymbol() {
+      return this.subcomponentSymbol;
+    }
 
   }
 
@@ -141,31 +143,31 @@ public class ExpressionBuildHelper {
   public static List<ASTConnector> createPossibleConnectors(ASTConnector connector, Map<String, List<String>> portNameVariations) {
     List<ASTConnector> possibleConnectors = new ArrayList<>();
     List<String> presentPorts = getPortNames(connector);
-    Map<String, String> alreadyCreated = new HashMap<>();
+    Set<Map<String, String>> alreadyCreated = new HashSet<>();
     generateVariableCombinations(presentPorts, portNameVariations, combination -> {
 
-      if (alreadyCreated.entrySet().contains(combination))
+      if (alreadyCreated.contains(combination))
         return;
+      alreadyCreated.add(new HashMap<>(combination));
 
       var updatedConnector = changeConnectorPortNames(connector.deepClone(), combination);
-      if (!(updatedConnector.getSource().getPort() == null || updatedConnector.getTargetList().stream().filter(e -> e.getPort() == null).map(k -> k).collect(Collectors.toList()).size() > 0))
+      if (!(updatedConnector.getSource().getPort() == null ||
+        updatedConnector.getTargetList().stream().anyMatch(e -> e.getPort() == null))) {
         possibleConnectors.add(updatedConnector);
-
+      }
     });
     return possibleConnectors;
   }
 
   public static List<ASTExpression> createPossibleGuardExpressions(ASTExpression expr, Map<String, List<String>> fieldNameVariations) {
     List<ASTExpression> guardExpressions = new ArrayList<>();
-    if(fieldNameVariations.isEmpty()){
+    if (fieldNameVariations.isEmpty()) {
       guardExpressions.add(expr);
       return guardExpressions;
     }
     List<String> presentVariables = new ArrayList<>();
-    collectVariableNames(expr, presentVariables,false);
-    int entryCounter = 1;
+    collectVariableNames(expr, presentVariables, false);
     generateVariableCombinations(presentVariables, fieldNameVariations, combination -> {
-
 
 
       ASTExpression exprCopy = expr.deepClone();
@@ -194,15 +196,15 @@ public class ExpressionBuildHelper {
     return guardExpressions;
   }
 
-  public static PortSymbol createPortSymbolForName(PortInformation portInformation, Map<String, List<String>> portNameVariations){
+  public static PortSymbol createPortSymbolForName(PortInformation portInformation, Map<String, List<String>> portNameVariations) {
 
     SymTypeExpression portType;
-   if(portInformation.getSubcomponentSymbol() != null && portInformation.getSubcomponentSymbol().isTypePresent() && portInformation.getSubcomponentSymbol().getType().isGenericComponentType()){
-     var genericComponent = portInformation.getSubcomponentSymbol().getType().asGenericComponentType();
-     portType = genericComponent.getTypeOfPort(portInformation.arcPort.getName()).get().deepClone();
-   }else{
-     portType = portInformation.arcPort.getType().deepClone();
-   }
+    if (portInformation.getSubcomponentSymbol() != null && portInformation.getSubcomponentSymbol().isTypePresent() && portInformation.getSubcomponentSymbol().getType().isGenericComponentType()) {
+      var genericComponent = portInformation.getSubcomponentSymbol().getType().asGenericComponentType();
+      portType = genericComponent.getTypeOfPort(portInformation.arcPort.getName()).get().deepClone();
+    } else {
+      portType = portInformation.arcPort.getType().deepClone();
+    }
 
 
     PortSymbol createdSymbol = null;

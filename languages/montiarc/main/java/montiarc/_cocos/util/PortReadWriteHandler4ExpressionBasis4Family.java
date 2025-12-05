@@ -59,7 +59,7 @@ public class PortReadWriteHandler4ExpressionBasis4Family implements ExpressionsB
     this(new ContextState());
   }
 
-  private List<PortWithState> portContext = new ArrayList();
+  private List<PortWithState> portContext = new ArrayList<>();
 
   protected void clearPortContext() {
     portContext.clear();
