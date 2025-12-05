@@ -109,7 +109,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingEventTest6",
     "MissingSymbolsInGuardTest3",
     "MissingSymbolsInTransitionActionTest",
-    "MissingSymbolsInEntryAction"
+    "MissingSymbolsInEntryAction",
+    "MissingSymbolsInExitAction"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -208,6 +209,25 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_AUT, "MissingSymbolsInEntryAction4.arc", 12, 17, 12, 19, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInEntryAction4.arc", 16, 17, 16, 19, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInEntryAction4.arc", 18, 19, 18, 21, CANT_FIND_SYMBOL_IN_EXPRESSION, "a3")
+      ),
+      arg("MissingSymbolsInExitActionTest1",
+        mpk(PKG_AUT, "MissingSymbolsInExitAction1.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction1.arc", 12, 14, 12, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "a")
+      ),
+      arg("MissingSymbolsInExitActionTest2",
+        mpk(PKG_AUT, "MissingSymbolsInExitAction2.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction2.arc", 12, 16, 12, 17, CANT_FIND_SYMBOL_IN_EXPRESSION, "a")
+      ),
+      arg("MissingSymbolsInExitActionTest3",
+        mpk(PKG_AUT, "MissingSymbolsInExitAction3.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction3.arc", 12, 16, 12, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction3.arc", 13, 16, 13, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2")
+      ),
+      arg("MissingSymbolsInExitActionTest4",
+        mpk(PKG_AUT, "MissingSymbolsInExitAction4.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction4.arc", 12, 16, 12, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction4.arc", 16, 16, 16, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInExitAction4.arc", 18, 18, 18, 20, CANT_FIND_SYMBOL_IN_EXPRESSION, "a3")
       ),
       arg("MissingSymbolsInGuardTest1",
         mpk(PKG_AUT, "MissingSymbolsInGuard1.arc"),
