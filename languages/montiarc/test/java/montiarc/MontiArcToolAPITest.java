@@ -5,9 +5,12 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.apache.commons.io.FileUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -349,5 +352,46 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThat(asts.size()).isEqualTo(2);
     assertThat(asts).anyMatch(ast -> "Comp1".equals(ast.getArcComponentType().getName()));
     assertThat(asts).anyMatch(ast -> "Comp2".equals(ast.getArcComponentType().getName()));
+  }
+
+  @Test
+  public void testCreateEmpty() throws IOException {
+    // Given
+    File targetDir = new File(System.getProperty("java.io.tmpdir") + "test/montiarc/create/EmptyProject");
+    String[] args = new String[] {
+      "create", targetDir.getAbsolutePath(),
+    };
+
+    // When
+    MontiArcTool.main(args);
+
+    // Then
+    Assertions.assertTrue(FileUtils.isDirectory(targetDir));
+    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir));
+    Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
+
+    // Cleanup
+    FileUtils.deleteDirectory(targetDir);
+  }
+
+  @Test
+  public void testCreateEmptyTemplate() throws IOException {
+    // Given
+    File targetDir = new File(System.getProperty("java.io.tmpdir") + "test/montiarc/create/EmptyProject");
+    String[] args = new String[] {
+      "create", targetDir.getAbsolutePath(),
+      "-t", "empty",
+    };
+
+    // When
+    MontiArcTool.main(args);
+
+    // Then
+    Assertions.assertTrue(FileUtils.isDirectory(targetDir));
+    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir));
+    Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
+
+    // Cleanup
+    FileUtils.deleteDirectory(targetDir);
   }
 }

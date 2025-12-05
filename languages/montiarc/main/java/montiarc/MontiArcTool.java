@@ -285,7 +285,7 @@ public class MontiArcTool extends MontiArcToolTOP {
           ZipEntry entry = entries.nextElement();
           if (!entry.getName().toLowerCase().startsWith(templateName)) continue;
           if (!foundTemplate) foundTemplate = true;
-          File entryDestination = new File("./" + name, entry.getName().substring(templateName.length()));
+          File entryDestination = new File(name, entry.getName().substring(templateName.length()));
           if (entry.isDirectory()) {
             entryDestination.mkdirs();
           } else {
