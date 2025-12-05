@@ -6,6 +6,7 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.Error;
+import montiarc.util.SCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -18,6 +19,7 @@ import java.util.stream.Stream;
 
 import static de.se_rwth.commons.logging.Finding.Type.ERROR;
 import static de.se_rwth.commons.logging.Finding.Type.WARNING;
+import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
@@ -47,6 +49,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   private final static String TEST_DIR = "endtoend";
+
+  private final static String PKG_AUT = "automata";
 
   private final static String PKG_COMP = "components";
 
@@ -99,7 +103,9 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "ConnectorMismatchDirectionTest4",
     "MissingSymbolsInConnectorTest6",
     "MissingSymbolsInConnectorTest7",
-    "CircularInheritanceWithCompositionTest"
+    "CircularInheritanceWithCompositionTest",
+    "MissingEventTest5",
+    "MissingEventTest6"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -125,6 +131,34 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
     return Stream.of(
+      arg("MissingEventTest1",
+        mpk(PKG_AUT, "MissingEvent1.arc"),
+        fn(ERROR, PKG_AUT, "MissingEvent1.arc", 11, 12, 11, 15, CANT_FIND_MSG_EVENT_SYMBOL, "msg")
+      ),
+      arg("MissingEventTest2",
+        mpk(PKG_AUT, "MissingEvent2.arc"),
+        fn(ERROR, PKG_AUT, "MissingEvent2.arc", 12, 12, 12, 16, CANT_FIND_MSG_EVENT_SYMBOL, "msg1"),
+        fn(ERROR, PKG_AUT, "MissingEvent2.arc", 13, 12, 13, 16, CANT_FIND_MSG_EVENT_SYMBOL, "msg2")
+      ),
+      arg("MissingEventTest3",
+        mpk(PKG_AUT, "MissingEvent3.arc"),
+        fn(ERROR, PKG_AUT, "MissingEvent3.arc", 16, 12, 16, 13, CANT_FIND_MSG_EVENT_SYMBOL, "o")
+      ),
+      arg("MissingEventTest4",
+        mpk(PKG_AUT, "MissingEvent4.arc"),
+        fn(ERROR, PKG_AUT, "MissingEvent4.arc", 16, 12, 16, 13, CANT_FIND_MSG_EVENT_SYMBOL, "p"),
+        fn(ERROR, PKG_AUT, "MissingEvent4.arc", 17, 12, 17, 13, CANT_FIND_MSG_EVENT_SYMBOL, "v")
+      ),
+      arg("MissingEventTest5",
+        mpk(PKG_AUT, "MissingEvent5.arc"),
+        fn(ERROR, PKG_AUT, "MissingEvent5.arc", 12, 10, 12, 13, CANT_FIND_MSG_EVENT_SYMBOL, "msg")
+      ),
+      arg("MissingEventTest6",
+        mpk(PKG_AUT, "MissingEvent6.arc"),
+        fn(ERROR, PKG_AUT, "MissingEvent6.arc", 12, 16, 12, 20, CANT_FIND_MSG_EVENT_SYMBOL, "msg1"),
+        fn(ERROR, PKG_AUT, "MissingEvent6.arc", 16, 16, 16, 20, CANT_FIND_MSG_EVENT_SYMBOL, "msg2"),
+        fn(ERROR, PKG_AUT, "MissingEvent6.arc", 18, 18, 18, 22, CANT_FIND_MSG_EVENT_SYMBOL, "msg3")
+      ),
       arg("CircularInheritanceTest1",
         mpk(PKG_COMP, "CircularInheritance1.arc"),
         fn(ERROR, PKG_COMP, "CircularInheritance1.arc", 7, 32, 7, 60, CIRCULAR_INHERITANCE, "CircularInheritance1")

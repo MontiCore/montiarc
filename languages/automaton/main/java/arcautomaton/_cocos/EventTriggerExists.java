@@ -25,7 +25,10 @@ public class EventTriggerExists implements ArcAutomatonASTMsgEventCoCo {
       .resolveSCEventDefMany(node.getName(), getSymbolPredicate()).stream().findFirst();
 
     if(optEventSym.isEmpty()) {
-      Log.error(ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL.format(), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+      Log.error(ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL.format(node.getName()),
+        node.get_SourcePositionStart(),
+        node.get_SourcePositionEnd()
+      );
     }
   }
 

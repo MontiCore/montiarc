@@ -1421,7 +1421,7 @@ public class VariantCoCosTest extends MontiArcTestBase {
           "A -> A i;" +
           "}" +
           "}",
-        ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL
+        ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL
       ),
       // Automaton with missing trigger symbol in one variant
       arg("component Comp75 { " +

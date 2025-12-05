@@ -158,8 +158,8 @@ public class EventTriggerExists4FamilyTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidParams() {
     return Stream.of(
-      Arguments.arguments("aPort", new String[0], ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL),
-      Arguments.arguments("aPort", new String[]{"bPort"}, ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL)
+      Arguments.arguments("aPort", new String[0], ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL),
+      Arguments.arguments("aPort", new String[]{"bPort"}, ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL)
     );
   }
 

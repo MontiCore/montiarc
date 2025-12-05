@@ -115,7 +115,10 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
           msgEventExpressionList.addAll(List.of(featureConstraints, portCondition));
           // Check if msgEvent can be active without the referenced port (variable)
           if (ExpressionSolverService.solve(msgEventExpressionList) == Status.UNSATISFIABLE) {
-            Log.error(ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL.format(), msgEvent.getKey().get_SourcePositionStart(), msgEvent.getKey().get_SourcePositionEnd());
+            Log.error(ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL.format(msgEvent.getKey().getName()),
+              msgEvent.getKey().get_SourcePositionStart(),
+              msgEvent.getKey().get_SourcePositionEnd()
+            );
           } else {
             // Add port to enclosing-scope, if port exists
             var msgPort = messagePort.get().getKey();
@@ -134,7 +137,10 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
     Optional<SCEventDefSymbol> optEventSym = msgEvent.getEnclosingScope()
       .resolveSCEventDefMany(msgEvent.getName(), getSymbolPredicate()).stream().findFirst();
     if (optEventSym.isEmpty()) {
-      Log.error(ArcAutomataError.MSG_EVENT_WITHOUT_SYMBOL.format(), msgEvent.get_SourcePositionStart(), msgEvent.get_SourcePositionEnd());
+      Log.error(ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL.format(msgEvent.getName()),
+        msgEvent.get_SourcePositionStart(),
+        msgEvent.get_SourcePositionEnd()
+      );
     }
   }
 
