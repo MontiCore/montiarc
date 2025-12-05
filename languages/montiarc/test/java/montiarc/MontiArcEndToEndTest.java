@@ -34,10 +34,10 @@ import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
+import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.MISSING_COMPONENT;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
-import static montiarc.util.SCError.PRECONDITION_NOT_BOOLEAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -106,7 +106,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingSymbolsInConnectorTest7",
     "CircularInheritanceWithCompositionTest",
     "MissingEventTest5",
-    "MissingEventTest6"
+    "MissingEventTest6",
+    "MissingSymbolsInGuardTest3"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -186,6 +187,25 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_AUT, "MissingState5.arc", 16, 7, 16, 16, CANT_FIND_TARGET, "M4"),
         fn(ERROR, PKG_AUT, "MissingState5.arc", 18, 9, 18, 18, CANT_FIND_SOURCE, "M5"),
         fn(ERROR, PKG_AUT, "MissingState5.arc", 18, 9, 18, 18, CANT_FIND_TARGET, "M6")
+      ),
+      arg("MissingSymbolsInGuardTest1",
+        mpk(PKG_AUT, "MissingSymbolsInGuard1.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard1.arc", 12, 13, 12, 14, CANT_FIND_SYMBOL_IN_EXPRESSION, "g")
+      ),
+      arg("MissingSymbolsInGuardTest2",
+        mpk(PKG_AUT, "MissingSymbolsInGuard2.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard2.arc", 12, 13, 12, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "g1"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard2.arc", 13, 13, 13, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "g2")
+      ),
+      arg("MissingSymbolsInGuardTest3",
+        mpk(PKG_AUT, "MissingSymbolsInGuard3.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard3.arc", 12, 11, 12, 12, CANT_FIND_SYMBOL_IN_EXPRESSION, "g")
+      ),
+      arg("MissingSymbolsInGuardTest4",
+        mpk(PKG_AUT, "MissingSymbolsInGuard4.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard4.arc", 12, 17, 12, 19, CANT_FIND_SYMBOL_IN_EXPRESSION, "g1"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard4.arc", 16, 17, 16, 19, CANT_FIND_SYMBOL_IN_EXPRESSION, "g2"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInGuard4.arc", 18, 19, 18, 21, CANT_FIND_SYMBOL_IN_EXPRESSION, "g3")
       ),
       arg("CircularInheritanceTest1",
         mpk(PKG_COMP, "CircularInheritance1.arc"),
@@ -277,8 +297,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("MissingPortTypeTest9",
         mpk(PKG_COMP, "MissingPortType9.arc"),
-        fn(ERROR, PKG_COMP, "MissingPortType9.arc", 11, 11, 11, 18, CANT_FIND_SYMBOL, "Missing"),
-        fn(ERROR, PKG_COMP, "MissingPortType9.arc", 16, 13, 16, 14, PRECONDITION_NOT_BOOLEAN, "Obscure")
+        fn(ERROR, PKG_COMP, "MissingPortType9.arc", 11, 11, 11, 18, CANT_FIND_SYMBOL, "Missing")
       ),
       arg("MissingPortTypeTest10",
         mpk(PKG_COMP, "MissingPortType10.arc"),

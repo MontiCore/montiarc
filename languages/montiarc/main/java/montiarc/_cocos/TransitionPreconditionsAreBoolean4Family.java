@@ -39,6 +39,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.BOOLEAN;
+
 public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcComponentTypeCoCo {
 
   public void check(@NotNull ASTArcComponentType node) {
@@ -203,11 +205,15 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
       for (ASTExpression guardExpression : guardExpressions) {
           SymTypeExpression preType = TypeCheck3.typeOf(guardExpression);
           if (preType.isObscureType()) {
-            Log.debug(() -> String.format("Coco '%s' is not checked on transition guard expression at %s, because the expression is malformed.", this.getClass().getSimpleName(), guard.getTransitionBody().get_SourcePositionStart()), "Cocos");
-          }
-
-          if (!SymTypeRelations.isBoolean(preType)) {
-            Log.error(String.format("0xCC111 Guard expressions must be boolean. Your guard expression is of type '%s'.", preType.print()),  guard.getTransitionBody().getPre().get_SourcePositionStart(), guard.getTransitionBody().getPre().get_SourcePositionEnd());
+            Log.debug(() -> String.format("Coco '%s' skipped for transition guard at %s. The type is obscure, an error should already have been logged.",
+              this.getClass().getSimpleName(),
+              guard.getTransitionBody().get_SourcePositionStart()
+            ), "Cocos");
+          } else if (!SymTypeRelations.isBoolean(preType)) {
+            Log.error(String.format("0xCC111 Expected '%s' but provided '%s'.", BOOLEAN, preType.print()),
+              guard.getTransitionBody().getPre().get_SourcePositionStart(),
+              guard.getTransitionBody().getPre().get_SourcePositionEnd()
+            );
           }
       }
       // Remove created variable-symbols

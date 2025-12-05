@@ -12,7 +12,7 @@ public enum MCError implements Error {
   INCOMPATIBLE_TYPE(VarDeclarationInitializationHasCorrectType.ERROR_CODE, ""),
   DIVIDE_EXPRESSION_ERR("0xA0168", ""),
   CANT_FIND_SYMBOL("0xA0324", "Cannot find symbol %s"),
-  CANT_FIND_SYMBOL_IN_EXPRESSION("0xFD118", ""),
+  CANT_FIND_SYMBOL_IN_EXPRESSION("0xFD118", "could not find symbol for expression \"%s\""),
   TYPE_STRING_NOT_RESOLVABLE("0xD02A6", ""),
   FOUND_MULTIPLE_SYMBOLS("0xA4095", ""),
   TARGET_TYPE_MISMATCH("0xFD451", ""),
