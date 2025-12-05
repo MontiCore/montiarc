@@ -107,7 +107,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "CircularInheritanceWithCompositionTest",
     "MissingEventTest5",
     "MissingEventTest6",
-    "MissingSymbolsInGuardTest3"
+    "MissingSymbolsInGuardTest3",
+    "MissingSymbolsInTransitionActionTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -206,6 +207,33 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_AUT, "MissingSymbolsInGuard4.arc", 12, 17, 12, 19, CANT_FIND_SYMBOL_IN_EXPRESSION, "g1"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInGuard4.arc", 16, 17, 16, 19, CANT_FIND_SYMBOL_IN_EXPRESSION, "g2"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInGuard4.arc", 18, 19, 18, 21, CANT_FIND_SYMBOL_IN_EXPRESSION, "g3")
+      ),
+      arg("MissingSymbolsInTransitionActionTest1",
+        mpk(PKG_AUT, "MissingSymbolsInTransitionAction1.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction1.arc", 12, 14, 12, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "a")
+      ),
+      arg("MissingSymbolsInTransitionActionTest2",
+        mpk(PKG_AUT, "MissingSymbolsInTransitionAction2.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction2.arc", 12, 16, 12, 17, CANT_FIND_SYMBOL_IN_EXPRESSION, "a")
+      ),
+      arg("MissingSymbolsInTransitionActionTest3",
+        mpk(PKG_AUT, "MissingSymbolsInTransitionAction3.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction3.arc", 12, 16, 12, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction3.arc", 13, 16, 13, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2")
+      ),
+      arg("MissingSymbolsInTransitionActionTest4",
+        mpk(PKG_AUT, "MissingSymbolsInTransitionAction4.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction4.arc", 12, 12, 12, 13, CANT_FIND_SYMBOL_IN_EXPRESSION, "a")
+      ),
+      arg("MissingSymbolsInTransitionActionTest5",
+        mpk(PKG_AUT, "MissingSymbolsInTransitionAction5.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction5.arc", 12, 14, 12, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "a")
+      ),
+      arg("MissingSymbolsInTransitionActionTest6",
+        mpk(PKG_AUT, "MissingSymbolsInTransitionAction6.arc"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 12, 20, 12, 22, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 16, 20, 16, 22, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2"),
+        fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 18, 22, 18, 24, CANT_FIND_SYMBOL_IN_EXPRESSION, "a3")
       ),
       arg("CircularInheritanceTest1",
         mpk(PKG_COMP, "CircularInheritance1.arc"),
