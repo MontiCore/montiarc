@@ -99,7 +99,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingComponentTest9",
     "NameClash",
     "SelfReferentialComponentWithCompositionTest",
-    "PortNotConnectedTest",
     "PortMultipleSender",
     "ConnectorMismatchDirectionTest4",
     "MissingSymbolsInConnectorTest6",

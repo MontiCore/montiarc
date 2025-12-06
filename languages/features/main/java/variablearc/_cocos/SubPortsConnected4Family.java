@@ -69,6 +69,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<String, BoolExpr> ports = new HashMap<>();
     Map<String, PortSymbol> portSymbols = new HashMap<>();
     Map<String, BoolExpr> portNameConditions = new HashMap<>();
+    Map<String,ASTComponentInstance > portToSubcomponent= new HashMap<>();
     Map<String, BoolExpr> portConnected = new HashMap<>();
     Map<String, Set<ASTConnector>> subCompNameToConnectors = new HashMap<>();
 
@@ -127,6 +128,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
           String portName = sub.getFullName() + "." + port.getName();
           ports.put(portName, ctx.mkBoolConst(portName));
           portSymbols.put(portName, port);
+          portToSubcomponent.put(portName, subComp);
         }
       }else{
         subVariationPoints = ((IVariableArcComponentTypeSymbol)sub.getType().asComponentType().getTypeInfo()).getAllVariationPoints();
@@ -141,6 +143,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
           String portName = sub.getFullName() + "." + port.getName();
           ports.put(portName, ctx.mkBoolConst(portName));
           portSymbols.put(portName, port);
+          portToSubcomponent.put(portName, subComp);
         }
       }
 
@@ -223,10 +226,12 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
 
       if (ExpressionSolverService.solve(expressionList) == Status.SATISFIABLE) {
         PortSymbol portSymbol = portSymbols.get(port);
+        ASTComponentInstance subComponent = portToSubcomponent.get(port);
+        String portIdentifier = subComponent.getName()+"."+port.substring(subComponent.getSymbol().getFullName().length()+1);
         if (portSymbol.isIncoming()) {
-          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(port), portSymbol.getSourcePosition());
+          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(portIdentifier),subComponent.getSymbol().getAstNode().get_SourcePositionStart(),subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
         } else {
-          Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(port), portSymbol.getSourcePosition());
+          Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(portIdentifier),subComponent.getSymbol().getAstNode().get_SourcePositionStart(),subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
         }
       }
     }
