@@ -2,7 +2,6 @@
 package variablearc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
