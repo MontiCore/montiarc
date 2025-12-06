@@ -5,8 +5,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.apache.commons.io.FileUtils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -366,9 +364,9 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     MontiArcTool.main(args);
 
     // Then
-    Assertions.assertTrue(Files.isDirectory(targetDir));
-    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir.toFile()));
-    Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
+    assertThat(targetDir).isDirectory();
+    assertThat(targetDir).isNotEmptyDirectory();
+    assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
   }
 
   @Test
@@ -384,8 +382,8 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     MontiArcTool.main(args);
 
     // Then
-    Assertions.assertTrue(Files.isDirectory(targetDir));
-    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir.toFile()));
-    Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
+    assertThat(targetDir).isDirectory();
+    assertThat(targetDir).isNotEmptyDirectory();
+    assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
   }
 }
