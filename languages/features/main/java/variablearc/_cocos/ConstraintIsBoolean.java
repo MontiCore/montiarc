@@ -16,18 +16,19 @@ import variablearc._ast.ASTArcConstraintDeclaration;
  */
 public class ConstraintIsBoolean implements VariableArcASTArcConstraintDeclarationCoCo {
 
-  public ConstraintIsBoolean() { }
+  final static String LOG_NAME = ConstraintIsBoolean.class.getSimpleName();
 
   @Override
-  public void check(@NotNull ASTArcConstraintDeclaration astConstraint) {
-    Preconditions.checkNotNull(astConstraint);
+  public void check(@NotNull ASTArcConstraintDeclaration node) {
+    Preconditions.checkNotNull(node);
 
-    ASTExpression expr = astConstraint.getExpression();
-    SymTypeExpression typeOfExpr = TypeCheck3.typeOf(expr);
+    SymTypeExpression typeOfExpr = TypeCheck3.typeOf(node.getExpression());
 
-    if (!SymTypeRelations.isBoolean(typeOfExpr)) {
+    if (typeOfExpr.isObscureType()) {
+      Log.debug(() -> "Skip CoCo check, the type of the constraint is obscure.", LOG_NAME);
+    } else if (!SymTypeRelations.isBoolean(typeOfExpr)) {
       Log.error(VariableArcError.CONSTRAINT_EXPRESSION_WRONG_TYPE.format(typeOfExpr.print()),
-        astConstraint.get_SourcePositionStart(), astConstraint.get_SourcePositionEnd()
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd()
       );
     }
   }

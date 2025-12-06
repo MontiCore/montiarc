@@ -57,6 +57,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   private final static String PKG_CPOS = "composition";
 
+  private final static String PKG_VARI = "variability";
+
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("invalidModelAndErrorProvider")
   @DisableIfDisplayName(contains = {
@@ -109,7 +111,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingSymbolsInGuardTest3",
     "MissingSymbolsInTransitionActionTest",
     "MissingSymbolsInEntryAction",
-    "MissingSymbolsInExitAction"
+    "MissingSymbolsInExitAction",
+    "MissingSymbolsInConstraint"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -626,6 +629,27 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_CPOS, "SelfReferentialComponentWithComposition.arc"),
         fn(ERROR, PKG_CPOS, "SelfReferentialComponentWithComposition.arc", 13, 39, 13, 43, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentWithComposition", "SelfReferentialComponentWithComposition -> SelfReferentialComponentWithComposition"),
         fn(ERROR, PKG_CPOS, "SelfReferentialComponentWithComposition.arc", 13, 45, 13, 49, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentWithComposition", "SelfReferentialComponentWithComposition -> SelfReferentialComponentWithComposition")
+      ),
+      arg("MissingSymbolsInConstraintTest1",
+        mpk(PKG_VARI, "MissingSymbolsInConstraint1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraint1.arc", 10, 14, 10, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInConstraintTest2",
+        mpk(PKG_VARI, "MissingSymbolsInConstraint2.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraint2.arc", 10, 14, 10, 16, CANT_FIND_SYMBOL_IN_EXPRESSION, "e1"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraint2.arc", 11, 14, 11, 16, CANT_FIND_SYMBOL_IN_EXPRESSION, "e2")
+      ),
+      arg("MissingSymbolsInConstraintTest3",
+        mpk(PKG_VARI, "MissingSymbolsInConstraint3.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraint3.arc", 11, 16, 11, 17, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInConstraintWithCompositionTest1",
+        mpk(PKG_VARI, "MissingSymbolsInConstraintWithComposition1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraintWithComposition1.arc", 13, 16, 13, 17, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInConstraintWithCompositionTest2",
+        mpk(PKG_VARI, "MissingSymbolsInConstraintWithComposition2.arc", "MissingSymbolsInConstraint1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraint1.arc", 10, 14, 10, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
       ),
       arg("NameClashParamParamTest",
         mp("NameClashParamParam.arc"),
