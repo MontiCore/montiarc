@@ -40,6 +40,7 @@ import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -273,13 +274,13 @@ public class MontiArcTool extends MontiArcToolTOP {
     }
     // download and unzip
     try {
-      File file = new File(System.getProperty("java.io.tmpdir") + "MontiArcTemplateProject.zip");
+      Path zip = Files.createTempFile("MontiArcTemplateProject", ".zip");
       String gitTag = this.versionSupplier.get().contains("SNAPSHOT") ? "heads/main" : ("tags/" + this.versionSupplier.get().substring(0, 5));
       Log.info(() -> "Downloading template...", "MontiArcTool");
-      FileUtils.copyURLToFile(new URI("https://github.com/MontiCore/montiarc-templates/archive/refs/" + gitTag + ".zip").toURL(), file);
+      FileUtils.copyURLToFile(new URI("https://github.com/MontiCore/montiarc-templates/archive/refs/" + gitTag + ".zip").toURL(), zip.toFile());
       Log.info(() -> "Creating Project " + name, "MontiArcTool");
       boolean foundTemplate = false;
-      try (java.util.zip.ZipFile zipFile = new ZipFile(file)) {
+      try (java.util.zip.ZipFile zipFile = new ZipFile(zip.toFile())) {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
           ZipEntry entry = entries.nextElement();

@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -355,43 +354,38 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
-  public void testCreateEmpty() throws IOException {
+  public void testCreateEmpty(@TempDir Path tempDir) throws IOException {
     // Given
-    File targetDir = new File(System.getProperty("java.io.tmpdir") + "test/montiarc/create/EmptyProject");
+    Path targetDir = tempDir.resolve("test/montiarc/create/EmptyProject");
+
     String[] args = new String[] {
-      "create", targetDir.getAbsolutePath(),
+      "create", targetDir.toAbsolutePath().toString(),
     };
 
     // When
     MontiArcTool.main(args);
 
     // Then
-    Assertions.assertTrue(FileUtils.isDirectory(targetDir));
-    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir));
+    Assertions.assertTrue(Files.isDirectory(targetDir));
+    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir.toFile()));
     Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
-
-    // Cleanup
-    FileUtils.deleteDirectory(targetDir);
   }
 
   @Test
-  public void testCreateEmptyTemplate() throws IOException {
+  public void testCreateEmptyTemplate(@TempDir Path tempDir) throws IOException {
     // Given
-    File targetDir = new File(System.getProperty("java.io.tmpdir") + "test/montiarc/create/EmptyProject");
+    Path targetDir = tempDir.resolve("test/montiarc/create/EmptyProject");
+
     String[] args = new String[] {
-      "create", targetDir.getAbsolutePath(),
-      "-t", "empty",
+      "create", targetDir.toAbsolutePath().toString(), "-t", "empty",
     };
 
     // When
     MontiArcTool.main(args);
 
     // Then
-    Assertions.assertTrue(FileUtils.isDirectory(targetDir));
-    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir));
+    Assertions.assertTrue(Files.isDirectory(targetDir));
+    Assertions.assertFalse(FileUtils.isEmptyDirectory(targetDir.toFile()));
     Assertions.assertEquals(0, Log.getErrorCount(), () -> Log.getFindings().toString());
-
-    // Cleanup
-    FileUtils.deleteDirectory(targetDir);
   }
 }
