@@ -33,6 +33,7 @@ import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
+import static montiarc.util.ArcError.UNSUPPORTED_MODEL_ELEMENT;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -61,6 +62,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("invalidModelAndErrorProvider")
+  @MethodSource("invalidModelAndErrorNoVariabilityProvider")
   @DisableIfDisplayName(contains = {
     "MissingComponentTest7",
     "MissingComponentTest8",
@@ -112,7 +114,9 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingSymbolsInTransitionActionTest",
     "MissingSymbolsInEntryAction",
     "MissingSymbolsInExitAction",
-    "MissingSymbolsInConstraint"
+    "MissingSymbolsInConstraint",
+    "MissingSymbolsInVarIfTest",
+    "MissingSymbolsInVarIfWithCompositionTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -692,6 +696,66 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModelAndError4VariabilityProvider() {
     return Stream.of(
+      arg("MissingSymbolsInVarIfTest1",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 9, 10, 10, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInVarIfTest2",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf2.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf2.arc", 10, 30, 10, 31, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInVarIfTest3",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf3.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf3.arc", 12, 11, 12, 12, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInVarIfTest4",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf4.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf4.arc", 10, 9, 12, 11, CANT_FIND_SYMBOL_IN_EXPRESSION, "e1"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf4.arc", 11, 11, 11, 13, CANT_FIND_SYMBOL_IN_EXPRESSION, "e2"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf4.arc", 12, 16, 12, 18, CANT_FIND_SYMBOL_IN_EXPRESSION, "e3")
+      ),
+      arg("MissingSymbolsInVarIfWithCompositionTest1",
+        mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIfWithComposition1.arc", 16, 11, 16, 12, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MissingSymbolsInVarIfWithCompositionTest2",
+        mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", "MissingSymbolsInVarIf1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 9, 10, 10, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      )
+    );
+  }
+
+  protected static Stream<Arguments> invalidModelAndErrorNoVariabilityProvider() {
+    return Stream.of(
+      arg("UnsupportedModelElementVarifTest1",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 3, 10, 15, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("UnsupportedModelElementVarifTest2",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf2.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf2.arc", 10, 3, 10, 18, UNSUPPORTED_MODEL_ELEMENT, "varif"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf2.arc", 10, 24, 10, 36, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("UnsupportedModelElementVarifTest3",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf3.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf3.arc", 12, 5, 12, 17, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("UnsupportedModelElementVarifTest4",
+        mpk(PKG_VARI, "MissingSymbolsInVarIf4.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf4.arc", 10, 3, 12, 4, UNSUPPORTED_MODEL_ELEMENT, "varif"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf4.arc", 11, 5, 11, 18, UNSUPPORTED_MODEL_ELEMENT, "varif"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf4.arc", 12, 10, 12, 23, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("UnsupportedModelElementWithCompositionTest1",
+        mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIfWithComposition1.arc", 16, 5, 16, 17, UNSUPPORTED_MODEL_ELEMENT, "varif"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIfWithComposition1.arc", 21, 3, 21, 15, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("UnsupportedModelElementWithCompositionTest2",
+        mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", "MissingSymbolsInVarIf1.arc"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", 17, 3, 17, 15, UNSUPPORTED_MODEL_ELEMENT, "varif"),
+        fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 3, 10, 15, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      )
     );
   }
 
