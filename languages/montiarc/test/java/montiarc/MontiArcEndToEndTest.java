@@ -649,7 +649,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("MissingSymbolsInConstraintWithCompositionTest1",
         mpk(PKG_VARI, "MissingSymbolsInConstraintWithComposition1.arc"),
-        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraintWithComposition1.arc", 13, 16, 13, 17, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+        fn(ERROR, PKG_VARI, "MissingSymbolsInConstraintWithComposition1.arc", 15, 16, 15, 17, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
       ),
       arg("MissingSymbolsInConstraintWithCompositionTest2",
         mpk(PKG_VARI, "MissingSymbolsInConstraintWithComposition2.arc", "MissingSymbolsInConstraint1.arc"),
