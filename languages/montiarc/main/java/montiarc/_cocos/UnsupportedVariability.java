@@ -9,13 +9,14 @@ import variablearc._ast.ASTArcVarIf;
 import variablearc._cocos.VariableArcASTArcVarIfCoCo;
 
 public class UnsupportedVariability implements VariableArcASTArcVarIfCoCo {
+
   @Override
   public void check(@NotNull ASTArcVarIf ast) {
     Preconditions.checkNotNull(ast);
     Log.error(
-      ArcError.UNSUPPORTED_MODEL_ELEMENT.format("variability"),
+      ArcError.UNSUPPORTED_MODEL_ELEMENT.format("varif"),
       ast.get_SourcePositionStart(),
-      ast.get_SourcePositionEnd()
+      ast.getThen().get_SourcePositionEnd()
     );
   }
 }
