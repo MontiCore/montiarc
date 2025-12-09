@@ -7,7 +7,7 @@ package automata;
  *
  * Component parameters and fields are not resolvable as event symbols.
  */
-component MissingEvent4 {
+component MissingEventInTransition4 {
 
   int v = 0;
 

@@ -2,14 +2,13 @@
 package automata;
 
 /*
- * Invalid model: The source state 'M1' and target state 'M2' of the transitions
+ * Invalid model: The source state 'M1' and target state 'M2' of the transition
  * are missing (the state symbols cannot be resolved).
  */
-component MissingState4 {
+component MissingStateInTransition3 {
 
   automaton {
     initial state S;
-    M1 -> S;
-    S -> M2;
+    M1 -> M2;
   }
 }

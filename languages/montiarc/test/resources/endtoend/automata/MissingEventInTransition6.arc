@@ -5,7 +5,7 @@ package automata;
  * Invalid model: The msg events 'msg1', 'msg2', and 'msg3' are missing
  * (the event symbols cannot be resolved).
  */
-component MissingEvent6 {
+component MissingEventInTransition6 {
 
   automaton {
     initial state S1 {

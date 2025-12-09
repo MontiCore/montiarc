@@ -6,7 +6,7 @@ package automata;
  *
  * Outgoing ports are not resolvable as event symbol.
  */
-component MissingEvent3 {
+component MissingEventInTransition3 {
 
   port in int i;
   port out int o;

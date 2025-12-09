@@ -5,7 +5,7 @@ package automata;
  * Invalid model: The source and target states 'M1', 'M2', and 'M3' of various
  * transitions are missing (the state symbols cannot be resolved).
  */
-component MissingState5 {
+component MissingStateInTransition5 {
 
   automaton {
     initial state S1 {
