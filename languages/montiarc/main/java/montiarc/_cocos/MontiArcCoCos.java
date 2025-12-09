@@ -218,11 +218,13 @@ public class MontiArcCoCos {
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
     checker.addCoCo(new SubcomponentsConstraint());
-    checker.addCoCo(new VarIfOmitFieldReferences());
     checker.addCoCo(new NoPortInConstraint());
-    checker.addCoCo(new NoPortInVarIfCondition());
-    checker.addCoCo(new VarIfIsBoolean());
-    checker.addCoCo(new VarIfSmtConvertible());
+    if (checkVariants) {
+      checker.addCoCo(new VarIfOmitFieldReferences());
+      checker.addCoCo(new NoPortInVarIfCondition());
+      checker.addCoCo(new VarIfIsBoolean());
+      checker.addCoCo(new VarIfSmtConvertible());
+    }
 
     // Modes
     checker.addCoCo(new MaxOneModeAutomaton());
