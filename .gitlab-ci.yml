@@ -43,15 +43,6 @@ Build:
   script:
     - gradle clean assemble --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
 
-Build LSP:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  <<: *cache_gradle_pull_push
-  stage: build
-  needs: ["Build"]
-  allow_failure: false
-  script:
-    - gradle tooling:language-server:build --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
-
 Unit Test:
   stage: test
   <<: *cache_gradle_pull_push
