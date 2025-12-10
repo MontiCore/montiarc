@@ -2,8 +2,6 @@
 package montiarc;
 
 import com.microsoft.z3.Context;
-import de.monticore.types.check.CompKindExpressionDeSer;
-import montiarc._symboltable.MontiArcScopesGenitorP2;
 import montiarc._symboltable.MontiArcScopesGenitorP2Delegator;
 import montiarc._symboltable.MontiArcScopesGenitorP3Delegator;
 import montiarc.evaluation.MontiArcDeriveSMTExpr;
@@ -11,26 +9,11 @@ import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 public class MontiArcMill extends MontiArcMillTOP {
 
-  protected static MontiArcMill millMontiArcScopesGenitorP2;
-
   protected static MontiArcMill millMontiArcScopesGenitorP2Delegator;
 
   protected static MontiArcMill millMontiArcScopesGenitorP3Delegator;
 
   protected static MontiArcMill millMontiArcFullConverter;
-
-  protected static MontiArcMill millMontiArcCompTypeExprDeSer;
-
-  public static MontiArcScopesGenitorP2 scopesGenitorP2() {
-    if (millMontiArcScopesGenitorP2 == null) {
-      millMontiArcScopesGenitorP2 = getMill();
-    }
-    return millMontiArcScopesGenitorP2._scopesGenitorP2();
-  }
-
-  protected MontiArcScopesGenitorP2 _scopesGenitorP2() {
-    return new MontiArcScopesGenitorP2();
-  }
 
   public static MontiArcScopesGenitorP2Delegator scopesGenitorP2Delegator() {
     if (millMontiArcScopesGenitorP2Delegator == null) {
@@ -65,20 +48,8 @@ public class MontiArcMill extends MontiArcMillTOP {
     return new MontiArcDeriveSMTExpr(context);
   }
 
-  public static CompKindExpressionDeSer compTypeExprDeSer() {
-    if (millMontiArcCompTypeExprDeSer == null) {
-      millMontiArcCompTypeExprDeSer = getMill();
-    }
-    return millMontiArcCompTypeExprDeSer._compTypeExprDeSer();
-  }
-
-  protected CompKindExpressionDeSer _compTypeExprDeSer() {
-    return new CompKindExpressionDeSer();
-  }
-
   public static void initMe(MontiArcMill a) {
     MontiArcMillTOP.initMe(a);
-    millMontiArcScopesGenitorP2 = a;
     millMontiArcScopesGenitorP2Delegator = a;
     millMontiArcScopesGenitorP3Delegator = a;
     millMontiArcFullConverter = a;
@@ -86,7 +57,6 @@ public class MontiArcMill extends MontiArcMillTOP {
 
   public static void reset() {
     MontiArcMillTOP.reset();
-    millMontiArcScopesGenitorP2 = null;
     millMontiArcScopesGenitorP2Delegator = null;
     millMontiArcScopesGenitorP3Delegator = null;
     millMontiArcFullConverter = null;

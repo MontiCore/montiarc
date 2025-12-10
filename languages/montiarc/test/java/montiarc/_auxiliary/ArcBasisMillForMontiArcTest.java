@@ -3,7 +3,6 @@ package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
 import com.google.common.base.Preconditions;
-import de.monticore.types.check.CompKindExpressionDeSer;
 import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
 import de.monticore.types.check.ISynthesizeComponent;
 import montiarc.MontiArcMill;
@@ -49,33 +48,6 @@ public class ArcBasisMillForMontiArcTest {
     // Then
     Assertions.assertEquals(expectedCompSynthesizer,
       ArcBasisMill.scopesGenitorP2().getComponentSynthesizer().getClass());
-  }
-
-  protected static Stream<Arguments> setupAndExpectedClassForCompKindExprDeSerProvider() {
-    return Stream.of(
-      Arguments.of(arcBasisMillSetup(), CompKindExpressionDeSer.class),
-      Arguments.of(montiArcMillSetup(), CompKindExpressionDeSer.class)
-    );
-  }
-
-  /**
-   * Ensures that the component type expression (de)serializer has the right type with respect to the initialized mill.
-   *
-   * @param setup         The setup to execute, e.g., initialize the respective mill.
-   * @param expectedDeSer The class of the (de)serializer that the mill should instantiate.
-   */
-  @ParameterizedTest
-  @MethodSource("setupAndExpectedClassForCompKindExprDeSerProvider")
-  void shouldProvideCompKindExprDeSerAsExpected(@NotNull Runnable setup,
-                                                @NotNull Class<CompKindExpressionDeSer> expectedDeSer) {
-    Preconditions.checkNotNull(setup);
-    Preconditions.checkNotNull(expectedDeSer);
-
-    // When
-    setup.run();
-
-    // Then
-    Assertions.assertInstanceOf(expectedDeSer, ArcBasisMill.compKindExprDeSer());
   }
 
   /**

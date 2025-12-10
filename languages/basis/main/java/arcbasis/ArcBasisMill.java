@@ -5,7 +5,6 @@ import arcbasis._symboltable.ArcBasisScopesGenitorP2;
 import arcbasis._symboltable.ArcBasisScopesGenitorP2Delegator;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3;
 import arcbasis._symboltable.ArcBasisScopesGenitorP3Delegator;
-import de.monticore.types.check.CompKindExpressionDeSer;
 
 public class ArcBasisMill extends ArcBasisMillTOP {
 
@@ -16,8 +15,6 @@ public class ArcBasisMill extends ArcBasisMillTOP {
   protected static ArcBasisMill millArcBasisScopesGenitorP3;
 
   protected static ArcBasisMill millArcBasisScopesGenitorP3Delegator;
-
-  protected static ArcBasisMill millArcBasisCompTypeExprDeSer;
 
   public static ArcBasisScopesGenitorP2 scopesGenitorP2() {
     if (millArcBasisScopesGenitorP2 == null) {
@@ -63,24 +60,12 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     return new ArcBasisScopesGenitorP3Delegator();
   }
 
-  public static CompKindExpressionDeSer compKindExprDeSer() {
-    if (millArcBasisCompTypeExprDeSer == null) {
-      millArcBasisCompTypeExprDeSer = getMill();
-    }
-    return millArcBasisCompTypeExprDeSer._compKindExprDeSer();
-  }
-
-  protected CompKindExpressionDeSer _compKindExprDeSer() {
-    return new CompKindExpressionDeSer();
-  }
-
   public static void initMe(ArcBasisMill a) {
     ArcBasisMillTOP.initMe(a);
     millArcBasisScopesGenitorP2 = a;
     millArcBasisScopesGenitorP2Delegator = a;
     millArcBasisScopesGenitorP3 = a;
     millArcBasisScopesGenitorP3Delegator = a;
-    millArcBasisCompTypeExprDeSer = a;
   }
 
   public static void reset() {
@@ -89,6 +74,5 @@ public class ArcBasisMill extends ArcBasisMillTOP {
     millArcBasisScopesGenitorP2Delegator = null;
     millArcBasisScopesGenitorP3 = null;
     millArcBasisScopesGenitorP3Delegator = null;
-    millArcBasisCompTypeExprDeSer = null;
   }
 }
