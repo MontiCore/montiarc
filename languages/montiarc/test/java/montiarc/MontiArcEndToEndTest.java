@@ -105,8 +105,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "SelfReferentialComponentWithCompositionTest",
     "PortMultipleSender",
     "ConnectorMismatchDirectionTest4",
-    "MissingSymbolsInConnectorTest6",
-    "MissingSymbolsInConnectorTest7",
+    "MissingPortInConnectorTest1",
+    "MissingSubcomponentInConnectorTest",
     "CircularInheritanceWithCompositionTest",
     "MissingEventInTransitionTest5",
     "MissingEventInTransitionTest6",
@@ -531,54 +531,54 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_CPOS, "ConnectorMismatchType4A.arc", 25, 13, 25, 19, CONNECTOR_TYPE_MISMATCH, "int", "boolean"),
         fn(ERROR, PKG_CPOS, "ConnectorMismatchType4A.arc", 27, 13, 27, 14, CONNECTOR_TYPE_MISMATCH, "int", "boolean")
       ),
-      arg("MissingSymbolsInConnectorTest1",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector1.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector1.arc", 13, 3, 13, 10, MISSING_COMPONENT, "Missing")
+      arg("MissingComponentInConnectorTest",
+        mpk(PKG_CPOS, "MissingComponentInConnector.arc"),
+        fn(ERROR, PKG_CPOS, "MissingComponentInConnector.arc", 13, 3, 13, 10, MISSING_COMPONENT, "Missing")
       ),
-      arg("MissingSymbolsInConnectorTest2",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector2.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector2.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector2.arc", 11, 12, 11, 19, CANT_FIND_SYMBOL, "Missing")
+      arg("MissingPortInConnectorTest1",
+        mpk(PKG_CPOS, "MissingPortInConnector1.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector1.arc", 17, 3, 17, 4, MISSING_PORT, "i"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector1.arc", 18, 12, 18, 13, MISSING_PORT, "o")
       ),
-      arg("MissingSymbolsInConnectorTest3",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector3.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector3.arc", 15, 13, 15, 20, CANT_FIND_SYMBOL, "Missing"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector3.arc", 16, 14, 16, 21, CANT_FIND_SYMBOL, "Missing")
+      arg("MissingPortInConnectorTest2",
+        mpk(PKG_CPOS, "MissingPortInConnector2.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector2.arc", 19, 8, 19, 13, MISSING_PORT, "sub.i"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector2.arc", 20, 3, 20, 8, MISSING_PORT, "sub.o")
       ),
-      arg("MissingSymbolsInConnectorTest4",
-        path(mpk(PKG_CPOS, "MissingSymbolsInConnector4.arc"), mpk(PKG_COMP, "MissingPortType3.arc")),
+      arg("MissingPortInConnectorTest3",
+        mpk(PKG_CPOS, "MissingPortInConnector3A.arc", "MissingPortInConnector3B.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector3A.arc", 17, 8, 17, 13, MISSING_PORT, "sub.i"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector3A.arc", 18, 3, 18, 8, MISSING_PORT, "sub.o")
+      ),
+      arg("MissingPortInConnectorTest4",
+        mpk(PKG_CPOS, "MissingPortInConnector4A.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector4A.arc", 18, 8, 18, 13, MISSING_PORT, "sub.i"),
+        fn(ERROR, PKG_CPOS, "MissingPortInConnector4A.arc", 19, 3, 19, 8, MISSING_PORT, "sub.o")
+      ),
+      arg("MissingPortTypeInConnectorTest1",
+        mpk(PKG_CPOS, "MissingPortTypeInConnector1.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortTypeInConnector1.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing"),
+        fn(ERROR, PKG_CPOS, "MissingPortTypeInConnector1.arc", 11, 12, 11, 19, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingPortTypeInConnectorTest2",
+        mpk(PKG_CPOS, "MissingPortTypeInConnector2.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortTypeInConnector2.arc", 15, 13, 15, 20, CANT_FIND_SYMBOL, "Missing"),
+        fn(ERROR, PKG_CPOS, "MissingPortTypeInConnector2.arc", 16, 14, 16, 21, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MissingPortTypeInConnectorTest3",
+        path(mpk(PKG_CPOS, "MissingPortTypeInConnector3.arc"), mpk(PKG_COMP, "MissingPortType3.arc")),
         fn(ERROR, PKG_COMP, "MissingPortType3.arc", 10, 11, 10, 18, CANT_FIND_SYMBOL, "Missing"),
         fn(ERROR, PKG_COMP, "MissingPortType3.arc", 11, 12, 11, 19, CANT_FIND_SYMBOL, "Missing")
       ),
-      arg("MissingSymbolsInConnectorTest5",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector5A.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector5A.arc", 19, 8, 19, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector5A.arc", 20, 12, 20, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
+      arg("MissingPortTypeInConnectorTest4",
+        mpk(PKG_CPOS, "MissingPortTypeInConnector4A.arc"),
+        fn(ERROR, PKG_CPOS, "MissingPortTypeInConnector4A.arc", 19, 8, 19, 13, CONNECTOR_TYPE_MISMATCH, "Missing", "int"),
+        fn(ERROR, PKG_CPOS, "MissingPortTypeInConnector4A.arc", 20, 12, 20, 13, CONNECTOR_TYPE_MISMATCH, "int", "Missing")
       ),
-      arg("MissingSymbolsInConnectorTest6",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector6.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector6.arc", 17, 8, 17, 14, MISSING_SUBCOMPONENT, "subA"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector6.arc", 18, 3, 18, 9, MISSING_SUBCOMPONENT, "subA")
-      ),
-      arg("MissingSymbolsInConnectorTest7",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector7.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector7.arc", 17, 3, 17, 4, MISSING_PORT, "i"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector7.arc", 18, 12, 18, 13, MISSING_PORT, "o")
-      ),
-      arg("MissingSymbolsInConnectorTest8",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector8.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector8.arc", 19, 8, 19, 13, MISSING_PORT, "sub.i"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector8.arc", 20, 3, 20, 8, MISSING_PORT, "sub.o")
-      ),
-      arg("MissingSymbolsInConnectorTest9",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector9A.arc", "MissingSymbolsInConnector9B.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector9A.arc", 17, 8, 17, 13, MISSING_PORT, "sub.i"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector9A.arc", 18, 3, 18, 8, MISSING_PORT, "sub.o")
-      ),
-      arg("MissingSymbolsInConnectorTest10",
-        mpk(PKG_CPOS, "MissingSymbolsInConnector10A.arc"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector10A.arc", 18, 8, 18, 13, MISSING_PORT, "sub.i"),
-        fn(ERROR, PKG_CPOS, "MissingSymbolsInConnector10A.arc", 19, 3, 19, 8, MISSING_PORT, "sub.o")
+      arg("MissingSubcomponentInConnectorTest",
+        mpk(PKG_CPOS, "MissingSubcomponentInConnector.arc"),
+        fn(ERROR, PKG_CPOS, "MissingSubcomponentInConnector.arc", 17, 8, 17, 14, MISSING_SUBCOMPONENT, "subA"),
+        fn(ERROR, PKG_CPOS, "MissingSubcomponentInConnector.arc", 18, 3, 18, 9, MISSING_SUBCOMPONENT, "subA")
       ),
       arg("PortMultipleSenderTest1",
         mpk(PKG_CPOS, "PortMultipleSender1.arc"),

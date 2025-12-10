@@ -1,10 +1,10 @@
 {
-  "name": "MissingSymbolsInConnector5B",
+  "name": "MissingPortTypeInConnector4B",
   "package": "composition",
   "symbols": [
     {
       "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
-      "name": "MissingSymbolsInConnector5B",
+      "name": "MissingPortTypeInConnector4B",
       "spannedScope": {
         "isShadowingScope": true,
         "symbols": [

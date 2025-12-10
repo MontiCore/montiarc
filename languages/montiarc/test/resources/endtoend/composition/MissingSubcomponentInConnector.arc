@@ -5,7 +5,7 @@ package composition;
  * Invalid model: The subcomponent subA, which is the source and the target of
  * connectors, is missing (the subcomponent cannot be resolved).
  */
-component MissingSymbolsInConnector6 {
+component MissingSubcomponentInConnector {
 
   port in int i;
   port out int o;

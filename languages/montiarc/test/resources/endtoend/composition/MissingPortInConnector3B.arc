@@ -4,4 +4,4 @@ package composition;
 /**
  * Valid model
  */
-component MissingSymbolsInConnector9B { }
+component MissingPortInConnector3B { }

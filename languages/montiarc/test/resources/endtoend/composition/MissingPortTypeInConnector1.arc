@@ -5,7 +5,7 @@ package composition;
  * Invalid model: The type Missing of ports i and o is missing (the datatype
  * cannot be resolved). The ports are and source and a target of a connector.
  */
-component MissingSymbolsInConnector2 {
+component MissingPortTypeInConnector1 {
 
   port in Missing i;
   port out Missing o;

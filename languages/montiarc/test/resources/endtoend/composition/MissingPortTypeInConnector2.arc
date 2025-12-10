@@ -6,7 +6,7 @@ package composition;
  * defined by inner component Inner, are missing (the datatype cannot be
  * resolved). The ports are a source and a target of a connector.
  */
-component MissingSymbolsInConnector3 {
+component MissingPortTypeInConnector2 {
 
   port in int i;
   port out int o;

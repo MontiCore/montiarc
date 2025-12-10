@@ -5,7 +5,7 @@ package composition;
  * Invalid model: The ports i and o, which are the target and source of
  * connectors, are missing (the ports cannot be resolved).
  */
-component MissingSymbolsInConnector7 {
+component MissingPortInConnector1 {
 
   component Inner {
     port in int i;

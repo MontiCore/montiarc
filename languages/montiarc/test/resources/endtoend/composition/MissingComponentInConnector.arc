@@ -5,7 +5,7 @@ package composition;
  * Invalid model: The type Missing of subcomponent sub is missing (the component
  * cannot be resolved). Therefore, the ports sub.i and sub.o cannot be resolved.
  */
-component MissingSymbolsInConnector1 {
+component MissingComponentInConnector {
 
   port in int i;
   port out int o;
