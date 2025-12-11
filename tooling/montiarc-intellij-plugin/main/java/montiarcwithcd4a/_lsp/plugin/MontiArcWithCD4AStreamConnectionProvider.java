@@ -9,8 +9,8 @@ import java.util.List;
 
 public class MontiArcWithCD4AStreamConnectionProvider extends MontiArcWithCD4AStreamConnectionProviderTOP {
 
-  public MontiArcWithCD4AStreamConnectionProvider(Project project, String jarName) {
-    super(project, jarName);
+  public MontiArcWithCD4AStreamConnectionProvider(Project project, String jarName, String pluginId) {
+    super(project, jarName, pluginId);
   }
 
   @Override
