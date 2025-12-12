@@ -43,7 +43,7 @@ public class VariableArcResolvingTest extends VariableArcTestBase {
 
     // Then
     Assertions.assertEquals(1, variables.size());
-    Assertions.assertTrue(variables.get(0) instanceof ArcFeature2VariableAdapter);
+    Assertions.assertInstanceOf(ArcFeature2VariableAdapter.class, variables.get(0));
     Assertions.assertEquals(symbol, ((ArcFeature2VariableAdapter) variables.get(0)).getAdaptee());
   }
 

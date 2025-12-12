@@ -59,7 +59,7 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get().getTypeInfo().getSpannedScope() instanceof IVariableArcScope);
+    Assertions.assertInstanceOf(IVariableArcScope.class, result.get().getTypeInfo().getSpannedScope());
     Assertions.assertEquals(compSym, result.get().getTypeInfo());
   }
 
@@ -121,12 +121,12 @@ public class MontiArcSynthesizeComponentTest extends MontiArcTestBase {
 
     // Then
     Assertions.assertTrue(result.isPresent());
-    Assertions.assertTrue(result.get() instanceof CompKindOfGenericComponentType);
+    Assertions.assertInstanceOf(CompKindOfGenericComponentType.class, result.get());
     CompKindOfGenericComponentType resultAsGeneric = (CompKindOfGenericComponentType) result.get();
 
     Assertions.assertEquals(compSym, resultAsGeneric.getTypeInfo());
-    Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("K").get() instanceof SymTypeOfObject);
-    Assertions.assertTrue(resultAsGeneric.getTypeBindingFor("V").get() instanceof SymTypeOfGenerics);
+    Assertions.assertInstanceOf(SymTypeOfObject.class, resultAsGeneric.getTypeBindingFor("K").get());
+    Assertions.assertInstanceOf(SymTypeOfGenerics.class, resultAsGeneric.getTypeBindingFor("V").get());
     Assertions.assertEquals(fooSym, resultAsGeneric.getTypeBindingFor("K").get().getTypeInfo());
     Assertions.assertEquals(listSym, resultAsGeneric.getTypeBindingFor("V").get().getTypeInfo());
     Assertions.assertEquals(fooSym,

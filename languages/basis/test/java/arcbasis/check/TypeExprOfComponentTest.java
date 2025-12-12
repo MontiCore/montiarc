@@ -142,7 +142,7 @@ public class TypeExprOfComponentTest extends ArcBasisTestBase {
 
     // Then
     Assertions.assertTrue(portsType.isPresent());
-    Assertions.assertTrue(portsType.get() instanceof SymTypePrimitive);
+    Assertions.assertInstanceOf(SymTypePrimitive.class, portsType.get());
     Assertions.assertEquals(BasicSymbolsMill.INT, portsType.get().print());
   }
 

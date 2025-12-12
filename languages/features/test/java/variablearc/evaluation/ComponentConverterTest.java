@@ -154,7 +154,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
     Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(0).getAstExpression()));
     // Assert second expression (parameter)
     Assertions.assertEquals(Optional.of("comp1"), exprs.getExpressions().get(1).getPrefix());
-    Assertions.assertTrue(exprs.getExpressions().get(1) instanceof AssignmentExpression);
+    Assertions.assertInstanceOf(AssignmentExpression.class, exprs.getExpressions().get(1));
     Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(1).getAstExpression()));
     Assertions.assertEquals("p1", ((AssignmentExpression) exprs.getExpressions().get(1)).getVariable().getName());
     // Assert third expression
