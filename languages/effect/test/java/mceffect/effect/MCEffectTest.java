@@ -6,7 +6,7 @@ import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.tagging.ISymbolTagger;
 import de.monticore.tagging.SimpleSymbolTagger;
 import de.monticore.tagging.TagRepository;
-import mceffect.EffectAbstractTest;
+import mceffect.EffectTestBase;
 import mceffect.MCEffectTool;
 import mceffect._ast.ASTMCEffect;
 import montiarc.MontiArcMill;
@@ -20,7 +20,7 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
 
-public class MCEffectTest extends EffectAbstractTest {
+public class MCEffectTest extends EffectTestBase {
 
   @BeforeEach
   public void setup() throws IOException {

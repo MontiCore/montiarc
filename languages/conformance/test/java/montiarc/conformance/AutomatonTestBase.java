@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class AutomatonAbstractTest {
+public class AutomatonTestBase {
 
   protected ASTArcComponentType refAut;
   protected ASTArcComponentType conAut;

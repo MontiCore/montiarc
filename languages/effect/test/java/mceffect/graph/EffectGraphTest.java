@@ -2,7 +2,7 @@
 package mceffect.graph;
 
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
-import mceffect.EffectAbstractTest;
+import mceffect.EffectTestBase;
 import mceffect.MCEffectTool;
 import mceffect._ast.ASTMCEffect;
 import mceffect.effect.EffectStorage;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class EffectGraphTest extends EffectAbstractTest {
+public class EffectGraphTest extends EffectTestBase {
 
   @BeforeEach
   public void setup() {

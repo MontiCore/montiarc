@@ -3,7 +3,7 @@ package montiarc.conformance;
 
 import org.junit.jupiter.api.Test;
 
-public class AutomatonToolTest extends AutomatonAbstractTest {
+public class AutomatonToolTest extends AutomatonTestBase {
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/automaton2smt/";
 
   @Test

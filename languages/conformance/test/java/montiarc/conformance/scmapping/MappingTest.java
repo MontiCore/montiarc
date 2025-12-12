@@ -12,7 +12,7 @@ import de.monticore.scbasis._symboltable.SCStateSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symboltable.ISymbol;
-import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.AutomatonTestBase;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ import java.util.Map;
 
 import static montiarc.conformance.util.AutomataLoader.loadMapping;
 
-class MappingTest extends AutomatonAbstractTest {
+class MappingTest extends AutomatonTestBase {
   public String modelDir = "test/resources/montiarc/conformance/";
   private Context ctx;
   private Expr<? extends Sort> currState;

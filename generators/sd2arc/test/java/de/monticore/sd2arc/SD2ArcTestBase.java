@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
-public abstract class AbstractTest {
+public abstract class SD2ArcTestBase {
 
   protected static final String SYMBOL_PATH = "test/resources";
 

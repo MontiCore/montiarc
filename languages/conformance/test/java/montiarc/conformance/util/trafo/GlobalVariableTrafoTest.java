@@ -13,7 +13,7 @@ import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.MCFatalError;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.AutomatonTestBase;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import montiarc.conformance.util.AutomataLoader;
 import org.apache.commons.lang3.tuple.Pair;
@@ -25,7 +25,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.File;
 
-public class GlobalVariableTrafoTest extends AutomatonAbstractTest {
+public class GlobalVariableTrafoTest extends AutomatonTestBase {
   private final Context ctx = new Context();
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/";
   private ASTArcComponentType aut;

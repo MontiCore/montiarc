@@ -3,7 +3,7 @@ package mceffect.checker;
 
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.logging.Log;
-import mceffect.EffectAbstractTest;
+import mceffect.EffectTestBase;
 import mceffect.MCEffectTool;
 import mceffect._ast.ASTMCEffect;
 import mceffect.effect.Effect;
@@ -16,7 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 
-public abstract class AbstractCheckerTest extends EffectAbstractTest {
+public abstract class AbstractCheckerTest extends EffectTestBase {
 
   private EffectChecker checker;
   private EffectStorage storage;

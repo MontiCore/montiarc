@@ -9,7 +9,7 @@ import com.microsoft.z3.Solver;
 import com.microsoft.z3.Sort;
 import com.microsoft.z3.Status;
 import de.monticore.scbasis._ast.ASTSCTransition;
-import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.AutomatonTestBase;
 import montiarc.conformance.automaton2smt.smtAutomaton.SMTAutomaton;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,7 +22,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class SMTAutomatonTest extends AutomatonAbstractTest {
+public class SMTAutomatonTest extends AutomatonTestBase {
   protected Context ctx;
   protected String modelDir = "test/resources/montiarc/conformance/automaton2smt/";
   protected Expr<? extends Sort> src;

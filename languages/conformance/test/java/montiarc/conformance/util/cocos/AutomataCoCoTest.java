@@ -5,7 +5,7 @@ import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.AutomatonTestBase;
 import montiarc.conformance.util.AutomataLoader;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 
-public class AutomataCoCoTest extends AutomatonAbstractTest {
+public class AutomataCoCoTest extends AutomatonTestBase {
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/";
 
   @BeforeEach

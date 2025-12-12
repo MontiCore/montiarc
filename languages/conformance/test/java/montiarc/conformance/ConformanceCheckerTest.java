@@ -14,7 +14,7 @@ import java.io.File;
 import static montiarc.conformance.util.AutomataLoader.loadMapping;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class ConformanceCheckerTest extends AutomatonAbstractTest {
+class ConformanceCheckerTest extends AutomatonTestBase {
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/automaton2smt/";
 
   @BeforeEach

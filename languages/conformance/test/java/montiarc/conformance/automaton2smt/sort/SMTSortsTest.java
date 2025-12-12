@@ -2,7 +2,7 @@
 package montiarc.conformance.automaton2smt.sort;
 
 import com.microsoft.z3.Context;
-import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.AutomatonTestBase;
 import montiarc.conformance.automaton2smt.cd.CD2SMT;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SMTSortsTest extends AutomatonAbstractTest {
+public class SMTSortsTest extends AutomatonTestBase {
   protected Context ctx;
   protected String RELATIVE_MODEL_PATH =
       "test/resources/montiarc/conformance/automaton2smt/";

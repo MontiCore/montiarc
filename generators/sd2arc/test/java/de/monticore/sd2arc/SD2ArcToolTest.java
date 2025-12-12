@@ -15,7 +15,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-public class SD2ArcToolTest extends AbstractTest {
+public class SD2ArcToolTest extends SD2ArcTestBase {
 
   Path output = Paths.get("build/sd2arc");
 

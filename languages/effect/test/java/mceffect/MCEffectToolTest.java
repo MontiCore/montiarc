@@ -3,7 +3,7 @@ package mceffect;
 
 import org.junit.jupiter.api.Test;
 
-public class MCEffectToolTest extends EffectAbstractTest {
+public class MCEffectToolTest extends EffectTestBase {
 
   @Test
   public void TestMCEffectTool() {

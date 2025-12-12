@@ -21,7 +21,7 @@ import java.util.function.Function;
  * The base of every effect test. Handles initialization and reset of static
  * stuff (log, mill, tc delegate, basic symbols).
  */
-public abstract class EffectAbstractTest extends ATestBase {
+public abstract class EffectTestBase extends ATestBase {
 
   /**
    * We initialize the mill before all tests. The mill does not need to be

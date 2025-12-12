@@ -3,7 +3,7 @@ package montiarc.conformance.scmapping;
 
 import de.se_rwth.commons.logging.Log;
 import de.se_rwth.commons.logging.LogStub;
-import montiarc.conformance.AutomatonAbstractTest;
+import montiarc.conformance.AutomatonTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ import java.io.File;
 
 import static montiarc.conformance.util.AutomataLoader.loadMapping;
 
-public class CoCoTest extends AutomatonAbstractTest {
+public class CoCoTest extends AutomatonTestBase {
   public String RELATIVE_MODEL_PATH = "test/resources/montiarc/conformance/";
 
   @BeforeEach
