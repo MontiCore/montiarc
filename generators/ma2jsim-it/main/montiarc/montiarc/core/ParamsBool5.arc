@@ -6,8 +6,8 @@ component ParamsBool5(boolean p1, boolean p2) {
   port in boolean i;
   port out boolean o;
 
-  // boolean v1 = p1;
-  // boolean v2 = p2;
+  boolean v1 = p1;
+  boolean v2 = p2;
 
   automaton {
     initial state S;

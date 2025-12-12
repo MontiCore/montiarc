@@ -7,16 +7,16 @@ import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.List;
 import java.util.stream.Stream;
 
 import static montiarc.rte.msg.MessageFactory.msg;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @JSimTest
 class ParamsBool5Test {
@@ -26,23 +26,22 @@ class ParamsBool5Test {
    * @param p2 the argument for parameter p2
    */
   @ParameterizedTest
-  @ValueSource(booleans = {
-    true, true,
-    true, false,
-    false, true,
-    false, false
+  @CsvSource({
+    "true, true",
+    "true, false",
+    "false, true",
+    "false, false"
   })
-  @Disabled
-  void testCtorSetsField(boolean p1, boolean p2) {
+  void ParamBool5CompImpl(boolean p1, boolean p2) {
     // When
-    ParamsBool5Comp sut = new ParamsBool5CompBuilder()
+    ParamsBool5CompImpl sut = (ParamsBool5CompImpl) new ParamsBool5CompBuilder()
       .set_param_p1(p1)
       .set_param_p2(p2)
       .setName("sut").build();
 
     // Then
-    //Assertions.assertThat(sut.field_v1).isEqualTo(p1);
-    //Assertions.assertThat(sut.field_v2).isEqualTo(p2);
+    assertThat(sut.field_v1).isEqualTo(p1);
+    assertThat(sut.field_v2).isEqualTo(p2);
   }
 
   /**

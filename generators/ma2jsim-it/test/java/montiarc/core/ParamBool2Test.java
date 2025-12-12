@@ -2,9 +2,10 @@
 package montiarc.core;
 
 import montiarc.rte.tests.JSimTest;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 @JSimTest
 class ParamBool2Test {
@@ -17,14 +18,13 @@ class ParamBool2Test {
     true,
     false
   })
-  @Disabled
-  void testCtorSetsField(boolean p) {
+  void testSetsField(boolean p) {
     // When
-    ParamBool2Comp sut = new ParamBool2CompBuilder()
+    ParamBool2CompImpl sut = (ParamBool2CompImpl) new ParamBool2CompBuilder()
       .set_param_p(p)
       .setName("sut").build();
 
     // Then
-    //Assertions.assertThat(sut.field_v).isEqualTo(p);
+    assertThat(sut.field_v).isEqualTo(p);
   }
 }

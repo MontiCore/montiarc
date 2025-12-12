@@ -6,7 +6,7 @@ component ParamBool5(boolean p) {
   port in boolean i;
   port out boolean o;
 
-  // boolean v = p;
+  boolean v = p;
 
   automaton {
     initial state S;

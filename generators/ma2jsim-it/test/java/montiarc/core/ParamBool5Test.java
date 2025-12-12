@@ -7,7 +7,6 @@ import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,6 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static montiarc.rte.msg.MessageFactory.msg;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @JSimTest
 class ParamBool5Test {
@@ -29,15 +29,14 @@ class ParamBool5Test {
     true,
     false
   })
-  @Disabled
-  void testCtorSetsField(boolean p) {
+  void testSetsField(boolean p) {
     // When
-    ParamBool5Comp sut = new ParamBool5CompBuilder()
+    ParamBool5CompImpl sut = (ParamBool5CompImpl) new ParamBool5CompBuilder()
       .set_param_p(p)
       .setName("sut").build();
 
     // Then
-    //Assertions.assertThat(sut.field_v).isEqualTo(p);
+    assertThat(sut.field_v).isEqualTo(p);
   }
 
   /**
