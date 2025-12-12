@@ -3521,11 +3521,13 @@ The messages are sent in order, that is, first the result of the expression
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Color</span><span class="w"> </span><span class="n">pedLight</span><span class="p">;</span>
 
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="c1">// The light is green for the cars initially</span>
-<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
-<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">GREEN</span><span class="p">;</span>
-<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">RED</span><span class="p">;</span><span class="w"> </span>
-<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Green</span><span class="p">;</span>
+<span class="w">    </span><span class="c1">// When entering this state, the light gets green for the cars and red for the predestrians</span>
+<span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">Green</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="k">entry</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">GREEN</span><span class="p">;</span>
+<span class="w">        </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">RED</span><span class="p">;</span><span class="w"> </span>
+<span class="w">      </span><span class="p">}</span>
+<span class="w">    </span><span class="p">};</span>
 
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Yellow</span><span class="p">;</span>
 <span class="w">    </span><span class="kd">state</span> <span class="nc">Red</span><span class="p">;</span>
@@ -3533,25 +3535,21 @@ The messages are sent in order, that is, first the result of the expression
 <span class="w">    </span><span class="c1">// A pedestrian presses the button on either side of the road, </span>
 <span class="w">    </span><span class="c1">// tell the cars to stop (car light becomes yellow)</span>
 <span class="w">    </span><span class="n">Green</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Yellow</span><span class="w"> </span><span class="n">reqL</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Yellow</span><span class="p">;</span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">YELLOW</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">    </span><span class="n">Green</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Yellow</span><span class="w"> </span><span class="n">reqR</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Yellow</span><span class="p">;</span>
+<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">YELLOW</span><span class="p">;</span>
 <span class="w">    </span><span class="p">}</span>
 
 <span class="w">    </span><span class="c1">// After some time, the car light becomes red and the light for the </span>
 <span class="w">    </span><span class="c1">// pedestrians becomes green</span>
 <span class="w">    </span><span class="n">Yellow</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Red</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
 <span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">RED</span><span class="p">;</span>
-<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Green</span><span class="p">;</span><span class="w"> </span>
+<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">GREEN</span><span class="p">;</span><span class="w"> </span>
 <span class="w">    </span><span class="p">}</span>
 
-<span class="w">    </span><span class="c1">// After some time, the cars are allowed to drive again. The car light </span>
-<span class="w">    </span><span class="c1">// becomes green, the pedestrian light becomes red</span>
-<span class="w">    </span><span class="n">Red</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Green</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">carLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Green</span><span class="p">;</span>
-<span class="w">      </span><span class="n">pedLight</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Color</span><span class="p">.</span><span class="na">Red</span><span class="p">;</span>
-<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="c1">// After some time, the cars are allowed to drive again. </span>
+<span class="w">    </span><span class="n">Red</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">Green</span><span class="p">;</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>

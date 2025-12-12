@@ -3177,19 +3177,18 @@ Next, download the <a href="https://github.com/MontiCore/montiarc/releases/tag/s
 <div class="highlight"><pre><span></span><code>java<span class="w"> </span>-jar<span class="w"> </span>MontiArc-7.9.0.jar
 </code></pre></div>
 <h4 id="install-the-cli-beta">Install the CLI (BETA)</h4>
-<p>If you also want to use the <a href="../HelloWorld/">CLI</a>, you can find installers for all platforms <a href="https://github.com/MontiCore/montiarc/releases/tag/snapshot">here</a>. Download the installer for your platform, extract, and run it.</p>
-<div class="admonition info">
-<p class="admonition-title">Add MontiArc to PATH</p>
-<p>To be able to run the MontiArc command from anywhere, you will need to update your path variable.</p>
+<p>If you also want to use the <a href="../HelloWorld/">CLI</a>, you can find installers for all platforms <a href="https://github.com/MontiCore/montiarc/releases/tag/snapshot">here</a>.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">MacOS</label><label for="__tabbed_1_3">Linux</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
 <ol>
+<li>Download the installer for Windows(.exe), extract, and run it.</li>
+<li>To be able to run the MontiArc command from anywhere, you will need to update your path variable:<ul>
 <li>Open the advanced system settings (Erweiterte System Eigenschaften) by pressing the Windows key and searching for it.</li>
 <li>Press <strong>Environment Variables</strong> (Umgebungsvariablen)</li>
 <li>Inside the user variables, look for <code>Path</code><ul>
 <li>If <code>Path</code> exists<ol>
-<li>Select <code>Path</code> </li>
+<li>Select <code>Path</code></li>
 <li>Click <strong>Edit...</strong></li>
 <li>Click <strong>New...</strong></li>
 <li>Insert <code>C:\Program Files\MontiArc\</code></li>
@@ -3205,16 +3204,46 @@ Next, download the <a href="https://github.com/MontiCore/montiarc/releases/tag/s
 </li>
 </ul>
 </li>
+</ul>
+</li>
 </ol>
 </div>
 <div class="tabbed-block">
-<p>Add <code>export PATH="/Applications/MontiArc/bin:$PATH"</code> to your <code>~/.zshrc</code> file.
-If that file doesn't exist, create it. Restart your shell or run <code>source ~/.zshrc</code> to load the changes.</p>
+<ol>
+<li>Download the installer for MacOS(.pkg) </li>
+<li>Run the installer and follow the instructions.<ul>
+<li>You will probably receive following message: ''Apple could not verify “MontiArc-[...].pkg” is free of malware that may harm your Mac or compromise your privacy.''<ol>
+<li>Navigate to <code>System Settings</code></li>
+<li>Navigate to <code>Privacy &amp; Security</code></li>
+<li>Navigate to <code>Security</code></li>
+<li>Search for the message ''... was blocked from use because it is not from an identified developer''</li>
+<li>Click on <strong>Open anyway</strong></li>
+</ol>
+</li>
+</ul>
+</li>
+<li>You are now able to use the MontiArc tool.</li>
+<li>To be able to run the MontiArc command from anywhere, you will need to update your path variable:<ul>
+<li>Add <code>export PATH="/Applications/MontiArc.app/Contents/MacOS:$PATH"</code> to your <code>~/.zshrc</code> file.</li>
+<li>If that file doesn't exist, create it. </li>
+<li>Restart your shell or run <code>source ~/.zshrc</code> to load the changes.</li>
+</ul>
+</li>
+</ol>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>MontiArc can only be used via the terminal. Clicking on the MontiArc app icon displayed in your app overview will not work.</p>
+</div>
 </div>
 <div class="tabbed-block">
-<p>You should already know how to add a program to your path?</p>
-<p>If not, simply add <code>export PATH="/opt/montiarc/bin:$PATH"</code> to whatever shell's rc script you're using (likely <code>~/.bashrc</code>).</p>
-</div>
+<ol>
+<li>Download the installer for Linux(.deb/.rpm) and run it.</li>
+<li>To be able to run the MontiArc command from anywhere, you will need to update your path variable:<ul>
+<li>You should already know how to add a program to your path?</li>
+<li>If not, simply add <code>export PATH="/opt/montiarc/bin:$PATH"</code> to whatever shell's rc script you're using (likely <code>~/.bashrc</code>).</li>
+</ul>
+</li>
+</ol>
 </div>
 </div>
 </div>
