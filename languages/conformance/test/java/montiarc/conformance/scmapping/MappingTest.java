@@ -73,30 +73,30 @@ class MappingTest extends AutomatonTestBase {
   @ValueSource(strings = {"mcMapping"})
   public void stateMappingTest(String strategy) {
     //Then
-    Assertions.assertEquals(getRefStateName("Anon"), "NotLoggedIn");
-    Assertions.assertEquals(getRefStateName("Known"), "LoggedIn");
-    Assertions.assertNotEquals(getRefStateName("Anon"), "LoggedIn");
-    Assertions.assertNotEquals(getRefStateName("Known"), "NotLoggedIn");
+    Assertions.assertEquals("NotLoggedIn", getRefStateName("Anon"));
+    Assertions.assertEquals("LoggedIn", getRefStateName("Known"));
+    Assertions.assertNotEquals("LoggedIn", getRefStateName("Anon"));
+    Assertions.assertNotEquals("NotLoggedIn", getRefStateName("Known"));
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"mcMapping"})
   public void inputMappingTest(String strategy) {
     //Then
-    Assertions.assertEquals(getRefInput("GET_VALUE"), "input=ACTION");
-    Assertions.assertEquals(getRefInput("LOGOUT"), "input=LOGOUT");
-    Assertions.assertEquals(getRefInput("INCREASE_VALUE"), "input=ACTION");
-    Assertions.assertEquals(getRefInput("correct"), "input=LOGIN");
-    Assertions.assertNotEquals(getRefInput("GET_VALUE"), "input=LOGIN");
+    Assertions.assertEquals("input=ACTION", getRefInput("GET_VALUE"));
+    Assertions.assertEquals("input=LOGOUT", getRefInput("LOGOUT"));
+    Assertions.assertEquals("input=ACTION", getRefInput("INCREASE_VALUE"));
+    Assertions.assertEquals("input=LOGIN", getRefInput("correct"));
+    Assertions.assertNotEquals("input=LOGIN", getRefInput("GET_VALUE"));
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"mcMapping"})
   public void outputMappingTest(String strategy) {
     //Then
-    Assertions.assertEquals(getRefOutput("ERROR"), "output = [ERROR]");
-    Assertions.assertEquals(getRefOutput("0"), "output = [RESPONSE, RESPONSE]");
-    Assertions.assertEquals(getRefOutput("[]"), "output = []");
+    Assertions.assertEquals("output = [ERROR]", getRefOutput("ERROR"));
+    Assertions.assertEquals("output = [RESPONSE, RESPONSE]", getRefOutput("0"));
+    Assertions.assertEquals("output = []", getRefOutput("[]"));
   }
 
   public String getRefStateName(String conStateName) {
@@ -151,7 +151,7 @@ class MappingTest extends AutomatonTestBase {
     solverConstraints.add(constraint);
 
     solver.add(solverConstraints.toArray(new BoolExpr[0]));
-    Assertions.assertEquals(solver.check(), Status.SATISFIABLE);
+    Assertions.assertEquals(Status.SATISFIABLE, solver.check());
     return solver.getModel();
   }
 }

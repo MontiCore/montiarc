@@ -73,7 +73,7 @@ public class GlobalVariableTrafoTest extends AutomatonTestBase {
     solver.add(new BoolExpr[] {smtTrans, contr});
 
     //Then
-    Assertions.assertEquals(solver.check(), Status.UNSATISFIABLE);
+    Assertions.assertEquals(Status.UNSATISFIABLE, solver.check());
   }
 
   @Test
@@ -86,6 +86,6 @@ public class GlobalVariableTrafoTest extends AutomatonTestBase {
     solver.add(new BoolExpr[] {smtTrans});
 
     // Then
-    Assertions.assertEquals(solver.check(), Status.SATISFIABLE);
+    Assertions.assertEquals(Status.SATISFIABLE, solver.check());
   }
 }
