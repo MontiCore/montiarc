@@ -21,36 +21,49 @@ java -jar MontiArc-7.9.0.jar
 
 #### Install the CLI (BETA)
 
-If you also want to use the [CLI](./HelloWorld.md), you can find installers for all platforms [here](https://github.com/MontiCore/montiarc/releases/tag/snapshot). Download the installer for your platform, extract, and run it.
+If you also want to use the [CLI](./HelloWorld.md), you can find installers for all platforms [here](https://github.com/MontiCore/montiarc/releases/tag/snapshot).
 
-!!! info "Add MontiArc to PATH"
-    To be able to run the MontiArc command from anywhere, you will need to update your path variable.
-
-    === "Windows"
-        1. Open the advanced system settings (Erweiterte System Eigenschaften) by pressing the Windows key and searching for it.
-        2. Press **Environment Variables** (Umgebungsvariablen)
-        3. Inside the user variables, look for `Path`
+=== "Windows"
+    1. Download the installer for Windows(.exe), extract, and run it.
+    2. To be able to run the MontiArc command from anywhere, you will need to update your path variable:
+        - Open the advanced system settings (Erweiterte System Eigenschaften) by pressing the Windows key and searching for it.
+        - Press **Environment Variables** (Umgebungsvariablen)
+        - Inside the user variables, look for `Path`
             - If `Path` exists
-                1. Select `Path` 
+                1. Select `Path`
                 2. Click **Edit...**
                 3. Click **New...**
                 4. Insert `C:\Program Files\MontiArc\`
                 5. Click **OK** three times
-            - If `Path` does not exist
-                 1. Click **New...** in the user variables section
-                 2. Set **Variable Name** to `Path`
-                 3. Set **Variable Value** to `C:\Program Files\MontiArc\`
-                 4. Click **OK** three times
+              - If `Path` does not exist
+                1. Click **New...** in the user variables section
+                2. Set **Variable Name** to `Path`
+                3. Set **Variable Value** to `C:\Program Files\MontiArc\`
+                4. Click **OK** three times
 
-    === "MacOS"
-        Add `export PATH="/Applications/MontiArc/bin:$PATH"` to your `~/.zshrc` file.
-        If that file doesn't exist, create it. Restart your shell or run `source ~/.zshrc` to load the changes.
+=== "MacOS"
+    1. Download the installer for MacOS(.pkg) 
+    2. Run the installer and follow the instructions.
+        - You will probably receive following message: ''Apple could not verify “MontiArc-[...].pkg” is free of malware that may harm your Mac or compromise your privacy.''
+            1. Navigate to `System Settings`
+            2. Navigate to `Privacy & Security`
+            3. Navigate to `Security`
+            4. Search for the message ''... was blocked from use because it is not from an identified developer''
+            5. Click on **Open anyway**
+    3. You are now able to use the MontiArc tool.
+    4. To be able to run the MontiArc command from anywhere, you will need to update your path variable:
+        - Add `export PATH="/Applications/MontiArc.app/Contents/MacOS:$PATH"` to your `~/.zshrc` file.
+        - If that file doesn't exist, create it. 
+        - Restart your shell or run `source ~/.zshrc` to load the changes.
+  
+    !!! info 
+        MontiArc can only be used via the terminal. Clicking on the MontiArc app icon displayed in your app overview will not work.
 
-    === "Linux"
-        You should already know how to add a program to your path?
-        
-        If not, simply add `export PATH="/opt/montiarc/bin:$PATH"` to whatever shell's rc script you're using (likely `~/.bashrc`).
-
+=== "Linux"
+    1. Download the installer for Linux(.deb/.rpm) and run it.
+    2. To be able to run the MontiArc command from anywhere, you will need to update your path variable:
+        - You should already know how to add a program to your path?
+        - If not, simply add `export PATH="/opt/montiarc/bin:$PATH"` to whatever shell's rc script you're using (likely `~/.bashrc`).
 
 You can then run the tool by running:
 ```bash

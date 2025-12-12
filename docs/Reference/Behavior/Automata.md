@@ -226,11 +226,13 @@ component TrafficLight {
   port out Color pedLight;
   
   automaton {
-    // The light is green for the cars initially
-    initial { 
-      carLight = Color.GREEN;
-      pedLight = Color.RED; 
-    } state Green;
+    // When entering this state, the light gets green for the cars and red for the predestrians
+    initial state Green {
+      entry / {
+        carLight = Color.GREEN;
+        pedLight = Color.RED; 
+      }
+    };
     
     state Yellow;
     state Red;
@@ -238,25 +240,21 @@ component TrafficLight {
     // A pedestrian presses the button on either side of the road, 
     // tell the cars to stop (car light becomes yellow)
     Green -> Yellow reqL / {
-      carLight = Color.Yellow;
+      carLight = Color.YELLOW;
     }
     Green -> Yellow reqR / {
-      carLight = Color.Yellow;
+      carLight = Color.YELLOW;
     }
     
     // After some time, the car light becomes red and the light for the 
     // pedestrians becomes green
     Yellow -> Red / {
       carLight = Color.RED;
-      pedLight = Color.Green; 
+      pedLight = Color.GREEN; 
     }
     
-    // After some time, the cars are allowed to drive again. The car light 
-    // becomes green, the pedestrian light becomes red
-    Red -> Green / {
-      carLight = Color.Green;
-      pedLight = Color.Red;
-    }
+    // After some time, the cars are allowed to drive again. 
+    Red -> Green;
   }
 }
 ```
