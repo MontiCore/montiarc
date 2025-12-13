@@ -8,7 +8,6 @@ import com.microsoft.z3.FuncDecl;
 import com.microsoft.z3.IntExpr;
 import com.microsoft.z3.Symbol;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
@@ -22,7 +21,9 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.INT;
+import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
 import static montiarc.MontiArcMill.parser;
+import static montiarc.MontiArcMillTOP.variableSymbolBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -41,26 +42,23 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
       scope.add(MontiArcMill.arcFeatureSymbolBuilder().setName("f1").setEnclosingScope(scope).build());
       scope.add(MontiArcMill.arcFeatureSymbolBuilder().setName("f2").setEnclosingScope(scope).build());
       scope.add(MontiArcMill.arcFeatureSymbolBuilder().setName("f3").setEnclosingScope(scope).build());
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i1")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i2")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i3")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i1").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i2").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i3").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
 
       TransitiveScopeSetter setScope = new TransitiveScopeSetter();
       setScope.setScope(ast, scope);
 
-      BoolExpr f1 = ctx.mkBoolConst("f1");
-      BoolExpr f2 = ctx.mkBoolConst("f2");
-      BoolExpr f3 = ctx.mkBoolConst("f3");
-
       Symbol[] symbols = new Symbol[]{
-        ctx.mkSymbol("f1"), ctx.mkSymbol("f2"), ctx.mkSymbol("f3"),
+        ctx.mkSymbol("f1"),
+        ctx.mkSymbol("f2"),
+        ctx.mkSymbol("f3"),
       };
 
       FuncDecl<?>[] functions = new FuncDecl<?>[]{
-        f1.getFuncDecl(), f2.getFuncDecl(), f3.getFuncDecl(),
+        ctx.mkBoolConst("f1").getFuncDecl(),
+        ctx.mkBoolConst("f2").getFuncDecl(),
+        ctx.mkBoolConst("f3").getFuncDecl(),
       };
 
       MontiArcDeriveSMTExpr toSmt = new MontiArcDeriveSMTExpr(ctx);
@@ -83,26 +81,20 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
       ASTExpression ast = parser().parse_StringExpression(expr).orElseThrow();
 
       IMontiArcScope scope = MontiArcMill.scope();
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i1")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i2")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i3")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i1").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i2").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
 
       TransitiveScopeSetter setScope = new TransitiveScopeSetter();
       setScope.setScope(ast, scope);
 
-      IntExpr i1 = ctx.mkIntConst("i1");
-      IntExpr i2 = ctx.mkIntConst("i2");
-      IntExpr i3 = ctx.mkIntConst("i3");
-
       Symbol[] symbols = new Symbol[]{
-        ctx.mkSymbol("i1"), ctx.mkSymbol("i2"), ctx.mkSymbol("i3")
+        ctx.mkSymbol("i1"),
+        ctx.mkSymbol("i2")
       };
 
       FuncDecl<?>[] functions = new FuncDecl<?>[]{
-        i1.getFuncDecl(), i2.getFuncDecl(), i3.getFuncDecl()
+        ctx.mkIntConst("i1").getFuncDecl(),
+        ctx.mkIntConst("i2").getFuncDecl()
       };
 
       MontiArcDeriveSMTExpr toSmt = new MontiArcDeriveSMTExpr(ctx);
@@ -126,10 +118,8 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
       ASTExpression ast = parser().parse_StringExpression(expr).orElseThrow();
 
       IMontiArcScope scope = MontiArcMill.scope();
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i1")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
-      scope.add(MontiArcMill.variableSymbolBuilder().setName("i2")
-        .setType(SymTypeExpressionFactory.createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i1").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("i2").setType(createPrimitive(INT)).setEnclosingScope(scope).build());
 
       TransitiveScopeSetter setScope = new TransitiveScopeSetter();
       setScope.setScope(ast, scope);
@@ -171,9 +161,9 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
 
   static Stream<Arguments> intExpr() {
     return Stream.of(
+      arg("1", "1"),
       arg("i1", "i1"),
       arg("i2", "i2"),
-      arg("i3", "i3"),
       arg("i1 + i2", "(+ i1 i2)"),
       arg("i1 - i2", "(- i1 i2)"),
       arg("i1 * i2", "(* i1 i2)"),
@@ -222,5 +212,5 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
     );
   }
 
-  public record Int(Function<Context, IntExpr> expr) {}
+  record Int(Function<Context, IntExpr> expr) {}
 }
