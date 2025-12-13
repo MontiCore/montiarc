@@ -2,6 +2,7 @@
 package variablearc.evaluation.exp2smt;
 
 import com.google.common.base.Preconditions;
+import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.IntExpr;
 import de.monticore.expressions.bitexpressions._ast.ASTBinaryAndExpression;
@@ -55,7 +56,12 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
     Optional<IntExpr> right = this.getResult().getValueAsInt();
 
     if (left.isPresent() && right.isPresent()) {
-      this.getResult().setValue(this.getContext().mkBV2Int(this.getContext().mkBVSHL(this.getContext().mkInt2BV(64, left.get()), this.getContext().mkInt2BV(64, right.get())), true));
+      this.getResult().setValue(this.getContext().mkBV2Int(
+        this.getContext().mkBVSHL(
+          this.getContext().mkInt2BV(64, left.get()),
+          this.getContext().mkInt2BV(64, right.get())
+        ), true)
+      );
     } else {
       this.getResult().clear();
     }
@@ -71,7 +77,12 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
     Optional<IntExpr> right = this.getResult().getValueAsInt();
 
     if (left.isPresent() && right.isPresent()) {
-      this.getResult().setValue(this.getContext().mkBV2Int(this.getContext().mkBVASHR(this.getContext().mkInt2BV(64, left.get()), this.getContext().mkInt2BV(64, right.get())), true));
+      this.getResult().setValue(this.getContext().mkBV2Int(
+        this.getContext().mkBVASHR(
+          this.getContext().mkInt2BV(64, left.get()),
+          this.getContext().mkInt2BV(64, right.get())
+        ), true)
+      );
     } else {
       this.getResult().clear();
     }
@@ -87,7 +98,11 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
     Optional<IntExpr> right = this.getResult().getValueAsInt();
 
     if (left.isPresent() && right.isPresent()) {
-      this.getResult().setValue(this.getContext().mkBV2Int(this.getContext().mkBVLSHR(this.getContext().mkInt2BV(64, left.get()), this.getContext().mkInt2BV(64, right.get())), true));
+      this.getResult().setValue(this.getContext().mkBV2Int(
+        this.getContext().mkBVLSHR(
+          this.getContext().mkInt2BV(64, left.get()),
+          this.getContext().mkInt2BV(64, right.get())
+        ), true));
     } else {
       this.getResult().clear();
     }
@@ -97,29 +112,22 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
   public void handle(@NotNull ASTBinaryAndExpression node) {
     Preconditions.checkNotNull(node);
     node.getLeft().accept(getTraverser());
-    Optional<IntExpr> left = this.getResult().getValueAsInt();
+    Optional<BoolExpr> leftBool = this.getResult().getValueAsBool();
+    Optional<IntExpr> leftInt = this.getResult().getValueAsInt();
 
     node.getRight().accept(getTraverser());
-    Optional<IntExpr> right = this.getResult().getValueAsInt();
+    Optional<BoolExpr> rightBool = this.getResult().getValueAsBool();
+    Optional<IntExpr> rightInt = this.getResult().getValueAsInt();
 
-    if (left.isPresent() && right.isPresent()) {
-      this.getResult().setValue(this.getContext().mkBV2Int(this.getContext().mkBVAND(this.getContext().mkInt2BV(64, left.get()), this.getContext().mkInt2BV(64, right.get())), true));
-    } else {
-      this.getResult().clear();
-    }
-  }
-
-  @Override
-  public void handle(@NotNull ASTBinaryXorExpression node) {
-    Preconditions.checkNotNull(node);
-    node.getLeft().accept(getTraverser());
-    Optional<IntExpr> left = this.getResult().getValueAsInt();
-
-    node.getRight().accept(getTraverser());
-    Optional<IntExpr> right = this.getResult().getValueAsInt();
-
-    if (left.isPresent() && right.isPresent()) {
-      this.getResult().setValue(this.getContext().mkBV2Int(this.getContext().mkBVXOR(this.getContext().mkInt2BV(64, left.get()), this.getContext().mkInt2BV(64, right.get())), true));
+    if (leftBool.isPresent() && rightBool.isPresent()) {
+      this.getResult().setValue(this.getContext().mkAnd(leftBool.get(), rightBool.get()));
+    } else if (leftInt.isPresent() && rightInt.isPresent()) {
+      this.getResult().setValue(this.getContext().mkBV2Int(
+        this.getContext().mkBVAND(
+          this.getContext().mkInt2BV(64, leftInt.get()),
+          this.getContext().mkInt2BV(64, rightInt.get())
+        ), true)
+      );
     } else {
       this.getResult().clear();
     }
@@ -129,13 +137,47 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
   public void handle(@NotNull ASTBinaryOrOpExpression node) {
     Preconditions.checkNotNull(node);
     node.getLeft().accept(getTraverser());
-    Optional<IntExpr> left = this.getResult().getValueAsInt();
+    Optional<BoolExpr> leftBool = this.getResult().getValueAsBool();
+    Optional<IntExpr> leftInt = this.getResult().getValueAsInt();
 
     node.getRight().accept(getTraverser());
-    Optional<IntExpr> right = this.getResult().getValueAsInt();
+    Optional<BoolExpr> rightBool = this.getResult().getValueAsBool();
+    Optional<IntExpr> rightInt = this.getResult().getValueAsInt();
 
-    if (left.isPresent() && right.isPresent()) {
-      this.getResult().setValue(this.getContext().mkBV2Int(this.getContext().mkBVOR(this.getContext().mkInt2BV(64, left.get()), this.getContext().mkInt2BV(64, right.get())), true));
+    if (leftBool.isPresent() && rightBool.isPresent()) {
+      this.getResult().setValue(this.getContext().mkOr(leftBool.get(), rightBool.get()));
+    } else if (leftInt.isPresent() && rightInt.isPresent()) {
+      this.getResult().setValue(this.getContext().mkBV2Int(
+        this.getContext().mkBVOR(
+          this.getContext().mkInt2BV(64, leftInt.get()),
+          this.getContext().mkInt2BV(64, rightInt.get())
+        ), true)
+      );
+    } else {
+      this.getResult().clear();
+    }
+  }
+
+  @Override
+  public void handle(@NotNull ASTBinaryXorExpression node) {
+    Preconditions.checkNotNull(node);
+    node.getLeft().accept(getTraverser());
+    Optional<BoolExpr> leftBool = this.getResult().getValueAsBool();
+    Optional<IntExpr> leftInt = this.getResult().getValueAsInt();
+
+    node.getRight().accept(getTraverser());
+    Optional<BoolExpr> rightBool = this.getResult().getValueAsBool();
+    Optional<IntExpr> rightInt = this.getResult().getValueAsInt();
+
+    if (leftBool.isPresent() && rightBool.isPresent()) {
+      this.getResult().setValue(this.getContext().mkXor(leftBool.get(), rightBool.get()));
+    } else if (leftInt.isPresent() && rightInt.isPresent()) {
+      this.getResult().setValue(this.getContext().mkBV2Int(
+        this.getContext().mkBVXOR(
+          this.getContext().mkInt2BV(64, leftInt.get()),
+          this.getContext().mkInt2BV(64, rightInt.get())
+        ), true)
+      );
     } else {
       this.getResult().clear();
     }
