@@ -27,6 +27,7 @@ import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.MISSING_PORT;
 import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
+import static montiarc.util.ArcError.MULTIPLE_BEHAVIOR;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
@@ -116,7 +117,9 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingSymbolsInExitAction",
     "MissingSymbolsInConstraint",
     "MissingSymbolsInVarIfTest",
-    "MissingSymbolsInVarIfWithCompositionTest"
+    "MissingSymbolsInVarIfWithCompositionTest",
+    "MoreThanOneBehaviorTest",
+    "MoreThanOneBehaviorWithVariabilityTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -385,6 +388,27 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "MissingPortType12.arc"),
         fn(ERROR, PKG_COMP, "MissingPortType12.arc", 11, 11, 11, 18, CANT_FIND_SYMBOL, "Missing"),
         fn(ERROR, PKG_COMP, "MissingPortType12.arc", 12, 12, 12, 19, CANT_FIND_SYMBOL, "Missing")
+      ),
+      arg("MoreThanOneBehaviorTest1",
+        mpk(PKG_COMP, "MoreThanOneBehavior1.arc"),
+        fn(ERROR, PKG_COMP, "MoreThanOneBehavior1.arc", 10, 3, 10, 33, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorTest2",
+        mpk(PKG_COMP, "MoreThanOneBehavior2.arc"),
+        fn(ERROR, PKG_COMP, "MoreThanOneBehavior2.arc", 10, 3, 10, 14, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorTest3",
+        mpk(PKG_COMP, "MoreThanOneBehavior3.arc"),
+        fn(ERROR, PKG_COMP, "MoreThanOneBehavior3.arc", 11, 3, 11, 14, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorTest4",
+        mpk(PKG_COMP, "MoreThanOneBehavior4.arc"),
+        fn(ERROR, PKG_COMP, "MoreThanOneBehavior4.arc", 12, 5, 12, 35, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorTest5",
+        mpk(PKG_COMP, "MoreThanOneBehavior5.arc"),
+        fn(ERROR, PKG_COMP, "MoreThanOneBehavior5.arc", 10, 3, 10, 33, MULTIPLE_BEHAVIOR),
+        fn(ERROR, PKG_COMP, "MoreThanOneBehavior5.arc", 11, 3, 11, 33, MULTIPLE_BEHAVIOR)
       ),
       arg("PortUnusedTest1",
         mpk(PKG_COMP, "PortUnused1.arc"),
@@ -721,6 +745,45 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("MissingSymbolsInVarIfWithCompositionTest2",
         mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 9, 10, 10, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest1",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability1.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability1.arc", 13, 15, 13, 45, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest2",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability2.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability2.arc", 13, 15, 13, 26, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest3",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability3.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability3.arc", 13, 15, 13, 26, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest4",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability4.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability4.arc", 13, 17, 13, 47, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest5",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability5.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability5.arc", 12, 15, 12, 45, MULTIPLE_BEHAVIOR),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability5.arc", 13, 15, 13, 45, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest6",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability6.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability6.arc", 14, 5, 14, 35, MULTIPLE_BEHAVIOR),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability6.arc", 18, 5, 18, 35, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest7",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability7.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability7.arc", 14, 5, 14, 35, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest8",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability8.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability8.arc", 14, 5, 14, 35, MULTIPLE_BEHAVIOR),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability8.arc", 19, 5, 19, 35, MULTIPLE_BEHAVIOR)
+      ),
+      arg("MoreThanOneBehaviorWithVariabilityTest9",
+        mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability9.arc"),
+        fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability9.arc", 18, 5, 18, 35, MULTIPLE_BEHAVIOR)
       )
     );
   }

@@ -6,59 +6,26 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.MULTIPLE_BEHAVIOR;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link AtomicMaxOneBehavior}.
  */
-public class AtomicMaxOneBehaviorTest extends MontiArcTestBase {
+class AtomicMaxOneBehaviorTest extends MontiArcTestBase {
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // atomic no behavior
-    "component Comp1 { }",
-    // atomic with automaton
-    "component Comp2 { " +
-      "automaton { } " +
-      "}",
-    // inner with automaton
-    "component Comp3 { " +
-      "component Inner { " +
-      "automaton { } " +
-      "} " +
-      "}",
-    // two inner with automata
-    "component Comp4 { " +
-      "component Inner1 { " +
-      "automaton { } " +
-      "} " +
-      "component Inner2 { " +
-      "automaton { } " +
-      "} " +
-      "}",
-    // atomic with ajava
-    "component Comp5 { " +
-      "compute { } " +
-      "}",
-    // composed with behavior and automaton
-    "component Comp6 { " +
-      "component Inner1 i1 { } " +
-      "compute { } " +
-      "automaton { } " +
-      "}"
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -76,7 +43,7 @@ public class AtomicMaxOneBehaviorTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -90,39 +57,65 @@ public class AtomicMaxOneBehaviorTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      arg("component ValidComp1 { }"),
+      arg("component ValidComp2 { automaton { } }"),
+      arg("component ValidComp3 { component Inner { automaton { } } }"),
+      arg("component ValidComp4 { component Inner1 { automaton { } } component Inner2 { automaton { } } }"),
+      arg("component ValidComp5 { compute { } }"),
+      arg("component ValidComp6 { component Inner { compute { } } automaton { } }")
+    );
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // atomic two automata
-      arg("component Comp1 { " +
-          "automaton { } " +
-          "automaton { } " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR),
-      // atomic two ajava blocks
-      arg("component Comp2 { " +
-          "compute { } " +
-          "compute { } " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR),
-      // atomic with automaton and ajava
-      arg("component Comp3 { " +
-          "automaton { } " +
-          "compute { } " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR),
-      // inner with two automata
-      arg("component Comp4 { " +
-          "component Inner { " +
-          "automaton { } " +
-          "automaton { } " +
-          "} " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR)
+      // atomic component with two automata
+      arg("""
+          component InvalidComp1 {
+            automaton { }
+            automaton { }
+          }
+        """, MULTIPLE_BEHAVIOR
+      ),
+      // atomic component with two ajava blocks
+      arg("""
+        component InvalidComp2 {
+          compute { }
+          compute { }
+        }
+        """, MULTIPLE_BEHAVIOR
+      ),
+      // atomic component with automaton and ajava
+      arg("""
+        component InvalidComp3 {
+          automaton { }
+          compute { }
+        }
+        """, MULTIPLE_BEHAVIOR
+      ),
+      // inner component with two automata
+      arg("""
+        component InvalidComp4 {
+          component Inner {
+            automaton { }
+            automaton { }
+          }
+        }
+        """, MULTIPLE_BEHAVIOR
+      ),
+      // atomic component with three automata
+      arg("""
+          component InvalidComp5 {
+            automaton { }
+            automaton { }
+            automaton { }
+          }
+        """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
+      )
     );
   }
 }
