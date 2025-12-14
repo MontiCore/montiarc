@@ -32,9 +32,7 @@ public class DseCommonAssignmentJavaPrinter extends AssignmentExpressionsPrettyP
       getPrinter().print("= montiarc.rte.dse.AnnotatedValue.newAnnoValue(");
     }
     else {
-      montiarc.rte.log.Log.error("The assignment used is not supported. Only \' equals \' is " +
-        "supported");
-
+      montiarc.rte.log.Log.error("The assignment used is not supported. Only 'equals' is supported");
     }
 
     node.getRight().accept(getTraverser());

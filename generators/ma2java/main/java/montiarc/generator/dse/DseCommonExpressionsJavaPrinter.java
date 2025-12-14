@@ -294,22 +294,22 @@ public class DseCommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrin
 
   @Override
   public void handle(de.monticore.expressions.commonexpressions._ast.ASTPlusPrefixExpression node) {
-    montiarc.rte.log.Log.error("The operator \'plus prefix expression\' is not supported");
+    montiarc.rte.log.Log.error("The operator 'plus prefix expression' is not supported");
   }
 
   @Override
   public void handle(de.monticore.expressions.commonexpressions._ast.ASTMinusPrefixExpression node) {
-    montiarc.rte.log.Log.error("The operator \'minus prefix expression\' is not supported");
+    montiarc.rte.log.Log.error("The operator 'minus prefix expression' is not supported");
   }
 
   @Override
   public void handle(de.monticore.expressions.commonexpressions._ast.ASTModuloExpression node) {
-    montiarc.rte.log.Log.error("The operator \'modulo\' is not supported");
+    montiarc.rte.log.Log.error("The operator 'modulo' is not supported");
   }
 
   @Override
   public void handle(de.monticore.expressions.commonexpressions._ast.ASTConditionalExpression node) {
-    montiarc.rte.log.Log.error("The operator \'conditional expression\' is not supported");
+    montiarc.rte.log.Log.error("The operator 'conditional expression' is not supported");
   }
 
   @Override

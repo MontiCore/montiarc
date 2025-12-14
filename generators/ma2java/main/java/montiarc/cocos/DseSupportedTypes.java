@@ -72,13 +72,13 @@ public abstract class DseSupportedTypes {
   }
 
   public static void printError(String compName, String dataType, SourcePosition position) {
-    montiarc.rte.log.Log.error(compName + ": the type \'" + dataType + "\' is not supported for " +
+    montiarc.rte.log.Log.error(compName + ": the type '" + dataType + "' is not supported for " +
       "variables/ parameters." + " Source position: " + position);
   }
 
   public static void printError(String compName, String dataType, SourcePosition start,
                                 SourcePosition end) {
-    montiarc.rte.log.Log.error(compName + ": the type \'" + dataType + "\' is not supported for " +
+    montiarc.rte.log.Log.error(compName + ": the type '" + dataType + "' is not supported for " +
       "ports." + " Source position start: " + start + " end: " + end);
   }
 
