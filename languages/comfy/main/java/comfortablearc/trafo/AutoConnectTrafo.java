@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
-import java.util.stream.Collectors;
 
 import static comfortablearc.trafo.AutoConnectFilters.getUnconnectedOuterSourcePorts;
 import static comfortablearc.trafo.AutoConnectFilters.getUnconnectedOuterTargetPorts;
@@ -44,7 +43,7 @@ public class AutoConnectTrafo implements IAutoConnectTrafo {
     List<SubcomponentSymbol> connectableSubComps = this.comps.peek().getSymbol()
       .getSubcomponents().stream()
       .filter(subComp -> !isAFullyConnectedComponent(subComp, this.comps.peek().getSymbol()))
-      .collect(Collectors.toList());
+      .toList();
 
     List<ASTPortAccess> unconnectedSources = new ArrayList<>(getUnconnectedOuterSourcePorts(this.comps.peek().getSymbol()));
     List<ASTPortAccess> unconnectedTargets = new ArrayList<>(getUnconnectedOuterTargetPorts(this.comps.peek().getSymbol()));

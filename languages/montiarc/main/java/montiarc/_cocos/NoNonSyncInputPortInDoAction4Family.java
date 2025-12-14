@@ -55,7 +55,7 @@ public class NoNonSyncInputPortInDoAction4Family implements ArcBasisASTArcCompon
     Map<ASTSCDoAction, BoolExpr> doConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -89,7 +89,7 @@ public class NoNonSyncInputPortInDoAction4Family implements ArcBasisASTArcCompon
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
         MontiArcTraverser varifTraverser = MontiArcMill.traverser();
-        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).collect(Collectors.toList());
+        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).toList();
 
         ASTSCDoActionCollector varifDoActionCollector = new ASTSCDoActionCollector();
         varifTraverser.add4SCDoActions(varifDoActionCollector);
@@ -147,9 +147,9 @@ public class NoNonSyncInputPortInDoAction4Family implements ArcBasisASTArcCompon
       if (!variableNames.isEmpty()) {
         for (String variableName : variableNames) {
           // Check if there are fields shadowing ports
-          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).collect(Collectors.toList());
+          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
           var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
-          possiblePorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming() && !e.getKey().getSymbol().getTiming().matches(TIMED_SYNC)).collect(Collectors.toList());
+          possiblePorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming() && !e.getKey().getSymbol().getTiming().matches(TIMED_SYNC)).toList();
           for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
             doEntryExpressionList.clear();
             doEntryExpressionList.addAll(List.of(featureConstraints, ctx.mkAnd(doEntry.getValue(), entry.getValue())));

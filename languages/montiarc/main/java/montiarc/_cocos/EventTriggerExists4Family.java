@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -51,7 +50,7 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
     Map<ASTArcPort, BoolExpr> portConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting all features, constraints and ports from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
@@ -74,13 +73,13 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
         mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      List<ASTMsgEvent> mainMessageEvents = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(l -> l.isPresentSCEvent()).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).collect(Collectors.toList());
+      List<ASTMsgEvent> mainMessageEvents = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(l -> l.isPresentSCEvent()).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).toList();
 
       for (ASTMsgEvent msgEvent : mainMessageEvents) {
         messageEventConditions.put(msgEvent, ctx.mkTrue());
       }
 
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for (ASTArcPort port : mainPorts) {
         portConditions.put(port, ctx.mkTrue());
       }

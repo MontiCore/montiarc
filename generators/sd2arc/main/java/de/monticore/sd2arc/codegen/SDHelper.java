@@ -42,7 +42,7 @@ public class SDHelper {
     for (ASTSDSendMessage connector : diagram.getSDBody().streamSDElements()
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
-      .collect(Collectors.toList())) {
+      .toList()) {
       if (connector.isPresentSDTarget()
         && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
         && connector.isPresentSDSource()
@@ -103,7 +103,7 @@ public class SDHelper {
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
       .filter(e -> !SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDMessage(e.getSDAction()) || !SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDMessage(e.getSDAction()).isTrigger())
-      .collect(Collectors.toList()).get(index);
+      .toList().get(index);
 
     return element.isPresentSDSource()
       && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(element.getSDSource())
@@ -125,7 +125,7 @@ public class SDHelper {
       return false;
     List<ASTSDComponent> targetComponents = getTargetComponents(diagram, component.getName() + "." + port.getName()).stream()
       .filter(c -> c.streamSDModifiers().noneMatch(m -> m instanceof ASTSDHiddenFreeModifier))
-      .collect(Collectors.toList());
+      .toList();
     if (targetComponents.isEmpty()) return true;
     //    c is match-visible, and p is connected to a visible component.
     if (component.getSDModifierList().stream().anyMatch(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDVisibleModifier))

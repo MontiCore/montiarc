@@ -34,7 +34,7 @@ public class ArcAutomatonHelper {
     List<ASTSCTransition> transitions = automaton.streamTransitions().filter(tr ->
         tr.getSourceName().equals(srcState.getName()) &&
           !((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
-      .collect(Collectors.toList());
+      .toList();
 
     return transitions.get(0);
   }
@@ -170,7 +170,7 @@ public class ArcAutomatonHelper {
     List<ASTSCState> result = new ArrayList<>(next.size());
     while (!next.isEmpty()) {
       result.add(next.peek());
-      next.addAll(getSubStatesStream(next.pop()).collect(Collectors.toList()));
+      next.addAll(getSubStatesStream(next.pop()).toList());
     }
     return result;
   }

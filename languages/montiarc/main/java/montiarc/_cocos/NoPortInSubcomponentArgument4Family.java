@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static montiarc.util.ArcError.PORT_REF_IN_STATIC_CONTEXT;
 
@@ -52,7 +51,7 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
 
     allFeatures = new ArrayList<>(mainFeatures);
@@ -77,12 +76,12 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
         mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for (ASTArcPort port : mainPorts) {
         portConditions.put(port, ctx.mkTrue());
       }
 
-      List<ASTComponentInstance> mainSubcomponents = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(v -> ((ASTComponentInstantiation) v).getComponentInstanceList()).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubcomponents = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(v -> ((ASTComponentInstantiation) v).getComponentInstanceList()).flatMap(List::stream).toList();
       for (ASTComponentInstance component : mainSubcomponents) {
         subcomponentConditions.put(component, ctx.mkTrue());
       }
@@ -112,7 +111,7 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
         var variableNames = ExpressionBuildHelper.getAllVariableOccurences(argument.getExpression());
         if (!variableNames.isEmpty()) {
           for (String variableName : variableNames) {
-            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
+            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
               componentEntryExpressionList.clear();
               componentEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));

@@ -15,7 +15,6 @@ import org.mockito.Mockito;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -31,7 +30,7 @@ public class ASTComponentTypeTest extends ArcBasisTestBase {
     List<String> expectedTargets = Arrays.asList(targets);
     List<String> actualTargets = connectors.stream()
       .flatMap(astConnector -> astConnector.getTargetsNames().stream())
-      .collect(Collectors.toList());
+      .toList();
     Assertions.assertTrue(expectedTargets.containsAll(actualTargets));
     Assertions.assertTrue(actualTargets.containsAll(expectedTargets));
   }
@@ -52,7 +51,7 @@ public class ASTComponentTypeTest extends ArcBasisTestBase {
     List<String> expectedSources = Arrays.asList(sources);
     List<String> actualSources = connectors.stream()
       .map(ASTConnector::getSourceName)
-      .collect(Collectors.toList());
+      .toList();
     Assertions.assertTrue(expectedSources.containsAll(actualSources));
     Assertions.assertTrue(actualSources.containsAll(expectedSources));
   }
@@ -175,7 +174,7 @@ public class ASTComponentTypeTest extends ArcBasisTestBase {
     List<String> expectedInnerComponents = Arrays.asList(innerComponents);
     List<String> actualInnerComponents = this.getInnerComponentsTestComponent()
       .getInnerComponents().stream().map(ASTArcComponentType::getName)
-      .collect(Collectors.toList());
+      .toList();
     Assertions.assertTrue(expectedInnerComponents.containsAll(actualInnerComponents));
     Assertions.assertTrue(actualInnerComponents.containsAll(expectedInnerComponents));
   }

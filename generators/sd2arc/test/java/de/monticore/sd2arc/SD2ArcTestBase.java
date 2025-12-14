@@ -56,7 +56,7 @@ public abstract class SD2ArcTestBase {
     List<String> lesser = moreAllowed ? expected : actual;
 
     // do not use 'removeAll' because that behaves differently to remove when a list contains one element multiple times
-    List<String> matched = bigger.stream().filter(lesser::remove).collect(Collectors.toList());
+    List<String> matched = bigger.stream().filter(lesser::remove).toList();
 
     Assertions.assertEquals(moreAllowed ? expected : Collections.emptyList(), moreAllowed ? Collections.emptyList() : actual, String.format("%s\nCould match: %s", message, matched));
   }

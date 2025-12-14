@@ -97,7 +97,7 @@ public class MAStreamHelper {
       .stream()
       .map(ASTComponentInstantiation::getComponentInstanceList)
       .flatMap(Collection::stream)
-      .collect(Collectors.toList()));
+      .toList());
 
     // Also consider all Instantiations of "Nested"-Components (internal,
     // declared inside)
@@ -105,7 +105,7 @@ public class MAStreamHelper {
       .stream()
       .map(ASTArcComponentType::getComponentInstanceList)
       .flatMap(Collection::stream)
-      .collect(Collectors.toList()));
+      .toList());
 
     return subComponents;
   }

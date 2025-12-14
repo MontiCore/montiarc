@@ -40,7 +40,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -68,7 +67,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
     Map<String, List<String>> fieldNameVariations;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
     List<ASTArcParameter> mainParameters = node.getHead().getArcParameterList();
 
     allFeatures = new ArrayList<>(mainFeatures);
@@ -112,9 +111,9 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
         MontiArcTraverser varifTraverser = MontiArcMill.traverser();
-        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).collect(Collectors.toList());
-        var arcInits = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcInit).map(k -> (ASTArcInit) k).collect(Collectors.toList());
-        var arcComputes = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcCompute).map(k -> (ASTArcCompute) k).collect(Collectors.toList());
+        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).toList();
+        var arcInits = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcInit).map(k -> (ASTArcInit) k).toList();
+        var arcComputes = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcCompute).map(k -> (ASTArcCompute) k).toList();
 
         ASTIfStatementCollector varifIfStatementCollector = new ASTIfStatementCollector();
         varifTraverser.add4MCCommonStatements(varifIfStatementCollector);
@@ -174,7 +173,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
 
         if (!variableNames.isEmpty()) {
           for (String variableName : variableNames) {
-            var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
+            var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcField, BoolExpr> entry : possibleFields) {
               ifStatementEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(ifStatementEntryExpressionList) == Status.SATISFIABLE) {
@@ -185,7 +184,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
               ifStatementEntryExpressionList.clear();
             }
 
-            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
+            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
               ifStatementEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(ifStatementEntryExpressionList) == Status.SATISFIABLE) {

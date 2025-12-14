@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import static de.monticore.symbols.compsymbols._symboltable.Timing.TIMED_SYNC;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
@@ -60,7 +59,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
     Map<PortSymbol,BoolExpr> portsymbolConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -96,7 +95,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
         MontiArcTraverser varifTraverser = MontiArcMill.traverser();
-        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).collect(Collectors.toList());
+        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).toList();
 
         ASTTransitionBodyCollector varifTransitionCollector = new ASTTransitionBodyCollector();
         varifTraverser.add4SCTransitions4Code(varifTransitionCollector);
@@ -155,7 +154,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
           // Check if there are fields shadowing ports
           IArcBasisScope scope = (IArcBasisScope) doEntry.getKey().getEnclosingScope();
           List<VariableSymbol> ports = scope.resolveVariableMany(variableName, this.getVariablePredicate());
-          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).collect(Collectors.toList());
+          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
 
           if (!ports.isEmpty()) {
 
@@ -168,7 +167,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
 
               doEntryExpressionList.clear();
               
-              var portConditions = portsymbolConditions.entrySet().stream().filter(e -> e.getKey().equals(((Port2VariableAdapter) portSymbol).getAdaptee())).map(Map.Entry::getValue).collect(Collectors.toList());
+              var portConditions = portsymbolConditions.entrySet().stream().filter(e -> e.getKey().equals(((Port2VariableAdapter) portSymbol).getAdaptee())).map(Map.Entry::getValue).toList();
               if (portConditions.isEmpty())
                 continue;
 

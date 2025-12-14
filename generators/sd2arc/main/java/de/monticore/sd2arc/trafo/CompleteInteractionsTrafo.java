@@ -13,7 +13,6 @@ import de.monticore.lang.sdbasis._visitor.SDBasisVisitor2;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static de.monticore.sd2arc.trafo.EmbeddingComponent.isEmbedded;
 
@@ -89,7 +88,7 @@ public class CompleteInteractionsTrafo implements SDBasisVisitor2 {
     for (ASTSDSendMessage connector : currentDiagram.getSDBody().streamSDElements()
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
-      .collect(Collectors.toList())) {
+      .toList()) {
       if (connector.isPresentSDTarget()
         && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
         && connector.isPresentSDSource()

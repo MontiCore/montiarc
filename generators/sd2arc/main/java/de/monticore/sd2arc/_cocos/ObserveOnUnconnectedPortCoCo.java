@@ -32,7 +32,7 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
       .map(e -> SD4ComponentsMill.typeDispatcher().asSDBasisASTSDSendMessage(e).getSDTarget())
       .filter(e -> SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(e))
       .map(e -> SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(e))
-      .collect(Collectors.toList());
+      .toList();
 
     Set<String> connectedPorts = getConnectedPorts(node);
 
@@ -53,7 +53,7 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
     for (ASTSDSendMessage connector : node.getSDBody().streamSDElements()
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
-      .collect(Collectors.toList())) {
+      .toList()) {
       if (connector.isPresentSDTarget()
         && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
         && connector.isPresentSDSource()

@@ -12,7 +12,6 @@ import de.se_rwth.commons.logging.Log;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Interactions in the sequence diagram should match the connectors in the embedding component.
@@ -45,7 +44,7 @@ public class ImpliedConnectorsFitEmbeddingComponentCoCo implements SDBasisASTSeq
     for (ASTSDSendMessage connector : diagram.getSDBody().streamSDElements()
       .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
       .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
-      .collect(Collectors.toList())) {
+      .toList()) {
       if (connector.isPresentSDTarget()
         && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
         && connector.isPresentSDSource()

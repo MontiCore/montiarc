@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static arcbasis._cocos.PortReadWriteHandler4ExpressionsBasis.ContextState;
 
@@ -52,7 +51,7 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
     Map<ASTTransitionBody, BoolExpr> transitionConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -86,7 +85,7 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
         MontiArcTraverser varifTraverser = MontiArcMill.traverser();
-        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).collect(Collectors.toList());
+        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).toList();
 
         ASTTransitionBodyCollector varifTransitionCollector = new ASTTransitionBodyCollector();
         varifTraverser.add4SCTransitions4Code(varifTransitionCollector);
@@ -139,10 +138,10 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
         for (PortReadWriteHandler4ExpressionBasis4Family.PortWithState portEntry : portContext) {
           var portName = portEntry.getPortSymbol().getName();
           // Check if there are fields shadowing ports
-          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(portName)).collect(Collectors.toList());
-          var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(portName)).collect(Collectors.toList());
-          var possibleIncomingPorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming()).collect(Collectors.toList());
-          var possibleOutgoingPorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isOutgoing()).collect(Collectors.toList());
+          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(portName)).toList();
+          var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(portName)).toList();
+          var possibleIncomingPorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming()).toList();
+          var possibleOutgoingPorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isOutgoing()).toList();
 
           for (Map.Entry<ASTArcPort, BoolExpr> incoming : possibleIncomingPorts) {
             transitionEntryExpressionList.addAll(List.of(featureConstraints, incoming.getValue()));

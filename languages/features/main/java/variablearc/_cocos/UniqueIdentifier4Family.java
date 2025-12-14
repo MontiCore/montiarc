@@ -39,7 +39,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -73,7 +72,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     Map<ASTArcElement, BoolExpr> elementConditions;
 
 
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     List<String> allFeatures;
     List<ExpressionSet> allConstraints;
@@ -169,7 +168,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
 
       if (ExpressionSolverService.solve(List.of(potentialConflict.getValue(),featureConstraints)) == Status.SATISFIABLE) {
 
-        for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet().stream().filter(e -> e.getKey().equals(potentialConflict.getKey())).collect(Collectors.toList())) {
+        for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet().stream().filter(e -> e.getKey().equals(potentialConflict.getKey())).toList()) {
           List<ElementCondition> group = entry.getValue();
           List<ElementCondition> active = new ArrayList<>();
           for (ElementCondition element : group) {

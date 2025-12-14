@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class TaggingEffectStorage implements EffectStorage {
   private final ISymbolTagger tags;
@@ -25,7 +24,7 @@ public class TaggingEffectStorage implements EffectStorage {
   public List<Effect> getEffectsOfComponent(ComponentTypeSymbol component) {
     List<Effect> result = new ArrayList<>();
     for (PortSymbol port : component.getAllIncomingPorts()) {
-      result.addAll(tags.getTags(port).stream().map(tag -> this.createEffect(tag, port, component)).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toUnmodifiableList()));
+      result.addAll(tags.getTags(port).stream().map(tag -> this.createEffect(tag, port, component)).filter(Optional::isPresent).map(Optional::get).toList());
     }
     return Collections.unmodifiableList(result);
   }

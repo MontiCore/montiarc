@@ -64,7 +64,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     Map<SubcomponentSymbol, Integer> subcomponentToInt = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Managing all features, variations, constraints and connectors
     List<String> allFeatures;
@@ -81,7 +81,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
       allConstraints.add(mainConstraintSet);
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
-      allSubComponents.addAll(subcomponentConditions.keySet().stream().map(ASTComponentInstance::getSymbol).collect(Collectors.toList()));
+      allSubComponents.addAll(subcomponentConditions.keySet().stream().map(ASTComponentInstance::getSymbol).toList());
       for (Map.Entry<ASTConnector, BoolExpr> connectorEntry : connectorConditions.entrySet()) {
         Boolean sourceStronglyCausal = connectorEntry.getKey().getSource().isPresentPortSymbol() ? connectorEntry.getKey().getSource().getPortSymbol().getStronglyCausal() : false;
         var newConnector = new ConnectorInfo(connectorEntry.getKey(), connectorEntry.getValue(), sourceStronglyCausal);
@@ -93,11 +93,11 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
       allConstraints.add(mainConstraintSet);
       List<ASTConnector> mainConnectors = node.getConnectors();
 
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
       for (ASTComponentInstance mainSubComp : mainSubComps) {
         subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }
-      allSubComponents.addAll(mainSubComps.stream().map(ASTComponentInstance::getSymbol).collect(Collectors.toList()));
+      allSubComponents.addAll(mainSubComps.stream().map(ASTComponentInstance::getSymbol).toList());
       for (ASTConnector connector : mainConnectors) {
         Boolean sourceStronglyCausal = connector.getSource().isPresentPortSymbol() ? connector.getSource().getPortSymbol().getStronglyCausal() : false;
         var newConnector = new ConnectorInfo(connector, ctx.mkTrue(), sourceStronglyCausal);

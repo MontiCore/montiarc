@@ -70,7 +70,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<ASTComponentInstance, BoolExpr> subcomponentCondition = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting all features, constraints, ports and connectors from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
@@ -93,10 +93,10 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     } else {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
-      List<ASTConnector> mainConnectors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).toList();
+      List<ASTConnector> mainConnectors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).toList();
 
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
 
       for (ASTComponentInstance subComp : mainSubComps) {
         subcomponentCondition.put(subComp, ctx.mkTrue());
@@ -143,7 +143,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
       var portNames = ExpressionBuildHelper.getPortNames(connectorEntry.getKey());
       Map<String, Long> portCount = portInfoConditions.entrySet().stream().filter(e -> portNames.contains(e.getKey().getPortName())).collect(Collectors.groupingBy(port -> port.getKey().getPortName(), Collectors.counting()));
       boolean multiplePortsExist = portCount.entrySet().stream().anyMatch(e -> e.getValue() > 1);
-      boolean genericPorts = !portInfoConditions.entrySet().stream().filter(e -> portNames.contains(e.getKey().getPortName())).filter(e -> e.getKey().getSubcomponentSymbol() != null ?  e.getKey().getSubcomponentSymbol().getType().isGenericComponentType() : false).map(k -> k).collect(Collectors.toList()).isEmpty();
+      boolean genericPorts = !(portInfoConditions.entrySet().stream().filter(e -> portNames.contains(e.getKey().getPortName())).count() == 0);
       List<ASTConnector> connectorsToCheck = new ArrayList<>();
       List<PortInformation> connectorPorts = new ArrayList<>();
 
@@ -152,7 +152,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
        if (multiplePortsExist||genericPorts) {
         List<Map.Entry<ExpressionBuildHelper.PortInformation, BoolExpr>> possiblePorts;
         for (String portName : portNames) {
-          possiblePorts = portInfoConditions.entrySet().stream().filter(e -> e.getKey().getPortName().equals(portName)).collect(Collectors.toList());
+          possiblePorts = portInfoConditions.entrySet().stream().filter(e -> e.getKey().getPortName().equals(portName)).toList();
           for (Map.Entry<PortInformation, BoolExpr> entry : possiblePorts) {
             List<BoolExpr> possibleConnectorExpressionList = new ArrayList<>(List.of(featureConstraints, connectorEntry.getValue(), entry.getValue()));
 

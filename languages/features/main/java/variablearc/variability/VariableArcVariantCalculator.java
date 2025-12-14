@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * VariableArc variant calculator.
@@ -63,8 +62,7 @@ public class VariableArcVariantCalculator implements IVariantCalculator {
         componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
           .filter(instance -> componentTypeSymbol.variationPointsContainSymbol(variantBuilder.getIncludedVariationPoints(), instance))
           .filter(SubcomponentSymbol::isTypePresent) // for robustness
-          .collect(
-            Collectors.toList());
+          .toList();
 
       if (subcomponents.isEmpty()) {
         variants.add(variantBuilder

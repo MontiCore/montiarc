@@ -58,7 +58,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
     // Check feature assignments
     for (ASTArcFeature feature : node.getBody()
       .streamArcElementsOfType(ASTArcFeatureDeclaration.class)
-      .flatMap(ASTArcFeatureDeclaration::streamArcFeatures).collect(Collectors.toList())) {
+      .flatMap(ASTArcFeatureDeclaration::streamArcFeatures).toList()) {
       Optional<ASTStereoValue> stereo = getStereo(node, feature.getName());
       if (stereo.isEmpty()) continue;
 
@@ -205,7 +205,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
     List<ASTStereoValue> stereos = node.getStereotype().getValuesList().stream()
       .filter(s -> Objects.equals(s.getName(), name))
       .filter(ASTStereoValue::isPresentExpression)
-      .collect(Collectors.toList());
+      .toList();
     if (stereos.isEmpty()) {
       return Optional.empty();
     }

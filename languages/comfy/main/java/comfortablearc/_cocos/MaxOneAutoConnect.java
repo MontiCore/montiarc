@@ -11,7 +11,6 @@ import montiarc.util.ComfortableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Checks that there is no more than one {@link ASTArcAutoConnect} in each component body.
@@ -24,7 +23,7 @@ public class MaxOneAutoConnect implements ArcBasisASTComponentBodyCoCo {
 
     List<ASTArcElement> acs = node.streamArcElements()
       .filter(ASTArcAutoConnect.class::isInstance)
-      .collect(Collectors.toList());
+      .toList();
 
     if(acs.size() > 1) {
       Log.error(

@@ -21,7 +21,6 @@ import variablearc.evaluation.expressions.NegatedExpression;
 import java.util.*;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 
 public class VariationConditionHelper {
@@ -165,7 +164,7 @@ public class VariationConditionHelper {
       boolean prefixEmpty = constraintExpr.getPrefix().isEmpty();
       ExpressionSet constraintExprSet;
       if (!prefixEmpty) {
-        var tempPrefix = allFeatures.stream().filter(e -> e.contains((constraintExpr.getPrefix().get().contains(".") ? constraintExpr.getPrefix().get().substring(constraintExpr.getPrefix().get().lastIndexOf(".")) : constraintExpr.getPrefix().get()))).collect(Collectors.toList());
+        var tempPrefix = allFeatures.stream().filter(e -> e.contains((constraintExpr.getPrefix().get().contains(".") ? constraintExpr.getPrefix().get().substring(constraintExpr.getPrefix().get().lastIndexOf(".")) : constraintExpr.getPrefix().get()))).toList();
         if (!tempPrefix.isEmpty()) {
           String newPrefix = tempPrefix.get(0).substring(0, tempPrefix.get(0).lastIndexOf("."));
           constraintExprSet = new ExpressionSet(new ArrayList<>() {{

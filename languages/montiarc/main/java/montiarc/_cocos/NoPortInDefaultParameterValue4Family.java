@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import static montiarc.util.ArcError.PORT_REF_IN_STATIC_CONTEXT;
 
@@ -50,7 +49,7 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
     Map<ASTArcPort, BoolExpr> portConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -71,7 +70,7 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
         mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for (ASTArcPort port : mainPorts) {
         portConditions.put(port, ctx.mkTrue());
       }
@@ -91,7 +90,7 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
       var variableNames = ExpressionBuildHelper.getAllVariableOccurences(param.getDefault());
       if (!variableNames.isEmpty()) {
         for (String variableName : variableNames) {
-          var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
+          var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
           for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
             List<BoolExpr> portInDefaultParamExpressionList = new ArrayList<>(List.of(featureConstraints, entry.getValue()));
             if (ExpressionSolverService.solve(portInDefaultParamExpressionList) == Status.SATISFIABLE) {

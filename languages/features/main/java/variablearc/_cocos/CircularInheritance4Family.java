@@ -20,7 +20,6 @@ import variablearc.evaluation.ExpressionSolver;
 import variablearc._cocos.util.VariationConditionHelper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCoCo {
@@ -117,7 +116,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     List<ExpressionSet> allConstraints;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting alls features, variations and constraints from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
@@ -149,7 +148,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
       componentConditions.put(node,ctx.mkTrue());
       currentComponentExtensions = getComponentExtensionList(node, node.getSymbol(), new ArrayList<>(), new ArrayList<>());
 
-      var componentsInBody = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).collect(Collectors.toList());
+      var componentsInBody = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).toList();
       for (ASTArcComponentType component : componentsInBody) {
         componentConditions.put(component,ctx.mkTrue());
         var componentExtensions = getComponentExtensionList(component, component.getSymbol(), new ArrayList<>(), new ArrayList<>());
@@ -184,7 +183,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     List<ComponentTypeSymbol> components = currentComponentExtensions.stream()
       .flatMap(e -> Stream.of(e.source, e.target))
       .distinct()
-      .collect(Collectors.toList());
+      .toList();
 
     int componentCount = components.size();
 

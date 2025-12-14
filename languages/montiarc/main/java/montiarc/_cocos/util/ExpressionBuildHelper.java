@@ -18,7 +18,6 @@ import variablearc._cocos.util.ASTNameExpressionChangeContext;
 
 import java.util.*;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 public class ExpressionBuildHelper {
 
@@ -71,7 +70,7 @@ public class ExpressionBuildHelper {
     if (newSourceName != null) {
       connector.getSource().setPort(newPortName.get(sourceName));
       connector.getSource().setEnclosingScope(scope);
-      connector.getSource().setPortSymbol(scope.getPortSymbols().entries().stream().filter(e -> e.getKey().equals(newPortName.get(sourceName))).map(k -> k.getValue()).collect(Collectors.toList()).get(0));
+      connector.getSource().setPortSymbol(scope.getPortSymbols().entries().stream().filter(e -> e.getKey().equals(newPortName.get(sourceName))).map(k -> k.getValue()).toList().get(0));
     }
     for (ASTPortAccess target : connector.getTargetList()) {
       var targetName = target.isPresentComponent() ? target.getComponent() + "." + target.getPort() : target.getPort();
@@ -79,7 +78,7 @@ public class ExpressionBuildHelper {
       if (newTargetName != null) {
         target.setPort(newTargetName);
         target.setEnclosingScope(scope);
-        target.setPortSymbol(scope.getPortSymbols().entries().stream().filter(e -> e.getKey().equals(newPortName.get(targetName))).map(k -> k.getValue()).collect(Collectors.toList()).get(0));
+        target.setPortSymbol(scope.getPortSymbols().entries().stream().filter(e -> e.getKey().equals(newPortName.get(targetName))).map(k -> k.getValue()).toList().get(0));
       }
     }
     return connector;

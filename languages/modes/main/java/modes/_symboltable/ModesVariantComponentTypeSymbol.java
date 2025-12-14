@@ -14,7 +14,6 @@ import variablearc._symboltable.VariantArcComponentTypeSymbol;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Represents a configured component type variant. Includes all symbols found in the mode.
@@ -47,7 +46,7 @@ public class ModesVariantComponentTypeSymbol extends VariantArcComponentTypeSymb
     List<VariableSymbol> fields = new ArrayList<>(super.getFields());
     fields.addAll(mode.getSpannedScope().getLocalVariableSymbols().stream()
       .filter(f -> !(f instanceof Port2VariableAdapter))
-      .collect(Collectors.toList()));
+      .toList());
     return fields;
   }
 

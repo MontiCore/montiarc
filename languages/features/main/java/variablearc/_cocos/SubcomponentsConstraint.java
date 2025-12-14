@@ -22,7 +22,6 @@ import variablearc.evaluation.ExpressionSolver;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Checks if a component's subcomponents' features are bound correctly to a discrete value.
@@ -76,7 +75,7 @@ public class SubcomponentsConstraint implements ArcBasisASTArcComponentTypeCoCo 
           .flatMap(instance -> getFeaturesOfInstance(instance).stream().filter(feature ->
             model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName())).getBoolValue()
               != model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__")).getBoolValue()
-          ).map(feature -> instance.getName() + "." + feature.getName())).collect(Collectors.toList());
+          ).map(feature -> instance.getName() + "." + feature.getName())).toList();
 
         Log.error(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(causingFeatures.toString()),
           node.get_SourcePositionStart(), node.get_SourcePositionEnd());

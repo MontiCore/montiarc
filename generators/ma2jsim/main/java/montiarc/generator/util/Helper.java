@@ -202,7 +202,7 @@ public class Helper {
   public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTArcComponentType comp) {
     List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
       .map(ISymbol::getName)
-      .map(String::toLowerCase).collect(Collectors.toList());
+      .map(String::toLowerCase).toList();
     return comp.getSymbol().getAllIncomingPorts().stream()
       .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
       .collect(Collectors.toList());
@@ -211,7 +211,7 @@ public class Helper {
   public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTModeAutomaton sc, ASTArcComponentType comp) {
     List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
       .map(ISymbol::getName)
-      .map(String::toLowerCase).collect(Collectors.toList());
+      .map(String::toLowerCase).toList();
     return comp.getSymbol().getAllIncomingPorts().stream()
       .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
       .collect(Collectors.toList());
@@ -615,7 +615,7 @@ public class Helper {
   }
 
   public Map<PortSymbol, String> getPortsWithSuffixesOfOtherVariants(VariantArcComponentTypeSymbol variantCompSymbol) {
-    List<PortSymbol> ownOriginalPorts = variantCompSymbol.getAllPorts().stream().map(p -> ((VariantPortSymbol) p).getOriginal()).collect(Collectors.toList());
+    List<PortSymbol> ownOriginalPorts = variantCompSymbol.getAllPorts().stream().map(p -> ((VariantPortSymbol) p).getOriginal()).toList();
     ComponentTypeSymbol original = variantCompSymbol.getAdaptee();
 
     return original.getAllPorts().stream()

@@ -55,7 +55,7 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
     Map<ASTArcCompute, BoolExpr> computeConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -88,7 +88,7 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
           continue;
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
-        var arcInits = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcCompute).map(k -> (ASTArcCompute) k).collect(Collectors.toList());
+        var arcInits = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcCompute).map(k -> (ASTArcCompute) k).toList();
 
         for (ASTArcCompute arcCompute : arcInits) {
           computeConditions.put(arcCompute, variationExpr);
@@ -139,9 +139,9 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
       if (!variableNames.isEmpty()) {
         for (String variableName : variableNames) {
           // Check if there are fields shadowing ports
-          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).collect(Collectors.toList());
+          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
           var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
-          possiblePorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming() && !e.getKey().getSymbol().getTiming().matches(TIMED_SYNC)).collect(Collectors.toList());
+          possiblePorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming() && !e.getKey().getSymbol().getTiming().matches(TIMED_SYNC)).toList();
           for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
 
             computeEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));

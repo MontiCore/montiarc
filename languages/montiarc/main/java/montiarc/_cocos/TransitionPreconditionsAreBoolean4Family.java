@@ -37,7 +37,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.BOOLEAN;
 
@@ -60,7 +59,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     Map<ASTArcStatechart, BoolExpr> statechartConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
     List<ASTArcParameter> mainParameters = node.getHead().getArcParameterList();
 
     // Getting alls features, ports and variations from the Main-Component
@@ -84,7 +83,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
       for (Map.Entry<ASTArcStatechart, BoolExpr> chartEntry : statechartConditions.entrySet()) {
 
-        var transitions = chartEntry.getKey().streamTransitions().collect(Collectors.toList());
+        var transitions = chartEntry.getKey().streamTransitions().toList();
         for (ASTSCTransition transition : transitions) {
           ASTTransitionBody body = transition.getSCTBody() instanceof ASTTransitionBody ? (ASTTransitionBody) transition.getSCTBody() : null;
           if (body == null) continue;
@@ -100,20 +99,20 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      List<ASTArcField> mainFields = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcField> mainFields = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).toList();
       for (ASTArcField field : mainFields) {
         fieldConditions.put(field, ctx.mkTrue());
       }
 
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for(ASTArcPort mainPort : mainPorts){
         portConditions.put(mainPort,ctx.mkTrue());
       }
 
-      var mainCharts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).collect(Collectors.toList());
+      var mainCharts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).toList();
       for (ASTArcStatechart chart : mainCharts) {
 
-        var transitions = chart.streamTransitions().collect(Collectors.toList());
+        var transitions = chart.streamTransitions().toList();
         for (ASTSCTransition transition : transitions) {
           ASTTransitionBody body = transition.getSCTBody() instanceof ASTTransitionBody ? (ASTTransitionBody) transition.getSCTBody() : null;
           if (body == null) continue;
@@ -147,7 +146,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
         List<ASTArcPort> guardPorts = new ArrayList<>();
         if (!variableNames.isEmpty()) {
           for (String variableName : variableNames) {
-            var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
+            var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcField, BoolExpr> entry : possibleFields) {
               guardExpressionList.addAll(List.of(guard.requiredFeatures,featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(guardExpressionList) == Status.SATISFIABLE) {
@@ -158,7 +157,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
 
 
-            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
+            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
               guardExpressionList.addAll(List.of(guard.requiredFeatures, featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(guardExpressionList) == Status.SATISFIABLE) {

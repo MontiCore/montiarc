@@ -167,7 +167,7 @@ public final class IncCheckUtil {
       incCheckFiles = reportFiles
         .filter(p -> p.toFile().isFile())
         .filter(p -> p.endsWith("IncGenGradleCheck.txt"))
-        .collect(Collectors.toList());
+        .toList();
     } catch (IOException e) {
       Log.debug(() -> String.format(
         "Could not fully read old reports. Increment data will only partially be evaluated. '%s'", e.getMessage()

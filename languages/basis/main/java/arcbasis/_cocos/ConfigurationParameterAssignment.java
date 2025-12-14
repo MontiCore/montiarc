@@ -152,13 +152,13 @@ public class ConfigurationParameterAssignment
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
     List<String> paramNames = parameters.stream()
-      .map(VariableSymbol::getName).collect(Collectors.toList());
+      .map(VariableSymbol::getName).toList();
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
     List<ASTSubcomponentArgument> keywordArgs = arguments.stream()
       .filter(ASTSubcomponentArgument::isPresentName)
-      .collect(Collectors.toList());
+      .toList();
 
     int mandatoryParamsAmount = parameters.size() - componentExpression.getTypeInfo().getNumOptParams();
     int defaultAssignedByKey = 0;
@@ -194,13 +194,13 @@ public class ConfigurationParameterAssignment
     List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
     List<VariableSymbol> parameters = componentExpression.getTypeInfo().getParameterList();
 
-    List<String> paramNames = parameters.stream().map(VariableSymbol::getName).collect(Collectors.toList());
+    List<String> paramNames = parameters.stream().map(VariableSymbol::getName).toList();
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 
     List<ASTExpression> exprs = arguments.stream()
       .map(ASTSubcomponentArgument::getExpression)
-      .collect(Collectors.toList());
+      .toList();
 
     List<Optional<SymTypeExpression>> paramTypes = componentExpression.getParameterTypes();
 
@@ -269,7 +269,7 @@ public class ConfigurationParameterAssignment
     List<ASTSubcomponentArgument> arguments = componentExpression.getArguments();
 
     List<String> paramNames = componentExpression.getTypeInfo().getParameterList()
-      .stream().map(VariableSymbol::getName).collect(Collectors.toList());
+      .stream().map(VariableSymbol::getName).toList();
     Map<String, Integer> paramIndices = IntStream.range(0, paramNames.size()).boxed()
       .collect(Collectors.toMap(paramNames::get, Function.identity()));
 

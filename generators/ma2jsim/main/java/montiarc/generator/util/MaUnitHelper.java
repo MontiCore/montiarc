@@ -72,7 +72,7 @@ public class MaUnitHelper {
     ArrayList<ASTExpression> testValues = new ArrayList<>();
     for (List<ASTExpression> testCaseDefinition : testDefinition.get().getSetCollectionItemList().stream()
       .map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).getSetCollectionItemList())
-      .map(list -> list.stream().map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).collect(Collectors.toList())).collect(Collectors.toList())) {
+      .map(list -> list.stream().map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).collect(Collectors.toList())).toList()) {
       if (index < testCaseDefinition.size())
         testValues.add(testCaseDefinition.get(index));
     }

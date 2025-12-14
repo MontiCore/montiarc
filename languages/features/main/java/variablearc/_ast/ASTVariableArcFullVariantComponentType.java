@@ -111,7 +111,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainBodyPorts = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).collect(Collectors.toList());
+      var mainBodyPorts = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).toList();
 
       for (ASTArcPort mainPorts : mainBodyPorts) {
         portConditions.put(mainPorts, ctx.mkTrue());
@@ -131,7 +131,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationPorts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+        var variationPorts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).toList();
         for (ASTArcPort variationPort : variationPorts) {
           if (variationPort.isPresentSymbol() && variationPort.getSymbol().isPresentAstNode()) {
             ASTArcPort existingPort = findPortByProperties(portConditions, variationPort.getSymbol());
@@ -178,7 +178,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationConnectors = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).collect(Collectors.toList());
+        var variationConnectors = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).toList();
         for (ASTConnector variationConnector : variationConnectors) {
           connectorConditions.merge(variationConnector, variationExpr, ctx::mkOr);
         }
@@ -196,7 +196,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainBodySubcomponents = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      var mainBodySubcomponents = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
 
       for (ASTComponentInstance mainBodySubcomponent : mainBodySubcomponents) {
         subcomponentConditions.put(mainBodySubcomponent, ctx.mkTrue());
@@ -216,7 +216,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationSubcomponents = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+        var variationSubcomponents = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
         for (ASTComponentInstance variationSubcomponent : variationSubcomponents) {
           subcomponentConditions.merge(variationSubcomponent, variationExpr, ctx::mkOr);
         }
@@ -236,7 +236,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       componentConditions.put(this.getOriginal(), ctx.mkTrue());
 
-      var mainBodyComponents = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).collect(Collectors.toList());
+      var mainBodyComponents = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).toList();
       for (ASTArcComponentType mainBodyComponent : mainBodyComponents) {
         componentConditions.put(mainBodyComponent, ctx.mkTrue());
       }
@@ -256,7 +256,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationComponents = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).collect(Collectors.toList());
+        var variationComponents = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).toList();
         for (ASTArcComponentType variationComponent : variationComponents) {
           componentConditions.merge(variationComponent, variationExpr, ctx::mkOr);
         }
@@ -274,7 +274,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainBehaviors = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(v -> ((ASTArcBehaviorElement) v)).collect(Collectors.toList());
+      var mainBehaviors = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(v -> ((ASTArcBehaviorElement) v)).toList();
       for (ASTArcBehaviorElement mainBehavior : mainBehaviors) {
         behaviorConditions.put(mainBehavior, ctx.mkTrue());
       }
@@ -293,7 +293,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationBehaviors = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(v -> ((ASTArcBehaviorElement) v)).collect(Collectors.toList());
+        var variationBehaviors = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(v -> ((ASTArcBehaviorElement) v)).toList();
         for (ASTArcBehaviorElement variationBehavior : variationBehaviors) {
           behaviorConditions.merge(variationBehavior, variationExpr, ctx::mkOr);
         }
@@ -311,7 +311,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainFields = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).collect(Collectors.toList());
+      var mainFields = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).toList();
       for (ASTArcField mainField : mainFields) {
         fieldConditions.put(mainField, ctx.mkTrue());
       }
@@ -330,7 +330,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationFields = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).collect(Collectors.toList());
+        var variationFields = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).toList();
         for (ASTArcField variationField : variationFields) {
           fieldConditions.merge(variationField, variationExpr, ctx::mkOr);
         }
@@ -385,7 +385,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainStateCharts = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).collect(Collectors.toList());
+      var mainStateCharts = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).toList();
       for (ASTArcStatechart mainStateChart : mainStateCharts) {
         statechartConditions.put(mainStateChart, ctx.mkTrue());
       }
@@ -404,7 +404,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationStateCharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).collect(Collectors.toList());
+        var variationStateCharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).toList();
         for (ASTArcStatechart variationStateChart : variationStateCharts) {
           statechartConditions.merge(variationStateChart, variationExpr, ctx::mkOr);
         }
@@ -422,7 +422,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainMessageEvents = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(ASTTransitionBody::isPresentSCEvent).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).collect(Collectors.toList());
+      var mainMessageEvents = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(ASTTransitionBody::isPresentSCEvent).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).toList();
       for (ASTMsgEvent mainMessageEvent : mainMessageEvents) {
         messageeventConditions.put(mainMessageEvent, ctx.mkTrue());
       }
@@ -441,7 +441,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationMessageEvents = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(ASTTransitionBody::isPresentSCEvent).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).collect(Collectors.toList());
+        var variationMessageEvents = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(ASTTransitionBody::isPresentSCEvent).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).toList();
         for (ASTMsgEvent variationMessageEvent : variationMessageEvents) {
           messageeventConditions.merge(variationMessageEvent, variationExpr, ctx::mkOr);
         }
@@ -459,7 +459,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
       List<VariableArcVariationPoint> variationPoints = getVariationPoints();
 
-      var mainBodyPortSymbols = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(ASTArcPort::getSymbol).collect(Collectors.toList());
+      var mainBodyPortSymbols = this.getOriginal().getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(ASTArcPort::getSymbol).toList();
 
       for (PortSymbol mainPortSymbols : mainBodyPortSymbols) {
         portsymbolConditions.put(mainPortSymbols, ctx.mkTrue());
@@ -479,7 +479,7 @@ public class ASTVariableArcFullVariantComponentType extends ASTArcComponentType 
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
 
-        var variationPortSymbols = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).map(ASTArcPort::getSymbol).collect(Collectors.toList());
+        var variationPortSymbols = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).map(ASTArcPort::getSymbol).toList();
         for (PortSymbol variationPortSymbol : variationPortSymbols) {
           portsymbolConditions.put(variationPortSymbol, variationExpr);
         }

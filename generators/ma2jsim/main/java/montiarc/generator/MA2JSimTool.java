@@ -350,7 +350,7 @@ public class MA2JSimTool extends MontiArcTool {
       List<String> javaFiles = walk
         .map(Path::toString)
         .filter(s -> s.endsWith(".java"))
-        .collect(Collectors.toList());
+        .toList();
       javacCommand.addAll(javaFiles);
     }
 

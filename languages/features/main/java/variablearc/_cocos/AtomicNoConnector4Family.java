@@ -28,7 +28,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -56,7 +55,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting all features, ports and variations from the Main-Component
     List<String> allFeatures;
@@ -81,7 +80,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
       for (ASTConnector connector : mainConnectors) {
         connectorConditions.put(connector, ctx.mkTrue());
       }
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
       for (ASTComponentInstance mainSubComp : mainSubComps) {
         subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }

@@ -34,7 +34,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -67,7 +66,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting all features, constraints and connectors from the Main-Component
     List<String> allFeatures;
@@ -95,7 +94,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for (ASTArcPort mainPort : mainPorts) {
         portConditions.put(mainPort, ctx.mkTrue());
         portNameInfos.put(node.getSymbol().getFullName() + "." + mainPort.getName(), new PortInfo(node.getSymbol().getFullName() + "." + mainPort.getName(), mainPort.getSymbol().isIncoming(), false, ctx.mkTrue()));
@@ -107,7 +106,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
         connectorConditions.put(connector, ctx.mkTrue());
       }
 
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
       for (ASTComponentInstance mainSubComp : mainSubComps) {
         subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }
@@ -125,7 +124,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
       var subVariationPoints = ((IVariableArcComponentTypeSymbol) (sub.getType().getTypeInfo().getAstNode().getSymbol())).getAllVariationPoints();
 
       var compTypeSymbol = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode());
-      var subFeatures = compTypeSymbol.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).collect(Collectors.toList());
+      var subFeatures = compTypeSymbol.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).toList();
       allFeatures.addAll(subFeatures);
       if (sub.isTypePresent()) {
         // Add Ports of the sub-component, that are not declared in variation points
@@ -146,7 +145,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
         BoolExpr variationExpr = ctx.mkOr(expr.get());
         var subVariationExpr = VariationConditionHelper.renamePrefix(ctx, variationExpr, compTypeSymbol.getSymbol().getFullName(), node.getSymbol().getFullName() + "." + sub.getName());
 
-        var subVariationPorts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(ASTArcPort::getSymbol).collect(Collectors.toList());
+        var subVariationPorts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(ASTArcPort::getSymbol).toList();
         for (PortSymbol subVariationPort : subVariationPorts) {
           portNameInfos.put(node.getSymbol().getFullName() + "." + sub.getName() + "." + subVariationPort.getName(), new PortInfo(node.getSymbol().getFullName() + "." + sub.getName() + "." + subVariationPort.getName(), subVariationPort.isIncoming(), true, (BoolExpr) subVariationExpr));
         }

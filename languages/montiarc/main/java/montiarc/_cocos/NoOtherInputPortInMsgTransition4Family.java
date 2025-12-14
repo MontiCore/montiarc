@@ -58,7 +58,7 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
     Map<ASTTransitionBody, BoolExpr> transitionConditions;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -92,7 +92,7 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
 
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
         MontiArcTraverser varifTraverser = MontiArcMill.traverser();
-        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).collect(Collectors.toList());
+        var statecharts = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).toList();
 
         ASTTransitionBodyCollector varifTransitionCollector = new ASTTransitionBodyCollector();
         varifTraverser.add4SCTransitions4Code(varifTransitionCollector);
@@ -160,9 +160,9 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
       if (!variableNames.isEmpty()) {
         for (String variableName : variableNames) {
           // Check if there are fields shadowing ports
-          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).collect(Collectors.toList());
+          var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
           var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
-          possiblePorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming()).collect(Collectors.toList());
+          possiblePorts = possiblePorts.stream().filter(e -> e.getKey().isPresentSymbol() && e.getKey().getSymbol().isIncoming()).toList();
           for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
             // Check if the port-name is the same as the event
             if (entry.getKey().getName().equals(event)) {

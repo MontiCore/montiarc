@@ -29,7 +29,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -57,7 +56,7 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Maintaining all features, variations, constraints, behaviors and subcomponents
     List<String> allFeatures;
@@ -78,12 +77,12 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
       for (ASTComponentInstance mainSubComp : mainSubComps) {
         subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }
 
-      List<ASTArcBehaviorElement> mainBehaviors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(k -> (ASTArcBehaviorElement) k).collect(Collectors.toList());
+      List<ASTArcBehaviorElement> mainBehaviors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(k -> (ASTArcBehaviorElement) k).toList();
       for (ASTArcBehaviorElement behavior : mainBehaviors) {
         behaviorConditions.put(behavior, ctx.mkTrue());
       }

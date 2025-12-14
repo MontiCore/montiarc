@@ -37,10 +37,10 @@ public class SubPortsConnected implements ArcBasisASTArcComponentTypeCoCo {
     final Collection<String> targets = node.getConnectors().stream()
       .map(ASTConnector::getTargetsNames)
       .flatMap(Collection::stream)
-      .collect(Collectors.toList());
+      .toList();
     final Collection<String> sources = node.getConnectors().stream()
       .map(ASTConnector::getSourceName)
-      .collect(Collectors.toList());
+      .toList();
 
     for (SubcomponentSymbol subSymbol : node.getSymbol().getSubcomponents()) {
       if (!subSymbol.isTypePresent()) continue;

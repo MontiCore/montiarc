@@ -33,7 +33,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCoCo {
 
@@ -55,7 +54,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     List<ASTConnector> allConnectors;
 
     // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting all features, ports and variations from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
@@ -93,12 +92,12 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
         connectorConditions.put(connector, ctx.mkTrue());
       }
 
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
       for (ASTComponentInstance mainSubComp : mainSubComps) {
         subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }
 
-      List<String> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(l -> node.getSymbol().getFullName() + "." + l.getSymbol().getName()).collect(Collectors.toList());
+      List<String> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(l -> node.getSymbol().getFullName() + "." + l.getSymbol().getName()).toList();
 
       Map<String, BoolExpr> mainPortsDefined = new HashMap<>();
       for (String port : mainPorts) {
@@ -156,7 +155,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
         var subVariationExpr = VariationConditionHelper.renamePrefix(ctx, variationExpr, compSymbol.getName(), node.getSymbol().getFullName() + "." + sub.getName());
 
         // Add conditions that have to hold, for the variation-ports to exist
-        var variationPorts = varitationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(l -> node.getSymbol().getFullName() + "." + sub.getName() + "." + l.getName()).collect(Collectors.toList());
+        var variationPorts = varitationPoint.getArcElements().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).map(l -> node.getSymbol().getFullName() + "." + sub.getName() + "." + l.getName()).toList();
         for (String variationPort : variationPorts) {
           subcomponentportsDefined.put(variationPort, (BoolExpr) subVariationExpr);
         }

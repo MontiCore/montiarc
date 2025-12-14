@@ -18,7 +18,6 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class FDGenerator {
 
@@ -38,10 +37,10 @@ public class FDGenerator {
 
     // Get the model path (to find the correct MontiArc model files)
     List<Path> modelPath =
-      Arrays.stream(args[0].split(",\\s+")).map(Path::of).collect(Collectors.toList());
+      Arrays.stream(args[0].split(",\\s+")).map(Path::of).toList();
     Path relevantPath = modelPath.get(0);
     List<Path> outputPath =
-      Arrays.stream(args[1].split(",\\s+")).map(Path::of).collect(Collectors.toList());
+      Arrays.stream(args[1].split(",\\s+")).map(Path::of).toList();
     Path outputDir = outputPath.get(0);
 
     // Get ASTs

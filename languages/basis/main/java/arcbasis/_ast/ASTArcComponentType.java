@@ -262,12 +262,12 @@ public class ASTArcComponentType extends ASTArcComponentTypeTOP {
       .stream()
       .map(ASTComponentInstantiation::getComponentInstanceList)
       .flatMap(Collection::stream)
-      .collect(Collectors.toList()));
+      .toList());
     subComponents.addAll(this.getInnerComponents()
       .stream()
       .map(ASTArcComponentType::getComponentInstanceList)
       .flatMap(Collection::stream)
-      .collect(Collectors.toList()));
+      .toList());
     return subComponents;
   }
 

@@ -11,7 +11,6 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Checks that stereotypes do not contain multiple timing annotations.
@@ -24,7 +23,7 @@ public class OnlyOneTiming implements UMLStereotypeASTStereotypeCoCo {
 
     final List<ASTStereoValue> timings = node.getValuesList().stream()
       .filter(v -> Timing.contains(v.getName()))
-      .collect(Collectors.toUnmodifiableList());
+      .toList();
 
     if (timings.size() > 1) {
       Log.error(ArcError.MULTIPLE_TIMING_ANNOTATIONS.toString(),

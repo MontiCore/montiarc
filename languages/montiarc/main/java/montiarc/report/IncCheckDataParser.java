@@ -11,7 +11,6 @@ import java.nio.file.Path;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.zip.DataFormatException;
 
@@ -55,7 +54,7 @@ public final class IncCheckDataParser {
 
   private IncCheckData deserialize(@NotNull Path incCheckFile) throws IOException, ParseException {
     try (Stream<String> lines = Files.lines(incCheckFile, Charset.defaultCharset())) {
-      for (String line : lines.collect(Collectors.toList())) {
+      for (String line : lines.toList()) {
         this.processLine(line);
       }
 
