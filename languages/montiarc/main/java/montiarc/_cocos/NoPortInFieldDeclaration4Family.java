@@ -50,7 +50,7 @@ public class NoPortInFieldDeclaration4Family implements ArcBasisASTArcComponentT
     Map<ASTArcField, BoolExpr> fieldConditions;
 
     // Reading and processing parts of the Main-Component
-    ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -72,12 +72,12 @@ public class NoPortInFieldDeclaration4Family implements ArcBasisASTArcComponentT
         mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      ArrayList<ASTArcPort> mainPorts = (ArrayList<ASTArcPort>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
       for (ASTArcPort mainPort : mainPorts) {
         portConditions.put(mainPort, ctx.mkTrue());
       }
 
-      ArrayList<ASTArcField> mainFields = (ArrayList<ASTArcField>) node.getFields();
+      List<ASTArcField> mainFields = node.getFields();
       for (ASTArcField field : mainFields) {
         fieldConditions.put(field, ctx.mkTrue());
       }

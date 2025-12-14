@@ -70,7 +70,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<ASTComponentInstance, BoolExpr> subcomponentCondition = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
     // Getting all features, constraints, ports and connectors from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
@@ -93,10 +93,10 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     } else {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
-      ArrayList<ASTArcPort> mainPorts = (ArrayList<ASTArcPort>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
-      ArrayList<ASTConnector> mainConnectors = (ArrayList<ASTConnector>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTConnector> mainConnectors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).collect(Collectors.toList());
 
-      ArrayList<ASTComponentInstance> mainSubComps = (ArrayList<ASTComponentInstance>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
 
       for (ASTComponentInstance subComp : mainSubComps) {
         subcomponentCondition.put(subComp, ctx.mkTrue());

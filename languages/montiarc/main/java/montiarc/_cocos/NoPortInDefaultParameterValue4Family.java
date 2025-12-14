@@ -50,7 +50,7 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
     Map<ASTArcPort, BoolExpr> portConditions;
 
     // Reading and processing parts of the Main-Component
-    ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConstraints = new ArrayList<>();
@@ -71,13 +71,13 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
         mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      ArrayList<ASTArcPort> mainPorts = (ArrayList<ASTArcPort>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
       for (ASTArcPort port : mainPorts) {
         portConditions.put(port, ctx.mkTrue());
       }
     }
 
-    ArrayList<ASTArcParameter> mainParameters = (ArrayList<ASTArcParameter>) node.getHead().getArcParameterList();
+    List<ASTArcParameter> mainParameters = node.getHead().getArcParameterList();
     if (!mainParameters.isEmpty())
       allParameters = new ArrayList<>(mainParameters);
 

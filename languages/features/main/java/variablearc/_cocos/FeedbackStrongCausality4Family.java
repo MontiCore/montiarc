@@ -64,7 +64,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     Map<SubcomponentSymbol, Integer> subcomponentToInt = new HashMap<>();
 
     // Reading and processing parts of the Main-Component
-    ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
     // Managing all features, variations, constraints and connectors
     List<String> allFeatures;
@@ -91,9 +91,9 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     } else {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
-      ArrayList<ASTConnector> mainConnectors = (ArrayList<ASTConnector>) node.getConnectors();
+      List<ASTConnector> mainConnectors = node.getConnectors();
 
-      ArrayList<ASTComponentInstance> mainSubComps = (ArrayList<ASTComponentInstance>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
       for (ASTComponentInstance mainSubComp : mainSubComps) {
         subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }

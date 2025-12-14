@@ -49,7 +49,7 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
     }
 
     // Reading and processing parts of the Main-Component
-    ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
     // Managing all features, variations, constraints and connectors
     List<String> allFeatures;
@@ -82,14 +82,14 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
       ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      ArrayList<ASTArcPort> mainPorts = (ArrayList<ASTArcPort>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
       for(ASTArcPort mainPort : mainPorts){
         String portName = node.getSymbol().getFullName() + "." + mainPort.getName();
         portConditions.put(mainPort,ctx.mkTrue());
         portNameConditions.put(portName,ctx.mkTrue());
       }
 
-      ArrayList<ASTConnector> mainConnectors = (ArrayList<ASTConnector>) node.getConnectors();
+      List<ASTConnector> mainConnectors = node.getConnectors();
       allConnectors.addAll(mainConnectors);
       for (ASTConnector connector : mainConnectors) {
         connectorConditions.put(connector, ctx.mkTrue());

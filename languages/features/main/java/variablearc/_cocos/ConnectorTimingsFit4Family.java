@@ -51,7 +51,7 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
         Map<String, PortInfo> portNameInfos = new HashMap<>();
 
         // Reading and processing parts of the Main-Component
-        ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+        List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
         // Managing all features, variations, constraints and connectors
         List<String> allFeatures;
@@ -80,13 +80,13 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
         ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
         allConstraints.add(mainConstraintSet);
 
-        ArrayList<ASTArcPort> mainPorts = (ArrayList<ASTArcPort>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+        List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
         for(ASTArcPort mainPort : mainPorts){
           portConditions.put(mainPort,ctx.mkTrue());
           portNameInfos.put(mainPort.getSymbol().getFullName(), new PortInfo(mainPort.getSymbol().getFullName(), mainPort.getSymbol().isIncoming(), mainPort.getSymbol().getTiming(), ctx.mkTrue()));
         }
 
-        ArrayList<ASTConnector> mainConnectors = (ArrayList<ASTConnector>) node.getConnectors();
+        List<ASTConnector> mainConnectors = node.getConnectors();
         allConnectors.addAll(mainConnectors);
         for (ASTConnector connector : mainConnectors) {
           connectorConditions.put(connector, ctx.mkTrue());
@@ -96,7 +96,7 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
           portNameInfos.put(port.getFullName(), new PortInfo(port.getFullName(), port.isIncoming(), port.getTiming(), ctx.mkTrue()));
         }
 
-        ArrayList<ASTComponentInstance> mainSubComps = (ArrayList<ASTComponentInstance>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
+        List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).collect(Collectors.toList());
         for(ASTComponentInstance mainSubComp : mainSubComps){
           subcomponentConditions.put(mainSubComp,ctx.mkTrue());
         }

@@ -52,7 +52,7 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions;
 
     // Reading and processing parts of the Main-Component
-    ArrayList<String> mainFeatures = (ArrayList<String>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
+    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).collect(Collectors.toList());
 
 
     allFeatures = new ArrayList<>(mainFeatures);
@@ -77,12 +77,12 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
         mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
       allConstraints.add(mainConstraintSet);
 
-      ArrayList<ASTArcPort> mainPorts = (ArrayList<ASTArcPort>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).collect(Collectors.toList());
       for (ASTArcPort port : mainPorts) {
         portConditions.put(port, ctx.mkTrue());
       }
 
-      ArrayList<ASTComponentInstance> mainSubcomponents = (ArrayList<ASTComponentInstance>) node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(v -> ((ASTComponentInstantiation) v).getComponentInstanceList()).flatMap(List::stream).collect(Collectors.toList());
+      List<ASTComponentInstance> mainSubcomponents = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(v -> ((ASTComponentInstantiation) v).getComponentInstanceList()).flatMap(List::stream).collect(Collectors.toList());
       for (ASTComponentInstance component : mainSubcomponents) {
         subcomponentConditions.put(component, ctx.mkTrue());
       }
