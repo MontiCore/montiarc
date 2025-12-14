@@ -27,11 +27,11 @@
 
 <#macro printGetAllSubcomponents comp>
   protected java.util.List${r"<montiarc.rte.timesync.IComponent>"} getAllSubcomponents() {
-    return java.util.Arrays.asList(new montiarc.rte.timesync.IComponent[] {
+    return java.util.Arrays.asList(
     <#list comp.getSubcomponents() as subcomponent>
       ${subcomponent.getName()}<#sep>, </#sep>
     </#list>
-    });
+    );
   }
 </#macro>
 

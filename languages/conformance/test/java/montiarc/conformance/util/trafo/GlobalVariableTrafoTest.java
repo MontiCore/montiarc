@@ -70,7 +70,7 @@ public class GlobalVariableTrafoTest extends AutomatonTestBase {
                 smtAut.getProperty(tgt, counter))); // counter != counter
 
     Solver solver = ctx.mkSolver();
-    solver.add(new BoolExpr[] {smtTrans, contr});
+    solver.add(smtTrans, contr);
 
     //Then
     Assertions.assertEquals(Status.UNSATISFIABLE, solver.check());
@@ -83,7 +83,7 @@ public class GlobalVariableTrafoTest extends AutomatonTestBase {
     ASTSCTransition transition = getTransition("3", aut);
     BoolExpr smtTrans = smtAut.evaluateTransition(transition, input, src, tgt, output);
     Solver solver = ctx.mkSolver();
-    solver.add(new BoolExpr[] {smtTrans});
+    solver.add(smtTrans);
 
     // Then
     Assertions.assertEquals(Status.SATISFIABLE, solver.check());
