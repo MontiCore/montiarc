@@ -85,6 +85,29 @@ class AtomicMaxOneBehavior4FamilyTest extends AtomicMaxOneBehaviorTest {
           constraint(f1 ^ f2);
         }
         """
+      ),
+      arg("""
+        component ValidCompWithVariability3 {
+          component Inner {
+            feature f1, f2;
+            varif(f1) { automaton { } }
+            varif(f2) { automaton { } }
+            constraint(f1 ^ f2);
+          }
+        }
+        """
+      ),
+      arg("""
+        component ValidCompWithVariability4 {
+          feature f1, f2, f3;
+          varif(f1) { automaton { } }
+          varif(f2) { automaton { } }
+          varif(f3) { automaton { } }
+          constraint(!(f1 && f2));
+          constraint(!(f1 && f3));
+          constraint(!(f2 && f3));
+        }
+        """
       )
     );
   }
