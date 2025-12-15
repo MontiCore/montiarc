@@ -1,184 +1,250 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcautomaton.ArcAutomatonMill;
-import arcautomaton._ast.ASTArcStatechart;
-import arcautomaton._ast.ASTMsgEvent;
-import arcautomaton._symboltable.IArcAutomatonScope;
-import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTArcElement;
-import arcbasis._ast.ASTComponentBody;
-import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.scbasis._ast.ASTSCStatechartElement;
-import de.monticore.scbasis._ast.ASTSCTransition;
-import de.monticore.sctransitions4code._ast.ASTTransitionBody;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbolBuilder;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
-import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcAutomataError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class EventTriggerExists4FamilyTest extends MontiArcTestBase {
-
-  @BeforeEach
-  protected void initSymbols() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setUpComponents();
-  }
-
-  protected void setUpComponents() {
-    compile("package a.b; component A { }");
-    compile("package a.b; component B {port in boolean i; port in String mesin;}");
-    compile("package a.b; component C { port out boolean o; }");
-    compile("package a.b; component D { port in int i; }");
-    compile("package a.b; component E { port out int o; }");
-    compile("package a.b; component F { port in java.lang.Integer i; }");
-    compile("package a.b; component G { port in java.util.List<java.lang.Integer> i; }");
-    compile("package a.b; component H { port out java.util.List<java.lang.Integer> o; }");
-    compile("package a.b; component I { port in java.lang.Comparable<java.lang.Integer> i; }");
-    compile("package a.b; component J { port out java.lang.Comparable<java.lang.Integer> o; }");
-    compile("package a.b; component K<T> { port in T i; } ");
-    compile("package a.b; component L<T> { port out T o; }");
-  }
-
-  private static Stream<Arguments> provideUniqueSenderModel() {
-    List<Arguments> componentList = new ArrayList<>();
-    Arguments simpleModel = arg("component Test{}");
-    componentList.add(simpleModel);
-    return componentList.stream();
-  }
+/**
+ * The class under test is {@link EventTriggerExists4Family}.
+ */
+class EventTriggerExists4FamilyTest extends EvenTriggerExistsTest {
 
   @ParameterizedTest
-  @MethodSource("provideUniqueSenderModel")
-  public void TestModelRuntimeMontiArcCoCos(@NotNull String model) {
+  @MethodSource("validModels")
+  @MethodSource("validModelsWithVariability")
+  void shouldNotReportError(@NotNull String model) {
 
-    Preconditions.checkNotNull(model);
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+
     MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
     checker.get4FullVariant().addCoCo(new EventTriggerExists4Family());
 
-    ASTMACompilationUnit mainAST = compile(model);
-    checker.checkAll(mainAST);
-
-    String[] test = getLoggedErrorCodes();
+    // When
+    checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getErrorCount() == 0);
-  }
-
-  private static <T> void addCoCoAs(T coco, Consumer<T> consumer) {
-    consumer.accept(coco);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
-  @MethodSource("validParams")
-  public void shouldFindEventSymbol(String eventName, String[] portNames) {
-    Preconditions.checkNotNull(eventName);
-    Preconditions.checkNotNull(portNames);
+  @MethodSource("invalidModels")
+  @MethodSource("invalidModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "InvalidComp4",
+    "InvalidComp5",
+    "InvalidCompWithVariability1",
+    "InvalidCompWithVariability2",
+    "InvalidCompWithVariability3",
+    "InvalidCompWithVariability4",
+    "InvalidCompWithVariability5"
+  })
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
 
-    //Given
-    ASTMsgEvent msgEvent = ArcAutomatonMill.msgEventBuilder().setName(eventName).build();
-    msgEvent.setEnclosingScope(createTestScope(portNames));
-    ASTTransitionBody transitionBody = ArcAutomatonMill.transitionBodyBuilder().setSCEvent(msgEvent).build();
-    ASTSCTransition scTransition = ArcAutomatonMill.sCTransitionBuilder().setSCTBody(transitionBody).uncheckedBuild();
-    List<ASTSCStatechartElement> transitionList = new ArrayList<>();
-    transitionList.add(scTransition);
-    ASTArcStatechart chart = ArcAutomatonMill.arcStatechartBuilder().setSCStatechartElementsList(transitionList).uncheckedBuild();
-    List<ASTArcElement> chartElementList = new ArrayList<>();
-    chartElementList.add(chart);
-    ASTComponentBody body = ArcAutomatonMill.componentBodyBuilder().setArcElementsList(chartElementList).uncheckedBuild();
-    ASTArcComponentType compType = ArcAutomatonMill.arcComponentTypeBuilder().setBody(body).uncheckedBuild();
-    compType.setEnclosingScope(createTestScope(portNames));
-    EventTriggerExists4Family coco = new EventTriggerExists4Family();
+    // Given
+    ASTMACompilationUnit ast = compile(model);
 
-    //When
-    coco.check(compType);
+    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    checker.get4FullVariant().addCoCo(new EventTriggerExists4Family());
 
-    //Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  @ParameterizedTest
-  @MethodSource("invalidParams")
-  public void shouldProduceError(String eventName, String[] portNames, Error error) {
-    Preconditions.checkNotNull(eventName);
-    Preconditions.checkNotNull(portNames);
-
-    //Given
-    ASTMsgEvent msgEvent = ArcAutomatonMill.msgEventBuilder().setName(eventName).build();
-    msgEvent.setEnclosingScope(createTestScope(portNames));
-    ASTTransitionBody transitionBody = ArcAutomatonMill.transitionBodyBuilder().setSCEvent(msgEvent).build();
-    ASTSCTransition scTransition = ArcAutomatonMill.sCTransitionBuilder().setSCTBody(transitionBody).uncheckedBuild();
-    List<ASTSCStatechartElement> transitionList = new ArrayList<>();
-    transitionList.add(scTransition);
-    ASTArcStatechart chart = ArcAutomatonMill.arcStatechartBuilder().setSCStatechartElementsList(transitionList).uncheckedBuild();
-    List<ASTArcElement> chartElementList = new ArrayList<>();
-    chartElementList.add(chart);
-    ASTComponentBody body = ArcAutomatonMill.componentBodyBuilder().setArcElementsList(chartElementList).uncheckedBuild();
-    ASTArcComponentType compType = ArcAutomatonMill.arcComponentTypeBuilder().setBody(body).uncheckedBuild();
-    compType.setEnclosingScope(createTestScope(portNames));
-
-    EventTriggerExists4Family coco = new EventTriggerExists4Family();
-
-    //When
-    coco.check(compType);
-
-    //Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(error));
-  }
-
-  protected static Stream<Arguments> validParams() {
+  static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
-      Arguments.arguments("Tick", new String[0]),
-      Arguments.arguments("Tick", new String[]{"aPort"}),
-      Arguments.arguments("aPort", new String[]{"aPort"}),
-      Arguments.arguments("aPort", new String[]{"aPort", "bPort"}),
-      Arguments.arguments("aPort", new String[]{"aPort", "aPort"})
+      // transition with msg-event, resolved port part of the static configuration
+      arg("""
+        component ValidCompWithVariability1 {
+          port in int i;
+          port out int o;
+        
+          feature f;
+        
+          varif(f) {
+            automaton {
+              initial state S;
+              S -> S i;
+            }
+          }
+        }
+        """
+      ),
+      // transition with msg-event, resolved port defined in another feature
+      arg("""
+        component ValidCompWithVariability2 {
+          feature f1, f2;
+        
+          varif(f1) {
+            port in int i;
+            port out int o;
+          }
+        
+          varif(f2) {
+            automaton {
+              initial state S;
+              S -> S i;
+            }
+          }
+        
+          constraint(f1 == f2);
+        }
+        """
+      ),
+      // transition with msg-event, port direction dependent on the feature
+      arg("""
+        component ValidCompWithVariability3 {
+          feature f1, f2;
+        
+          varif(f1) {
+            port in int io1;
+            port out int io2;
+          }
+        
+          varif(f2) {
+            port out int io1;
+            port in int io2;
+          }
+        
+          varif(f1) {
+            automaton {
+              initial state S;
+              S -> S io1;
+            }
+          }
+        
+          varif(f2) {
+            automaton {
+              initial state S;
+              S -> S io2;
+            }
+          }
+        
+          constraint(f1 != f2);
+        }
+        """
+      )
     );
   }
 
-  protected static Stream<Arguments> invalidParams() {
+  static Stream<Arguments> invalidModelsWithVariability() {
     return Stream.of(
-      Arguments.arguments("aPort", new String[0], ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL),
-      Arguments.arguments("aPort", new String[]{"bPort"}, ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL)
+      // transition with non-resolvable msg-event, port part of a feature not available in all configurations
+      arg("""
+          component InvalidCompWithVariability1 {
+            feature f;
+          
+            varif(f) {
+              port in int i;
+              port out int o;
+            }
+          
+            automaton {
+              initial state S;
+              S -> S i;
+            }
+          }""",
+        CANT_FIND_MSG_EVENT_SYMBOL
+      ),
+      // transition with non-resolvable msg-event, port und automaton defined in different features
+      arg("""
+          component InvalidCompWithVariability2 {
+            feature f1, f2;
+          
+            varif(f1) {
+              port in int i;
+              port out int o;
+            }
+          
+            varif(f2) {
+              automaton {
+                initial state S;
+                S -> S i;
+              }
+            }
+          }""",
+        CANT_FIND_MSG_EVENT_SYMBOL
+      ),
+      // two transitions with non-resolvable msg-event, ports und automata defined in different features
+      arg("""
+          component InvalidCompWithVariability3 {
+            feature f1, f2, f3;
+          
+            varif(f1) {
+              port in int i1, i2;
+              port out int o;
+            }
+          
+            varif(f2) {
+              automaton {
+                initial state S;
+                S -> S i1;
+              }
+            }
+          
+            varif(f3) {
+              automaton {
+                initial state S;
+                S -> S i2;
+              }
+            }
+          }""",
+        CANT_FIND_MSG_EVENT_SYMBOL
+      ),
+      // nested transition with non-resolvable msg-event, port und automaton defined in different features
+      arg("""
+          component InvalidCompWithVariability4 {
+            feature f1, f2;
+          
+            varif(f1) {
+              port in int i;
+              port out int o;
+            }
+          
+            varif(f2) {
+              automaton {
+                initial state S {
+                  S -> S i;
+                }
+              }
+            }
+          }""",
+        CANT_FIND_MSG_EVENT_SYMBOL
+      ),
+      // inner transition with non-resolvable msg-event, port und automaton defined in different features
+      arg("""
+          component InvalidCompWithVariability5 {
+            feature f1, f2;
+          
+            varif(f1) {
+              port in int i;
+              port out int o;
+            }
+          
+            varif(f2) {
+              automaton {
+                initial state S {
+                  -> i;
+                }
+              }
+            }
+          }""",
+        CANT_FIND_MSG_EVENT_SYMBOL
+      )
     );
-  }
-
-  protected IArcAutomatonScope createTestScope(String[] portNames) {
-    IArcAutomatonScope scope = ArcAutomatonMill.scope();
-
-    for (String portName : portNames) {
-      PortSymbol portSymbol = new PortSymbolBuilder()
-        .setName(portName)
-        .setIncoming(true)
-        .setOutgoing(false)
-        .setEnclosingScope(scope)
-        .setType(SymTypeExpressionFactory.createObscureType())
-        .setStronglyCausal(false)
-        .build();
-      scope.add(portSymbol);
-    }
-
-    ArcAutomatonMill.globalScope().addSubScope(scope);
-    return scope;
   }
 }

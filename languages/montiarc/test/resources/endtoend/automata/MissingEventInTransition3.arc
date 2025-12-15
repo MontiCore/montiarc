@@ -2,17 +2,14 @@
 package automata;
 
 /*
- * Invalid model: The msg event 'o' is missing (the event symbol cannot be resolved).
- *
- * Outgoing ports are not resolvable as event symbol.
+ * Invalid model: The msg event 'msg' of the nested transition is missing
+ * (the event symbol cannot be resolved).
  */
 component MissingEventInTransition3 {
 
-  port in int i;
-  port out int o;
-
   automaton {
-    initial state S;
-    S -> S o;
+    initial state S {
+      S -> S msg;
+    }
   }
 }

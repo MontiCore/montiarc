@@ -2,18 +2,14 @@
 package automata;
 
 /*
- * Invalid model: The msg events 'p' and 'v' are missing (the event symbols
- * cannot be resolved).
- *
- * Component parameters and fields are not resolvable as event symbols.
+ * Invalid model: The msg event 'msg' of the internal transition is missing
+ * (the event symbol cannot be resolved).
  */
 component MissingEventInTransition4 {
 
-  int v = 0;
-
   automaton {
-    initial state S;
-    S -> S p;
-    S -> S v;
+    initial state S {
+      -> msg;
+    }
   }
 }

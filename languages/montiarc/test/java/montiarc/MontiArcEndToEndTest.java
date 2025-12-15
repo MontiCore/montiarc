@@ -109,7 +109,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingPortInConnectorTest1",
     "MissingSubcomponentInConnectorTest",
     "CircularInheritanceWithCompositionTest",
-    "MissingEventInTransitionTest5",
+    "MissingEventInTransitionTest3",
+    "MissingEventInTransitionTest4",
     "MissingEventInTransitionTest6",
     "MissingSymbolsInGuardTest3",
     "MissingSymbolsInTransitionActionTest",
@@ -156,16 +157,19 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("MissingEventInTransitionTest3",
         mpk(PKG_AUT, "MissingEventInTransition3.arc"),
-        fn(ERROR, PKG_AUT, "MissingEventInTransition3.arc", 16, 12, 16, 13, CANT_FIND_MSG_EVENT_SYMBOL, "o")
+        fn(ERROR, PKG_AUT, "MissingEventInTransition3.arc", 12, 14, 12, 17, CANT_FIND_MSG_EVENT_SYMBOL, "msg")
       ),
       arg("MissingEventInTransitionTest4",
         mpk(PKG_AUT, "MissingEventInTransition4.arc"),
-        fn(ERROR, PKG_AUT, "MissingEventInTransition4.arc", 16, 12, 16, 13, CANT_FIND_MSG_EVENT_SYMBOL, "p"),
-        fn(ERROR, PKG_AUT, "MissingEventInTransition4.arc", 17, 12, 17, 13, CANT_FIND_MSG_EVENT_SYMBOL, "v")
+        fn(ERROR, PKG_AUT, "MissingEventInTransition4.arc", 12, 10, 12, 13, CANT_FIND_MSG_EVENT_SYMBOL, "msg")
       ),
       arg("MissingEventInTransitionTest5",
         mpk(PKG_AUT, "MissingEventInTransition5.arc"),
-        fn(ERROR, PKG_AUT, "MissingEventInTransition5.arc", 12, 10, 12, 13, CANT_FIND_MSG_EVENT_SYMBOL, "msg")
+        fn(ERROR, PKG_AUT, "MissingEventInTransition5.arc", 19, 12, 19, 13, CANT_FIND_MSG_EVENT_SYMBOL, "o"),
+        fn(ERROR, PKG_AUT, "MissingEventInTransition5.arc", 20, 12, 20, 13, CANT_FIND_MSG_EVENT_SYMBOL, "v"),
+        fn(ERROR, PKG_AUT, "MissingEventInTransition5.arc", 21, 12, 21, 13, CANT_FIND_MSG_EVENT_SYMBOL, "p"),
+        fn(ERROR, PKG_AUT, "MissingEventInTransition5.arc", 22, 12, 22, 13, CANT_FIND_MSG_EVENT_SYMBOL, "T"),
+        fn(ERROR, PKG_AUT, "MissingEventInTransition5.arc", 23, 12, 23, 13, CANT_FIND_MSG_EVENT_SYMBOL, "S")
       ),
       arg("MissingEventInTransitionTest6",
         mpk(PKG_AUT, "MissingEventInTransition6.arc"),
