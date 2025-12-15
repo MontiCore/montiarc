@@ -8,6 +8,7 @@ ${tc.signature("variant")}
 <#assign CLASS>${ast.getName()}${suffixes.states()}${helper.variantSuffix(variant)}<#if isTop>${suffixes.top()}</#if></#assign>
 <#assign automaton = helper.getAutomatonBehavior(ast).get() />
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public class ${CLASS}<@Util.printTypeParameters ast/> {
   protected ${CONTEXT} context;
 

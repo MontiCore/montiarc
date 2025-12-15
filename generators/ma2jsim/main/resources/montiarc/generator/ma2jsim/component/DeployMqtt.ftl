@@ -11,6 +11,7 @@
 <#assign comp=variant!ast.getArcComponentType().getSymbol()/>
 <#-- @ftlvariable name="comp" type="de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol" -->
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top()}</#if>
   extends montiarc.rte.deploy.MqttDeployment<${comp.getName()}${suffixes.comp()}> {
 

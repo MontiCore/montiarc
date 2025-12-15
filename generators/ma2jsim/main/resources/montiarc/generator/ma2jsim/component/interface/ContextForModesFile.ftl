@@ -8,6 +8,7 @@
 </#if>
 
 <#assign comp = ast.getArcComponentType()>
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public interface ${comp.getName()}${suffixes.contextForModes()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters comp/>
   extends ${comp.getName()}${suffixes.parameters()} <@Util.printTypeParameters comp false/>,
           ${comp.getName()}${suffixes.fields()} <@Util.printTypeParameters comp false/>,

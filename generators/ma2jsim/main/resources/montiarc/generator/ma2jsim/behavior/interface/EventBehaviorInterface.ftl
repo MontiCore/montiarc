@@ -3,6 +3,7 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public interface ${ast.getName()}${suffixes.events()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/>
   extends montiarc.rte.behavior.Behavior<${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/>>{
 

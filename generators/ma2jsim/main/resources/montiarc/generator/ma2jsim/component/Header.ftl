@@ -8,6 +8,7 @@
 <#assign syncMsgClass>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
 <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public <#if isTop> abstract </#if> class ${compName}<@Util.printTypeParameters ast/>
   extends <#if hasModeAutomaton> montiarc.rte.component.AbstractModeComponent<${syncMsgClass}, ${eventClass}, ${ast.getName()}${suffixes.modeAutomaton()}>
           <#else> montiarc.rte.component.AbstractComponent<${syncMsgClass}, ${eventClass}> </#if>

@@ -4,6 +4,7 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 interface ${ast.getName()}${suffixes.modes()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/> {
   <#if helper.getModeAutomaton(ast).isPresent()>
     <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>

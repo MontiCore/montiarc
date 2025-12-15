@@ -4,7 +4,7 @@
 
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign CLASS>${ast.getName()}${suffixes.syncMsg()}<#if isTop>${suffixes.top()}</#if></#assign>
-
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public <#if isTop>abstract</#if> class ${CLASS} <@Util.printTypeParameters ast/> {
 
   <#list ast.getSymbol().getAllIncomingPorts() as port>

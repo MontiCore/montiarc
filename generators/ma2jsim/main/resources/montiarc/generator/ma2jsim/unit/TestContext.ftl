@@ -2,6 +2,7 @@
 <#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public static class ${ast.getName()}TestContext implements montiarc.maunit.api.MaUnitTestContext {
 
   @Override

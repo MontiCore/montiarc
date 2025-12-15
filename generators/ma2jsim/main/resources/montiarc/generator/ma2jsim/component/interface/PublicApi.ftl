@@ -4,6 +4,7 @@
 <#-- @ftlvariable name="isTop" type="boolean" -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public interface ${ast.getName()}${suffixes.comp()}<#if isTop>TOP</#if> <@Util.printTypeParameters ast/>
   extends montiarc.rte.component.Component,
           ${ast.getName()}${suffixes.output()} <@Util.printTypeParameters ast false/>,

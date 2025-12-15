@@ -13,6 +13,7 @@ ${tc.signature("variant")}
 <#assign BEHAVIOR>${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}${ubGenerics}</#assign>
 <#assign SUPER>montiarc.rte.automaton.Automaton${suffixes.builder()}${"<"} ${CONTEXT}, ${SYNC_MSG}, ${BEHAVIOR} ${">"}</#assign>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public ${MODIFIER} class ${CLASS}<@Util.printTypeParameters ast/> extends ${SUPER} {
 
 <#-- Constructor -->

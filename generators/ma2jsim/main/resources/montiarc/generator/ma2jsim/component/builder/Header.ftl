@@ -3,5 +3,6 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 public <#if isTop>abstract</#if> class
   ${ast.getName()}${suffixes.comp()}${suffixes.builder()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/>

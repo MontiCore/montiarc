@@ -13,6 +13,7 @@ ${tc.signature()}
   - it to the individual ports's values in the lambda body), because the lambda arguments name may be in conflict with
   - names of ports / fields / ...
   -->
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 protected interface ${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParameters ast/>
   extends montiarc.rte.automaton.Action<${syncMsg}> {
   @Override

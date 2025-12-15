@@ -5,6 +5,7 @@
 <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
 <#assign modes = helper.getModes(modeAutomaton)>
 
+@de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 protected enum Mode {
 <#list modes as mode>
   ${mode.getName()}("${mode.getName()}")<#sep>, </#sep>
