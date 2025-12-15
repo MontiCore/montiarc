@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcautomaton._cocos.EventTriggerExists;
 import arcautomaton._cocos.NoInputPortInEntryAction;
 import arcautomaton._cocos.NoInputPortInExitAction;
 import arcautomaton._cocos.NoNonSyncInputPortInDoAction;
@@ -100,7 +101,6 @@ import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfNoAssignmentExpr;
 import variablearc._cocos.VarIfOmitFieldReferences;
 import variablearc._cocos.VarIfSmtConvertible;
-import variablearc._cocos.arcautomaton.EventTriggerExists;
 import variablearc._cocos.arcbasis.UniqueIdentifier;
 
 /**
