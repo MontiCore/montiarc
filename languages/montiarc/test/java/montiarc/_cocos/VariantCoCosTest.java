@@ -1,37 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._cocos.AtomicMaxOneBehavior;
-import arcbasis._cocos.AtomicNoConnector;
-import arcbasis._cocos.BehaviorInDecomposed;
-import arcbasis._cocos.ConnectorDirectionsFit;
-import arcbasis._cocos.ConnectorPortsExist;
-import arcbasis._cocos.ConnectorTimingsFit;
-import arcbasis._cocos.FeedbackStrongCausality;
-import arcbasis._cocos.PortHeritageTypeFits;
-import arcbasis._cocos.PortUniqueSender;
-import arcbasis._cocos.PortsConnected;
-import arcbasis._cocos.SubPortsConnected;
-import arccompute._cocos.MaxOneInit;
-import arccompute._cocos.NoInitWithoutCompute;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
-import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
-import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
-import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
-import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
-import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
-import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcAutomataError;
-import montiarc.util.ArcComputeError;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -39,26 +15,48 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import variablearc._cocos.arcautomaton.EventTriggerExists;
-import variablearc._cocos.arcbasis.ConnectorTypesFit;
-import variablearc._cocos.arcbasis.UniqueIdentifier;
+import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 
 import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.MontiArcMill.globalScope;
+import static montiarc.MontiArcMill.scope;
+import static montiarc.MontiArcMillTOP.fieldSymbolBuilder;
+import static montiarc.MontiArcMillTOP.oOTypeSymbolBuilder;
+import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
+import static montiarc.util.ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE;
+import static montiarc.util.ArcComputeError.MULTIPLE_INIT;
+import static montiarc.util.ArcError.CONNECTORS_IN_ATOMIC;
+import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
+import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
+import static montiarc.util.ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR;
+import static montiarc.util.ArcError.FEEDBACK_CAUSALITY;
+import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
+import static montiarc.util.ArcError.IN_PORT_UNUSED;
+import static montiarc.util.ArcError.MISSING_PORT;
+import static montiarc.util.ArcError.MULTIPLE_BEHAVIOR;
+import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
+import static montiarc.util.ArcError.OUT_PORT_UNUSED;
+import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
+import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
+import static montiarc.util.MCError.EXPR_EQUAL_OP_NOT_APPLICABLE;
+import static montiarc.util.SCError.PRECONDITION_NOT_BOOLEAN;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VariantCoCosTest extends MontiArcTestBase {
+class VariantCoCosTest extends MontiArcTestBase {
 
   @BeforeEach
-  protected void initSymbols() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+  void initSymbols() {
+    globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
     setUpEnums();
     setUpComponents();
   }
 
-  protected void setUpComponents() {
+  void setUpComponents() {
     compile("package a.b; component A { port in int i; }");
     compile("package a.b; component B { port out int o; }");
     compile("package a.b; component C { port in int i1, i2; port out int o; }");
@@ -77,569 +75,632 @@ public class VariantCoCosTest extends MontiArcTestBase {
     compile("package a.b; component P<A,B> { feature ff; varif (ff) { port out A o; } else { port out B o; } }");
   }
 
-  protected void setUpEnums() {
-    OOTypeSymbol onOffEnumType = MontiArcMill.oOTypeSymbolBuilder().setIsEnum(true).setName("OnOff").setIsPublic(true).setSpannedScope(MontiArcMill.scope()).build();
-    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("ON").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("OFF").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-    MontiArcMill.globalScope().add(onOffEnumType);
+  void setUpEnums() {
+    OOTypeSymbol onOffEnumType = oOTypeSymbolBuilder()
+      .setName("OnOff").setIsEnum(true).setIsPublic(true)
+      .setSpannedScope(scope()).build();
+    onOffEnumType.getSpannedScope().add(fieldSymbolBuilder()
+      .setName("ON").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true)
+      .setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
+    onOffEnumType.getSpannedScope().add(fieldSymbolBuilder()
+      .setName("OFF").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true)
+      .setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
+    globalScope().add(onOffEnumType);
   }
 
   @ParameterizedTest
   @ValueSource(strings = {
     // atomic component, no variability
-    "component Comp1 { }",
+    "component ValidComp1 { }",
     // in port forward
-    "component Comp2 { " +
-      "port in int i; " +
-      "a.b.A sub; " +
-      "i -> sub.i; " +
-      "}",
+    """
+      component ValidComp2 {
+        port in int i;
+        a.b.A sub;
+        i -> sub.i;
+      }""",
     // out port forward
-    "component Comp3 { " +
-      "port out int o; " +
-      "a.b.B sub; " +
-      "sub.o -> o; " +
-      "}",
+    """
+      component ValidComp3 {
+        port out int o;
+        a.b.B sub;
+        sub.o -> o;
+      }""",
     // hidden channel
-    "component Comp4 { " +
-      "a.b.A sub1; " +
-      "a.b.B sub2; " +
-      "sub2.o -> sub1.i; " +
-      "}",
+    """
+      component ValidComp4 {
+        a.b.A sub1;
+        a.b.B sub2;
+        sub2.o -> sub1.i;
+      }""",
     // in port forward, single variation point
-    "component Comp5 { " +
-      "port in int i; " +
-      "feature f; " +
-      "varif (f) { " +
-      "a.b.A sub; " +
-      "i -> sub.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp5 {
+        port in int i;
+        feature f;
+        varif (f) {
+          a.b.A sub;
+          i -> sub.i;
+        }
+        constraint(f);
+      }""",
     // out port forward, single variation point
-    "component Comp6 { " +
-      "port out int o; " +
-      "feature f; " +
-      "varif (f) { " +
-      "a.b.B sub; " +
-      "sub.o -> o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp6 {
+        port out int o;
+        feature f;
+        varif (f) {
+          a.b.B sub;
+          sub.o -> o;
+        }
+        constraint(f);
+      }""",
     // hidden channel, single variation point
-    "component Comp7 { " +
-      "feature f; " +
-      "varif (f) { " +
-      "a.b.A sub1; " +
-      "a.b.B sub2; " +
-      "sub2.o -> sub1.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp7 {
+        feature f;
+        varif (f) {
+          a.b.A sub1;
+          a.b.B sub2;
+          sub2.o -> sub1.i;
+        }
+      }""",
     // in port forward, source direction mismatch, excluded variation point
-    "component Comp8 { " +
-      "varif (false) { " +
-      "port out int o; " +
-      "a.b.A sub; " +
-      "o -> sub.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp8 {
+        varif (false) {
+        port out int o;
+          a.b.A sub;
+          o -> sub.i;
+        }
+      }""",
     // in port forward, target direction mismatch, excluded variation point
-    "component Comp9 { " +
-      "varif (false) { " +
-      "port in int i; " +
-      "a.b.B sub; " +
-      "i -> sub.o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp9 {
+        varif (false) {
+        port in int i;
+          a.b.B sub;
+          i -> sub.o;
+        }
+      }""",
     // out port forward, source direction mismatch, excluded variation point
-    "component Comp10 { " +
-      "varif (false) { " +
-      "port out int o; " +
-      "a.b.A sub; " +
-      "sub.i -> o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp10 {
+        varif (false) {
+        port out int o;
+          a.b.A sub;
+          sub.i -> o;
+        }
+      }""",
     // out port forward, target direction mismatch, excluded variation point
-    "component Comp11 { " +
-      "varif (false) { " +
-      "port in int i; " +
-      "a.b.B sub; " +
-      "sub.o -> i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp11 {
+        varif (false) {
+        port in int i;
+          a.b.B sub;
+          sub.o -> i;
+        }
+      }""",
     // hidden channel, source direction mismatch, excluded variation point
-    "component Comp12 { " +
-      "varif (false) { " +
-      "a.b.A sub1, sub2; " +
-      "sub2.i -> sub1.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp12 {
+        varif (false) {
+          a.b.A sub1, sub2;
+          sub2.i -> sub1.i;
+        }
+      }""",
     // hidden channel, target direction mismatch, excluded variation point
-    "component Comp13 { " +
-      "varif (false) { " +
-      "a.b.B sub1, sub2; " +
-      "sub2.o -> sub1.o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp13 {
+        varif (false) {
+          a.b.B sub1, sub2;
+          sub2.o -> sub1.o;
+        }
+      }""",
     // in port forward, source direction mismatch, constrained feature
-    "component Comp14 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "varif (f) { " +
-      "port out int o; " +
-      "a.b.A sub; " +
-      "o -> sub.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp14 {
+        feature f;
+        varif (f) {
+        port out int o;
+          a.b.A sub;
+          o -> sub.i;
+        }
+        constraint(!f);
+      }""",
     // in port forward, target direction mismatch, constrained feature
-    "component Comp15 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "varif (f) { " +
-      "port in int i; " +
-      "a.b.B sub; " +
-      "i -> sub.o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp15 {
+        feature f;
+        varif (f) {
+          port in int i;
+          a.b.B sub;
+          i -> sub.o;
+        }
+        constraint(!f);
+      }""",
     // out port forward, source direction mismatch, constrained feature
-    "component Comp16 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "varif (f) { " +
-      "port out int o; " +
-      "a.b.A sub; " +
-      "sub.i -> o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp16 {
+        feature f;
+        varif (f) {
+          port out int o;
+          a.b.A sub;
+          sub.i -> o;
+        }
+        constraint(!f);
+      }""",
     // out port forward, target direction mismatch, constrained feature
-    "component Comp17 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "varif (f) { " +
-      "port in int i; " +
-      "a.b.B sub; " +
-      "sub.o -> i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp17 {
+        feature f;
+        varif (f) {
+          port in int i;
+          a.b.B sub;
+          sub.o -> i;
+        }
+        constraint(!f);
+      }""",
     // hidden channel, source direction mismatch, constrained feature
-    "component Comp18 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "varif (f) { " +
-      "a.b.A sub1, sub2; " +
-      "sub2.i -> sub1.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp18 {
+        feature f;
+        varif (f) {
+          a.b.A sub1, sub2;
+          sub2.i -> sub1.i;
+        }
+        constraint(!f);
+      }""",
     // hidden channel, target direction mismatch, constrained feature
-    "component Comp19 { " +
-      "feature f;" +
-      "constraint(!f);" +
-      "varif (f) { " +
-      "a.b.B sub1, sub2; " +
-      "sub2.o -> sub1.o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp19 {
+        feature f;
+        varif (f) {
+          a.b.B sub1, sub2;
+          sub2.o -> sub1.o;
+        }
+        constraint(!f);
+      }""",
     // in port forward, subcomponent with variable interface direction
-    "component Comp20 { " +
-      "port in int i; " +
-      "a.b.D sub; " +
-      "i -> sub.io; " +
-      "constraint (sub.ff); " +
-      "}",
+    """
+      component ValidComp20 {
+        port in int i;
+        a.b.D sub;
+        i -> sub.io;
+        constraint (sub.ff);
+      }""",
     // out port forward, subcomponent with variable interface direction
-    "component Comp21 { " +
-      "port out int o; " +
-      "a.b.D sub; " +
-      "sub.io -> o; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp21 {
+        port out int o;
+        a.b.D sub;
+        sub.io -> o;
+        constraint (!sub.ff);
+      }""",
     // hidden channel, subcomponent with variable interface direction
-    "component Comp22 { " +
-      "a.b.D sub1; " +
-      "a.b.D sub2; " +
-      "sub2.io -> sub1.io; " +
-      "constraint (sub1.ff && !sub2.ff); " +
-      "}",
+    """
+      component ValidComp22 {
+        a.b.D sub1;
+        a.b.D sub2;
+        sub2.io -> sub1.io;
+        constraint (sub1.ff && !sub2.ff);
+      }""",
     // port forward, component & subcomponent with variable interface direction
-    "component Comp23 { " +
-      "feature f; " +
-      "varif (f) { " +
-      "port in int io; " +
-      "io -> sub.io; " +
-      "} " +
-      "varif (!f) { " +
-      "port out int io; " +
-      "sub.io -> io; " +
-      "} " +
-      "a.b.D sub; " +
-      "constraint (sub.ff == f); " +
-      "}",
+    """
+      component ValidComp23 {
+        feature f;
+        varif (f) {
+          port in int io;
+          io -> sub.io;
+        }
+        varif (!f) {
+          port out int io;
+          sub.io -> io;
+        }
+        a.b.D sub;
+        constraint (sub.ff == f);
+      }""",
     // in port forward, connector type mismatch, excluded variation point
-    "component Comp24 { " +
-      "varif (false) { " +
-      "port in int i; " +
-      "a.b.E sub; " +
-      "i -> sub.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp24 {
+        varif (false) {
+          port in int i;
+          a.b.E sub;
+          i -> sub.i;
+        }
+      }""",
     // out port forward, connector type mismatch, excluded variation point
-    "component Comp25 { " +
-      "varif (false) { " +
-      "port out int o; " +
-      "a.b.F sub; " +
-      "sub.o -> o; " +
-      "} " +
-      "}",
+    """
+      component ValidComp25 {
+        varif (false) {
+          port out int o;
+          a.b.F sub;
+          sub.o -> o;
+        }
+      }""",
     // hidden channel, connector type mismatch, excluded variation point
-    "component Comp26 { " +
-      "varif (false) { " +
-      "a.b.E sub1; " +
-      "a.b.B sub2; " +
-      "sub2.o -> sub1.i; " +
-      "a.b.A sub3; " +
-      "a.b.F sub4; " +
-      "sub4.o -> sub3.i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp26 {
+        varif (false) {
+        a.b.E sub1;
+        a.b.B sub2;
+        sub2.o -> sub1.i;
+        a.b.A sub3;
+        a.b.F sub4;
+        sub4.o -> sub3.i;
+        }
+      }""",
     // port forward, subcomponent with variable interface types (deselect feature)
-    "component Comp27 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.G sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp27 {
+        port in int i;
+        port out int o;
+        a.b.G sub;
+        i -> sub.i;
+        sub.o -> o;
+        constraint (!sub.ff);
+      }""",
     // port forward, subcomponent with variable interface types (select feature)
-    "component Comp28 { " +
-      "port in boolean i; " +
-      "port out boolean o; " +
-      "a.b.G sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "constraint (sub.ff); " +
-      "}",
+    """
+      component ValidComp28 {
+        port in boolean i;
+        port out boolean o;
+        a.b.G sub;
+        i -> sub.i;
+        sub.o -> o;
+        constraint (sub.ff);
+      }""",
     // port forward, component and subcomponent with variable interface types
-    "component Comp29 { " +
-      "feature f; " +
-      "varif (f) { " +
-      "port in boolean i; " +
-      "port out boolean o; " +
-      "} else { " +
-      "port in int i; " +
-      "port out int o; " +
-      "} " +
-      "a.b.G sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "constraint (sub.ff == f); " +
-      "}",
+    """
+      component ValidComp29 {
+        feature f;
+        varif (f) {
+          port in boolean i;
+          port out boolean o;
+        } else {
+          port in int i;
+          port out int o;
+        }
+        a.b.G sub;
+        i -> sub.i;
+        sub.o -> o;
+        constraint (sub.ff == f);
+      }""",
     // in port forward, subcomponent with variable interface timing (deselect feature)
-    "component Comp30 { " +
-      "port in int i; " +
-      "a.b.I sub; " +
-      "i -> sub.i; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp30 {
+        port in int i;
+        a.b.I sub;
+        i -> sub.i;
+        constraint (!sub.ff);
+      }""",
     // in port forward, subcomponent with variable interface timing (select feature)
-    "component Comp31 { " +
-      "port sync in int i; " +
-      "a.b.I sub; " +
-      "i -> sub.i; " +
-      "constraint (sub.ff); " +
-      "}",
+    """
+      component ValidComp31 {
+        port sync in int i;
+        a.b.I sub;
+        i -> sub.i;
+        constraint (sub.ff);
+      }""",
     // out port forward, subcomponent with variable interface timing (deselect feature)
-    "component Comp32 { " +
-      "port out int o; " +
-      "a.b.J sub; " +
-      "sub.o -> o; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp32 {
+        port out int o;
+        a.b.J sub;
+        sub.o -> o;
+        constraint (!sub.ff);
+      }""",
     // out port forward, subcomponent with variable interface timing (select feature)
-    "component Comp33 { " +
-      "port sync out int o; " +
-      "a.b.J sub; " +
-      "sub.o -> o; " +
-      "constraint (sub.ff); " +
-      "}",
+    """
+      component ValidComp33 {
+        port sync out int o;
+        a.b.J sub;
+        sub.o -> o;
+        constraint (sub.ff);
+      }""",
     // in port forward, component and subcomponent with variable interface timing
-    "component Comp34 { " +
-      "feature f; " +
-      "varif (f) { " +
-      "port sync in int i; " +
-      "} else {" +
-      "port in int i; " +
-      "}" +
-      "a.b.I sub; " +
-      "i -> sub.i; " +
-      "constraint (sub.ff == f); " +
-      "}",
+    """
+      component ValidComp34 {
+        feature f;
+        varif (f) {
+          port sync in int i;
+        } else {
+          port in int i;
+        }
+        a.b.I sub;
+        i -> sub.i;
+        constraint (sub.ff == f);
+      }""",
     // out port forward, component and subcomponent with variable interface timing
-    "component Comp35 { " +
-      "feature f; " +
-      "varif (f) { " +
-      "port sync out int o; " +
-      "} else {" +
-      "port out int o; " +
-      "}" +
-      "a.b.J sub; " +
-      "sub.o -> o; " +
-      "constraint (sub.ff == f); " +
-      "}",
+    """
+      component ValidComp35 {
+        feature f;
+        varif (f) {
+        port sync out int o;
+        } else {
+          port out int o;
+        }
+        a.b.J sub;
+        sub.o -> o;
+        constraint (sub.ff == f);
+      }""",
     // feedback loop
-    "component Comp36 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.C sub1; " +
-      "a.b.K sub2; " +
-      "i -> sub1.i1; " +
-      "sub1.o -> sub2.i; " +
-      "sub2.o1 -> o; " +
-      "sub2.o2 -> sub1.i2; " +
-      "}",
+    """
+      component ValidComp36 {
+        port in int i;
+        port out int o;
+        a.b.C sub1;
+        a.b.K sub2;
+        i -> sub1.i1;
+        sub1.o -> sub2.i;
+        sub2.o1 -> o;
+        sub2.o2 -> sub1.i2;
+      }""",
     // feedback loop, subcomponent with variable interface delay (deselect feature)
-    "component Comp37 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.C sub1; " +
-      "a.b.L sub2; " +
-      "i -> sub1.i1; " +
-      "sub1.o -> sub2.i; " +
-      "sub2.o -> o; " +
-      "sub2.o -> sub1.i2; " +
-      "constraint (!sub2.ff); " +
-      "}",
+    """
+      component ValidComp37 {
+        port in int i;
+        port out int o;
+        a.b.C sub1;
+        a.b.L sub2;
+        i -> sub1.i1;
+        sub1.o -> sub2.i;
+        sub2.o -> o;
+        sub2.o -> sub1.i2;
+        constraint (!sub2.ff);
+      }""",
     // feedback loop, component with variable configuration and subcomponent with variable interface delay
-    "component Comp38 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "feature f; " +
-      "a.b.C sub1; " +
-      "a.b.L sub2; " +
-      "i -> sub1.i1; " +
-      "sub1.o -> sub2.i; " +
-      "sub2.o -> o; " +
-      "varif (!f) { " +
-      "sub2.o -> sub1.i2; " +
-      "} else { " +
-      "i -> sub1.i2; " +
-      "}" +
-      "constraint (sub2.ff == f); " +
-      "}",
+    """
+      component ValidComp38 {
+        port in int i;
+        port out int o;
+        feature f;
+        a.b.C sub1;
+        a.b.L sub2;
+        i -> sub1.i1;
+        sub1.o -> sub2.i;
+        sub2.o -> o;
+        varif (!f) {
+          sub2.o -> sub1.i2;
+        } else {
+          i -> sub1.i2;
+        }
+        constraint (sub2.ff == f);
+      }""",
     // in port unused, component with variable configuration, excluded variation point
-    "component Comp39 { " +
-      "varif (false) { " +
-      "port in int i; " +
-      "} " +
-      "a.b.A sub1; " +
-      "a.b.B sub2; " +
-      "sub2.o -> sub1.i; " +
-      "}",
+    """
+      component ValidComp39 {
+        varif (false) {
+          port in int i;
+        }
+        a.b.A sub1;
+        a.b.B sub2;
+        sub2.o -> sub1.i;
+      }""",
     // out port unused, component with variable configuration, excluded variation point
-    "component Comp40 { " +
-      "varif (false) { " +
-      "port out int o; " +
-      "} " +
-      "a.b.A sub1; " +
-      "a.b.B sub2; " +
-      "sub2.o -> sub1.i; " +
-      "}",
+    """
+      component ValidComp40 {
+        varif (false) {
+          port out int o;
+        }
+        a.b.A sub1;
+        a.b.B sub2;
+        sub2.o -> sub1.i;
+      }""",
     // in port not connected, component with variable configuration, excluded variation point
-    "component Comp41 { " +
-      "varif (false) { " +
-      "a.b.A sub; " +
-      "} " +
-      "}",
+    """
+      component ValidComp41 {
+        varif (false) {
+          a.b.A sub;
+        }
+      }""",
     // out port not connected, component with variable configuration, excluded variation point
-    "component Comp42 { " +
-      "varif (false) { " +
-      "a.b.B sub; " +
-      "} " +
-      "}",
+    """
+      component ValidComp42 {
+        varif (false) {
+          a.b.B sub;
+        }
+      }""",
     // in port not connected, subcomponent with variable configuration (deselected feature)
-    "component Comp43 { " +
-      "a.b.M sub; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp43 {
+        a.b.M sub;
+        constraint (!sub.ff);
+      }""",
     // out port not connected, subcomponent with variable configuration (deselected feature)
-    "component Comp44 { " +
-      "a.b.N sub; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp44 {
+        a.b.N sub;
+        constraint (!sub.ff);
+      }""",
     // out port forward, subcomponent with variable generic interface type (selected feature)
-    "component Comp45<T> { " +
-      "port out T o; " +
-      "a.b.P<T, java.lang.Integer> sub; " +
-      "sub.o -> o; " +
-      "constraint(sub.ff); " +
-      "}",
+
+    """
+      component ValidComp45<T> {
+        port out T o;
+        a.b.P<T, java.lang.Integer> sub;
+        sub.o -> o;
+        constraint(sub.ff);
+      }""",
     // out port forward, subcomponent with variable generic interface type
-    "component Comp46<A, B> { " +
-      "feature f; " +
-      "varif (f) { port out A o; } " +
-      "else { port out B o; } " +
-      "a.b.P<A, B> sub; " +
-      "sub.o -> o; " +
-      "constraint(sub.ff == f); " +
-      "}",
+    """
+      component ValidComp46<A, B> {
+        feature f;
+        varif (f) {
+          port out A o;
+        }
+        else {
+          port out B o;
+        }
+        a.b.P<A, B> sub;
+        sub.o -> o;
+        constraint(sub.ff == f);
+      }""",
     // in port forward with inherited port
-    "component Comp47 extends a.b.M { " +
-      "varif (ff) { " +
-      "a.b.A sub;" +
-      "i -> sub.i;" +
-      "} " +
-      "}",
+    """
+      component ValidComp47 extends a.b.M {
+        varif (ff) {
+          a.b.A sub;
+          i -> sub.i;
+        }
+      }""",
     // inherited port that switches direction
-    "component Comp48 extends a.b.D { " +
-      "varif (ff) { " +
-      "a.b.A sub;" +
-      "io -> sub.i;" +
-      "} else { " +
-      "a.b.B sub;" +
-      "sub.o -> io;" +
-      "} " +
-      "}",
+    """
+      component ValidComp48 extends a.b.D {
+        varif (ff) {
+          a.b.A sub;
+          io -> sub.i;
+        } else {
+          a.b.B sub;
+          sub.o -> io;
+        }
+      }""",
     // inherited generic port that switches between int and boolean
-    "component Comp49 extends a.b.P<int, boolean> { " +
-      "varif (ff) { " +
-      "a.b.B sub; " +
-      "} else {" +
-      "a.b.F sub; " +
-      "} " +
-      "sub.o -> o; " +
-      "}",
+    """
+      component ValidComp49 extends a.b.P<int, boolean> {
+        varif (ff) {
+          a.b.B sub;
+        } else {
+          a.b.F sub;
+        }
+        sub.o -> o;
+      }""",
     // atomic component with port that switches types
-    "component Comp50 { " +
-      "feature ff; " +
-      "varif (ff) { " +
-      "port out int p; " +
-      "} else { " +
-      "port out double p; " +
-      "} " +
-      "compute {" +
-      "p = 5; " +
-      "}" +
-      "}",
+    """
+      component ValidComp50 {
+        feature ff;
+        varif (ff) {
+        port out int p;
+        } else {
+          port out double p;
+        }
+        compute {
+          p = 5;
+        }
+      }""",
     // Switches between behaviors
-    "component Comp51 { " +
-      "feature f; " +
-      "varif (f) { " +
-      "compute { } " +
-      "} else { " +
-      "compute { } " +
-      "} " +
-      "}",
+    """
+      component ValidComp51 {
+        feature f;
+        varif (f) {
+          compute { }
+        } else {
+          compute { }
+        }
+      }""",
     // Switches between field initial values
-    "component Comp52 { " +
-      "feature f; " +
-      "port out int o; " +
-      "varif (f) { " +
-      "int i = 0; " +
-      "} else { " +
-      "int i = 5; " +
-      "} " +
-      "compute { " +
-      "  o = i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp52 {
+        feature f;
+        port out int o;
+        varif (f) {
+          int i = 0;
+        } else {
+          int i = 5;
+        }
+        compute {
+          o = i;
+        }
+      }""",
     // Switches between automaton behaviors with preconditions
-    "component Comp53 { " +
-      "feature f;" +
-      "varif (f) {" +
-      "port in int i;" +
-      "automaton {" +
-      "initial state A;" +
-      "A -> A [i > 1];" +
-      "}" +
-      "} else {" +
-      "port in boolean i;" +
-      "automaton {" +
-      "initial state A;" +
-      "A -> A [i];" +
-      "}" +
-      "}" +
-      "}",
+    """
+      component ValidComp53 {
+        feature f;
+        varif (f) {
+          port in int i;
+          automaton {
+            initial state A;
+            A -> A [i > 1];
+          }
+        } else {
+          port in boolean i;
+          automaton {
+            initial state A;
+            A -> A [i];
+          }
+        }
+      }""",
     // Switches between field types
-    "component Comp54 { " +
-      "feature f; " +
-      "port out double o; " +
-      "varif (f) { " +
-      "  double i = 2.5; " +
-      "} else {" +
-      "  int i = 2; " +
-      "} " +
-      "compute { " +
-      "  o = i; " +
-      "} " +
-      "}",
+    """
+      component ValidComp54 {
+        feature f;
+        port out double o;
+        varif (f) {
+          double i = 2.5;
+        } else {
+          int i = 2;
+        }
+        compute {
+          o = i;
+        }
+      }""",
     // Enum constants map to different values
-    "component Comp55(OnOff onOff) { " +
-      "varif(onOff == OnOff.OFF) {" +
-      "  automaton {" +
-      "    initial state S;" +
-      "  }" +
-      "} " +
-      "varif(onOff == OnOff.ON) {" +
-      "  automaton {" +
-      "    initial state S;" +
-      "  }" +
-      "} " +
-      "}",
+    """
+      component ValidComp55(OnOff onOff) {
+        varif(onOff == OnOff.OFF) {
+          automaton {
+            initial state S;
+          }
+        }
+        varif(onOff == OnOff.ON) {
+          automaton {
+            initial state S;
+          }
+        }
+      }""",
     // in port forward, timing match, subcomponent with variable interface timing (deselect feature)
-    "component Comp56 { " +
-      "port sync in int i; " +
-      "a.b.I sub; " +
-      "i -> sub.i; " +
-      "constraint (!sub.ff); " +
-      "}",
+    """
+      component ValidComp56 {
+        port sync in int i;
+        a.b.I sub;
+        i -> sub.i;
+        constraint (!sub.ff);
+      }""",
     // out port forward, timing mismatch, subcomponent with variable interface timing (select feature)
-    "component Comp57 { " +
-      "port out int o; " +
-      "a.b.J sub; " +
-      "sub.o -> o; " +
-      "constraint (sub.ff); " +
-      "}",
+    """
+      component ValidComp57 {
+        port out int o;
+        a.b.J sub;
+        sub.o -> o;
+        constraint (sub.ff);
+      }""",
     // Event trigger constraint always required
-    "component Comp58 { " +
-      "feature f;" +
-      "varif (f) {" +
-      "port in boolean i;" +
-      "}" +
-      "automaton {" +
-      "initial state A;" +
-      "A -> A i;" +
-      "}" +
-      "constraint (f);" +
-      "}",
+    """
+      component ValidComp58 {
+        feature f;
+        varif (f) {
+          port in boolean i;
+        }
+        automaton {
+          initial state A;
+          A -> A i;
+        }
+        constraint (f);
+      }""",
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @DisableIfDisplayName(contains = {
+    "ValidComp23",
+    "ValidComp27",
+    "ValidComp28",
+    "ValidComp29",
+    "ValidComp33",
+    "ValidComp35",
+    "ValidComp37",
+    "ValidComp38",
+    "ValidComp45",
+    "ValidComp46",
+    "ValidComp47",
+    "ValidComp48",
+    "ValidComp49",
+    "ValidComp53",
+  })
+  void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
-    checker.get4Variant().addCoCo(new PortsConnected());
-    checker.get4Variant().addCoCo(new PortUniqueSender());
-    checker.get4Variant().addCoCo(new SubPortsConnected());
-    checker.get4Variant().addCoCo(new ConnectorPortsExist());
-    checker.get4Variant().addCoCo(new ConnectorTypesFit());
-    checker.get4Variant().addCoCo(new ConnectorDirectionsFit());
-    checker.get4Variant().addCoCo(new ConnectorTimingsFit());
-    checker.get4Variant().addCoCo(new AtomicNoConnector());
-    checker.get4Variant().addCoCo(new AtomicMaxOneBehavior());
-    checker.get4Variant().addCoCo(new FeedbackStrongCausality());
-    checker.get4Variant().addCoCo(new PortHeritageTypeFits());
-    checker.get4Variant().addCoCo(new UniqueIdentifier());
-    checker.get4Variant().addCoCo(new TransitionPreconditionsAreBoolean());
-    checker.get4Variant().addCoCo(new ExpressionStatementIsValid());
-    checker.get4Variant().addCoCo(new VarDeclarationInitializationHasCorrectType());
-    checker.get4Variant().addCoCo(new ForConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new ForEachIsValid());
-    checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new SwitchStatementValid());
-    checker.get4Variant().addCoCo(new EventTriggerExists());
-    checker.get4Variant().addCoCo(new BehaviorInDecomposed());
-    checker.get4Variant().addCoCo(new NoInitWithoutCompute());
-    checker.get4Variant().addCoCo(new MaxOneInit());
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab2(true);
 
     // When
     checker.checkAll(ast);
@@ -650,37 +711,34 @@ public class VariantCoCosTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  @DisableIfDisplayName(contains = {
+    "InvalidComp26",
+    "InvalidComp27",
+    "InvalidComp29",
+    "InvalidComp34",
+    "InvalidComp35",
+    "InvalidComp37",
+    "InvalidComp38",
+    "InvalidComp41",
+    "InvalidComp60",
+    "InvalidComp61",
+    "InvalidComp62",
+    "InvalidComp63",
+    "InvalidComp64",
+    "InvalidComp69",
+    "InvalidComp74",
+    "InvalidComp75",
+    "InvalidComp76",
+    "InvalidComp77"
+  })
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcVariantCoCoChecker checker = new MontiArcVariantCoCoChecker();
-    checker.get4Variant().addCoCo(new PortsConnected());
-    checker.get4Variant().addCoCo(new PortUniqueSender());
-    checker.get4Variant().addCoCo(new SubPortsConnected());
-    checker.get4Variant().addCoCo(new ConnectorPortsExist());
-    checker.get4Variant().addCoCo(new ConnectorTypesFit());
-    checker.get4Variant().addCoCo(new ConnectorDirectionsFit());
-    checker.get4Variant().addCoCo(new ConnectorTimingsFit());
-    checker.get4Variant().addCoCo(new AtomicNoConnector());
-    checker.get4Variant().addCoCo(new AtomicMaxOneBehavior());
-    checker.get4Variant().addCoCo(new FeedbackStrongCausality());
-    checker.get4Variant().addCoCo(new PortHeritageTypeFits());
-    checker.get4Variant().addCoCo(new UniqueIdentifier());
-    checker.get4Variant().addCoCo(new TransitionPreconditionsAreBoolean());
-    checker.get4Variant().addCoCo(new ExpressionStatementIsValid());
-    checker.get4Variant().addCoCo(new VarDeclarationInitializationHasCorrectType());
-    checker.get4Variant().addCoCo(new ForConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new ForEachIsValid());
-    checker.get4Variant().addCoCo(new IfConditionHasBooleanType());
-    checker.get4Variant().addCoCo(new SwitchStatementValid());
-    checker.get4Variant().addCoCo(new EventTriggerExists());
-    checker.get4Variant().addCoCo(new BehaviorInDecomposed());
-    checker.get4Variant().addCoCo(new NoInitWithoutCompute());
-    checker.get4Variant().addCoCo(new MaxOneInit());
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab2(true);
 
     // When
     checker.checkAll(ast);
@@ -690,796 +748,927 @@ public class VariantCoCosTest extends MontiArcTestBase {
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> invalidModels() {
     return Stream.of(
       // in port forward, source direction mismatch
-      arg("component Comp1 { " +
-          "port out int o; " +
-          "a.b.A sub; " +
-          "o -> sub.i; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp1 {
+            port out int o;
+            a.b.A sub;
+            o -> sub.i;
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // in port forward, target direction mismatch
-      arg("component Comp2 { " +
-          "port in int i; " +
-          "a.b.B sub; " +
-          "i -> sub.o; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp2 {
+            port in int i;
+            a.b.B sub;
+            i -> sub.o;
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // out port forward, source direction mismatch
-      arg("component Comp3 { " +
-          "port out int o; " +
-          "a.b.A sub; " +
-          "sub.i -> o; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp3 {
+            port out int o;
+            a.b.A sub;
+            sub.i -> o;
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // out port forward, target direction mismatch
-      arg("component Comp4 { " +
-          "port in int i; " +
-          "a.b.B sub; " +
-          "sub.o -> i; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp4 {
+            port in int i;
+            a.b.B sub;
+            sub.o -> i;
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // hidden channel, source direction mismatch
-      arg("component Comp5 { " +
-          "a.b.A sub1, sub2; " +
-          "sub2.i -> sub1.i; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp5 {
+            a.b.A sub1, sub2;
+            sub2.i -> sub1.i;
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // hidden channel, target direction mismatch
-      arg("component Comp6 { " +
-          "a.b.B sub1, sub2; " +
-          "sub2.o -> sub1.o; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp6 {
+            a.b.B sub1, sub2;
+            sub2.o -> sub1.o;
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // in port forward, source direction mismatch, single variation point
-      arg("component Comp7 { " +
-          "port out int o; " +
-          "feature f; " +
-          "varif (f) { " +
-          "a.b.A sub; " +
-          "o -> sub.i; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp7 {
+            port out int o;
+            feature f;
+            varif (f) {
+              a.b.A sub;
+              o -> sub.i;
+            }
+            constraint (f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // in port forward, target direction mismatch, single variation point
-      arg("component Comp8 { " +
-          "port in int i; " +
-          "feature f; " +
-          "varif (f) { " +
-          "a.b.B sub; " +
-          "i -> sub.o; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp8 {
+            port in int i;
+            feature f;
+            varif (f) {
+              a.b.B sub;
+              i -> sub.o;
+            }
+            constraint (f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // out port forward, source direction mismatch, single variation point
-      arg("component Comp9 { " +
-          "port out int o; " +
-          "feature f; " +
-          "varif (f) { " +
-          "a.b.A sub; " +
-          "sub.i -> o; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp9 {
+            port out int o;
+            feature f;
+            varif (f) {
+              a.b.A sub;
+              sub.i -> o;
+            }
+            constraint (f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // out port forward, target direction mismatch, single variation point
-      arg("component Comp10 { " +
-          "port in int i; " +
-          "feature f; " +
-          "varif (f) { " +
-          "a.b.B sub; " +
-          "sub.o -> i; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp10 {
+            port in int i;
+            feature f;
+            varif (f) {
+              a.b.B sub;
+              sub.o -> i;
+            }
+            constraint (f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // hidden channel, single variation point, source direction mismatch
-      arg("component Comp11 { " +
-          "feature f; " +
-          "varif (f) { " +
-          "a.b.A sub1, sub2; " +
-          "sub2.i -> sub1.i; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp11 {
+            feature f;
+            varif (f) {
+              a.b.A sub1, sub2;
+              sub2.i -> sub1.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // hidden channel, single variation point, target direction mismatch
-      arg("component Comp12 { " +
-          "feature f; " +
-          "varif (f) { " +
-          "a.b.B sub1, sub2; " +
-          "sub2.o -> sub1.o; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp12 {
+            feature f;
+            varif (f) {
+              a.b.B sub1, sub2;
+              sub2.o -> sub1.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // in port forward, source direction mismatch, included variation point
-      arg("component Comp13 { " +
-          "varif (true) { " +
-          "port out int o; " +
-          "a.b.A sub; " +
-          "o -> sub.i; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp13 {
+            varif (true) {
+              port out int o;
+              a.b.A sub;
+              o -> sub.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // in port forward, target direction mismatch, included variation point
-      arg("component Comp14 { " +
-          "varif (true) { " +
-          "port in int i; " +
-          "a.b.B sub; " +
-          "i -> sub.o; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp14 {
+            varif (true) {
+              port in int i;
+              a.b.B sub;
+              i -> sub.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // out port forward, source direction mismatch, included variation point
-      arg("component Comp15 { " +
-          "varif (true) { " +
-          "port out int o; " +
-          "a.b.A sub; " +
-          "sub.i -> o; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp15 {
+            varif (true) {
+              port out int o;
+              a.b.A sub;
+              sub.i -> o;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // out port forward, target direction mismatch, included variation point
-      arg("component Comp16 { " +
-          "varif (true) { " +
-          "port in int i; " +
-          "a.b.B sub; " +
-          "sub.o -> i; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp16 {
+            varif (true) {
+              port in int i;
+              a.b.B sub;
+              sub.o -> i;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // hidden channel, source direction mismatch, included variation point
-      arg("component Comp17 { " +
-          "varif (true) { " +
-          "a.b.A sub1, sub2; " +
-          "sub2.i -> sub1.i; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp17 {
+            varif (true) {
+              a.b.A sub1, sub2;
+              sub2.i -> sub1.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // hidden channel, target direction mismatch, included variation point
-      arg("component Comp18 { " +
-          "varif (true) { " +
-          "a.b.B sub1, sub2; " +
-          "sub2.o -> sub1.o; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp18 {
+            varif (true) {
+              a.b.B sub1, sub2;
+              sub2.o -> sub1.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // in port forward, source direction mismatch, unconstrained feature
-      arg("component Comp19 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "varif (f) { " +
-          "port out int o; " +
-          "a.b.A sub; " +
-          "o -> sub.i; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp19 {
+            feature f;
+            constraint(f);
+            varif (f) {
+              port out int o;
+              a.b.A sub;
+              o -> sub.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // in port forward, target direction mismatch, unconstrained feature
-      arg("component Comp20 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "varif (f) { " +
-          "port in int i; " +
-          "a.b.B sub; " +
-          "i -> sub.o; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp20 {
+            feature f;
+            constraint(f);
+            varif (f) {
+              port in int i;
+              a.b.B sub;
+              i -> sub.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // out port forward, source direction mismatch, unconstrained feature
-      arg("component Comp21 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "varif (f) { " +
-          "port out int o; " +
-          "a.b.A sub; " +
-          "sub.i -> o; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp21 {
+            feature f;
+            constraint(f);
+            varif (f) {
+              port out int o;
+              a.b.A sub;
+              sub.i -> o;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // out port forward, target direction mismatch, unconstrained feature
-      arg("component Comp22 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "varif (f) { " +
-          "port in int i; " +
-          "a.b.B sub; " +
-          "sub.o -> i; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp22 {
+            feature f;
+            constraint(f);
+            varif (f) {
+              port in int i;
+              a.b.B sub;
+              sub.o -> i;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // hidden channel, source direction mismatch, unconstrained feature
-      arg("component Comp23 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "varif (f) { " +
-          "a.b.A sub1, sub2; " +
-          "sub2.i -> sub1.i; " +
-          "} " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp23 {
+            feature f;
+            constraint(f);
+            varif (f) {
+              a.b.A sub1, sub2;
+              sub2.i -> sub1.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // hidden channel, target direction mismatch, unconstrained feature
-      arg("component Comp24 { " +
-          "feature f;" +
-          "constraint(f);" +
-          "varif (f) { " +
-          "a.b.B sub1, sub2; " +
-          "sub2.o -> sub1.o; " +
-          "} " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp24 {
+            feature f;
+            constraint(f);
+            varif (f) {
+              a.b.B sub1, sub2;
+              sub2.o -> sub1.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // in port forward, target direction mismatch, subcomponent with variable interface direction
-      arg("component Comp25 { " +
-          "port in int i; " +
-          "a.b.D sub; " +
-          "i -> sub.io; " +
-          "constraint (!sub.ff); " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp25 {
+            port in int i;
+            a.b.D sub;
+            i -> sub.io;
+            constraint (!sub.ff);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // out port forward, source direction mismatch, subcomponent with variable interface direction
-      arg("component Comp26 { " +
-          "port out int o; " +
-          "a.b.D sub; " +
-          "sub.io -> o; " +
-          "constraint (sub.ff); " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp26 {
+            port out int o;
+            a.b.D sub;
+            sub.io -> o;
+            constraint (sub.ff);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // hidden channel, source direction mismatch, subcomponent with variable interface direction
-      arg("component Comp27 { " +
-          "a.b.D sub1; " +
-          "a.b.D sub2; " +
-          "sub2.io -> sub1.io; " +
-          "constraint (sub1.ff && sub2.ff); " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp27 {
+            a.b.D sub1;
+            a.b.D sub2;
+            sub2.io -> sub1.io;
+            constraint (sub1.ff && sub2.ff);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // hidden channel, target direction mismatch, subcomponent with variable interface direction
-      arg("component Comp28 { " +
-          "a.b.D sub1; " +
-          "a.b.D sub2; " +
-          "sub2.io -> sub1.io; " +
-          "constraint (!sub1.ff && !sub2.ff); " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp28 {
+            a.b.D sub1;
+            a.b.D sub2;
+            sub2.io -> sub1.io;
+            constraint (!sub1.ff && !sub2.ff);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
       // hidden channel, source and target direction mismatch, subcomponent with variable interface direction
-      arg("component Comp29 { " +
-          "a.b.D sub1; " +
-          "a.b.D sub2; " +
-          "sub2.io -> sub1.io; " +
-          "constraint (!sub1.ff && sub2.ff); " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
+      arg("""
+          component InvalidComp29 {
+            a.b.D sub1;
+            a.b.D sub2;
+            sub2.io -> sub1.io;
+            constraint (!sub1.ff && sub2.ff);
+          }""",
+        SOURCE_DIRECTION_MISMATCH,
+        TARGET_DIRECTION_MISMATCH
+      ),
       // in port forward, connector type mismatch, included variation point
-      arg("component Comp30 { " +
-          "varif (true) { " +
-          "port in int i; " +
-          "a.b.E sub; " +
-          "i -> sub.i; " +
-          "} " +
-          "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH),
+      arg("""
+          component InvalidComp30 {
+            varif (true) {
+              port in int i;
+              a.b.E sub;
+              i -> sub.i;
+            }
+          }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
       // out port forward, connector type mismatch, included variation point
-      arg("component Comp31 { " +
-          "varif (true) { " +
-          "port out int o; " +
-          "a.b.F sub; " +
-          "sub.o -> o; " +
-          "} " +
-          "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH),
+      arg("""
+          component InvalidComp31 {
+            varif (true) {
+            port out int o;
+              a.b.F sub;
+              sub.o -> o;
+            }
+          }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
       // hidden channel, connector type mismatch, included variation point
-      arg("component Comp32 { " +
-          "varif (true) { " +
-          "a.b.E sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "a.b.A sub3; " +
-          "a.b.F sub4; " +
-          "sub4.o -> sub3.i; " +
-          "} " +
-          "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH,
-        ArcError.CONNECTOR_TYPE_MISMATCH),
+      arg("""
+          component InvalidComp32 {
+            varif (true) {
+              a.b.E sub1;
+              a.b.B sub2;
+              sub2.o -> sub1.i;
+              a.b.A sub3;
+              a.b.F sub4;
+              sub4.o -> sub3.i;
+            }
+          }""",
+        CONNECTOR_TYPE_MISMATCH,
+        CONNECTOR_TYPE_MISMATCH
+      ),
       // port forward, connector type mismatch, component and subcomponent with variable interface types
-      arg("component Comp33 { " +
-          "feature f; " +
-          "varif (f) { " +
-          "port in boolean i; " +
-          "port out boolean o; " +
-          "} else { " +
-          "port in int i; " +
-          "port out int o; " +
-          "} " +
-          "a.b.G sub; " +
-          "i -> sub.i; " +
-          "sub.o -> o; " +
-          "constraint (sub.ff == !f); " +
-          "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH,
-        ArcError.CONNECTOR_TYPE_MISMATCH,
-        ArcError.CONNECTOR_TYPE_MISMATCH,
-        ArcError.CONNECTOR_TYPE_MISMATCH),
+      arg("""
+          component InvalidComp33 {
+            feature f;
+            varif (f) {
+              port in boolean i;
+              port out boolean o;
+            } else {
+              port in int i;
+              port out int o;
+            }
+            a.b.G sub;
+            i -> sub.i;
+            sub.o -> o;
+            constraint (sub.ff == !f);
+          }""",
+        CONNECTOR_TYPE_MISMATCH,
+        CONNECTOR_TYPE_MISMATCH,
+        CONNECTOR_TYPE_MISMATCH,
+        CONNECTOR_TYPE_MISMATCH
+      ),
       // port forward, connector direction and type mismatch, component and subcomponent with variable interface types
-      arg("component Comp34 { " +
-          "feature f; " +
-          "a.b.H sub; " +
-          "varif (f) { " +
-          "port out boolean o; " +
-          "sub.io -> o; " +
-          "} else { " +
-          "port in int i; " +
-          "i -> sub.io; " +
-          "} " +
-          "constraint (sub.ff == f); " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.CONNECTOR_TYPE_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.CONNECTOR_TYPE_MISMATCH),
+      arg("""
+          component InvalidComp34 {
+            feature f;
+            a.b.H sub;
+            varif (f) {
+              port out boolean o;
+              sub.io -> o;
+            } else {
+              port in int i;
+              i -> sub.io;
+            }
+            constraint (sub.ff == f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH,
+        CONNECTOR_TYPE_MISMATCH,
+        TARGET_DIRECTION_MISMATCH,
+        CONNECTOR_TYPE_MISMATCH
+      ),
       // in port forward, timing mismatch, subcomponent with variable interface timing (select feature)
-      arg("component Comp35 { " +
-          "port in int i; " +
-          "a.b.I sub; " +
-          "i -> sub.i; " +
-          "constraint (sub.ff); " +
-          "}",
-        ArcError.CONNECTOR_TIMING_MISMATCH),
+      arg("""
+          component InvalidComp35 {
+            port in int i;
+            a.b.I sub;
+            i -> sub.i;
+            constraint (sub.ff);
+          }""",
+        CONNECTOR_TIMING_MISMATCH
+      ),
       // out port forward, timing mismatch, subcomponent with variable interface timing (deselect feature)
-      arg("component Comp36 { " +
-          "port sync out int o; " +
-          "a.b.J sub; " +
-          "sub.o -> o; " +
-          "constraint (!sub.ff); " +
-          "}",
-        ArcError.CONNECTOR_TIMING_MISMATCH),
+      arg("""
+          component InvalidComp36 {
+            port sync out int o;
+            a.b.J sub;
+            sub.o -> o;
+            constraint (!sub.ff);
+          }""",
+        CONNECTOR_TIMING_MISMATCH
+      ),
       // in port forward, timing mismatch, component and subcomponent with variable interface timing
-      arg("component Comp37 { " +
-          "feature f; " +
-          "varif (f) { " +
-          "port sync in int i; " +
-          "} else {" +
-          "port in int i; " +
-          "}" +
-          "a.b.I sub; " +
-          "i -> sub.i; " +
-          "constraint (sub.ff == !f); " +
-          "}",
-        ArcError.CONNECTOR_TIMING_MISMATCH),
+      arg("""
+          component InvalidComp37 {
+            feature f;
+            varif (f) {
+              port sync in int i;
+            } else {
+              port in int i;
+            }
+            a.b.I sub;
+            i -> sub.i;
+            constraint (sub.ff == !f);
+          }""",
+        CONNECTOR_TIMING_MISMATCH
+      ),
       // out port forward, timing mismatch, component and subcomponent with variable interface timing
-      arg("component Comp38 { " +
-          "feature f; " +
-          "varif (f) { " +
-          "port sync out int o; " +
-          "} else {" +
-          "port out int o; " +
-          "}" +
-          "a.b.J sub; " +
-          "sub.o -> o; " +
-          "constraint (sub.ff == !f); " +
-          "}",
-        ArcError.CONNECTOR_TIMING_MISMATCH),
+      arg("""
+          component InvalidComp38 {
+            feature f;
+            varif (f) {
+              port sync out int o;
+            } else {
+              port out int o;
+            }
+            a.b.J sub;
+            sub.o -> o;
+            constraint (sub.ff == !f);
+          }""",
+        CONNECTOR_TIMING_MISMATCH
+      ),
       // feedback loop, weakly-causal feedback
-      arg("component Comp39 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.C sub1; " +
-          "a.b.L sub2; " +
-          "i -> sub1.i1; " +
-          "sub1.o -> sub2.i; " +
-          "sub2.o -> sub1.i2; " +
-          "sub2.o -> o; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp39 {
+            feature f;
+            port in int i;
+            port out int o;
+            a.b.C sub1;
+            a.b.L sub2;
+            i -> sub1.i1;
+            sub1.o -> sub2.i;
+            sub2.o -> sub1.i2;
+            sub2.o -> o;
+            constraint(sub2.ff == f);
+          }""",
+        FEEDBACK_CAUSALITY
+      ),
       // feedback loop, weakly-causal feedback, subcomponent with variable interface delay (select feature)
-      arg("component Comp40 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.C sub1; " +
-          "a.b.L sub2; " +
-          "i -> sub1.i1; " +
-          "sub1.o -> sub2.i; " +
-          "sub2.o -> o; " +
-          "sub2.o -> sub1.i2; " +
-          "constraint (sub2.ff); " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp40 {
+            port in int i;
+            port out int o;
+            a.b.C sub1;
+            a.b.L sub2;
+            i -> sub1.i1;
+            sub1.o -> sub2.i;
+            sub2.o -> o;
+            sub2.o -> sub1.i2;
+            constraint (sub2.ff);
+          }""",
+        FEEDBACK_CAUSALITY
+      ),
       // feedback loop, weakly-causal feedback, component with variable configuration and subcomponent with variable interface delay
-      arg("component Comp41 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "feature f; " +
-          "a.b.C sub1; " +
-          "a.b.L sub2; " +
-          "i -> sub1.i1; " +
-          "sub1.o -> sub2.i; " +
-          "sub2.o -> o; " +
-          "varif (f) { " +
-          "sub2.o -> sub1.i2; " +
-          "} else { " +
-          "i -> sub1.i2; " +
-          "}" +
-          "constraint (sub2.ff == f); " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp41 {
+            port in int i;
+            port out int o;
+            feature f;
+            a.b.C sub1;
+            a.b.L sub2;
+            i -> sub1.i1;
+            sub1.o -> sub2.i;
+            sub2.o -> o;
+            varif (f) {
+              sub2.o -> sub1.i2;
+            } else {
+              i -> sub1.i2;
+            }
+            constraint (sub2.ff == f);
+          }""",
+        FEEDBACK_CAUSALITY
+      ),
       // in port unused
-      arg("component Comp42 { " +
-          "port in int i; " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.IN_PORT_UNUSED),
+      arg("""
+          component InvalidComp42 {
+            port in int i;
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        IN_PORT_UNUSED
+      ),
       // out port unused
-      arg("component Comp43 { " +
-          "port out int o; " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED),
+      arg("""
+          component InvalidComp43 {
+            port out int o;
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        OUT_PORT_UNUSED
+      ),
       // ports unused
-      arg("component Comp44 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
+      arg("""
+          component InvalidComp44 {
+            port in int i;
+            port out int o;
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      ),
       // in port unused, component with variable configuration, included variation point
-      arg("component Comp45 { " +
-          "varif (true) { " +
-          "port in int i; " +
-          "} " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.IN_PORT_UNUSED),
+      arg("""
+          component InvalidComp45 {
+            varif (true) {
+              port in int i;
+            }
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        IN_PORT_UNUSED
+      ),
       // out port unused, component with variable configuration, included variation point
-      arg("component Comp46 { " +
-          "varif (true) { " +
-          "port out int o; " +
-          "} " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED),
+      arg("""
+          component InvalidComp46 {
+            varif (true) {
+              port out int o;
+            }
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        OUT_PORT_UNUSED
+      ),
       // in port unused, component with variable configuration
-      arg("component Comp47 { " +
-          "feature f; " +
-          "port in int i; " +
-          "varif (f) { " +
-          "a.b.A sub; " +
-          "i -> sub.i; " +
-          "} " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.IN_PORT_UNUSED),
+      arg("""
+          component InvalidComp47 {
+            feature f;
+            port in int i;
+            varif (f) {
+              a.b.A sub;
+              i -> sub.i;
+            }
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        IN_PORT_UNUSED
+      ),
       // out port unused, component with variable configuration
-      arg("component Comp48 { " +
-          "feature f; " +
-          "port out int o; " +
-          "varif (f) { " +
-          "a.b.B sub; " +
-          "sub.o -> o; " +
-          "} " +
-          "a.b.A sub1; " +
-          "a.b.B sub2; " +
-          "sub2.o -> sub1.i; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED),
+      arg("""
+          component InvalidComp48 {
+            feature f;
+            port out int o;
+            varif (f) {
+              a.b.B sub;
+              sub.o -> o;
+            }
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i;
+          }""",
+        OUT_PORT_UNUSED
+      ),
       // in port not connected
-      arg("component Comp49 { " +
-          "a.b.A sub; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp49 {
+            a.b.A sub;
+          }""",
+        IN_PORT_NOT_CONNECTED
+      ),
       // out port not connected
-      arg("component Comp50 { " +
-          "a.b.B sub; " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp50 {
+            a.b.B sub;
+          }""",
+        OUT_PORT_NOT_CONNECTED
+      ),
       // ports not connected
-      arg("component Comp51 { " +
-          "a.b.C sub; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED,
-        ArcError.IN_PORT_NOT_CONNECTED,
-        ArcError.OUT_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp51 {
+            a.b.C sub;
+          }""",
+        IN_PORT_NOT_CONNECTED,
+        IN_PORT_NOT_CONNECTED,
+        OUT_PORT_NOT_CONNECTED
+      ),
       // in port not connected, component with variable configuration, included variation point
-      arg("component Comp52 { " +
-          "varif (true) { " +
-          "a.b.A sub; " +
-          "} " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp52 {
+            varif (true) {
+              a.b.A sub;
+            }
+          }""",
+        IN_PORT_NOT_CONNECTED
+      ),
       // out port not connected, component with variable configuration, included variation point
-      arg("component Comp53 { " +
-          "varif (true) { " +
-          "a.b.B sub; " +
-          "} " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp53 {
+            varif (true) {
+              a.b.B sub;
+            }
+          }""",
+        OUT_PORT_NOT_CONNECTED
+      ),
       // in port not connected, component with variable configuration
-      arg("component Comp54 { " +
-          "feature f; " +
-          "a.b.A sub; " +
-          "varif (f) { " +
-          "port in int i; " +
-          "i -> sub.i; " +
-          "} " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp54 {
+            feature f;
+            a.b.A sub;
+            varif (f) {
+              port in int i;
+              i -> sub.i;
+            }
+          }""",
+        IN_PORT_NOT_CONNECTED
+      ),
       // out port not connected, component with variable configuration
-      arg("component Comp55 { " +
-          "feature f; " +
-          "a.b.B sub; " +
-          "varif (f) { " +
-          "port out int o; " +
-          "sub.o -> o; " +
-          "} " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp55 {
+            feature f;
+            a.b.B sub;
+            varif (f) {
+              port out int o;
+              sub.o -> o;
+            }
+          }""",
+        OUT_PORT_NOT_CONNECTED
+      ),
       // in port unused, in port not connected, component with variable configuration
-      arg("component Comp56 { " +
-          "feature f; " +
-          "a.b.A sub; " +
-          "port in int i; " +
-          "varif (f) { " +
-          "i -> sub.i; " +
-          "} " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp56 {
+            feature f;
+            a.b.A sub;
+            port in int i;
+            varif (f) {
+              i -> sub.i;
+            }
+          }""",
+        IN_PORT_UNUSED,
+        IN_PORT_NOT_CONNECTED
+      ),
       // out port unused, out port not connected, component with variable configuration
-      arg("component Comp57 { " +
-          "feature f; " +
-          "a.b.B sub; " +
-          "port out int o; " +
-          "varif (f) { " +
-          "sub.o -> o; " +
-          "} " +
-          "}",
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp57 {
+            feature f;
+            a.b.B sub;
+            port out int o;
+            varif (f) {
+              sub.o -> o;
+            }
+          }""",
+        OUT_PORT_UNUSED,
+        OUT_PORT_NOT_CONNECTED
+      ),
       // in port not connected, subcomponent with variable configuration (selected feature)
-      arg("component Comp58 { " +
-          "a.b.M sub; " +
-          "constraint (sub.ff); " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp58 {
+            a.b.M sub;
+            constraint (sub.ff);
+          }""",
+        IN_PORT_NOT_CONNECTED
+      ),
       // out port not connected, subcomponent with variable configuration (selected feature)
-      arg("component Comp59 { " +
-          "a.b.N sub; " +
-          "constraint (sub.ff); " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED),
+      arg("""
+          component InvalidComp59 {
+            a.b.N sub;
+            constraint (sub.ff);
+          }""",
+        OUT_PORT_NOT_CONNECTED
+      ),
       // Multiple behaviors if feature is selected
-      arg("component Comp60 { " +
-          "feature f; " +
-          "varif (!f) { " +
-          "a.b.N sub; " +
-          "} " +
-          "constraint (!sub.ff); " +
-          "compute { } " +
-          "compute { } " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR,
-        ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR),
+      arg("""
+          component InvalidComp60 {
+            feature f;
+            varif (f) {
+              compute { }
+              compute { }
+            } else {
+              a.b.N sub;
+              constraint (!sub.ff);
+            }
+          }""",
+        MULTIPLE_BEHAVIOR,
+        DECOMPOSED_COMPONENT_WITH_BEHAVIOR
+      ),
       // out port forward, subcomponent with variable generic interface type (deselected feature)
-      arg("component Comp61<T> { " +
-          "port out T o; " +
-          "a.b.P<T, java.lang.Integer> sub; " +
-          "sub.o -> o; " +
-          "constraint(!sub.ff); " +
-          "}",
-        ArcError.CONNECTOR_TYPE_MISMATCH),
+      arg("""
+          component InvalidComp61<T> {
+            port out T o;
+            a.b.P<T, java.lang.Integer> sub;
+            sub.o -> o;
+            constraint(!sub.ff);
+          }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
       // in port forward with inherited port
-      arg("component Comp62 extends a.b.M { " +
-          "a.b.A sub;" +
-          "i -> sub.i;" +
-          "}",
-        ArcError.MISSING_PORT
+      arg("""
+          component InvalidComp62 extends a.b.M {
+            a.b.A sub;
+            i -> sub.i;
+          }""",
+        MISSING_PORT
       ),
       // inherited port that switches direction
-      arg("component Comp63 extends a.b.D { " +
-          "a.b.A sub;" +
-          "io -> sub.i;" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH
-      ),/*
+      arg("""
+          component InvalidComp63 extends a.b.D {
+            a.b.A sub;
+            io -> sub.i;
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
       // atomic component with port that switches existence
-      arg("component Comp64 { " +
-          "feature ff; " +
-          "varif (ff) { " +
-          "port out int p; " +
-          "} " +
-          "compute {" +
-          "p = 5; " +
-          "} " +
-          "}",
-        new InternalError("0xFD118")
-      ),*/
+      arg(
+        """
+          component InvalidComp64 {
+            feature ff;
+            varif (ff) {
+              port out int p;
+            }
+            compute {
+              p = 5;
+            }
+          }""", CANT_FIND_SYMBOL_IN_EXPRESSION
+      ),
       // Multiple behaviors if feature is selected
-      arg("component Comp65 { " +
-          "feature f; " +
-          "varif (f) { " +
-          "compute { } " +
-          "} " +
-          "compute { } " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR),
+      arg("""
+          component InvalidComp65 {
+            feature f;
+            varif (f) {
+              compute { }
+            }
+            compute { }
+          }""",
+        MULTIPLE_BEHAVIOR
+      ),
       // Multiple behaviors if both features are selected
-      arg("component Comp66 { " +
-          "feature f1, f2; " +
-          "varif (f1) { " +
-          "compute { } " +
-          "} " +
-          "varif (f2) { " +
-          "compute { } " +
-          "} " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR),
+      arg("""
+          component InvalidComp66 {
+            feature f1, f2;
+            varif (f1) {
+              compute { }
+            }
+            varif (f2) {
+              compute { }
+            }
+          }""",
+        MULTIPLE_BEHAVIOR
+      ),
       // Multiple fields if both features are selected
-      arg("component Comp67 { " +
-          "feature f1, f2; " +
-          "varif (f1) { " +
-          "int i = 0; " +
-          "} " +
-          "varif (f2) { " +
-          "int i = 1; " +
-          "} " +
-          "}",
-        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      arg("""
+          component InvalidComp67 {
+            feature f1, f2;
+            varif (f1) {
+              int i = 0;
+            }
+            varif (f2) {
+              int i = 1;
+            }
+          }""",
+        UNIQUE_IDENTIFIER_NAMES
+      ),
       // component that switches between atomic and decomposed with connector
-      arg("component Comp68 { " +
-          "feature f;" +
-          "port in int i;" +
-          "port out int o;" +
-          "varif (f) {" +
-          "port in int i2;" +
-          "a.b.C sub;" +
-          "i -> sub.i1;" +
-          "i2 -> sub.i2;" +
-          "sub.o -> o;" +
-          "} else {" +
-          "i -> o;" +
-          "}" +
-          "}",
-        ArcError.CONNECTORS_IN_ATOMIC
+      arg("""
+          component InvalidComp68 {
+            feature f;
+            port in int i;
+            port out int o;
+            varif (f) {
+              port in int i2;
+              a.b.C sub;
+              i -> sub.i1;
+              i2 -> sub.i2;
+              sub.o -> o;
+            } else {
+              i -> o;
+            }
+          }""",
+        CONNECTORS_IN_ATOMIC
       ),
       // Switches between automaton behaviors with preconditions
       arg(
-        "component Comp69 { " +
-          "feature f;" +
-          "varif(f){" +
-          "port in int i;" +
-          "automaton {" +
-          "initial state B;" +
-          "B -> B [i];" +
-          "}" +
-          "} else {" +
-          "port in boolean i;" +
-          "automaton {" +
-          "initial state A;" +
-          "A -> A [i == \"a\"];" +
-          "}" +
-          "}" +
-          "}",
-        new InternalError("0xB0166"), // equal not applicable
-        new InternalError("0xCC111")  // int not boolean
+        """
+          component InvalidComp69 {
+            feature f;
+            varif(f){
+              port in int i;
+              automaton {
+                initial state B;
+                B -> B [i];
+              }
+            } else {
+              port in boolean i;
+              automaton {
+                initial state A;
+                A -> A [i == "a"];
+              }
+            }
+          }""",
+        EXPR_EQUAL_OP_NOT_APPLICABLE,
+        PRECONDITION_NOT_BOOLEAN
       ),
       // Enum constants map to same value
-      arg("component Comp70(OnOff onOff) { " +
-          "varif(onOff == OnOff.OFF) {" +
-          "  automaton {" +
-          "    initial state S;" +
-          "  }" +
-          "} " +
-          "varif(onOff == OnOff.OFF) {" +
-          "  automaton {" +
-          "    initial state S;" +
-          "  }" +
-          "} " +
-          "}",
-        ArcError.MULTIPLE_BEHAVIOR),
+      arg("""
+          component InvalidComp70(OnOff onOff) {
+            varif(onOff == OnOff.OFF) {
+              automaton {
+                initial state S;
+              }
+            }
+            varif(onOff == OnOff.OFF) {
+              automaton {
+                initial state S;
+              }
+            }
+          }""",
+        MULTIPLE_BEHAVIOR
+      ),
       // Multiple identifier if feature is selected
-      arg("component Comp71(boolean i) { " +
-          "feature f1; " +
-          "varif (f1) { " +
-          "int i = 0; " +
-          "} " +
-          "}",
-        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      arg("""
+          component InvalidComp71(boolean i) {
+            feature f1;
+            varif (f1) {
+              int i = 0;
+            }
+          }""",
+        UNIQUE_IDENTIFIER_NAMES
+      ),
       // Multiple identifier if feature is selected
-      arg("component Comp72(boolean i) { " +
-          "feature f1; " +
-          "varif (f1) { " +
-          "port in int i; " +
-          "} " +
-          "}",
-        ArcError.UNIQUE_IDENTIFIER_NAMES),
+      arg("""
+          component InvalidComp72(boolean i) {
+            feature f1;
+            varif (f1) {
+              port in int i;
+            }
+          }""",
+        UNIQUE_IDENTIFIER_NAMES
+      ),
       // Multiple identifier feature should not throw exception
-      arg("component Comp73 { " +
-          "feature f; " +
-          "feature f; " +
-          "varif (f) { } " +
-          "}",
-        ArcError.UNIQUE_IDENTIFIER_NAMES,
-        ArcError.UNIQUE_IDENTIFIER_NAMES),
-      // Automaton with missing trigger symbol in one variant
-      arg("component Comp74 { " +
-          "feature f;" +
-          "varif(f) {" +
-          "port in boolean i;" +
-          "}" +
-          "automaton {" +
-          "initial state A;" +
-          "A -> A i;" +
-          "}" +
-          "}",
-        ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL
+      arg("""
+          component InvalidComp73 {
+            feature f;
+            feature f;
+            varif (f) { }
+          }""",
+        UNIQUE_IDENTIFIER_NAMES
       ),
       // Automaton with missing trigger symbol in one variant
-      arg("component Comp75 { " +
-          "feature f;" +
-          "varif(f) {" +
-          "a.b.B sub;" +
-          "port out int o;" +
-          "sub.o -> o;" +
-          "}" +
-          "automaton {" +
-          "initial state A;" +
-          "A -> A;" +
-          "}" +
-          "}",
-        ArcError.DECOMPOSED_COMPONENT_WITH_BEHAVIOR
+      arg("""
+          component InvalidComp74 {
+            feature f;
+            varif(f) {
+              port in boolean i;
+            }
+            automaton {
+              initial state A;
+              A -> A i;
+            }
+          }""",
+        CANT_FIND_MSG_EVENT_SYMBOL
+      ),
+      // Automaton in decomposed component variant
+      arg("""
+          component InvalidComp75 {
+            feature f;
+            varif(f) {
+              a.b.B sub;
+              port out int o;
+              sub.o -> o;
+            }
+            automaton {
+              initial state A;
+              A -> A;
+            }
+          }""",
+        DECOMPOSED_COMPONENT_WITH_BEHAVIOR
       ),
       // Two Initial for compute
-      arg("component Comp76 { " +
-          "feature f1, f2;" +
-          "varif(f1) {" +
-          "init {}" +
-          "}" +
-          "varif(f2) {" +
-          "init {}" +
-          "}" +
-          "compute {}" +
-          "}",
-        ArcComputeError.MULTIPLE_INIT
+      arg("""
+          component InvalidComp76 {
+            feature f1, f2;
+            varif(f1) {
+              init { }
+            }
+            varif(f2) {
+              init { }
+            }
+            compute { }
+          }""",
+        MULTIPLE_INIT
       ),
       // Init without compute
-      arg("component Comp77 { " +
-          "feature f;" +
-          "varif(f) {" +
-          "compute {}" +
-          "}" +
-          "init {}" +
-          "}",
-        ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE
+      arg("""
+          component InvalidComp77 {
+            feature f;
+            varif(f) {
+              compute { }
+            }
+            init { }
+          }""",
+        INIT_BLOCK_WITHOUT_COMPUTE
       )
     );
-  }
-
-  static class InternalError implements Error {
-
-    protected String errorCode;
-
-    public InternalError(@NotNull String errorCode) {
-      Preconditions.checkNotNull(errorCode);
-      this.errorCode = errorCode;
-    }
-
-    @Override
-    public String getErrorCode() {
-      return errorCode;
-    }
-
-    @Override
-    public String getErrorMsgFormat() {
-      return "";
-    }
   }
 }
