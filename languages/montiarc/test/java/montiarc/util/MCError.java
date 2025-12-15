@@ -8,7 +8,6 @@ import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationI
  * combination with the existing test infrastructure
  */
 public enum MCError implements Error {
-  TYPE_REF_ASSIGNMENT_ERR(VarDeclarationInitializationHasCorrectType.TYPE_REF_ASSIGNMENT_ERROR_CODE, ""),
   INCOMPATIBLE_TYPE(VarDeclarationInitializationHasCorrectType.ERROR_CODE, ""),
   DIVIDE_EXPRESSION_ERR("0xA0168", ""),
   CANT_FIND_SYMBOL("0xA0324", "Cannot find symbol %s"),
