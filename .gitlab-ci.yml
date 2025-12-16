@@ -65,14 +65,6 @@ Unit Test:
       - ./**/build/**/reports/test-coverage/jacoco.xml
     when: always
 
-Verify Formatting:
-  stage: check
-  <<: *cache_gradle_pull_only
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
-  allow_failure: false
-  script:
-    - gradle spotlessCheck --build-cache -PenableLanguageServer
-
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
   <<: *cache_gradle_pull_only
@@ -130,6 +122,14 @@ Github Mirror:
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success
+
+Verify Formatting:
+  stage: check
+  needs: []
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  allow_failure: false
+  script:
+    - gradle spotlessCheck
 
 Check Dependency Updates:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
