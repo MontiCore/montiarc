@@ -140,13 +140,7 @@ public class SynthesizeComponentFromMCBasicTypesTest extends ArcBasisTestBase {
     // Then
     Assertions.assertFalse(result4normal.getResult().isPresent());
     Assertions.assertFalse(result4qual.getResult().isPresent());
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(
-        getErrorCodes(
-          MCError.MISSING_COMPONENT,
-          MCError.MISSING_COMPONENT
-        )
-      );
+    assertThat(Log.getFindings()).isEmpty(); // Error is only logged by ISynthesizeComponent
   }
 
   @Test
