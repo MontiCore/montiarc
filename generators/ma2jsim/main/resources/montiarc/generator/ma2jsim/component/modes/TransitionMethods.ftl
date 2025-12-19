@@ -14,16 +14,16 @@
   protected void transition_${transitionIndex}() {
     <@logTransition transition/>
 
-    this.currentMode = Mode.${transition.getTargetName()};
-    this.context.<@MethodNames.modeTeardown transition.getSourceNameSymbol()/>();
-    this.context.<@MethodNames.modeSetup transition.getTargetNameSymbol()/>();
-    this.context.<@MethodNames.modeInit transition.getTargetNameSymbol()/>();
+    this.currentMode = Mode.${transition.getTarget().getName()};
+    this.context.<@MethodNames.modeTeardown transition.getSource().getNameSymbol()/>();
+    this.context.<@MethodNames.modeSetup transition.getTarget().getNameSymbol()/>();
+    this.context.<@MethodNames.modeInit transition.getTarget().getNameSymbol()/>();
   }
 </#list>
 
 <#macro logTransition transition>
-  <#assign source = transition.getSourceNameSymbol().getAstNode()>
-  <#assign target = transition.getTargetNameSymbol().getAstNode()>
+  <#assign source = transition.getSource().getNameSymbol().getAstNode()>
+  <#assign target = transition.getTarget().getNameSymbol().getAstNode()>
   <#assign removedSubs = helper.getInstancesFromMode(source)>
   <#assign removedConnectors = helper.getConnectors(source)>
   <#assign addedSubs = helper.getInstancesFromMode(target)>

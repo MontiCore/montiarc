@@ -83,10 +83,10 @@ public class SMTAutomaton implements ISMTAutomaton {
 
     // check source state
 
-    BoolExpr checkSourceState = smtState.checkConstructor(src, trans.getSourceNameSymbol());
+    BoolExpr checkSourceState = smtState.checkConstructor(src, trans.getSource().getNameSymbol());
 
     // check the next state
-    BoolExpr checkTargetState = smtState.checkConstructor(tgt, trans.getTargetNameSymbol());
+    BoolExpr checkTargetState = smtState.checkConstructor(tgt, trans.getTarget().getNameSymbol());
 
     // check input value
     BoolExpr checkInput = evaluateGuard(trans, in, src);

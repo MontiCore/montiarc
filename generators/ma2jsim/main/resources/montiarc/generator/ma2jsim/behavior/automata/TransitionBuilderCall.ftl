@@ -31,8 +31,8 @@ ${tc.signature("automaton", "transition", "noInputsForActions", "useSyncMsg", "i
 </#assign>
 
 new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
-  .setSource(states.${prefixes.state()}${transition.getSourceName()})
-  .setTarget(states.${prefixes.state()}${transition.getTargetName()})
+  .setSource(states.${prefixes.state()}${transition.getSource().getName()})
+  .setTarget(states.${prefixes.state()}${transition.getTarget().getName()})
   .setGuard(<@guard/>)
   .setAction(<@action/>)
   .build()
@@ -52,8 +52,8 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
 </#macro>
 
 <#macro action>
-  <#assign source = transition.getSourceNameDefinition()>
-  <#assign target = transition.getTargetNameDefinition()>
+  <#assign source = transition.getSource().getNameDefinition()>
+  <#assign target = transition.getTarget().getNameDefinition()>
   <@actionCast/> (${lambdaArgs}) -> {
   <#-- Calculate whether there the current state is in a state hierarchy that also contains the target state -->
   <#assign commonSuperstate = automaton.findCommonSuperstate(source, target)!>

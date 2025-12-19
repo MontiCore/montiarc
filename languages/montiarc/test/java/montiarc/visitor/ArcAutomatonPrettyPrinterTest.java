@@ -159,18 +159,18 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Check transitions
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(3));
     ASTSCTransition opened_locked = (ASTSCTransition) statechart.getSCStatechartElement(3);
-    Assertions.assertEquals("Opened", opened_locked.getSourceName());
-    Assertions.assertEquals("Locked", opened_locked.getTargetName());
+    Assertions.assertEquals("Opened", opened_locked.getSource().getName());
+    Assertions.assertEquals("Locked", opened_locked.getTarget().getName());
 
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(4));
     ASTSCTransition locked_closed = (ASTSCTransition) statechart.getSCStatechartElement(4);
-    Assertions.assertEquals("Locked", locked_closed.getSourceName());
-    Assertions.assertEquals("Closed", locked_closed.getTargetName());
+    Assertions.assertEquals("Locked", locked_closed.getSource().getName());
+    Assertions.assertEquals("Closed", locked_closed.getTarget().getName());
 
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(5));
     ASTSCTransition closed_opened = (ASTSCTransition) statechart.getSCStatechartElement(5);
-    Assertions.assertEquals("Closed", closed_opened.getSourceName());
-    Assertions.assertEquals("Opened", closed_opened.getTargetName());
+    Assertions.assertEquals("Closed", closed_opened.getSource().getName());
+    Assertions.assertEquals("Opened", closed_opened.getTarget().getName());
   }
 
   @Test
@@ -193,14 +193,14 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(3));
     ASTSCTransition opened_closed = (ASTSCTransition) statechart.getSCStatechartElement(3);
-    Assertions.assertEquals("Opened", opened_closed.getSourceName());
-    Assertions.assertEquals("Closed", opened_closed.getTargetName());
+    Assertions.assertEquals("Opened", opened_closed.getSource().getName());
+    Assertions.assertEquals("Closed", opened_closed.getTarget().getName());
 
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(4));
     ASTSCTransition closed_opened = (ASTSCTransition) statechart.getSCStatechartElement(4);
-    Assertions.assertEquals("Closed", closed_opened.getSourceName());
-    Assertions.assertEquals("Opened", closed_opened.getTargetName());
+    Assertions.assertEquals("Closed", closed_opened.getSource().getName());
+    Assertions.assertEquals("Opened", closed_opened.getTarget().getName());
 
     // Check guard
     Assertions.assertInstanceOf(ASTNameExpression.class, ((ASTTransitionBody) closed_opened.getSCTBody()).getPre());
@@ -209,14 +209,14 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(5));
     ASTSCTransition closed_locked = (ASTSCTransition) statechart.getSCStatechartElement(5);
-    Assertions.assertEquals("Closed", closed_locked.getSourceName());
-    Assertions.assertEquals("Locked", closed_locked.getTargetName());
+    Assertions.assertEquals("Closed", closed_locked.getSource().getName());
+    Assertions.assertEquals("Locked", closed_locked.getTarget().getName());
 
     //check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(6));
     ASTSCTransition locked_closed = (ASTSCTransition) statechart.getSCStatechartElement(6);
-    Assertions.assertEquals("Locked", locked_closed.getSourceName());
-    Assertions.assertEquals("Closed", locked_closed.getTargetName());
+    Assertions.assertEquals("Locked", locked_closed.getSource().getName());
+    Assertions.assertEquals("Closed", locked_closed.getTarget().getName());
 
     // Check guard
     Assertions.assertInstanceOf(ASTEqualsExpression.class, ((ASTTransitionBody) locked_closed.getSCTBody()).getPre());
@@ -252,14 +252,14 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(3));
     ASTSCTransition opened_closed = (ASTSCTransition) statechart.getSCStatechartElement(3);
-    Assertions.assertEquals("Opened", opened_closed.getSourceName());
-    Assertions.assertEquals("Closed", opened_closed.getTargetName());
+    Assertions.assertEquals("Opened", opened_closed.getSource().getName());
+    Assertions.assertEquals("Closed", opened_closed.getTarget().getName());
 
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(4));
     ASTSCTransition closed_opened = (ASTSCTransition) statechart.getSCStatechartElement(4);
-    Assertions.assertEquals("Closed", closed_opened.getSourceName());
-    Assertions.assertEquals("Opened", closed_opened.getTargetName());
+    Assertions.assertEquals("Closed", closed_opened.getSource().getName());
+    Assertions.assertEquals("Opened", closed_opened.getTarget().getName());
 
     // Check guard
     Assertions.assertInstanceOf(ASTNameExpression.class, ((ASTTransitionBody) closed_opened.getSCTBody()).getPre());
@@ -283,8 +283,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(5));
     ASTSCTransition closed_locked = (ASTSCTransition) statechart.getSCStatechartElement(5);
-    Assertions.assertEquals("Closed", closed_locked.getSourceName());
-    Assertions.assertEquals("Locked", closed_locked.getTargetName());
+    Assertions.assertEquals("Closed", closed_locked.getSource().getName());
+    Assertions.assertEquals("Locked", closed_locked.getTarget().getName());
 
     // Check reaction
     Assertions.assertInstanceOf(ASTMCJavaBlock.class, ((ASTTransitionBody) closed_locked.getSCTBody())
@@ -312,8 +312,8 @@ public class ArcAutomatonPrettyPrinterTest extends MontiArcTestBase {
     // Check transition
     Assertions.assertInstanceOf(ASTSCTransition.class, statechart.getSCStatechartElement(6));
     ASTSCTransition locked_closed = (ASTSCTransition) statechart.getSCStatechartElement(6);
-    Assertions.assertEquals("Locked", locked_closed.getSourceName());
-    Assertions.assertEquals("Closed", locked_closed.getTargetName());
+    Assertions.assertEquals("Locked", locked_closed.getSource().getName());
+    Assertions.assertEquals("Closed", locked_closed.getTarget().getName());
 
     // Check guard
     Assertions.assertInstanceOf(ASTEqualsExpression.class, ((ASTTransitionBody) locked_closed.getSCTBody()).getPre());

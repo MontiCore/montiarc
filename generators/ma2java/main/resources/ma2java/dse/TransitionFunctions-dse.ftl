@@ -2,11 +2,11 @@
 ${tc.signature("state", "automaton", "input", "output", "result", "counter")}
 
 <#if ast.getSCTBody().isPresentPre()>
-protected void from${state.getName()}To${ast.targetName}${counter}() {
-  montiarc.rte.log.Log.trace("Transition from${state.getName()}To${ast.targetName}${counter}");
+protected void from${state.getName()}To${ast.getTarget().getName()}${counter}() {
+  montiarc.rte.log.Log.trace("Transition from${state.getName()}To${ast.getTarget().getName()}${counter}");
 <#else>
-protected void from${state.getName()}To${ast.targetName}NoGuard${counter}() {
-  montiarc.rte.log.Log.trace("Transition from${state.getName()}To${ast.targetName}NoGuard${counter}");
+protected void from${state.getName()}To${ast.getTarget().getName()}NoGuard${counter}() {
+  montiarc.rte.log.Log.trace("Transition from${state.getName()}To${ast.getTarget().getName()}NoGuard${counter}");
 </#if>
 
   // Context for Solver
@@ -17,9 +17,9 @@ protected void from${state.getName()}To${ast.targetName}NoGuard${counter}() {
 
 	// add the branch condition to taken branches
 	<#if ast.getSCTBody().isPresentPre()>
-		montiarc.rte.dse.TestController.addBranch(${compHelperDse.printExpression(ast.getSCTBody().getPre())}, instanceName + "From${state.getName()}To${ast.targetName}${counter}");
+		montiarc.rte.dse.TestController.addBranch(${compHelperDse.printExpression(ast.getSCTBody().getPre())}, instanceName + "From${state.getName()}To${ast.getTarget().getName()}${counter}");
 	<#else>
-		montiarc.rte.dse.TestController.addBranch(ctx.mkBool(true), instanceName + "From${state.getName()}To${ast.targetName}NoGuard${counter}");
+		montiarc.rte.dse.TestController.addBranch(ctx.mkBool(true), instanceName + "From${state.getName()}To${ast.getTarget().getName()}NoGuard${counter}");
 	</#if>
 
   // exit state(s)
@@ -39,5 +39,5 @@ protected void from${state.getName()}To${ast.targetName}NoGuard${counter}() {
   <#list autHelper.getEnteringParentStatesFromWith(automaton, state, ast) as state>
     entry${state.getName()}();
   </#list>
-  this.transitionTo${ast.targetName}();
+  this.transitionTo${ast.getTarget().getName()}();
 }

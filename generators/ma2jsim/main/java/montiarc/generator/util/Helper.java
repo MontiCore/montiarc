@@ -130,14 +130,14 @@ public class Helper {
 
   public List<ASTSCTransition> filterTransitionsForSourceMode(List<ASTSCTransition> transitions, String srcMode) {
     return transitions.stream()
-      .filter(tr -> tr.getSourceName().equals(srcMode))
+      .filter(tr -> tr.getSource().getName().equals(srcMode))
       .collect(Collectors.toList());
   }
 
   public List<ASTSCTransition> getTransitionsForTickEventFromState(ASTModeAutomaton modeAutomaton, ASTArcMode srcMode) {
     Preconditions.checkArgument(srcMode.isPresentSymbol());
     return getTransitionsWithoutEvent(modeAutomaton).stream()
-      .filter(tr -> tr.getSourceNameSymbol().equals(srcMode.getSymbol()))
+      .filter(tr -> tr.getSource().getNameSymbol().equals(srcMode.getSymbol()))
       .collect(Collectors.toList());
   }
 
@@ -300,7 +300,7 @@ public class Helper {
 
   /** Prints the transition signature: Source, Target, Guard, and Event. But not the action. */
   public String printTransitionSignature(ASTSCTransition tr) {
-    StringBuilder builder = new StringBuilder(tr.getSourceName() + " -> " + tr.getTargetName());
+    StringBuilder builder = new StringBuilder(tr.getSource().getName() + " -> " + tr.getTarget().getName());
 
     if (tr.getSCTBody() instanceof ASTTransitionBody) {
       IndentPrinter printer = new IndentPrinter();

@@ -32,7 +32,7 @@ public class ArcAutomatonHelper {
     Preconditions.checkArgument(hasTransitionWithoutGuardFrom(automaton, srcState));
 
     List<ASTSCTransition> transitions = automaton.streamTransitions().filter(tr ->
-        tr.getSourceName().equals(srcState.getName()) &&
+        tr.getSource().getName().equals(srcState.getName()) &&
           !((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
       .toList();
 
@@ -45,7 +45,7 @@ public class ArcAutomatonHelper {
     Preconditions.checkArgument(automaton.streamStates().anyMatch(state -> state.equals(srcState)));
 
     return automaton.streamTransitions()
-      .filter(tr -> tr.getSourceName().equals(srcState.getName()) && ((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
+      .filter(tr -> tr.getSource().getName().equals(srcState.getName()) && ((ASTTransitionBody) tr.getSCTBody()).isPresentPre())
       .collect(Collectors.toList());
   }
 
@@ -65,7 +65,7 @@ public class ArcAutomatonHelper {
     );
 
     return automaton.streamTransitions()
-      .filter(tr -> tr.getSourceName().equals(srcState.getName()))
+      .filter(tr -> tr.getSource().getName().equals(srcState.getName()))
       .map(tr -> (ASTTransitionBody) tr.getSCTBody())
       .anyMatch(tr -> !tr.isPresentPre());
   }
@@ -181,7 +181,7 @@ public class ArcAutomatonHelper {
     Preconditions.checkNotNull(automaton);
     Preconditions.checkNotNull(from);
     Preconditions.checkNotNull(transition);
-    ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTargetName()).orElseThrow().getAstNode();
+    ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTarget().getName()).orElseThrow().getAstNode();
     return getDifferingParents(automaton, from, to);
   }
 
@@ -191,7 +191,7 @@ public class ArcAutomatonHelper {
     Preconditions.checkNotNull(automaton);
     Preconditions.checkNotNull(from);
     Preconditions.checkNotNull(transition);
-    ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTargetName()).orElseThrow().getAstNode();
+    ASTSCState to = from.getEnclosingScope().resolveSCState(transition.getTarget().getName()).orElseThrow().getAstNode();
     List<ASTSCState> res = getDifferingParents(automaton, to, from);
     Collections.reverse(res);
     return res;

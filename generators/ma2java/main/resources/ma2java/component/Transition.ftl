@@ -21,7 +21,7 @@ ${result}
 <#list autHelper.getEnteringParentStatesFromWith(automaton, state, ast) as state>
   entry${state.getName()}();
 </#list>
-this.transitionTo${ast.targetName}();
+this.transitionTo${ast.getTarget().getName()}();
 <#if ast.getSCTBody().isPresentPre()>
 }
 </#if>

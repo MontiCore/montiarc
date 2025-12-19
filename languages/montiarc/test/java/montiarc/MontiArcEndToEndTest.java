@@ -179,30 +179,30 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("MissingStateInTransitionTest1",
         mpk(PKG_AUT, "MissingStateInTransition1.arc"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition1.arc", 12, 5, 12, 12, CANT_FIND_SOURCE, "M")
+        fn(ERROR, PKG_AUT, "MissingStateInTransition1.arc", 12, 5, 12, 6, CANT_FIND_SOURCE, "M")
       ),
       arg("MissingStateInTransitionTest2",
         mpk(PKG_AUT, "MissingStateInTransition2.arc"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition2.arc", 12, 5, 12, 12, CANT_FIND_TARGET, "M")
+        fn(ERROR, PKG_AUT, "MissingStateInTransition2.arc", 12, 10, 12, 11, CANT_FIND_TARGET, "M")
       ),
       arg("MissingStateInTransitionTest3",
         mpk(PKG_AUT, "MissingStateInTransition3.arc"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition3.arc", 12, 5, 12, 14, CANT_FIND_SOURCE, "M1"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition3.arc", 12, 5, 12, 14, CANT_FIND_TARGET, "M2")
+        fn(ERROR, PKG_AUT, "MissingStateInTransition3.arc", 12, 5,  12, 7,  CANT_FIND_SOURCE, "M1"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition3.arc", 12, 11, 12, 13, CANT_FIND_TARGET, "M2")
       ),
       arg("MissingStateInTransitionTest4",
         mpk(PKG_AUT, "MissingStateInTransition4.arc"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition4.arc", 12, 5, 12, 13, CANT_FIND_SOURCE, "M1"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition4.arc", 13, 5, 13, 13, CANT_FIND_TARGET, "M2")
+        fn(ERROR, PKG_AUT, "MissingStateInTransition4.arc", 12, 5,  12, 7,  CANT_FIND_SOURCE, "M1"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition4.arc", 13, 10, 13, 12, CANT_FIND_TARGET, "M2")
       ),
       arg("MissingStateInTransitionTest5",
         mpk(PKG_AUT, "MissingStateInTransition5.arc"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 12, 7, 12, 16, CANT_FIND_SOURCE, "M1"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 12, 7, 12, 16, CANT_FIND_TARGET, "M2"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 16, 7, 16, 16, CANT_FIND_SOURCE, "M3"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 16, 7, 16, 16, CANT_FIND_TARGET, "M4"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 18, 9, 18, 18, CANT_FIND_SOURCE, "M5"),
-        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 18, 9, 18, 18, CANT_FIND_TARGET, "M6")
+        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 12, 7,  12, 9,  CANT_FIND_SOURCE, "M1"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 12, 13, 12, 15, CANT_FIND_TARGET, "M2"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 16, 7,  16, 9,  CANT_FIND_SOURCE, "M3"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 16, 13, 16, 15, CANT_FIND_TARGET, "M4"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 18, 9,  18, 11, CANT_FIND_SOURCE, "M5"),
+        fn(ERROR, PKG_AUT, "MissingStateInTransition5.arc", 18, 15, 18, 17, CANT_FIND_TARGET, "M6")
       ),
       arg("MissingSymbolsInEntryActionTest1",
         mpk(PKG_AUT, "MissingSymbolsInEntryAction1.arc"),
