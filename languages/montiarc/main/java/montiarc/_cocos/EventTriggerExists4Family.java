@@ -86,7 +86,7 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTMsgEvent, BoolExpr> msgEvent : messageEventConditions.entrySet()) {
 

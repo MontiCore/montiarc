@@ -81,7 +81,7 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
       allParameters = new ArrayList<>(mainParameters);
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (ASTArcParameter param : allParameters) {
       if (!param.isPresentDefault())

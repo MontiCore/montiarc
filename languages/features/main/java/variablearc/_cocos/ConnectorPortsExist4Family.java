@@ -164,7 +164,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Check for each connector, if ports or components are missing
     for (ASTConnector connector : allConnectors) {

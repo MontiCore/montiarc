@@ -122,7 +122,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Grouping elements by name
     Map<String, List<ElementCondition>> grouped = new HashMap<>();

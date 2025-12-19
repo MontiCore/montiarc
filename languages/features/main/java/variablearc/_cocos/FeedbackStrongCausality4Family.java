@@ -106,7 +106,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Indexing subcomponents, to later access them in the edge-matrix
     int subIndex = 1;

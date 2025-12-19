@@ -167,7 +167,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Setting the conditions for each extension
     for (ComponentExtension ext : currentComponentExtensions) {

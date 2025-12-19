@@ -87,7 +87,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Adding all subcomponent-conditions
     List<BoolExpr> allSubcomponentConditions = new ArrayList<>();

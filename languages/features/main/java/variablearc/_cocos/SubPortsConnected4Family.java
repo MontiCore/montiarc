@@ -106,7 +106,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (ASTComponentInstance subComp : subcomponentConditions.keySet()) {
 

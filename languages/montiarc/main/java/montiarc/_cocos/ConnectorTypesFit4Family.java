@@ -112,7 +112,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTComponentInstance, BoolExpr> subEntry : subcomponentCondition.entrySet()) {
 

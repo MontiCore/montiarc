@@ -72,7 +72,7 @@ public class PortHeritageTypeFits4Family implements ArcBasisASTArcComponentTypeC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     List<BoolExpr> portExpressionList = new ArrayList<>();
 

@@ -103,7 +103,7 @@ public class PortReadWriteInCompute4Family implements ArcBasisASTArcComponentTyp
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTArcCompute, BoolExpr> computeEntry : computeConditions.entrySet()) {
 

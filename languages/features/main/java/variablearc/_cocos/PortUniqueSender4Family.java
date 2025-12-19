@@ -114,7 +114,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Processing Sub-Components, that are defined within the component, but not in a variation block
     for (SubcomponentSymbol sub : node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).map(ASTComponentInstance::getSymbol).toList()) {

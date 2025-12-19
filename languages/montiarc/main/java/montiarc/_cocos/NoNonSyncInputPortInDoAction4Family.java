@@ -116,7 +116,7 @@ public class NoNonSyncInputPortInDoAction4Family implements ArcBasisASTArcCompon
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTSCDoAction, BoolExpr> doEntry : doConditions.entrySet()) {
 

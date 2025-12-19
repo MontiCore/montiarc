@@ -83,7 +83,7 @@ public class NoPortInFieldDeclaration4Family implements ArcBasisASTArcComponentT
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTArcField, BoolExpr> fieldEntry : fieldConditions.entrySet()) {
 

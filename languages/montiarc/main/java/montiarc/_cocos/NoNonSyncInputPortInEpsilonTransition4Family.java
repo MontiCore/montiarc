@@ -117,7 +117,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTTransitionBody, BoolExpr> doEntry : transitionConditions.entrySet()) {
 

@@ -126,7 +126,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Guard guard : allGuards) {
       List<ASTExpression> guardExpressions = new ArrayList<>();

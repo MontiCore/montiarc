@@ -119,7 +119,7 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTTransitionBody, BoolExpr> transitionEntry : transitionConditions.entrySet()) {
 

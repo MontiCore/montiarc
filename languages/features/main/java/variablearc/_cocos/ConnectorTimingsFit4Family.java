@@ -110,7 +110,7 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
       }
 
         // Adding Constraints
-        BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+        BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
         for (ASTConnector connector : allConnectors) {
             var source = connector.getSource();

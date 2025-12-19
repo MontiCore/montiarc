@@ -156,7 +156,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if(node instanceof ASTVariableArcFullVariantComponentType)
-        featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+        featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     for (Map.Entry<ASTSwitchStatement, BoolExpr> switchStatementEntry : switchStatementConditions.entrySet()) {
 

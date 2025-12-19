@@ -96,7 +96,7 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     // Define connectivity with implications
     for (ASTConnector connector : allConnectors) {

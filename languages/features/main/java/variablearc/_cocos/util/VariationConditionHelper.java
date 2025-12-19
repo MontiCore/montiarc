@@ -2,6 +2,9 @@
 package variablearc._cocos.util;
 
 import arcbasis._ast.ASTArcComponentType;
+import com.microsoft.z3.BoolExpr;
+import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanAndOpExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanOrOpExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTEqualsExpression;
@@ -10,7 +13,6 @@ import de.monticore.expressions.commonexpressions._ast.ASTLogicalNotExpression;
 import de.monticore.expressions.commonexpressions._symboltable.ICommonExpressionsScope;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
-import com.microsoft.z3.*;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc.evaluation.ExpressionSet;
@@ -18,51 +20,45 @@ import variablearc.evaluation.ExpressionSolver;
 import variablearc.evaluation.expressions.Expression;
 import variablearc.evaluation.expressions.NegatedExpression;
 
-import java.util.*;
-
 import java.util.ArrayList;
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class VariationConditionHelper {
 
   private static Map<String, ICommonExpressionsScope> fieldAccessScopes = new HashMap<>();
 
-  public static void resetFieldAccessScopeMap(){
-    fieldAccessScopes = new HashMap<>();
-  }
   public static ExpressionSet getExpressionSetCopyWithContext(ExpressionSet exprSet) {
 
     List<Expression> expressionCopies = new ArrayList<>();
 
-      ArrayList<Expression> originalExpressions = new ArrayList<>();
-      ArrayList<Expression> newExpressions = new ArrayList<>();
-      originalExpressions.addAll(exprSet.getExpressions());
-      ASTNameExpressionChangeContext changeContextNameExpression = new ASTNameExpressionChangeContext();
+    ArrayList<Expression> originalExpressions = new ArrayList<>(exprSet.getExpressions());
+    ASTNameExpressionChangeContext changeContextNameExpression = new ASTNameExpressionChangeContext();
 
-      VariableArcTraverser traverser = VariableArcMill.traverser();
-      traverser.add4ExpressionsBasis(changeContextNameExpression);
+    VariableArcTraverser traverser = VariableArcMill.traverser();
+    traverser.add4ExpressionsBasis(changeContextNameExpression);
 
-      for(Expression expr : originalExpressions){
-        saveFieldAccessScopesFromExpression(expr.getAstExpression());
-        Expression copiedExpression;
-        if(expr instanceof NegatedExpression) {
-          copiedExpression = new NegatedExpression(expr.getAstExpression().deepClone());
-        }else{
-          copiedExpression = new Expression(expr.getAstExpression().deepClone());
-        }
-        expr.getAstExpression().accept(traverser);
-        copiedExpression.getAstExpression().accept(traverser);
-        expressionCopies.add(copiedExpression);
+    for (Expression expr : originalExpressions) {
+      saveFieldAccessScopesFromExpression(expr.getAstExpression());
+      Expression copiedExpression;
+      if (expr instanceof NegatedExpression) {
+        copiedExpression = new NegatedExpression(expr.getAstExpression().deepClone());
+      } else {
+        copiedExpression = new Expression(expr.getAstExpression().deepClone());
       }
-      changeContextNameExpression.clearScopeMap();
+      expr.getAstExpression().accept(traverser);
+      copiedExpression.getAstExpression().accept(traverser);
+      expressionCopies.add(copiedExpression);
+    }
+    changeContextNameExpression.clearScopeMap();
 
     return new ExpressionSet(expressionCopies);
   }
 
-
-  private static void saveFieldAccessScopesFromExpression(ASTExpression expr){
-    if(expr instanceof ASTFieldAccessExpression){
-      fieldAccessScopes.put(((ASTFieldAccessExpression) expr).getName(),((ASTFieldAccessExpression) expr).getEnclosingScope());
+  private static void saveFieldAccessScopesFromExpression(ASTExpression expr) {
+    if (expr instanceof ASTFieldAccessExpression) {
+      fieldAccessScopes.put(((ASTFieldAccessExpression) expr).getName(), ((ASTFieldAccessExpression) expr).getEnclosingScope());
     }
 
     if (expr instanceof ASTBooleanAndOpExpression) {
@@ -74,7 +70,7 @@ public class VariationConditionHelper {
       saveFieldAccessScopesFromExpression(((ASTBooleanOrOpExpression) expr).getRight());
     }
 
-    if(expr instanceof ASTEqualsExpression){
+    if (expr instanceof ASTEqualsExpression) {
       saveFieldAccessScopesFromExpression(((ASTEqualsExpression) expr).getLeft());
       saveFieldAccessScopesFromExpression(((ASTEqualsExpression) expr).getRight());
     }
@@ -83,18 +79,16 @@ public class VariationConditionHelper {
       saveFieldAccessScopesFromExpression(((ASTLogicalNotExpression) expr).getExpression());
   }
 
-
   public static ASTExpression changeNameExpressionInCondition(ASTExpression expr) {
 
     if (expr instanceof ASTNameExpression) {
 
-      if ((((ASTNameExpression) expr).getName().contains(expr.getEnclosingScope().getSpanningSymbol().getPackageName()) && !expr.getEnclosingScope().getSpanningSymbol().getPackageName().isEmpty() ) || ((ASTNameExpression) expr).getName().contains(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "."))
+      if ((((ASTNameExpression) expr).getName().contains(expr.getEnclosingScope().getSpanningSymbol().getPackageName()) && !expr.getEnclosingScope().getSpanningSymbol().getPackageName().isEmpty()) || ((ASTNameExpression) expr).getName().contains(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "."))
         return expr;
 
       ((ASTNameExpression) expr).setName(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "." + ((ASTNameExpression) expr).getName());
       return expr;
-    }
-    else if(expr instanceof ASTFieldAccessExpression){
+    } else if (expr instanceof ASTFieldAccessExpression) {
       expr.setEnclosingScope(fieldAccessScopes.get(((ASTFieldAccessExpression) expr).getName()));
     }
 
@@ -107,7 +101,7 @@ public class VariationConditionHelper {
       changeNameExpressionInCondition(((ASTBooleanOrOpExpression) expr).getRight());
     }
 
-    if(expr instanceof ASTEqualsExpression){
+    if (expr instanceof ASTEqualsExpression) {
       changeNameExpressionInCondition(((ASTEqualsExpression) expr).getLeft());
       changeNameExpressionInCondition(((ASTEqualsExpression) expr).getRight());
     }
@@ -135,32 +129,13 @@ public class VariationConditionHelper {
     return expr;
   }
 
-
-
-  public static String retrieveConditionExpression(ASTExpression expr) {
-    if (expr instanceof ASTNameExpression)
-      return ((ASTNameExpression) expr).getName();
-
-    if (expr instanceof ASTBooleanAndOpExpression)
-      return retrieveConditionExpression(((ASTBooleanAndOpExpression) expr).getLeft()) + ((ASTBooleanAndOpExpression) expr).getOperator() + retrieveConditionExpression(((ASTBooleanAndOpExpression) expr).getRight());
-
-    if (expr instanceof ASTBooleanOrOpExpression)
-      return retrieveConditionExpression(((ASTBooleanOrOpExpression) expr).getLeft()) + ((ASTBooleanOrOpExpression) expr).getOperator() + retrieveConditionExpression(((ASTBooleanOrOpExpression) expr).getRight());
-
-    if (expr instanceof ASTLogicalNotExpression)
-      return "!" + retrieveConditionExpression(((ASTLogicalNotExpression) expr).getExpression());
-
-    return "";
-  }
-
-  public static BoolExpr getFeatureConstraints(ASTArcComponentType node, List<ExpressionSet> allConstraints, List<String> allFeatures, ExpressionSolver expSolver) {
+  public static BoolExpr getFeatureConstraints(ASTArcComponentType node, ExpressionSet allConstraints, List<String> allFeatures, ExpressionSolver expSolver) {
     Context ctx = expSolver.getContext();
     BoolExpr featureConstraints = ctx.mkTrue();
 
-    if (allConstraints.isEmpty() || !node.isPresentSymbol())
-      return featureConstraints;
+    if (allConstraints.isEmpty() || !node.isPresentSymbol()) return featureConstraints;
 
-    for (Expression constraintExpr : allConstraints.get(0).getExpressions()) {
+    for (Expression constraintExpr : allConstraints.getExpressions()) {
       boolean prefixEmpty = constraintExpr.getPrefix().isEmpty();
       ExpressionSet constraintExprSet;
       if (!prefixEmpty) {
@@ -196,7 +171,7 @@ public class VariationConditionHelper {
       Context ctx = ExpressionSolverService.getContext();
       Expr arg = e.getArgs()[0];
       if (arg instanceof BoolExpr) {
-        return ctx.mkEq((BoolExpr) arg, ctx.mkFalse());
+        return ctx.mkEq(arg, ctx.mkFalse());
       }
     }
     return e;

@@ -153,7 +153,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
 
     for (ASTConnector connector : allConnectors) {

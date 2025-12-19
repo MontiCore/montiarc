@@ -144,7 +144,7 @@ public class ExpressionStatementIsValid4Family implements ArcBasisASTArcComponen
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints, allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
 
     List<ASTExpression> possibleExpressions = new ArrayList<>();
     for (Map.Entry<ASTExpressionStatement, BoolExpr> expressionEntry : expressionStatementConditions.entrySet()) {
