@@ -45,13 +45,13 @@ public class OnlyAssignmentOrCallExpressionStatementTest extends MontiArcTestBas
         "component Comp1 { }"
       ),
       Arguments.of(
-        "component Comp2 { int x; compute { x++; } }"
+        "component Comp2 { int x = 0; compute { x++; } }"
       ),
       Arguments.of(
-        "component Comp3 { int x; compute { x = 1 + 2; } }"
+        "component Comp3 { int x = 0; compute { x = 1 + 2; } }"
       ),
       Arguments.of(
-        "component Comp4 { int x; compute { } init { x = 42; } }"
+        "component Comp4 { int x = 0; compute { } init { x = 42; } }"
       ),
       Arguments.of(
         "component Comp5 { compute { System.out.println(\"Test\"); } }"
@@ -85,15 +85,15 @@ public class OnlyAssignmentOrCallExpressionStatementTest extends MontiArcTestBas
         ArcError.INVALID_STATEMENT
       ),
       arg(
-        "component Comp2 { int x; compute { x; } }",
+        "component Comp2 { int x = 0; compute { x; } }",
         ArcError.INVALID_STATEMENT
       ),
       arg(
-        "component Comp3 { int x; compute { x + 1; } }",
+        "component Comp3 { int x = 0; compute { x + 1; } }",
         ArcError.INVALID_STATEMENT
       ),
       arg(
-        "component Comp4 { int x;" +
+        "component Comp4 { int x = 0;" +
           "compute { " +
           "true;" +
           "b && true;" +

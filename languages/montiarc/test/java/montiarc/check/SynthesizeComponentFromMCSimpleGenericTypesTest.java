@@ -223,8 +223,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(MCError.MISSING_COMPONENT));
+    assertThat(getLoggedErrorCodes()).isEmpty(); // Error logged by ISynthesizeComponent
   }
 
   @Test
@@ -273,8 +272,7 @@ public class SynthesizeComponentFromMCSimpleGenericTypesTest extends MontiArcTes
 
     // Then
     Assertions.assertFalse(resultWrapper.getResult().isPresent());
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(MCError.MISSING_COMPONENT));
+    assertThat(getLoggedErrorCodes()).isEmpty(); // Error logged by ISynthesizeComponent
   }
 
   /**
