@@ -5,6 +5,7 @@ classdiagram lang {
 
   public class Simulation {
     public static void stop();
+    public static Duration getTickLength();
   }
 
   public class Timer {
@@ -22,6 +23,8 @@ classdiagram lang {
     protected long milliseconds;
 
     protected Duration();
+
+    public long getInMilliseconds();
 
     public Duration add(Duration other);
     public Duration subtract(Duration other);

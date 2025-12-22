@@ -8,6 +8,11 @@ public class Duration extends DurationTOP {
   }
 
   @Override
+  public long getInMilliseconds() {
+    return milliseconds;
+  }
+
+  @Override
   public Duration add(Duration other) {
     return new Duration(milliseconds + other.milliseconds);
   }

@@ -29,4 +29,8 @@ public class Simulation extends SimulationTOP {
     if (coordinatingScheduler == null) throw new RuntimeException("No simulation is running, cannot stop simulation.");
     coordinatingScheduler.stop();
   }
+
+  public static Duration getTickDuration() {
+    return Duration.ofMilliseconds(nanosecondsPerTick / 1000000);
+  }
 }
