@@ -6,7 +6,7 @@
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 interface ${ast.getName()}${suffixes.features()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/>{
 
-<#list helper.getFeatures(ast) as feature>
+<#list helper.getComponentHelper().getFeatures(ast) as feature>
     boolean ${prefixes.feature()}${feature.getName()}();
 </#list>
 }

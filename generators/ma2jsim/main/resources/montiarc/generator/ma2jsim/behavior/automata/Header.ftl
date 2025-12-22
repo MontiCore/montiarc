@@ -8,6 +8,6 @@ ${tc.signature("automaton")}
 <#assign SYNC_MSG> ${ast.getName()}${suffixes.syncMsg()} <@Util.printTypeParameters ast false/> </#assign>
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
-public <#if isTop>abstract</#if> class ${ast.getName()}${suffixes.automaton()}${helper.variantSuffix(ast.getSymbol())}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/>
+public <#if isTop>abstract</#if> class ${ast.getName()}${suffixes.automaton()}${helper.getVariantHelper().variantSuffix(ast.getSymbol())}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/>
   extends montiarc.rte.automaton.Automaton${"<"} ${CONTEXT}, ${SYNC_MSG} ${">"}
   implements ${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/>

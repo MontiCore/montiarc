@@ -4,16 +4,16 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#list ast.getSymbol().getAllIncomingPorts() as portSym>
-  <#assign portAccessor>this.${prefixes.port()}${portSym.getName()}${helper.portVariantSuffix(ast, portSym)}()</#assign>
-  <#assign existenceConditions = helper.getExistenceCondition(ast, portSym)/>
-  <#assign methodName = prefixes.portValueOf() + portSym.getName() + helper.portVariantSuffix(ast, portSym)/>
+  <#assign portAccessor>this.${prefixes.port()}${portSym.getName()}${helper.getVariantHelper().portVariantSuffix(ast, portSym)}()</#assign>
+  <#assign existenceConditions = helper.getVariantHelper().getExistenceCondition(ast, portSym)/>
+  <#assign methodName = prefixes.portValueOf() + portSym.getName() + helper.getVariantHelper().portVariantSuffix(ast, portSym)/>
   protected <@Util.getTypeString portSym.getType()/> ${methodName}() {
     <#if existenceConditions?has_content>
       ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
       if(${prettyPrinter.prettyprint(existenceConditions)}) {
     </#if>
-      return ${portAccessor}.isTickBlocked() ? ${helper.getNullLikeValue(portSym.getType())} : ${portAccessor}.peekBuffer().getData();
+      return ${portAccessor}.isTickBlocked() ? ${helper.getTypeHelper().getNullLikeValue(portSym.getType())} : ${portAccessor}.peekBuffer().getData();
 
     <#if existenceConditions?has_content>
       } else throw new RuntimeException(

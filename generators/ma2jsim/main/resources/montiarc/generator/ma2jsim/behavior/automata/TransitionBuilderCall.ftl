@@ -13,7 +13,7 @@
   -->
 ${tc.signature("automaton", "transition", "noInputsForActions", "useSyncMsg", "inPorts")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-<#assign body = helper.getASTTransitionBody(transition)/>
+<#assign body = helper.getBehaviorHelper().getASTTransitionBody(transition)/>
 
 <#assign lambdaArgs>
   <#if noInputsForActions>
@@ -43,7 +43,7 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
     {
       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
       return ${prettyPrinter.prettyprint(body.get().getPre())};
     }
   <#else>
@@ -79,7 +79,7 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   <#if body.isPresent() && body.get().isPresentTransitionAction()>
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
     ${prettyPrinter.prettyprint(body.get().getTransitionAction())}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
@@ -112,14 +112,14 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   <#elseif !noInputsForActions>
     <#assign port = inPorts[0]>
     <#assign type = port.getType()>
-    <#if helper.isUnboxedChar(type)>(montiarc.rte.automaton.guards.CharGuard)
-    <#elseif helper.isUnboxedBoolean(type)>(montiarc.rte.automaton.guards.BooleanGuard)
-    <#elseif helper.isUnboxedByte(type)>(montiarc.rte.automaton.guards.ByteGuard)
-    <#elseif helper.isUnboxedShort(type)>(montiarc.rte.automaton.guards.ShortGuard)
-    <#elseif helper.isUnboxedInt(type)>(montiarc.rte.automaton.guards.IntGuard)
-    <#elseif helper.isUnboxedLong(type)>(montiarc.rte.automaton.guards.LongGuard)
-    <#elseif helper.isUnboxedFloat(type)>(montiarc.rte.automaton.guards.FloatGuard)
-    <#elseif helper.isUnboxedDouble(type)>(montiarc.rte.automaton.guards.DoubleGuard)</#if>
+    <#if helper.getTypeHelper().isUnboxedChar(type)>(montiarc.rte.automaton.guards.CharGuard)
+    <#elseif helper.getTypeHelper().isUnboxedBoolean(type)>(montiarc.rte.automaton.guards.BooleanGuard)
+    <#elseif helper.getTypeHelper().isUnboxedByte(type)>(montiarc.rte.automaton.guards.ByteGuard)
+    <#elseif helper.getTypeHelper().isUnboxedShort(type)>(montiarc.rte.automaton.guards.ShortGuard)
+    <#elseif helper.getTypeHelper().isUnboxedInt(type)>(montiarc.rte.automaton.guards.IntGuard)
+    <#elseif helper.getTypeHelper().isUnboxedLong(type)>(montiarc.rte.automaton.guards.LongGuard)
+    <#elseif helper.getTypeHelper().isUnboxedFloat(type)>(montiarc.rte.automaton.guards.FloatGuard)
+    <#elseif helper.getTypeHelper().isUnboxedDouble(type)>(montiarc.rte.automaton.guards.DoubleGuard)</#if>
   </#if>
 </#macro>
 
@@ -128,13 +128,13 @@ new montiarc.rte.automaton.TransitionBuilder<${transitionMsgType}>()
   <#elseif !noInputsForActions>
     <#assign port = inPorts[0]>
     <#assign type = port.getType()>
-    <#if helper.isUnboxedChar(type)>(montiarc.rte.automaton.actions.CharAction)
-    <#elseif helper.isUnboxedBoolean(type)>(montiarc.rte.automaton.actions.BooleanAction)
-    <#elseif helper.isUnboxedByte(type)>(montiarc.rte.automaton.actions.ByteAction)
-    <#elseif helper.isUnboxedShort(type)>(montiarc.rte.automaton.actions.ShortAction)
-    <#elseif helper.isUnboxedInt(type)>(montiarc.rte.automaton.actions.IntAction)
-    <#elseif helper.isUnboxedLong(type)>(montiarc.rte.automaton.actions.LongAction)
-    <#elseif helper.isUnboxedFloat(type)>(montiarc.rte.automaton.actions.FloatAction)
-    <#elseif helper.isUnboxedDouble(type)>(montiarc.rte.automaton.actions.DoubleAction)</#if>
+    <#if helper.getTypeHelper().isUnboxedChar(type)>(montiarc.rte.automaton.actions.CharAction)
+    <#elseif helper.getTypeHelper().isUnboxedBoolean(type)>(montiarc.rte.automaton.actions.BooleanAction)
+    <#elseif helper.getTypeHelper().isUnboxedByte(type)>(montiarc.rte.automaton.actions.ByteAction)
+    <#elseif helper.getTypeHelper().isUnboxedShort(type)>(montiarc.rte.automaton.actions.ShortAction)
+    <#elseif helper.getTypeHelper().isUnboxedInt(type)>(montiarc.rte.automaton.actions.IntAction)
+    <#elseif helper.getTypeHelper().isUnboxedLong(type)>(montiarc.rte.automaton.actions.LongAction)
+    <#elseif helper.getTypeHelper().isUnboxedFloat(type)>(montiarc.rte.automaton.actions.FloatAction)
+    <#elseif helper.getTypeHelper().isUnboxedDouble(type)>(montiarc.rte.automaton.actions.DoubleAction)</#if>
   </#if>
 </#macro>

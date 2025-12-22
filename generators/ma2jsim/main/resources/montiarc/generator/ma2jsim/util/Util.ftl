@@ -27,7 +27,7 @@
 </#macro>
 
 <#macro printTypeParameters astComponentType printBounds=true>
-    <#if helper.isGenericComponent(astComponentType)>
+    <#if helper.getComponentHelper().isGenericComponent(astComponentType)>
         <#list astComponentType.getSymbol().getTypeParameters()>
             ${"<"}
             <#items as param><@printTypeParameter param printBounds/><#sep>, </#sep></#items>

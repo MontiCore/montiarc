@@ -125,7 +125,7 @@ public class MA2JSimGen {
       generateModeAutomaton(ast);
     }
 
-    if (helper.getVariants(ast.getArcComponentType()).size() <= 1
+    if (helper.getVariantHelper().getVariants(ast.getArcComponentType()).size() <= 1
       && ast.getArcComponentType().getSymbol().getTypeParameters().isEmpty()) {
       this.generateComponentDeployment(ast);
       if (!ast.getArcComponentType().getSymbol().getAllPorts().isEmpty()) {
@@ -203,19 +203,19 @@ public class MA2JSimGen {
   protected void generateBehaviorClasses(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
 
-    List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariants(ast.getArcComponentType());
+    List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariantHelper().getVariants(ast.getArcComponentType());
     for (VariableArcVariantComponentTypeSymbol variant : variants) {
 
       // set variant pretty printer
       this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter(variant));
-      final String variantSuffix = helper.variantSuffix(variant);
+      final String variantSuffix = helper.getVariantHelper().variantSuffix(variant);
 
       if (variant.isAtomic()) {
-        if (helper.getAutomatonBehavior((ASTArcComponentType) variant.getAstNode()).isPresent()) {
+        if (helper.getBehaviorHelper().getAutomatonBehavior((ASTArcComponentType) variant.getAstNode()).isPresent()) {
           generateAutomatonImplementation(ast, variantSuffix, variant);
           generateAutomatonBuilder(ast, variantSuffix, variant);
           generateStatesClass(ast, variantSuffix, variant);
-        } else if (helper.getComputeBehavior((ASTArcComponentType) variant.getAstNode()).isPresent()) {
+        } else if (helper.getBehaviorHelper().getComputeBehavior((ASTArcComponentType) variant.getAstNode()).isPresent()) {
           generateComputeImplementation(ast, variantSuffix, variant);
         }
       }
@@ -310,7 +310,7 @@ public class MA2JSimGen {
     final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariantHelper().getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
   }
 
   /**
@@ -325,7 +325,7 @@ public class MA2JSimGen {
     final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariantHelper().getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
   }
 
   /**
@@ -340,7 +340,7 @@ public class MA2JSimGen {
     final boolean existsHwc = existsHWC(ast.getArcComponentType().getSymbol(), prefix, suffix);
     if (existsHwc) suffix += Suffixes.TOP;
 
-    generate(template, ast, prefix, suffix, existsHwc, helper.getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
+    generate(template, ast, prefix, suffix, existsHwc, helper.getVariantHelper().getVariants(ast.getArcComponentType()).stream().findFirst().orElse(null));
   }
 
   protected void generate(@NotNull String template, @NotNull ASTMACompilationUnit ast,

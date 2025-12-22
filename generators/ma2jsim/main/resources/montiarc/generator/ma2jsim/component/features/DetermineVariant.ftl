@@ -4,20 +4,20 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 
-<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
+<#assign hasOnlyOneVariant = helper.getVariantHelper().getVariants(ast)?size == 1>
 
-<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariants(ast)[0]) == "true")>
+<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariantHelper().getVariants(ast)[0]) == "true")>
 protected final int variantID;
 
 protected int determineVariant() {
   ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
-  <#list helper.getVariants(ast) as variant>
+  <#list helper.getVariantHelper().getVariants(ast) as variant>
     if (${prettyPrinter.prettyprintCondition(variant)}) {
       <#if hasOnlyOneVariant>
       return 0;
       <#else>
-      return ${helper.variantSuffix(variant)};
+      return ${helper.getVariantHelper().variantSuffix(variant)};
       </#if>
     }
   <#sep> else </#sep>

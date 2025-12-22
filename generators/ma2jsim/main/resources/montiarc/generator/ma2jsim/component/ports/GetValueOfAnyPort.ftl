@@ -7,8 +7,8 @@
 @Override
 protected Object portValueOf(montiarc.rte.port.InPort<?> p) {
   <#list inPorts as inPort>
-    <#assign portAccessor = "this." + prefixes.port() + inPort.getName() + helper.portVariantSuffix(ast, inPort)/>
-    <#assign portValueGetter = prefixes.portValueOf() + inPort.getName() + helper.portVariantSuffix(ast, inPort)/>
+    <#assign portAccessor = "this." + prefixes.port() + inPort.getName() + helper.getVariantHelper().portVariantSuffix(ast, inPort)/>
+    <#assign portValueGetter = prefixes.portValueOf() + inPort.getName() + helper.getVariantHelper().portVariantSuffix(ast, inPort)/>
     if (p == ${portAccessor}) {
       return ${portValueGetter}();
     } else

@@ -6,8 +6,8 @@
 <#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
-<#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
-<#assign modes = helper.getModes(modeAutomaton)>
+<#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
+<#assign modes = helper.getModeHelper().getModes(modeAutomaton)>
 <#list modes as mode>
   @Override
   public void <@MethodNames.modeSetup mode.getSymbol()/>() {
@@ -23,9 +23,9 @@
 <#macro createSubs mode>
 
   // Set up sub components
-  <#list helper.getInstancesFromMode(mode) as sub>
+  <#list helper.getModeHelper().getInstancesFromMode(mode) as sub>
     <#assign subSymbol = sub.getSymbol()>
-    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.subcomponentVariantSuffix(ast, subSymbol)}</#assign>
+    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)}</#assign>
     <#assign subCompType><@Util.getCompTypeString subSymbol.getType() "${suffixes.compImpl()}"/></#assign>
     <#assign builderType><@Util.getCompTypeString subSymbol.getType() "${suffixes.comp()}${suffixes.builder()}"/></#assign>
 
@@ -34,7 +34,7 @@
     .setOracleFactory(oracleFactory)
     .setScheduler(this.getScheduler())
     .setSuperComponent(this)
-      <#list helper.getArgNamesMappedToExpressions(subSymbol.getAstNode()) as name, expression>
+      <#list helper.getComponentHelper().getArgNamesMappedToExpressions(subSymbol.getAstNode()) as name, expression>
         .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
       </#list>
     .build();
@@ -47,7 +47,7 @@
 <#macro createConnectors mode>
 
   // Set up connectors
-  <#list helper.getConnectors(mode) as connector>
+  <#list helper.getModeHelper().getConnectors(mode) as connector>
     <#assign sourcePort><@ModeUtil.calcPortAccessor connector.getSource() mode ast/></#assign>
     <#list connector.getTargetList() as target>
       <#assign targetPort><@ModeUtil.calcPortAccessor target mode ast/></#assign>
@@ -60,8 +60,8 @@
 <#-- ASTArcMode mode, ASTArcComponentType compAst -->
 <#macro updateUnconnectedOutputs mode compAst>
   this.unconnectedOutputs = java.util.Set.of(
-    <#list helper.getUnconnectedOutPortsIncludingMode(compAst.getSymbol(), mode) as port>
-      ${prefixes.port()}${port.getName()}${helper.portVariantSuffix(compAst, port)}()
+    <#list helper.getComponentHelper().getUnconnectedOutPortsIncludingMode(compAst.getSymbol(), mode) as port>
+      ${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(compAst, port)}()
     <#sep>,
     </#list>
   );

@@ -6,19 +6,19 @@
 <#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
 
 
-<#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
-<#assign modes = helper.getModes(modeAutomaton)>
+<#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
+<#assign modes = helper.getModeHelper().getModes(modeAutomaton)>
 
-<#list helper.getTransitionsForPortEvents(ast, modeAutomaton) as port, transitions>
+<#list helper.getModeHelper().getTransitionsForPortEvents(ast, modeAutomaton) as port, transitions>
   <#assign portName = port.getName()>
   public void ${prefixes.message()}${portName}(<@Util.getTypeString port.getType()/> ${portName}) {
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
     ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+    ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
 
     switch (currentMode) {
       <#list modes as mode>
-        <#assign takableTransitions = helper.filterTransitionsForSourceMode(transitions, mode.getName())>
+        <#assign takableTransitions = helper.getModeHelper().filterTransitionsForSourceMode(transitions, mode.getName())>
 
         case ${mode.getName()}: {
           <@ModeUtil.transitioningBehavior takableTransitions, modeAutomaton/>
@@ -33,11 +33,11 @@
 <#-- Methods for input ports that do not trigger any behavior. Such methods have not been create yet,
   -- but are a required part of the automaton API.
   -->
-<#list helper.getInPortsNotTriggeringAnyTransition(modeAutomaton, ast) as port>
+<#list helper.getModeHelper().getInPortsNotTriggeringAnyTransition(modeAutomaton, ast) as port>
   <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}</#assign>
 
   public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> ${port.getName()}) {
-    <#if helper.isSync(port)>
+    <#if helper.getComponentHelper().isSync(port)>
       de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
     </#if>
   }

@@ -20,7 +20,7 @@ public class MCVarDeclarationStatementsJavaPrinter extends MCVarDeclarationState
 
     if (!node.isPresentVariableInit() && node.getDeclarator().getSymbol().getType().isPrimitive()) {
       getPrinter().print(" = ");
-      getPrinter().print(helper.getNullLikeValue(node.getDeclarator().getSymbol().getType().asPrimitive()));
+      getPrinter().print(helper.getTypeHelper().getNullLikeValue(node.getDeclarator().getSymbol().getType().asPrimitive()));
     }
   }
 }

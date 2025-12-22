@@ -6,9 +6,9 @@
 <#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
 
 <#assign syncMsgClass>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
-<#assign syncedInPorts = helper.getSyncedInPortsOf(ast.getSymbol())>
-<#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
-<#assign modes = helper.getModes(modeAutomaton)>
+<#assign syncedInPorts = helper.getComponentHelper().getSyncedInPortsOf(ast.getSymbol())>
+<#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
+<#assign modes = helper.getModeHelper().getModes(modeAutomaton)>
 
 public void tick(${syncMsgClass} msg) {
   this.doTick( <#list syncedInPorts as inPort> msg.${inPort.getName()} <#sep>,</#list> );
@@ -21,11 +21,11 @@ protected void doTick(
 ) {
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getFeatures(ast)])}
+  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
 
   switch (currentMode) {
     <#list modes as mode>
-      <#assign transitions = helper.getTransitionsForTickEventFromState(modeAutomaton, mode)>
+      <#assign transitions = helper.getModeHelper().getTransitionsForTickEventFromState(modeAutomaton, mode)>
 
       case ${mode.getName()}: {
         <@ModeUtil.transitioningBehavior transitions, modeAutomaton/>

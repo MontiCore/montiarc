@@ -2,7 +2,7 @@
 <#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 ${tc.signature("className")}
-<#list helper.getFeatures(ast) as feature>
+<#list helper.getComponentHelper().getFeatures(ast) as feature>
     <#assign fieldName>${prefixes.feature()}${feature.getName()}</#assign>
     protected boolean ${fieldName} = false;
 

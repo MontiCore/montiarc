@@ -6,6 +6,6 @@ ${tc.signature("subcomponentSym", "modeName")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign type><@Util.getCompTypeString subcomponentSym.getType() suffixes.compImpl()/></#assign>
 <#assign modeNamePart>${modeName}<#if modeName?has_content>_</#if></#assign>
-<#assign name>${prefixes.subcomp()}${modeNamePart}${subcomponentSym.getName()}${helper.subcomponentVariantSuffix(ast, subcomponentSym)}</#assign>
+<#assign name>${prefixes.subcomp()}${modeNamePart}${subcomponentSym.getName()}${helper.getVariantHelper().subcomponentVariantSuffix(ast, subcomponentSym)}</#assign>
 
 protected ${type} ${name};

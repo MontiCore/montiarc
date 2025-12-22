@@ -5,8 +5,8 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
-<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
-<#assign hasModeAutomaton = helper.getModeAutomaton(ast).isPresent()>
+<#assign hasOnlyOneVariant = helper.getVariantHelper().getVariants(ast)?size == 1>
+<#assign hasModeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).isPresent()>
 <#-- Usually, the constructor visibility is protected to force users to use the builder
   -- for instantiating components. However, MAUnit components must have public
   -- constructors so that the test engine can instantiate them.
@@ -24,7 +24,7 @@ ${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}
   <#list ast.getHead().getArcParameterList()>,
     <#items as param><@Util.getTypeString param.getSymbol().getType()/> ${prefixes.parameter()}${param.getName()}<#sep>, </#items>
   </#list>
-  <#list helper.getFeatures(ast)>,
+  <#list helper.getComponentHelper().getFeatures(ast)>,
     <#items as feature>Boolean ${prefixes.feature()}${feature.getName()}<#sep>, </#items>
   </#list>
 ) {
@@ -33,34 +33,34 @@ ${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}
   <#list ast.getHead().getArcParameterList() as param>
     this.${prefixes.parameter()}${param.getName()} = ${prefixes.parameter()}${param.getName()};
   </#list>
-  <#list helper.getFeatures(ast) as feature>
+  <#list helper.getComponentHelper().getFeatures(ast) as feature>
     this.${prefixes.feature()}${feature.getName()} = ${prefixes.feature()}${feature.getName()};
   </#list>
   <#if hasModeAutomaton>
     this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this, name);
   </#if>
 
-<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariants(ast)[0]) == "true")>
+<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariantHelper().getVariants(ast)[0]) == "true")>
   this.variantID = determineVariant();
 </#if>
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
-<#list helper.getFieldsInDependencyOrder(ast) as field>
-  <#assign initExpr = prettyPrinter.prettyprint(helper.getInitialForVariable(field))>
-  <@Util.getTypeString field.getType()/> ${field.getName()}${helper.fieldVariantSuffix(ast, field)} = ${initExpr};
+<#list helper.getComponentHelper().getFieldsInDependencyOrder(ast) as field>
+  <#assign initExpr = prettyPrinter.prettyprint(helper.getComponentHelper().getInitialForVariable(field))>
+  <@Util.getTypeString field.getType()/> ${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)} = ${initExpr};
 </#list>
 
 <#list ast.getSymbol().getFields() as field>
-  ${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)} = ${field.getName()}${helper.fieldVariantSuffix(ast, field)};
+  ${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)} = ${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)};
 </#list>
 
   <#if hasOnlyOneVariant>
-    <@variantSetup helper.getVariants(ast)[0]/>
+    <@variantSetup helper.getVariantHelper().getVariants(ast)[0]/>
   <#else>
     switch (this.variantID){
-      <#list helper.getVariants(ast) as variant>
-      case ${helper.variantSuffix(variant)} :
+      <#list helper.getVariantHelper().getVariants(ast) as variant>
+      case ${helper.getVariantHelper().variantSuffix(variant)} :
         <@variantSetup variant/>
         break;
       </#list>
@@ -81,21 +81,21 @@ this.oracle = oracleFactory.createOracleFor(this.getName());
 
 <#macro variantSetup variant>
   this.isAtomic = ${(variant.isAtomic() && !hasModeAutomaton)?c};
-  <@MethodNames.portSetup/>${helper.variantSuffix(variant)}();
+  <@MethodNames.portSetup/>${helper.getVariantHelper().variantSuffix(variant)}();
   <#if variant.isAtomic()>
-    <@MethodNames.behaviorSetup/>${helper.variantSuffix(variant)}();
+    <@MethodNames.behaviorSetup/>${helper.getVariantHelper().variantSuffix(variant)}();
   <#elseif variant.isDecomposed()>
-    <@MethodNames.subCompSetup/>${helper.variantSuffix(variant)}(oracleFactory);
-    <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}();
+    <@MethodNames.subCompSetup/>${helper.getVariantHelper().variantSuffix(variant)}(oracleFactory);
+    <@MethodNames.connectorSetup/>${helper.getVariantHelper().variantSuffix(variant)}();
   </#if>
   <#if !hasModeAutomaton>
-    <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}();
+    <@MethodNames.setupUnconnectedOutPorts/>${helper.getVariantHelper().variantSuffix(variant)}();
   </#if>
 </#macro>
 
 <#macro logInstantiation>
 <#assign hasParams = ast.getHead().getArcParameterList()?size != 0>
-<#assign hasFeatures = helper.getFeatures(ast)?size != 0>
+<#assign hasFeatures = helper.getComponentHelper().getFeatures(ast)?size != 0>
 <#assign hasFields = ast.getSymbol().getFields()?size != 0>
 
 <@Log.info log_aspects.createComponent(), "this.getName()">
@@ -106,12 +106,12 @@ this.oracle = oracleFactory.createOracleFor(this.getName());
       + "${param.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.parameter()}${param.getName()})<#sep> + ", "
     </#list>
     <#if hasParams && (hasFeatures || hasFields)> + ", "</#if>  <#-- Separator between parameters and following stuff -->
-    <#list helper.getFeatures(ast) as feature>
+    <#list helper.getComponentHelper().getFeatures(ast) as feature>
       + "${feature.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.feature()}${feature.getName()})<#sep> + ", "
     </#list>
     <#if hasFeatures && hasFields> + ", " </#if>
     <#list ast.getSymbol().getFields() as field>
-      + "${field.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.field()}${field.getName()}${helper.fieldVariantSuffix(ast, field)})<#sep> + ", "
+      + "${field.getName()}=" + montiarc.rte.logging.DataFormatter.format(this.${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)})<#sep> + ", "
     </#list>
     + "};"
   </#if>

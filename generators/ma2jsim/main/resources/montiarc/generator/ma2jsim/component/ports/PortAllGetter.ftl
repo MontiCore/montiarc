@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
+<#assign hasOnlyOneVariant = helper.getVariantHelper().getVariants(ast)?size == 1>
 
 <@allInPortsGetter/>
 <@allOutPortsGetter/>
@@ -21,11 +21,11 @@ public java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllInPorts
     );
   <#else>
     switch (this.variantID) {
-      <#list helper.getVariants(ast) as variant>
-        case ${helper.variantSuffix(variant)}:
+      <#list helper.getVariantHelper().getVariants(ast) as variant>
+        case ${helper.getVariantHelper().variantSuffix(variant)}:
           return java.util.List.of(
             <#list variant.getAllIncomingPorts() as port>
-              this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}<#sep>,
+              this.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}<#sep>,
             </#list>
           );
       </#list>
@@ -50,11 +50,11 @@ public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllOutPorts() {
     );
   <#else>
     switch (this.variantID) {
-      <#list helper.getVariants(ast) as variant>
-        case ${helper.variantSuffix(variant)}:
+      <#list helper.getVariantHelper().getVariants(ast) as variant>
+        case ${helper.getVariantHelper().variantSuffix(variant)}:
         return java.util.List.of(
           <#list variant.getAllOutgoingPorts() as port>
-            this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}() <#sep>, </#sep>
+            this.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}() <#sep>, </#sep>
           </#list>
         );
       </#list>
@@ -71,17 +71,17 @@ public java.util.List${"<"}montiarc.rte.port.OutPort${"<?>>"} getAllOutPorts() {
 public java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllSyncedInPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(
-    <#list helper.getSyncedInPortsOf(ast.getSymbol()) as port>
+    <#list helper.getComponentHelper().getSyncedInPortsOf(ast.getSymbol()) as port>
       this.${prefixes.port()}${port.getName()}<#sep>,
     </#list>
     );
   <#else>
     switch (this.variantID) {
-      <#list helper.getVariants(ast) as variant>
-        case ${helper.variantSuffix(variant)}:
+      <#list helper.getVariantHelper().getVariants(ast) as variant>
+        case ${helper.getVariantHelper().variantSuffix(variant)}:
           return java.util.List.of(
-            <#list helper.getSyncedInPortsOf(variant) as port>
-              this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}<#sep>,
+            <#list helper.getComponentHelper().getSyncedInPortsOf(variant) as port>
+              this.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}<#sep>,
             </#list>
           );
       </#list>
@@ -100,18 +100,18 @@ public java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllSyncedI
 public java.util.List${"<"}montiarc.rte.port.InOutPort${"<?, ?>>"} getAllMsgEventInPorts() {
   <#if hasOnlyOneVariant>
     return java.util.List.of(
-    <#list helper.getMsgEventInPortsOf(ast.getSymbol()) as port>
+    <#list helper.getComponentHelper().getMsgEventInPortsOf(ast.getSymbol()) as port>
       this.${prefixes.port()}${port.getName()}<#sep>, </#sep>
     </#list>
     );
 
   <#else>
     switch (this.variantID) {
-      <#list helper.getVariants(ast) as variant>
-        case ${helper.variantSuffix(variant)}:
+      <#list helper.getVariantHelper().getVariants(ast) as variant>
+        case ${helper.getVariantHelper().variantSuffix(variant)}:
           return java.util.List.of(
-            <#list helper.getMsgEventInPortsOf(variant) as port>
-              this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)} <#sep>, </#sep>
+            <#list helper.getComponentHelper().getMsgEventInPortsOf(variant) as port>
+              this.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)} <#sep>, </#sep>
             </#list>
           );
       </#list>

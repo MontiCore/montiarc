@@ -10,7 +10,7 @@ public ${ast.getName()}${suffixes.comp()}<@Util.printTypeParameters ast false/> 
     getScheduler(),
     getOracleFactory()
     <#list ast.getHead().getArcParameterList()>, <#items as param>${prefixes.getterMethod()}${prefixes.parameter()}${param.getName()}()<#sep>, </#sep></#items></#list>
-    <#list helper.getFeatures(ast)>, <#items as feature>${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}()<#sep>, </#sep></#items></#list>
+    <#list helper.getComponentHelper().getFeatures(ast)>, <#items as feature>${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}()<#sep>, </#sep></#items></#list>
   );
 
   component.setSuperComponent(superComponent);

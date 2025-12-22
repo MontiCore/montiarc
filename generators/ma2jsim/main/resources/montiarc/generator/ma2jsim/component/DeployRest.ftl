@@ -23,9 +23,9 @@ public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top(
   protected void setupEndpoints(${comp.getName()}${suffixes.comp()} component) {
     <#list comp.getAllIncomingPorts() as port>
       <#if !port.getType().isGenericType()>
-      server.subscribe("/${comp.getName()}/${port.getName()}${helper.portVariantSuffix(comp.getAstNode(), port)}", str -> deSerializer.deserialize(str, <@Util.getPortTypeString port.getType()/>.class)
+      server.subscribe("/${comp.getName()}/${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}", str -> deSerializer.deserialize(str, <@Util.getPortTypeString port.getType()/>.class)
         .map(m -> {
-          component.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(comp.getAstNode(), port)}().receive(montiarc.rte.msg.Message.of(m));
+          component.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}().receive(montiarc.rte.msg.Message.of(m));
           return true;
         }).orElse(false)
       );

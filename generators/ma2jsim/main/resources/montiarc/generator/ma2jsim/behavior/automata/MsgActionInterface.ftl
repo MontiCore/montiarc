@@ -5,7 +5,7 @@ ${tc.signature()}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign syncMsg>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
-<#assign inPorts = helper.getSyncedInPortsOf(ast.getSymbol())>
+<#assign inPorts = helper.getComponentHelper().getSyncedInPortsOf(ast.getSymbol())>
 
 <#--
   - The explicit declaration of the signature action lambda, unwrapping the synced input objects to individual lambda parameters
@@ -19,7 +19,7 @@ protected interface ${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParam
   @Override
   default void execute(${syncMsg} msg) {
     realExecute(
-      <#list inPorts as inPort> msg.${inPort.getName()}${helper.portVariantSuffix(ast, inPort)} <#sep>,</#list>
+      <#list inPorts as inPort> msg.${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)} <#sep>,</#list>
     );
   }
   void realExecute(

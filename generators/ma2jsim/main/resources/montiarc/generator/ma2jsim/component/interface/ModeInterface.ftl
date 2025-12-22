@@ -6,9 +6,9 @@
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 interface ${ast.getName()}${suffixes.modes()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters ast/> {
-  <#if helper.getModeAutomaton(ast).isPresent()>
-    <#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
-    <#list helper.getModes(modeAutomaton) as mode>
+  <#if helper.getComponentHelper().getModeAutomaton(ast).isPresent()>
+    <#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
+    <#list helper.getModeHelper().getModes(modeAutomaton) as mode>
       /* ${mode.getSymbol().getName()} */
       void <@MethodNames.modeSetup mode.getSymbol()/>();
       void <@MethodNames.modeInit mode.getSymbol()/>();

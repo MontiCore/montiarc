@@ -5,13 +5,13 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
-<#assign modeAutomatonOpt = helper.getModeAutomaton(ast)/>
+<#assign modeAutomatonOpt = helper.getComponentHelper().getModeAutomaton(ast)/>
 
 <#if modeAutomatonOpt.isPresent()>
 @Override
 protected void handleMessageWithModeAutomaton(montiarc.rte.port.InPort<?> p) {
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-    <#assign portNameWithSuffix>${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
+    <#assign portNameWithSuffix>${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)}</#assign>
     <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
     if (p == ${prefixes.port()}${portNameWithSuffix}) {
       getModeAutomaton().${prefixes.message()}${inPort.getName()}(${prefixes.portValueOf()}${portNameWithSuffix}());
@@ -25,7 +25,7 @@ protected void handleMessageWithBehavior(montiarc.rte.port.InPort<?> p) {
   if (this.getBehavior() == null) throw new IllegalStateException();
 
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-    <#assign portNameWithSuffix>${inPort.getName()}${helper.portVariantSuffix(ast, inPort)}</#assign>
+    <#assign portNameWithSuffix>${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)}</#assign>
     <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
     if (p == ${prefixes.port()}${portNameWithSuffix}) {
       this.getBehavior().${prefixes.message()}${portNameWithSuffix}(${prefixes.portValueOf()}${portNameWithSuffix}());

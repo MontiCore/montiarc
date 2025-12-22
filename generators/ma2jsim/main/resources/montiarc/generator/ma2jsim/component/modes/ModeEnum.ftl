@@ -2,8 +2,8 @@
 <#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 
-<#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
-<#assign modes = helper.getModes(modeAutomaton)>
+<#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
+<#assign modes = helper.getModeHelper().getModes(modeAutomaton)>
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
 protected enum Mode {

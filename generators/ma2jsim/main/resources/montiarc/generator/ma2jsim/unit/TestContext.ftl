@@ -7,7 +7,7 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
 
   @Override
   public int testCount() {
-    return ${MaUnitHelper.unitTestCaseCount(ast)};
+    return ${helper.getMaUnitHelper().unitTestCaseCount(ast)};
   }
 
   @Override
@@ -31,9 +31,9 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
     <#list ast.getHead().getArcParameterList() as param>
       case ${param?index}: // ${param.getName()}
         <#if param.isPresentDefault()><#assign default = prettyPrinter.prettyprint(param.getDefault())></#if>
-        <#if MaUnitHelper.isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
+        <#if helper.getMaUnitHelper().isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
     </#list>
-    <#list helper.getFeatures(ast) as feature>
+    <#list helper.getComponentHelper().getFeatures(ast) as feature>
       case ${feature?index+ast.getHead().getArcParameterList()?size}: // ${feature.getName()}
         <@returnStereoValue feature.getName() false?c/>
     </#list>
@@ -43,8 +43,8 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
 
   @Override
   public Class<?> getExpectedException(int testIndex) {
-    <#assign StereoValue = MaUnitHelper.getStereoValue(ast, "exception")>
-    <#if StereoValue.isPresent() && MaUnitHelper.isStereoValueList(StereoValue.get())>
+    <#assign StereoValue = helper.getMaUnitHelper().getStereoValue(ast, "exception")>
+    <#if StereoValue.isPresent() && helper.getMaUnitHelper().isStereoValueList(StereoValue.get())>
     switch (testIndex) {
       <#list StereoValue.get().getExpression().getSetCollectionItemList() as item>
         case ${item?index}:
@@ -61,9 +61,9 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
 }
 
 <#macro returnStereoValue name default="">
-  <#assign StereoValue = MaUnitHelper.getStereoValue(ast, name)>
+  <#assign StereoValue = helper.getMaUnitHelper().getStereoValue(ast, name)>
   <#if StereoValue.isPresent()>
-      return ${prettyPrinter.prettyprint(StereoValue.get().getExpression())}<#if MaUnitHelper.isStereoValueList(StereoValue.get())>.get(testIndex)</#if>;
+      return ${prettyPrinter.prettyprint(StereoValue.get().getExpression())}<#if helper.getMaUnitHelper().isStereoValueList(StereoValue.get())>.get(testIndex)</#if>;
   <#elseif default?has_content>
       return ${default};
   </#if>
@@ -71,7 +71,7 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
 
 <#macro returnTestValue parameterIndex default="">
   switch(testIndex) {
-  <#list MaUnitHelper.getTestValues(ast, parameterIndex) as expression>
+  <#list helper.getMaUnitHelper().getTestValues(ast, parameterIndex) as expression>
     case ${expression?index}:
       return ${prettyPrinter.prettyprint(expression)};
   </#list>

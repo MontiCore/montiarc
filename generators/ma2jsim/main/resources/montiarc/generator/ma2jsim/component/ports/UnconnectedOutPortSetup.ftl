@@ -4,14 +4,14 @@
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
-<#assign modeAutomatonOpt = helper.getModeAutomaton(ast)/>
+<#assign modeAutomatonOpt = helper.getComponentHelper().getModeAutomaton(ast)/>
 
 <#if !modeAutomatonOpt.isPresent()>
-  <#list helper.getVariants(ast) as variant>
-    protected void <@MethodNames.setupUnconnectedOutPorts/>${helper.variantSuffix(variant)}() {
+  <#list helper.getVariantHelper().getVariants(ast) as variant>
+    protected void <@MethodNames.setupUnconnectedOutPorts/>${helper.getVariantHelper().variantSuffix(variant)}() {
       this.unconnectedOutputs = java.util.Set.of(
-      <#list helper.getUnconnectedOutPortsWithoutModes(variant) as port>
-        this.${prefixes.port()}${port.getName()}${helper.portVariantSuffix(ast, port)}()
+      <#list helper.getComponentHelper().getUnconnectedOutPortsWithoutModes(variant) as port>
+        this.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}()
       <#sep>,
       </#list>
       );

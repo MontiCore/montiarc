@@ -5,15 +5,15 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign index = 0>
-<#list helper.getVariants(ast) as variant>
+<#list helper.getVariantHelper().getVariants(ast) as variant>
 <#if !variant.isAtomic()>
-protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() {
+protected void <@MethodNames.connectorSetup/>${helper.getVariantHelper().variantSuffix(variant)}() {
 <#list variant.getAstNode().getConnectors() as connector>
   <#assign source = connector.getSource()>
-  <#assign sourceType = helper.getTypeOfPortIfPresent(source).get()>
+  <#assign sourceType = helper.getComponentHelper().getTypeOfPortIfPresent(source).get()>
   <#assign unboxSourceType = SymTypeRelations.unbox(sourceType)>
   <#list connector.getTargetList() as target>
-  <#assign targetType = helper.getTypeOfPortIfPresent(target).get()>
+  <#assign targetType = helper.getComponentHelper().getTypeOfPortIfPresent(target).get()>
   <#assign unboxTargetType = SymTypeRelations.unbox(targetType)>
   <#-- If source and target are of different primitive type (ignoring boxing) -->
   <#if unboxSourceType.isPrimitive() && unboxTargetType.isPrimitive()
@@ -67,13 +67,13 @@ protected void <@MethodNames.connectorSetup/>${helper.variantSuffix(variant)}() 
   <#assign IsSubcompTheOwner = connectorEndPoint.isPresentComponent()>
 
   <#assign variantSuffix = IsSubcompTheOwner?then(
-    helper.portVariantSuffix(connectorEndPoint.getComponentSymbol(), connectorEndPoint.getPortSymbol()),
-    helper.portVariantSuffix(ast, connectorEndPoint.getPortSymbol())
+    helper.getVariantHelper().portVariantSuffix(connectorEndPoint.getComponentSymbol(), connectorEndPoint.getPortSymbol()),
+    helper.getVariantHelper().portVariantSuffix(ast, connectorEndPoint.getPortSymbol())
   )>
 
   <#if IsSubcompTheOwner>
     <#assign owningComp = connectorEndPoint.getComponentSymbol()>
-    <#assign compAccessor = prefixes.subcomp() + connectorEndPoint.getComponent() + helper.subcomponentVariantSuffix(ast, owningComp) + "()">
+    <#assign compAccessor = prefixes.subcomp() + connectorEndPoint.getComponent() + helper.getVariantHelper().subcomponentVariantSuffix(ast, owningComp) + "()">
     ${compAccessor}.${prefixes.port()}${connectorEndPoint.getPort()}${variantSuffix}()
 
   <#else>

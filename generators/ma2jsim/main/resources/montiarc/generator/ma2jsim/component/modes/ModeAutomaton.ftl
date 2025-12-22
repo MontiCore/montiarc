@@ -6,7 +6,7 @@
 <#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
-<#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
+<#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
 <#assign modeAutomatonClass>${ast.getName()}${suffixes.modeAutomaton()}<#if isTop>${suffixes.top()}</#if></#assign>
 <#assign modeContextType>${ast.getName()}${suffixes.contextForModes()} <@Util.printTypeParameters ast/></#assign>
 
@@ -31,7 +31,7 @@
 
   ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeEnum.ftl")}
 
-  <#assign initMode = helper.getInitialModes(modeAutomaton)[0]>
+  <#assign initMode = helper.getModeHelper().getInitialModes(modeAutomaton)[0]>
   void setup() {
     // set initial state
     this.currentMode = Mode.${initMode.getName()};
@@ -51,8 +51,8 @@
 }
 
 <#macro logInitialMode mode>
-  <#assign addedSubs = helper.getInstancesFromMode(mode)>
-  <#assign addedConnectors = helper.getConnectors(mode)>
+  <#assign addedSubs = helper.getModeHelper().getInstancesFromMode(mode)>
+  <#assign addedConnectors = helper.getModeHelper().getConnectors(mode)>
   <@Log.info log_aspects.modeChange() "this.compName">
       "-> ${initMode.getName()};"
     <#if addedSubs?size != 0 || addedConnectors?size != 0>

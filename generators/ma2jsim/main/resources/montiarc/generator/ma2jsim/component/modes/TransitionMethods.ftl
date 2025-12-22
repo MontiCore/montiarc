@@ -5,12 +5,12 @@
 <#import "/montiarc/generator/ma2jsim/component/modes/ModeUtil.ftl" as ModeUtil>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
 
-<#assign modeAutomaton = helper.getModeAutomaton(ast).get()>
+<#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast).get()>
 
-<#list helper.getTransitions(modeAutomaton) as transition>
+<#list helper.getModeHelper().getTransitions(modeAutomaton) as transition>
 
-  <#assign transitionIndex = helper.getTransitionIndex(transition, modeAutomaton)>
-  /** Transition action for: ${helper.printTransitionSignature(transition)} */
+  <#assign transitionIndex = helper.getModeHelper().getTransitionIndex(transition, modeAutomaton)>
+  /** Transition action for: ${helper.getBehaviorHelper().printTransitionSignature(transition)} */
   protected void transition_${transitionIndex}() {
     <@logTransition transition/>
 
@@ -24,10 +24,10 @@
 <#macro logTransition transition>
   <#assign source = transition.getSource().getNameSymbol().getAstNode()>
   <#assign target = transition.getTarget().getNameSymbol().getAstNode()>
-  <#assign removedSubs = helper.getInstancesFromMode(source)>
-  <#assign removedConnectors = helper.getConnectors(source)>
-  <#assign addedSubs = helper.getInstancesFromMode(target)>
-  <#assign addedConnectors = helper.getConnectors(target)>
+  <#assign removedSubs = helper.getModeHelper().getInstancesFromMode(source)>
+  <#assign removedConnectors = helper.getModeHelper().getConnectors(source)>
+  <#assign addedSubs = helper.getModeHelper().getInstancesFromMode(target)>
+  <#assign addedConnectors = helper.getModeHelper().getConnectors(target)>
 
   <@Log.info log_aspects.modeChange() "this.compName">
     "${source.getName()} -> ${target.getName()};"

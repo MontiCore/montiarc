@@ -3,8 +3,8 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
-<#assign modeAutomatonOpt = helper.getModeAutomaton(ast)>
-<#assign hasOnlyOneVariant = helper.getVariants(ast)?size == 1>
+<#assign modeAutomatonOpt = helper.getComponentHelper().getModeAutomaton(ast)>
+<#assign hasOnlyOneVariant = helper.getVariantHelper().getVariants(ast)?size == 1>
 
 @Override
 public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubcomponents() {
@@ -16,8 +16,8 @@ public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubco
     </#list>
   <#else>
     switch (this.variantID) {
-      <#list helper.getVariants(ast) as variant>
-        case ${helper.variantSuffix(variant)}:
+      <#list helper.getVariantHelper().getVariants(ast) as variant>
+        case ${helper.getVariantHelper().variantSuffix(variant)}:
         <#list variant.getSubcomponents() as subcomponent>
           allSubcomponentList.add(<@subCompAccessor subcomponent/>);
         </#list>
@@ -29,9 +29,9 @@ public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubco
 
   <#if modeAutomatonOpt.isPresent()>
   switch (this.modeAutomaton.currentMode) {
-    <#list helper.getModes(modeAutomatonOpt.get()) as mode>
+    <#list helper.getModeHelper().getModes(modeAutomatonOpt.get()) as mode>
       case ${mode.getName()}:
-        <#list helper.getInstancesFromMode(mode) as modeSub>
+        <#list helper.getModeHelper().getInstancesFromMode(mode) as modeSub>
           allSubcomponentList.add(<@modeSubCompAccessor modeSub.getSymbol() mode/>);
         </#list>
         break;
@@ -43,11 +43,11 @@ public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubco
 }
 
 <#macro subCompAccessor subSymbol>
-  <#assign variantSuffix = helper.subcomponentVariantSuffix(ast, subSymbol)>
+  <#assign variantSuffix = helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)>
   this.${prefixes.subcomp()}${subSymbol.getName()}${variantSuffix}()
 </#macro>
 
 <#macro modeSubCompAccessor subSymbol mode>
-  <#assign variantSuffix = helper.subcomponentVariantSuffix(ast, subSymbol)>
+  <#assign variantSuffix = helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)>
   this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${variantSuffix}()
 </#macro>

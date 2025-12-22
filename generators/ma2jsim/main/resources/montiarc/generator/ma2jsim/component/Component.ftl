@@ -31,7 +31,7 @@ ${tc.include("montiarc.generator.ma2jsim.component.Header.ftl")} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.Connectors.ftl")}
 
-  <#if helper.getModeAutomaton(ast).isPresent()>
+  <#if helper.getComponentHelper().getModeAutomaton(ast).isPresent()>
     ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeSubcomponents.ftl")}
     ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeSetup.ftl")}
     ${tc.include("montiarc.generator.ma2jsim.component.modes.ModeInit.ftl")}

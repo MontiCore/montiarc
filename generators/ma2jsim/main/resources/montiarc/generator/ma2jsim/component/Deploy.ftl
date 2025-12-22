@@ -50,7 +50,7 @@ protected ${comp.getName()}${suffixes.comp()} buildComponent(montiarc.rte.schedu
   <#else>
     <@Util.getTypeString param.getType()/>.class
   </#if>
-      ).orElse(${helper.getNarrowedNullLikeValue(param.getType())})
+      ).orElse(${helper.getTypeHelper().getNarrowedNullLikeValue(param.getType())})
     );
   }
 </#list>

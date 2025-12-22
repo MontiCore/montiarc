@@ -9,6 +9,6 @@
   this.${prefixes.parameter()}${param.getName()}();
 </#list>
 <#-- Shadow features -->
-<#list helper.getFeatures(ast) as feature>
+<#list helper.getComponentHelper().getFeatures(ast) as feature>
   final boolean ${feature.getName()} = this.${prefixes.feature()}${feature.getName()}();
 </#list>

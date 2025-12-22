@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 ${tc.signature("variant")}
 
-<#assign automaton = helper.getAutomatonBehavior(ast).get() />
+<#assign automaton = helper.getBehaviorHelper().getAutomatonBehavior(ast).get() />
 
 ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.automata.Header.ftl", [automaton])}
 {
