@@ -84,4 +84,9 @@ public class Duration extends DurationTOP {
   public static Duration ofDays(long days, long hours, long minutes, long seconds, long milliseconds) {
     return new Duration(days * 24 * 60 * 60 * 1000 + hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000 + milliseconds);
   }
+
+  @Override
+  public boolean equals(Object o) {
+    return (o instanceof Duration) && ((Duration) o).milliseconds == milliseconds;
+  }
 }

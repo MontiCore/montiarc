@@ -30,7 +30,7 @@ public class Simulation extends SimulationTOP {
     coordinatingScheduler.stop();
   }
 
-  public static Duration getTickDuration() {
+  public static Duration getTickLength() {
     return Duration.ofMilliseconds(nanosecondsPerTick / 1000000);
   }
 }
