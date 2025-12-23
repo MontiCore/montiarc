@@ -70,12 +70,12 @@ public class DeploymentCLITest {
 
   @Test
   void testCliArgumentsAreParsedCorrectly() {
-    String[] args = {"--tickCount", "123", "--simulationTickLength", "456"};
+    String[] args = {"--tickCount", "123", "--simulationTickLength", "456",  "--simulatedTickLength", "789"};
     deployment.deploy(args);
     Mockito.verify(scheduler).run(Mockito.any(), Mockito.anyBoolean(), tickCapture.capture(), simulationTickLengthCapture.capture(), simulatedTickLengthCapture.capture());
     assertEquals(123, tickCapture.getValue().longValue());
-    assertEquals(456, simulationTickLengthCapture.getValue().longValue());
-    assertEquals(0, simulatedTickLengthCapture.getValue().longValue());
+    assertEquals(456000000, simulationTickLengthCapture.getValue().longValue());
+    assertEquals(789000000, simulatedTickLengthCapture.getValue().longValue());
   }
 
   @Test

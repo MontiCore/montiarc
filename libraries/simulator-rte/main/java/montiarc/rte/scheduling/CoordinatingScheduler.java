@@ -97,10 +97,10 @@ public class CoordinatingScheduler implements Scheduler {
    *                             If that is also zero the actual computation time for each tick is used.
    */
   public void run(SimComponent component,
-                     boolean runToCompletion,
-                     long ticks,
-                     long simulationTickLength,
-                     long simulatedTickLength) {
+                  boolean runToCompletion,
+                  long ticks,
+                  long simulationTickLength,
+                  long simulatedTickLength) {
     if (!compToScheduler.containsKey(component)) {
       throw new IllegalArgumentException("Component not registered");
     }
@@ -144,6 +144,9 @@ public class CoordinatingScheduler implements Scheduler {
           Log.info("--- Tick " + Simulation.ticks + " ---", "Scheduler");
           if (ticks != Long.MIN_VALUE) {
             ticks--;
+          }
+          if (simulationTickLength > 0 && tickStart + simulationTickLength + 10000000 <= System.nanoTime()) {
+            Log.warn("Can't keep up! The simulation of one tick took " + ((System.nanoTime() - tickStart + simulationTickLength) / 1000000000) + " seconds longer than the set tick length");
           }
           tickStart = System.nanoTime();
         }

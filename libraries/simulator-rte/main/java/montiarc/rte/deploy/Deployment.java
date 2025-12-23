@@ -50,14 +50,17 @@ public abstract class Deployment<T extends Component> {
         printHelp();
         return;
       }
+      if (cmd.hasOption("debug")) {
+        Log.initDEBUG();
+      }
       if (cmd.hasOption("tickCount")) {
         tickCount = Long.parseLong(cmd.getOptionValue("tickCount"));
       }
       if (cmd.hasOption("simulationTickLength")) {
-        simulationTickLength = Long.parseLong(cmd.getOptionValue("simulationTickLength"));
+        simulationTickLength = Long.parseLong(cmd.getOptionValue("simulationTickLength")) * 1000000;
       }
       if (cmd.hasOption("simulatedTickLength")) {
-        simulationTickLength = Long.parseLong(cmd.getOptionValue("simulatedTickLength"));
+        simulatedTickLength = Long.parseLong(cmd.getOptionValue("simulatedTickLength")) * 1000000;
       }
 
       for (Option opt : cmd.getOptions()) {
@@ -128,6 +131,10 @@ public abstract class Deployment<T extends Component> {
     options.addOption(Option.builder().longOpt("help")
       .required(false)
       .desc("Displays this help message")
+      .get());
+    options.addOption(Option.builder().longOpt("debug")
+      .required(false)
+      .desc("Output debug level log messages")
       .get());
 
     // Parameter Options
