@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+ln -sf "/Applications/MontiArc.app/Contents/MacOS/MontiArc" /usr/local/bin/montiarc
+exit 0

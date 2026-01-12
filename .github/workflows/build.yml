@@ -81,11 +81,11 @@ jobs:
           - os: macos-latest
             target: macOS
             asset_extension: .pkg
-            package_settings: -t pkg --icon docs/assets/images/icon.png --about-url "https://monticore.github.io/montiarc"
+            package_settings: -t pkg --icon docs/assets/images/icon.png --about-url "https://monticore.github.io/montiarc" --resource-dir tooling/ma2jsim-cli/jpackage/macos
           - os: windows-latest
             target: Windows
             asset_extension: .exe
-            package_settings: --win-console --win-dir-chooser --icon docs/assets/images/icon.ico --about-url "https://monticore.github.io/montiarc"
+            package_settings: --win-console --win-dir-chooser --icon docs/assets/images/icon.ico --about-url "https://monticore.github.io/montiarc" --win-upgrade-uuid 8239b244-9b64-4da7-8697-8aefecdc25b4 --resource-dir tooling/ma2jsim-cli/jpackage/windows
           - os: ubuntu-latest
             target: Linux
             asset_extension: -Linux.tar.xz
