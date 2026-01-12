@@ -67,7 +67,7 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
     // is it feasible to assume that the inner expression is actually a type?
     // regex checks for names connected by dots with optional whitespace
     if (innerExpr.matches("^([a-zA-Z\\d_$]+(\\s*\\.\\s*[a-zA-Z\\d_$]+)*)$")) {
-      type = ((IMontiArcScope) node.getEnclosingScope()).resolveType(innerExpr);
+      type = ((IMontiArcScope) node.getEnclosingScope()).resolveTypeMany(innerExpr).stream().findFirst();
     }
     if (type.isPresent() && MontiArcMill.typeDispatcher().isOOSymbolsOOType(type.get())) {
       getPrinter().print(type.get().getFullName());
