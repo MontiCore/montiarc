@@ -119,7 +119,8 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: 21
+          # Use latest Java version for newest jpackage
+          java-version: 25
 
       - name: Install Fedora dependencies
         if: matrix.target == 'Fedora'
