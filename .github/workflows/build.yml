@@ -85,7 +85,7 @@ jobs:
           - os: windows-latest
             target: Windows
             asset_extension: .exe
-            package_settings: --win-console --win-dir-chooser --icon docs/assets/images/icon.ico --about-url "https://monticore.github.io/montiarc" --win-upgrade-uuid 8239b244-9b64-4da7-8697-8aefecdc25b4 --resource-dir tooling/ma2jsim-cli/jpackage/windows
+            package_settings: --win-console --win-dir-chooser --icon docs/assets/images/icon.ico --about-url "https://monticore.github.io/montiarc" --win-upgrade-uuid 8239b244-9b64-4da7-8697-8aefecdc25b4 --resource-dir tooling/ma2jsim-cli/jpackage/windows --verbose
           - os: ubuntu-latest
             target: Linux
             asset_extension: -Linux.tar.xz
@@ -116,9 +116,9 @@ jobs:
         run: dotnet tool install --global wix
       - name: Setup Java
         if: matrix.target == 'Windows'
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
-          distribution: temurin
+          distribution: oracle
           # Use latest Java version for newest jpackage
           java-version: 25
 
