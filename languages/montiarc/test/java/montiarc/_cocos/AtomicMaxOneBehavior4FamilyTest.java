@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AtomicMaxOneBehavior4FamilyTest extends AtomicMaxOneBehaviorTest {
 
   @ParameterizedTest
-  //@MethodSource("validModels")
+  @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
   void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
