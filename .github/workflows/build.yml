@@ -116,7 +116,7 @@ jobs:
         run: dotnet tool install --global wix
       - name: Add WiX extensions
         if: matrix.target == 'Windows'
-        run: wix extension add -g WixToolset.UI.wixext WixToolset.Util.wixex
+        run: wix extension add -g WixToolset.UI.wixext WixToolset.Util.wixext
       - name: Setup Java
         if: matrix.target == 'Windows'
         uses: actions/setup-java@v5
