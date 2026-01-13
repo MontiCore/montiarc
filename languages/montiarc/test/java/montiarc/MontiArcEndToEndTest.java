@@ -65,9 +65,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   @MethodSource("invalidModelAndErrorProvider")
   @MethodSource("invalidModelAndErrorNoVariabilityProvider")
   @DisableIfDisplayName(contains = {
-    "MissingComponentTest7",
-    "MissingComponentTest8",
-    "MissingComponentTest9",
     "NameClash",
     "SelfReferentialComponentWithCompositionTest",
     "CircularInheritanceWithCompositionTest3"
@@ -99,9 +96,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   @MethodSource("invalidModelAndError4VariabilityProvider")
   @DisableIfDisplayName(contains = {
     "CircularInheritanceTest7",
-    "MissingComponentTest7",
-    "MissingComponentTest8",
-    "MissingComponentTest9",
     "NameClash",
     "SelfReferentialComponentWithCompositionTest",
     "PortMultipleSender",
@@ -356,7 +350,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_COMP, "MissingComponent9.arc", 12, 3, 12, 6, MISSING_COMPONENT, "int"),
         fn(ERROR, PKG_COMP, "MissingComponent9.arc", 13, 3, 13, 7, MISSING_COMPONENT, "long"),
         fn(ERROR, PKG_COMP, "MissingComponent9.arc", 14, 3, 14, 8, MISSING_COMPONENT, "float"),
-        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 15, 3, 16, 9, MISSING_COMPONENT, "double")
+        fn(ERROR, PKG_COMP, "MissingComponent9.arc", 15, 3, 15, 9, MISSING_COMPONENT, "double")
       ),
       arg("MissingPortTypeTest1",
         mpk(PKG_COMP, "MissingPortType1.arc"),
