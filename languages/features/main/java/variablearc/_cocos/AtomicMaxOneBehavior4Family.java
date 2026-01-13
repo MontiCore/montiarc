@@ -32,10 +32,7 @@ import java.util.Map;
 
 public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeCoCo {
 
-  private static Context ctx;
-
-  private static boolean evaluateCondition(Context ctx, Model model, BoolExpr condition) {
-    AtomicMaxOneBehavior4Family.ctx = ctx;
+  private static boolean evaluateCondition(Model model, BoolExpr condition) {
     try {
       Expr<?> eval = model.evaluate(condition, true);
       return eval.isTrue();
@@ -50,7 +47,7 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
     Preconditions.checkArgument(node.isPresentSymbol());
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    ctx = ExpressionSolverService.getContext();
+    Context ctx = ExpressionSolverService.getContext();
 
     Map<ASTArcBehaviorElement, BoolExpr> behaviorConditions = new HashMap<>();
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
@@ -120,7 +117,7 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
     if (ExpressionSolverService.solve(multipleBehaviorExpressionList) == Status.SATISFIABLE) {
       Model model = ExpressionSolverService.getModel();
       for (Map.Entry<ASTArcBehaviorElement, BoolExpr> behavior : behaviorConditions.entrySet()) {
-        if (evaluateCondition(ctx, model, behavior.getValue())) {
+        if (evaluateCondition(model, behavior.getValue())) {
           if (first) first = false;
           else
             Log.error(ArcError.MULTIPLE_BEHAVIOR.toString(), behavior.getKey().get_SourcePositionStart(), behavior.getKey().get_SourcePositionEnd());

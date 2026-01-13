@@ -31,10 +31,7 @@ import java.util.Map;
 
 public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo {
 
-  private static Context ctx;
-
-  private static boolean evaluateCondition(Context ctx, Model model, BoolExpr condition) {
-    AtomicNoConnector4Family.ctx = ctx;
+  private static boolean evaluateCondition(Model model, BoolExpr condition) {
     try {
       Expr<?> eval = model.evaluate(condition, true);
       return eval.isTrue();
@@ -49,7 +46,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
     Preconditions.checkArgument(node.isPresentSymbol());
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    ctx = ExpressionSolverService.getContext();
+    Context ctx = ExpressionSolverService.getContext();
 
     Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
@@ -116,7 +113,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
     if (ExpressionSolverService.solve(connectorInAtomicExpressionList) == Status.SATISFIABLE) {
       Model model = ExpressionSolverService.getModel();
       for (Map.Entry<ASTConnector, BoolExpr> connector : connectorConditions.entrySet()) {
-        if (evaluateCondition(ctx, model, connector.getValue())) {
+        if (evaluateCondition(model, connector.getValue())) {
           Log.warn(ArcError.CONNECTORS_IN_ATOMIC.toString(), connector.getKey().get_SourcePositionStart(), connector.getKey().get_SourcePositionEnd());
         }
       }
