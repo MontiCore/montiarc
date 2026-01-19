@@ -1,0 +1,16 @@
+{
+  "name": "ComponentWithCircularInheritance1B",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "ComponentWithCircularInheritance1B",
+      "fullName": "ComponentWithCircularInheritance1B",
+      "super": [
+        {
+          "kind": "de.monticore.types.check.CompKindOfComponentType",
+          "componentTypeName": "ComponentWithCircularInheritance1A"
+        }
+      ]
+    }
+  ]
+}

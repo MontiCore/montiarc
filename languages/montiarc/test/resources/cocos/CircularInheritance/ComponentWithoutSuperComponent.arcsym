@@ -1,0 +1,10 @@
+{
+  "name": "ComponentWithoutSuperComponent",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "ComponentWithoutSuperComponent",
+      "fullName": "ComponentWithoutSuperComponent"
+    }
+  ]
+}

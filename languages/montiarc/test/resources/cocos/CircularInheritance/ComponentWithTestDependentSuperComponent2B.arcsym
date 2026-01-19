@@ -1,0 +1,16 @@
+{
+  "name": "ComponentWithTestDependentSuperComponent2B",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "ComponentWithTestDependentSuperComponent2B",
+      "fullName": "ComponentWithTestDependentSuperComponent2B",
+      "super": [
+        {
+          "kind": "de.monticore.types.check.CompKindOfComponentType",
+          "componentTypeName": "InvalidComp2"
+        }
+      ]
+    }
+  ]
+}

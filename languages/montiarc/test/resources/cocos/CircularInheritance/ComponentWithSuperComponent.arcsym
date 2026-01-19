@@ -1,0 +1,16 @@
+{
+  "name": "ComponentWithSuperComponent",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "ComponentWithSuperComponent",
+      "fullName": "ComponentWithSuperComponent",
+      "super": [
+        {
+          "kind": "de.monticore.types.check.CompKindOfComponentType",
+          "componentTypeName": "ComponentWithoutSuperComponent"
+        }
+      ]
+    }
+  ]
+}
