@@ -146,101 +146,101 @@ public class ExpressionStatementIsValid4Family implements ArcBasisASTArcComponen
     List<ASTExpression> possibleExpressions = new ArrayList<>();
     for (Map.Entry<ASTExpressionStatement, BoolExpr> expressionEntry : expressionStatementConditions.entrySet()) {
 
-        if(node instanceof ASTVariableArcFullVariantComponentType) {
-          // Step 1: Check if Expression can be active
-          List<BoolExpr> expressionEntryExpressionList = new ArrayList<>(List.of(featureConstraints, expressionEntry.getValue()));
-          var expressionSatisfied = ExpressionSolverService.solve(expressionEntryExpressionList);
-          if (expressionSatisfied == Status.UNSATISFIABLE)
-            continue;
+      if (node instanceof ASTVariableArcFullVariantComponentType) {
+        // Step 1: Check if Expression can be active
+        List<BoolExpr> expressionEntryExpressionList = new ArrayList<>(List.of(featureConstraints, expressionEntry.getValue()));
+        var expressionSatisfied = ExpressionSolverService.solve(expressionEntryExpressionList);
+        if (expressionSatisfied == Status.UNSATISFIABLE)
+          continue;
 
-          expressionEntryExpressionList.clear();
+        expressionEntryExpressionList.clear();
 
-          // Step 2: Check if individual variables and ports are possible and create all combinations
-          var variableNames = ExpressionBuildHelper.getVariableNames(expressionEntry.getKey().getExpression());
-          List<ASTArcField> expressionFields = new ArrayList<>();
-          List<ASTArcPort> expressionPorts = new ArrayList<>();
-          if (!variableNames.isEmpty()) {
-            for (String variableName : variableNames) {
-              var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
-              for (Map.Entry<ASTArcField, BoolExpr> entry : possibleFields) {
+        // Step 2: Check if individual variables and ports are possible and create all combinations
+        var variableNames = ExpressionBuildHelper.getVariableNames(expressionEntry.getKey().getExpression());
+        List<ASTArcField> expressionFields = new ArrayList<>();
+        List<ASTArcPort> expressionPorts = new ArrayList<>();
+        if (!variableNames.isEmpty()) {
+          for (String variableName : variableNames) {
+            var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
+            for (Map.Entry<ASTArcField, BoolExpr> entry : possibleFields) {
 
-                expressionEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
-                if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE) {
-                  var field = entry.getKey();
-                  expressionFields.add(entry.getKey());
-                  createdVariablesConditions.put(field.getName() + "_" + (field.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
-                }
-                expressionEntryExpressionList.clear();
+              expressionEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
+              if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE) {
+                var field = entry.getKey();
+                expressionFields.add(entry.getKey());
+                createdVariablesConditions.put(field.getName() + "_" + (field.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
               }
-
-              var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
-              for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
-
-                expressionEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
-                if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE) {
-                  var port = entry.getKey();
-                  expressionPorts.add(port);
-                  createdVariablesConditions.put(port.getName() + "_" + (port.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
-                }
-                expressionEntryExpressionList.clear();
-              }
-            }
-
-            if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
-              possibleExpressions.add(expressionEntry.getKey().getExpression());
-              break;
-            } else {
-              ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
-              for (ASTArcField expressionField : expressionFields) {
-                Optional.ofNullable(ExpressionBuildHelper.createVariableSymbol(expressionField.getSymbol(), fieldNameVariations)).ifPresent(createdVariableSymbols::add);
-              }
-              for (ASTArcPort expressionPort : expressionPorts) {
-                Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(expressionPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
-              }
-            }
-
-            if (!allParameters.isEmpty()) {
-              for (ASTArcParameter parameter : allParameters) {
-                Optional.ofNullable(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations)).ifPresent(createdVariableSymbols::add);
-              }
-            }
-
-            var potentialExpressions = ExpressionBuildHelper.createPossibleGuardExpressions(expressionEntry.getKey().getExpression(), fieldNameVariations);
-
-            // Step 3: Check if created combinations are possible
-            for (ASTExpression potentialExpression : potentialExpressions) {
-              List<String> variablesInExpr = ExpressionBuildHelper.getVariableNames(potentialExpression);
-
-              expressionEntryExpressionList.add(featureConstraints);
-              for (String variableName : variablesInExpr) {
-                BoolExpr variableCondition = createdVariablesConditions.get(variableName);
-                if (variableCondition != null)
-                  expressionEntryExpressionList.add(variableCondition);
-              }
-              if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE)
-                possibleExpressions.add(potentialExpression);
               expressionEntryExpressionList.clear();
             }
-            fieldNameVariations.clear();
-          } else {
-            possibleExpressions.add(expressionEntry.getKey().getExpression());
+
+            var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
+            for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
+
+              expressionEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
+              if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE) {
+                var port = entry.getKey();
+                expressionPorts.add(port);
+                createdVariablesConditions.put(port.getName() + "_" + (port.getSymbol().getType().print().hashCode() & 0x7fffffff), entry.getValue());
+              }
+              expressionEntryExpressionList.clear();
+            }
           }
-        }else{
+
+          if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
+            possibleExpressions.add(expressionEntry.getKey().getExpression());
+            break;
+          } else {
+            ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
+            for (ASTArcField expressionField : expressionFields) {
+              Optional.ofNullable(ExpressionBuildHelper.createVariableSymbol(expressionField.getSymbol(), fieldNameVariations)).ifPresent(createdVariableSymbols::add);
+            }
+            for (ASTArcPort expressionPort : expressionPorts) {
+              Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(expressionPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
+            }
+          }
+
+          if (!allParameters.isEmpty()) {
+            for (ASTArcParameter parameter : allParameters) {
+              Optional.ofNullable(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations)).ifPresent(createdVariableSymbols::add);
+            }
+          }
+
+          var potentialExpressions = ExpressionBuildHelper.createPossibleGuardExpressions(expressionEntry.getKey().getExpression(), fieldNameVariations);
+
+          // Step 3: Check if created combinations are possible
+          for (ASTExpression potentialExpression : potentialExpressions) {
+            List<String> variablesInExpr = ExpressionBuildHelper.getVariableNames(potentialExpression);
+
+            expressionEntryExpressionList.add(featureConstraints);
+            for (String variableName : variablesInExpr) {
+              BoolExpr variableCondition = createdVariablesConditions.get(variableName);
+              if (variableCondition != null)
+                expressionEntryExpressionList.add(variableCondition);
+            }
+            if (ExpressionSolverService.solve(expressionEntryExpressionList) == Status.SATISFIABLE)
+              possibleExpressions.add(potentialExpression);
+            expressionEntryExpressionList.clear();
+          }
+          fieldNameVariations.clear();
+        } else {
           possibleExpressions.add(expressionEntry.getKey().getExpression());
         }
-        // Step 4: TypeCheck possible Expressions
-        for (ASTExpression expression : possibleExpressions) {
-          TypeCheck3.typeOf(expression);
-        }
+      } else {
+        possibleExpressions.add(expressionEntry.getKey().getExpression());
+      }
+      // Step 4: TypeCheck possible Expressions
+      for (ASTExpression expression : possibleExpressions) {
+        TypeCheck3.typeOf(expression);
+      }
 
-        // Remove created variable-symbols
-        for (VariableSymbol variableSymbol : createdVariableSymbols) {
-            ExpressionBuildHelper.getScope().remove(variableSymbol);
-        }
+      // Remove created variable-symbols
+      for (VariableSymbol variableSymbol : createdVariableSymbols) {
+        ExpressionBuildHelper.getScope().remove(variableSymbol);
+      }
 
-        for (PortSymbol portSymbol : createdPortSymbols) {
-            ExpressionBuildHelper.getScope().remove(portSymbol);
-        }
+      for (PortSymbol portSymbol : createdPortSymbols) {
+        ExpressionBuildHelper.getScope().remove(portSymbol);
+      }
     }
   }
 }

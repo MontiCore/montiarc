@@ -113,9 +113,9 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
 
       SubcomponentSymbol sub = subComp.getSymbol();
 
-      if(!sub.isTypePresent())
+      if (!sub.isTypePresent())
         continue;
-      if(!sub.getType().getTypeInfo().isPresentAstNode())
+      if (!sub.getType().getTypeInfo().isPresentAstNode())
         continue;
 
       var subVariationPoints = ((IVariableArcComponentTypeSymbol) (sub.getType().getTypeInfo().getAstNode().getSymbol())).getAllVariationPoints();
@@ -152,7 +152,6 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
     // Adding Constraints
     BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
-
     for (ASTConnector connector : allConnectors) {
       var source = connector.getSource();
       BoolExpr condition = connectorConditions.get(connector) != null ? connectorConditions.get(connector) : ctx.mkTrue();
@@ -162,7 +161,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
 
       var sourceName = source.isPresentComponent() ? node.getSymbol().getFullName() + "." + source.getComponent() + "." + source.getPort() : node.getSymbol().getFullName() + "." + source.getPort();
       var sourcePortInfo = portNameInfos.get(sourceName);
-      if(sourcePortInfo == null)
+      if (sourcePortInfo == null)
         continue;
 
       BoolExpr srcExists = ctx.mkAnd(condition, sourcePortInfo.condition);
@@ -188,7 +187,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
 
         var targetName = target.isPresentComponent() ? node.getSymbol().getFullName() + "." + target.getComponent() + "." + target.getPort() : node.getSymbol().getFullName() + "." + target.getPort();
         var targetPortInfo = portNameInfos.get(targetName);
-        if(targetPortInfo == null)
+        if (targetPortInfo == null)
           continue;
 
         BoolExpr trgtExists = ctx.mkAnd(condition, targetPortInfo.condition);

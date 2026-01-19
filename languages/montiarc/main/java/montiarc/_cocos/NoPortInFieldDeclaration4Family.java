@@ -36,7 +36,7 @@ public class NoPortInFieldDeclaration4Family implements ArcBasisASTArcComponentT
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-    if(DuplicateElementsService.duplicateElementPresent(node))
+    if (DuplicateElementsService.duplicateElementPresent(node))
       return;
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
@@ -89,8 +89,6 @@ public class NoPortInFieldDeclaration4Family implements ArcBasisASTArcComponentT
       fieldEntryExpressionList.addAll(List.of(featureConstraints, fieldEntry.getValue()));
       if (ExpressionSolverService.solve(fieldEntryExpressionList) == Status.UNSATISFIABLE)
         continue;
-
-
 
       var variableNames = ExpressionBuildHelper.getAllVariableOccurences(fieldEntry.getKey().getInitial());
       if (variableNames.size() > 0) {

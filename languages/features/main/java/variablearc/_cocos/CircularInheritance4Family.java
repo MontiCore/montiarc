@@ -121,9 +121,9 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     // Getting alls features, variations and constraints from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
 
-    List<ComponentExtension> currentComponentExtensions = new  ArrayList<>();
+    List<ComponentExtension> currentComponentExtensions = new ArrayList<>();
 
-    if(node instanceof ASTVariableArcFullVariantComponentType){
+    if (node instanceof ASTVariableArcFullVariantComponentType) {
 
       constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
@@ -140,15 +140,15 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
         }
       }
 
-    }else{
+    } else {
       constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
-      componentConditions.put(node,ctx.mkTrue());
+      componentConditions.put(node, ctx.mkTrue());
       currentComponentExtensions = getComponentExtensionList(node, node.getSymbol(), new ArrayList<>(), new ArrayList<>());
 
       var componentsInBody = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).toList();
       for (ASTArcComponentType component : componentsInBody) {
-        componentConditions.put(component,ctx.mkTrue());
+        componentConditions.put(component, ctx.mkTrue());
         var componentExtensions = getComponentExtensionList(component, component.getSymbol(), new ArrayList<>(), new ArrayList<>());
         for (ComponentExtension ext : componentExtensions) {
           var extSource = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(ext.source.getAstNode());
@@ -222,7 +222,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
 
       expressionList_DirectExtension.add(ctx.mkAnd(selfDirectExtension, featureConstraints));
       for (BoolExpr selfVar : selfExtVars)
-          expressionList_DirectExtension.add(ctx.mkEq(selfVar, ctx.mkTrue()));
+        expressionList_DirectExtension.add(ctx.mkEq(selfVar, ctx.mkTrue()));
       // Checking for direct extension
       if (ExpressionSolverService.solve(expressionList_DirectExtension) == Status.SATISFIABLE) {
         Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
@@ -238,7 +238,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
         BoolExpr transitiveBody = ctx.mkTrue();
         for (BoolExpr extendVar : transitiveExtVars)
           transitiveBody = ctx.mkAnd(extendVar, transitiveBody);
-        expressionList_TransitiveExtension.addAll(List.of(ctx.mkEq(transitiveVariable, transitiveBody),transitiveVariable));
+        expressionList_TransitiveExtension.addAll(List.of(ctx.mkEq(transitiveVariable, transitiveBody), transitiveVariable));
       }
 
       if (ExpressionSolverService.solve(expressionList_TransitiveExtension) == Status.SATISFIABLE) {

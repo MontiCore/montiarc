@@ -39,10 +39,11 @@ import static de.monticore.symbols.compsymbols._symboltable.Timing.TIMED_SYNC;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 
 public class NoNonSyncInputPortInDoAction4Family implements ArcBasisASTArcComponentTypeCoCo {
+
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-    if(DuplicateElementsService.duplicateElementPresent(node))
+    if (DuplicateElementsService.duplicateElementPresent(node))
       return;
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();

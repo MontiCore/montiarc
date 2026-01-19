@@ -145,13 +145,13 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
 
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
-    if(node instanceof ASTVariableArcFullVariantComponentType)
-        featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
+    if (node instanceof ASTVariableArcFullVariantComponentType)
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTVariableDeclarator, BoolExpr> declaratorEntry : varDeclaratorConditions.entrySet()) {
 
       List<ASTExpression> possibleExpressions = new ArrayList<>();
-      if(node instanceof ASTVariableArcFullVariantComponentType) {
+      if (node instanceof ASTVariableArcFullVariantComponentType) {
         // Step 1: Check if Expression can be active
         List<BoolExpr> declaratorEntryExpressionList = new ArrayList<>(List.of(featureConstraints, declaratorEntry.getValue()));
         var expressionSatisfied = ExpressionSolverService.solve(declaratorEntryExpressionList);
@@ -159,7 +159,6 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
           continue;
 
         declaratorEntryExpressionList.clear();
-
 
         // Step 2: Check if individual variables and ports are possible and create all combinations
         var variableNames = ExpressionBuildHelper.getVariableNames(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression().deepClone());
@@ -191,7 +190,6 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
             }
           }
 
-
           if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
             possibleExpressions.add(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression());
             break;
@@ -204,8 +202,6 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
               Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(expressionPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
             }
           }
-
-
 
           if (!allParameters.isEmpty()) {
             for (ASTArcParameter parameter : allParameters) {
@@ -231,12 +227,12 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
           }
           fieldNameVariations.clear();
         } else {
-          if(declaratorEntry.getKey().isPresentVariableInit()) {
+          if (declaratorEntry.getKey().isPresentVariableInit()) {
             possibleExpressions.add(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression());
           }
         }
-      }else{
-        if(declaratorEntry.getKey().isPresentVariableInit()){
+      } else {
+        if (declaratorEntry.getKey().isPresentVariableInit()) {
           possibleExpressions.add(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression());
         }
       }
@@ -244,7 +240,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
         if (declaratorEntry.getKey().isPresentVariableInit()) {
           var originalExpression = ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression();
           ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).setExpression(possibleExpression);
-          if(ExpressionBuildHelper.getScope() != null) {
+          if (ExpressionBuildHelper.getScope() != null) {
             ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression().setEnclosingScope(ExpressionBuildHelper.getScope());
           }
           check(declaratorEntry.getKey());
@@ -255,14 +251,14 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
 
     // Remove created variable-symbols
     for (VariableSymbol variableSymbol : createdVariableSymbols) {
-        variableSymbol.getEnclosingScope().remove(variableSymbol);
+      variableSymbol.getEnclosingScope().remove(variableSymbol);
     }
 
     for (PortSymbol portSymbol : createdPortSymbols) {
-        portSymbol.getEnclosingScope().remove(portSymbol);
+      portSymbol.getEnclosingScope().remove(portSymbol);
     }
-    createdVariableSymbols = new  ArrayList<>();
-    createdPortSymbols = new  ArrayList<>();
+    createdVariableSymbols = new ArrayList<>();
+    createdPortSymbols = new ArrayList<>();
     ExpressionBuildHelper.setScope(null);
   }
 

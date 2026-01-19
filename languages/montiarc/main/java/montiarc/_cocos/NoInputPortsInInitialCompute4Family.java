@@ -43,7 +43,7 @@ public class NoInputPortsInInitialCompute4Family implements ArcBasisASTArcCompon
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-    if(DuplicateElementsService.duplicateElementPresent(node))
+    if (DuplicateElementsService.duplicateElementPresent(node))
       return;
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
@@ -89,7 +89,7 @@ public class NoInputPortsInInitialCompute4Family implements ArcBasisASTArcCompon
         BoolExpr variationExpr = ctx.mkAnd(expr.get());
         var arcInits = variationPoint.getArcElements().stream().filter(e -> e instanceof ASTArcInit).map(k -> (ASTArcInit) k).toList();
 
-        for(ASTArcInit arcInit : arcInits) {
+        for (ASTArcInit arcInit : arcInits) {
           initConditions.put(arcInit, variationExpr);
         }
       }
@@ -103,7 +103,7 @@ public class NoInputPortsInInitialCompute4Family implements ArcBasisASTArcCompon
       }
     }
 
-      // Adding Constraints
+    // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
       featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);

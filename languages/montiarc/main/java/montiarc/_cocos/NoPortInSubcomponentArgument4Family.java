@@ -38,7 +38,7 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-    if(DuplicateElementsService.duplicateElementPresent(node))
+    if (DuplicateElementsService.duplicateElementPresent(node))
       return;
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
@@ -53,17 +53,14 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
     // Reading and processing parts of the Main-Component
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
-
     allFeatures = new ArrayList<>(mainFeatures);
     portConditions = new HashMap<>();
     subcomponentConditions = new HashMap<>();
 
-
-
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       constraints = null;
       if (node.isPresentSymbol())
-          constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
 
@@ -86,9 +83,8 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
 
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
-    if(node instanceof ASTVariableArcFullVariantComponentType)
+    if (node instanceof ASTVariableArcFullVariantComponentType)
       featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
-
 
     for (Map.Entry<ASTComponentInstance, BoolExpr> componentEntry : subcomponentConditions.entrySet()) {
 
@@ -96,15 +92,14 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
       List<BoolExpr> componentEntryExpressionList = new ArrayList<>();
       componentEntryExpressionList.addAll(List.of(featureConstraints, componentEntry.getValue()));
       if (ExpressionSolverService.solve(componentEntryExpressionList) == Status.UNSATISFIABLE)
-          continue;
-
-      // Step 2: Get all parameters of the SubComponent and check if there is a violation
-      if(!componentEntry.getKey().isPresentArcArguments())
         continue;
 
+      // Step 2: Get all parameters of the SubComponent and check if there is a violation
+      if (!componentEntry.getKey().isPresentArcArguments())
+        continue;
 
       var compArguments = componentEntry.getKey().getArcArguments().getArcArgumentList();
-      for (ASTArcArgument argument :  compArguments) {
+      for (ASTArcArgument argument : compArguments) {
         var variableNames = ExpressionBuildHelper.getAllVariableOccurences(argument.getExpression());
         if (!variableNames.isEmpty()) {
           for (String variableName : variableNames) {

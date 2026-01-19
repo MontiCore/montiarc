@@ -68,12 +68,12 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<String, BoolExpr> ports = new HashMap<>();
     Map<String, PortSymbol> portSymbols = new HashMap<>();
     Map<String, BoolExpr> portNameConditions = new HashMap<>();
-    Map<String,ASTComponentInstance > portToSubcomponent= new HashMap<>();
+    Map<String, ASTComponentInstance> portToSubcomponent = new HashMap<>();
     Map<String, BoolExpr> portConnected = new HashMap<>();
     Map<String, Set<ASTConnector>> subCompNameToConnectors = new HashMap<>();
 
-    if(node instanceof ASTVariableArcFullVariantComponentType){
-      constraints =  ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
+    if (node instanceof ASTVariableArcFullVariantComponentType) {
+      constraints = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
 
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       for (ASTConnector connector : connectorConditions.keySet()) {
@@ -85,7 +85,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
       }
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
 
-    }else{
+    } else {
       constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTConnector> mainConnectors = node.getConnectors();
@@ -99,8 +99,8 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
         }
       }
       List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
-      for(ASTComponentInstance mainSubComp : mainSubComps){
-        subcomponentConditions.put(mainSubComp,ctx.mkTrue());
+      for (ASTComponentInstance mainSubComp : mainSubComps) {
+        subcomponentConditions.put(mainSubComp, ctx.mkTrue());
       }
     }
 
@@ -111,16 +111,16 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
 
       SubcomponentSymbol sub = subComp.getSymbol();
 
-      if(!sub.isTypePresent())
+      if (!sub.isTypePresent())
         continue;
 
       List<VariableArcVariationPoint> subVariationPoints;
       ASTArcComponentType compTypeSymbol = null;
       List<String> subPorts;
 
-      if(sub.getType().isGenericComponentType()){
-        subVariationPoints = ((IVariableArcComponentTypeSymbol)sub.getType().asGenericComponentType().getTypeInfo()).getAllVariationPoints();
-        var portList = ((IVariableArcComponentTypeSymbol)sub.getType().asGenericComponentType().getTypeInfo()).getTypeInfo().getPorts();
+      if (sub.getType().isGenericComponentType()) {
+        subVariationPoints = ((IVariableArcComponentTypeSymbol) sub.getType().asGenericComponentType().getTypeInfo()).getAllVariationPoints();
+        var portList = ((IVariableArcComponentTypeSymbol) sub.getType().asGenericComponentType().getTypeInfo()).getTypeInfo().getPorts();
         subPorts = portList.stream().map(l -> sub.getFullName() + "." + l.getName()).collect(Collectors.toList());
 
         for (PortSymbol port : portList) {
@@ -129,14 +129,14 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
           portSymbols.put(portName, port);
           portToSubcomponent.put(portName, subComp);
         }
-      }else{
-        subVariationPoints = ((IVariableArcComponentTypeSymbol)sub.getType().asComponentType().getTypeInfo()).getAllVariationPoints();
-        if(sub.isPresentAstNode() && sub.getAstNode().isPresentSymbol() && sub.getAstNode().getSymbol().getType().getTypeInfo().isPresentAstNode()) {
+      } else {
+        subVariationPoints = ((IVariableArcComponentTypeSymbol) sub.getType().asComponentType().getTypeInfo()).getAllVariationPoints();
+        if (sub.isPresentAstNode() && sub.getAstNode().isPresentSymbol() && sub.getAstNode().getSymbol().getType().getTypeInfo().isPresentAstNode()) {
           compTypeSymbol = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode());
           var subFeatures = compTypeSymbol.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).toList();
           allFeatures.addAll(subFeatures);
         }
-        var portList = ((IVariableArcComponentTypeSymbol)sub.getType().asComponentType().getTypeInfo()).getTypeInfo().getPorts();
+        var portList = ((IVariableArcComponentTypeSymbol) sub.getType().asComponentType().getTypeInfo()).getTypeInfo().getPorts();
         subPorts = portList.stream().map(l -> sub.getFullName() + "." + l.getName()).collect(Collectors.toList());
         for (PortSymbol port : portList) {
           String portName = sub.getFullName() + "." + port.getName();
@@ -171,7 +171,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
         for (String variationPort : variationPorts) {
           var variationPortConst = ctx.mkBoolConst(variationPort + "_active");
           BoolExpr portActive = ctx.mkEq(variationPortConst, ctx.mkAnd(subVariationExpr, subcomponentConditions.get(subComp)));
-          portNameConditions.put(variationPort, ctx.mkAnd(portActive,variationPortConst));
+          portNameConditions.put(variationPort, ctx.mkAnd(portActive, variationPortConst));
 
           BoolExpr portConnectors = ctx.mkFalse();
 
@@ -179,8 +179,8 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
             continue;
 
           for (ASTConnector portConnector : subCompNameToConnectors.get(node.getSymbol().getFullName() + "." + sub.getName())) {
-            for(var target : portConnector.getTargetsNames()){
-              if((node.getSymbol().getFullName() + "." + sub.getName()+"."+target).equals(variationPort)){
+            for (var target : portConnector.getTargetsNames()) {
+              if ((node.getSymbol().getFullName() + "." + sub.getName() + "." + target).equals(variationPort)) {
                 portConnectors = ctx.mkOr(portConnectors, ctx.mkEq(ctx.mkBoolConst("From_" + portConnector.getSource().getPort() + "_To_" + variationPort), connectorConditions.get(portConnector)));
               }
             }
@@ -193,19 +193,19 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     // Define connectivity with implications
     for (ASTConnector connector : allConnectors) {
       if (connector.getSource().isPresentComponentSymbol()) {
-        if(!connector.getSource().getComponentSymbol().isTypePresent())
+        if (!connector.getSource().getComponentSymbol().isTypePresent())
           continue;
         String sourceName = connector.getSource().getComponentSymbol().getFullName() + "." + connector.getSource().getPort();
-        if(portNameConditions.get(sourceName) == null || connectorConditions.get(connector) == null)
+        if (portNameConditions.get(sourceName) == null || connectorConditions.get(connector) == null)
           continue;
         portConnected.merge(sourceName, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector)), ctx::mkOr);
       }
       for (ASTPortAccess target : connector.getTargetList()) {
         if (target.isPresentComponentSymbol()) {
-          if(!target.getComponentSymbol().isTypePresent())
+          if (!target.getComponentSymbol().isTypePresent())
             continue;
           String targetName = target.getComponentSymbol().getFullName() + "." + target.getPort();
-          if(portNameConditions.get(targetName) == null || connectorConditions.get(connector) == null)
+          if (portNameConditions.get(targetName) == null || connectorConditions.get(connector) == null)
             continue;
           portConnected.merge(targetName, ctx.mkImplies(portNameConditions.get(targetName), connectorConditions.get(connector)), ctx::mkOr);
         }
@@ -221,16 +221,16 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
       BoolExpr portUnConnected = ctx.mkNot(portisConnected);
       BoolExpr portConnectsTo = !portisConnected.equals(ctx.mkFalse()) ? ctx.mkImplies(ctx.mkBoolConst(port + "_active"), portisConnected) : ctx.mkTrue();
 
-      List<BoolExpr> expressionList = new ArrayList<>(List.of(portisPresent, featureConstraints, portUnConnected,portConnectsTo));
+      List<BoolExpr> expressionList = new ArrayList<>(List.of(portisPresent, featureConstraints, portUnConnected, portConnectsTo));
 
       if (ExpressionSolverService.solve(expressionList) == Status.SATISFIABLE) {
         PortSymbol portSymbol = portSymbols.get(port);
         ASTComponentInstance subComponent = portToSubcomponent.get(port);
-        String portIdentifier = subComponent.getName()+"."+port.substring(subComponent.getSymbol().getFullName().length()+1);
+        String portIdentifier = subComponent.getName() + "." + port.substring(subComponent.getSymbol().getFullName().length() + 1);
         if (portSymbol.isIncoming()) {
-          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(portIdentifier),subComponent.getSymbol().getAstNode().get_SourcePositionStart(),subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
+          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(portIdentifier), subComponent.getSymbol().getAstNode().get_SourcePositionStart(), subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
         } else {
-          Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(portIdentifier),subComponent.getSymbol().getAstNode().get_SourcePositionStart(),subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
+          Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(portIdentifier), subComponent.getSymbol().getAstNode().get_SourcePositionStart(), subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
         }
       }
     }

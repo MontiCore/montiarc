@@ -54,7 +54,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     List<PortSymbol> createdPortSymbols;
     List<ASTArcParameter> allParameters;
     Map<ASTArcField, BoolExpr> fieldConditions;
-    Map<ASTArcPort,BoolExpr> portConditions;
+    Map<ASTArcPort, BoolExpr> portConditions;
     Map<String, List<String>> fieldNameVariations;
     Map<ASTArcStatechart, BoolExpr> statechartConditions;
 
@@ -88,7 +88,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
           if (!body.isPresentPre()) continue;
           var guardExpression = body.getPre();
-          Guard variationGuard = new Guard(guardExpression, chartEntry.getValue(),body);
+          Guard variationGuard = new Guard(guardExpression, chartEntry.getValue(), body);
           allGuards.add(variationGuard);
         }
       }
@@ -102,8 +102,8 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
       }
 
       List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
-      for(ASTArcPort mainPort : mainPorts){
-        portConditions.put(mainPort,ctx.mkTrue());
+      for (ASTArcPort mainPort : mainPorts) {
+        portConditions.put(mainPort, ctx.mkTrue());
       }
 
       var mainCharts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(l -> (ASTArcStatechart) l).toList();
@@ -116,7 +116,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
           if (!body.isPresentPre()) continue;
           var guardExpression = body.getPre();
-          Guard mainGuard = new Guard(guardExpression, ctx.mkTrue(),body);
+          Guard mainGuard = new Guard(guardExpression, ctx.mkTrue(), body);
           allGuards.add(mainGuard);
         }
       }
@@ -127,7 +127,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
     for (Guard guard : allGuards) {
       List<ASTExpression> guardExpressions = new ArrayList<>();
-      if(node instanceof ASTVariableArcFullVariantComponentType) {
+      if (node instanceof ASTVariableArcFullVariantComponentType) {
 
         // Step 1: Check if guard can be active
         List<BoolExpr> guardExpressionList = new ArrayList<>(List.of(featureConstraints, guard.requiredFeatures));
@@ -145,14 +145,12 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
           for (String variableName : variableNames) {
             var possibleFields = fieldConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcField, BoolExpr> entry : possibleFields) {
-              guardExpressionList.addAll(List.of(guard.requiredFeatures,featureConstraints, entry.getValue()));
+              guardExpressionList.addAll(List.of(guard.requiredFeatures, featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(guardExpressionList) == Status.SATISFIABLE) {
                 guardFields.add(entry.getKey());
               }
               guardExpressionList.clear();
             }
-
-
 
             var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).toList();
             for (Map.Entry<ASTArcPort, BoolExpr> entry : possiblePorts) {
@@ -163,63 +161,63 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
               guardExpressionList.clear();
             }
 
-              if (guardFields.isEmpty() && guardPorts.isEmpty()) {
-                guardExpressions.add(guard.expression);
-                break;
-              }
+            if (guardFields.isEmpty() && guardPorts.isEmpty()) {
+              guardExpressions.add(guard.expression);
+              break;
+            }
 
-              if (!guardFields.isEmpty()) {
-                ExpressionBuildHelper.setScope(guardFields.get(0).getEnclosingScope());
-                for (ASTArcField guardField : guardFields) {
-                  Optional.ofNullable(ExpressionBuildHelper.createVariableSymbol(guardField.getSymbol(), fieldNameVariations)).ifPresent(createdVariableSymbols::add);
-                }
+            if (!guardFields.isEmpty()) {
+              ExpressionBuildHelper.setScope(guardFields.get(0).getEnclosingScope());
+              for (ASTArcField guardField : guardFields) {
+                Optional.ofNullable(ExpressionBuildHelper.createVariableSymbol(guardField.getSymbol(), fieldNameVariations)).ifPresent(createdVariableSymbols::add);
               }
+            }
 
-              if (!guardPorts.isEmpty()) {
-                ExpressionBuildHelper.setScope(guardPorts.get(0).getEnclosingScope());
-                for (ASTArcPort guardPort : guardPorts) {
-                  Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(guardPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
-                }
+            if (!guardPorts.isEmpty()) {
+              ExpressionBuildHelper.setScope(guardPorts.get(0).getEnclosingScope());
+              for (ASTArcPort guardPort : guardPorts) {
+                Optional.ofNullable(ExpressionBuildHelper.createPortSymbol(guardPort.getSymbol(), fieldNameVariations)).ifPresent(createdPortSymbols::add);
               }
+            }
 
-              if (!allParameters.isEmpty()) {
-                for (ASTArcParameter parameter : allParameters) {
-                  Optional.ofNullable(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations)).ifPresent(createdVariableSymbols::add);
-                }
+            if (!allParameters.isEmpty()) {
+              for (ASTArcParameter parameter : allParameters) {
+                Optional.ofNullable(ExpressionBuildHelper.createParameterSymbol(parameter, fieldNameVariations)).ifPresent(createdVariableSymbols::add);
               }
+            }
 
-              guardExpressions.addAll(ExpressionBuildHelper.createPossibleGuardExpressions(guard.expression, fieldNameVariations));
-              fieldNameVariations = new HashMap<>();
+            guardExpressions.addAll(ExpressionBuildHelper.createPossibleGuardExpressions(guard.expression, fieldNameVariations));
+            fieldNameVariations = new HashMap<>();
           }
         } else {
           guardExpressions.add(guard.expression);
         }
-      }else{
-          guardExpressions.add(guard.getExpression());
+      } else {
+        guardExpressions.add(guard.getExpression());
       }
 
       for (ASTExpression guardExpression : guardExpressions) {
-          SymTypeExpression preType = TypeCheck3.typeOf(guardExpression);
-          if (preType.isObscureType()) {
-            Log.debug(() -> String.format("Coco '%s' skipped for transition guard at %s. The type is obscure, an error should already have been logged.",
-              this.getClass().getSimpleName(),
-              guard.getTransitionBody().get_SourcePositionStart()
-            ), "Cocos");
-          } else if (!SymTypeRelations.isBoolean(preType)) {
-            Log.error(String.format("0xCC111 Expected '%s' but provided '%s'.", BOOLEAN, preType.print()),
-              guard.getTransitionBody().getPre().get_SourcePositionStart(),
-              guard.getTransitionBody().getPre().get_SourcePositionEnd()
-            );
-          }
+        SymTypeExpression preType = TypeCheck3.typeOf(guardExpression);
+        if (preType.isObscureType()) {
+          Log.debug(() -> String.format("Coco '%s' skipped for transition guard at %s. The type is obscure, an error should already have been logged.",
+            this.getClass().getSimpleName(),
+            guard.getTransitionBody().get_SourcePositionStart()
+          ), "Cocos");
+        } else if (!SymTypeRelations.isBoolean(preType)) {
+          Log.error(String.format("0xCC111 Expected '%s' but provided '%s'.", BOOLEAN, preType.print()),
+            guard.getTransitionBody().getPre().get_SourcePositionStart(),
+            guard.getTransitionBody().getPre().get_SourcePositionEnd()
+          );
+        }
       }
       // Remove created variable-symbols
       for (VariableSymbol variableSymbol : createdVariableSymbols) {
-          variableSymbol.getEnclosingScope().remove(variableSymbol);
+        variableSymbol.getEnclosingScope().remove(variableSymbol);
       }
 
       // Remove created port-Symbols
       for (PortSymbol portSymbol : createdPortSymbols) {
-          portSymbol.getEnclosingScope().remove(portSymbol);
+        portSymbol.getEnclosingScope().remove(portSymbol);
       }
     }
   }
@@ -244,7 +242,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
       return requiredFeatures;
     }
 
-    public ASTTransitionBody getTransitionBody() {return transitionBody;}
+    public ASTTransitionBody getTransitionBody() { return transitionBody; }
 
   }
 }

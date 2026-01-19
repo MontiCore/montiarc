@@ -154,7 +154,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
     for (Map.Entry<ASTIfStatement, BoolExpr> ifStatementEntry : ifStatementConditions.entrySet()) {
 
       List<ASTExpression> possibleExpressions = new ArrayList<>();
-      if(node instanceof ASTVariableArcFullVariantComponentType) {
+      if (node instanceof ASTVariableArcFullVariantComponentType) {
         // Step 1: Check if Expression can be active
         List<BoolExpr> ifStatementEntryExpressionList = new ArrayList<>(List.of(featureConstraints, ifStatementEntry.getValue()));
         var expressionSatisfied = ExpressionSolverService.solve(ifStatementEntryExpressionList);
@@ -231,7 +231,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
         } else {
           possibleExpressions.add(ifStatementEntry.getKey().getCondition());
         }
-      }else{
+      } else {
         possibleExpressions.add(ifStatementEntry.getKey().getCondition());
       }
       for (ASTExpression possibleExpression : possibleExpressions) {
@@ -243,11 +243,11 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
     }
     // Remove created variable-symbols
     for (VariableSymbol variableSymbol : createdVariableSymbols) {
-        ExpressionBuildHelper.getScope().remove(variableSymbol);
+      ExpressionBuildHelper.getScope().remove(variableSymbol);
     }
 
     for (PortSymbol portSymbol : createdPortSymbols) {
-        ExpressionBuildHelper.getScope().remove(portSymbol);
+      ExpressionBuildHelper.getScope().remove(portSymbol);
     }
   }
 }

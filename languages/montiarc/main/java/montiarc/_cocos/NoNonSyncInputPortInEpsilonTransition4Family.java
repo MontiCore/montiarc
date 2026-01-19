@@ -56,7 +56,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
     ExpressionSet constraints;
 
     Map<ASTTransitionBody, BoolExpr> transitionConditions;
-    Map<PortSymbol,BoolExpr> portsymbolConditions;
+    Map<PortSymbol, BoolExpr> portsymbolConditions;
 
     // Reading and processing parts of the Main-Component
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
@@ -119,8 +119,8 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
 
     for (Map.Entry<ASTTransitionBody, BoolExpr> doEntry : transitionConditions.entrySet()) {
 
-      if(doEntry.getKey().isPresentSCEvent()){
-            continue;
+      if (doEntry.getKey().isPresentSCEvent()) {
+        continue;
       }
 
       // Step 1: Check if transition can be active
@@ -158,32 +158,32 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
 
             if (node instanceof ASTVariableArcFullVariantComponentType) {
 
-              for(VariableSymbol portSymbol : ports){
+              for (VariableSymbol portSymbol : ports) {
 
-                if(!(portSymbol instanceof Port2VariableAdapter))
+                if (!(portSymbol instanceof Port2VariableAdapter))
                   continue;
 
-              doEntryExpressionList.clear();
-              
-              var portConditions = portsymbolConditions.entrySet().stream().filter(e -> e.getKey().equals(((Port2VariableAdapter) portSymbol).getAdaptee())).map(Map.Entry::getValue).toList();
-              if (portConditions.isEmpty())
-                continue;
-
-              for (BoolExpr expr : portConditions) {
                 doEntryExpressionList.clear();
-                doEntryExpressionList.addAll(List.of(featureConstraints, ctx.mkAnd(doEntry.getValue(), expr)));
-                if (ExpressionSolverService.solve(doEntryExpressionList) == Status.UNSATISFIABLE)
+
+                var portConditions = portsymbolConditions.entrySet().stream().filter(e -> e.getKey().equals(((Port2VariableAdapter) portSymbol).getAdaptee())).map(Map.Entry::getValue).toList();
+                if (portConditions.isEmpty())
                   continue;
 
-                PortSymbol port = ((Port2VariableAdapter) portSymbol).getAdaptee();
-                if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
-                  if (shadowingFields.isEmpty()) {
-                    SourcePosition sourcePosition = node.get_SourcePositionStart();
-                    Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, doEntry.getKey()), sourcePosition);
+                for (BoolExpr expr : portConditions) {
+                  doEntryExpressionList.clear();
+                  doEntryExpressionList.addAll(List.of(featureConstraints, ctx.mkAnd(doEntry.getValue(), expr)));
+                  if (ExpressionSolverService.solve(doEntryExpressionList) == Status.UNSATISFIABLE)
+                    continue;
+
+                  PortSymbol port = ((Port2VariableAdapter) portSymbol).getAdaptee();
+                  if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
+                    if (shadowingFields.isEmpty()) {
+                      SourcePosition sourcePosition = node.get_SourcePositionStart();
+                      Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, doEntry.getKey()), sourcePosition);
+                    }
                   }
                 }
               }
-            }
             } else {
               if (!ports.isEmpty() && ports.get(0) instanceof Port2VariableAdapter) {
                 PortSymbol port = ((Port2VariableAdapter) ports.get(0)).getAdaptee();
@@ -196,11 +196,12 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
               }
             }
           }
-          }
         }
+      }
     }
 
   }
+
   protected Predicate<VariableSymbol> getVariablePredicate() {
     return v -> true;
   }

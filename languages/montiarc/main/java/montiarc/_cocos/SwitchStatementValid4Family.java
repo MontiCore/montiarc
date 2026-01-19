@@ -152,13 +152,13 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
 
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
-    if(node instanceof ASTVariableArcFullVariantComponentType)
-        featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
+    if (node instanceof ASTVariableArcFullVariantComponentType)
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTSwitchStatement, BoolExpr> switchStatementEntry : switchStatementConditions.entrySet()) {
 
       List<ASTExpression> possibleExpressions = new ArrayList<>();
-      if(node instanceof ASTVariableArcFullVariantComponentType) {
+      if (node instanceof ASTVariableArcFullVariantComponentType) {
         // Step 1: Check if Expression can be active
         List<BoolExpr> switchStatementEntryExpressionList = new ArrayList<>(List.of(featureConstraints, switchStatementEntry.getValue()));
         var expressionSatisfied = ExpressionSolverService.solve(switchStatementEntryExpressionList);
@@ -235,7 +235,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
         } else {
           possibleExpressions.add(switchStatementEntry.getKey().getExpression());
         }
-      }else{
+      } else {
         possibleExpressions.add(switchStatementEntry.getKey().getExpression());
       }
       for (ASTExpression possibleExpression : possibleExpressions) {
@@ -249,11 +249,11 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
     }
     // Remove created variable-symbols
     for (VariableSymbol variableSymbol : createdVariableSymbols) {
-        ExpressionBuildHelper.getScope().remove(variableSymbol);
+      ExpressionBuildHelper.getScope().remove(variableSymbol);
     }
 
     for (PortSymbol portSymbol : createdPortSymbols) {
-        ExpressionBuildHelper.getScope().remove(portSymbol);
+      ExpressionBuildHelper.getScope().remove(portSymbol);
     }
   }
 

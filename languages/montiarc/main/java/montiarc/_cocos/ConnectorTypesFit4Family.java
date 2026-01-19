@@ -57,7 +57,6 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
     Context ctx = ExpressionSolverService.getContext();
 
@@ -114,20 +113,19 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
 
     for (Map.Entry<ASTComponentInstance, BoolExpr> subEntry : subcomponentCondition.entrySet()) {
 
-      if(!subEntry.getKey().getSymbol().isTypePresent())
+      if (!subEntry.getKey().getSymbol().isTypePresent())
         continue;
 
-      var compSymbol = (ComponentTypeSymbol)subEntry.getKey().getSymbol().getType().getTypeInfo();
+      var compSymbol = (ComponentTypeSymbol) subEntry.getKey().getSymbol().getType().getTypeInfo();
       var subPorts = compSymbol.getPorts();
 
       for (PortSymbol port : subPorts) {
 
-        portInfoConditions.put(new PortInformation(subEntry.getKey().getSymbol().getName() + "." + port.getName(), port,subEntry.getKey().getSymbol()), subcomponentCondition.get(subEntry.getKey()));
+        portInfoConditions.put(new PortInformation(subEntry.getKey().getSymbol().getName() + "." + port.getName(), port, subEntry.getKey().getSymbol()), subcomponentCondition.get(subEntry.getKey()));
       }
     }
 
     for (Map.Entry<ASTConnector, BoolExpr> connectorEntry : connectorConditions.entrySet()) {
-
 
       // Step 1: Check if connector can be active
       List<BoolExpr> connectorActiveExpressionList = new ArrayList<>();
@@ -145,9 +143,8 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
       List<ASTConnector> connectorsToCheck = new ArrayList<>();
       List<PortInformation> connectorPorts = new ArrayList<>();
 
-
       // If multiple ports with the same name exist or generic ports, then check and create possible connectors
-       if (multiplePortsExist||genericPorts) {
+      if (multiplePortsExist || genericPorts) {
         List<Map.Entry<ExpressionBuildHelper.PortInformation, BoolExpr>> possiblePorts;
         for (String portName : portNames) {
           possiblePorts = portInfoConditions.entrySet().stream().filter(e -> e.getKey().getPortName().equals(portName)).toList();
@@ -160,11 +157,11 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
           }
         }
 
-         ExpressionBuildHelper.setScope((IArcBasisScope) connectorPorts.get(0).getArcPort().getEnclosingScope());
-          for (PortInformation connectorPort : connectorPorts) {
-            Optional.ofNullable(ExpressionBuildHelper.createPortSymbolForName(connectorPort, portNameVariations)).ifPresent( createdPortSymbols::add);
-          }
-          connectorsToCheck.addAll(ExpressionBuildHelper.createPossibleConnectors(connectorEntry.getKey(), portNameVariations));
+        ExpressionBuildHelper.setScope((IArcBasisScope) connectorPorts.get(0).getArcPort().getEnclosingScope());
+        for (PortInformation connectorPort : connectorPorts) {
+          Optional.ofNullable(ExpressionBuildHelper.createPortSymbolForName(connectorPort, portNameVariations)).ifPresent(createdPortSymbols::add);
+        }
+        connectorsToCheck.addAll(ExpressionBuildHelper.createPossibleConnectors(connectorEntry.getKey(), portNameVariations));
 
       } else {
         connectorsToCheck.add(connectorEntry.getKey());
@@ -176,12 +173,12 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
 
       // Remove created Portsymbols from the scope of the connector
       for (PortSymbol portSymbol : createdPortSymbols) {
-          connectorPorts.stream().filter(e -> e.getArcPort().getFullName().equals(portSymbol.getFullName())).forEach(l -> l.getArcPort().getEnclosingScope().remove(portSymbol));
-          ExpressionBuildHelper.getScope().remove(portSymbol);
-          connectorEntry.getKey().getEnclosingScope().remove(portSymbol);
+        connectorPorts.stream().filter(e -> e.getArcPort().getFullName().equals(portSymbol.getFullName())).forEach(l -> l.getArcPort().getEnclosingScope().remove(portSymbol));
+        ExpressionBuildHelper.getScope().remove(portSymbol);
+        connectorEntry.getKey().getEnclosingScope().remove(portSymbol);
       }
 
-      createdPortSymbols = new  ArrayList<>();
+      createdPortSymbols = new ArrayList<>();
       portNameVariations = new HashMap<>();
       ExpressionBuildHelper.setScope(null);
     }

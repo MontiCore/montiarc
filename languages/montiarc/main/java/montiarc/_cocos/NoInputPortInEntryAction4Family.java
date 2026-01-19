@@ -42,7 +42,7 @@ public class NoInputPortInEntryAction4Family implements ArcBasisASTArcComponentT
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-    if(DuplicateElementsService.duplicateElementPresent(node))
+    if (DuplicateElementsService.duplicateElementPresent(node))
       return;
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();

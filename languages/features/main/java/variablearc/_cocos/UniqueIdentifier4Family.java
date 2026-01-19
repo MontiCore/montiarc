@@ -42,7 +42,6 @@ import java.util.Optional;
 
 public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo {
 
-
   private List<ElementCondition> allElementList = new ArrayList<>();
 
   protected static Optional<SourcePosition> optSourcePosOf(@NotNull ISymbol sym) {
@@ -63,14 +62,13 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
 
-    DuplicateElementsService.setComponent(node,false);
+    DuplicateElementsService.setComponent(node, false);
 
     ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
     Context ctx = ExpressionSolverService.getContext();
 
     allElementList = new ArrayList<>();
     Map<ASTArcElement, BoolExpr> elementConditions;
-
 
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
@@ -155,28 +153,27 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding all constraints for the possible conflicts to the solver
-    List<BoolExpr> nameConflictExpressionList = new ArrayList<>(List.of(ctx.mkOr(nameConflicts.values().toArray(new BoolExpr[0])),featureConstraints));
+    List<BoolExpr> nameConflictExpressionList = new ArrayList<>(List.of(ctx.mkOr(nameConflicts.values().toArray(new BoolExpr[0])), featureConstraints));
 
     if (nameConflicts.isEmpty()) {
       return;
     }
 
-    for(Map.Entry<String, BoolExpr> potentialConflict : nameConflicts.entrySet()) {
+    for (Map.Entry<String, BoolExpr> potentialConflict : nameConflicts.entrySet()) {
 
-      if (ExpressionSolverService.solve(List.of(potentialConflict.getValue(),featureConstraints)) == Status.SATISFIABLE) {
+      if (ExpressionSolverService.solve(List.of(potentialConflict.getValue(), featureConstraints)) == Status.SATISFIABLE) {
 
         for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet().stream().filter(e -> e.getKey().equals(potentialConflict.getKey())).toList()) {
           List<ElementCondition> group = entry.getValue();
           List<ElementCondition> active = new ArrayList<>();
           for (ElementCondition element : group) {
-            if(ExpressionSolverService.solve(List.of(element.condition,featureConstraints)) == Status.SATISFIABLE)
-            {
+            if (ExpressionSolverService.solve(List.of(element.condition, featureConstraints)) == Status.SATISFIABLE) {
               active.add(element);
             }
           }
 
           if (active.size() > 1) {
-            DuplicateElementsService.setComponent(node,true);
+            DuplicateElementsService.setComponent(node, true);
             Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
               node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
           }
@@ -241,13 +238,16 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
       this.condition = condition;
       this.sourcePosition = sourcePosition;
     }
-    public String getName(){
+
+    public String getName() {
       return this.name;
     }
-    public BoolExpr getCondition(){
+
+    public BoolExpr getCondition() {
       return this.condition;
     }
-    public SourcePosition getSourcePosition(){
+
+    public SourcePosition getSourcePosition() {
       return this.sourcePosition;
     }
   }

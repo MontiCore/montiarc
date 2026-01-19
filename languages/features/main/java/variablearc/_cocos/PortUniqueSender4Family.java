@@ -59,7 +59,6 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     List<ASTConnector> allConnectors;
     List<SubcomponentSymbol> allSubComponents;
 
-
     // Reading and processing parts of the Main-Component
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
@@ -68,22 +67,22 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     allSubComponents = new ArrayList<>();
 
     constraints = null;
-    if(node instanceof ASTVariableArcFullVariantComponentType){
+    if (node instanceof ASTVariableArcFullVariantComponentType) {
       if (node.isPresentSymbol())
-        constraints = ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
+        constraints = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
 
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       allConnectors.addAll(connectorConditions.keySet());
 
-      for(Map.Entry<ASTArcPort, BoolExpr> entry : ((ASTVariableArcFullVariantComponentType) node).getPortConditions().entrySet()){
+      for (Map.Entry<ASTArcPort, BoolExpr> entry : ((ASTVariableArcFullVariantComponentType) node).getPortConditions().entrySet()) {
         portConditions.put(entry.getKey(), entry.getValue());
       }
-      for(Map.Entry<ASTArcPort, BoolExpr> portEntry : portConditions.entrySet()){
-        portNameConditions.merge(node.getSymbol().getFullName() + "." + portEntry.getKey().getSymbol().getName(),portEntry.getValue(),ctx::mkOr);
+      for (Map.Entry<ASTArcPort, BoolExpr> portEntry : portConditions.entrySet()) {
+        portNameConditions.merge(node.getSymbol().getFullName() + "." + portEntry.getKey().getSymbol().getName(), portEntry.getValue(), ctx::mkOr);
       }
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
-      for(Map.Entry<ASTComponentInstance, BoolExpr> subCompEntry: subcomponentConditions.entrySet()){
-        if(subCompEntry.getKey().isPresentSymbol())
+      for (Map.Entry<ASTComponentInstance, BoolExpr> subCompEntry : subcomponentConditions.entrySet()) {
+        if (subCompEntry.getKey().isPresentSymbol())
           subcomponentSymbolCondition.put(subCompEntry.getKey().getSymbol(), subCompEntry.getValue());
       }
     } else {
@@ -96,7 +95,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
       List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).toList();
       for (ASTArcPort port : mainPorts) {
         portConditions.put(port, ctx.mkTrue());
-        portNameConditions.merge(node.getSymbol().getFullName() + "." + port.getSymbol().getName(),ctx.mkTrue(),ctx::mkOr);
+        portNameConditions.merge(node.getSymbol().getFullName() + "." + port.getSymbol().getName(), ctx.mkTrue(), ctx::mkOr);
       }
 
       List<SubcomponentSymbol> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).map(ASTComponentInstance::getSymbol).toList();
@@ -115,7 +114,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
 
     // Processing Sub-Components, that are defined within the component, but not in a variation block
     for (SubcomponentSymbol sub : node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).map(ASTComponentInstance::getSymbol).toList()) {
-      if(!sub.isPresentAstNode() ||!sub.getAstNode().getSymbol().isTypePresent() || !sub.getAstNode().getSymbol().getType().getTypeInfo().isPresentAstNode() )
+      if (!sub.isPresentAstNode() || !sub.getAstNode().getSymbol().isTypePresent() || !sub.getAstNode().getSymbol().getType().getTypeInfo().isPresentAstNode())
         continue;
       var subComp = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode());
       var subFeatures = subComp.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).toList();
@@ -124,10 +123,10 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
       var subPorts = subComp.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap((List::stream)).toList();
       for (ASTArcPort port : subPorts) {
         portConditions.put(port, subcomponentSymbolCondition.get(sub));
-        portNameConditions.merge(sub.getFullName() + "." + port.getSymbol().getName(),subcomponentSymbolCondition.get(sub),ctx::mkOr);
+        portNameConditions.merge(sub.getFullName() + "." + port.getSymbol().getName(), subcomponentSymbolCondition.get(sub), ctx::mkOr);
       }
 
-      var subVariationPoints = ((IVariableArcComponentTypeSymbol)(sub.getType().getTypeInfo().getAstNode().getSymbol())).getAllVariationPoints();
+      var subVariationPoints = ((IVariableArcComponentTypeSymbol) (sub.getType().getTypeInfo().getAstNode().getSymbol())).getAllVariationPoints();
       for (VariableArcVariationPoint variationPoint : subVariationPoints) {
         var varifExprSet = VariationConditionHelper.getExpressionSetCopyWithContext(new ExpressionSet(variationPoint.getAllConditions()));
 
@@ -145,7 +144,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
         for (ASTArcPort variationPort : variationPorts) {
           BoolExpr portActive = ctx.mkEq(ctx.mkBoolConst(variationPort + "_active"), subVariationExpr);
           portConditions.put(variationPort, portActive);
-          portNameConditions.merge(sub.getFullName() + "." + variationPort.getSymbol().getName(),subcomponentSymbolCondition.get(sub),ctx::mkOr);
+          portNameConditions.merge(sub.getFullName() + "." + variationPort.getSymbol().getName(), subcomponentSymbolCondition.get(sub), ctx::mkOr);
         }
       }
     }
@@ -198,12 +197,12 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
         int violationsCount = (Integer.parseInt(model.eval(count, false).toString()) - 1);
         for (int k = 0; k < violationsCount; k++) {
           ASTConnector violatingConnector = connectors.stream().findFirst().isPresent() ? connectors.stream().findFirst().get() : null;
-          if(violatingConnector != null) {
+          if (violatingConnector != null) {
             Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName), violatingConnector.get_SourcePositionStart(), violatingConnector.get_SourcePositionEnd());
-          }else{
-            Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName),null,null);
+          } else {
+            Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName), null, null);
           }
-          }
+        }
       }
     }
   }

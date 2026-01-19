@@ -79,10 +79,10 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
       constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
-      for(ASTArcPort mainPort : mainPorts){
+      for (ASTArcPort mainPort : mainPorts) {
         String portName = node.getSymbol().getFullName() + "." + mainPort.getName();
-        portConditions.put(mainPort,ctx.mkTrue());
-        portNameConditions.put(portName,ctx.mkTrue());
+        portConditions.put(mainPort, ctx.mkTrue());
+        portNameConditions.put(portName, ctx.mkTrue());
       }
 
       List<ASTConnector> mainConnectors = node.getConnectors();
@@ -103,8 +103,8 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
           var existingCondition = portConnected.get(sourceName);
           portConnected.put(sourceName, ctx.mkOr(existingCondition, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector))));
         } else {
-          if(portNameConditions.containsKey(sourceName) && connectorConditions.containsKey(connector))
-              portConnected.put(sourceName, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector)));
+          if (portNameConditions.containsKey(sourceName) && connectorConditions.containsKey(connector))
+            portConnected.put(sourceName, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector)));
         }
       }
       for (ASTPortAccess target : connector.getTargetList()) {
@@ -115,8 +115,8 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
           var existingCondition = portConnected.get(targetName);
           portConnected.put(targetName, ctx.mkOr(existingCondition, ctx.mkImplies(portNameConditions.get(targetName), connectorConditions.get(connector))));
         } else {
-          if(portNameConditions.containsKey(targetName) && connectorConditions.containsKey(connector))
-               portConnected.put(targetName, ctx.mkImplies(portNameConditions.get(targetName), connectorConditions.get(connector)));
+          if (portNameConditions.containsKey(targetName) && connectorConditions.containsKey(connector))
+            portConnected.put(targetName, ctx.mkImplies(portNameConditions.get(targetName), connectorConditions.get(connector)));
         }
       }
     }
