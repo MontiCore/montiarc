@@ -39,7 +39,7 @@ class AtomicMaxOneBehavior4FamilyTest extends AtomicMaxOneBehaviorTest {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
@@ -69,45 +69,49 @@ class AtomicMaxOneBehavior4FamilyTest extends AtomicMaxOneBehaviorTest {
 
   protected static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
-      arg("""
-        component ValidCompWithVariability1 {
-          feature f1;
-          varif(f1) { automaton { } }
-          else { automaton { } }
-        }
+      arg(
         """
+          component ValidCompWithVariability1 {
+            feature f1;
+            varif(f1) { automaton { } }
+            else { automaton { } }
+          }
+          """
       ),
-      arg("""
-        component ValidCompWithVariability2 {
-          feature f1, f2;
-          varif(f1) { automaton { } }
-          varif(f2) { automaton { } }
-          constraint(f1 ^ f2);
-        }
+      arg(
         """
-      ),
-      arg("""
-        component ValidCompWithVariability3 {
-          component Inner {
+          component ValidCompWithVariability2 {
             feature f1, f2;
             varif(f1) { automaton { } }
             varif(f2) { automaton { } }
             constraint(f1 ^ f2);
           }
-        }
-        """
+          """
       ),
-      arg("""
-        component ValidCompWithVariability4 {
-          feature f1, f2, f3;
-          varif(f1) { automaton { } }
-          varif(f2) { automaton { } }
-          varif(f3) { automaton { } }
-          constraint(!(f1 && f2));
-          constraint(!(f1 && f3));
-          constraint(!(f2 && f3));
-        }
+      arg(
         """
+          component ValidCompWithVariability3 {
+            component Inner {
+              feature f1, f2;
+              varif(f1) { automaton { } }
+              varif(f2) { automaton { } }
+              constraint(f1 ^ f2);
+            }
+          }
+          """
+      ),
+      arg(
+        """
+          component ValidCompWithVariability4 {
+            feature f1, f2, f3;
+            varif(f1) { automaton { } }
+            varif(f2) { automaton { } }
+            varif(f3) { automaton { } }
+            constraint(!(f1 && f2));
+            constraint(!(f1 && f3));
+            constraint(!(f2 && f3));
+          }
+          """
       )
     );
   }
@@ -115,90 +119,99 @@ class AtomicMaxOneBehavior4FamilyTest extends AtomicMaxOneBehaviorTest {
   protected static Stream<Arguments> invalidModelsWithVariability() {
     return Stream.of(
       // atomic component with two automata (configuration f1 && f2)
-      arg("""
-        component InvalidCompWithVariability1 {
-          feature f1, f2;
-          varif(f1) { automaton { } }
-          varif(f2) { automaton { } }
-        }
-        """, MULTIPLE_BEHAVIOR
-      ),
-      // atomic component with two ajava blocks (configuration f1 && f2)
-      arg("""
-        component InvalidCompWithVariability2 {
-          feature f1, f2;
-          varif(f1) { compute { } }
-          varif(f2) { compute { } }
-        }""", MULTIPLE_BEHAVIOR
-      ),
-      // atomic component with automaton and ajava (configuration f1 && f2)
-      arg("""
-        component InvalidCompWithVariability3 {
-          feature f1,f2;
-          varif(f1) { automaton { } }
-          varif(f2) { compute { } }
-        }
-        """, MULTIPLE_BEHAVIOR
-      ),
-      // inner component with two automata (configuration f1 && f2)
-      arg("""
-        component InvalidCompWithVariability4 {
-          component Inner {
+      arg(
+        """
+          component InvalidCompWithVariability1 {
             feature f1, f2;
             varif(f1) { automaton { } }
             varif(f2) { automaton { } }
           }
-        }
-        """, MULTIPLE_BEHAVIOR
+          """, MULTIPLE_BEHAVIOR
+      ),
+      // atomic component with two ajava blocks (configuration f1 && f2)
+      arg(
+        """
+          component InvalidCompWithVariability2 {
+            feature f1, f2;
+            varif(f1) { compute { } }
+            varif(f2) { compute { } }
+          }""", MULTIPLE_BEHAVIOR
+      ),
+      // atomic component with automaton and ajava (configuration f1 && f2)
+      arg(
+        """
+          component InvalidCompWithVariability3 {
+            feature f1,f2;
+            varif(f1) { automaton { } }
+            varif(f2) { compute { } }
+          }
+          """, MULTIPLE_BEHAVIOR
+      ),
+      // inner component with two automata (configuration f1 && f2)
+      arg(
+        """
+          component InvalidCompWithVariability4 {
+            component Inner {
+              feature f1, f2;
+              varif(f1) { automaton { } }
+              varif(f2) { automaton { } }
+            }
+          }
+          """, MULTIPLE_BEHAVIOR
       ),
       // atomic component with three automata (configuration f1 && f2 && f3)
-      arg("""
-        component InvalidCompWithVariability5 {
-          feature f1, f2, f3;
-          varif(f1) { automaton { } }
-          varif(f2) { automaton { } }
-          varif(f3) { automaton { } }
-        }
-        """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidCompWithVariability5 {
+            feature f1, f2, f3;
+            varif(f1) { automaton { } }
+            varif(f2) { automaton { } }
+            varif(f3) { automaton { } }
+          }
+          """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
       ),
       // atomic component with three automata (configuration f1 && f2)
-      arg("""
-        component InvalidCompWithVariability6 {
-          feature f1, f2;
-          varif(f1) { automaton { } automaton { } }
-          varif(f2) { automaton { } }
-        }
-        """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidCompWithVariability6 {
+            feature f1, f2;
+            varif(f1) { automaton { } automaton { } }
+            varif(f2) { automaton { } }
+          }
+          """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
       ),
       // atomic component with two automata (configuration f1 && !f2)
-      arg("""
-        component InvalidCompWithVariability7 {
-          feature f1, f2;
-          varif(f1) { automaton { } automaton { } }
-          varif(f2) { automaton { } }
-          constraint(f1 ^ f2);
-        }
-        """, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidCompWithVariability7 {
+            feature f1, f2;
+            varif(f1) { automaton { } automaton { } }
+            varif(f2) { automaton { } }
+            constraint(f1 ^ f2);
+          }
+          """, MULTIPLE_BEHAVIOR
       ),
       // atomic component with two automata (configuration f1 ^ f2)
-      arg("""
-        component InvalidCompWithVariability8 {
-          feature f1, f2;
-          varif(f1) { automaton { } automaton { } }
-          varif(f2) { automaton { } automaton { } }
-          constraint(f1 ^ f2);
-        }
-        """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidCompWithVariability8 {
+            feature f1, f2;
+            varif(f1) { automaton { } automaton { } }
+            varif(f2) { automaton { } automaton { } }
+            constraint(f1 ^ f2);
+          }
+          """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
       ),
       // atomic component with two automata (configuration f2 && !f1)
-      arg("""
-        component InvalidCompWithVariability9 {
-          feature f1, f2;
-          varif(f1) { component Inner { } Inner sub; }
-          varif(f2) { automaton { } automaton { } }
-          constraint(f1 ^ f2);
-        }
-        """, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidCompWithVariability9 {
+            feature f1, f2;
+            varif(f1) { component Inner { } Inner sub; }
+            varif(f2) { automaton { } automaton { } }
+            constraint(f1 ^ f2);
+          }
+          """, MULTIPLE_BEHAVIOR
       )
     );
   }

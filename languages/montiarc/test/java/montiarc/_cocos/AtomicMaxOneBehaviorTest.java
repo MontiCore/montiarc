@@ -74,47 +74,52 @@ class AtomicMaxOneBehaviorTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       // atomic component with two automata
-      arg("""
+      arg(
+        """
           component InvalidComp1 {
             automaton { }
             automaton { }
           }
-        """, MULTIPLE_BEHAVIOR
+          """, MULTIPLE_BEHAVIOR
       ),
       // atomic component with two ajava blocks
-      arg("""
-        component InvalidComp2 {
-          compute { }
-          compute { }
-        }
-        """, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidComp2 {
+            compute { }
+            compute { }
+          }
+          """, MULTIPLE_BEHAVIOR
       ),
       // atomic component with automaton and ajava
-      arg("""
-        component InvalidComp3 {
-          automaton { }
-          compute { }
-        }
-        """, MULTIPLE_BEHAVIOR
+      arg(
+        """
+          component InvalidComp3 {
+            automaton { }
+            compute { }
+          }
+          """, MULTIPLE_BEHAVIOR
       ),
       // inner component with two automata
-      arg("""
-        component InvalidComp4 {
-          component Inner {
-            automaton { }
-            automaton { }
+      arg(
+        """
+          component InvalidComp4 {
+            component Inner {
+              automaton { }
+              automaton { }
+            }
           }
-        }
-        """, MULTIPLE_BEHAVIOR
+          """, MULTIPLE_BEHAVIOR
       ),
       // atomic component with three automata
-      arg("""
+      arg(
+        """
           component InvalidComp5 {
             automaton { }
             automaton { }
             automaton { }
           }
-        """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
+          """, MULTIPLE_BEHAVIOR, MULTIPLE_BEHAVIOR
       )
     );
   }
