@@ -45,7 +45,7 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     Map<ASTArcPort, BoolExpr> portConditions;
     Map<ASTTransitionBody, BoolExpr> transitionConditions;
@@ -54,7 +54,6 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     portConditions = new HashMap<>();
     transitionConditions = new HashMap<>();
 
@@ -67,11 +66,10 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
       transitionConditions.put(transitionBody, ctx.mkTrue());
     }
 
-    ExpressionSet mainConstraintSet = null;
+    constraints = null;
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
 
@@ -100,8 +98,7 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
       }
     } else {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTArcPort> mainPorts = node.getPorts();
       for (ASTArcPort port : mainPorts) {
@@ -112,7 +109,7 @@ public class PortReadWriteInTransition4Family implements ArcBasisASTArcComponent
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTTransitionBody, BoolExpr> transitionEntry : transitionConditions.entrySet()) {
 

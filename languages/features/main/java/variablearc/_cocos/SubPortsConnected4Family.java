@@ -55,12 +55,11 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
 
     // Managing all features, variations, constraints and connectors
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<ASTConnector> allConnectors;
 
     // Getting all features, ports and variations from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     allConnectors = new ArrayList<>();
 
     Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
@@ -74,8 +73,8 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     Map<String, Set<ASTConnector>> subCompNameToConnectors = new HashMap<>();
 
     if(node instanceof ASTVariableArcFullVariantComponentType){
-      ExpressionSet mainConstraintSet =  ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints =  ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
+
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       for (ASTConnector connector : connectorConditions.keySet()) {
         allConnectors.add(connector);
@@ -87,8 +86,8 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
 
     }else{
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
+
       List<ASTConnector> mainConnectors = node.getConnectors();
       allConnectors.addAll(mainConnectors);
 
@@ -106,7 +105,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (ASTComponentInstance subComp : subcomponentConditions.keySet()) {
 

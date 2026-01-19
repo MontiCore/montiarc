@@ -48,22 +48,21 @@ public class PortHeritageTypeFits4Family implements ArcBasisASTArcComponentTypeC
 
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<ASTArcPort> allPorts;
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     allPorts = new ArrayList<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
+
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
       allPorts.addAll(portConditions.keySet());
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
+
       List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for (ASTArcPort mainPort : mainPorts) {
         portConditions.put(mainPort, ctx.mkTrue());
@@ -72,7 +71,7 @@ public class PortHeritageTypeFits4Family implements ArcBasisASTArcComponentTypeC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     List<BoolExpr> portExpressionList = new ArrayList<>();
 

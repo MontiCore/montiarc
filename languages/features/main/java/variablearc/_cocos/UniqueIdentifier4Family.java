@@ -75,10 +75,9 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
 
     if (!node.getSymbol().isPresentAstNode())
       return;
@@ -95,8 +94,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       elementConditions = ((ASTVariableArcFullVariantComponentType) node).getElementConditions();
 
@@ -109,8 +107,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
       }
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       // Adding names of the arc-elements that belong to the main-component
       var mainElements = (ArrayList<ASTArcElement>) node.getBody().getArcElementList();
@@ -122,7 +119,7 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Grouping elements by name
     Map<String, List<ElementCondition>> grouped = new HashMap<>();

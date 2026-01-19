@@ -55,7 +55,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<VariableSymbol> createdVariableSymbols;
     List<PortSymbol> createdPortSymbols;
     List<ASTArcParameter> allParameters;
@@ -71,7 +71,6 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
     List<ASTArcParameter> mainParameters = node.getHead().getArcParameterList();
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     ifStatementConditions = new HashMap<>();
     createdVariableSymbols = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
@@ -92,11 +91,10 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
       ifStatementConditions.put(forStatement, ctx.mkTrue());
     }
 
-    ExpressionSet mainConstraintSet = null;
+    constraints = null;
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
       fieldConditions = ((ASTVariableArcFullVariantComponentType) node).getFieldConditions();
@@ -135,8 +133,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
       }
     } else {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTArcPort> mainPorts = node.getPorts();
       for (ASTArcPort port : mainPorts) {
@@ -152,7 +149,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTIfStatement, BoolExpr> ifStatementEntry : ifStatementConditions.entrySet()) {
 

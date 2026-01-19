@@ -53,7 +53,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     Map<ASTTransitionBody, BoolExpr> transitionConditions;
     Map<PortSymbol,BoolExpr> portsymbolConditions;
@@ -62,7 +62,6 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     transitionConditions = new HashMap<>();
     portsymbolConditions = new HashMap<>();
 
@@ -75,11 +74,10 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
       transitionConditions.put(transitionBody, ctx.mkTrue());
     }
 
-    ExpressionSet mainConstraintSet = null;
+    constraints = null;
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portsymbolConditions = ((ASTVariableArcFullVariantComponentType) node).getPortSymbolConditions();
 
@@ -110,14 +108,14 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
       }
     } else {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
+
     }
 
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if (node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTTransitionBody, BoolExpr> doEntry : transitionConditions.entrySet()) {
 

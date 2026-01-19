@@ -45,7 +45,7 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     Map<ASTArcPort, BoolExpr> portConditions;
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions;
@@ -55,26 +55,23 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
 
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     portConditions = new HashMap<>();
     subcomponentConditions = new HashMap<>();
 
 
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = null;
+      constraints = null;
       if (node.isPresentSymbol())
-          mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+          constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
 
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
     } else {
-      ExpressionSet mainConstraintSet = null;
+      constraints = null;
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
       for (ASTArcPort port : mainPorts) {
@@ -90,7 +87,7 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if(node instanceof ASTVariableArcFullVariantComponentType)
-      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+      featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
 
     for (Map.Entry<ASTComponentInstance, BoolExpr> componentEntry : subcomponentConditions.entrySet()) {

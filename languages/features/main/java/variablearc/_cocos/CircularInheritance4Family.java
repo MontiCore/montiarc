@@ -113,20 +113,19 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     Map<ASTArcComponentType, BoolExpr> componentConditions = new HashMap<>();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     // Reading and processing parts of the Main-Component
     List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
 
     // Getting alls features, variations and constraints from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
+
     List<ComponentExtension> currentComponentExtensions = new  ArrayList<>();
 
     if(node instanceof ASTVariableArcFullVariantComponentType){
 
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       componentConditions = ((ASTVariableArcFullVariantComponentType) node).getComponentConditions();
 
@@ -142,8 +141,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
       }
 
     }else{
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       componentConditions.put(node,ctx.mkTrue());
       currentComponentExtensions = getComponentExtensionList(node, node.getSymbol(), new ArrayList<>(), new ArrayList<>());
@@ -167,7 +165,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Setting the conditions for each extension
     for (ComponentExtension ext : currentComponentExtensions) {

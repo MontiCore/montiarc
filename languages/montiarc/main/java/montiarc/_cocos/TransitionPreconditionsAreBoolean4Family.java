@@ -48,7 +48,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<Guard> allGuards;
     List<VariableSymbol> createdVariableSymbols;
     List<PortSymbol> createdPortSymbols;
@@ -64,7 +64,6 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
 
     // Getting alls features, ports and variations from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     createdVariableSymbols = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
     allGuards = new ArrayList<>();
@@ -74,8 +73,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     allParameters = new ArrayList<>(mainParameters);
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       fieldConditions = ((ASTVariableArcFullVariantComponentType) node).getFieldConditions();
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
@@ -96,8 +94,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
       }
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTArcField> mainFields = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFieldDeclaration).map(v -> ((ASTArcFieldDeclaration) v).getArcFieldList()).flatMap(List::stream).toList();
       for (ASTArcField field : mainFields) {
@@ -126,7 +123,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Guard guard : allGuards) {
       List<ASTExpression> guardExpressions = new ArrayList<>();

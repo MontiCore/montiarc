@@ -54,17 +54,15 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
 
         // Managing all features, variations, constraints and connectors
         List<String> allFeatures;
-        List<ExpressionSet> allConstraints;
+        ExpressionSet constraints;
         List<ASTConnector> allConnectors;
 
         // Getting all features, ports and variations from the Main-Component
         allFeatures = new ArrayList<>(mainFeatures);
-        allConstraints = new ArrayList<>();
         allConnectors = new ArrayList<>();
 
       if (node instanceof ASTVariableArcFullVariantComponentType) {
-        ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-        allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
         connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
         allConnectors.addAll(connectorConditions.keySet());
@@ -76,8 +74,7 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
         subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
 
       } else {
-        ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-        allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
         List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
         for(ASTArcPort mainPort : mainPorts){
@@ -110,7 +107,7 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
       }
 
         // Adding Constraints
-        BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+        BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
         for (ASTConnector connector : allConnectors) {
             var source = connector.getSource();

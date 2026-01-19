@@ -57,22 +57,19 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
 
     // Maintaining all features, variations, constraints, behaviors and subcomponents
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     // Getting all features, variations, constraints, connectors and subcomponents from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
       behaviorConditions = ((ASTVariableArcFullVariantComponentType) node).getBehaviorConditions();
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
       for (ASTComponentInstance mainSubComp : mainSubComps) {
@@ -86,7 +83,7 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Adding all subcomponent-conditions
     List<BoolExpr> allSubcomponentConditions = new ArrayList<>();

@@ -59,7 +59,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<VariableSymbol> createdVariableSymbols;
     List<PortSymbol> createdPortSymbols;
     List<ASTArcParameter> allParameters;
@@ -75,7 +75,6 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
     List<ASTArcParameter> mainParameters = node.getHead().getArcParameterList();
 
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     switchStatementConditions = new HashMap<>();
     createdVariableSymbols = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
@@ -96,11 +95,10 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
       switchStatementConditions.put(switchStatement, ctx.mkTrue());
     }
 
-    ExpressionSet mainConstraintSet = null;
+    constraints = null;
     if (node instanceof ASTVariableArcFullVariantComponentType) {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
       fieldConditions = ((ASTVariableArcFullVariantComponentType) node).getFieldConditions();
@@ -139,8 +137,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
       }
     } else {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTArcPort> mainPorts = node.getPorts();
       for (ASTArcPort port : mainPorts) {
@@ -156,7 +153,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
     // Adding Constraints
     BoolExpr featureConstraints = ctx.mkTrue();
     if(node instanceof ASTVariableArcFullVariantComponentType)
-        featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+        featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTSwitchStatement, BoolExpr> switchStatementEntry : switchStatementConditions.entrySet()) {
 

@@ -56,22 +56,19 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
 
     // Getting all features, ports and variations from the Main-Component
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     // Getting all features, variations, constraints, connectors and subcomponents from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTConnector> mainConnectors = node.getConnectors();
       for (ASTConnector connector : mainConnectors) {
@@ -84,7 +81,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Adding all subcomponent-conditions
     List<BoolExpr> allSubcomponentConditions = new ArrayList<>();

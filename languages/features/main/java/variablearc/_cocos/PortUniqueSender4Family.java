@@ -55,7 +55,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions;
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<ASTConnector> allConnectors;
     List<SubcomponentSymbol> allSubComponents;
 
@@ -65,14 +65,12 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
 
     allFeatures = new ArrayList<>(mainFeatures);
     allConnectors = new ArrayList<>();
-    allConstraints = new ArrayList<>();
     allSubComponents = new ArrayList<>();
 
-    ExpressionSet mainConstraintSet = null;
+    constraints = null;
     if(node instanceof ASTVariableArcFullVariantComponentType){
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol)(((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
 
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       allConnectors.addAll(connectorConditions.keySet());
@@ -90,8 +88,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
       }
     } else {
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTConnector> mainConnectors = node.getConnectors();
       allConnectors.addAll(mainConnectors);
@@ -114,7 +111,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Processing Sub-Components, that are defined within the component, but not in a variation block
     for (SubcomponentSymbol sub : node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).map(ASTComponentInstance::getSymbol).toList()) {

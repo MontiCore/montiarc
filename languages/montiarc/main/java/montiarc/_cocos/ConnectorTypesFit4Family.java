@@ -62,7 +62,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<PortSymbol> createdPortSymbols;
     Map<PortInformation, BoolExpr> portInfoConditions;
     Map<ASTConnector, BoolExpr> connectorConditions;
@@ -74,15 +74,13 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
 
     // Getting all features, constraints, ports and connectors from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     createdPortSymbols = new ArrayList<>();
     portInfoConditions = new HashMap<>();
     connectorConditions = new HashMap<>();
     portNameVariations = new HashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       Map<ASTArcPort, BoolExpr> portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
       for (Map.Entry<ASTArcPort, BoolExpr> portEntry : portConditions.entrySet()) {
@@ -91,8 +89,8 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       subcomponentCondition = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
+
       List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclarationTOP::getArcPortList).flatMap(List::stream).toList();
       List<ASTConnector> mainConnectors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTConnector).map(v -> ((ASTConnector) v)).toList();
 
@@ -112,7 +110,7 @@ public class ConnectorTypesFit4Family implements ArcBasisASTArcComponentTypeCoCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTComponentInstance, BoolExpr> subEntry : subcomponentCondition.entrySet()) {
 

@@ -44,7 +44,7 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
     Context ctx = ExpressionSolverService.getContext();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
 
     Map<ASTMsgEvent, BoolExpr> messageEventConditions;
     Map<ASTArcPort, BoolExpr> portConditions;
@@ -54,24 +54,21 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
 
     // Getting all features, constraints and ports from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     portConditions = new HashMap<>();
     messageEventConditions = new HashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = null;
+      constraints = null;
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
 
       portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
       messageEventConditions = ((ASTVariableArcFullVariantComponentType) node).getMessageEventConditions();
 
     } else {
-      ExpressionSet mainConstraintSet = null;
+      constraints = null;
       if (node.isPresentSymbol())
-        mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+        constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
 
       List<ASTMsgEvent> mainMessageEvents = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcStatechart).map(k -> (ASTArcStatechart) k).map(ASTArcStatechartTOP::getSCStatechartElementList).flatMap(List::stream).filter(n -> n instanceof ASTSCTransition).map(i -> (((ASTSCTransition) i))).map(o -> (ASTTransitionBody) o.getSCTBody()).filter(l -> l.isPresentSCEvent()).map(ASTTransitionBody::getSCEvent).filter(h -> h instanceof ASTMsgEvent).map(u -> (ASTMsgEvent) u).toList();
 
@@ -86,7 +83,7 @@ public class EventTriggerExists4Family implements ArcBasisASTArcComponentTypeCoC
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTMsgEvent, BoolExpr> msgEvent : messageEventConditions.entrySet()) {
 

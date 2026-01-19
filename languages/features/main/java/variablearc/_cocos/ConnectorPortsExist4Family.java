@@ -50,7 +50,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
 
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<ASTConnector> allConnectors;
 
     // Reading and processing parts of the Main-Component
@@ -58,7 +58,6 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
 
     // Getting all features, ports and variations from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     allConnectors = new ArrayList<>();
 
     // Initialize Z3 variables
@@ -66,8 +65,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     Map<String, BoolExpr> componentExistsVars = new HashMap<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       allConnectors.addAll(connectorConditions.keySet());
 
@@ -83,8 +81,8 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
+
       List<ASTConnector> mainConnectors = node.getConnectors();
       allConnectors.addAll(mainConnectors);
 
@@ -164,7 +162,7 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Check for each connector, if ports or components are missing
     for (ASTConnector connector : allConnectors) {

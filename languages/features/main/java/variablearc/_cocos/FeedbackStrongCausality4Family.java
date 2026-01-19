@@ -68,17 +68,16 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
 
     // Managing all features, variations, constraints and connectors
     List<String> allFeatures;
-    List<ExpressionSet> allConstraints;
+    ExpressionSet constraints;
     List<SubcomponentSymbol> allSubComponents;
 
     // Getting all features, ports and variations from the Main-Component
     allFeatures = new ArrayList<>(mainFeatures);
-    allConstraints = new ArrayList<>();
     allSubComponents = new ArrayList<>();
 
     if (node instanceof ASTVariableArcFullVariantComponentType) {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
+
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
       allSubComponents.addAll(subcomponentConditions.keySet().stream().map(ASTComponentInstance::getSymbol).toList());
@@ -89,8 +88,8 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
       }
 
     } else {
-      ExpressionSet mainConstraintSet = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-      allConstraints.add(mainConstraintSet);
+      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
+
       List<ASTConnector> mainConnectors = node.getConnectors();
 
       List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
@@ -106,7 +105,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     }
 
     // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, allConstraints.getFirst(), allFeatures, expSolver);
+    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     // Indexing subcomponents, to later access them in the edge-matrix
     int subIndex = 1;
@@ -155,21 +154,21 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
         path[i] = ctx.mkIntConst("n" + i);
       }
 
-      List<BoolExpr> constraints = new ArrayList<>();
+      List<BoolExpr> causalConstraints = new ArrayList<>();
 
       // Check that each index is within bounds
       for (IntExpr pathNode : path) {
-        constraints.add(ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), pathNode), ctx.mkLt(pathNode, ctx.mkInt(componentCount))));
+        causalConstraints.add(ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), pathNode), ctx.mkLt(pathNode, ctx.mkInt(componentCount))));
       }
 
       // The starting node has to be equal to the ending node, to form a cycle
-      constraints.add(ctx.mkEq(path[0], path[cycleLen]));
+      causalConstraints.add(ctx.mkEq(path[0], path[cycleLen]));
 
       // If the cycle is of lenght > 2, then each intermediate node should be distinct
       if (cycleLen > 2) {
         for (int i = 0; i < cycleLen; i++) {
           for (int j = i + 1; j < cycleLen; j++) {
-            constraints.add(ctx.mkNot(ctx.mkEq(path[i], path[j])));
+            causalConstraints.add(ctx.mkNot(ctx.mkEq(path[i], path[j])));
           }
         }
       }
@@ -188,10 +187,10 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
             }
           }
         }
-        constraints.add(edgeExists);
+        causalConstraints.add(edgeExists);
       }
       // Comnbine all constraints, to ensure that a cycle exists
-      BoolExpr cycleConstraints = ctx.mkAnd(constraints.toArray(new BoolExpr[0]));
+      BoolExpr cycleConstraints = ctx.mkAnd(causalConstraints.toArray(new BoolExpr[0]));
       cycleExists = ctx.mkOr(cycleExists, cycleConstraints);
     }
 
