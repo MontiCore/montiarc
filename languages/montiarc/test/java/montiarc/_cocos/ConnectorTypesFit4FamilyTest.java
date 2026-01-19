@@ -37,7 +37,7 @@ public class ConnectorTypesFit4FamilyTest extends MontiArcTestBase {
 
   protected void setUpComponents() {
     compile("package a.b; component A { }");
-    compile("package a.b; component B {port in boolean i;}");
+    compile("package a.b; component B { port in boolean i; }");
     compile("package a.b; component C { port out boolean o; }");
     compile("package a.b; component D { port in int i; }");
     compile("package a.b; component E { port out int o; }");
