@@ -2,366 +2,79 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
-import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.ConnectorDirectionsFit4Family;
+import variablearc._cocos.ConnectorPortsExist4Family;
 
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConnectorDirectionsFit4FamilyTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link ConnectorDirectionsFit4Family}.
+ */
+class ConnectorDirectionsFit4FamilyTest extends ConnectorDirectionsFitTest {
 
   @BeforeEach
-  protected void initSymbols() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setupEnums();
-    setupComponents();
-  }
-
-  protected void setupEnums() {
-    OOTypeSymbol onOffEnumType = MontiArcMill.oOTypeSymbolBuilder().setIsEnum(true).setName("OnOff").setIsPublic(true).setSpannedScope(MontiArcMill.scope()).build();
-    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("ON").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("OFF").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-    MontiArcMill.globalScope().add(onOffEnumType);
-  }
-
-  protected void setupComponents() {
-    compile("package a.b; component A { }");
-    compile("package a.b; component B { port in int i; port out int o; }");
-    compile("package a.b; component C { port in int i; port <<delayed>> out int o; }");
-    compile("package a.b; component D { port in int i1, i2; port out int o; }");
-    compile("package a.b; component Z { a.b.A a1; feature f1;  port in int i; port out int o; varif(f1){port out int k; o -> a1.i;} }");
-  }
-
-  private static Stream<Arguments> provideUniqueSenderModel() {
-    List<Arguments> componentList = new ArrayList<>();
-    Arguments simpleModel = arg(                   "component Comp7 { " +
-      "feature f1,f2;" +
-      "varif(f1){port in int i1, i2, i3; " +
-      "varif(f2){a.b.A a;} else{i1 -> i2, i3; }}" +
-      "constraint(f1 && !f2);" +
-      "}");
-    //arg("package a.b; component C1 { feature f1,f2; port out int i1; port in int i2; a.b.Z z5; i1 -> z5.i; varif(f1){a.b.Z z1; i2 -> z5.i;  } constraint(!f1); }");
-    componentList.add(simpleModel);
-    return componentList.stream();
+  @Override
+  protected void setUp() {
+    super.setUp();
+    compile("package a.b; component E { feature ff; varif (ff) { port in int io; } else { port out int io; } }");
+    compile("package a.b; component F { port in int io; }");
+    compile("package a.b; component G { port out int io; }");
   }
 
   @ParameterizedTest
-  @MethodSource("provideUniqueSenderModel")
-  public void TestModelRuntimeMontiArcCoCos(@NotNull String model) {
-
-    Preconditions.checkNotNull(model);
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorDirectionsFit4Family());
-
-    ASTMACompilationUnit mainAST = compile(model);
-    checker.checkAll(mainAST);
-
-    String[] test = getLoggedErrorCodes();
-
-    // Then
-    assertThat(Log.getErrorCount() == 0);
-  }
-
-  private static <T> void addCoCoAs(T coco, Consumer<T> consumer) {
-    consumer.accept(coco);
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { " +
-      "a.b.A a(); " +
-      "}",
-    "component Comp2 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.B b; " +
-      "i -> b.i; " +
-      "b.o -> o; " +
-      "}",
-    "component Comp3 { " +
-      "a.b.B b; " +
-      "a.b.C c; " +
-      "b.o -> c.i; " +
-      "c.o -> b.i; " +
-      "}",
-    "component Comp4 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "component Inner { " +
-      "port in int i; " +
-      "port out int o; " +
-      "} " +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "}",
-    "component Comp5 { " +
-      "port in int i; " +
-      "port out int o1, o2; " +
-      "a.b.D d; " +
-      "i -> d.i1; " +
-      "i -> d.i2; " +
-      "d.o -> o1, o2; " +
-      "}",
-    "component Comp6 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "i -> o; " +
-      "}",
-    "component Comp7 { " +
-      "port in int i; " +
-      "port out int o1, o2; " +
-      "i -> o1, o2; " +
-      "}"
+  @MethodSource("validModels")
+  @MethodSource("validModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "ValidCompWithVariability19 ",
+    "ValidCompWithVariability20 ",
+    "ValidCompWithVariability21 ",
+    "ValidCompWithVariability22 ",
+    "ValidCompWithVariability23 "
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
-    Preconditions.checkNotNull(model);
-
-    // Given
-    ASTMACompilationUnit ast = compile(model);
-
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConnectorDirectionsFit4Family());
-
-    // When
-    checker.checkAll(ast);
-
-    // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { " +
-      "feature f1;" +
-      "varif(f1){a.b.A a(); }" +
-      "}",
-    "component Comp2 { " +
-      "feature f1,f2,f3;" +
-      "varif(f1){ port in int i; }" +
-      "varif(f2){ port out int o; }" +
-      "a.b.B b; " +
-      "varif(f3){ i -> b.i; " +
-      "b.o -> o; }" +
-      "constraint(f1 && f2 && f3);" +
-      "}",
-    "component Comp3 {" +
-      "feature f1,f2; " +
-      "varif(f1){a.b.A a;}else{a.b.B b; " +
-      "a.b.C c;}" +
-      "varif(f2){b.o -> c.i; " +
-      "c.o -> b.i; }" +
-      "constraint(!f1 && f2);" +
-      "}",
-    "component Comp4 { " +
-      "feature f1;" +
-      "varif(f1){port in int i; " +
-      "port out int o; }" +
-      "component Inner {" +
-      "feature f1; " +
-      "varif(f1){port in int i; " +
-      "port out int o; }" +
-      "constraint(f1);" +
-      "} " +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "constraint(f1 == sub.f1);" +
-      "}",
-    "component Comp5 { " +
-      "feature f1,f2;" +
-      "port in int i; " +
-      "port out int o1, o2; " +
-      "a.b.D d; " +
-      "varif(f1){ i -> d.i1; }" +
-      "varif(f2){ i -> d.i2; }" +
-      "d.o -> o1, o2; " +
-      "constraint(f1 && f2);" +
-      "}",
-    "component Comp6 { " +
-      "feature f1;" +
-      "port in int i; " +
-      "port out int o; " +
-      "varif(f1){i -> o; }" +
-      "}",
-    "component Comp7 {" +
-      "feature f1; " +
-      "port in int i; " +
-      "port out int o1, o2; " +
-      "varif(f1){a.b.A a;}else{i -> o1, o2; }" +
-      "constraint(!f1);" +
-      "}"
-  })
-  public void shouldNotReportErrorWithVariability(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
     checker.get4FullVariant().addCoCo(new ConnectorDirectionsFit4Family());
 
     // When
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-
-    // Given
-    ASTMACompilationUnit ast = compile(model);
-
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConnectorDirectionsFit4Family());
-
-    // When
-    checker.checkAll(ast);
-
-    // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
-  }
-
-  protected static Stream<Arguments> invalidModels() {
-    return Stream.of(
-      arg("component Comp1 { " +
-          "port in int i1; " +
-          "port in int i2; " +
-          "a.b.B b; " +
-          "i1 -> b.i; " +
-          "i2 -> b.o; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp2 { " +
-          "port out int o1; " +
-          "port out int o2; " +
-          "a.b.B b; " +
-          "b.i -> o1; " +
-          "b.o -> o2; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      arg("component Comp3 { " +
-          "port in int i1, i2; " +
-          "i1 -> i2; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp4 { " +
-          "port out int o1, o2; " +
-          "o1 -> o2; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      arg("component Comp5 { " +
-          "port in int i1, i2; " +
-          "port out int o; " +
-          "i1 -> i2, o; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp6 { " +
-          "port in int i1, i2; " +
-          "port out int o; " +
-          "i1 -> o, i2; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp7 { " +
-          "port in int i1, i2, i3; " +
-          "i1 -> i2, i3; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp8 { " +
-          "port in int i1, i2, i3, i4; " +
-          "i1 -> i3; " +
-          "i2 -> i4; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp9 { " +
-          "port in int i1, i2; " +
-          "a.b.B b1, b2; " +
-          "i1 -> b1.i; " +
-          "i2 -> b2.i; " +
-          "b1.o -> b2.o; " +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp10 { " +
-          "port out int o1, o2; " +
-          "a.b.B b1, b2; " +
-          "b1.o -> o1; " +
-          "b2.o -> o2; " +
-          "b1.i -> b2.i; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      arg("component Comp11 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.B b1, b2; " +
-          "i -> b1.i; " +
-          "b2.i -> b1.o; " +
-          "b2.o -> p; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp12 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.B b1, b2; " +
-          "o -> b1.o; " +
-          "b1.i -> b2.o; " +
-          "b1.i -> i; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp13 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "component Inner {" +
-          "port in int i; " +
-          "port out int o; " +
-          "} " +
-          "Inner sub; " +
-          "i -> sub.o; " +
-          "o -> sub.i; " +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH)
-    );
-  }
-
-  @ParameterizedTest
   @MethodSource("invalidModelsWithVariability")
-  public void shouldReportErrorWithVariability(@NotNull String model, @NotNull Error... errors) throws IOException {
+  @DisableIfDisplayName(contains = {
+    "InvalidCompWithVariability14 ",
+    "InvalidCompWithVariability15 ",
+    "InvalidCompWithVariability16 ",
+    "InvalidCompWithVariability17 ",
+    "InvalidCompWithVariability18 ",
+    "InvalidCompWithVariability19 ",
+    "InvalidCompWithVariability20 "
+  })
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -375,142 +88,523 @@ public class ConnectorDirectionsFit4FamilyTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModelsWithVariability() {
+  static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
-      arg("component Comp1 { " +
-          "feature f1,f2;" +
-          "varif(f1){port in int i1; " +
-          "port in int i2; }" +
-          "a.b.B b; " +
-          "varif(f2){i1 -> b.i; " +
-          "i2 -> b.o; }" +
-          "constraint(f1 && f2);" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp2 { " +
-          "feature f1,f2;" +
-          "varif(f1){a.b.A a;}else{port out int o1; }" +
-          "port out int o2; " +
-          "varif(f2){a.b.B b; " +
-          "b.i -> o1; " +
-          "b.o -> o2; }" +
-          "constraint(!f1 && f2);" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      arg("component Comp3 { " +
-          "feature f1;" +
-          "port in int i1, i2; " +
-          "varif(f1){ i1 -> i2; }" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp4 { " +
-          "feature f1,f2;" +
-          "varif(f1){" +
-          "port out int o1, o2;" +
-          "varif(f2){" +
-          "o1 -> o2; }}" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      arg("component Comp5 { " +
-          "feature f1,f2;" +
-          "varif(f1){port in int i1, i2; " +
-          "port out int o;" +
-          "varif(f2){ " +
-          "i1 -> i2, o; }}" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp6 { " +
-          "feature f1;" +
-          "port in int i1, i2; " +
-          "port out int o; " +
-          "varif(f1){i1 -> o, i2; }" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp7 { " +
-          "feature f1,f2;" +
-          "varif(f1){port in int i1, i2, i3; " +
-          "varif(f2){a.b.A a;} else{i1 -> i2, i3; }}" +
-          "constraint(f1 && !f2);" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp8 {" +
-          "feature f1,f2;" +
-          "port in int i1, i2, i3, i4; " +
-          "varif(f1){i1 -> i3; }" +
-          "varif(f2){i2 -> i4; }" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp9 { " +
-          "port in int i1, i2; " +
-          "feature f1,f2;" +
-          "a.b.B b1, b2; " +
-          "varif(f1){" +
-          "i1 -> b1.i; " +
-          "i2 -> b2.i; }" +
-          "varif(f2){" +
-          "b1.o -> b2.o; }" +
-          "}",
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp10 { " +
-          "feature f1,f2;" +
-          "varif(f1){port out int o1, o2; }" +
-          "a.b.B b1, b2; " +
-          "varif(f2){b1.o -> o1; " +
-          "b2.o -> o2; " +
-          "b1.i -> b2.i; }" +
-          "constraint(f1);" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH),
-      arg("component Comp11 {" +
-          "feature f1; " +
-          "varif(f1){port in int i; " +
-          "port out int o; " +
-          "a.b.B b1, b2; " +
-          "i -> b1.i; " +
-          "b2.i -> b1.o; " +
-          "b2.o -> p; }" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp12 { " +
-          "feature f1,f2,f3;" +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.B b1, b2; " +
-          "varif(f1){o -> b1.o; }" +
-          "varif(f2){b1.i -> b2.o;} " +
-          "varif(f3){b1.i -> i; }" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH,
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH),
-      arg("component Comp13 {" +
-          "feature f1; " +
-          "port in int i; " +
-          "port out int o; " +
-          "component Inner {" +
-          "feature f1;" +
-          "port in int i; " +
-          "port out int o; " +
-          "constraint(f1);" +
-          "} " +
-          "Inner sub; " +
-          "varif(f1){i -> sub.o; " +
-          "o -> sub.i; }" +
-          "constraint(f1 == sub.f1);" +
-          "}",
-        ArcError.SOURCE_DIRECTION_MISMATCH,
-        ArcError.TARGET_DIRECTION_MISMATCH)
+      // in port forward, single variation point
+      arg("""
+        component ValidCompWithVariability1 {
+          port in int i;
+          feature f;
+          varif (f) {
+            a.b.B sub;
+            i -> sub.i;
+          }
+          constraint (f);
+        }"""
+      ),
+      // out port forward, single variation point
+      arg("""
+        component ValidCompWithVariability2 {
+          port out int o;
+          feature f;
+          varif (f) {
+            a.b.C sub;
+            sub.o -> o;
+          }
+          constraint (f);
+        }"""
+      ),
+      // hidden channel, single variation point
+      arg("""
+        component ValidCompWithVariability3 {
+          feature f;
+          varif (f) {
+            a.b.B sub1;
+            a.b.C sub2;
+            sub2.o -> sub1.i;
+          }
+        }"""
+      ),
+      // in port forward, source direction mismatch, dead variation point
+      arg("""
+        component ValidCompWithVariability4 {
+          varif (false) {
+            port out int o;
+            a.b.B sub;
+            o -> sub.i;
+          }
+        }"""
+      ),
+      // in port forward, target direction mismatch, dead variation point
+      arg("""
+        component ValidCompWithVariability5 {
+          varif (false) {
+            port in int i;
+            a.b.C sub;
+            i -> sub.o;
+          }
+        }"""
+      ),
+      // out port forward, source direction mismatch, dead variation point
+      arg("""
+        component ValidCompWithVariability6 {
+          varif (false) {
+            port out int o;
+            a.b.B sub;
+            sub.i -> o;
+          }
+        }"""
+      ),
+      // out port forward, target direction mismatch, dead variation point
+      arg("""
+        component ValidCompWithVariability7 {
+          varif (false) {
+            port in int i;
+            a.b.C sub;
+            sub.o -> i;
+          }
+        }"""
+      ),
+      // hidden channel, source direction mismatch, dead variation point
+      arg("""
+        component ValidCompWithVariability8 {
+          varif (false) {
+            a.b.B sub1, sub2;
+            sub2.i -> sub1.i;
+          }
+        }"""
+      ),
+      // hidden channel, target direction mismatch, dead variation point
+      arg("""
+        component ValidCompWithVariability9 {
+          varif (false) {
+            a.b.C sub1, sub2;
+            sub2.o -> sub1.o;
+          }
+        }"""
+      ),
+      // in port forward, source direction mismatch, dead feature
+      arg("""
+        component ValidCompWithVariability10 {
+          feature f;
+          varif (f) {
+            port out int o;
+            a.b.B sub;
+            o -> sub.i;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // in port forward, target direction mismatch, dead feature
+      arg("""
+        component ValidCompWithVariability11 {
+          feature f;
+          varif (f) {
+            port in int i;
+            a.b.C sub;
+            i -> sub.o;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // out port forward, source direction mismatch, dead feature
+      arg("""
+        component ValidCompWithVariability12 {
+          feature f;
+          varif (f) {
+            port out int o;
+            a.b.B sub;
+            sub.i -> o;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // out port forward, target direction mismatch, dead feature
+      arg("""
+        component ValidCompWithVariability13 {
+          feature f;
+          varif (f) {
+            port in int i;
+            a.b.C sub;
+            sub.o -> i;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // hidden channel, source direction mismatch, dead feature
+      arg("""
+        component ValidCompWithVariability14 {
+          feature f;
+          varif (f) {
+            a.b.B sub1, sub2;
+            sub2.i -> sub1.i;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // hidden channel, target direction mismatch, dead feature
+      arg("""
+        component ValidCompWithVariability15 {
+          feature f;
+          varif (f) {
+            a.b.C sub1, sub2;
+            sub2.o -> sub1.o;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // in port forward, subcomponent interface with variable direction
+      arg("""
+        component ValidCompWithVariability16 {
+          port in int i;
+          a.b.E sub;
+          i -> sub.io;
+          constraint (sub.ff);
+        }"""
+      ),
+      // out port forward, subcomponent interface with variable direction
+      arg("""
+        component ValidCompWithVariability17 {
+          port out int o;
+          a.b.E sub;
+          sub.io -> o;
+          constraint (!sub.ff);
+        }"""
+      ),
+      // hidden channel, subcomponent interface with variable direction
+      arg("""
+        component ValidCompWithVariability18 {
+          a.b.E sub1;
+          a.b.E sub2;
+          sub2.io -> sub1.io;
+          constraint (sub1.ff && !sub2.ff);
+        }"""
+      ),
+      // in port forward, component interface with variable direction
+      arg("""
+        component ValidCompWithVariability19 {
+          feature f;
+          varif (f) {
+            port in int io;
+          } else {
+            port out int io;
+          }
+          a.b.F sub;
+          io -> sub.io;
+          constraint (f);
+        }"""
+      ),
+      // out port forward, subcomponent interface with variable direction
+      arg("""
+        component ValidCompWithVariability20 {
+          feature f;
+          varif (f) {
+            port in int io;
+          } else {
+            port out int io;
+          }
+          a.b.G sub;
+          sub.io -> io;
+          constraint (!f);
+        }"""
+      ),
+      // port forward, component & subcomponent interfaces with variable direction
+      arg("""
+        component ValidCompWithVariability21 {
+          feature f;
+          varif (f) {
+            port in int io;
+            io -> sub.io;
+          } else {
+            port out int io;
+            sub.io -> io;
+          }
+          a.b.E sub;
+          constraint (sub.ff == f);
+        }"""
+      ),
+      // in port forward, subcomponent with variable type
+      arg("""
+        component ValidCompWithVariability22 {
+          feature f;
+          port in int io;
+          varif (f) {
+            a.b.F sub;
+          } else {
+            a.b.G sub;
+          }
+          io -> sub.io;
+          constraint (f);
+        }"""
+      ),
+      // out port forward, subcomponent interface with variable direction
+      arg("""
+        component ValidCompWithVariability23 {
+          feature f;
+          port out int io;
+          varif (f) {
+            a.b.F sub;
+          } else {
+            a.b.G sub;
+          }
+          sub.io -> io;
+          constraint (!f);
+        }"""
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModelsWithVariability() {
+    return Stream.of(
+      // in port forward, source direction mismatch, tautological variation point
+      arg("""
+          component InvalidCompWithVariability1 {
+            varif (true) {
+              port out int o;
+              a.b.B sub;
+              o -> sub.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // in port forward, target direction mismatch, tautological variation point
+      arg("""
+          component InvalidCompWithVariability2 {
+            varif (true) {
+              port in int i;
+              a.b.C sub;
+              i -> sub.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // out port forward, source direction mismatch, tautological variation point
+      arg("""
+          component InvalidCompWithVariability3 {
+            varif (true) {
+              port out int o;
+              a.b.B sub;
+              sub.i -> o;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // out port forward, target direction mismatch, tautological variation point
+      arg("""
+          component InvalidCompWithVariability4 {
+            varif (true) {
+              port in int i;
+              a.b.C sub;
+              sub.o -> i;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // hidden channel, source direction mismatch, tautological variation point
+      arg("""
+          component InvalidCompWithVariability5 {
+            varif (true) {
+              a.b.B sub1, sub2;
+              sub2.i -> sub1.i;
+            }
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // hidden channel, target direction mismatch, tautological variation point
+      arg("""
+          component InvalidCompWithVariability6 {
+            varif (true) {
+              a.b.C sub1, sub2;
+              sub2.o -> sub1.o;
+            }
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // in port forward, source direction mismatch, core feature
+      arg("""
+          component InvalidCompWithVariability7 {
+            feature f;
+            varif (f) {
+              port out int o;
+              a.b.B sub;
+              o -> sub.i;
+            }
+            constraint (f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // in port forward, target direction mismatch, core feature
+      arg("""
+          component InvalidCompWithVariability8 {
+            feature f;
+            varif (f) {
+              port in int i;
+              a.b.C sub;
+              i -> sub.o;
+            }
+            constraint (f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // out port forward, source direction mismatch, core feature
+      arg("""
+          component InvalidCompWithVariability9 {
+            feature f;
+            varif (f) {
+              port out int o;
+              a.b.B sub;
+              sub.i -> o;
+            }
+            constraint (f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // out port forward, target direction mismatch, core feature
+      arg("""
+          component InvalidCompWithVariability10 {
+            feature f;
+            varif (f) {
+              port in int i;
+              a.b.C sub;
+              sub.o -> i;
+            }
+            constraint (f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // hidden channel, source direction mismatch, core feature
+      arg("""
+          component InvalidCompWithVariability11 {
+            feature f;
+            varif (f) {
+              a.b.B sub1, sub2;
+              sub2.i -> sub1.i;
+            }
+            constraint (f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // hidden channel, target direction mismatch, core feature
+      arg("""
+          component InvalidCompWithVariability12 {
+            feature f;
+            varif (f) {
+              a.b.C sub1, sub2;
+              sub2.o -> sub1.o;
+            }
+            constraint (f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // in port forward, target direction mismatch, subcomponent interface with variable direction
+      arg("""
+          component InvalidCompWithVariability13 {
+            port in int i;
+            a.b.E sub;
+            i -> sub.io;
+            constraint (!sub.ff);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // out port forward, source direction mismatch, subcomponent interface with variable direction
+      arg("""
+          component InvalidCompWithVariability14 {
+            port out int o;
+            a.b.E sub;
+            sub.io -> o;
+            constraint (!sub.ff);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // hidden channel, source and target direction mismatch, subcomponent interface with variable direction
+      arg("""
+          component InvalidCompWithVariability15 {
+            a.b.E sub1;
+            a.b.E sub2;
+            sub2.io -> sub1.io;
+            constraint (!sub1.ff && sub2.ff);
+          }""",
+        SOURCE_DIRECTION_MISMATCH, TARGET_DIRECTION_MISMATCH
+      ),
+      // in port forward, source direction mismatch, component interface with variable direction
+      arg("""
+          component InvalidCompWithVariability16 {
+            feature f;
+            varif (f) {
+              port in int io;
+            } else {
+              port out int io;
+            }
+            a.b.F sub;
+            io -> sub.io;
+            constraint (!f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      ),
+      // out port forward, target direction mismatch, subcomponent interface with variable direction
+      arg("""
+          component InvalidCompWithVariability17 {
+            feature f;
+            varif (f) {
+              port in int io;
+            } else {
+              port out int io;
+            }
+            a.b.G sub;
+            sub.io -> io;
+            constraint (f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // port forward, source and target direction mismatch, component & subcomponent interfaces with variable direction
+      arg("""
+          component InvalidCompWithVariability18 {
+            feature f;
+            varif (f) {
+              port in int io;
+              io -> sub.io;
+            } else {
+              port out int io;
+              sub.io -> io;
+            }
+            a.b.E sub;
+            constraint (sub.ff == !f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH, TARGET_DIRECTION_MISMATCH
+      ),
+      // in port forward, target direction mismatch, subcomponent with variable type
+      arg("""
+          component InvalidCompWithVariability19 {
+            feature f;
+            port in int io;
+            varif (f) {
+              a.b.F sub;
+            } else {
+              a.b.G sub;
+            }
+            io -> sub.io;
+            constraint (!f);
+          }""",
+        TARGET_DIRECTION_MISMATCH
+      ),
+      // out port forward, source direction mismatch, subcomponent interface with variable direction
+      arg("""
+          component InvalidCompWithVariability20 {
+            feature f;
+            port out int io;
+            varif (f) {
+              a.b.F sub;
+            } else {
+              a.b.G sub;
+            }
+            sub.io -> io;
+            constraint (f);
+          }""",
+        SOURCE_DIRECTION_MISMATCH
+      )
     );
   }
 }
