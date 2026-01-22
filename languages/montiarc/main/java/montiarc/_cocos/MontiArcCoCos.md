@@ -68,9 +68,10 @@
 
 ## MontiArc CoCos
 
-| in MA | CoCo(s)        | Language | Code(s) |
-|-------|----------------|----------|---------|
-| ☑     | RootNoInstance | MontiArc | 0xC1010 |
+| in MA | CoCo(s)              | Language | Code(s) | 
+|-------|----------------------|----------|---------|
+| ☑     | RootNoInstance       | MontiArc | 0xC1010 |
+| ☑     | ImportedSymbolExists | MontiArc | 0xC1024 |
 
 ## VariableArc CoCos
 

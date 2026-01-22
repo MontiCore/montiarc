@@ -38,6 +38,7 @@ import static montiarc.util.ArcError.UNSUPPORTED_MODEL_ELEMENT;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.MISSING_COMPONENT;
+import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -712,6 +713,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("NameClashVarVarTest",
         mp("NameClashVarVar.arc"),
         fn(ERROR, "NameClashVarVar.arc", 13, 7, 13, 8, UNIQUE_IDENTIFIER_NAMES, "v")
+      ),
+      arg("NameClashVarVarTest",
+        mp("NameClashVarVar.arc"),
+        fn(ERROR, "NameClashVarVar.arc", 13, 7, 13, 8, UNIQUE_IDENTIFIER_NAMES, "v")
+      ),
+      arg("ImportSymbolNotFound1",
+        mpk(PKG_COMP, "ImportSymbolNotFound1A.arc"),
+        fn(WARNING, PKG_COMP, "ImportSymbolNotFound1A.arc", 5, 1, 5, 25, IMPORTED_SYMBOL_MISSING, "unknown.symbol.C")
       )
     );
   }

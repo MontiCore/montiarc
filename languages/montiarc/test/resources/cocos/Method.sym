@@ -1,0 +1,22 @@
+{
+  "name": "Method",
+  "package": "cocos",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",
+      "name": "Method",
+      "type": {
+        "kind": "de.monticore.types.check.SymTypeOfObject",
+        "objName": "cocos.Type"
+      },
+      "isStatic": true,
+      "isFinal": true,
+      "isMethod": true,
+      "isConstructor": true,
+      "isPublic": true,
+      "isProtected": true,
+      "isPrivate": true
+    }
+
+  ]
+}

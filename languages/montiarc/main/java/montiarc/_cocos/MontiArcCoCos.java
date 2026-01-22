@@ -298,6 +298,7 @@ public class MontiArcCoCos {
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
     checker.addCoCo(new RootNoInstance());
     checker.addCoCo(new PortHeritageTimingFits());
+    checker.addCoCo(new ImportedSymbolExists());
 
     // ComfortableArc Cocos
     checker.addCoCo(new MaxOneAutoConnect());

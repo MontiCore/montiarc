@@ -1,0 +1,11 @@
+{
+  "name": "ImportSymbolNotFound1B",
+  "package": "components",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "ImportSymbolNotFound1B",
+      "fullName": "components.ImportSymbolNotFound1B"
+    }
+  ]
+}

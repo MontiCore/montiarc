@@ -1,0 +1,12 @@
+{
+  "name": "Component",
+  "package": "cocos",
+  "kindHierarchy": [
+  ],
+  "symbols": [
+    {
+      "kind": "arcbasis._symboltable.ComponentTypeSymbol",
+      "name": "Component"
+    }
+  ]
+}
