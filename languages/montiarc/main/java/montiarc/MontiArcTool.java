@@ -538,10 +538,13 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void prettyPrint(@NotNull ASTMACompilationUnit ast, @NotNull String file) {
     Preconditions.checkNotNull(ast);
     Preconditions.checkNotNull(file);
+
     if (!file.isEmpty()) {
-      file = Paths.get(file,
-        Names.getPathFromQualifiedName(ast.getPackage().getQName()),
-        ast.getArcComponentType().getName() + ".arc").toString();
+      String pkgPath = "";
+      if (ast.isPresentPackage()) {
+        pkgPath = Names.getPathFromQualifiedName(ast.getPackage().getQName());
+      }
+      file = Paths.get(file, pkgPath, ast.getArcComponentType().getName() + ".arc").toString();
     }
     this.print(MontiArcMill.prettyPrint(ast, true), file);
   }

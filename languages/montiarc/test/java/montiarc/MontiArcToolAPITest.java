@@ -24,6 +24,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 class MontiArcToolAPITest extends MontiArcTestBase {
 
+  @TempDir
+  Path i1, i2, pp, s, r;
+
   /**
    * Verifies that the number of options matches the expected number of options.
    * This test catches changes upstream so new options can be properly
@@ -257,9 +260,6 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     assertThrows(IllegalArgumentException.class, () -> tool.compile(new String[]{}, "", "", "", false, false));
   }
 
-  @TempDir
-  Path i1, i2, pp, s, r;
-
   @Test
   void compileEmptyInputDirShouldSucceed() {
     // Given
@@ -384,6 +384,32 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     // Then
     assertThat(targetDir).isDirectory();
     assertThat(targetDir).isNotEmptyDirectory();
+    assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
+  }
+
+  @Test
+  void compileModelWithoutPackageShouldNotLogErrors() throws IOException {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+    tool.init();
+
+    Log.clearFindings();
+    Log.enableFailQuick(false);
+
+    Path model = i1.resolve("A.arc");
+    Files.writeString(model, "component A { }");
+
+    // When
+    tool.compile(
+      new String[]{model.toString()},
+      pp.toString(),
+      s.toString(),
+      null,
+      false,
+      false
+    );
+
+    // Then
     assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
   }
 }
