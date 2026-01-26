@@ -36,7 +36,7 @@ public class DataFormatter {
     } else if (data instanceof Message) {
       return format(((Message<?>) data).getData());
     } else {
-      return "Object of " + Object.class.getCanonicalName();
+      return "Object of " + data.getClass().getCanonicalName();
     }
   }
 
