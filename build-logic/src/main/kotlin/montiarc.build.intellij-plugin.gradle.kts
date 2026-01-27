@@ -2,7 +2,10 @@
 import org.gradle.accessors.dm.LibrariesForSeLibs
 
 plugins {
-  id("montiarc.build.language-server")
+  id("montiarc.build.java")
+  id("montiarc.build.nodejs")
+
+  id("de.monticore.language-server")
   id("org.jetbrains.intellij.platform")
 }
 

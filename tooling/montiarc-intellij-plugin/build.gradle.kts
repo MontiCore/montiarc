@@ -4,32 +4,20 @@ plugins {
   id("montiarc.build.intellij-plugin")
 }
 
-configurations {
-  grammar
-}
-
 val lspJar = configurations.register("languageServerJar") {
   isCanBeResolved = true
   isCanBeConsumed = false
 }
 
 dependencies {
-  grammar(project(":languages:montiarc"))
-  grammar(seLibs.mc.grammar)
-  grammar(seLibs.mc.cd4a)
-  grammar(seLibs.mc.statecharts)
-
-  implementation(project(":languages:montiarc"))
-  implementation(libs.gradle.tooling.api)
-  implementation(seLibs.mc.grammar)
-  implementation(seLibs.mc.lsp)
-  implementation(seLibs.mc.cd4a)
-  implementation(seLibs.mc.c2mc)
-  implementation(variantOf(seLibs.mc.cd4a) { classifier("language-server") })
-
-  add(lspJar.name, project(path = ":tooling:language-server", configuration = "languageServerJar"))
+  add(
+    lspJar.name,
+    project(
+      path = ":tooling:language-server",
+      configuration = "languageServerJar"
+    )
+  )
 }
-
 
 sourceSets {
   main {
@@ -44,6 +32,10 @@ sourceSets {
 
 tasks.configureEach {
   enabled = enabled && project.hasProperty("enableLanguageServer")
+}
+
+java {
+  withSourcesJar()
 }
 
 // create needs to be used instead of register, since register is evaluated lazily and this too late,

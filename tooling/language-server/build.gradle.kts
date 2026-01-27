@@ -1,26 +1,15 @@
 /* (c) https://github.com/MontiCore/monticore */
-import de.mclsg.task.RunVscodePluginAttachedTask
-import de.mclsg.task.VscodePluginTask
+import montiarc.build.VscodeGenConfig
 
 plugins {
   id("montiarc.build.language-server")
 }
 
-configurations {
-  grammar
-}
-
 dependencies {
   grammar(project(":languages:montiarc"))
-  grammar(seLibs.mc.grammar)
   grammar(seLibs.mc.cd4a)
-  grammar(seLibs.mc.statecharts)
 
-  implementation(project(":languages:montiarc"))
   implementation(libs.gradle.tooling.api)
-  implementation(seLibs.mc.grammar)
-  implementation(seLibs.mc.lsp)
-  implementation(seLibs.mc.cd4a)
   implementation(seLibs.mc.c2mc)
   implementation(variantOf(seLibs.mc.cd4a) { classifier("language-server") })
 }
@@ -42,8 +31,11 @@ tasks.configureEach {
   enabled = enabled && project.hasProperty("enableLanguageServer")
 }
 
-// create needs to be used instead of register, since register is evaluated lazily and this too late,
-// since this task creates other tasks
+java {
+  withSourcesJar()
+}
+
+// Eager task creation because the task creates other tasks
 val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure") {
   configure<de.mclsg.MCLSGPluginAggregationExtension> {
     setLanguageAggregationName("MontiArcWithCD4A")
@@ -60,8 +52,18 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
   autoconfigureLspTasks()
 }
 
-tasks.named("build") {
-  dependsOn("autoconfigure")
+extensions.configure<VscodeGenConfig>(VscodeGenConfig::class) {
+  multiproject.set(true)
+  icon.set(rootProject.file("docs/assets/images/icon.png"))
+  readme.set(file("README.md"))
+  languageConfig.from(
+    "language-configuration.json",
+    "montiarc.tmLanguage.json",
+    "snippets.json"
+  )
+  extensionProjectLocation.set(file(
+    autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir()
+  ))
 }
 
 // Edit package.json of the generated project
@@ -128,63 +130,34 @@ tasks.register("editPackageJson") {
   }
 }
 
-tasks.register<Copy>("copyIcon") {
-  from(rootProject.projectDir.absolutePath + "/docs/assets/images/icon.png")
-  include("icon.png")
-  into(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir() + "/icons")
-}
-
-tasks.register<Copy>("copyConfiguration") {
-  from(projectDir.absolutePath + "/main/resources/")
-  include("language-configuration.json")
-  include("montiarc.tmLanguage.json")
-  include("snippets.json")
-  into(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir())
-}
-
-tasks.register<Copy>("copyReadme") {
-  from(rootProject.projectDir)
-  include("README.md")
-  into(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir())
-}
-
-tasks.named<VscodePluginTask>("generateMontiArcWithCD4AVscodePlugin") {
-  this.getAdditionalCliArgs().add("-mup")
-  finalizedBy("editPackageJson", "copyIcon", "copyConfiguration", "copyReadme")
-}
-
-tasks.named<RunVscodePluginAttachedTask>("runMontiArcWithCD4AVscodePluginAttached") {
-  this.args("-mup")
-}
-
+// We have to set explicit task dependencies for some autoconfigured tasks,
+// as their declared inputs sadly are not by themselves connected to the outputs
+// of the other tasks.
+// Moreover, we cannot set this automatically from a build-logic plugin,
+// as these fail if we refer to the name of a task that we only create in here.
+// In build-logic plugins, we have to option to use tasks.withType<TaskType> for
+// such configuration. However, the following two tasks are Exec tasks and the
+// configuration that we perform is specific to each of them-not general for all
+// Exec tasks
 tasks.named<Exec>("buildMontiArcWithCD4AVscodePlugin") {
-  dependsOn(project.tasks.npmInstall, "packageMontiArcWithCD4AVscodePlugin")
+  dependsOn(
+    project.tasks.npmInstall,
+    "packageMontiArcWithCD4AVscodePlugin"
+  )
   addNpmToPath(this)
 }
 
 tasks.named<Exec>("packageMontiArcWithCD4AVscodePlugin") {
-  dependsOn(project.tasks.npmInstall, "editPackageJson", "copyIcon", "copyConfiguration", "copyReadme")
+  dependsOn(
+    project.tasks.npmInstall,
+    "editPackageJson",
+    "copyVscodeResources"
+  )
   addNpmToPath(this)
 }
 
-tasks.named("generateMontiArcWithCD4ALanguageServer") {
-  dependsOn(tasks.generateMCGrammars)
-}
-
-tasks.named("sourcesJar") {
+tasks.named<Jar>("sourcesJar") {
   dependsOn(tasks.named("generateMontiArcWithCD4ALanguageServer"))
-}
-
-tasks.named("packMontiArcWithCD4ALanguageServer") {
-  dependsOn(
-    ":languages:montiarc:jar",
-    ":languages:basis:jar",
-    ":languages:automaton:jar",
-    ":languages:comfy:jar",
-    ":languages:compute:jar",
-    ":languages:features:jar",
-    ":languages:modes:jar"
-  )
 }
 
 fun addNpmToPath(task: Exec) {
