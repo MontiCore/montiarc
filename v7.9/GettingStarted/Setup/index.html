@@ -22,7 +22,7 @@
       
       
       <link rel="icon" href="../../assets/images/icon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
     
     
       
@@ -30,7 +30,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.618322db.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
       
       
 
@@ -3181,32 +3181,7 @@ Next, download the <a href="https://github.com/MontiCore/montiarc/releases/tag/s
 <div class="tabbed-set tabbed-alternate" data-tabs="1:3"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><input id="__tabbed_1_3" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Windows</label><label for="__tabbed_1_2">MacOS</label><label for="__tabbed_1_3">Linux</label></div>
 <div class="tabbed-content">
 <div class="tabbed-block">
-<ol>
-<li>Download the installer for Windows(.exe), extract, and run it.</li>
-<li>To be able to run the MontiArc command from anywhere, you will need to update your path variable:<ul>
-<li>Open the advanced system settings (Erweiterte System Eigenschaften) by pressing the Windows key and searching for it.</li>
-<li>Press <strong>Environment Variables</strong> (Umgebungsvariablen)</li>
-<li>Inside the user variables, look for <code>Path</code><ul>
-<li>If <code>Path</code> exists<ol>
-<li>Select <code>Path</code></li>
-<li>Click <strong>Edit...</strong></li>
-<li>Click <strong>New...</strong></li>
-<li>Insert <code>C:\Program Files\MontiArc\</code></li>
-<li>Click <strong>OK</strong> three times</li>
-</ol>
-</li>
-<li>If <code>Path</code> does not exist<ol>
-<li>Click <strong>New...</strong> in the user variables section</li>
-<li>Set <strong>Variable Name</strong> to <code>Path</code></li>
-<li>Set <strong>Variable Value</strong> to <code>C:\Program Files\MontiArc\</code></li>
-<li>Click <strong>OK</strong> three times</li>
-</ol>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
+<p>Download the installer for Windows(.exe), extract, and run it.</p>
 </div>
 <div class="tabbed-block">
 <ol>
@@ -3222,11 +3197,16 @@ Next, download the <a href="https://github.com/MontiCore/montiarc/releases/tag/s
 </li>
 </ul>
 </li>
-<li>You are now able to use the MontiArc tool.</li>
-<li>To be able to run the MontiArc command from anywhere, you will need to update your path variable:<ul>
-<li>Add <code>export PATH="/Applications/MontiArc.app/Contents/MacOS:$PATH"</code> to your <code>~/.zshrc</code> file.</li>
-<li>If that file doesn't exist, create it. </li>
-<li>Restart your shell or run <code>source ~/.zshrc</code> to load the changes.</li>
+<li>You are now able to use the MontiArc tool from anywhere.<ul>
+<li>When deinstalling MontiArc again, an orphan symlink is left behind at <code>/usr/local/bin/montiarc</code>. To remove this link follow these steps:<ol>
+<li>Check if the symlink exists: <code>ls -l /usr/local/bin/montiarc</code><ul>
+<li>If it exists, something like ''montiarc -&gt; ...'' will be provided</li>
+<li>Otherwise: ''No such file or directory''</li>
+</ul>
+</li>
+<li>To remove the symlink run: <code>sudo rm /usr/local/bin/montiarc</code></li>
+</ol>
+</li>
 </ul>
 </li>
 </ol>
@@ -3374,10 +3354,10 @@ Next, download the <a href="https://github.com/MontiCore/montiarc/releases/tag/s
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.e71a0d61.min.js"></script>
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
