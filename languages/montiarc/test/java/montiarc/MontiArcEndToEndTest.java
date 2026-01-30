@@ -40,6 +40,7 @@ import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.MISSING_COMPONENT;
+import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
@@ -63,6 +64,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   private final static String PKG_CPOS = "composition";
 
   private final static String PKG_VARI = "variability";
+
+  private final static String PKG_MODES = "modes";
 
   @ParameterizedTest(name = "[{index}] {0}")
   @MethodSource("invalidModelAndErrorProvider")
@@ -748,6 +751,18 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("ImportSymbolNotFound1",
         mpk(PKG_COMP, "ImportSymbolNotFound1A.arc"),
         fn(WARNING, PKG_COMP, "ImportSymbolNotFound1A.arc", 5, 1, 5, 25, IMPORTED_SYMBOL_MISSING, "unknown.symbol.C")
+      ),
+      arg("StateInModeAutomatonTest1",
+        mpk(PKG_MODES, "StateInModeAutomaton1.arc"),
+        fn(ERROR, PKG_MODES, "StateInModeAutomaton1.arc", 9, 3, 12, 4, MODE_AUTOMATON_CONTAINS_STATE)
+      ),
+      arg("StateInModeAutomatonTest2",
+        mpk(PKG_MODES, "StateInModeAutomaton2.arc"),
+        fn(ERROR, PKG_MODES, "StateInModeAutomaton2.arc", 9, 3, 13, 4, MODE_AUTOMATON_CONTAINS_STATE)
+      ),
+      arg("StateInModeAutomatonTest3",
+        mpk(PKG_MODES, "StateInModeAutomaton3.arc"),
+        fn(ERROR, PKG_MODES, "StateInModeAutomaton3.arc", 11, 5, 14, 6, MODE_AUTOMATON_CONTAINS_STATE)
       )
     );
   }
