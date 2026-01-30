@@ -35,6 +35,8 @@ import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.ArcError.UNSUPPORTED_MODEL_ELEMENT;
+import static montiarc.util.ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT;
+import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.MISSING_COMPONENT;
@@ -454,6 +456,31 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("SelfReferentialComponentTest5",
         mpk(PKG_COMP, "SelfReferentialComponent5A.arc"),
         fn(ERROR, PKG_COMP, "SelfReferentialComponent5A.arc", 13, 30, 13, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent5A", "SelfReferentialComponent5A -> SelfReferentialComponent5B -> SelfReferentialComponent5A")
+      ),
+      arg("AutoconnectInAtomicTest1",
+        mpk(PKG_CPOS, "AutoconnectInAtomic1.arc"),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic1.arc", 9, 3, 9, 20, AUTOCONNECT_IN_ATOMIC_COMPONENT)
+      ),
+      arg("AutoconnectInAtomicTest2",
+        mpk(PKG_CPOS, "AutoconnectInAtomic2.arc"),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic2.arc", 9, 3, 9, 20, AUTOCONNECT_IN_ATOMIC_COMPONENT)
+      ),
+      arg("AutoconnectInAtomicTest3",
+        mpk(PKG_CPOS, "AutoconnectInAtomic3.arc"),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic3.arc", 9, 3, 9, 19, AUTOCONNECT_IN_ATOMIC_COMPONENT)
+      ),
+      arg("AutoconnectInAtomicTest4",
+        mpk(PKG_CPOS, "AutoconnectInAtomic4.arc"),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic4.arc", 11, 3, 11, 20, AUTOCONNECT_IN_ATOMIC_COMPONENT)
+      ),
+      arg("AutoconnectInAtomicTest5",
+        mpk(PKG_CPOS, "AutoconnectInAtomic5.arc"),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic5.arc", 9, 3, 9, 20, AUTOCONNECT_IN_ATOMIC_COMPONENT),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic5.arc", 10, 3, 10, 20, MULTIPLE_AUTOCONNECTS, "2")
+      ),
+      arg("AutoconnectInAtomicTest6",
+        mpk(PKG_CPOS, "AutoconnectInAtomic6.arc"),
+        fn(ERROR, PKG_CPOS, "AutoconnectInAtomic6.arc", 10, 5, 10, 22, AUTOCONNECT_IN_ATOMIC_COMPONENT)
       ),
       arg("CircularInheritanceWithCompositionTest1",
         mpk(PKG_CPOS, "CircularInheritanceWithComposition1.arc"),
