@@ -44,11 +44,11 @@ To set up the correct Gradle wrapper version, you can run the following once:
 
 === "Windows"
     ```powershell
-    .\init-gradlew.bat build
+    .\init-gradlew.bat
     ```
 === "macOS/Linux"
     ```bash
-    ./init-gradlew build
+    ./init-gradlew
     ```
 
 To compile the model, simply execute the Gradle build task with the now added Gradle wrapper:
