@@ -19,6 +19,7 @@ import java.util.stream.Stream;
 import static de.se_rwth.commons.logging.Finding.Type.ERROR;
 import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
+import static montiarc.util.ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
@@ -867,6 +868,18 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", 17, 3, 17, 15, UNSUPPORTED_MODEL_ELEMENT, "varif"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 3, 10, 15, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("InitWithoutComputeTest1",
+        mpk(PKG_COMP, "InitWithoutCompute1.arc"),
+        fn(ERROR, PKG_COMP, "InitWithoutCompute1.arc", 10, 3, 10, 22, INIT_BLOCK_WITHOUT_COMPUTE)
+      ),
+      arg("InitWithoutComputeTest2",
+        mpk(PKG_COMP, "InitWithoutCompute2.arc"),
+        fn(ERROR, PKG_COMP, "InitWithoutCompute2.arc", 11, 5, 11, 24, INIT_BLOCK_WITHOUT_COMPUTE)
+      ),
+      arg("InitWithoutComputeTest3",
+        mpk(PKG_COMP, "InitWithoutCompute3.arc"),
+        fn(ERROR, PKG_COMP, "InitWithoutCompute3.arc", 8, 3, 8, 22, INIT_BLOCK_WITHOUT_COMPUTE)
       )
     );
   }
