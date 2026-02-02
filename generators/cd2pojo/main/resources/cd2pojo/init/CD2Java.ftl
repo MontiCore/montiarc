@@ -14,3 +14,9 @@
 ${glex.replaceTemplate("cd2java.EmptyBody", glex.templateHP("cd2pojo.EmptyBody.ftl"))}
 
 ${decConfig.withCopyCreator().defaultApply()}
+${decConfig.withGetters().applyOnName("getter").ignoreOnName("noGetter")}
+${decConfig.withDefaultsForCardinalityAttrs().applyOnName("defaultCardinality").ignoreOnName("noDefaultCardinality")}
+${decConfig.withSetters().applyOnName("setter").ignoreOnName("noSetter")}
+${decConfig.withNavigableSetters().applyOnName("setter").ignoreOnName("noSetter")}
+${decConfig.withBuilders().applyOnName("builder").ignoreOnName("noBuilder")}
+${decConfig.withObservers().applyOnName("observable").ignoreOnName("notObservable")}
