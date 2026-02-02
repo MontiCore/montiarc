@@ -72,6 +72,7 @@ import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationN
 import modes._cocos.MaxOneModeAutomaton;
 import modes._cocos.ModeAutomatonContainsNoStates;
 import modes._cocos.ModeOmitPortDefinition;
+import modes._cocos.NoCodeBlockInModeTransitions;
 import modes._cocos.StatechartContainsNoMode;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
@@ -229,6 +230,7 @@ public class MontiArcCoCos {
     // Modes
     checker.addCoCo(new MaxOneModeAutomaton());
     checker.addCoCo(new ModeAutomatonContainsNoStates());
+    checker.addCoCo(new NoCodeBlockInModeTransitions());
     //checker.addCoCo(new ModeAutomataInDecomposedComponent());
     checker.addCoCo(new ModeOmitPortDefinition());
     checker.addCoCo(new StatechartContainsNoMode());

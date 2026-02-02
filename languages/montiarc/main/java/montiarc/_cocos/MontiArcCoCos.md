@@ -102,6 +102,7 @@
 | ☑     | ModeAutomatonContainsNoStates     | Modes    | 0xC1352 |       |
 | ☑     | StatechartContainsNoModes         | Modes    | 0xC1353 |       |
 | ☑     | ModeOmitPortDefinition            | Modes    | 0xC1354 |       |
+| ☑     | NoCodeBlockInModeTransitions      | Modes    | 0xC1355 |       |
 
 ## Automaton CoCos
 

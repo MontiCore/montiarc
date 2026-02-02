@@ -12,7 +12,8 @@ public enum ModesError implements Error {
   MODE_AUTOMATON_IN_ATOMIC_COMPONENT("0xC1351", "Atomic components may not define modes and mode automata."),
   MODE_AUTOMATON_CONTAINS_STATE("0xC1352", "Mode automata cannot define states only modes"),
   STATECHART_CONTAINS_MODE("0xC1353", "The behavior statechart cannot define modes"),
-  MODE_CONTAINS_PORT_DEFINITION("0xC1354", "Port '%s' cannot be defined in mode");
+  MODE_CONTAINS_PORT_DEFINITION("0xC1354", "Port '%s' cannot be defined in mode"),
+  MODE_AUTOMATON_TRANSITION_CONTAINS_ACTION("0xC1355", "Mode automaton transition must not define an action block");
 
   private final String errorCode;
   private final String errorMsgFormat;
