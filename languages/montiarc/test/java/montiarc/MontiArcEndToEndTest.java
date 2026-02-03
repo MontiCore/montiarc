@@ -53,6 +53,7 @@ import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
+import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
 import static montiarc.util.VariableArcError.FEATURE_UPPER_CASE;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -808,6 +809,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModelAndError4VariabilityProvider() {
     return Stream.of(
+      arg("ConstraintSmtConvertibleTest",
+        mpk(PKG_VARI, "ConstraintSmtConvertible.arc"),
+        fn(WARNING, PKG_VARI, "ConstraintSmtConvertible.arc", 8, 14, 8, 29, EXPRESSION_NOT_SMT_CONVERTIBLE, "obj.isPresent()")
+      ),
       arg("MissingSymbolsInVarIfTest1",
         mpk(PKG_VARI, "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 9, 10, 10, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
