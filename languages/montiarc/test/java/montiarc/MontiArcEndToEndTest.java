@@ -26,6 +26,7 @@ import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_UPPER_CASE;
+import static montiarc.util.ArcError.INVALID_CONTEXT_ASSIGNMENT;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.MISSING_PORT;
@@ -719,6 +720,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_CPOS, "SelfReferentialComponentWithComposition.arc"),
         fn(ERROR, PKG_CPOS, "SelfReferentialComponentWithComposition.arc", 13, 39, 13, 43, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentWithComposition", "SelfReferentialComponentWithComposition -> SelfReferentialComponentWithComposition"),
         fn(ERROR, PKG_CPOS, "SelfReferentialComponentWithComposition.arc", 13, 45, 13, 49, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentWithComposition", "SelfReferentialComponentWithComposition -> SelfReferentialComponentWithComposition")
+      ),
+      arg("ConstraintNoAssignmentExpressionTest",
+        mpk(PKG_VARI, "ConstraintNoAssignmentExpression.arc"),
+        fn(ERROR, PKG_VARI, "ConstraintNoAssignmentExpression.arc", 8, 14, 8, 22, INVALID_CONTEXT_ASSIGNMENT)
       ),
       arg("MissingSymbolsInConstraintTest1",
         mpk(PKG_VARI, "MissingSymbolsInConstraint1.arc"),
