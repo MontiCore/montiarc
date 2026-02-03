@@ -29,6 +29,7 @@ import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_UPPER_CASE;
 import static montiarc.util.ArcError.INVALID_CONTEXT_ASSIGNMENT;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
+import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.MISSING_PORT;
 import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
@@ -113,6 +114,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   @MethodSource("invalidModelAndError4VariabilityProvider")
   @DisableIfDisplayName(contains = {
     "CircularInheritanceTest7",
+    "NoInputPortInEntryAction",
     "NameClash",
     "SelfReferentialComponentWithCompositionTest",
     "PortMultipleSender",
@@ -298,6 +300,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 12, 20, 12, 22, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 16, 20, 16, 22, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 18, 22, 18, 24, CANT_FIND_SYMBOL_IN_EXPRESSION, "a3")
+      ),
+      arg("NoInputPortInEntryActionTest",
+        mpk(PKG_AUT, "NoInputPortInEntryAction.arc"),
+        fn(ERROR, PKG_AUT, "NoInputPortInEntryAction.arc", 13, 25, 13, 26, IN_PORT_REF_IN_INVALID_CONTEXT, "i", "entry actions")
       ),
       arg("CircularInheritanceTest1",
         mpk(PKG_COMP, "CircularInheritance1.arc"),
