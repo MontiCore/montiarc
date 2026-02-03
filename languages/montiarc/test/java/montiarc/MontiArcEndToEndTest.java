@@ -96,7 +96,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     String symbolPath = Paths.get(TEST_RESOURCE, TEST_DIR).toString();
 
     // Given
-    String[] args = new String[]{"-i", modelPath, "-path", symbolPath, "-novar"};
+    String[] args = new String[]{"-i", modelPath, "-path", symbolPath, "-novar", "-c2mc"};
     MontiArcTool tool = new MontiArcTool();
 
     // When
@@ -143,7 +143,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     String symbolPath = Paths.get(TEST_RESOURCE, TEST_DIR).toString();
 
     // Given
-    String[] args = new String[]{"-i", modelPath, "-path", symbolPath};
+    String[] args = new String[]{"-i", modelPath, "-path", symbolPath, "-c2mc"};
     MontiArcTool tool = new MontiArcTool();
 
     // When
