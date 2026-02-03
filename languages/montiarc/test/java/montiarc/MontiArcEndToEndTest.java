@@ -20,6 +20,7 @@ import static de.se_rwth.commons.logging.Finding.Type.ERROR;
 import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
 import static montiarc.util.ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE;
+import static montiarc.util.ArcComputeError.MULTIPLE_INIT;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.COMPONENT_LOWER_CASE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
@@ -935,6 +936,18 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("InitWithoutComputeTest3",
         mpk(PKG_COMP, "InitWithoutCompute3.arc"),
         fn(ERROR, PKG_COMP, "InitWithoutCompute3.arc", 8, 3, 8, 22, INIT_BLOCK_WITHOUT_COMPUTE)
+      ),
+      arg("MaxOneInitTest1",
+        mpk(PKG_COMP, "MaxOneInit1.arc"),
+        fn(ERROR, PKG_COMP, "MaxOneInit1.arc", 12, 3, 12, 11, MULTIPLE_INIT)
+      ),
+      arg("MaxOneInitTest2",
+        mpk(PKG_COMP, "MaxOneInit2.arc"),
+        fn(ERROR, PKG_COMP, "MaxOneInit2.arc", 16, 5, 16, 13, MULTIPLE_INIT)
+      ),
+      arg("MaxOneInitTest3",
+        mpk(PKG_COMP, "MaxOneInit3.arc"),
+        fn(ERROR, PKG_COMP, "MaxOneInit3.arc", 12, 3, 12, 11, MULTIPLE_INIT)
       )
     );
   }
