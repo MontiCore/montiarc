@@ -21,9 +21,11 @@ import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
 import static montiarc.util.ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
+import static montiarc.util.ArcError.COMPONENT_LOWER_CASE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
+import static montiarc.util.ArcError.FIELD_UPPER_CASE;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.MISSING_PORT;
@@ -31,9 +33,13 @@ import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
 import static montiarc.util.ArcError.MULTIPLE_BEHAVIOR;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
+import static montiarc.util.ArcError.PARAMETER_UPPER_CASE;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
+import static montiarc.util.ArcError.PORT_UPPER_CASE;
 import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.SUBCOMPONENT_UPPER_CASE;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.TYPE_PARAMETER_UPPER_CASE;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.ArcError.UNSUPPORTED_MODEL_ELEMENT;
 import static montiarc.util.ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT;
@@ -45,6 +51,7 @@ import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
+import static montiarc.util.VariableArcError.FEATURE_UPPER_CASE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -414,6 +421,31 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "MoreThanOneBehavior5.arc"),
         fn(ERROR, PKG_COMP, "MoreThanOneBehavior5.arc", 10, 3, 10, 33, MULTIPLE_BEHAVIOR),
         fn(ERROR, PKG_COMP, "MoreThanOneBehavior5.arc", 11, 3, 11, 33, MULTIPLE_BEHAVIOR)
+      ),
+      arg("NamesCapitalizationTest1",
+        mpk(PKG_COMP, "namesCapitalization1.arc"),
+        fn(WARNING, PKG_COMP, "namesCapitalization1.arc", 7, 1, 7, 35, COMPONENT_LOWER_CASE)
+      ),
+      arg("NamesCapitalizationTest2",
+        mpk(PKG_COMP, "NamesCapitalization2.arc"),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 7, 40, 7, 46, PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 7, 48, 7, 54, PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 7, 32, 7, 34, TYPE_PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 7, 36, 7, 38, TYPE_PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 8, 15, 8, 17, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 9, 16, 9, 18, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 10, 15, 10, 17, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 11, 16, 11, 18, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 13, 7, 13, 13, FIELD_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 15, 3, 30, 4, COMPONENT_LOWER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 15, 23, 15, 29, PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 15, 19, 15, 21, TYPE_PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 16, 16, 16, 18, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 16, 20, 16, 22, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 17, 17, 17, 19, PORT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 19, 9, 19, 15, FIELD_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 32, 14, 32, 26, SUBCOMPONENT_UPPER_CASE),
+        fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 32, 28, 32, 35, SUBCOMPONENT_UPPER_CASE)
       ),
       arg("PortUnusedTest1",
         mpk(PKG_COMP, "PortUnused1.arc"),
@@ -834,6 +866,24 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("MoreThanOneBehaviorWithVariabilityTest9",
         mpk(PKG_VARI, "MoreThanOneBehaviorWithVariability9.arc"),
         fn(ERROR, PKG_VARI, "MoreThanOneBehaviorWithVariability9.arc", 18, 5, 18, 35, MULTIPLE_BEHAVIOR)
+      ),
+      arg("NamesCapitalizationWithVariabilityTest",
+        mpk(PKG_VARI, "NamesCapitalizationWithVariability.arc"),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 9, 11, 9, 12, FEATURE_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 12, 17, 12, 18, PORT_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 13, 9, 13, 14, FIELD_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 14, 5, 16, 6, COMPONENT_LOWER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 14, 25, 14, 30, PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 14, 22, 14, 23, TYPE_PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 15, 19, 15, 20, PORT_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 17, 17, 17, 23, SUBCOMPONENT_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 20, 17, 20, 18, PORT_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 21, 9, 21, 14, FIELD_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 22, 5, 24, 6, COMPONENT_LOWER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 22, 25, 22, 30, PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 22, 22, 22, 23, TYPE_PARAMETER_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 23, 19, 23, 20, PORT_UPPER_CASE),
+        fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 25, 17, 25, 23, SUBCOMPONENT_UPPER_CASE)
       )
     );
   }

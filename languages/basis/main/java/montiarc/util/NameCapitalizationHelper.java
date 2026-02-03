@@ -47,7 +47,7 @@ public class NameCapitalizationHelper {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(args);
     Preconditions.checkArgument(!Arrays.asList(args).contains(null));
-    Log.error(String.format(error.toString(), args), node.get_SourcePositionStart());
+    Log.error(String.format(error.toString(), args), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
   }
 
   /**
@@ -63,6 +63,6 @@ public class NameCapitalizationHelper {
     Preconditions.checkNotNull(node);
     Preconditions.checkNotNull(args);
     Preconditions.checkArgument(!Arrays.asList(args).contains(null));
-    Log.warn(String.format(error.toString(), args), node.get_SourcePositionStart());
+    Log.warn(String.format(error.toString(), args), node.get_SourcePositionStart(), node.get_SourcePositionEnd());
   }
 }
