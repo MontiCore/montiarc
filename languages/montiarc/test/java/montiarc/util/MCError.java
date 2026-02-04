@@ -33,7 +33,7 @@ public enum MCError implements Error {
   EXPR_LOGICAL_NOT_NOT_APPLICABLE("0xB0164", ""),
   EXPR_SHIFT_OP_NOT_APPLICABLE("0xC0201", ""),
   MISSING_COMPONENT("0xD0104", "Cannot resolve component '%s'"),
-  DUPLICATE_VAR_IN_SCOPE(VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE , "Variable '%s' is already defined in the scope.");
+  DUPLICATE_VAR_IN_SCOPE(VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE, "Variable '%s' is already defined in the scope.");
 
   private final String errorCode;
   private final String errorMsgFormat;
