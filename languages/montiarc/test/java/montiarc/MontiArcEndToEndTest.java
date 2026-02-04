@@ -26,6 +26,7 @@ import static montiarc.util.ArcError.COMPONENT_LOWER_CASE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
+import static montiarc.util.ArcError.FIELD_INIT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_UPPER_CASE;
 import static montiarc.util.ArcError.INVALID_CONTEXT_ASSIGNMENT;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
@@ -797,6 +798,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("NameClashVarVarTest",
         mp("NameClashVarVar.arc"),
         fn(ERROR, "NameClashVarVar.arc", 13, 7, 13, 8, UNIQUE_IDENTIFIER_NAMES, "v")
+      ),
+      arg("FieldInitTypeMismatchTest",
+        mpk(PKG_COMP, "FieldInitTypeMismatch.arc"),
+        fn(ERROR, PKG_COMP, "FieldInitTypeMismatch.arc", 10, 11, 10, 18, FIELD_INIT_TYPE_MISMATCH, "boolean", "int")
       ),
       arg("ImportSymbolNotFound1",
         mpk(PKG_COMP, "ImportSymbolNotFound1A.arc"),
