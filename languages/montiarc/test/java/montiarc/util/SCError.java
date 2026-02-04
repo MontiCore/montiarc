@@ -19,7 +19,7 @@ import static de.monticore.scbasis._cocos.TransitionSourceTargetExists.CANT_FIND
 public enum SCError implements Error {
   DUPLICATE_STATE(UniqueStates.ERROR_CODE, ""),
   MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE, ""),
-  MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE, ""),
+  MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE, "Statecharts need at least one initial state."),
   STATE_NAME_NOT_CAPITAL(CapitalStateNames.ERROR_CODE, ""),
   PRECONDITION_NOT_BOOLEAN(TransitionPreconditionsAreBoolean.ERROR_CODE, "Guard expressions must be boolean. Your guard expression is of type '%s'."),
   CANT_FIND_SOURCE(CANT_FIND_SOURCE_ERROR_CODE, CANT_FIND_SOURCE_ERROR_MSG),

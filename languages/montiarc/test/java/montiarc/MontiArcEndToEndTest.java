@@ -57,6 +57,7 @@ import static montiarc.util.ModesError.MODE_CONTAINS_PORT_DEFINITION;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
+import static montiarc.util.SCError.MISSING_INITIAL_STATE;
 import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
 import static montiarc.util.VariableArcError.FEATURE_UPPER_CASE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -305,6 +306,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 12, 20, 12, 22, CANT_FIND_SYMBOL_IN_EXPRESSION, "a1"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 16, 20, 16, 22, CANT_FIND_SYMBOL_IN_EXPRESSION, "a2"),
         fn(ERROR, PKG_AUT, "MissingSymbolsInTransitionAction6.arc", 18, 22, 18, 24, CANT_FIND_SYMBOL_IN_EXPRESSION, "a3")
+      ),
+      arg("NoInitialStateTest1",
+        mpk(PKG_AUT, "NoInitialState1.arc"),
+        fn(ERROR, PKG_AUT, "NoInitialState1.arc", 8, 3, 8, 16, MISSING_INITIAL_STATE)
+      ),
+      arg("NoInitialStateTest2",
+        mpk(PKG_AUT, "NoInitialState2.arc"),
+        fn(ERROR, PKG_AUT, "NoInitialState2.arc", 9, 5, 9, 18, MISSING_INITIAL_STATE)
       ),
       arg("NoInputPortInEntryActionTest",
         mpk(PKG_AUT, "NoInputPortInEntryAction.arc"),
