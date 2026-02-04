@@ -49,6 +49,7 @@ import static montiarc.util.ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT;
 import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
+import static montiarc.util.MCError.DUPLICATE_VAR_IN_SCOPE;
 import static montiarc.util.MCError.MISSING_COMPONENT;
 import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
@@ -74,6 +75,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   private final static String PKG_COMP = "components";
 
   private final static String PKG_CPOS = "composition";
+
+  private final static String PKG_STMT = "statements";
 
   private final static String PKG_VARI = "variability";
 
@@ -797,6 +800,31 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("ImportSymbolNotFound1",
         mpk(PKG_COMP, "ImportSymbolNotFound1A.arc"),
         fn(WARNING, PKG_COMP, "ImportSymbolNotFound1A.arc", 5, 1, 5, 25, IMPORTED_SYMBOL_MISSING, "unknown.symbol.C")
+      ),
+      arg("NoDuplicateVariableDeclarationsTest1",
+        mpk(PKG_STMT, "NoDuplicateVariableDeclarations1.arc"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations1.arc", 12, 11, 12, 16, DUPLICATE_VAR_IN_SCOPE, "i"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations1.arc", 13, 11, 13, 16, DUPLICATE_VAR_IN_SCOPE, "i")
+      ),
+      arg("NoDuplicateVariableDeclarationsTest2",
+        mpk(PKG_STMT, "NoDuplicateVariableDeclarations2.arc"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations2.arc", 12, 13, 12, 18, DUPLICATE_VAR_IN_SCOPE, "i"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations2.arc", 13, 13, 13, 18, DUPLICATE_VAR_IN_SCOPE, "i")
+      ),
+      arg("NoDuplicateVariableDeclarationsTest3",
+        mpk(PKG_STMT, "NoDuplicateVariableDeclarations3.arc"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations3.arc", 12, 13, 12, 18, DUPLICATE_VAR_IN_SCOPE, "i"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations3.arc", 13, 13, 13, 18, DUPLICATE_VAR_IN_SCOPE, "i")
+      ),
+      arg("NoDuplicateVariableDeclarationsTest4",
+        mpk(PKG_STMT, "NoDuplicateVariableDeclarations4.arc"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations4.arc", 10, 9, 10, 14, DUPLICATE_VAR_IN_SCOPE, "i"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations4.arc", 11, 9, 11, 14, DUPLICATE_VAR_IN_SCOPE, "i")
+      ),
+      arg("NoDuplicateVariableDeclarationsTest5",
+        mpk(PKG_STMT, "NoDuplicateVariableDeclarations5.arc"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations5.arc", 10, 9, 10, 14, DUPLICATE_VAR_IN_SCOPE, "i"),
+        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations5.arc", 11, 9, 11, 14, DUPLICATE_VAR_IN_SCOPE, "i")
       ),
       arg("StateInModeAutomatonTest1",
         mpk(PKG_MODES, "StateInModeAutomaton1.arc"),
