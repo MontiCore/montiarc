@@ -52,6 +52,7 @@ import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.DUPLICATE_VAR_IN_SCOPE;
 import static montiarc.util.MCError.MISSING_COMPONENT;
 import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
+import static montiarc.util.ModesError.MODE_CONTAINS_PORT_DEFINITION;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
@@ -837,6 +838,15 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("StateInModeAutomatonTest3",
         mpk(PKG_MODES, "StateInModeAutomaton3.arc"),
         fn(ERROR, PKG_MODES, "StateInModeAutomaton3.arc", 11, 5, 14, 6, MODE_AUTOMATON_CONTAINS_STATE)
+      ),
+      arg("PortInModeTest1",
+        mpk(PKG_MODES, "PortInMode1.arc"),
+        fn(ERROR, PKG_MODES, "PortInMode1.arc",11, 19, 11, 22, MODE_CONTAINS_PORT_DEFINITION, "pIn")
+      ),
+      arg("PortInModeTest2",
+        mpk(PKG_MODES, "PortInMode2.arc"),
+        fn(ERROR, PKG_MODES, "PortInMode2.arc", 11, 19, 11, 22, MODE_CONTAINS_PORT_DEFINITION, "pIn"),
+        fn(ERROR, PKG_MODES, "PortInMode2.arc", 14, 23, 14, 27, MODE_CONTAINS_PORT_DEFINITION, "pOut")
       )
     );
   }

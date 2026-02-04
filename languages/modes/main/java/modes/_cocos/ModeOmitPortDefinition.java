@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._cocos;
 
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.se_rwth.commons.logging.Log;
 import modes._ast.ASTArcMode;
 import montiarc.util.ModesError;
@@ -11,7 +11,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 /**
  * This context-condition checks that modes do not define ports.
  */
-public class ModeOmitPortDefinition implements ModesASTArcModeCoCo{
+public class ModeOmitPortDefinition implements ModesASTArcModeCoCo {
 
   @Override
   public void check(@NotNull ASTArcMode node) {
@@ -19,7 +19,11 @@ public class ModeOmitPortDefinition implements ModesASTArcModeCoCo{
     Preconditions.checkArgument(node.isPresentSymbol());
 
     for (PortSymbol port : node.getSpannedScope().getLocalPortSymbols()) {
-      Log.error(ModesError.MODE_CONTAINS_PORT_DEFINITION.format(port.getName()), port.getSourcePosition());
+      Log.error(
+        ModesError.MODE_CONTAINS_PORT_DEFINITION.format(port.getName()),
+        port.getAstNode().get_SourcePositionStart(),
+        port.getAstNode().get_SourcePositionEnd()
+      );
     }
   }
 }

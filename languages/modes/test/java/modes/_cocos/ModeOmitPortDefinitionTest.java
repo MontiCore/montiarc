@@ -1,8 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package modes._cocos;
 
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.compsymbols._ast.ASTPort;
+import de.monticore.types.check.SymTypeExpression;
 import modes.ModesMill;
 import modes.ModesTestBase;
 import modes._ast.ASTArcMode;
@@ -45,7 +46,12 @@ public class ModeOmitPortDefinitionTest extends ModesTestBase {
     mode.setSpannedScope(ModesMill.scope());
     mode.setSymbol(ModesMill.arcModeSymbolBuilder().setName("m").setAstNode(mode).setSpannedScope(mode.getSpannedScope()).build());
     for (int i = 0; i < numberOfPortSymbols; i++) {
-      mode.getSpannedScope().add(Mockito.mock(PortSymbol.class));
+      mode.getSpannedScope().add(ModesMill.portSymbolBuilder()
+        .setName("p" + i)
+        .setIncoming(true)
+        .setType(Mockito.mock(SymTypeExpression.class))
+        .setAstNode(Mockito.mock(ASTPort.class))
+        .build());
     }
 
     // When
