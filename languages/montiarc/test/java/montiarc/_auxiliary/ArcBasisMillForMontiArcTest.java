@@ -2,6 +2,7 @@
 package montiarc._auxiliary;
 
 import arcbasis.ArcBasisMill;
+import arcbasis.check.ArcBasisFullSynthesizeCompKind;
 import com.google.common.base.Preconditions;
 import de.monticore.types.check.CompKindExpressionDeSer;
 import de.monticore.types.check.FullSynthesizeCompKindFromMCSimpleGenericTypes;
@@ -20,8 +21,8 @@ public class ArcBasisMillForMontiArcTest {
 
   protected static Stream<Arguments> setupAndExpectedClassForScopesGenitorP2Provider() {
     return Stream.of(
-      Arguments.of(arcBasisMillSetup(), FullSynthesizeCompKindFromMCSimpleGenericTypes.class),
-      Arguments.of(montiArcMillSetup(), FullSynthesizeCompKindFromMCSimpleGenericTypes.class)
+      Arguments.of(arcBasisMillSetup(), ArcBasisFullSynthesizeCompKind.class),
+      Arguments.of(montiArcMillSetup(), ArcBasisFullSynthesizeCompKind.class)
     );
   }
 

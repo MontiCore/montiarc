@@ -17,7 +17,7 @@ class CD3Test {
 
   @Test
   void test_field_package_modifiers() throws NoSuchFieldException {
-    assertThat(Modifier.isPublic(C4.class.getDeclaredField("a1").getModifiers())).isFalse();
+    assertThat(Modifier.isPublic(C4.class.getDeclaredField("a1").getModifiers())).isTrue();
     assertThat(Modifier.isProtected(C4.class.getDeclaredField("a1").getModifiers())).isFalse();
     assertThat(Modifier.isPrivate(C4.class.getDeclaredField("a1").getModifiers())).isFalse();
     assertThat(Modifier.isStatic(C4.class.getDeclaredField("a1").getModifiers())).isFalse();

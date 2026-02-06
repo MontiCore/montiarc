@@ -44,4 +44,43 @@ classdiagram types {
     public static void call(int i, int j);
     public static void call(Object o, Object p);
   }
+
+  // ======= Associations ======== //
+
+  public interface InterfaceLeft { }
+  public interface InterfaceRight { }
+
+  public abstract class AbstractClassLeft implements InterfaceLeft { }
+  public abstract class AbstractClassRight implements InterfaceRight { }
+
+  public class ClassLeft extends AbstractClassLeft { }
+  public class ClassRight extends AbstractClassRight { }
+
+  association InterfaceLeft -> InterfaceRight;
+  association AbstractClassLeft -> AbstractClassRight;
+  association ClassLeft -> ClassRight;
+
+  association InterfaceLeft -> (interfaceRightSet) InterfaceRight [*];
+  association AbstractClassLeft -> (abstractClassRightSet) AbstractClassRight [*];
+  association ClassLeft -> (classRightSet) ClassRight [*];
+
+  association [*] InterfaceLeft (interfaceLeftSet) <- InterfaceRight;
+  association [*] AbstractClassLeft (abstractClassLeftSet) <- AbstractClassRight;
+  association [*] ClassLeft (classLeftSet) <- ClassRight;
+
+  association InterfaceLeft -> (interfaceRightList) InterfaceRight [*] {ordered};
+  association AbstractClassLeft -> (abstractClassRightList) AbstractClassRight [*] {ordered};
+  association ClassLeft -> (classRightList) ClassRight [*] {ordered};
+
+  association {ordered} [*] InterfaceLeft (interfaceLeftList) <- InterfaceRight;
+  association {ordered} [*] AbstractClassLeft (abstractClassLeftList) <- AbstractClassRight;
+  association {ordered} [*] ClassLeft (classLeftList) <- ClassRight;
+
+  association InterfaceLeft -> (interfaceRightOptional) InterfaceRight [0..1];
+  association AbstractClassLeft -> (abstractClassRightOptional) AbstractClassRight [0..1];
+  association ClassLeft -> (classRightOptional) ClassRight [0..1];
+
+  association [0..1] InterfaceLeft (interfaceLeftOptional) <- InterfaceRight;
+  association [0..1] AbstractClassLeft (abstractClassLeftOptional) <- AbstractClassRight;
+  association [0..1]  ClassLeft (classLeftOptional)<- ClassRight;
 }
