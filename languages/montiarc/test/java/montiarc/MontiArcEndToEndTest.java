@@ -51,6 +51,8 @@ import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.DUPLICATE_VAR_IN_SCOPE;
+import static montiarc.util.MCError.FOR_EACH_EXPR_NOT_ITERABLE;
+import static montiarc.util.MCError.FOR_EACH_TYPE_MISMATCH;
 import static montiarc.util.MCError.MISSING_COMPONENT;
 import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.ModesError.MODE_CONTAINS_PORT_DEFINITION;
@@ -139,7 +141,9 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MissingSymbolsInVarIfTest",
     "MissingSymbolsInVarIfWithCompositionTest",
     "MoreThanOneBehaviorTest",
-    "MoreThanOneBehaviorWithVariabilityTest"
+    "MoreThanOneBehaviorWithVariabilityTest",
+    "ForEachExpressionNotIterableTest",
+    "ForEachTypeMismatchTest"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -815,6 +819,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("ImportSymbolNotFound1",
         mpk(PKG_COMP, "ImportSymbolNotFound1A.arc"),
         fn(WARNING, PKG_COMP, "ImportSymbolNotFound1A.arc", 5, 1, 5, 25, IMPORTED_SYMBOL_MISSING, "unknown.symbol.C")
+      ),
+      arg("ForEachExpressionNotIterableTest",
+        mpk(PKG_STMT, "ForEachExpressionNotIterable.arc"),
+        fn(ERROR, PKG_STMT, "ForEachExpressionNotIterable.arc", 14, 20, 14, 21, FOR_EACH_EXPR_NOT_ITERABLE)
+      ),
+      arg("ForEachTypeMismatchTest",
+        mpk(PKG_STMT, "ForEachTypeMismatch.arc"),
+        fn(ERROR, PKG_STMT, "ForEachTypeMismatch.arc", 19, 12, 19, 21, FOR_EACH_TYPE_MISMATCH, "java.lang.Boolean", "java.lang.Integer")
       ),
       arg("NoDuplicateVariableDeclarationsTest1",
         mpk(PKG_STMT, "NoDuplicateVariableDeclarations1.arc"),

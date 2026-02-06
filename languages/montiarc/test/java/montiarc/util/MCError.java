@@ -4,6 +4,11 @@ package montiarc.util;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
 
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE;
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG;
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_CODE;
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_MSG;
+
 /**
  * Wraps monticore error messages into enum values, so they can be used in
  * combination with the existing test infrastructure
@@ -33,7 +38,9 @@ public enum MCError implements Error {
   EXPR_LOGICAL_NOT_NOT_APPLICABLE("0xB0164", ""),
   EXPR_SHIFT_OP_NOT_APPLICABLE("0xC0201", ""),
   MISSING_COMPONENT("0xD0104", "Cannot resolve component '%s'"),
-  DUPLICATE_VAR_IN_SCOPE(VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE, "Variable '%s' is already defined in the scope.");
+  DUPLICATE_VAR_IN_SCOPE(VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE, "Variable '%s' is already defined in the scope."),
+  FOR_EACH_EXPR_NOT_ITERABLE(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE, FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG),
+  FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG);
 
   private final String errorCode;
   private final String errorMsgFormat;

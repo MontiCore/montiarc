@@ -64,7 +64,6 @@ import de.monticore.scstatehierarchy.NoSubstatesHandler;
 import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
-import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
@@ -319,7 +318,7 @@ public class MontiArcCoCos {
       checker.addCoCo(new ExpressionStatementIsValid());
       checker.addCoCo(new VarDeclarationInitializationHasCorrectType());
       checker.addCoCo(new ForConditionHasBooleanType());
-      checker.addCoCo(new ForEachIsValid());
+      checker.addCoCo(new ForEachIsValid4MA());
       checker.addCoCo(new IfConditionHasBooleanType());
       checker.addCoCo(new SwitchStatementValid());
     }
