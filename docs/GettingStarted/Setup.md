@@ -11,17 +11,17 @@ So if you haven't already, now is the right time to [install Java 11](https://ww
 #### Run the CLI Manually
 
 To run the CLI manually, you need to have [Java 11](https://www.oracle.com/de/java/technologies/javase/jdk11-archive-downloads.html) installed.
-Next, download the [MontiArc-7.8.1.jar](https://github.com/MontiCore/montiarc/releases/tag/7.8.1).
+Next, download the [MontiArc-7.8.2.jar](https://github.com/MontiCore/montiarc/releases/tag/7.8.2).
 
 You can then run the tool with:
 
 ```bash
-java -jar MontiArc-7.8.1.jar
+java -jar MontiArc-7.8.2.jar
 ```
 
 #### Install the CLI (BETA)
 
-If you also want to use the [CLI](./HelloWorld.md), you can find installers for all platforms [here](https://github.com/MontiCore/montiarc/releases/tag/7.8.1). Download the installer for your platform, extract, and run it.
+If you also want to use the [CLI](./HelloWorld.md), you can find installers for all platforms [here](https://github.com/MontiCore/montiarc/releases/tag/7.8.2). Download the installer for your platform, extract, and run it.
 
 !!! info "Add MontiArc to PATH"
     To be able to run the MontiArc command from anywhere, you will need to update your path variable.

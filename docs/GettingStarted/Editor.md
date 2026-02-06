@@ -19,7 +19,7 @@ Though there are some editors that provide a better experience for Gradle and Mo
 
 1. To install VS Code, follow their [instructions](https://code.visualstudio.com/docs/setup/setup-overview).
 2. Install the MontiArc extension.
-    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/7.8.1) the `.vsix` extension.
+    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/7.8.2) the `.vsix` extension.
     2. Start VS Code.
     3. Go to the extension tab → Click `...` → Install from VSIX → Select the previously downloaded extension.
 3. Install the Java extension.

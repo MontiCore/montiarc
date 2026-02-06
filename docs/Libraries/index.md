@@ -40,8 +40,8 @@ and create a publishing config.
     plugins {
       `java-library`
       `maven-publish`
-      id("montiarc-jsim") version "7.8.1"
-      id("cd2pojo") version "7.8.1"
+      id("montiarc-jsim") version "7.8.2"
+      id("cd2pojo") version "7.8.2"
     }
 
     publishing {

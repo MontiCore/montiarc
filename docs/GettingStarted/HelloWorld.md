@@ -15,15 +15,14 @@ Save the file and open a terminal window inside your folder and enter the follow
 
 ```bash
 montiarc --input HelloWorld.arc --output . # (1)!
-montiarc run DeployHelloWorld.java
 ```
 
-1.  If you've downloaded the jar directly, run `java -jar MontiArc-7.8.1.jar --input HelloWorld.arc --output .`
+1.  If you've downloaded the jar directly, run `java -jar MontiArc-7.8.2.jar --input HelloWorld.arc --output .`
 
-A `Hello, World!` should print to the terminal. If it did, congrats! You're now a MontiArc modeler.
+You should now find compiled MontiArc models in your folder. If it did, congrats! You're now a MontiArc modeler.
 
 ## Anatomy of a Component Model
-Let's review the model you've just run.
+Let's review the model you've just compiled.
 
 
 #### Import
@@ -98,28 +97,18 @@ Here, you used the MontiArc command-line tooling to compile MontiArc models into
 
 ```bash
 DeployHelloWorld.java
-DeployMqttHelloWorld.java
-DeployRestHelloWorld.java
-HelloWorldComponent.java
+HelloWorldComp.java
+HelloWorldCompBuilder.java
+HelloWorldCompImpl.java
 HelloWorldContext.java
-HelloWorldBehavior.java
 HelloWorldAutomaton.java
+HelloWorldAutomatonBuilder.java
 HelloWorldStates.java
 HelloWorldEvents.java
 HelloWorldSyncMsg.java
 ```
 
 Most of which are needed to simulate the model using Java.
-
-```bash
-montiarc run DeployHelloWorld.java
-```
-This executes the Java main method of the `DeployHelloWorld` class, which in turn sets up the [simulation](../Usage/Simulation/index.md) and starts it.
-The run command is shorthand for calling Java with the correct class path. It requires Java to be installed on your system.
-
-By default the simulation is non-interactive and input streams have to be provided for it to be useful (See [testing](../Reference/Testing/index.md)).
-We provide two interactive simulation deployments where the simulation reads and writes to [MQTT](../Usage/Simulation/index.md#mqtt) or has a [Rest API](../Usage/Simulation/index.md#rest).
-
 
 ---
 
