@@ -5,6 +5,11 @@ import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationI
 
 import java.util.regex.Pattern;
 
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE;
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG;
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_CODE;
+import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_MSG;
+
 /**
  * Wraps monticore error messages into enum values, so they can be used in
  * combination with the existing test infrastructure
@@ -19,7 +24,9 @@ public enum MCError implements Error {
   FOUND_MULTIPLE_SYMBOLS("0xA4095"),
   TARGET_TYPE_MISMATCH("0xFD451"),
   EXPRESSION_LVALUE("0xFDD47"),
-  MISSING_COMPONENT("0xD0104");
+  MISSING_COMPONENT("0xD0104"),
+  FOR_EACH_EXPR_NOT_ITERABLE(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE),
+  FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE);
 
   public static final Pattern ERROR_CODE_PATTERN = Pattern.compile("0xA\\d{4}");
 
