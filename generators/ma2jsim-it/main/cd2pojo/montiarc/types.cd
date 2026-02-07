@@ -48,6 +48,8 @@ classdiagram types {
     public static void call(Object o, Object p);
   }
 
+  public class ItInt implements java.lang.Iterable<Integer> { }
+
   // ======= Associations ======== //
 
   public interface InterfaceLeft { }

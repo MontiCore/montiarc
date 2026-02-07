@@ -3,32 +3,30 @@ package montiarc.statements;
 
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
-import montiarc.types.OnOff;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.types.Signal.SIGNAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JSimTest
-class ForEachWithListTest {
+class ForEachWithList2Test {
 
   @Test
   void testIO() {
     // Given
-    ForEachWithListComp sut = new ForEachWithListCompBuilder().setName("sut").build();
+    ForEachWithList2Comp sut = new ForEachWithList2CompBuilder().setName("sut").build();
 
-    PortObserver<OnOff> port_o = new PortObserver<>();
+    PortObserver<Integer> port_o = new PortObserver<>();
 
     sut.port_o().connect(port_o);
 
     // When
-    sut.port_i().receive(msg(List.of(OnOff.ON, OnOff.OFF)));
+    sut.port_i().receive(msg(SIGNAL));
 
     sut.runToCompletion();
 
     // Then
-    assertThat(port_o.getObservedMessages()).containsExactly(msg(OnOff.ON), msg(OnOff.OFF));
+    assertThat(port_o.getObservedMessages()).containsExactly(msg(0), msg(1));
   }
 }

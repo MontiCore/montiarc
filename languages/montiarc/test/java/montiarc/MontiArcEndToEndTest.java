@@ -822,7 +822,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("ForEachExpressionNotIterableTest",
         mpk(PKG_STMT, "ForEachExpressionNotIterable.arc"),
-        fn(ERROR, PKG_STMT, "ForEachExpressionNotIterable.arc", 14, 20, 14, 21, FOR_EACH_EXPR_NOT_ITERABLE)
+        fn(ERROR, PKG_STMT, "ForEachExpressionNotIterable.arc", 14, 20, 14, 21, FOR_EACH_EXPR_NOT_ITERABLE, "int")
       ),
       arg("ForEachTypeMismatchTest",
         mpk(PKG_STMT, "ForEachTypeMismatch.arc"),

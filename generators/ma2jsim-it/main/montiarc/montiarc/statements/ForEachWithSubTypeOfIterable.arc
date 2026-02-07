@@ -1,18 +1,17 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.statements;
 
-import java.util.Set;
-import montiarc.types.OnOff;
+import montiarc.types.ItInt;
 
-component ForEachWithSet {
+component ForEachWithSubTypeOfIterable {
 
-  port in Set<OnOff> i;
-  port out OnOff o;
+  port in ItInt i;
+  port out int o;
 
   automaton {
     initial state S;
     S -> S i / {
-      for (OnOff e : i) {
+      for (int e : i) {
         o = e;
       }
     }
