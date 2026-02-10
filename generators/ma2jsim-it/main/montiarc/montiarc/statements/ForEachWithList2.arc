@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.statements;
 
-import montiarc.types.Signal;
+import montiarc.lang.Signal;
 
 component ForEachWithList2 {
 

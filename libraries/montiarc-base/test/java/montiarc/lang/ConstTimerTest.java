@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.lang.Signal.SIGNAL;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,7 +32,7 @@ class ConstTimerTest {
 
     // When
     sut.port_start().receive(tk());
-    sut.port_start().receive(msg(Signal.get()));
+    sut.port_start().receive(msg(SIGNAL));
     for (int i = 0 ; i < duration ; i++) {
       sut.port_start().receive(tk());
       expected.add(tk());
@@ -40,7 +41,7 @@ class ConstTimerTest {
     sut.runToCompletion(1000000000L);
 
     // Then
-    expected.add(msg(Signal.get()));
+    expected.add(msg(SIGNAL));
     expected.add(tk());
     assertThat(port_completed.getObservedMessages()).containsExactlyElementsOf(expected);
   }

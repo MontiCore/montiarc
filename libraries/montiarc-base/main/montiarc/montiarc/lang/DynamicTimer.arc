@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang;
 
+import montiarc.lang.Signal.SIGNAL;
+
 /**
  * This component acts as a timer that can be started and sends a signal,
  * once the specified duration has been exceeded.
@@ -23,7 +25,7 @@ component DynamicTimer {
       timer = Timer.start(start);
     }
     running -> idle [timer.completed()] / {
-      completed = Signal.get();
+      completed = SIGNAL;
     }
   }
 }

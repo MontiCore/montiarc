@@ -4,7 +4,7 @@ package montiarc.datatypes.generics;
 import java.util.List;
 import montiarc.types.CardinalDirection;
 import montiarc.types.CardinalDirection.*;
-import montiarc.types.Signal;
+import montiarc.lang.Signal;
 
 component List6() {
   port in Signal i;

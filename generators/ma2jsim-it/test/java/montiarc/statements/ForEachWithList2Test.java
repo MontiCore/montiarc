@@ -5,8 +5,8 @@ import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Test;
 
+import static montiarc.lang.Signal.SIGNAL;
 import static montiarc.rte.msg.MessageFactory.msg;
-import static montiarc.types.Signal.SIGNAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JSimTest

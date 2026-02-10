@@ -2,11 +2,11 @@
 package montiarc.datatypes.generics;
 
 import com.google.common.base.Preconditions;
+import montiarc.lang.Signal;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import montiarc.types.CardinalDirection;
-import montiarc.types.Signal;
 import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.Disabled;
@@ -17,13 +17,13 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static montiarc.lang.Signal.SIGNAL;
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.types.CardinalDirection.EAST;
 import static montiarc.types.CardinalDirection.NORTH;
 import static montiarc.types.CardinalDirection.SOUTH;
 import static montiarc.types.CardinalDirection.WEST;
-import static montiarc.types.Signal.SIGNAL;
 
 @JSimTest
 @Disabled

@@ -7,10 +7,6 @@ classdiagram types {
     NORTH, EAST, SOUTH, WEST;
   }
 
-  public enum Signal {
-    SIGNAL;
-  }
-
   public enum OnOff {
     ON, OFF;
   }

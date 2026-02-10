@@ -7,8 +7,7 @@ classdiagram lang {
     public static void printLn(String output);
   }
 
-  public class Signal {
-    protected Signal();
-    public static Signal get();
+  public enum Signal {
+    SIGNAL;
   }
 }
