@@ -1193,17 +1193,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#interplay-with-cd2pojo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interplay with cd2pojo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#added-build-elements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3183,17 +3172,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#interplay-with-cd2pojo" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Interplay with cd2pojo
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#added-build-elements" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3401,12 +3379,33 @@ Some configuration options only have default values, if the task is created for 
 <td><code>$buildDir/montiarc/SOURCE_SET_NAME</code></td>
 <td>Where the generated files should be placed. Generated Java code ist placed in the <code>java</code> subfolder, exported symbol files are put in the <code>symbols</code> subfolder.</td>
 </tr>
+<tr>
+<td>debugTask</td>
+<td><code>false</code></td>
+<td>If set to true, a debugger can be attached to the generator process for debugging purposes.</td>
+</tr>
+<tr>
+<td>---</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>## Interplay with cd2pojo</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>If the <a href="../CD2Pojo/"><code>cd2pojo</code> plugin</a> Plugin is also applied, then the class diagram models defined therein</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>are also available in the MontiArc models of the same source set.</td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<hr />
-<h2 id="interplay-with-cd2pojo">Interplay with cd2pojo</h2>
-<p>If the <a href="../CD2Pojo/"><code>cd2pojo</code> plugin</a> Plugin is also applied, then the class diagram models defined therein
-are also available in the MontiArc models of the same source set.</p>
 <hr />
 <h2 id="added-build-elements">Added build elements</h2>
 <ul>

@@ -1221,17 +1221,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#added-build-elements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Added build elements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#fixing-problems" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3172,17 +3161,6 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#added-build-elements" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Added build elements
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#fixing-problems" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -3375,37 +3353,138 @@ Some configuration options only have default values if the task is created for a
 <td><code>$buildDir/cd2pojo/SOURCE_SET_NAME</code></td>
 <td>Where the generated files should be placed. Generated Java code ist placed in the <code>java</code> subfolder, exported symbol files are put in the <code>symbols</code> subfolder.</td>
 </tr>
+<tr>
+<td>debugTask</td>
+<td><code>false</code></td>
+<td>If set to true, a debugger can be attached to the generator process for debugging purposes.</td>
+</tr>
+<tr>
+<td>---</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>## Added build elements</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* The Plugin adds the dependency configuration <em>cd2pojoGenerator</em> on which it places the dependency on the generator</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>that is used to generate .java code from the .cd files. If you use <code>class2mc</code>, then you can place the Java classes</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>that you want to use in your models on this configuration.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* For every SourceSet, the plugin</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* Adds a CD2PojoCompile task that performs the generation step from .cd models</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>to .java code. The task name is <code>compileCd2pojo</code> for main and <code>compileSourceSetNameCd2pojo</code> for others</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* Adds a jar task packaging the .cdsym models of the main source set, adding it to the default publication.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* Adds three configurations:</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* <code>cd2pojo</code> for the main source set and <code>sourceSetNameCd2Pojo</code> for others:\</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Used to declare dependencies on other cd2pojo models. This configuration is not resolvable or consumable and only</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>serves the purpose to declare dependencies. The models of the dependencies will automatically be added to the</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>symbolImportDir of the <code>compileCd2pojo</code> task and their Java implementations will automatically be added to the</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>implementation</code> configuration for compilation and runtime. To this end, <code>implementation</code> extends the <code>cd2pojo</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>configuration, as do:</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* <code>cd2pojoSymbolDependencies</code> for the main source set and <code>sourceSetNameCd2pojoSymbolDependencies</code> for others:\</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Only contains the cd models of the dependencies (represented by .cdsym files). Do not use</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>this configuration to <em>declare</em> the dependencies (use <code>cd2pojo</code> for this purpose instead), but use this</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>configuration, when you want to access the cd2pojo models of the dependencies. (This configuration is derived</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>from the <code>cd2pojo</code> configuration, only considering the cd2pojo models.)</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* <code>cd2pojoSymbolElements</code> for the main source set and <code>sourceSetNameCd2pojoSymbolElements</code> for others:\</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Contains the jar of the cd2pojo models (represented by .cdsym files) that is added to the default publication</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>set. By default, this configuration is only added for the main source set.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>* Models declared in the main source set are also available in the test source sets.</td>
+<td></td>
+<td></td>
+</tr>
 </tbody>
 </table>
-<hr />
-<h2 id="added-build-elements">Added build elements</h2>
-<ul>
-<li>The Plugin adds the dependency configuration <em>cd2pojoGenerator</em> on which it places the dependency on the generator 
-  that is used to generate .java code from the .cd files. If you use <code>class2mc</code>, then you can place the Java classes
-  that you want to use in your models on this configuration.</li>
-<li>For every SourceSet, the plugin</li>
-<li>Adds a CD2PojoCompile task that performs the generation step from .cd models
-    to .java code. The task name is <code>compileCd2pojo</code> for main and <code>compileSourceSetNameCd2pojo</code> for others</li>
-<li>Adds a jar task packaging the .cdsym models of the main source set, adding it to the default publication.</li>
-<li>Adds three configurations:<ul>
-<li><code>cd2pojo</code> for the main source set and <code>sourceSetNameCd2Pojo</code> for others:\
-  Used to declare dependencies on other cd2pojo models. This configuration is not resolvable or consumable and only
-  serves the purpose to declare dependencies. The models of the dependencies will automatically be added to the
-  symbolImportDir of the <code>compileCd2pojo</code> task and their Java implementations will automatically be added to the
-  <code>implementation</code> configuration for compilation and runtime. To this end, <code>implementation</code> extends the <code>cd2pojo</code>
-  configuration, as do:</li>
-<li><code>cd2pojoSymbolDependencies</code> for the main source set and <code>sourceSetNameCd2pojoSymbolDependencies</code> for others:\
-  Only contains the cd models of the dependencies (represented by .cdsym files). Do not use
-  this configuration to <em>declare</em> the dependencies (use <code>cd2pojo</code> for this purpose instead), but use this
-  configuration, when you want to access the cd2pojo models of the dependencies. (This configuration is derived
-  from the <code>cd2pojo</code> configuration, only considering the cd2pojo models.)</li>
-<li><code>cd2pojoSymbolElements</code> for the main source set and <code>sourceSetNameCd2pojoSymbolElements</code> for others:\
-  Contains the jar of the cd2pojo models (represented by .cdsym files) that is added to the default publication
-  set. By default, this configuration is only added for the main source set.</li>
-</ul>
-</li>
-<li>Models declared in the main source set are also available in the test source sets.</li>
-</ul>
 <hr />
 <h2 id="fixing-problems">Fixing problems:</h2>
 <ul>
