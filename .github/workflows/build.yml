@@ -113,10 +113,10 @@ jobs:
         uses: microsoft/setup-msbuild@v1.1
       - name: Install WiX
         if: matrix.target == 'Windows'
-        run: dotnet tool install --global wix
+        run: dotnet tool install --global wix --version 6.0.2
       - name: Add WiX extensions
         if: matrix.target == 'Windows'
-        run: wix extension add -g WixToolset.UI.wixext WixToolset.Util.wixext
+        run: wix extension add -g WixToolset.UI.wixext/6.0.2 WixToolset.Util.wixext/6.0.2
       - name: Setup Java
         if: matrix.target == 'Windows'
         uses: actions/setup-java@v5
