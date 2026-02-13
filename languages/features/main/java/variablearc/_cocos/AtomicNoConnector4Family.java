@@ -111,7 +111,7 @@ public class AtomicNoConnector4Family implements ArcBasisASTArcComponentTypeCoCo
       Model model = ExpressionSolverService.getModel();
       for (Map.Entry<ASTConnector, BoolExpr> connector : connectorConditions.entrySet()) {
         if (evaluateCondition(model, connector.getValue())) {
-          Log.warn(ArcError.CONNECTORS_IN_ATOMIC.toString(), connector.getKey().get_SourcePositionStart(), connector.getKey().get_SourcePositionEnd());
+          Log.error(ArcError.CONNECTORS_IN_ATOMIC.toString(), connector.getKey().get_SourcePositionStart(), connector.getKey().get_SourcePositionEnd());
         }
       }
     }

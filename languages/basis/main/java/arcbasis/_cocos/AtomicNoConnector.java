@@ -22,9 +22,8 @@ public class AtomicNoConnector implements ArcBasisASTArcComponentTypeCoCo {
     if (!node.getSymbol().isAtomic()) return;
 
     for (ASTArcElement e : node.getBody().getArcElementList()) {
-
       if (e instanceof ASTConnector) {
-        Log.warn(ArcError.CONNECTORS_IN_ATOMIC.toString(), e.get_SourcePositionStart(), e.get_SourcePositionEnd());
+        Log.error(ArcError.CONNECTORS_IN_ATOMIC.toString(), e.get_SourcePositionStart(), e.get_SourcePositionEnd());
       }
     }
   }
