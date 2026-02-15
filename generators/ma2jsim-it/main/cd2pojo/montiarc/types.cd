@@ -44,7 +44,7 @@ classdiagram types {
     public static void call(Object o, Object p);
   }
 
-  public class ItInt implements java.lang.Iterable<Integer> { }
+  public class IntSeq implements java.lang.Iterable<Integer> { }
 
   // ======= Associations ======== //
 

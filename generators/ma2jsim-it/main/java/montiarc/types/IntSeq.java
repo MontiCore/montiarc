@@ -7,9 +7,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-public class ItInt extends ItIntTOP {
+public class IntSeq extends IntSeqTOP {
 
-  public ItInt(Integer... i) {
+  public IntSeq(Integer... i) {
     list = Arrays.asList(i);
   }
 
