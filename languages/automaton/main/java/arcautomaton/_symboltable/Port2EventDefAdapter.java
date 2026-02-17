@@ -4,6 +4,7 @@ package arcautomaton._symboltable;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
+import de.se_rwth.commons.SourcePosition;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 public class Port2EventDefAdapter extends SCEventDefSymbol {
@@ -32,5 +33,10 @@ public class Port2EventDefAdapter extends SCEventDefSymbol {
   @Override
   public String getPackageName() {
     return this.getAdaptee().getPackageName();
+  }
+
+  @Override
+  public SourcePosition getSourcePosition() {
+    return this.getAdaptee().getSourcePosition();
   }
 }
