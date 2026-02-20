@@ -30,12 +30,12 @@ public class CheckNoFieldDependencyCycles implements ArcBasisASTArcComponentType
           Set<String> usedNames = extractNames(init);
           Set<VariableSymbol> usedFields = fields.stream()
             .filter(sym -> usedNames.contains(sym.getName()))
-            .collect(Collectors.toSet());
+            .collect(Collectors.toCollection(LinkedHashSet::new));
           deps.put(field.getSymbol(), usedFields);
         }
       });
 
-    Map<VariableSymbol, Integer> inDegree = new HashMap<>();
+    Map<VariableSymbol, Integer> inDegree = new LinkedHashMap<>();
     for (VariableSymbol f : fields) {
       inDegree.put(f, deps.getOrDefault(f, Collections.emptySet()).size());
     }
@@ -65,7 +65,8 @@ public class CheckNoFieldDependencyCycles implements ArcBasisASTArcComponentType
         .collect(Collectors.joining(", "));
 
       Log.error(ArcError.CIRCULAR_FIELDS_DEPENDENCY.format(circularVars),
-        comp.get_SourcePositionStart());
+        comp.get_SourcePositionStart(), comp.get_SourcePositionEnd()
+      );
     }
   }
 

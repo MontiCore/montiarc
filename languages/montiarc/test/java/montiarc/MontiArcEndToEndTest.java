@@ -21,6 +21,7 @@ import static de.se_rwth.commons.logging.Finding.Type.WARNING;
 import static montiarc.util.ArcAutomataError.CANT_FIND_MSG_EVENT_SYMBOL;
 import static montiarc.util.ArcComputeError.INIT_BLOCK_WITHOUT_COMPUTE;
 import static montiarc.util.ArcComputeError.MULTIPLE_INIT;
+import static montiarc.util.ArcError.CIRCULAR_FIELDS_DEPENDENCY;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.COMPONENT_LOWER_CASE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
@@ -322,6 +323,18 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("NoInputPortInEntryActionTest",
         mpk(PKG_AUT, "NoInputPortInEntryAction.arc"),
         fn(ERROR, PKG_AUT, "NoInputPortInEntryAction.arc", 13, 25, 13, 26, IN_PORT_REF_IN_INVALID_CONTEXT, "i", "entry actions")
+      ),
+      arg("CircularFieldDependencyTest1",
+        mpk(PKG_COMP, "CircularFieldDependency1.arc"),
+        fn(ERROR, PKG_COMP, "CircularFieldDependency1.arc", 7, 1, 10, 2, CIRCULAR_FIELDS_DEPENDENCY, "a, b")
+      ),
+      arg("CircularFieldDependencyTest2",
+        mpk(PKG_COMP, "CircularFieldDependency2.arc"),
+        fn(ERROR, PKG_COMP, "CircularFieldDependency2.arc", 7, 1, 11, 2, CIRCULAR_FIELDS_DEPENDENCY, "a, b, c")
+      ),
+      arg("CircularFieldDependencyTest3",
+        mpk(PKG_COMP, "CircularFieldDependency3.arc"),
+        fn(ERROR, PKG_COMP, "CircularFieldDependency3.arc", 7, 1, 10, 2, CIRCULAR_FIELDS_DEPENDENCY, "a, b")
       ),
       arg("CircularInheritanceTest1",
         mpk(PKG_COMP, "CircularInheritance1.arc"),
