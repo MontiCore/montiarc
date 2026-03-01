@@ -20,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * The class under test is {@link EventTriggerExists}.
  */
-class EvenTriggerExistsTest extends MontiArcTestBase {
+class EventTriggerExistsTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("validModels")
@@ -42,7 +42,8 @@ class EvenTriggerExistsTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -56,7 +57,8 @@ class EvenTriggerExistsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   static Stream<Arguments> validModels() {
@@ -71,11 +73,11 @@ class EvenTriggerExistsTest extends MontiArcTestBase {
           }
         }"""
       ),
-      // transition with epsilon transition (transition without msg-event)
+      // transition with epsilon transition
       arg("""
         component ValidComp3 {
-          port <<sync>> in int i;
-          port <<sync>> out int o;
+          port sync in int i;
+          port sync out int o;
           automaton {
             initial state S;
             S -> S;
@@ -96,8 +98,8 @@ class EvenTriggerExistsTest extends MontiArcTestBase {
       // transition with msg-event (synchronous port)
       arg("""
         component ValidComp5 {
-          port <<sync>> in int i;
-          port <<sync>> out int o;
+          port sync in int i;
+          port sync out int o;
           automaton {
             initial state S;
             S -> S i;
@@ -155,7 +157,7 @@ class EvenTriggerExistsTest extends MontiArcTestBase {
           }""",
         CANT_FIND_MSG_EVENT_SYMBOL
       ),
-      // two transition with non-resolvable msg-event
+      // two transitions with non-resolvable msg-event
       arg("""
           component InvalidComp2 {
             automaton {
@@ -167,7 +169,7 @@ class EvenTriggerExistsTest extends MontiArcTestBase {
         CANT_FIND_MSG_EVENT_SYMBOL,
         CANT_FIND_MSG_EVENT_SYMBOL
       ),
-      // two transition with non-resolvable msg-events
+      // two transitions with non-resolvable msg-events
       arg("""
           component InvalidComp3 {
             automaton {

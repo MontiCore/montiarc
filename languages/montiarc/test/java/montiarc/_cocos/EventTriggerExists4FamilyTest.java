@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * The class under test is {@link EventTriggerExists4Family}.
  */
-class EventTriggerExists4FamilyTest extends EvenTriggerExistsTest {
+class EventTriggerExists4FamilyTest extends EventTriggerExistsTest {
 
   @ParameterizedTest
   @MethodSource("validModels")
@@ -50,7 +50,8 @@ class EventTriggerExists4FamilyTest extends EvenTriggerExistsTest {
     "InvalidCompWithVariability4",
     "InvalidCompWithVariability5"
   })
-  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
