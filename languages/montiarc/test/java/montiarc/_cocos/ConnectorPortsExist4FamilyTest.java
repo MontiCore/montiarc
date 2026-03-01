@@ -2,241 +2,586 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
-import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.ConnectorPortsExist4Family;
 
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.MISSING_PORT;
+import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConnectorPortsExist4FamilyTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link ConnectorPortsExist4Family}.
+ */
+class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
 
-    @BeforeEach
-    protected void initSymbols() {
-        MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-        MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-        setupEnums();
-        setupComponents();
-    }
+  @BeforeEach
+  @Override
+  protected void setUp() {
+    super.setUp();
+    compile("package a.b; component F { feature ff; varif (ff) { port in int i; }}");
+    compile("package a.b; component G { feature ff; varif (ff) { port out int o; }}");
+  }
 
-    protected void setupEnums()
-    {
-        OOTypeSymbol onOffEnumType = MontiArcMill.oOTypeSymbolBuilder().setIsEnum(true).setName("OnOff").setIsPublic(true).setSpannedScope(MontiArcMill.scope()).build();
-        onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("ON").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-        onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("OFF").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-        MontiArcMill.globalScope().add(onOffEnumType);
-    }
+  @ParameterizedTest
+  @MethodSource("validModels")
+  @MethodSource("validModelsWithVariability")
+  void shouldNotReportError(@NotNull String model) {
+    Preconditions.checkNotNull(model);
 
-    protected void setupComponents()
-    {
-        compile("package a.b; component A { }");
-        compile("package a.b; component B { port in int i; }");
-        compile("package a.b; component C { port out int o; }");
-        compile("package a.b; component D { port in int i; port out int o; }");
-        compile("package a.b; component E { port in int i1, i2; port out int o; }");
-        compile("package a.b; component Z { a.b.A a1; feature f1;  port in int i; port out int o; varif(f1){port out int k; o -> a1.i;} }");
-    }
+    // Given
+    ASTMACompilationUnit ast = compile(model);
 
-    private static Stream<Arguments> provideUniqueSenderModel()
-    {
-        List<Arguments> componentList = new ArrayList<>();
-        Arguments simpleModel =  arg("component Comp1 { " +
-          "feature f1,f2;" +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "varif(f1){ port in int k;  }" +
-          "else{ i -> a.i; }" +
-          "varif(f2){ a.o -> o; }" +
-          "}");
-        componentList.add(simpleModel);
-        return componentList.stream();
-    }
+    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
 
-    @ParameterizedTest
-    @MethodSource("provideUniqueSenderModel")
-    public void TestModelRuntimeMontiArcCoCos(@NotNull String model) {
+    // When
+    checker.checkAll(ast);
 
-        Preconditions.checkNotNull(model);
-        MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-        checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
+    // Then
+    assertThat(Log.getFindings()).isEmpty();
+  }
 
-        ASTMACompilationUnit mainAST = compile(model);
-        checker.checkAll(mainAST);
+  @ParameterizedTest
+  @MethodSource("invalidModels")
+  @MethodSource("invalidModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "InvalidCompWithVariability14 ",
+    "InvalidCompWithVariability15 ",
+    "InvalidCompWithVariability17 ",
+    "InvalidCompWithVariability18 ",
+    "InvalidCompWithVariability19 "
+  })
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
 
-        String[] test = getLoggedErrorCodes();
+    // Given
+    ASTMACompilationUnit ast = compile(model);
 
-        // Then
-        assertThat(Log.getErrorCount() == 0);
-    }
+    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
 
-    private static <T> void addCoCoAs(T coco, Consumer<T> consumer) {
-        consumer.accept(coco);
-    }
+    // When
+    checker.checkAll(ast);
 
-    @ParameterizedTest
-    @ValueSource(strings = {
-            "component Comp1 { }",
-            "component Comp2 {" +
-                    "port in int i; " +
-                    "port out int o; " +
-                    "i -> o; " +
-                    "}",
-            "component Comp3 { " +
-                    "port in int i; " +
-                    "port in int o; " +
-                    "a.b.D d; " +
-                    "i -> d.i; " +
-                    "d.o -> o; " +
-                    "}",
-            "component Comp4 { " +
-                    "port in int i; " +
-                    "port out int o1, o2; " +
-                    "a.b.E e; " +
-                    "i -> e.i1, e.i2; " +
-                    "e.o -> o1, o2; " +
-                    "}",
-            "component Comp5 { " +
-                    "port in int i; " +
-                    "port out int o; " +
-                    "component Inner {" +
-                    "port in int i; " +
-                    "port out int o; " +
-                    "} " +
-                    "Inner sub; " +
-                    "i -> sub.i; " +
-                    "sub.o -> o; " +
-                    "}"
-    })
-    public void shouldNotReportError(@NotNull String model) throws IOException {
-        Preconditions.checkNotNull(model);
+    // Then
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
 
-        // Given
-        ASTMACompilationUnit ast = compile(model);
+  static Stream<Arguments> validModelsWithVariability() {
+    return Stream.of(
+      // input forward, single variation point
+      arg("""
+        component ValidCompWithVariability1 {
+          feature f;
+          port in int i;
+          varif (f) {
+            i -> sub.i;
+          }
+          a.b.B sub;
+          constraint (f);
+        }"""
+      ),
+      // output forward, single variation point
+      arg("""
+        component ValidCompWithVariability2 {
+          feature f;
+          port out int o;
+          varif (f) {
+            sub.o -> o;
+          }
+          a.b.C sub;
+          constraint (f);
+        }"""
+      ),
+      // hidden channel, single variation point
+      arg("""
+        component ValidCompWithVariability3 {
+          feature f;
+          varif (f) {
+            sub2.o -> sub1.i;
+          }
+          a.b.B sub1;
+          a.b.C sub2;
+        }"""
+      ),
+      // input forward, missing source, dead variation point
+      arg("""
+        component ValidCompWithVariability4 {
+          varif (false) {
+            i -> sub.i;
+          }
+          a.b.B sub;
+        }"""
+      ),
+      // input forward, missing target (subcomponent), dead variation point
+      arg("""
+        component ValidCompWithVariability5 {
+          port in int i;
+          varif (false) {
+            i -> sub.i;
+          }
+        }"""
+      ),
+      // input forward, missing target (port), dead variation point
+      arg("""
+        component ValidCompWithVariability6 {
+          port in int i;
+          varif (false) {
+            i -> sub.i;
+          }
+          a.b.A sub;
+        }"""
+      ),
+      // output forward, missing source (subcomponent), dead variation point
+      arg("""
+        component ValidCompWithVariability7 {
+          port out int o;
+          varif (false) {
+            sub.o -> o;
+          }
+        }"""
+      ),
+      // output forward, missing source (port), dead variation point
+      arg("""
+        component ValidCompWithVariability8 {
+          port out int o;
+          varif (false) {
+            sub.o -> o;
+          }
+          a.b.A sub;
+        }"""
+      ),
+      // output forward, missing target, dead variation point
+      arg("""
+        component ValidCompWithVariability9 {
+          varif (false) {
+            sub.o -> o;
+          }
+          a.b.C sub;
+        }"""
+      ),      // input forward, missing source, dead feature
+      arg("""
+        component ValidCompWithVariability10 {
+          feature f;
+          varif (f) {
+            a.b.B sub;
+            i -> sub.i;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // input forward, missing target (subcomponent), dead feature
+      arg("""
+        component ValidCompWithVariability11 {
+          feature f;
+          varif (f) {
+            port in int i;
+            i -> sub.i;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // input forward, missing target (port), dead feature
+      arg("""
+        component ValidCompWithVariability12 {
+          feature f;
+          varif (f) {
+            port in int i;
+            a.b.A sub;
+            i -> sub.i;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // output forward, missing source (subcomponent), dead feature
+      arg("""
+        component ValidCompWithVariability13 {
+          feature f;
+          varif (f) {
+            port out int o;
+            sub.o -> o;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // output forward, missing source (port), dead feature
+      arg("""
+        component ValidCompWithVariability14 {
+          feature f;
+          varif (f) {
+            port out int o;
+            a.b.A sub;
+            sub.o -> o;
+          }
+          constraint (!f);
+        }"""
+      ),
+      // output forward, missing target, dead feature
+      arg("""
+        component ValidCompWithVariability15 {
+          feature f;
+          varif (f) {
+            sub.o -> o;
+          }
+          a.b.A sub;
+          constraint (!f);
+        }"""
+      ),
+      // input forward, component with conditional interface
+      arg("""
+        component ValidCompWithVariability16 {
+          feature f;
+          varif (f) {
+            port in int i;
+          }
+          a.b.B sub;
+          i -> sub.i;
+          constraint (f);
+        }"""
+      ),
+      // input forward, subcomponent with conditional interface
+      arg("""
+        component ValidCompWithVariability17 {
+          port in int i;
+          a.b.F sub;
+          i -> sub.i;
+          constraint (sub.ff);
+        }"""
+      ),
+      // input forward, component and subcomponent with conditional interfaces
+      arg("""
+        component ValidCompWithVariability18 {
+          feature f;
+          varif (f) {
+            port in int i;
+          }
+          a.b.F sub;
+          constraint (sub.ff == f);
+        }"""
+      ),
+      // output forward, component with conditional interface
+      arg("""
+        component ValidCompWithVariability19 {
+          feature f;
+          varif (f) {
+            port out int o;
+          }
+          a.b.C sub;
+          sub.o -> o;
+          constraint (f);
+        }"""
+      ),
+      // output forward, subcomponent with conditional interface
+      arg("""
+        component ValidCompWithVariability20 {
+          port out int o;
+          a.b.G sub;
+          sub.o -> o;
+          constraint (sub.ff);
+        }"""
+      ),
+      // output forward, component and subcomponent with conditional interfaces
+      arg("""
+        component ValidCompWithVariability21 {
+          feature f;
+          varif (f) {
+            port out int o;
+          }
+          a.b.G sub;
+          constraint (sub.ff == f);
+        }"""
+      ),
+      // hidden channel, subcomponents with conditional interfaces
+      arg("""
+        component ValidCompWithVariability22 {
+          a.b.F sub1;
+          a.b.G sub2;
+          sub2.o -> sub1.i;
+          constraint (sub1.ff && sub2.ff);
+        }"""
+      ),
+      // input forward, conditional subcomponent
+      arg("""
+        component ValidCompWithVariability23 {
+          feature f;
+          port in int i;
+          varif (f) {
+            a.b.B sub;
+          }
+          i -> sub.i;
+          constraint (f);
+        }"""
+      ),
+      // output forward, conditional subcomponent
+      arg("""
+        component ValidCompWithVariability24 {
+          feature f;
+          port out int o;
+          varif (f) {
+            a.b.C sub;
+          }
+          sub.o -> o;
+          constraint (f);
+        }"""
+      )
+    );
+  }
 
-        MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-        checker.addCoCo(new ConnectorPortsExist4Family());
-
-        // When
-        checker.checkAll(ast);
-
-        // Then
-        assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidModels")
-    public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
-        Preconditions.checkNotNull(model);
-        Preconditions.checkNotNull(errors);
-
-        // Given
-        ASTMACompilationUnit ast = compile(model);
-
-        MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-        checker.addCoCo(new ConnectorPortsExist4Family());
-
-        // When
-        checker.checkAll(ast);
-
-        // Then
-        assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-        assertThat(getLoggedErrorCodes())
-                .containsExactlyInAnyOrder(getErrorCodes(errors));
-    }
-
-    protected static Stream<Arguments> invalidModels() {
-        return Stream.of(
-                arg("component Comp1 { " +
-                                "port in int i; " +
-                                "port out int o; " +
-                                "a.b.A a; " +
-                                "i -> a.i; " +
-                                "a.o -> o; " +
-                                "}",
-                        ArcError.MISSING_PORT,
-                        ArcError.MISSING_PORT),
-                arg("component Comp2 { " +
-                                "port in int i; " +
-                                "port in int o; " +
-                                "a.b.B b; " +
-                                "i -> b.i; " +
-                                "b.o -> o; " +
-                                "}",
-                        ArcError.MISSING_PORT),
-                arg("component Comp3 { " +
-                                "port in int i; " +
-                                "port in int o; " +
-                                "a.b.C c; " +
-                                "i -> c.i; " +
-                                "c.o -> o; " +
-                                "}",
-                        ArcError.MISSING_PORT),
-                arg("component Comp4 { i -> o; }",
-                        ArcError.MISSING_PORT,
-                        ArcError.MISSING_PORT),
-                arg("component Comp5 { " +
-                                "port in int i; " +
-                                "i -> o; " +
-                                "}",
-                        ArcError.MISSING_PORT),
-                arg("component Comp6 { " +
-                                "port out int o; " +
-                                "i -> o; " +
-                                "}",
-                        ArcError.MISSING_PORT),
-                arg("component Comp7 { " +
-                                "port in int i; " +
-                                "i -> b.i; " +
-                                "}",
-                        ArcError.MISSING_SUBCOMPONENT),
-                arg("component Comp8 { " +
-                                "port out int o; " +
-                                "c.o -> o; " +
-                                "}",
-                        ArcError.MISSING_SUBCOMPONENT),
-                arg("component Comp9 { " +
-                                "c.o -> b.i; " +
-                                "}",
-                        ArcError.MISSING_SUBCOMPONENT,
-                        ArcError.MISSING_SUBCOMPONENT),
-                arg("component Comp10 { " +
-                                "port in int i; " +
-                                "i -> b1.i, b2.i; " +
-                                "}",
-                        ArcError.MISSING_SUBCOMPONENT,
-                        ArcError.MISSING_SUBCOMPONENT),
-                arg("component Comp10 { " +
-                                "i -> d1.i, d2.i; " +
-                                "d1.o -> o1; " +
-                                "d2.o -> o2; " +
-                                "}",
-                        ArcError.MISSING_PORT,
-                        ArcError.MISSING_SUBCOMPONENT,
-                        ArcError.MISSING_SUBCOMPONENT,
-                        ArcError.MISSING_SUBCOMPONENT,
-                        ArcError.MISSING_PORT,
-                        ArcError.MISSING_SUBCOMPONENT,
-                        ArcError.MISSING_PORT)
-        );
-    }
+  static Stream<Arguments> invalidModelsWithVariability() {
+    return Stream.of(
+      // input forward, missing source, tautological variation point
+      arg("""
+          component InvalidCompWithVariability1 {
+            varif (true) {
+              i -> sub.i;
+            }
+            a.b.B sub;
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing target (subcomponent), tautological variation point
+      arg("""
+          component InvalidCompWithVariability2 {
+            port in int i;
+            varif (true) {
+              i -> sub.i;
+            }
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // input forward, missing target (port), tautological variation point
+      arg("""
+          component InvalidCompWithVariability3 {
+            port in int i;
+            varif (true) {
+              i -> sub.i;
+            }
+            a.b.A sub;
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing source (subcomponent), tautological variation point
+      arg("""
+          component InvalidCompWithVariability4 {
+            port out int o;
+            varif (true) {
+              sub.o -> o;
+            }
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // output forward, missing source (port), tautological variation point
+      arg("""
+          component InvalidCompWithVariability5 {
+            port out int o;
+            varif (true) {
+              sub.o -> o;
+            }
+            a.b.A sub;
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing target, tautological variation point
+      arg("""
+          component InvalidCompWithVariability6 {
+            a.b.C sub;
+            varif (true) {
+              sub.o -> o;
+            }
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing source, core feature
+      arg("""
+          component InvalidCompWithVariability7 {
+            feature f;
+            varif (f) {
+              i -> sub.i;
+            }
+            a.b.B sub;
+            constraint (f);
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing target (subcomponent), core feature
+      arg("""
+          component InvalidCompWithVariability8 {
+            feature f;
+            port in int i;
+            varif (f) {
+              i -> sub.i;
+            }
+            constraint (f);
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // input forward, missing target (port), core feature
+      arg("""
+          component InvalidCompWithVariability9 {
+            feature f;
+            port in int i;
+            varif (f) {
+              i -> sub.i;
+            }
+            a.b.A sub;
+            constraint (f);
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing source (subcomponent), core feature
+      arg("""
+          component InvalidCompWithVariability10 {
+            feature f;
+            port out int o;
+            varif (f) {
+              sub.o -> o;
+            }
+            constraint (f);
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // output forward, missing source (port), core feature
+      arg("""
+          component InvalidCompWithVariability11 {
+            feature f;
+            port out int o;
+            varif (f) {
+              sub.o -> o;
+            }
+            a.b.A sub;
+            constraint (f);
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing target, core feature
+      arg("""
+          component InvalidCompWithVariability12 {
+            feature f;
+            varif (f) {
+              sub.o -> o;
+            }
+            a.b.C sub;
+            constraint (f);
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing source, component with conditional interface
+      arg("""
+          component InvalidCompWithVariability13 {
+            feature f;
+            varif (f) {
+              port in int i;
+            }
+            a.b.B sub;
+            i -> sub.i;
+            constraint (!f);
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing target, subcomponent with conditional interface
+      arg("""
+          component InvalidCompWithVariability14 {
+            port in int i;
+            a.b.F sub;
+            i -> sub.i;
+            constraint (!sub.ff);
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing source and target, component and subcomponent with conditional interfaces
+      arg("""
+          component InvalidCompWithVariability15 {
+            feature f;
+            varif (f) {
+              port in int i;
+            }
+            a.b.F sub;
+            constraint (sub.ff == !f);
+          }""",
+        MISSING_PORT, MISSING_PORT
+      ),
+      // output forward, missing target, component with conditional interface
+      arg("""
+          component InvalidCompWithVariability16 {
+            feature f;
+            varif (f) {
+              port out int o;
+            }
+            a.b.C sub;
+            sub.o -> o;
+            constraint (!f);
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing source, subcomponent with conditional interface
+      arg("""
+          component InvalidCompWithVariability17 {
+            port out int o;
+            a.b.G sub;
+            sub.o -> o;
+            constraint (!sub.ff);
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing source and target, component and subcomponent with conditional interfaces
+      arg("""
+          component InvalidCompWithVariability18 {
+            feature f;
+            varif (f) {
+              port out int o;
+            }
+            a.b.G sub;
+            constraint (sub.ff == !f);
+          }""",
+        MISSING_PORT, MISSING_PORT
+      ),
+      // hidden channel, missing source and target, subcomponents with conditional interfaces
+      arg("""
+          component InvalidCompWithVariability19 {
+            a.b.F sub1;
+            a.b.G sub2;
+            sub2.o -> sub1.i;
+            constraint (sub1.ff && !sub2.ff);
+          }""",
+        MISSING_PORT, MISSING_PORT
+      ),
+      // input forward, missing source (subcomponent), conditional subcomponent
+      arg("""
+          component InvalidCompWithVariability20 {
+            feature f;
+            port in int i;
+            varif (f) {
+              a.b.B sub;
+            }
+            i -> sub.i;
+            constraint (!f);
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // output forward, missing source (subcomponent), conditional subcomponent
+      arg("""
+          component InvalidCompWithVariability21 {
+            feature f;
+            port out int o;
+            varif (f) {
+              a.b.C sub;
+            }
+            sub.o -> o;
+            constraint (!f);
+          }""",
+        MISSING_SUBCOMPONENT
+      )
+    );
+  }
 }

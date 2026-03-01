@@ -6,27 +6,26 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.MISSING_PORT;
+import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link ConnectorPortsExist}.
  */
-public class ConnectorPortsExistTest extends MontiArcTestBase {
+class ConnectorPortsExistTest extends MontiArcTestBase {
 
   @BeforeEach
-  protected void setUpComponents() {
+  protected void setUp() {
     compile("package a.b; component A { }");
     compile("package a.b; component B { port in int i; }");
     compile("package a.b; component C { port out int o; }");
@@ -35,40 +34,8 @@ public class ConnectorPortsExistTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 {" +
-      "port in int i; " +
-      "port out int o; " +
-      "i -> o; " +
-      "}",
-    "component Comp3 { " +
-      "port in int i; " +
-      "port in int o; " +
-      "a.b.D d; " +
-      "i -> d.i; " +
-      "d.o -> o; " +
-      "}",
-    "component Comp4 { " +
-      "port in int i; " +
-      "port out int o1, o2; " +
-      "a.b.E e; " +
-      "i -> e.i1, e.i2; " +
-      "e.o -> o1, o2; " +
-      "}",
-    "component Comp5 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "component Inner {" +
-      "port in int i; " +
-      "port out int o; " +
-      "} " +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "}"
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -81,12 +48,13 @@ public class ConnectorPortsExistTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -100,84 +68,187 @@ public class ConnectorPortsExistTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> validModels() {
     return Stream.of(
-      arg("component Comp1 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "i -> a.i; " +
-          "a.o -> o; " +
-          "}",
-        ArcError.MISSING_PORT,
-        ArcError.MISSING_PORT),
-      arg("component Comp2 { " +
-          "port in int i; " +
-          "port in int o; " +
-          "a.b.B b; " +
-          "i -> b.i; " +
-          "b.o -> o; " +
-          "}",
-        ArcError.MISSING_PORT),
-      arg("component Comp3 { " +
-          "port in int i; " +
-          "port in int o; " +
-          "a.b.C c; " +
-          "i -> c.i; " +
-          "c.o -> o; " +
-          "}",
-        ArcError.MISSING_PORT),
-      arg("component Comp4 { i -> o; }",
-        ArcError.MISSING_PORT,
-        ArcError.MISSING_PORT),
-      arg("component Comp5 { " +
-          "port in int i; " +
-          "i -> o; " +
-          "}",
-        ArcError.MISSING_PORT),
-      arg("component Comp6 { " +
-          "port out int o; " +
-          "i -> o; " +
-          "}",
-        ArcError.MISSING_PORT),
-      arg("component Comp7 { " +
-          "port in int i; " +
-          "i -> b.i; " +
-          "}",
-        ArcError.MISSING_SUBCOMPONENT),
-      arg("component Comp8 { " +
-          "port out int o; " +
-          "c.o -> o; " +
-          "}",
-        ArcError.MISSING_SUBCOMPONENT),
-      arg("component Comp9 { " +
-          "c.o -> b.i; " +
-          "}",
-        ArcError.MISSING_SUBCOMPONENT,
-        ArcError.MISSING_SUBCOMPONENT),
-      arg("component Comp10 { " +
-          "port in int i; " +
-          "i -> b1.i, b2.i; " +
-          "}",
-        ArcError.MISSING_SUBCOMPONENT,
-        ArcError.MISSING_SUBCOMPONENT),
-      arg("component Comp10 { " +
-          "i -> d1.i, d2.i; " +
-          "d1.o -> o1; " +
-          "d2.o -> o2; " +
-          "}",
-        ArcError.MISSING_PORT,
-        ArcError.MISSING_SUBCOMPONENT,
-        ArcError.MISSING_SUBCOMPONENT,
-        ArcError.MISSING_SUBCOMPONENT,
-        ArcError.MISSING_PORT,
-        ArcError.MISSING_SUBCOMPONENT,
-        ArcError.MISSING_PORT)
+      // decomposed component, no ports or connectors
+      arg("""
+        component ValidComp1 {
+          a.b.A sub;
+        }"""
+      ),
+      // input forward
+      arg("""
+        component ValidComp2 {
+          port in int i;
+          a.b.B sub;
+          i -> sub.i;
+        }"""
+      ),
+      // output forward
+      arg("""
+        component ValidComp3 {
+          port out int o;
+          a.b.C sub;
+          sub.o -> o;
+        }"""
+      ),
+      // hidden channel
+      arg("""
+        component ValidComp4 {
+          a.b.B sub1;
+          a.b.C sub2;
+          sub2.o -> sub1.i;
+        }"""
+      ),
+      // port forward, inner component
+      arg("""
+        component ValidComp5 {
+          port in int i;
+          port out int o;
+          component Inner {
+            port in int i;
+            port out int o;
+          }
+          Inner sub;
+          i -> sub.i;
+          sub.o -> o;
+        }"""
+      ),
+      // output forward, multiple targets (component)
+      arg("""
+        component ValidComp6 {
+          port out int o1, o2;
+          a.b.C sub;
+          sub.o -> o1, o2;
+        }"""
+      ),
+      // input forward, multiple targets (subcomponents)
+      arg("""
+        component ValidComp7 {
+          port in int i;
+          a.b.B sub1, sub2;
+          i -> sub1.i, sub2.i;
+        }"""
+      ),
+      // input forward, multiple targets (subcomponent ports)
+      arg("""
+        component ValidComp8 {
+          port in int i;
+          a.b.E sub;
+          i -> sub.i1, sub.i2;
+        }"""
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // input forward, missing source
+      arg("""
+          component InvalidComp1 {
+            a.b.B sub;
+            i -> sub.i;
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing target (port)
+      arg("""
+          component InvalidComp2 {
+            port in int i;
+            a.b.A sub;
+            i -> sub.i;
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, missing target (subcomponent)
+      arg("""
+          component InvalidComp3 {
+            port in int i;
+            i -> sub.i;
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // output forward, missing target
+      arg("""
+          component InvalidComp4 {
+            a.b.C sub;
+            sub.o -> o;
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing source (port)
+      arg("""
+          component InvalidComp5 {
+            port out int o;
+            a.b.A sub;
+            sub.o -> o;
+          }""",
+        MISSING_PORT
+      ),
+      // output forward, missing source (subcomponent)
+      arg("""
+          component InvalidComp6 {
+            port out int o;
+            sub.o -> o;
+          }""",
+        MISSING_SUBCOMPONENT
+      ),
+      // hidden channel, missing source
+      arg("""
+          component InvalidComp7 {
+            a.b.A sub1;
+            a.b.C sub2;
+            sub2.o -> sub1.i;
+          }""",
+        MISSING_PORT
+      ),
+      // hidden channel, missing target
+      arg("""
+          component InvalidComp8 {
+            a.b.B sub1;
+            a.b.A sub2;
+            sub2.o -> sub1.i;
+          }""",
+        MISSING_PORT
+      ),
+      // input forward, multiple sources missing
+      arg("""
+          component InvalidComp9 {
+            a.b.B sub1, sub2;
+            i1 -> sub1.i;
+            i2 -> sub2.i;
+          }""",
+        MISSING_PORT, MISSING_PORT
+      ),
+      // input forward, multiple targets missing (subcomponents)
+      arg("""
+          component InvalidComp10 {
+            port in int i;
+            i -> sub1.i, sub2.i;
+          }""",
+        MISSING_SUBCOMPONENT, MISSING_SUBCOMPONENT
+      ),
+      // input forward, multiple targets missing (ports)
+      arg("""
+          component InvalidComp11 {
+            port in int i;
+            a.b.A sub;
+            i -> sub.i1, sub.i2;
+          }""",
+        MISSING_PORT, MISSING_PORT
+      ),
+      // output forward, multiple targets missing
+      arg("""
+          component InvalidComp12 {
+            a.b.C sub;
+            sub.o -> o1, o2;
+          }""",
+        MISSING_PORT, MISSING_PORT
+      )
     );
   }
 }
