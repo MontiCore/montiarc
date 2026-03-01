@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.util;
 
+import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
 
@@ -39,6 +40,7 @@ public enum MCError implements Error {
   EXPR_SHIFT_OP_NOT_APPLICABLE("0xC0201", ""),
   MISSING_COMPONENT("0xD0104", "Cannot resolve component '%s'"),
   DUPLICATE_VAR_IN_SCOPE(VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE, "Variable '%s' is already defined in the scope."),
+  FOR_CONDITION_NOT_BOOLEAN(ForConditionHasBooleanType.ERROR_CODE, ForConditionHasBooleanType.ERROR_MSG_FORMAT),
   FOR_EACH_EXPR_NOT_ITERABLE(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE, FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG),
   FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG);
 

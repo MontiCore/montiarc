@@ -238,7 +238,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
       for (ASTExpression possibleExpression : possibleExpressions) {
         SymTypeExpression result = TypeCheck3.typeOf(possibleExpression);
         if (!SymTypeRelations.isBoolean(result)) {
-          Log.error(ERROR_CODE + ERROR_MSG_FORMAT, forStatementEntry.getKey().get_SourcePositionStart());
+          Log.error(ERROR_CODE + " " + ERROR_MSG_FORMAT, forStatementEntry.getKey().get_SourcePositionStart());
         }
       }
     }
