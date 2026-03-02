@@ -2,6 +2,7 @@
 package montiarc.util;
 
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
+import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
 
@@ -42,7 +43,8 @@ public enum MCError implements Error {
   DUPLICATE_VAR_IN_SCOPE(VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE, "Variable '%s' is already defined in the scope."),
   FOR_CONDITION_NOT_BOOLEAN(ForConditionHasBooleanType.ERROR_CODE, ForConditionHasBooleanType.ERROR_MSG_FORMAT),
   FOR_EACH_EXPR_NOT_ITERABLE(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE, FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG),
-  FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG);
+  FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG),
+  IF_CONDITION_NOT_BOOLEAN(IfConditionHasBooleanType.ERROR_CODE, IfConditionHasBooleanType.ERROR_MSG_FORMAT);
 
   private final String errorCode;
   private final String errorMsgFormat;
