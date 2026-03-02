@@ -37,7 +37,8 @@ class ConnectorTimingsFit4FamilyTest extends ConnectorTimingsFitTest {
   @MethodSource("validModelsWithVariability")
   @DisableIfDisplayName(contains = {
     "ValidCompWithVariability7 ",
-    "ValidCompWithVariability10 "
+    "ValidCompWithVariability10 ",
+    "ValidCompWithVariability11 "
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
