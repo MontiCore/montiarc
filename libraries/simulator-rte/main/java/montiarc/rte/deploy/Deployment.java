@@ -3,6 +3,7 @@ package montiarc.rte.deploy;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
+import montiarc.lang.Simulation;
 import montiarc.rte.component.Component;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.deploy.util.DeSerializer;
@@ -88,6 +89,7 @@ public abstract class Deployment<T extends Component> {
   ) {
 
     // Setup
+    Simulation.nanosecondsPerTick = simulatedTickLength <= 0 ? simulationTickLength : simulatedTickLength;
     CoordinatingScheduler scheduler = buildCoordinatingScheduler();
     T component = Preconditions.checkNotNull(buildComponent(scheduler, parameters));
     if (strategy != null) {
