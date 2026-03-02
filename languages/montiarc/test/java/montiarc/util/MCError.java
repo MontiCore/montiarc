@@ -17,7 +17,6 @@ import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_MSG
  * combination with the existing test infrastructure
  */
 public enum MCError implements Error {
-  INCOMPATIBLE_TYPE(VarDeclarationInitializationHasCorrectType.ERROR_CODE, ""),
   DIVIDE_EXPRESSION_ERR("0xA0168", ""),
   CANT_FIND_SYMBOL("0xA0324", "Cannot find symbol %s"),
   CANT_FIND_SYMBOL_IN_EXPRESSION("0xFD118", "could not find symbol for expression \"%s\""),
@@ -46,7 +45,8 @@ public enum MCError implements Error {
   FOR_EACH_EXPR_NOT_ITERABLE(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE, FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG),
   FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG),
   IF_CONDITION_NOT_BOOLEAN(IfConditionHasBooleanType.ERROR_CODE, IfConditionHasBooleanType.ERROR_MSG_FORMAT),
-  SWITCH_SELECTOR_NOT_SWITCHABLE(SwitchStatementValid.ERROR_CODE, SwitchStatementValid.ERROR_MSG_FORMAT);
+  SWITCH_SELECTOR_NOT_SWITCHABLE(SwitchStatementValid.ERROR_CODE, SwitchStatementValid.ERROR_MSG_FORMAT),
+  VAR_DEC_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT);
 
   private final String errorCode;
   private final String errorMsgFormat;

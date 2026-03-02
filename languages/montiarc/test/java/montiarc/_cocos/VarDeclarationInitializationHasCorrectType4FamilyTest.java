@@ -2,82 +2,187 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
-import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
-import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
-import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static montiarc.util.MCError.VAR_DEC_TYPE_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VarDeclarationInitializationHasCorrectType4FamilyTest extends MontiArcTestBase {
-
-  protected void initSymbols() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setupEnums();
-    setupComponents();
-  }
-
-  protected void setupEnums() {
-    OOTypeSymbol onOffEnumType = MontiArcMill.oOTypeSymbolBuilder().setIsEnum(true).setName("OnOff").setIsPublic(true).setSpannedScope(MontiArcMill.scope()).build();
-    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("ON").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-    onOffEnumType.getSpannedScope().add(MontiArcMill.fieldSymbolBuilder().setName("OFF").setIsStatic(true).setIsFinal(true).setIsPublic(true).setIsReadOnly(true).setType(SymTypeExpressionFactory.createTypeObject(onOffEnumType)).build());
-    MontiArcMill.globalScope().add(onOffEnumType);
-  }
-
-  protected void setupComponents() {
-    compile("package a.b; component A { }");
-    compile("package a.b; component B { port in int i; port out int o; }");
-    compile("package a.b; component C { port in int i; port <<delayed>> out int o; }");
-    compile("package a.b; component D { port in int i1, i2; port out int o; }");
-    compile("package a.b; component Z { a.b.A a1; feature f1;  port in int i; port out int o; varif(f1){port out int k; o -> a1.i;} }");
-  }
-
-  private static Stream<Arguments> provideUniqueSenderModel() {
-    List<Arguments> componentList = new ArrayList<>();
-    Arguments simpleModel = arg("component TestA {" +
-      "feature f1,f2,f3;" +
-      "varif(f1){int currentPosition = 0;} " +
-      "varif(f2){double currentPosition = 0;} " +
-      "varif(f3){compute{" +
-      "int j = currentPosition + 1;" +
-      "}}" +
-      "}");
-    componentList.add(simpleModel);
-    return componentList.stream();
-  }
+/**
+ * The class under test is {@link VarDeclarationInitializationHasCorrectType4Family}.
+ */
+class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarationInitializationHasCorrectTypeTest {
 
   @ParameterizedTest
-  @MethodSource("provideUniqueSenderModel")
-  public void TestModelRuntimeMontiArcCoCos(@NotNull String model) {
-
+  @MethodSource("validModels")
+  @MethodSource("validModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "ValidCompWithVariability2 ",
+    "ValidCompWithVariability3 "
+  })
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
+
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+
     MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
     checker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
 
-    ASTMACompilationUnit mainAST = compile(model);
-    checker.checkAll(mainAST);
-
-    String[] test = getLoggedErrorCodes();
+    // When
+    checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getErrorCount() == 0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
-  private static <T> void addCoCoAs(T coco, Consumer<T> consumer) {
-    consumer.accept(coco);
+  @ParameterizedTest
+  @MethodSource("invalidModels")
+  @MethodSource("invalidModelsWithVariability")
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+
+    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    checker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
+  static Stream<Arguments> validModelsWithVariability() {
+    return Stream.of(
+      // type mismatch, var declaration with primitive type, dead variation point
+      arg("""
+        component ValidCompWithVariability1 {
+          varif (false) {
+            automaton {
+              initial state S;
+              S -> S / {
+                int v = true;
+              }
+            }
+          }
+        }
+        """
+      ),
+      // type mismatch, var declaration with primitive type, dead feature
+      arg("""
+        component ValidCompWithVariability2 {
+          feature f;
+          int v = 0;
+          varif (f) {
+            automaton {
+              initial state S;
+              S -> S / {
+                int v = true;
+              }
+            }
+          }
+          constraint (!f);
+        }
+        """
+      ),
+      // var declaration with conditional type
+      arg("""
+        component ValidCompWithVariability3 {
+          feature f1;
+          feature f2;
+          varif (f1) {
+            int v = 0;
+          }
+          else {
+            boolean v = false;
+          }
+          varif (f2) {
+            automaton {
+              initial state S;
+              S -> S / {
+                int v = true;
+              }
+            }
+          }
+          constraint (!(f2 && !f1));
+        }
+        """
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModelsWithVariability() {
+    return Stream.of(
+      // type mismatch, var declaration with primitive type, tautological variation point
+      arg("""
+          component ValidCompWithVariability1 {
+            varif (true) {
+              automaton {
+                initial state S;
+                S -> S / {
+                  int v = true;
+                }
+              }
+            }
+          }
+          """,
+        VAR_DEC_TYPE_MISMATCH
+      ),
+      // type mismatch, var declaration with primitive type, core feature
+      arg("""
+          component ValidCompWithVariability2 {
+            feature f;
+            int v = 0;
+            varif (f) {
+              automaton {
+                initial state S;
+                S -> S / {
+                  int v = true;
+                }
+              }
+            }
+            constraint (f);
+          }
+          """,
+        VAR_DEC_TYPE_MISMATCH
+      ),
+      // var declaration with conditional type
+      arg("""
+          component ValidCompWithVariability3 {
+            feature f1;
+            feature f2;
+            varif (f1) {
+              int v = 0;
+            }
+            else {
+              boolean v = false;
+            }
+            varif (f2) {
+              automaton {
+                initial state S;
+                S -> S / {
+                  int v = true;
+                }
+              }
+            }
+          }
+          """,
+        VAR_DEC_TYPE_MISMATCH
+      )
+    );
+  }
 }
