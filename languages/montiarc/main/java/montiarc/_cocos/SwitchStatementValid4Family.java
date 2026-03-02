@@ -243,7 +243,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
         if (!(SymTypeRelations.isChar(result) || SymTypeRelations.isByte(result)
           || SymTypeRelations.isShort(result) || SymTypeRelations.isInt(result)
           || isEnumMember(result))) {
-          Log.error(ERROR_CODE + ERROR_MSG_FORMAT, switchStatementEntry.getKey().get_SourcePositionStart());
+          Log.error(ERROR_CODE + " " + ERROR_MSG_FORMAT, switchStatementEntry.getKey().get_SourcePositionStart());
         }
       }
     }

@@ -1,10 +1,9 @@
 {
   "copyright": "(c) https://github.com/MontiCore/monticore",
   "name": "Enum",
-  "package": "cocos",
   "symbols": [
     {
-      "kind": "de.monticore.cdbasis._symboltable.CDTypeSymbol",
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
       "name": "Enum",
       "isEnum": true,
       "isPublic": true,
@@ -12,25 +11,25 @@
         "symbols": [
           {
             "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
-            "name": "EnumElementOne",
+            "name": "E1",
             "isPublic": true,
             "isStatic": true,
             "isFinal": true,
             "type": {
               "kind": "de.monticore.types.check.SymTypeOfObject",
-              "objName": "cocos.Enum"
+              "objName": "Enum"
             },
             "isReadOnly": true
           },
           {
             "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
-            "name": "EnumElementTwo",
+            "name": "E2",
             "isPublic": true,
             "isStatic": true,
             "isFinal": true,
             "type": {
               "kind": "de.monticore.types.check.SymTypeOfObject",
-              "objName": "cocos.Enum"
+              "objName": "Enum"
             },
             "isReadOnly": true
           }
