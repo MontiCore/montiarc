@@ -17,6 +17,7 @@ sourceSets {
 
 dependencies {
   api(seLibs.se.commons.logging)
+  api(seLibs.mc.javagen.runtime)
   api(libs.mqtt)
   api(libs.commons.cli)
   api(libs.jackson)
