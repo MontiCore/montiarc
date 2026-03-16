@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc_with_cd4a._lsp.language_aggregation.modelpath;
+package montiarc_with_cd._lsp.language_aggregation.modelpath;
 
 import de.mclsg.lsp.modelpath.ModelPathCache;
 import de.mclsg.lsp.modelpath.ModelPathResolver;

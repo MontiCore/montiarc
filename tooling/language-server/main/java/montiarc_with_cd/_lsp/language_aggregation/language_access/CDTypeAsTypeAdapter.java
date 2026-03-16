@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc_with_cd4a._lsp.language_aggregation.language_access;
+package montiarc_with_cd._lsp.language_aggregation.language_access;
 
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.symbols.basicsymbols._ast.ASTType;

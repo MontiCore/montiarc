@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarcwithcd4a._lsp.plugin;
+package montiarcwithcd._lsp.plugin;
 
 import com.intellij.openapi.project.Project;
 import org.jetbrains.annotations.NotNull;
@@ -7,9 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MontiArcWithCD4AStreamConnectionProvider extends MontiArcWithCD4AStreamConnectionProviderTOP {
+public class MontiArcWithCDStreamConnectionProvider extends MontiArcWithCDStreamConnectionProviderTOP {
 
-  public MontiArcWithCD4AStreamConnectionProvider(Project project, String jarName, String pluginId) {
+  public MontiArcWithCDStreamConnectionProvider(Project project, String jarName, String pluginId) {
     super(project, jarName, pluginId);
   }
 

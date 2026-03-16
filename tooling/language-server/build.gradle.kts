@@ -21,8 +21,8 @@ val languageServerJarArtifactConfig = configurations.register("languageServerJar
 
 afterEvaluate {
   languageServerJarArtifactConfig.configure {
-    outgoing.artifact(tasks.named("packMontiArcWithCD4ALanguageServer")) {
-      builtBy(tasks.named("packMontiArcWithCD4ALanguageServer"))
+    outgoing.artifact(tasks.named("packMontiArcWithCDLanguageServer")) {
+      builtBy(tasks.named("packMontiArcWithCDLanguageServer"))
     }
   }
 }
@@ -38,12 +38,12 @@ java {
 // Eager task creation because the task creates other tasks
 val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure") {
   configure<de.mclsg.MCLSGPluginAggregationExtension> {
-    setLanguageAggregationName("MontiArcWithCD4A")
-    setTargetPackage("montiarc_with_cd4a")
+    setLanguageAggregationName("MontiArcWithCD")
+    setTargetPackage("montiarc_with_cd")
     setHandCodedDirBase("${projectDir}/main")
 
     member("MontiArc", "arc", true)
-    member("de.monticore.CD4Analysis", "cd", false)
+    member("de.monticore.CD4Code", "cd", false)
   }
   including(
     de.mclsg.TaskTypes.LANGUAGE_SERVER,
@@ -55,15 +55,17 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
 extensions.configure<VscodeGenConfig>(VscodeGenConfig::class) {
   multiproject.set(true)
   icon.set(rootProject.file("docs/assets/images/icon.png"))
-  readme.set(file("README.md"))
+  readme.set(file(rootProject.projectDir.path + "README.md"))
   languageConfig.from(
-    "language-configuration.json",
-    "montiarc.tmLanguage.json",
-    "snippets.json"
+    projectDir.absolutePath + "/main/resources/" + "language-configuration.json",
+    projectDir.absolutePath + "/main/resources/" + "montiarc.tmLanguage.json",
+    projectDir.absolutePath + "/main/resources/" + "snippets.json"
   )
-  extensionProjectLocation.set(file(
-    autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir()
-  ))
+  extensionProjectLocation.set(
+    file(
+      autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir()
+    )
+  )
 }
 
 // Edit package.json of the generated project
@@ -100,18 +102,18 @@ tasks.register("editPackageJson") {
 
     (content["contributes"] as MutableMap<String, Any>)["grammars"] = listOf(
       mapOf(
-        "language" to "MontiArcWithCD4A",
+        "language" to "MontiArcWithCD",
         "scopeName" to "source.montiarc",
         "path" to "./montiarc.tmLanguage.json",
-        "embeddedLanguages" to {
+        "embeddedLanguages" to mapOf(
           "meta.embedded.block.java" to "source.java"
-        }
+        )
       )
     )
 
     (content["contributes"] as MutableMap<String, Any>)["snippets"] = listOf(
       mapOf(
-        "language" to "MontiArcWithCD4A",
+        "language" to "MontiArcWithCD",
         "path" to "./snippets.json",
       )
     )
@@ -119,7 +121,7 @@ tasks.register("editPackageJson") {
     (content["contributes"] as MutableMap<String, Any>)["menus"] = mapOf(
       "editor/title" to listOf(
         mapOf(
-          "when" to "editorLangId == 'MontiArcWithCD4A'",
+          "when" to "editorLangId == 'MontiArcWithCD'",
           "command" to "gradle.runBuild",
           "group" to "navigation@1",
         )
@@ -139,15 +141,15 @@ tasks.register("editPackageJson") {
 // such configuration. However, the following two tasks are Exec tasks and the
 // configuration that we perform is specific to each of them-not general for all
 // Exec tasks
-tasks.named<Exec>("buildMontiArcWithCD4AVscodePlugin") {
+tasks.named<Exec>("buildMontiArcWithCDVscodePlugin") {
   dependsOn(
     project.tasks.npmInstall,
-    "packageMontiArcWithCD4AVscodePlugin"
+    "packageMontiArcWithCDVscodePlugin"
   )
   addNpmToPath(this)
 }
 
-tasks.named<Exec>("packageMontiArcWithCD4AVscodePlugin") {
+tasks.named<Exec>("packageMontiArcWithCDVscodePlugin") {
   dependsOn(
     project.tasks.npmInstall,
     "editPackageJson",
@@ -157,7 +159,7 @@ tasks.named<Exec>("packageMontiArcWithCD4AVscodePlugin") {
 }
 
 tasks.named<Jar>("sourcesJar") {
-  dependsOn(tasks.named("generateMontiArcWithCD4ALanguageServer"))
+  dependsOn(tasks.named("generateMontiArcWithCDLanguageServer"))
 }
 
 fun addNpmToPath(task: Exec) {

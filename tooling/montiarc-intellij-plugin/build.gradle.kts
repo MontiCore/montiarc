@@ -22,10 +22,10 @@ dependencies {
 sourceSets {
   main {
     java {
-      srcDir("build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-intellij-plugin/src/main/java")
+      srcDir("build/generated-sources/MontiArcWithCD/plugins/montiarcwithcd-intellij-plugin/src/main/java")
     }
     resources {
-      srcDir("build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-intellij-plugin/src/main/resources")
+      srcDir("build/generated-sources/MontiArcWithCD/plugins/montiarcwithcd-intellij-plugin/src/main/resources")
     }
   }
 }
@@ -42,12 +42,12 @@ java {
 // since this task creates other tasks
 val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure") {
   configure<de.mclsg.MCLSGPluginAggregationExtension> {
-    setLanguageAggregationName("MontiArcWithCD4A")
-    setTargetPackage("montiarc_with_cd4a")
+    setLanguageAggregationName("MontiArcWithCD")
+    setTargetPackage("montiarc_with_cd")
     setHandCodedDirBase("${projectDir}/main")
 
     member("MontiArc", "arc", true)
-    member("de.monticore.CD4Analysis", "cd", false)
+    member("de.monticore.CD4Code", "cd", false)
     languageServerJar(
       File(lspJar.get().asPath)
     )
@@ -66,20 +66,20 @@ tasks.named("build") {
   dependsOn("autoconfigure")
 }
 
-tasks.named<de.mclsg.task.IntellijPluginTask>("generateMontiArcWithCD4AIntellijPlugin") {
+tasks.named<de.mclsg.task.IntellijPluginTask>("generateMontiArcWithCDIntellijPlugin") {
   handCodedDir.set(project.layout.projectDirectory.dir("main/java"))
 }
 
 tasks.named("patchPluginXml") {
-  dependsOn("generateMontiArcWithCD4AIntellijPlugin")
+  dependsOn("generateMontiArcWithCDIntellijPlugin")
 }
 
 tasks.named("compileJava") {
-  dependsOn("generateMontiArcWithCD4AIntellijPlugin")
+  dependsOn("generateMontiArcWithCDIntellijPlugin")
 }
 
 tasks.named("sourcesJar") {
-  dependsOn("generateMontiArcWithCD4AIntellijPlugin")
+  dependsOn("generateMontiArcWithCDIntellijPlugin")
 }
 
 tasks.named("buildPlugin") {
@@ -88,12 +88,12 @@ tasks.named("buildPlugin") {
 
 tasks.named<org.jetbrains.intellij.platform.gradle.tasks.PrepareSandboxTask>("prepareSandbox") {
   // TODO: double copy, we can probably skip copy into generated-sources
-  from("build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-intellij-plugin/bin/") {
+  from("build/generated-sources/MontiArcWithCD/plugins/montiarcwithcd-intellij-plugin/bin/") {
     into("montiarc-intellij-plugin/bin") // based on project name, not generated plugin name!
   }
-  dependsOn("copyMontiArcWithCD4AJarIntoIntellijPlugin")
+  dependsOn("copyMontiArcWithCDJarIntoIntellijPlugin")
 }
 
-tasks.named("copyMontiArcWithCD4AJarIntoIntellijPlugin"){
-  dependsOn(":tooling:language-server:packMontiArcWithCD4ALanguageServer")
+tasks.named("copyMontiArcWithCDJarIntoIntellijPlugin") {
+  dependsOn(":tooling:language-server:packMontiArcWithCDLanguageServer")
 }
