@@ -44,7 +44,7 @@ jobs:
         run: |
           mkdir dist
           mv tooling/ma2jsim-cli/build/libs/MontiArc.jar dist/MontiArc-${{ steps.extract_version.outputs.version }}.jar
-          mv tooling/language-server/build/generated-sources/MontiArcWithCD4A/plugins/montiarcwithcd4a-vscode-plugin/montiarc-${{ steps.extract_version.outputs.full_version }}.vsix dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
+          mv tooling/language-server/build/generated-sources/MontiArcWithCD/plugins/montiarcwithcd-vscode-plugin/montiarc-${{ steps.extract_version.outputs.full_version }}.vsix dist/MontiArc-${{ steps.extract_version.outputs.version }}.vsix
           mv tooling/montiarc-intellij-plugin/build/distributions/montiarc-intellij-plugin-${{ steps.extract_version.outputs.full_version }}.zip dist/MontiArc-Intellij-Plugin-${{ steps.extract_version.outputs.version }}.zip
 
 
