@@ -31,4 +31,9 @@ public class Timer extends TimerTOP {
       return Duration.ofMilliseconds((System.nanoTime() - startTime) / 1000000);
     }
   }
+
+  @Override
+  public Duration remaining() {
+    return duration.subtract(startedAgo());
+  }
 }

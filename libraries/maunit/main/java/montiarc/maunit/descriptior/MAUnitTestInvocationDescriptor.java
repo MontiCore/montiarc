@@ -51,11 +51,12 @@ public class MAUnitTestInvocationDescriptor extends AbstractTestDescriptor imple
   @Override
   public MAUnitTestExecutionContext execute(MAUnitTestExecutionContext context, DynamicTestExecutor dynamicTestExecutor) throws Exception {
     CoordinatingScheduler scheduler = new CoordinatingScheduler();
+    Simulation.nanosecondsPerTick = getSimulatedTickLength();
+    Simulation.ticks = 0;
     OracleFactory oracleFactory = OracleFactory.withDefaultStrategy(OracleFactory.lowestHash());
     SimComponent component = (SimComponent) testClass.getConstructors()[0].newInstance(getArguments(testClass.getConstructors()[0].getParameterCount(), scheduler, oracleFactory));
     boolean caughtException = false;
     try {
-      Simulation.ticks = 0;
       component.run(getTickCount(), getSimulatedTickLength());
     } catch (Throwable e) {
       caughtException = true;

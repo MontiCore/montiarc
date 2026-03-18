@@ -17,6 +17,7 @@ classdiagram lang {
 
     public boolean completed();
     public Duration startedAgo();
+    public Duration remaining();
   }
 
   public class Duration {
