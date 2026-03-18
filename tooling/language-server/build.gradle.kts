@@ -55,7 +55,7 @@ val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure
 extensions.configure<VscodeGenConfig>(VscodeGenConfig::class) {
   multiproject.set(true)
   icon.set(rootProject.file("docs/assets/images/icon.png"))
-  readme.set(file(rootProject.projectDir.path + "README.md"))
+  readme.set(rootProject.file("README.md"))
   languageConfig.from(
     projectDir.absolutePath + "/main/resources/" + "language-configuration.json",
     projectDir.absolutePath + "/main/resources/" + "montiarc.tmLanguage.json",
