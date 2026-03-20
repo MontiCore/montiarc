@@ -19,7 +19,7 @@ This guide comprises the following steps:
 
 #### Prerequisites 
 - Git (for checking out the project)
-- Gradle 8.5 (for building the project)
+- Gradle 8.14.4 (for building the project)
 - Java 21 (for building and executing the project)
 
 #### Cloning the Project

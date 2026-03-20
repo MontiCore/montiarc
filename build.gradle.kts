@@ -16,7 +16,7 @@ dependencies {
 }
 
 reporting.reports.register("jacocoAggregatedTestReport", JacocoCoverageReport::class) {
-  testType.set(TestSuiteType.UNIT_TEST)
+  testSuiteName.set("test")
 }
 
 tasks.getByName<JacocoReport>("jacocoAggregatedTestReport").reports {

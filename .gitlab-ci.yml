@@ -36,7 +36,7 @@ stages:
   - mirror
 
 Build:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   <<: *cache_gradle_pull_push
   stage: build
   allow_failure: false
@@ -46,7 +46,7 @@ Build:
 Unit Test:
   stage: test
   <<: *cache_gradle_pull_push
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   allow_failure: false
   script:
     - gradle test jacocoAggregatedTestReport --stacktrace --build-cache -PenableLanguageServer
@@ -66,7 +66,7 @@ Unit Test:
     when: always
 
 Deploy Nexus:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   <<: *cache_gradle_pull_only
   stage: deploy
   script:
@@ -94,7 +94,7 @@ Trigger Digital Twin:
 # For more information, visit: https://git.rwth-aachen.de/monticore/auxiliary-development-tools/github-mirror-tools (Available internally only)
 Github Mirror:
   stage: mirror
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   variables:
     # The repository is edited during this job. To make sure that no changes persist, we instruct GitLab to always
     # create a fresh clone of the repository instead of caching it and attempting to remove any changes.
@@ -126,13 +126,13 @@ Github Mirror:
 Verify Formatting:
   stage: check
   needs: []
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   allow_failure: false
   script:
     - gradle spotlessCheck
 
 Check Dependency Updates:
-  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.5-jdk21
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   stage: check
   needs: []
   allow_failure: true
