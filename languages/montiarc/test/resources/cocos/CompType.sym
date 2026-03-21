@@ -1,0 +1,10 @@
+{
+  "name": "CompType",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "CompType",
+      "fullName": "CompType"
+    }
+  ]
+}
