@@ -6,24 +6,23 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
+import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link SubPortsConnected}.
  */
-public class SubPortsConnectedTest extends MontiArcTestBase {
+class SubPortsConnectedTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void setUpComponents() {
@@ -36,63 +35,8 @@ public class SubPortsConnectedTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 { " +
-      "a.b.A a; " +
-      "}",
-    "component Comp3 { " +
-      "port in int i; " +
-      "a.b.B b; " +
-      "i -> b.i; " +
-      "}",
-    "component Comp4 { " +
-      "port out int o; " +
-      "a.b.C c; " +
-      "c.o -> o; " +
-      "}",
-    "component Comp5 { " +
-      "port out int o1, o2; " +
-      "a.b.C c; " +
-      "c.o -> o1, o2; " +
-      "}",
-    "component Comp6 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.D d; " +
-      "i -> d.i; " +
-      "d.o -> o; " +
-      "}",
-    "component Comp7 { " +
-      "port in int i; " +
-      "a.b.E e; " +
-      "i -> e.i1; " +
-      "i -> e.i2; " +
-      "}",
-    "component Comp8 { " +
-      "port in int i; " +
-      "a.b.E e; " +
-      "i -> e.i1, e.i2; " +
-      "}",
-    "component Comp9 { " +
-      "port out int o1, o2; " +
-      "a.b.F f; " +
-      "f.o1 -> o1; " +
-      "f.o2 -> o2; " +
-      "}",
-    "component Comp10 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "component Inner {" +
-      "port in int i; " +
-      "port out int o; " +
-      "}" +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "}"
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -105,12 +49,13 @@ public class SubPortsConnectedTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -124,52 +69,171 @@ public class SubPortsConnectedTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> validModels() {
     return Stream.of(
-      arg("component Comp1 { " +
-          "a.b.B b; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED),
-      arg("component Comp2 { " +
-          "a.b.C c; " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED),
-      arg("component Comp3 { " +
-          "a.b.D d; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED,
-        ArcError.OUT_PORT_NOT_CONNECTED),
-      arg("component Comp4 { " +
-          "a.b.B b; " +
-          "a.b.C c; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED,
-        ArcError.OUT_PORT_NOT_CONNECTED),
-      arg("component Comp5 { " +
-          "a.b.E e; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED,
-        ArcError.IN_PORT_NOT_CONNECTED),
-      arg("component Comp6 { " +
-          "a.b.F f; " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED,
-        ArcError.OUT_PORT_NOT_CONNECTED),
-      arg("component Comp7 { " +
-          "a.b.B b1, b2; " +
-          "}",
-        ArcError.IN_PORT_NOT_CONNECTED,
-        ArcError.IN_PORT_NOT_CONNECTED),
-      arg("component Comp8 { " +
-          "a.b.C c1, c2; " +
-          "}",
-        ArcError.OUT_PORT_NOT_CONNECTED,
-        ArcError.OUT_PORT_NOT_CONNECTED)
+      // no subcomponents
+      arg("""
+        component ValidComp1 { }
+        """
+      ),
+      // subcomponent without ports
+      arg("""
+        component ValidComp2 {
+          a.b.A a;
+        }
+        """
+      ),
+      // input port of subcomponent is target of connector
+      arg("""
+        component ValidComp3 {
+          port in int i;
+          a.b.B b;
+          i -> b.i;
+        }
+        """
+      ),
+      // output port of subcomponent is source of connector
+      arg("""
+        component ValidComp4 {
+          port out int o;
+          a.b.C c;
+          c.o -> o;
+        }
+        """
+      ),
+      // input and output port of subcomponent are source and target of connector
+      arg("""
+        component ValidComp5 {
+          port in int i;
+          port out int o;
+          a.b.D d;
+          i -> d.i;
+          d.o -> o;
+        }
+        """
+      ),
+      // input ports of subcomponent are each a target of a connector
+      arg("""
+        component ValidComp6 {
+          port in int i;
+          a.b.E e;
+          i -> e.i1;
+          i -> e.i2;
+        }
+        """
+      ),
+      // input ports of subcomponent are target of a multi-target connector
+      arg("""
+        component ValidComp7 {
+          port in int i;
+          a.b.E e;
+          i -> e.i1, e.i2;
+        }
+        """
+      ),
+      // output ports of subcomponent are each a target of a connector
+      arg("""
+        component ValidComp8 {
+          port out int o1, o2;
+          a.b.F f;
+          f.o1 -> o1;
+          f.o2 -> o2;
+        }
+        """
+      ),
+      // input and output port of subcomponent in inner component are source and target of a connector
+      arg("""
+        component ValidComp9 {
+          component Inner {
+            port in int i;
+            port out int o;
+            a.b.D d;
+            i -> d.i;
+            d.o -> o;
+          }
+        }
+        """
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // subcomponent with unconnected input port
+      arg("""
+          component InvalidComp1 {
+            a.b.B b;
+          }
+          """,
+        IN_PORT_NOT_CONNECTED
+      ),
+      // subcomponent with unconnected output port
+      arg("""
+          component InvalidComp2 {
+            a.b.C c;
+          }
+          """,
+        OUT_PORT_NOT_CONNECTED
+      ),
+      // subcomponent with unconnected input and output port
+      arg("""
+          component InvalidComp3 {
+            a.b.D d;
+          }
+          """,
+        IN_PORT_NOT_CONNECTED,
+        OUT_PORT_NOT_CONNECTED
+      ),
+      // two subcomponents with unconnected ports
+      arg("""
+          component InvalidComp4 {
+            a.b.B b;
+            a.b.C c;
+          }
+          """,
+        IN_PORT_NOT_CONNECTED,
+        OUT_PORT_NOT_CONNECTED
+      ),
+      // subcomponent with two unconnected input ports
+      arg("""
+          component InvalidComp5 {
+            a.b.E e;
+          }
+          """,
+        IN_PORT_NOT_CONNECTED,
+        IN_PORT_NOT_CONNECTED
+      ),
+      // subcomponent with two unconnected output ports
+      arg("""
+          component InvalidComp6 {
+            a.b.F f;
+          }
+          """,
+        OUT_PORT_NOT_CONNECTED,
+        OUT_PORT_NOT_CONNECTED
+      ),
+      // two subcomponents with unconnected input ports
+      arg("""
+          component InvalidComp7 {
+            a.b.B b1, b2;
+          }
+          """,
+        IN_PORT_NOT_CONNECTED,
+        IN_PORT_NOT_CONNECTED
+      ),
+      // two subcomponents with unconnected output ports
+      arg("""
+          component InvalidComp8 {
+            a.b.C c1, c2;
+          }
+          """,
+        OUT_PORT_NOT_CONNECTED,
+        OUT_PORT_NOT_CONNECTED
+      )
     );
   }
 }
