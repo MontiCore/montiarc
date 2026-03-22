@@ -8,30 +8,31 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.IN_PORT_UNUSED;
+import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link PortsConnected}.
  */
-public class PortsConnectedTest extends MontiArcTestBase {
+class PortsConnectedTest extends MontiArcTestBase {
 
   @BeforeEach
-  protected void initSymbols() {
+  @Override
+  protected void init() {
+    super.init();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setUpComponents();
+    this.setUpComponents();
   }
 
   protected void setUpComponents() {
@@ -44,63 +45,8 @@ public class PortsConnectedTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 { " +
-      "a.b.A a; " +
-      "}",
-    "component Comp3 { " +
-      "port in int i; " +
-      "a.b.B b; " +
-      "i -> b.i; " +
-      "}",
-    "component Comp4 { " +
-      "port out int o; " +
-      "a.b.C c; " +
-      "c.o -> o; " +
-      "}",
-    "component Comp5 { " +
-      "port out int o1, o2; " +
-      "a.b.C c; " +
-      "c.o -> o1, o2; " +
-      "}",
-    "component Comp6 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.D d; " +
-      "i -> d.i; " +
-      "d.o -> o; " +
-      "}",
-    "component Comp7 { " +
-      "port in int i; " +
-      "a.b.E e; " +
-      "i -> e.i1; " +
-      "i -> e.i2; " +
-      "}",
-    "component Comp8 { " +
-      "port in int i; " +
-      "a.b.E e; " +
-      "i -> e.i1, e.i2; " +
-      "}",
-    "component Comp9 { " +
-      "port out int o1, o2; " +
-      "a.b.F f; " +
-      "f.o1 -> o1; " +
-      "f.o2 -> o2; " +
-      "}",
-    "component Comp10 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "component Inner {" +
-      "port in int i; " +
-      "port out int o; " +
-      "}" +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "}"
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -113,12 +59,13 @@ public class PortsConnectedTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -132,56 +79,185 @@ public class PortsConnectedTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> validModels() {
     return Stream.of(
-      arg("component Comp1 { " +
-          "port in int i; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED),
-      arg("component Comp2 { " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp3 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp4 { " +
-          "port in int i1, i2; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_UNUSED),
-      arg("component Comp5 { " +
-          "port out int o1, o2; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp6 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "component Inner { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "} " +
-          "Inner sub; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED)
+      // atomic component
+      arg("""
+        component ValidComp1 {
+          port in int i;
+          port out int o;
+        }
+        """
+      ),
+      // composed component without ports
+      arg("""
+        component ValidComp2 {
+          a.b.A a;
+        }
+        """
+      ),
+      // input port is source of connector
+      arg("""
+        component ValidComp3 {
+          port in int i;
+          a.b.B b;
+          i -> b.i;
+        }
+        """
+      ),
+      // output port is target of connector
+      arg("""
+        component ValidComp4 {
+          port out int o;
+          a.b.C c;
+          c.o -> o;
+        }
+        """
+      ),
+      // input port and output port are source and target of connector
+      arg("""
+        component ValidComp5 {
+          port in int i;
+          port out int o;
+          a.b.D d;
+          i -> d.i;
+          d.o -> o;
+        }
+        """
+      ),
+      // input ports are each a source of a connector
+      arg("""
+        component ValidComp6 {
+          port in int i1, i2;
+          a.b.E e;
+          i1 -> e.i1;
+          i2 -> e.i2;
+        }
+        """
+      ),
+      // output ports are each a target of a connector
+      arg("""
+        component ValidComp7 {
+          port out int o1, o2;
+          a.b.C c;
+          c.o -> o1;
+          c.o -> o2;
+        }
+        """
+      ),
+      // output ports are target of a multi-target connector
+      arg("""
+        component ValidComp8 {
+          port out int o1, o2;
+          a.b.C c;
+          c.o -> o1, o2;
+        }
+        """
+      ),
+      // atomic inner component with same named ports
+      arg("""
+        component ValidComp9 {
+          port in int i;
+          port out int o;
+          component Inner {
+            port in int i;
+            port out int o;
+          }
+          Inner sub;
+          i -> sub.i;
+          o -> sub.o;
+        }
+        """
+      ),
+      // composed inner component with connected input and output ports
+      arg("""
+        component ValidComp10 {
+          component Inner {
+            port in int i;
+            port out int o;
+            a.b.D d;
+            i -> d.i;
+            d.o -> o;
+          }
+        }
+        """
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // unused input port
+      arg("""
+          component InvalidComp1 {
+            port in int i;
+            a.b.A a;
+          }
+          """,
+        IN_PORT_UNUSED
+      ),
+      // unused output port
+      arg("""
+          component InvalidComp2 {
+            port out int o;
+            a.b.A a;
+          }
+          """,
+        OUT_PORT_UNUSED
+      ),
+      // unused input and output port
+      arg("""
+          component InvalidComp3 {
+            port in int i;
+            port out int o;
+            a.b.A a;
+          }
+          """,
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      ),
+      // multiple unused input ports
+      arg("""
+          component InvalidComp4 {
+            port in int i1, i2;
+            a.b.A a;
+          }
+          """,
+        IN_PORT_UNUSED,
+        IN_PORT_UNUSED
+      ),
+      // multiple unused output ports
+      arg("""
+          component InvalidComp5 {
+            port out int o1, o2;
+            a.b.A a;
+          }
+          """,
+        OUT_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      ),
+      // input and output of composed inner component are unused
+      arg("""
+          component InvalidComp6 {
+            port in int i;
+            port out int o;
+            component Inner {
+              port in int i;
+              port out int o;
+              a.b.A a;
+            }
+            Inner sub;
+            i -> sub.i;
+            sub.o -> o;
+          }
+          """,
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      )
     );
   }
 }

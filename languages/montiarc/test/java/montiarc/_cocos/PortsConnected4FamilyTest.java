@@ -2,243 +2,36 @@
 package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
-import de.monticore.class2mc.OOClass2MCResolver;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
-import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.PortsConnected4Family;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.IN_PORT_UNUSED;
+import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PortsConnected4FamilyTest extends MontiArcTestBase {
-
-  @BeforeEach
-  protected void initSymbols() {
-    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
-    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setUpComponents();
-  }
-
-  protected void setUpComponents() {
-    compile("package a.b; component A { }");
-    compile("package a.b; component B { port in int i; }");
-    compile("package a.b; component C { port out int o; }");
-    compile("package a.b; component D { port in int i; port out int o; }");
-    compile("package a.b; component E { port in int i1, i2; }");
-    compile("package a.b; component F { port out int o1, o2; }");
-  }
-
-  private static Stream<Arguments> provideUniqueSenderModel() {
-    List<Arguments> componentList = new ArrayList<>();
-    Arguments simpleModel = arg(    "component Comp7 { " +
-      "feature f1;" +
-      "varif(f1){" +
-      "port in int i;}" +
-      "else{" +
-      "port out int o; " +
-      "}" +
-      "a.b.A a; " +
-      "port in int i;" +
-      "a.b.B b;" +
-      "b.i -> i;" +
-      "}");
-    componentList.add(simpleModel);
-    return componentList.stream();
-  }
+/**
+ * The class under test is {@link PortsConnected4Family}.
+ */
+class PortsConnected4FamilyTest extends PortsConnectedTest {
 
   @ParameterizedTest
-  @MethodSource("provideUniqueSenderModel")
-  public void TestModelRuntimeMontiArcCoCos(@NotNull String model) {
-
-    Preconditions.checkNotNull(model);
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new PortsConnected4Family());
-
-    ASTMACompilationUnit mainAST = compile(model);
-    checker.checkAll(mainAST);
-
-    String[] test = getLoggedErrorCodes();
-
-    // Then
-    assertThat(Log.getErrorCount() == 0);
-  }
-
-  private static <T> void addCoCoAs(T coco, Consumer<T> consumer) {
-    consumer.accept(coco);
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings =
-    {"component Comp1 { feature f1; }",
-    "component Comp2 {" +
-      "feature f1; " +
-      "varif(f1){ a.b.A a; }" +
-      "}",
-    "component Comp3 {" +
-      "feature f1,f2; " +
-      "varif(f1){port in int i; }" +
-      "varif(f2){a.b.B b; }" +
-      "i -> b.i; " +
-      "constraint(f1 && f2);" +
-      "}",
-    "component Comp4 { " +
-      "feature f1,f2;" +
-      "varif(f1){port out int o;}" +
-      "a.b.C c; " +
-      "varif(f2){c.o -> o;}" +
-      "constraint(f1 && f2);" +
-      "}",
-    "component Comp5 { " +
-      "feature f1,f2;" +
-      "varif(f1){port out int o1, o2; }" +
-      "a.b.C c; " +
-      "varif(f2){a.b.A a;}" +
-      "else{c.o -> o1, o2; }" +
-      "constraint(f1 && !f2);" +
-      "}",
-    "component Comp6 {" +
-      "feature f1,f2; " +
-      "varif(f1){ port in int i; }" +
-      "varif(f2){ port out int o; }" +
-      "a.b.D d; " +
-      "varif(f1){ i -> d.i; }" +
-      "varif(f2){ d.o -> o; }" +
-      "constraint(f1 || f2);" +
-      "}",
-    "component Comp7 { " +
-      "feature f1,f2;" +
-      "varif(f1){port in int i; }" +
-      "a.b.E e; " +
-      "varif(f2){" +
-      "i -> e.i1; " +
-      "i -> e.i2;}" +
-      "constraint((f1 && f2) || (!f1 && !f2));" +
-      "}",
-    "component Comp8 { " +
-      "feature f1,f2;" +
-      "varif(f1){port in int i;}" +
-      "a.b.E e; " +
-      "varif(f2){" +
-      "a.b.A a;" +
-      "}" +
-      "else{ i -> e.i1, e.i2; }" +
-      "constraint(f1 && !f2);" +
-      "}",
-    "component Comp9 { " +
-      "feature f1, f2;" +
-      "port out int o1, o2; " +
-      "a.b.F f; " +
-      "varif(f1){f.o1 -> o1; }" +
-      "varif(f2){f.o2 -> o2; }" +
-      "constraint(f1 && f2);" +
-      "}",
-    "component Comp10 { " +
-      "feature f1,f2;" +
-      "varif(f1){ port in int i; }" +
-      "varif(f2){ port out int o;} " +
-      "component Inner {" +
-      "feature f1,f2;" +
-      "varif(f1){ port in int i; }" +
-      "varif(f2){ port out int o; }" +
-      "constraint(f1 && f2);" +
-      "}" +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "constraint((f1 == sub.f1) && (f2 == sub.f2));" +
-      "}"})
-
-  public void shouldNotReportErrorWithVariability(@NotNull String model) throws IOException {
-    Preconditions.checkNotNull(model);
-
-    // Given
-    ASTMACompilationUnit ast = compile(model);
-
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new PortsConnected4Family());
-
-    // When
-    checker.checkAll(ast);
-
-    // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
-  }
-
-  @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 { " +
-      "a.b.A a; " +
-      "}",
-    "component Comp3 { " +
-      "port in int i; " +
-      "a.b.B b; " +
-      "i -> b.i; " +
-      "}",
-    "component Comp4 { " +
-      "port out int o; " +
-      "a.b.C c; " +
-      "c.o -> o; " +
-      "}",
-    "component Comp5 { " +
-      "port out int o1, o2; " +
-      "a.b.C c; " +
-      "c.o -> o1, o2; " +
-      "}",
-    "component Comp6 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.D d; " +
-      "i -> d.i; " +
-      "d.o -> o; " +
-      "}",
-    "component Comp7 { " +
-      "port in int i; " +
-      "a.b.E e; " +
-      "i -> e.i1; " +
-      "i -> e.i2; " +
-      "}",
-    "component Comp8 { " +
-      "port in int i; " +
-      "a.b.E e; " +
-      "i -> e.i1, e.i2; " +
-      "}",
-    "component Comp9 { " +
-      "port out int o1, o2; " +
-      "a.b.F f; " +
-      "f.o1 -> o1; " +
-      "f.o2 -> o2; " +
-      "}",
-    "component Comp10 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "component Inner {" +
-      "port in int i; " +
-      "port out int o; " +
-      "}" +
-      "Inner sub; " +
-      "i -> sub.i; " +
-      "sub.o -> o; " +
-      "}"
+  @MethodSource("validModels")
+  @MethodSource("validModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "ValidCompWithVariability7",
+    "ValidCompWithVariability8",
+    "ValidCompWithVariability9"
   })
-
-
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -251,12 +44,25 @@ public class PortsConnected4FamilyTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  @MethodSource("invalidModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "InvalidCompWithVariability1 ",
+    "InvalidCompWithVariability2 ",
+    "InvalidCompWithVariability3 ",
+    "InvalidCompWithVariability4 ",
+    "InvalidCompWithVariability5 ",
+    "InvalidCompWithVariability6 ",
+    "InvalidCompWithVariability10 ",
+    "InvalidCompWithVariability11 ",
+    "InvalidCompWithVariability12 "
+  })
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -270,141 +76,348 @@ public class PortsConnected4FamilyTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
-      arg("component Comp1 { " +
-          "port in int i; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED),
-      arg("component Comp2 { " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp3 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp4 { " +
-          "port in int i1, i2; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_UNUSED),
-      arg("component Comp5 { " +
-          "port out int o1, o2; " +
-          "a.b.A a; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp6 { " +
-          "port in int i; " +
-          "port out int o; " +
-          "component Inner { " +
-          "port in int i; " +
-          "port out int o; " +
-          "a.b.A a; " +
-          "} " +
-          "Inner sub; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED)
+      // unconnected input port, dead variation point
+      arg("""
+        component ValidCompWithVariability1 {
+          varif (false) {
+            port in int i;
+          }
+          a.b.A sub;
+        }
+        """
+      ),
+      // unconnected output port, dead variation point
+      arg("""
+        component ValidCompWithVariability2 {
+          varif (false) {
+            port out int o;
+          }
+          a.b.A sub;
+        }
+        """
+      ),
+      // unconnected input and output port, dead variation point
+      arg("""
+        component ValidCompWithVariability3 {
+          varif (false) {
+            port in int i;
+            port out int o;
+          }
+          a.b.A sub;
+        }
+        """
+      ),
+      // unconnected input port, dead feature
+      arg("""
+        component ValidCompWithVariability4 {
+          feature f;
+          varif (f) {
+            port in int i;
+          }
+          a.b.A sub;
+          constraint (!f);
+        }
+        """
+      ),
+      // unconnected output port, dead feature
+      arg("""
+        component ValidCompWithVariability5 {
+          feature f;
+          varif (f) {
+            port out int o;
+          }
+          a.b.A sub;
+          constraint (!f);
+        }
+        """
+      ),
+      // unconnected input and output port, dead feature
+      arg("""
+        component ValidCompWithVariability6 {
+          feature f;
+          varif (f) {
+            port in int i;
+            port out int o;
+          }
+          a.b.A sub;
+          constraint (!f);
+        }
+        """
+      ),
+      // conditionally connected input port
+      arg("""
+        component ValidCompWithVariability7 {
+          feature f;
+          port in int i;
+          a.b.B sub;
+          varif (f) {
+            i -> sub.i;
+          }
+          constraint (f);
+        }
+        """
+      ),
+      // conditionally connected output port
+      arg("""
+        component ValidCompWithVariability8 {
+          feature f;
+          port out int o;
+          a.b.C sub;
+          varif (f) {
+            sub.o -> o;
+          }
+          constraint (f);
+        }
+        """
+      ),
+      // conditionally connected input and output port
+      arg("""
+        component ValidCompWithVariability9 {
+          feature f;
+          port in int i;
+          port out int o;
+          a.b.D sub;
+          varif (f) {
+            i -> sub.i;
+            sub.o -> o;
+          }
+          constraint (f);
+        }
+        """
+      ),
+      // conditional input port with conditional connector
+      arg("""
+        component ValidCompWithVariability10 {
+          feature f1;
+          feature f2;
+          varif (f1) {
+            port in int i;
+          }
+          a.b.B sub;
+          varif (f2) {
+            i -> sub.i;
+          }
+          constraint (f1 == f2);
+        }
+        """
+      ),
+      // conditional output port with conditional connector
+      arg("""
+        component ValidCompWithVariability11 {
+          feature f1;
+          feature f2;
+          varif (f1) {
+            port out int o;
+          }
+          a.b.C sub;
+          varif (f2) {
+            sub.o -> o;
+          }
+          constraint (f1 == f2);
+        }
+        """
+      ),
+      // conditional input and output port with conditional connector
+      arg("""
+        component ValidCompWithVariability12 {
+          feature f1;
+          feature f2;
+          varif (f1) {
+            port in int i;
+            port out int o;
+          }
+          a.b.D sub;
+          varif (f2) {
+            i -> sub.i;
+            sub.o -> o;
+          }
+          constraint (f1 == f2);
+        }
+        """
+      )
     );
   }
 
-  @ParameterizedTest
-  @MethodSource("invalidModelsWithVariability")
-  public void shouldReportErrorWithVariability(@NotNull String model, @NotNull Error... errors) throws IOException {
-    Preconditions.checkNotNull(model);
-    Preconditions.checkNotNull(errors);
-
-    // Given
-    ASTMACompilationUnit ast = compile(model);
-
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new PortsConnected4Family());
-
-    // When
-    checker.checkAll(ast);
-
-    // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
+  static Stream<Arguments> invalidModelsWithVariability() {
+    return Stream.of(
+      // unconnected input port, tautological variation point
+      arg("""
+          component InvalidCompWithVariability1 {
+            varif (true) {
+              port in int i;
+            }
+            a.b.A sub;
+          }
+          """,
+        IN_PORT_UNUSED
+      ),
+      // unconnected output port, tautological variation point
+      arg("""
+          component InvalidCompWithVariability2 {
+            varif (true) {
+              port out int o;
+            }
+            a.b.A sub;
+          }
+          """,
+        OUT_PORT_UNUSED
+      ),
+      // unconnected input and output port, tautological variation point
+      arg("""
+          component InvalidCompWithVariability3 {
+            varif (true) {
+              port in int i;
+              port out int o;
+            }
+            a.b.A sub;
+          }
+          """,
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      ),
+      // unconnected input port, core feature
+      arg("""
+          component InvalidCompWithVariability4 {
+            feature f;
+            varif (f) {
+              port in int i;
+            }
+            a.b.A sub;
+            constraint (f);
+          }
+          """,
+        IN_PORT_UNUSED
+      ),
+      // unconnected output port, core feature
+      arg("""
+          component InvalidCompWithVariability5 {
+            feature f;
+            varif (f) {
+              port out int o;
+            }
+            a.b.A sub;
+            constraint (!f);
+          }
+          """,
+        OUT_PORT_UNUSED
+      ),
+      // unconnected input and output port, core feature
+      arg("""
+          component InvalidCompWithVariability6 {
+            feature f;
+            varif (f) {
+              port in int i;
+              port out int o;
+            }
+            a.b.A sub;
+            constraint (!f);
+          }
+          """,
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      ),
+      // conditionally unconnected input port
+      arg("""
+          component InvalidCompWithVariability7 {
+            feature f;
+            port in int i;
+            a.b.B sub;
+            varif (f) {
+              i -> sub.i;
+            }
+          }
+          """,
+        IN_PORT_UNUSED
+      ),
+      // conditionally unconnected output port
+      arg("""
+          component InvalidCompWithVariability8 {
+            feature f;
+            port out int o;
+            a.b.C sub;
+            varif (f) {
+              sub.o -> o;
+            }
+          }
+          """,
+        OUT_PORT_UNUSED
+      ),
+      // conditionally unconnected input and output port
+      arg("""
+          component InvalidCompWithVariability9 {
+            feature f;
+            port in int i;
+            port out int o;
+            a.b.D sub;
+            varif (f) {
+              i -> sub.i;
+              sub.o -> o;
+            }
+          }
+          """,
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      ),
+      // conditional input port with conditional connector
+      arg("""
+          component InvalidCompWithVariability10 {
+            feature f1;
+            feature f2;
+            varif (f1) {
+              port in int i;
+            }
+            a.b.B sub;
+            varif (f2) {
+              i -> sub.i;
+            }
+            constraint (!(!f1 && f2));
+          }
+          """,
+        IN_PORT_UNUSED
+      ),
+      // conditional output port with conditional connector
+      arg("""
+          component InvalidCompWithVariability11 {
+            feature f1;
+            feature f2;
+            varif (f1) {
+              port out int o;
+            }
+            a.b.C sub;
+            varif (f2) {
+              sub.o -> o;
+            }
+            constraint (!(!f1 && f2));
+          }
+          """,
+        OUT_PORT_UNUSED
+      ),
+      // conditional input and output port with conditional connector
+      arg("""
+          component InvalidCompWithVariability12 {
+            feature f1;
+            feature f2;
+            varif (f1) {
+              port in int i;
+              port out int o;
+            }
+            a.b.D sub;
+            varif (f2) {
+              i -> sub.i;
+              sub.o -> o;
+            }
+            constraint (!(!f1 && f2));
+          }
+          """,
+        IN_PORT_UNUSED,
+        OUT_PORT_UNUSED
+      )
+    );
   }
-
-
-  protected static Stream<Arguments> invalidModelsWithVariability() {
-    return Stream.of( arg("component Comp1 {" +
-          "feature f1; " +
-          "varif(f1){port in int i;}" +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED),
-      arg("component Comp2 { " +
-          "feature f1;" +
-          "varif(f1){port out int o; }" +
-          "a.b.A a; " +
-          "constraint(f1);" +
-          "}",
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp3 { " +
-          "feature f1,f2;" +
-          "varif(f1){ port in int i; }" +
-          "varif(f2){ port out int o; }" +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp4 { " +
-          "feature f1;" +
-          "varif(f1){ a.b.A aa;}" +
-          "else{port in int i1, i2;}" +
-          "constraint(!f1); " +
-          "a.b.A a; " +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_UNUSED),
-      arg("component Comp5 { " +
-          "feature f1;" +
-          "varif(f1){" +
-          "a.b.A aa;}" +
-          "else{" +
-          "port out int o1, o2; " +
-          "}" +
-          "a.b.A a; " +
-          "}",
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED),
-      arg("component Comp6 { " +
-          "feature f1,f2;" +
-          "varif(f1){ port in int i; }" +
-          "varif(f2){ port out int o; }" +
-          "component Inner {" +
-          "feature f1,f2; " +
-          "varif(f1){ port in int i; }" +
-          "varif(f2){ port out int o; }" +
-          "a.b.A a; " +
-          "constraint(f1 && f2);" +
-          "} " +
-          "Inner sub; " +
-          "constraint(f1 == sub.f1 && f2 == sub.f2);" +
-          "}",
-        ArcError.IN_PORT_UNUSED,
-        ArcError.IN_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED,
-        ArcError.OUT_PORT_UNUSED)
-    );}
-
 }
