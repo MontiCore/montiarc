@@ -6,24 +6,22 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link PortUniqueSender}.
  */
-public class PortUniqueSenderTest extends MontiArcTestBase {
+class PortUniqueSenderTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void setUpComponents() {
@@ -33,76 +31,8 @@ public class PortUniqueSenderTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // no ports or connectors
-    "component Comp1 { }",
-    // single in port forward
-    "component Comp2 { " +
-      "port in int i; " +
-      "a.b.A a; " +
-      "i -> a.i; " +
-      "}",
-    // multiple targets in port forward
-    "component Comp3 { " +
-      "port in int i; " +
-      "a.b.A a1, a2; " +
-      "i -> a1.i, a2.i; " +
-      "}",
-    // multiple in port forwards (different targets)
-    "component Comp4 { " +
-      "port in int i; " +
-      "a.b.A a1, a2; " +
-      "i -> a1.i;" +
-      "i -> a2.i; " +
-      "}",
-    // single out port forward
-    "component Comp5 { " +
-      "port out int o; " +
-      "a.b.B b; " +
-      "b.o -> o; " +
-      "}",
-    // multiple targets out port forward
-    "component Comp6 { " +
-      "port out int o1, o2; " +
-      "a.b.B b; " +
-      "b.o -> o1, o2; " +
-      "}",
-    // multiple out port forwards (different targets)
-    "component Comp7 { " +
-      "port out int o1, o2; " +
-      "a.b.B b1, b2; " +
-      "b1.o -> o1;" +
-      "b2.o -> o2; " +
-      "}",
-    // single hidden connector
-    "component Comp8 { " +
-      "a.b.A a;" +
-      "a.b.B b; " +
-      "b.o -> a.i; " +
-      "}",
-    // multiple targets hidden connector
-    "component Comp9 { " +
-      "a.b.A a1, a2;" +
-      "a.b.B b; " +
-      "b.o -> a1.i, a2.i; " +
-      "}",
-    // multiple hidden connectors (different targets)
-    "component Comp10 { " +
-      "a.b.A a1, a2;" +
-      "a.b.B b1, b2; " +
-      "b1.o -> a1.i; " +
-      "b2.o -> a2.i; " +
-      "}",
-    // multiple connectors (different targets)
-    "component Comp11 { " +
-      "port in int i; " +
-      "port out int o; " +
-      "a.b.C c; " +
-      "i -> c.i; " +
-      "c.o -> o; " +
-      "}"
-  })
-  public void shouldReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -115,12 +45,13 @@ public class PortUniqueSenderTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -134,80 +65,208 @@ public class PortUniqueSenderTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> validModels() {
     return Stream.of(
-      // multiple in port forward (same target)
-      arg("component Comp1 {" +
-          "port in int i1, i2; " +
-          "a.b.A a; " +
-          "i1 -> a.i; " +
-          "i2 -> a.i; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      // multiple out port forward (same target)
-      arg("component Comp2 {" +
-          "port out int o; " +
-          "a.b.B b1, b2; " +
-          "b1.o -> o; " +
-          "b2.o -> o; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      // redundant in port forward
-      arg("component Comp3 { " +
-          "port in int i; " +
-          "a.b.A a; " +
-          "i -> a.i; " +
-          "i -> a.i; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      // redundant out port forward
-      arg("component Comp4 { " +
-          "port out int o; " +
-          "a.b.B b; " +
-          "b.o -> o; " +
-          "b.o -> o; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      // multiple targets hidden connector (same target)
-      arg("component Comp5 {" +
-          "a.b.B b; " +
-          "a.b.A a; " +
-          "b.o -> a.i, a.i; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      // multiple hidden connector (same target)
-      arg("component Comp6 {" +
-          "a.b.B b1, b2; " +
-          "a.b.A a; " +
-          "b1.o -> a.i; " +
-          "b2.o -> a.i; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER),
-      // three in port forward (same target)
-      arg("component Comp7 {" +
-          "port in int i1, i2, i3; " +
-          "a.b.A a; " +
-          "i1 -> a.i; " +
-          "i2 -> a.i; " +
-          "i3 -> a.i; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER,
-        ArcError.PORT_MULTIPLE_SENDER),
-      // multiple out port forward (same target)
-      arg("component Comp8 {" +
-          "port out int o; " +
-          "a.b.B b1, b2, b3; " +
-          "b1.o -> o; " +
-          "b2.o -> o; " +
-          "b3.o -> o; " +
-          "}",
-        ArcError.PORT_MULTIPLE_SENDER,
-        ArcError.PORT_MULTIPLE_SENDER)
+      // component without ports
+      arg("""
+        component ValidComp1 { }
+        """
+      ),
+      // input forward
+      arg("""
+        component ValidComp2 {
+          port in int i;
+          a.b.A sub;
+          i -> sub.i;
+        }
+        """
+      ),
+      // input forward to multiple different targets (multi-target connector)
+      arg("""
+        component ValidComp3 {
+          port in int i;
+          a.b.A sub1, sub2;
+          i -> sub1.i, sub2.i;
+        }
+        """
+      ),
+      // input forward to multiple different targets (multiple connectors)
+      arg("""
+        component ValidComp4 {
+          port in int i;
+          a.b.A sub1, sub2;
+          i -> sub1.i;
+          i -> sub2.i;
+        }
+        """
+      ),
+      // output forward
+      arg("""
+        component ValidComp5 {
+          port out int o;
+          a.b.B sub;
+          sub.o -> o;
+        }
+        """
+      ),
+      // output forward to multiple different targets (multi-target connector)
+      arg("""
+        component ValidComp6 {
+          port out int o1, o2;
+          a.b.B sub;
+          sub.o -> o1, o2;
+        }
+        """
+      ),
+      // output forward to multiple different targets (multiple connectors)
+      arg("""
+        component ValidComp7 {
+          port out int o1, o2;
+          a.b.B sub1, sub2;
+          sub1.o -> o1;
+          sub2.o -> o2;
+        }
+        """
+      ),
+      // hidden channel between single source and target
+      arg("""
+        component ValidComp8 {
+          a.b.A sub1;
+          a.b.B sub2;
+          sub2.o -> sub1.i;
+        }
+        """
+      ),
+      // hidden channel between single source and multiple targets (multi-target connector)
+      arg("""
+        component ValidComp9 {
+          a.b.A sub1, sub2;
+          a.b.B sub3;
+          sub3.o -> sub1.i, sub2.i;
+        }
+        """
+      ),
+      // hidden channel between single source and multiple targets (multiple connectors)
+      arg("""
+        component ValidComp10 {
+          a.b.A sub1, sub2;
+          a.b.B sub3, sub4;
+          sub3.o -> sub1.i;
+          sub4.o -> sub2.i;
+        }
+        """
+      ),
+      // input and output forward
+      arg("""
+        component ValidComp11 {
+          port in int i;
+          port out int o;
+          a.b.C sub;
+          i -> sub.i;
+          sub.o -> o;
+        }
+        """
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // multiple input forwards (same target)
+      arg("""
+          component InvalidComp1 {
+            port in int i1, i2;
+            a.b.A sub;
+            i1 -> sub.i;
+            i2 -> sub.i;
+          }
+          """,
+        PORT_MULTIPLE_SENDER
+      ),
+      // multiple output forwards (same target)
+      arg("""
+          component InvalidComp2 {
+            port out int o;
+            a.b.B sub1, sub2;
+            sub1.o -> o;
+            sub2.o -> o;
+          }
+          """,
+        PORT_MULTIPLE_SENDER
+      ),
+      // redundant input forward
+      arg("""
+          component InvalidComp3 {
+            port in int i;
+            a.b.A sub;
+            i -> sub.i;
+            i -> sub.i;
+          }
+          """,
+        PORT_MULTIPLE_SENDER
+      ),
+      // redundant output forward
+      arg("""
+          component InvalidComp4 {
+            port out int o;
+            a.b.B sub;
+            sub.o -> o;
+            sub.o -> o;
+          }
+          """,
+        PORT_MULTIPLE_SENDER
+      ),
+      // multi-target hidden connector (same target)
+      arg("""
+          component InvalidComp5 {
+            a.b.A sub1;
+            a.b.B sub2;
+            sub2.o -> sub1.i, sub1.i;
+          }
+          """,
+        PORT_MULTIPLE_SENDER
+      ),
+      // redundant hidden connectors (same target)
+      arg("""
+          component InvalidComp6 {
+            a.b.A sub1;
+            a.b.B sub2, sub3;
+            sub2.o -> sub1.i;
+            sub3.o -> sub1.i;
+          }
+          """,
+        PORT_MULTIPLE_SENDER
+      ),
+      // multiple input forwards (same target)
+      arg("""
+          component InvalidComp7 {
+            port in int i1, i2, i3;
+            a.b.A sub;
+            i1 -> sub.i;
+            i2 -> sub.i;
+            i3 -> sub.i;
+          }
+          """,
+        PORT_MULTIPLE_SENDER,
+        PORT_MULTIPLE_SENDER
+      ),
+      // multiple output forwards (same target)
+      arg("""
+          component InvalidComp8 {
+            port out int o;
+            a.b.B sub1, sub2, sub3;
+            sub1.o -> o;
+            sub2.o -> o;
+            sub3.o -> o;
+          }
+          """,
+        PORT_MULTIPLE_SENDER,
+        PORT_MULTIPLE_SENDER
+      )
     );
   }
 }
