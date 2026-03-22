@@ -8,28 +8,30 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
-import org.assertj.core.api.Assertions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.FEEDBACK_CAUSALITY;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FeedbackStrongCausalityTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link FeedbackStrongCausality}.
+ */
+class FeedbackStrongCausalityTest extends MontiArcTestBase {
 
   @BeforeEach
-  protected void initSymbols() {
+  @Override
+  protected void init() {
+    super.init();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
-    setUpComponents();
+    this.setUpComponents();
   }
 
   protected void setUpComponents() {
@@ -47,136 +49,8 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // component without subcomponents
-    "component Comp1 { }",
-    // subcomponent without ports
-    "component Comp2 { " +
-      "  a.b.A sub; " +
-      "}",
-    // in port forward to sink
-    "component Comp3 { " +
-      "  port in int i; " +
-      "  a.b.B sub; " +
-      "  i -> sub.i; " +
-      "}",
-    // out port forward from source
-    "component Comp4 { " +
-      "  port out int o; " +
-      "  a.b.E sub; " +
-      "  sub.o -> o; " +
-      "}",
-    // direct strongly causal feedback loop
-    "component Comp5 { " +
-      "  a.b.D sub; " +
-      "  sub.o -> sub.i; " +
-      "}",
-    // direct strongly causal feedback loop & port forward
-    "component Comp6 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  a.b.F sub; " +
-      "  i -> sub.i1; " +
-      "  sub.o -> sub.i2; " +
-      "  sub.o -> o; " +
-      "}",
-    // strongly causal feedback loop
-    "component Comp7 { " +
-      "  a.b.D sub1; " +
-      "  a.b.E sub2; " +
-      "  sub1.o -> sub2.i; " +
-      "  sub2.o -> sub1.i; " +
-      "}",
-    // strongly causal feedback loop
-    "component Comp8 { " +
-      "  a.b.E sub1; " +
-      "  a.b.F sub2; " +
-      "  sub1.o -> sub2.i; " +
-      "  sub2.o -> sub1.i; " +
-      "}",
-    // strongly causal feedback loop  & port forward
-    "component Comp9 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  a.b.G sub1; " +
-      "  a.b.D sub2; " +
-      "  i -> sub1.i1; " +
-      "  sub1.o -> sub2.i; " +
-      "  sub2.o -> sub1.i2; " +
-      "  sub2.o -> o; " +
-      "}",
-    // direct strongly causal feedback loop & nested subcomponent
-    "component Comp10 { " +
-      "  a.b.H sub; " +
-      "  sub.o -> sub.i; " +
-      "}",
-    // indirect strongly causal feedback loop & nested subcomponent
-    "component Comp11 { " +
-      "  a.b.J sub; " +
-      "  sub.o -> sub.i; " +
-      "}",
-    // multiple strongly causal feedback loops & port forward
-    "component Comp12 { " +
-        "  port in int i; " +
-        "  port out int o; " +
-        "  a.b.G sub1; " +
-        "  a.b.F sub2; " +
-        "  i -> sub1.i1; " +
-        "  sub1.o -> sub2.i1; " +
-        "  sub1.o -> sub2.i2; " +
-        "  sub2.o -> sub1.i2; " +
-        "  sub2.o -> o; " +
-        "}",
-    // multiple strongly causal feedback loops & port forward
-    "component Comp13 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  a.b.F sub1; " +
-      "  a.b.G sub2; " +
-      "  i -> sub1.i1; " +
-      "  sub1.o -> sub2.i1; " +
-      "  sub1.o -> sub2.i2; " +
-      "  sub2.o -> sub1.i2; " +
-      "  sub2.o -> o; " +
-      "}",
-    // multiple strongly causal feedback loops & port forward (connector with multiple targets)
-    "component Comp14 { " +
-        "  port in int i; " +
-        "  port out int o; " +
-        "  a.b.G sub1; " +
-        "  a.b.F sub2; " +
-        "  i -> sub1.i1; " +
-        "  sub1.o -> sub2.i1, sub2.i2; " +
-        "  sub2.o -> sub1.i2, o; " +
-        "}",
-    // multiple strongly causal feedback loops & port forward (connector with multiple targets)
-    "component Comp15 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  a.b.F sub1; " +
-      "  a.b.G sub2; " +
-      "  i -> sub1.i1; " +
-      "  sub1.o -> sub2.i1, sub2.i2; " +
-      "  sub2.o -> sub1.i2, o; " +
-      "}",
-    // Strongly causal feedback loops with nested sink and source
-    "component Comp16 { " +
-      "  a.b.K sub; " +
-      "  sub.o -> sub.i; " +
-      "}",
-    // directly strongly causal with behavior declaring the delay
-    "component Comp17 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  component Inner inner {" +
-      "    port in int i;" +
-      "    port out int o;" +
-      "    <<delayed>> automaton {}" +
-      "  }" +
-      "  i -> inner.i; inner.o -> o; " +
-      "}",
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -194,7 +68,8 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -208,101 +83,300 @@ public class FeedbackStrongCausalityTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    Assertions.assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> validModels() {
+    return Stream.of(
+      // component without subcomponents
+      arg("""
+        component ValidComp1 { }
+        """
+      ),
+      // subcomponent without ports
+      arg("""
+        component ValidComp2 {
+          a.b.A sub;
+        }
+        """
+      ),
+      // input forward to sink
+      arg("""
+        component ValidComp3 {
+          port in int i;
+          a.b.B sub;
+          i -> sub.i;
+        }
+        """
+      ),
+      // output forward from source
+      arg("""
+        component ValidComp4 {
+          port out int o;
+          a.b.E sub;
+          sub.o -> o;
+        }
+        """
+      ),
+      // direct strongly causal feedback loop
+      arg("""
+        component ValidComp5 {
+          a.b.D sub;
+          sub.o -> sub.i;
+        }
+        """
+      ),
+      // direct strongly causal feedback loop with input and output forward
+      arg("""
+        component ValidComp6 {
+          port in int i;
+          port out int o;
+          a.b.F sub;
+          i -> sub.i1;
+          sub.o -> sub.i2;
+          sub.o -> o;
+        }
+        """
+      ),
+      // indirect strongly causal feedback loop
+      arg("""
+        component ValidComp7 {
+          a.b.D sub1;
+          a.b.E sub2;
+          sub1.o -> sub2.i;
+          sub2.o -> sub1.i;
+        }
+        """
+      ),
+      // strongly causal feedback loop with input and output forward
+      arg("""
+        component ValidComp8 {
+          port in int i;
+          port out int o;
+          a.b.G sub1;
+          a.b.D sub2;
+          i -> sub1.i1;
+          sub1.o -> sub2.i;
+          sub2.o -> sub1.i2;
+          sub2.o -> o;
+        }
+        """
+      ),
+      // direct strongly causal feedback loop & nested subcomponent
+      arg("""
+        component ValidComp9 {
+          a.b.H sub;
+          sub.o -> sub.i;
+        }
+        """
+      ),
+      // indirect strongly causal feedback loop & nested subcomponent
+      arg("""
+        component ValidComp10 {
+          a.b.J sub;
+          sub.o -> sub.i;
+        }
+        """
+      ),
+      // multiple strongly causal feedback loops & port forward
+      arg("""
+        component ValidComp11 {
+          port in int i;
+          port out int o;
+          a.b.G sub1;
+          a.b.F sub2;
+          i -> sub1.i1;
+          sub1.o -> sub2.i1;
+          sub1.o -> sub2.i2;
+          sub2.o -> sub1.i2;
+          sub2.o -> o;
+        }
+        """
+      ),
+      // multiple strongly causal feedback loops & port forward
+      arg("""
+        component ValidComp12 {
+          port in int i;
+          port out int o;
+          a.b.F sub1;
+          a.b.G sub2;
+          i -> sub1.i1;
+          sub1.o -> sub2.i1;
+          sub1.o -> sub2.i2;
+          sub2.o -> sub1.i2;
+          sub2.o -> o;
+        }
+        """
+      ),
+      // multiple strongly causal feedback loops & port forward (connector with multiple targets)
+      arg("""
+        component ValidComp13 {
+          port in int i;
+          port out int o;
+          a.b.G sub1;
+          a.b.F sub2;
+          i -> sub1.i1;
+          sub1.o -> sub2.i1, sub2.i2;
+          sub2.o -> sub1.i2, o;
+        }
+        """
+      ),
+      // multiple strongly causal feedback loops & port forward (connector with multiple targets)
+      arg("""
+        component ValidComp14 {
+          port in int i;
+          port out int o;
+          a.b.F sub1;
+          a.b.G sub2;
+          i -> sub1.i1;
+          sub1.o -> sub2.i1, sub2.i2;
+          sub2.o -> sub1.i2, o;
+        }
+        """
+      ),
+      // Strongly causal feedback loops with nested sink and source
+      arg("""
+        component ValidComp15 {
+          a.b.K sub;
+          sub.o -> sub.i;
+        }
+        """
+      ),
+      // directly strongly causal with behavior declaring the delay
+      arg("""
+        component ValidComp16 {
+          port in int i;
+          port out int o;
+          component Inner inner {
+            port in int i;
+            port out int o;
+            <<delayed>> automaton {}
+          }
+          i -> inner.i; inner.o -> o;
+        }
+        """
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModels() {
     return Stream.of(
       // direct non strongly causal feedback loop
-      arg("component Comp1 { " +
-          "  a.b.E sub; " +
-          "  sub.o -> sub.i; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp1 {
+            a.b.E sub;
+            sub.o -> sub.i;
+          }
+          """,
+        FEEDBACK_CAUSALITY
+      ),
       // direct non strongly causal feedback loop & port forward
-      arg("component Comp2 { " +
-          "  port in int i; " +
-          "  port out int o; " +
-          "  a.b.G sub; " +
-          "  i -> sub.i1; " +
-          "  sub.o -> sub.i2; " +
-          "  sub.o -> o; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp2 {
+            port in int i;
+            port out int o;
+            a.b.G sub;
+            i -> sub.i1;
+            sub.o -> sub.i2;
+            sub.o -> o;
+          }
+          """,
+        FEEDBACK_CAUSALITY
+      ),
       // non strongly causal feedback loop
-      arg("component Comp3 { " +
-          "  a.b.E sub1; " +
-          "  a.b.E sub2; " +
-          "  sub1.o -> sub2.i; " +
-          "  sub2.o -> sub1.i; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp3 {
+            a.b.E sub1;
+            a.b.E sub2;
+            sub1.o -> sub2.i;
+            sub2.o -> sub1.i;
+          }
+          """,
+        FEEDBACK_CAUSALITY
+      ),
       // non strongly causal feedback loop & port forward
-      arg("component Comp4 { " +
-          "  port in int i; " +
-          "  port out int o; " +
-          "  a.b.G sub1; " +
-          "  a.b.E sub2; " +
-          "  i -> sub1.i1; " +
-          "  sub1.o -> sub2.i; " +
-          "  sub2.o -> sub1.i2; " +
-          "  sub2.o -> o; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp4 {
+            port in int i;
+            port out int o;
+            a.b.G sub1;
+            a.b.E sub2;
+            i -> sub1.i1;
+            sub1.o -> sub2.i;
+            sub2.o -> sub1.i2;
+            sub2.o -> o;
+          }
+          """,
+        FEEDBACK_CAUSALITY
+      ),
       // direct non strongly causal feedback loop & nested subcomponent
-      arg("component Comp5 { " +
-          "  a.b.I sub; " +
-          "  sub.o -> sub.i; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp5 {
+            a.b.I sub;
+            sub.o -> sub.i;
+          }
+          """,
+        FEEDBACK_CAUSALITY
+      ),
       // multiple direct non strongly causal feedback loops
-      arg("component Comp6 { " +
-          "  a.b.G sub; " +
-          "  sub.o -> sub.i1; " +
-          "  sub.o -> sub.i2; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp6 {
+            a.b.G sub;
+            sub.o -> sub.i1;
+            sub.o -> sub.i2;
+          }
+          """,
+        FEEDBACK_CAUSALITY,
+        FEEDBACK_CAUSALITY
+      ),
       // multiple non strongly causal feedback loops
-      arg("component Comp7 { " +
-          "  a.b.G sub1; " +
-          "  a.b.E sub2; " +
-          "  a.b.E sub3; " +
-          "  sub1.o -> sub2.i; " +
-          "  sub1.o -> sub3.i; " +
-          "  sub2.o -> sub1.i1; " +
-          "  sub3.o -> sub1.i2; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp7 {
+            a.b.G sub1;
+            a.b.E sub2;
+            a.b.E sub3;
+            sub1.o -> sub2.i;
+            sub1.o -> sub3.i;
+            sub2.o -> sub1.i1;
+            sub3.o -> sub1.i2;
+          }
+          """,
+        FEEDBACK_CAUSALITY,
+        FEEDBACK_CAUSALITY
+      ),
       // multiple non strongly causal feedback loops & port forward
-      arg("component Comp8 { " +
-          "  port in int i; " +
-          "  port out int o; " +
-          "  a.b.G sub1; " +
-          "  a.b.G sub2; " +
-          "  i -> sub1.i1; " +
-          "  sub1.o -> sub2.i1; " +
-          "  sub1.o -> sub2.i2; " +
-          "  sub2.o -> sub1.i2; " +
-          "  sub2.o -> o; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY),
+      arg("""
+          component InvalidComp8 {
+            port in int i;
+            port out int o;
+            a.b.G sub1;
+            a.b.G sub2;
+            i -> sub1.i1;
+            sub1.o -> sub2.i1;
+            sub1.o -> sub2.i2;
+            sub2.o -> sub1.i2;
+            sub2.o -> o;
+          }
+          """,
+        FEEDBACK_CAUSALITY,
+        FEEDBACK_CAUSALITY
+      ),
       // multiple non strongly causal feedback loops & port forward (connector with multiple targets)
-      arg("component Comp9 { " +
-          "  port in int i; " +
-          "  port out int o; " +
-          "  a.b.G sub1; " +
-          "  a.b.G sub2; " +
-          "  i -> sub1.i1; " +
-          "  sub1.o -> sub2.i1, sub2.i2; " +
-          "  sub2.o -> sub1.i2, o; " +
-          "}",
-        ArcError.FEEDBACK_CAUSALITY,
-        ArcError.FEEDBACK_CAUSALITY)
+      arg("""
+          component InvalidComp9 {
+            port in int i;
+            port out int o;
+            a.b.G sub1;
+            a.b.G sub2;
+            i -> sub1.i1;
+            sub1.o -> sub2.i1, sub2.i2;
+            sub2.o -> sub1.i2, o;
+          }
+          """,
+        FEEDBACK_CAUSALITY,
+        FEEDBACK_CAUSALITY
+      )
     );
   }
 }
