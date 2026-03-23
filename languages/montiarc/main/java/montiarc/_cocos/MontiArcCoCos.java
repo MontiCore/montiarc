@@ -25,11 +25,11 @@ import arcbasis._cocos.ConnectorTypesFit;
 import arcbasis._cocos.FeedbackStrongCausality;
 import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
+import arcbasis._cocos.NoComponentReferenceCycle;
 import arcbasis._cocos.NoPortInDefaultParameterValue;
 import arcbasis._cocos.NoPortInFieldDeclaration;
 import arcbasis._cocos.NoPortInSubcomponentArgument;
 import arcbasis._cocos.NoPortInSuperComponentArgument;
-import arcbasis._cocos.NoComponentReferenceCycle;
 import arcbasis._cocos.OnlyAssignmentOrCallExpressionStatement;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
@@ -91,7 +91,6 @@ import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.FeedbackStrongCausality4Family;
 import variablearc._cocos.NoPortInConstraint;
 import variablearc._cocos.NoPortInVarIfCondition;
-import variablearc._cocos.PortHeritageTypeFits4Family;
 import variablearc._cocos.PortUniqueSender4Family;
 import variablearc._cocos.PortsConnected4Family;
 import variablearc._cocos.SubPortsConnected4Family;
@@ -166,11 +165,8 @@ public class MontiArcCoCos {
     }
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoComponentReferenceCycle());
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new PortHeritageTypeFits4Family());
-    } else {
-      checker.addCoCo(new PortHeritageTypeFits());
-    }
+    checker.addCoCo(new PortHeritageTimingFits());
+    checker.addCoCo(new PortHeritageTypeFits());
     checker.addCoCo(new FieldInitTypeFits());
     checker.addCoCo(new ParameterDefaultValueTypeFits());
     if (checkVariants) {
@@ -298,7 +294,6 @@ public class MontiArcCoCos {
     // MontiArc CoCos
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
     checker.addCoCo(new RootNoInstance());
-    checker.addCoCo(new PortHeritageTimingFits());
     checker.addCoCo(new ImportedSymbolExists());
 
     // ComfortableArc Cocos
