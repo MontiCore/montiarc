@@ -158,7 +158,7 @@ public abstract class AbstractComponent<I, B extends Behavior<I>>
 
   @Override
   public final void handleMessage(InPort<?> p) {
-    Log.info(() -> DataFormatter.format(portValueOf(p)), this.getName() + "#" + Aspects.RECEIVE_EVENT);
+    Log.info(() -> DataFormatter.format(portValueOf(p)), p.getQualifiedName() + "#" + Aspects.RECEIVE_EVENT);
     this.processMessage(p);
   }
 
