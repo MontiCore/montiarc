@@ -64,17 +64,21 @@ expression
 any input port is a valid trigger. If no event trigger is specified, then the 
 transition is triggered by discrete time progress.
 
-* `/ { ACTION }` (optional) the actions that are executed when taking the 
-transition where `ACTION` is a list of statements.
+* `/ { ACTION }` (optional) the [actions](./Automata.md#actions) that are executed when taking the 
+transition.
 
 !!! info "Hint" 
     If a transition does **not** specify an event trigger (i.e., no port name is written after the guard or at all), then this transition is called an _epsilon transition_ or _time-triggered transition_. It is executed at each simulation time step.
 
-## Entry and Exit Actions
+## Actions
 
-A state may define entry and exit actions that are executed when entering 
-respectively exiting the state. A state with both entry and exit actions 
-looks like 
+`ACTION`s describe the reaction to a stimulus. They may be added to a state as entry- and/or exit-action or to a transition as an action. 
+`ACTION`s are a list of [statements](../Concepts/Statements.md) that are executed when a state is entered, left, or when a transition is taken.
+
+### Entry and Exit Actions
+
+A state may define entry and exit actions that are executed when entering exiting the state, respectively.
+A state with both entry and exit actions looks like 
 
 ```montiarc
 state S {
@@ -84,6 +88,87 @@ state S {
 ```
 
 where `ACTION1` and `ACTION2` are each a list of statements.
+
+In this example the input port is shadowed when entering the state `S`. After assigning `0` to `i`, the value of `i` (`= 0`) is written on port `o`. 
+```montiarc
+component Comp {
+  port in int i;
+  port out int o; 
+  automaton { 
+    initial state S { 
+      entry / { 
+        int i = 0; 
+        o = i; 
+      }
+    }
+  }
+}
+```
+
+### Further Action Examples
+
+!!! info "Note"
+      The `ACTION`s described below, which are executed when a transition is taken, can **also** be used in entry and exit actions. 
+      Note also that this is only a collection of examples that are intended to provide a general overview and to serve as a starting point.
+
+`ACTION`s can be used for writing values on ports,
+```montiarc
+component Comp {
+  port in int i;
+  port out int o;
+  
+  automaton {
+    initial state S;
+    S -> S [i > 1] / { o = 42; }
+  }
+}
+```
+
+Including loops,
+```montiarc
+component Comp {
+  port in int i;
+  port out int o;
+
+  automaton {
+    initial state S;
+    S -> S [i == 1] / { 
+      for (int j = 0; j <= 10; j++) { 
+         o = j; 
+      } 
+    }
+  }
+}
+``` 
+
+Assigning values to variables,
+```montiarc
+component Comp {
+  port in int i;
+  port out int o;
+  
+  boolean b;
+  
+  automaton {
+    initial state S;
+    S -> S [i == 1] / { b = true; }
+  }
+}
+``` 
+
+or for Executing functions
+```montiarc
+component Comp {
+  port in int i;
+  port out int o;
+  
+  automaton {
+    initial state S;
+    S -> S [i == 1] / { foo.someMethodCall(); }
+  }
+}
+``` 
+
 
 ## Hierarchical States
 
