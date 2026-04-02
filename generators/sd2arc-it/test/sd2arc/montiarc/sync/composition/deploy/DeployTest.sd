@@ -7,12 +7,18 @@ import montiarc.types.OnOff;
 sequencediagram DeployTest {
   parallel;
 
-  parallel.o1 -> : OnOff.OFF;
-  parallel.o2 -> : OnOff.OFF;
+  Tick {
+    parallel.o1 -> : OnOff.OFF;
+    parallel.o2 -> : OnOff.OFF;
+  }
 
-  parallel.o1 -> : OnOff.OFF;
-  parallel.o2 -> : OnOff.OFF;
+  Tick {
+    parallel.o1 -> : OnOff.OFF;
+    parallel.o2 -> : OnOff.OFF;
+  }
 
-  parallel.o1 -> : OnOff.OFF;
-  parallel.o2 -> : OnOff.OFF;
+  Tick {
+    parallel.o1 -> : OnOff.OFF;
+    parallel.o2 -> : OnOff.OFF;
+  }
 }

@@ -1,5 +1,6 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- ASTSequenceDiagram ast -->
+<#-- @ftlvariable name="helper" type="de.monticore.sd2arc.codegen.SDHelper" -->
   component AssertOrder__ assertOrder__ {
 
 <#list helper.getVisibleComponents(ast) as comp>
@@ -64,6 +65,7 @@
         ${element.getName()} = ${prettyPrinter.prettyprint(element.getAssignment())};
     </#if>
   </#list>
+      <#if (stateCount == 0)>}</#if>
       }
       state S${stateCount} {
         entry / {
@@ -77,6 +79,7 @@
       }
 
   <#-- manual star transiton -->
+  <#if (stateCount > 0)>
   <#list 0..stateCount-1 as i>
     <#list helper.getVisibleComponents(ast) as comp>
       <#list helper.getComponentPorts(comp) as portSymbol>
@@ -93,6 +96,7 @@
       S${i} -> S${i} [countedTicks < ${helper.tickLength(ast)}] / {countedTicks = countedTicks + 1;}
 
   </#list>
+  </#if>
     }
   }
 

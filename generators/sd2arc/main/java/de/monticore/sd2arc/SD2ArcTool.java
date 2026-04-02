@@ -40,7 +40,11 @@ public class SD2ArcTool extends SD4ComponentsTool {
 
   @Override
   public ASTSDArtifact parse(String model) {
-    return CompleteInteractionsTrafo.transform(AddAdjacentSubcomponents.transform(EmbeddingComponent.inject(AddDefaultMatchToComponents.transform(super.parse(model)))));
+    ASTSDArtifact artifact = super.parse(model);
+    if (artifact != null) {
+      return CompleteInteractionsTrafo.transform(AddAdjacentSubcomponents.transform(EmbeddingComponent.inject(AddDefaultMatchToComponents.transform(artifact))));
+    }
+    return artifact;
   }
 
   @Override
