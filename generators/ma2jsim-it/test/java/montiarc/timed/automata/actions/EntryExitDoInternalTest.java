@@ -51,21 +51,12 @@ class EntryExitDoInternalTest {
   static Stream<Arguments> io() {
     return Stream.of(
       Arguments.of(
-        List.of(msg("noop"), msg("noop"), tk(), tk(), msg("noop"), msg("noop"), tk()),
-        List.of(msg("Enter A"),                              // <- Initial state entered
-                msg("Do A"), tk(),                           // <- Action of first time frame
-                msg("Do A"), tk(),  // <- Action of second time frame
-                msg("Do A"), tk())                           // <- ...
-      ),
-      /*  // This test case is deactivated, because internal transitions are not yet supported. It would replace the one above
-      Arguments.of(
         List.of(msg("noop"), tk(), msg("internal"), tk(), tk()),
         List.of(msg("Enter A"),                              // <- Initial state entered
                 msg("Do A"), tk(),                           // <- Action of first time frame
                 msg("internal A"), msg("Do A"), tk(),  // <- Action of second time frame
                 msg("Do A"), tk())                           // <- ...
       ),
-      */
       Arguments.of(
         List.of(msg("loop"), msg("loop"), tk()),
         List.of(msg("Enter A"),

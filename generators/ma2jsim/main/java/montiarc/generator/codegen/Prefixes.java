@@ -23,6 +23,7 @@ public class Prefixes {
   public final static String GETTER_METHOD = "get_";
   public final static String STATE = "state_";
   public final static String TRANSITION = "transition_";
+  public final static String INNER_TRANSITION = "inner_transition_";
   public final static String MESSAGE = "msg_";
   public final static String TICK = "tick_";
   public final static String NO_STIMULUS = "noStimulus_";
@@ -40,6 +41,7 @@ public class Prefixes {
   public String getterMethod() { return GETTER_METHOD; }
   public String state() { return STATE; }
   public String transition() { return TRANSITION; }
+  public String innerTransition() { return INNER_TRANSITION; }
   public String message() { return MESSAGE; }
   public String tick() { return TICK; }
   public String noStimulus() { return NO_STIMULUS; }

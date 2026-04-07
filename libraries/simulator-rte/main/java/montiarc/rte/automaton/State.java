@@ -17,7 +17,9 @@ public class State {
   protected Action<NoInput> exitAction;
   protected Action<NoInput> doAction;
 
-  /** Nullable parameters: {@code initAction, entryAction, exitAction, doAction} */
+  /**
+   * Nullable parameters: {@code initAction, entryAction, exitAction, doAction}
+   */
   public State(String name,
                List<State> substates,
                List<State> initialSubstates,
@@ -49,19 +51,25 @@ public class State {
     return this.name;
   }
 
-  /** Executes the entry action of exactly this state (and no sub states) */
+  /**
+   * Executes the entry action of exactly this state (and no sub states)
+   */
   public void enter() {
     if (this.entryAction != null) this.entryAction.execute(null);
   }
 
-  /** Executes the entry action of this state and after that of all sub states */
+  /**
+   * Executes the entry action of this state and after that of all sub states
+   */
   public void enterWithSub() {
     enter();
     if (!initialSubstates.isEmpty())
       getDirectInitialSubstate().orElseThrow().enterWithSub();
   }
 
-  /** Executes the exit action of exactly this state (and no sub state) */
+  /**
+   * Executes the exit action of exactly this state (and no sub state)
+   */
   public void exit() {
     if (this.exitAction != null) this.exitAction.execute(null);
   }
@@ -72,14 +80,23 @@ public class State {
    */
   public void exitSub(State source) {
     if (isSubstate(source)) {
-      getSubstates().forEach(s -> s.exitSub(source));
+      exitSubSkipSelf(source);
       this.exit();
     } else if (source == this) {
       this.exit();
     }
   }
 
-  /** Executes the do action of exactly this state */
+  /**
+   * Executes the exit action of all sub states of this state, but not the exit action of this state itself.
+   */
+  public void exitSubSkipSelf(State source) {
+    getSubstates().forEach(s -> s.exitSub(source));
+  }
+
+  /**
+   * Executes the do action of exactly this state
+   */
   public void doAction() {
     if (this.doAction != null) {
       this.doAction.execute(null);

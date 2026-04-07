@@ -11,7 +11,7 @@ ${tc.signature("automaton")}
 <#assign syncedPorts = helper.getComponentHelper().getSyncedInPortsOf(ast.getSymbol())/>
 <#assign hasSyncedPorts = syncedPorts?size gt 0/>
 <#assign tickMsgType = hasSyncedPorts?then(syncMsgType, "montiarc.rte.automaton.NoInput")/>
-
+<#assign portList = ast.getSymbol().getAllIncomingPorts()/>
 
 
 <#if hasSyncedPorts>
@@ -25,6 +25,11 @@ protected ${ast.getName()}${suffixes.states()}${helper.getVariantHelper().varian
 <#assign transitionsForTickEvent = helper.getBehaviorHelper().getTransitionsWithoutEvent(automaton)/>
 <#list transitionsForTickEvent as transition>
   protected montiarc.rte.automaton.Transition<${tickMsgType}> ${prefixes.transition()}tick_${transition?counter};
+</#list>
+
+<#assign innerTransitionsForTickEvent = helper.getBehaviorHelper().getInnerTransitionsWithoutTrigger(automaton)/>
+<#list innerTransitionsForTickEvent as transition>
+  protected montiarc.rte.automaton.Transition<${tickMsgType}> ${prefixes.innerTransition()}tick_${transition?counter};
 </#list>
 
 protected ${compAutomatonClass} (
@@ -43,37 +48,63 @@ protected ${compAutomatonClass} (
     </#if>
   </#list>
 
+  <#-- Create inner transitions objects on tick events -->
+  <#list innerTransitionsForTickEvent as transition>
+    ${prefixes.innerTransition()}tick_${transition?counter} =
+    <#if syncedPorts?size == 0>
+       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, true, false, []])};
+    <#else>
+       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, false, true, syncedPorts])};
+    </#if>
+  </#list>
+
   <#-- Create transition objects for message-triggered transitions. -->
-  <#list helper.getBehaviorHelper().getTransitionsForPortEvents(ast, automaton) as port, transitions>
-    <#assign portName = port.getName()>
-    <#list transitions as transition>
-    <#-- Transition objects -->
-    ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter} =
-      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, false, false, [port]])};
+  <#list portList as port>
+    <#assign portName = port.getName()/>
+
+    <#assign msgTriggeredTransitions = helper.getBehaviorHelper().getAllTransitionsForPortWithEventTrigger(ast, automaton, port)/>
+    <#list msgTriggeredTransitions as transition>
+      <#-- Transition objects -->
+      ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter} =
+        ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, transition, false, false, [port]])};
+    </#list>
+
+    <#assign msgTriggeredInnerTransitions = helper.getBehaviorHelper().getAllInnerTransitionsForPortWithEventTrigger(ast, automaton, port)/>
+    <#list msgTriggeredInnerTransitions as innerTransition>
+        <#-- InnerTransition objects -->
+        ${prefixes.innerTransition()}${prefixes.message()}${portName}_${innerTransition?counter} =
+          ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/TransitionBuilderCall.ftl", [automaton, innerTransition, false, false, [port]])};
     </#list>
   </#list>
+
 }
 
-<#-- Generate method that executes tick-triggered transitions on tick events (if enabled). -->
+<#-- Generate method that executes tick-triggered (inner) transitions on tick events (if enabled). -->
 @Override
 public void tick(${syncMsgType} syncedInputs) {
   <#assign transitionArg =  hasSyncedPorts?then("syncedInputs", "null")/>
-  <#list transitionsForTickEvent>
-    java.util.Map<Integer, montiarc.rte.automaton.Transition<${tickMsgType}>> enabledTransitions = new java.util.LinkedHashMap<>(${transitionsForTickEvent?size});
+  <#assign transitionsSize = transitionsForTickEvent?size + innerTransitionsForTickEvent?size/>
+  java.util.Map<Integer, montiarc.rte.automaton.Transition<${tickMsgType}>> enabledTransitions = new java.util.LinkedHashMap<>(${transitionsSize});
 
-    <#items as tr>
-    <#assign transition_field = prefixes.transition() + prefixes.tick() + tr?counter>
-      if(${transition_field}.isEnabled(state, ${transitionArg})) {
-        enabledTransitions.put(enabledTransitions.size(), ${transition_field});
-      }
-    </#items>
-
-    if (!enabledTransitions.isEmpty()) {
-      getContext().getOracle()
-        .decideAmong(enabledTransitions)
-        .execute(this, ${transitionArg});
+  <#list transitionsForTickEvent as tr>
+    <#assign transition_field = prefixes.transition() + prefixes.tick() + tr?counter/>
+    if(${transition_field}.isEnabled(state, ${transitionArg})) {
+       enabledTransitions.put(enabledTransitions.size(), ${transition_field});
     }
   </#list>
+
+  <#list innerTransitionsForTickEvent as tr>
+     <#assign transition_field = prefixes.innerTransition() + prefixes.tick() + tr?counter/>
+     if(${transition_field}.isEnabled(state, ${transitionArg})) {
+        enabledTransitions.put(enabledTransitions.size(), ${transition_field});
+     }
+  </#list>
+
+  if (!enabledTransitions.isEmpty()) {
+    getContext().getOracle()
+      .decideAmong(enabledTransitions)
+      .execute(this, ${transitionArg});
+  }
 
   this.getState().doActionWithSuper();
 }
@@ -81,48 +112,60 @@ public void tick(${syncMsgType} syncedInputs) {
 <#-- Declare transition objects for message-triggered transitions.
   -- Also create methods for the triggering input ports, executing these transitions.
   -->
-<#list helper.getBehaviorHelper().getTransitionsForPortEvents(ast, automaton) as port, transitions>
-  <#assign portName = port.getName()>
-  <#list transitions as transition>
-    <#-- Transition objects -->
-    protected montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>> ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter};
-  </#list>
-
-  <#-- Methods for the triggering input port, to execute matching transitions. -->
-  @Override
-  public void ${prefixes.message()}${portName}${helper.getVariantHelper().portVariantSuffix(ast, port)}(<@Util.getTypeString port.getType()/> msg) {
-
-  <#list transitions>
-    java.util.Map<Integer, montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>>> enabledTransitions = new java.util.LinkedHashMap<>(${transitions?size});
-
-    <#items as tr>
-    <#assign transition_field = prefixes.transition() + prefixes.message() + portName + "_" + tr?counter>
-      if(${transition_field}.isEnabled(state, msg)) {
-        enabledTransitions.put(enabledTransitions.size(), ${transition_field});
-      }
-    </#items>
-
-    if (!enabledTransitions.isEmpty()) {
-      getContext().getOracle()
-        .decideAmong(enabledTransitions)
-        .execute(this, msg);
-    }
-  </#list>
-  }
-</#list>
-
-<#-- Methods for input ports that do not trigger any behavior. Such methods have not been create yet,
-  -- but are a required part of the automaton API.
-  -->
-<#list helper.getBehaviorHelper().getInPortsNotTriggeringAnyTransition(automaton, ast) as port>
+<#list portList as port>
+  <#assign portName = port.getName()/>
   <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}</#assign>
 
-  @Override
-  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
-    <#if helper.getComponentHelper().isSync(port)>
-      de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
-    </#if>
-  }
+  <#assign msgTriggeredTransitions = helper.getBehaviorHelper().getAllTransitionsForPortWithEventTrigger(ast, automaton, port)/>
+  <#list msgTriggeredTransitions as transition>
+      <#-- Transition objects -->
+      protected montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>> ${prefixes.transition()}${prefixes.message()}${portName}_${transition?counter};
+  </#list>
+
+  <#assign msgTriggeredInnerTransitions = helper.getBehaviorHelper().getAllInnerTransitionsForPortWithEventTrigger(ast, automaton, port)/>
+  <#list msgTriggeredInnerTransitions as innerTransition>
+      <#-- InnerTransition objects -->
+      protected montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>> ${prefixes.innerTransition()}${prefixes.message()}${portName}_${innerTransition?counter};
+  </#list>
+
+  <#assign transitionsSize = msgTriggeredTransitions?size + msgTriggeredInnerTransitions?size/>
+  <#if transitionsSize gt 0>
+    <#-- Methods for the triggering input port, to execute matching transitions. -->
+    @Override
+    public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
+      java.util.Map<Integer, montiarc.rte.automaton.Transition<<@Util.getTypeString port.getType() true/>>> enabledTransitions = new java.util.LinkedHashMap<>(${transitionsSize});
+
+      <#list msgTriggeredTransitions as tr>
+        <#assign transition_field = prefixes.transition() + prefixes.message() + portName + "_" + tr?counter/>
+        if(${transition_field}.isEnabled(state, msg)) {
+          enabledTransitions.put(enabledTransitions.size(), ${transition_field});
+        }
+      </#list>
+
+      <#list msgTriggeredInnerTransitions as tr>
+        <#assign transition_field = prefixes.innerTransition() + prefixes.message() + portName + "_" + tr?counter/>
+        if(${transition_field}.isEnabled(state, msg)) {
+          enabledTransitions.put(enabledTransitions.size(), ${transition_field});
+        }
+      </#list>
+
+      if (!enabledTransitions.isEmpty()) {
+        getContext().getOracle()
+          .decideAmong(enabledTransitions)
+          .execute(this, msg);
+      }
+    }
+  <#else>
+    <#-- Methods for input ports that do not trigger any behavior. Such methods have not been create yet,
+    -- but are a required part of the automaton API.
+    -->
+    @Override
+    public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
+      <#if helper.getComponentHelper().isSync(port)>
+        de.se_rwth.commons.logging.Log.warn("Event behavior method was illegally called for synchronous port '${port.getName()}'.");
+      </#if>
+    }
+  </#if>
 </#list>
 
 <#-- Methods for ports from other variants of the same component -->

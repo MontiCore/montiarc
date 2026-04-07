@@ -16,12 +16,12 @@ import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
+import de.monticore.scstatehierarchy._ast.ASTSCInternTransition;
 import de.monticore.scstateinvariants._ast.ASTSCInvState;
 import de.monticore.sctransitions4code._ast.ASTTransitionAction;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCStatement;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.monticore.symboltable.ISymbol;
 import montiarc.MontiArcMill;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import variablearc._ast.ASTVariantArcComponentType;
@@ -58,19 +58,6 @@ public class BehaviorHelper {
     return component.getBody().streamArcElementsOfType(ASTArcInit.class).findFirst();
   }
 
-  /**
-   * Get all transitions from the given statechart that are triggered by a message stimulus.
-   * Messages are grouped by triggering port event name.
-   *
-   * @param enclosingComponent the component the statechart is a part of
-   * @param sc                 the statechart from which transitions should be extracted
-   * @return event-triggered transitions grouped by triggering port
-   */
-  public Map<PortSymbol, List<ASTSCTransition>> getTransitionsForPortEvents(ASTArcComponentType enclosingComponent, ASTArcStatechart sc) {
-    return getTransitionsMappedToPortTriggers(enclosingComponent, sc.streamTransitions());
-  }
-
-
   protected Map<PortSymbol, List<ASTSCTransition>> getTransitionsMappedToPortTriggers(ASTArcComponentType enclosingComponent, Stream<ASTSCTransition> transitions) {
     Map<PortSymbol, List<ASTSCTransition>> result = new HashMap<>();
     transitions.forEach(tr -> {
@@ -96,6 +83,105 @@ public class BehaviorHelper {
     } else {
       return Optional.empty();
     }
+  }
+
+
+  public List<ASTSCTransition> getAllTransitionsForPortWithEventTrigger(ASTArcComponentType enclosingComponent, ASTArcStatechart sc, PortSymbol port) {
+    return getAllTransitionsForPort(enclosingComponent, sc.streamTransitions(), port);
+  }
+
+
+  public List<ASTSCTransition> getAllTransitionsForPort(ASTArcComponentType enclosingComponent, Stream<ASTSCTransition> transitions, PortSymbol port) {
+    List<ASTSCTransition> result = new ArrayList<>();
+
+    transitions.forEach(tr -> {
+      Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
+      if (body.isEmpty()) return;
+      Optional<PortSymbol> trigger = getTriggeringPortSymbol(enclosingComponent, body.get());
+      if (trigger.isEmpty()) return;
+      if (trigger.get().getName().equals(port.getName())) {
+        result.add(tr);
+      }
+    });
+    return result;
+  }
+
+
+  public List<ASTSCInternTransition> getAllInnerTransitionsForPortWithEventTrigger(ASTArcComponentType enclosingComponent, ASTArcStatechart sc, PortSymbol port) {
+    List<ASTSCInternTransition> result = new ArrayList<>();
+
+    List<ASTSCInternTransition> transitions = getInnerTransitions(sc);
+
+    transitions.forEach(tr -> {
+      Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
+      if (body.isEmpty()) return;
+      Optional<PortSymbol> trigger = getTriggeringPortSymbol(enclosingComponent, body.get());
+      if (trigger.isEmpty()) return;
+
+      if (trigger.get().getName().equals(port.getName())) {
+        result.add(tr);
+      }
+    });
+    return result;
+  }
+
+
+  public List<ASTSCInternTransition> getInnerTransitionsWithoutTrigger(ASTArcStatechart sc) {
+    List<ASTSCInternTransition> transitions = this.getInnerTransitions(sc);
+
+    ArrayList<ASTSCInternTransition> result = new ArrayList<>();
+    transitions.forEach(tr -> {
+      Optional<ASTTransitionBody> body = getASTTransitionBody(tr);
+      if (body.isEmpty() || !body.get().isPresentSCEvent()) {
+        result.add(tr);
+      }
+    });
+    return result;
+  }
+
+
+  public boolean isInnerTransition(ASTSCStateElement transition) {
+    return MontiArcMill.typeDispatcher().isSCStateHierarchyASTSCInternTransition(transition);
+  }
+
+
+  public List<ASTSCInternTransition> getInnerTransitions(ASTArcStatechart sc) {
+    List<ASTSCInternTransition> result = new ArrayList<>();
+    for (ASTSCState state : sc.getStates()) {
+      Optional<ASTSCHierarchyBody> bodyOpt = getBodyOfHierarchicalState(state);
+      if (bodyOpt.isEmpty()) continue;
+
+      for (ASTSCStateElement elem : bodyOpt.get().getSCStateElementList()) {
+        if (MontiArcMill.typeDispatcher().isSCStateHierarchyASTSCInternTransition(elem)) {
+          ASTSCInternTransition innerTr =
+            MontiArcMill.typeDispatcher().asSCStateHierarchyASTSCInternTransition(elem);
+          result.add(innerTr);
+        }
+      }
+    }
+    return result;
+  }
+
+
+  public Optional<ASTTransitionBody> getASTTransitionBody(ASTSCInternTransition transition) {
+    if (transition.getSCTBody() instanceof ASTTransitionBody) {
+      return Optional.of((ASTTransitionBody) transition.getSCTBody());
+    }
+    return Optional.empty();
+  }
+
+
+  public ASTSCState getInnerTransitionState(ASTArcStatechart sc, ASTSCInternTransition transition) {
+    for (ASTSCState state : sc.getStates()) {
+      Optional<ASTSCHierarchyBody> bodyOpt = getBodyOfHierarchicalState(state);
+      if (bodyOpt.isEmpty()) continue;
+      for (ASTSCStateElement elem : bodyOpt.get().getSCStateElementList()) {
+        if (elem == transition) {
+          return state;
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -142,15 +228,6 @@ public class BehaviorHelper {
       .filter(Optional::isPresent)
       .filter(sym -> sym.get() instanceof Port2EventDefAdapter)
       .map(sym -> ((Port2EventDefAdapter) sym.get()).getAdaptee());
-  }
-
-  public List<PortSymbol> getInPortsNotTriggeringAnyTransition(ASTArcStatechart sc, ASTArcComponentType comp) {
-    List<String> triggeringPorts = getTransitionsForPortEvents(comp, sc).keySet().stream()
-      .map(ISymbol::getName)
-      .map(String::toLowerCase).collect(Collectors.toList());
-    return comp.getSymbol().getAllIncomingPorts().stream()
-      .filter(p -> !triggeringPorts.contains(p.getName().toLowerCase()))
-      .collect(Collectors.toList());
   }
 
 

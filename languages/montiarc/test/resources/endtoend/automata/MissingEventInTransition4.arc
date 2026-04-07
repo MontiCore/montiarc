@@ -2,7 +2,7 @@
 package automata;
 
 /*
- * Invalid model: The msg event 'msg' of the internal transition is missing
+ * Invalid model: The msg event 'msg' of the inner transition is missing
  * (the event symbol cannot be resolved).
  */
 component MissingEventInTransition4 {
