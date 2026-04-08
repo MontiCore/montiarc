@@ -2,6 +2,8 @@
 package montiarc.statements;
 
 import montiarc.types.OnOff;
+import montiarc.types.OnOff.ON;
+import montiarc.types.OnOff.OFF;
 
 component SwitchConditional {
 
@@ -18,6 +20,10 @@ component SwitchConditional {
         case 1: o = 1; break;
         case 2: o = 2; break;
         default: o = -1; break;
+      }
+      switch (i) {
+        default: o = -1; break;
+        case 1: o = 1; break;
       }
     }
     S -> S c / {
@@ -39,6 +45,13 @@ component SwitchConditional {
       switch (e) {
         case OnOff.ON: o = 1; break;
         case OnOff.OFF: o = 2; break;
+        default: o = -1; break;
+      }
+    }
+    S -> S e / {
+      switch (e) {
+        case ON: o = 1; break;
+        case OFF: o = 2; break;
         default: o = -1; break;
       }
     }

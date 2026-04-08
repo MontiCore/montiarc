@@ -29,18 +29,18 @@ class SwitchConditionTest {
 
   @ParameterizedTest
   @CsvSource(value = {
-    "1, 1",
-    "2, 2",
-    "-1, -1"
+    "1, 1, 1",
+    "2, 2, -1",
+    "-1, -1, -1"
   })
-  void testInt(int i, int o) {
+  void testInt(int i, int o1, int o2) {
     // When
     sut.port_i().receive(msg(i));
 
     sut.runToCompletion();
 
     // Then
-    assertThat(port_o.getObservedMessages()).containsExactly(msg(o));
+    assertThat(port_o.getObservedMessages()).containsExactly(msg(o1), msg(o2));
   }
 
   @ParameterizedTest
