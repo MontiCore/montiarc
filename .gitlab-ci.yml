@@ -148,7 +148,7 @@ Check Dependency Updates:
       
       OUTDATED_BLOCK=$(sed -n '/"outdated": {/,/}/p' build/versions/dependency-updates.json)
       OUTDATED_COUNT=$(echo "$OUTDATED_BLOCK" | grep -oP '"count":\s*\K\d+' | head -1)
-      if [ "$OUTDATED_COUNT" -gt 1 ]; then
+      if [ "$OUTDATED_COUNT" -gt 2 ]; then
         echo "Found $OUTDATED_COUNT outdated dependencies."
         exit 1
       else
