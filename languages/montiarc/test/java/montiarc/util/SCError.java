@@ -17,7 +17,7 @@ import static de.monticore.scbasis._cocos.TransitionSourceTargetExists.CANT_FIND
  * infrastructure
  */
 public enum SCError implements Error {
-  DUPLICATE_STATE(UniqueStates.ERROR_CODE, ""),
+  DUPLICATE_STATE(UniqueStates.ERROR_CODE, "State names must be unique but %s was duplicated."),
   MORE_THAN_ONE_INITIAL_STATE(MaxOneInitialState.ERROR_CODE, ""),
   MISSING_INITIAL_STATE(AtLeastOneInitialState.ERROR_CODE, "Statecharts need at least one initial state."),
   STATE_NAME_NOT_CAPITAL(CapitalStateNames.ERROR_CODE, ""),

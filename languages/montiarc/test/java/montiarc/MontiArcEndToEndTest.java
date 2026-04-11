@@ -60,6 +60,7 @@ import static montiarc.util.ModesError.MODE_CONTAINS_PORT_DEFINITION;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
+import static montiarc.util.SCError.DUPLICATE_STATE;
 import static montiarc.util.SCError.MISSING_INITIAL_STATE;
 import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
 import static montiarc.util.VariableArcError.FEATURE_UPPER_CASE;
@@ -170,6 +171,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModelAndErrorProvider() {
     return Stream.of(
+      arg("DuplicateStatesTest1",
+        mpk(PKG_AUT, "DuplicateStates1.arc"),
+        fn(ERROR, PKG_AUT, "DuplicateStates1.arc", 13, 5, 13, 14, DUPLICATE_STATE, "s2")
+      ),
+      arg("DuplicateStatesTest2",
+        mpk(PKG_AUT, "DuplicateStates2.arc"),
+        fn(ERROR, PKG_AUT, "DuplicateStates2.arc", 16, 7, 18, 8, DUPLICATE_STATE, "s3")
+      ),
       arg("MissingEventInTransitionTest1",
         mpk(PKG_AUT, "MissingEventInTransition1.arc"),
         fn(ERROR, PKG_AUT, "MissingEventInTransition1.arc", 11, 12, 11, 15, CANT_FIND_MSG_EVENT_SYMBOL, "msg")
