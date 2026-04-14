@@ -47,6 +47,7 @@ import static montiarc.util.ArcError.OPTIONAL_PARAMS_LAST;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.PARAMETER_UPPER_CASE;
+import static montiarc.util.ArcError.PARAM_DEFAULT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 import static montiarc.util.ArcError.PORT_UPPER_CASE;
 import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
@@ -571,6 +572,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("SelfReferentialComponentTest5",
         mpk(PKG_COMP, "SelfReferentialComponent5A.arc"),
         fn(ERROR, PKG_COMP, "SelfReferentialComponent5A.arc", 13, 30, 13, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent5A", "SelfReferentialComponent5A -> SelfReferentialComponent5B -> SelfReferentialComponent5A")
+      ),
+      arg("TypeMismatchOfDefaultParameterValueTest",
+        mpk(PKG_COMP, "TypeMismatchOfDefaultParameterValue.arc"),
+        fn(ERROR, PKG_COMP, "TypeMismatchOfDefaultParameterValue.arc", 7, 59, 7, 73, PARAM_DEFAULT_TYPE_MISMATCH, "int", "boolean")
       ),
       arg("AutoconnectInAtomicTest1",
         mpk(PKG_CPOS, "AutoconnectInAtomic1.arc"),
