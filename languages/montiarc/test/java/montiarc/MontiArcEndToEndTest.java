@@ -1,6 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
+import arcautomaton._cocos.NoInputPortInEntryAction;
+import arcautomaton._cocos.NoInputPortInExitAction;
+import arcautomaton._cocos.NoNonSyncInputPortInDoAction;
+import arcautomaton._cocos.NoNonSyncInputPortInEpsilonTransition;
+import arcautomaton._cocos.NoOtherInputPortInMsgTransition;
+import arccompute._cocos.NoInputPortsInInitialCompute;
+import arccompute._cocos.NoNonSyncInputPortInCompute;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Finding;
@@ -84,6 +91,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   private final static String PKG_CPOS = "composition";
 
+  private final static String PKG_CB = "compute";
+
   private final static String PKG_STMT = "statements";
 
   private final static String PKG_VARI = "variability";
@@ -125,7 +134,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   @MethodSource("invalidModelAndError4VariabilityProvider")
   @DisableIfDisplayName(contains = {
     "CircularInheritanceTest7",
-    "NoInputPortInEntryAction",
     "NameClash",
     "SelfReferentialComponentWithCompositionTest",
     "PortMultipleSender",
@@ -179,6 +187,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("DuplicateStatesTest2",
         mpk(PKG_AUT, "DuplicateStates2.arc"),
         fn(ERROR, PKG_AUT, "DuplicateStates2.arc", 16, 7, 18, 8, DUPLICATE_STATE, "s3")
+      ),
+      arg("InputPortInEntryActionTest",
+        mpk(PKG_AUT, "InputPortInEntryAction.arc"),
+        fn(ERROR, PKG_AUT, "InputPortInEntryAction.arc", 13, 25, 13, 26, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoInputPortInEntryAction.CONTEXT)
+      ),
+      arg("InputPortInExitActionTest",
+        mpk(PKG_AUT, "InputPortInExitAction.arc"),
+        fn(ERROR, PKG_AUT, "InputPortInExitAction.arc", 13, 24, 13, 25, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoInputPortInExitAction.CONTEXT)
       ),
       arg("MissingEventInTransitionTest1",
         mpk(PKG_AUT, "MissingEventInTransition1.arc"),
@@ -330,9 +346,17 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_AUT, "NoInitialState2.arc"),
         fn(ERROR, PKG_AUT, "NoInitialState2.arc", 9, 5, 9, 18, MISSING_INITIAL_STATE)
       ),
-      arg("NoInputPortInEntryActionTest",
-        mpk(PKG_AUT, "NoInputPortInEntryAction.arc"),
-        fn(ERROR, PKG_AUT, "NoInputPortInEntryAction.arc", 13, 25, 13, 26, IN_PORT_REF_IN_INVALID_CONTEXT, "i", "entry actions")
+      arg("NonSyncInputPortInDoActionTest",
+        mpk(PKG_AUT, "NonSyncInputPortInDoAction.arc"),
+        fn(ERROR, PKG_AUT, "NonSyncInputPortInDoAction.arc", 13, 17, 13, 18, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoNonSyncInputPortInDoAction.CONTEXT)
+      ),
+      arg("NonSyncInputPortInEpsilonTransitionTest",
+        mpk(PKG_AUT, "NonSyncInputPortInEpsilonTransition.arc"),
+        fn(ERROR, PKG_AUT, "NonSyncInputPortInEpsilonTransition.arc", 13, 15, 13, 16, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoNonSyncInputPortInEpsilonTransition.CONTEXT)
+      ),
+      arg("NonMsgInputPortInMsgTransitionTest",
+        mpk(PKG_AUT, "NonMsgInputPortInMsgTransition.arc"),
+        fn(ERROR, PKG_AUT, "NonMsgInputPortInMsgTransition.arc", 13, 15, 13, 17, IN_PORT_REF_IN_INVALID_CONTEXT, "i2", NoOtherInputPortInMsgTransition.CONTEXT)
       ),
       arg("CircularFieldDependencyTest1",
         mpk(PKG_COMP, "CircularFieldDependency1.arc"),
@@ -769,6 +793,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_CPOS, "SelfReferentialComponentWithComposition.arc"),
         fn(ERROR, PKG_CPOS, "SelfReferentialComponentWithComposition.arc", 13, 39, 13, 43, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentWithComposition", "SelfReferentialComponentWithComposition -> SelfReferentialComponentWithComposition"),
         fn(ERROR, PKG_CPOS, "SelfReferentialComponentWithComposition.arc", 13, 45, 13, 49, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponentWithComposition", "SelfReferentialComponentWithComposition -> SelfReferentialComponentWithComposition")
+      ),
+      arg("InputPortInInitialComputeTest",
+        mpk(PKG_CB, "InputPortInInitialCompute.arc"),
+        fn(ERROR, PKG_CB, "InputPortInInitialCompute.arc", 12, 13, 12, 14, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoInputPortsInInitialCompute.CONTEXT)
+      ),
+      arg("NonSyncInputPortInComputeTest",
+        mpk(PKG_CB, "NonSyncInputPortInCompute.arc"),
+        fn(ERROR, PKG_CB, "NonSyncInputPortInCompute.arc", 11, 13, 11, 14, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoNonSyncInputPortInCompute.CONTEXT)
       ),
       arg("ConstraintNoAssignmentExpressionTest",
         mpk(PKG_VARI, "ConstraintNoAssignmentExpression.arc"),

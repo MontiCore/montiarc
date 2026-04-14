@@ -11,7 +11,6 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Status;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.scactions._ast.ASTSCExitAction;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTNameCollector;
@@ -35,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static arcautomaton._cocos.NoInputPortInExitAction.CONTEXT;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 
 public class NoInputPortInExitAction4Family implements ArcBasisASTArcComponentTypeCoCo {
@@ -130,11 +130,7 @@ public class NoInputPortInExitAction4Family implements ArcBasisASTArcComponentTy
       ASTNameCollector nameCollector = new ASTNameCollector();
       nameTraverser.add4ExpressionsBasis(nameCollector);
       actionEntry.getKey().getSCABody().accept(nameTraverser);
-      List<String> variableNames = new ArrayList<>();
-
-      for (ASTNameExpression nameExpression : nameCollector.getExpressions()) {
-        variableNames.add(nameExpression.getName());
-      }
+      List<ASTNameExpression> nameExpressions = nameCollector.getExpressions();
 
       MontiArcTraverser variableTraverser = MontiArcMill.traverser();
       ASTVariableDeclaratorCollector variableCollector = new ASTVariableDeclaratorCollector();
@@ -142,8 +138,9 @@ public class NoInputPortInExitAction4Family implements ArcBasisASTArcComponentTy
       actionEntry.getKey().getSCABody().accept(variableTraverser);
 
       // Step 3: Check if there is a potential violation
-      if (!variableNames.isEmpty()) {
-        for (String variableName : variableNames) {
+      if (!nameExpressions.isEmpty()) {
+        for (ASTNameExpression nameExpression : nameExpressions) {
+          String variableName = nameExpression.getName();
           // Check if there are fields shadowing ports
           var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
           var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
@@ -153,8 +150,9 @@ public class NoInputPortInExitAction4Family implements ArcBasisASTArcComponentTy
             actionEntryExpressionList.addAll(List.of(featureConstraints, actionEntry.getValue(), entry.getValue()));
             if (ExpressionSolverService.solve(actionEntryExpressionList) == Status.SATISFIABLE) {
               if (shadowingFields.isEmpty()) {
-                SourcePosition sourcePosition = actionEntry.getKey().get_SourcePositionStart();
-                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, actionEntry.getKey().getSCABody()), sourcePosition);
+                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                  nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                );
               }
             }
           }

@@ -13,7 +13,6 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Status;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTNameCollector;
@@ -38,6 +37,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static arcautomaton.ArcAutomatonMill.typeDispatcher;
+import static arcautomaton._cocos.NoOtherInputPortInMsgTransition.CONTEXT;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 
 public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcComponentTypeCoCo {
@@ -137,11 +137,7 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
       ASTNameCollector nameCollector = new ASTNameCollector();
       nameTraverser.add4ExpressionsBasis(nameCollector);
       transitionEntry.getKey().accept(nameTraverser);
-      List<String> variableNames = new ArrayList<>();
-
-      for (ASTNameExpression nameExpression : nameCollector.getExpressions()) {
-        variableNames.add(nameExpression.getName());
-      }
+      List<ASTNameExpression> nameExpressions = nameCollector.getExpressions();
 
       MontiArcTraverser variableTraverser = MontiArcMill.traverser();
       ASTVariableDeclaratorCollector variableCollector = new ASTVariableDeclaratorCollector();
@@ -154,8 +150,9 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
         event = typeDispatcher().asArcAutomatonASTMsgEvent(transitionEntry.getKey().getSCEvent()).getName();
 
       // Step 3: Check if there is a potential violation
-      if (!variableNames.isEmpty()) {
-        for (String variableName : variableNames) {
+      if (!nameExpressions.isEmpty()) {
+        for (ASTNameExpression nameExpression : nameExpressions) {
+          String variableName = nameExpression.getName();
           // Check if there are fields shadowing ports
           var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
           var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
@@ -169,8 +166,9 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
             transitionEntryExpressionList.addAll(List.of(featureConstraints, transitionEntry.getValue(), entry.getValue()));
             if (ExpressionSolverService.solve(transitionEntryExpressionList) == Status.SATISFIABLE) {
               if (shadowingFields.isEmpty()) {
-                SourcePosition sourcePosition = transitionEntry.getKey().get_SourcePositionStart();
-                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, transitionEntry.getKey()), sourcePosition);
+                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                  nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                );
               }
             }
           }

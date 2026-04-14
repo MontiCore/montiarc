@@ -14,7 +14,6 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTNameCollector;
@@ -38,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import static arcautomaton._cocos.NoNonSyncInputPortInEpsilonTransition.CONTEXT;
 import static de.monticore.symbols.compsymbols._symboltable.Timing.TIMED_SYNC;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 
@@ -135,11 +135,7 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
       ASTNameCollector nameCollector = new ASTNameCollector();
       nameTraverser.add4ExpressionsBasis(nameCollector);
       doEntry.getKey().accept(nameTraverser);
-      List<String> variableNames = new ArrayList<>();
-
-      for (ASTNameExpression nameExpression : nameCollector.getExpressions()) {
-        variableNames.add(nameExpression.getName());
-      }
+      List<ASTNameExpression> nameExprs = new ArrayList<>(nameCollector.getExpressions());
 
       MontiArcTraverser variableTraverser = MontiArcMill.traverser();
       ASTVariableDeclaratorCollector variableCollector = new ASTVariableDeclaratorCollector();
@@ -147,8 +143,10 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
       doEntry.getKey().accept(variableTraverser);
 
       // Step 3: Check if there is a potential violation
-      if (!variableNames.isEmpty()) {
-        for (String variableName : variableNames) {
+      if (!nameExprs.isEmpty()) {
+        for (ASTNameExpression nameExpr : nameExprs) {
+          String variableName = nameExpr.getName();
+
           // Check if there are fields shadowing ports
           IArcBasisScope scope = (IArcBasisScope) doEntry.getKey().getEnclosingScope();
           List<VariableSymbol> ports = scope.resolveVariableMany(variableName, this.getVariablePredicate());
@@ -178,8 +176,9 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
                   PortSymbol port = ((Port2VariableAdapter) portSymbol).getAdaptee();
                   if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
                     if (shadowingFields.isEmpty()) {
-                      SourcePosition sourcePosition = node.get_SourcePositionStart();
-                      Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, doEntry.getKey()), sourcePosition);
+                      Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                        nameExpr.get_SourcePositionStart(), nameExpr.get_SourcePositionEnd()
+                      );
                     }
                   }
                 }
@@ -189,8 +188,9 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
                 PortSymbol port = ((Port2VariableAdapter) ports.get(0)).getAdaptee();
                 if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
                   if (shadowingFields.isEmpty()) {
-                    SourcePosition sourcePosition = node.get_SourcePositionStart();
-                    Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, doEntry.getKey()), sourcePosition);
+                    Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                      nameExpr.get_SourcePositionStart(), nameExpr.get_SourcePositionEnd()
+                    );
                   }
                 }
               }

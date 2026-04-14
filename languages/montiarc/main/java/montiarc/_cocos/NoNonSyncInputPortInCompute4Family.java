@@ -10,7 +10,6 @@ import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Status;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTArcComputeCollector;
@@ -34,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static arccompute._cocos.NoNonSyncInputPortInCompute.CONTEXT;
 import static de.monticore.symbols.compsymbols._symboltable.Timing.TIMED_SYNC;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 
@@ -121,11 +121,7 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
       ASTNameCollector nameCollector = new ASTNameCollector();
       nameTraverser.add4ExpressionsBasis(nameCollector);
       computeEntry.getKey().accept(nameTraverser);
-      List<String> variableNames = new ArrayList<>();
-
-      for (ASTNameExpression nameExpression : nameCollector.getExpressions()) {
-        variableNames.add(nameExpression.getName());
-      }
+      List<ASTNameExpression> nameExpressions = nameCollector.getExpressions();
 
       MontiArcTraverser variableTraverser = MontiArcMill.traverser();
       ASTVariableDeclaratorCollector variableCollector = new ASTVariableDeclaratorCollector();
@@ -133,8 +129,9 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
       computeEntry.getKey().accept(variableTraverser);
 
       // Step 3: Check if there is a potential violation
-      if (!variableNames.isEmpty()) {
-        for (String variableName : variableNames) {
+      if (!nameExpressions.isEmpty()) {
+        for (ASTNameExpression nameExpression : nameExpressions) {
+          String variableName = nameExpression.getName();
           // Check if there are fields shadowing ports
           var shadowingFields = variableCollector.getDeclarators().stream().filter(e -> e.getDeclarator().getName().equals(variableName)).toList();
           var possiblePorts = portConditions.entrySet().stream().filter(e -> e.getKey().getName().equals(variableName)).collect(Collectors.toList());
@@ -144,8 +141,9 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
             computeEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
             if (ExpressionSolverService.solve(computeEntryExpressionList) == Status.SATISFIABLE) {
               if (shadowingFields.isEmpty()) {
-                SourcePosition sourcePosition = computeEntry.getKey().get_SourcePositionStart();
-                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, computeEntry.getKey()), sourcePosition);
+                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                  nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                );
               }
             }
             computeEntryExpressionList.clear();

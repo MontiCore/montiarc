@@ -19,7 +19,7 @@ import static arcautomaton.ArcAutomatonMill.typeDispatcher;
 public class NoOtherInputPortInMsgTransition implements SCTransitions4CodeASTTransitionBodyCoCo {
 
   // A human-readable description of the context in which this check is applied
-  protected final static String context = "this message-event triggered transition";
+  public final static String CONTEXT = "this message-event triggered transition";
 
   @Override
   public void check(@NotNull ASTTransitionBody node) {
@@ -38,6 +38,6 @@ public class NoOtherInputPortInMsgTransition implements SCTransitions4CodeASTTra
   protected NoOtherInputPortInEventContextVisitor createVisitor(@NotNull String event) {
     Preconditions.checkNotNull(event);
     Preconditions.checkArgument(!event.isBlank());
-    return new NoOtherInputPortInEventContextVisitor(event, context);
+    return new NoOtherInputPortInEventContextVisitor(event, CONTEXT);
   }
 }

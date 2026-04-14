@@ -7,7 +7,6 @@ import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Port2VariableAdapter;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
 
@@ -57,8 +56,8 @@ public class NoOtherInputPortInEventContextVisitor implements ExpressionsBasisVi
 
     if (ports.size() == 1 && ports.get(0) instanceof Port2VariableAdapter
       && ((Port2VariableAdapter) ports.get(0)).getAdaptee().isIncoming()) {
-      SourcePosition sourcePosition = node.get_SourcePositionStart();
-      Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(name, this.context), sourcePosition);
+      Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(name, this.context),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
     }
   }
 

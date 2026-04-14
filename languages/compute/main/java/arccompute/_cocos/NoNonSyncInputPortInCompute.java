@@ -16,14 +16,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class NoNonSyncInputPortInCompute implements ArcComputeASTArcComputeCoCo {
 
   // A human-readable description of the context in which this check is applied
-  protected final static String context = "compute blocks";
+  public final static String CONTEXT = "compute blocks";
 
   // When executing the coco, we traverse the ast using a traverser,
   // applying the included visitor only in the context of compute blocks.
   protected final ArcComputeTraverser traverser;
 
   public NoNonSyncInputPortInCompute() {
-    this(new NoNonSyncInputPortInContextVisitor(context));
+    this(new NoNonSyncInputPortInContextVisitor(CONTEXT));
   }
 
   protected NoNonSyncInputPortInCompute(@NotNull ExpressionsBasisVisitor2 visit4BasisExpr) {

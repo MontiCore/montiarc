@@ -17,14 +17,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class NoNonSyncInputPortInDoAction implements SCDoActionsASTSCDoActionCoCo {
 
   // A human-readable description of the context in which this check is applied
-  protected final static String context = "do actions";
+  public final static String CONTEXT = "do actions";
 
   // When executing the coco, we traverse the ast using a traverser,
   // applying the included visitor only in the context of do actions.
   protected final ArcAutomatonTraverser traverser;
 
   public NoNonSyncInputPortInDoAction() {
-    this(new NoNonSyncInputPortInContextVisitor(context));
+    this(new NoNonSyncInputPortInContextVisitor(CONTEXT));
   }
 
   protected NoNonSyncInputPortInDoAction(@NotNull ExpressionsBasisVisitor2 visit4BasisExpr) {

@@ -2,9 +2,9 @@
 package automata;
 
 /**
- * Invalid model: An input port is referenced in a variable declaration inside an entry action.
+ * Invalid model: An input port is referenced inside an entry action.
  */
-component NoInputPortInEntryAction {
+component InputPortInEntryAction {
 
   port in int i;
 

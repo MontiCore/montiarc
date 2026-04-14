@@ -18,14 +18,14 @@ import org.codehaus.commons.nullanalysis.NotNull;
 public class NoInputPortInExitAction implements SCActionsASTSCExitActionCoCo {
 
   // A human-readable description of the context in which this check is applied
-  protected final static String context = "exit actions";
+  public final static String CONTEXT = "exit actions";
 
   // When executing the coco, we traverse the ast using a traverser,
   // applying the included visitor only in the context of exit actions.
   protected final ArcAutomatonTraverser traverser;
 
   public NoInputPortInExitAction() {
-    this(new NoInputPortInContextVisitor(context));
+    this(new NoInputPortInContextVisitor(CONTEXT));
   }
 
   protected NoInputPortInExitAction(@NotNull ExpressionsBasisVisitor2 visit4BasisExpr) {
