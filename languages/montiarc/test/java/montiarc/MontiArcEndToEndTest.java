@@ -44,6 +44,7 @@ import static montiarc.util.ArcError.PORT_UPPER_CASE;
 import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.SUBCOMPONENT_UPPER_CASE;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
+import static montiarc.util.ArcError.TYPE_ARG_IGNORES_UPPER_BOUND;
 import static montiarc.util.ArcError.TYPE_PARAMETER_UPPER_CASE;
 import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.ArcError.UNSUPPORTED_MODEL_ELEMENT;
@@ -895,6 +896,11 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_MODES, "PortInMode2.arc"),
         fn(ERROR, PKG_MODES, "PortInMode2.arc", 11, 19, 11, 22, MODE_CONTAINS_PORT_DEFINITION, "pIn"),
         fn(ERROR, PKG_MODES, "PortInMode2.arc", 14, 23, 14, 27, MODE_CONTAINS_PORT_DEFINITION, "pOut")
+      ),
+      arg("PrimitiveTypeParameterBoundsTest",
+        mpk(PKG_COMP, "PrimitiveTypeParameterBounds.arc"),
+        fn(ERROR, PKG_COMP, "PrimitiveTypeParameterBounds.arc", 13, 26, 13, 39, TYPE_ARG_IGNORES_UPPER_BOUND, "boolean", "int"),
+        fn(ERROR, PKG_COMP, "PrimitiveTypeParameterBounds.arc", 16, 26, 16, 39, TYPE_ARG_IGNORES_UPPER_BOUND, "Boolean", "Integer")
       )
     );
   }
