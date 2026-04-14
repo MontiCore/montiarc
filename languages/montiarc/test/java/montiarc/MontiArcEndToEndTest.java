@@ -43,6 +43,7 @@ import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.MISSING_PORT;
 import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
 import static montiarc.util.ArcError.MULTIPLE_BEHAVIOR;
+import static montiarc.util.ArcError.OPTIONAL_PARAMS_LAST;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static montiarc.util.ArcError.PARAMETER_UPPER_CASE;
@@ -520,6 +521,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 19, 9, 19, 15, FIELD_UPPER_CASE),
         fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 32, 14, 32, 26, SUBCOMPONENT_UPPER_CASE),
         fn(WARNING, PKG_COMP, "NamesCapitalization2.arc", 32, 28, 32, 35, SUBCOMPONENT_UPPER_CASE)
+      ),
+      arg("OptionalBeforeMandatoryParameterTest",
+        mpk(PKG_COMP, "OptionalBeforeMandatoryParameter.arc"),
+        fn(ERROR, PKG_COMP, "OptionalBeforeMandatoryParameter.arc", 9, 56, 9, 62, OPTIONAL_PARAMS_LAST, "p2", "p1")
       ),
       arg("PortUnusedTest1",
         mpk(PKG_COMP, "PortUnused1.arc"),
