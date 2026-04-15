@@ -10,57 +10,24 @@ import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._visitor.MontiArcTraverser;
 import montiarc.util.Error;
-import montiarc.util.SCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.SCError.MISSING_INITIAL_STATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link AtLeastOneInitialState}.
  */
-public class AtLeastOneInitialStateTest extends MontiArcTestBase {
+class AtLeastOneInitialStateTest extends MontiArcTestBase {
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // no automaton
-    "component Comp1 { }",
-    // automaton with initial state
-    "component Comp2 { " +
-      "automaton { " +
-      "initial state s; " +
-      "} " +
-      "}",
-    // automaton with two initial states
-    "component Comp3 { " +
-      "automaton { " +
-      "initial state s1; " +
-      "initial state s2; " +
-      "} " +
-      "}",
-    // inner automaton with initial states
-    "component Comp4 { " +
-      "component Inner { " +
-      "automaton { " +
-      "initial state s; " +
-      "} " +
-      "} " +
-      "}",
-    //
-    // mode automaton with initial state
-    "component Comp5 { " +
-      "mode automaton { " +
-      "initial mode s { } " +
-      "} " +
-      "}",
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -75,12 +42,13 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -96,75 +64,156 @@ public class AtLeastOneInitialStateTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes()).as(Log.getFindings().toString())
+    assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // no automaton
+      arg("component ValidComp1 { }"),
+      // automaton with initial state
+      arg(
+        """
+          component ValidComp2 {
+            automaton {
+              initial state s;
+            }
+          }
+          """
+      ),
+      // automaton with two initial states
+      arg(
+        """
+          component ValidComp3 {
+            automaton {
+              initial state s1;
+              initial state s2;
+            }
+          }
+          """
+      ),
+      // inner automaton with initial state
+      arg(
+        """
+          component ValidComp4 {
+            component Inner {
+              automaton {
+                initial state s;
+              }
+            }
+          }
+          """
+      ),
+      // mode automaton with initial state
+      arg(
+        """
+          component ValidComp5 {
+            mode automaton {
+              initial mode s { }
+            }
+          }
+          """
+      )
+    );
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // automaton no initial state
-      arg("component Comp1 { " +
-          "automaton { } " +
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // inner automaton no initial state
-      arg("component Comp2 { " +
-          "component Inner { " +
-          "automaton { } " +
-          "} " +
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // inner with initial state and outer automaton
-      arg("component Comp3 { " +
-          "automaton { } " +
-          "component Inner { " +
-          "automaton { " +
-          "initial state s; " +
-          "} " +
-          "} " +
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // outer with initial state and inner automaton
-      arg("component Comp4 { " +
-          "automaton { " +
-          "initial state s; " +
-          "} " +
-          "component Inner { " +
-          "automaton { } " +
-          "} " +
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // mode automaton no initial state
-      arg("component Comp5 { " +
-          "mode automaton { } " +
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // mode automaton no initial state and automaton
-      arg("component Comp6 { " +
-          "mode automaton { } " +
-          "automaton { " +
-          "initial state s; " +
-          "} "+
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // automaton no initial state and mode automaton
-      arg("component Comp7 { " +
-          "automaton { } " +
-          "mode automaton { " +
-          "initial mode s { } " +
-          "} "+
-          "}",
-        SCError.MISSING_INITIAL_STATE),
-      // automaton no initial state, but inner initial state
-      arg("component Comp8 { " +
-          "automaton { "  +
-          "state s { "+
-          "initial state inners;" +
-          "}" +
-          "}" +
-          "}",
-        SCError.MISSING_INITIAL_STATE)
+      // automaton without initial state
+      arg(
+        """
+          component InvalidComp1 {
+            automaton { }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // inner automaton without initial state
+      arg(
+        """
+          component InvalidComp2 {
+            component Inner {
+              automaton { }
+            }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // outer automaton without initial state, inner automaton with initial state
+      arg(
+        """
+          component InvalidComp3 {
+            automaton { }
+            component Inner {
+              automaton {
+                initial state s;
+              }
+            }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // outer automaton with initial state, inner automaton without initial state
+      arg(
+        """
+          component InvalidComp4 {
+            automaton {
+              initial state s;
+            }
+            component Inner {
+              automaton { }
+            }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // mode automaton without initial state
+      arg(
+        """
+          component InvalidComp5 {
+            mode automaton { }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // mode automaton without initial state, automaton with initial state
+      arg(
+        """
+          component InvalidComp6 {
+            mode automaton { }
+            automaton {
+              initial state s;
+            }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // automaton without initial state, mode automaton with initial state
+      arg(
+        """
+          component InvalidComp7 {
+            automaton { }
+            mode automaton {
+              initial mode s { }
+            }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      ),
+      // automaton without a top-level initial state, only within a nested state
+      arg(
+        """
+          component InvalidComp8 {
+            automaton {
+              state s {
+                initial state inners;
+              }
+            }
+          }
+          """,
+        MISSING_INITIAL_STATE
+      )
     );
   }
 }
