@@ -6,69 +6,31 @@ import comfortablearc._cocos.AtomicNoAutoConnect;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ComfortableArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link AtomicNoAutoConnect}.
  */
-public class AtomicNoAutoConnectTest extends MontiArcTestBase {
+class AtomicNoAutoConnectTest extends MontiArcTestBase {
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     compile("component A { }");
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // atomic (empty) no autoconnect
-    "component Comp1 { } ",
-    // atomic (automaton) no autoconnect
-    "component Comp2 { " +
-      "automaton { } " +
-      "}",
-    // composed no autoconnect
-    "component Comp3 { " +
-      "A a; " +
-      "}",
-    // composed autoconnect port
-    "component Comp4 { " +
-      "A a; autoconnect port; " +
-      "}",
-    // composed autoconnect type
-    "component Comp5 { " +
-      "A a; " +
-      "autoconnect type; " +
-      "}",
-    // composed autoconnect off
-    "component Comp6 { " +
-      "A a; " +
-      "autoconnect off; " +
-      "}",
-    // composed (inner) no autoconnect
-    "component Comp7 { " +
-      "component Inner { } " +
-      "Inner sub; " +
-      "}",
-    // composed (inner) autoconnect
-    "component Comp8 { " +
-      "component Inner { } " +
-      "Inner sub; " +
-      "autoconnect port; " +
-      "}",
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -81,12 +43,13 @@ public class AtomicNoAutoConnectTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -100,54 +63,126 @@ public class AtomicNoAutoConnectTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // atomic (empty) no autoconnect
+      arg("component ValidComp1 { }"),
+      // atomic (automaton) no autoconnect
+      arg("""
+        component ValidComp2 {
+          automaton { }
+        }
+        """
+      ),
+      // composed no autoconnect
+      arg("""
+        component ValidComp3 {
+          A a;
+        }
+        """
+      ),
+      // composed autoconnect port
+      arg("""
+        component ValidComp4 {
+          A a; autoconnect port;
+        }
+        """
+      ),
+      // composed autoconnect type
+      arg("""
+        component ValidComp5 {
+          A a;
+          autoconnect type;
+        }
+        """
+      ),
+      // composed autoconnect off
+      arg("""
+        component ValidComp6 {
+          A a;
+          autoconnect off;
+        }
+        """
+      ),
+      // composed (inner) no autoconnect
+      arg("""
+        component ValidComp7 {
+          component Inner { }
+          Inner sub;
+        }
+        """
+      ),
+      // composed (inner) autoconnect
+      arg("""
+        component ValidComp8 {
+          component Inner { }
+          Inner sub;
+          autoconnect port;
+        }
+        """
+      )
+    );
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       // atomic (empty) autoconnect port
-      arg("component Comp1 { " +
-          "autoconnect port; " +
-          "}",
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT),
+      arg("""
+          component InvalidComp1 {
+            autoconnect port;
+          }
+          """,
+        AUTOCONNECT_IN_ATOMIC_COMPONENT
+      ),
       // atomic (empty) autoconnect type
-      arg("component Comp2 { " +
-          "autoconnect type; " +
-          "}",
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT),
-      // atomic (empty) autoconnect type
-      arg("component Comp3 { " +
-          "autoconnect off; " +
-          "}",
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT),
+      arg("""
+          component InvalidComp2 {
+            autoconnect type;
+          }
+          """,
+        AUTOCONNECT_IN_ATOMIC_COMPONENT
+      ),
+      // atomic (empty) autoconnect off
+      arg("""
+          component InvalidComp3 {
+            autoconnect off;
+          }
+          """,
+        AUTOCONNECT_IN_ATOMIC_COMPONENT
+      ),
       // atomic (automaton) autoconnect port
-      arg("component Comp4 { " +
-          "automaton { } " +
-          "autoconnect port; " +
-          "}",
-        // atomic (unused inner) autoconnect port
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT),
-      arg("component Comp5 { " +
-          "automaton { } " +
-          "autoconnect port; " +
-          "}",
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT),
+      arg("""
+          component InvalidComp4 {
+            automaton { }
+            autoconnect port;
+          }
+          """,
+        AUTOCONNECT_IN_ATOMIC_COMPONENT
+      ),
       // atomic two autoconnects
-      arg("component Comp6 { " +
-          "autoconnect port; " +
-          "autoconnect port; " +
-          "}",
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT),
+      arg("""
+          component InvalidComp5 {
+            autoconnect port;
+            autoconnect port;
+          }
+          """,
+        AUTOCONNECT_IN_ATOMIC_COMPONENT
+      ),
       // atomic inner autoconnect
-      arg("component Comp7 { " +
-        "component Inner { " +
-        "autoconnect port; " +
-        "} " +
-        "Inner sub; " +
-        "}",
-        ComfortableArcError.AUTOCONNECT_IN_ATOMIC_COMPONENT)
+      arg("""
+          component InvalidComp6 {
+            component Inner {
+              autoconnect port;
+            }
+            Inner sub;
+          }
+          """,
+        AUTOCONNECT_IN_ATOMIC_COMPONENT
+      )
     );
   }
 }
