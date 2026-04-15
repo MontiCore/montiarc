@@ -8,196 +8,24 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.MCError.EXPRESSION_LVALUE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Holds test for {@link AssignmentExpressionsOnlyAssignToLValuesCoCo}
+ * The class under test is {@link AssignmentExpressionsOnlyAssignToLValuesCoCo}.
  */
-public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTestBase {
+class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTestBase {
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // no assignment expression
-    "component Comp1 { }",
-    // assignment expression with parameter
-    "component Comp2(int p) { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "p = 1; " +
-      "} " +
-      "}}",
-    // assignment expression with field
-    "component Comp3 { " +
-      "int f = 1;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "f = 1; " +
-      "} " +
-      "}}",
-    // assignment expression with local variable
-    "component Comp4 { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "int v = 1; " +
-      "v = 2; " +
-      "} " +
-      "}}",
-    // assignment expression with port
-    "component Comp5 { " +
-      "port out int o;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "o = 2; " +
-      "} " +
-      "}}",
-    // increment expression with parameter
-    "component Comp6(int p) { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "p++; " +
-      "} " +
-      "}}",
-    // increment expression with field
-    "component Comp7 { " +
-      "int f = 1;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "f++; " +
-      "} " +
-      "}}",
-    // increment expression with local variable
-    "component Comp8 { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "int v = 1; " +
-      "v++; " +
-      "} " +
-      "}}",
-    // decrement expression with parameter
-    "component Comp9(int p) { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "p--; " +
-      "} " +
-      "}}",
-    // decrement expression with field
-    "component Comp10 { " +
-      "int f = 1;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "f--; " +
-      "} " +
-      "}}",
-    // decrement expression with local variable
-    "component Comp11 { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "int v = 1; " +
-      "v--; " +
-      "} " +
-      "}}",
-    // prefix increment expression with parameter
-    "component Comp12(int p) { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "++p; " +
-      "} " +
-      "}}",
-    // prefix increment expression with field
-    "component Comp13 { " +
-      "int f = 1;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "++f; " +
-      "} " +
-      "}}",
-    // prefix increment expression with local variable
-    "component Comp14 { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "int v = 1; " +
-      "++v; " +
-      "} " +
-      "}}",
-    // prefix decrement expression with parameter
-    "component Comp15(int p) { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "--p; " +
-      "} " +
-      "}}",
-    // prefix decrement expression with field
-    "component Comp16 { " +
-      "int f = 1;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "--f; " +
-      "} " +
-      "}}",
-    // prefix decrement expression with local variable
-    "component Comp17 { " +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "int v = 1; " +
-      "--v; " +
-      "} " +
-      "}}",
-    // assignment expression in compute
-    "component Comp18(int p) {" +
-      "port out int o;" +
-      "int f = 1;" +
-      "compute { " +
-      "int v = 0;" +
-      "p = 1; f = 1; v = 1; o = 1;" +
-      "p++; f++; v++; o++;" +
-      "p--; f--; v--; o--;" +
-      "++p; ++f; ++v; ++o;" +
-      "--p; --f; --v; --o;" +
-      "} " +
-      "}",
-    // nested assignment expression
-    "component Comp19 { " +
-      "port out int o;" +
-      "automaton { " +
-      "initial state s; " +
-      "s -> s / { " +
-      "int v = 1; " +
-      "o = v = 1; " +
-      "o = v++;" +
-      "o = v--;" +
-      "o = ++v;" +
-      "o = --v;" +
-      "o = o = v = v;" +
-      "} " +
-      "}}"
-  })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  @MethodSource("validModels")
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -210,12 +38,13 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -229,86 +58,389 @@ public class AssignmentExpressionsOnlyAssignToLValuesCoCoTest extends MontiArcTe
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
-    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // no assignment expression
+      arg("component ValidComp1 { }"),
+      // assignment expression with parameter
+      arg(
+        """
+          component ValidComp2(int p) {
+            automaton {
+              initial state s;
+              s -> s / {
+                p = 1;
+              }
+            }
+          }
+          """
+      ),
+      // assignment expression with field
+      arg(
+        """
+          component ValidComp3 {
+            int f = 1;
+            automaton {
+              initial state s;
+              s -> s / {
+                f = 1;
+              }
+            }
+          }
+          """
+      ),
+      // assignment expression with local variable
+      arg(
+        """
+          component ValidComp4 {
+            automaton {
+              initial state s;
+              s -> s / {
+                int v = 1;
+                v = 2;
+              }
+            }
+          }
+          """
+      ),
+      // assignment expression with port
+      arg(
+        """
+          component ValidComp5 {
+            port out int o;
+            automaton {
+              initial state s;
+              s -> s / {
+                o = 2;
+              }
+            }
+          }
+          """
+      ),
+      // increment expression with parameter
+      arg(
+        """
+          component ValidComp6(int p) {
+            automaton {
+              initial state s;
+              s -> s / {
+                p++;
+              }
+            }
+          }
+          """
+      ),
+      // increment expression with field
+      arg(
+        """
+          component ValidComp7 {
+            int f = 1;
+            automaton {
+              initial state s;
+              s -> s / {
+                f++;
+              }
+            }
+          }
+          """
+      ),
+      // increment expression with local variable
+      arg(
+        """
+          component ValidComp8 {
+            automaton {
+              initial state s;
+              s -> s / {
+                int v = 1;
+                v++;
+              }
+            }
+          }
+          """
+      ),
+      // decrement expression with parameter
+      arg(
+        """
+          component ValidComp9(int p) {
+            automaton {
+              initial state s;
+              s -> s / {
+                p--;
+              }
+            }
+          }
+          """
+      ),
+      // decrement expression with field
+      arg(
+        """
+          component ValidComp10 {
+            int f = 1;
+            automaton {
+              initial state s;
+              s -> s / {
+                f--;
+              }
+            }
+          }
+          """
+      ),
+      // decrement expression with local variable
+      arg(
+        """
+          component ValidComp11 {
+            automaton {
+              initial state s;
+              s -> s / {
+                int v = 1;
+                v--;
+              }
+            }
+          }
+          """
+      ),
+      // prefix increment expression with parameter
+      arg(
+        """
+          component ValidComp12(int p) {
+            automaton {
+              initial state s;
+              s -> s / {
+                ++p;
+              }
+            }
+          }
+          """
+      ),
+      // prefix increment expression with field
+      arg(
+        """
+          component ValidComp13 {
+            int f = 1;
+            automaton {
+              initial state s;
+              s -> s / {
+                ++f;
+              }
+            }
+          }
+          """
+      ),
+      // prefix increment expression with local variable
+      arg(
+        """
+          component ValidComp14 {
+            automaton {
+              initial state s;
+              s -> s / {
+                int v = 1;
+                ++v;
+              }
+            }
+          }
+          """
+      ),
+      // prefix decrement expression with parameter
+      arg(
+        """
+          component ValidComp15(int p) {
+            automaton {
+              initial state s;
+              s -> s / {
+                --p;
+              }
+            }
+          }
+          """
+      ),
+      // prefix decrement expression with field
+      arg(
+        """
+          component ValidComp16 {
+            int f = 1;
+            automaton {
+              initial state s;
+              s -> s / {
+                --f;
+              }
+            }
+          }
+          """
+      ),
+      // prefix decrement expression with local variable
+      arg(
+        """
+          component ValidComp17 {
+            automaton {
+              initial state s;
+              s -> s / {
+                int v = 1;
+                --v;
+              }
+            }
+          }
+          """
+      ),
+      // assignment, increment, and decrement expressions in a compute block
+      arg(
+        """
+          component ValidComp18(int p) {
+            port out int o;
+            int f = 1;
+            compute {
+              int v = 0;
+              p = 1; f = 1; v = 1; o = 1;
+              p++; f++; v++; o++;
+              p--; f--; v--; o--;
+              ++p; ++f; ++v; ++o;
+              --p; --f; --v; --o;
+            }
+          }
+          """
+      ),
+      // assignment, increment, and decrement expressions nested within another assignment expression
+      arg(
+        """
+          component ValidComp19 {
+            port out int o;
+            automaton {
+              initial state s;
+              s -> s / {
+                int v = 1;
+                o = v = 1;
+                o = v++;
+                o = v--;
+                o = ++v;
+                o = --v;
+                o = o = v = v;
+              }
+            }
+          }
+          """
+      )
+    );
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       // assignment expression with literal value
-      arg("component Comp1 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "0 = 1; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE),
-      // inc expression with literal value
-      arg("component Comp2 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "0++; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE),
-      // dec expression with literal value
-      arg("component Comp3 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "0--; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE),
-      // prefix inc expression with literal value
-      arg("component Comp4 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "--0; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE),
-      // prefix dec expression with literal value
-      arg("component Comp5 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "--0; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE),
+      arg(
+        """
+          component InvalidComp1 {
+            automaton {
+              initial state s;
+              s -> s / {
+                0 = 1;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      ),
+      // increment expression with literal value
+      arg(
+        """
+          component InvalidComp2 {
+            automaton {
+              initial state s;
+              s -> s / {
+                0++;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      ),
+      // decrement expression with literal value
+      arg(
+        """
+          component InvalidComp3 {
+            automaton {
+              initial state s;
+              s -> s / {
+                0--;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      ),
+      // prefix increment expression with literal value
+      arg(
+        """
+          component InvalidComp4 {
+            automaton {
+              initial state s;
+              s -> s / {
+                ++0;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      ),
+      // prefix decrement expression with literal value
+      arg(
+        """
+          component InvalidComp5 {
+            automaton {
+              initial state s;
+              s -> s / {
+                --0;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      ),
       // nested assignment expression with literal value
-      arg("component Comp6 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "int i = 1++; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE),
+      arg(
+        """
+          component InvalidComp6 {
+            automaton {
+              initial state s;
+              s -> s / {
+                int i = 1++;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      ),
       // multiple nested assignment expression with literal value
-      arg("component Comp7 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "1++ = 1 = 1; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE,
-        MCError.EXPRESSION_LVALUE,
-        MCError.EXPRESSION_LVALUE),
-      // assignment expression with function
-      arg("component Comp8 { " +
-          "automaton { " +
-          "initial state s; " +
-          "s -> s / { " +
-          "func() = 1; " +
-          "} " +
-          "}}",
-        MCError.EXPRESSION_LVALUE)
+      arg(
+        """
+          component InvalidComp7 {
+            automaton {
+              initial state s;
+              s -> s / {
+                1++ = 1 = 1;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE,
+        EXPRESSION_LVALUE,
+        EXPRESSION_LVALUE
+      ),
+      // assignment expression with function call
+      arg(
+        """
+          component InvalidComp8 {
+            automaton {
+              initial state s;
+              s -> s / {
+                func() = 1;
+              }
+            }
+          }
+          """,
+        EXPRESSION_LVALUE
+      )
     );
   }
 }
