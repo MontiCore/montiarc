@@ -1,44 +1,37 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._cocos.ComponentHeritageRawType;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import arcbasis._cocos.ComponentHeritageRawType;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.RAW_USE_OF_PARAMETRIZED_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ComponentHeritageRawTypeTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link ComponentHeritageRawType}.
+ */
+class ComponentHeritageRawTypeTest extends MontiArcTestBase {
 
   @BeforeEach
-  protected void setUpSuperTypes() {
+  void setUpSuperTypes() {
     compile("package a.b; component A { }");
     compile("package a.b; component B<T> { }");
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 extends a.b.A { }",
-    "component Comp2<T> extends a.b.A { }",
-    "component Comp3 extends a.b.B<int> { }",
-    "component Comp4<T> extends a.b.B<T> { }",
-    "component Comp5 extends a.b.A, a.b.A { }",
-    "component Comp6<T> extends a.b.A, a.b.A { }",
-    "component Comp7 extends a.b.B<int>, a.b.B<double> { }",
-    "component Comp8<T> extends a.b.B<T>, a.b.B<int> { }",
-  })
-  public void shouldNotReportErrors(@NotNull String model) {
+  @MethodSource("validModels")
+  void shouldNotReportErrors(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     //Given
@@ -51,12 +44,13 @@ public class ComponentHeritageRawTypeTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportErrors(@NotNull String model, @NotNull Error... errors) {
+  void shouldReportErrors(@NotNull String model,
+                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -70,22 +64,41 @@ public class ComponentHeritageRawTypeTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // extends a non-generic supertype
+      arg("component ValidComp1 extends a.b.A { }"),
+      // generic subtype extends a non-generic supertype
+      arg("component ValidComp2<T> extends a.b.A { }"),
+      // extends a generic supertype with a concrete type argument
+      arg("component ValidComp3 extends a.b.B<int> { }"),
+      // generic subtype extends a generic supertype with its own type parameter as argument
+      arg("component ValidComp4<T> extends a.b.B<T> { }"),
+      // extends the same non-generic supertype twice
+      arg("component ValidComp5 extends a.b.A, a.b.A { }"),
+      // generic subtype extends the same non-generic supertype twice
+      arg("component ValidComp6<T> extends a.b.A, a.b.A { }"),
+      // extends a generic supertype twice with different concrete type arguments
+      arg("component ValidComp7 extends a.b.B<int>, a.b.B<double> { }"),
+      // generic subtype extends a generic supertype once with its own type parameter, once with a concrete type argument
+      arg("component ValidComp8<T> extends a.b.B<T>, a.b.B<int> { }")
+    );
+  }
+
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1 extends a.b.B { }",
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
-      arg("component Comp2<T> extends a.b.B { }",
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
-      arg("component Comp3<T> extends a.b.A, a.b.B { }",
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
-      arg("component Comp4 extends a.b.B, a.b.B { }",
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE,
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
+      // raw use of a generic supertype
+      arg("component InvalidComp1 extends a.b.B { }", RAW_USE_OF_PARAMETRIZED_TYPE),
+      // generic subtype with a raw use of a generic supertype
+      arg("component InvalidComp2<T> extends a.b.B { }", RAW_USE_OF_PARAMETRIZED_TYPE),
+      // generic subtype extends a non-generic supertype and a raw use of a generic supertype
+      arg("component InvalidComp3<T> extends a.b.A, a.b.B { }", RAW_USE_OF_PARAMETRIZED_TYPE),
+      // raw use of the same generic supertype twice
+      arg("component InvalidComp4 extends a.b.B, a.b.B { }", RAW_USE_OF_PARAMETRIZED_TYPE, RAW_USE_OF_PARAMETRIZED_TYPE)
     );
   }
 }
