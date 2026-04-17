@@ -6,68 +6,116 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.CIRCULAR_FIELDS_DEPENDENCY;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Integrationstest for the CoCo {@link CheckNoFieldDependencyCycles}.
+ * The class under test is {@link CheckNoFieldDependencyCycles}.
  */
-public class CheckNoFieldDependencyCyclesTest extends MontiArcTestBase {
+class CheckNoFieldDependencyCyclesTest extends MontiArcTestBase {
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    "component Comp1 { int a = 1; int b = a + 1; }",
-    "component Comp2 { int x = 0; }"
-  })
-  public void shouldNotReportError(String model) throws IOException {
+  @MethodSource("validModels")
+  public void shouldNotReportError(String model) {
     Preconditions.checkNotNull(model);
+
+    // Given
     ASTMACompilationUnit ast = compile(model);
+
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new CheckNoFieldDependencyCycles());
+
+    // When
     checker.checkAll(ast);
-    assertThat(Log.getFindingsCount())
-      .as(Log.getFindings().toString())
-      .isEqualTo(0);
+
+    // Then
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(String model, Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
+
+    // Given
     ASTMACompilationUnit ast = compile(model);
+
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new CheckNoFieldDependencyCycles());
+
+    // When
     checker.checkAll(ast);
-    assertThat(Log.getFindingsCount())
-      .as(Log.getFindings().toString())
-      .isEqualTo(errors.length);
+
+    // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // field with a literal initializer, no dependency
+      arg("""
+        component ValidComp1 {
+          int a = 0;
+        }
+        """
+      ),
+      // field depending on a field declared before it
+      arg("""
+        component ValidComp2 {
+          int a = 0;
+          int b = a;
+        }"""
+      ),
+      // field depending on a field declared after it
+      arg("""
+        component ValidComp3 {
+          int a = b;
+          int b = 0;
+        }"""
+      )
+    );
+  }
+
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg(
-        "component Comp1 { int a = b; int b = a; }",
-        ArcError.CIRCULAR_FIELDS_DEPENDENCY
+      // two fields directly depending on each other
+      arg("""
+          component InvalidComp1 {
+            int a = b;
+            int b = a;
+          }
+          """,
+        CIRCULAR_FIELDS_DEPENDENCY
       ),
-      arg(
-        "component Comp2 { int a = c; int b = a; int c = b; }",
-        ArcError.CIRCULAR_FIELDS_DEPENDENCY
+      // three fields transitively depending on each other
+      arg("""
+          component InvalidComp2 {
+            int a = c;
+            int b = a;
+            int c = b;
+          }
+          """,
+        CIRCULAR_FIELDS_DEPENDENCY
       ),
-      arg(
-        "component Comp3 { int a = 1 + b; int b = 2 + a; }",
-        ArcError.CIRCULAR_FIELDS_DEPENDENCY
+      // two fields depending on each other through arithmetic expressions
+      arg("""
+          component InvalidComp3 {
+            int a = 1 + b;
+            int b = 2 + a;
+          }
+          """,
+        CIRCULAR_FIELDS_DEPENDENCY
       )
     );
   }
