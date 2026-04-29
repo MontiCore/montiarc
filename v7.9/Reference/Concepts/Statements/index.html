@@ -3429,13 +3429,14 @@ Same as before, but the control variables already exist.</p>
 Iterating over a collection of items.</p>
 <h3 id="switch">Switch</h3>
 <p><div class="highlight"><pre><span></span><code><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">expression</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="n">CONSTANT_OR_ENUM_VAL</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
-<span class="w">  </span><span class="k">default</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span><span class="w"> </span><span class="k">break</span><span class="p">;</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="n">value1</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span>
+<span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="n">value2</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span>
+<span class="w">  </span><span class="k">default</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span>
 <span class="p">}</span>
 </code></pre></div>
-evaluates the expression and depending on whether it is equal to a constant or 
-enumeration value, it executes the statements declared within the respective cases.
-These statement definitions must be terminated with a <code>break;</code> statement.
+evaluates the expression and executes the statements declared within the matching case.
+The <code>case</code> labels do not need to be constant values, they can be arbitrary expressions.
+Switch statements do not fall through between cases, so <code>break</code> statements are not required.
 The statements of the <code>default</code> case are executed if the evaluated expression 
 value does not match any other case.</p>
 <h3 id="break">Break</h3>
