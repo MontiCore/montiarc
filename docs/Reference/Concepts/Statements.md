@@ -114,13 +114,14 @@ Iterating over a collection of items.
 ### Switch
 ```java
 switch (expression) {
-  case CONSTANT_OR_ENUM_VAL: /* statements */ break;
-  default: /* statements */ break;
+  case value1: /* statements */
+  case value2: /* statements */
+  default: /* statements */
 }
 ```
-evaluates the expression and depending on whether it is equal to a constant or 
-enumeration value, it executes the statements declared within the respective cases.
-These statement definitions must be terminated with a `break;` statement.
+evaluates the expression and executes the statements declared within the matching case.
+The `case` labels do not need to be constant values, they can be arbitrary expressions.
+Switch statements do not fall through between cases, so `break` statements are not required.
 The statements of the `default` case are executed if the evaluated expression 
 value does not match any other case.
 
