@@ -26,6 +26,7 @@ import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTEnhancedForControlCollector;
 import montiarc._cocos.util.ExpressionBuildHelper;
 import montiarc._visitor.MontiArcTraverser;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
@@ -43,10 +44,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
-
-  public static final String ERROR_CODE = "0xA0907 ";
-
-  public static final String ERROR_MSG_FORMAT = "For-each loop expression must be an array of subtype of list.";
 
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
@@ -243,7 +240,7 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
 
         if (!SymTypeRelations.isSubTypeOf(expression, arrays)) {
           if (!SymTypeRelations.isSubTypeOf(expression, lists)) {
-            Log.error(ERROR_CODE + ERROR_MSG_FORMAT, forStatementEntry.getKey().get_SourcePositionStart());
+            Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(expression.printFullName()), forStatementEntry.getKey().get_SourcePositionStart());
           }
         }
       }

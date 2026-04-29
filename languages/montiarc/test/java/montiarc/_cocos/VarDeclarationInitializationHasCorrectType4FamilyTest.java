@@ -13,7 +13,7 @@ import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 
 import java.util.stream.Stream;
 
-import static montiarc.util.MCError.VAR_DEC_TYPE_MISMATCH;
+import static montiarc.util.MCError.VAR_DECLARATION_TYPE_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -140,7 +140,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
             }
           }
           """,
-        VAR_DEC_TYPE_MISMATCH
+        VAR_DECLARATION_TYPE_MISMATCH
       ),
       // type mismatch, var declaration with primitive type, core feature
       arg("""
@@ -158,7 +158,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
             constraint (f);
           }
           """,
-        VAR_DEC_TYPE_MISMATCH
+        VAR_DECLARATION_TYPE_MISMATCH
       ),
       // var declaration with conditional type
       arg("""
@@ -181,7 +181,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
             }
           }
           """,
-        VAR_DEC_TYPE_MISMATCH
+        VAR_DECLARATION_TYPE_MISMATCH
       )
     );
   }

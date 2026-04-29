@@ -10,23 +10,14 @@ import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.Optional;
+import montiarc.util.MCError;
 
 import static de.monticore.types3.SymTypeRelations.getNominalSuperTypes;
 import static de.monticore.types3.SymTypeRelations.isCompatible;
-import static java.lang.String.format;
 
 public class ForEachIsValid4MA extends ForEachIsValid {
 
   public ForEachIsValid4MA() { }
-
-  public static final String FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE = ERROR_CODE;
-
-  public static final String FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG =
-    "For-each loop expression must be iterable (e.g., an array or a list). Instead, the type is '%s'";
-
-  public static final String FOR_EACH_TYPE_MISMATCH_ERROR_CODE = "0xA0908";
-
-  public static final String FOR_EACH_TYPE_MISMATCH_ERROR_MSG = "Type mismatch, expected '%s' but provided '%s'";
 
   @Override
   public void check(ASTEnhancedForControl node) {
@@ -46,8 +37,7 @@ public class ForEachIsValid4MA extends ForEachIsValid {
     }
 
     if (!typeOfExpression.isArrayType() && symTypeOfIterable.isEmpty()) {
-      Log.error(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE + " "
-          + format(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG, typeOfExpression.printFullName()),
+      Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(typeOfExpression.printFullName()),
         node.getExpression().get_SourcePositionStart(),
         node.getExpression().get_SourcePositionEnd()
       );
@@ -61,8 +51,7 @@ public class ForEachIsValid4MA extends ForEachIsValid {
       }
 
       if (!isCompatible(typeOfVariable, typeArg)) {
-        Log.error(FOR_EACH_TYPE_MISMATCH_ERROR_CODE + " " +
-            format(FOR_EACH_TYPE_MISMATCH_ERROR_MSG,
+        Log.error(MCError.FOR_EACH_TYPE_MISMATCH.format(
               typeArg.printFullName(),
               typeOfVariable.printFullName()
             ),

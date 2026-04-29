@@ -4,6 +4,7 @@ package mceffect._parser;
 import de.se_rwth.commons.Names;
 import de.se_rwth.commons.logging.Log;
 import mceffect._ast.ASTMCEffect;
+import mceffect.util.MCEffectError;
 
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -25,10 +26,7 @@ public class MCEffectParser extends MCEffectParserTOP {
 
     if (!packageName.endsWith(packageDeclaration)) {
       Log.error(
-          String.format(
-              "0xEFF001: The package declaration %s"
-                  + " of the diagram (%s) must not differ from the"
-                  + " package of the diagram file.",
+          MCEffectError.PACKAGE_MISMATCH.format(
               packageDeclaration, fileName),
           ast.isPresentMCPackageDeclaration()
               ? ast.getMCPackageDeclaration().get_SourcePositionStart()

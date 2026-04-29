@@ -6,6 +6,8 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.conformance.util.AutomataLoader;
+import montiarc.conformance.util.ConformanceToolError;
+import montiarc.util.MCError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -45,26 +47,19 @@ public class AutConformanceTool extends MontiArcTool {
 
       // Set input file and parse it
       if (!cmd.hasOption("c")) {
-        Log.error(
-            "0xFD102 conformance checking require a  concrete model. "
-                + "A statechart as embedded in a montiArc component (*.arc) and "
-                + "A Class diagram containing the datatypes (.cd)");
+        Log.error(ConformanceToolError.MISSING_CONCRETE_MODEL.format());
       }
       String[] concrete = cmd.getOptionValues("c");
 
       // Set input file and parse it
       if (!cmd.hasOption("r")) {
-        Log.error(
-            "0xFD102 conformance checking require a  concrete model."
-                + " A statechart as embedded in a montiArc component (*.arc) and"
-                + " A Class diagram containing the datatypes (.cd)");
+        Log.error(ConformanceToolError.MISSING_REFERENCE_MODEL.format());
       }
       String[] reference = cmd.getOptionValues("r");
 
       // Set input file and parse it
       if (!cmd.hasOption("m")) {
-        Log.error(
-            "0xFD102conformance checking require a  mapping  between concrete and reference model.");
+        Log.error(ConformanceToolError.MISSING_MAPPING.format());
       }
       String mapping = cmd.getOptionValue("m");
 
@@ -73,7 +68,7 @@ public class AutConformanceTool extends MontiArcTool {
     } catch (Exception e) {
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp("java -jar MCFeatureDiagram.jar", options, true);
-      Log.error("0xFD114 An exception occured while processing the CLI input!", e);
+      Log.error(MCError.CLI_EXCEPTION.format(), e);
     }
   }
 

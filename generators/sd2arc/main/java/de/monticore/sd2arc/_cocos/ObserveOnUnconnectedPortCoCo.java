@@ -8,6 +8,7 @@ import de.monticore.lang.sdbasis._ast.ASTSDSendMessage;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._cocos.SDBasisASTSequenceDiagramCoCo;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
+import de.monticore.sd2arc.util.SD2ArcError;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.HashSet;
@@ -19,9 +20,6 @@ import java.util.stream.Collectors;
  * Warn if an interaction is without a trigger for an unconnected port in an embedded sequence diagram.
  */
 public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCoCo {
-
-  public static final String MESSAGE_ERROR = "0xB5102: "
-    + "The port '%s' is not connected to anything, thus the interaction can never be observed. Did you forget to add the trigger keyword?";
 
   @Override
   public void check(ASTSequenceDiagram node) {
@@ -38,7 +36,7 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
 
     for (ASTSDPort target : targets) {
       if (!connectedPorts.contains(target.getName() + "." + target.getPort())) {
-        Log.error(String.format(MESSAGE_ERROR, target.getName() + "." + target.getPort()), target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+        Log.error(SD2ArcError.OBSERVE_ON_UNCONNECTED_PORT.format(target.getName() + "." + target.getPort()), target.get_SourcePositionStart(), target.get_SourcePositionEnd());
       }
     }
   }

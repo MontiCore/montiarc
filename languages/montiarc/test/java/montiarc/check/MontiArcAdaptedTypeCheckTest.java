@@ -10,6 +10,7 @@ import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -120,12 +121,12 @@ public class MontiArcAdaptedTypeCheckTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidExpression() {
     return Stream.of(
-      Arguments.of("B", new String[]{"0xFD118"}), // Component Type
-      Arguments.of("sub.fieldSub == 1", new String[]{"0xF737F"}), // Sub-field
-      Arguments.of("sub.pSub == 1", new String[]{"0xF737F"}), // Sub-parameter
-      Arguments.of("sub.sub", new String[]{"0xF737F"}), // Sub-instance
-      Arguments.of("sub.C", new String[]{"0xF737F"}), // Sub-Component Type
-      Arguments.of("sub.sub.fSubSub", new String[]{"0xF737F"}) // Sub-sub-feature
+      Arguments.of("B", new String[]{MCError.CANT_FIND_SYMBOL_IN_EXPRESSION.getErrorCode()}), // Component Type
+      Arguments.of("sub.fieldSub == 1", new String[]{MCError.UNKNOWN_SUBCOMPONENT_MEMBER.getErrorCode()}), // Sub-field
+      Arguments.of("sub.pSub == 1", new String[]{MCError.UNKNOWN_SUBCOMPONENT_MEMBER.getErrorCode()}), // Sub-parameter
+      Arguments.of("sub.sub", new String[]{MCError.UNKNOWN_SUBCOMPONENT_MEMBER.getErrorCode()}), // Sub-instance
+      Arguments.of("sub.C", new String[]{MCError.UNKNOWN_SUBCOMPONENT_MEMBER.getErrorCode()}), // Sub-Component Type
+      Arguments.of("sub.sub.fSubSub", new String[]{MCError.UNKNOWN_SUBCOMPONENT_MEMBER.getErrorCode()}) // Sub-sub-feature
     );
   }
 }

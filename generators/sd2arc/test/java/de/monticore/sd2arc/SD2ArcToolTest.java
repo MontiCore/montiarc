@@ -4,6 +4,7 @@ package de.monticore.sd2arc;
 import de.monticore.io.paths.MCPath;
 import de.monticore.lang.sd4components.SD4ComponentsMill;
 import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
+import de.monticore.sd2arc.util.SD2ArcError;
 import de.se_rwth.commons.logging.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -54,10 +55,10 @@ public class SD2ArcToolTest extends SD2ArcTestBase {
 
   protected static Stream<Arguments> provideIncorrectAndErrorCodes() {
     return Stream.of(
-      Arguments.of("ImpliedConnectorsFitEmbeddingComponent.sd", new String[]{"0xB5101"}),
-      Arguments.of("ObserveOnUnconnectedPort.sd", new String[]{"0xB5102"}),
-      Arguments.of("ObserveOnUnconnectedPortEmbedded.sd", new String[]{"0xB5102"}),
-      Arguments.of("SubcomponentExistsInEmbeddingComponent.sd", new String[]{"0xB5100"})
+      Arguments.of("ImpliedConnectorsFitEmbeddingComponent.sd", new String[]{SD2ArcError.IMPLIED_CONNECTORS_FIT.getErrorCode()}),
+      Arguments.of("ObserveOnUnconnectedPort.sd", new String[]{SD2ArcError.OBSERVE_ON_UNCONNECTED_PORT.getErrorCode()}),
+      Arguments.of("ObserveOnUnconnectedPortEmbedded.sd", new String[]{SD2ArcError.OBSERVE_ON_UNCONNECTED_PORT.getErrorCode()}),
+      Arguments.of("SubcomponentExistsInEmbeddingComponent.sd", new String[]{SD2ArcError.SUBCOMPONENT_NOT_EXISTS.getErrorCode()})
     );
   }
 }

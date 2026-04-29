@@ -26,6 +26,7 @@ import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTSwitchStatementCollector;
 import montiarc._cocos.util.ExpressionBuildHelper;
 import montiarc._visitor.MontiArcTraverser;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
@@ -43,13 +44,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeCoCo {
-
-  public static final String ERROR_CODE = "0xA0917";
-
-  public static final String ERROR_MSG_FORMAT =
-    "Switch expression in the switch-statement must be " +
-      "char, byte, short, int, Character, Byte, Short, " +
-      "Integer, or an enum type.";
 
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
@@ -243,7 +237,7 @@ public class SwitchStatementValid4Family implements ArcBasisASTArcComponentTypeC
         if (!(SymTypeRelations.isChar(result) || SymTypeRelations.isByte(result)
           || SymTypeRelations.isShort(result) || SymTypeRelations.isInt(result)
           || isEnumMember(result))) {
-          Log.error(ERROR_CODE + " " + ERROR_MSG_FORMAT, switchStatementEntry.getKey().get_SourcePositionStart());
+          Log.error(MCError.SWITCH_EXPRESSION_TYPE_INVALID.format(), switchStatementEntry.getKey().get_SourcePositionStart());
         }
       }
     }

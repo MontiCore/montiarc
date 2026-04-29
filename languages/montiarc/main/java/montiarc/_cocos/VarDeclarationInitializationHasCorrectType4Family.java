@@ -9,6 +9,7 @@ import arcbasis._ast.ASTArcPort;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
+import montiarc.util.MCError;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
@@ -262,14 +263,6 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
     ExpressionBuildHelper.setScope(null);
   }
 
-  /**
-   * Indicates that the type of the initialization expression is not compatible with the type of the assigned variable.
-   */
-  public static final String ERROR_CODE = "0xA0921";
-
-  public static final String ERROR_MSG_FORMAT = "Incompatible type '%s' of the initialization expression for variable '%s' " +
-    "that is of type '%s'.";
-
   public void check(ASTVariableDeclarator node) {
     if (!node.isPresentVariableInit() || !(node.getVariableInit() instanceof ASTSimpleInit)) {
       return; // We can only check initializations of the form of expressions (as defined in SimpleInit).
@@ -296,7 +289,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
           node.getDeclarator().getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName()), "Cocos");
 
       } else if (!SymTypeRelations.isCompatible(varType, initType)) {
-        Log.error(ERROR_CODE + " " + String.format(ERROR_MSG_FORMAT,
+        Log.error(MCError.VAR_DECLARATION_TYPE_MISMATCH.format(
           initType.printFullName(), node.getDeclarator().getName(), varType.printFullName()));
       }
     }

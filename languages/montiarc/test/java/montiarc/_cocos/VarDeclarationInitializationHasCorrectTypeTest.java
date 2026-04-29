@@ -18,7 +18,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static montiarc.util.MCError.TARGET_TYPE_MISMATCH;
-import static montiarc.util.MCError.VAR_DEC_TYPE_MISMATCH;
+import static montiarc.util.MCError.VAR_DECLARATION_TYPE_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -134,7 +134,7 @@ class VarDeclarationInitializationHasCorrectTypeTest extends MontiArcTestBase {
             }
           }
         }
-        """, VAR_DEC_TYPE_MISMATCH
+        """, VAR_DECLARATION_TYPE_MISMATCH
       ),
       // target type mismatch, var declaration with generic target typing
       arg("""

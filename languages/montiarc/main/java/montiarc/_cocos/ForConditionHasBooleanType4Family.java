@@ -26,6 +26,7 @@ import montiarc.MontiArcMill;
 import montiarc._cocos.util.ASTForStatementCollector;
 import montiarc._cocos.util.ExpressionBuildHelper;
 import montiarc._visitor.MontiArcTraverser;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
@@ -43,10 +44,6 @@ import java.util.Map;
 import java.util.Optional;
 
 public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponentTypeCoCo {
-
-  public static final String ERROR_CODE = "0xA0906";
-
-  public static final String ERROR_MSG_FORMAT = "Condition of for-loop must be a boolean expression.";
 
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
@@ -238,7 +235,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
       for (ASTExpression possibleExpression : possibleExpressions) {
         SymTypeExpression result = TypeCheck3.typeOf(possibleExpression);
         if (!SymTypeRelations.isBoolean(result)) {
-          Log.error(ERROR_CODE + " " + ERROR_MSG_FORMAT, forStatementEntry.getKey().get_SourcePositionStart());
+          Log.error(MCError.FOR_CONDITION_NOT_BOOLEAN.format(), forStatementEntry.getKey().get_SourcePositionStart());
         }
       }
     }

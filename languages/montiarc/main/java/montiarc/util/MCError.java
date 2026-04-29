@@ -4,13 +4,12 @@ package montiarc.util;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
+import static de.monticore.statements.mccommonstatements.cocos.ForEachIsValid.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE;
+import static de.monticore.statements.mccommonstatements.cocos.ForEachIsValid.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG;
+import static de.monticore.statements.mccommonstatements.cocos.ForEachIsValid.FOR_EACH_TYPE_MISMATCH_ERROR_CODE;
+import static de.monticore.statements.mccommonstatements.cocos.ForEachIsValid.FOR_EACH_TYPE_MISMATCH_ERROR_MSG;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
-
-import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE;
-import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG;
-import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_CODE;
-import static montiarc._cocos.ForEachIsValid4MA.FOR_EACH_TYPE_MISMATCH_ERROR_MSG;
 
 /**
  * Wraps monticore error messages into enum values, so they can be used in
@@ -46,7 +45,12 @@ public enum MCError implements Error {
   FOR_EACH_TYPE_MISMATCH(FOR_EACH_TYPE_MISMATCH_ERROR_CODE, FOR_EACH_TYPE_MISMATCH_ERROR_MSG),
   IF_CONDITION_NOT_BOOLEAN(IfConditionHasBooleanType.ERROR_CODE, IfConditionHasBooleanType.ERROR_MSG_FORMAT),
   SWITCH_SELECTOR_NOT_SWITCHABLE(SwitchStatementValid.ERROR_CODE, SwitchStatementValid.ERROR_MSG_FORMAT),
-  VAR_DEC_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT);
+  SWITCH_EXPRESSION_TYPE_INVALID(SwitchStatementValid.ERROR_CODE, SwitchStatementValid.ERROR_MSG_FORMAT),
+  UNKNOWN_SUBCOMPONENT_MEMBER("0xF737F", ""),
+  VAR_DEC_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT),
+  VAR_DECLARATION_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT),
+  CLI_EXCEPTION("0xFD114", "An exception occurred while processing the CLI input"),
+  TRANSITION_PRECONDITION_NOT_BOOLEAN("0xCC111", "Expected '%s' but provided '%s'");
 
   private final String errorCode;
   private final String errorMsgFormat;

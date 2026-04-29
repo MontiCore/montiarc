@@ -7,6 +7,7 @@ import de.monticore.tagging.ISymbolTagger;
 import de.monticore.tagging.tags._ast.ASTTag;
 import de.monticore.tagging.tags._ast.ASTValuedTag;
 import de.se_rwth.commons.logging.Log;
+import mceffect.util.MCEffectError;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,11 +41,11 @@ public class TaggingEffectStorage implements EffectStorage {
           PortSymbol targetPort = optTargetPort.get();
           result = Optional.of(new SimpleEffect(component, port, targetPort, isCheck(name), isEnsure(name), getEffectKind(name), tag.get_SourcePositionStart()));
         } else {
-          Log.error("0x93b8d Not a valid port: " + value + "\n" + tag);
+          Log.error(MCEffectError.INVALID_PORT_REFERENCE.format(value));
         }
       }
     } else{
-      Log.error("0x762bd Not a valid tag: " + tag);
+      Log.error(MCEffectError.INVALID_TAG.format(tag));
     }
 
     return result;
@@ -58,7 +59,7 @@ public class TaggingEffectStorage implements EffectStorage {
     } else if (name.contains("no")){
       return EffectKind.NO;
     } else {
-      Log.error("0x44d8e Invalid Tag-name for effects: " + name);
+      Log.error(MCEffectError.INVALID_TAG_NAME.format(name));
       return null;
     }
   }

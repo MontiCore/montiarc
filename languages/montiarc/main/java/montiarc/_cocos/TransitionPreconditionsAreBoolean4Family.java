@@ -23,6 +23,7 @@ import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 import montiarc._cocos.util.ExpressionBuildHelper;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
@@ -204,7 +205,7 @@ public class TransitionPreconditionsAreBoolean4Family implements ArcBasisASTArcC
             guard.getTransitionBody().get_SourcePositionStart()
           ), "Cocos");
         } else if (!SymTypeRelations.isBoolean(preType)) {
-          Log.error(String.format("0xCC111 Expected '%s' but provided '%s'.", BOOLEAN, preType.print()),
+          Log.error(MCError.TRANSITION_PRECONDITION_NOT_BOOLEAN.format(BOOLEAN, preType.print()),
             guard.getTransitionBody().getPre().get_SourcePositionStart(),
             guard.getTransitionBody().getPre().get_SourcePositionEnd()
           );

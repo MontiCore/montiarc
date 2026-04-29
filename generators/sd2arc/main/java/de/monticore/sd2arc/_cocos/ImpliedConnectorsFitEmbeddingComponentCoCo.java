@@ -8,6 +8,7 @@ import de.monticore.lang.sdbasis._ast.ASTSDSendMessage;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._cocos.SDBasisASTSequenceDiagramCoCo;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
+import de.monticore.sd2arc.util.SD2ArcError;
 import de.se_rwth.commons.logging.Log;
 
 import java.util.HashMap;
@@ -18,9 +19,6 @@ import java.util.Map;
  */
 public class ImpliedConnectorsFitEmbeddingComponentCoCo implements SDBasisASTSequenceDiagramCoCo {
 
-  public static final String MESSAGE_ERROR = "0xB5101: "
-    + "Cannot observe '%s -> %s' as the connector does not exist in the embedding component";
-
   @Override
   public void check(ASTSequenceDiagram node) {
     if (!EmbeddingComponent.isEmbedded(node))
@@ -30,7 +28,7 @@ public class ImpliedConnectorsFitEmbeddingComponentCoCo implements SDBasisASTSeq
 
     for (Map.Entry<ASTSDPort, ASTSDPort> entry : impliedConnectors.entrySet()) {
       if (!containsConnector(EmbeddingComponent.get(node), getQName(entry.getKey()), getQName(entry.getValue()))) {
-        Log.error(String.format(MESSAGE_ERROR, getQName(entry.getKey()), getQName(entry.getValue())), entry.getKey().get_SourcePositionStart(), entry.getValue().get_SourcePositionEnd());
+        Log.error(SD2ArcError.IMPLIED_CONNECTORS_FIT.format(getQName(entry.getKey()), getQName(entry.getValue())), entry.getKey().get_SourcePositionStart(), entry.getValue().get_SourcePositionEnd());
       }
     }
   }

@@ -1,27 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util;
+package de.monticore.sd2arc.util;
+
+import montiarc.util.Error;
 
 /**
- * The enum of all montiarc variable errors, which extends the mixing
+ * The enum of all SD2Arc errors, which extends the mixing
  * interface {@link Error}.
  * <p>
- * Assigned code range: 0xC1400 - 0xC1449
+ * Assigned code range: 0xB5100 - 0xB5199
  */
-public enum VariableArcError implements Error {
-  CONSTRAINT_EXPRESSION_WRONG_TYPE("0xC1400", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  CONSTRAINT_NOT_SATISFIED("0xC1401", "Constraints are not satisfied"),
-  FEATURE_UPPER_CASE("0xC1402", "Convention violation, features should be lower case"),
-  FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
-  SUBCOMPONENTS_NOT_CONSTRAINT("0xC1404", "Features %s are not correctly constraint by this component"),
-  IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1405", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Value of field '%s' not available in static context"),
-  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Value of field '%s' not available in static context"),
-  EXPRESSION_NOT_SMT_CONVERTIBLE("0xC1417", "Unsupported expression, cannot solve '%s', this will lead to problems with variability");
+public enum SD2ArcError implements Error {
+  SUBCOMPONENT_NOT_EXISTS("0xB5100", "Subcomponent '%s' does not exist in the embedding component '%s'"),
+  IMPLIED_CONNECTORS_FIT("0xB5101", "Implied connector from '%s' to '%s' does not fit"),
+  OBSERVE_ON_UNCONNECTED_PORT("0xB5102", "Cannot observe on unconnected port '%s'");
 
   private final String errorCode;
   private final String errorMsgFormat;
 
-  VariableArcError(String errorCode, String errorMsgFormat) {
+  SD2ArcError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
     assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());

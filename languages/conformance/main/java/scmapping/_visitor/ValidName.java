@@ -7,6 +7,7 @@ import de.monticore.expressions.commonexpressions._visitor.CommonExpressionsVisi
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.se_rwth.commons.logging.Log;
+import scmapping.util.ConformanceError;
 import scmapping.util.MappingUtil;
 
 import java.util.List;
@@ -40,10 +41,7 @@ public class ValidName implements ExpressionsBasisVisitor2, CommonExpressionsVis
 
   public void printError(ASTNode node, String name, List<String> alternative) {
     Log.error(
-        String.format(
-            "0xC2003 Invalid expression \"%s\" at position %s. The alternatives %s could be \n Note: all names relative to "
-                + "the concrete Statecharts must be on the  left  side of  rules and names relative to the reference statecharts must be "
-                + "on the right side\n",
+        ConformanceError.INVALID_NAME_ALTERNATIVES.format(
             name, MappingUtil.printPosition(node), alternative));
   }
 }

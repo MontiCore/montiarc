@@ -3,7 +3,9 @@ package mceffect;
 
 import de.monticore.cd4code.CD4CodeMill;
 import de.se_rwth.commons.logging.Log;
+import mceffect.util.MCEffectError;
 import montiarc.MontiArcMill;
+import montiarc.util.MCError;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -50,23 +52,21 @@ public class MCEffectTool extends MCEffectToolTOP {
       // Set input file and parse it
       if (!cmd.hasOption("mp")) {
         Log.error(
-            "0xEFF001 A path to the models must be give. Consider using the option"
-                + " -mp to introduce the model path.");
+            MCEffectError.MODEL_PATH_MISSING.format());
       }
       String modelPath = cmd.getOptionValue("mp");
 
       // Set input file and parse it
       if (!cmd.hasOption("mc")) {
         Log.error(
-            "0xEFF001 A main component must be specified. Consider using the option"
-                + " -mc to introduce the name of main component.");
+            MCEffectError.MAIN_COMPONENT_MISSING.format());
       }
       String mainComponent = cmd.getOptionValue("mc");
 
       // Set input file and parse it
       if (!cmd.hasOption("e")) {
         Log.error(
-            "0xEFF001 Effects specifications must be given. Consider Using the option -e to introduce the effect file");
+            MCEffectError.EFFECT_SPECIFICATIONS_MISSING.format());
       }
       String[] effects = cmd.getOptionValues("e");
       boolean showGraph = cmd.hasOption('g');
@@ -80,14 +80,13 @@ public class MCEffectTool extends MCEffectToolTOP {
             modelPath, mainComponent, Set.of(effects), showGraph);
       } else {
         Log.error(
-            "0xEFF001 the type of component mus tbe specified.\n"
-                + "consider using options --ma for MontiArc component and --sml for sysML Components.");
+            MCEffectError.COMPONENT_TYPE_NOT_SPECIFIED.format());
       }
 
     } catch (Exception e) {
       HelpFormatter formatter = new HelpFormatter();
       formatter.printHelp("java -jar MCFeatureDiagram.jar", options, true);
-      Log.error("0xFD114 An exception occured while processing the CLI input!", e);
+      Log.error(MCError.CLI_EXCEPTION.format(), e);
     }
   }
 

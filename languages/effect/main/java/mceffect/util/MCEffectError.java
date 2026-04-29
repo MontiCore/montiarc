@@ -1,27 +1,28 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.util;
+package mceffect.util;
+
+import montiarc.util.Error;
 
 /**
- * The enum of all montiarc variable errors, which extends the mixing
+ * The enum of all MCEffect errors, which extends the mixing
  * interface {@link Error}.
  * <p>
- * Assigned code range: 0xC1400 - 0xC1449
+ * Assigned code range: 0xEFF00 - 0xEFF99
  */
-public enum VariableArcError implements Error {
-  CONSTRAINT_EXPRESSION_WRONG_TYPE("0xC1400", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  CONSTRAINT_NOT_SATISFIED("0xC1401", "Constraints are not satisfied"),
-  FEATURE_UPPER_CASE("0xC1402", "Convention violation, features should be lower case"),
-  FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
-  SUBCOMPONENTS_NOT_CONSTRAINT("0xC1404", "Features %s are not correctly constraint by this component"),
-  IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1405", "Incompatible types: '%s' cannot be converted to 'boolean'"),
-  FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Value of field '%s' not available in static context"),
-  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Value of field '%s' not available in static context"),
-  EXPRESSION_NOT_SMT_CONVERTIBLE("0xC1417", "Unsupported expression, cannot solve '%s', this will lead to problems with variability");
+public enum MCEffectError implements Error {
+  PACKAGE_MISMATCH("0xEFF00", "The package declaration %s of the diagram (%s) must not differ from the package of the diagram file"),
+  MODEL_PATH_MISSING("0xEFF01", "A path to the models must be given. Consider using the option -mp to introduce the model path"),
+  MAIN_COMPONENT_MISSING("0xEFF02", "A main component must be specified. Consider using the option -mc to introduce the name of main component"),
+  EFFECT_SPECIFICATIONS_MISSING("0xEFF03", "Effects specifications must be given. Consider using the option -e to introduce the effect file"),
+  COMPONENT_TYPE_NOT_SPECIFIED("0xEFF04", "The type of component must be specified. Consider using options --ma for MontiArc component and --sml for sysML components"),
+  INVALID_PORT_REFERENCE("0xEFF10", "Not a valid port: %s"),
+  INVALID_TAG("0xEFF11", "Not a valid tag: %s"),
+  INVALID_TAG_NAME("0xEFF12", "Invalid tag-name for effects: %s");
 
   private final String errorCode;
   private final String errorMsgFormat;
 
-  VariableArcError(String errorCode, String errorMsgFormat) {
+  MCEffectError(String errorCode, String errorMsgFormat) {
     assert (errorCode != null);
     assert (errorMsgFormat != null);
     assert (ERROR_CODE_PATTERN.matcher(errorCode).matches());

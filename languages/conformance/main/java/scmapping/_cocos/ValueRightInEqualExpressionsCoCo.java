@@ -9,6 +9,7 @@ import de.monticore.expressions.commonexpressions._cocos.CommonExpressionsASTEqu
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.conformance.util.AutomataUtils;
+import scmapping.util.ConformanceError;
 import scmapping.util.MappingUtil;
 
 import java.util.ArrayList;
@@ -19,10 +20,6 @@ import static scmapping.util.MappingUtil.printPosition;
 
 public class ValueRightInEqualExpressionsCoCo implements CommonExpressionsASTEqualsExpressionCoCo {
   private final List<String> validLeftNames = new ArrayList<>();
-  private final String errorMessage =
-      "0xC2001 Invalid expression \"%s\" at position %s. The left side of EqualsExpression"
-          + " can either be a state, input-port , output-port or global variable\n"
-          + "Values must be at the right side";
 
   public ValueRightInEqualExpressionsCoCo(ASTArcComponentType refAut, ASTArcComponentType conAut) {
     AutomataUtils.getInPorts(refAut).forEach(p -> validLeftNames.add(p.getName()));
@@ -43,19 +40,15 @@ public class ValueRightInEqualExpressionsCoCo implements CommonExpressionsASTEqu
     if (node.getLeft() instanceof ASTNameExpression) {
       ASTNameExpression left = (ASTNameExpression) node.getLeft();
       if (!validLeftNames.contains((left.getName()))) {
-        Log.error(String.format(errorMessage, left.getName(), printPosition(node)));
+        Log.error(ConformanceError.VALUE_RIGHT_IN_EQUAL_EXPRESSIONS.format(left.getName(), printPosition(node)));
       }
     } else if (node.getLeft() instanceof ASTFieldAccessExpression) {
       if (!validLeftNames.contains(MappingUtil.print(node.getLeft()))) {
         Log.error(
-            String.format(errorMessage, print(node.getRight()), printPosition(node.getLeft())));
+            ConformanceError.VALUE_RIGHT_IN_EQUAL_EXPRESSIONS.format(print(node.getRight()), printPosition(node.getLeft())));
       }
     } else {
-      Log.error(String.format(errorMessage, print(node.getRight()), printPosition(node.getLeft())));
+      Log.error(ConformanceError.VALUE_RIGHT_IN_EQUAL_EXPRESSIONS.format(print(node.getRight()), printPosition(node.getLeft())));
     }
-  }
-
-  public String getErrorMessage() {
-    return errorMessage;
   }
 }
