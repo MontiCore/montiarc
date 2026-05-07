@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
+import java.math.BigDecimal;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.Context;
 import de.monticore.literals.mccommonliterals._ast.ASTBasicDoubleLiteral;
@@ -92,24 +93,24 @@ public class MCCommonLiterals2SMT implements MCCommonLiteralsHandler {
   @Override
   public void handle(@NotNull ASTBasicFloatLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
+    this.getResult().setValue(this.getContext().mkReal(BigDecimal.valueOf(node.getValue()).toPlainString()));
   }
 
   @Override
   public void handle(@NotNull ASTSignedBasicFloatLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
+    this.getResult().setValue(this.getContext().mkReal(BigDecimal.valueOf(node.getValue()).toPlainString()));
   }
 
   @Override
   public void handle(@NotNull ASTBasicDoubleLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
+    this.getResult().setValue(this.getContext().mkReal(BigDecimal.valueOf(node.getValue()).toPlainString()));
   }
 
   @Override
   public void handle(@NotNull ASTSignedBasicDoubleLiteral node) {
     Preconditions.checkNotNull(node);
-    this.getResult().setValue(this.getContext().mkReal(node.getSource()));
+    this.getResult().setValue(this.getContext().mkReal(BigDecimal.valueOf(node.getValue()).toPlainString()));
   }
 }

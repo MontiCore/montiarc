@@ -155,7 +155,9 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
       arg("f1 & f2", "(and f1 f2)"),
       arg("f1 | f2", "(or f1 f2)"),
       arg("f1 ^ f2", "(xor f1 f2)"),
-      arg("(f1 && !f2) || (f2 && !f1)", "(or (and f1 (not f2)) (and f2 (not f1)))")
+      arg("(f1 && !f2) || (f2 && !f1)", "(or (and f1 (not f2)) (and f2 (not f1)))"),
+      arg("0.2f > 0", "(> 0.20000000298023224 0)"),
+      arg("0.2F > 1L", "(> 0.20000000298023224 1)")
     );
   }
 
