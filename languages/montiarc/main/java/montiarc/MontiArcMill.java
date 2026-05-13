@@ -2,6 +2,8 @@
 package montiarc;
 
 import com.microsoft.z3.Context;
+import de.monticore.prettyprint.IndentPrinter;
+import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc._symboltable.MontiArcScopesGenitorP2Delegator;
 import montiarc._symboltable.MontiArcScopesGenitorP3Delegator;
 import montiarc.evaluation.MontiArcDeriveSMTExpr;
@@ -60,5 +62,14 @@ public class MontiArcMill extends MontiArcMillTOP {
     millMontiArcScopesGenitorP2Delegator = null;
     millMontiArcScopesGenitorP3Delegator = null;
     millMontiArcFullConverter = null;
+  }
+
+  @Override
+  protected String _prettyPrint(de.monticore.ast.ASTNode node, boolean printComments) {
+    if (fullPrettyPrinter == null) {
+      fullPrettyPrinter = new MontiArcFullPrettyPrinter(new IndentPrinter(), false);
+    }
+    fullPrettyPrinter.setPrintComments(printComments);
+    return fullPrettyPrinter.prettyprint(node);
   }
 }

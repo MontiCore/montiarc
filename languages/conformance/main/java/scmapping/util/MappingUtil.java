@@ -73,8 +73,7 @@ public class MappingUtil {
   }
 
   public static String print(ASTNode node) {
-    MontiArcFullPrettyPrinter prettyPrinter = new MontiArcFullPrettyPrinter(new IndentPrinter());
-    prettyPrinter.setPrintComments(false);
+    MontiArcFullPrettyPrinter prettyPrinter = new MontiArcFullPrettyPrinter(new IndentPrinter(), false);
     return prettyPrinter.prettyprint(node);
   }
 }
