@@ -26,6 +26,9 @@ import arcbasis._cocos.FeedbackStrongCausality;
 import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
 import arcbasis._cocos.NoComponentReferenceCycle;
+import arcbasis._cocos.NoFieldInDefaultParameterValue;
+import arcbasis._cocos.NoFieldInSuperComponentArgument;
+import arcbasis._cocos.NoFieldInSubcomponentArgument;
 import arcbasis._cocos.NoPortInDefaultParameterValue;
 import arcbasis._cocos.NoPortInFieldDeclaration;
 import arcbasis._cocos.NoPortInSubcomponentArgument;
@@ -85,10 +88,11 @@ import variablearc._cocos.ConstraintIsBoolean;
 import variablearc._cocos.ConstraintNoAssignmentExpr;
 import variablearc._cocos.ConstraintSatisfied4Comp;
 import variablearc._cocos.ConstraintSmtConvertible;
-import variablearc._cocos.ConstraintsOmitFieldReferences;
+import variablearc._cocos.NoFieldInConstraint;
 import variablearc._cocos.FeatureNameCapitalization;
 import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.FeedbackStrongCausality4Family;
+import variablearc._cocos.NoFieldInVarIfCondition;
 import variablearc._cocos.NoPortInConstraint;
 import variablearc._cocos.NoPortInVarIfCondition;
 import variablearc._cocos.PortUniqueSender4Family;
@@ -98,7 +102,7 @@ import variablearc._cocos.SubcomponentsConstraint;
 import variablearc._cocos.UniqueIdentifier4Family;
 import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfNoAssignmentExpr;
-import variablearc._cocos.VarIfOmitFieldReferences;
+
 import variablearc._cocos.VarIfSmtConvertible;
 import variablearc._cocos.arcbasis.UniqueIdentifier;
 
@@ -175,6 +179,9 @@ public class MontiArcCoCos {
       varChecker.get4FullVariant().addCoCo(new NoPortInSubcomponentArgument4Family());
       varChecker.get4FullVariant().addCoCo(new NoPortInSuperComponentArgument4Family());
     } else {
+      checker.addCoCo(new NoFieldInSuperComponentArgument());
+      checker.addCoCo(new NoFieldInDefaultParameterValue());
+      checker.addCoCo(new NoFieldInSubcomponentArgument());
       checker.addCoCo(new NoPortInDefaultParameterValue());
       checker.addCoCo(new NoPortInFieldDeclaration());
       checker.addCoCo(new NoPortInSubcomponentArgument());
@@ -207,7 +214,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new RefinementRawType());
 
     // VariableArc
-    checker.addCoCo(new ConstraintsOmitFieldReferences());
+    checker.addCoCo(new NoFieldInConstraint());
     checker.addCoCo(new ConstraintIsBoolean());
     checker.addCoCo(new ConstraintSmtConvertible());
     checker.addCoCo(new ConstraintSatisfied4Comp());
@@ -216,7 +223,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new SubcomponentsConstraint());
     checker.addCoCo(new NoPortInConstraint());
     if (checkVariants) {
-      checker.addCoCo(new VarIfOmitFieldReferences());
+      checker.addCoCo(new NoFieldInVarIfCondition());
       checker.addCoCo(new NoPortInVarIfCondition());
       checker.addCoCo(new VarIfIsBoolean());
       checker.addCoCo(new VarIfSmtConvertible());

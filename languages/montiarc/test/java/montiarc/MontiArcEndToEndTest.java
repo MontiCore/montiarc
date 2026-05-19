@@ -35,6 +35,7 @@ import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_INIT_TYPE_MISMATCH;
+import static montiarc.util.ArcError.FIELD_REF_IN_STATIC_CONTEXT;
 import static montiarc.util.ArcError.FIELD_UPPER_CASE;
 import static montiarc.util.ArcError.INVALID_CONTEXT_ASSIGNMENT;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
@@ -953,6 +954,11 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_VARI, "ConstraintSmtConvertible.arc"),
         fn(WARNING, PKG_VARI, "ConstraintSmtConvertible.arc", 8, 14, 8, 29, EXPRESSION_NOT_SMT_CONVERTIBLE, "obj.isPresent()")
       ),
+      arg("FieldReferenceInStaticContextVariabilityTest",
+        mpk(PKG_VARI, "FieldReferenceInStaticContext.arc", "ParameterizedSuperComponent.arc"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 10, 14, 10, 15, FIELD_REF_IN_STATIC_CONTEXT, "x"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 11, 9, 11, 10, FIELD_REF_IN_STATIC_CONTEXT, "x")
+      ),
       arg("MissingSymbolsInVarIfTest1",
         mpk(PKG_VARI, "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 9, 10, 10, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
@@ -1069,6 +1075,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIfWithComposition2.arc", 17, 3, 17, 15, UNSUPPORTED_MODEL_ELEMENT, "varif"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 3, 10, 15, UNSUPPORTED_MODEL_ELEMENT, "varif")
+      ),
+      arg("FieldReferenceInStaticContextNoVariabilityTest",
+        mpk(PKG_VARI, "FieldReferenceInStaticContext.arc", "ParameterizedSuperComponent.arc"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 4, 49, 4, 50, FIELD_REF_IN_STATIC_CONTEXT, "x"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 4, 88, 4, 89, FIELD_REF_IN_STATIC_CONTEXT, "x"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 8, 13, 8, 14, FIELD_REF_IN_STATIC_CONTEXT, "x"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 10, 14, 10, 15, FIELD_REF_IN_STATIC_CONTEXT, "x"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 11, 3, 11, 19, UNSUPPORTED_MODEL_ELEMENT, "varif")
       ),
       arg("InitWithoutComputeTest1",
         mpk(PKG_COMP, "InitWithoutCompute1.arc"),
