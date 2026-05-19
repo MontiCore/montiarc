@@ -28,7 +28,7 @@ Person person = Person.Person();
 ```
 
 The declaration statement above declares a variable named `person` of type 
-`Parson` and assigns the variable to a new object of type `Person`;
+`Person` and assigns the variable to a new object of type `Person`;
 
 ## Expression statements
 ```java
