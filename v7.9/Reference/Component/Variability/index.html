@@ -3220,17 +3220,17 @@
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="variability">Variability</h1>
+<h1 id="variability">Variability<a class="headerlink" href="#variability" title="Permanent link">&para;</a></h1>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>Variability support is rudimentary. Expect significant performance impacts during compilation.
 Not all features are supported by the simulator.</p>
 </div>
-<h2 id="features">Features</h2>
+<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <p>Features have a name and are of type Boolean. They act similar to parameters as they are assigned by during and instantiation.</p>
 <div class="highlight"><pre><span></span><code><span class="n">feature</span><span class="w"> </span><span class="n">NAME1</span><span class="p">,</span><span class="w"> </span><span class="n">NAME2</span><span class="p">;</span>
 </code></pre></div>
-<h2 id="variation-points">Variation Points</h2>
+<h2 id="variation-points">Variation Points<a class="headerlink" href="#variation-points" title="Permanent link">&para;</a></h2>
 <p>Variation points are the core building block of variability. They allow for architecture variability.
 Variation points have a condition that needs to be satisfied for the included elements to be added to the base component.</p>
 <div class="highlight"><pre><span></span><code><span class="n">varif</span><span class="w"> </span><span class="p">(</span><span class="n">BOOLEAN_EXPRESSION</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -3240,11 +3240,11 @@ Variation points have a condition that needs to be satisfied for the included el
 <p>Inside of variation points we can include all types of MontiArc elements (e.g., ports, connectors, subcomponents, automata, other variation points, etc.).
 Only features and constraints need to be defined outside of these.</p>
 <p>The Boolean expression has to be evaluated statically; this means it cannot contain references to <a href="../Interfaces/">ports</a> and <a href="../../Behavior/Fields/">fields</a>.</p>
-<h2 id="constraints">Constraints</h2>
+<h2 id="constraints">Constraints<a class="headerlink" href="#constraints" title="Permanent link">&para;</a></h2>
 <p>Constraints can restrict the possible variants of a component by defining Boolean expressions that have to be satisfied for a component to be considered valid.</p>
 <div class="highlight"><pre><span></span><code>constraint(BOOLEAN_EXPRESSION);
 </code></pre></div>
-<h3 id="binding-features">Binding Features</h3>
+<h3 id="binding-features">Binding Features<a class="headerlink" href="#binding-features" title="Permanent link">&para;</a></h3>
 <p>Constraints are also used to bind features to specific values. </p>
 <p>Given a subcomponent named <code>sub</code> with a feature <code>f</code>, we can constrain the feature to a specific value:
 <div class="highlight"><pre><span></span><code>constraint(sub.f);

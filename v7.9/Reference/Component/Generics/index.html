@@ -3180,7 +3180,7 @@
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="generic-components">Generic Components</h1>
+<h1 id="generic-components">Generic Components<a class="headerlink" href="#generic-components" title="Permanent link">&para;</a></h1>
 <p>To facilitate reuse, <em>generic components</em> can be parametrized with <em>type parameters</em>.
 The type parameters can then be used as types for ports, parameters, or other entities in the behavior definition of a component.
 For defining multiple type parameters, one separates them using commas:
@@ -3196,7 +3196,7 @@ For defining multiple type parameters, one separates them using commas:
 <span class="p">}</span>
 </code></pre></div>
 The type variable <code>T</code> can be used anywhere where a non-generic type could have been used.</p>
-<h2 id="instantiation">Instantiation</h2>
+<h2 id="instantiation">Instantiation<a class="headerlink" href="#instantiation" title="Permanent link">&para;</a></h2>
 <p>When components with generic type parameters are used during <a href="../Decomposition/">decomposition</a>, types have to be bound.</p>
 <p>In the following, we bind the type parameter <code>&lt;T&gt;</code> of our previous example to <code>WindowButtonMoveEvent</code>.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">HumanMachineInterface</span><span class="w"> </span><span class="p">{</span>
@@ -3218,14 +3218,14 @@ Instead of binding a direct type, one can also bind subcomponent type variables 
 <span class="w">  </span><span class="c1">// Other sub components ...</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h2 id="inheritance">Inheritance</h2>
+<h2 id="inheritance">Inheritance<a class="headerlink" href="#inheritance" title="Permanent link">&para;</a></h2>
 <p>When <a href="../Inheritance/">extending</a> from a generic component, all its type parameters must be bound.
 Using newly defined type parameters for this is also allowed.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Selector</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="p">(</span><span class="cm">/*...*/</span><span class="p">)</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">StreamMerger</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// ...</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h2 id="upper-bounds">Upper bounds</h2>
+<h2 id="upper-bounds">Upper bounds<a class="headerlink" href="#upper-bounds" title="Permanent link">&para;</a></h2>
 <p><div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">AgeFilter</span><span class="o">&lt;</span><span class="n">T</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Person</span><span class="o">&gt;</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">minAge</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">unfiltered</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">T</span><span class="w"> </span><span class="n">filtered</span><span class="p">;</span>

@@ -3258,7 +3258,7 @@
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="collections">Collections</h1>
+<h1 id="collections">Collections<a class="headerlink" href="#collections" title="Permanent link">&para;</a></h1>
 <p>Collections are a means to <em>collect</em> multiple values into one value.
 This is especially useful if their quantity changes over time or is very large.</p>
 <p>As an initial example, in the following,
@@ -3267,7 +3267,7 @@ into the list of numbers <code>numList</code>.</p>
 <div class="highlight"><pre><span></span><code><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">numList</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">[</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="o">]</span><span class="p">;</span>
 </code></pre></div>
 <p>This <code>numList</code> can then be used in further calculations.</p>
-<h2 id="collection-types">Collection Types</h2>
+<h2 id="collection-types">Collection Types<a class="headerlink" href="#collection-types" title="Permanent link">&para;</a></h2>
 <p>MontiArc supports the four major collection types</p>
 <ul>
 <li><code>Set</code>: an unordered collection of 0 to n values</li>
@@ -3277,7 +3277,7 @@ into the list of numbers <code>numList</code>.</p>
   using so-called keys.</li>
 </ul>
 <p>They are explained in further detail below.</p>
-<h3 id="type-arguments">Type Arguments</h3>
+<h3 id="type-arguments">Type Arguments<a class="headerlink" href="#type-arguments" title="Permanent link">&para;</a></h3>
 <p>Collection types require type arguments;
 These arguments state which type of element the collection can hold.
 E.g., a list of type <code>List&lt;Person&gt;</code> can only hold instances
@@ -3291,7 +3291,7 @@ has to be specified, the type of the key has to be provided as well;
 with the key having the type <code>Car</code>, separated by a comma.
 This example could be the mapping of owners to their cars.</p>
 <p>In MontiArc <a href="../Primitives/">Primitives</a> can also be used as type parameters.</p>
-<h2 id="list">List</h2>
+<h2 id="list">List<a class="headerlink" href="#list" title="Permanent link">&para;</a></h2>
 <p>An ordered collection of arbitrary size.</p>
 <p>Using Lists requires the import</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.List</span><span class="p">;</span>
@@ -3320,7 +3320,7 @@ query information on the contained elements, e.g.,</p>
 <span class="kt">boolean</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns whether the list is empty, b is false</span>
 <span class="kt">boolean</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">l</span><span class="p">.</span><span class="na">contains</span><span class="p">(</span><span class="mi">7</span><span class="p">);</span><span class="w"> </span><span class="c1">// returns wether the list contains 7, c is true</span>
 </code></pre></div>
-<h2 id="set">Set</h2>
+<h2 id="set">Set<a class="headerlink" href="#set" title="Permanent link">&para;</a></h2>
 <p>An unordered collection of arbitrary size,
 each element is contained at most once.</p>
 <p>Using Sets requires the import</p>
@@ -3358,7 +3358,7 @@ a <a href="../../Concepts/Statements/#for-loop"><code>for</code>-loop</a> can be
 <span class="p">}</span>
 <span class="c1">// here, sum is 6</span>
 </code></pre></div>
-<h2 id="optional">Optional</h2>
+<h2 id="optional">Optional<a class="headerlink" href="#optional" title="Permanent link">&para;</a></h2>
 <p>A collection of size 0 to 1.
 It can be used to represent a value that may be absent.</p>
 <p>Using Optionals requires the import</p>
@@ -3374,7 +3374,7 @@ It can be used to represent a value that may be absent.</p>
 <span class="kt">boolean</span><span class="w"> </span><span class="n">e</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="na">isEmpty</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns the optional is empty, e is false</span>
 <span class="n">String</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">.</span><span class="na">get</span><span class="p">();</span><span class="w"> </span><span class="c1">// returns the contained element. v is &quot;a&quot;, o must not be empty!</span>
 </code></pre></div>
-<h2 id="map">Map</h2>
+<h2 id="map">Map<a class="headerlink" href="#map" title="Permanent link">&para;</a></h2>
 <p>This type represents a mapping from keys to values.</p>
 <p>Using Maps requires the import</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">java.util.Map</span><span class="p">;</span>

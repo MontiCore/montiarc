@@ -3214,7 +3214,7 @@
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="class-diagrams">Class Diagrams</h1>
+<h1 id="class-diagrams">Class Diagrams<a class="headerlink" href="#class-diagrams" title="Permanent link">&para;</a></h1>
 <p>UML class diagrams are a handy way to define object-oriented types.
 MontiArc has an integration for class diagrams written with <a href="https://github.com/MontiCore/cd4analysis"><em>cd4code</em></a> (a language extension of <em>cd4analysis</em>).
 cd4code features the definition of</p>
@@ -3261,12 +3261,12 @@ cd4code features the definition of</p>
 <span class="err">  </span><span class="k k-NameSpace">association</span><span class="err"> shareholding </span><span class="o">[1] Entity (shareholder) -- (owns) Share [*]</span><span class="err">;</span>
 <span class="err">}</span>
 </code></pre></div>
-<h2 id="comprehensive-information">Comprehensive information</h2>
+<h2 id="comprehensive-information">Comprehensive information<a class="headerlink" href="#comprehensive-information" title="Permanent link">&para;</a></h2>
 <p>You can find comprehensive information on how to define types with cd4code <a href="https://github.com/MontiCore/cd4analysis">here</a>.
 Moreover, there are <a href="https://github.com/MontiCore/cd4analysis/tree/dev/cdlang/src/test/resources/de/monticore/cd4analysis/examples">several examples</a> of cd4code models.</p>
-<h2 id="special-behavior-of-class-diagram-usage-in-montiarc">Special behavior of class diagram usage in MontiArc</h2>
+<h2 id="special-behavior-of-class-diagram-usage-in-montiarc">Special behavior of class diagram usage in MontiArc<a class="headerlink" href="#special-behavior-of-class-diagram-usage-in-montiarc" title="Permanent link">&para;</a></h2>
 <p>There are some things that you should note when working with object-oriented types in MontiArc:</p>
-<h3 id="packages">Packages</h3>
+<h3 id="packages">Packages<a class="headerlink" href="#packages" title="Permanent link">&para;</a></h3>
 <p>Class diagrams themselves are defined within a package structure.
 However, they themselves also span a new package.
 E.g., take the following class diagram model:
@@ -3287,7 +3287,7 @@ To use the type in MontiArc, one would be importing it at the beginning of the M
 
 <span class="kd">component</span> <span class="nc">WindowController</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/*...*/</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
-<h3 id="calling-constructors">Calling constructors</h3>
+<h3 id="calling-constructors">Calling constructors<a class="headerlink" href="#calling-constructors" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">personOutPort</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Person</span><span class="p">.</span><span class="na">Person</span><span class="p">(</span><span class="s">&quot;Steven&quot;</span><span class="p">);</span>
 <span class="p">}</span>

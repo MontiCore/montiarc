@@ -3094,16 +3094,16 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="libraries">Libraries</h1>
+<h1 id="libraries">Libraries<a class="headerlink" href="#libraries" title="Permanent link">&para;</a></h1>
 <p>Every library consists of component models and class definitions. 
 Libraries are distributed as JAR files, and MontiArc provides means 
 to automatically resolve and include different library dependencies by using <a href="../Usage/Gradle/">Gradle</a>.</p>
 <p>For a list of all publicly available libraries, go to <a href="PublicLibraries/">Public Libraries</a>.</p>
 <p>The documentation for the standard library, which is included in every MontiArc project, can be seen <a href="StandardLibrary/">here</a>.</p>
-<h2 id="using-and-publishing-libraries">Using and Publishing Libraries</h2>
+<h2 id="using-and-publishing-libraries">Using and Publishing Libraries<a class="headerlink" href="#using-and-publishing-libraries" title="Permanent link">&para;</a></h2>
 <p>This section provides details on how to include libraries in your project and how to publish your own library such that it can be consumed by others.
 This guide assumes that you're using <a href="../Usage/Gradle/">Gradle</a> to manage your project.</p>
-<h3 id="using">Using</h3>
+<h3 id="using">Using<a class="headerlink" href="#using" title="Permanent link">&para;</a></h3>
 <p>MontiArc dependencies are added like any other <a href="https://docs.gradle.org/current/userguide/declaring_dependencies.html">Gradle dependency</a>.</p>
 <p>Inside the dependencies block of your Gradle build file, you can use the <code>montiarc</code> configuration.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">build.gradle.kts</label></div>
@@ -3117,7 +3117,7 @@ This guide assumes that you're using <a href="../Usage/Gradle/">Gradle</a> to ma
 </div>
 </div>
 </div>
-<h3 id="publishing">Publishing</h3>
+<h3 id="publishing">Publishing<a class="headerlink" href="#publishing" title="Permanent link">&para;</a></h3>
 <p>The easiest way to publish your own components is by using maven repositories. 
 For that you need to enable the <a href="https://docs.gradle.org/current/userguide/publishing_maven.html"><code>maven-publish</code></a> plugin in your project
 and create a publishing config.</p>

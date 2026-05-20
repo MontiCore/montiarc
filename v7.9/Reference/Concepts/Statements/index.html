@@ -3345,10 +3345,10 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="statements">Statements</h1>
+<h1 id="statements">Statements<a class="headerlink" href="#statements" title="Permanent link">&para;</a></h1>
 <p>Actions are defined by a list of statements that are instructions to be 
 executed in some sequence. A statement can include one or more expressions.</p>
-<h2 id="variable-declarations">Variable declarations</h2>
+<h2 id="variable-declarations">Variable declarations<a class="headerlink" href="#variable-declarations" title="Permanent link">&para;</a></h2>
 <p>Declaration statements declare variables and constants, specifying their data 
 type, name, and initial value. Some examples are given in the following:.</p>
 <p><div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="p">;</span>
@@ -3364,13 +3364,13 @@ and assigns it the value <code>42</code>.</p>
 </code></pre></div>
 <p>The declaration statement above declares a variable named <code>person</code> of type 
 <code>Person</code> and assigns the variable to a new object of type <code>Person</code>;</p>
-<h2 id="expression-statements">Expression statements</h2>
+<h2 id="expression-statements">Expression statements<a class="headerlink" href="#expression-statements" title="Permanent link">&para;</a></h2>
 <p><div class="highlight"><pre><span></span><code><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">14</span><span class="p">;</span>
 <span class="n">foo</span><span class="p">.</span><span class="na">callToAMethod</span><span class="p">();</span>
 </code></pre></div>
 One can always use an expression as a statement.
 Thus, assignments can be declared (which are formally expressions) and methods can be called.</p>
-<h2 id="statement-block">Statement block</h2>
+<h2 id="statement-block">Statement block<a class="headerlink" href="#statement-block" title="Permanent link">&para;</a></h2>
 <p><div class="highlight"><pre><span></span><code><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">15</span><span class="p">;</span>
 <span class="p">{</span>
 <span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">13</span><span class="p">;</span>
@@ -3384,20 +3384,20 @@ On the other side, one can instead use single statements, such as
 <span class="k">else</span><span class="w"> </span><span class="n">elseStatement</span><span class="p">;</span>
 </code></pre></div>
 But this is discouraged.</p>
-<h2 id="control-statements">Control statements</h2>
-<h3 id="if-else">If-else</h3>
+<h2 id="control-statements">Control statements<a class="headerlink" href="#control-statements" title="Permanent link">&para;</a></h2>
+<h3 id="if-else">If-else<a class="headerlink" href="#if-else" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// Statements</span>
 <span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// Statements</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="while-loop">While loop</h3>
+<h3 id="while-loop">While loop<a class="headerlink" href="#while-loop" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// Statements</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="do-while-loop">Do-while loop</h3>
+<h3 id="do-while-loop">Do-while loop<a class="headerlink" href="#do-while-loop" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="k">do</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// Statements</span>
 <span class="p">}</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">condition</span><span class="p">)</span>
@@ -3405,7 +3405,7 @@ But this is discouraged.</p>
 First executes the statements block following the <code>do</code>.
 After each execution of the statement block, the condition is evaluated.
 If it evaluates to <code>true</code>, then the statement block is executed again.</p>
-<h3 id="for-loop">For loop</h3>
+<h3 id="for-loop">For loop<a class="headerlink" href="#for-loop" title="Permanent link">&para;</a></h3>
 <p>There are three different versions of the for loop.
 <div class="highlight"><pre><span></span><code><span class="c1">// Creating control variables:</span>
 <span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">expr</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">expr</span><span class="p">;</span><span class="w"> </span><span class="n">condition</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">,</span><span class="w"> </span><span class="n">j</span><span class="o">--</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
@@ -3427,7 +3427,7 @@ Same as before, but the control variables already exist.</p>
 <span class="p">}</span>
 </code></pre></div>
 Iterating over a collection of items.</p>
-<h3 id="switch">Switch</h3>
+<h3 id="switch">Switch<a class="headerlink" href="#switch" title="Permanent link">&para;</a></h3>
 <p><div class="highlight"><pre><span></span><code><span class="k">switch</span><span class="w"> </span><span class="p">(</span><span class="n">expression</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="n">value1</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span>
 <span class="w">  </span><span class="k">case</span><span class="w"> </span><span class="n">value2</span><span class="p">:</span><span class="w"> </span><span class="cm">/* statements */</span>
@@ -3439,7 +3439,7 @@ The <code>case</code> labels do not need to be constant values, they can be arbi
 Switch statements do not fall through between cases, so <code>break</code> statements are not required.
 The statements of the <code>default</code> case are executed if the evaluated expression 
 value does not match any other case.</p>
-<h3 id="break">Break</h3>
+<h3 id="break">Break<a class="headerlink" href="#break" title="Permanent link">&para;</a></h3>
 <p>The <code>break;</code> statement is not only available in <code>switch</code> statements, but also in loops in which they terminate the loop early.</p>
 
 

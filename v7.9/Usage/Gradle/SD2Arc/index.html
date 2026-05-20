@@ -3176,7 +3176,7 @@
 <p>This plugin generates MontiArc test models from sequence diagrams.
 See the <a href="../../../Reference/Testing/SequenceDiagrams/">testing</a> with sequence diagrams section for more information. </p>
 <hr />
-<h2 id="apply-it">Apply it:</h2>
+<h2 id="apply-it">Apply it:<a class="headerlink" href="#apply-it" title="Permanent link">&para;</a></h2>
 <p>Within Gradle's settings script, you need to declare:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Kotlin</label><label for="__tabbed_1_2">Groovy</label></div>
 <div class="tabbed-content">
@@ -3238,7 +3238,7 @@ See the <a href="../../../Reference/Testing/SequenceDiagrams/">testing</a> with 
 </div>
 </div>
 <hr />
-<h2 id="configure-it">Configure it:</h2>
+<h2 id="configure-it">Configure it:<a class="headerlink" href="#configure-it" title="Permanent link">&para;</a></h2>
 <p>The plugin adds a SD2ArcCompile task for every source set that exists.
 The name of that task is <code>compileSRC_SET_NAMEsd2arc</code>, omitting the name of the source set for the <em>main</em> source set.</p>
 <p>Note that MontiArc source files that the sd2arc generator produces are automatically added to the MontiArc source of the same source set.
@@ -3272,7 +3272,7 @@ Hence, the sequence diagram can only reference MontiArc models not part of the s
 </div>
 <p>Note that the generated Java code will be generated to <code>$destinationDirectory/montiarc</code> 
 (<code>destinationDirectory</code> being defined in the <code>sd2arc</code> entry of the source set).</p>
-<h2 id="configuration-options-in-detail">Configuration options in detail:</h2>
+<h2 id="configuration-options-in-detail">Configuration options in detail:<a class="headerlink" href="#configuration-options-in-detail" title="Permanent link">&para;</a></h2>
 <p>Each SD2ArcCompile task has the following configuration options that can be set.
 Some configuration options only have default values if the task is created for a source set.</p>
 <table>

@@ -3224,7 +3224,7 @@
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="primitives">Primitives</h1>
+<h1 id="primitives">Primitives<a class="headerlink" href="#primitives" title="Permanent link">&para;</a></h1>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Dummy</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">myIntField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">long</span><span class="w"> </span><span class="n">myLongField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -3237,7 +3237,7 @@
 <span class="p">}</span>
 </code></pre></div>
 <p>MontiArc provides the following primitive data types:</p>
-<h2 id="integer-numbers">Integer numbers</h2>
+<h2 id="integer-numbers">Integer numbers<a class="headerlink" href="#integer-numbers" title="Permanent link">&para;</a></h2>
 <!-- Byte and Short are excluded for now as they are pretty useless:
      One cannot assign any constant values to them at the moment. -->
 <!--* `byte` with values between `-128` and `127`-->
@@ -3249,7 +3249,7 @@
 <p>Normally, integer literals are of the type <code>int</code>.
 However, it is also possible to create literals that are explicitly of the type <code>long</code> by adding an <code>l</code> or <code>L</code> as a suffix: <code>42l</code> or <code>42L</code>. (<code>L</code> is the recommended suffix, as <code>l</code> is similar to <code>1</code>).
 Values of type <code>int</code> can be assigned to entities of the <code>long</code>, <code>double</code>, <code>float</code>, and <code>char</code> types.</p>
-<h2 id="floating-point-numbers">Floating-point numbers</h2>
+<h2 id="floating-point-numbers">Floating-point numbers<a class="headerlink" href="#floating-point-numbers" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>float</code> is a single-precision 32-bit IEEE 754 floating point</li>
 <li><code>double</code> is a double-precision 64-bit IEEE 754 floating point</li>
@@ -3258,14 +3258,14 @@ Values of type <code>int</code> can be assigned to entities of the <code>long</c
 Normally, floating-point literals are of the type <code>double</code>.
 However, it is also possible to create literals of the type <code>float</code> by adding <code>f</code> or <code>F</code> as a suffix: <code>2.0f</code> or <code>2.0F</code>. 
 Values of the type <code>float</code> can be assigned to entities of the <code>double</code> type.</p>
-<h2 id="boolean-values">Boolean values</h2>
+<h2 id="boolean-values">Boolean values<a class="headerlink" href="#boolean-values" title="Permanent link">&para;</a></h2>
 <p><code>boolean</code> data can have two different values: <code>true</code> and <code>false</code></p>
-<h2 id="character-values">Character values</h2>
+<h2 id="character-values">Character values<a class="headerlink" href="#character-values" title="Permanent link">&para;</a></h2>
 <p><code>char</code> is a 16-bit Unicode character.
 It is possible to define a character value by its Unicode code point. To this end, the hexadecimal Unicode code follows the Unicode escape <code>\u</code>: <code>char foo = '\u0F23'</code>.
 Moreover, MontiArc features the <a href="https://docs.oracle.com/javase/tutorial/java/data/characters.html">same escape codes as Java</a> for commonly used control characters, such as <code>\n</code> for new line.
 Character values can be assigned to entities of the <code>int</code>, <code>long</code>, <code>double</code>, and <code>float</code> types.</p>
-<h2 id="void">Void</h2>
+<h2 id="void">Void<a class="headerlink" href="#void" title="Permanent link">&para;</a></h2>
 <p>While the <code>void</code> type is not usable as a type of values, it is recognized as the return type of methods that do not return anything:
 <div class="highlight"><pre><span></span><code><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// ...</span>

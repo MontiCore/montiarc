@@ -3173,10 +3173,10 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="types">Types</h1>
+<h1 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h1>
 <p>Often, primitive types are too restricting for the communication between components or when storing data.
 To represent more complex data structures, custom type definitions can be made. For this, we use class diagrams.</p>
-<h2 id="defining">Defining</h2>
+<h2 id="defining">Defining<a class="headerlink" href="#defining" title="Permanent link">&para;</a></h2>
 <p>Type definitions are handled by class diagrams. Just like component class diagrams have a package and name.
 The file ends with the <code>.cd</code> ending, and the Gradle plugin expects it to be located in the <code>src/main/cd2pojo</code> folder.</p>
 <p>For our system, we used a custom <code>MotorCMD</code> Enum definition.</p>
@@ -3197,11 +3197,11 @@ The file ends with the <code>.cd</code> ending, and the Gradle plugin expects it
 </div>
 </div>
 </div>
-<h2 id="using">Using</h2>
+<h2 id="using">Using<a class="headerlink" href="#using" title="Permanent link">&para;</a></h2>
 <p>Types can be used for ports, fields, and variables. They can be either fully qualified or imported.
 If the type is located in the same package, the import statement can be omitted.</p>
 <p>A Fully qualified type contains all the parent packages separated by dots: <code>elevator.Commands.MotorCMD</code>.</p>
-<h2 id="java">Java</h2>
+<h2 id="java">Java<a class="headerlink" href="#java" title="Permanent link">&para;</a></h2>
 <p>In addition to user-defined types, it is possible to use Java types. For this, <a href="../../../Reference/Types/JavaIntegration/"><code>class2mc</code></a> has to be enabled:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="2:2"><input checked="checked" id="__tabbed_2_1" name="__tabbed_2" type="radio" /><input id="__tabbed_2_2" name="__tabbed_2" type="radio" /><div class="tabbed-labels"><label for="__tabbed_2_1">CLI</label><label for="__tabbed_2_2">Gradle</label></div>
 <div class="tabbed-content">

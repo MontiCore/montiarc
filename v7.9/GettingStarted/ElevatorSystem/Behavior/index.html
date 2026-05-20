@@ -3189,11 +3189,11 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="behavior">Behavior</h1>
+<h1 id="behavior">Behavior<a class="headerlink" href="#behavior" title="Permanent link">&para;</a></h1>
 <p>As we have seen in the <a href="../../HelloWorld/">"Hello, World!"</a> model, atomic components can have behavior definitions.
 The behavior is defined using <a href="../../../Reference/Behavior/Automata/">statecharts</a>. In the following, you will see how we can use ports to react to the environment and send messages ourselves.</p>
 <p>In our elevator simulation, we use simplified behaviors and just interact with the console.</p>
-<h2 id="receiving">Receiving</h2>
+<h2 id="receiving">Receiving<a class="headerlink" href="#receiving" title="Permanent link">&para;</a></h2>
 <p>Our <code>Door</code> component has two states, open and closed. Whenever we receive a message on <code>shouldOpen</code> we react to it by changing states if needed.</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:1"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Door.arc</label></div>
 <div class="tabbed-content">
@@ -3223,7 +3223,7 @@ The behavior is defined using <a href="../../../Reference/Behavior/Automata/">st
 The guard can be identified by the rectangular brackets <code>[]</code> and contains a Boolean expression.
 The transition can only be taken if the condition inside the guard holds, i.e. evaluates to true.
 Following the guard is the trigger. Transition can only be taken if their trigger is activated. In this case, if a message on the <code>shouldOpen</code> port has been received.</p>
-<h2 id="sending-and-storing-values">Sending and Storing values</h2>
+<h2 id="sending-and-storing-values">Sending and Storing values<a class="headerlink" href="#sending-and-storing-values" title="Permanent link">&para;</a></h2>
 <p>In the <code>Door</code> component, we have already seen how we can write stateful behaviors. In addition to multiple states, a behavior can also store information inside component fields.
 These can then be accessed in transitions and allow for another form of stateful behaviors.</p>
 <p>Since all the motor's ports are synchronous, the motor only uses tick transitions, too. A tick indicates one progress in time and is regularly triggered. 
@@ -3270,7 +3270,7 @@ Otherwise, it stays in the same position. The motor always outputs its current p
 They have a type and name followed by a mandatory default value. In our case, the motor's current position starts at <code>0</code> as set in:
 <div class="highlight"><pre><span></span><code><span class="kt">double</span><span class="w"> </span><span class="n">currentPosition</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 </code></pre></div></p>
-<h2 id="initial-entry-exit-do">Initial, Entry, Exit, Do</h2>
+<h2 id="initial-entry-exit-do">Initial, Entry, Exit, Do<a class="headerlink" href="#initial-entry-exit-do" title="Permanent link">&para;</a></h2>
 <p>Finally, we have our controller, which is the heart of the system and provides most of the logic behind it.
 It reacts to the button presses, decides in which direction to move the elevator, and is responsible for opening and closing the door. </p>
 <div class="tabbed-set tabbed-alternate" data-tabs="3:1"><input checked="checked" id="__tabbed_3_1" name="__tabbed_3" type="radio" /><div class="tabbed-labels"><label for="__tabbed_3_1">ControlStation.arc</label></div>
@@ -3406,7 +3406,7 @@ When this state is active, the motor is always stopped.</p>
 <div class="highlight"><pre><span></span><code><span class="n">OpenDoor</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">OpenDoor</span><span class="p">;</span>
 </code></pre></div></p>
 </div>
-<h2 id="hierarchical-states">Hierarchical States</h2>
+<h2 id="hierarchical-states">Hierarchical States<a class="headerlink" href="#hierarchical-states" title="Permanent link">&para;</a></h2>
 <p>To avoid triggering exit and entry actions again when processing new incoming button presses we use hierarchical states.</p>
 <p>States can be composed of other states. Where the innermost initial state is visited when the state is reached.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">OpenDoor</span><span class="w"> </span><span class="p">{</span>

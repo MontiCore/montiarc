@@ -3235,7 +3235,7 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="connectors">Connectors</h1>
+<h1 id="connectors">Connectors<a class="headerlink" href="#connectors" title="Permanent link">&para;</a></h1>
 <p>Connectors connect the interfaces (ports) of components, defining the flow of 
 messages and determining which components communicate with each other. 
 Connectors are defined in the body of the component type. A connector looks 
@@ -3260,9 +3260,9 @@ The targets are given as a comma-separated list, which looks like</p>
 <div class="highlight"><pre><span></span><code><span class="n">SOURCE</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">TARGET1</span><span class="p">;</span><span class="w"> </span>
 <span class="n">SOURCE</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">TARGET2</span><span class="p">;</span><span class="w"> </span>
 </code></pre></div>
-<h2 id="compatibility">Compatibility</h2>
+<h2 id="compatibility">Compatibility<a class="headerlink" href="#compatibility" title="Permanent link">&para;</a></h2>
 <p>Ports can be connected if the direction, timing, and type are compatible.</p>
-<h4 id="direction">Direction</h4>
+<h4 id="direction">Direction<a class="headerlink" href="#direction" title="Permanent link">&para;</a></h4>
 <p>The source of a connector can be:</p>
 <ul>
 <li>
@@ -3301,15 +3301,15 @@ connector. E.g., <code>sub1.o -&gt; sub2.i;</code> connects port <code>o</code> 
 to port <code>i</code> of subcomponent <code>sub2</code>.</p>
 </li>
 </ul>
-<h4 id="timing">Timing</h4>
+<h4 id="timing">Timing<a class="headerlink" href="#timing" title="Permanent link">&para;</a></h4>
 <p>Regarding <a href="../../Concepts/Timing/">timing</a>, two rules apply:</p>
 <ul>
 <li>The source of an event port can be any other timing.</li>
 <li>The source of a sync port has to be sync as well.</li>
 </ul>
-<h4 id="types">Types</h4>
+<h4 id="types">Types<a class="headerlink" href="#types" title="Permanent link">&para;</a></h4>
 <p><a href="../../Types/">Types</a> are compatible if the target type is a subtype of the source type. </p>
-<h2 id="feedback">Feedback</h2>
+<h2 id="feedback">Feedback<a class="headerlink" href="#feedback" title="Permanent link">&para;</a></h2>
 <p>If subcomponents form a communication circle along the direction of connectors, 
 then a subcomponent may communicate with itself, either directly or indirectly 
 across other subcomponents. We call this a feedback loop. </p>

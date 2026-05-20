@@ -3313,14 +3313,14 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="maunit">MaUnit</h1>
+<h1 id="maunit">MaUnit<a class="headerlink" href="#maunit" title="Permanent link">&para;</a></h1>
 <p>MaUnit is a test framework for MontiArc. There are several benefits to writing
 test on the same abstraction layer as the model:</p>
 <ul>
 <li>Reuse the same concepts already known from MontiArc</li>
 <li>No need to know the underlying simulation engine</li>
 </ul>
-<h2 id="how-to-write-tests">How to Write Tests</h2>
+<h2 id="how-to-write-tests">How to Write Tests<a class="headerlink" href="#how-to-write-tests" title="Permanent link">&para;</a></h2>
 <p>In MontiArc, tests are components that verify the behavior of other components.
 This is achieved by making assertions over the input and output streams of the
 system to be tested, also called system under test (SUT).</p>
@@ -3329,7 +3329,7 @@ three major parts, namely the test fixture, the SUT, and the test oracle.
 The test fixture (also called the test context) provides inputs to the SUT.
 The SUT produces outputs based on the provided inputs, which are then evaluated
 and compared against the expected results by a test oracle.</p>
-<h3 id="test-anatomy">Test Anatomy</h3>
+<h3 id="test-anatomy">Test Anatomy<a class="headerlink" href="#test-anatomy" title="Permanent link">&para;</a></h3>
 <p>A test in MontiArc is identified by the <code>&lt;&lt;test&gt;&gt;</code> stereotype in front of the
 component definition. Take a look at the following example:</p>
 <div class="highlight"><pre><span></span><code><span class="o">&lt;&lt;</span><span class="n">test</span><span class="o">&gt;&gt;</span>
@@ -3353,7 +3353,7 @@ The <code>assertEquals</code> component then checks the output against the expec
 The example makes use of two library components called <code>Emit</code> and
 <code>AssertEquals</code>,
 which are responsible for the setup and assertions, respectively.</p>
-<h3 id="parameterized-tests">Parameterized Tests</h3>
+<h3 id="parameterized-tests">Parameterized Tests<a class="headerlink" href="#parameterized-tests" title="Permanent link">&para;</a></h3>
 <p>MontiArc allows the definition of parameterized tests.
 This is useful when wanting to define multiple tests while keeping the overall
 architecture the same.
@@ -3393,7 +3393,7 @@ tests than the list can be omitted, and a direct value can be assigned.</p>
 </tr>
 </tbody>
 </table>
-<h3 id="complex-tests">Complex Tests</h3>
+<h3 id="complex-tests">Complex Tests<a class="headerlink" href="#complex-tests" title="Permanent link">&para;</a></h3>
 <p>More complex tests can be defined by using other library components that
 produce or assert streams of messages.
 The execution length of the test can be set with the <code>ticks</code> stereotype, which
@@ -3531,14 +3531,14 @@ The test is parameterized by the input and output streams of the SUT.</p>
 </div>
 </div>
 </div>
-<h3 id="library-components">Library Components</h3>
+<h3 id="library-components">Library Components<a class="headerlink" href="#library-components" title="Permanent link">&para;</a></h3>
 <p>The library consists of two main component categories: assertion components and emitter
 components. The former provide means to compare input streams with expected values,
 the latter for generating streams of messages. All assertion components share that they
 have a single incoming port called <code>actual</code>, while all emitter components have one
 outgoing port called <code>out</code>. All components lie in the <code>montiarc.maunit.api</code> package.</p>
 <p><img alt="EmitterAsserterOverview" src="../../../assets/images/EmitterAsserter.png" width="600" /></p>
-<h5 id="asserter">Asserter</h5>
+<h5 id="asserter">Asserter<a class="headerlink" href="#asserter" title="Permanent link">&para;</a></h5>
 <ul>
 <li><strong><code>AssertTrue:</code></strong>
   The most simple assertion component. 
@@ -3572,7 +3572,7 @@ outgoing port called <code>out</code>. All components lie in the <code>montiarc.
   Likewise, if fewer messages arrive than were expected, the test also fails. 
   All received messages have to be equal to the expected messages.</li>
 </ul>
-<h5 id="emitter">Emitter</h5>
+<h5 id="emitter">Emitter<a class="headerlink" href="#emitter" title="Permanent link">&para;</a></h5>
 <ul>
 <li><strong><code>Emit&lt;T&gt;(T output)</code></strong> 
   This component will emit a single message of type T with the value of output 
@@ -3603,7 +3603,7 @@ outgoing port called <code>out</code>. All components lie in the <code>montiarc.
   Of all emit components, this gives the most control over how and when 
   messages are sent.</li>
 </ul>
-<h2 id="controlling-how-tests-are-run">Controlling How Tests Are Run</h2>
+<h2 id="controlling-how-tests-are-run">Controlling How Tests Are Run<a class="headerlink" href="#controlling-how-tests-are-run" title="Permanent link">&para;</a></h2>
 <p>If the MontiArc Gradle plugin is used, tests are automatically run during the 
 test task. The task only considers components located in the test source 
 directory that have the <code>&lt;&lt;test&gt;&gt;</code> stereotype. The test task can be run 

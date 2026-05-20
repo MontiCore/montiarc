@@ -3141,7 +3141,7 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="junit">JUnit</h1>
+<h1 id="junit">JUnit<a class="headerlink" href="#junit" title="Permanent link">&para;</a></h1>
 <p>If you want to write tests with the simulator in Java directly, you can use JUnit and the extensions we provide.</p>
 <ul>
 <li><code>montiarc.rte.tests.JSimTest</code>: This class annotation can be used to hook the tests into the simulation log output.</li>
@@ -3153,7 +3153,7 @@
 <p>Be aware that for the simulation to progress over a <a href="../../Concepts/Timing/">time interval</a>, <strong>all</strong> incoming ports must have received a tick.</p>
 <p>Messages supplied to ports are only processed once the simulation has been started. The simulation runs until no component can process any more messages. This is indefinitely for closed-loop systems.</p>
 </div>
-<h2 id="example-test">Example Test</h2>
+<h2 id="example-test">Example Test<a class="headerlink" href="#example-test" title="Permanent link">&para;</a></h2>
 <p>Given the following MontiArc model, which acts as a medium and forwards all messages:
 <div class="highlight"><span class="filename">Medium.arc</span><pre><span></span><code><span class="kd">component</span> <span class="nc">Medium</span><span class="w"> </span><span class="p">{</span>
 

@@ -3140,19 +3140,19 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="using-gradle">Using Gradle</h1>
+<h1 id="using-gradle">Using Gradle<a class="headerlink" href="#using-gradle" title="Permanent link">&para;</a></h1>
 <p>Using <a href="https://gradle.org/">Gradle</a> to process MontiArc models brings some advantages, such as:</p>
 <ul>
 <li>Easier configuration of model processing</li>
 <li>Dependency management that allows you to publish models and to depend on other MontiArc libraries</li>
 <li>Automatic compilation of MontiArc's generated code (if the <a href="https://docs.gradle.org/current/userguide/java_plugin.html"><em>java</em></a> plugin is also applied)</li>
 </ul>
-<h2 id="perquisites">Perquisites</h2>
+<h2 id="perquisites">Perquisites<a class="headerlink" href="#perquisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Gradle 8.14.4 (or a <a href="https://docs.gradle.org/current/userguide/gradle_wrapper.html">Gradle wrapper</a> with that version) is required to execute the MontiArc build process.</li>
 <li>Java 21 is the version of the code produced by the MontiArc generator.</li>
 </ul>
-<h2 id="montiarc-project-structure">MontiArc Project Structure</h2>
+<h2 id="montiarc-project-structure">MontiArc Project Structure<a class="headerlink" href="#montiarc-project-structure" title="Permanent link">&para;</a></h2>
 <p>When using Gradle to build MontiArc applications, the default project structure looks like the following:
 <div class="highlight"><pre><span></span><code>project-root
 ├── src
@@ -3188,7 +3188,7 @@ For every source set (e.g., <code>main</code> or <code>test</code> if you apply 
 Similar to Java, MontiArc models are organized in package structures that are also reflected by the directory structure in which they are saved.
 E.g. if a model is in the package <code>com.example</code>, then its file should be under the path <code>montiarc/com/example</code>.
 You can also <a href="#further-references">change the location</a> in which models are found.</p>
-<h2 id="project-setup">Project setup</h2>
+<h2 id="project-setup">Project setup<a class="headerlink" href="#project-setup" title="Permanent link">&para;</a></h2>
 <p>To enable the usage of the MontiArc plugin, we have to add the repository in which it lays to the settings file of Gradle:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Kotlin</label><label for="__tabbed_1_2">Groovy</label></div>
 <div class="tabbed-content">
@@ -3254,7 +3254,7 @@ You can also <a href="#further-references">change the location</a> in which mode
 </div>
 </div>
 <p>You can now place your models in the <code>src/main/montiarc</code> folder of your project.</p>
-<h2 id="executing-the-generation-process">Executing the generation process</h2>
+<h2 id="executing-the-generation-process">Executing the generation process<a class="headerlink" href="#executing-the-generation-process" title="Permanent link">&para;</a></h2>
 <p>Gradle can be run as a standalone tool from the command line, or from IDEs by using plugins:</p>
 <ul>
 <li>IntelliJ IDEA comes with the <a href="https://www.jetbrains.com/help/idea/getting-started-with-gradle.html">Gradle and Gradle Extension</a> plugins shipped by default</li>
@@ -3290,7 +3290,7 @@ Check that, as a result, the Java class <code>MyComp</code> should be generated 
 </div>
 </div>
 </div>
-<h2 id="adding-class-diagrams-to-your-project">Adding class diagrams to your project</h2>
+<h2 id="adding-class-diagrams-to-your-project">Adding class diagrams to your project<a class="headerlink" href="#adding-class-diagrams-to-your-project" title="Permanent link">&para;</a></h2>
 <p>You can declare class diagram models to be used by MontiArc by applying the <em>cd2pojo</em> plugin.
 To do this, add the cd2pojo plugin to the <code>plugins</code> block within the build script:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="4:2"><input checked="checked" id="__tabbed_4_1" name="__tabbed_4" type="radio" /><input id="__tabbed_4_2" name="__tabbed_4" type="radio" /><div class="tabbed-labels"><label for="__tabbed_4_1">Kotlin</label><label for="__tabbed_4_2">Groovy</label></div>
@@ -3358,7 +3358,7 @@ To do this, add the cd2pojo plugin to the <code>plugins</code> block within the 
 Check that no error occurs.
 Moreover, verify that the Java class <code>Status</code> has been generated to <code>build/cd2pojo/main/java/com/example/MyTypes/Status.java</code>.
 Note: If an error occurs, try running Gradle's <code>clean</code> task before. </p>
-<h2 id="using-java-types">Using java types</h2>
+<h2 id="using-java-types">Using java types<a class="headerlink" href="#using-java-types" title="Permanent link">&para;</a></h2>
 <p>You can use JDK classes from MontiArc models by setting the <code>useClass2mc</code> option of the generation task in Gradle's build script:
 <div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="c1">// The syntax is the same for Kotlin and Groovy build scripts</span>
 <span class="n">task</span><span class="p">.</span><span class="na">compileMontiarc</span><span class="w"> </span><span class="p">{</span>
@@ -3389,7 +3389,7 @@ To this end, the <code>useClass2Mc</code> option has to be set for the <code>com
 <p>If you use Java types in class diagrams, then you also have to set the <code>useClass2Mc</code> option for your MontiArc models.
 Otherwise, you will encounter errors.</p>
 </div>
-<h2 id="further-references">Further references</h2>
+<h2 id="further-references">Further references<a class="headerlink" href="#further-references" title="Permanent link">&para;</a></h2>
 <p>Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.
 It also enables fine configuration options.
 You can find comprehensive information about the MontiArc plugin under <a href="MontiArc/">MontiArc Gradle Plugin</a> and about the cd2pojo plugin under <a href="CD2Pojo/">Cd2pojo Gradle Plugin</a>.</p>

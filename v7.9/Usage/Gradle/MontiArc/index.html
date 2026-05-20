@@ -3220,7 +3220,7 @@
 <p>This plugin generates Java code from MontiArc models.
 Moreover, it distributes MontiArc models as jars with <code>.arcsym</code> files.</p>
 <hr />
-<h2 id="apply-it">Apply it:</h2>
+<h2 id="apply-it">Apply it:<a class="headerlink" href="#apply-it" title="Permanent link">&para;</a></h2>
 <p>Within Gradle's settings script, you need to declare:</p>
 <div class="tabbed-set tabbed-alternate" data-tabs="1:2"><input checked="checked" id="__tabbed_1_1" name="__tabbed_1" type="radio" /><input id="__tabbed_1_2" name="__tabbed_1" type="radio" /><div class="tabbed-labels"><label for="__tabbed_1_1">Kotlin</label><label for="__tabbed_1_2">Groovy</label></div>
 <div class="tabbed-content">
@@ -3282,7 +3282,7 @@ Moreover, it distributes MontiArc models as jars with <code>.arcsym</code> files
 </div>
 </div>
 <hr />
-<h2 id="configure-it">Configure it:</h2>
+<h2 id="configure-it">Configure it:<a class="headerlink" href="#configure-it" title="Permanent link">&para;</a></h2>
 <p>The plugin adds a MontiArcCompile task for every source set that exists.
 The name of that task is <code>compileSRC_SET_NAMEMontiarc</code>, omitting the name of the source set for the <em>main</em> source set.</p>
 <p>Note that Java source files that the MontiArc generator produces are automatically added to the Java source of the same
@@ -3342,7 +3342,7 @@ etc. )</p>
 <p>Note that the generated java code will be generated to <code>$destinationDirectory/java</code> and created <code>.arcsym</code> files are
 placed in <code>$destinationDirectory/symbols</code> (<code>destinationDirectory</code> being defined in the <code>montiarc</code> entry of the source
 set).</p>
-<h2 id="configuration-options-in-detail">Configuration options in detail:</h2>
+<h2 id="configuration-options-in-detail">Configuration options in detail:<a class="headerlink" href="#configuration-options-in-detail" title="Permanent link">&para;</a></h2>
 <p>Each MontiArcCompile task has the following configuration options that can be set.
 Some configuration options only have default values, if the task is created for a source set. </p>
 <table>
@@ -3407,7 +3407,7 @@ Some configuration options only have default values, if the task is created for 
 </tbody>
 </table>
 <hr />
-<h2 id="added-build-elements">Added build elements</h2>
+<h2 id="added-build-elements">Added build elements<a class="headerlink" href="#added-build-elements" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The Plugin adds the dependency configuration <em>maGenerator</em> on which it places the dependency on the generator that is
   used to generate .java code from the .arc files. If you use <code>class2mc</code>, then you can place the java classes that you
@@ -3453,7 +3453,7 @@ Some configuration options only have default values, if the task is created for 
 <li>Models declared in the main source set are also available in the test source sets.</li>
 </ul>
 <hr />
-<h2 id="fixing-problems">Fixing problems:</h2>
+<h2 id="fixing-problems">Fixing problems:<a class="headerlink" href="#fixing-problems" title="Permanent link">&para;</a></h2>
 <ul>
 <li>The generator only generates classes with a <em>TOP</em> postfix\
     When you use the default value of the <em>hwcPath</em>, the <em>outputDir</em> may erroneously be in the hwcPath because 

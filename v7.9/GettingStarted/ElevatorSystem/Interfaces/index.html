@@ -3167,14 +3167,14 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="interfaces">Interfaces</h1>
+<h1 id="interfaces">Interfaces<a class="headerlink" href="#interfaces" title="Permanent link">&para;</a></h1>
 <p>Interfaces provide well-defined means for communication between components. The interface of a component is composed of <a href="../../../Reference/Component/Interfaces/">ports</a>.
 Every port has a direction, type, and <a href="../../../Reference/Concepts/Timing/">timing</a>.</p>
 <p>Incoming ports receive messages, whereas outgoing ports send messages. The port type can be primitive or an object type.
 We look at user-defined type definitions <a href="../Types/">later</a>.</p>
 <p>It is uncommon for a component to not have any inputs. Since there is always something a component reacts to.
 Be it the force that pushes a button to information that flows through the system.</p>
-<h2 id="event-ports">Event Ports</h2>
+<h2 id="event-ports">Event Ports<a class="headerlink" href="#event-ports" title="Permanent link">&para;</a></h2>
 <p>The default timing of ports is event-based; this means events are emitted and received over ports.</p>
 <p>In our elevator system, we start with the buttons. Our system only receives an event when a button has been pressed with the information on which floor that was.
 To model this, we use an incoming port of the primitive type integer. Each value represents a floor that the elevator has been called to.</p>
@@ -3218,7 +3218,7 @@ To model this, we use an incoming port of the primitive type integer. Each value
 </div>
 </div>
 </div>
-<h2 id="sync-ports">Sync Ports</h2>
+<h2 id="sync-ports">Sync Ports<a class="headerlink" href="#sync-ports" title="Permanent link">&para;</a></h2>
 <p>An alternative timing is synchronous. Here, all ports send and receive values at the same time.</p>
 <p>Another interesting example is the motor component. It should receive commands to go up, down, or stay where it's at, but also send out its current position.
 For that, we use two ports, one incoming and one outgoing.</p>
@@ -3236,7 +3236,7 @@ For that, we use two ports, one incoming and one outgoing.</p>
 </div>
 </div>
 <p>For now, just know that object ports behave the same as primitive ports, and we will look at the <code>MotorCMD</code> type definition <a href="../Types/">later</a>. </p>
-<h2 id="delayed-ports">Delayed Ports</h2>
+<h2 id="delayed-ports">Delayed Ports<a class="headerlink" href="#delayed-ports" title="Permanent link">&para;</a></h2>
 <p>Since in both timings it is possible that the outputs causally depend on the inputs, ports can be delayed.</p>
 <p>In the case of the control station, this means the <code>motorCommand</code> is dependent on the <code>motorPoition</code>, but the <code>motorPosition</code> depends on the <code>motorCommand</code>.
 To avoid this circle, all outputs are delayed and sent only after the current time step has been completed. </p>

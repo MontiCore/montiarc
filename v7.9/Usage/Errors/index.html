@@ -5958,65 +5958,65 @@
 
 <!-- (c) https://github.com/MontiCore/monticore -->
 
-<h1 id="errors">Errors</h1>
+<h1 id="errors">Errors<a class="headerlink" href="#errors" title="Permanent link">&para;</a></h1>
 <p>When using the tooling, there are multiple errors you might encounter:</p>
-<h3 id="0xc1100-circular-inheritance">0xC1100 - <em>Circular Inheritance</em></h3>
-<h5 id="description">Description</h5>
+<h3 id="0xc1100-circular-inheritance">0xC1100 - <em>Circular Inheritance</em><a class="headerlink" href="#0xc1100-circular-inheritance" title="Permanent link">&para;</a></h3>
+<h5 id="description">Description<a class="headerlink" href="#description" title="Permanent link">&para;</a></h5>
 <p>Occurs when a component directly or indirectly inherits from itself, creating an inheritance cycle.</p>
-<h5 id="example">Example</h5>
+<h5 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix">How to fix</h5>
+<h5 id="how-to-fix">How to fix<a class="headerlink" href="#how-to-fix" title="Permanent link">&para;</a></h5>
 <p>Break the inheritance cycle by refactoring one of the components so that no cyclic dependency remains.</p>
 <hr />
-<h3 id="0xc1101-missing-component">0xC1101 - <em>Missing Component</em></h3>
-<h5 id="description_1">Description</h5>
+<h3 id="0xc1101-missing-component">0xC1101 - <em>Missing Component</em><a class="headerlink" href="#0xc1101-missing-component" title="Permanent link">&para;</a></h3>
+<h5 id="description_1">Description<a class="headerlink" href="#description_1" title="Permanent link">&para;</a></h5>
 <p>The specified component cannot be found or resolved in the current context.</p>
-<h5 id="example_1">Example</h5>
+<h5 id="example_1">Example<a class="headerlink" href="#example_1" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">X</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">UnknownComp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_1">How to fix</h5>
+<h5 id="how-to-fix_1">How to fix<a class="headerlink" href="#how-to-fix_1" title="Permanent link">&para;</a></h5>
 <p>Ensure that <code>UnknownComp</code> exists and is imported or defined in the same package or module.</p>
 <hr />
-<h3 id="0xc1102-ambiguous-reference">0xC1102 - <em>Ambiguous Reference</em></h3>
-<h5 id="description_2">Description</h5>
+<h3 id="0xc1102-ambiguous-reference">0xC1102 - <em>Ambiguous Reference</em><a class="headerlink" href="#0xc1102-ambiguous-reference" title="Permanent link">&para;</a></h3>
+<h5 id="description_2">Description<a class="headerlink" href="#description_2" title="Permanent link">&para;</a></h5>
 <p>More than one component or element matches the given name, making resolution ambiguous.</p>
-<h5 id="example_2">Example</h5>
+<h5 id="example_2">Example<a class="headerlink" href="#example_2" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">pkg1</span><span class="p">.</span><span class="na">Foo</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">pkg2</span><span class="p">.</span><span class="na">Foo</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Bar</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Foo</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_2">How to fix</h5>
+<h5 id="how-to-fix_2">How to fix<a class="headerlink" href="#how-to-fix_2" title="Permanent link">&para;</a></h5>
 <p>Qualify your reference with the full package path or rename one of the conflicting components.</p>
 <hr />
-<h3 id="0xc1103-in-port-unused">0xC1103 - <em>In Port Unused</em></h3>
-<h5 id="description_3">Description</h5>
+<h3 id="0xc1103-in-port-unused">0xC1103 - <em>In Port Unused</em><a class="headerlink" href="#0xc1103-in-port-unused" title="Permanent link">&para;</a></h3>
+<h5 id="description_3">Description<a class="headerlink" href="#description_3" title="Permanent link">&para;</a></h5>
 <p>An incoming port is declared but never connected or used in the model.</p>
-<h5 id="example_3">Example</h5>
+<h5 id="example_3">Example<a class="headerlink" href="#example_3" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">msg</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// msg is never  connected</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_3">How to fix</h5>
+<h5 id="how-to-fix_3">How to fix<a class="headerlink" href="#how-to-fix_3" title="Permanent link">&para;</a></h5>
 <p>Add a connector to route data into this port (e.g., <code>B.out -&gt; msg;</code>) or remove the <code>msg</code> port if it isn’t required.</p>
 <hr />
-<h3 id="0xc1104-out-port-unused">0xC1104 - <em>Out Port Unused</em></h3>
-<h5 id="description_4">Description</h5>
+<h3 id="0xc1104-out-port-unused">0xC1104 - <em>Out Port Unused</em><a class="headerlink" href="#0xc1104-out-port-unused" title="Permanent link">&para;</a></h3>
+<h5 id="description_4">Description<a class="headerlink" href="#description_4" title="Permanent link">&para;</a></h5>
 <p>An outgoing port is declared but never connected or used in the model.</p>
-<h5 id="example_4">Example</h5>
+<h5 id="example_4">Example<a class="headerlink" href="#example_4" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">data</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// data is never sent or connected</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_4">How to fix</h5>
-<h2 id="connect-this-port-to-a-target-eg-data-bin-or-remove-the-data-port-if-it-isnt-delivering-relevant-output">Connect this port to a target (e.g., <code>data -&gt; B.in;</code>) or remove the <code>data</code> port if it isn’t delivering relevant output.</h2>
-<h3 id="0xc1105-port-multiple-sender">0xC1105 - <em>Port Multiple Sender</em></h3>
-<h5 id="description_5">Description</h5>
+<h5 id="how-to-fix_4">How to fix<a class="headerlink" href="#how-to-fix_4" title="Permanent link">&para;</a></h5>
+<h2 id="connect-this-port-to-a-target-eg-data-bin-or-remove-the-data-port-if-it-isnt-delivering-relevant-output">Connect this port to a target (e.g., <code>data -&gt; B.in;</code>) or remove the <code>data</code> port if it isn’t delivering relevant output.<a class="headerlink" href="#connect-this-port-to-a-target-eg-data-bin-or-remove-the-data-port-if-it-isnt-delivering-relevant-output" title="Permanent link">&para;</a></h2>
+<h3 id="0xc1105-port-multiple-sender">0xC1105 - <em>Port Multiple Sender</em><a class="headerlink" href="#0xc1105-port-multiple-sender" title="Permanent link">&para;</a></h3>
+<h5 id="description_5">Description<a class="headerlink" href="#description_5" title="Permanent link">&para;</a></h5>
 <p>An incoming port receives values from more than one connector, causing conflicting data sources.</p>
-<h5 id="example_5">Example</h5>
+<h5 id="example_5">Example<a class="headerlink" href="#example_5" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
@@ -6024,19 +6024,19 @@
 <span class="w">  </span><span class="n">b</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="c1">// second sender to x</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_5">How to fix</h5>
+<h5 id="how-to-fix_5">How to fix<a class="headerlink" href="#how-to-fix_5" title="Permanent link">&para;</a></h5>
 <p>Ensure each input port has at most one source.</p>
 <hr />
-<h3 id="0xc1106-in-port-not-connected">0xC1106 - <em>In Port Not Connected</em></h3>
-<h5 id="description_6">Description</h5>
+<h3 id="0xc1106-in-port-not-connected">0xC1106 - <em>In Port Not Connected</em><a class="headerlink" href="#0xc1106-in-port-not-connected" title="Permanent link">&para;</a></h3>
+<h5 id="description_6">Description<a class="headerlink" href="#description_6" title="Permanent link">&para;</a></h5>
 <p>An incoming port is declared but left unconnected, so it never receives data.</p>
-<h5 id="example_6">Example</h5>
+<h5 id="example_6">Example<a class="headerlink" href="#example_6" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">inVal</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// missing connector for inVal</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_6">How to fix</h5>
+<h5 id="how-to-fix_6">How to fix<a class="headerlink" href="#how-to-fix_6" title="Permanent link">&para;</a></h5>
 <p>Create a connector to supply data to this port, for example:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">inVal</span><span class="p">;</span>
@@ -6047,30 +6047,30 @@
 </code></pre></div>
 <p>Or remove <code>inVal</code> if it’s not needed.</p>
 <hr />
-<h3 id="0xc1107-out-port-not-connected">0xC1107 - <em>Out Port Not Connected</em></h3>
-<h5 id="description_7">Description</h5>
+<h3 id="0xc1107-out-port-not-connected">0xC1107 - <em>Out Port Not Connected</em><a class="headerlink" href="#0xc1107-out-port-not-connected" title="Permanent link">&para;</a></h3>
+<h5 id="description_7">Description<a class="headerlink" href="#description_7" title="Permanent link">&para;</a></h5>
 <p>An outgoing port is declared but has no connectors, so its output is never delivered.</p>
-<h5 id="example_7">Example</h5>
+<h5 id="example_7">Example<a class="headerlink" href="#example_7" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">outVal</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// missing connector from outVal</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1108-missing-port">0xC1108 - <em>Missing Port</em></h3>
-<h5 id="description_8">Description</h5>
+<h3 id="0xc1108-missing-port">0xC1108 - <em>Missing Port</em><a class="headerlink" href="#0xc1108-missing-port" title="Permanent link">&para;</a></h3>
+<h5 id="description_8">Description<a class="headerlink" href="#description_8" title="Permanent link">&para;</a></h5>
 <p>A referenced port does not exist on the specified component.</p>
-<h5 id="example_8">Example</h5>
+<h5 id="example_8">Example<a class="headerlink" href="#example_8" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 <span class="w">  </span><span class="n">o</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">unknown</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1109-missing-subcomponent">0xC1109 - <em>Missing Subcomponent</em></h3>
-<h5 id="description_9">Description</h5>
+<h3 id="0xc1109-missing-subcomponent">0xC1109 - <em>Missing Subcomponent</em><a class="headerlink" href="#0xc1109-missing-subcomponent" title="Permanent link">&para;</a></h3>
+<h5 id="description_9">Description<a class="headerlink" href="#description_9" title="Permanent link">&para;</a></h5>
 <p>A referenced subcomponent cannot be found in the component definition.</p>
-<h5 id="example_9">Example</h5>
+<h5 id="example_9">Example<a class="headerlink" href="#example_9" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 <span class="w">  </span><span class="c1">// forgot to declare sub</span>
@@ -6078,10 +6078,10 @@
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1110-connector-type-mismatch">0xC1110 - <em>Connector Type Mismatch</em></h3>
-<h5 id="description_10">Description</h5>
+<h3 id="0xc1110-connector-type-mismatch">0xC1110 - <em>Connector Type Mismatch</em><a class="headerlink" href="#0xc1110-connector-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_10">Description<a class="headerlink" href="#description_10" title="Permanent link">&para;</a></h5>
 <p>The type of the source port does not match the target port type.</p>
-<h5 id="example_10">Example</h5>
+<h5 id="example_10">Example<a class="headerlink" href="#example_10" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">txt</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">num</span><span class="p">;</span>
@@ -6089,10 +6089,10 @@
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1111-source-direction-mismatch">0xC1111 - <em>Source Direction Mismatch</em></h3>
-<h5 id="description_11">Description</h5>
+<h3 id="0xc1111-source-direction-mismatch">0xC1111 - <em>Source Direction Mismatch</em><a class="headerlink" href="#0xc1111-source-direction-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_11">Description<a class="headerlink" href="#description_11" title="Permanent link">&para;</a></h5>
 <p>Attempt to connect from an input port as if it were an output. In MontiArc, every connector must go from an output port to an input port.</p>
-<h5 id="example_11">Example</h5>
+<h5 id="example_11">Example<a class="headerlink" href="#example_11" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">i1</span><span class="p">,</span><span class="w"> </span><span class="n">i2</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
@@ -6101,10 +6101,10 @@
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1112-target-direction-mismatch">0xC1112 - <em>Target Direction Mismatch</em></h3>
-<h5 id="description_12">Description</h5>
+<h3 id="0xc1112-target-direction-mismatch">0xC1112 - <em>Target Direction Mismatch</em><a class="headerlink" href="#0xc1112-target-direction-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_12">Description<a class="headerlink" href="#description_12" title="Permanent link">&para;</a></h5>
 <p>Attempt to write to an output port as if it were an input. In MontiArc, every connector must go from an output port to an input port.</p>
-<h5 id="example_12">Example</h5>
+<h5 id="example_12">Example<a class="headerlink" href="#example_12" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o1</span><span class="p">,</span><span class="w"> </span><span class="n">o2</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">i1</span><span class="p">;</span>
@@ -6113,10 +6113,10 @@
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1113-connector-timing-mismatch">0xC1113 - <em>Connector Timing Mismatch</em></h3>
-<h5 id="description_13">Description</h5>
+<h3 id="0xc1113-connector-timing-mismatch">0xC1113 - <em>Connector Timing Mismatch</em><a class="headerlink" href="#0xc1113-connector-timing-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_13">Description<a class="headerlink" href="#description_13" title="Permanent link">&para;</a></h5>
 <p>The timing annotations (<code>sync</code>, <code>delay</code>, etc.) on source and target ports differ incompatibly.</p>
-<h5 id="example_13">Example</h5>
+<h5 id="example_13">Example<a class="headerlink" href="#example_13" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="n">delay</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
@@ -6124,19 +6124,19 @@
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1114-multiple-timing-annotations">0xC1114 - <em>Multiple Timing Annotations</em></h3>
-<h5 id="description_14">Description</h5>
+<h3 id="0xc1114-multiple-timing-annotations">0xC1114 - <em>Multiple Timing Annotations</em><a class="headerlink" href="#0xc1114-multiple-timing-annotations" title="Permanent link">&para;</a></h3>
+<h5 id="description_14">Description<a class="headerlink" href="#description_14" title="Permanent link">&para;</a></h5>
 <p>A port has been annotated with more than one timing modifier.</p>
-<h5 id="example_14">Example</h5>
+<h5 id="example_14">Example<a class="headerlink" href="#example_14" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="n">delay</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1115-multiple-behavior">0xC1115 - <em>Multiple Behavior</em></h3>
-<h5 id="description_15">Description</h5>
+<h3 id="0xc1115-multiple-behavior">0xC1115 - <em>Multiple Behavior</em><a class="headerlink" href="#0xc1115-multiple-behavior" title="Permanent link">&para;</a></h3>
+<h5 id="description_15">Description<a class="headerlink" href="#description_15" title="Permanent link">&para;</a></h5>
 <p>A component defines more than one behavior block.</p>
-<h5 id="example_15">Example</h5>
+<h5 id="example_15">Example<a class="headerlink" href="#example_15" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/*...*/</span><span class="w"> </span><span class="p">}</span>
 <span class="w">  </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="cm">/*...*/</span><span class="w"> </span><span class="p">}</span>
@@ -6148,11 +6148,11 @@
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1117-feedback-causality">0xC1117 - <em>Feedback Causality</em></h3>
-<h5 id="description_16">Description</h5>
+<h3 id="0xc1117-feedback-causality">0xC1117 - <em>Feedback Causality</em><a class="headerlink" href="#0xc1117-feedback-causality" title="Permanent link">&para;</a></h3>
+<h5 id="description_16">Description<a class="headerlink" href="#description_16" title="Permanent link">&para;</a></h5>
 <p>Occurs when a model contains a feedback loop without any form of delay, causing signals to propagate instantaneously in a cycle. This leads to undefined or nondeterministic behavior because there is no defined ordering for updates.
 Read more about causality and feedback loops <a href="../../Reference/Component/Connectors/#feedback">here</a>.</p>
-<h5 id="example_16">Example</h5>
+<h5 id="example_16">Example<a class="headerlink" href="#example_16" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
@@ -6169,7 +6169,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="p">}</span>
 <span class="c1">// Here, sub.o drives sub.i within the same tick, forming a zero-delay feedback loop.</span>
 </code></pre></div>
-<h5 id="how-to-fix_7">How to fix</h5>
+<h5 id="how-to-fix_7">How to fix<a class="headerlink" href="#how-to-fix_7" title="Permanent link">&para;</a></h5>
 <p>Add a delay anywhere in the loop: annotate the behavior (e.g., automaton or compute block) with <code>&lt;&lt;delayed&gt;&gt;</code> to enforce at least one clock tick between signal propagations for this component:
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span>
@@ -6187,219 +6187,219 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="p">}</span>
 </code></pre></div></p>
 <hr />
-<h3 id="0xc1119-too-few-arguments">0xC1119 - <em>Too Few Arguments</em></h3>
-<h5 id="description_17">Description</h5>
+<h3 id="0xc1119-too-few-arguments">0xC1119 - <em>Too Few Arguments</em><a class="headerlink" href="#0xc1119-too-few-arguments" title="Permanent link">&para;</a></h3>
+<h5 id="description_17">Description<a class="headerlink" href="#description_17" title="Permanent link">&para;</a></h5>
 <p>A component instance is invoked with fewer arguments than required.</p>
-<h5 id="example_17">Example</h5>
+<h5 id="example_17">Example<a class="headerlink" href="#example_17" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// missing second arg</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_8">How to fix</h5>
+<h5 id="how-to-fix_8">How to fix<a class="headerlink" href="#how-to-fix_8" title="Permanent link">&para;</a></h5>
 <p>Provide all required arguments: <code>A a("hello", 5);</code>.</p>
 <hr />
-<h3 id="0xc1120-too-many-arguments">0xC1120 - <em>Too Many Arguments</em></h3>
-<h5 id="description_18">Description</h5>
+<h3 id="0xc1120-too-many-arguments">0xC1120 - <em>Too Many Arguments</em><a class="headerlink" href="#0xc1120-too-many-arguments" title="Permanent link">&para;</a></h3>
+<h5 id="description_18">Description<a class="headerlink" href="#description_18" title="Permanent link">&para;</a></h5>
 <p>A component instance is given more arguments than its signature defines.</p>
-<h5 id="example_18">Example</h5>
+<h5 id="example_18">Example<a class="headerlink" href="#example_18" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// extra arg</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_9">How to fix</h5>
+<h5 id="how-to-fix_9">How to fix<a class="headerlink" href="#how-to-fix_9" title="Permanent link">&para;</a></h5>
 <p>Remove the extra arguments or adjust the component signature accordingly.</p>
 <hr />
-<h3 id="0xc1122-comp-arg-multiple-values">0xC1122 - <em>Comp Arg Multiple Values</em></h3>
-<h5 id="description_19">Description</h5>
+<h3 id="0xc1122-comp-arg-multiple-values">0xC1122 - <em>Comp Arg Multiple Values</em><a class="headerlink" href="#0xc1122-comp-arg-multiple-values" title="Permanent link">&para;</a></h3>
+<h5 id="description_19">Description<a class="headerlink" href="#description_19" title="Permanent link">&para;</a></h5>
 <p>The same named argument is assigned multiple values in a component instantiation.</p>
-<h5 id="example_19">Example</h5>
+<h5 id="example_19">Example<a class="headerlink" href="#example_19" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1123-comp-arg-type-mismatch">0xC1123 - <em>Comp Arg Type Mismatch</em></h3>
-<h5 id="description_20">Description</h5>
+<h3 id="0xc1123-comp-arg-type-mismatch">0xC1123 - <em>Comp Arg Type Mismatch</em><a class="headerlink" href="#0xc1123-comp-arg-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_20">Description<a class="headerlink" href="#description_20" title="Permanent link">&para;</a></h5>
 <p>The provided argument type does not match the expected parameter type.</p>
-<h5 id="example_20">Example</h5>
+<h5 id="example_20">Example<a class="headerlink" href="#example_20" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">&quot;string&quot;</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 <span class="c1">// an Integer is intended not a String value</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1124-comp-arg-key-invalid">0xC1124 - <em>Comp Arg Key Invalid</em></h3>
-<h5 id="description_21">Description</h5>
+<h3 id="0xc1124-comp-arg-key-invalid">0xC1124 - <em>Comp Arg Key Invalid</em><a class="headerlink" href="#0xc1124-comp-arg-key-invalid" title="Permanent link">&para;</a></h3>
+<h5 id="description_21">Description<a class="headerlink" href="#description_21" title="Permanent link">&para;</a></h5>
 <p>An unknown key argument is used when instantiating a component.</p>
-<h5 id="example_21">Example</h5>
+<h5 id="example_21">Example<a class="headerlink" href="#example_21" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1125-comp-arg-value-after-key">0xC1125 - <em>Comp Arg Value After Key</em></h3>
-<h5 id="description_22">Description</h5>
+<h3 id="0xc1125-comp-arg-value-after-key">0xC1125 - <em>Comp Arg Value After Key</em><a class="headerlink" href="#0xc1125-comp-arg-value-after-key" title="Permanent link">&para;</a></h3>
+<h5 id="description_22">Description<a class="headerlink" href="#description_22" title="Permanent link">&para;</a></h5>
 <p>A positional argument follows a named argument, which is disallowed.</p>
-<h5 id="example_22">Example</h5>
+<h5 id="example_22">Example<a class="headerlink" href="#example_22" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_10">How to fix</h5>
+<h5 id="how-to-fix_10">How to fix<a class="headerlink" href="#how-to-fix_10" title="Permanent link">&para;</a></h5>
 <p>Place all positional arguments before any named arguments.</p>
 <hr />
-<h3 id="0xc1126-optional-params-last">0xC1126 - <em>Optional Params Last</em></h3>
-<h5 id="description_23">Description</h5>
+<h3 id="0xc1126-optional-params-last">0xC1126 - <em>Optional Params Last</em><a class="headerlink" href="#0xc1126-optional-params-last" title="Permanent link">&para;</a></h3>
+<h5 id="description_23">Description<a class="headerlink" href="#description_23" title="Permanent link">&para;</a></h5>
 <p>Optional configuration parameters must come after all mandatory parameters in a component or invocation. Placing an optional parameter before a required one leads to ambiguity and is disallowed.</p>
-<h5 id="example_23">Example</h5>
+<h5 id="example_23">Example<a class="headerlink" href="#example_23" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">Comp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">opt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">mand</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// error: optional &#39;opt&#39; before mandatory &#39;mand&#39;</span>
 </code></pre></div>
-<h5 id="how-to-fix_11">How to fix</h5>
+<h5 id="how-to-fix_11">How to fix<a class="headerlink" href="#how-to-fix_11" title="Permanent link">&para;</a></h5>
 <p>Reorder the parameter list so that all mandatory parameters precede any optional ones:
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">Comp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">mand</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">opt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div></p>
 <hr />
-<h3 id="0xc1127-subcomponent-reference-cycle">0xC1127 - <em>Subcomponent Reference Cycle</em></h3>
-<h5 id="description_24">Description</h5>
+<h3 id="0xc1127-subcomponent-reference-cycle">0xC1127 - <em>Subcomponent Reference Cycle</em><a class="headerlink" href="#0xc1127-subcomponent-reference-cycle" title="Permanent link">&para;</a></h3>
+<h5 id="description_24">Description<a class="headerlink" href="#description_24" title="Permanent link">&para;</a></h5>
 <p>Subcomponents reference each other circularly.</p>
-<h5 id="example_24">Example</h5>
+<h5 id="example_24">Example<a class="headerlink" href="#example_24" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="n">a</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_12">How to fix</h5>
+<h5 id="how-to-fix_12">How to fix<a class="headerlink" href="#how-to-fix_12" title="Permanent link">&para;</a></h5>
 <p>Refactor the model to remove cyclic subcomponent definitions.</p>
 <hr />
-<h3 id="0xc1131-expected-an-expression">0xC1131 - <em>Expected an Expression</em></h3>
-<h5 id="description_25">Description</h5>
+<h3 id="0xc1131-expected-an-expression">0xC1131 - <em>Expected an Expression</em><a class="headerlink" href="#0xc1131-expected-an-expression" title="Permanent link">&para;</a></h3>
+<h5 id="description_25">Description<a class="headerlink" href="#description_25" title="Permanent link">&para;</a></h5>
 <p>An expression was expected in a place where it was omitted or malformed.</p>
-<h5 id="example_25">Example</h5>
+<h5 id="example_25">Example<a class="headerlink" href="#example_25" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="w">  </span><span class="n">connect</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p">;</span><span class="w"> </span><span class="c1">// missing right-hand expression</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1132-heritage-in-port-type-mismatch">0xC1132 - <em>Heritage In Port Type Mismatch</em></h3>
-<h5 id="description_26">Description</h5>
+<h3 id="0xc1132-heritage-in-port-type-mismatch">0xC1132 - <em>Heritage In Port Type Mismatch</em><a class="headerlink" href="#0xc1132-heritage-in-port-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_26">Description<a class="headerlink" href="#description_26" title="Permanent link">&para;</a></h5>
 <p>An inherited component redefines an incoming port with a type incompatible with its supertype.</p>
-<h5 id="example_26">Example</h5>
+<h5 id="example_26">Example<a class="headerlink" href="#example_26" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">m</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_13">How to fix</h5>
+<h5 id="how-to-fix_13">How to fix<a class="headerlink" href="#how-to-fix_13" title="Permanent link">&para;</a></h5>
 <p>Align port types with the super component or rename the port.</p>
 <hr />
-<h3 id="0xc1133-heritage-out-port-type-mismatch">0xC1133 - <em>Heritage Out Port Type Mismatch</em></h3>
-<h5 id="description_27">Description</h5>
+<h3 id="0xc1133-heritage-out-port-type-mismatch">0xC1133 - <em>Heritage Out Port Type Mismatch</em><a class="headerlink" href="#0xc1133-heritage-out-port-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_27">Description<a class="headerlink" href="#description_27" title="Permanent link">&para;</a></h5>
 <p>An inherited component redefines an outgoing port with an incompatible type.</p>
-<h5 id="example_27">Example</h5>
+<h5 id="example_27">Example<a class="headerlink" href="#example_27" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">n</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_14">How to fix</h5>
+<h5 id="how-to-fix_14">How to fix<a class="headerlink" href="#how-to-fix_14" title="Permanent link">&para;</a></h5>
 <p>Keep the same type as in the abstraction or choose a new port name.</p>
 <hr />
-<h3 id="0xc1134-heritage-port-direction-mismatch">0xC1134 - <em>Heritage Port Direction Mismatch</em></h3>
-<h5 id="description_28">Description</h5>
+<h3 id="0xc1134-heritage-port-direction-mismatch">0xC1134 - <em>Heritage Port Direction Mismatch</em><a class="headerlink" href="#0xc1134-heritage-port-direction-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_28">Description<a class="headerlink" href="#description_28" title="Permanent link">&para;</a></h5>
 <p>An inherited component changes the direction of a port from its supertype.</p>
-<h5 id="example_28">Example</h5>
+<h5 id="example_28">Example<a class="headerlink" href="#example_28" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_15">How to fix</h5>
+<h5 id="how-to-fix_15">How to fix<a class="headerlink" href="#how-to-fix_15" title="Permanent link">&para;</a></h5>
 <p>Maintain the original direction (in or out) or rename the port.</p>
 <hr />
-<h3 id="0xc1135-port-ref-in-static-context">0xC1135 - <em>Port Ref In Static Context</em></h3>
-<h5 id="description_29">Description</h5>
+<h3 id="0xc1135-port-ref-in-static-context">0xC1135 - <em>Port Ref In Static Context</em><a class="headerlink" href="#0xc1135-port-ref-in-static-context" title="Permanent link">&para;</a></h3>
+<h5 id="description_29">Description<a class="headerlink" href="#description_29" title="Permanent link">&para;</a></h5>
 <p>Port references are disallowed in static contexts such as field initializers or varif conditions—because ports only exist at runtime and cannot be accessed during static initialization.</p>
-<h5 id="example_29">Example</h5>
+<h5 id="example_29">Example<a class="headerlink" href="#example_29" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 <span class="w">  </span><span class="n">varif</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// error: &#39;i&#39; referenced in static context</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_16">How to fix</h5>
+<h5 id="how-to-fix_16">How to fix<a class="headerlink" href="#how-to-fix_16" title="Permanent link">&para;</a></h5>
 <p>Remove static usage or pass port values at runtime.</p>
 <hr />
-<h3 id="0xc1137-field-init-type-mismatch">0xC1137 - <em>Field Init Type Mismatch</em></h3>
-<h5 id="description_30">Description</h5>
+<h3 id="0xc1137-field-init-type-mismatch">0xC1137 - <em>Field Init Type Mismatch</em><a class="headerlink" href="#0xc1137-field-init-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_30">Description<a class="headerlink" href="#description_30" title="Permanent link">&para;</a></h5>
 <p>A component field is initialized with a value of the wrong type.</p>
-<h5 id="example_30">Example</h5>
+<h5 id="example_30">Example<a class="headerlink" href="#example_30" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="kt">boolean</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1139-param-default-type-mismatch">0xC1139 - <em>Param Default Type Mismatch</em></h3>
-<h5 id="description_31">Description</h5>
+<h3 id="0xc1139-param-default-type-mismatch">0xC1139 - <em>Param Default Type Mismatch</em><a class="headerlink" href="#0xc1139-param-default-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_31">Description<a class="headerlink" href="#description_31" title="Permanent link">&para;</a></h5>
 <p>A parameter’s default value does not match its declared type.</p>
-<h5 id="example_31">Example</h5>
+<h5 id="example_31">Example<a class="headerlink" href="#example_31" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="kt">boolean</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1142-comp-arg-multi-assignment">0xC1142 - <em>Comp Arg Multi Assignment</em></h3>
-<h5 id="description_32">Description</h5>
+<h3 id="0xc1142-comp-arg-multi-assignment">0xC1142 - <em>Comp Arg Multi Assignment</em><a class="headerlink" href="#0xc1142-comp-arg-multi-assignment" title="Permanent link">&para;</a></h3>
+<h5 id="description_32">Description<a class="headerlink" href="#description_32" title="Permanent link">&para;</a></h5>
 <p>Occurs when a component instantiation uses either the wrong assignment operator or assigns the same parameter more than once.</p>
-<h5 id="example_32">Example</h5>
+<h5 id="example_32">Example<a class="headerlink" href="#example_32" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="p">:</span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">            </span><span class="c1">// wrong operator (must be “=”)</span>
 <span class="kd">component</span> <span class="nf">B</span><span class="p">(</span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w">      </span><span class="c1">// duplicate assignment of “y”</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1143-component-lower-case">0xC1143 - <em>Component Lower Case</em></h3>
-<h5 id="description_33">Description</h5>
+<h3 id="0xc1143-component-lower-case">0xC1143 - <em>Component Lower Case</em><a class="headerlink" href="#0xc1143-component-lower-case" title="Permanent link">&para;</a></h3>
+<h5 id="description_33">Description<a class="headerlink" href="#description_33" title="Permanent link">&para;</a></h5>
 <p>Component names should start with an uppercase letter by convention.</p>
-<h5 id="example_33">Example</h5>
+<h5 id="example_33">Example<a class="headerlink" href="#example_33" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">myComp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1144-subcomponent-upper-case">0xC1144 - <em>Subcomponent Upper Case</em></h3>
-<h5 id="description_34">Description</h5>
+<h3 id="0xc1144-subcomponent-upper-case">0xC1144 - <em>Subcomponent Upper Case</em><a class="headerlink" href="#0xc1144-subcomponent-upper-case" title="Permanent link">&para;</a></h3>
+<h5 id="description_34">Description<a class="headerlink" href="#description_34" title="Permanent link">&para;</a></h5>
 <p>Subcomponent instances should start with a lowercase letter.</p>
-<h5 id="example_34">Example</h5>
+<h5 id="example_34">Example<a class="headerlink" href="#example_34" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="n">Sub</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_17">How to fix</h5>
+<h5 id="how-to-fix_17">How to fix<a class="headerlink" href="#how-to-fix_17" title="Permanent link">&para;</a></h5>
 <p>Rename to <code>sub</code>.</p>
 <hr />
-<h3 id="0xc1145-port-upper-case">0xC1145 - <em>Port Upper Case</em></h3>
-<h5 id="description_35">Description</h5>
+<h3 id="0xc1145-port-upper-case">0xC1145 - <em>Port Upper Case</em><a class="headerlink" href="#0xc1145-port-upper-case" title="Permanent link">&para;</a></h3>
+<h5 id="description_35">Description<a class="headerlink" href="#description_35" title="Permanent link">&para;</a></h5>
 <p>Ports should start with a lowercase letter.</p>
-<h5 id="example_35">Example</h5>
+<h5 id="example_35">Example<a class="headerlink" href="#example_35" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">Data</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1146-parameter-upper-case">0xC1146 - <em>Parameter Upper Case</em></h3>
-<h5 id="description_36">Description</h5>
+<h3 id="0xc1146-parameter-upper-case">0xC1146 - <em>Parameter Upper Case</em><a class="headerlink" href="#0xc1146-parameter-upper-case" title="Permanent link">&para;</a></h3>
+<h5 id="description_36">Description<a class="headerlink" href="#description_36" title="Permanent link">&para;</a></h5>
 <p>Parameters should start with a lowercase letter.</p>
-<h5 id="example_36">Example</h5>
+<h5 id="example_36">Example<a class="headerlink" href="#example_36" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">Par</span><span class="p">)</span><span class="w"> </span><span class="p">{}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1147-field-upper-case">0xC1147 - <em>Field Upper Case</em></h3>
-<h5 id="description_37">Description</h5>
+<h3 id="0xc1147-field-upper-case">0xC1147 - <em>Field Upper Case</em><a class="headerlink" href="#0xc1147-field-upper-case" title="Permanent link">&para;</a></h3>
+<h5 id="description_37">Description<a class="headerlink" href="#description_37" title="Permanent link">&para;</a></h5>
 <p>Component fields should start with a lowercase letter.</p>
-<h5 id="example_37">Example</h5>
+<h5 id="example_37">Example<a class="headerlink" href="#example_37" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="n">Bool</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1148-unique-identifier-names">0xC1148 - <em>Unique Identifier Names</em></h3>
-<h5 id="description_38">Description</h5>
+<h3 id="0xc1148-unique-identifier-names">0xC1148 - <em>Unique Identifier Names</em><a class="headerlink" href="#0xc1148-unique-identifier-names" title="Permanent link">&para;</a></h3>
+<h5 id="description_38">Description<a class="headerlink" href="#description_38" title="Permanent link">&para;</a></h5>
 <p>Multiple identifiers in the same scope share the same name.</p>
-<h5 id="example_38">Example</h5>
+<h5 id="example_38">Example<a class="headerlink" href="#example_38" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">x</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1149-restricted-identifier">0xC1149 - <em>Restricted Identifier</em></h3>
-<h5 id="description_39">Description</h5>
+<h3 id="0xc1149-restricted-identifier">0xC1149 - <em>Restricted Identifier</em><a class="headerlink" href="#0xc1149-restricted-identifier" title="Permanent link">&para;</a></h3>
+<h5 id="description_39">Description<a class="headerlink" href="#description_39" title="Permanent link">&para;</a></h5>
 <p>A reserved or restricted identifier is used where disallowed.</p>
-<h5 id="example_39">Example</h5>
+<h5 id="example_39">Example<a class="headerlink" href="#example_39" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">key</span><span class="p">;</span><span class="w">                 </span><span class="c1">// ❌ “key” is restricted</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1150-unsupported-model-element">0xC1150 - <em>Unsupported Model Element</em></h3>
-<h5 id="description_40">Description</h5>
+<h3 id="0xc1150-unsupported-model-element">0xC1150 - <em>Unsupported Model Element</em><a class="headerlink" href="#0xc1150-unsupported-model-element" title="Permanent link">&para;</a></h3>
+<h5 id="description_40">Description<a class="headerlink" href="#description_40" title="Permanent link">&para;</a></h5>
 <p>A language feature is used that MontiArc does not support and is thus ignored.</p>
-<h5 id="example_40">Example</h5>
+<h5 id="example_40">Example<a class="headerlink" href="#example_40" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="n">final</span><span class="w"> </span><span class="kd">state</span> <span class="nc">s</span><span class="p">;</span><span class="w"> </span><span class="c1">// The final state is unsupported</span>
@@ -6407,35 +6407,35 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1151-read-from-outgoing-port">0xC1151 - <em>Read From Outgoing Port</em></h3>
-<h5 id="description_41">Description</h5>
+<h3 id="0xc1151-read-from-outgoing-port">0xC1151 - <em>Read From Outgoing Port</em><a class="headerlink" href="#0xc1151-read-from-outgoing-port" title="Permanent link">&para;</a></h3>
+<h5 id="description_41">Description<a class="headerlink" href="#description_41" title="Permanent link">&para;</a></h5>
 <p>Attempt to read data from an outgoing port, which is write-only.</p>
-<h5 id="example_41">Example</h5>
+<h5 id="example_41">Example<a class="headerlink" href="#example_41" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_18">How to fix</h5>
+<h5 id="how-to-fix_18">How to fix<a class="headerlink" href="#how-to-fix_18" title="Permanent link">&para;</a></h5>
 <p>Reverse connector direction or use an incoming port for reading.</p>
 <hr />
-<h3 id="0xc1152-write-to-incoming-port">0xC1152 - <em>Write To Incoming Port</em></h3>
-<h5 id="description_42">Description</h5>
+<h3 id="0xc1152-write-to-incoming-port">0xC1152 - <em>Write To Incoming Port</em><a class="headerlink" href="#0xc1152-write-to-incoming-port" title="Permanent link">&para;</a></h3>
+<h5 id="description_42">Description<a class="headerlink" href="#description_42" title="Permanent link">&para;</a></h5>
 <p>Attempt to write data to an incoming port, which is read-only.</p>
-<h5 id="example_42">Example</h5>
+<h5 id="example_42">Example<a class="headerlink" href="#example_42" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_19">How to fix</h5>
+<h5 id="how-to-fix_19">How to fix<a class="headerlink" href="#how-to-fix_19" title="Permanent link">&para;</a></h5>
 <p>Use an outgoing port or connector to send data.</p>
 <hr />
-<h3 id="0xc1153-write-to-readonly-variable">0xC1153 - <em>Write To Readonly Variable</em></h3>
-<h5 id="description_43">Description</h5>
+<h3 id="0xc1153-write-to-readonly-variable">0xC1153 - <em>Write To Readonly Variable</em><a class="headerlink" href="#0xc1153-write-to-readonly-variable" title="Permanent link">&para;</a></h3>
+<h5 id="description_43">Description<a class="headerlink" href="#description_43" title="Permanent link">&para;</a></h5>
 <p>A component field declared as read-only is being assigned.</p>
-<h5 id="example_43">Example</h5>
+<h5 id="example_43">Example<a class="headerlink" href="#example_43" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">final</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1154-invalid-context-assignment">0xC1154 - <em>Invalid Context Assignment</em></h3>
-<h5 id="description_44">Description</h5>
+<h3 id="0xc1154-invalid-context-assignment">0xC1154 - <em>Invalid Context Assignment</em><a class="headerlink" href="#0xc1154-invalid-context-assignment" title="Permanent link">&para;</a></h3>
+<h5 id="description_44">Description<a class="headerlink" href="#description_44" title="Permanent link">&para;</a></h5>
 <p>Assignments are not allowed in this syntactic context. You cannot use an assignment expression (=, +=, -=, etc.) in places where MontiArc does not expect it namely inside subcomponent argument lists or in connector declarations. Such contexts only allow simple parameter bindings or connector arrows, not arbitrary assignments.</p>
-<h5 id="example_44">Example</h5>
+<h5 id="example_44">Example<a class="headerlink" href="#example_44" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="n">Component</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
@@ -6444,53 +6444,53 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1155-invalid-context-increment-prefix">0xC1155 - <em>Invalid Context Increment Prefix</em></h3>
-<h5 id="description_45">Description</h5>
+<h3 id="0xc1155-invalid-context-increment-prefix">0xC1155 - <em>Invalid Context Increment Prefix</em><a class="headerlink" href="#0xc1155-invalid-context-increment-prefix" title="Permanent link">&para;</a></h3>
+<h5 id="description_45">Description<a class="headerlink" href="#description_45" title="Permanent link">&para;</a></h5>
 <p>Prefix increment (<code>++x</code>) is used in a context where disallowed.</p>
-<h5 id="example_45">Example</h5>
+<h5 id="example_45">Example<a class="headerlink" href="#example_45" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="nf">b</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">++</span><span class="n">p</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_20">How to fix</h5>
+<h5 id="how-to-fix_20">How to fix<a class="headerlink" href="#how-to-fix_20" title="Permanent link">&para;</a></h5>
 <p>Perform increments within allowed behavioral code blocks.</p>
 <hr />
-<h3 id="0xc1156-invalid-context-decrement-prefix">0xC1156 - <em>Invalid Context Decrement Prefix</em></h3>
-<h5 id="description_46">Description</h5>
+<h3 id="0xc1156-invalid-context-decrement-prefix">0xC1156 - <em>Invalid Context Decrement Prefix</em><a class="headerlink" href="#0xc1156-invalid-context-decrement-prefix" title="Permanent link">&para;</a></h3>
+<h5 id="description_46">Description<a class="headerlink" href="#description_46" title="Permanent link">&para;</a></h5>
 <p>Prefix decrement (<code>--x</code>) is used where not permitted.</p>
-<h5 id="example_46">Example</h5>
+<h5 id="example_46">Example<a class="headerlink" href="#example_46" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="nf">b</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">--</span><span class="n">p</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_21">How to fix</h5>
+<h5 id="how-to-fix_21">How to fix<a class="headerlink" href="#how-to-fix_21" title="Permanent link">&para;</a></h5>
 <p>Use within valid behavioral blocks.</p>
 <hr />
-<h3 id="0xc1157-invalid-context-increment-suffix">0xC1157 - <em>Invalid Context Increment Suffix</em></h3>
-<h5 id="description_47">Description</h5>
+<h3 id="0xc1157-invalid-context-increment-suffix">0xC1157 - <em>Invalid Context Increment Suffix</em><a class="headerlink" href="#0xc1157-invalid-context-increment-suffix" title="Permanent link">&para;</a></h3>
+<h5 id="description_47">Description<a class="headerlink" href="#description_47" title="Permanent link">&para;</a></h5>
 <p>Suffix increment (<code>x++</code>) is disallowed in this context.</p>
-<h5 id="example_47">Example</h5>
+<h5 id="example_47">Example<a class="headerlink" href="#example_47" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="nf">b</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">++</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_22">How to fix</h5>
+<h5 id="how-to-fix_22">How to fix<a class="headerlink" href="#how-to-fix_22" title="Permanent link">&para;</a></h5>
 <p>Place increments in behavior sections.</p>
 <hr />
-<h3 id="0xc1158-invalid-context-decrement-suffix">0xC1158 - <em>Invalid Context Decrement Suffix</em></h3>
-<h5 id="description_48">Description</h5>
+<h3 id="0xc1158-invalid-context-decrement-suffix">0xC1158 - <em>Invalid Context Decrement Suffix</em><a class="headerlink" href="#0xc1158-invalid-context-decrement-suffix" title="Permanent link">&para;</a></h3>
+<h5 id="description_48">Description<a class="headerlink" href="#description_48" title="Permanent link">&para;</a></h5>
 <p>Suffix decrement (<code>x--</code>) is disallowed here.</p>
-<h5 id="example_48">Example</h5>
+<h5 id="example_48">Example<a class="headerlink" href="#example_48" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">B</span><span class="w"> </span><span class="nf">b</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">--</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_23">How to fix</h5>
+<h5 id="how-to-fix_23">How to fix<a class="headerlink" href="#how-to-fix_23" title="Permanent link">&para;</a></h5>
 <p>Use within valid operational code.</p>
 <hr />
-<h3 id="0xc1159-key-not-unique">0xC1159 - <em>Key Not Unique</em></h3>
-<h5 id="description_49">Description</h5>
+<h3 id="0xc1159-key-not-unique">0xC1159 - <em>Key Not Unique</em><a class="headerlink" href="#0xc1159-key-not-unique" title="Permanent link">&para;</a></h3>
+<h5 id="description_49">Description<a class="headerlink" href="#description_49" title="Permanent link">&para;</a></h5>
 <p>The same key is used multiple times when setting parameters.</p>
-<h5 id="example_49">Example</h5>
+<h5 id="example_49">Example<a class="headerlink" href="#example_49" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="n">x</span><span class="o">=</span><span class="mi">2</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1174-connectors-in-atomic">0xC1174 - <em>Connectors In Atomic</em></h3>
-<h5 id="description_50">Description</h5>
+<h3 id="0xc1174-connectors-in-atomic">0xC1174 - <em>Connectors In Atomic</em><a class="headerlink" href="#0xc1174-connectors-in-atomic" title="Permanent link">&para;</a></h3>
+<h5 id="description_50">Description<a class="headerlink" href="#description_50" title="Permanent link">&para;</a></h5>
 <p>An atomic component is one without subcomponents; connectors cannot be used inside such components.</p>
-<h5 id="example_50">Example</h5>
+<h5 id="example_50">Example<a class="headerlink" href="#example_50" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w">  </span><span class="n">Integer</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
@@ -6499,53 +6499,53 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1175-type-parameter-upper-case">0xC1175 - <em>Type Parameter Upper Case</em></h3>
-<h5 id="description_51">Description</h5>
+<h3 id="0xc1175-type-parameter-upper-case">0xC1175 - <em>Type Parameter Upper Case</em><a class="headerlink" href="#0xc1175-type-parameter-upper-case" title="Permanent link">&para;</a></h3>
+<h5 id="description_51">Description<a class="headerlink" href="#description_51" title="Permanent link">&para;</a></h5>
 <p>Type parameters should start with an uppercase letter by convention.</p>
-<h5 id="example_51">Example</h5>
+<h5 id="example_51">Example<a class="headerlink" href="#example_51" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_24">How to fix</h5>
+<h5 id="how-to-fix_24">How to fix<a class="headerlink" href="#how-to-fix_24" title="Permanent link">&para;</a></h5>
 <p>Rename the type parameter to an uppercase identifier:</p>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1176-type-argument-ignores-upper-bound">0xC1176 - <em>Type Argument Ignores Upper Bound</em></h3>
-<h5 id="description_52">Description</h5>
+<h3 id="0xc1176-type-argument-ignores-upper-bound">0xC1176 - <em>Type Argument Ignores Upper Bound</em><a class="headerlink" href="#0xc1176-type-argument-ignores-upper-bound" title="Permanent link">&para;</a></h3>
+<h5 id="description_52">Description<a class="headerlink" href="#description_52" title="Permanent link">&para;</a></h5>
 <p>Type parameter does not respect its declared upper bound.</p>
-<h5 id="example_52">Example</h5>
+<h5 id="example_52">Example<a class="headerlink" href="#example_52" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">T</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Number</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">inst</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// ❌ String does not extend Number</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1177-too-few-type-arguments">0xC1177 - <em>Too Few Type Arguments</em></h3>
-<h5 id="description_53">Description</h5>
+<h3 id="0xc1177-too-few-type-arguments">0xC1177 - <em>Too Few Type Arguments</em><a class="headerlink" href="#0xc1177-too-few-type-arguments" title="Permanent link">&para;</a></h3>
+<h5 id="description_53">Description<a class="headerlink" href="#description_53" title="Permanent link">&para;</a></h5>
 <p>Too few type arguments provided for a generic component.</p>
-<h5 id="example_53">Example</h5>
+<h5 id="example_53">Example<a class="headerlink" href="#example_53" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">K</span><span class="p">,</span><span class="w"> </span><span class="n">V</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span><span class="w"> </span><span class="n">inst</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// ❌ missing second argument</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1178-too-many-type-arguments">0xC1178 - <em>Too Many Type Arguments</em></h3>
-<h5 id="description_54">Description</h5>
+<h3 id="0xc1178-too-many-type-arguments">0xC1178 - <em>Too Many Type Arguments</em><a class="headerlink" href="#0xc1178-too-many-type-arguments" title="Permanent link">&para;</a></h3>
+<h5 id="description_54">Description<a class="headerlink" href="#description_54" title="Permanent link">&para;</a></h5>
 <p>Too many type arguments provided for a generic component.</p>
-<h5 id="example_54">Example</h5>
+<h5 id="example_54">Example<a class="headerlink" href="#example_54" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="o">&lt;</span><span class="n">String</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="o">&gt;</span><span class="w"> </span><span class="n">inst</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// two args for one parameter</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1182-raw-use-of-parametrized-type">0xC1182 - <em>Raw Use Of Parametrized Type</em></h3>
-<h5 id="description_55">Description</h5>
+<h3 id="0xc1182-raw-use-of-parametrized-type">0xC1182 - <em>Raw Use Of Parametrized Type</em><a class="headerlink" href="#0xc1182-raw-use-of-parametrized-type" title="Permanent link">&para;</a></h3>
+<h5 id="description_55">Description<a class="headerlink" href="#description_55" title="Permanent link">&para;</a></h5>
 <p>Raw usage of a parameterized component type without type arguments.</p>
-<h5 id="example_55">Example</h5>
+<h5 id="example_55">Example<a class="headerlink" href="#example_55" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="n">inst</span><span class="p">;</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// raw use</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1184-refinement-port-name-mismatch">0xC1184 - <em>Refinement Port Name Mismatch</em></h3>
-<h5 id="description_56">Description</h5>
+<h3 id="0xc1184-refinement-port-name-mismatch">0xC1184 - <em>Refinement Port Name Mismatch</em><a class="headerlink" href="#0xc1184-refinement-port-name-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_56">Description<a class="headerlink" href="#description_56" title="Permanent link">&para;</a></h5>
 <p>Interface mismatch during refinement: a port exists in the abstraction but not in the refinement.</p>
-<h5 id="example_56">Example</h5>
+<h5 id="example_56">Example<a class="headerlink" href="#example_56" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">refines</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="c1">// missing port x </span>
@@ -6553,72 +6553,72 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1185-refinement-port-direction-changed">0xC1185 - <em>Refinement Port Direction Changed</em></h3>
-<h5 id="description_57">Description</h5>
+<h3 id="0xc1185-refinement-port-direction-changed">0xC1185 - <em>Refinement Port Direction Changed</em><a class="headerlink" href="#0xc1185-refinement-port-direction-changed" title="Permanent link">&para;</a></h3>
+<h5 id="description_57">Description<a class="headerlink" href="#description_57" title="Permanent link">&para;</a></h5>
 <p>Direction mismatch: a port changes from <code>in</code> to <code>out</code> or vice versa during refinement.</p>
-<h5 id="example_57">Example</h5>
+<h5 id="example_57">Example<a class="headerlink" href="#example_57" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">refines</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1186-refinement-timing-mismatch-in">0xC1186 - <em>Refinement Timing Mismatch In</em></h3>
-<h5 id="description_58">Description</h5>
+<h3 id="0xc1186-refinement-timing-mismatch-in">0xC1186 - <em>Refinement Timing Mismatch In</em><a class="headerlink" href="#0xc1186-refinement-timing-mismatch-in" title="Permanent link">&para;</a></h3>
+<h5 id="description_58">Description<a class="headerlink" href="#description_58" title="Permanent link">&para;</a></h5>
 <p>Illegal timing change for an incoming port during refinement.</p>
-<h5 id="example_58">Example</h5>
+<h5 id="example_58">Example<a class="headerlink" href="#example_58" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">refines</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1187-refinement-timing-mismatch-out">0xC1187 - <em>Refinement Timing Mismatch Out</em></h3>
-<h5 id="description_59">Description</h5>
+<h3 id="0xc1187-refinement-timing-mismatch-out">0xC1187 - <em>Refinement Timing Mismatch Out</em><a class="headerlink" href="#0xc1187-refinement-timing-mismatch-out" title="Permanent link">&para;</a></h3>
+<h5 id="description_59">Description<a class="headerlink" href="#description_59" title="Permanent link">&para;</a></h5>
 <p>Illegal timing change for an outgoing port during refinement.</p>
-<h5 id="example_59">Example</h5>
+<h5 id="example_59">Example<a class="headerlink" href="#example_59" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">refines</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1188-refinement-in-port-type-mismatch">0xC1188 - <em>Refinement In Port Type Mismatch</em></h3>
-<h5 id="description_60">Description</h5>
+<h3 id="0xc1188-refinement-in-port-type-mismatch">0xC1188 - <em>Refinement In Port Type Mismatch</em><a class="headerlink" href="#0xc1188-refinement-in-port-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_60">Description<a class="headerlink" href="#description_60" title="Permanent link">&para;</a></h5>
 <p>Input port type in the refinement is not a supertype of the abstraction’s port type.</p>
-<h5 id="example_60">Example</h5>
+<h5 id="example_60">Example<a class="headerlink" href="#example_60" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">refines</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1189-refinement-out-port-type-mismatch">0xC1189 - <em>Refinement Out Port Type Mismatch</em></h3>
-<h5 id="description_61">Description</h5>
+<h3 id="0xc1189-refinement-out-port-type-mismatch">0xC1189 - <em>Refinement Out Port Type Mismatch</em><a class="headerlink" href="#0xc1189-refinement-out-port-type-mismatch" title="Permanent link">&para;</a></h3>
+<h5 id="description_61">Description<a class="headerlink" href="#description_61" title="Permanent link">&para;</a></h5>
 <p>Output port type in the refinement is not a subtype of the abstraction’s port type.</p>
-<h5 id="example_61">Example</h5>
+<h5 id="example_61">Example<a class="headerlink" href="#example_61" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">refines</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Object</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1190-circular-fields-dependency">0xC1190 - <em>Circular Fields Dependency</em></h3>
-<h5 id="description_62">Description</h5>
+<h3 id="0xc1190-circular-fields-dependency">0xC1190 - <em>Circular Fields Dependency</em><a class="headerlink" href="#0xc1190-circular-fields-dependency" title="Permanent link">&para;</a></h3>
+<h5 id="description_62">Description<a class="headerlink" href="#description_62" title="Permanent link">&para;</a></h5>
 <p>Component fields depend on each other circularly in their initializers.</p>
-<h5 id="example_62">Example</h5>
+<h5 id="example_62">Example<a class="headerlink" href="#example_62" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">Integer</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">b</span><span class="p">;</span>
 <span class="w">  </span><span class="n">Integer</span><span class="w"> </span><span class="n">b</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="p">;</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />
-<h3 id="0xc1191-in-port-ref-in-invalid-context">0xC1191 - <em>IN Port Ref In Invalid Context</em></h3>
-<h5 id="description_63">Description</h5>
+<h3 id="0xc1191-in-port-ref-in-invalid-context">0xC1191 - <em>IN Port Ref In Invalid Context</em><a class="headerlink" href="#0xc1191-in-port-ref-in-invalid-context" title="Permanent link">&para;</a></h3>
+<h5 id="description_63">Description<a class="headerlink" href="#description_63" title="Permanent link">&para;</a></h5>
 <p>Value of an incoming port is not available in the given static context.</p>
-<h5 id="example_63">Example</h5>
+<h5 id="example_63">Example<a class="headerlink" href="#example_63" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 <span class="w">  </span><span class="kt">int</span><span class="w"> </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w"> </span><span class="c1">// cannot read port in initializer</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_25">How to fix</h5>
+<h5 id="how-to-fix_25">How to fix<a class="headerlink" href="#how-to-fix_25" title="Permanent link">&para;</a></h5>
 <p>Read port values at runtime (e.g., in behavior) or pass them through connectors.</p>
 <hr />
-<h3 id="0xc1192-out-port-member-accessed">0xC1192 - <em>Out Port Member Accessed</em></h3>
-<h5 id="description_64">Description</h5>
+<h3 id="0xc1192-out-port-member-accessed">0xC1192 - <em>Out Port Member Accessed</em><a class="headerlink" href="#0xc1192-out-port-member-accessed" title="Permanent link">&para;</a></h3>
+<h5 id="description_64">Description<a class="headerlink" href="#description_64" title="Permanent link">&para;</a></h5>
 <p>Cannot access an outgoing port or its members; output ports are write-only.</p>
-<h5 id="example_64">Example</h5>
+<h5 id="example_64">Example<a class="headerlink" href="#example_64" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 <span class="w">  </span><span class="n">compute</span><span class="w"> </span><span class="p">{</span>
@@ -6626,13 +6626,13 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h5 id="how-to-fix_26">How to fix</h5>
+<h5 id="how-to-fix_26">How to fix<a class="headerlink" href="#how-to-fix_26" title="Permanent link">&para;</a></h5>
 <p>Use the port as a connector source only, or read through an input port.</p>
 <hr />
-<h3 id="0xc1193-invalid-port-timing-override">0xC1193 - <em>Invalid Port Timing Override</em></h3>
-<h5 id="description_65">Description</h5>
+<h3 id="0xc1193-invalid-port-timing-override">0xC1193 - <em>Invalid Port Timing Override</em><a class="headerlink" href="#0xc1193-invalid-port-timing-override" title="Permanent link">&para;</a></h3>
+<h5 id="description_65">Description<a class="headerlink" href="#description_65" title="Permanent link">&para;</a></h5>
 <p>A port cannot override its timing annotation to an incompatible value.</p>
-<h5 id="example_65">Example</h5>
+<h5 id="example_65">Example<a class="headerlink" href="#example_65" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>

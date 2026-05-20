@@ -3368,15 +3368,15 @@
   
 
 
-<h1 id="autoconnect">Autoconnect</h1>
+<h1 id="autoconnect">Autoconnect<a class="headerlink" href="#autoconnect" title="Permanent link">&para;</a></h1>
 <p>MontiArc allows to automatically complete component definitions by adding <a href="../Connectors/">connectors</a> based on the present ports.
 Different strategies exist for selecting which ports to connect. These are: <code>off</code>, <code>port</code>, and <code>type</code>. </p>
 <div class="admonition info">
 <p class="admonition-title">Info</p>
 <p>It is <strong>not</strong> possible to use multiple autoconnect modes in a component.</p>
 </div>
-<h2 id="strategies">Strategies</h2>
-<h3 id="autoconnect-off">Autoconnect Off</h3>
+<h2 id="strategies">Strategies<a class="headerlink" href="#strategies" title="Permanent link">&para;</a></h2>
+<h3 id="autoconnect-off">Autoconnect Off<a class="headerlink" href="#autoconnect-off" title="Permanent link">&para;</a></h3>
 <p>The default strategy. It does not add any new connectors and can be omitted. </p>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">autoconnect</span><span class="w"> </span><span class="n">off</span><span class="p">;</span>
@@ -3388,10 +3388,10 @@ Different strategies exist for selecting which ports to connect. These are: <cod
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="autoconnect-port">Autoconnect Port</h3>
+<h3 id="autoconnect-port">Autoconnect Port<a class="headerlink" href="#autoconnect-port" title="Permanent link">&para;</a></h3>
 <p>If ports with matching names and compatible types exist, a connection is added.
 If multiple ports match, no connector is added for the corresponding ports.</p>
-<h5 id="1-example">1. Example</h5>
+<h5 id="1-example">1. Example<a class="headerlink" href="#1-example" title="Permanent link">&para;</a></h5>
 <p>Since there is no matching port of the same type and name, no connector is added.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">autoconnect</span><span class="w"> </span><span class="k">port</span><span class="p">;</span>
@@ -3403,7 +3403,7 @@ If multiple ports match, no connector is added for the corresponding ports.</p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h5 id="2-example">2. Example</h5>
+<h5 id="2-example">2. Example<a class="headerlink" href="#2-example" title="Permanent link">&para;</a></h5>
 <p>Adds the connectors <code>i -&gt; inner.i</code> and <code>o.inner -&gt; o</code>.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">autoconnect</span><span class="w"> </span><span class="k">port</span><span class="p">;</span>
@@ -3416,7 +3416,7 @@ If multiple ports match, no connector is added for the corresponding ports.</p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h5 id="3-example">3. Example</h5>
+<h5 id="3-example">3. Example<a class="headerlink" href="#3-example" title="Permanent link">&para;</a></h5>
 <p>Two connectors are added: <code>i -&gt; inner1.i</code> and <code>i -&gt; inner2.i</code>.
 For the outgoing port <code>o</code> multiple connections are possible, <code>inner1.o -&gt; o</code> and <code>inner2.0 -&gt; o</code>, but since it can only be connected to one, no connection is added.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">A</span><span class="w"> </span><span class="p">{</span>
@@ -3430,10 +3430,10 @@ For the outgoing port <code>o</code> multiple connections are possible, <code>in
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h3 id="autoconnect-type">Autoconnect Type</h3>
+<h3 id="autoconnect-type">Autoconnect Type<a class="headerlink" href="#autoconnect-type" title="Permanent link">&para;</a></h3>
 <p>If ports with compatible types exist, a connection is added.
 If multiple ports match, no connector is added for the corresponding ports.</p>
-<h5 id="1-example_1">1. Example</h5>
+<h5 id="1-example_1">1. Example<a class="headerlink" href="#1-example_1" title="Permanent link">&para;</a></h5>
 <p>Adds the connector <code>i -&gt; inner.i_inner</code> since the type is the same.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">autoconnect</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
@@ -3444,7 +3444,7 @@ If multiple ports match, no connector is added for the corresponding ports.</p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h5 id="2-example_1">2. Example</h5>
+<h5 id="2-example_1">2. Example<a class="headerlink" href="#2-example_1" title="Permanent link">&para;</a></h5>
 <p>Adds the connector <code>i -&gt; inner.i_inner</code> and <code>inner.o -&gt; o</code> since the type is the same.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span><span class="w"> </span>
 <span class="w">  </span><span class="n">autoconnect</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>
@@ -3457,7 +3457,7 @@ If multiple ports match, no connector is added for the corresponding ports.</p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h5 id="3-example_1">3. Example</h5>
+<h5 id="3-example_1">3. Example<a class="headerlink" href="#3-example_1" title="Permanent link">&para;</a></h5>
 <p>No connector is added, since multiple ambiguous candidates exist: <code>i -&gt; inner.i_inner</code>, <code>inner.o -&gt; o</code>, <code>inner.o -&gt; inner.i_inner</code> and <code>o -&gt; i</code>.
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Comp</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">autoconnect</span><span class="w"> </span><span class="n">type</span><span class="p">;</span>

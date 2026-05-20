@@ -3401,7 +3401,7 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="automata-or-actually-statecharts">Automata (or actually: Statecharts)</h1>
+<h1 id="automata-or-actually-statecharts">Automata (or actually: Statecharts)<a class="headerlink" href="#automata-or-actually-statecharts" title="Permanent link">&para;</a></h1>
 <p>Automata are a means to model behavior in MontiArc. An automaton consists of 
 states and transitions between these states. When time progresses, or when the 
 component receives an input, the automata may execute a transition, producing 
@@ -3424,7 +3424,7 @@ and transitions.</p>
 <span class="p">}</span>
 </code></pre></div>
 </details>
-<h2 id="states">States</h2>
+<h2 id="states">States<a class="headerlink" href="#states" title="Permanent link">&para;</a></h2>
 <p>An automaton has at least one state and exactly one initial state.</p>
 <p>A simple state declaration looks like</p>
 <div class="highlight"><pre><span></span><code><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
@@ -3438,7 +3438,7 @@ and transitions.</p>
 <p><code>S</code> is the unique name of the state (defines the state's name)</p>
 </li>
 </ul>
-<h2 id="transitions">Transitions</h2>
+<h2 id="transitions">Transitions<a class="headerlink" href="#transitions" title="Permanent link">&para;</a></h2>
 <p>An automaton can have any number of transitions between states.</p>
 <p>A simple transition looks like</p>
 <div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">CONDITION</span><span class="o">]</span><span class="w"> </span><span class="n">EVENT</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">ACTION</span><span class="w"> </span><span class="p">}</span>
@@ -3469,10 +3469,10 @@ transition.</p>
 <p class="admonition-title">Hint</p>
 <p>If a transition does <strong>not</strong> specify an event trigger (i.e., no port name is written after the guard or at all), then this transition is called an <em>epsilon transition</em> or <em>time-triggered transition</em>. It is executed at each simulation time step.</p>
 </div>
-<h2 id="actions">Actions</h2>
+<h2 id="actions">Actions<a class="headerlink" href="#actions" title="Permanent link">&para;</a></h2>
 <p><code>ACTION</code>s describe the reaction to a stimulus. They may be added to a state as entry- and/or exit-action or to a transition as an action. 
 <code>ACTION</code>s are a list of <a href="../../Concepts/Statements/">statements</a> that are executed when a state is entered, left, or when a transition is taken.</p>
-<h3 id="entry-and-exit-actions">Entry and Exit Actions</h3>
+<h3 id="entry-and-exit-actions">Entry and Exit Actions<a class="headerlink" href="#entry-and-exit-actions" title="Permanent link">&para;</a></h3>
 <p>A state may define entry and exit actions that are executed when entering exiting the state, respectively.
 A state with both entry and exit actions looks like </p>
 <div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">S</span><span class="w"> </span><span class="p">{</span>
@@ -3495,7 +3495,7 @@ A state with both entry and exit actions looks like </p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h3 id="further-action-examples">Further Action Examples</h3>
+<h3 id="further-action-examples">Further Action Examples<a class="headerlink" href="#further-action-examples" title="Permanent link">&para;</a></h3>
 <div class="admonition info">
 <p class="admonition-title">Note</p>
 <p>The <code>ACTION</code>s described below, which are executed when a transition is taken, can <strong>also</strong> be used in entry and exit actions. 
@@ -3551,7 +3551,7 @@ A state with both entry and exit actions looks like </p>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div></p>
-<h2 id="hierarchical-states">Hierarchical States</h2>
+<h2 id="hierarchical-states">Hierarchical States<a class="headerlink" href="#hierarchical-states" title="Permanent link">&para;</a></h2>
 <p>A state may be hierarchically decomposed into substates. A state can have any 
 number of substates and substates themselves can be hierarchically decomposed.</p>
 <div class="highlight"><pre><span></span><code><span class="kd">state</span> <span class="nc">HS</span><span class="w"> </span><span class="p">{</span>
@@ -3576,7 +3576,7 @@ number of substates and substates themselves can be hierarchically decomposed.</
 </ul>
 <p>Hierarchical states and their substates can be the source and target of 
 transitions just like regular states.</p>
-<h2 id="message-events">Message Events</h2>
+<h2 id="message-events">Message Events<a class="headerlink" href="#message-events" title="Permanent link">&para;</a></h2>
 <p>A message event occurs when an incoming, non-synchronous port receives a 
 message. The execution of a transition can be triggered by such an event. 
 The type and name of the message event is the type and name of the 
@@ -3592,7 +3592,7 @@ corresponding port.</p>
 <div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">number</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="n">number</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">number</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h2 id="time-events-epsilon-transitions">Time Events (Epsilon Transitions)</h2>
+<h2 id="time-events-epsilon-transitions">Time Events (Epsilon Transitions)<a class="headerlink" href="#time-events-epsilon-transitions" title="Permanent link">&para;</a></h2>
 <p>A time event, which we also call a tick, occurs at discrete points in time. 
 It is not specified how much time passes between two ticks, but it can be 
 assumed that any calculation can be computed between two successive ticks.</p>
@@ -3612,7 +3612,7 @@ The current message on each synchronous port is available for the time event.
 A transition triggered by a time event can reason about properties of messages on all incoming, synchronous ports, and use the messages in the transition action.</p>
 <div class="highlight"><pre><span></span><code><span class="n">S1</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S2</span><span class="w"> </span><span class="o">[</span><span class="n">b</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="mi">0</span><span class="o">]</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">v</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">b</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
-<h2 id="output">Output</h2>
+<h2 id="output">Output<a class="headerlink" href="#output" title="Permanent link">&para;</a></h2>
 <p>An automaton can send a message via an outgoing port by assigning it some value.
 While messages on incoming ports are only available in the context of a specific event, 
 messages can be sent via an outgoing port in any action. </p>
@@ -3636,9 +3636,9 @@ Multiple messages can be sent via outgoing ports in quick succession. </p>
 <p>Two messages are sent via port <code>result</code> every time the transition is executed. 
 The messages are sent in order, that is, first the result of the expression 
 <code>100 / number</code> and then the result of the expression <code>100 * number</code>.</p>
-<h2 id="examples">Examples</h2>
+<h2 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h2>
 <p>We show examples for each time interpretation, although they can also be mixed.</p>
-<h3 id="event-automaton">Event Automaton</h3>
+<h3 id="event-automaton">Event Automaton<a class="headerlink" href="#event-automaton" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.types.Color</span><span class="p">;</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.types.ButtonEvent</span><span class="p">;</span>
 
@@ -3681,7 +3681,7 @@ The messages are sent in order, that is, first the result of the expression
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
-<h3 id="time-synchronous-automaton">Time-Synchronous Automaton</h3>
+<h3 id="time-synchronous-automaton">Time-Synchronous Automaton<a class="headerlink" href="#time-synchronous-automaton" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Divide</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">a</span><span class="p">,</span><span class="w"> </span><span class="n">b</span><span class="p">,</span>
 <span class="w">       </span><span class="k">sync</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">r</span><span class="p">;</span>

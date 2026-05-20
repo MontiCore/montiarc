@@ -3287,9 +3287,9 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="hello-world">Hello, World!</h1>
+<h1 id="hello-world">Hello, World!<a class="headerlink" href="#hello-world" title="Permanent link">&para;</a></h1>
 <p>You're now ready to start with your first system. </p>
-<h2 id="writing-and-running-a-component-model">Writing and Running a Component Model</h2>
+<h2 id="writing-and-running-a-component-model">Writing and Running a Component Model<a class="headerlink" href="#writing-and-running-a-component-model" title="Permanent link">&para;</a></h2>
 <p>Go to a directory of your choice and create a text file named <code>HelloWorld.arc</code>.</p>
 <p>Now open the file <code>HelloWorld.arc</code> you just created and insert the following:</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.lang.*</span><span class="p">;</span>
@@ -3313,19 +3313,19 @@ montiarc<span class="w"> </span>run<span class="w"> </span>HelloWorld.arc
 <li>If you've downloaded the jar directly, run <code>java -jar MontiArc-7.9.0.jar --input HelloWorld.arc --output .</code></li>
 </ol>
 <p>A <code>Hello, World!</code> should print to the terminal. If it did, congrats! You're now a MontiArc modeler.</p>
-<h2 id="anatomy-of-a-component-model">Anatomy of a Component Model</h2>
+<h2 id="anatomy-of-a-component-model">Anatomy of a Component Model<a class="headerlink" href="#anatomy-of-a-component-model" title="Permanent link">&para;</a></h2>
 <p>Let's review the model you've just run.</p>
-<h4 id="import">Import</h4>
+<h4 id="import">Import<a class="headerlink" href="#import" title="Permanent link">&para;</a></h4>
 <p><div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">montiarc.lang.*</span><span class="p">;</span>
 </code></pre></div>
 The first part is an import statement. It allows us to include additional functionality inside our model.
 Every element is located in some package. Everything defined in the same package is visible to one another and can be used without importing.
 Elements located in another package must be imported explicitly, like the MontiArc standard library that is imported here.</p>
-<h4 id="comment">Comment</h4>
+<h4 id="comment">Comment<a class="headerlink" href="#comment" title="Permanent link">&para;</a></h4>
 <p><a href="../../Reference/Concepts/Comments/">Comments</a> will be ignored by the parser and are just like in Java and many other languages.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// My HelloWorld component</span>
 </code></pre></div>
-<h4 id="component">Component</h4>
+<h4 id="component">Component<a class="headerlink" href="#component" title="Permanent link">&para;</a></h4>
 <p><div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">HelloWorld</span><span class="w"> </span><span class="p">{</span>
 
 <span class="p">}</span>
@@ -3333,7 +3333,7 @@ Elements located in another package must be imported explicitly, like the MontiA
 The main part is a <a href="../../Reference/Component/">component</a> called <code>HelloWorld</code>. Components are the core building blocks of any MontiArc model and describe a unit of common characteristics that interact with the environment through well-defined interfaces.
 In our example, the component has no interface and thus is deployable, i.e. executable.</p>
 <p>Components can consist of other components, which we refer to as <a href="../../Reference/Component/Decomposition/">decomposed</a> components, or contain a behavior description, so-called <a href="../../Reference/Behavior/">atomic</a> components. In our example, the component is atomic, and the behavior is described by an <a href="../../Reference/Behavior/Automata/">automaton</a>.</p>
-<h4 id="automaton">Automaton</h4>
+<h4 id="automaton">Automaton<a class="headerlink" href="#automaton" title="Permanent link">&para;</a></h4>
 <p><div class="highlight"><pre><span></span><code><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 <span class="w">  </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
@@ -3344,7 +3344,7 @@ In our example, the component has no interface and thus is deployable, i.e. exec
 Automata have <a href="../../Reference/Behavior/Automata/#states">states</a> and <a href="../../Reference/Behavior/Automata/#transitions">transitions</a>. States can be identified by the <code>state</code> keyword and their name. One state has to be marked as the <code>initial</code> state; this is the state we start at.</p>
 <p>Transitions describe state changes and allow execution of code during that. Every transition has a trigger; more on that later, but if none is specified (as in our case), the transition is triggered every time step.
 In our example, we stay at state <code>S</code> and execute the transition body.</p>
-<h4 id="statements">Statements</h4>
+<h4 id="statements">Statements<a class="headerlink" href="#statements" title="Permanent link">&para;</a></h4>
 <p>A transition body consists of multiple <a href="../../Reference/Concepts/Statements/">statements</a>. Where each ends with a semicolon <code>;</code>, which means the statement is over, and we can continue with the next one.
 Our body consists of two statements:</p>
 <p><div class="highlight"><pre><span></span><code><span class="n">Console</span><span class="p">.</span><span class="na">printLn</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
@@ -3355,7 +3355,7 @@ What is printed out can be provided as an argument to the method.</p>
 </code></pre></div>
 This statement interacts with the simulation we are executing and stops it after the current time step. By default, models are run indefinitely, and without this statement, we would have repeatedly printed <code>Hello World!</code> to the console forever.</p>
 <p>You most likely won't need to interact with the simulation, yet stop it, in your projects since modeling infinite systems is a feature, not a bug.</p>
-<h2 id="compiling-and-running-are-separate-steps">Compiling and Running are Separate Steps</h2>
+<h2 id="compiling-and-running-are-separate-steps">Compiling and Running are Separate Steps<a class="headerlink" href="#compiling-and-running-are-separate-steps" title="Permanent link">&para;</a></h2>
 <p>Now that you know how the program was modeled, let's again look at the steps you took to execute the model. </p>
 <p>Although we refer to it as execution, this is more of a simulation. In real applications, these models are cyberphysical systems where the components are distributed and possibly realized through mechanical, electrical, and software components. </p>
 <p><div class="highlight"><pre><span></span><code>montiarc<span class="w"> </span>--input<span class="w"> </span>HelloWorld.arc<span class="w"> </span>--output<span class="w"> </span>.

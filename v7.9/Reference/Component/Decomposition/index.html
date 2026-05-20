@@ -3179,13 +3179,13 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="de-composition">(De-) Composition</h1>
+<h1 id="de-composition">(De-) Composition<a class="headerlink" href="#de-composition" title="Permanent link">&para;</a></h1>
 <p>Components can be decomposed to structure a system, separate concerns, and 
 reduce complexity by distributing system functionality across multiple smaller 
 components. </p>
 <p>In MontiArc, component types define the decomposition of components in terms 
 of subcomponents and connectors between the components' interfaces. </p>
-<h2 id="subcomponent-declaration">Subcomponent Declaration</h2>
+<h2 id="subcomponent-declaration">Subcomponent Declaration<a class="headerlink" href="#subcomponent-declaration" title="Permanent link">&para;</a></h2>
 <p>Subcomponents are declared in the body of a component type, specifying the 
 subcomponents' types and stating their names. A simple subcomponent declaration 
 looks like </p>
@@ -3211,7 +3211,7 @@ list after the component's type, which looks like </p>
 <div class="highlight"><pre><span></span><code><span class="n">TYPE</span><span class="w"> </span><span class="n">SUB1</span><span class="p">;</span>
 <span class="n">TYPE</span><span class="w"> </span><span class="n">SUB2</span><span class="p">;</span>
 </code></pre></div>
-<h2 id="arguments">Arguments</h2>
+<h2 id="arguments">Arguments<a class="headerlink" href="#arguments" title="Permanent link">&para;</a></h2>
 <p>The instantiation of a component may require arguments, which configure the 
 component's initial state or behavior.
 The component's type declaration defines the number, order, and type of 
@@ -3224,7 +3224,7 @@ A subcomponent declaration with arguments looks like</p>
 <p>where <code>ARGS</code> is a comma-separated list of arguments of the form 
 <code>ARG1, ARG2, ...., ARGn</code> where <code>ARG1</code>, <code>ARG2</code>, and so forth until <code>ARGn</code> are 
 the first, second, and so forth until the n-th argument. All arguments are defined using <a href="../../Concepts/Expressions/">expressions</a>.</p>
-<h2 id="type-arguments">Type Arguments</h2>
+<h2 id="type-arguments">Type Arguments<a class="headerlink" href="#type-arguments" title="Permanent link">&para;</a></h2>
 <p>Generic components require type arguments that replace the generic's type 
 parameters with the actual types.
 The component's type declaration defines the number of type arguments needed, 

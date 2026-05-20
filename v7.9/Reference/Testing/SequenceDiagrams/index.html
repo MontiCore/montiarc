@@ -3257,7 +3257,7 @@
 
 
 <!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="sequence-diagrams-for-testing">Sequence Diagrams for Testing</h1>
+<h1 id="sequence-diagrams-for-testing">Sequence Diagrams for Testing<a class="headerlink" href="#sequence-diagrams-for-testing" title="Permanent link">&para;</a></h1>
 <p>Sequence diagrams are well suited for the specification and testing of behavior.
 Here we will only focus on the testing part. To enable this feature, use the <a href="../../../Usage/Gradle/SD2Arc/">SD2Arc</a> Tool.</p>
 <p>MontiArc provides an integration for sequence diagrams. They look similar to
@@ -3277,7 +3277,7 @@ For a detailed definition of sequence diagrams, read <a href="https://link.sprin
   assert (emitterA.out &amp;&amp; and.b) == and.q;
 }
 </code></pre></div>
-<h2 id="test">Test</h2>
+<h2 id="test">Test<a class="headerlink" href="#test" title="Permanent link">&para;</a></h2>
 <p>Sequence diagrams have a package and a name like any other model in MontiArc.
 A sequence diagram starts with the listing of actors included in the sequence.
 This is a list of names and optionally a type. For tests that stand on their own
@@ -3324,7 +3324,7 @@ complete sequencediagram AndScenario02Test {
 </code></pre></div>
 <p>Using multiple components and different <a href="#semantics">semantics</a> allows the
 the specification of complex scenarios or requirements.</p>
-<h2 id="embedded">Embedded</h2>
+<h2 id="embedded">Embedded<a class="headerlink" href="#embedded" title="Permanent link">&para;</a></h2>
 <p>Another possible way to use sequence diagrams is to specify an existing architecture.
 For that, an existing decomposed MontiArc model has to be specified for which an 
 interaction between the subcomponents can be modeled.</p>
@@ -3341,7 +3341,7 @@ sequencediagram AndSD1 {
   assert (notA.a &amp;&amp; notB.b) == nor.q;
 }
 </code></pre></div>
-<h2 id="semantics">Semantics</h2>
+<h2 id="semantics">Semantics<a class="headerlink" href="#semantics" title="Permanent link">&para;</a></h2>
 <p>We have previously said that C&amp;C sequence diagrams are exemplary. This means the modeled
 interaction can occur once, multiple times at any frequency, concurrently, or never.
 Furthermore, a sequence diagram can be an abstraction of the real execution by omitting
@@ -3352,16 +3352,16 @@ where applying them to the whole model is equal to applying them to each compone
 individually. In the graphical notation, the name can be prefixed with a stereotype to
 indicate that it should be interpreted correspondingly. In the textual notation, keywords
 are used for this purpose.</p>
-<h4 id="free">Free</h4>
+<h4 id="free">Free<a class="headerlink" href="#free" title="Permanent link">&para;</a></h4>
 <p>This is the default interpretation and allows any interaction or component to be
 omitted. The stereotype is <code>«match:free»</code> and the keyword is <code>free</code> or <code>...</code>.</p>
-<h4 id="complete">Complete</h4>
+<h4 id="complete">Complete<a class="headerlink" href="#complete" title="Permanent link">&para;</a></h4>
 <p>The opposite of free. No interaction displayed in the timeframe can be omitted,
 and all interactions that occur must be included in the model. Interactions outside the
 timeframe, that is, interactions before and after the first and last interaction on a timeline,
 can still occur and be omitted from the model. The stereotype is <code>«match:complete»</code>
 and the keyword is <code>complete</code>.</p>
-<h4 id="visible">Visible</h4>
+<h4 id="visible">Visible<a class="headerlink" href="#visible" title="Permanent link">&para;</a></h4>
 <p>Similar to complete, but interactions with components not included in the diagram can be omitted. Interactions between components included in the model, i.e., visible
 components, have to be complete. The stereotype is <code>«match:visible»</code> and the keyword
 is <code>visible</code>.</p>
