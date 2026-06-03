@@ -1,40 +1,43 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.rte.deploy.util;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import de.se_rwth.commons.logging.Log;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class DeSerializer {
 
+  protected final ObjectMapper mapper;
+
+  public DeSerializer() {
+    mapper = JsonMapper.builder().build();
+  }
+
   public String serialize(Object o) {
-    ObjectMapper om = new ObjectMapper();
     try {
-      return om.writeValueAsString(o);
-    } catch (IOException ignored) { }
+      return mapper.writeValueAsString(o);
+    } catch (JacksonException ignored) { }
 
     return "";
   }
 
   public <R> Optional<R> deserialize(String s, TypeReference<R> typeRef) {
-    ObjectMapper om = new ObjectMapper();
     try {
-      return Optional.of(om.readValue(s, typeRef));
-    } catch (IOException e) {
+      return Optional.of(mapper.readValue(s, typeRef));
+    } catch (JacksonException e) {
       Log.error(String.format("Cannot deserialize object of class %s. Reason: %s", typeRef.getType().getTypeName(), e));
     }
     return Optional.empty();
   }
 
   public <R> Optional<R> deserialize(String s, Class<R> clazz) {
-    ObjectMapper om = new ObjectMapper();
-
     try {
-      return Optional.of(om.readValue(s, clazz));
-    } catch (IOException e) {
+      return Optional.of(mapper.readValue(s, clazz));
+    } catch (JacksonException e) {
       Log.error(String.format("Cannot deserialize object of class %s. Reason: %s", clazz.getName(), e));
     }
     return Optional.empty();

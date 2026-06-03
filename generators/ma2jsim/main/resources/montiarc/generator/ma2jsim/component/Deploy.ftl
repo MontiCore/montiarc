@@ -46,7 +46,7 @@ protected ${comp.getName()}${suffixes.comp()} buildComponent(montiarc.rte.schedu
             deSerializer.deserialize(
             parameters.get("${param.getName()}"),
   <#if param.getType().isGenericType()>
-            new com.fasterxml.jackson.core.type.TypeReference<<@Util.getTypeString param.getType()/>>() {}
+            new tools.jackson.core.type.TypeReference<<@Util.getTypeString param.getType()/>>() {}
   <#else>
     <@Util.getTypeString param.getType()/>.class
   </#if>
