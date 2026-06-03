@@ -405,7 +405,10 @@ public class MontiArcTool extends MontiArcToolTOP {
           Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), pkg, rfp),
             ast.get().isPresentPackage() ?
               ast.get().getPackage().get_SourcePositionStart() :
-              ast.get().getArcComponentType().get_SourcePositionStart()
+              ast.get().getArcComponentType().get_SourcePositionStart(),
+            ast.get().isPresentPackage() ?
+              ast.get().getPackage().get_SourcePositionEnd() :
+              ast.get().getArcComponentType().get_SourcePositionEnd()
           );
         }
       } else if (root.isFile()) {
@@ -415,7 +418,10 @@ public class MontiArcTool extends MontiArcToolTOP {
           Log.error(String.format(MontiArcError.PACKAGE_AND_FILE_PATH_DIFFER.toString(), pkg, rfp),
             ast.get().isPresentPackage() ?
               ast.get().getPackage().get_SourcePositionStart() :
-              ast.get().getArcComponentType().get_SourcePositionStart()
+              ast.get().getArcComponentType().get_SourcePositionStart(),
+            ast.get().isPresentPackage() ?
+              ast.get().getPackage().get_SourcePositionEnd() :
+              ast.get().getArcComponentType().get_SourcePositionEnd()
           );
         }
       }
