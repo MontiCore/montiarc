@@ -68,7 +68,7 @@ import de.monticore.sctransitions4code._cocos.TransitionPreconditionsAreBoolean;
 import de.monticore.statements.mccommonstatements.cocos.ExpressionStatementIsValid;
 import de.monticore.statements.mccommonstatements.cocos.ForConditionHasBooleanType;
 import de.monticore.statements.mccommonstatements.cocos.IfConditionHasBooleanType;
-import de.monticore.statements.mccommonstatements.cocos.SwitchStatementValid;
+import de.monticore.statements.mccommonstatements.cocos.SwitchCaseTypesValid;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationInitializationHasCorrectType;
 import de.monticore.statements.mcvardeclarationstatements._cocos.VarDeclarationNameAlreadyDefinedInScope;
 import modes._cocos.MaxOneModeAutomaton;
@@ -315,14 +315,14 @@ public class MontiArcCoCos {
         varChecker.get4FullVariant().addCoCo(new ForConditionHasBooleanType4Family());
         varChecker.get4FullVariant().addCoCo(new ForEachIsValid4Family());
         varChecker.get4FullVariant().addCoCo(new IfConditionHasBooleanType4Family());
-        varChecker.get4FullVariant().addCoCo(new SwitchStatementValid4Family());
+        //varChecker.get4FullVariant().addCoCo(new SwitchCaseCompatible4Family());
     } else {
       checker.addCoCo(new ExpressionStatementIsValid());
       checker.addCoCo(new VarDeclarationInitializationHasCorrectType());
       checker.addCoCo(new ForConditionHasBooleanType());
       checker.addCoCo(new ForEachIsValid4MA());
       checker.addCoCo(new IfConditionHasBooleanType());
-      checker.addCoCo(new SwitchStatementValid());
+      checker.addCoCo(new SwitchCaseTypesValid());
     }
 
     // Block unsupported model elements

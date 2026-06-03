@@ -152,4 +152,4 @@
 | ☑     | ☑           | ForConditionHasBooleanType                 | Statements |       |
 | ☑     | ☑           | ForEachIsValid                             | Statements |       |
 | ☑     | ☑           | IfConditionHasBooleanType                  | Statements |       |
-| ☑     | ☑           | SwitchStatementValid                       | Statements |       |
+| ☑     | ☑           | SwitchCaseTypesValid                       | Statements |       |

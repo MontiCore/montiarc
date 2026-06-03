@@ -66,6 +66,7 @@ import static montiarc.util.MCError.DUPLICATE_VAR_IN_SCOPE;
 import static montiarc.util.MCError.FOR_EACH_EXPR_NOT_ITERABLE;
 import static montiarc.util.MCError.FOR_EACH_TYPE_MISMATCH;
 import static montiarc.util.MCError.MISSING_COMPONENT;
+import static montiarc.util.MCError.SWITCH_CASE_INCOMPATIBLE;
 import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.ModesError.MODE_CONTAINS_PORT_DEFINITION;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
@@ -1107,6 +1108,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("MaxOneInitTest3",
         mpk(PKG_COMP, "MaxOneInit3.arc"),
         fn(ERROR, PKG_COMP, "MaxOneInit3.arc", 12, 3, 12, 11, MULTIPLE_INIT)
+      ),
+      arg("SwitchCaseIncompatibleTest1",
+        mpk(PKG_STMT, "SwitchCaseIncompatible1.arc"),
+        fn(ERROR, PKG_STMT, "SwitchCaseIncompatible1.arc", 10, 14, 10, 15, SWITCH_CASE_INCOMPATIBLE, "int", "boolean")
+      ),
+      arg("SwitchCaseIncompatibleTest2",
+        mpk(PKG_STMT, "SwitchCaseIncompatible2.arc"),
+        fn(ERROR, PKG_STMT, "SwitchCaseIncompatible2.arc", 14, 14, 14, 15, SWITCH_CASE_INCOMPATIBLE, "int", "OnOff")
       )
     );
   }
