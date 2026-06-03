@@ -1,21 +1,46 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc.evaluation.exp2smt;
 
+import java.util.Optional;
+import org.codehaus.commons.nullanalysis.NotNull;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.ArithExpr;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntExpr;
-import org.codehaus.commons.nullanalysis.NotNull;
-
-import java.util.Optional;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 
 public class Expr2SMTResult {
 
   protected Expr<?> value;
+  protected ASTExpression failureCause;
+  protected String failureReason;
 
   public void clear() {
     this.value = null;
+  }
+
+  public void reset() {
+    this.value = null;
+    this.failureCause = null;
+    this.failureReason = null;
+  }
+
+  public void markFailure(@NotNull ASTExpression cause, @NotNull String reason) {
+    Preconditions.checkNotNull(cause);
+    Preconditions.checkNotNull(reason);
+    if (this.failureCause == null) {
+      this.failureCause = cause;
+      this.failureReason = reason;
+    }
+  }
+
+  public Optional<ASTExpression> getFailureCause() {
+    return Optional.ofNullable(this.failureCause);
+  }
+
+  public Optional<String> getFailureReason() {
+    return Optional.ofNullable(this.failureReason);
   }
 
   public Optional<Expr<?>> getValue() {

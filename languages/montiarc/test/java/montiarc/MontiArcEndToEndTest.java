@@ -952,7 +952,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     return Stream.of(
       arg("ConstraintSmtConvertibleTest",
         mpk(PKG_VARI, "ConstraintSmtConvertible.arc"),
-        fn(WARNING, PKG_VARI, "ConstraintSmtConvertible.arc", 8, 14, 8, 29, EXPRESSION_NOT_SMT_CONVERTIBLE, "obj.isPresent()")
+        fn(WARNING, PKG_VARI, "ConstraintSmtConvertible.arc", 8, 14, 8, 29, EXPRESSION_NOT_SMT_CONVERTIBLE, "obj.isPresent()", "method calls are not supported in this context")
       ),
       arg("FieldReferenceInStaticContextVariabilityTest",
         mpk(PKG_VARI, "FieldReferenceInStaticContext.arc", "ParameterizedSuperComponent.arc"),

@@ -76,6 +76,8 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
         // Handle variables
         this.getResult().setValue(this.getContext().mkConst((getPrefix().isEmpty() ? "" : getPrefix() + ".") + node.getName(), sort.get()));
       }
+    } else {
+      this.getResult().markFailure(node, "names of this type cannot be encoded as an SMT expression");
     }
   }
 }

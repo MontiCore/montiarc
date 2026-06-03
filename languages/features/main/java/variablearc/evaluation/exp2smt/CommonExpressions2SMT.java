@@ -77,6 +77,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   public void handle(@NotNull ASTCallExpression node) {
     Preconditions.checkNotNull(node);
     this.getResult().clear();
+    this.getResult().markFailure(node, "method calls are not supported in this context");
   }
 
   @Override
@@ -112,6 +113,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
         }
       } else {
         this.getResult().clear();
+        this.getResult().markFailure(node, "field accesses of this type cannot be encoded as an SMT expression");
       }
     }
   }
