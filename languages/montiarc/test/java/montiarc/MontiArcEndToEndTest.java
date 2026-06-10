@@ -1117,14 +1117,22 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_STMT, "SwitchCaseIncompatible2.arc"),
         fn(ERROR, PKG_STMT, "SwitchCaseIncompatible2.arc", 14, 14, 14, 15, SWITCH_CASE_INCOMPATIBLE, "int", "OnOff")
       ),
-    arg("SwitchCaseIncompatibleTest3",
-      mpk(PKG_STMT, "SwitchCaseIncompatible3.arc"),
-      fn(ERROR, PKG_STMT, "SwitchCaseIncompatible3.arc", 14, 14, 14, 18, SWITCH_CASE_INCOMPATIBLE, "long", "boolean")
-    ),
+      arg("SwitchCaseIncompatibleTest3",
+        mpk(PKG_STMT, "SwitchCaseIncompatible3.arc"),
+        fn(ERROR, PKG_STMT, "SwitchCaseIncompatible3.arc", 14, 14, 14, 18, SWITCH_CASE_INCOMPATIBLE, "long", "boolean")
+      ),
       arg("SwitchCaseIncompatibleTest4",
         mpk(PKG_STMT, "SwitchCaseIncompatible4.arc"),
         fn(ERROR, PKG_STMT, "SwitchCaseIncompatible4.arc", 15, 14, 15, 18, SWITCH_CASE_INCOMPATIBLE, "double", "java.lang.Long"),
         fn(ERROR, PKG_STMT, "SwitchCaseIncompatible4.arc", 19, 14, 19, 18, SWITCH_CASE_INCOMPATIBLE, "double", "long")
+      ),
+      arg("SwitchCaseIncompatibleStringTest5",
+        mpk(PKG_STMT, "SwitchCaseIncompatible5.arc"),
+        fn(ERROR, PKG_STMT, "SwitchCaseIncompatible5.arc", 14, 14, 14, 17, SWITCH_CASE_INCOMPATIBLE, "int", "java.lang.String")
+      ),
+      arg("SwitchCaseIncompatibleStringTest6",
+        mpk(PKG_STMT, "SwitchCaseIncompatible6.arc"),
+        fn(ERROR, PKG_STMT, "SwitchCaseIncompatible6.arc", 14, 14, 14, 19, SWITCH_CASE_INCOMPATIBLE, "R\"hello\"", "int")
       )
     );
   }
