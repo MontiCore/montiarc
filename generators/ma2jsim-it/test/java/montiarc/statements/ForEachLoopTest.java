@@ -18,6 +18,7 @@ class ForEachLoopTest {
 
   private ForEachLoopComp sut;
   private PortObserver<Integer> port_o;
+  private PortObserver<Character> port_c;
 
   @BeforeEach
   void init() {
@@ -25,8 +26,10 @@ class ForEachLoopTest {
     sut = new ForEachLoopCompBuilder().setName("sut").build();
 
     port_o = new PortObserver<>();
+    port_c = new PortObserver<>();
 
     sut.port_o().connect(port_o);
+    sut.port_c().connect(port_c);
   }
 
   @Test
@@ -71,6 +74,17 @@ class ForEachLoopTest {
 
     // Then
     assertThat(port_o.getObservedMessages()).containsExactly(msg(0), msg(1));
+  }
+
+  @Test
+  void testString() {
+    // When
+    sut.port_str().receive(msg("ab"));
+
+    sut.runToCompletion();
+
+    // Then
+    assertThat(port_c.getObservedMessages()).containsExactly(msg('a'), msg('b'));
   }
 
   @Test

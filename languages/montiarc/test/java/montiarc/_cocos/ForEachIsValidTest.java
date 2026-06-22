@@ -169,6 +169,20 @@ class ForEachIsValidTest extends MontiArcTestBase {
           }
         }
         """
+      ),
+      // for-each over String iterates characters
+      arg("""
+        import java.lang.String;
+        component ValidComp8 {
+          String v = "";
+          automaton {
+            initial state S;
+            S -> S / {
+              for (char i : v) { }
+            }
+          }
+        }
+        """
       )
     );
   }
@@ -236,6 +250,22 @@ class ForEachIsValidTest extends MontiArcTestBase {
               initial state S;
               S -> S / {
                 for (Integer i : v) { }
+              }
+            }
+          }
+          """,
+        FOR_EACH_TYPE_MISMATCH
+      ),
+      // for-each over String with non-char loop variable
+      arg("""
+          import java.lang.String;
+          import java.lang.Boolean;
+          component InvalidComp5 {
+            String v = "";
+            automaton {
+              initial state S;
+              S -> S / {
+                for (Boolean i : v) { }
               }
             }
           }

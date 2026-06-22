@@ -238,10 +238,10 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
         SymTypeExpression arrays = SymTypeExpressionFactory.createTypeObject(MontiArcMill.typeSymbolBuilder().setName("java.util.Arrays").setSpannedScope(MontiArcMill.scope()).setEnclosingScope(node.getEnclosingScope()).build());
         SymTypeExpression lists = SymTypeExpressionFactory.createTypeObject(MontiArcMill.typeSymbolBuilder().setName("java.lang.Iterable").setSpannedScope(MontiArcMill.scope()).setEnclosingScope(node.getEnclosingScope()).build());
 
-        if (!SymTypeRelations.isSubTypeOf(expression, arrays)) {
-          if (!SymTypeRelations.isSubTypeOf(expression, lists)) {
-            Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(expression.printFullName()), forStatementEntry.getKey().get_SourcePositionStart());
-          }
+        if (!SymTypeRelations.isSubTypeOf(expression, arrays)
+          && !SymTypeRelations.isSubTypeOf(expression, lists)
+          && !SymTypeRelations.isString(expression)) {
+          Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(expression.printFullName()), forStatementEntry.getKey().get_SourcePositionStart());
         }
       }
     }

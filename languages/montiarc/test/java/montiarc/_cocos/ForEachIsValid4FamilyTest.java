@@ -57,6 +57,7 @@ class ForEachIsValid4FamilyTest extends ForEachIsValidTest {
   @DisableIfDisplayName(contains = {
     "InvalidComp3 ",
     "InvalidComp4 ",
+    "InvalidComp5 ",
     "InvalidCompWithVariability3 "
   })
   void shouldReportError(@NotNull String model,

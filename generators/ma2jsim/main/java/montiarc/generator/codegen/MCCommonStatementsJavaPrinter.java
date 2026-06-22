@@ -6,6 +6,7 @@ import de.monticore.prettyprint.CommentPrettyPrinter;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.statements.mccommonstatements._ast.ASTConstantExpressionSwitchLabel;
 import de.monticore.statements.mccommonstatements._ast.ASTDefaultSwitchLabel;
+import de.monticore.statements.mccommonstatements._ast.ASTEnhancedForControl;
 import de.monticore.statements.mccommonstatements._ast.ASTIfStatement;
 import de.monticore.statements.mccommonstatements._ast.ASTSwitchBlockStatementGroup;
 import de.monticore.statements.mccommonstatements._ast.ASTSwitchLabel;
@@ -143,5 +144,23 @@ public class MCCommonStatementsJavaPrinter extends MCCommonStatementsPrettyPrint
   @Override
   public void handle(ASTConstantExpressionSwitchLabel node) {
     node.getConstant().accept(getTraverser());
+  }
+
+  @Override
+  public void handle(ASTEnhancedForControl node) {
+    if (this.isPrintComments()) {
+      CommentPrettyPrinter.printPreComments(node, this.getPrinter());
+    }
+
+    node.getFormalParameter().accept(this.getTraverser());
+    this.getPrinter().print(" : ");
+    node.getExpression().accept(this.getTraverser());
+    if (SymTypeRelations.isString(TypeCheck3.typeOf(node.getExpression()))) {
+      this.getPrinter().print(".toCharArray()");
+    }
+
+    if (this.isPrintComments()) {
+      CommentPrettyPrinter.printPostComments(node, this.getPrinter());
+    }
   }
 }

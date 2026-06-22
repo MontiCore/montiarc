@@ -2,6 +2,7 @@
 package montiarc.statements;
 
 import java.lang.Iterable;
+import java.lang.String;
 import java.util.List;
 import java.util.Set;
 import montiarc.types.IntSeq;
@@ -13,7 +14,9 @@ component ForEachLoop {
   port in Set<int> set;
   port in Iterable<int> iter;
   port in IntSeq obj;
+  port in String str;
   port out int o;
+  port out char c;
 
   automaton {
     initial state S;
@@ -35,6 +38,11 @@ component ForEachLoop {
     S -> S obj / {
       for (int e : obj) {
         o = e;
+      }
+    }
+    S -> S str / {
+      for (char e : str) {
+        c = e;
       }
     }
     S -> S [i == 1] i / {

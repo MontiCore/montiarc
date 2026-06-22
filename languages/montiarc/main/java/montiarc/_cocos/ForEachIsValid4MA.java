@@ -4,8 +4,11 @@ package montiarc._cocos;
 import com.google.common.base.Preconditions;
 import de.monticore.statements.mccommonstatements._ast.ASTEnhancedForControl;
 import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
+import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
 
@@ -36,15 +39,22 @@ public class ForEachIsValid4MA extends ForEachIsValid {
       return;
     }
 
-    if (!typeOfExpression.isArrayType() && symTypeOfIterable.isEmpty()) {
+    boolean isStringIteration = SymTypeRelations.isString(typeOfExpression);
+
+    if (!typeOfExpression.isArrayType() && !isStringIteration && symTypeOfIterable.isEmpty()) {
       Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(typeOfExpression.printFullName()),
         node.getExpression().get_SourcePositionStart(),
         node.getExpression().get_SourcePositionEnd()
       );
     } else {
-      SymTypeExpression typeArg = typeOfExpression.isArrayType() ?
-        typeOfExpression.asArrayType().cloneWithLessDim(1) :
-        symTypeOfIterable.orElseThrow().asGenericType().getArgument(0);
+      SymTypeExpression typeArg;
+      if (typeOfExpression.isArrayType()) {
+        typeArg = typeOfExpression.asArrayType().cloneWithLessDim(1);
+      } else if (isStringIteration) {
+        typeArg = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.CHAR);
+      } else {
+        typeArg = symTypeOfIterable.orElseThrow().asGenericType().getArgument(0);
+      }
 
       if (typeArg.isObscureType()) {
         return;
