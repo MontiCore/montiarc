@@ -9,7 +9,7 @@ ${tc.signature("comp")}
     // outputs
     <@printLocalOutputVariables comp/>
     // execute the initial action
-    ${compHelper.printStatement(ast.getMCBlockStatement())}
+    ${compHelper.printStatement(ast.getMCStatement())}
     // set result
     <@printSetOutput comp/>
     // provide initial value for delay ports

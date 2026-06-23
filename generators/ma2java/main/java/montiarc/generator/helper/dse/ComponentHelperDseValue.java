@@ -14,7 +14,7 @@ import arccompute._ast.ASTArcCompute;
 import arccompute._ast.ASTArcInit;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
+import de.monticore.statements.mcstatementsbasis._ast.ASTMCStatement;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
@@ -125,9 +125,9 @@ public class ComponentHelperDseValue {
   }
 
   /**
-   * @return the printed java expression of the given {@link ASTMCBlockStatement} node.
+   * @return the printed java expression of the given {@link ASTMCStatement} node.
    */
-  public String printStatement(ASTMCBlockStatement statement) {
+  public String printStatement(ASTMCStatement statement) {
     return this.getPrettyPrinter().prettyprint(statement);
   }
 

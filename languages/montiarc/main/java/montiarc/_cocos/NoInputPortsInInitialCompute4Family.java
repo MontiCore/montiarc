@@ -121,13 +121,13 @@ public class NoInputPortsInInitialCompute4Family implements ArcBasisASTArcCompon
       MontiArcTraverser nameTraverser = MontiArcMill.traverser();
       ASTNameCollector nameCollector = new ASTNameCollector();
       nameTraverser.add4ExpressionsBasis(nameCollector);
-      transitionEntry.getKey().getMCBlockStatement().accept(nameTraverser);
+      transitionEntry.getKey().getMCStatement().accept(nameTraverser);
       List<ASTNameExpression> nameExpressions = nameCollector.getExpressions();
 
       MontiArcTraverser variableTraverser = MontiArcMill.traverser();
       ASTVariableDeclaratorCollector variableCollector = new ASTVariableDeclaratorCollector();
       variableTraverser.add4MCVarDeclarationStatements(variableCollector);
-      transitionEntry.getKey().getMCBlockStatement().accept(variableTraverser);
+      transitionEntry.getKey().getMCStatement().accept(variableTraverser);
 
       // Step 3: Check if there is a potential violation
       if (!nameExpressions.isEmpty()) {

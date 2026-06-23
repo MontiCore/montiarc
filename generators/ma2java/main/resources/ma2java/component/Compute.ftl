@@ -19,7 +19,7 @@ public void compute() {
   <@printLocalOutputVariables comp/>
 
   // compute
-  ${compHelper.printStatement(ast.getMCBlockStatement())}
+  ${compHelper.printStatement(ast.getMCStatement())}
 
   // result
   <@printSetOutput comp/>

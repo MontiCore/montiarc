@@ -10,7 +10,7 @@ public void compute() {
   <@printLocalOutputVariables comp/>
 
   // compute
-  ${compHelperDse.printStatement(ast.getMCBlockStatement())}
+  ${compHelperDse.printStatement(ast.getMCStatement())}
 
   // result
   <@printSetOutput comp/>

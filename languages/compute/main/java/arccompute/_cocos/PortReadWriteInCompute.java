@@ -48,6 +48,6 @@ public class PortReadWriteInCompute implements ArcComputeASTArcComputeCoCo {
   @Override
   public void check(@NotNull ASTArcCompute node) {
     Preconditions.checkNotNull(node);
-    node.getMCBlockStatement().accept(this.traverser);
+    node.getMCStatement().accept(this.traverser);
   }
 }

@@ -34,6 +34,6 @@ public class NoInputPortsInInitialCompute implements ArcComputeASTArcInitCoCo {
   @Override
   public void check(@NotNull ASTArcInit node) {
     Preconditions.checkNotNull(node);
-    node.getMCBlockStatement().accept(this.traverser);
+    node.getMCStatement().accept(this.traverser);
   }
 }
