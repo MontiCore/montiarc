@@ -49,7 +49,7 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
   <#if helper.getBehaviorHelper().getEntryAction(state).isPresent()>
   .setEntryAction(
     (in) -> {
-    <@executeAction> ${prettyPrinter.prettyprint(helper.getBehaviorHelper().getEntryAction(state).get())} </@executeAction>
+    <@executeAction> ${javaPrinter.generateCode(helper.getBehaviorHelper().getEntryAction(state).get())} </@executeAction>
     <#if "${helper.getBehaviorHelper().getStateInvariant(state)}" != "" || invariantOfSuperState>
       if(!${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant()) {
         de.se_rwth.commons.logging.Log.warn("Invariant not satisfied before entering state ${state.getName()} ");
@@ -68,12 +68,12 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
   </#if>
   <#if helper.getBehaviorHelper().getExitAction(state).isPresent()>
   .setExitAction((in) -> {
-    <@executeAction> ${prettyPrinter.prettyprint(helper.getBehaviorHelper().getExitAction(state).get())} </@executeAction>
+    <@executeAction> ${javaPrinter.generateCode(helper.getBehaviorHelper().getExitAction(state).get())} </@executeAction>
   })
   </#if>
   <#if helper.getBehaviorHelper().getDoAction(state).isPresent()>
   .setDoAction((in) -> {
-    <@executeAction> ${prettyPrinter.prettyprint(helper.getBehaviorHelper().getDoAction(state).get())} </@executeAction>
+    <@executeAction> ${javaPrinter.generateCode(helper.getBehaviorHelper().getDoAction(state).get())} </@executeAction>
     <#if "${helper.getBehaviorHelper().getStateInvariant(state)}" != "" || invariantOfSuperState>
       if(!${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant()) {
         de.se_rwth.commons.logging.Log.warn("Invariant not satisfied after executing Do-Action of state ${state.getName()} ");

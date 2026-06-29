@@ -19,6 +19,7 @@ import freemarker.template.TemplateModelException;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.check.MontiArcTypeCheck;
 import montiarc.generator.util.Helper;
 import montiarc.generator.util.MaUnitHelper;
 import montiarc.util.LogAspects;
@@ -81,9 +82,10 @@ public class MA2JSimGen {
     glex.setGlobalValue("prefixes", Prefixes.getInstance());
     glex.setGlobalValue("log_aspects", LogAspects.getInstance());
     glex.setGlobalValue("helper", new Helper());
-    glex.setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
+    glex.setGlobalValue("javaPrinter", new MA2JSimJavaGenerator());
     glex.setGlobalValue("timing_untimed", Timing.UNTIMED);
     glex.setGlobalValue("MaUnitHelper", new MaUnitHelper());
+    glex.setGlobalValue("mill", MontiArcMill.getMill());
     glex.bindTemplateHookPoint("<Component>Body", "montiarc.generator.ma2jsim.unit.Component.ftl");
     glex.bindTemplateHookPoint("<Component>Header", "montiarc.generator.ma2jsim.unit.Header.ftl");
     return glex;
@@ -205,9 +207,10 @@ public class MA2JSimGen {
 
     List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariantHelper().getVariants(ast.getArcComponentType());
     for (VariableArcVariantComponentTypeSymbol variant : variants) {
+      MontiArcTypeCheck.enterContext(variant);
 
       // set variant pretty printer
-      this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter(variant));
+      this.setup.getGlex().setGlobalValue("javaPrinter", new MA2JSimJavaGenerator(variant));
       final String variantSuffix = helper.getVariantHelper().variantSuffix(variant);
 
       if (variant.isAtomic()) {
@@ -219,9 +222,11 @@ public class MA2JSimGen {
           generateComputeImplementation(ast, variantSuffix, variant);
         }
       }
+      // Reset TypeCheckContext
+      MontiArcTypeCheck.leaveContext();
     }
     // reset prettyPrinter
-    this.setup.getGlex().setGlobalValue("prettyPrinter", new MA2JSimJavaPrinter());
+    this.setup.getGlex().setGlobalValue("javaPrinter", new MA2JSimJavaGenerator());
   }
 
   protected void generateAutomatonImplementation(@NotNull ASTMACompilationUnit ast, @NotNull String suffix, @NotNull ComponentTypeSymbol variant) {

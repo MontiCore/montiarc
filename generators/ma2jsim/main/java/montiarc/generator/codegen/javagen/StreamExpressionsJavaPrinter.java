@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.generator.codegen;
+package montiarc.generator.codegen.javagen;
 
 import de.monticore.expressions.streamexpressions._ast.ASTAppendAbsentStreamExpression;
 import de.monticore.expressions.streamexpressions._ast.ASTAppendStreamExpression;

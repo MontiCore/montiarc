@@ -11,7 +11,7 @@
     <#if existenceConditions?has_content>
       ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
-      if(${prettyPrinter.prettyprint(existenceConditions)}) {
+      if(${javaPrinter.generateCode(existenceConditions)}) {
     </#if>
       return ${portAccessor}.isTickBlocked() ? ${helper.getTypeHelper().getNullLikeValue(portSym.getType())} : ${portAccessor}.peekBuffer().getData();
 

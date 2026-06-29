@@ -20,7 +20,7 @@ protected void <@MethodNames.subCompSetup/>${helper.getVariantHelper().variantSu
         .setSuperComponent(this)
         .setOracleFactory(oracleFactory)
         <#list helper.getComponentHelper().getArgNamesMappedToExpressions(subcomponent.getAstNode()) as name, expression>
-            .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
+            .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${javaPrinter.generateCode(expression)})
         </#list>
         <#list helper.getVariantHelper().getFeaturesMappedToBool(subcomponent) as feature, value>
             .${prefixes.setterMethod()}${prefixes.feature()}${feature.getName()}(${value?c})

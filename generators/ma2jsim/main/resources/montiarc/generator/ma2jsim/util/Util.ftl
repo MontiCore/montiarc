@@ -8,7 +8,7 @@
 
 <#-- SymTypeExpression type -->
 <#macro getTypeString type boxPrimitives=false>
-  ${prettyPrinter.prettyprint(type, boxPrimitives)}
+  ${javaPrinter.generateCode(type, boxPrimitives)}
 </#macro>
 
 <#-- CompKindExpression type -->

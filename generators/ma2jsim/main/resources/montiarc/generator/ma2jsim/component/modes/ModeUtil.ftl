@@ -37,7 +37,7 @@
 
     <#list transitions as transition>
       <#assign guardExpre = helper.getBehaviorHelper().getGuard(transition)>
-      <#assign guardPrinted><#if guardExpre.isPresent()>${prettyPrinter.prettyprint(guardExpre.get())} <#else>true</#if></#assign>
+      <#assign guardPrinted><#if guardExpre.isPresent()>${javaPrinter.generateCode(guardExpre.get())} <#else>true</#if></#assign>
       <#assign transitionIndex = helper.getModeHelper().getTransitionIndex(transition, automaton)>
 
       // Transition: ${helper.getBehaviorHelper().printTransitionSignature(transition)}

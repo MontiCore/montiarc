@@ -19,7 +19,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   <#if helper.getBehaviorHelper().getComputeInit(ast).isPresent()>
-    ${prettyPrinter.prettyprint(helper.getBehaviorHelper().getComputeInit(ast).get().getMCStatement())}
+    ${javaPrinter.generateCode(helper.getBehaviorHelper().getComputeInit(ast).get().getMCStatement())}
   </#if>
 
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
@@ -42,7 +42,7 @@ ${tc.includeArgs("montiarc.generator.ma2jsim.behavior.compute.Header.ftl", [comp
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
-  ${prettyPrinter.prettyprint(compute.getMCStatement())}
+  ${javaPrinter.generateCode(compute.getMCStatement())}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}
   }
 

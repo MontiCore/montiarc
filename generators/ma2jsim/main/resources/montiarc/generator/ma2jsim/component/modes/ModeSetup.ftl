@@ -35,7 +35,7 @@
     .setScheduler(this.getScheduler())
     .setSuperComponent(this)
       <#list helper.getComponentHelper().getArgNamesMappedToExpressions(subSymbol.getAstNode()) as name, expression>
-        .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${prettyPrinter.prettyprint(expression)})
+        .${prefixes.setterMethod()}${prefixes.parameter()}${name}(${javaPrinter.generateCode(expression)})
       </#list>
     .build();
     <#-- In opposition to the mode teardown, we do not need to log the creation of new sub components,

@@ -6,14 +6,14 @@
 
 <#assign hasOnlyOneVariant = helper.getVariantHelper().getVariants(ast)?size == 1>
 
-<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariantHelper().getVariants(ast)[0]) == "true")>
+<#if !(hasOnlyOneVariant && javaPrinter.generateCodeCondition(helper.getVariantHelper().getVariants(ast)[0]) == "true")>
 protected final int variantID;
 
 protected int determineVariant() {
   ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
   <#list helper.getVariantHelper().getVariants(ast) as variant>
-    if (${prettyPrinter.prettyprintCondition(variant)}) {
+    if (${javaPrinter.generateCodeCondition(variant)}) {
       <#if hasOnlyOneVariant>
       return 0;
       <#else>

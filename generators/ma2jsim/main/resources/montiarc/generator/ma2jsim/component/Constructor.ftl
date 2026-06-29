@@ -40,14 +40,14 @@ ${visibility} ${ast.getName()}${suffixes.compImpl()}<#if isTop>${suffixes.top()}
     this.modeAutomaton = new ${ast.getName()}${suffixes.modeAutomaton()}(this, name);
   </#if>
 
-<#if !(hasOnlyOneVariant && prettyPrinter.prettyprintCondition(helper.getVariantHelper().getVariants(ast)[0]) == "true")>
+<#if !(hasOnlyOneVariant && javaPrinter.generateCodeCondition(helper.getVariantHelper().getVariants(ast)[0]) == "true")>
   this.variantID = determineVariant();
 </#if>
 
 ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
 
 <#list helper.getComponentHelper().getFieldsInDependencyOrder(ast) as field>
-  <#assign initExpr = prettyPrinter.prettyprint(helper.getComponentHelper().getInitialForVariable(field))>
+  <#assign initExpr = javaPrinter.generateCode(helper.getComponentHelper().getInitialForVariable(field))>
   <@Util.getTypeString field.getType()/> ${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)} = ${initExpr};
 </#list>
 

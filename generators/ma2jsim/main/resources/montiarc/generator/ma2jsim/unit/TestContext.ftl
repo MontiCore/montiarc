@@ -30,7 +30,7 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
     switch (parameterIndex) {
     <#list ast.getHead().getArcParameterList() as param>
       case ${param?index}: // ${param.getName()}
-        <#if param.isPresentDefault()><#assign default = prettyPrinter.prettyprint(param.getDefault())></#if>
+        <#if param.isPresentDefault()><#assign default = javaPrinter.generateCode(param.getDefault())></#if>
         <#if helper.getMaUnitHelper().isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
     </#list>
     <#list helper.getComponentHelper().getFeatures(ast) as feature>
@@ -48,12 +48,12 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
     switch (testIndex) {
       <#list StereoValue.get().getExpression().getSetCollectionItemList() as item>
         case ${item?index}:
-          return ${prettyPrinter.prettyprint(item.getExpression())};
+          return ${mill.prettyPrint(item.getExpression(), false)};
       </#list>
     }
     throw new montiarc.maunit.api.ParameterResolutionException();
     <#elseif StereoValue.isPresent()>
-    return ${prettyPrinter.prettyprint(StereoValue.get())};
+    return ${javaPrinter.generateCode(StereoValue.get())};
     <#else>
     return null;
     </#if>
@@ -63,7 +63,7 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
 <#macro returnStereoValue name default="">
   <#assign StereoValue = helper.getMaUnitHelper().getStereoValue(ast, name)>
   <#if StereoValue.isPresent()>
-      return ${prettyPrinter.prettyprint(StereoValue.get().getExpression())}<#if helper.getMaUnitHelper().isStereoValueList(StereoValue.get())>.get(testIndex)</#if>;
+      return ${javaPrinter.generateCode(StereoValue.get().getExpression())}<#if helper.getMaUnitHelper().isStereoValueList(StereoValue.get())>.get(testIndex)</#if>;
   <#elseif default?has_content>
       return ${default};
   </#if>
@@ -73,7 +73,7 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
   switch(testIndex) {
   <#list helper.getMaUnitHelper().getTestValues(ast, parameterIndex) as expression>
     case ${expression?index}:
-      return ${prettyPrinter.prettyprint(expression)};
+      return ${javaPrinter.generateCode(expression)};
   </#list>
   <#if default?has_content>
     default: return ${default};

@@ -8,7 +8,7 @@ ${tc.signature("field")}
 public <@Util.getTypeString field.getType()/> ${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)}() {
 <#if existenceConditions?has_content>
   ${tc.include("montiarc.generator.ma2jsim.component.ShadowConstants.ftl")}
-  if(${prettyPrinter.prettyprint(existenceConditions)}) {
+  if(${javaPrinter.generateCode(existenceConditions)}) {
 </#if>
   return this.${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)};
 <#if existenceConditions?has_content>
