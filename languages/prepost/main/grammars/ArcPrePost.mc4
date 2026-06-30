@@ -4,9 +4,9 @@ component grammar ArcPrePost extends ArcBasis {
 
   ArcPrePost implements ArcBehaviorElement =
     HLINE
-    (key("trigger") Expression ";") ?
-    (key("pre") ":" Expression ";") ?
-    key("post") ":" Expression ";"
+    (key("trigger") trigger:Expression ";") ?
+    (key("pre") ":" pre:Expression ";") ?
+    key("post") ":" post:Expression ";"
   ;
 
   token HLINE =  ('\r' | '\n') (' ' | '\t')*  '-' '-' '-' ('-')+  (' ' | '\t')* ('\r' | '\n');

@@ -54,6 +54,7 @@ import arccompute._cocos.MaxOneInit;
 import arccompute._cocos.NoInitWithoutCompute;
 import arccompute._cocos.NoInputPortsInInitialCompute;
 import arccompute._cocos.NoNonSyncInputPortInCompute;
+import arcprepost._cocos.PrePostIsBoolean;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
@@ -327,6 +328,9 @@ public class MontiArcCoCos {
 
     // Block unsupported model elements
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
+
+    // PrePost
+    checker.addCoCo(new PrePostIsBoolean());
 
     return checkVariants? varChecker : checker;
   }

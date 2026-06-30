@@ -14,10 +14,14 @@ dependencies {
   grammar(project(":languages:comfy"))
   grammar(project(":languages:features"))
   grammar(project(":languages:modes"))
+  grammar(project(":languages:ag"))
+  grammar(project(":languages:prepost"))
 
   api(project(":languages:compute"))
   api(project(":languages:features"))
   api(project(":languages:modes"))
+  api(project(":languages:ag"))
+  api(project(":languages:prepost"))
 
   implementation(seLibs.mc.c2mc)
   implementation(libs.guava)

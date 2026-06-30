@@ -20,6 +20,8 @@
 | [ComfortableArc](#comfortablearc-cocos) | 0xC1450 - 0xC1499 |
 | [Unit](#maunit-cocos)                   | 0xC1500 - 0xC1549 |
 | [ArcCompute](#arccompute-cocos)         | 0xC1550 - 0xC1599 |
+| [PrePost](#prepost-cocos)               | 0xC1600 - 0xC1649 |
+
 
 ## ArcBasis CoCos
 
@@ -153,3 +155,10 @@
 | ☑     | ☑           | ForEachIsValid                             | Statements |       |
 | ☑     | ☑           | IfConditionHasBooleanType                  | Statements |       |
 | ☑     | ☑           | SwitchCaseTypesValid                       | Statements |       |
+
+## PrePost CoCos
+
+
+| in MA | VariantCoCo | CoCo(s)          | Language   | Codes   |
+|-------|-------------|------------------|------------|---------|
+| ☑     | ☑           | PrePostIsBoolean | ArcPrePost | 0xC1600 |

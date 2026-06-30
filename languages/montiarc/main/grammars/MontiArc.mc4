@@ -17,6 +17,7 @@
  * * -- ArcAutomaton.mc4
  * * -- ComfortableArc.mc4
  * * -- Modes.mc4
+ * * -- ArcPrePost
  * * -- VariableArc.mc4
  * * * -- MontiArc.mc4
  *
@@ -39,7 +40,8 @@ grammar MontiArc extends
             ArcAutomaton,
             ComfortableArc,
             Modes,
-            VariableArc                                 {
+            VariableArc,
+            ArcPrePost {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
    * @attribute package The package declaration of the component model
