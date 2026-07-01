@@ -10,4 +10,48 @@ classdiagram lang {
   public enum Signal {
     SIGNAL;
   }
+
+  public class Simulation {
+    public static void stop();
+    public static Duration getTickLength();
+  }
+
+  public class Timer {
+    protected Duration duration;
+
+    protected Timer();
+
+    public static Timer start(Duration duration);
+
+    public boolean completed();
+    public Duration startedAgo();
+    public Duration remaining();
+  }
+
+  public class Duration {
+    protected long milliseconds;
+
+    protected Duration();
+
+    public long getInMilliseconds();
+
+    public Duration add(Duration other);
+    public Duration subtract(Duration other);
+
+    public static Duration ofMilliseconds(long milliseconds);
+    public static Duration ofSeconds(long seconds);
+    public static Duration ofSeconds(long seconds, long milliseconds);
+    public static Duration ofMinutes(long minutes);
+    public static Duration ofMinutes(long minutes, long seconds);
+    public static Duration ofMinutes(long minutes, long seconds, long milliseconds);
+    public static Duration ofHours(long hours);
+    public static Duration ofHours(long hours, long minutes);
+    public static Duration ofHours(long hours, long minutes, long seconds);
+    public static Duration ofHours(long hours, long minutes, long seconds, long milliseconds);
+    public static Duration ofDays(long days);
+    public static Duration ofDays(long days, long hours);
+    public static Duration ofDays(long days, long hours, long minutes);
+    public static Duration ofDays(long days, long hours, long minutes, long seconds);
+    public static Duration ofDays(long days, long hours, long minutes, long seconds, long milliseconds);
+  }
 }

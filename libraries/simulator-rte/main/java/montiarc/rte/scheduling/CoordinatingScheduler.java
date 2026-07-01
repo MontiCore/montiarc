@@ -2,7 +2,7 @@
 package montiarc.rte.scheduling;
 
 import de.se_rwth.commons.logging.Log;
-import montiarc.lang.Simulation;
+import montiarc.rte.Simulation;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.msg.Message;
 import montiarc.rte.port.InPort;

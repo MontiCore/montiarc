@@ -1,10 +1,10 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.maunit.descriptior;
 
-import montiarc.lang.Simulation;
 import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.maunit.engine.MAUnitTestExecutionContext;
+import montiarc.rte.Simulation;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.oracle.OracleFactory;
 import montiarc.rte.scheduling.CoordinatingScheduler;

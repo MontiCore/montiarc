@@ -1,14 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.lang;
 
+import montiarc.rte.Simulation;
+
 public class Timer extends TimerTOP {
 
   protected long startTime;
 
   protected Timer(Duration duration) {
     this.duration = duration;
-    if (Simulation.nanosecondsPerTick > 0) {
-      this.startTime = Simulation.ticks;
+    if (montiarc.rte.Simulation.nanosecondsPerTick > 0) {
+      this.startTime = montiarc.rte.Simulation.ticks;
     } else {
       this.startTime = System.nanoTime();
     }
@@ -25,8 +27,8 @@ public class Timer extends TimerTOP {
 
   @Override
   public Duration startedAgo() {
-    if (Simulation.nanosecondsPerTick > 0) {
-      return Duration.ofMilliseconds((Simulation.ticks - startTime) * Simulation.nanosecondsPerTick / 1000000);
+    if (montiarc.rte.Simulation.nanosecondsPerTick > 0) {
+      return Duration.ofMilliseconds((Simulation.ticks - startTime) * montiarc.rte.Simulation.nanosecondsPerTick / 1000000);
     } else {
       return Duration.ofMilliseconds((System.nanoTime() - startTime) / 1000000);
     }

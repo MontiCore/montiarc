@@ -102,7 +102,6 @@ class MA2JSimPlugin : Plugin<Project> {
 
   private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {
     dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
-    dependencies.addProvider(sourceSet.cd2pojo4MaDeclarationConfigName, provider { MAVEN_RTE_PROJECT_REF })
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
     // too. Therefore, we want to put the dependency on the api configuration. However, the api configuration only

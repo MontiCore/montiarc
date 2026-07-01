@@ -3,7 +3,7 @@ package montiarc.rte.deploy;
 
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
-import montiarc.lang.Simulation;
+import montiarc.rte.Simulation;
 import montiarc.rte.component.Component;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.deploy.util.DeSerializer;

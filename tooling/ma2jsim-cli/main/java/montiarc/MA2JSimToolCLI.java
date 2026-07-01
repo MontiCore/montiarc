@@ -32,8 +32,6 @@ public class MA2JSimToolCLI extends MA2JSimTool {
     // Add montiarc-base
     copyZipResourceToJarTmp("montiarc-base-arcSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
     copyZipResourceToJarTmp("montiarc-base-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
-    // Add simulator-rte
-    copyZipResourceToJarTmp("simulator-rte-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
     // Add maunit
     copyZipResourceToJarTmp("maunit-arcSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
     copyZipResourceToJarTmp("maunit-cd2pojoSymbols.zip").ifPresent(MontiArcMill.globalScope().getSymbolPath()::addEntry);
