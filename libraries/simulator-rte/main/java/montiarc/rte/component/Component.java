@@ -15,16 +15,6 @@ public interface Component {
 
   /**
    * Simulates this component for as long as there are messages on inputs.
-   *
-   * @deprecated Use {@link Component#runToCompletion()} instead.
-   */
-  @Deprecated
-  default void run() {
-    runToCompletion();
-  }
-
-  /**
-   * Simulates this component for as long as there are messages on inputs.
    */
   default void runToCompletion() {
     runToCompletion(0);
