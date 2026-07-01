@@ -11,12 +11,13 @@
 <#-- @ftlvariable name="tc" type="de.monticore.generating.templateengine.TemplateController" -->
 <#-- @ftlvariable name="genSetup" type="de.monticore.generating.GeneratorSetup" -->
 
-${glex.replaceTemplate("cd2java.EmptyBody", glex.templateHP("cd2pojo.EmptyBody.ftl"))}
+<#-- Use default configuration  -->
+${tc.include("cd2java.init.CD2Pojo")}
+${decConfig.withGetters().defaultIgnore()}
+${decConfig.withDefaultsForCardinalityAttrs().defaultIgnore()}
+${decConfig.withSetters().defaultIgnore()}
+${decConfig.withNavigableSetters().defaultIgnore()}
+${decConfig.withAbstractMethodSignatures().defaultIgnore()}
 
-${decConfig.withCopyCreator().defaultApply()}
-${decConfig.withGetters().applyOnName("getter").ignoreOnName("noGetter")}
-${decConfig.withDefaultsForCardinalityAttrs().applyOnName("defaultCardinality").ignoreOnName("noDefaultCardinality")}
-${decConfig.withSetters().applyOnName("setter").ignoreOnName("noSetter")}
-${decConfig.withNavigableSetters().applyOnName("setter").ignoreOnName("noSetter")}
-${decConfig.withBuilders().applyOnName("builder").ignoreOnName("noBuilder")}
-${decConfig.withObservers().applyOnName("observable").ignoreOnName("notObservable")}
+<#-- Replace default templates -->
+${glex.replaceTemplate("cd2java.EmptyBody", glex.templateHP("cd2pojo.EmptyBody.ftl"))}

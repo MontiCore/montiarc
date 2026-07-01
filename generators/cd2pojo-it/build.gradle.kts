@@ -26,6 +26,7 @@ dependencies {
 
 tasks.compileCd2pojo {
   useClass2Mc.set(true)
+  tmplDir.set(file("$projectDir/main/cd2pojo"))
 }
 
 tasks.compileMontiarc {

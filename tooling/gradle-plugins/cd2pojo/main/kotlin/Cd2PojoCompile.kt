@@ -11,6 +11,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.IgnoreEmptyDirectories
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
@@ -50,6 +51,12 @@ abstract class Cd2PojoCompile : DefaultTask() {
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val hwcPath : ConfigurableFileCollection
+
+  @get:InputDirectory
+  @get:Optional
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  @get:IgnoreEmptyDirectories
+  abstract val tmplDir : DirectoryProperty
 
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
@@ -143,6 +150,10 @@ abstract class Cd2PojoCompile : DefaultTask() {
 
       if (useClass2Mc.get()) {
         it.args("--class2mc")
+      }
+
+      if (tmplDir.isPresent) {
+        it.args("--template", tmplDir.get())
       }
 
       if (!cleanHwcPath.isEmpty) {
