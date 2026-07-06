@@ -2,6 +2,9 @@
 package montiarc.gradle.ma2jsim
 
 import montiarc.gradle.cd2pojo.VERSION
+import montiarc.gradle.fmu2arc.fmu2arc4MaDeclarationConfigName
+import montiarc.gradle.fmu2arc.fmu2arc4MaSymbolDependencyConfigName
+import montiarc.gradle.fmu2arc.fmu2arc4MaCompSymbolDependencyConfigName
 import montiarc.gradle.montiarc.*
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -80,6 +83,10 @@ class MA2JSimPlugin : Plugin<Project> {
       pluginManager.withPlugin("cd2pojo") {
         pluginManager.apply(CDOut2MAInPlugin::class.java)
       }
+
+      pluginManager.withPlugin("fmu2arc") {
+        pluginManager.apply(FMUOut2MAInPlugin::class.java)
+      }
     }
   }
 
@@ -102,6 +109,7 @@ class MA2JSimPlugin : Plugin<Project> {
 
   private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {
     dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
+    dependencies.addProvider(sourceSet.fmu2arc4MaDeclarationConfigName, provider { MAVEN_RTE_PROJECT_REF })
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
     // too. Therefore, we want to put the dependency on the api configuration. However, the api configuration only
@@ -131,7 +139,12 @@ class MA2JSimPlugin : Plugin<Project> {
       genTask.outputDir.set(montiarcSrcDirSet.destinationDirectory)
       genTask.symbolImportDir.from(
         configurations.named(sourceSet.montiarcSymbolDependencyConfigurationName),
-        configurations.named(sourceSet.cd2Pojo4MaSymbolDependencyConfigName)
+        configurations.named(sourceSet.cd2Pojo4MaSymbolDependencyConfigName),
+
+        // Fmu Symbols
+        configurations.named(sourceSet.fmu2arc4MaSymbolDependencyConfigName),
+        // Fmu dependent Component Symbols
+        configurations.named(sourceSet.fmu2arc4MaCompSymbolDependencyConfigName)
       )
 
       sourceSet.java.srcDir(genTask.javaOutputDir())

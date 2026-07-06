@@ -25,10 +25,13 @@ jgrapht-ext = "org.jgrapht:jgrapht-ext:1.5.3"
 mqtt = "org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5"
 commons-cli = "commons-cli:commons-cli:1.11.0"
 gradle-tooling-api = "org.gradle:gradle-tooling-api:7.3-20210825160000+0000"
+fmi4j = "info.laht.fmi4j:fmi-import:0.38.0"
+slf4j-simple = "org.slf4j:slf4j-simple:2.0.18" # required by fmi4j which uses an old log4j version
+kotlin-stdlib = "org.jetbrains.kotlin:kotlin-stdlib:2.4.0"
 
 shadow = "com.gradleup.shadow:com.gradleup.shadow.gradle.plugin:8.3.6"
 spotless = "com.diffplug.spotless:spotless-plugin-gradle:8.1.0"
-kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
+kotlin-gradle = "org.jetbrains.kotlin:kotlin-gradle-plugin:2.2.21"
 node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
 intellij = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:2.6.0"
 

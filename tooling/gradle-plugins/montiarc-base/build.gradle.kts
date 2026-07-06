@@ -7,6 +7,7 @@ group = "montiarc.tooling.gradle-plugins"
 
 dependencies {
   api(project(":cd4ma-dependencies"))
+  api(project(":fmu4ma-dependencies"))
   api(project(":montiarc-sources"))
   api(project(":montiarc-dependencies"))
 }

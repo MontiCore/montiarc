@@ -9,6 +9,7 @@ import org.gradle.api.Project
  * * [MontiarcSourcePlugin]
  * * [MontiarcPublicationPlugin]
  * * [TransitiveCdPublicationPlugin]
+ * * [TransitiveFMUPublicationPlugin]
  */
 @Suppress("unused")
 class MontiarcBasePlugin : Plugin<Project> {
@@ -19,6 +20,7 @@ class MontiarcBasePlugin : Plugin<Project> {
       pluginManager.apply(MontiarcSourcesPlugin::class.java)
       pluginManager.apply(MontiarcPublicationPlugin::class.java)
       pluginManager.apply(TransitiveCdPublicationPlugin::class.java)
+      pluginManager.apply(montiarc.gradle.fmu2arc.TransitiveFMUPublicationPlugin::class.java)
     }
   }
 }

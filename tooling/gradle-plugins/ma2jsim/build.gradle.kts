@@ -8,6 +8,7 @@ group = "montiarc.tooling.gradle-plugins"
 
 dependencies {
   implementation(project(":cd2pojo"))
+  implementation(project(":fmu2arc"))
   implementation(project(":montiarc-base"))
 }
 

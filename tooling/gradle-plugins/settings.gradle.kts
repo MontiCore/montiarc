@@ -18,6 +18,8 @@ rootProject.name = "gradle-plugins"
 
 include(":cd2pojo")
 include(":cd4ma-dependencies")
+include(":fmu2arc")
+include(":fmu4ma-dependencies")
 include(":sd2arc")
 include(":ma2java")
 include(":ma2jsim")

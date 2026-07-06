@@ -5,3 +5,5 @@
 *.arc	text eol=lf
 *.cd	text eol=lf
 *.md	text eol=lf
+
+*.fmu filter=lfs diff=lfs merge=lfs -text

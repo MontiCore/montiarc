@@ -12,7 +12,7 @@ val repo: String = "https://nexus.se.rwth-aachen.de/content/groups/public/"
 dependencies {
   implementation(libs.shadow)
   implementation(libs.spotless)
-  implementation(libs.kotlin)
+  implementation(libs.kotlin.gradle)
   implementation(seLibs.se.commons.gradle)
   implementation(seLibs.mc.generator)
   implementation(seLibs.mc.language.server)
