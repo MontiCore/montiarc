@@ -118,6 +118,20 @@ class VarDeclarationInitializationHasCorrectTypeTest extends MontiArcTestBase {
           }
         }
         """
+      ),
+      // var declaration with mixed numeric literals and generic target typing
+      arg("""
+        import java.lang.Number;
+        import java.util.List;
+        component ValidComp5 {
+          automaton {
+            initial state S;
+            S -> S / {
+              List<Number> v = [ 1.0F, 3.33333, 1.6F ];
+            }
+          }
+        }
+        """
       )
     );
   }
