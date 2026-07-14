@@ -12,12 +12,12 @@ component SwitchCaseIncompatible4 {
     initial state S;
     S -> S / {
       switch (l1) {
-        case 3.14: break;
-        default: break;
+        case 3.14: ;
+        default: ;
       }
       switch (l2) {
-        case 3.14: break;
-        default: break;
+        case 3.14: ;
+        default: ;
       }
     }
   }

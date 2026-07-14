@@ -69,6 +69,7 @@ import static montiarc.util.MCError.MISSING_COMPONENT;
 import static montiarc.util.MCError.SWITCH_CASE_INCOMPATIBLE;
 import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static montiarc.util.ModesError.MODE_CONTAINS_PORT_DEFINITION;
+import static montiarc.util.MontiArcError.BREAK_STATEMENT_TARGETS_NO_LOOP;
 import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
@@ -1108,6 +1109,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("MaxOneInitTest3",
         mpk(PKG_COMP, "MaxOneInit3.arc"),
         fn(ERROR, PKG_COMP, "MaxOneInit3.arc", 12, 3, 12, 11, MULTIPLE_INIT)
+      ),
+      arg("BreakStatementTargetsNoLoopTest1",
+        mpk(PKG_STMT, "BreakStatementTargetsNoLoop1.arc"),
+        fn(ERROR, PKG_STMT, "BreakStatementTargetsNoLoop1.arc", 9, 9, 9, 15, BREAK_STATEMENT_TARGETS_NO_LOOP)
+      ),
+      arg("BreakStatementTargetsNoLoopTest2",
+        mpk(PKG_STMT, "BreakStatementTargetsNoLoop2.arc"),
+        fn(ERROR, PKG_STMT, "BreakStatementTargetsNoLoop2.arc", 10, 11, 10, 17, BREAK_STATEMENT_TARGETS_NO_LOOP)
       ),
       arg("SwitchCaseIncompatibleTest1",
         mpk(PKG_STMT, "SwitchCaseIncompatible1.arc"),

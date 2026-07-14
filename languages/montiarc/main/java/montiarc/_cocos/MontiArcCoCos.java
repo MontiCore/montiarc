@@ -207,6 +207,7 @@ public class MontiArcCoCos {
       checker.addCoCo(new BehaviorInDecomposed());
     }
     checker.addCoCo(new OnlyAssignmentOrCallExpressionStatement());
+    checker.addCoCo(new BreakStatementTargetsLoop());
 
     // ArcBasis Generics CoCos
     checker.addCoCo(new TypeParameterCapitalization());

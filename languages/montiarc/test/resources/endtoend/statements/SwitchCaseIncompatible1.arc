@@ -7,8 +7,8 @@ component SwitchCaseIncompatible1 {
     initial state S;
     S -> S / {
       switch (b) {
-        case 1: break;
-        default: break;
+        case 1: ;
+        default: ;
       }
     }
   }

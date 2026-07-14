@@ -34,7 +34,8 @@ public enum MontiArcError implements Error {
   UNIT_TEST_COUNT_MISMATCH("0xC1021", "Test count mismatch, expected values for '%d' tests but provided '%d'"),
   TOOL_SIMULATION_FAILED("0xC1022", "Simulation exited with error code %d. Output:\n%s"),
   TOOL_CREATE_TEMPLATE_NOT_EXIST("0xC1023", "The template '%s' does not exist"),
-  IMPORTED_SYMBOL_MISSING("0xC1024", "Cannot resolve imported symbol '%s'");
+  IMPORTED_SYMBOL_MISSING("0xC1024", "Cannot resolve imported symbol '%s'"),
+  BREAK_STATEMENT_TARGETS_NO_LOOP("0xC1025", "Break statements may only target loops.");
 
   private final String errorCode;
   private final String errorMsgFormat;

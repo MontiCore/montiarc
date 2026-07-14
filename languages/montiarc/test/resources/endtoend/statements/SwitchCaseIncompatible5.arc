@@ -11,8 +11,8 @@ component SwitchCaseIncompatible5 {
     initial state S;
     S -> S / {
       switch (text) {
-        case 100: break;
-        default: break;
+        case 100: ;
+        default: ;
       }
     }
   }

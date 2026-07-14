@@ -126,4 +126,4 @@ The statements of the `default` case are executed if the evaluated expression
 value does not match any other case.
 
 ### Break
-The `break;` statement is not only available in `switch` statements, but also in loops in which they terminate the loop early.
+The `break;` statement is available in loops in which it terminates the loop early.

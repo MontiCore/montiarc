@@ -11,9 +11,9 @@ component SwitchBoxedLong {
 
     S -> S / {
       switch (i) {
-        case 100L: o = 30; break;
-        case 200L: o = 40; break;
-        default:   o = -1; break;
+        case 100L: o = 30;
+        case 200L: o = 40;
+        default:   o = -1;
       }
     }
   }

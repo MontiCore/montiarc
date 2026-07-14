@@ -11,9 +11,9 @@ component SwitchLong {
 
     S -> S / {
       switch (i) {
-        case 0L: o = 10; break;
-        case 1L: o = 20; break;
-        default: o = -1; break;
+        case 0L: o = 10;
+        case 1L: o = 20;
+        default: o = -1;
       }
     }
   }

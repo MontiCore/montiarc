@@ -11,8 +11,8 @@ component SwitchCaseIncompatible6 {
     initial state S;
     S -> S / {
       switch (v) {
-        case "hello": break;
-        default: break;
+        case "hello": ;
+        default: ;
       }
     }
   }
