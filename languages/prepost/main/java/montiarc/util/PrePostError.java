@@ -8,7 +8,9 @@ package montiarc.util;
  * Assigned code range: 0xC1600 - 0xC1649
  */
 public enum PrePostError implements Error {
-  CONDITION_EXPRESSION_WRONG_TYPE("0xC1600", "Incompatible types for %s: '%s' cannot be converted to 'boolean'.");
+  CONDITION_EXPRESSION_WRONG_TYPE("0xC1600", "Incompatible types for %s: '%s' cannot be converted to 'boolean'."),
+  TRIGGER_MISSING_PORT("0xC1601", "Cannot resolve Port '%s'."),
+  TRIGGER_NOT_AN_IN_PORT("0xC1602", "Direction mismatch, trigger '%s' is not an incoming port.");
 
   private final String errorCode;
   private final String errorMsgFormat;

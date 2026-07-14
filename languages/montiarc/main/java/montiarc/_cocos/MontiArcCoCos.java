@@ -55,6 +55,7 @@ import arccompute._cocos.NoInitWithoutCompute;
 import arccompute._cocos.NoInputPortsInInitialCompute;
 import arccompute._cocos.NoNonSyncInputPortInCompute;
 import arcprepost._cocos.PrePostIsBoolean;
+import arcprepost._cocos.TriggerPortExists;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
@@ -332,6 +333,7 @@ public class MontiArcCoCos {
 
     // PrePost
     checker.addCoCo(new PrePostIsBoolean());
+    checker.addCoCo(new TriggerPortExists());
 
     return checkVariants? varChecker : checker;
   }

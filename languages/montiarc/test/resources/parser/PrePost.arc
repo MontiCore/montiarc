@@ -8,6 +8,7 @@ component PrePost {
   port in int a;
   port in int b;
 
+  trigger: a;
   pre: a == b;
   post: a != b;
 }

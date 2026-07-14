@@ -159,6 +159,7 @@
 ## PrePost CoCos
 
 
-| in MA | VariantCoCo | CoCo(s)          | Language   | Codes   |
-|-------|-------------|------------------|------------|---------|
-| ☑     | ☑           | PrePostIsBoolean | ArcPrePost | 0xC1600 |
+| in MA | VariantCoCo | CoCo(s)           | Language   | Codes            |
+|-------|-------------|-------------------|------------|------------------|
+| ☑     | ☑           | PrePostIsBoolean  | ArcPrePost | 0xC1600          |
+| ☑     | ☑           | TriggerPortExists | ArcPrePost | 0xC1601, 0xC1602 |

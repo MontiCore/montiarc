@@ -3,7 +3,7 @@
 component grammar ArcPrePost extends ArcBasis {
 
   ArcPrePost implements ArcBehaviorElement =
-    (key("trigger") trigger:Expression ";") ?
+    (key("trigger") ":" trigger:Name ";") ?
     (key("pre") ":" pre:Expression ";") ?
     key("post") ":" post:Expression ";"
   ;
