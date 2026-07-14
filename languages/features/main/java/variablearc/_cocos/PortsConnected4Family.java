@@ -98,7 +98,7 @@ public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
     // Define connectivity with implications
     for (ASTConnector connector : allConnectors) {
       if (!connector.getSource().isPresentComponentSymbol()) {
-        String sourceName = connector.getSource().getPortDefinition().isPresentSymbol() ? connector.getSource().getPortDefinition().getSymbol().getFullName() : connector.getSource().getQName();
+        String sourceName = connector.getSource().isPresentPortSymbol() ? connector.getSource().getPortSymbol().getFullName() : node.getSymbol().getFullName() + "." + connector.getSource().getPort();
         if (portConnected.containsKey(sourceName)) {
           var existingCondition = portConnected.get(sourceName);
           portConnected.put(sourceName, ctx.mkOr(existingCondition, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector))));

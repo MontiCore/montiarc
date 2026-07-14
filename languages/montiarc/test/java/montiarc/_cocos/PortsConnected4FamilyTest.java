@@ -6,6 +6,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -17,6 +18,7 @@ import java.util.stream.Stream;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 /**
  * The class under test is {@link PortsConnected4Family}.
@@ -419,5 +421,24 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
         OUT_PORT_UNUSED
       )
     );
+  }
+
+  @Test
+  void shouldNotCrashOnUnresolvedSourcePort() {
+    // Given
+    ASTMACompilationUnit ast = compile("""
+      component RegressionUnresolvedSourcePort {
+        port in int i;
+        a.b.B sub;
+        i -> sub.i;
+        unknownPort -> sub.i;
+      }
+      """);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new PortsConnected4Family());
+
+    // Then
+    assertDoesNotThrow(() -> checker.checkAll(ast));
   }
 }
