@@ -7,8 +7,6 @@ spec Delay<T> {
   port out T z;
   T buffer;
 
-  ------------------------
-
   post: buffer = x  &&  z = buffer@pre;
 
 }

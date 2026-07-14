@@ -9,13 +9,9 @@ spec Storage {
 
   Map<Integer, Screw> s = Map();
 
-  ------------------------
-
   trigger din;
   pre: true;
   post: s.get(screw.id)==screw && dout==epsilon;
-
-  ------------------------
 
   trigger id;
   pre: s.containsKey(id);

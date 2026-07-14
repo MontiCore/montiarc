@@ -26,14 +26,12 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
     // only post condition
     """
       component OnlyPost {
-        -------
         post: true;
       }
     """,
     // Boolean constant
     """
       component OnlyPost {
-        -------
         pre: true;
         post: true;
       }
@@ -41,7 +39,6 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
     // expression
     """
       component OnlyPost {
-        -------
         pre: true && false;
         post: true && false;
       }
@@ -51,11 +48,10 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
       component OnlyPost {
         port in int a;
         port in int b;
-        -------
         pre: a == b;
         post: a == b;
       }
-    """,
+   """,
   })
   public void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
@@ -100,7 +96,6 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
       arg(
         """
           component OnlyPost {
-            -------
             post: "Error";
           }
         """,
@@ -109,7 +104,6 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
       arg(
         """
           component OnlyPost {
-            -------
             pre: "Error";
             post: true;
           }
@@ -119,7 +113,6 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
       arg(
         """
           component OnlyPost {
-            -------
             pre: true;
             post: "Error";
           }
@@ -129,7 +122,6 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
       arg(
         """
           component OnlyPost {
-            -------
             pre: "Error";
             post: "Error";
           }
@@ -142,11 +134,10 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
           component OnlyPost {
             port in String a;
             port in String b;
-            -------
             pre: a + b;
             post: a + b;
           }
-        """,
+       """,
         CONDITION_EXPRESSION_WRONG_TYPE,
         CONDITION_EXPRESSION_WRONG_TYPE)
     );

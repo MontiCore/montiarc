@@ -7,7 +7,7 @@ package parser;
 component PrePost {
   port in int a;
   port in int b;
-  ----------------
+
   pre: a == b;
   post: a != b;
 }

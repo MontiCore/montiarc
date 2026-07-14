@@ -8,8 +8,6 @@ spec SumUp {
 
   int s = 0;
 
-  ------------------------
-
   pre:  true;
   post: s = x+s@pre && y = s@pre;
 
