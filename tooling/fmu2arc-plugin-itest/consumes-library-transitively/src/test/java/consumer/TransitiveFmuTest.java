@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
+package consumer;
 
-import consumer.FmuConsumerComp;
-import consumer.FmuConsumerCompBuilder;
 import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
 
 import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
@@ -14,6 +14,7 @@ import static montiarc.rte.msg.MessageFactory.tk;
 public class TransitiveFmuTest {
 
   @Test
+  @DisabledOnOs(architectures = "aarch64")
   public void testTransitiveFmu() {
     FmuConsumerComp sut = new FmuConsumerCompBuilder().setName("sut").build();
 

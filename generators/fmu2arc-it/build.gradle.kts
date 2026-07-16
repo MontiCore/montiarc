@@ -41,3 +41,10 @@ tasks.compileTestMontiarc {
   useClass2Mc.set(true)
   dependsOn(tasks.compileTestFmu2arc)
 }
+
+// Don't run tests for certain architectures because fmus don't contain correct binaries
+tasks.withType<Test>().configureEach {
+  onlyIf {
+    System.getProperty("os.arch") != "aarch64"
+  }
+}

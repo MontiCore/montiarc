@@ -1,5 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
-import fmu.Feedthrough;
+package fmu;
+
 import dahlquist.DahlquistWrapper;
 import montiarc.maunit.api.Emit;
 import montiarc.maunit.api.AssertEquals;
@@ -7,7 +8,7 @@ import montiarc.maunit.api.AssertEquals;
 
 <<test, simulatedTickLength=1>>
 component FeedthroughFmuTest {
- Feedthrough sut(0.0);
+  Feedthrough sut(0.0);
 
   Emit<boolean> emitB(true);
   Emit<double> emitFloat64ContinuousInput(1.5);

@@ -8,13 +8,8 @@ plugins {
 
 dependencies {
   implementation(project(":languages:montiarc"))
-  api(libs.fmi4j) {
-    // Exclude the old SLF4J 1.7 binding that causes the warning
-    exclude(group = "org.slf4j", module = "slf4j-log4j12")
-    exclude(group = "log4j", module = "log4j")
-  }
-  // Logback to prevent error message and user up-to-date version
-  implementation(libs.slf4j.simple)
+  api(libs.fmi4j)
+  implementation(seLibs.se.commons.logging.slf4j)
   implementation(libs.kotlin.stdlib)
   implementation(libs.format)
   implementation(libs.guava)

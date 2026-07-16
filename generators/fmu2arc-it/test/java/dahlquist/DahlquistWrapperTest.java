@@ -5,12 +5,14 @@ import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
 
 // Tests that time is correctly processed for the fmus
 @JSimTest
 public class DahlquistWrapperTest {
 
   @Test
+  @DisabledOnOs(architectures = "aarch64")
   public void testDahlquistFmu() {
     DahlquistWrapperComp sut = new DahlquistWrapperCompBuilder().setName("sut").build();
 

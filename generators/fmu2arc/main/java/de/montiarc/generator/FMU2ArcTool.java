@@ -400,8 +400,6 @@ public class FMU2ArcTool {
       return null;
     }
 
-    return varName.replace("[", "_")
-      .replace("]", "")
-      .replace(".", "_");
+    return varName.replaceAll("[^a-zA-Z0-9_]", "_");
   }
 }

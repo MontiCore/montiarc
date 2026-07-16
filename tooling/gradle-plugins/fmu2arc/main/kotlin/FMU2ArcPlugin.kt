@@ -21,8 +21,8 @@ const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERS
 
 const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte:${VERSION}"
 
-const val MAVEN_FMI4J_REF = "info.laht.fmi4j:fmi-import:0.38.0"
-const val MAVEN_SLF4J_REF = "org.slf4j:slf4j-simple:2.0.18"
+const val MAVEN_FMI4J_REF = "io.github.generosolombardi-av.fmi4j:fmi-import:0.38.0-multiplatform.6"
+const val MAVEN_SLF4J_REF = "de.se_rwth.commons:se-commons-logging-slf4j:${VERSION}"
 
 @Suppress("unused")
 @Incubating

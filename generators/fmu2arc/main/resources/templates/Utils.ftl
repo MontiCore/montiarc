@@ -40,7 +40,7 @@
   <#assign p = "package " + packageName + ";">
 </#if>
 <#function sanitizeName varName>
-  <#return varName?replace("[", "_")?replace("]", "")?replace(".", "_")>
+  <#return varName?replace("[^a-zA-Z0-9_]", "_", "r")>
 </#function>
 <#function toJavaType fmiType>
   <#switch fmiType.toString()>

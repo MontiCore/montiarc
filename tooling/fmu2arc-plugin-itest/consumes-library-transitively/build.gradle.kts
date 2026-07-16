@@ -1,4 +1,4 @@
-
+/* (c) https://github.com/MontiCore/monticore */
 
 plugins {
   id("montiarc.build.jvm")
@@ -31,4 +31,11 @@ tasks.compileTestMontiarc {
 
 tasks.getByName<Test>("test") {
   useJUnitPlatform()
+}
+
+// Don't run tests for certain architectures because fmu's dont contain correct binaries
+tasks.withType<Test>().configureEach {
+  onlyIf {
+    System.getProperty("os.arch") != "aarch64"
+  }
 }

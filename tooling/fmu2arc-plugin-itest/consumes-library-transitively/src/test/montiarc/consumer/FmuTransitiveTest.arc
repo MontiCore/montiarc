@@ -1,5 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
-import consumer.FmuConsumer;
+package consumer;
+
 import montiarc.maunit.api.Emit;
 import montiarc.maunit.api.AssertEquals;
 

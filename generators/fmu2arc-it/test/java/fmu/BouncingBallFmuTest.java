@@ -5,6 +5,7 @@ import montiarc.rte.port.PortObserver;
 import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.DisabledOnOs;
 
 import static montiarc.rte.msg.MessageFactory.msg;
 
@@ -14,6 +15,7 @@ import static montiarc.rte.msg.MessageFactory.msg;
 public class BouncingBallFmuTest {
 
   @Test
+  @DisabledOnOs(architectures = "aarch64")
   public void testTunableRestitutionAcceptedDuringSimulation() {
     BouncingBallComp sut = new BouncingBallCompBuilder().setName("sut").set_param_g(-9.81).build();
 
