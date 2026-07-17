@@ -19,6 +19,7 @@ public class ConstraintSatisfied4Comp implements ArcBasisASTArcComponentTypeCoCo
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
     if (!(node.getSymbol() instanceof IVariableArcComponentTypeSymbol)) return;
+    if (((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints().isEmpty()) return;
 
     ExpressionSolver solver = new ExpressionSolver();
     Optional<Boolean> eval = solver.solve(((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints());

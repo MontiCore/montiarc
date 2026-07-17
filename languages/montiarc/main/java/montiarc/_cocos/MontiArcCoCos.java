@@ -223,9 +223,9 @@ public class MontiArcCoCos {
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
-    checker.addCoCo(new SubcomponentsConstraint());
     checker.addCoCo(new NoPortInConstraint());
     if (checkVariants) {
+      checker.addCoCo(new SubcomponentsConstraint());
       checker.addCoCo(new NoFieldInVarIfCondition());
       checker.addCoCo(new NoPortInVarIfCondition());
       checker.addCoCo(new VarIfIsBoolean());

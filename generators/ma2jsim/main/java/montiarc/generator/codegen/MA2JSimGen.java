@@ -207,7 +207,7 @@ public class MA2JSimGen {
 
     List<VariableArcVariantComponentTypeSymbol> variants = helper.getVariantHelper().getVariants(ast.getArcComponentType());
     for (VariableArcVariantComponentTypeSymbol variant : variants) {
-      MontiArcTypeCheck.enterContext(variant);
+      if (variants.size() > 1) MontiArcTypeCheck.enterContext(variant);
 
       // set variant pretty printer
       this.setup.getGlex().setGlobalValue("javaPrinter", new MA2JSimJavaGenerator(variant));
@@ -223,7 +223,7 @@ public class MA2JSimGen {
         }
       }
       // Reset TypeCheckContext
-      MontiArcTypeCheck.leaveContext();
+      if (variants.size() > 1) MontiArcTypeCheck.leaveContext();
     }
     // reset prettyPrinter
     this.setup.getGlex().setGlobalValue("javaPrinter", new MA2JSimJavaGenerator());
