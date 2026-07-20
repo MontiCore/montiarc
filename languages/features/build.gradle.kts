@@ -18,15 +18,7 @@ dependencies {
   implementation(libs.janino)
   implementation(libs.z3)
 
-  testImplementation((project(":languages:basis"))) {
-    capabilities {
-      requireCapability("montiarc.languages:basis-tests")
-    }
-  }
+  testImplementation(testFixtures(project(":languages:basis")))
 
   testImplementation(libs.mockito)
-}
-
-java.registerFeature("tests") {
-  usingSourceSet(sourceSets.getByName("test"))
 }

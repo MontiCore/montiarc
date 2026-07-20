@@ -1,7 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-package arcbasis._symboltable;
+package montiarc._symboltable;
 
 import arcbasis.ArcBasisMill;
+import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._visitor.ArcBasisTraverser;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;

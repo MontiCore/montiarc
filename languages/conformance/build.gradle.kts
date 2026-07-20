@@ -12,7 +12,6 @@ dependencies {
   grammar(seLibs.mc.statecharts)
 
   api(project(":languages:montiarc"))
-  api(project(":languages:basis"))
   api(seLibs.mc.statecharts) {
     exclude("org.apache.groovy", "groovy")
   }

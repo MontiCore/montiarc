@@ -12,7 +12,6 @@ dependencies {
   grammar(seLibs.mc.statecharts)
 
   api(project(":languages:montiarc"))
-  api(project(":languages:basis"))
   api(project(":languages:conformance"))
   api(seLibs.mc.statecharts) {
     exclude("org.apache.groovy", "groovy")
@@ -28,10 +27,5 @@ dependencies {
   implementation(seLibs.mc.ocl.ocl2smt)
   implementation(variantOf(seLibs.mc.cd4a) { classifier("cd2smt") })
 
-  testImplementation((project(":languages:basis"))) {
-    capabilities {
-      requireCapability("montiarc.languages:basis-tests")
-    }
-  }
-
+  testImplementation(testFixtures(project(":languages:basis")))
 }

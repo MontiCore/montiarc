@@ -12,22 +12,10 @@ dependencies {
   grammar(project(":languages:prepost"))
   grammar(project(":languages:syscl-basis"))
 
-  api(project(":languages:ag"))
-  api(project(":languages:prepost"))
-  api(project(":languages:syscl-basis"))
-
-  testImplementation((project(":languages:basis"))) {
-    capabilities {
-      requireCapability("montiarc.languages:basis-tests")
-    }
-  }
+  testImplementation(testFixtures(project(":languages:basis")))
 
   implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
   implementation(seLibs.mc.ocl)
-}
-
-java.registerFeature("tests") {
-  usingSourceSet(sourceSets.getByName("test"))
 }

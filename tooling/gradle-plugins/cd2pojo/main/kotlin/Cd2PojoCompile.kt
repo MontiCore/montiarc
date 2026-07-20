@@ -1,11 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.cd2pojo
 
+import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.FileSystemOperations
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
@@ -20,6 +22,7 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.process.ExecOperations
 import org.gradle.work.InputChanges
 
 /**
@@ -27,6 +30,12 @@ import org.gradle.work.InputChanges
  */
 @CacheableTask
 abstract class Cd2PojoCompile : DefaultTask() {
+
+  @get:Inject
+  abstract val execOps: ExecOperations
+
+  @get:Inject
+  abstract val fs: FileSystemOperations
 
   // Unimplemented options: help / version / prettyprint / reports / turning cocos off / configtemplate /templatepath
   // see CD4CodeTool#addStandartOptions
@@ -36,55 +45,55 @@ abstract class Cd2PojoCompile : DefaultTask() {
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val modelPath : ConfigurableFileCollection
+  abstract val modelPath: ConfigurableFileCollection
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:Optional
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val symbolImportDir : ConfigurableFileCollection
+  abstract val symbolImportDir: ConfigurableFileCollection
 
   @get:Input
-  abstract val useClass2Mc : Property<Boolean>
+  abstract val useClass2Mc: Property<Boolean>
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val hwcPath : ConfigurableFileCollection
+  abstract val hwcPath: ConfigurableFileCollection
 
   @get:InputDirectory
   @get:Optional
   @get:PathSensitive(PathSensitivity.RELATIVE)
   @get:IgnoreEmptyDirectories
-  abstract val tmplDir : DirectoryProperty
+  abstract val tmplDir: DirectoryProperty
 
   @get:OutputDirectory
-  abstract val outputDir : DirectoryProperty
+  abstract val outputDir: DirectoryProperty
 
   /** Enable debugging of the CD2PojoTool while executing*/
   @get:Input
   @get:Option(
     option = "debugTask",
     description = "Enable debugging of the CD2PojoTool while executing. " +
-      "Set a the port to which the debugger listens with '--debugPort=...'"
+        "Set a the port to which the debugger listens with '--debugPort=...'"
   )
-  abstract val debugTask : Property<Boolean>
+  abstract val debugTask: Property<Boolean>
 
   @get:Input
   @get:Option(
     option = "debugPort",
     description = "If '--debugTask' is specified, use this option to specify " +
-      "to which port the debugger shall listen. Defaults to 5005."
+        "to which port the debugger shall listen. Defaults to 5005."
   )
-  abstract val debugPort : Property<String>
+  abstract val debugPort: Property<String>
 
   @get:Input
-  abstract val printTaskInfo : Property<Boolean>
+  abstract val printTaskInfo: Property<Boolean>
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val classPath : ConfigurableFileCollection
+  abstract val classPath: ConfigurableFileCollection
 
   init {
     description = "Generates .java code from class diagrams using cd2pojo."
@@ -108,10 +117,10 @@ abstract class Cd2PojoCompile : DefaultTask() {
   }
 
   @TaskAction
-  fun exec(changes : InputChanges) {
+  fun exec(changes: InputChanges) {
     // We clean the output directory if the task cannot be run incrementally
     if (!changes.isIncremental) {
-      this.outputDir.get().asFile.deleteRecursively()
+      fs.delete { it.delete(this.outputDir) }
     }
 
     if (printTaskInfo.get()) {
@@ -129,9 +138,9 @@ abstract class Cd2PojoCompile : DefaultTask() {
     }
 
     // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
-    project.delete(outputDir)
+    fs.delete {  it.delete(outputDir) }
 
-    project.javaexec {
+    execOps.javaexec {
       it.classpath(this.classPath)
       it.mainClass.set(getMainClass())
 
@@ -166,9 +175,7 @@ abstract class Cd2PojoCompile : DefaultTask() {
   }
 
   private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {
-    return project.files(
-      fileCollection.files.filter { it.exists() }
-    )
+    return fileCollection.filter { it.exists() }
   }
 
   private fun getMainClass() = CD2POJO_TOOL_CLASS

@@ -5,7 +5,7 @@ import arcbasis.ArcBasisMill;
 import arcbasis.ArcBasisTestBase;
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
-import arcbasis._symboltable.TransitiveScopeSetter;
+import montiarc._symboltable.TransitiveScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis.ExpressionsBasisMill;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;

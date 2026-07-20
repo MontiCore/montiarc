@@ -1,11 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.sd2arc
 
+import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.FileSystemOperations
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.IgnoreEmptyDirectories
@@ -16,12 +18,19 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.process.ExecOperations
 import org.gradle.work.InputChanges
 
 /**
  * A task that generates MontiArc components from sequence diagrams, using sd2arc.
  */
 abstract class Sd2ArcCompile : DefaultTask() {
+
+  @get:Inject
+  abstract val execOps: ExecOperations
+
+  @get:Inject
+  abstract val fs: FileSystemOperations
 
   @get:InputFiles
   @get:SkipWhenEmpty
@@ -84,7 +93,7 @@ abstract class Sd2ArcCompile : DefaultTask() {
   fun exec(changes : InputChanges) {
     // We clean the output directory if the task cannot be run incrementally
     if (!changes.isIncremental) {
-      this.outputDir.get().asFile.deleteRecursively()
+      fs.delete { it.delete(this.outputDir) }
     }
 
     if (printTaskInfo.get()) {
@@ -96,14 +105,14 @@ abstract class Sd2ArcCompile : DefaultTask() {
     val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
 
     // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
-    project.delete(outputDir)
+    fs.delete {  it.delete(outputDir) }
 
     if (cleanModelPath.isEmpty) {
       logger.info("None of the given model path directories exists: ${this.modelPath.files}")
       return
     }
 
-    project.javaexec {
+    execOps.javaexec {
       it.classpath(getClassPath())
       it.mainClass.convention(getMainClass())
 
@@ -134,9 +143,7 @@ abstract class Sd2ArcCompile : DefaultTask() {
   }
 
   private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {
-    return project.files(
-      fileCollection.files.filter { it.exists() }
-    )
+    return fileCollection.filter { it.exists() }
   }
 
   private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)

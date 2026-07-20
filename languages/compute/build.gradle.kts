@@ -10,17 +10,11 @@ dependencies {
   grammar(seLibs.mc.grammar)
   grammar(project(":languages:basis"))
 
-  api(project(":languages:basis"))
-
   implementation(libs.apache.commons)
   implementation(libs.guava)
   implementation(libs.janino)
 
-  testImplementation((project(":languages:basis"))) {
-    capabilities {
-      requireCapability("montiarc.languages:basis-tests")
-    }
-  }
+  testImplementation(testFixtures(project(":languages:basis")))
 
   testImplementation(libs.mockito)
 }

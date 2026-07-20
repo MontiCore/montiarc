@@ -2,6 +2,7 @@
 
 plugins {
   id("montiarc.build.language")
+  id("montiarc.build.java-test-fixtures")
 }
 
 layout.buildDirectory.set(project(":languages").layout.buildDirectory.dir("${project.name}"))
@@ -17,8 +18,11 @@ dependencies {
   implementation(libs.janino)
 
   testImplementation(libs.mockito)
-}
 
-java.registerFeature("tests") {
-  usingSourceSet(sourceSets.getByName("test"))
+  testFixturesImplementation(libs.guava)
+  testFixturesImplementation(libs.janino)
+  testFixturesImplementation(libs.apache.commons)
+  testFixturesImplementation(libs.junit.api)
+  testFixturesImplementation(libs.assertj)
+  testFixturesApi(libs.junit.params)
 }

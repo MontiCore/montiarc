@@ -31,6 +31,17 @@ import org.gradle.work.InputChanges
 @CacheableTask
 abstract class FMU2ArcCompile : DefaultTask()  {
 
+  @get:Inject
+  abstract val execOps: ExecOperations
+
+  @get:Inject
+  abstract val fs: FileSystemOperations
+
+  @get:Inject
+  abstract val objectFactory: ObjectFactory
+
+  @get:Internal
+  abstract val projectDirectory: DirectoryProperty
 
   @get:InputFiles
   @get:SkipWhenEmpty
@@ -85,22 +96,11 @@ abstract class FMU2ArcCompile : DefaultTask()  {
     return this.outputDir.dir("symbols")
   }
 
-
-  //Use these Operations to not have to access the project object directly
-  @get:Inject
-  abstract val execOperations: ExecOperations
-
-  @get:Inject
-  abstract val fsOperations: FileSystemOperations
-
-  @get:Inject
-  abstract val objectFactory: ObjectFactory
-
   @TaskAction
   fun exec(changes : InputChanges) {
     // We clean the output directory if the task cannot be run incrementally
     if (!changes.isIncremental) {
-      this.outputDir.get().asFile.deleteRecursively()
+      fs.delete { it.delete(this.outputDir) }
     }
 
     if (printTaskInfo.get()) {
@@ -115,11 +115,11 @@ abstract class FMU2ArcCompile : DefaultTask()  {
       return
     }
     // Delete all outputs
-    fsOperations.delete {
+    fs.delete {
       it.delete(outputDir)
     }
 
-    execOperations.javaexec {
+    execOps.javaexec {
       it.mainClass.set(getMainClass())
       it.classpath(this.classPath)
 
@@ -137,10 +137,6 @@ abstract class FMU2ArcCompile : DefaultTask()  {
   }
 
   private fun getMainClass() = FMU2ARC_TOOL_CLASS
-
-
-  @get:Internal
-  abstract val projectDirectory: DirectoryProperty
 
   //Custom Method to prevent generator from generating new java files from fmu in jar
   private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {

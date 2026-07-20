@@ -17,12 +17,6 @@ dependencies {
   grammar(project(":languages:ag"))
   grammar(project(":languages:prepost"))
 
-  api(project(":languages:compute"))
-  api(project(":languages:features"))
-  api(project(":languages:modes"))
-  api(project(":languages:ag"))
-  api(project(":languages:prepost"))
-
   implementation(seLibs.mc.c2mc)
   implementation(libs.guava)
   implementation(libs.janino)
@@ -30,11 +24,7 @@ dependencies {
 
   runtimeOnly(seLibs.mc.stream.symbols)
 
-  testImplementation((project(":languages:basis"))) {
-    capabilities {
-      requireCapability("montiarc.languages:basis-tests")
-    }
-  }
+  testImplementation(testFixtures(project(":languages:basis")))
 
   testImplementation(libs.mockito)
 }

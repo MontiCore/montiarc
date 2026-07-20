@@ -16,11 +16,7 @@ dependencies {
   implementation(libs.guava)
   implementation(libs.smt)
 
-  testImplementation((project(":languages:basis"))) {
-    capabilities {
-      requireCapability("montiarc.languages:basis-tests")
-    }
-  }
+  testImplementation(testFixtures(project(":languages:basis")))
   testImplementation(seLibs.mc.fd)
 }
 

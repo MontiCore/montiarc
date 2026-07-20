@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.evaluation;
 
-import arcbasis._symboltable.TransitiveScopeSetter;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.FuncDecl;
@@ -11,6 +10,7 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
+import montiarc._symboltable.TransitiveScopeSetter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

@@ -1,11 +1,13 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2java
 
+import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.FileSystemOperations
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.CacheableTask
@@ -20,6 +22,7 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
+import org.gradle.process.ExecOperations
 import org.gradle.work.InputChanges
 
 /**
@@ -27,6 +30,13 @@ import org.gradle.work.InputChanges
  */
 @CacheableTask
 abstract class MontiArcCompile : DefaultTask() {
+
+  @get:Inject
+  abstract val execOps: ExecOperations
+
+  @get:Inject
+  abstract val fs: FileSystemOperations
+
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
@@ -116,7 +126,7 @@ abstract class MontiArcCompile : DefaultTask() {
   fun exec(changes : InputChanges) {
     // We clean the output directory if the task cannot be run incrementally
     if (!changes.isIncremental) {
-      this.outputDir.get().asFile.deleteRecursively()
+      fs.delete { it.delete(this.outputDir) }
     }
 
     if (printTaskInfo.get()) {
@@ -133,7 +143,7 @@ abstract class MontiArcCompile : DefaultTask() {
       return
     }
 
-    project.javaexec {
+    execOps.javaexec {
       it.mainClass.set(getMainClass())
       it.classpath(this.classPath)
 
@@ -167,9 +177,7 @@ abstract class MontiArcCompile : DefaultTask() {
   }
 
   private fun getExistingEntriesInProjectFrom(fileCollection: FileCollection): FileCollection {
-    return project.files(
-      fileCollection.files.filter { it.exists() }
-    )
+    return fileCollection.filter { it.exists() }
   }
 
   private fun getMainClass() = MA_TOOL_CLASS

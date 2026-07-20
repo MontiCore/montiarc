@@ -3,7 +3,6 @@ package montiarc.check;
 
 import arcbasis._symboltable.IArcBasisScope;
 import arcbasis._symboltable.SymbolService;
-import arcbasis._symboltable.TransitiveScopeSetter;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -18,6 +17,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc.util.MCError;
+import montiarc._symboltable.TransitiveScopeSetter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
