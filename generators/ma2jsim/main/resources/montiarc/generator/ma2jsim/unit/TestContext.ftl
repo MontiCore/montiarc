@@ -30,7 +30,7 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
     switch (parameterIndex) {
     <#list ast.getHead().getArcParameterList() as param>
       case ${param?index}: // ${param.getName()}
-        <#if param.isPresentDefault()><#assign default = javaPrinter.generateCode(param.getDefault())></#if>
+        <#if param.isPresentDefault()><#assign default = javaPrinter.generateCode(param.getDefault(), param.getSymbol().getType())></#if>
         <#if helper.getMaUnitHelper().isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
     </#list>
     <#list helper.getComponentHelper().getFeatures(ast) as feature>

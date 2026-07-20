@@ -7,7 +7,7 @@ ${tc.signature("className")}
     <#assign fieldName>${prefixes.parameter()}${param.getName()}</#assign>
     protected <@Util.getTypeString param.getSymbol().getType()/> ${fieldName} =
     <#if param.isPresentDefault()>
-        ${javaPrinter.generateCode(param.getDefault())}
+        ${javaPrinter.generateCode(param.getDefault(), param.getSymbol().getType())}
     <#else>
         <#if !param.getSymbol().getType().isPrimitive()>
             null

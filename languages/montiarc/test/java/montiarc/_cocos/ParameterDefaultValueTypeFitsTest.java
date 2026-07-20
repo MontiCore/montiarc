@@ -43,6 +43,8 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
     "component Comp4(int p1 = 1, int p2 = 2) { }",
     "component Comp5(boolean p1 = true, int p2 = 2) { }",
     "component Comp6(boolean p1, int p2 = 2) { }",
+    "component Comp7(java.lang.Double p = 5) { }",
+    "component Comp8(java.lang.Number p = 5) { }",
     //"component Comp7(java.lang.Integer p = java.lang.Integer.Integer(1)) { }",
     //"component Comp8(java.lang.Comparable<java.lang.Integer> p = java.lang.Integer.Integer(1)) { }"
   })
@@ -99,6 +101,10 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
         ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
       arg("component Comp6(java.lang.Integer p = java.lang.String.String()) { }",
         MCError.TARGET_TYPE_MISMATCH),
+      arg("component Comp6a(java.lang.Integer p = 5.0) { }",
+        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
+      arg("component Comp6b(java.lang.Comparable<java.lang.Double> p = 5) { }",
+        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
       arg("component Comp7<T>(T p = 1) { }",
         ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
       arg("component Comp8<T>(T p = java.lang.Integer.Integer(1)) { }",

@@ -1,17 +1,20 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.generator.codegen;
 
+import de.monticore.codegen.CodeGenSymTypeExpressionConverter;
 import de.monticore.codegen.TraverserBasedCodeGenerator;
 import de.monticore.codegen.javagen.JavaGenSymTypeExpressionConverter;
 import de.monticore.codegen.javagen.JavaGenVisitorState;
 import de.monticore.codegen.javagen.JavaOperationPrinter;
 import de.monticore.codegen.javagen.SymTypeExpression2JavaConverter;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis.codegen.javagen.ExpressionsBasisJavaGenVisitor;
 import de.monticore.literals.mccommonliterals.codegen.javagen.MCCommonLiteralsJavaGenVisitor;
 import de.monticore.ocl.setexpressions.codegen.javagen.SetExpressionsJavaGenVisitor;
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.TypeCheck3;
 import de.monticore.visitor.ITraverser;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
@@ -181,6 +184,20 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
     }
 
     return this.generateCode(expression.getAstExpression());
+  }
+
+  public String generateCode(ASTExpression expression, SymTypeExpression targetType) {
+    String printedExpression = this.generateCode(expression);
+    SymTypeExpression expressionType = TypeCheck3.typeOf(expression, targetType);
+
+    getPrinter().clearBuffer();
+    CodeGenSymTypeExpressionConverter.printConverted(
+      getPrinter(),
+      targetType,
+      expressionType,
+      printer -> printer.print(printedExpression)
+    );
+    return getPrinter().getContent();
   }
 
   public String generateCode(SymTypeExpression expression, boolean boxPrimitives) {
