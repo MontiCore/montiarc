@@ -6,7 +6,7 @@ import arcbasis.ArcBasisTestBase;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentHead;
 import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTConnector;
+import arcbasis._ast.ASTConnectorBuilder;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import montiarc.util.ArcError;
@@ -50,8 +50,11 @@ public class AtomicNoConnectorTest extends ArcBasisTestBase {
       .setBody(ArcBasisMill.componentBodyBuilder().build())
       .setHead(Mockito.mock(ASTComponentHead.class))
       .build();
+
+    ASTConnectorBuilder connectorBuilder = ArcBasisMill.connectorBuilder().setSource("in_temp").setTargetList("out_temp");
+
     for (int i = 0; i < numberOfConnectors; i++) {
-      compType.getBody().addArcElement(Mockito.mock(ASTConnector.class));
+      compType.getBody().addArcElement(connectorBuilder.build());
     }
 
     if (!atomic) {

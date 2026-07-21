@@ -46,10 +46,14 @@ class FeedbackStrongCausalityTest extends MontiArcTestBase {
     compile("package a.b; component I { port in int i; port out int o; E sub; i -> sub.i; sub.o -> o; }");
     compile("package a.b; component J { port in int i; port out int o; D sub1; E sub2; i -> sub1.i; sub1.o -> sub2.i; sub2.o -> o; } ");
     compile("package a.b; component K { port in int i; port out int o; B sub1; C sub2; i -> sub1.i; sub2.o -> o; } ");
+    compile("package a.b; component L { port in int i1, i2; port out int o1, o2; a.b.E fwd1, fwd2; i1 -> fwd1.i; fwd1.o -> o1; i2 -> fwd2.i; fwd2.o -> o2; } ");
+    compile("package a.b; component M { port in int i1, i2; port out int o; automaton {}} ");
+    compile("package a.b; component N { port in int i1, i2; port out int o; a.b.D d; a.b.M c; i1 -> c.i1; i2 -> d.i; d.o -> c.i2; c.o -> o; } ");
   }
 
   @ParameterizedTest
   @MethodSource("validModels")
+  @MethodSource("validModelsWithEffectChains")
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
@@ -68,6 +72,7 @@ class FeedbackStrongCausalityTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("invalidModels")
+  @MethodSource("invalidModelsWithEffectChains")
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -375,6 +380,46 @@ class FeedbackStrongCausalityTest extends MontiArcTestBase {
           }
           """,
         FEEDBACK_CAUSALITY,
+        FEEDBACK_CAUSALITY
+
+      )
+    );
+  }
+
+  static Stream<Arguments> validModelsWithEffectChains() {
+    return Stream.of(
+      // Independent effect chains in subcomponent
+      arg("""
+        component ValidCompWithEffectChains1 {
+          port in int i;
+          port out int o;
+          a.b.L sub;
+          i -> sub.i1;
+          sub.o1 -> sub.i2;
+          sub.o2 -> o;
+        }
+        """
+      ),
+      // Independent effect chains through delay
+      arg("""
+        component ValidCompWithEffectChains2{
+          a.b.N sub;
+          sub.o -> sub.i2;
+        }
+        """
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModelsWithEffectChains() {
+    return Stream.of(
+      // compare to ValidComp18, this does not use the delay
+      arg("""
+          component InvalidCompWithEffectChains1 {
+            a.b.N sub;
+            sub.o -> sub.i1;
+          }
+          """,
         FEEDBACK_CAUSALITY
       )
     );
