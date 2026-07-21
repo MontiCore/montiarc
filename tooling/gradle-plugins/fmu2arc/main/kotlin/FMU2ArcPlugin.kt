@@ -22,6 +22,7 @@ const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERS
 const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:simulator-rte:${VERSION}"
 
 const val MAVEN_FMI4J_REF = "io.github.generosolombardi-av.fmi4j:fmi-import:0.38.0-multiplatform.6"
+
 const val MAVEN_SLF4J_REF = "de.se_rwth.commons:se-commons-logging-slf4j:${VERSION}"
 
 @Suppress("unused")
@@ -45,12 +46,10 @@ class FMU2ArcPlugin : Plugin<Project> {
         dependencies.addProvider(sourceSet.implementationConfigurationName, provider { SE_LOGGING_PROJECT_REF })
 
         dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_FMI4J_REF })
-        dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_SLF4J_REF })
         dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
+        dependencies.addProvider(sourceSet.runtimeOnlyConfigurationName, provider { MAVEN_SLF4J_REF })
       }
       pluginManager.apply(FMU2ArcDistributionPlugin::class.java)
-
-
     }
   }
 
@@ -91,6 +90,7 @@ class FMU2ArcPlugin : Plugin<Project> {
 
     // Add a dependency on the fmu2arc jar
     dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
+    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_SLF4J_REF })
   }
 
   /**

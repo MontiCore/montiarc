@@ -9,7 +9,7 @@ plugins {
 dependencies {
   implementation(project(":languages:montiarc"))
   api(libs.fmi4j)
-  implementation(seLibs.se.commons.logging.slf4j)
+  runtimeOnly(seLibs.se.commons.logging.slf4j)
   implementation(libs.kotlin.stdlib)
   implementation(libs.format)
   implementation(libs.guava)
