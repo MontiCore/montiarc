@@ -1,5 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 import montiarc.build.VscodeGenConfig
+import java.io.File
 
 plugins {
   id("montiarc.build.language-server")
@@ -68,17 +69,18 @@ extensions.configure<VscodeGenConfig>(VscodeGenConfig::class) {
   )
 }
 
-// Edit package.json of the generated project
+// Extract these values at configuration time
+val projectVersion = version.toString()
+val packageJsonFile = File(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir(), "package.json")
+
 tasks.register("editPackageJson") {
+  val targetFile = packageJsonFile
+  val targetVersion = projectVersion
+
   doLast {
-    val file = File(
-      "${
-        autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir()
-      }/package.json"
-    )
-    val json = groovy.json.JsonBuilder(groovy.json.JsonSlurper().parse(file))
+    val json = groovy.json.JsonBuilder(groovy.json.JsonSlurper().parse(targetFile))
     val content = json.content as MutableMap<String, Any>
-    content["version"] = version.toString()
+    content["version"] = targetVersion
     content["name"] = "montiarc"
     content["displayName"] = "MontiArc"
     content["icon"] = "icons/icon.png"
@@ -89,7 +91,6 @@ tasks.register("editPackageJson") {
       "type" to "git",
       "url" to "https://github.com/MontiCore/montiarc"
     )
-
 
     val languageContributes =
       (((content["contributes"] as Map<*, *>)["languages"] as List<*>)[0] as MutableMap<String, Any>)
@@ -128,51 +129,42 @@ tasks.register("editPackageJson") {
       )
     )
 
-    file.writeText(json.toPrettyString())
+    targetFile.writeText(json.toPrettyString())
   }
 }
 
-// We have to set explicit task dependencies for some autoconfigured tasks,
-// as their declared inputs sadly are not by themselves connected to the outputs
-// of the other tasks.
-// Moreover, we cannot set this automatically from a build-logic plugin,
-// as these fail if we refer to the name of a task that we only create in here.
-// In build-logic plugins, we have to option to use tasks.withType<TaskType> for
-// such configuration. However, the following two tasks are Exec tasks and the
-// configuration that we perform is specific to each of them-not general for all
-// Exec tasks
+// Extract value at configuration time
+val nodeExecutableDir = project.node.resolvedNodeDir.asFile.get()
+
+fun addNpmToPath(task: Exec, nodeDir: File) {
+  val isWindows = System.getProperty("os.name").lowercase().startsWith("win")
+  val sysPath = System.getenv("PATH")
+  val pathSep = File.pathSeparator
+
+  if (isWindows) {
+    task.environment("PATH", "${nodeDir}${pathSep}${sysPath}")
+  } else {
+    task.environment("PATH", "${nodeDir}/bin${pathSep}${sysPath}")
+  }
+}
+
 tasks.named<Exec>("buildMontiArcWithCDVscodePlugin") {
   dependsOn(
-    project.tasks.npmInstall,
+    tasks.named("npmInstall"),
     "packageMontiArcWithCDVscodePlugin"
   )
-  addNpmToPath(this)
+  addNpmToPath(this, nodeExecutableDir)
 }
 
 tasks.named<Exec>("packageMontiArcWithCDVscodePlugin") {
   dependsOn(
-    project.tasks.npmInstall,
+    tasks.named("npmInstall"),
     "editPackageJson",
     "copyVscodeResources"
   )
-  addNpmToPath(this)
+  addNpmToPath(this, nodeExecutableDir)
 }
 
 tasks.named<Jar>("sourcesJar") {
   dependsOn(tasks.named("generateMontiArcWithCDLanguageServer"))
-}
-
-fun addNpmToPath(task: Exec) {
-  val isWindows = System.getProperty("os.name").lowercase().startsWith("win")
-  if (isWindows) {
-    task.environment(
-      "PATH",
-      "${project.node.computedNodeDir.get()}${File.pathSeparator}${System.getenv("PATH")}"
-    )
-  } else {
-    task.environment(
-      "PATH",
-      "${project.node.computedNodeDir.get()}/bin${File.pathSeparator}${System.getenv("PATH")}"
-    )
-  }
 }

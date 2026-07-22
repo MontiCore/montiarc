@@ -41,7 +41,7 @@ Build:
   stage: build
   allow_failure: false
   script:
-    - gradle clean assemble --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
+    - gradle clean assemble --stacktrace --build-cache --configuration-cache -PenableLanguageServer -Pde.monticore.gradle.performance_statistic="false" --refresh-dependencies
 
 Unit Test:
   stage: test
@@ -49,7 +49,7 @@ Unit Test:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   allow_failure: false
   script:
-    - gradle test jacocoAggregatedTestReport --stacktrace --build-cache -PenableLanguageServer
+    - gradle test jacocoAggregatedTestReport --stacktrace --build-cache --configuration-cache -PenableLanguageServer -Pde.monticore.gradle.performance_statistic="false"
     - awk -F","
       '{ instructions += $4 + $5; covered += $5 } END
       { print covered, "/", instructions, " instructions covered"; print 100*covered/instructions, "% covered" }'
@@ -70,7 +70,7 @@ Deploy Nexus:
   <<: *cache_gradle_pull_only
   stage: deploy
   script:
-    - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache -PenableLanguageServer
+    - gradle publish :gradle-plugins:publishAll -PmavenPassword=$pass -PmavenUser=$user --build-cache --configuration-cache -PenableLanguageServer -Pde.monticore.gradle.performance_statistic="false"
   rules:
     - if: '$CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH && $CI_PIPELINE_SOURCE == "push"'
       when: on_success

@@ -2,6 +2,7 @@
 package montiarc.gradle.sd2arc
 
 import javax.inject.Inject
+import montiarc.gradle.ma2jsim.GENERATOR_DEPENDENCY_CONFIG_NAME
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -15,6 +16,8 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
@@ -72,6 +75,11 @@ abstract class Sd2ArcCompile : DefaultTask() {
   @get:Input
   abstract val printTaskInfo : Property<Boolean>
 
+  @get:InputFiles
+  @get:IgnoreEmptyDirectories
+  @get:PathSensitive(PathSensitivity.RELATIVE)
+  abstract val classPath : ConfigurableFileCollection
+
   init {
     description = "Generates .arc components from sequence diagrams using sd2arc."
 
@@ -82,7 +90,7 @@ abstract class Sd2ArcCompile : DefaultTask() {
     debugTask.convention(false)
     debugPort.convention("5005")
 
-    dependsOn(getClassPath())
+    classPath.setFrom(project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME))
   }
 
   fun montiarcOutputDir(): Provider<Directory> {
@@ -113,8 +121,10 @@ abstract class Sd2ArcCompile : DefaultTask() {
     }
 
     execOps.javaexec {
-      it.classpath(getClassPath())
+      it.classpath(this.classPath)
       it.mainClass.convention(getMainClass())
+
+      it.setIgnoreExitValue(true)
 
       if (debugTask.get()) {
         it.jvmArgs(
@@ -146,8 +156,6 @@ abstract class Sd2ArcCompile : DefaultTask() {
     return fileCollection.filter { it.exists() }
   }
 
-  private fun getClassPath() = project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME)
-
   private fun getMainClass() = SD2ARC_TOOL_CLASS
 
   private fun printInfo() {
@@ -167,6 +175,6 @@ abstract class Sd2ArcCompile : DefaultTask() {
 
     println("MainClass:" + getMainClass())
     println("ClassPath:")
-    getClassPath().get().asPath.split(":").forEach { println("  $it") }
+    classPath.asPath.split(":").forEach { println("  $it") }
   }
 }
