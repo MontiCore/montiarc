@@ -898,27 +898,22 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("NoDuplicateVariableDeclarationsTest1",
         mpk(PKG_STMT, "NoDuplicateVariableDeclarations1.arc"),
-        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations1.arc", 12, 11, 12, 16, DUPLICATE_VAR_IN_SCOPE, "i"),
         fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations1.arc", 13, 11, 13, 16, DUPLICATE_VAR_IN_SCOPE, "i")
       ),
       arg("NoDuplicateVariableDeclarationsTest2",
         mpk(PKG_STMT, "NoDuplicateVariableDeclarations2.arc"),
-        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations2.arc", 12, 13, 12, 18, DUPLICATE_VAR_IN_SCOPE, "i"),
         fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations2.arc", 13, 13, 13, 18, DUPLICATE_VAR_IN_SCOPE, "i")
       ),
       arg("NoDuplicateVariableDeclarationsTest3",
         mpk(PKG_STMT, "NoDuplicateVariableDeclarations3.arc"),
-        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations3.arc", 12, 13, 12, 18, DUPLICATE_VAR_IN_SCOPE, "i"),
         fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations3.arc", 13, 13, 13, 18, DUPLICATE_VAR_IN_SCOPE, "i")
       ),
       arg("NoDuplicateVariableDeclarationsTest4",
         mpk(PKG_STMT, "NoDuplicateVariableDeclarations4.arc"),
-        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations4.arc", 10, 9, 10, 14, DUPLICATE_VAR_IN_SCOPE, "i"),
         fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations4.arc", 11, 9, 11, 14, DUPLICATE_VAR_IN_SCOPE, "i")
       ),
       arg("NoDuplicateVariableDeclarationsTest5",
         mpk(PKG_STMT, "NoDuplicateVariableDeclarations5.arc"),
-        fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations5.arc", 10, 9, 10, 14, DUPLICATE_VAR_IN_SCOPE, "i"),
         fn(ERROR, PKG_STMT, "NoDuplicateVariableDeclarations5.arc", 11, 9, 11, 14, DUPLICATE_VAR_IN_SCOPE, "i")
       ),
       arg("StateInModeAutomatonTest1",

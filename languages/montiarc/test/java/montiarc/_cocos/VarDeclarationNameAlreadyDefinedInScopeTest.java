@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NoDuplicateVariableInBehaviorTest extends MontiArcTestBase {
+public class VarDeclarationNameAlreadyDefinedInScopeTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("validModels")
@@ -55,24 +55,32 @@ public class NoDuplicateVariableInBehaviorTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> validModels() {
     return Stream.of(
-      arg("component Comp1 { int i = 1; automaton { initial state S; S -> S / { int i = 1; } } }"),
-      arg("component Comp2 { int i = 1; compute { int i = 1; } }"),
-      arg("component Comp3 { int i = 0; automaton { initial state S; S -> S / { int i = 1;} S -> S / { int i = 1; } } }")
+      arg("component Comp1 { automaton { initial state S; S -> S / { int i = 1; } } }"),
+      arg("component Comp2 { compute { int i = 1; } }"),
+      arg("component Comp3 { automaton { initial state S; S -> S / { int i = 1;} S -> S / { int i = 1; } } }")
     );
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       arg("component Comp1 { compute { int i = 1; int i = 1; } }", new String[] {
-        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
       arg("component Comp2 { automaton { initial state S; S -> S / { int i = 1; int i = 1; } } }", new String[] {
-        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
       arg("component Comp3 { compute { boolean a = 1 == 0; int a = 1; double a = 1; long a = 1; } }", new String[] {
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
+        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
+      arg("component Comp4 { int i = 0; automaton { initial state S; S -> S / { int i = 1;} S -> S / { int i = 1; } } }", new String[] {
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE,
+        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
+      arg("component Comp5 { int i = 1; compute { int i = 1; } }", new String[] {
+        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
+      arg("component Comp6 { int i = 1; automaton { initial state S; S -> S / { int i = 1; } } }", new String[] {
+        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
+      arg("component Comp6 { automaton { initial state S; S -> S / { int i = 1; for (int i = 0; i < 1; i++) {} } } }", new String[] {
+        VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE }),
+      arg("component Comp6 { automaton { initial state S; S -> S / { int i = 1; { int i = 0; } } } }", new String[] {
         VarDeclarationNameAlreadyDefinedInScope.ERROR_CODE })
     );
   }
