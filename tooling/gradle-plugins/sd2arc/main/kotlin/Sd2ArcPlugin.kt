@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.sd2arc
 
+import montiarc.gradle.ma2jsim.compileMontiarcTaskName
 import montiarc.gradle.montiarc.montiarc
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
@@ -120,7 +121,7 @@ class Sd2ArcPlugin : Plugin<Project> {
     }
 
     sourceSet.sd2arc.get().compiledBy(generateTask, Sd2ArcCompile::outputDir)
-    tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
+    tasks.named(sourceSet.compileMontiarcTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
   }

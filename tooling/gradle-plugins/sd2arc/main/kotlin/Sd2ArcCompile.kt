@@ -2,7 +2,6 @@
 package montiarc.gradle.sd2arc
 
 import javax.inject.Inject
-import montiarc.gradle.ma2jsim.GENERATOR_DEPENDENCY_CONFIG_NAME
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
