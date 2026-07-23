@@ -32,6 +32,7 @@ import static montiarc.util.ArcError.CIRCULAR_FIELDS_DEPENDENCY;
 import static montiarc.util.ArcError.CIRCULAR_INHERITANCE;
 import static montiarc.util.ArcError.COMPONENT_LOWER_CASE;
 import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
+import static montiarc.util.ArcError.COMP_ARG_TYPE_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TIMING_MISMATCH;
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_INIT_TYPE_MISMATCH;
@@ -75,6 +76,7 @@ import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
 import static montiarc.util.SCError.DUPLICATE_STATE;
 import static montiarc.util.SCError.MISSING_INITIAL_STATE;
+import static montiarc.util.VariableArcError.CONSTRAINT_NOT_SATISFIED;
 import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
 import static montiarc.util.VariableArcError.FEATURE_UPPER_CASE;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -110,7 +112,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
   @DisableIfDisplayName(contains = {
     "NameClash",
     "SelfReferentialComponentWithCompositionTest",
-    "CircularInheritanceWithCompositionTest3"
+    "CircularInheritanceWithCompositionTest3",
+    "TypeMismatchOfDefaultParameterValueTest2"
   })
   void invalidModelsShouldFailEndToEnd(@NotNull String name,
                                        @NotNull String modelPath,
@@ -159,7 +162,8 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
     "MoreThanOneBehaviorTest",
     "MoreThanOneBehaviorWithVariabilityTest",
     "ForEachExpressionNotIterableTest",
-    "ForEachTypeMismatchTest"
+    "ForEachTypeMismatchTest",
+    "TypeMismatchOfDefaultParameterValueTest2"
   })
   void invalidModelsShouldFailEndToEnd4Variability(@NotNull String name,
                                                    @NotNull String modelPath,
@@ -576,9 +580,22 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "SelfReferentialComponent5A.arc"),
         fn(ERROR, PKG_COMP, "SelfReferentialComponent5A.arc", 13, 30, 13, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent5A", "SelfReferentialComponent5A -> SelfReferentialComponent5B -> SelfReferentialComponent5A")
       ),
-      arg("TypeMismatchOfDefaultParameterValueTest",
+      arg("TypeMismatchOfConfigurationParameterValue1",
+        mpk(PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc"),
+        fn(ERROR, PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc", 9, 7, 9, 8, COMP_ARG_TYPE_MISMATCH, "boolean", "int"),
+        fn(ERROR, PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc", 7, 1, 10, 2, CONSTRAINT_NOT_SATISFIED)
+      ),
+      arg("TypeMismatchOfConfigurationParameterValue2",
+        mpk(PKG_COMP, "TypeMismatchOfConfigurationParameterValue2.arc"),
+        fn(ERROR, PKG_COMP, "TypeMismatchOfConfigurationParameterValue2.arc", 9, 7, 9, 8, COMP_ARG_TYPE_MISMATCH, "boolean", "int")
+      ),
+      arg("TypeMismatchOfDefaultParameterValueTest1",
         mpk(PKG_COMP, "TypeMismatchOfDefaultParameterValue.arc"),
         fn(ERROR, PKG_COMP, "TypeMismatchOfDefaultParameterValue.arc", 7, 59, 7, 73, PARAM_DEFAULT_TYPE_MISMATCH, "int", "boolean")
+      ),
+      arg("TypeMismatchOfDefaultParameterValueTest2",
+        mpk(PKG_COMP, "TypeMismatchOfDefaultParameterValue2.arc"),
+        fn(ERROR, PKG_COMP, "TypeMismatchOfDefaultParameterValue2.arc", 7, 59, 7, 73, PARAM_DEFAULT_TYPE_MISMATCH, "int", "boolean")
       ),
       arg("AutoconnectInAtomicTest1",
         mpk(PKG_CPOS, "AutoconnectInAtomic1.arc"),
