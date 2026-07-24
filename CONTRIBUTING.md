@@ -18,7 +18,7 @@ This guide comprises the following steps:
 ### Setup
 
 #### Prerequisites 
-- Git (for checking out the project)
+- Git (for checking out the project) and [Git-LFS](https://git-lfs.com/)
 - Gradle 8.14.4 (for building the project)
 - Java 21 (for building and executing the project)
 
