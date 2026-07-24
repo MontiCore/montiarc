@@ -1,0 +1,16 @@
+# An .aiignore file follows the same syntax as a .gitignore file.
+# .gitignore documentation: https://git-scm.com/docs/gitignore
+
+.classpath
+.gradle
+.idea
+.project
+.settings
+.vscode
+.kotlin
+.intellijPlatform
+
+*.iml
+*.hprof
+*.lck
+.DS_Store
