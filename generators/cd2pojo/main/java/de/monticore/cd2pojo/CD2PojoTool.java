@@ -1,7 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 package de.monticore.cd2pojo;
 
-import de.monticore.cd2pojo.logging.CD2PojoLog;
 import de.monticore.cd4analysis._symboltable.ICD4AnalysisScope;
 import de.monticore.cd4code.CD4CodeMill;
 import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
@@ -19,7 +18,6 @@ import java.util.List;
 public class CD2PojoTool extends CDGenTool {
 
   public static void main(String[] args) {
-    CD2PojoLog.init();
     CD2PojoTool tool = new CD2PojoTool();
     String[] augmentedArgs = augmentWithNewDefaultConfigTemplate(args);
     tool.run(augmentedArgs);

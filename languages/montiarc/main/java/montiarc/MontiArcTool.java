@@ -14,7 +14,6 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCos;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc.check.MontiArcTypeCheck;
-import montiarc.logging.MontiArcLog;
 import montiarc.report.IncCheckUtil;
 import montiarc.report.UpToDateResults;
 import montiarc.report.VersionFileDeserializer;
@@ -82,8 +81,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
   @Override
   public void init() {
-    MontiArcLog.init();
-    MontiArcMill.init();
+    super.init();
     MontiArcTypeCheck.init();
     SymTypeRelations.init();
     MCCollectionSymTypeRelations.init();
@@ -132,9 +130,9 @@ public class MontiArcTool extends MontiArcToolTOP {
 
         // if --d or --t: enable verbose logging
         if (cl.hasOption("d")) {
-          MontiArcLog.initDEBUG();
+          Log.initDEBUG();
         } else if (cl.hasOption("t")) {
-          MontiArcLog.initTRACE();
+          Log.initTRACE();
         }
 
         run(cl);

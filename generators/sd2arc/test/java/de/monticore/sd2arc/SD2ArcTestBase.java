@@ -3,6 +3,7 @@ package de.monticore.sd2arc;
 
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.ATestBase;
 import org.junit.jupiter.api.Assertions;
 
 import java.nio.file.Path;
@@ -16,7 +17,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
-public abstract class SD2ArcTestBase {
+public abstract class SD2ArcTestBase extends ATestBase {
 
   protected static final String SYMBOL_PATH = "test/resources";
 

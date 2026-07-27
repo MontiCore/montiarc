@@ -13,6 +13,7 @@ dependencies {
   implementation(libs.janino)
   implementation(libs.guava)
   implementation(seLibs.mc.c2mc)
+  testImplementation(testFixtures(project(":languages:basis")))
 }
 
 tasks.shadowJar {

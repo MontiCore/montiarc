@@ -12,7 +12,6 @@ import de.monticore.sd2arc._cocos.ObserveOnUnconnectedPortCoCo;
 import de.monticore.sd2arc._cocos.SubcomponentExistsInEmbeddingComponentCoCo;
 import de.monticore.sd2arc.codegen.SDGenerator;
 import de.monticore.sd2arc.codegen.SDHelper;
-import de.monticore.sd2arc.logging.SD2ArcLog;
 import de.monticore.sd2arc.trafo.AddAdjacentSubcomponents;
 import de.monticore.sd2arc.trafo.AddDefaultMatchToComponents;
 import de.monticore.sd2arc.trafo.CompleteInteractionsTrafo;
@@ -59,7 +58,6 @@ public class SD2ArcTool extends SD4ComponentsTool {
 
   @Override
   public void init() {
-    SD2ArcLog.init();
     MontiArcMill.init();
     super.init();
   }
