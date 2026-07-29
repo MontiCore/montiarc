@@ -88,10 +88,12 @@ nav:
       - MontiArc: 'Usage/Gradle/MontiArc.md'
       - CD2Java: 'Usage/Gradle/CD2Pojo.md'
       - SD2Arc: 'Usage/Gradle/SD2Arc.md'
+      - FMU2Arc: 'Usage/Gradle/FMU2Arc.md'
     - CLI:
       - CLI: 'Usage/CLI/index.md'
       - MontiArc: 'Usage/CLI/MontiArc.md'
       - CD2Java: 'Usage/CLI/CD2Pojo.md'
+      - FMU2Arc: 'Usage/CLI/FMU2Arc.md'
     - Errors: 
         - Errors: 'Usage/Errors/index.md'
     - Simulation: 
@@ -129,6 +131,7 @@ nav:
       - Java Integration: 'Reference/Types/JavaIntegration.md'
     - Simulation:
         - Simulation: 'Reference/Simulation/index.md'
+        - Co-Simulation (FMUs): 'Reference/Simulation/CoSimulation.md'
         - Oracle: 'Reference/Simulation/Oracle.md'
     - Testing:
       - Testing: 'Reference/Testing/index.md'

@@ -64,4 +64,15 @@ MontiArc is packed with features. This section is a detailed explanation and sho
 
     [:octicons-arrow-right-24: Read more](./Testing/index.md)
 
+-   :material-animation-play: &nbsp;
+    __Simulation__
+
+    ---
+
+    Learn more about the simulator and co-simulation
+
+    ---
+
+    [:octicons-arrow-right-24: Read more](./Simulation/index.md)
+
 </div>

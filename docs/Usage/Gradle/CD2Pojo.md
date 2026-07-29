@@ -135,6 +135,7 @@ Some configuration options only have default values if the task is created for a
 | outputDir       | `$buildDir/cd2pojo/SOURCE_SET_NAME`                          | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                                        |
 | debugTask       | `false`                                                      | If set to true, a debugger can be attached to the generator process for debugging purposes.                                                                                                                                                                                                                                                          |
 ---
+
 ## Added build elements
 * The Plugin adds the dependency configuration *cd2pojoGenerator* on which it places the dependency on the generator 
   that is used to generate .java code from the .cd files. If you use `class2mc`, then you can place the Java classes

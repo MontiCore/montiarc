@@ -10,7 +10,7 @@ To represent more complex data structures, custom type definitions can be made. 
 
 ## Defining
 
-Type definitions are handled by class diagrams. Just like component class diagrams have a package and name.
+Type definitions are handled by class diagrams. Just like components, class diagrams have a package and name.
 The file ends with the `.cd` ending, and the Gradle plugin expects it to be located in the `src/main/cd2pojo` folder.
 
 For our system, we used a custom `MotorCMD` Enum definition.
