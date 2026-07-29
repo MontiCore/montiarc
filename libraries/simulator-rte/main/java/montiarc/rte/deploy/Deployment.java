@@ -7,6 +7,7 @@ import montiarc.rte.Simulation;
 import montiarc.rte.component.Component;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.deploy.util.DeSerializer;
+import montiarc.rte.oracle.OracleFactory;
 import montiarc.rte.scheduling.CoordinatingScheduler;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -106,7 +107,7 @@ public abstract class Deployment<T extends Component> {
   }
 
   protected CoordinatingScheduler buildCoordinatingScheduler() {
-    return new CoordinatingScheduler();
+    return new CoordinatingScheduler(OracleFactory.withDefaultStrategy(OracleFactory.preferFirst()));
   }
 
   protected abstract T buildComponent(CoordinatingScheduler scheduler, Map<String, String> parameters);

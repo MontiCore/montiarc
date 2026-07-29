@@ -7,7 +7,7 @@ public ${ast.getName()}${suffixes.comp()}<@Util.printTypeParameters ast false/> 
 
   ${ast.getName()}${suffixes.compImpl()}<@Util.printTypeParameters ast false/> component = new ${ast.getName()}${suffixes.compImpl()}<@Util.printTypeParameters ast false/>(
     getName(),
-    getScheduler(),
+    getScheduler().orElse(new montiarc.rte.scheduling.CoordinatingScheduler(getOracleFactory())),
     getOracleFactory()
     <#list ast.getHead().getArcParameterList()>, <#items as param>${prefixes.getterMethod()}${prefixes.parameter()}${param.getName()}()<#sep>, </#sep></#items></#list>
     <#list helper.getComponentHelper().getFeatures(ast)>, <#items as feature>${prefixes.getterMethod()}${prefixes.feature()}${feature.getName()}()<#sep>, </#sep></#items></#list>

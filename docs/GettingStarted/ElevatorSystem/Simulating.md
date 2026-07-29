@@ -1,7 +1,7 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 # Simulating the System
 
-To simulate the system, we can use the Gradle run task like before.
+To [simulate the system](../../Reference/Simulation/index.md), we can use the Gradle run task like before.
 To make life easier, we can also set the main class to the deployment elevator system class. 
 
 === "build.gradle.kts"

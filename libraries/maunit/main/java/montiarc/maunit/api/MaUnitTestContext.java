@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.maunit.api;
 
+import montiarc.rte.oracle.OracleFactory;
+
 /**
  * Describes the context of a {@link MaUnitTest @MaUnitTest}.
  */
@@ -61,5 +63,13 @@ public interface MaUnitTestContext {
    */
   default boolean isExceptionExpected(int testIndex) {
     return getExpectedException(testIndex) != null;
+  }
+
+  /**
+   * @param testIndex the test case index.
+   * @return the oracle factory for the given test case.
+   */
+  default OracleFactory getOracleFactory(int testIndex) {
+    return OracleFactory.withDefaultStrategy(OracleFactory.preferFirst());
   }
 }

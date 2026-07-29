@@ -28,19 +28,24 @@ public class ${fmu.getName()}CompBuilder {
     return this.superComponent;
   }
 
-  protected montiarc.rte.scheduling.Scheduler scheduler = new montiarc.rte.scheduling.CoordinatingScheduler();
+  protected java.util.Optional<montiarc.rte.scheduling.Scheduler> scheduler = java.util.Optional.empty();
 
-  public montiarc.rte.scheduling.Scheduler getScheduler() {
+  public java.util.Optional<montiarc.rte.scheduling.Scheduler> getScheduler() {
     return this.scheduler;
   }
 
-  public ${fmu.getName()}CompBuilder setScheduler(montiarc.rte.scheduling.Scheduler scheduler) {
+  public ${fmu.getName()}CompBuilder setScheduler(java.util.Optional<montiarc.rte.scheduling.Scheduler> scheduler) {
     this.scheduler = scheduler;
     return this;
   }
 
+  public ${fmu.getName()}CompBuilder setScheduler(montiarc.rte.scheduling.Scheduler scheduler) {
+    this.scheduler = java.util.Optional.of(scheduler);
+    return this;
+  }
+
   protected montiarc.rte.oracle.OracleFactory oracleFactory = montiarc.rte.oracle.OracleFactory
-          .withDefaultStrategy(montiarc.rte.oracle.OracleFactory.lowestHash());
+          .withDefaultStrategy(montiarc.rte.oracle.OracleFactory.preferFirst());
 
   public ${fmu.getName()}CompBuilder setOracleFactory(montiarc.rte.oracle.OracleFactory oracleFactory) {
     this.oracleFactory = oracleFactory;
@@ -81,7 +86,7 @@ public class ${fmu.getName()}CompBuilder {
             + ((name == null || name.isBlank()) ? "ERR: no name given" : name);
     ${fmu.getName()}CompImpl component = new ${fmu.getName()}CompImpl(
             getName(),
-            getScheduler(),
+            getScheduler().orElse(new montiarc.rte.scheduling.CoordinatingScheduler(getOracleFactory())),
             getOracleFactory()<#list fixedParamVars as v>
         , get_param_${sanitizeName(v.getName())}()
     </#list>);

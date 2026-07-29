@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  */
 public class OracleFactory {
 
-  protected Supplier<Oracle> defaultStrategy = LowestHashValueOracle::new;
+  protected Supplier<Oracle> defaultStrategy = PreferFirstOracle::new;
   protected Map<String, Supplier<Oracle>> subCompToOracleMap = new HashMap<>();
 
   /**
@@ -160,5 +160,22 @@ public class OracleFactory {
    */
   public static Supplier<Oracle> preferUnexplored(Supplier<Oracle> fallbackStrategy) {
     return () -> new PreferUnexploredOracle(fallbackStrategy.get());
+  }
+
+  /**
+   * A supplier that creates new {@link RandomOracle}s on each evaluation.
+   */
+  public static Supplier<Oracle> random() {
+    return RandomOracle::new;
+  }
+
+  /**
+   * A supplier that creates new {@link PreferLeastUsedOracle} on each
+   * evaluation.
+   * @param fallbackStrategy The oracle strategy that selects an option among
+   *                         multiple least used options.
+   */
+  public static Supplier<Oracle> preferLeastUsed(Supplier<Oracle> fallbackStrategy) {
+    return () -> new PreferLeastUsedOracle(fallbackStrategy.get());
   }
 }

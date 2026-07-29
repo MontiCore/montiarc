@@ -7,6 +7,8 @@ The included simulator allows running MontiArc models. This is useful for testin
 Multiple options are available for running the simulator, including interactive.
 A simulator has the benefit of controlling the simulation speed.
 
+For more information about the simulator read the [reference chapter](../../Reference/Simulation/index.md)
+
 ## Non-Interactive
 The default simulator is not interactive and has to be filled with inputs programmatically.
 See the [testing](../../Reference/Testing/index.md) chapter for more information on it.

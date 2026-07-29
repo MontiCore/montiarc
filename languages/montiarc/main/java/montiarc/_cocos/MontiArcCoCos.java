@@ -36,6 +36,7 @@ import arcbasis._cocos.NoPortInSuperComponentArgument;
 import arcbasis._cocos.OnlyAssignmentOrCallExpressionStatement;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
+import arcbasis._cocos.OracleStereotypeValueExists;
 import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.PortHeritageTimingFits;
@@ -175,6 +176,7 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortHeritageTypeFits());
     checker.addCoCo(new FieldInitTypeFits());
     checker.addCoCo(new ParameterDefaultValueTypeFits());
+    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new OracleStereotypeValueExists());
     if (checkVariants) {
       varChecker.get4FullVariant().addCoCo(new NoPortInDefaultParameterValue4Family());
       varChecker.get4FullVariant().addCoCo(new NoPortInFieldDeclaration4Family());

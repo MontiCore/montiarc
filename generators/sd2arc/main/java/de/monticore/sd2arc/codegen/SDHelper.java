@@ -179,6 +179,7 @@ public class SDHelper {
     Map<String, String> stereotypes = new HashMap<>();
     stereotypes.put("ticks", String.valueOf(defaultTicks));
     stereotypes.put("test", null);
+    stereotypes.put("oracle", "\"first\"");
 
     if (!diagram.isPresentStereotype()) return stereotypes;
     for (ASTStereoValue value : diagram.getStereotype().getValuesList()) {

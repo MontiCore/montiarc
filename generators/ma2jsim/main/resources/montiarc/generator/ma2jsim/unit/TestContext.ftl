@@ -26,6 +26,11 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
   }
 
   @Override
+  public montiarc.rte.oracle.OracleFactory getOracleFactory(int testIndex) {
+    return montiarc.rte.oracle.OracleFactory.withDefaultStrategy(${helper.getComponentHelper().getOracleFactory(ast)});
+  }
+
+  @Override
   public Object resolveParameter(int testIndex, int parameterIndex) {
     switch (parameterIndex) {
     <#list ast.getHead().getArcParameterList() as param>

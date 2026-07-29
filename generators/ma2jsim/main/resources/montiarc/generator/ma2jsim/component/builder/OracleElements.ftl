@@ -3,7 +3,7 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#-- @ftlvariable name="className" type="String" -->
 ${tc.signature("className")}
-protected montiarc.rte.oracle.OracleFactory oracleFactory = montiarc.rte.oracle.OracleFactory.withDefaultStrategy(montiarc.rte.oracle.OracleFactory.lowestHash());
+protected montiarc.rte.oracle.OracleFactory oracleFactory = montiarc.rte.oracle.OracleFactory.withDefaultStrategy(${helper.getComponentHelper().getOracleFactory(ast)});
 
 public ${className} setOracleFactory(montiarc.rte.oracle.OracleFactory oracleFactory) { this.oracleFactory = oracleFactory; return this; }
 

@@ -5,6 +5,8 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.rte.Simulation;
 import montiarc.rte.component.SimComponent;
 import montiarc.rte.msg.Message;
+import montiarc.rte.oracle.Oracle;
+import montiarc.rte.oracle.OracleFactory;
 import montiarc.rte.port.InPort;
 
 import java.util.Collection;
@@ -19,12 +21,15 @@ import java.util.stream.Collectors;
  */
 public class CoordinatingScheduler implements Scheduler {
 
+  protected Oracle oracle;
+
   protected final Map<SimComponent, ComponentScheduler> compToScheduler;
 
   protected boolean requestedToStop = false;
 
-  public CoordinatingScheduler() {
+  public CoordinatingScheduler(OracleFactory factory) {
     this.compToScheduler = new HashMap<>();
+    this.oracle = factory.createDefaultOracle();
   }
 
   @Override
@@ -125,11 +130,14 @@ public class CoordinatingScheduler implements Scheduler {
     Collection<ComponentScheduler> activeSchedulers = getActiveSchedulers();
     long tickStart = System.nanoTime();
     while (!activeSchedulers.isEmpty() && !requestedToStop) {
-      for (ComponentScheduler s : activeSchedulers) {
+
+      while (!activeSchedulers.isEmpty()) {
+        ComponentScheduler s = oracle.decideAmong(activeSchedulers);
+        activeSchedulers.remove(s);
         s.executeNextSchedule();
       }
-
       activeSchedulers = getActiveSchedulers();
+
       boolean tickTriggered = false; // End the simulation if after a tick no component can be scheduled
       while (!tickTriggered && activeSchedulers.isEmpty() && (ticks > 0 || ticks == Long.MIN_VALUE) && (!runToCompletion || this.compToScheduler.get(component).allPortsHaveBufferedTick())) {
         // This loop blocks the thread until a component can be scheduled (e.g. through an event outside the simulation)

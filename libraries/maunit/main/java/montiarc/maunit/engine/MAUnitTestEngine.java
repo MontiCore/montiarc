@@ -5,6 +5,7 @@ import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.descriptior.MAUnitTestDescriptor;
 import montiarc.rte.component.AbstractComponent;
 import montiarc.rte.component.SimComponent;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.platform.commons.support.AnnotationSupport;
 import org.junit.platform.engine.EngineDiscoveryRequest;
 import org.junit.platform.engine.ExecutionRequest;
@@ -19,11 +20,13 @@ import org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine;
  */
 public class MAUnitTestEngine extends HierarchicalTestEngine<MAUnitTestExecutionContext> {
 
+  @NotNull
   @Override
   public String getId() {
     return "maunit";
   }
 
+  @NotNull
   @Override
   public TestDescriptor discover(EngineDiscoveryRequest request, UniqueId uniqueId) {
     EngineDescriptor engineDescriptor = new EngineDescriptor(uniqueId, "MontiArc Unit Test");

@@ -75,7 +75,8 @@ public enum ArcError implements Error {
   OUT_PORT_MEMBER_ACCESSED("0xC1192", "Cannot access port '%s' or any of its members; output ports are write-only"),
   INVALID_PORT_TIMING_OVERRIDE("0xC1193", "Port '%s' cannot override timing from '%s' to '%s'"),
   INVALID_STATEMENT("0xC1194", "The expression is not a valid statement; only assignments or method calls are allowed as statements"),
-  FIELD_REF_IN_STATIC_CONTEXT("0xC1195", "Value of field '%s' not available in static context");
+  FIELD_REF_IN_STATIC_CONTEXT("0xC1195", "Value of field '%s' not available in static context"),
+  UNEXPECTED_ORACLE_TYPE("0xC1196", "Value of '%s' is not a known oracle strategy");
 
   private final String errorCode;
   private final String errorMsgFormat;

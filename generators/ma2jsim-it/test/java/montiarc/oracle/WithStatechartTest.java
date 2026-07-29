@@ -20,6 +20,7 @@ import static montiarc.rte.msg.MessageFactory.msg;
 import static montiarc.rte.msg.MessageFactory.tk;
 import static montiarc.rte.oracle.OracleFactory.preferFirst;
 import static montiarc.rte.oracle.OracleFactory.preferLast;
+import static montiarc.rte.oracle.OracleFactory.preferLeastUsed;
 import static montiarc.rte.oracle.OracleFactory.preferUnexplored;
 import static montiarc.types.OnOff.ON;
 
@@ -86,10 +87,16 @@ class WithStatechartTest {
           .set4Comp("sut", preferLast())
       ),
       Arguments.of(
-        List.of(msg(ON), tk(), msg(ON), tk(), msg(ON), tk()),
-        List.of(msg(2), tk(), msg(1), tk(), msg(2), tk()),
+        List.of(msg(ON), tk(), msg(ON), tk(), msg(ON), tk(), msg(ON), tk()),
+        List.of(msg(2), tk(), msg(1), tk(), msg(2), tk(), msg(2), tk()),
         OracleFactory.withDefaultStrategy(preferFirst())
           .set4Comp("sut", preferUnexplored(preferLast()))
+      ),
+      Arguments.of(
+        List.of(msg(ON), tk(), msg(ON), tk(), msg(ON), tk(), msg(ON), tk()),
+        List.of(msg(2), tk(), msg(1), tk(), msg(2), tk(), msg(1), tk()),
+        OracleFactory.withDefaultStrategy(preferFirst())
+          .set4Comp("sut", preferLeastUsed(preferLast()))
       )
     );
   }

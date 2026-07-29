@@ -277,4 +277,24 @@ public class ComponentHelper {
 
     return sorted;
   }
+
+  public String getOracleFactory(ASTArcComponentType ast) {
+    if (ast.isPresentStereotype() && ast.getStereotype().contains("oracle")) {
+      switch (ast.getStereotype().getValue("oracle")) {
+        case "first":
+          return "montiarc.rte.oracle.OracleFactory.preferFirst()";
+        case "last":
+          return "montiarc.rte.oracle.OracleFactory.preferLast()";
+        case "lowestHash":
+          return "montiarc.rte.oracle.OracleFactory.lowestHash()";
+        case "random":
+          return "montiarc.rte.oracle.OracleFactory.random()";
+        case "leastUsed":
+          return "montiarc.rte.oracle.OracleFactory.preferLeastUsed(montiarc.rte.oracle.OracleFactory.preferFirst())";
+        case "unexplored":
+          return "montiarc.rte.oracle.OracleFactory.preferUnexplored(montiarc.rte.oracle.OracleFactory.preferFirst())";
+      }
+    }
+    return "montiarc.rte.oracle.OracleFactory.lowestHash()";
+  }
 }

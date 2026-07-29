@@ -31,6 +31,6 @@ public class PreferFirstOracle implements Oracle {
     Preconditions.checkNotNull(options);
     Preconditions.checkArgument(!options.isEmpty());
 
-    return options.get(0);
+    return options.getFirst();
   }
 }

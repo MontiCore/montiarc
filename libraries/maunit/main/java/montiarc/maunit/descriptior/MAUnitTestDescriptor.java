@@ -5,6 +5,7 @@ import montiarc.maunit.api.MaUnitTest;
 import montiarc.maunit.api.MaUnitTestContext;
 import montiarc.maunit.engine.MAUnitTestExecutionContext;
 import montiarc.rte.component.SimComponent;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.engine.descriptor.DynamicDescendantFilter;
 import org.junit.jupiter.engine.descriptor.Filterable;
 import org.junit.platform.commons.support.AnnotationSupport;
@@ -32,6 +33,7 @@ public class MAUnitTestDescriptor extends AbstractTestDescriptor implements Filt
 
   // --- Filterable ----------------------------------------------------------
 
+  @NotNull
   @Override
   public DynamicDescendantFilter getDynamicDescendantFilter() {
     return dynamicDescendantFilter;
@@ -39,6 +41,7 @@ public class MAUnitTestDescriptor extends AbstractTestDescriptor implements Filt
 
   // --- TestDescriptor ------------------------------------------------------
 
+  @NotNull
   @Override
   public Type getType() {
     return Type.CONTAINER;
@@ -51,6 +54,7 @@ public class MAUnitTestDescriptor extends AbstractTestDescriptor implements Filt
 
   // --- Node ----------------------------------------------------------------
 
+  @NotNull
   @Override
   public MAUnitTestExecutionContext execute(MAUnitTestExecutionContext context, DynamicTestExecutor dynamicTestExecutor) {
     MaUnitTestContext testContext = createTestContext();

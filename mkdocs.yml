@@ -127,6 +127,9 @@ nav:
       - Collections: 'Reference/Types/Collections.md'
       - Classes: 'Reference/Types/Classes.md'
       - Java Integration: 'Reference/Types/JavaIntegration.md'
+    - Simulation:
+        - Simulation: 'Reference/Simulation/index.md'
+        - Oracle: 'Reference/Simulation/Oracle.md'
     - Testing:
       - Testing: 'Reference/Testing/index.md'
       - MaUnit: 'Reference/Testing/MaUnit.md'
