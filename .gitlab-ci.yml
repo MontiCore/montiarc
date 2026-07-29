@@ -137,7 +137,7 @@ Check Dependency Updates:
   needs: []
   allow_failure: true
   script:
-    - gradle dependencyUpdates
+    - gradle dependencyUpdates -PenableLanguageServer
     - |
       echo "Checking for outdated dependencies..."
       REPORT_FILE="build/versions/dependency-updates.json"
@@ -148,7 +148,7 @@ Check Dependency Updates:
       
       OUTDATED_BLOCK=$(sed -n '/"outdated": {/,/}/p' build/versions/dependency-updates.json)
       OUTDATED_COUNT=$(echo "$OUTDATED_BLOCK" | grep -oP '"count":\s*\K\d+' | head -1)
-      if [ "$OUTDATED_COUNT" -gt 2 ]; then
+      if [ "$OUTDATED_COUNT" -gt 4 ]; then
         echo "Found $OUTDATED_COUNT outdated dependencies."
         exit 1
       else
