@@ -14,6 +14,7 @@ import de.monticore.ocl.setexpressions.codegen.javagen.SetExpressionsJavaGenVisi
 import de.monticore.prettyprint.IndentPrinter;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types.mcbasictypes.codegen.javagen.MCBasicTypesJavaGenVisitor;
 import de.monticore.types3.TypeCheck3;
 import de.monticore.visitor.ITraverser;
 import montiarc.MontiArcMill;
@@ -21,11 +22,8 @@ import montiarc._visitor.MontiArcTraverser;
 import montiarc.generator.codegen.javagen.BitExpressionsJavaPrinter;
 import montiarc.generator.codegen.javagen.MAAssignmentExpressionsJavaGenVisitor;
 import montiarc.generator.codegen.javagen.MACommonExpressionsJavaGenVisitor;
-import montiarc.generator.codegen.javagen.MCBasicTypesJavaPrinter;
-import montiarc.generator.codegen.javagen.MCCollectionTypesJavaPrinter;
-import montiarc.generator.codegen.javagen.MCCommonStatementsJavaPrinter;
-import montiarc.generator.codegen.javagen.MCSimpleGenericTypesJavaPrinter;
-import montiarc.generator.codegen.javagen.MCVarDeclarationStatementsJavaPrinter;
+import montiarc.generator.codegen.javagen.MACommonStatementsJavaGenVisitor;
+import montiarc.generator.codegen.javagen.MAVarDeclarationStatementsJavaGenVisitor;
 import montiarc.generator.codegen.javagen.StreamExpressionsJavaPrinter;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
@@ -63,20 +61,9 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
 
     // Types
 
-    MCBasicTypesJavaPrinter mcBasicTypesJavaPrinter = new MCBasicTypesJavaPrinter(getPrinter(), printComments);
-    this.traverser.setMCBasicTypesHandler(mcBasicTypesJavaPrinter);
-    this.traverser.getMCBasicTypesVisitorList().clear();
-    this.traverser.add4MCBasicTypes(mcBasicTypesJavaPrinter);
-
-    MCSimpleGenericTypesJavaPrinter mcSimpleGenericTypesJavaPrinter = new MCSimpleGenericTypesJavaPrinter(getPrinter(), printComments);
-    this.traverser.setMCSimpleGenericTypesHandler(mcSimpleGenericTypesJavaPrinter);
-    this.traverser.getMCSimpleGenericTypesVisitorList().clear();
-    this.traverser.add4MCSimpleGenericTypes(mcSimpleGenericTypesJavaPrinter);
-
-    MCCollectionTypesJavaPrinter mcCollectionTypesJavaPrinter = new MCCollectionTypesJavaPrinter(getPrinter(), printComments);
-    this.traverser.setMCCollectionTypesHandler(mcCollectionTypesJavaPrinter);
-    this.traverser.getMCCollectionTypesVisitorList().clear();
-    this.traverser.add4MCCollectionTypes(mcCollectionTypesJavaPrinter);
+    MCBasicTypesJavaGenVisitor visMCBasicTypes = new MCBasicTypesJavaGenVisitor(state);
+    traverser.setMCBasicTypesHandler(visMCBasicTypes);
+    traverser.add4MCBasicTypes(visMCBasicTypes);
 
     // Literals
 
@@ -102,25 +89,21 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
       new ExpressionsBasisJavaGenVisitor(state);
     traverser.setExpressionsBasisHandler(visExpressionBasis);
 
+    StreamExpressionsJavaPrinter streamExpressionsJavaPrinter = new StreamExpressionsJavaPrinter(getPrinter(), printComments);
+    this.traverser.setStreamExpressionsHandler(streamExpressionsJavaPrinter);
+    this.traverser.getStreamExpressionsVisitorList().clear();
+    this.traverser.add4StreamExpressions(streamExpressionsJavaPrinter);
+
     // Statements
 
     SetExpressionsJavaGenVisitor setExpressionsPrinter = new SetExpressionsJavaGenVisitor(state);
     this.traverser.setSetExpressionsHandler(setExpressionsPrinter);
 
-    MCCommonStatementsJavaPrinter mcCommonStatementsPrinter = new MCCommonStatementsJavaPrinter(getPrinter(), printComments);
+    MACommonStatementsJavaGenVisitor mcCommonStatementsPrinter = new MACommonStatementsJavaGenVisitor(state);
     this.traverser.setMCCommonStatementsHandler(mcCommonStatementsPrinter);
-    this.traverser.getMCCommonStatementsVisitorList().clear();
-    this.traverser.add4MCCommonStatements(mcCommonStatementsPrinter);
 
-    MCVarDeclarationStatementsJavaPrinter mcVarDeclarationStatementsJavaPrinter = new MCVarDeclarationStatementsJavaPrinter(getPrinter(), printComments);
+    MAVarDeclarationStatementsJavaGenVisitor mcVarDeclarationStatementsJavaPrinter = new MAVarDeclarationStatementsJavaGenVisitor(state);
     this.traverser.setMCVarDeclarationStatementsHandler(mcVarDeclarationStatementsJavaPrinter);
-    this.traverser.getMCVarDeclarationStatementsVisitorList().clear();
-    this.traverser.add4MCVarDeclarationStatements(mcVarDeclarationStatementsJavaPrinter);
-
-    StreamExpressionsJavaPrinter streamExpressionsJavaPrinter = new StreamExpressionsJavaPrinter(getPrinter(), printComments);
-    this.traverser.setStreamExpressionsHandler(streamExpressionsJavaPrinter);
-    this.traverser.getStreamExpressionsVisitorList().clear();
-    this.traverser.add4StreamExpressions(streamExpressionsJavaPrinter);
 
     // Fallback pretty printer
 
