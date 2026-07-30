@@ -74,9 +74,6 @@ abstract class MontiArcCompile : DefaultTask() {
   @get:Input
   abstract val traceLog: Property<Boolean>
 
-  @get:Input
-  abstract val fileLog: Property<Boolean>
-
   /** Enable debugging of the CD2PojoTool while executing. */
   @get:Input
   @get:Option(
@@ -106,7 +103,6 @@ abstract class MontiArcCompile : DefaultTask() {
     checkVariability.convention(false)
     debugLog.convention(false)
     traceLog.convention(false)
-    fileLog.convention(false)
 
     printTaskInfo.convention(false)
     debugTask.convention(false)
@@ -168,9 +164,11 @@ abstract class MontiArcCompile : DefaultTask() {
       it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
       it.args("--report", this.reportsOutputDir().get().asFile.path)
 
-      if (debugLog.get()) { it.args("--debug") }
-      if (traceLog.get()) { it.args("--trace") }
-      if (fileLog.get()) { it.args("--file") }
+      if (debugLog.get()) {
+        it.args("--stacktrace=ERROR,WARN,INFO,TRACE,DEBUG")
+      } else if (traceLog.get()) {
+        it.args("--stacktrace=ERROR,WARN,INFO,TRACE")
+      }
 
       if(useClass2Mc.get()) { it.args("--class2mc") }
 

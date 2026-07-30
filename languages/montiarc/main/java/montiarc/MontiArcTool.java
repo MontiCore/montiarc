@@ -128,21 +128,17 @@ public class MontiArcTool extends MontiArcToolTOP {
           return;
         }
 
-        // if --d or --t: enable verbose logging
-        if (cl.hasOption("d")) {
-          Log.initDEBUG();
-        } else if (cl.hasOption("t")) {
-          Log.initTRACE();
-        }
+        setupLog(cl);
 
-        run(cl);
+        doRun(cl);
       }
     } catch (ParseException e) {
       Log.error(String.format(MontiArcError.TOOL_PARSE_IOEXCEPTION.toString(), e.getMessage()));
     }
   }
 
-  protected void run(@NotNull CommandLine cl) {
+  @Override
+  protected void doRun(@NotNull CommandLine cl) {
     Preconditions.checkNotNull(cl);
     Preconditions.checkArgument(!cl.hasOption("h"));
     Preconditions.checkArgument(!cl.hasOption("v"));
@@ -162,16 +158,16 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     boolean novar = cl.hasOption("novar");
 
-    this.run(i, p, pp, s, r, c2mc, novar);
+    this.doRun(i, p, pp, s, r, c2mc, novar);
   }
 
-  protected void run(@NotNull String[] i,
-                     @NotNull String[] p,
-                     @Nullable String pp,
-                     @Nullable String s,
-                     @Nullable String r,
-                     boolean c2mc,
-                     boolean novar) {
+  protected void doRun(@NotNull String[] i,
+                       @NotNull String[] p,
+                       @Nullable String pp,
+                       @Nullable String s,
+                       @Nullable String r,
+                       boolean c2mc,
+                       boolean novar) {
     Preconditions.checkNotNull(i);
     Preconditions.checkNotNull(p);
     Preconditions.checkArgument(i.length > 0);
@@ -717,16 +713,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     options.addOption(Option.builder("novar")
       .longOpt("no-variability-checks")
       .desc("Disable the analysis of variable components for better performance")
-      .build());
-
-    options.addOption(Option.builder("d")
-      .longOpt("debug")
-      .desc("Enables verbose logging with debug-level information")
-      .build());
-
-    options.addOption(Option.builder("t")
-      .longOpt("trace")
-      .desc("Enables verbose logging with trace-level information")
       .build());
 
     return options;

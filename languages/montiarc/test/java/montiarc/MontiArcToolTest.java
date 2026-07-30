@@ -55,7 +55,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
   }
 
   /**
-   * Method under test {@link MontiArcTool#run(CommandLine)}
+   * Method under test {@link MontiArcTool#doRun(CommandLine)}
    */
   @Test
   public void runWithNullCLShouldThrow() {
@@ -63,7 +63,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> tool.run((CommandLine) null));
+    Assertions.assertThrows(NullPointerException.class, () -> tool.doRun((CommandLine) null));
   }
 
   /**
@@ -153,7 +153,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
   }
 
   /**
-   * Method under test {@link MontiArcTool#run(CommandLine)}
+   * Method under test {@link MontiArcTool#doRun(CommandLine)}
    */
   @ParameterizedTest
   @MethodSource("runTasksExceptionProvider")
@@ -165,7 +165,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    Assertions.assertThrows(expected, () -> tool.run(cli));
+    Assertions.assertThrows(expected, () -> tool.doRun(cli));
   }
 
   protected static Stream<Arguments> runTasksExceptionProvider() {

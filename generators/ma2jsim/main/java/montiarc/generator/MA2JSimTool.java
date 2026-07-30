@@ -109,7 +109,7 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
-  protected void run(@NotNull CommandLine cl) {
+  protected void doRun(@NotNull CommandLine cl) {
     Preconditions.checkArgument(!cl.hasOption("h"));
     Preconditions.checkArgument(!cl.hasOption("v"));
     Preconditions.checkArgument(cl.hasOption("i"));
@@ -133,18 +133,18 @@ public class MA2JSimTool extends MontiArcTool {
 
     boolean novar = cl.hasOption("novar");
 
-    this.run(i, p, hwc, o, pp, s, r, c2mc, novar);
+    this.doRun(i, p, hwc, o, pp, s, r, c2mc, novar);
   }
 
-  protected void run(@NotNull String[] i,
-                     @NotNull String[] p,
-                     @NotNull String[] hwc,
-                     @Nullable String o,
-                     @Nullable String pp,
-                     @Nullable String s,
-                     @Nullable String r,
-                     boolean c2mc,
-                     boolean novar) {
+  protected void doRun(@NotNull String[] i,
+                       @NotNull String[] p,
+                       @NotNull String[] hwc,
+                       @Nullable String o,
+                       @Nullable String pp,
+                       @Nullable String s,
+                       @Nullable String r,
+                       boolean c2mc,
+                       boolean novar) {
     Preconditions.checkNotNull(i);
     Preconditions.checkNotNull(p);
     Preconditions.checkNotNull(hwc);

@@ -30,7 +30,7 @@ public class MA2JSimToolAPITest extends MA2JSimTestBase {
     // Then
     assertThat(options.getOptions().size())
       .as(() -> options.getOptions().toString())
-      .isEqualTo(13);
+      .isEqualTo(12);
   }
 
   @Test

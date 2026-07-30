@@ -45,7 +45,7 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     // Then
     assertThat(options.getOptions().size())
         .as(() -> options.getOptions().toString())
-        .isEqualTo(11);
+        .isEqualTo(10);
   }
 
   @Test
@@ -209,36 +209,19 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
-  void initOptionsShouldCreateDebugOptionAsExpected() {
+  void initOptionsShouldCreateStacktraceOptionAsExpected() {
     // When
-    Option option = new MontiArcTool().initOptions().getOption("d");
+    Option option = new MontiArcTool().initOptions().getOption("stacktrace");
 
     // Then
     assertThat(option).isNotNull();
     assertThat(option.hasLongOpt()).isTrue();
-    assertThat(option.getLongOpt()).isEqualTo("debug");
+    assertThat(option.getLongOpt()).isEqualTo("stacktrace");
     assertThat(option.isRequired()).isFalse();
-    assertThat(option.hasArg()).isFalse();
-    assertThat(option.hasArgs()).isFalse();
-    assertThat(option.hasOptionalArg()).isFalse();
-    assertThat(option.hasArgName()).isFalse();
-    assertThat(option.hasValueSeparator()).isFalse();
-  }
-
-  @Test
-  void initOptionsShouldCreateTraceOptionAsExpected() {
-    // When
-    Option option = new MontiArcTool().initOptions().getOption("t");
-
-    // Then
-    assertThat(option).isNotNull();
-    assertThat(option.hasLongOpt()).isTrue();
-    assertThat(option.getLongOpt()).isEqualTo("trace");
-    assertThat(option.isRequired()).isFalse();
-    assertThat(option.hasArg()).isFalse();
-    assertThat(option.hasArgs()).isFalse();
-    assertThat(option.hasOptionalArg()).isFalse();
-    assertThat(option.hasArgName()).isFalse();
+    assertThat(option.hasArg()).isTrue();
+    assertThat(option.hasArgs()).isTrue();
+    assertThat(option.hasOptionalArg()).isTrue();
+    assertThat(option.hasArgName()).isTrue();
     assertThat(option.hasValueSeparator()).isFalse();
   }
 

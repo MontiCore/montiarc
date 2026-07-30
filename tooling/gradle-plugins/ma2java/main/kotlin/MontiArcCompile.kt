@@ -162,8 +162,11 @@ abstract class MontiArcCompile : DefaultTask() {
       it.args("--report", this.reportsOutputDir().get().asFile.path)
 
       if (useClass2Mc.get()) { it.args("--class2mc") }
-      if (debugLog.get()) { it.args("--debug") }
-      if (traceLog.get()) { it.args("--trace") }
+      if (debugLog.get()) {
+        it.args("--stacktrace=ERROR,WARN,INFO,TRACE,DEBUG")
+      } else if (traceLog.get()) {
+        it.args("--stacktrace=ERROR,WARN,INFO,TRACE")
+      }
 
       if (!cleanHwcPath.isEmpty) {
         it.args("--handwritten-code", cleanHwcPath.asPath)
