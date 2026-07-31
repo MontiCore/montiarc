@@ -1,8 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._symboltable.SymbolService;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
+import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -31,6 +34,45 @@ class ForEachIsValidTest extends MontiArcTestBase {
     super.init();
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    setUpMultiInheritanceTypes();
+  }
+
+  protected void setUpMultiInheritanceTypes() {
+    OOTypeSymbol i1 = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("I1")
+      .setIsInterface(true)
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    SymbolService.link(MontiArcMill.globalScope(), i1);
+
+    OOTypeSymbol i2 = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("I2")
+      .setIsInterface(true)
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    SymbolService.link(MontiArcMill.globalScope(), i2);
+
+    OOTypeSymbol mi1 = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("MI1")
+      .setSpannedScope(MontiArcMill.scope())
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject(i1))
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject(i2))
+      .build();
+    SymbolService.link(MontiArcMill.globalScope(), mi1);
+
+    OOTypeSymbol mi2 = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("MI2")
+      .setSpannedScope(MontiArcMill.scope())
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject(i1))
+      .addSuperTypes(SymTypeExpressionFactory.createTypeObject(i2))
+      .build();
+    SymbolService.link(MontiArcMill.globalScope(), mi2);
+
+    OOTypeSymbol unrelated = MontiArcMill.oOTypeSymbolBuilder()
+      .setName("Unrelated")
+      .setSpannedScope(MontiArcMill.scope())
+      .build();
+    SymbolService.link(MontiArcMill.globalScope(), unrelated);
   }
 
   @ParameterizedTest
@@ -183,6 +225,21 @@ class ForEachIsValidTest extends MontiArcTestBase {
           }
         }
         """
+      ),
+      // for-each over a list expression whose elements form a union type
+      arg("""
+        component ValidComp9 {
+          port in MI1 mi1;
+          port in MI2 mi2;
+          automaton {
+            initial state S;
+            S -> S / {
+              for (I1 e : [mi1, mi2]) { }
+              for (I2 e : [mi1, mi2]) { }
+            }
+          }
+        }
+        """
       )
     );
   }
@@ -266,6 +323,21 @@ class ForEachIsValidTest extends MontiArcTestBase {
               initial state S;
               S -> S / {
                 for (Boolean i : v) { }
+              }
+            }
+          }
+          """,
+        FOR_EACH_TYPE_MISMATCH
+      ),
+      // for-each over union-typed list where not every alternative fits the loop variable
+      arg("""
+          component InvalidComp6 {
+            port in MI1 mi1;
+            port in Unrelated unrelated;
+            automaton {
+              initial state S;
+              S -> S / {
+                for (I1 i : [mi1, unrelated]) { }
               }
             }
           }

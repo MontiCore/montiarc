@@ -2,6 +2,7 @@
 package montiarc.generator.codegen.javagen;
 
 import de.monticore.codegen.javagen.JavaGenVisitorState;
+import de.monticore.codegen.javagen.SymTypeExpression2JavaConverter;
 import de.monticore.codegen.util.Node2Name;
 import de.monticore.statements.mccommonstatements._ast.ASTConstantExpressionSwitchLabel;
 import de.monticore.statements.mccommonstatements._ast.ASTDefaultSwitchLabel;
@@ -11,6 +12,7 @@ import de.monticore.statements.mccommonstatements._ast.ASTSwitchLabel;
 import de.monticore.statements.mccommonstatements._ast.ASTSwitchStatement;
 import de.monticore.statements.mccommonstatements.codegen.javagen.MCCommonStatementsJavaGenVisitor;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCBlockStatement;
+import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
 
@@ -90,9 +92,27 @@ public class MACommonStatementsJavaGenVisitor extends MCCommonStatementsJavaGenV
 
   @Override
   public void traverse(ASTEnhancedForControl node) {
-    super.traverse(node);
-    if (SymTypeRelations.isString(TypeCheck3.typeOf(node.getExpression()))) {
+    SymTypeExpression expressionType = TypeCheck3.typeOf(node.getExpression());
+    SymTypeExpression variableType = TypeCheck3.symTypeFromAST(node.getFormalParameter().getMCType());
+
+    node.getFormalParameter().accept(this.getTraverser());
+    this.getPrinter().print(" : ");
+    state.startParentheses();
+    if (SymTypeRelations.isStringOrSubType(expressionType)) {
+      node.getExpression().accept(this.getTraverser());
+      state.endParentheses();
       this.getPrinter().print(".toCharArray()");
+    } else if (expressionType.isArrayType()) {
+      node.getExpression().accept(getTraverser());
+      state.endParentheses();
+    } else {
+      this.getPrinter().print("(");
+      this.getPrinter().print("java.lang.Iterable<");
+      this.getPrinter().print(SymTypeExpression2JavaConverter.getBoxedJavaTypePrint(variableType));
+      this.getPrinter().print(">) (java.lang.Iterable<?>) (");
+      node.getExpression().accept(this.getTraverser());
+      state.endParentheses();
+      state.endParentheses();
     }
   }
 }

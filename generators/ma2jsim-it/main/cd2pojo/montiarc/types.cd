@@ -50,12 +50,16 @@ classdiagram types {
 
   public interface InterfaceLeft { }
   public interface InterfaceRight { }
+  public interface I1 { }
+  public interface I2 { }
 
   public abstract class AbstractClassLeft implements InterfaceLeft { }
   public abstract class AbstractClassRight implements InterfaceRight { }
 
   public class ClassLeft extends AbstractClassLeft { }
   public class ClassRight extends AbstractClassRight { }
+  public class MI1 implements I1, I2 { }
+  public class MI2 implements I1, I2 { }
 
   association AbstractClassLeft -> AbstractClassRight;
   association ClassLeft -> ClassRight;

@@ -5,7 +5,11 @@ import java.lang.Iterable;
 import java.lang.String;
 import java.util.List;
 import java.util.Set;
+import montiarc.types.I1;
+import montiarc.types.I2;
 import montiarc.types.IntSeq;
+import montiarc.types.MI1;
+import montiarc.types.MI2;
 
 component ForEachLoop {
 
@@ -17,6 +21,8 @@ component ForEachLoop {
   port in String str;
   port out int o;
   port out char c;
+  port out I1 o1;
+  port out I2 o2;
 
   automaton {
     initial state S;
@@ -53,6 +59,22 @@ component ForEachLoop {
     S -> S [i == 2] i / {
       for (int e : {2, 3}) {
         o = e;
+      }
+    }
+    S -> S [i == 3] i / {
+      for (I1 e : [MI1.MI1(), MI2.MI2()]) {
+        o1 = e;
+      }
+      for (I2 e : [MI1.MI1(), MI2.MI2()]) {
+        o2 = e;
+      }
+    }
+    S -> S [i == 4] i / {
+      for (I1 e : {MI1.MI1(), MI2.MI2()}) {
+        o1 = e;
+      }
+      for (I2 e : {MI1.MI1(), MI2.MI2()}) {
+        o2 = e;
       }
     }
   }

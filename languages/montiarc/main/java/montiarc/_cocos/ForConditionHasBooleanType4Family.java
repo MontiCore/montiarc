@@ -150,6 +150,10 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
       featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
 
     for (Map.Entry<ASTForStatement, BoolExpr> forStatementEntry : forStatementConditions.entrySet()) {
+      if (!(forStatementEntry.getKey().getForControl() instanceof ASTCommonForControl)) {
+        continue;
+      }
+      ASTCommonForControl forControl = (ASTCommonForControl) forStatementEntry.getKey().getForControl();
 
       List<ASTExpression> possibleExpressions = new ArrayList<>();
       if (node instanceof ASTVariableArcFullVariantComponentType) {
@@ -162,7 +166,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
         forStatementEntryExpressionList.clear();
 
         // Step 2: Check if individual variables and ports are possible and create all combinations
-        var variableNames = ExpressionBuildHelper.getVariableNames(((ASTCommonForControl) forStatementEntry.getKey().getForControl()).getCondition());
+        var variableNames = ExpressionBuildHelper.getVariableNames(forControl.getCondition());
         List<ASTArcField> expressionFields = new ArrayList<>();
         List<ASTArcPort> expressionPorts = new ArrayList<>();
 
@@ -192,7 +196,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
           }
 
           if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
-            possibleExpressions.add(((ASTCommonForControl) forStatementEntry.getKey().getForControl()).getCondition());
+            possibleExpressions.add(forControl.getCondition());
             break;
           } else {
             ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
@@ -210,7 +214,7 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
             }
           }
 
-          var potentialExpressions = ExpressionBuildHelper.createPossibleGuardExpressions(((ASTCommonForControl) forStatementEntry.getKey().getForControl()).getCondition(), fieldNameVariations);
+          var potentialExpressions = ExpressionBuildHelper.createPossibleGuardExpressions(forControl.getCondition(), fieldNameVariations);
 
           // Step 3: Check if created combinations are possible
           for (ASTExpression potentialExpression : potentialExpressions) {
@@ -227,10 +231,10 @@ public class ForConditionHasBooleanType4Family implements ArcBasisASTArcComponen
           }
           fieldNameVariations.clear();
         } else {
-          possibleExpressions.add(((ASTCommonForControl) forStatementEntry.getKey().getForControl()).getCondition());
+          possibleExpressions.add(forControl.getCondition());
         }
       } else {
-        possibleExpressions.add(((ASTCommonForControl) forStatementEntry.getKey().getForControl()).getCondition());
+        possibleExpressions.add(forControl.getCondition());
       }
       for (ASTExpression possibleExpression : possibleExpressions) {
         SymTypeExpression result = TypeCheck3.typeOf(possibleExpression);

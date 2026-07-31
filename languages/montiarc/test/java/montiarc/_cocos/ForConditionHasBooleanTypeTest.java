@@ -175,6 +175,18 @@ class ForConditionHasBooleanTypeTest extends MontiArcTestBase {
           }
         }
         """
+      ),
+      // enhanced for loop does not define a condition to check
+      arg("""
+        component ValidComp11 {
+          automaton {
+            initial state S;
+            S -> S / {
+              for (int i : [1, 2]) { }
+            }
+          }
+        }
+        """
       )
     );
   }

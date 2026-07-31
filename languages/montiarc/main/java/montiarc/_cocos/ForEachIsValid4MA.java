@@ -7,16 +7,16 @@ import de.monticore.statements.mccommonstatements.cocos.ForEachIsValid;
 import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
-import de.monticore.types.mccollectiontypes.types3.MCCollectionSymTypeRelations;
 import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.SymTypeRelationsOfIterables;
 import de.monticore.types3.TypeCheck3;
 import de.se_rwth.commons.logging.Log;
-
-import java.util.Optional;
 import montiarc.util.MCError;
 
-import static de.monticore.types3.SymTypeRelations.getNominalSuperTypes;
+import java.util.Optional;
+
 import static de.monticore.types3.SymTypeRelations.isCompatible;
+import static java.lang.String.format;
 
 public class ForEachIsValid4MA extends ForEachIsValid {
 
@@ -33,68 +33,34 @@ public class ForEachIsValid4MA extends ForEachIsValid {
       return;
     }
 
-    Optional<SymTypeExpression> symTypeOfIterable = getIterable(typeOfExpression);
-
-    if (symTypeOfIterable.isPresent() && symTypeOfIterable.get().isObscureType()) {
-      return;
+    Optional<SymTypeExpression> symTypeOfIteration;
+    if (SymTypeRelations.isStringOrSubType(typeOfExpression)) {
+      symTypeOfIteration = Optional.of(SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.CHAR));
+    } else {
+      symTypeOfIteration = SymTypeRelationsOfIterables.getIterationType(typeOfExpression);
     }
 
-    boolean isStringIteration = SymTypeRelations.isString(typeOfExpression);
-
-    if (!typeOfExpression.isArrayType() && !isStringIteration && symTypeOfIterable.isEmpty()) {
-      Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(typeOfExpression.printFullName()),
+    if (symTypeOfIteration.isEmpty()) {
+      Log.error(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_CODE + " "
+          + format(FOR_EACH_EXPR_NOT_ITERABLE_ERROR_MSG, typeOfExpression.printFullName()),
         node.getExpression().get_SourcePositionStart(),
         node.getExpression().get_SourcePositionEnd()
       );
-    } else {
-      SymTypeExpression typeArg;
-      if (typeOfExpression.isArrayType()) {
-        typeArg = typeOfExpression.asArrayType().cloneWithLessDim(1);
-      } else if (isStringIteration) {
-        typeArg = SymTypeExpressionFactory.createPrimitive(BasicSymbolsMill.CHAR);
-      } else {
-        typeArg = symTypeOfIterable.orElseThrow().asGenericType().getArgument(0);
-      }
-
-      if (typeArg.isObscureType()) {
-        return;
-      }
-
-      if (!isCompatible(typeOfVariable, typeArg)) {
-        Log.error(MCError.FOR_EACH_TYPE_MISMATCH.format(
-              typeArg.printFullName(),
-              typeOfVariable.printFullName()
-            ),
-          node.getFormalParameter().get_SourcePositionStart(),
-          node.getFormalParameter().get_SourcePositionEnd()
-        );
-      }
-    }
-  }
-
-  protected static Optional<SymTypeExpression> getIterable(SymTypeExpression type) {
-    Preconditions.checkNotNull(type);
-
-    if (MCCollectionSymTypeRelations.isList(type)
-      || MCCollectionSymTypeRelations.isSet(type)) {
-      return Optional.of(type);
+      return;
     }
 
-    if (type.isGenericType()) {
-      String name = type.asGenericType().getTypeConstructorFullName();
-      if ((name.equals("java.lang.Iterable") || name.equals("Iterable"))
-        && type.asGenericType().sizeArguments() == 1) {
-        return Optional.of(type);
-      }
+    if (symTypeOfIteration.get().isObscureType()) {
+      return;
     }
 
-    for (SymTypeExpression superType : getNominalSuperTypes(type)) {
-      Optional<SymTypeExpression> typeOfIterable = getIterable(superType);
-      if (typeOfIterable.isPresent()) {
-        return typeOfIterable;
-      }
+    if (!isCompatible(typeOfVariable, symTypeOfIteration.get())) {
+      Log.error(MCError.FOR_EACH_TYPE_MISMATCH.format(
+          symTypeOfIteration.get().printFullName(),
+          typeOfVariable.printFullName()
+        ),
+        node.getFormalParameter().get_SourcePositionStart(),
+        node.getFormalParameter().get_SourcePositionEnd()
+      );
     }
-
-    return Optional.empty();
   }
 }

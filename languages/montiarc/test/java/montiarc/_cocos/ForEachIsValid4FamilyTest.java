@@ -32,6 +32,7 @@ class ForEachIsValid4FamilyTest extends ForEachIsValidTest {
     "ValidComp5 ",
     "ValidComp6 ",
     "ValidComp7 ",
+    "ValidComp9 ",
     "ValidCompWithVariability2 ",
     "ValidCompWithVariability3 "
   })
@@ -58,6 +59,7 @@ class ForEachIsValid4FamilyTest extends ForEachIsValidTest {
     "InvalidComp3 ",
     "InvalidComp4 ",
     "InvalidComp5 ",
+    "InvalidComp6 ",
     "InvalidCompWithVariability3 "
   })
   void shouldReportError(@NotNull String model,
