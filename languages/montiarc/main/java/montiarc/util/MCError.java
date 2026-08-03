@@ -49,6 +49,7 @@ public enum MCError implements Error {
   VAR_DECLARATION_TYPE_MISMATCH(VarDeclarationInitializationHasCorrectType.ERROR_CODE, VarDeclarationInitializationHasCorrectType.ERROR_MSG_FORMAT),
   CLI_EXCEPTION("0xFD114", "An exception occurred while processing the CLI input"),
   TRANSITION_PRECONDITION_NOT_BOOLEAN("0xCC111", "Expected '%s' but provided '%s'"),
+  QUALIFIED_NAME_NOT_FOUND("0xF735F", "unable to interpret qualified name  \"%s\" as expression"),
   SWITCH_CASE_INCOMPATIBLE(SwitchCaseTypesValid.CASE_ERROR_CODE, SwitchCaseTypesValid.CASE_ERROR_MSG_FORMAT);
 
   private final String errorCode;

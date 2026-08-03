@@ -3,6 +3,7 @@ package montiarc;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import com.google.common.base.Preconditions;
@@ -51,7 +52,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> tool.run((String[]) null));
+    Assertions.assertThrows(NullPointerException.class, () -> tool.run(null));
   }
 
   /**
@@ -63,7 +64,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
     MontiArcTool tool = new MontiArcTool();
 
     // When && Then
-    Assertions.assertThrows(NullPointerException.class, () -> tool.doRun((CommandLine) null));
+    Assertions.assertThrows(NullPointerException.class, () -> tool.doRun(null));
   }
 
   /**
@@ -89,6 +90,9 @@ public class MontiArcToolTest extends MontiArcTestBase {
   public void initGlobalScopeShouldSetSymbolPath() {
     // Given
     MontiArcTool tool = new MontiArcTool();
+    MontiArcMill.globalScope().getSymbolPath().close();
+    MontiArcMill.globalScope().setSymbolPath(new MCPath());
+    // create copy to see that nothing gets removed
 
     String path = "test/resources/CLI/industryModels/industry";
     String[] args = new String[]{path};
@@ -534,9 +538,9 @@ public class MontiArcToolTest extends MontiArcTestBase {
     tool.runSymbolTablePhase2(astB);
 
     // Then
-    Assertions.assertTrue(astB.getEnclosingScope().getSubScopes().get(0)
+    Assertions.assertTrue(astB.getEnclosingScope().getSubScopes().getFirst()
       .resolveSubcomponentLocally("a").isPresent());
-    Assertions.assertNotNull(astB.getEnclosingScope().getSubScopes().get(0)
+    Assertions.assertNotNull(astB.getEnclosingScope().getSubScopes().getFirst()
       .resolveSubcomponentLocally("a").get().getType());
   }
 
@@ -569,7 +573,7 @@ public class MontiArcToolTest extends MontiArcTestBase {
     PortSymbol bInPort = bCompType.getPort("inPortB").orElseThrow();
     SubcomponentSymbol aInstance = bCompType.getSubcomponents("a").orElseThrow();
 
-    ASTConnector connector = astB.getArcComponentType().getConnectors().get(0);
+    ASTConnector connector = astB.getArcComponentType().getConnectors().getFirst();
     ASTPortAccess bAccess = connector.getSource();
     ASTPortAccess aAccess = connector.getTarget(0);
 

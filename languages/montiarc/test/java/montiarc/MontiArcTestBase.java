@@ -7,6 +7,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.check.MontiArcTypeCheck;
 import montiarc.trafo.MontiArcTrafos;
+import montiarc.util.SymbolPathLoader;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,6 +45,10 @@ public abstract class MontiArcTestBase extends ATestBase {
     BasicSymbolsMill.initializePrimitives();
     BasicSymbolsMill.initializeObject();
     BasicSymbolsMill.initializeString();
+
+    try{
+      SymbolPathLoader.addResource("Stream.symtabdefinitionsym");
+    } catch (IOException ignore) {}
   }
 
   /**

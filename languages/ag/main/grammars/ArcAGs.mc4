@@ -2,9 +2,9 @@
 
 component grammar ArcAGs extends ArcBasis {
 
-  ArcAG implements ArcBehaviorElement =
-    (key("assume") ":" Expression ";") ?
-    key("guarantee") ":" Expression ";"
+  scope (shadowing non_exporting) ArcAG implements ArcBehaviorElement =
+    (key("assume") ":" assume:Expression ";") ?
+    key("guarantee") ":" guarantee:Expression ";"
   ;
 
 }

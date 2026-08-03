@@ -19,6 +19,7 @@ import montiarc.report.UpToDateResults;
 import montiarc.report.VersionFileDeserializer;
 import montiarc.trafo.MontiArcTrafos;
 import montiarc.util.MontiArcError;
+import montiarc.util.SymbolPathLoader;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -35,10 +36,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.JarURLConnection;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -54,7 +53,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
-import java.util.jar.JarFile;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
@@ -648,18 +646,14 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void initGlobalScope(@NotNull Collection<Path> entries) {
     Preconditions.checkNotNull(entries);
     Preconditions.checkArgument(!entries.contains(null));
+    MontiArcMill.globalScope().getSymbolPath().close();
     entries.forEach(entry -> MontiArcMill.globalScope().getSymbolPath().addEntry(entry));
   }
 
   public void initializeStreams() {
-    URL streamURL = MontiArcTool.class.getClassLoader().getResource("Stream.symtabdefinitionsym");
-    if (streamURL == null) return;
     try {
-      JarURLConnection urlConnection = (JarURLConnection) streamURL.openConnection();
-      JarFile jar = urlConnection.getJarFile();
-      Path jarPath = Path.of(jar.getName());
-      MontiArcMill.globalScope().getSymbolPath().addEntry(jarPath);
-    } catch (IOException ignored) {}
+      SymbolPathLoader.addResource("Stream.symtabdefinitionsym");
+    } catch (IOException ignore) {}
   }
 
 

@@ -73,7 +73,8 @@ public class ParserTest extends MontiArcTestBase {
     "MultipleInheritance.arc",
     "UnitSyntax.arc",
     "RefinementSyntax.arc",
-    "PrePost.arc"
+    "PrePost.arc",
+    "AG.arc"
   })
   public void shouldParseWithoutError(String fileName) {
     parse(Paths.get(TEST_RESOURCE, PACKAGE, fileName).toString(), false);

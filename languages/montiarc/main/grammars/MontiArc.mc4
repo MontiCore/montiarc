@@ -41,6 +41,7 @@ grammar MontiArc extends
             ComfortableArc,
             Modes,
             VariableArc,
+            ArcAGs,
             ArcPrePost {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
