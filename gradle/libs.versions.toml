@@ -36,4 +36,4 @@ node-gradle = "com.github.node-gradle:gradle-node-plugin:5.0.0"
 intellij = "org.jetbrains.intellij.platform:org.jetbrains.intellij.platform.gradle.plugin:2.6.0"
 
 [plugins]
-versions = { id = "io.github.ben-manes.versions", version = "0.57.0" }
+versions = { id = "io.github.ben-manes.versions", version = "0.59.0" }
