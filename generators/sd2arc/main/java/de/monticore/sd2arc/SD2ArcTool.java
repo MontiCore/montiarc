@@ -22,7 +22,6 @@ import de.monticore.symbols.oosymbols._symboltable.MethodSymbolDeSer;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbolDeSer;
 import montiarc.MontiArcMill;
 import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -107,26 +106,19 @@ public class SD2ArcTool extends SD4ComponentsTool {
       .longOpt("output")
       .hasArgs()
       .desc("Sets the target path for the generated files (optional).")
-      .build());
+      .get());
     // class2mc
     options.addOption(Option.builder("c2mc")
       .longOpt("class2mc")
       .desc("Enables to resolve java classes in the model path")
-      .build());
+      .get());
     // defaultTicks
     options.addOption(Option.builder("t")
       .longOpt("defaultTicks")
       .desc("Sets the default ticks for the generated files (optional).")
       .type(Number.class)
       .numberOfArgs(1)
-      .build());
+      .get());
     return super.addStandardOptions(options);
-  }
-
-  @Override
-  public void printHelp(Options options) {
-    HelpFormatter formatter = new HelpFormatter();
-    formatter.setWidth(80);
-    formatter.printHelp("SD2Arc", options);
   }
 }

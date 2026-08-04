@@ -64,7 +64,7 @@ public class DeploymentCLITest {
           .desc("Sets the myParam component parameter")
           .hasArg()
           .argName("myParam")
-          .build());
+          .get());
     }
   }
 

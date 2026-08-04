@@ -100,40 +100,40 @@ public class MCEffectTool extends MCEffectToolTOP {
                 "Introduce the path to the models: montiArc components(*.arc),"
                     + " effect specifications(*.eff), and class diagrams(*.cd)")
             .numberOfArgs(1)
-            .build());
+            .get());
 
     options.addOption(
         Option.builder("mc")
             .longOpt("maincomponent")
             .desc("Introduce the Qualified name of the component form the model directory\n")
             .numberOfArgs(1)
-            .build());
+            .get());
 
     options.addOption(
         Option.builder("e")
             .longOpt("effect")
             .desc("Introduce the file containing the different effects(*.eff)")
             .numberOfArgs(1)
-            .build());
+            .get());
 
     options.addOption(
         Option.builder("ma")
             .longOpt("montiarc")
             .desc("indicate that the tool must run on montiarc components")
             .numberOfArgs(0)
-            .build());
+            .get());
     options.addOption(
         Option.builder("sml")
             .longOpt("sysml")
             .desc("indicate that the tool must run on sysML components")
             .numberOfArgs(0)
-            .build());
+            .get());
     options.addOption(
         Option.builder("g")
             .longOpt("graph")
             .desc("show a graph with ports and their connections")
             .numberOfArgs(0)
-            .build());
+            .get());
     return options;
   }
 }

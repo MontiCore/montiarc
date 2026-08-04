@@ -80,21 +80,21 @@ public class AutConformanceTool extends MontiArcTool {
             .longOpt("concrete")
             .desc("Introduce the concrete statechart and class diagram")
             .numberOfArgs(2)
-            .build());
+            .get());
 
     options.addOption(
         Option.builder("r")
             .longOpt("reference")
             .desc("Introduce the reference statechart and class diagram")
             .numberOfArgs(2)
-            .build());
+            .get());
 
     options.addOption(
         Option.builder("m")
             .longOpt("mapping")
             .desc("Introduce the file mapping concrete and reference statechart")
             .numberOfArgs(1)
-            .build());
+            .get());
 
     return options;
   }

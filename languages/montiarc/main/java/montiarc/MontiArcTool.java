@@ -26,6 +26,7 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -173,7 +174,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     MontiArcMill.globalScope().clear();
     MontiArcMill.globalScope().init();
-    this.initBuildInSymbols(c2mc);
+    this.initBuiltInSymbols(c2mc);
     this.initGlobalScope(p);
     this.compile(i, pp, s, r, c2mc, novar);
   }
@@ -663,7 +664,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
   }
 
-  protected void initBuildInSymbols(boolean c2mc) {
+  protected void initBuiltInSymbols(boolean c2mc) {
     BasicSymbolsMill.initializePrimitives();
     initializeStreams();
     if (c2mc) {
@@ -703,12 +704,12 @@ public class MontiArcTool extends MontiArcToolTOP {
     options.addOption(Option.builder("c2mc")
       .longOpt("class2mc")
       .desc("Enables importing java symbols from the java runtime environment")
-      .build());
+      .get());
 
     options.addOption(Option.builder("novar")
       .longOpt("no-variability-checks")
       .desc("Disable the analysis of variable components for better performance")
-      .build());
+      .get());
 
     return options;
   }
@@ -721,15 +722,18 @@ public class MontiArcTool extends MontiArcToolTOP {
       .numberOfArgs(1)
       .argName("templateName")
       .desc("The project template that should be used for the new project.")
-      .build());
+      .get());
     return options;
   }
 
   protected void printHelp() {
-    org.apache.commons.cli.HelpFormatter formatter = new org.apache.commons.cli.HelpFormatter();
-    formatter.setWidth(80);
-    formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
-    formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
+    HelpFormatter formatter = HelpFormatter.builder().setShowSince(false).get();
+    try {
+      formatter.printHelp("MontiArc [build]", " The main MontiArc build command.", initOptions(), "", true);
+      formatter.printHelp("MontiArc create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
+    } catch (java.io.IOException e) {
+      throw new RuntimeException(e); // If the help-output could not be written to the help appendable
+    }
   }
 
   /**

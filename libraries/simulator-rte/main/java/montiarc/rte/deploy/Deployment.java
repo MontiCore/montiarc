@@ -154,7 +154,7 @@ public abstract class Deployment<T extends Component> {
 
   protected void printHelp() {
     try {
-      HelpFormatter.builder().get().printHelp("java " + this.getClass().getSimpleName(), "", buildOptions(), "", true);
+      HelpFormatter.builder().setShowSince(false).get().printHelp("Deployment", "", buildOptions(), "", true);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

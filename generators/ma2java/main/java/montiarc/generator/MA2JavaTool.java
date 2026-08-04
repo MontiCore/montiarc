@@ -65,17 +65,17 @@ public class MA2JavaTool extends MontiArcTool {
       .desc("Generates java code to the specified directory")
       .hasArg()
       .argName("dir")
-      .build());
+      .get());
     options.addOption(org.apache.commons.cli.Option.builder("hwc")
       .longOpt("handwritten-code")
       .desc("Sets the artifact path for handwritten code, space separated")
       .hasArgs()
       .argName("paths")
-      .build());
+      .get());
     options.addOption(org.apache.commons.cli.Option.builder("dse")
       .longOpt("dynamic-symbolic-execution")
       .desc("Enables code generation for dynamic-symbolic execution")
-      .build());
+      .get());
     return super.addStandardOptions(options);
   }
 
@@ -125,7 +125,7 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkArgument(i.length > 0);
 
     this.initGlobalScope(p);
-    this.initBuildInSymbols(c2mc);
+    this.initBuiltInSymbols(c2mc);
     this.compile(i, hwc, o, pp, s, r, c2mc, dse, novar);
   }
 

@@ -20,6 +20,7 @@ import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.help.HelpFormatter;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
@@ -151,7 +152,7 @@ public class MA2JSimTool extends MontiArcTool {
     Preconditions.checkArgument(i.length > 0);
 
     this.initGlobalScope(p);
-    this.initBuildInSymbols(c2mc);
+    this.initBuiltInSymbols(c2mc);
     this.compile(i, hwc, o, pp, s, r, c2mc, novar);
   }
 
@@ -308,11 +309,11 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   protected void printHelp() {
-    org.apache.commons.cli.help.HelpFormatter formatter = org.apache.commons.cli.help.HelpFormatter.builder().get();
+    HelpFormatter formatter = HelpFormatter.builder().setShowSince(false).get();
     try {
-      formatter.printHelp("MontiArcTool [build]", " The main MontiArc build command.", initOptions(), "", true);
-      formatter.printHelp("MontiArcTool create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
-      formatter.printHelp("MontiArcTool run <CompName.arc>",
+      formatter.printHelp("MontiArc [build]", " The main MontiArc build command.", initOptions(), "", true);
+      formatter.printHelp("MontiArc create <name>", " Create a new MontiArc project with the given name in the current folder.", initCreateOptions(), "", true);
+      formatter.printHelp("MontiArc run <CompName.arc>",
         " Run the simulator for a component. Additional parameters are forwarded to the Component. This commands needs Java installed on the system.",
         initRunSimulationOptions(),
         "",
