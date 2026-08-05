@@ -14,7 +14,7 @@ Though there are some editors that provide a better experience for Gradle and Mo
 
 1. To install IntelliJ IDEA, follow their [instructions](https://www.jetbrains.com/idea/download/).
 2. Install the MontiArc extension.
-    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/snapshot) the `montiarc-intellij-plugin-*.zip` extension.
+    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/7.9.0) the `montiarc-intellij-plugin-*.zip` extension.
     2. Start IntelliJ.
     3. Go to File → Settings → Plugins → Click the settings wheel → Install Plugin from disk... → Select the previously downloaded zip.
 3. IntelliJ has native support for Gradle projects. Simply open any MontiArc project using `File > Open`.
@@ -23,7 +23,7 @@ Though there are some editors that provide a better experience for Gradle and Mo
 
 1. To install VS Code, follow their [instructions](https://code.visualstudio.com/docs/setup/setup-overview).
 2. Install the MontiArc extension.
-    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/snapshot) the `.vsix` extension.
+    1. [Download](https://github.com/MontiCore/montiarc/releases/tag/7.9.0) the `.vsix` extension.
     2. Start VS Code.
     3. Go to the extension tab → Click `...` → Install from VSIX → Select the previously downloaded extension.
 3. Install the Java extension.
