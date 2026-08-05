@@ -9,28 +9,28 @@
       
       
       
-        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.9/Reference/">
+        <link rel="canonical" href="https://monticore.github.io/montiarc/v7.9/Reference/Concepts/Expressions/Streams/">
       
       
-        <link rel="prev" href="../Usage/Simulation/">
+        <link rel="prev" href="../Sets/">
       
       
-        <link rel="next" href="Concepts/">
+        <link rel="next" href="../../Statements/">
       
       
         
       
       
-      <link rel="icon" href="../assets/images/icon.png">
+      <link rel="icon" href="../../../../assets/images/icon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
-        <title>Reference - MontiArc</title>
+        <title>Streams - MontiArc</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../../../../assets/stylesheets/main.ec1eaa64.min.css">
       
       
 
@@ -55,9 +55,9 @@
       
     
     
-      <link rel="stylesheet" href="../stylesheets/extra.css">
+      <link rel="stylesheet" href="../../../../stylesheets/extra.css">
     
-    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -93,7 +93,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#reference" class="md-skip">
+        <a href="#stream-expressions" class="md-skip">
           Skip to content
         </a>
       
@@ -142,14 +142,14 @@
 
     <!-- Link to home -->
     <a
-      href=".."
+      href="../../../.."
       title="MontiArc"
       class="md-header__button md-logo"
       aria-label="MontiArc"
       data-md-component="logo"
     >
       
-  <img src="../assets/images/icon-mono.png" alt="logo">
+  <img src="../../../../assets/images/icon-mono.png" alt="logo">
 
     </a>
 
@@ -164,12 +164,12 @@
       <div class="md-header__ellipsis">
         <div class="md-header__topic md-header__topic__image">
           <!-- Override to use Image -->
-          <img alt="MontiArc" style="height: 1.2em; margin: auto;" src="../assets/images/MontiArc_Text.svg">
+          <img alt="MontiArc" style="height: 1.2em; margin: auto;" src="../../../../assets/images/MontiArc_Text.svg">
         </div>
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Reference
+              Streams
             
           </span>
         </div>
@@ -273,7 +273,7 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href=".." class="md-tabs__link">
+      <a href="../../../.." class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
 
@@ -298,7 +298,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../GettingStarted/" class="md-tabs__link">
+        <a href="../../../../GettingStarted/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -326,7 +326,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../Usage/" class="md-tabs__link">
+        <a href="../../../../Usage/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -356,7 +356,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../../../" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -384,7 +384,7 @@
     <!-- Recurse, if the first item has further nested items -->
     
       <li class="md-tabs__item">
-        <a href="../Libraries/" class="md-tabs__link">
+        <a href="../../../../Libraries/" class="md-tabs__link">
           
   <!-- !! Removed icon in navigation content !! -->
 
@@ -408,7 +408,7 @@
   <!-- Navigation item with nested items -->
   
     <li class="md-tabs__item">
-      <a href="../FAQ/" class="md-tabs__link">
+      <a href="../../../../FAQ/" class="md-tabs__link">
         
   <!-- !! Removed icon in navigation content !! -->
 
@@ -452,8 +452,6 @@
           
             
               
-                
-              
               <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
@@ -465,9 +463,9 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href=".." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
+    <a href="../../../.." title="MontiArc" class="md-nav__button md-logo" aria-label="MontiArc" data-md-component="logo">
       
-  <img src="../assets/images/icon-mono.png" alt="logo">
+  <img src="../../../../assets/images/icon-mono.png" alt="logo">
 
     </a>
     MontiArc
@@ -494,7 +492,7 @@
   
   
     <li class="md-nav__item">
-      <a href=".." class="md-nav__link">
+      <a href="../../../.." class="md-nav__link">
         
   
   
@@ -554,7 +552,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../GettingStarted/" class="md-nav__link ">
+            <a href="../../../../GettingStarted/" class="md-nav__link ">
               
   
   
@@ -600,7 +598,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/Setup/" class="md-nav__link">
+      <a href="../../../../GettingStarted/Setup/" class="md-nav__link">
         
   
   
@@ -628,7 +626,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/Editor/" class="md-nav__link">
+      <a href="../../../../GettingStarted/Editor/" class="md-nav__link">
         
   
   
@@ -656,7 +654,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/HelloWorld/" class="md-nav__link">
+      <a href="../../../../GettingStarted/HelloWorld/" class="md-nav__link">
         
   
   
@@ -684,7 +682,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/HelloGradle/" class="md-nav__link">
+      <a href="../../../../GettingStarted/HelloGradle/" class="md-nav__link">
         
   
   
@@ -745,7 +743,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../GettingStarted/ElevatorSystem/" class="md-nav__link ">
+            <a href="../../../../GettingStarted/ElevatorSystem/" class="md-nav__link ">
               
   
   
@@ -791,7 +789,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/ElevatorSystem/Interfaces/" class="md-nav__link">
+      <a href="../../../../GettingStarted/ElevatorSystem/Interfaces/" class="md-nav__link">
         
   
   
@@ -819,7 +817,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/ElevatorSystem/Connectors/" class="md-nav__link">
+      <a href="../../../../GettingStarted/ElevatorSystem/Connectors/" class="md-nav__link">
         
   
   
@@ -847,7 +845,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/ElevatorSystem/Behavior/" class="md-nav__link">
+      <a href="../../../../GettingStarted/ElevatorSystem/Behavior/" class="md-nav__link">
         
   
   
@@ -875,7 +873,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/ElevatorSystem/Types/" class="md-nav__link">
+      <a href="../../../../GettingStarted/ElevatorSystem/Types/" class="md-nav__link">
         
   
   
@@ -903,7 +901,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../GettingStarted/ElevatorSystem/Simulating/" class="md-nav__link">
+      <a href="../../../../GettingStarted/ElevatorSystem/Simulating/" class="md-nav__link">
         
   
   
@@ -977,7 +975,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Usage/" class="md-nav__link ">
+            <a href="../../../../Usage/" class="md-nav__link ">
               
   
   
@@ -1052,7 +1050,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Usage/Gradle/" class="md-nav__link ">
+            <a href="../../../../Usage/Gradle/" class="md-nav__link ">
               
   
   
@@ -1098,7 +1096,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/Gradle/MontiArc/" class="md-nav__link">
+      <a href="../../../../Usage/Gradle/MontiArc/" class="md-nav__link">
         
   
   
@@ -1126,7 +1124,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/Gradle/CD2Pojo/" class="md-nav__link">
+      <a href="../../../../Usage/Gradle/CD2Pojo/" class="md-nav__link">
         
   
   
@@ -1154,7 +1152,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/Gradle/SD2Arc/" class="md-nav__link">
+      <a href="../../../../Usage/Gradle/SD2Arc/" class="md-nav__link">
         
   
   
@@ -1182,7 +1180,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/Gradle/FMU2Arc/" class="md-nav__link">
+      <a href="../../../../Usage/Gradle/FMU2Arc/" class="md-nav__link">
         
   
   
@@ -1247,7 +1245,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Usage/CLI/" class="md-nav__link ">
+            <a href="../../../../Usage/CLI/" class="md-nav__link ">
               
   
   
@@ -1293,7 +1291,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/CLI/MontiArc/" class="md-nav__link">
+      <a href="../../../../Usage/CLI/MontiArc/" class="md-nav__link">
         
   
   
@@ -1321,7 +1319,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/CLI/CD2Pojo/" class="md-nav__link">
+      <a href="../../../../Usage/CLI/CD2Pojo/" class="md-nav__link">
         
   
   
@@ -1349,7 +1347,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Usage/CLI/FMU2Arc/" class="md-nav__link">
+      <a href="../../../../Usage/CLI/FMU2Arc/" class="md-nav__link">
         
   
   
@@ -1408,7 +1406,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Usage/Errors/" class="md-nav__link ">
+            <a href="../../../../Usage/Errors/" class="md-nav__link ">
               
   
   
@@ -1480,7 +1478,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Usage/Simulation/" class="md-nav__link ">
+            <a href="../../../../Usage/Simulation/" class="md-nav__link ">
               
   
   
@@ -1576,7 +1574,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="./" class="md-nav__link md-nav__link--active">
+            <a href="../../../" class="md-nav__link ">
               
   
   
@@ -1594,7 +1592,7 @@
             </a>
             
               
-              <label class="md-nav__link md-nav__link--active" for="__nav_4" id="__nav_4_label" tabindex="">
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
                 <span class="md-nav__icon md-icon"></span>
               </label>
             
@@ -1617,8 +1615,10 @@
                 
   
   
+    
   
   
+  
     
     
       
@@ -1646,15 +1646,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Concepts/" class="md-nav__link ">
+            <a href="../../" class="md-nav__link ">
               
   
   
@@ -1680,7 +1680,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1700,7 +1700,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Concepts/Comments/" class="md-nav__link">
+      <a href="../../Comments/" class="md-nav__link">
         
   
   
@@ -1725,6 +1725,8 @@
                 
   
   
+    
+  
   
   
     
@@ -1747,15 +1749,15 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_3" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_2_3" checked>
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Concepts/Expressions/" class="md-nav__link ">
+            <a href="../" class="md-nav__link ">
               
   
   
@@ -1779,7 +1781,7 @@
             
           </div>
         
-        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_3_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="3" aria-labelledby="__nav_4_2_3_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_4_2_3">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1799,7 +1801,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Concepts/Expressions/Sets/" class="md-nav__link">
+      <a href="../Sets/" class="md-nav__link">
         
   
   
@@ -1824,10 +1826,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="Concepts/Expressions/Streams/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Streams
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -1843,6 +1872,148 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stream-types-and-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Types and Timing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stream-syntax-and-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Syntax and Operators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stream Syntax and Operators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stream-constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Constructors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streamt-standard-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream&lt;T&gt; Standard API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stream&lt;T&gt; Standard API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stream-generation-static-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Generation (Static Methods)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-and-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties and State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slicing-and-repetition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slicing and Repetition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#higher-order-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Higher-Order Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuple-and-projection-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuple and Projection Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -1863,7 +2034,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Concepts/Statements/" class="md-nav__link">
+      <a href="../../Statements/" class="md-nav__link">
         
   
   
@@ -1891,7 +2062,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Concepts/Timing/" class="md-nav__link">
+      <a href="../../Timing/" class="md-nav__link">
         
   
   
@@ -1969,7 +2140,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Component/" class="md-nav__link ">
+            <a href="../../../Component/" class="md-nav__link ">
               
   
   
@@ -2015,7 +2186,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Decomposition/" class="md-nav__link">
+      <a href="../../../Component/Decomposition/" class="md-nav__link">
         
   
   
@@ -2043,7 +2214,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Connectors/" class="md-nav__link">
+      <a href="../../../Component/Connectors/" class="md-nav__link">
         
   
   
@@ -2071,7 +2242,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Generics/" class="md-nav__link">
+      <a href="../../../Component/Generics/" class="md-nav__link">
         
   
   
@@ -2099,7 +2270,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Inheritance/" class="md-nav__link">
+      <a href="../../../Component/Inheritance/" class="md-nav__link">
         
   
   
@@ -2127,7 +2298,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Interfaces/" class="md-nav__link">
+      <a href="../../../Component/Interfaces/" class="md-nav__link">
         
   
   
@@ -2155,7 +2326,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Parameter/" class="md-nav__link">
+      <a href="../../../Component/Parameter/" class="md-nav__link">
         
   
   
@@ -2183,7 +2354,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Variability/" class="md-nav__link">
+      <a href="../../../Component/Variability/" class="md-nav__link">
         
   
   
@@ -2211,7 +2382,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Component/Autoconnect/" class="md-nav__link">
+      <a href="../../../Component/Autoconnect/" class="md-nav__link">
         
   
   
@@ -2283,7 +2454,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Behavior/" class="md-nav__link ">
+            <a href="../../../Behavior/" class="md-nav__link ">
               
   
   
@@ -2329,7 +2500,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Behavior/Automata/" class="md-nav__link">
+      <a href="../../../Behavior/Automata/" class="md-nav__link">
         
   
   
@@ -2357,7 +2528,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Behavior/Compute/" class="md-nav__link">
+      <a href="../../../Behavior/Compute/" class="md-nav__link">
         
   
   
@@ -2385,7 +2556,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Behavior/Delay/" class="md-nav__link">
+      <a href="../../../Behavior/Delay/" class="md-nav__link">
         
   
   
@@ -2413,7 +2584,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Behavior/Fields/" class="md-nav__link">
+      <a href="../../../Behavior/Fields/" class="md-nav__link">
         
   
   
@@ -2441,7 +2612,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Behavior/HWC/" class="md-nav__link">
+      <a href="../../../Behavior/HWC/" class="md-nav__link">
         
   
   
@@ -2511,7 +2682,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Types/" class="md-nav__link ">
+            <a href="../../../Types/" class="md-nav__link ">
               
   
   
@@ -2557,7 +2728,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Types/Primitives/" class="md-nav__link">
+      <a href="../../../Types/Primitives/" class="md-nav__link">
         
   
   
@@ -2585,7 +2756,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Types/Collections/" class="md-nav__link">
+      <a href="../../../Types/Collections/" class="md-nav__link">
         
   
   
@@ -2613,7 +2784,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Types/Classes/" class="md-nav__link">
+      <a href="../../../Types/Classes/" class="md-nav__link">
         
   
   
@@ -2641,7 +2812,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Types/JavaIntegration/" class="md-nav__link">
+      <a href="../../../Types/JavaIntegration/" class="md-nav__link">
         
   
   
@@ -2707,7 +2878,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Simulation/" class="md-nav__link ">
+            <a href="../../../Simulation/" class="md-nav__link ">
               
   
   
@@ -2753,7 +2924,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Simulation/CoSimulation/" class="md-nav__link">
+      <a href="../../../Simulation/CoSimulation/" class="md-nav__link">
         
   
   
@@ -2781,7 +2952,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Simulation/Oracle/" class="md-nav__link">
+      <a href="../../../Simulation/Oracle/" class="md-nav__link">
         
   
   
@@ -2849,7 +3020,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="Testing/" class="md-nav__link ">
+            <a href="../../../Testing/" class="md-nav__link ">
               
   
   
@@ -2895,7 +3066,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Testing/MaUnit/" class="md-nav__link">
+      <a href="../../../Testing/MaUnit/" class="md-nav__link">
         
   
   
@@ -2923,7 +3094,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Testing/JUnit/" class="md-nav__link">
+      <a href="../../../Testing/JUnit/" class="md-nav__link">
         
   
   
@@ -2951,7 +3122,7 @@
   
   
     <li class="md-nav__item">
-      <a href="Testing/SequenceDiagrams/" class="md-nav__link">
+      <a href="../../../Testing/SequenceDiagrams/" class="md-nav__link">
         
   
   
@@ -3021,7 +3192,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Libraries/" class="md-nav__link ">
+            <a href="../../../../Libraries/" class="md-nav__link ">
               
   
   
@@ -3092,7 +3263,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Libraries/StandardLibrary/" class="md-nav__link ">
+            <a href="../../../../Libraries/StandardLibrary/" class="md-nav__link ">
               
   
   
@@ -3138,7 +3309,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Libraries/StandardLibrary/Components/" class="md-nav__link">
+      <a href="../../../../Libraries/StandardLibrary/Components/" class="md-nav__link">
         
   
   
@@ -3166,7 +3337,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../Libraries/StandardLibrary/TypesAndFunctions/" class="md-nav__link">
+      <a href="../../../../Libraries/StandardLibrary/TypesAndFunctions/" class="md-nav__link">
         
   
   
@@ -3225,7 +3396,7 @@
         
           
           <div class="md-nav__link md-nav__container">
-            <a href="../Libraries/PublicLibraries/" class="md-nav__link ">
+            <a href="../../../../Libraries/PublicLibraries/" class="md-nav__link ">
               
   
   
@@ -3281,7 +3452,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../FAQ/" class="md-nav__link">
+      <a href="../../../../FAQ/" class="md-nav__link">
         
   
   
@@ -3336,9 +3507,7 @@
             
             
               
-                
-              
-              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" hidden>
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
                 <div class="md-sidebar__scrollwrap">
                   <div class="md-sidebar__inner">
                     
@@ -3349,6 +3518,136 @@
   
     
   
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#stream-types-and-timing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Types and Timing
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stream-syntax-and-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Syntax and Operators
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stream Syntax and Operators">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stream-constructors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Constructors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stream-operators" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Operators
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#streamt-standard-api" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream&lt;T&gt; Standard API
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Stream&lt;T&gt; Standard API">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stream-generation-static-methods" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stream Generation (Static Methods)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#properties-and-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Properties and State
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#slicing-and-repetition" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Slicing and Repetition
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#higher-order-functions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Higher-Order Functions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tuple-and-projection-operations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Tuple and Projection Operations
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
   
 </nav>
                   </div>
@@ -3362,69 +3661,254 @@
               <article class="md-content__inner md-typeset">
                 
                   
-  
-
 
 
   
   
 
 
-<!-- (c) https://github.com/MontiCore/monticore -->
-<h1 id="reference">Reference<a class="headerlink" href="#reference" title="Permanent link">&para;</a></h1>
-<p>MontiArc is packed with features. This section is a detailed explanation and showcase of most of them.</p>
-<div class="grid cards">
+<h1 id="stream-expressions">Stream Expressions<a class="headerlink" href="#stream-expressions" title="Permanent link">&para;</a></h1>
+<p>The <strong>Stream Expressions</strong> are domain-specific operations for stream processing.
+Based on the theoretical foundations of Focus (Broy/Stølen), this allow modelers to succinctly declare, manipulate, and evaluate streams.</p>
+<h2 id="stream-types-and-timing">Stream Types and Timing<a class="headerlink" href="#stream-types-and-timing" title="Permanent link">&para;</a></h2>
+<p>MontiArc provides several distinct type constructors to handle different stream timing paradigms:</p>
 <ul>
-<li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 10.96a.985.985 0 0 1-.37-1.37L3.13 7c.11-.2.28-.34.47-.42l7.83-4.4c.16-.12.36-.18.57-.18s.41.06.57.18l7.9 4.44c.19.1.35.26.44.46l1.45 2.52c.28.48.11 1.09-.36 1.36l-1 .58v4.96c0 .38-.21.71-.53.88l-7.9 4.44c-.16.12-.36.18-.57.18s-.41-.06-.57-.18l-7.9-4.44A.99.99 0 0 1 3 16.5v-5.54c-.3.17-.68.18-1 0m10-6.81v6.7l5.96-3.35zM5 15.91l6 3.38v-6.71L5 9.21zm14 0v-3.22l-5 2.9c-.33.18-.7.17-1 .01v3.69zm-5.15-2.55 6.28-3.63-.58-1.01-6.28 3.63z"/></svg></span> &nbsp;
-    <strong>Concepts</strong></p>
-<hr />
-<p>Core concepts and elements</p>
-<hr />
-<p><a href="Concepts/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read more</a></p>
-</li>
-<li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m7 2 4 4H8v4H6V6H3zm10 8-4-4h3V2h2v4h3zM7 12h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-6a2 2 0 0 1 2-2m0 2v6h10v-6z"/></svg></span> &nbsp;
-    <strong>Components</strong></p>
-<hr />
-<p>Main building blocks of MontiArc</p>
-<hr />
-<p><a href="Component/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read more</a></p>
-</li>
-<li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M8 5.14v14l11-7z"/></svg></span> &nbsp;
-    <strong>Behavior</strong></p>
-<hr />
-<p>Describe component functions</p>
-<hr />
-<p><a href="Behavior/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read more</a></p>
-</li>
-<li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M48.2 66.8c-.1-.8-.2-1.7-.2-2.5v-.2c0-8.8 7.2-16 16-16 .9 0 1.9.1 2.8.2C74.3 49.6 80 56.2 80 64.1c0 8.8-7.2 16-16 16-7.9 0-14.5-5.7-15.8-13.2zM0 64c0 26.9 16.5 49.9 40 59.3v105.3c-23.5 9.5-40 32.5-40 59.3 0 35.3 28.7 64 64 64 26.9 0 49.9-16.5 59.3-40h201.3c9.5 23.5 32.5 40 59.3 40 35.3 0 64-28.7 64-64 0-26.9-16.5-49.9-40-59.3V123.3c23.5-9.5 40-32.5 40-59.3 0-35.3-28.7-64-64-64C357 0 334 16.5 324.6 40H123.3C113.9 16.5 90.9 0 64 0 28.7 0 0 28.7 0 64m368 0a16 16 0 1 1 32 0 16 16 0 1 1-32 0m-43.3 24c6.5 16 19.3 28.9 35.3 35.3v105.3c-16 6.5-28.9 19.3-35.3 35.3H123.4c-6.5-16-19.3-28.9-35.3-35.3V123.3c16-6.5 28.9-19.3 35.3-35.3zM384 272a16 16 0 1 1 0 32 16 16 0 1 1 0-32M80 288c0 7.9-5.7 14.5-13.2 15.8-.8.1-1.7.2-2.5.2h-.2c-8.8 0-16-7.2-16-16 0-.9.1-1.9.2-2.8 1.3-7.5 7.9-13.2 15.8-13.2 8.8 0 16 7.2 16 16zm436.7-40c6.5 16 19.3 28.9 35.3 35.3v105.3c-16 6.5-28.9 19.3-35.3 35.3H315.4c-6.5-16-19.3-28.9-35.3-35.3v-20.7h-48v20.7c-23.5 9.5-40 32.5-40 59.3 0 35.3 28.7 64 64 64 26.9 0 49.9-16.5 59.3-40h201.3c9.5 23.5 32.5 40 59.3 40 35.3 0 64-28.7 64-64 0-26.9-16.5-49.9-40-59.3V283.3c23.5-9.5 40-32.5 40-59.3 0-35.3-28.7-64-64-64-26.9 0-49.9 16.5-59.3 40H464v9.6c10.7 10.9 19.1 23.9 24.6 38.4h28zm59.3-8a16 16 0 1 1 0-32 16 16 0 1 1 0 32M271.8 450.7a16 16 0 1 1-31.5-5.5 16 16 0 1 1 31.5 5.5m301.5 13c-7.5-1.3-13.2-7.9-13.2-15.8 0-8.8 7.2-16 16-16 7.9 0 14.5 5.7 15.8 13.2v.1c.1.9.2 1.8.2 2.7 0 8.8-7.2 16-16 16-.9 0-1.9-.1-2.8-.2"/></svg></span> &nbsp;
-    <strong>Types</strong></p>
-<hr />
-<p>Define and use types</p>
-<hr />
-<p><a href="Types/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read more</a></p>
-</li>
-<li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 2v2h1v14a4 4 0 0 0 4 4 4 4 0 0 0 4-4V4h1V2zm4 14c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1m2-4c-.6 0-1-.4-1-1s.4-1 1-1 1 .4 1 1-.4 1-1 1m1-5h-4V4h4z"/></svg></span> &nbsp;
-    <strong>Testing</strong></p>
-<hr />
-<p>Write tests for your models</p>
-<hr />
-<p><a href="Testing/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read more</a></p>
-</li>
-<li>
-<p><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 2h10v2H4v10H2V4c0-1.11.89-2 2-2m4 4h10v2H8v10H6V8c0-1.11.89-2 2-2m4 4h8c1.11 0 2 .89 2 2v8c0 1.11-.89 2-2 2h-8c-1.11 0-2-.89-2-2v-8c0-1.11.89-2 2-2m2 2v8l6-4z"/></svg></span> &nbsp;
-    <strong>Simulation</strong></p>
-<hr />
-<p>Learn more about the simulator and co-simulation</p>
-<hr />
-<p><a href="Simulation/"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13.22 19.03a.75.75 0 0 1 0-1.06L18.19 13H3.75a.75.75 0 0 1 0-1.5h14.44l-4.97-4.97a.749.749 0 0 1 .326-1.275.75.75 0 0 1 .734.215l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0"/></svg></span> Read more</a></p>
-</li>
+<li><code>Stream&lt;T&gt;</code>: The base stream type.</li>
+<li><code>UntimedStream&lt;T&gt;</code>: A standard stream of elements with no timing semantics.</li>
+<li><code>EventStream&lt;T&gt;</code>: A timed stream that can include <code>Tick</code> elements to denote the end of a time slice. (This is the default timing if none is specified).</li>
+<li><code>SyncStream&lt;T&gt;</code>: A synchronous stream where time slices are strictly aligned.</li>
+<li><code>ToptStream&lt;T&gt;</code>: A timed optional stream that allows for the explicit absence of values.</li>
 </ul>
-</div>
+<hr />
+<h2 id="stream-syntax-and-operators">Stream Syntax and Operators<a class="headerlink" href="#stream-syntax-and-operators" title="Permanent link">&para;</a></h2>
+<p>The grammar introduces specialized syntax for constructing and combining streams natively within expressions.</p>
+<h3 id="stream-constructors">Stream Constructors<a class="headerlink" href="#stream-constructors" title="Permanent link">&para;</a></h3>
+<p>You can construct streams using angle brackets <code>&lt; ... &gt;</code>. Constructors support optional timing modifiers and explicit type arguments.</p>
+<p><strong>Format:</strong> <code>[Timing]? ["&lt;" Type "&gt;"]? "&lt;" Elements "&gt;"</code></p>
+<p><strong>Elements</strong> can be standard expressions, <code>Tick</code>, or <code>~</code> (which denotes the absence of a value, shorthand for <code>Abs</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Syntax Example</th>
+<th>Equivalent To</th>
+<th>Valid In</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;&gt;</code></td>
+<td>Empty stream</td>
+<td>All streams</td>
+</tr>
+<tr>
+<td><code>&lt;a&gt;</code></td>
+<td><code>a:&lt;&gt;</code></td>
+<td>All streams</td>
+</tr>
+<tr>
+<td><code>&lt;a, b&gt;</code></td>
+<td><code>a:b:&lt;&gt;</code></td>
+<td>All streams</td>
+</tr>
+<tr>
+<td><code>&lt;Tick, a&gt;</code></td>
+<td><code>Tick:a:&lt;&gt;</code></td>
+<td><code>EventStream</code></td>
+</tr>
+<tr>
+<td><code>&lt;a, ~&gt;</code></td>
+<td><code>a:Abs:&lt;&gt;</code></td>
+<td><code>ToptStream</code></td>
+</tr>
+<tr>
+<td><code>Event&lt;Integer&gt;&lt;1, Tick&gt;</code></td>
+<td>Explicitly typed event stream</td>
+<td><code>EventStream</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="stream-operators">Stream Operators<a class="headerlink" href="#stream-operators" title="Permanent link">&para;</a></h3>
+<p>Stream expressions support custom infix operators for common manipulations. Note that concatenation and append operations are <strong>right-associative</strong> (e.g., <code>a:b:c</code> evaluates as <code>a:(b:c)</code>).</p>
+<table>
+<thead>
+<tr>
+<th>Operator</th>
+<th>Name</th>
+<th>Example</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>:</code></td>
+<td><strong>Append</strong></td>
+<td><code>a : stream</code></td>
+<td>Appends a single element <code>a</code> to the front of a stream.</td>
+</tr>
+<tr>
+<td><code>Abs:</code></td>
+<td><strong>Append Absent</strong></td>
+<td><code>Abs : stream</code></td>
+<td>Appends the absence of an element (used in <code>Topt</code> streams).</td>
+</tr>
+<tr>
+<td><code>Tick:</code></td>
+<td><strong>Append Tick</strong></td>
+<td><code>Tick : stream</code></td>
+<td>Appends a time slice boundary (used in <code>Event</code> streams).</td>
+</tr>
+<tr>
+<td><code>^^</code></td>
+<td><strong>Concatenate</strong></td>
+<td><code>streamA ^^ streamB</code></td>
+<td>Concatenates two streams together.</td>
+</tr>
+<tr>
+<td><code>#</code></td>
+<td><strong>Length</strong></td>
+<td><code>#stream</code></td>
+<td>Returns the length of the stream.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="streamt-standard-api"><code>Stream&lt;T&gt;</code> Standard API<a class="headerlink" href="#streamt-standard-api" title="Permanent link">&para;</a></h2>
+<p>The <code>Stream&lt;T&gt;</code> interface provides a rich library of methods for querying, slicing, and transforming streams.</p>
+<h3 id="stream-generation-static-methods">Stream Generation (Static Methods)<a class="headerlink" href="#stream-generation-static-methods" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>repeat(S elem, long n)</code></td>
+<td>Generates a stream of type <code>S</code> by repeating <code>elem</code> exactly <code>n</code> times.</td>
+</tr>
+<tr>
+<td><code>iterate(S -&gt; S f, S elem)</code></td>
+<td>Generates an infinite stream by repeatedly applying function <code>f</code> to the previous element, starting with <code>elem</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="properties-and-state">Properties and State<a class="headerlink" href="#properties-and-state" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>long len()</code></td>
+<td>Returns the number of elements in the stream.</td>
+</tr>
+<tr>
+<td><code>boolean hasInfiniteLen()</code></td>
+<td>Returns <code>true</code> if the stream is infinite.</td>
+</tr>
+<tr>
+<td><code>boolean isEmpty()</code></td>
+<td>Returns <code>true</code> if the stream contains zero elements.</td>
+</tr>
+<tr>
+<td><code>Set&lt;T&gt; values()</code></td>
+<td>Collects and returns all unique elements of the stream as a <code>Set</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="slicing-and-repetition">Slicing and Repetition<a class="headerlink" href="#slicing-and-repetition" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Stream&lt;T&gt; dropFirst()</code></td>
+<td>Returns a new stream with the first element removed.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; dropMultiple(long n)</code></td>
+<td>Returns a new stream with the first <code>n</code> elements removed.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; take(long n)</code></td>
+<td>Returns a new stream containing only the first <code>n</code> elements.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; times(long n)</code></td>
+<td>Repeats the entire stream sequence <code>n</code> times (e.g., <code>&lt;2&gt;.times(3)</code> yields <code>&lt;2, 2, 2&gt;</code>).</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; infTimes()</code></td>
+<td>Repeats the stream sequence infinitely.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; rcDups()</code></td>
+<td>Returns a stream with consecutive duplicate elements removed.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="higher-order-functions">Higher-Order Functions<a class="headerlink" href="#higher-order-functions" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;U&gt; Stream&lt;U&gt; map(T -&gt; U f)</code></td>
+<td>Transforms the stream by applying the function <code>f</code> to each element.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; filter(T -&gt; boolean p)</code></td>
+<td>Keeps only the elements that satisfy the predicate <code>p</code>.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; takeWhile(T -&gt; boolean p)</code></td>
+<td>Yields elements from the beginning of the stream as long as predicate <code>p</code> is true.</td>
+</tr>
+<tr>
+<td><code>Stream&lt;T&gt; dropWhile(T -&gt; boolean p)</code></td>
+<td>Bypasses elements as long as predicate <code>p</code> is true, then yields the remaining stream.</td>
+</tr>
+<tr>
+<td><code>&lt;U&gt; Stream&lt;U&gt; scanl(U -&gt; T -&gt; U f, U acc)</code></td>
+<td>Folds the stream from the left, yielding a new stream of the successive accumulated values.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tuple-and-projection-operations">Tuple and Projection Operations<a class="headerlink" href="#tuple-and-projection-operations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Method Signature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;U&gt; Stream&lt;(T,U)&gt; zip(Stream&lt;U&gt; s)</code></td>
+<td>Combines this stream with stream <code>s</code> into a single stream of pairs/tuples.</td>
+</tr>
+<tr>
+<td><code>static projFst(Stream&lt;(S,U)&gt; s)</code></td>
+<td>Extracts a stream containing only the <strong>first</strong> elements of a stream of tuples.</td>
+</tr>
+<tr>
+<td><code>static projSnd(Stream&lt;(S,U)&gt; s)</code></td>
+<td>Extracts a stream containing only the <strong>second</strong> elements of a stream of tuples.</td>
+</tr>
+</tbody>
+</table>
 
 
 
@@ -3432,13 +3916,8 @@
 
 
 
-  
-  
 
 
-
-
-  
 
 
 
@@ -3458,12 +3937,10 @@
   
     
       
-        
-      
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
           
-          <a href="../Usage/Simulation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Simulation">
+          <a href="../Sets/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Sets">
             <div class="md-footer__button md-icon">
               
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
@@ -3473,20 +3950,20 @@
                 Previous
               </span>
               <div class="md-ellipsis">
-                Simulation
+                Sets
               </div>
             </div>
           </a>
         
         
           
-          <a href="Concepts/" class="md-footer__link md-footer__link--next" aria-label="Next: Concepts">
+          <a href="../../Statements/" class="md-footer__link md-footer__link--next" aria-label="Next: Statements">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Concepts
+                Statements
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -3553,10 +4030,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../../..", "features": ["navigation.tabs", "navigation.sections", "navigation.footer", "navigation.instant", "navigation.instant.progress", "navigation.indexes", "toc.follow", "content.tabs.link", "social", "content.code.copy", "content.code.annotate"], "search": "../../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../../../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
