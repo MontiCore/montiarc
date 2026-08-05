@@ -65,6 +65,19 @@ Unit Test:
       - ./**/build/**/reports/test-coverage/jacoco.xml
     when: always
 
+Test Templates:
+  stage: test
+  <<: *cache_gradle_pull_push
+  image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
+  needs: ["Build"]
+  allow_failure: false
+  script:
+    - gradle publishToMavenLocal --stacktrace
+    - |
+      for template_dir in templates/*/; do      
+        gradle -I ../test-templates.init.gradle -p "$template_dir" build --stacktrace
+      done
+
 Deploy Nexus:
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   <<: *cache_gradle_pull_only
@@ -77,9 +90,9 @@ Deploy Nexus:
 
 Trigger Digital Twin:
   stage: downstream
-  needs: 
-   - job: "Deploy Nexus"
-     optional: true
+  needs:
+    - job: "Deploy Nexus"
+      optional: true
   allow_failure: false
   trigger:
     project: monticore/umlp-anwendungen/digital-twin

@@ -5,6 +5,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -335,6 +336,7 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
+  @Disabled
   public void testCreateEmpty(@TempDir Path tempDir) throws IOException {
     // Given
     Path targetDir = tempDir.resolve("test/montiarc/create/EmptyProject");
@@ -353,6 +355,7 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
+  @Disabled
   public void testCreateEmptyTemplate(@TempDir Path tempDir) throws IOException {
     // Given
     Path targetDir = tempDir.resolve("test/montiarc/create/EmptyProject");

@@ -32,6 +32,7 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -258,26 +259,28 @@ public class MontiArcTool extends MontiArcToolTOP {
   }
 
   protected void runCreate(String name, CommandLine cl) {
-    String templateName = "montiarc-templates-main/";
+    String templateName;
     if (cl.hasOption("t")) {
-      templateName += cl.getOptionValue("t").toLowerCase();
+      templateName = cl.getOptionValue("t").toLowerCase();
     } else {
-      templateName += "empty";
+      templateName = "empty";
     }
     // download and unzip
     try {
-      Path zip = Files.createTempFile("MontiArcTemplateProject", ".zip");
+      Path zip = Files.createTempFile("MontiArcTemplate-" + templateName, ".zip");
       String gitTag = this.versionSupplier.get().contains("SNAPSHOT") ? "heads/main" : ("tags/" + this.versionSupplier.get().substring(0, 5));
       Log.info(() -> "Downloading template...", "MontiArcTool");
-      FileUtils.copyURLToFile(new URI("https://github.com/MontiCore/montiarc-templates/archive/refs/" + gitTag + ".zip").toURL(), zip.toFile());
+      try {
+        FileUtils.copyURLToFile(new URI("https://github.com/MontiCore/montiarc/releases/download/" + gitTag + "/" + templateName + ".zip").toURL(), zip.toFile());
+      } catch (FileNotFoundException e) {
+        Log.error(MontiArcError.TOOL_CREATE_TEMPLATE_NOT_EXIST.format(cl.getOptionValue("t")), e);
+        return;
+      }
       Log.info(() -> "Creating Project " + name, "MontiArcTool");
-      boolean foundTemplate = false;
       try (java.util.zip.ZipFile zipFile = new ZipFile(zip.toFile())) {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
           ZipEntry entry = entries.nextElement();
-          if (!entry.getName().toLowerCase().startsWith(templateName)) continue;
-          if (!foundTemplate) foundTemplate = true;
           File entryDestination = new File(name, entry.getName().substring(templateName.length()));
           if (entry.isDirectory()) {
             entryDestination.mkdirs();
@@ -290,7 +293,6 @@ public class MontiArcTool extends MontiArcToolTOP {
           }
         }
       }
-      if (!foundTemplate) Log.error(MontiArcError.TOOL_CREATE_TEMPLATE_NOT_EXIST.format(cl.getOptionValue("t")));
     } catch (IOException | SecurityException e) {
       Log.error(e.getMessage());
     } catch (URISyntaxException e) {
@@ -653,9 +655,8 @@ public class MontiArcTool extends MontiArcToolTOP {
   public void initializeStreams() {
     try {
       SymbolPathLoader.addResource("Stream.symtabdefinitionsym");
-    } catch (IOException ignore) {}
+    } catch (IOException ignore) { }
   }
-
 
   public void initializeClass2MC() {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());

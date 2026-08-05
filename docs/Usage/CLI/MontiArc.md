@@ -37,10 +37,10 @@ The create command allows you to easily set up a new project.
 montiarc create <name> [-t <templateName>]
 ```
 
-| Option                         | Description                                                                                                                                                                        |
-| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `<ProjectName>`                | Name of the newly generated project                                                                                                                                                |
-| `-t,--template <templateName>` | Selected template for the project. By default, an empty Gradle project is created. Look [here](https://github.com/MontiCore/montiarc-templates) for the available template options. |
+| Option                         | Description                                                                                                                                                                                     |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<ProjectName>`                | Name of the newly generated project                                                                                                                                                             |
+| `-t,--template <templateName>` | Selected template for the project. By default, an empty Gradle project is created. Look [here](https://github.com/MontiCore/montiarc/releases/tag/snapshot) for the available template options. |
 
 
 ### Run

@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# (c) https://github.com/MontiCore/monticore
+#
+# This tool downloads the Gradle 8.14.4 wrapper
+#
+
+
+BASEDIR=$(dirname $0)
+mkdir -p "$BASEDIR/gradle/wrapper"
+curl -L -o "$BASEDIR/gradle/wrapper/gradle-wrapper.jar" https://raw.githubusercontent.com/gradle/gradle/refs/tags/v8.14.4/gradle/wrapper/gradle-wrapper.jar
+curl -L -o "$BASEDIR/gradlew" https://raw.githubusercontent.com/gradle/gradle/refs/tags/v8.14.4/gradlew
+curl -L -o "$BASEDIR/gradlew.bat" https://raw.githubusercontent.com/gradle/gradle/refs/tags/v8.14.4/gradlew.bat
+
+echo """distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.14.4-bin.zip
+networkTimeout=10000
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+""" > "$BASEDIR/gradle/wrapper/gradle-wrapper.properties"
+
+chmod +x "$BASEDIR/gradlew"

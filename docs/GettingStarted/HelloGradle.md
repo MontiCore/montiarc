@@ -16,6 +16,8 @@ montiarc create MyMontiArcProject
 ```
 This will create a new directory called `MyMontiArcProject` which contains a near-empty MontiArc Gradle project.
 
+Or [download the template](https://github.com/MontiCore/montiarc/releases/download/snapshot/empty.zip) unzip and copy it into your folder.
+
 Inside the project open `src/main/montiarc/pkg/HelloWorld.arc`:
 
 ```montiarc

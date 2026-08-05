@@ -1,0 +1,25 @@
+// test-templates.init.gradle
+gradle.settingsEvaluated { settings ->
+  // Inject mavenLocal into plugin resolution
+  settings.pluginManagement {
+    repositories {
+      mavenLocal()
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+      gradlePluginPortal()
+    }
+  }
+}
+
+gradle.projectsLoaded { proxy ->
+  proxy.rootProject.allprojects {
+    // Inject mavenLocal into standard dependency resolution
+    repositories {
+      mavenLocal()
+      maven {
+        url = uri("https://nexus.se.rwth-aachen.de/content/groups/public/")
+      }
+    }
+  }
+}

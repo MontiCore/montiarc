@@ -1,0 +1,10 @@
+package elevator;
+
+classdiagram Commands {
+
+  public enum MotorCMD {
+    UP,
+    DOWN,
+    STOP;
+  }
+}
