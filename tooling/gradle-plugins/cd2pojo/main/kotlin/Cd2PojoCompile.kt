@@ -95,6 +95,10 @@ abstract class Cd2PojoCompile : DefaultTask() {
   @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val classPath: ConfigurableFileCollection
 
+  @get:Input
+  @get:Optional
+  abstract val configTemplate: Property<String>
+
   init {
     description = "Generates .java code from class diagrams using cd2pojo."
 
@@ -165,9 +169,14 @@ abstract class Cd2PojoCompile : DefaultTask() {
         it.args("--template", tmplDir.get())
       }
 
+      if (configTemplate.isPresent) {
+        it.args("-ct", configTemplate.get())
+      }
+
       if (!cleanHwcPath.isEmpty) {
         it.args("--handwrittencode", cleanHwcPath.asPath)
       }
+
       if (!cleanSymbolImportDirs.isEmpty) {
         it.args("-path", cleanSymbolImportDirs.asPath)
       }
