@@ -268,7 +268,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     // download and unzip
     try {
       Path zip = Files.createTempFile("MontiArcTemplate-" + templateName, ".zip");
-      String gitTag = this.versionSupplier.get().contains("SNAPSHOT") ? "heads/main" : ("tags/" + this.versionSupplier.get().substring(0, 5));
+      String gitTag = this.versionSupplier.get().contains("SNAPSHOT") ? "snapshot" : this.versionSupplier.get();
       Log.info(() -> "Downloading template...", "MontiArcTool");
       try {
         FileUtils.copyURLToFile(new URI("https://github.com/MontiCore/montiarc/releases/download/" + gitTag + "/" + templateName + ".zip").toURL(), zip.toFile());

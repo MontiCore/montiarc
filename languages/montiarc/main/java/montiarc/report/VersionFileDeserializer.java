@@ -4,13 +4,9 @@ package montiarc.report;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
@@ -40,10 +36,11 @@ public final class VersionFileDeserializer {
 
     try (
       InputStream fileStream = fileLoc.openStream();
-      Reader streamReader = new InputStreamReader(fileStream, StandardCharsets.UTF_8);
-      BufferedReader fileReader = new BufferedReader(streamReader);
     ) {
-      return Optional.of(fileReader.readLine());
+      java.util.Properties properties = new java.util.Properties();
+      properties.load(fileStream);
+
+      return Optional.ofNullable(properties.getProperty("version"));
     } catch (IOException e) {
       return Optional.empty();
     }
