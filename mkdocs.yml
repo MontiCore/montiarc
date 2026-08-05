@@ -103,7 +103,10 @@ nav:
     - Concepts:
       - Concepts: 'Reference/Concepts/index.md'
       - Comments: 'Reference/Concepts/Comments.md'
-      - Expressions: 'Reference/Concepts/Expressions.md'
+      - Expressions: 
+        - Expressions: 'Reference/Concepts/Expressions/index.md'
+        - Sets: 'Reference/Concepts/Expressions/Sets.md'
+        - Streams: 'Reference/Concepts/Expressions/Streams.md'
       - Statements: 'Reference/Concepts/Statements.md'
       - Timing: 'Reference/Concepts/Timing.md'
     - Component:

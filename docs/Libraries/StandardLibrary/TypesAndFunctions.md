@@ -6,7 +6,7 @@ hide:
 
 # Types and Functions
 
-These classes can be imported and used in [expressions](../../Reference/Concepts/Expressions.md#method-invocation).
+These classes can be imported and used in [expressions](../../Reference/Concepts/Expressions/index.md#method-invocation).
 
 ---
 

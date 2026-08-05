@@ -59,7 +59,7 @@ TYPE SUB(ARGS);
 
 where `ARGS` is a comma-separated list of arguments of the form 
 `ARG1, ARG2, ...., ARGn` where `ARG1`, `ARG2`, and so forth until `ARGn` are 
-the first, second, and so forth until the n-th argument. All arguments are defined using [expressions](../Concepts/Expressions.md).
+the first, second, and so forth until the n-th argument. All arguments are defined using [expressions](../Concepts/Expressions/index.md).
 
 ## Type Arguments
 

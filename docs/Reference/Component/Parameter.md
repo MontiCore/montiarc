@@ -27,7 +27,7 @@ component LinearScalar(double factor, double offset = 0.0) {
 
 ## Instantiation of components with configuration parameters
 When components with parameters are used during [decomposition](./Decomposition.md), values have to be assigned to these.
-These values can be any [expression](../Concepts/Expressions.md) and can contain parameters of the enclosing component, too.
+These values can be any [expression](../Concepts/Expressions/index.md) and can contain parameters of the enclosing component, too.
 
 ```montiarc
 component MeasureNet {

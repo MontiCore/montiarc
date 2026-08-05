@@ -26,7 +26,7 @@ The standard library is included in all MontiArc models and contains useful comp
 
     ---
 
-    Functions, which can be used in [expressions](../../Reference/Concepts/Expressions.md#method-invocation)
+    Functions, which can be used in [expressions](../../Reference/Concepts/Expressions/index.md#method-invocation)
 
     ---
 
