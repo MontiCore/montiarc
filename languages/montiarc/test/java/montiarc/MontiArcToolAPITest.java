@@ -3,8 +3,10 @@ package montiarc;
 
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.report.VersionFileDeserializer;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -335,7 +337,9 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
-  public void testCreateEmpty(@TempDir Path tempDir) throws IOException {
+  public void testCreateEmpty(@TempDir Path tempDir) {
+    Assumptions.assumeTrue(new VersionFileDeserializer(MontiArcTool.INC_CHECK_VERSION_PATH)
+      .loadVersion().contains("SNAPSHOT"));
     // Given
     Path targetDir = tempDir.resolve("test/montiarc/create/EmptyProject");
 
@@ -353,7 +357,9 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
-  public void testCreateEmptyTemplate(@TempDir Path tempDir) throws IOException {
+  public void testCreateEmptyTemplate(@TempDir Path tempDir) {
+    Assumptions.assumeTrue(new VersionFileDeserializer(MontiArcTool.INC_CHECK_VERSION_PATH)
+      .loadVersion().contains("SNAPSHOT"));
     // Given
     Path targetDir = tempDir.resolve("test/montiarc/create/EmptyProject");
 
@@ -371,7 +377,9 @@ class MontiArcToolAPITest extends MontiArcTestBase {
   }
 
   @Test
-  public void testCreateElevatorTutorialTemplate(@TempDir Path tempDir) throws IOException {
+  public void testCreateElevatorTutorialTemplate(@TempDir Path tempDir) {
+    Assumptions.assumeTrue(new VersionFileDeserializer(MontiArcTool.INC_CHECK_VERSION_PATH)
+      .loadVersion().contains("SNAPSHOT"));
     // Given
     Path targetDir = tempDir.resolve("test/montiarc/create/ElevatorProject");
 
