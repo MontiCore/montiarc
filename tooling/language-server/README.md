@@ -7,4 +7,4 @@ The language server can be debugged by running
 
 ## Installing the packaged plugin
 See install instructions in the documentation:
-https://monticore.github.io/montiarc/v7.9/GettingStarted/Editor/
+https://monticore.github.io/montiarc/v7.10/GettingStarted/Editor/

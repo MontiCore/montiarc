@@ -11,17 +11,17 @@ So if you haven't already, now is the right time to [install Java 21](https://ww
 #### Run the CLI Manually
 
 To run the CLI manually, you need to have [Java 21](https://www.oracle.com/de/java/technologies/downloads/#java21) installed.
-Next, download the [MontiArc-7.9.0.jar](https://github.com/MontiCore/montiarc/releases/tag/7.9.0).
+Next, download the [MontiArc-7.9.0.jar](https://github.com/MontiCore/montiarc/releases/tag/snapshot).
 
 You can then run the tool with:
 
 ```bash
-java -jar MontiArc-7.9.0.jar
+java -jar MontiArc-7.10.0.jar
 ```
 
 #### Install the CLI (BETA)
 
-If you also want to use the [CLI](./HelloWorld.md), you can find installers for all platforms [here](https://github.com/MontiCore/montiarc/releases/tag/7.9.0).
+If you also want to use the [CLI](./HelloWorld.md), you can find installers for all platforms [here](https://github.com/MontiCore/montiarc/releases/tag/snapshot).
 
 === "Windows"
     Download the installer for Windows(.exe), extract, and run it.

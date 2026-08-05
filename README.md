@@ -7,7 +7,7 @@
 
 <h4 align="center">
   <a href="https://monticore.github.io/montiarc">Documentation</a> |
-  <a href="https://monticore.github.io/montiarc/v7.9/GettingStarted">Getting Started</a> |
+  <a href="https://monticore.github.io/montiarc/v7.10/GettingStarted">Getting Started</a> |
   <a href="https://www.monticore.de/">MontiCore</a>
 </h4>
 
@@ -39,9 +39,9 @@ variability and feature configuration, dynamic reconfiguration, and generics.
 ### Further Information
 
 * [Documentation](https://monticore.github.io/montiarc)
-  * [Setup](https://monticore.github.io/montiarc/v7.9/GettingStarted/Setup)
+  * [Setup](https://monticore.github.io/montiarc/v7.10/GettingStarted/Setup)
   * [Contributing](https://github.com/MontiCore/montiarc/blob/dev/CONTRIBUTING.md)
-  * [FAQ](https://monticore.github.io/montiarc/v7.9/FAQ)
+  * [FAQ](https://monticore.github.io/montiarc/v7.10/FAQ)
 * [Publications](https://www.se-rwth.de/publications/)
 * [License](https://github.com/MontiCore/monticore/blob/HEAD/00.org/Licenses/LICENSE-MONTICORE-3-LEVEL.md)
 
