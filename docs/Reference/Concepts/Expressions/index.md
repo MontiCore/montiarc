@@ -1,11 +1,12 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 # Expressions
 
-Expressions are combinations of variables, operations, and method invocations that evaluate to some value. Expressions can be used in arguments of component 
-instantiations, in guards of transitions, and as part of statements in actions 
-of automata.
+Expressions are combinations of variables, literals, operators, and method invocations that evaluate to a single value.
+They are used throughout the language, such as in arguments for component instantiations, in guards of transitions, and as part of statements in the actions of automata.
 
-Given the following types 
+## Context & Setup
+
+To illustrate how expressions work, assume the following types are defined:
 
 ```classdiagram
   public class Person {
@@ -20,96 +21,91 @@ Given the following types
   }
 ```
 
-and imports of these types 
+And imported into your current model:
 
 ```montiarc
 import montiarc.types.Person;
 import montiarc.types.Role;
 ```
 
-The following are valid expressions:
+## Working with Objects
 
-## Object creation 
+The following examples demonstrate how to use expressions to create objects, access fields, and invoke methods.
 
 ```java
+// 1. Object Creation
+// Declares a variable 'p' of type Person and evaluates the creation expression
 Person p = Person.Person();
+
+// 2. Field Access & Assignment 
+// Accesses fields on variable 'p' and assigns new values to them
+p.age = 35;
+p.name = "Max";
+
+// Creates a new Role object and assigns it to the 'role' field
+p.role = Role.Role();
+
+// Chained field access: accesses the 'id' field of the 'role' field
+p.role.id = 5; 
+
+// 3. Field Reading
+// Accesses the 'age' field and stores its evaluated result in a new variable
+int currentAge = p.age;
+
+// 4. Method Invocation
+// Invokes the getFullName() method on the object referenced by 'p'
+p.getFullName();
+
 ```
 
-`Person p` declares a variable of type Person
-and `Person.Person()` creates the corresponding object.
+## Operators
 
-## Field access
+The language supports standard mathematical, assignment, comparison, and logical operators.
 
-`p.age = 35;` 
+### Arithmetic Operators
 
-Accesses the field `age` of variable `p` and sets its value to `35`.
-
-`p.name = "Max";`
-
-accesses the field `name` of variable `p` and sets its value to `"Max"`
-
-`p.role = Role.Role();`
-
-Access the field `role` of variable `p` and creates an Object of type `Role` 
-
-`p.role.id = 5; ` 
-
-Access the field `id` of field `role` of variable `p` and sets it to `5`
-
-`int age2 = p.age;` 
-
-accesses field `age` of variable `p` and stores it in a new variable `age2` 
-
-## Method invocation
-
-`p.getFullName()` 
-
-invokes method `getFullName()` on the object behind variable `p`
-
-## Arithmetic Operators
-
-Arithmetic operators perform mathematical operations and return a number.
+Arithmetic operators perform mathematical calculations and evaluate to a numeric value.
 
 | Operator | Name           | Example |
 | -------- | -------------- | ------- |
-| +        | Addition       | a + b   |
-| -        | Subtraction    | a - b   |
-| *        | Multiplication | a * b   |
-| /        | Division       | a / b   |
-| %        | Modulo         | a % b   |
+| `+`      | Addition       | `a + b` |
+| `-`      | Subtraction    | `a - b` |
+| `*`      | Multiplication | `a * b` |
+| `/`      | Division       | `a / b` |
+| `%`      | Modulo         | `a % b` |
 
-## Assignment Operators
+### Assignment Operators
 
-Assignment operators assign a value to a variable or send a message via a port.
+Assignment operators evaluate the right side and assign the resulting value to a variable on the left side, or send a message via a port.
 
-| Operator | Example | Abbreviation for |
-| -------- | ------- | ---------------- |
-| =        | a = b   |                  |
-| +=       | a += b  | a = a + b        |
-| -=       | a -= b  | a = a - b        |
-| *=       | a *= b  | a = a * b        |
-| /=       | a /= b  | a = a / b        |
-| %=       | a %= b  | a = a % b        |
+| Operator | Example  | Abbreviation for |
+| -------- | -------- | ---------------- |
+| `=`      | `a = b`  |                  |
+| `+=`     | `a += b` | `a = a + b`      |
+| `-=`     | `a -= b` | `a = a - b`      |
+| `*=`     | `a *= b` | `a = a * b`      |
+| `/=`     | `a /= b` | `a = a / b`      |
+| `%=`     | `a %= b` | `a = a % b`      |
 
-## Comparison Operators
+### Comparison Operators
 
-Comparison operators compare two values and return a Boolean.
+Comparison operators compare two evaluated values and return a Boolean (`true` or `false`).
 
-| Operator | Name                  | Example |
-| -------- | --------------------- | ------- |
-| ==       | Equal to              | a == b  |
-| !=       | Not equal to          | a != b  |
-| \>       | Greater than          | a > b   |
-| <        | Less than             | a < b   |
-| \>=      | Greater than or equal | a >= b  |
-| <=       | Less than or equal    | a <= b  |
+| Operator | Name                  | Example  |
+| -------- | --------------------- | -------- |
+| `==`     | Equal to              | `a == b` |
+| `!=`     | Not equal to          | `a != b` |
+| `>`      | Greater than          | `a > b`  |
+| `<`      | Less than             | `a < b`  |
+| `>=`     | Greater than or equal | `a >= b` |
+| `<=`     | Less than or equal    | `a <= b` |
 
-## Logical Operators
+### Logical Operators
 
-Logical operators operate on Boolean values and return a Boolean.
+Logical operators operate strictly on Boolean values and evaluate to a Boolean result.
 
 | Operator | Name        | Example  |
 | -------- | ----------- | -------- |
-| &&       | Logical and | a && b   |
-| \|\|     | Logical or  | a \|\| b |
-| !        | Logical not | !a       |
+| `&&`     | Logical AND | `a && b` |
+| `        |             | `        |
+| `!`      | Logical NOT | `!a`     |

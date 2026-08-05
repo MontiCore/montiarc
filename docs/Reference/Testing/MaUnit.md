@@ -76,7 +76,7 @@ component AndTest(T p1, T p2) { }
 ### Complex Tests
 
 More complex tests can be defined by using other library components that
-produce or assert streams of messages.
+produce or assert [streams of messages](../Concepts/Expressions/Streams.md).
 The execution length of the test can be set with the `ticks` stereotype, which
 defines the number of ticks that the test should run for. Likewise, with
 `simulatedTickLength` the simulated time between ticks in nanoseconds can be set.

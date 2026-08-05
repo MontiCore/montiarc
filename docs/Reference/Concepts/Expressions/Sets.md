@@ -1,3 +1,4 @@
+<!-- (c) https://github.com/MontiCore/monticore -->
 # Set Expressions
 
 The **Set Expressions** are domain-specific operations for sets and lists, commonly found in OCL (Object Constraint Language) and specifications.

@@ -1,11 +1,14 @@
+<!-- (c) https://github.com/MontiCore/monticore -->
 # Stream Expressions
 
 The **Stream Expressions** are domain-specific operations for stream processing.
-Based on the theoretical foundations of Focus (Broy/Stølen), this allow modelers to succinctly declare, manipulate, and evaluate streams.
+Based on the theoretical foundations of FOCUS[^1], this allow modelers to succinctly declare, manipulate, and evaluate streams.
+
+[^1]: Manfred Broy and Ketil Stølen. *Specification and Development of Interactive Systems. Focus on Streams, Interfaces and Refinement*. Springer Verlag Heidelberg, 2001.
 
 ## Stream Types and Timing
 
-MontiArc provides several distinct type constructors to handle different stream timing paradigms:
+MontiArc provides several distinct type constructors to handle different stream [timing](../Timing.md) paradigms:
 
 * `Stream<T>`: The base stream type.
 * `UntimedStream<T>`: A standard stream of elements with no timing semantics.
