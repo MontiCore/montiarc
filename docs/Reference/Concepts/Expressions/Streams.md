@@ -1,20 +1,68 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
-# Stream Expressions
 
-The **Stream Expressions** are domain-specific operations for stream processing.
-Based on the theoretical foundations of FOCUS[^1], this allow modelers to succinctly declare, manipulate, and evaluate streams.
+# Streams 
+
+According to the Focus theory developed by Professor Manfred Broy A 
+stream is a temporarily ordered sequence of messages (events, 
+signals), which may be finite or infinite. The FOCUS[^1] theory is a 
+semantically very well-founded mathematical construction to ensure 
+that distributed and asynchronously or synchronously communicating 
+components can be specified in a compositional style, and repeated 
+refinements and decompositions are possible. MontiArc What's created 
+as a practical language in the spirit of FOCUS[^1]. 
+
+See literature on Focus below (TODO).
+
+Technically Streams can be handled like any other kind of expression 
+types. They provide an API for their manipulation, and some 
+syntactically special operators, like concatenation (infix: "^^") Or 
+the explicit listing of a stream with its values "<a,b,c>".   
+Semantically a stream denotes the temporal order of a sequence of 
+messages which maybe infinite. Therefore streams can be very well 
+used in behavioral descriptions of components, for example in 
+Assumption/Guarantee style, but cannot be used as parameters or 
+attributes inside a component. 
+
+How to specify with streams is explained in the literature (TODO). 
+
+Here we explain the syntactic appearance of streams and its different 
+variants. 
+
+# Stream Expressions 
+
+**Stream Expressions** extend the Expression languages with specific 
+operations for stream processing. This allow modelers to succinctly 
+declare, manipulate, and evaluate streams. 
 
 [^1]: Manfred Broy and Ketil Stølen. *Specification and Development of Interactive Systems. Focus on Streams, Interfaces and Refinement*. Springer Verlag Heidelberg, 2001.
 
 ## Stream Types and Timing
 
-MontiArc provides several distinct type constructors to handle different stream [timing](../Timing.md) paradigms:
+MontiArc provides several distinct type constructors to handle 
+different stream [timing](../Timing.md) paradigms. This is necessary 
+because, dependent on the level of abstraction, sometimes timing is 
+irrelevant and sometimes timing constraints are very relevant. To be 
+able to specify timing constraints, time needs to be made explicit in 
+the stream of elements. FOCUS does that in different forms, (1) 
+untimed, (2) restricting streams to provide exactly or at most one 
+message per time slice, or (3) using Ticks as a form of 
+pseudo-message that explicitly models the progress of time Into the 
+next time slice.  
 
-* `Stream<T>`: The base stream type.
-* `UntimedStream<T>`: A standard stream of elements with no timing semantics.
-* `EventStream<T>`: A timed stream that can include `Tick` elements to denote the end of a time slice. (This is the default timing if none is specified).
-* `SyncStream<T>`: A synchronous stream where time slices are strictly aligned.
-* `ToptStream<T>`: A timed optional stream that allows for the explicit absence of values.
+ * `Stream<T>`: The base stream type (a kind of supertype for all streams).
+ * `UntimedStream<T>`: A standard stream of elements with no explicit 
+    timing information.
+ * `EventStream<T>`: A timed stream that can include 
+      `Tick` elements to denote the end of a time slice.
+      In a time slice there are finitely many messages allowed.  
+      (This is the default timing if none is specified).
+ * `SyncStream<T>`: A synchronous stream where a time slice contains exactly one
+      message. This is why the stream is denoted By the list of messages and 
+      the ticks are omitted. Please note that semantically `SyncStream`
+      is a subset of `EventStream` even though the syntactic representation 
+      is different. 
+ * `ToptStream<T>`: A relaxation of the synchronous stream where 
+       the message may be optional (so at most one message per time slice). 
 
 ---
 

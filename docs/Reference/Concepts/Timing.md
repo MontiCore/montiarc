@@ -1,8 +1,11 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 # Timing
 
-To understand MontiArc you need to know about timings and how they affect components. Multiple time abstractions are available in MontiArc.
-We briefly introduce the different timing concepts here. MontiArc is based on the mathematical FOCUS[^1] framework, which provides clear semantics.
+To understand MontiArc you need to know about timings and how they 
+affect components. Multiple time abstractions are available in 
+MontiArc. We briefly introduce the different timing concepts here. 
+MontiArc is based on the mathematical FOCUS[^1] framework, which 
+provides clear semantics. 
 
 In MontiArc time is split into equidistant time intervals, where each interval has a finite number of messages.
 The granularity of time, i.e., length of intervals, is not modeled and depends on the system's context.
