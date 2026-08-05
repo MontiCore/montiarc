@@ -72,7 +72,7 @@ Test Templates:
   needs: ["Build"]
   allow_failure: false
   script:
-    - gradle publishToMavenLocal --stacktrace --build-cache --configuration-cache -PenableLanguageServer -Pde.monticore.gradle.performance_statistic="false" --refresh-dependencies
+    - gradle :gradle-plugins:publishAllToMavenLocal --stacktrace --build-cache --configuration-cache -PenableLanguageServer -Pde.monticore.gradle.performance_statistic="false" --refresh-dependencies
     - |
       for template_dir in templates/*/; do
         gradle -I ../test-templates.init.gradle -p "$template_dir" build --stacktrace
