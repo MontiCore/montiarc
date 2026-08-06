@@ -195,7 +195,7 @@ jobs:
         run: |
           for template_dir in templates/*/; do
             FOLDER_NAME=$(basename "$template_dir")
-            zip -r "./dist/${FOLDER_NAME}.zip" "templates/${FOLDER_NAME}/"
+            (cd "templates/${FOLDER_NAME}" && zip -r "../../dist/${FOLDER_NAME}.zip" .)
           done
       # SNAPSHOT
       - name: Create SNAPSHOT release

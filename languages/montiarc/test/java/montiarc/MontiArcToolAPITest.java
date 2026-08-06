@@ -353,7 +353,8 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     // Then
     assertThat(targetDir).isDirectory();
     assertThat(targetDir).isNotEmptyDirectory();
-    assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
+    assertThat(targetDir).isDirectoryContaining("glob:**/build.gradle.kts");
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test
@@ -373,7 +374,8 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     // Then
     assertThat(targetDir).isDirectory();
     assertThat(targetDir).isNotEmptyDirectory();
-    assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
+    assertThat(targetDir).isDirectoryContaining("glob:**/build.gradle.kts");
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test
@@ -393,7 +395,8 @@ class MontiArcToolAPITest extends MontiArcTestBase {
     // Then
     assertThat(targetDir).isDirectory();
     assertThat(targetDir).isNotEmptyDirectory();
-    assertThat(Log.getErrorCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
+    assertThat(targetDir).isDirectoryContaining("glob:**/build.gradle.kts");
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @Test

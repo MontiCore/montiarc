@@ -281,7 +281,7 @@ public class MontiArcTool extends MontiArcToolTOP {
         Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
           ZipEntry entry = entries.nextElement();
-          File entryDestination = new File(name, entry.getName().substring(templateName.length()));
+          File entryDestination = new File(name, entry.getName());
           if (entry.isDirectory()) {
             entryDestination.mkdirs();
           } else {
