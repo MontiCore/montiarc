@@ -4,7 +4,6 @@ package arcautomaton._ast;
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcautomaton._visitor.SCTransitionsCollector;
-import arcbasis._ast.ASTPortDeclaration;
 import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
@@ -45,7 +44,6 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     return list;
   }
 
-
   /**
    * @return a stream containing all initial states of this statechart. Note that if one initial state is declared
    * multiple times (probably by mistake) then all its declarations are contained in the stream.
@@ -76,7 +74,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
     if (this.isDelayed != null) {
       return this.isDelayed;
     } else if (this.isPresentStereotype()) {
-      this.isDelayed = this.getStereotype().contains(ASTPortDeclaration.DELAY);
+      this.isDelayed = this.getStereotype().contains(DELAY);
       return this.isDelayed;
     } else {
       this.isDelayed = false;

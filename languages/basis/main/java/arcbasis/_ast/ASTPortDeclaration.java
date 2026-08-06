@@ -3,14 +3,11 @@ package arcbasis._ast;
 
 import de.monticore.symbols.compsymbols._symboltable.Timing;
 
-
 /**
  * Represents a port declaration. Extends {@link ASTPortDeclarationTOP} with utility functionality
  * for easy access.
  */
 public class ASTPortDeclaration extends ASTPortDeclarationTOP {
-
-  public static final String DELAY = "delayed";
 
   protected ASTPortDeclaration() {
     super();
@@ -26,10 +23,5 @@ public class ASTPortDeclaration extends ASTPortDeclarationTOP {
 
   public Timing getTiming() {
     return this.sync ? Timing.TIMED_SYNC : Timing.TIMED;
-  }
-
-  public boolean hasDelay() {
-    return this.isPresentStereotype() && this.getStereotype().streamValues()
-      .anyMatch(v -> v.getName().equals(ASTPortDeclaration.DELAY));
   }
 }
