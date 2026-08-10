@@ -16,6 +16,7 @@ dependencies {
   grammar(project(":languages:modes"))
   grammar(project(":languages:ag"))
   grammar(project(":languages:prepost"))
+  grammar(project(":languages:ucd"))
 
   implementation(seLibs.mc.c2mc)
   implementation(libs.guava)

@@ -1,0 +1,8 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+component grammar ArcUCD extends ArcBasis, UCD {
+  scope ArcUCDiagram implements ArcBehaviorElement =
+      Stereotype? "usecasediagram" "{"
+        UCDElement*
+      "}";
+}

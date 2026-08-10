@@ -42,7 +42,8 @@ grammar MontiArc extends
             Modes,
             VariableArc,
             ArcAGs,
-            ArcPrePost {
+            ArcPrePost,
+            ArcUCD {
 
   /** ASTMACompilationUnit represents the entire content of a MontiArc model
    * @attribute package The package declaration of the component model
