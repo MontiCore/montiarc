@@ -85,7 +85,7 @@ abstract class FMU2ArcCompile : DefaultTask()  {
 
     printTaskInfo.convention(false)
 
-    classPath.setFrom(project.configurations.named(montiarc.gradle.fmu2arc.GENERATOR_DEPENDENCY_CONFIG_NAME))
+    classPath.setFrom(project.configurations.named(montiarc.gradle.fmu2arc.TOOL_CLASSPATH_CONFIG_NAME))
   }
 
   fun javaOutputDir(): Provider<Directory> {

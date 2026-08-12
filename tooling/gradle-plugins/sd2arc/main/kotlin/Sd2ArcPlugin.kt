@@ -15,7 +15,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
-const val GENERATOR_DEPENDENCY_CONFIG_NAME = "sd2arcGenerator"
+const val TOOL_CLASSPATH_CONFIG_NAME = "sd2arcTool"
 
 const val SD2ARC_TOOL_CLASS = "de.monticore.sd2arc.SD2ArcTool"
 
@@ -58,13 +58,15 @@ class Sd2ArcPlugin : Plugin<Project> {
 
   private fun addGeneratorDependency() = with (project) {
     // Add a configuration to store the classpath for executing the sd2arc generator
-    configurations.create(GENERATOR_DEPENDENCY_CONFIG_NAME) {
+    configurations.create(TOOL_CLASSPATH_CONFIG_NAME) {
       it.isCanBeResolved = true  // Necessary so that gradle can actually find a jar artifact
-      it.isCanBeConsumed = false  // We do not use this configuration for publishing
+      it.isCanBeConsumed = false  // The configuration should not be published, its internal to the compile task impl
+      it.isCanBeDeclared = false // The user should not be able to declare new dependencies in this configuration
+      it.isVisible = false // Should not be visible outside the project
     }
 
     // Add a dependency on the sd2arc jar
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
+    dependencies.addProvider(TOOL_CLASSPATH_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
   private fun getSourceSetsOf(project: Project): SourceSetContainer {

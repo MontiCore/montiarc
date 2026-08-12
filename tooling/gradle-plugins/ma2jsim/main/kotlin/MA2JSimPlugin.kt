@@ -17,7 +17,7 @@ import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.api.tasks.testing.Test
 import org.gradle.jvm.tasks.Jar
 
-const val GENERATOR_DEPENDENCY_CONFIG_NAME = "maGenerator"
+const val TOOL_CLASSPATH_CONFIG_NAME = "ma2jsimTool"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JSimTool"
 
@@ -98,13 +98,15 @@ class MA2JSimPlugin : Plugin<Project> {
 
   private fun addGeneratorDependency() = with (project) {
     // Add a configuration to store the classpath for executing the ma2java generator
-    configurations.create(GENERATOR_DEPENDENCY_CONFIG_NAME) {
+    configurations.create(TOOL_CLASSPATH_CONFIG_NAME) {
       it.isCanBeResolved = true  // Necessary so that gradle can actually find a jar artifact
-      it.isCanBeConsumed = false  // We do not use this configuration for publishing
+      it.isCanBeConsumed = false  // The configuration should not be published, its internal to the compile task impl
+      it.isCanBeDeclared = false // The user should not be able to declare new dependencies in this configuration
+      it.isVisible = false // Should not be visible outside the project
     }
 
-    // Add a dependency on the ma2java jar
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
+    // Add a dependency on the ma2jsim jar
+    dependencies.addProvider(TOOL_CLASSPATH_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
   private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {

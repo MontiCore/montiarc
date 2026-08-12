@@ -13,7 +13,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
-const val GENERATOR_DEPENDENCY_CONFIG_NAME = "cd2pojoGenerator"
+const val TOOL_CLASSPATH_CONFIG_NAME = "cd2pojoTool"
 
 const val CD2POJO_TOOL_CLASS = "de.monticore.cd2pojo.CD2PojoTool"
 
@@ -35,7 +35,7 @@ class Cd2PojoPlugin : Plugin<Project> {
     with (project) {
       pluginManager.apply("java-base")
 
-      addGeneratorDependency()
+      addToolClasspath()
 
       getSourceSetsOf(project).all { sourceSet ->
         // Adding an entry for cd2pojo to all source sets and creating compile tasks from them
@@ -48,15 +48,17 @@ class Cd2PojoPlugin : Plugin<Project> {
     }
   }
 
-  private fun addGeneratorDependency() = with (project) {
+  private fun addToolClasspath() = with (project) {
     // Add a configuration to store the classpath for executing the cd2pojo generator
-    configurations.create(GENERATOR_DEPENDENCY_CONFIG_NAME) {
+    configurations.create(TOOL_CLASSPATH_CONFIG_NAME) {
       it.isCanBeResolved = true  // Necessary so that gradle can actually find a jar artifact
-      it.isCanBeConsumed = false  // We do not use this configuration for publishing
+      it.isCanBeConsumed = false  // The configuration should not be published, its internal to the compile task impl
+      it.isCanBeDeclared = false // The user should not be able to declare new dependencies in this configuration
+      it.isVisible = false // Should not be visible outside the project
     }
 
     // Add a dependency on the cd2pojo jar
-    dependencies.addProvider(GENERATOR_DEPENDENCY_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
+    dependencies.addProvider(TOOL_CLASSPATH_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
   private fun getSourceSetsOf(project: Project): SourceSetContainer {

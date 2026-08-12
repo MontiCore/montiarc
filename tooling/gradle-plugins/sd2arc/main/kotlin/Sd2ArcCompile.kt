@@ -89,7 +89,7 @@ abstract class Sd2ArcCompile : DefaultTask() {
     debugTask.convention(false)
     debugPort.convention("5005")
 
-    classPath.setFrom(project.configurations.named(GENERATOR_DEPENDENCY_CONFIG_NAME))
+    classPath.setFrom(project.configurations.named(TOOL_CLASSPATH_CONFIG_NAME))
   }
 
   fun montiarcOutputDir(): Provider<Directory> {
