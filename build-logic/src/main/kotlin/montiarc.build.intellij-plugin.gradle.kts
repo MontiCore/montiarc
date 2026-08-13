@@ -21,7 +21,7 @@ val seLibs = the<LibrariesForSeLibs>()
 dependencies {
   implementation(seLibs.mc.lsp.intellij.get())
   intellijPlatform {
-    intellijIdeaCommunity("2024.2")
+    intellijIdeaCommunity("2025.2")
 
     bundledPlugin("com.intellij.java")
     plugin("com.redhat.devtools.lsp4ij", "0.7.0")

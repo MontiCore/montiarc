@@ -39,11 +39,13 @@ tasks.named<DependencyUpdatesTask>("dependencyUpdates").configure {
   reportfileName = "dependency-updates"
 
   rejectVersionIf {
-    isNonStable(candidate.version) && !isNonStable(currentVersion)
+    (isNonStable(candidate.version) && !isNonStable(currentVersion))
+        || (candidate.group == "com.jetbrains.intellij.java"
+        && candidate.module == "java-compiler-ant-tasks")
   }
 }
 
-fun isNonStable(version: String): Boolean {
+private fun isNonStable(version: String): Boolean {
   val stableKeyword = listOf("RELEASE", "FINAL", "GA").any { version.contains(it) }
   val regex = Regex("^[0-9,.v-]+(-r)?$")
   return !stableKeyword && !regex.matches(version)
