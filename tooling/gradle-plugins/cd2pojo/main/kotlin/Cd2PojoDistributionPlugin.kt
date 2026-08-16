@@ -19,9 +19,6 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
-const val CD2POJO_API_SYMBOL_USAGE = "cd2pojo-api"
-const val CD2POJO_SYMBOLS_BASE_CLASSIFIER = "cd2pojoSymbols"
-
 @Suppress("unused")
 class Cd2PojoDistributionPlugin : Plugin<Project> {
 
@@ -277,9 +274,3 @@ val SourceSet.cd2pojoOutgoingSymbolsConfigName: String
 val SourceSet.cd2PojoSymbolsJarTaskName: String
   get() = getTaskName("cd2Pojo", "symbolsJar")
 
-val SourceSet.cdSymbolsJarClassifierName: String
-  get() = if (SourceSet.isMain(this)) {
-      CD2POJO_SYMBOLS_BASE_CLASSIFIER
-    } else {
-      "${this.name}-$CD2POJO_SYMBOLS_BASE_CLASSIFIER"
-    }

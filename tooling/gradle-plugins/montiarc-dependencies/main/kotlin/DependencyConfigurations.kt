@@ -33,6 +33,34 @@ val SourceSet.montiarcOutgoingSymbolsConfigurationName: String
   }
 
 /**
+ * Name of the configuration used to declare dependencies on MontiArc model projects.
+ *
+ * For example, this is `montiarc` for `main` and `testMontiarc` for `test`.
+ */
+val SourceSet.montiarcConfigName: String
+  get() = nameMontiarcConfig()
+
+/**
+ * Name of the resolvable configuration containing the model symbols required while compiling
+ * MontiArc source models that depend on other MontiArc models.
+ *
+ * For example, this is `montiarcSymbolpath` for `main` and `testMontiarcSymbolpath` for `test`.
+ */
+val SourceSet.montiarcSymbolpathConfigName: String
+  get() = nameMontiarcConfig("Symbolpath")
+
+/**
+ * Name of the consumable configuration exposing compiled MontiArc symbols.
+ *
+ * For example, this is `montiarcApiElements` for `main` and `testMontiarcApiElements` for `test`.
+ */
+val SourceSet.montiarcApiElementsConfigName: String
+  get() = nameMontiarcConfig("ApiElements")
+
+private fun SourceSet.nameMontiarcConfig(suffix: String = ""): String =
+  if (SourceSet.isMain(this)) "montiarc$suffix" else "${name}Montiarc$suffix"
+
+/**
  * Adds the gradle module attributes to the configuration that mark it as a jar that contains .arcsym models.
  */
 fun addMontiarcSymbolJarAttributesTo(config: Configuration, project: Project) = with (project) {

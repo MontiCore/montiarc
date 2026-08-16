@@ -56,6 +56,57 @@ val SourceSet.fmu2arc4MaCompSymbolDependencyConfigName
       "${this.name}FMU2arc4montiarcCompSymbolDependencies"
     }
 
+/**
+ * Name of the configuration used to declare fmu dependencies of MontiArc models.
+ *
+ * For example, this is `fmu2arc4montiarc` for `main` and `testFmu2arc4montiarc` for `test`.
+ */
+val SourceSet.fmu2arc4MaConfigName: String
+  get() = nameFMU4MaConfig()
+
+/**
+ * Name of the resolvable configuration containing the fmu files required while compiling the
+ * MontiArc models that declare a dependency via `fmu2arc4montiarc`.
+ *
+ * For example, this is `fmu2arc4montiarcModelpath` for `main` and
+ * `testFmu2arc4montiarcModelpath` for `test`.
+ */
+val SourceSet.fmu2arc4MaModelpathConfigName: String
+  get() = nameFMU4MaConfig("Modelpath")
+
+/**
+ * Name of the resolvable configuration containing the fmu symbols required while compiling the
+ * MontiArc models that declare a dependency via `fmu2arc4montiarc`.
+ *
+ * For example, this is `fmu2arc4montiarcSymbolpath` for `main` and
+ * `testFmu2arc4montiarcSymbolpath` for `test`.
+ */
+val SourceSet.fmu2arc4MaSymbolpathConfigName: String
+  get() = nameFMU4MaConfig("Symbolpath")
+
+/**
+ * Name of the resolvable configuration containing the montiarc component symbols published by
+ * fmu2arc-declared projects, so consumers of `fmu2arc4montiarc(...)` can import generated wrapper
+ * components directly.
+ *
+ * For example, this is `fmu2arc4montiarcCompSymbolpath` for `main` and
+ * `testFmu2arc4montiarcCompSymbolpath` for `test`.
+ */
+val SourceSet.fmu2arc4MaCompSymbolpathConfigName: String
+  get() = nameFMU4MaConfig("CompSymbolpath")
+
+/**
+ * Name of the consumable configuration exposing the transitive fmu dependencies of the MontiArc
+ * models.
+ *
+ * For example, this is `fmu2arc4montiarcApiElements` for `main` and
+ * `testFmu2arc4montiarcApiElements` for `test`.
+ */
+val SourceSet.fmu2arc4MaApiElementsConfigName: String
+  get() = nameFMU4MaConfig("ApiElements")
+
+private fun SourceSet.nameFMU4MaConfig(suffix: String = ""): String =
+  if (SourceSet.isMain(this)) "fmu2arc4montiarc$suffix" else "${name}FMU2arc4montiarc$suffix"
 
 /**
  * The publication metadata for the set of transitive dependencies that the MontiArc models have.

@@ -19,11 +19,6 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
-const val FMU2ARC_API_SYMBOL_USAGE = "fmu2arcSymbol-for-montiarc-api"
-const val FMU2ARC_API_FILE_USAGE = "fmu2arc-api-file-usages"
-const val FMU2ARC_SYMBOLS_BASE_CLASSIFIER = "fmu2arcSymbols"
-const val FMU2ARC_FILES_BASE_CLASSIFIER = "fmu2arcFiles"
-
 @Suppress("unused")
 class FMU2ArcDistributionPlugin  : Plugin<Project> {
 
