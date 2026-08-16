@@ -11,8 +11,6 @@ import org.gradle.api.tasks.SourceSet
 
 const val FMU2ARC_4_MONTIARC_USAGE = "fmu2arc-for-montiarc-api"
 
-const val FMU2ARC_SYMBOL_USAGE = "fmu2arcSymbol-for-montiarc-api"
-
 val SourceSet.fmu2arc4MaDeclarationConfigName
   get() =
     if (SourceSet.isMain(this)) {
@@ -131,7 +129,7 @@ fun addFMU4maJarAttributesTo(config: Configuration, project: Project) = with(pro
 fun addFMUSymbolAttributesTo(config: Configuration, project: Project) = with(project) {
   config.attributes {
     it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
-    it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, FMU2ARC_SYMBOL_USAGE))
+    it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, FMU2ARC_API_SYMBOL_USAGE))
     it.attribute(Bundling.BUNDLING_ATTRIBUTE, project.objects.named(Bundling::class.java, Bundling.EXTERNAL))
     it.attribute(
       LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,

@@ -6,12 +6,12 @@ import org.gradle.api.tasks.SourceSet
 /**
  * Usage value identifying variants that contain compiled FMU2Arc symbols.
  */
-const val FMU2ARC_API_SYMBOL_USAGE = "fmu2arcSymbol-for-montiarc-api"
+const val FMU2ARC_API_SYMBOL_USAGE = "fmu2arc-api"
 
 /**
  * Usage value identifying variants that contain FMU files.
  */
-const val FMU2ARC_API_FILE_USAGE = "fmu2arc-api-file-usages"
+const val FMU2ARC_API_FILE_USAGE = "fmu2arc-files"
 
 /**
  * Base classifier for JARs containing compiled FMU2Arc symbols.
