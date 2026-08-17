@@ -23,8 +23,18 @@ public class ${fmu.getName()}Compute
   Fmu fmu;
   CoSimulationSlave fmuInstance;
   {
-    try{
-      fmuFile = new File("${fmuFile.toURI().getPath()}");
+    try {
+      String fmuResourcePath = "/${packageName}/${fmuFile.getName()}";
+      java.io.InputStream fmuInputStream = getClass().getResourceAsStream(fmuResourcePath);
+      if (fmuInputStream == null) {
+        throw new IOException("FMU resource '" + fmuResourcePath + "' not found on classpath");
+      }
+
+      fmuFile = java.io.File.createTempFile("${fmuFile.getName()?keep_before_last('.')}", ".fmu");
+      fmuFile.deleteOnExit();
+      java.nio.file.Files.copy(fmuInputStream, fmuFile.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+      fmuInputStream.close();
+
       fmu = Fmu.from(fmuFile);
       fmuInstance = fmu.asCoSimulationFmu().newInstance();
     } catch (IOException e) {
@@ -46,7 +56,7 @@ public class ${fmu.getName()}Compute
     this.fmuInstance.setupExperiment(0.0, 0.0, 0.0);
     this.fmuInstance.enterInitializationMode();
     <#list fixedParamVars as v>
-      fmuInstance.write${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()}}, new ${toJavaType(v.getType())}[]{${sanitizeName(v.getName())}});
+      fmuInstance.write${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()?c}}, new ${toJavaType(v.getType())}[]{${sanitizeName(v.getName())}});
     </#list>
     this.fmuInstance.exitInitializationMode();
     {
@@ -62,7 +72,7 @@ public class ${fmu.getName()}Compute
 <#list inputVars as v> ${toJavaType(v.getType())} ${sanitizeName(v.getName())}<#if v_has_next>, </#if></#list>) {
     double dt = Simulation.nanosecondsPerTick / 1_000_000_000.0;
 <#list inputVars as v>
-  fmuInstance.write${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()}}, new ${toJavaType(v.getType())}[]{${sanitizeName(v.getName())}});
+  fmuInstance.write${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()?c}}, new ${toJavaType(v.getType())}[]{${sanitizeName(v.getName())}});
 </#list>
 <#list outputVars as v>
   ${toJavaType(v.getType())}[] ${sanitizeName(v.getName())}arr = new ${toJavaType(v.getType())}[1];
@@ -70,7 +80,7 @@ public class ${fmu.getName()}Compute
     fmuInstance.doStep(t, dt);
     {
 <#list outputVars as v>
-    fmuInstance.read${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()}}, ${sanitizeName(v.getName())}arr);
+    fmuInstance.read${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()?c}}, ${sanitizeName(v.getName())}arr);
     context.port_${sanitizeName(v.getName())}().send(${sanitizeName(v.getName())}arr[0]);
 </#list>
     }
@@ -87,7 +97,7 @@ public class ${fmu.getName()}Compute
   <#list tunParamVars as v>
   @Override
   public void msg_${sanitizeName(v.getName())}(${toJavaType(v.getType())} msg) {
-    fmuInstance.write${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()}}, new ${toJavaType(v.getType())}[]{msg});
+    fmuInstance.write${toFmi4jType(v.getType())}(new long[]{${v.getValueReference()?c}}, new ${toJavaType(v.getType())}[]{msg});
   }
   </#list>
   @Override
