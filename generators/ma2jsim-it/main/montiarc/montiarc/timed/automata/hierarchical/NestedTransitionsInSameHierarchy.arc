@@ -75,9 +75,9 @@ component NestedTransitionsInSameHierarchy {
     c -> cz  [i.equals("c -> cz")]  i / o = "c -> cz";
     c -> czz [i.equals("c -> czz")] i / o = "c -> czz";
 
-    d -> dz   [i.equals("d -> dz")]    i / o = "d -> dz";    dzz_z -> dzz_z / o = "dzz_z";
+    d -> dz   [i.equals("d -> dz")]    i / o = "d -> dz";
     d -> dzz  [i.equals("d -> dzz")]   i / o = "d -> dzz";
-    dd -> ddz [i.equals("dd -> ddz")]  i / o = "dd -> ddz";  ddz_z -> ddz_z / o = "ddz_z";
+    dd -> ddz [i.equals("dd -> ddz")]  i / o = "dd -> ddz";
 
     f -> ffz        [i.equals("f -> ffz")]        i / o = "f -> ffz";
     f -> fzz_z      [i.equals("f -> fzz_z")]      i / o = "f -> fzz_z";

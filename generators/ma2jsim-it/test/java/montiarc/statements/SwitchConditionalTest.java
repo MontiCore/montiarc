@@ -12,7 +12,7 @@ import static montiarc.rte.msg.MessageFactory.msg;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JSimTest
-class SwitchConditionTest {
+class SwitchConditionalTest {
 
   private SwitchConditionalComp sut;
   private PortObserver<Integer> port_o;
@@ -52,6 +52,22 @@ class SwitchConditionTest {
   void testChar(char i, int o) {
     // When
     sut.port_c().receive(msg(i));
+
+    sut.runToCompletion();
+
+    // Then
+    assertThat(port_o.getObservedMessages()).containsExactly(msg(o));
+  }
+
+  @ParameterizedTest
+  @CsvSource(value = {
+    "a, 1",
+    "b, 2",
+    "0, -1"
+  })
+  void testString(String i, int o) {
+    // When
+    sut.port_s().receive(msg(i));
 
     sut.runToCompletion();
 

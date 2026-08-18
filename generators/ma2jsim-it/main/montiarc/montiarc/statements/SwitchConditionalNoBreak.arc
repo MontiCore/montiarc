@@ -35,6 +35,13 @@ component SwitchConditionalNoBreak {
         default: o = -1;
       }
     }
+    S -> S s / {
+      switch (s) {
+        case "a": o = 1;
+        case "b": o = 2;
+        default: o = -1;
+      }
+    }
     S -> S e / {
       switch (e) {
         case OnOff.ON: o = 1;

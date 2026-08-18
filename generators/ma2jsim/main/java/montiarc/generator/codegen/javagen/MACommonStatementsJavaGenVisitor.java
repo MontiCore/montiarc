@@ -50,7 +50,7 @@ public class MACommonStatementsJavaGenVisitor extends MCCommonStatementsJavaGenV
         state.startParentheses();
 
         if (label instanceof ASTConstantExpressionSwitchLabel constantLabel &&
-          SymTypeRelations.isString(TypeCheck3.typeOf(constantLabel.getConstant()))) {
+          SymTypeRelations.isStringOrSubType(TypeCheck3.typeOf(constantLabel.getConstant()))) {
           // Override for string literals
 
           constantLabel.getConstant().accept(this.getTraverser());

@@ -44,6 +44,15 @@ class SwitchFallThroughFixTest {
     sut.port_c().receive(msg('z'));
     sut.runToCompletion();
 
+    sut.port_s().receive(msg("a"));
+    sut.runToCompletion();
+
+    sut.port_s().receive(msg("b"));
+    sut.runToCompletion();
+
+    sut.port_s().receive(msg("z"));
+    sut.runToCompletion();
+
     sut.port_e().receive(msg(OnOff.ON));
     sut.runToCompletion();
 
@@ -55,6 +64,7 @@ class SwitchFallThroughFixTest {
       msg(1), msg(1),
       msg(2), msg(-1),
       msg(-1), msg(-1),
+      msg(1), msg(2), msg(-1),
       msg(1), msg(2), msg(-1),
       msg(1), msg(2)
     );
@@ -89,6 +99,15 @@ class SwitchFallThroughFixTest {
     sutNoBreaks.port_c().receive(msg('z'));
     sutNoBreaks.runToCompletion();
 
+    sutNoBreaks.port_s().receive(msg("a"));
+    sutNoBreaks.runToCompletion();
+
+    sutNoBreaks.port_s().receive(msg("b"));
+    sutNoBreaks.runToCompletion();
+
+    sutNoBreaks.port_s().receive(msg("z"));
+    sutNoBreaks.runToCompletion();
+
     sutNoBreaks.port_e().receive(msg(OnOff.ON));
     sutNoBreaks.runToCompletion();
 
@@ -100,6 +119,7 @@ class SwitchFallThroughFixTest {
       msg(1), msg(1),
       msg(2), msg(-1),
       msg(-1), msg(-1),
+      msg(1), msg(2), msg(-1),
       msg(1), msg(2), msg(-1),
       msg(1), msg(2)
     );
