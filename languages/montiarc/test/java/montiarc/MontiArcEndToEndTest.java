@@ -13,6 +13,7 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -1154,6 +1155,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("SwitchCaseIncompatibleStringTest6",
         mpk(PKG_STMT, "SwitchCaseIncompatible6.arc"),
         fn(ERROR, PKG_STMT, "SwitchCaseIncompatible6.arc", 14, 14, 14, 19, SWITCH_CASE_INCOMPATIBLE, "R\"hello\"", "int")
+      ),
+      arg("ImportingTheSameComponentFromDifferentLibrariesTest",
+        mpk("library", "library1/pkg/SubLib.arc", "library2/pkg/SubLib.arc", "ImportFromTwoLibraries.arc"),
+        fn(ERROR, "library", "ImportFromTwoLibraries.arc", 7, 3, 7, 9, MCError.AMBIGUOUS_COMPONENT_REFERENCE, "pkg.SubLib", "pkg.SubLib")
       )
     );
   }

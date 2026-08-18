@@ -14,6 +14,7 @@ import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcArtifactScope;
 import montiarc._symboltable.MontiArcArtifactScope;
 import montiarc.util.Error;
+import montiarc.util.MCError;
 import montiarc.util.MontiArcError;
 import org.apache.commons.cli.CommandLine;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -21,6 +22,7 @@ import org.codehaus.commons.nullanalysis.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -981,5 +983,34 @@ public class MontiArcToolTest extends MontiArcTestBase {
       Arguments.of((Object) new String[]{"-i", PATH + "/pkgAndSubpathMatch/path/sub1/Comp1.arc"}),
       Arguments.of((Object) new String[]{"-i", PATH + "/pkgAndSubpathMatch/path/sub2/Comp1.arc"})
     );
+  }
+
+  @Test
+  public void expectedErrorForLibraryImport(@TempDir Path tempDir) {
+    // Given
+    Path lib1Model = Path.of(TEST_RESOURCE, "endtoend", "library", "library1");
+    Path lib2Model = Path.of(TEST_RESOURCE, "endtoend", "library", "library2");
+    Path mainModel = Path.of(TEST_RESOURCE, "endtoend", "library", "ImportFromTwoLibraries.arc");
+
+    Path symbols1 = tempDir.resolve("symbols1");
+    Path symbols2 = tempDir.resolve("symbols2");
+
+    MontiArcTool tool = new MontiArcTool();
+
+    // When
+    tool.run(new String[]{"-i", lib1Model.toString(), "-s", symbols1.toString()});
+    Assertions.assertTrue(Log.getFindings().isEmpty(), Log.getFindings().toString());
+
+    tool.run(new String[]{"-i", lib2Model.toString(), "-s", symbols2.toString()});
+    Assertions.assertTrue(Log.getFindings().isEmpty(), Log.getFindings().toString());
+
+    tool.run(new String[]{
+      "-i", mainModel.toString(),
+      "-path", symbols1.toString(), symbols2.toString()
+    });
+
+    // Then
+    assertThat(getLoggedErrorCodes()).as(Log.getFindings().toString())
+      .containsExactlyInAnyOrder(getErrorCodes(MCError.AMBIGUOUS_MCPATH_ENTRIES, MCError.MISSING_COMPONENT, MontiArcError.IMPORTED_SYMBOL_MISSING));
   }
 }
