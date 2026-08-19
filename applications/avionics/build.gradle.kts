@@ -23,4 +23,5 @@ tasks.compileCd2pojo {
 
 tasks.compileMontiarc {
   useClass2Mc.set(true)
+  checkVariability.set(true)
 }
