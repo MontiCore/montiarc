@@ -3483,26 +3483,26 @@ They are used throughout the language, such as in arguments for component instan
 <h2 id="working-with-objects">Working with Objects<a class="headerlink" href="#working-with-objects" title="Permanent link">&para;</a></h2>
 <p>The following examples demonstrate how to use expressions to create objects, access fields, and invoke methods.</p>
 <div class="highlight"><pre><span></span><code><span class="c1">// 1. Object Creation</span>
-<span class="c1">// Declares a variable &#39;p&#39; of type Person and evaluates the creation expression</span>
+<span class="c1">// Declares a variable 'p' of type Person and evaluates the creation expression</span>
 <span class="n">Person</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Person</span><span class="p">.</span><span class="na">Person</span><span class="p">();</span>
 
 <span class="c1">// 2. Field Access &amp; Assignment </span>
-<span class="c1">// Accesses fields on variable &#39;p&#39; and assigns new values to them</span>
+<span class="c1">// Accesses fields on variable 'p' and assigns new values to them</span>
 <span class="n">p</span><span class="p">.</span><span class="na">age</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">35</span><span class="p">;</span>
-<span class="n">p</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;Max&quot;</span><span class="p">;</span>
+<span class="n">p</span><span class="p">.</span><span class="na">name</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Max"</span><span class="p">;</span>
 
-<span class="c1">// Creates a new Role object and assigns it to the &#39;role&#39; field</span>
+<span class="c1">// Creates a new Role object and assigns it to the 'role' field</span>
 <span class="n">p</span><span class="p">.</span><span class="na">role</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Role</span><span class="p">.</span><span class="na">Role</span><span class="p">();</span>
 
-<span class="c1">// Chained field access: accesses the &#39;id&#39; field of the &#39;role&#39; field</span>
+<span class="c1">// Chained field access: accesses the 'id' field of the 'role' field</span>
 <span class="n">p</span><span class="p">.</span><span class="na">role</span><span class="p">.</span><span class="na">id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5</span><span class="p">;</span><span class="w"> </span>
 
 <span class="c1">// 3. Field Reading</span>
-<span class="c1">// Accesses the &#39;age&#39; field and stores its evaluated result in a new variable</span>
+<span class="c1">// Accesses the 'age' field and stores its evaluated result in a new variable</span>
 <span class="kt">int</span><span class="w"> </span><span class="n">currentAge</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="na">age</span><span class="p">;</span>
 
 <span class="c1">// 4. Method Invocation</span>
-<span class="c1">// Invokes the getFullName() method on the object referenced by &#39;p&#39;</span>
+<span class="c1">// Invokes the getFullName() method on the object referenced by 'p'</span>
 <span class="n">p</span><span class="p">.</span><span class="na">getFullName</span><span class="p">();</span>
 </code></pre></div>
 <h2 id="operators">Operators<a class="headerlink" href="#operators" title="Permanent link">&para;</a></h2>

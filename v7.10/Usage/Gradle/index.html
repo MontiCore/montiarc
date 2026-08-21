@@ -3504,7 +3504,7 @@ You can also <a href="#further-references">change the location</a> in which mode
 <span class="n">pluginManagement</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">repositories</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="n">maven</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="p">)</span>
+<span class="w">      </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">"https://nexus.se.rwth-aachen.de/content/groups/public/"</span><span class="p">)</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
@@ -3516,7 +3516,7 @@ You can also <a href="#further-references">change the location</a> in which mode
 <span class="n">pluginManagement</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
 <span class="w">    </span><span class="n">maven</span><span class="w"> </span><span class="o">{</span>
-<span class="w">      </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="o">)</span>
+<span class="w">      </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">"https://nexus.se.rwth-aachen.de/content/groups/public/"</span><span class="o">)</span>
 <span class="w">    </span><span class="o">}</span>
 <span class="w">  </span><span class="o">}</span>
 <span class="o">}</span>
@@ -3529,30 +3529,30 @@ You can also <a href="#further-references">change the location</a> in which mode
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle.kts</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span><span class="w">  </span><span class="c1">// Optional, but recommended</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"java"</span><span class="p">)</span><span class="w">  </span><span class="c1">// Optional, but recommended</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"montiarc-jsim"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"VERSION_YOU_WANT_TO_USE"</span>
 <span class="p">}</span>
 
 <span class="c1">// Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
 <span class="c1">// Therefore we have to add this repo to our build.</span>
 <span class="n">repositories</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">maven</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="p">(</span><span class="s">"https://nexus.se.rwth-aachen.de/content/groups/public/"</span><span class="p">)</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span><span class="w">  </span><span class="c1">// Optional, but recommended</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc-jsim&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"java"</span><span class="w">  </span><span class="c1">// Optional, but recommended</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"montiarc-jsim"</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">"VERSION_YOU_WANT_TO_USE"</span>
 <span class="o">}</span>
 
 <span class="c1">// Required RTE classes are in the Maven repo of the chair of Software Engineering at RWTH Aachen.</span>
 <span class="c1">// Therefore we have to add this repo to our build.</span>
 <span class="n">repositories</span><span class="w"> </span><span class="o">{</span>
 <span class="w">  </span><span class="n">maven</span><span class="w"> </span><span class="o">{</span>
-<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">&quot;https://nexus.se.rwth-aachen.de/content/groups/public/&quot;</span><span class="o">)</span>
+<span class="w">    </span><span class="n">url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">uri</span><span class="o">(</span><span class="s2">"https://nexus.se.rwth-aachen.de/content/groups/public/"</span><span class="o">)</span>
 <span class="w">  </span><span class="o">}</span>
 <span class="o">}</span>
 </code></pre></div>
@@ -3582,15 +3582,15 @@ Check that, as a result, the Java class <code>MyComp</code> should be generated 
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle.kts</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"java"</span><span class="p">)</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"montiarc-jsim"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"VERSION_YOU_WANT_TO_USE"</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc-jsim&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"java"</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"montiarc-jsim"</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">"VERSION_YOU_WANT_TO_USE"</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
@@ -3603,17 +3603,17 @@ To do this, add the cd2pojo plugin to the <code>plugins</code> block within the 
 <div class="tabbed-content">
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle.kts</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;java&quot;</span><span class="p">)</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;cd2pojo&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"java"</span><span class="p">)</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"montiarc-jsim"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"VERSION_YOU_WANT_TO_USE"</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"cd2pojo"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"VERSION_YOU_WANT_TO_USE"</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
 <div class="tabbed-block">
 <div class="highlight"><span class="filename">build.gradle</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="o">{</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;java&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;montiarc-jsim&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">&quot;cd2pojo&quot;</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">&quot;VERSION_YOU_WANT_TO_USE&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"java"</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"montiarc-jsim"</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">"VERSION_YOU_WANT_TO_USE"</span>
+<span class="w">  </span><span class="n">id</span><span class="w"> </span><span class="s2">"cd2pojo"</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s2">"VERSION_YOU_WANT_TO_USE"</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
@@ -3665,9 +3665,9 @@ Check that no error occurs.
 Moreover, verify that the Java class <code>Status</code> has been generated to <code>build/cd2pojo/main/java/com/example/MyTypes/Status.java</code>.
 Note: If an error occurs, try running Gradle's <code>clean</code> task before. </p>
 <h2 id="using-java-types">Using java types<a class="headerlink" href="#using-java-types" title="Permanent link">&para;</a></h2>
-<p>You can use JDK classes from MontiArc models by setting the <code>useClass2mc</code> option of the generation task in Gradle's build script:
+<p>You can use JDK classes from MontiArc models by setting the <code>useClass2Mc</code> option of the generation task in Gradle's build script:
 <div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="c1">// The syntax is the same for Kotlin and Groovy build scripts</span>
-<span class="n">task</span><span class="p">.</span><span class="na">compileMontiarc</span><span class="w"> </span><span class="p">{</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">compileMontiarc</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></p>
@@ -3686,7 +3686,7 @@ Check that no error occurs.</p>
 <p>Java types can be used similarly from within class diagram models.
 To this end, the <code>useClass2Mc</code> option has to be set for the <code>compileCd2pojo</code> task that under the hood processes the class diagram models:
 <div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="c1">// Add the following to your build file:</span>
-<span class="n">task</span><span class="p">.</span><span class="na">compileCd2pojo</span><span class="w"> </span><span class="p">{</span>
+<span class="n">tasks</span><span class="p">.</span><span class="na">compileCd2pojo</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div></p>
@@ -3698,7 +3698,7 @@ Otherwise, you will encounter errors.</p>
 <h2 id="further-references">Further references<a class="headerlink" href="#further-references" title="Permanent link">&para;</a></h2>
 <p>Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.
 It also enables fine configuration options.
-You can find comprehensive information about the MontiArc plugin under <a href="MontiArc/">MontiArc Gradle Plugin</a> and about the cd2pojo plugin under <a href="CD2Pojo/">Cd2pojo Gradle Plugin</a>.</p>
+You can find comprehensive information about the MontiArc plugin under <a href="MontiArc/">MontiArc Gradle Plugin</a> and about the cd2pojo plugin under <a href="CD2Pojo/">CD2Pojo Gradle Plugin</a>.</p>
 
 
 

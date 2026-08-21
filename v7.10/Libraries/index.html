@@ -3417,7 +3417,7 @@ This guide assumes that you're using <a href="../Usage/Gradle/">Gradle</a> to ma
 <div class="tabbed-block">
 <div class="highlight"><pre><span></span><code><span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="c1">// montiarc + Dependency Notation - GroupID : ArtifactID (Name) : Version</span>
-<span class="w">    </span><span class="n">montiarc</span><span class="p">(</span><span class="err">&#39;</span><span class="o">&lt;</span><span class="n">group</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="err">&#39;</span><span class="p">)</span>
+<span class="w">    </span><span class="n">montiarc</span><span class="p">(</span><span class="err">'</span><span class="o">&lt;</span><span class="n">group</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">name</span><span class="o">&gt;</span><span class="p">:</span><span class="o">&lt;</span><span class="n">version</span><span class="o">&gt;</span><span class="err">'</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
@@ -3433,18 +3433,18 @@ and create a publishing config.</p>
 <div class="highlight"><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">`java-library`</span>
 <span class="w">  </span><span class="n">`maven-publish`</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;montiarc-jsim&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;7.10.0-SNAPSHOT&quot;</span>
-<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">&quot;cd2pojo&quot;</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">&quot;7.10.0-SNAPSHOT&quot;</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"montiarc-jsim"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"7.10.0-SNAPSHOT"</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"cd2pojo"</span><span class="p">)</span><span class="w"> </span><span class="n">version</span><span class="w"> </span><span class="s">"7.10.0-SNAPSHOT"</span>
 <span class="p">}</span>
 
 <span class="n">publishing</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">publications</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="n">create</span><span class="o">&lt;</span><span class="n">MavenPublication</span><span class="o">&gt;</span><span class="p">(</span><span class="s">&quot;maven&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">groupId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;de.montiarc.sample&quot;</span>
-<span class="w">      </span><span class="n">artifactId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;library&quot;</span>
-<span class="w">      </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;1.0&quot;</span>
+<span class="w">    </span><span class="n">create</span><span class="o">&lt;</span><span class="n">MavenPublication</span><span class="o">&gt;</span><span class="p">(</span><span class="s">"maven"</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">      </span><span class="n">groupId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"de.montiarc.sample"</span>
+<span class="w">      </span><span class="n">artifactId</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"library"</span>
+<span class="w">      </span><span class="n">version</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"1.0"</span>
 
-<span class="w">      </span><span class="n">from</span><span class="p">(</span><span class="n">components</span><span class="o">[</span><span class="s">&quot;java&quot;</span><span class="o">]</span><span class="p">)</span>
+<span class="w">      </span><span class="n">from</span><span class="p">(</span><span class="n">components</span><span class="o">[</span><span class="s">"java"</span><span class="o">]</span><span class="p">)</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
 <span class="p">}</span>

@@ -6499,7 +6499,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <h5 id="example_17">Example<a class="headerlink" href="#example_17" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="p">,</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">n</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">&quot;hello&quot;</span><span class="p">);</span><span class="w"> </span><span class="c1">// missing second arg</span>
+<span class="w">  </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">"hello"</span><span class="p">);</span><span class="w"> </span><span class="c1">// missing second arg</span>
 <span class="p">}</span>
 </code></pre></div>
 <h5 id="how-to-fix_8">How to fix<a class="headerlink" href="#how-to-fix_8" title="Permanent link">&para;</a></h5>
@@ -6511,7 +6511,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <h5 id="example_18">Example<a class="headerlink" href="#example_18" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">s</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// extra arg</span>
+<span class="w">  </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">"x"</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// extra arg</span>
 <span class="p">}</span>
 </code></pre></div>
 <h5 id="how-to-fix_9">How to fix<a class="headerlink" href="#how-to-fix_9" title="Permanent link">&para;</a></h5>
@@ -6529,7 +6529,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <p>The provided argument type does not match the expected parameter type.</p>
 <h5 id="example_20">Example<a class="headerlink" href="#example_20" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="n">Integer</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
-<span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">&quot;string&quot;</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
+<span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">A</span><span class="w"> </span><span class="nf">a</span><span class="p">(</span><span class="s">"string"</span><span class="p">);</span><span class="w"> </span><span class="p">}</span>
 <span class="c1">// an Integer is intended not a String value</span>
 </code></pre></div>
 <hr />
@@ -6555,7 +6555,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <h5 id="description_23">Description<a class="headerlink" href="#description_23" title="Permanent link">&para;</a></h5>
 <p>Optional configuration parameters must come after all mandatory parameters in a component or invocation. Placing an optional parameter before a required one leads to ambiguity and is disallowed.</p>
 <h5 id="example_23">Example<a class="headerlink" href="#example_23" title="Permanent link">&para;</a></h5>
-<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">Comp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">opt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">mand</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// error: optional &#39;opt&#39; before mandatory &#39;mand&#39;</span>
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">Comp</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">opt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">mand</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// error: optional 'opt' before mandatory 'mand'</span>
 </code></pre></div>
 <h5 id="how-to-fix_11">How to fix<a class="headerlink" href="#how-to-fix_11" title="Permanent link">&para;</a></h5>
 <p>Reorder the parameter list so that all mandatory parameters precede any optional ones:
@@ -6618,7 +6618,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <h5 id="example_29">Example<a class="headerlink" href="#example_29" title="Permanent link">&para;</a></h5>
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">B</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
-<span class="w">  </span><span class="n">varif</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// error: &#39;i&#39; referenced in static context</span>
+<span class="w">  </span><span class="n">varif</span><span class="p">(</span><span class="n">i</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1">// error: 'i' referenced in static context</span>
 <span class="p">}</span>
 </code></pre></div>
 <h5 id="how-to-fix_16">How to fix<a class="headerlink" href="#how-to-fix_16" title="Permanent link">&para;</a></h5>
@@ -6746,7 +6746,7 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">out</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">o</span><span class="p">;</span>
 <span class="w">  </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
 <span class="w">  </span><span class="n">B</span><span class="w"> </span><span class="nf">b</span><span class="p">(</span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// Nested assignment in a subcomponent instantiation</span>
-<span class="w">  </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w">     </span><span class="c1">// Using &#39;=&#39; instead of &#39;-&gt;&#39;</span>
+<span class="w">  </span><span class="n">o</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span><span class="w">     </span><span class="c1">// Using '=' instead of '-&gt;'</span>
 <span class="p">}</span>
 </code></pre></div>
 <hr />

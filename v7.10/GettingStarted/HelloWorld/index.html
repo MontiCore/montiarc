@@ -3605,7 +3605,7 @@
 <span class="w">  </span><span class="nt">automaton</span><span class="w"> </span><span class="p">{</span>
 <span class="w">    </span><span class="k">initial</span><span class="w"> </span><span class="kd">state</span> <span class="nc">S</span><span class="p">;</span>
 <span class="w">    </span><span class="n">S</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">S</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="n">Console</span><span class="p">.</span><span class="na">printLn</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<span class="w">      </span><span class="n">Console</span><span class="p">.</span><span class="na">printLn</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
 <span class="w">      </span><span class="n">Simulation</span><span class="p">.</span><span class="na">stop</span><span class="p">();</span>
 <span class="w">    </span><span class="p">}</span>
 <span class="w">  </span><span class="p">}</span>
@@ -3653,7 +3653,7 @@ In our example, we stay at state <code>S</code> and execute the transition body.
 <h4 id="statements">Statements<a class="headerlink" href="#statements" title="Permanent link">&para;</a></h4>
 <p>A transition body consists of multiple <a href="../../Reference/Concepts/Statements/">statements</a>. Where each ends with a semicolon <code>;</code>, which means the statement is over, and we can continue with the next one.
 Our body consists of two statements:</p>
-<p><div class="highlight"><pre><span></span><code><span class="n">Console</span><span class="p">.</span><span class="na">printLn</span><span class="p">(</span><span class="s">&quot;Hello World!&quot;</span><span class="p">);</span>
+<p><div class="highlight"><pre><span></span><code><span class="n">Console</span><span class="p">.</span><span class="na">printLn</span><span class="p">(</span><span class="s">"Hello World!"</span><span class="p">);</span>
 </code></pre></div>
 This line does most of the work in our model; it prints the string <code>"Hello World!"</code> to the console. It is a function call similar to other programming languages.
 What is printed out can be provided as an argument to the method.</p>
