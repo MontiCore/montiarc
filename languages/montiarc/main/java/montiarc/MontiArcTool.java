@@ -174,8 +174,8 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     MontiArcMill.globalScope().clear();
     MontiArcMill.globalScope().init();
-    this.initBuiltInSymbols(c2mc);
     this.initGlobalScope(p);
+    this.initBuiltInSymbols(c2mc);
     this.compile(i, pp, s, r, c2mc, novar);
   }
 
@@ -669,7 +669,9 @@ public class MontiArcTool extends MontiArcToolTOP {
     initializeStreams();
     if (c2mc) {
       this.initializeClass2MC();
-    } else {
+    }
+
+    if (MontiArcMill.globalScope().resolveType("java.lang.String").isEmpty()) {
       BasicSymbolsMill.initializeString();
     }
   }
