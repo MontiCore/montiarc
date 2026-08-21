@@ -45,7 +45,7 @@ tasks.compileMontiarc {
 }
 
 tasks.compileTestMontiarc {
-  symbolImportDir.from(tasks.compileCd2pojo.get().symbolOutputDir())
+  symbolpath.from(tasks.compileCd2pojo.get().symbolOutputDir())
   useClass2Mc.set(true)
 }
 

@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.gradle.fmu2arc
+package montiarc.gradle.montiarc
 
+import montiarc.gradle.fmu2arc.fmu2ArcFilesJarTaskName
+import montiarc.gradle.fmu2arc.fmu2ArcSymbolsJarTaskName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.component.AdhocComponentWithVariants
@@ -22,7 +24,7 @@ class TransitiveFMUPublicationPlugin : Plugin<Project> {
   override fun apply(project: Project) {
     this.project = project
     with (project) {
-      pluginManager.apply(FMUDependencies4MontiarcPlugin::class.java)
+      pluginManager.apply(FMUDependencies4MontiArcPlugin::class.java)
       pluginManager.withPlugin("java") {
         val mainSourceSet = extensions.getByType(JavaPluginExtension::class.java)
           .sourceSets
@@ -42,7 +44,7 @@ class TransitiveFMUPublicationPlugin : Plugin<Project> {
       logger.error("Internal error: Tried to create a publication for source set ${sourceSet.name}, but the " +
           "JavaPlugin is not applied!")
     }
-    val outgoingConfig = createFMU4MaOutgoingConfigFor(sourceSet)
+    val outgoingConfig = createOutgoingApiElementsConfig(sourceSet)
     connectOutgoingConfigOf(sourceSet)
 
     (components.getByName("java") as AdhocComponentWithVariants)  // .mapToOptional results in the jar
@@ -50,10 +52,10 @@ class TransitiveFMUPublicationPlugin : Plugin<Project> {
 
     // Copy the Fmu-File jar and generated Symbols jar if fmu2arc is applied
     pluginManager.withPlugin("fmu2arc") {
-      val jarTaskSym = tasks.named(sourceSet.fmu2arcSymbolsJarTaskName, Jar::class.java)
+      val jarTaskSym = tasks.named(sourceSet.fmu2ArcSymbolsJarTaskName, Jar::class.java)
       val symJar = jarTaskToPublishArtifact(jarTaskSym)
       outgoingConfig.outgoing.artifacts.add(symJar)
-      val jarTaskFile = tasks.named(sourceSet.fmu2arcFilesJarTaskName, Jar::class.java)
+      val jarTaskFile = tasks.named(sourceSet.fmu2ArcFilesJarTaskName, Jar::class.java)
       val fileJar = jarTaskToPublishArtifact(jarTaskFile)
       outgoingConfig.outgoing.artifacts.add(fileJar)
     }
@@ -63,14 +65,14 @@ class TransitiveFMUPublicationPlugin : Plugin<Project> {
    * Creates an outgoing consumable configuration meant to contain all fmu dependencies of the MontiArc models of the
    * source set.
    */
-  private fun createFMU4MaOutgoingConfigFor(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.outgoingFMU4MaDependenciesConfigName)
+  private fun createOutgoingApiElementsConfig(sourceSet: SourceSet): Configuration = with (project) {
+    val config = configurations.maybeCreate(sourceSet.fmu2arc4montiarcApiElementsConfigName)
     config.isCanBeConsumed = true
     config.isCanBeResolved = false
     config.isVisible = false
     config.description = "Publication variant with the fmu dependencies of the MontiArc models in source set " +
         "${sourceSet.name}. Moreover, a copy of the fmu jar is contained in this config."
-    addFMU4maJarAttributesTo(config, project)
+    addFMU4MAJarAttributesTo(config, project)
 
     return config
   }
@@ -79,8 +81,8 @@ class TransitiveFMUPublicationPlugin : Plugin<Project> {
    * Lets the outgoing config of the source set extend the fmu2arc4montiarc config in order to transfer its dependencies
    */
   private fun connectOutgoingConfigOf(sourceSet: SourceSet) = with (project) {
-    val fmu2arcDeclConfig = configurations.named(sourceSet.fmu2arc4MaDeclarationConfigName)
-    val outgoingFMU2arcConfig = configurations.named(sourceSet.outgoingFMU4MaDependenciesConfigName)
+    val fmu2arcDeclConfig = configurations.named(sourceSet.fmu2arc4montiarcConfigName)
+    val outgoingFMU2arcConfig = configurations.named(sourceSet.fmu2arc4montiarcApiElementsConfigName)
 
     outgoingFMU2arcConfig.configure { it.extendsFrom(fmu2arcDeclConfig.get()) }
   }

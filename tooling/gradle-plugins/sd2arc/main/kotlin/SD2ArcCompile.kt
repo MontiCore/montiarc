@@ -26,7 +26,7 @@ import org.gradle.work.InputChanges
 /**
  * A task that generates MontiArc components from sequence diagrams, using sd2arc.
  */
-abstract class Sd2ArcCompile : DefaultTask() {
+abstract class SD2ArcCompile : DefaultTask() {
 
   @get:Inject
   abstract val execOps: ExecOperations
@@ -37,12 +37,12 @@ abstract class Sd2ArcCompile : DefaultTask() {
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
-  abstract val modelPath : ConfigurableFileCollection
+  abstract val modelpath : ConfigurableFileCollection
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:Optional
-  abstract val symbolImportDir : ConfigurableFileCollection
+  abstract val symbolpath : ConfigurableFileCollection
 
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
@@ -77,7 +77,7 @@ abstract class Sd2ArcCompile : DefaultTask() {
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val classPath : ConfigurableFileCollection
+  abstract val toolPath : ConfigurableFileCollection
 
   init {
     description = "Generates .arc components from sequence diagrams using sd2arc."
@@ -89,7 +89,7 @@ abstract class Sd2ArcCompile : DefaultTask() {
     debugTask.convention(false)
     debugPort.convention("5005")
 
-    classPath.setFrom(project.configurations.named(TOOL_CLASSPATH_CONFIG_NAME))
+    toolPath.setFrom(project.configurations.named(TOOL_CLASSPATH_CONFIG_NAME))
   }
 
   fun montiarcOutputDir(): Provider<Directory> {
@@ -108,19 +108,19 @@ abstract class Sd2ArcCompile : DefaultTask() {
     }
 
     // For directories: filter out entries that do not exist
-    val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
-    val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
+    val cleanModelpath = getExistingEntriesInProjectFrom(this.modelpath)
+    val cleanSymbolpath = getExistingEntriesInProjectFrom(this.symbolpath)
 
     // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
     fs.delete {  it.delete(outputDir) }
 
-    if (cleanModelPath.isEmpty) {
-      logger.info("None of the given model path directories exists: ${this.modelPath.files}")
+    if (cleanModelpath.isEmpty) {
+      logger.info("None of the given model path directories exists: ${this.modelpath.files}")
       return
     }
 
     execOps.javaexec {
-      it.classpath(this.classPath)
+      it.classpath(this.toolPath)
       it.mainClass.convention(getMainClass())
 
       it.setIgnoreExitValue(true)
@@ -134,11 +134,11 @@ abstract class Sd2ArcCompile : DefaultTask() {
 
       // Set build args for the sd2arc generator
       it.args("--coco")
-      it.args("--input", cleanModelPath.asPath)
+      it.args("--input", cleanModelpath.asPath)
       it.args("--output", this.montiarcOutputDir().get().asFile.path)
 
-      if (!cleanSymbolImportDirs.isEmpty) {
-        it.args("-path", cleanSymbolImportDirs.asPath)
+      if (!cleanSymbolpath.isEmpty) {
+        it.args("-path", cleanSymbolpath.asPath)
       }
 
       if (useClass2Mc.get()) {
@@ -161,19 +161,19 @@ abstract class Sd2ArcCompile : DefaultTask() {
     println("Trying generation")
 
     println("Modelpath:")
-    modelPath.forEach { println("  $it") }
+    modelpath.forEach { println("  $it") }
     println("Modelpath with existing entries:")
-    modelPath.filter { it.exists() }.forEach { println("  $it") }
+    modelpath.filter { it.exists() }.forEach { println("  $it") }
 
     println("Symbol import dir:")
-    symbolImportDir.forEach { println("  $it") }
+    symbolpath.forEach { println("  $it") }
     println("Symbol import dir with existing entries:")
-    symbolImportDir.filter { it.exists() }.forEach { println("  $it") }
+    symbolpath.filter { it.exists() }.forEach { println("  $it") }
 
     println("OutDir: " + outputDir.get())
 
     println("MainClass:" + getMainClass())
     println("ClassPath:")
-    classPath.asPath.split(":").forEach { println("  $it") }
+    toolPath.asPath.split(":").forEach { println("  $it") }
   }
 }

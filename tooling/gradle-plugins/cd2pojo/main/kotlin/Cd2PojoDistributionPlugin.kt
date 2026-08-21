@@ -4,273 +4,283 @@ package montiarc.gradle.cd2pojo
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
-import org.gradle.api.artifacts.PublishArtifact
-import org.gradle.api.attributes.Bundling
-import org.gradle.api.attributes.Category
 import org.gradle.api.attributes.LibraryElements
-import org.gradle.api.attributes.Usage
 import org.gradle.api.component.AdhocComponentWithVariants
-import org.gradle.api.internal.artifacts.dsl.LazyPublishArtifact
-import org.gradle.api.internal.plugins.DefaultArtifactPublicationSet
-import org.gradle.api.internal.project.ProjectInternal
 import org.gradle.api.plugins.BasePlugin
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
-@Suppress("unused")
-class Cd2PojoDistributionPlugin : Plugin<Project> {
+/**
+ * Configures dependency resolution and variant publication for CD2Pojo symbol artifacts.
+ *
+ * For every source set, this plugin configures:
+ * - a declarable configuration for dependencies on CD2Pojo model projects;
+ * - a resolvable symbol-path configuration that supplies `.cdsym` artifacts to CD2Pojo;
+ * - an optional, consumable API-elements variant containing generated symbols.
+ *
+ * For Java projects, only the `main` symbols are published as a variant of the
+ * `java` software component.
+ */
+class CD2PojoDistributionPlugin : Plugin<Project> {
 
-  private lateinit var project : Project
+  private lateinit var project: Project
 
-  override fun apply(project : Project) {
+  override fun apply(project: Project) {
     this.project = project
-    this.project.pluginManager.apply(Cd2PojoPlugin::class.java)
+    project.pluginManager.apply(CD2PojoPlugin::class.java)
 
-    with (project) {
+    with(project) {
       extensions.getByType(JavaPluginExtension::class.java)
-        .sourceSets.all { sourceSet ->
-          val dependencyDeclarationConfig = setUpDependencyDeclarationConfig(sourceSet)
-          val incomingSymbolConfig = setUpSymbolDependencyConfig(sourceSet, dependencyDeclarationConfig)
-          addDependenciesToTaskInput(sourceSet, incomingSymbolConfig)
+        .sourceSets
+        .all { sourceSet ->
+          val cd2PojoConfiguration = addDeclarationConfigTo(sourceSet)
+
+          val cd2PojoSymbolpathConfiguration =
+            createCD2PojoSymbolpathConfig(
+              sourceSet,
+              cd2PojoConfiguration
+            )
+
+          configureCD2PojoSymbolpath(
+            sourceSet,
+            cd2PojoSymbolpathConfiguration
+          )
         }
 
-      // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
+      /*
+       * `main` and `test` are provided by the Java plugin. The callback is invoked
+       * immediately when the Java plugin has already been applied; otherwise, it is
+       * invoked when the plugin is applied.
+       */
       pluginManager.withPlugin("java") {
-        linkMainToTestModels()
-        addModelsPublicationForMain()
+        makeMainModelsAvailableInTests()
+        configureMainCD2PojoSymbolPublication()
       }
     }
   }
 
   /**
-   * Creates a configuration used to declare dependencies on cd2pojo models and their implementation simultaneously.
-   * To this end, the _implementation_ configuration of the source set extends from the created _cd2pojo_ configuration.
-   * If the java-library plugin is applied, then _api_ will also extend from _cd2pojo_
+   * Creates the declarable configuration for dependencies on CD2Pojo model projects.
+   *
+   * The source set's `implementation` configuration extends from this configuration.
+   * If the Java Library plugin is applied, the `main` source set's `api` configuration
+   * also extends from it.
    */
-  private fun setUpDependencyDeclarationConfig(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.cd2PojoDependencyDeclarationConfigName)
-    config.isCanBeConsumed = false
-    config.isCanBeResolved = false
-    config.isVisible = false
-    config.description = "Used to declare dependencies on other cd2pojo projects. This will simultaneously add their " +
-      "java implementation to the implementation configuration and their models to to the cd2pojoSymbolDependencies"
+  private fun addDeclarationConfigTo(
+    sourceSet: SourceSet
+  ): Configuration = with(project) {
+    val cd2PojoConfiguration = configurations.maybeCreate(
+      sourceSet.cd2pojoConfigName
+    )
 
-    configurations.named(sourceSet.implementationConfigurationName) { it.extendsFrom(config) }
+    cd2PojoConfiguration.isCanBeConsumed = false
+    cd2PojoConfiguration.isCanBeResolved = false
+    cd2PojoConfiguration.isVisible = false
+    cd2PojoConfiguration.description =
+      "Declares dependencies on CD2Pojo model projects. Declared dependencies are " +
+          "available to the implementation configuration and CD2Pojo symbol path."
+
+    configurations.named(sourceSet.implementationConfigurationName) {
+      it.extendsFrom(cd2PojoConfiguration)
+    }
 
     pluginManager.withPlugin("java-library") {
       if (SourceSet.isMain(sourceSet)) {
-        configurations.named(sourceSet.apiConfigurationName) { it.extendsFrom(config) }
+        configurations.named(sourceSet.apiConfigurationName) {
+          it.extendsFrom(cd2PojoConfiguration)
+        }
       }
     }
 
-    return config
+    cd2PojoConfiguration
   }
 
   /**
-   * Creates a configuration (_cd2pojoSymbolDependencies_) for the given source set, containing model dependencies
-   * (.cdsym etc). Only use this configuration for processing, but not to declare dependencies! Do the latter using the
-   * _cd2pojo_ configuration from which _cd2pojoSymbolDependencies_ extends from to automatically adopt the
-   * dependencies.
-   * @param generalDependencyConfiguration The cd2pojo configuration that is used to _declare_ the dependencies.
+   * Creates the resolvable configuration supplying CD2Pojo symbol artifacts required
+   * on the symbol path of [sourceSet].
+   *
+   * Declare dependencies through [SourceSet.cd2pojoConfigName]. This configuration
+   * inherits those dependencies and resolves their `.cdsym` artifacts.
    */
-  private fun setUpSymbolDependencyConfig(sourceSet: SourceSet,
-                                          generalDependencyConfiguration: Configuration): Configuration {
+  private fun createCD2PojoSymbolpathConfig(
+    sourceSet: SourceSet,
+    cd2PojoConfiguration: Configuration
+  ): Configuration {
+    return project.configurations.create(sourceSet.cd2pojoSymbolpathConfigName) {
+      it.extendsFrom(cd2PojoConfiguration)
+      it.isCanBeResolved = true
+      it.isCanBeConsumed = false
+      it.isVisible = false
+      it.description =
+        "Resolves CD2Pojo symbol artifacts, such as .cdsym files, required on the " +
+            "CD2Pojo symbol path. Declare dependencies using the " +
+            "${sourceSet.cd2pojoConfigName} configuration."
 
-    return project.configurations.create(sourceSet.cd2PojoSymbolDependencyConfigName) { config ->
-      config.extendsFrom(generalDependencyConfiguration)
-      config.isCanBeResolved = true
-      config.isCanBeConsumed = false
-      config.isVisible = false
-      config.description = "Contains cd _model_ dependencies (.cdsym, etc). Only use this configuration for " +
-        "processing dependencies, but not for declaring them. For declaring them, use the _cd2pojo_ configuration " +
-        "instead."
-
-      addCd2PojoSymbolJarAttributesTo(config)
+      attachCD2PojoSymbolAttributes(it.attributes, project, LibraryElements.JAR)
     }
   }
 
   /**
-   * Adds the gradle module attributes to the configuration that mark it as a jar that contains .cdsym models.
+   * Adds the resolved artifacts from [cd2PojoSymbolpathConfiguration] to the
+   * [CD2PojoCompile.symbolpath] of [sourceSet]'s CD2Pojo compile task.
    */
-  private fun addCd2PojoSymbolJarAttributesTo(config: Configuration) {
-    config.attributes {
-      it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
-      it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, CD2POJO_API_SYMBOL_USAGE))
-      it.attribute(Bundling.BUNDLING_ATTRIBUTE, project.objects.named(Bundling::class.java, Bundling.EXTERNAL))
-      it.attribute(
-        LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
-        project.objects.named(LibraryElements::class.java, LibraryElements.JAR)
+  private fun configureCD2PojoSymbolpath(
+    sourceSet: SourceSet,
+    cd2PojoSymbolpathConfiguration: Configuration
+  ) = with(project) {
+    tasks.named(sourceSet.compileCD2PojoTaskName, CD2PojoCompile::class.java) {
+      it.symbolpath.from(cd2PojoSymbolpathConfiguration)
+    }
+  }
+
+  /**
+   * Makes symbols compiled from `main` models available while compiling `test` models.
+   *
+   * The `testCd2pojo` configuration extends from `cd2pojo`. The symbols output by
+   * the `main` CD2Pojo compile task is also added to the `test` task's symbol path.
+   */
+  private fun makeMainModelsAvailableInTests() = with(project) {
+    val sourceSets = extensions.getByType(JavaPluginExtension::class.java).sourceSets
+    val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
+    val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
+
+    val mainCD2PojoConfiguration = configurations.getByName(
+      mainSourceSet.cd2pojoConfigName
+    )
+    val testCD2PojoConfiguration = configurations.getByName(
+      testSourceSet.cd2pojoConfigName
+    )
+    testCD2PojoConfiguration.extendsFrom(mainCD2PojoConfiguration)
+
+    val mainCD2PojoCompileTask = tasks.named(
+      mainSourceSet.compileCD2PojoTaskName,
+      CD2PojoCompile::class.java
+    )
+
+    tasks.named(
+      testSourceSet.compileCD2PojoTaskName,
+      CD2PojoCompile::class.java
+    ) {
+      it.symbolpath.from(
+        mainCD2PojoCompileTask.flatMap(CD2PojoCompile::symbolOutputDir)
       )
     }
   }
 
   /**
-   * Adds the artifacts from [dependencyConfig] to the [Cd2PojoCompile.symbolImportDir] of the task that compiles
-   * [sourceSet].
+   * Configures publication of compiled CD2Pojo symbols from the `main` source set.
    */
-  private fun addDependenciesToTaskInput(sourceSet: SourceSet, dependencyConfig: Configuration) = with (project) {
-    val compileTask = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
-    compileTask.configure { genTask ->
-      genTask.symbolImportDir.from(dependencyConfig)
+  private fun configureMainCD2PojoSymbolPublication() = with(project) {
+    val mainSourceSet = extensions
+      .getByType(JavaPluginExtension::class.java)
+      .sourceSets
+      .getByName(SourceSet.MAIN_SOURCE_SET_NAME)
+
+    configureCD2PojoSymbolPublication(mainSourceSet)
+  }
+
+  /**
+   * Configures the consumable CD2Pojo API-elements variant for [sourceSet].
+   *
+   * The generated symbols are packaged into a JAR and exposed as an optional variant
+   * of the `java` software component.
+   */
+  private fun configureCD2PojoSymbolPublication(sourceSet: SourceSet) {
+    val cd2PojoApiElementsConfiguration =
+      createOutgoingApiElementsConfig(sourceSet)
+
+    val cd2PojoSymbolsJarTask = createCD2PojoSymbolsJarTask(sourceSet)
+
+    setUpPublicationOf(
+      cd2PojoSymbolsJarTask,
+      cd2PojoApiElementsConfiguration
+    )
+    connectOutgoingConfigOf(sourceSet)
+  }
+
+  /**
+   * Creates the consumable API-elements configuration exposing compiled CD2Pojo
+   * symbols for [sourceSet].
+   */
+  private fun createOutgoingApiElementsConfig(
+    sourceSet: SourceSet
+  ): Configuration {
+    return project.configurations.create(
+      sourceSet.cd2pojoApiElementsConfigName
+    ) { cd2PojoApiElementsConfiguration ->
+      cd2PojoApiElementsConfiguration.isCanBeConsumed = true
+      cd2PojoApiElementsConfiguration.isCanBeResolved = false
+      cd2PojoApiElementsConfiguration.description =
+        "Contains symbols compiled from CD2Pojo models in source set '${sourceSet.name}'."
+
+      attachCD2PojoSymbolAttributes(
+        cd2PojoApiElementsConfiguration.attributes,
+        project,
+        LibraryElements.JAR
+      )
     }
   }
 
   /**
-   * Makes symbols of source set `main`'s compiled models available in `test` (these source sets must exist, checked by
-   * whether the [org.gradle.api.plugins.JavaPlugin] is applied).
+   * Creates the task that packages symbols compiled from [sourceSet]'s CD2Pojo
+   * models into a JAR.
    */
-  private fun linkMainToTestModels(): Unit = with (project) {
-    if (!pluginManager.hasPlugin("java")) {
-      logger.error("Internal error: Tried to link main and test source sets, but the JavaPlugin is not applied!")
+  private fun createCD2PojoSymbolsJarTask(
+    sourceSet: SourceSet
+  ): TaskProvider<Jar> = with(project) {
+    val cd2PojoCompileTask = tasks.named(
+      sourceSet.compileCD2PojoTaskName,
+      CD2PojoCompile::class.java
+    )
+
+    val cd2PojoSymbolsJarTask = tasks.register(
+      sourceSet.cd2pojoSymbolsJarTaskName,
+      Jar::class.java
+    ) {
+      it.from(cd2PojoCompileTask.flatMap(CD2PojoCompile::symbolOutputDir))
+      it.archiveClassifier.set(sourceSet.cd2pojoSymbolsJarClassifierName)
+      it.isPreserveFileTimestamps = false
+      it.isReproducibleFileOrder = true
     }
 
-    val sourceSets = extensions.getByType(JavaPluginExtension::class.java).sourceSets
-    val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
-    val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
-
-    // 1) Make main's cd2pojo dependencies also test's cd2pojo dependencies
-    // We only have to link the dependencies to _cd2pojo_ models. Their _java implementation_ dependencies are already
-    // linked, as testImplementation extends implementation
-    val mainModelConfig = configurations.getByName(mainSourceSet.cd2PojoDependencyDeclarationConfigName)
-    val testModelConfig = configurations.getByName(testSourceSet.cd2PojoDependencyDeclarationConfigName)
-    testModelConfig.extendsFrom(mainModelConfig)
-
-
-    val mainCompile = tasks.named(mainSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
-    // 2) Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java) { testCompile ->
-      testCompile.symbolImportDir.from(mainCompile.get().symbolOutputDir())
-    }
-  }
-
-  /**
-   * Sets up publishing of the symbols of the compiled models of the main source set (that must exists, checked by
-   * whether the [org.gradle.api.plugins.JavaPlugin] is applied)
-   */
-  private fun addModelsPublicationForMain() = with (project) {
-    if (!pluginManager.hasPlugin("java")) {
-      logger.error("Internal error: Tried to create a publication for the main source set, but the JavaPlugin is " +
-        "not applied!")
+    tasks.named(BasePlugin.ASSEMBLE_TASK_NAME) {
+      it.dependsOn(cd2PojoSymbolsJarTask)
     }
 
-    val sourceSets = extensions.getByType(JavaPluginExtension::class.java).sourceSets
-    val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
-
-    setUpSymbolPublicationOf(mainSourceSet)
+    cd2PojoSymbolsJarTask
   }
 
   /**
-   * Sets up a publication for the symbols of the compiled models of the given source set. To this end, a jar task is
-   * created.
+   * Adds [cd2PojoSymbolsJarTask] as an outgoing artifact of
+   * [cd2PojoApiElementsConfiguration] and exposes the configuration as an optional
+   * variant of the `java` software component.
    */
-  private fun setUpSymbolPublicationOf(sourceSet: SourceSet) {
+  private fun setUpPublicationOf(
+    cd2PojoSymbolsJarTask: TaskProvider<Jar>,
+    cd2PojoApiElementsConfiguration: Configuration
+  ) = with(project) {
+    cd2PojoApiElementsConfiguration.outgoing.artifact(cd2PojoSymbolsJarTask)
 
-    val symbolsConfig = createOutgoingSymbolsConfig(sourceSet)
-    val symbolsJarTask = createSymbolsJarTask(sourceSet)
-    val symbolsJar = jarTaskToPublishArtifact(symbolsJarTask)
-
-    setUpPublicationOf(symbolsJar, symbolsConfig)
-    makeIncomingDependenciesToTransitives(sourceSet)
+    (components.getByName("java") as AdhocComponentWithVariants)
+      .addVariantsFromConfiguration(cd2PojoApiElementsConfiguration) {
+        it.mapToOptional()
+      }
   }
 
   /**
-   * Creates a consumable configuration that contains the symbols of the compiled models of the given source set.
+   * Makes dependencies declared through [SourceSet.cd2pojoConfigName] transitive
+   * dependencies of [sourceSet]'s published CD2Pojo API-elements variant.
    */
-  private fun createOutgoingSymbolsConfig(sourceSet: SourceSet): Configuration {
-    return project.configurations.create(sourceSet.cd2pojoOutgoingSymbolsConfigName) { config ->
-      config.isCanBeConsumed = true
-      config.isCanBeResolved = false
-      config.description = "Symbols of the compiled cd models of source set ${sourceSet.name}"
+  private fun connectOutgoingConfigOf(sourceSet: SourceSet) {
+    val cd2PojoConfiguration = project.configurations.getByName(
+      sourceSet.cd2pojoConfigName
+    )
+    val cd2PojoApiElementsConfiguration = project.configurations.getByName(
+      sourceSet.cd2pojoApiElementsConfigName
+    )
 
-      addCd2PojoSymbolJarAttributesTo(config)
-    }
-  }
-
-  /**
-   * Creates a jar task that packages the cd symbols produced by compiling the models of the source set into a jar.
-   */
-  private fun createSymbolsJarTask(sourceSet: SourceSet): TaskProvider<Jar> = with (project) {
-
-    val compileTask = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
-
-    val cdSymbolsJarTask = tasks.register(sourceSet.cd2PojoSymbolsJarTaskName, Jar::class.java) { jar ->
-      jar.from(compileTask.get().symbolOutputDir())
-      jar.archiveClassifier.set(sourceSet.cdSymbolsJarClassifierName)
-      jar.isPreserveFileTimestamps = false
-      jar.isReproducibleFileOrder = true
-    }
-
-    tasks.named(BasePlugin.ASSEMBLE_TASK_NAME) { it.dependsOn(cdSymbolsJarTask) }
-
-    return cdSymbolsJarTask
-  }
-
-  /**
-   * Gets the [LazyPublishArtifact] representation of the jar tasks output.
-   */
-  private fun jarTaskToPublishArtifact(task: TaskProvider<Jar>): LazyPublishArtifact {
-    return LazyPublishArtifact(task, (project as ProjectInternal).fileResolver, (project as ProjectInternal).taskDependencyFactory)
-  }
-
-  /**
-   * Sets up the publication of the jar by adding it to the [DefaultArtifactPublicationSet], setting it as outgoing
-   * artifact of the given configuration, and adding the configuration to the java [SoftwareComponent].
-   * Note that the _java_ component must exist (checked by whether the [org.gradle.api.plugins.JavaPlugin] is applied
-   */
-  private fun setUpPublicationOf(jar: PublishArtifact, outgoingConfig: Configuration) = with (project) {
-    if (!pluginManager.hasPlugin("java")) {
-      logger.error("Internal error: Tried to create a publication, but the JavaPlugin is not applied!")
-    }
-
-    extensions
-      .getByType(DefaultArtifactPublicationSet::class.java)
-      .addCandidate(jar)
-
-    (components.getByName("java") as AdhocComponentWithVariants)  // .mapToOptional results in the jar
-      .addVariantsFromConfiguration(outgoingConfig) { it.mapToOptional() }  // being an optional dependency in Maven
-
-    outgoingConfig.outgoing.artifacts.add(jar)
-  }
-
-  /**
-   * Asserts that cd dependencies of the project appear as transitive dependencies in the publication.
-   * To this end, this method lets the `outgoingCd2PojoSymbols` configuration of the given [SourceSet] extend from
-   * it's `cd2pojoSymbolDependencies` configuration.
-   * @param sourceSet the [SourceSet] whose cd symbols should be published and for which this method will
-   *        add the transitive dependencies.
-   */
-  private fun makeIncomingDependenciesToTransitives(sourceSet: SourceSet) {
-    val configs = project.configurations
-    val dependencyConfig = configs.getByName(sourceSet.cd2PojoDependencyDeclarationConfigName)
-    val outgoingConfig = configs.getByName(sourceSet.cd2pojoOutgoingSymbolsConfigName)
-
-    outgoingConfig.extendsFrom(dependencyConfig)
+    cd2PojoApiElementsConfiguration.extendsFrom(cd2PojoConfiguration)
   }
 }
-
-val SourceSet.cd2PojoDependencyDeclarationConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-      "cd2pojo"
-    } else {
-      "${this.name}Cd2pojo"
-    }
-
-val SourceSet.cd2PojoSymbolDependencyConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-      "cd2pojoSymbolDependencies"
-    } else {
-      "${this.name}Cd2pojoSymbolDependencies"
-    }
-
-val SourceSet.cd2pojoOutgoingSymbolsConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-      "cd2pojoSymbolElements"
-    } else {
-      "${this.name}Cd2pojoSymbolElements"
-    }
-
-val SourceSet.cd2PojoSymbolsJarTaskName: String
-  get() = getTaskName("cd2Pojo", "symbolsJar")
-

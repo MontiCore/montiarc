@@ -11,7 +11,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
-const val TOOL_CLASSPATH_CONFIG_NAME = "fmu2arcTool"
+const val TOOL_CLASSPATH_CONFIG_NAME = "fmu2arcToolClasspath"
 
 const val FMU2ARC_TOOL_CLASS = "de.montiarc.generator.FMU2ArcTool"
 
@@ -39,9 +39,9 @@ class FMU2ArcPlugin : Plugin<Project> {
     with(project) {
       addGeneratorDependency()
 
-      getSourceSetsOf(project).all { sourceSet ->
+      sourceSetsOf(project).all { sourceSet ->
         // Adding an entry for fmu2arc to all source sets and creating compile tasks from them
-        addFmu2ArcEntryToSourceSet(sourceSet)
+        addFMU2ArcEntryToSourceSet(sourceSet)
         createCompileFMU2ArcTask(sourceSet)
         dependencies.addProvider(sourceSet.implementationConfigurationName, provider { SE_LOGGING_PROJECT_REF })
 
@@ -53,7 +53,7 @@ class FMU2ArcPlugin : Plugin<Project> {
     }
   }
 
-  private fun getSourceSetsOf(project: Project): SourceSetContainer {
+  private fun sourceSetsOf(project: Project): SourceSetContainer {
     return project.extensions
       .getByType(JavaPluginExtension::class.java)
       .sourceSets
@@ -64,7 +64,7 @@ class FMU2ArcPlugin : Plugin<Project> {
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * fmu2arc sources is added to the java sources of the same SourceSet
    */
-  private fun addFmu2ArcEntryToSourceSet(sourceSet: SourceSet) {
+  private fun addFMU2ArcEntryToSourceSet(sourceSet: SourceSet) {
     val srcDirSet = sourceSet.extensions.create(
       FMU2ArcSourceDirectorySet::class.java, "fmu2arc",
       DefaultFMU2ArcSourceDirectorySet::class.java,
@@ -108,7 +108,7 @@ class FMU2ArcPlugin : Plugin<Project> {
     generateTask.configure { genTask ->
       genTask.description = "Generates java code from the fmu files in source set ${sourceSet.name}."
       genTask.projectDirectory.set(project.layout.projectDirectory) // Prevents generator from generating java code again
-      genTask.modelPath.setFrom(fmuSrcDirSet.sourceDirectories)
+      genTask.modelpath.setFrom(fmuSrcDirSet.sourceDirectories)
       genTask.outputDir.set(fmuSrcDirSet.destinationDirectory)
 
       sourceSet.java.srcDir(genTask.javaOutputDir())

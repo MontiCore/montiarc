@@ -20,8 +20,8 @@ class FMUOut2MAInPlugin : Plugin<Project>  {
     this.project.pluginManager.apply(MA2JSimPlugin::class.java)
 
     sourceSetsOf(project).all { sourceSet ->
-      connectFmuSymbolsToMontiArc(sourceSet)
-      createDependencyBetweenFmuAndMaCompileTasks(sourceSet)
+      connectFMUSymbolsToMontiArc(sourceSet)
+      createDependencyBetweenFMUAndMACompileTasks(sourceSet)
     }
     with (project) {
       pluginManager.withPlugin("java") {
@@ -35,18 +35,18 @@ class FMUOut2MAInPlugin : Plugin<Project>  {
       .getByType(JavaPluginExtension::class.java)
       .sourceSets
   }
-  private fun connectFmuSymbolsToMontiArc(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+  private fun connectFMUSymbolsToMontiArc(sourceSet: SourceSet) = with (project) {
+    val maCompile = tasks.named(sourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
     val fmuCompile = tasks.named(sourceSet.compileFMU2ArcTaskName, FMU2ArcCompile::class.java)
 
     maCompile.configure {
-      it.symbolImportDir.from(
+      it.symbolpath.from(
         provider { fmuCompile.get().symbolOutputDir() }
       )
     }
   }
-  private fun createDependencyBetweenFmuAndMaCompileTasks(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+  private fun createDependencyBetweenFMUAndMACompileTasks(sourceSet: SourceSet) = with (project) {
+    val maCompile = tasks.named(sourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
     val fmuCompile = tasks.named(sourceSet.compileFMU2ArcTaskName, FMU2ArcCompile::class.java)
 
     maCompile.configure {
@@ -68,11 +68,11 @@ class FMUOut2MAInPlugin : Plugin<Project>  {
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
     val mainFMUCompile = tasks.named(mainSourceSet.compileFMU2ArcTaskName, FMU2ArcCompile::class.java)
-    val testMACompile = tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+    val testMACompile = tasks.named(testSourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
 
     // Puts main's symbols on the symbol path of test
     testMACompile.configure {
-      it.symbolImportDir.from(
+      it.symbolpath.from(
         provider { mainFMUCompile.get().symbolOutputDir() }
       )
     }

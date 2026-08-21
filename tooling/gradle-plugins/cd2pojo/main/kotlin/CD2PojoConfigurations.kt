@@ -1,6 +1,12 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.cd2pojo
 
+import org.gradle.api.Project
+import org.gradle.api.attributes.AttributeContainer
+import org.gradle.api.attributes.Bundling
+import org.gradle.api.attributes.Category
+import org.gradle.api.attributes.LibraryElements
+import org.gradle.api.attributes.Usage
 import org.gradle.api.tasks.SourceSet
 
 /**
@@ -49,7 +55,7 @@ val SourceSet.cd2pojoSymbolsJarTaskName: String
 /**
  * Archive classifier for the JAR containing class diagram symbols.
  */
-val SourceSet.cdSymbolsJarClassifierName: String
+val SourceSet.cd2pojoSymbolsJarClassifierName: String
   get() = if (SourceSet.isMain(this)) {
     CD2POJO_SYMBOLS_BASE_CLASSIFIER
   } else {
@@ -58,3 +64,31 @@ val SourceSet.cdSymbolsJarClassifierName: String
 
 private fun SourceSet.nameCD2PojoConfig(suffix: String = ""): String =
   if (SourceSet.isMain(this)) "cd2pojo$suffix" else "${name}Cd2pojo$suffix"
+
+/**
+ * Adds attributes for selecting or exposing a JAR variant containing class diagram symbols.
+ */
+fun attachCD2PojoSymbolAttributes(
+  attributes: AttributeContainer,
+  project: Project,
+  libraryElements: String = LibraryElements.JAR
+) {
+  val objects = project.objects
+
+  attributes.attribute(
+    Usage.USAGE_ATTRIBUTE,
+    objects.named(Usage::class.java, CD2POJO_API_SYMBOL_USAGE)
+  )
+  attributes.attribute(
+    Category.CATEGORY_ATTRIBUTE,
+    objects.named(Category::class.java, Category.LIBRARY)
+  )
+  attributes.attribute(
+    Bundling.BUNDLING_ATTRIBUTE,
+    objects.named(Bundling::class.java, Bundling.EXTERNAL)
+  )
+  attributes.attribute(
+    LibraryElements.LIBRARY_ELEMENTS_ATTRIBUTE,
+    objects.named(LibraryElements::class.java, libraryElements)
+  )
+}

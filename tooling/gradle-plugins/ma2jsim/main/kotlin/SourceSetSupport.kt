@@ -1,11 +1,11 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2jsim
 
-import montiarc.gradle.cd2pojo.Cd2PojoCompile
-import montiarc.gradle.cd2pojo.cd2PojoDependencyDeclarationConfigName
-import montiarc.gradle.cd2pojo.compileCd2PojoTaskName
-import montiarc.gradle.montiarc.cd2pojo4MaDeclarationConfigName
-import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
+import montiarc.gradle.cd2pojo.CD2PojoCompile
+import montiarc.gradle.cd2pojo.cd2pojoConfigName
+import montiarc.gradle.cd2pojo.compileCD2PojoTaskName
+import montiarc.gradle.montiarc.cd2pojo4montiarcConfigName
+import montiarc.gradle.montiarc.montiarcConfigName
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.SourceSet
@@ -45,19 +45,19 @@ class SourceSetSupport {
 
     private fun Project.putProducedModelsIntoConsumerInput(provider: SourceSet, consumer: SourceSet) {
       val providerCdSymbols = provider {
-        tasks.named(provider.compileCd2PojoTaskName, Cd2PojoCompile::class.java).get()
+        tasks.named(provider.compileCD2PojoTaskName, CD2PojoCompile::class.java).get()
           .symbolOutputDir()
       }
       val providerMaSymbols = provider {
-        tasks.named(provider.compileMontiarcTaskName, MontiArcCompile::class.java).get()
+        tasks.named(provider.compileMontiArcTaskName, MontiArcCompile::class.java).get()
           .symbolOutputDir()
       }
 
-      tasks.named(consumer.compileCd2PojoTaskName, Cd2PojoCompile::class.java).configure {
-        it.symbolImportDir.from(providerCdSymbols)
+      tasks.named(consumer.compileCD2PojoTaskName, CD2PojoCompile::class.java).configure {
+        it.symbolpath.from(providerCdSymbols)
       }
-      tasks.named(consumer.compileMontiarcTaskName, MontiArcCompile::class.java).configure {
-        it.symbolImportDir.from(providerCdSymbols, providerMaSymbols)
+      tasks.named(consumer.compileMontiArcTaskName, MontiArcCompile::class.java).configure {
+        it.symbolpath.from(providerCdSymbols, providerMaSymbols)
       }
     }
 
@@ -65,14 +65,14 @@ class SourceSetSupport {
       configurations.named(consumer.implementationConfigurationName).configure {
         it.extendsFrom(configurations.getByName(provider.implementationConfigurationName))
       }
-      configurations.named(consumer.cd2PojoDependencyDeclarationConfigName).configure {
-        it.extendsFrom(configurations.getByName(provider.cd2PojoDependencyDeclarationConfigName))
+      configurations.named(consumer.cd2pojoConfigName).configure {
+        it.extendsFrom(configurations.getByName(provider.cd2pojoConfigName))
       }
-      configurations.named(consumer.cd2pojo4MaDeclarationConfigName).configure {
-        it.extendsFrom(configurations.getByName(provider.cd2pojo4MaDeclarationConfigName))
+      configurations.named(consumer.cd2pojo4montiarcConfigName).configure {
+        it.extendsFrom(configurations.getByName(provider.cd2pojo4montiarcConfigName))
       }
-      configurations.named(consumer.montiarcDependencyDeclarationConfigName).configure {
-        it.extendsFrom(configurations.getByName(provider.montiarcDependencyDeclarationConfigName))
+      configurations.named(consumer.montiarcConfigName).configure {
+        it.extendsFrom(configurations.getByName(provider.montiarcConfigName))
       }
     }
   }

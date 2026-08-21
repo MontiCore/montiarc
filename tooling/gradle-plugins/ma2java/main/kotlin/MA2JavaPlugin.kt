@@ -2,10 +2,10 @@
 package montiarc.gradle.ma2java
 
 import montiarc.gradle.cd2pojo.VERSION
-import montiarc.gradle.montiarc.MontiarcBasePlugin
-import montiarc.gradle.montiarc.cd2Pojo4MaSymbolDependencyConfigName
+import montiarc.gradle.montiarc.MontiArcBasePlugin
+import montiarc.gradle.montiarc.cd2pojo4montiarcSymbolpathConfigName
 import montiarc.gradle.montiarc.montiarc
-import montiarc.gradle.montiarc.montiarcSymbolDependencyConfigurationName
+import montiarc.gradle.montiarc.montiarcSymbolpathConfigName
 import montiarc.gradle.montiarc.montiarcSymbolsJarTaskName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,7 +16,7 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
-const val TOOL_CLASSPATH_CONFIG_NAME = "ma2javaTool"
+const val TOOL_CLASSPATH_CONFIG_NAME = "ma2javaToolClasspath"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JavaTool"
 
@@ -31,13 +31,13 @@ const val MAVEN_RTE_PROJECT_REF = "montiarc.libraries:majava-rte:${VERSION}"
  * @see MontiArcCompile
  */
 @Suppress("unused")
-class Ma2JavaPlugin : Plugin<Project> {
+class MA2JavaPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
   override fun apply(project: Project){
     this.project = project
-    this.project.pluginManager.apply(MontiarcBasePlugin::class.java)
+    this.project.pluginManager.apply(MontiArcBasePlugin::class.java)
 
     this.project.extensions.extraProperties.set("MATaskType", MontiArcCompile::class.java)
 
@@ -46,8 +46,8 @@ class Ma2JavaPlugin : Plugin<Project> {
 
       sourceSetsOf(project).all { sourceSet ->
         // Enabling the declaration of model dependencies and prepare their extraction
-        createCompileMontiarcTask(sourceSet)
-        addRuntimeEnvironmentDependencyForApiOf(sourceSet)
+        createCompileMontiArcTask(sourceSet)
+        addRuntimeEnvironmentDependencyFor(sourceSet)
       }
 
       // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
@@ -83,7 +83,7 @@ class Ma2JavaPlugin : Plugin<Project> {
     dependencies.addProvider(TOOL_CLASSPATH_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
-  private fun addRuntimeEnvironmentDependencyForApiOf(sourceSet: SourceSet) = with(project) {
+  private fun addRuntimeEnvironmentDependencyFor(sourceSet: SourceSet) = with(project) {
     dependencies.addProvider(sourceSet.implementationConfigurationName, provider { MAVEN_RTE_PROJECT_REF })
 
     // If the project is a library and gets consumed, the consumer must transitively consume the runtime environment,
@@ -102,19 +102,19 @@ class Ma2JavaPlugin : Plugin<Project> {
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * task is added to the java sources of the same SourceSet.
    */
-  private fun createCompileMontiarcTask(sourceSet: SourceSet): TaskProvider<MontiArcCompile> = with (project) {
+  private fun createCompileMontiArcTask(sourceSet: SourceSet): TaskProvider<MontiArcCompile> = with (project) {
     val montiarcSrcDirSet = sourceSet.montiarc.get()
-    val taskName = sourceSet.compileMontiarcTaskName
+    val taskName = sourceSet.compileMontiArcTaskName
     val generateTask = tasks.register(taskName, MontiArcCompile::class.java)
 
     generateTask.configure { genTask ->
-      genTask.description = "Generates java code from the Montiarc models in source set ${sourceSet.name}."
+      genTask.description = "Generates java code from the MontiArc models in source set ${sourceSet.name}."
 
-      genTask.modelPath.from(montiarcSrcDirSet.sourceDirectories)
+      genTask.modelpath.from(montiarcSrcDirSet.sourceDirectories)
       genTask.outputDir.set(montiarcSrcDirSet.destinationDirectory)
-      genTask.symbolImportDir.from(
-        configurations.named(sourceSet.montiarcSymbolDependencyConfigurationName),
-        configurations.named(sourceSet.cd2Pojo4MaSymbolDependencyConfigName)
+      genTask.symbolpath.from(
+        configurations.named(sourceSet.montiarcSymbolpathConfigName),
+        configurations.named(sourceSet.cd2pojo4montiarcSymbolpathConfigName)
       )
 
       sourceSet.java.srcDir(genTask.javaOutputDir())
@@ -143,10 +143,10 @@ class Ma2JavaPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainCompile = tasks.named(mainSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+    val mainCompile = tasks.named(mainSourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
     // Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java) {
-      it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
+    tasks.named(testSourceSet.compileMontiArcTaskName, MontiArcCompile::class.java) {
+      it.symbolpath.from(mainCompile.get().symbolOutputDir())
     }
   }
 
@@ -154,7 +154,7 @@ class Ma2JavaPlugin : Plugin<Project> {
    * Configures the symbols jar task so that it contains the symbols produced by the [MontiArcCompile] task.
    */
   private fun putCompiledSymbolsIntoJarOf(sourceSet: SourceSet) = with (project) {
-    val compileTask = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+    val compileTask = tasks.named(sourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
     tasks.named(sourceSet.montiarcSymbolsJarTaskName, Jar::class.java).configure {jar ->
       jar.from(compileTask.get().symbolOutputDir())
     }

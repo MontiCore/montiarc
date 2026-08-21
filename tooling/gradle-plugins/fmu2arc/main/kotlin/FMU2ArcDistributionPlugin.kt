@@ -32,15 +32,15 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
 
       extensions.getByType(JavaPluginExtension::class.java)
         .sourceSets.all { sourceSet ->
-          val dependencyDeclarationConfig = setUpDependencyDeclarationConfig(sourceSet)
-          val incomingFileConfig = setUpFileDependencyConfig(sourceSet, dependencyDeclarationConfig)
+          val dependencyDeclarationConfig = addDeclarationConfigTo(sourceSet)
+          val incomingFileConfig = createFMU2ArcModelpathConfig(sourceSet, dependencyDeclarationConfig)
           addDependenciesToTaskInput(sourceSet, incomingFileConfig)
         }
 
 
       // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
       pluginManager.withPlugin("java") {
-        linkMainToTestModels()
+        makeMainModelsAvailableInTests()
         addModelsPublicationForMain()
       }
     }
@@ -51,8 +51,8 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
    * To this end, the _implementation_ configuration of the source set extends from the created _fmu2arc_ configuration.
    * If the java-library plugin is applied, then _api_ will also extend from _fmu2arc_
    */
-  private fun setUpDependencyDeclarationConfig(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.fmu2arcDependencyDeclarationConfigName)
+  private fun addDeclarationConfigTo(sourceSet: SourceSet): Configuration = with (project) {
+    val config = configurations.maybeCreate(sourceSet.fmu2ArcConfigName)
     config.isCanBeConsumed = false
     config.isCanBeResolved = false
     config.isVisible = false
@@ -77,8 +77,8 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
    * dependencies.
    * @param generalDependencyConfiguration The fmu2arc configuration that is used to _declare_ the dependencies.
    */
-  private fun setUpFileDependencyConfig(sourceSet: SourceSet, generalDependencyConfiguration: Configuration): Configuration {
-    return project.configurations.create(sourceSet.fmu2arcFileDependencyConfigName) { config ->
+  private fun createFMU2ArcModelpathConfig(sourceSet: SourceSet, generalDependencyConfiguration: Configuration): Configuration {
+    return project.configurations.create(sourceSet.fmu2ArcModelpathConfigName) { config ->
       config.extendsFrom(generalDependencyConfiguration)
       config.isCanBeResolved = true
       config.isCanBeConsumed = false
@@ -91,13 +91,13 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
   }
 
   /**
-   * Adds the artifacts from [dependencyConfig] to the [FMU2ArcCompile.modelPath] of the task that compiles
+   * Adds the artifacts from [dependencyConfig] to the [FMU2ArcCompile.modelpath] of the task that compiles
    * [sourceSet].
    */
   private fun addDependenciesToTaskInput(sourceSet: SourceSet, dependencyConfig: Configuration) = with (project) {
     val compileTask = tasks.named(sourceSet.compileFMU2ArcTaskName, FMU2ArcCompile::class.java)
     compileTask.configure { genTask ->
-      genTask.modelPath.from(dependencyConfig)
+      genTask.modelpath.from(dependencyConfig)
     }
   }
 
@@ -137,7 +137,7 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
    * Makes files of source set `main`'s compiled models available in `test` (these source sets must exist, checked by
    * whether the [org.gradle.api.plugins.JavaPlugin] is applied).
    */
-  private fun linkMainToTestModels(): Unit = with (project) {
+  private fun makeMainModelsAvailableInTests(): Unit = with (project) {
     if (!pluginManager.hasPlugin("java")) {
       logger.error("Internal error: Tried to link main and test source sets, but the JavaPlugin is not applied!")
     }
@@ -147,8 +147,8 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
 
-    val mainModelConfig = configurations.getByName(mainSourceSet.fmu2arcDependencyDeclarationConfigName)
-    val testModelConfig = configurations.getByName(testSourceSet.fmu2arcDependencyDeclarationConfigName)
+    val mainModelConfig = configurations.getByName(mainSourceSet.fmu2ArcConfigName)
+    val testModelConfig = configurations.getByName(testSourceSet.fmu2ArcConfigName)
     testModelConfig.extendsFrom(mainModelConfig)
 
   }
@@ -175,7 +175,7 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
    */
   private fun setUpSymbolAndFilePublicationOf(sourceSet: SourceSet) {
 
-    val symbolsConfig = createOutgoingSymbolsConfig(sourceSet)
+    val symbolsConfig = createOutgoingApiElementsConfig(sourceSet)
     val symbolsJarTask = createSymbolsJarTask(sourceSet)
     val symbolsJar = jarTaskToPublishArtifact(symbolsJarTask)
 
@@ -187,14 +187,14 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
 
     setUpPublicationOf(fileJar, filesConfig)
 
-    makeIncomingDependenciesToTransitives(sourceSet)
+    connectOutgoingConfigOf(sourceSet)
   }
 
   /**
    * Creates a consumable configuration that contains the symbols of the compiled models of the given source set.
    */
-  private fun createOutgoingSymbolsConfig(sourceSet: SourceSet): Configuration {
-    return project.configurations.create(sourceSet.fmu2arcOutgoingSymbolsConfigName) { config ->
+  private fun createOutgoingApiElementsConfig(sourceSet: SourceSet): Configuration {
+    return project.configurations.create(sourceSet.fmu2ArcApiElementsConfigName) { config ->
       config.isCanBeConsumed = true
       config.isCanBeResolved = false
       config.description = "Symbols of the compiled fmu models of source set ${sourceSet.name}"
@@ -210,9 +210,9 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
 
     val compileTask = tasks.named(sourceSet.compileFMU2ArcTaskName, FMU2ArcCompile::class.java)
 
-    val symbolsJarTask = tasks.register(sourceSet.fmu2arcSymbolsJarTaskName, Jar::class.java) { jar ->
+    val symbolsJarTask = tasks.register(sourceSet.fmu2ArcSymbolsJarTaskName, Jar::class.java) { jar ->
       jar.from(compileTask.get().symbolOutputDir())
-      jar.archiveClassifier.set(sourceSet.fmuSymbolsJarClassifierName)
+      jar.archiveClassifier.set(sourceSet.fmu2ArcSymbolsJarClassifierName)
       jar.isPreserveFileTimestamps = false
       jar.isReproducibleFileOrder = true
     }
@@ -226,7 +226,7 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
    * Creates a consumable configuration that contains the .fmu files of the compiled models of the given source set.
    */
   private fun createOutgoingFilesConfig(sourceSet: SourceSet): Configuration {
-    return project.configurations.create(sourceSet.fmu2arcOutgoingFileConfigName) { config ->
+    return project.configurations.create(sourceSet.fmu2ArcFilesElementsConfigName) { config ->
       config.isCanBeConsumed = true
       config.isCanBeResolved = false
       config.description = ".fmu Files of the fmu models of source set ${sourceSet.name}"
@@ -242,9 +242,9 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
 
     val compileTask = tasks.named(sourceSet.compileFMU2ArcTaskName, FMU2ArcCompile::class.java)
 
-    val fileTaskJar = tasks.register(sourceSet.fmu2arcFilesJarTaskName, Jar::class.java) { jar ->
-      jar.from(compileTask.get().modelPath)
-      jar.archiveClassifier.set(sourceSet.fmuFilesJarClassifierName)
+    val fileTaskJar = tasks.register(sourceSet.fmu2ArcFilesJarTaskName, Jar::class.java) { jar ->
+      jar.from(compileTask.get().modelpath)
+      jar.archiveClassifier.set(sourceSet.fmu2ArcFilesJarClassifierName)
       jar.isPreserveFileTimestamps = false
       jar.isReproducibleFileOrder = true
     }
@@ -283,62 +283,13 @@ class FMU2ArcDistributionPlugin  : Plugin<Project> {
    * @param sourceSet the [SourceSet] whose symbols should be published and for which this method will
    *        add the transitive dependencies.
    */
-  private fun makeIncomingDependenciesToTransitives(sourceSet: SourceSet) {
+  private fun connectOutgoingConfigOf(sourceSet: SourceSet) {
     val configs = project.configurations
-    val dependencyConfig = configs.getByName(sourceSet.fmu2arcDependencyDeclarationConfigName)
-    val outgoingSymbolConfig = configs.getByName(sourceSet.fmu2arcOutgoingSymbolsConfigName)
-    val outgoingFileConfig = configs.getByName(sourceSet.fmu2arcOutgoingFileConfigName)
+    val dependencyConfig = configs.getByName(sourceSet.fmu2ArcConfigName)
+    val outgoingSymbolConfig = configs.getByName(sourceSet.fmu2ArcApiElementsConfigName)
+    val outgoingFileConfig = configs.getByName(sourceSet.fmu2ArcFilesElementsConfigName)
     outgoingSymbolConfig.extendsFrom(dependencyConfig)
     outgoingFileConfig.extendsFrom(dependencyConfig)
   }
 
 }
-
-val SourceSet.fmu2arcDependencyDeclarationConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-    "fmu2arc"
-  } else {
-    "${this.name}FMU2arc"
-  }
-
-val SourceSet.fmu2arcFileDependencyConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-    "fmu2arcFileDependencies"
-  } else {
-    "${this.name}FMU2arcFileDependencies"
-  }
-
-val SourceSet.fmu2arcOutgoingSymbolsConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-    "fmu2arcSymbolElements"
-  } else {
-    "${this.name}fmu2arcSymbolElements"
-  }
-
-val SourceSet.fmu2arcOutgoingFileConfigName: String
-  get() = if (SourceSet.isMain(this)) {
-    "fmu2arcFMUFileElements"
-  } else {
-    "${this.name}fmu2arcFMUFileElements"
-  }
-
-val SourceSet.fmu2arcSymbolsJarTaskName: String
-  get() = getTaskName("fmu2arc", "symbolsJar")
-
-val SourceSet.fmu2arcFilesJarTaskName: String
-  get() = getTaskName("fmu2arc", "FilesJar")
-
-
-val SourceSet.fmuSymbolsJarClassifierName: String
-  get() = if (SourceSet.isMain(this)) {
-    FMU2ARC_SYMBOLS_BASE_CLASSIFIER
-  } else {
-    "${this.name}-$FMU2ARC_SYMBOLS_BASE_CLASSIFIER"
-  }
-
-val SourceSet.fmuFilesJarClassifierName: String
-  get() = if (SourceSet.isMain(this)) {
-    FMU2ARC_FILES_BASE_CLASSIFIER
-  } else {
-    "${this.name}-$FMU2ARC_FILES_BASE_CLASSIFIER"
-  }

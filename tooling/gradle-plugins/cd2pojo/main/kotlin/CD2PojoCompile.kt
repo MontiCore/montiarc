@@ -26,32 +26,33 @@ import org.gradle.process.ExecOperations
 import org.gradle.work.InputChanges
 
 /**
- * A task that generates Java code from class diagrams, using cd2pojo.
+ * Generates Java source code and symbol files from MontiCore class diagrams using
+ * the CD2Pojo tool.
+ *
+ * The task always regenerates all outputs when it executes. This prevents stale
+ * generated artifacts, for example a TOP class remaining after its corresponding
+ * handwritten class has been removed.
  */
 @CacheableTask
-abstract class Cd2PojoCompile : DefaultTask() {
+abstract class CD2PojoCompile : DefaultTask() {
 
   @get:Inject
   abstract val execOps: ExecOperations
 
   @get:Inject
-  abstract val fs: FileSystemOperations
-
-  // Unimplemented options: help / version / prettyprint / reports / turning cocos off / configtemplate /templatepath
-  // see CD4CodeTool#addStandartOptions
-  //     CDGeneratorTool#addAdditionalOptions
+  abstract val fsOps: FileSystemOperations
 
   @get:InputFiles
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val modelPath: ConfigurableFileCollection
+  abstract val modelpath: ConfigurableFileCollection
 
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:Optional
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val symbolImportDir: ConfigurableFileCollection
+  abstract val symbolpath: ConfigurableFileCollection
 
   @get:Input
   abstract val useClass2Mc: Property<Boolean>
@@ -65,25 +66,29 @@ abstract class Cd2PojoCompile : DefaultTask() {
   @get:Optional
   @get:PathSensitive(PathSensitivity.RELATIVE)
   @get:IgnoreEmptyDirectories
-  abstract val tmplDir: DirectoryProperty
+  abstract val templateDir: DirectoryProperty
 
   @get:OutputDirectory
   abstract val outputDir: DirectoryProperty
 
-  /** Enable debugging of the CD2PojoTool while executing*/
+  /**
+   * Starts CD2Pojo with a JDWP debugger attached, suspends until a debugger connects.
+   */
   @get:Input
   @get:Option(
     option = "debugTask",
-    description = "Enable debugging of the CD2PojoTool while executing. " +
-        "Set a the port to which the debugger listens with '--debugPort=...'"
+    description = "Start CD2Pojo suspended for remote debugging. " +
+        "Use '--debugPort=...' to configure the listening port."
   )
   abstract val debugTask: Property<Boolean>
 
+  /**
+   * JDWP port used when [debugTask] is enabled.
+   */
   @get:Input
   @get:Option(
     option = "debugPort",
-    description = "If '--debugTask' is specified, use this option to specify " +
-        "to which port the debugger shall listen. Defaults to 5005."
+    description = "JDWP listening port for '--debugTask'. Defaults to 5005."
   )
   abstract val debugPort: Property<String>
 
@@ -93,14 +98,14 @@ abstract class Cd2PojoCompile : DefaultTask() {
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val classPath: ConfigurableFileCollection
+  abstract val toolClasspath: ConfigurableFileCollection
 
   @get:Input
   @get:Optional
   abstract val configTemplate: Property<String>
 
   init {
-    description = "Generates .java code from class diagrams using cd2pojo."
+    description = "Generates Java code from class diagrams using CD2Pojo."
 
     useClass2Mc.convention(false)
 
@@ -109,22 +114,22 @@ abstract class Cd2PojoCompile : DefaultTask() {
     debugTask.convention(false)
     debugPort.convention("5005")
 
-    classPath.setFrom(project.configurations.named(TOOL_CLASSPATH_CONFIG_NAME))
+    toolClasspath.setFrom(project.configurations.named(TOOL_CLASSPATH_CONFIG_NAME))
   }
 
   fun javaOutputDir(): Provider<Directory> {
-    return this.outputDir.dir("java")
+    return outputDir.dir("java")
   }
 
   fun symbolOutputDir(): Provider<Directory> {
-    return this.outputDir.dir("symbols")
+    return outputDir.dir("symbols")
   }
 
   @TaskAction
   fun exec(changes: InputChanges) {
-    // We clean the output directory if the task cannot be run incrementally
     if (!changes.isIncremental) {
-      fs.delete { it.delete(this.outputDir) }
+      logger.info("CD2Pojo inputs changed non-incrementally; deleting previous outputs.")
+      fsOps.delete { it.delete(outputDir) }
     }
 
     if (printTaskInfo.get()) {
@@ -132,20 +137,20 @@ abstract class Cd2PojoCompile : DefaultTask() {
     }
 
     // For directories: filter out entries that do not exist
-    val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
-    val cleanSymbolImportDirs = getExistingEntriesInProjectFrom(this.symbolImportDir)
-    val cleanHwcPath = getExistingEntriesInProjectFrom(this.hwcPath)
+    val cleanModelpath = getExistingEntriesInProjectFrom(modelpath)
+    val cleanSymbolpath = getExistingEntriesInProjectFrom(symbolpath)
+    val cleanHwcPath = getExistingEntriesInProjectFrom(hwcPath)
 
-    if (cleanModelPath.isEmpty) {
-      logger.info("None of the given model path directories exists: ${this.modelPath.files}")
+    if (cleanModelpath.isEmpty) {
+      logger.info("None of the configured model path entries exists: ${modelpath.files}")
       return
     }
 
-    // Delete all outputs to avoid cases such as: user deletes the HWC class, but the generated TOP class persists
-    fs.delete {  it.delete(outputDir) }
+    // Delete all outputs to avoid stale outputs (such as stale TOP-classes)
+    fsOps.delete {  it.delete(outputDir) }
 
     execOps.javaexec {
-      it.classpath(this.classPath)
+      it.classpath(toolClasspath)
       it.mainClass.set(getMainClass())
 
       if (debugTask.get()) {
@@ -157,16 +162,16 @@ abstract class Cd2PojoCompile : DefaultTask() {
 
       // Set build args for the cd2pojo generator
       it.args("--checkcococs")
-      it.args("--input", cleanModelPath.asPath)
-      it.args("--output", this.javaOutputDir().get().asFile.path)
-      it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
+      it.args("--input", cleanModelpath.asPath)
+      it.args("--output", javaOutputDir().get().asFile.path)
+      it.args("--symboltable", symbolOutputDir().get().asFile.path)
 
       if (useClass2Mc.get()) {
         it.args("--class2mc")
       }
 
-      if (tmplDir.isPresent) {
-        it.args("--template", tmplDir.get())
+      if (templateDir.isPresent) {
+        it.args("--template", templateDir.get())
       }
 
       if (configTemplate.isPresent) {
@@ -177,8 +182,8 @@ abstract class Cd2PojoCompile : DefaultTask() {
         it.args("--handwrittencode", cleanHwcPath.asPath)
       }
 
-      if (!cleanSymbolImportDirs.isEmpty) {
-        it.args("-path", cleanSymbolImportDirs.asPath)
+      if (!cleanSymbolpath.isEmpty) {
+        it.args("-path", cleanSymbolpath.asPath)
       }
     }
   }
@@ -193,25 +198,25 @@ abstract class Cd2PojoCompile : DefaultTask() {
     println("Trying generation")
 
     println("Modelpath:")
-    modelPath.forEach { println("  $it") }
+    modelpath.forEach { println("  $it") }
     println("Modelpath with existing entries:")
-    modelPath.filter { it.exists() }.forEach { println("  $it") }
+    modelpath.filter { it.exists() }.forEach { println("  $it") }
+
+    println("Symbolpath:")
+    symbolpath.forEach { println("  $it") }
+    println("Symbolpath with existing entries:")
+    symbolpath.filter { it.exists() }.forEach { println("  $it") }
 
     println("HWCpath:")
     hwcPath.forEach { println("  $it") }
 
     println("class2mc: " + useClass2Mc.get())
 
-    println("Symbol import dir:")
-    symbolImportDir.forEach { println("  $it") }
-    println("Symbol import dir with existing entries:")
-    symbolImportDir.filter { it.exists() }.forEach { println("  $it") }
-
-    println("OutDir: " + outputDir.get())
+    println("OutputDir: " + outputDir.get())
 
     println("MainClass:" + getMainClass())
-    println("ClassPath:")
-    this.classPath.asPath.split(":").forEach { println("  $it") }
+    println("ToolClasspath:")
+    toolClasspath.asPath.split(":").forEach { println("  $it") }
 
     println("Debugging infos: isEnabled=${debugTask.get()}; port=${debugPort.get()}")
   }

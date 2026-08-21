@@ -14,17 +14,17 @@ import org.gradle.api.tasks.SourceSet
  */
 const val CLASS2MC_USAGE = "class2mc-api"
 
-val SourceSet.class2mcConfigName get() = class2mcConfigName()
-val SourceSet.class2mcClasspathConfigName get() = class2mcConfigName("Classpath")
-val SourceSet.class2mcApiElementsConfigName get() = class2mcConfigName("ApiElements")
+val SourceSet.class2mcConfigName get() = nameClass2MCConfig()
+val SourceSet.class2mcClasspathConfigName get() = nameClass2MCConfig("Classpath")
+val SourceSet.class2mcApiElementsConfigName get() = nameClass2MCConfig("ApiElements")
 
-private fun SourceSet.class2mcConfigName(suffix: String = ""): String =
+private fun SourceSet.nameClass2MCConfig(suffix: String = ""): String =
   if (SourceSet.isMain(this)) "class2mc$suffix" else "${name}Class2mc$suffix"
 
 /**
  * Shared attribute set for both the classpath and the apiElements variant.
  */
-fun attachClass2mcAttributes(attrs: AttributeContainer,
+fun attachClass2MCAttributes(attrs: AttributeContainer,
                              project: Project,
                              libraryElements: String) {
   val objects = project.objects

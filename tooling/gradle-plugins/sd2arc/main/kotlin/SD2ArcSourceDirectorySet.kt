@@ -11,18 +11,18 @@ import javax.inject.Inject
 /**
  * [SourceDirectorySet] for class diagram sources, used for sd2arc
  */
-interface Sd2ArcSourceDirectorySet : SourceDirectorySet
+interface SD2ArcSourceDirectorySet : SourceDirectorySet
 
-abstract class DefaultSd2ArcSourceDirectorySet @Inject constructor(
+abstract class DefaultSD2ArcSourceDirectorySet @Inject constructor(
   sourceDirectorySet: SourceDirectorySet,
   taskDependencyFactory: TaskDependencyFactory
-) : DefaultSourceDirectorySet(sourceDirectorySet, taskDependencyFactory), Sd2ArcSourceDirectorySet
+) : DefaultSourceDirectorySet(sourceDirectorySet, taskDependencyFactory), SD2ArcSourceDirectorySet
 
 val SourceSet.sd2arc
   get(): Optional<SourceDirectorySet> = Optional.ofNullable(
-    extensions.findByType(Sd2ArcSourceDirectorySet::class.java)
+    extensions.findByType(SD2ArcSourceDirectorySet::class.java)
   )
 
 
-val SourceSet.compileSd2ArcTaskName: String
+val SourceSet.compileSD2ArcTaskName: String
   get() = getCompileTaskName("sd2arc")

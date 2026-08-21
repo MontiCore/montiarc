@@ -13,9 +13,9 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    create("Montiarc") {
+    create("MontiArc") {
       id = "montiarc"
-      implementationClass = "montiarc.gradle.ma2java.Ma2JavaPlugin"
+      implementationClass = "montiarc.gradle.ma2java.MA2JavaPlugin"
     }
   }
 }

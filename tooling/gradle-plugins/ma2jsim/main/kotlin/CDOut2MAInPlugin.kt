@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.ma2jsim
 
-import montiarc.gradle.cd2pojo.Cd2PojoCompile
-import montiarc.gradle.cd2pojo.compileCd2PojoTaskName
+import montiarc.gradle.cd2pojo.CD2PojoCompile
+import montiarc.gradle.cd2pojo.compileCD2PojoTaskName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
@@ -10,7 +10,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 
 /**
- * Connects the outputs of [Cd2PojoCompile] to the inputs of [MontiArcCompile] (for each [SourceSet]).
+ * Connects the outputs of [CD2PojoCompile] to the inputs of [MontiArcCompile] (for each [SourceSet]).
  */
 class CDOut2MAInPlugin : Plugin<Project> {
 
@@ -21,8 +21,8 @@ class CDOut2MAInPlugin : Plugin<Project> {
     this.project.pluginManager.apply(MA2JSimPlugin::class.java)
 
     sourceSetsOf(project).all { sourceSet ->
-      connectCdSymbolsToMontiarc(sourceSet)
-      createDependencyBetweenCdAndMaCompileTasks(sourceSet)
+      connectCDSymbolsToMontiArc(sourceSet)
+      createDependencyBetweenCDAndMACompileTasks(sourceSet)
     }
 
     with (project) {
@@ -38,20 +38,20 @@ class CDOut2MAInPlugin : Plugin<Project> {
       .sourceSets
   }
 
-  private fun connectCdSymbolsToMontiarc(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
-    val cdCompile = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
+  private fun connectCDSymbolsToMontiArc(sourceSet: SourceSet) = with (project) {
+    val maCompile = tasks.named(sourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
+    val cdCompile = tasks.named(sourceSet.compileCD2PojoTaskName, CD2PojoCompile::class.java)
 
     maCompile.configure {
-      it.symbolImportDir.from(
+      it.symbolpath.from(
         provider { cdCompile.get().symbolOutputDir() }
       )
     }
   }
 
-  private fun createDependencyBetweenCdAndMaCompileTasks(sourceSet: SourceSet) = with (project) {
-    val maCompile = tasks.named(sourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
-    val cdCompile = tasks.named(sourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
+  private fun createDependencyBetweenCDAndMACompileTasks(sourceSet: SourceSet) = with (project) {
+    val maCompile = tasks.named(sourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
+    val cdCompile = tasks.named(sourceSet.compileCD2PojoTaskName, CD2PojoCompile::class.java)
 
     maCompile.configure { it.dependsOn(cdCompile) }
   }
@@ -69,12 +69,12 @@ class CDOut2MAInPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainCDCompile = tasks.named(mainSourceSet.compileCd2PojoTaskName, Cd2PojoCompile::class.java)
-    val testMACompile = tasks.named(testSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+    val mainCDCompile = tasks.named(mainSourceSet.compileCD2PojoTaskName, CD2PojoCompile::class.java)
+    val testMACompile = tasks.named(testSourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
 
     // Puts main's symbols on the symbol path of test
     testMACompile.configure {
-      it.symbolImportDir.from(
+      it.symbolpath.from(
           provider { mainCDCompile.get().symbolOutputDir() }
       )
     }

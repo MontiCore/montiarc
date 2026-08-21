@@ -17,7 +17,7 @@ import org.gradle.api.tasks.SourceSetContainer
  * ```
  */
 @Suppress("unused")
-class MontiarcDependenciesPlugin : Plugin<Project> {
+class MontiArcDependenciesPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
@@ -29,13 +29,12 @@ class MontiarcDependenciesPlugin : Plugin<Project> {
 
       sourceSetsOf(project).all {sourceSet ->
         addDeclarationConfigTo(sourceSet)
-        addSymbolDependencyConfigTo(sourceSet)
-        letSymbolConfigExtendMontiarcConfigOf(sourceSet)
-        letJavaExtendMontiarcConfigOf(sourceSet)
+        createMontiArcSymbolpathConfig(sourceSet)
+        connectDependencyConfigsOf(sourceSet)
       }
 
       pluginManager.withPlugin("java") {
-        letTestModelsExtendMainModels()
+        makeMainModelsAvailableInTests()
       }
     }
   }
@@ -48,22 +47,22 @@ class MontiarcDependenciesPlugin : Plugin<Project> {
    * To this end, the _implementation_ configuration of the source set extends from the created _montiarc_ configuration
    */
   private fun addDeclarationConfigTo(sourceSet: SourceSet) = with (project) {
-    val config = configurations.maybeCreate(sourceSet.montiarcDependencyDeclarationConfigName)
+    val config = configurations.maybeCreate(sourceSet.montiarcConfigName)
     config.isCanBeConsumed = false
     config.isCanBeResolved = false
     config.isVisible = false
     config.description = "Used to declare dependencies on other montiarc projects. This will simultaneously add their " +
-      "java implementation to the implementation configuration and their models to to the montiarcSymbolDependencies"
+      "java implementation to the implementation configuration and their models to to the montiarcSymbolpath configuration"
   }
 
   /**
-  * Creates a configuration (_montiarcSymbolDependencies_) for the given source set, containing model dependencies
+  * Creates a configuration (_montiarcSymbolpath_) for the given source set, containing model dependencies
   * (.arcsym etc). Only use this configuration for processing, but not to declare dependencies! Do the latter using the
-  * _montiarc_ configuration from which _montiarcSymbolDependencies_ extends from to automatically adopt the
+  * _montiarc_ configuration from which _montiarcSymbolpath_ extends from to automatically adopt the
   * dependencies.
   */
-  private fun addSymbolDependencyConfigTo(sourceSet: SourceSet) = with (project) {
-    configurations.create(sourceSet.montiarcSymbolDependencyConfigurationName) { config ->
+  private fun createMontiArcSymbolpathConfig(sourceSet: SourceSet) = with (project) {
+    configurations.create(sourceSet.montiarcSymbolpathConfigName) { config ->
       config.isCanBeResolved = true
       config.isCanBeConsumed = false
       config.isVisible = false
@@ -71,22 +70,17 @@ class MontiarcDependenciesPlugin : Plugin<Project> {
         "processing dependencies, but not for declaring them. For declaring them, use the _montiarc_ configuration " +
         "instead."
 
-      addMontiarcSymbolJarAttributesTo(config, project)
+      addMontiArcSymbolJarAttributesTo(config, project)
     }
   }
 
-  private fun letSymbolConfigExtendMontiarcConfigOf(sourceSet: SourceSet) = with (project) {
-    val symbolsConfig = configurations.named(sourceSet.montiarcSymbolDependencyConfigurationName)
-    val declarationConfig = configurations.named(sourceSet.montiarcDependencyDeclarationConfigName)
+  private fun connectDependencyConfigsOf(sourceSet: SourceSet) = with (project) {
+    val symbolsConfig = configurations.named(sourceSet.montiarcSymbolpathConfigName)
+    val declarationConfig = configurations.named(sourceSet.montiarcConfigName)
+    val javaConfig = configurations.named(sourceSet.implementationConfigurationName)
 
     symbolsConfig.configure { it.extendsFrom(declarationConfig.get()) }
-  }
-
-  private fun letJavaExtendMontiarcConfigOf(sourceSet: SourceSet) = with (project) {
-    val javaConfig = configurations.named(sourceSet.implementationConfigurationName)
-    val montiarcConfig = configurations.named(sourceSet.montiarcDependencyDeclarationConfigName)
-
-    javaConfig.configure { it.extendsFrom(montiarcConfig.get()) }
+    javaConfig.configure { it.extendsFrom(declarationConfig.get()) }
   }
 
   /**
@@ -95,7 +89,7 @@ class MontiarcDependenciesPlugin : Plugin<Project> {
    *
    * If this method is called, the `java` plugin must have already been applied. Else, an error is logged.
    */
-  private fun letTestModelsExtendMainModels() = with (project) {
+  private fun makeMainModelsAvailableInTests() = with (project) {
     if (!pluginManager.hasPlugin("java")) {
       logger.error("Internal error: Tried to link main and test source sets, but the JavaPlugin is not applied!")
     }
@@ -104,8 +98,8 @@ class MontiarcDependenciesPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainModelConfig = configurations.named(mainSourceSet.montiarcDependencyDeclarationConfigName)
-    val testModelConfig = configurations.named(testSourceSet.montiarcDependencyDeclarationConfigName)
+    val mainModelConfig = configurations.named(mainSourceSet.montiarcConfigName)
+    val testModelConfig = configurations.named(testSourceSet.montiarcConfigName)
     testModelConfig.configure { it.extendsFrom(mainModelConfig.get()) }
   }
 

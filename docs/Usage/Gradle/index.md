@@ -238,10 +238,10 @@ Moreover, verify that the Java class `Status` has been generated to `build/cd2po
 Note: If an error occurs, try running Gradle's `clean` task before. 
 
 ## Using java types
-You can use JDK classes from MontiArc models by setting the `useClass2mc` option of the generation task in Gradle's build script:
+You can use JDK classes from MontiArc models by setting the `useClass2Mc` option of the generation task in Gradle's build script:
 ```kotlin title="build.gradle(.kts)"
 // The syntax is the same for Kotlin and Groovy build scripts
-task.compileMontiarc {
+tasks.compileMontiarc {
   useClass2Mc.set(true)
 }
 ```
@@ -265,7 +265,7 @@ Java types can be used similarly from within class diagram models.
 To this end, the `useClass2Mc` option has to be set for the `compileCd2pojo` task that under the hood processes the class diagram models:
 ```kotlin title="build.gradle(.kts)"
 // Add the following to your build file:
-task.compileCd2pojo {
+tasks.compileCd2pojo {
   useClass2Mc.set(true)
 }
 ```
@@ -277,12 +277,12 @@ task.compileCd2pojo {
 ## Further references 
 Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.
 It also enables fine configuration options.
-You can find comprehensive information about the MontiArc plugin under [MontiArc Gradle Plugin](./MontiArc.md) and about the cd2pojo plugin under [Cd2pojo Gradle Plugin](./CD2Pojo.md).
+You can find comprehensive information about the MontiArc plugin under [MontiArc Gradle Plugin](./MontiArc.md) and about the cd2pojo plugin under [CD2Pojo Gradle Plugin](./CD2Pojo.md).
 
 [Gradle]: https://gradle.org/
 [IntelliJ Plugins]: https://www.jetbrains.com/help/idea/getting-started-with-gradle.html
 [Eclipse Plugin]: https://marketplace.eclipse.org/content/buildship-gradle-integration
 [VS Code Plugin]: https://code.visualstudio.com/docs/java/java-build#_gradle
 [Java Gradle Plugin]: https://docs.gradle.org/current/userguide/java_plugin.html
-[Nexus ma2java Location]: https://nexus.se.rwth-aachen.de/#browse/search=group.raw%3Dmontiarc.generators%20AND%20name.raw%3Dma2java
+[Nexus ma2jsim Location]: https://nexus.se.rwth-aachen.de/#browse/search=group.raw%3Dmontiarc.generators%20AND%20name.raw%3Dma2jsim
 [Nexus cd2pojo Location]: https://nexus.se.rwth-aachen.de/#browse/search=group.raw%3Dmontiarc.generators%20AND%20name.raw%3Dcd2pojo

@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 import montiarc.build.BuildConstants
-import montiarc.gradle.montiarc.cd2pojo4MaDeclarationConfigName
-import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
+import montiarc.gradle.montiarc.cd2pojo4montiarcConfigName
+import montiarc.gradle.montiarc.montiarcConfigName
 
 plugins {
   id("montiarc.build.jvm")
@@ -23,45 +23,45 @@ tasks.getByName<Test>("test") {
 // The source set names represent how they dependend on project "c"
 // (including the name of the configurations they use to declare this dependency)
 // E.g., the following source set uses montiarc(...) to depend on ":ma-only-c"
-val maToMaOnlyC: SourceSet = sourceSets.create("maToMaOnlyC")
-val maToMixedCWith4MaDepToB: SourceSet = sourceSets.create("maToMixedCWith4MaDepToB")
-val maToMixedCWithCdDepToB: SourceSet = sourceSets.create("maToMixedCWithCdDepToB")
-val cd4maToMixedCWith4MaDepToB: SourceSet = sourceSets.create("cd4maToMixedCWith4MaDepToB")
-val cd4maToMixedCWithCdDepToB: SourceSet = sourceSets.create("cd4maToMixedCWithCdDepToB")
+val montiarcToMontiArcOnly: SourceSet = sourceSets.create("montiarcToMontiArcOnlyC")
+val montiarcToMixedCWith4MontiArcDepToB: SourceSet = sourceSets.create("montiarcToMixedCWith4MontiArcDepToB")
+val montiarcToMixedCWithClassDiagramDepToB: SourceSet = sourceSets.create("montiarcToMixedCWithClassDiagramDepToB")
+val cd4maToMixedCWith4MontiArcDepToB: SourceSet = sourceSets.create("cd4maToMixedCWith4MontiArcDepToB")
+val cd4maToMixedCWithClassDiagramDepToB: SourceSet = sourceSets.create("cd4maToMixedCWithClassDiagramDepToB")
 val cd4maToB: SourceSet = sourceSets.create("cd4maToB")
 
 dependencies {
   add(
-    maToMaOnlyC.montiarcDependencyDeclarationConfigName,
+    montiarcToMontiArcOnly.montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:ma-only-c")
   )
   add(
-    maToMixedCWith4MaDepToB.montiarcDependencyDeclarationConfigName,
+    montiarcToMixedCWith4MontiArcDepToB.montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
-    maToMixedCWithCdDepToB.montiarcDependencyDeclarationConfigName,
+    montiarcToMixedCWithClassDiagramDepToB.montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
-    cd4maToMixedCWith4MaDepToB.cd2pojo4MaDeclarationConfigName,
+    cd4maToMixedCWith4MontiArcDepToB.cd2pojo4montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
-    cd4maToMixedCWithCdDepToB.cd2pojo4MaDeclarationConfigName,
+    cd4maToMixedCWithClassDiagramDepToB.cd2pojo4montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
-    cd4maToB.cd2pojo4MaDeclarationConfigName,
+    cd4maToB.cd2pojo4montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:cd-b")
   )
 }
 
 tasks.check.configure {
-  dependsOn(maToMaOnlyC.compileJavaTaskName)
-  dependsOn(maToMixedCWith4MaDepToB.compileJavaTaskName)
-  dependsOn(maToMixedCWithCdDepToB.compileJavaTaskName)
-  dependsOn(cd4maToMixedCWith4MaDepToB.compileJavaTaskName)
-  dependsOn(cd4maToMixedCWithCdDepToB.compileJavaTaskName)
+  dependsOn(montiarcToMontiArcOnly.compileJavaTaskName)
+  dependsOn(montiarcToMixedCWith4MontiArcDepToB.compileJavaTaskName)
+  dependsOn(montiarcToMixedCWithClassDiagramDepToB.compileJavaTaskName)
+  dependsOn(cd4maToMixedCWith4MontiArcDepToB.compileJavaTaskName)
+  dependsOn(cd4maToMixedCWithClassDiagramDepToB.compileJavaTaskName)
   dependsOn(cd4maToB.compileJavaTaskName)
 }

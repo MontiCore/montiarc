@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 import montiarc.build.BuildConstants
-import montiarc.gradle.cd2pojo.cd2PojoDependencyDeclarationConfigName
-import montiarc.gradle.montiarc.cd2pojo4MaDeclarationConfigName
-import montiarc.gradle.montiarc.montiarcDependencyDeclarationConfigName
+import montiarc.gradle.cd2pojo.cd2pojoConfigName
+import montiarc.gradle.montiarc.cd2pojo4montiarcConfigName
+import montiarc.gradle.montiarc.montiarcConfigName
 
 plugins {
   id("montiarc.build.jvm")
@@ -36,39 +36,39 @@ val cdToB: SourceSet = sourceSets.create("cdToB")
 
 dependencies {
   add(
-    maToMixedCWith4MaDepToB.montiarcDependencyDeclarationConfigName,
+    maToMixedCWith4MaDepToB.montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
-    maToMixedCWithCdDepToB.montiarcDependencyDeclarationConfigName,
+    maToMixedCWithCdDepToB.montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
-    maToMaOnlyC.montiarcDependencyDeclarationConfigName,
+    maToMaOnlyC.montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:ma-only-c")
   )
   add(
-    cd4maToMixedCWith4MaDepToB.cd2pojo4MaDeclarationConfigName,
+    cd4maToMixedCWith4MaDepToB.cd2pojo4montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
-    cd4maToMixedCWithCdDepToB.cd2pojo4MaDeclarationConfigName,
+    cd4maToMixedCWithCdDepToB.cd2pojo4montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
-    cd4maToB.cd2pojo4MaDeclarationConfigName,
+    cd4maToB.cd2pojo4montiarcConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:cd-b")
   )
   add(
-    cdToMixedCWith4MaDepToB.cd2PojoDependencyDeclarationConfigName,
+    cdToMixedCWith4MaDepToB.cd2pojoConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-4ma-dep-to-b")
   )
   add(
-    cdToMixedCWithCdDepToB.cd2PojoDependencyDeclarationConfigName,
+    cdToMixedCWithCdDepToB.cd2pojoConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:mixed-c-with-cd-dep-to-b")
   )
   add(
-    cdToB.cd2PojoDependencyDeclarationConfigName,
+    cdToB.cd2pojoConfigName,
     project(":tooling:ma2jsim-plugin-itest:cd4montiarc-dependencies:cd-b")
   )
 }

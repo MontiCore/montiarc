@@ -73,7 +73,7 @@ tool that puts everything together.
 The Gradle plugins `cd2pojo` and `montiarc-jsim` offer configuration options 
 to facilitate the debugging of generator executions in integration and 
 application projects: 
-All [`Cd2PojoCompile`](tooling%2Fgradle-plugins%2Fcd2pojo%2Fmain%2Fkotlin%2FCd2PojoCompile.kt) 
+All [`CD2PojoCompile`](tooling%2Fgradle-plugins%2Fcd2pojo%2Fmain%2Fkotlin%2FCD2PojoCompile.kt) 
 and [`MontiArcCompile`](tooling%2Fgradle-plugins%2Fma2jsim%2Fmain%2Fkotlin%2FMontiArcCompile.kt) 
 tasks expose a boolean property called `debugTask`. When set to `true`, the 
 corresponding task will wait for a remote debugger to connect on port `5005` 

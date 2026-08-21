@@ -90,8 +90,8 @@ etc. )
       testMontiarc("some.testModel.publisher:logic-gates:1.2.0")
     }
 
-    task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
-      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+    tasks.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
+      symbolpath.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
       useClass2Mc.set(true)  // Default value is false
     }
     ```
@@ -114,8 +114,8 @@ etc. )
         testMontiarc "some.testModel.publisher:logic-gates:1.2.0"
     }
 
-    task.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
-      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+    tasks.compileMontiarc {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Montiarc"
+      symbolpath.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
       useClass2Mc.set(true)  // Default value is false
     }
     ```
@@ -130,10 +130,10 @@ Some configuration options only have default values, if the task is created for 
 
 | Option          | Default value                                                | Description                                                                                                                                                                                                                                                                                                                         |
 |-----------------|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| modelPath       | `$projectDir/src/SOURCE_SET_NAME/montiarc`                   | Where to find the MontiArc models for which Java code should be generated. You can specify multiple locations with multiple `modelPath.from(...)` statements.                                                                                                                                                                       |
+| modelpath       | `$projectDir/src/SOURCE_SET_NAME/montiarc`                   | Where to find the MontiArc models for which Java code should be generated. You can specify multiple locations with multiple `modelpath.from(...)` statements.                                                                                                                                                                       |
 | hwcPath         | All java code from the same source set (main, or test, etc.) | Where to find the handwritten code extensions for the generated MontiArc code.                                                                                                                                                                                                                                                      |
-| symbolImportDir | The `montiarcSymbolDependencies` configuration               | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolImportDir.from(...)` statements.                                                                                                                 |
-| useClass2Mc     | `false`                                                      | If you want to use java types (or other JVM types) in your MontiArc models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `maGenerator`) will be accessible from MontiArc models. *Note*: this will be changed in the future. | <!-- TODO: Check if we need to put these types into the generateMA configuration --> |
+| symbolpath      | The `montiarcSymbolpath` configuration                       | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolpath.from(...)` statements.                                                                                                                 |
+| useClass2Mc     | `false`                                                      | If you want to use java types (or other JVM types) in your MontiArc models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `ma2jsimToolClasspath`) will be accessible from MontiArc models. *Note*: this will be changed in the future. | <!-- TODO: Check if we need to put these types into the generateMA configuration --> |
 | outputDir       | `$buildDir/montiarc/SOURCE_SET_NAME`                         | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                       |
 | debugTask       | `false`                                                      | If set to true, a debugger can be attached to the generator process for debugging purposes.                                                                                                                                                                                                                                         |
 ---
@@ -143,11 +143,11 @@ are also available in the MontiArc models of the same source set.
 
 ---
 ## Added build elements
-* The Plugin adds the dependency configuration *maGenerator* on which it places the dependency on the generator that is
+* The Plugin adds the dependency configuration *ma2jsimToolClasspath* on which it places the dependency on the generator that is
   used to generate .java code from the .arc files. If you use `class2mc`, then you can place the java classes that you
   want to use in your models on this configuration.
 * For every SourceSet, the plugin
-  * Adds a `MontiarcCompile` task that performs the generation step from .arc models
+  * Adds a `MontiArcCompile` task that performs the generation step from .arc models
     to .java code. The task name is `compileMontiarc` for main and `compileSourceSetNameMontiarc` for others
   * Adds a jar task packaging the .arcsym models of the main source set, adding it to the default publication.
   * Adds three configurations:
@@ -156,28 +156,28 @@ are also available in the MontiArc models of the same source set.
       serves the purpose to declare dependencies. The models of the dependencies will automatically be added to
       the `compileMontiarc` task and their java implementations will automatically be added to the
       `implementation` configuration for compilation and runtime.
-    * `cd4pojo4montiarc` for the main source set and `sourceSetNameCd2pojo4montiarc` for others:\
+    * `cd2pojo4montiarc` for the main source set and `sourceSetNameCd2pojo4montiarc` for others:\
       Used to declare dependencies of MontiArc models on other class diagram projects. This configuration is not
       resolvable or consumable and only serves the purpose to declare dependencies. The models of the dependencies will
       automatically be added to the `compileMontiarc` task and their java implementations will automatically be added to
       the `implementation` configuration for compilation and runtime.
-    * `montiarcSymbolDependencies` for the main source set and `sourceSetNameMontiarcSymbolDependencies` for others:\
+    * `montiarcSymbolpath` for the main source set and `sourceSetNameMontiarcSymbolpath` for others:\
       Loads the MontiArc dependencies (represented by .arcsym files). Do not use 
       this configuration to _declare_ the dependencies (use `montiarc` for this purpose instead), but use this
       configuration, when you want to access the MontiArc models of the dependencies. (This configuration is
       automatically derived from the `montiarc` configuration, only considering the montiarc models.)
-    * `cd2pojo4montiarcSymbolDependencies` for the main source set and `sourceSetNameCd2pojo4montiarcSymbolDependencies`
+    * `cd2pojo4montiarcSymbolpath` for the main source set and `sourceSetNameCd2pojo4montiarcSymbolpath`
       for others:\
       Loads the class diagram dependencies of our MontiArc models (represented by .cdsym files). Do not use
       this configuration to _declare_ the dependencies (use `cd2pojo4montiarc` for this purpose instead), but use this
       configuration, when you want to access the class diagram dependencies. (This configuration is
       automatically derived from the `cd2pojo4montiarc` configuration, only considering the class diagram models.)
-    * `montiarcSymbolElements` for the main source set and `sourceSetNameMontiarcSymbolElements` for others:\
+    * `montiarcApiElements` for the main source set and `sourceSetNameMontiarcApiElements` for others:\
       Contains the jar of the MontiArc models (represented by .arcsym files) that is added to the default publication
       set. Is also used to publish the list of MontiArc dependencies of this project. To this end, it extends the
       `montiarc` configuration. By default, this configuration is only added for the main source set.
-    * `cd2pojo4montiarcSymbolDependencyElements` for the main source set and
-      `sourceSetNameCd2pojo4montiarcSymbolDependencyElements` for others:\
+    * `cd2pojo4montiarcApiElements` for the main source set and
+      `sourceSetNameCd2pojo4montiarcApiElements` for others:\
       Used to publish the list of class diagram dependencies of our MontiArc models. To this end, it extends the
       `cd2pojo4montiarc` configuration. By default, this configuration is only added for the main source set.
       If the project also applies the `cd2pojo` plugin, then the cd-symbols jar is also published with this

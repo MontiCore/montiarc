@@ -41,8 +41,8 @@ configurations {
 }
 
 dependencies {
-  cd2pojoSymbolDependencies(sourceSets["base"].output)
-  montiarcSymbolDependencies(sourceSets["base"].output)
+  cd2pojoSymbolpath(sourceSets["base"].output)
+  montiarcSymbolpath(sourceSets["base"].output)
   implementation(sourceSets["base"].output)
   implementation(seLibs.se.commons.logging)
   implementation(seLibs.se.commons.utilities)

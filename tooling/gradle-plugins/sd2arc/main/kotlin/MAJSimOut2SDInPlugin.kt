@@ -5,20 +5,19 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginExtension
 import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceSetContainer
 import montiarc.gradle.ma2jsim.MontiArcCompile
-import montiarc.gradle.ma2jsim.compileMontiarcTaskName
+import montiarc.gradle.ma2jsim.compileMontiArcTaskName
 
 /**
- * Connects the outputs of [MontiArcCompile] to the inputs of [Sd2ArcCompile] (for each [SourceSet]).
+ * Connects the outputs of [MontiArcCompile] to the inputs of [SD2ArcCompile] (for each [SourceSet]).
  */
-class MAJsimOut2SDInPlugin : Plugin<Project> {
+class MAJSimOut2SDInPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
   override fun apply(project: Project) {
     this.project = project
-    this.project.pluginManager.apply(Sd2ArcPlugin::class.java)
+    this.project.pluginManager.apply(SD2ArcPlugin::class.java)
 
     with (project) {
       pluginManager.withPlugin("java") {
@@ -40,10 +39,10 @@ class MAJsimOut2SDInPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainCompile = tasks.named(mainSourceSet.compileMontiarcTaskName, MontiArcCompile::class.java)
+    val mainCompile = tasks.named(mainSourceSet.compileMontiArcTaskName, MontiArcCompile::class.java)
     // Puts main's symbols on the symbol path of test
-    tasks.named(testSourceSet.compileSd2ArcTaskName, Sd2ArcCompile::class.java) {
-      it.symbolImportDir.from(mainCompile.get().symbolOutputDir())
+    tasks.named(testSourceSet.compileSD2ArcTaskName, SD2ArcCompile::class.java) {
+      it.symbolpath.from(mainCompile.get().symbolOutputDir())
     }
   }
 }

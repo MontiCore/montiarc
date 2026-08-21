@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.gradle.fmu2arc
+package montiarc.gradle.montiarc
 
+import montiarc.gradle.fmu2arc.FMU2ARC_API_FILE_USAGE
+import montiarc.gradle.fmu2arc.FMU2ARC_API_SYMBOL_USAGE
 import org.gradle.api.attributes.AttributeDisambiguationRule
 import org.gradle.api.attributes.MultipleCandidatesDetails
 import org.gradle.api.attributes.Usage

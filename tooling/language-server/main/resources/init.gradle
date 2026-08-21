@@ -58,11 +58,11 @@ allprojects { project ->
 
       if (project.extensions.getExtraProperties().has("MATaskType")) {
         project.tasks.withType(project.extensions.getExtraProperties().get("MATaskType")) { task ->
-          task.modelPath.each { dir ->
+          task.modelpath.each { dir ->
             relevant = true
             paths.add(projectDir.relativize(dir.toPath()).toString())
           }
-          task.symbolImportDir.each { dir ->
+          task.symbolpath.each { dir ->
             symbolPaths.add(dir.toPath().toString())
           }
         }
@@ -70,11 +70,11 @@ allprojects { project ->
 
       if (project.extensions.getExtraProperties().has("CDTaskType")) {
         project.tasks.withType(project.extensions.getExtraProperties().get("CDTaskType")) { task ->
-          task.modelPath.each { dir ->
+          task.modelpath.each { dir ->
             relevant = true
             paths.add(projectDir.relativize(dir.toPath()).toString())
           }
-          task.symbolImportDir.each { dir ->
+          task.symbolpath.each { dir ->
             symbolPaths.add(dir.toPath().toString())
           }
           cdOutputPaths.add(task.outputDir.get().getAsFile().toPath())

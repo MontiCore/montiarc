@@ -11,7 +11,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 
 /**
- * Adds a sourceset entry for Montiarc models to every [SourceSet].
+ * Adds a sourceset entry for MontiArc models to every [SourceSet].
  * Usage:
  * ```
  * sourceSets {
@@ -24,7 +24,7 @@ import org.gradle.api.tasks.SourceSetContainer
  * ```
  */
 @Suppress("unused")
-class MontiarcSourcesPlugin : Plugin<Project> {
+class MontiArcSourcesPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
@@ -33,7 +33,7 @@ class MontiarcSourcesPlugin : Plugin<Project> {
 
     with(project) {
       pluginManager.apply("java-base")
-      sourceSetsOf(project).all { addMontiarcTo(it) }
+      sourceSetsOf(project).all { addMontiArcEntryToSourceSet(it) }
     }
   }
 
@@ -43,10 +43,10 @@ class MontiarcSourcesPlugin : Plugin<Project> {
   /**
    * Adds the entry "montiarc" to every source set where users can put montiarc models.
    */
-  private fun addMontiarcTo(sourceSet: SourceSet) {
+  private fun addMontiArcEntryToSourceSet(sourceSet: SourceSet) {
     val srcDirSet = sourceSet.extensions.create(
-      MontiarcSourceDirectorySet::class.java, "montiarc",
-      DefaultMontiarcSourceDirectorySet::class.java,
+      MontiArcSourceDirectorySet::class.java, "montiarc",
+      DefaultMontiArcSourceDirectorySet::class.java,
       project.objects.sourceDirectorySet("montiarc", "${sourceSet.name} montiarc source"),
       DefaultTaskDependencyFactory.withNoAssociatedProject()
     )

@@ -29,7 +29,7 @@ const val FMU2ARC_FILES_BASE_CLASSIFIER = "fmu2arcFiles"
  * For example, this is `fmu2arc` for `main` and `testFmu2arc` for `test`.
  */
 val SourceSet.fmu2ArcConfigName: String
-  get() = fmu2ArcConfigurationName()
+  get() = nameFMU2ArcConfig()
 
 /**
  * Name of the resolvable configuration containing FMU files required on the model
@@ -39,7 +39,7 @@ val SourceSet.fmu2ArcConfigName: String
  * `testFmu2arcModelpath` for `test`.
  */
 val SourceSet.fmu2ArcModelpathConfigName: String
-  get() = fmu2ArcConfigurationName("Modelpath")
+  get() = nameFMU2ArcConfig("Modelpath")
 
 /**
  * Name of the consumable configuration exposing compiled FMU2Arc symbols.
@@ -48,7 +48,7 @@ val SourceSet.fmu2ArcModelpathConfigName: String
  * `testFmu2arcApiElements` for `test`.
  */
 val SourceSet.fmu2ArcApiElementsConfigName: String
-  get() = fmu2ArcConfigurationName("ApiElements")
+  get() = nameFMU2ArcConfig("ApiElements")
 
 /**
  * Name of the consumable configuration exposing FMU files.
@@ -57,7 +57,7 @@ val SourceSet.fmu2ArcApiElementsConfigName: String
  * `testFmu2arcFilesElements` for `test`.
  */
 val SourceSet.fmu2ArcFilesElementsConfigName: String
-  get() = fmu2ArcConfigurationName("FilesElements")
+  get() = nameFMU2ArcConfig("FilesElements")
 
 /**
  * Name of the task that packages compiled FMU2Arc symbols into a JAR.
@@ -91,5 +91,5 @@ val SourceSet.fmu2ArcFilesJarClassifierName: String
     "$name-$FMU2ARC_FILES_BASE_CLASSIFIER"
   }
 
-private fun SourceSet.fmu2ArcConfigurationName(suffix: String = ""): String =
+private fun SourceSet.nameFMU2ArcConfig(suffix: String = ""): String =
   if (SourceSet.isMain(this)) "fmu2arc$suffix" else "${name}Fmu2arc$suffix"

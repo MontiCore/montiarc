@@ -10,7 +10,7 @@ import org.gradle.api.attributes.Usage
  * Using this rule, dependency variants with perfectly matching [Usage] attribute value [CD2POJO_4_MONTIARC_USAGE] are
  * preferred over [CD2POJO_API_SYMBOL_USAGE] when we search for [Usage] values of [CD2POJO_4_MONTIARC_USAGE].
  */
-class Cd2PojoForMontiArcPreferred : AttributeDisambiguationRule<Usage> {
+class CD2PojoForMontiArcPreferred : AttributeDisambiguationRule<Usage> {
   override fun execute(t: MultipleCandidatesDetails<Usage>): Unit = with (t) {
     if (consumerValue != null && consumerValue!!.name == CD2POJO_4_MONTIARC_USAGE) {
 

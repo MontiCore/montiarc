@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-import montiarc.gradle.cd2pojo.Cd2PojoCompile
+import montiarc.gradle.cd2pojo.CD2PojoCompile
 import montiarc.gradle.ma2jsim.MontiArcCompile
-import montiarc.gradle.ma2jsim.compileMontiarcTaskName
+import montiarc.gradle.ma2jsim.compileMontiArcTaskName
 import montiarc.gradle.ma2jsim.SourceSetSupport.Companion.linkSourceSets
 
 plugins {
@@ -49,7 +49,7 @@ dependencies {
   testImplementation(testFixtures(project(":libraries:simulator-rte")))
 }
 
-tasks.withType(Cd2PojoCompile::class).configureEach {
+tasks.withType(CD2PojoCompile::class).configureEach {
   useClass2Mc.set(true)
 }
 
@@ -57,6 +57,6 @@ tasks.withType(MontiArcCompile::class).configureEach  {
   useClass2Mc.set(true)
 }
 
-tasks.named(variabilitySources!!.compileMontiarcTaskName, MontiArcCompile::class.java) {
+tasks.named(variabilitySources!!.compileMontiArcTaskName, MontiArcCompile::class.java) {
   checkVariability.set(true)
 }

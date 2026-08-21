@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package montiarc.gradle.fmu2arc
+package montiarc.gradle.montiarc
 
+import montiarc.gradle.fmu2arc.FMU2ARC_API_SYMBOL_USAGE
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.gradle.api.attributes.Bundling
@@ -11,76 +12,33 @@ import org.gradle.api.tasks.SourceSet
 
 const val FMU2ARC_4_MONTIARC_USAGE = "fmu2arc-for-montiarc-api"
 
-val SourceSet.fmu2arc4MaDeclarationConfigName
-  get() =
-    if (SourceSet.isMain(this)) {
-      "fmu2arc4montiarc"
-    } else {
-      "${this.name}FMU2arc4montiarc"
-    }
-
-val SourceSet.fmu2arc4MaFileDependencyConfigName
-  get() =
-    if (SourceSet.isMain(this)) {
-      "fmu2arc4montiarcFileDependencies"
-    } else {
-      "${this.name}FMU2arc4montiarcFileDependencies"
-    }
-
-val SourceSet.fmu2arc4MaSymbolDependencyConfigName
-  get() =
-    if (SourceSet.isMain(this)) {
-      "fmu2arc4montiarcSymbolDependencies"
-    } else {
-      "${this.name}FMU2arc4montiarcSymbolDependencies"
-    }
-
-val SourceSet.outgoingFMU4MaDependenciesConfigName
-  get() =
-    if (SourceSet.isMain(this)) {
-      "fmu2arc4montiarcDependencyElements"
-    } else {
-      "${this.name}FMU2arc4montiarcDependencyElements"
-    }
-
-
-// This config is used to make Symbols of Consumers of FMUs accessible without
-// having to declare a montiarc(project(...)) dependency
-val SourceSet.fmu2arc4MaCompSymbolDependencyConfigName
-  get() =
-    if (SourceSet.isMain(this)) {
-      "fmu2arc4montiarcCompSymbolDependencies"
-    } else {
-      "${this.name}FMU2arc4montiarcCompSymbolDependencies"
-    }
-
 /**
  * Name of the configuration used to declare fmu dependencies of MontiArc models.
  *
- * For example, this is `fmu2arc4montiarc` for `main` and `testFmu2arc4montiarc` for `test`.
+ * For example, this is `fmu2arc4montiarc` for `main` and `testFMU2arc4montiarc` for `test`.
  */
-val SourceSet.fmu2arc4MaConfigName: String
-  get() = nameFMU4MaConfig()
+val SourceSet.fmu2arc4montiarcConfigName: String
+  get() = nameFMU4MAConfig()
 
 /**
- * Name of the resolvable configuration containing the fmu files required while compiling the
- * MontiArc models that declare a dependency via `fmu2arc4montiarc`.
+ * Name of the resolvable configuration containing the fmu files required for
+ * executing montiarc components declared via `fmu2arc4montiarc`.
  *
- * For example, this is `fmu2arc4montiarcModelpath` for `main` and
- * `testFmu2arc4montiarcModelpath` for `test`.
+ * For example, this is `fmu2arc4montiarcRuntime` for `main` and
+ * `testFMU2arc4montiarcRuntime` for `test`.
  */
-val SourceSet.fmu2arc4MaModelpathConfigName: String
-  get() = nameFMU4MaConfig("Modelpath")
+val SourceSet.fmu2arc4montiarcRuntimeConfigName: String
+  get() = nameFMU4MAConfig("Runtime")
 
 /**
  * Name of the resolvable configuration containing the fmu symbols required while compiling the
  * MontiArc models that declare a dependency via `fmu2arc4montiarc`.
  *
  * For example, this is `fmu2arc4montiarcSymbolpath` for `main` and
- * `testFmu2arc4montiarcSymbolpath` for `test`.
+ * `testFMU2arc4montiarcSymbolpath` for `test`.
  */
-val SourceSet.fmu2arc4MaSymbolpathConfigName: String
-  get() = nameFMU4MaConfig("Symbolpath")
+val SourceSet.fmu2arc4montiarcSymbolpathConfigName: String
+  get() = nameFMU4MAConfig("Symbolpath")
 
 /**
  * Name of the resolvable configuration containing the montiarc component symbols published by
@@ -88,29 +46,29 @@ val SourceSet.fmu2arc4MaSymbolpathConfigName: String
  * components directly.
  *
  * For example, this is `fmu2arc4montiarcCompSymbolpath` for `main` and
- * `testFmu2arc4montiarcCompSymbolpath` for `test`.
+ * `testFMU2arc4montiarcCompSymbolpath` for `test`.
  */
-val SourceSet.fmu2arc4MaCompSymbolpathConfigName: String
-  get() = nameFMU4MaConfig("CompSymbolpath")
+val SourceSet.fmu2arc4montiarcCompSymbolpathConfigName: String
+  get() = nameFMU4MAConfig("CompSymbolpath")
 
 /**
  * Name of the consumable configuration exposing the transitive fmu dependencies of the MontiArc
  * models.
  *
  * For example, this is `fmu2arc4montiarcApiElements` for `main` and
- * `testFmu2arc4montiarcApiElements` for `test`.
+ * `testFMU2arc4montiarcApiElements` for `test`.
  */
-val SourceSet.fmu2arc4MaApiElementsConfigName: String
-  get() = nameFMU4MaConfig("ApiElements")
+val SourceSet.fmu2arc4montiarcApiElementsConfigName: String
+  get() = nameFMU4MAConfig("ApiElements")
 
-private fun SourceSet.nameFMU4MaConfig(suffix: String = ""): String =
+private fun SourceSet.nameFMU4MAConfig(suffix: String = ""): String =
   if (SourceSet.isMain(this)) "fmu2arc4montiarc$suffix" else "${name}FMU2arc4montiarc$suffix"
 
 /**
  * The publication metadata for the set of transitive dependencies that the MontiArc models have.
  * (Most notably, the [Usage] attribute value is [FMU2ARC_4_MONTIARC_USAGE]
  */
-fun addFMU4maJarAttributesTo(config: Configuration, project: Project) = with(project) {
+fun addFMU4MAJarAttributesTo(config: Configuration, project: Project) = with(project) {
   config.attributes {
     it.attribute(Category.CATEGORY_ATTRIBUTE, project.objects.named(Category::class.java, Category.LIBRARY))
     it.attribute(Usage.USAGE_ATTRIBUTE, project.objects.named(Usage::class.java, FMU2ARC_4_MONTIARC_USAGE))
@@ -124,7 +82,7 @@ fun addFMU4maJarAttributesTo(config: Configuration, project: Project) = with(pro
 
 /**
  * The publication metadata for the set of transitive dependencies that the MontiArc models have.
- * (Most notably, the [Usage] attribute value is [FMU2ARC_SYMBOL_USAGE]
+ * (Most notably, the [Usage] attribute value is [FMU2ARC_API_SYMBOL_USAGE]
  */
 fun addFMUSymbolAttributesTo(config: Configuration, project: Project) = with(project) {
   config.attributes {

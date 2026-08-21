@@ -9,16 +9,16 @@ import org.gradle.api.internal.tasks.TaskDependencyFactory
 import org.gradle.api.tasks.SourceSet
 
 /**
- * [SourceDirectorySet] for Montiarc sources
+ * [SourceDirectorySet] for MontiArc sources
  */
-interface MontiarcSourceDirectorySet : SourceDirectorySet
+interface MontiArcSourceDirectorySet : SourceDirectorySet
 
-abstract class DefaultMontiarcSourceDirectorySet @Inject constructor(
+abstract class DefaultMontiArcSourceDirectorySet @Inject constructor(
   sourceDirectorySet: SourceDirectorySet,
   taskDependencyFactory: TaskDependencyFactory
-) : DefaultSourceDirectorySet(sourceDirectorySet, taskDependencyFactory), MontiarcSourceDirectorySet
+) : DefaultSourceDirectorySet(sourceDirectorySet, taskDependencyFactory), MontiArcSourceDirectorySet
 
 val SourceSet.montiarc
   get(): Optional<SourceDirectorySet> = Optional.ofNullable(
-    extensions.findByType(MontiarcSourceDirectorySet::class.java)
+    extensions.findByType(MontiArcSourceDirectorySet::class.java)
   )

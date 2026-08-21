@@ -23,7 +23,7 @@ const val MONTIARC_SYMBOLS_BASE_CLASSIFIER = "arcSymbols"
  * a jar with content.
  */
 @Suppress("unused")
-class MontiarcPublicationPlugin : Plugin<Project> {
+class MontiArcPublicationPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
@@ -31,14 +31,14 @@ class MontiarcPublicationPlugin : Plugin<Project> {
     this.project = project
 
     with (project) {
-      pluginManager.apply(MontiarcDependenciesPlugin::class.java)
+      pluginManager.apply(MontiArcDependenciesPlugin::class.java)
 
       pluginManager.withPlugin("java") {
         val mainSourceSet = project.extensions.getByType(JavaPluginExtension::class.java)
           .sourceSets
           .getByName(SourceSet.MAIN_SOURCE_SET_NAME)
 
-        setUpMontiarcSymbolsPublicationFor(mainSourceSet)
+        setUpMontiArcSymbolsPublicationFor(mainSourceSet)
       }
     }
   }
@@ -47,40 +47,40 @@ class MontiarcPublicationPlugin : Plugin<Project> {
    * Sets up a publication for the symbols of the compiled models of the given source set. To this end, a jar task is
    * created.
    */
-  private fun setUpMontiarcSymbolsPublicationFor(sourceSet: SourceSet) {
+  private fun setUpMontiArcSymbolsPublicationFor(sourceSet: SourceSet) {
 
-    val arcSymbolsConfig = createOutgoingArcSymbolsConfiguration(sourceSet)
+    val arcSymbolsConfig = createOutgoingApiElementsConfig(sourceSet)
     val arcSymbolsJarTask = createArcSymbolsJarTask(sourceSet)
     val arcSymbolsJar = jarTaskToPublishArtifact(arcSymbolsJarTask)
 
     setUpPublicationOf(arcSymbolsJar, arcSymbolsConfig)
-    linkMontiarcDependenciesToOutgoingArcSymbolsConfiguration(sourceSet)
+    connectOutgoingConfigOf(sourceSet)
   }
 
   /**
    * Creates a consumable configuration that contains the symbols of the compiled models of the given source set.
    */
-  private fun createOutgoingArcSymbolsConfiguration(sourceSet: SourceSet): Configuration {
-    return project.configurations.create(sourceSet.montiarcOutgoingSymbolsConfigurationName) { config ->
+  private fun createOutgoingApiElementsConfig(sourceSet: SourceSet): Configuration {
+    return project.configurations.create(sourceSet.montiarcApiElementsConfigName) { config ->
       config.isCanBeConsumed = true
       config.isCanBeResolved = false
       config.description = "Symbols of the compiled models of source set ${sourceSet.name}"
 
-      addMontiarcSymbolJarAttributesTo(config, project)
+      addMontiArcSymbolJarAttributesTo(config, project)
     }
   }
 
   /**
    * Asserts that montiarc dependencies of the project appear as transitive dependencies in the publication.
-   * To this end, this method lets the `outgoingMontiarcSymbols` configuration of the given [SourceSet] extend from
-   * it's `montiarcSymbolDependencies` configuration.
+   * To this end, this method lets the [SourceSet.montiarcApiElementsConfigName] configuration of the given
+   * [SourceSet] extend from its [SourceSet.montiarcConfigName] configuration.
    * @param sourceSet the [SourceSet] whose montiarc symbols should be published and for which this method will
    *        add the transitive dependencies.
    */
-  private fun linkMontiarcDependenciesToOutgoingArcSymbolsConfiguration(sourceSet: SourceSet) {
+  private fun connectOutgoingConfigOf(sourceSet: SourceSet) {
     val configs = project.configurations
-    val montiarcDependencyConfig = configs.getByName(sourceSet.montiarcDependencyDeclarationConfigName)
-    val outgoingArcSymbolsConfiguration = configs.getByName(sourceSet.montiarcOutgoingSymbolsConfigurationName)
+    val montiarcDependencyConfig = configs.getByName(sourceSet.montiarcConfigName)
+    val outgoingArcSymbolsConfiguration = configs.getByName(sourceSet.montiarcApiElementsConfigName)
 
     outgoingArcSymbolsConfiguration.extendsFrom(montiarcDependencyConfig)
   }

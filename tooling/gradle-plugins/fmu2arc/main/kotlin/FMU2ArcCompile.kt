@@ -47,7 +47,7 @@ abstract class FMU2ArcCompile : DefaultTask()  {
   @get:SkipWhenEmpty
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val modelPath : ConfigurableFileCollection
+  abstract val modelpath : ConfigurableFileCollection
 
   @get:OutputDirectory
   abstract val outputDir : DirectoryProperty
@@ -58,7 +58,7 @@ abstract class FMU2ArcCompile : DefaultTask()  {
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
-  abstract val classPath : ConfigurableFileCollection
+  abstract val toolPath : ConfigurableFileCollection
 
   /** Enable debugging of the FMU2ArcTool while executing*/
   @get:Input
@@ -85,7 +85,7 @@ abstract class FMU2ArcCompile : DefaultTask()  {
 
     printTaskInfo.convention(false)
 
-    classPath.setFrom(project.configurations.named(montiarc.gradle.fmu2arc.TOOL_CLASSPATH_CONFIG_NAME))
+    toolPath.setFrom(project.configurations.named(TOOL_CLASSPATH_CONFIG_NAME))
   }
 
   fun javaOutputDir(): Provider<Directory> {
@@ -108,10 +108,10 @@ abstract class FMU2ArcCompile : DefaultTask()  {
     }
 
     // For directories: filter out entries that do not exist
-    val cleanModelPath = getExistingEntriesInProjectFrom(this.modelPath)
+    val cleanModelpath = getExistingEntriesInProjectFrom(this.modelpath)
 
-    if (cleanModelPath.isEmpty) {
-      logger.info("None of the given model path directories exists: ${this.modelPath.files}")
+    if (cleanModelpath.isEmpty) {
+      logger.info("None of the given model path directories exists: ${this.modelpath.files}")
       return
     }
     // Delete all outputs
@@ -121,7 +121,7 @@ abstract class FMU2ArcCompile : DefaultTask()  {
 
     execOps.javaexec {
       it.mainClass.set(getMainClass())
-      it.classpath(this.classPath)
+      it.classpath(this.toolPath)
 
       if (debugTask.get()) {
         it.jvmArgs(
@@ -130,7 +130,7 @@ abstract class FMU2ArcCompile : DefaultTask()  {
         )
       }
 
-      it.args("--input", cleanModelPath.asPath)
+      it.args("--input", cleanModelpath.asPath)
       it.args("--output", this.javaOutputDir().get().asFile.path)
       it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
     }
@@ -150,16 +150,16 @@ abstract class FMU2ArcCompile : DefaultTask()  {
     println("Trying generation")
 
     println("Modelpath:")
-    modelPath.forEach { println("  $it") }
+    modelpath.forEach { println("  $it") }
     println("Modelpath with existing entries:")
-    modelPath.filter { it.exists() }.forEach { println("  $it") }
+    modelpath.filter { it.exists() }.forEach { println("  $it") }
 
 
     println("OutDir: " + outputDir.get())
 
     println("MainClass:" + getMainClass())
     println("ClassPath:")
-    this.classPath.asPath.split(":").forEach { println("  $it") }
+    this.toolPath.asPath.split(":").forEach { println("  $it") }
 
     println("Debugging infos: isEnabled=${debugTask.get()}; port=${debugPort.get()}")
   }

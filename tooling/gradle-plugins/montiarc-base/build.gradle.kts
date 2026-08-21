@@ -14,9 +14,9 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    create("MontiarcBase") {
+    create("MontiArcBase") {
       id = "montiarc-base"
-      implementationClass = "montiarc.gradle.montiarc.MontiarcBasePlugin"
+      implementationClass = "montiarc.gradle.montiarc.MontiArcBasePlugin"
     }
   }
 }

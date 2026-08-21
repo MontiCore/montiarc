@@ -15,9 +15,9 @@ dependencies {
 
 gradlePlugin {
   plugins {
-    create("Sd2arc") {
+    create("SD2Arc") {
       id = "sd2arc"
-      implementationClass = "montiarc.gradle.sd2arc.Sd2ArcPlugin"
+      implementationClass = "montiarc.gradle.sd2arc.SD2ArcPlugin"
     }
   }
 }

@@ -1,6 +1,6 @@
 /* (c) https://github.com/MontiCore/monticore */
 import montiarc.gradle.ma2jsim.MontiArcCompile
-import montiarc.gradle.ma2jsim.compileMontiarcTaskName
+import montiarc.gradle.ma2jsim.compileMontiArcTaskName
 
 /**
  * This build is mostly a test specification. It defines configurations for different compileMontiarc tasks
@@ -24,15 +24,15 @@ val alteredConfigValuesSrcSet = sourceSets.create("alteringAndUsingConfigValues"
   montiarc.destinationDirectory.set(layout.buildDirectory.dir("montiarc-for-altered-destination"))
 }
 
-tasks.named<MontiArcCompile>(alteredConfigValuesSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(alteredConfigValuesSrcSet.compileMontiArcTaskName) {
   val srcSet = alteredConfigValuesSrcSet
   hwcPath.setFrom("$projectDir/src/${srcSet.name}/alteredJavaHwc")
-  symbolImportDir.setFrom("$projectDir/src/${srcSet.name}/alteredSymbolsDir")
+  symbolpath.setFrom("$projectDir/src/${srcSet.name}/alteredSymbolsDir")
   useClass2Mc.set(true)
 }
 
 val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesArePresent::class.java) {
-  dependsOn(tasks.named(alteredConfigValuesSrcSet.compileMontiarcTaskName))
+  dependsOn(tasks.named(alteredConfigValuesSrcSet.compileMontiArcTaskName))
   group = "verification"
 
   val expectedGenDir = layout.buildDirectory.dir("montiarc-for-altered-destination")
@@ -58,20 +58,20 @@ val multiplePathsSrcSet = sourceSets.create("usingMultiplePathsAsConfigValues") 
   ))
 }
 
-tasks.named<MontiArcCompile>(multiplePathsSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(multiplePathsSrcSet.compileMontiArcTaskName) {
   val srcSet = multiplePathsSrcSet
   hwcPath.setFrom(
     "$projectDir/src/${srcSet.name}/java",
     "$projectDir/src/${srcSet.name}/java2",
   )
-  symbolImportDir.setFrom(
+  symbolpath.setFrom(
     "$projectDir/src/${srcSet.name}/symbols",
     "$projectDir/src/${srcSet.name}/symbols2",
   )
 }
 
 val multiplePathsCheck = tasks.register("checkMultiplePaths", CheckFilesArePresent::class.java) {
-  dependsOn(tasks.named(multiplePathsSrcSet.compileMontiarcTaskName))
+  dependsOn(tasks.named(multiplePathsSrcSet.compileMontiArcTaskName))
   group = "verification"
 
   val expectedGenDir = layout.buildDirectory.dir("montiarc/${multiplePathsSrcSet.name}")
@@ -103,20 +103,20 @@ val mixedPathsExistanceSrcSet = sourceSets.create("usingMultiplePathsMixedExista
   ))
 }
 
-tasks.named<MontiArcCompile>(mixedPathsExistanceSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(mixedPathsExistanceSrcSet.compileMontiArcTaskName) {
   val srcSet = mixedPathsExistanceSrcSet
   hwcPath.setFrom(
     "$projectDir/src/${srcSet.name}/java",
     "$projectDir/src/${srcSet.name}/javaNotExisting",
   )
-  symbolImportDir.setFrom(
+  symbolpath.setFrom(
     "$projectDir/src/${srcSet.name}/symbols",
     "$projectDir/src/${srcSet.name}/symbolsNotExisting",
   )
 }
 
 val mixedPathExistenceCheck = tasks.register("checkMultipleMixedPathExistence", CheckFilesArePresent::class.java) {
-  dependsOn(tasks.named(mixedPathsExistanceSrcSet.compileMontiarcTaskName))
+  dependsOn(tasks.named(mixedPathsExistanceSrcSet.compileMontiArcTaskName))
   group = "verification"
 
   val expectedGenDir = layout.buildDirectory.dir("montiarc/${mixedPathsExistanceSrcSet.name}")
@@ -139,7 +139,7 @@ tasks.check.configure { dependsOn(mixedPathExistenceCheck) }
 val removingSrcSet = sourceSets.create("removingDefaultValues")
 tasks.named<MontiarcCompile>(removingSrcSet.getCompileMontiarcTaskName()) {
   hwcPath.setFrom()
-  symbolImportDir.setFrom()
+  symbolpath.setFrom()
 }
 
 val removingDefaultValuesCheck = tasks.register("checkRemovingDefaultValues", CheckFilesArePresent::class.java) {
@@ -162,14 +162,14 @@ tasks.check.configure { dependsOn(removingDefaultValuesCheck) }
 // Testing correct behavior if we change configuration values to unused or absent paths where possible
 // For this source set, declaring only an unused model path directory would lead to "NO_SOURCE", disabling testing
 val unusedConfigValuesSrcSet = sourceSets.create("declaringUnusedConfigValues")
-tasks.named<MontiArcCompile>(unusedConfigValuesSrcSet.compileMontiarcTaskName) {
+tasks.named<MontiArcCompile>(unusedConfigValuesSrcSet.compileMontiArcTaskName) {
   val srcSet = unusedConfigValuesSrcSet
   hwcPath.setFrom(file("$projectDir/src/${srcSet.name}/unusedJava"))
-  symbolImportDir.setFrom(file("$projectDir/src/${srcSet.name}/unusedSymbols"))
+  symbolpath.setFrom(file("$projectDir/src/${srcSet.name}/unusedSymbols"))
 }
 
 val unusedConfigValuesCheck = tasks.register("checkUnusedConfigValues", CheckFilesArePresent::class.java) {
-  dependsOn(tasks.named(unusedConfigValuesSrcSet.compileMontiarcTaskName))
+  dependsOn(tasks.named(unusedConfigValuesSrcSet.compileMontiArcTaskName))
   group = "verification"
 
   val expectedGenDir = layout.buildDirectory.dir("montiarc/${unusedConfigValuesSrcSet.name}")

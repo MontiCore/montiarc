@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.sd2arc
 
-import montiarc.gradle.ma2jsim.compileMontiarcTaskName
+import montiarc.gradle.ma2jsim.compileMontiArcTaskName
 import montiarc.gradle.montiarc.montiarc
 import org.gradle.api.Incubating
 import org.gradle.api.Plugin
@@ -15,7 +15,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
-const val TOOL_CLASSPATH_CONFIG_NAME = "sd2arcTool"
+const val TOOL_CLASSPATH_CONFIG_NAME = "sd2arcToolClasspath"
 
 const val SD2ARC_TOOL_CLASS = "de.monticore.sd2arc.SD2ArcTool"
 
@@ -25,24 +25,24 @@ const val SE_LOGGING_PROJECT_REF = "de.se_rwth.commons:se-commons-logging:${VERS
 
 @Suppress("unused")
 @Incubating
-class Sd2ArcPlugin : Plugin<Project> {
+class SD2ArcPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
   override fun apply(project: Project) {
     this.project = project
 
-    this.project.extensions.extraProperties.set("SDTaskType", Sd2ArcCompile::class.java)
+    this.project.extensions.extraProperties.set("SDTaskType", SD2ArcCompile::class.java)
 
     with (project) {
       pluginManager.apply("java-base")
 
       addGeneratorDependency()
 
-      getSourceSetsOf(project).all { sourceSet ->
+      sourceSetsOf(project).all { sourceSet ->
         // Adding an entry for sd2arc to all source sets and creating compile tasks from them
-        addSd2ArcEntryToSourceSet(sourceSet)
-        createCompileSd2ArcTask(sourceSet)
+        addSD2ArcEntryToSourceSet(sourceSet)
+        createCompileSD2ArcTask(sourceSet)
         dependencies.addProvider(sourceSet.implementationConfigurationName, provider { SE_LOGGING_PROJECT_REF })
       }
 
@@ -51,7 +51,7 @@ class Sd2ArcPlugin : Plugin<Project> {
       }
 
       pluginManager.withPlugin("montiarc-jsim") {
-        pluginManager.apply(MAJsimOut2SDInPlugin::class.java)
+        pluginManager.apply(MAJSimOut2SDInPlugin::class.java)
       }
     }
   }
@@ -69,7 +69,7 @@ class Sd2ArcPlugin : Plugin<Project> {
     dependencies.addProvider(TOOL_CLASSPATH_CONFIG_NAME, provider { MAVEN_GENERATOR_PROJECT_REF })
   }
 
-  private fun getSourceSetsOf(project: Project): SourceSetContainer {
+  private fun sourceSetsOf(project: Project): SourceSetContainer {
     return project.extensions
       .getByType(JavaPluginExtension::class.java)
       .sourceSets
@@ -80,10 +80,10 @@ class Sd2ArcPlugin : Plugin<Project> {
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * sd2arc sources is added to the MontiArc sources of the same SourceSet
    */
-  private fun addSd2ArcEntryToSourceSet(sourceSet: SourceSet) {
+  private fun addSD2ArcEntryToSourceSet(sourceSet: SourceSet) {
     val srcDirSet = sourceSet.extensions.create(
-      Sd2ArcSourceDirectorySet::class.java, "sd2arc",
-      DefaultSd2ArcSourceDirectorySet::class.java,
+      SD2ArcSourceDirectorySet::class.java, "sd2arc",
+      DefaultSD2ArcSourceDirectorySet::class.java,
       project.objects.sourceDirectorySet("sd2arc", "${sourceSet.name} sd2arc source"),
       DefaultTaskDependencyFactory.withNoAssociatedProject()
     )
@@ -108,22 +108,22 @@ class Sd2ArcPlugin : Plugin<Project> {
    * Moreover, the [destinationDirectory][SourceDirectorySet.getDestinationDirectory] of the
    * task is added to the MontiArc sources of the same SourceSet.
    */
-  private fun createCompileSd2ArcTask(sourceSet: SourceSet): TaskProvider<Sd2ArcCompile> = with (project) {
-    val sdSrcDirSet = sourceSet.extensions.getByType(Sd2ArcSourceDirectorySet::class.java)
-    val taskName = sourceSet.compileSd2ArcTaskName
-    val generateTask = tasks.register(taskName, Sd2ArcCompile::class.java)
+  private fun createCompileSD2ArcTask(sourceSet: SourceSet): TaskProvider<SD2ArcCompile> = with (project) {
+    val sdSrcDirSet = sourceSet.extensions.getByType(SD2ArcSourceDirectorySet::class.java)
+    val taskName = sourceSet.compileSD2ArcTaskName
+    val generateTask = tasks.register(taskName, SD2ArcCompile::class.java)
 
     generateTask.configure { genTask ->
       genTask.description = "Generates montiarc components from the sequence diagram models in source set ${sourceSet.name}."
 
-      genTask.modelPath.setFrom(sdSrcDirSet.sourceDirectories)
+      genTask.modelpath.setFrom(sdSrcDirSet.sourceDirectories)
       genTask.outputDir.set(sdSrcDirSet.destinationDirectory)
 
       sourceSet.montiarc.ifPresent { ma -> ma.srcDir(genTask.montiarcOutputDir()) }
     }
 
-    sourceSet.sd2arc.get().compiledBy(generateTask, Sd2ArcCompile::outputDir)
-    tasks.named(sourceSet.compileMontiarcTaskName) { it.dependsOn(generateTask) }
+    sourceSet.sd2arc.get().compiledBy(generateTask, SD2ArcCompile::outputDir)
+    tasks.named(sourceSet.compileMontiArcTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
   }

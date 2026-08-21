@@ -1,7 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.montiarc
 
-import montiarc.gradle.cd2pojo.cd2PojoDependencyDeclarationConfigName
+import montiarc.gradle.cd2pojo.CD2POJO_API_SYMBOL_USAGE
+import montiarc.gradle.cd2pojo.cd2pojoConfigName
 import org.gradle.api.NamedDomainObjectProvider
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -21,7 +22,7 @@ import org.gradle.api.tasks.SourceSetContainer
  * ```
  */
 @Suppress("unused")
-class CdDependencies4MontiarcPlugin : Plugin<Project> {
+class CDDependencies4MontiArcPlugin : Plugin<Project> {
 
   private lateinit var project: Project
 
@@ -29,18 +30,18 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
     this.project = project
 
     with (project) {
-      pluginManager.apply(MontiarcDependenciesPlugin::class.java)
+      pluginManager.apply(MontiArcDependenciesPlugin::class.java)
 
-      provideResolutionCompatibilityToPlainCd2Pojo()
+      provideResolutionCompatibilityToPlainCD2Pojo()
 
       sourceSetsOf(project).all { srcSet ->
         addDeclarationConfigTo(srcSet)
-        createCd4MaSymbolConfig(srcSet)
+        createCD4MASymbolConfig(srcSet)
         connectDependencyConfigsOf(srcSet)
       }
 
       pluginManager.withPlugin("java") {
-        connectMainToTestConfig()
+        makeMainModelsAvailableInTests()
       }
     }
   }
@@ -53,10 +54,10 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
    * we actually search for an [Usage] attribute value of [CD2POJO_4_MONTIARC_USAGE].
    */
 
-  private fun provideResolutionCompatibilityToPlainCd2Pojo() = with (project) {
+  private fun provideResolutionCompatibilityToPlainCD2Pojo() = with (project) {
     dependencies.attributesSchema.attribute(Usage.USAGE_ATTRIBUTE) {
-      it.compatibilityRules.add(Cd2PojoIsValidForMontiArc::class.java)
-      it.disambiguationRules.add(Cd2PojoForMontiArcPreferred::class.java)
+      it.compatibilityRules.add(CD2PojoIsValidForMontiArc::class.java)
+      it.disambiguationRules.add(CD2PojoForMontiArcPreferred::class.java)
     }
   }
 
@@ -64,28 +65,28 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
    * Creates a configuration used to declare dependencies of montiarc models on cd2pojo models.
    */
   private fun addDeclarationConfigTo(sourceSet: SourceSet) = with (project) {
-    val config = configurations.maybeCreate(sourceSet.cd2pojo4MaDeclarationConfigName)
+    val config = configurations.maybeCreate(sourceSet.cd2pojo4montiarcConfigName)
     config.isCanBeConsumed = false
     config.isCanBeResolved = false
     config.isVisible = true
     config.description = "Used to declare dependencies on cd2pojo models that should be used in MontiArc of source " +
       "set ${sourceSet.name}. This will simultaneously add their java implementation to the implementation " +
-      "configuration and their models to to the cd2pojo4MontiarcSymbolDependencies"
+      "configuration and their models to the cd2pojo4montiarcSymbolpath configuration"
   }
 
   /**
-   * Creates a configuration (_cd2pojo4montiarcSymbolDependencies_) for the given source set, containing cd model
+   * Creates a configuration (_cd2pojo4montiarcSymbolpath_) for the given source set, containing cd model
    * dependencies (.cdcsym) of the MontiArc models in the same source set. Only use this configuration for processing,
    * but not to declare dependencies! Do the latter using the _cd2pojo4montiarc_ configuration from which
-   * _cd2pojo4montiarcSymbolDependencies_ extends from, automatically adopting the dependencies.
+   * _cd2pojo4montiarcSymbolpath_ extends from, automatically adopting the dependencies.
    */
-  private fun createCd4MaSymbolConfig(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.cd2Pojo4MaSymbolDependencyConfigName)
+  private fun createCD4MASymbolConfig(sourceSet: SourceSet): Configuration = with (project) {
+    val config = configurations.maybeCreate(sourceSet.cd2pojo4montiarcSymbolpathConfigName)
     config.isCanBeResolved = true
     config.isCanBeConsumed = false
     config.isVisible = false
     config.description = "Pulls cd _model_ dependencies that we want to use in our MontiArc models in ${sourceSet.name}"
-    addCd4maJarAttributesTo(config, project)
+    addCD4MAJarAttributesTo(config, project)
 
     return config
   }
@@ -96,16 +97,16 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
    * implementations.
    *
    * The extensions are as follows:
-   * * cd2pojo4montiarcSymbolDependencies extends cd2pojo4montiarc,
+   * * cd2pojo4montiarcSymbolpath extends cd2pojo4montiarc,
    * * implementation (from the java plugin) extends cd2pojo4montiarc,
    * * api extends cd2pojo4montiarc (if the java-library plugin is applied),
    * * cd2pojo4montiarc extends montiarc
    * * cd2pojo4montiarc extends cd2pojo (if the cd2pojo plugin is applied)
    */
   private fun connectDependencyConfigsOf(sourceSet: SourceSet) = with(project) {
-    val cd4maDeclConfig = configurations.named(sourceSet.cd2pojo4MaDeclarationConfigName)
-    val cd4maSymbolConfig = configurations.named(sourceSet.cd2Pojo4MaSymbolDependencyConfigName)
-    val montiarcConfig = configurations.named(sourceSet.montiarcDependencyDeclarationConfigName)
+    val cd4maDeclConfig = configurations.named(sourceSet.cd2pojo4montiarcConfigName)
+    val cd4maSymbolConfig = configurations.named(sourceSet.cd2pojo4montiarcSymbolpathConfigName)
+    val montiarcConfig = configurations.named(sourceSet.montiarcConfigName)
     val javaImpl = configurations.named(sourceSet.implementationConfigurationName)
     var javaApi: NamedDomainObjectProvider<Configuration>? = null
 
@@ -126,7 +127,7 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
       // is called before this piece of code. The solution is to call `maybeCreate`, creating the config only if it
       // was not present yet. We do not configure it here, as this will be done by the closure declared in the cd2pojo
       // plugin.
-      val cd2pojo = configurations.maybeCreate(sourceSet.cd2PojoDependencyDeclarationConfigName)
+      val cd2pojo = configurations.maybeCreate(sourceSet.cd2pojoConfigName)
       cd4maDeclConfig.configure { cd4ma -> cd4ma.extendsFrom(cd2pojo) }
     }
   }
@@ -134,7 +135,7 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
   /**
    * Sets the cd dependencies of main's MontiArc models to also be the cd dependencies of test's MontiArc models.
    */
-  private fun connectMainToTestConfig() = with (project) {
+  private fun makeMainModelsAvailableInTests() = with (project) {
     if (!pluginManager.hasPlugin("java")) {
       logger.error("Internal error: Tried to link main and test source sets, but the JavaPlugin is not applied!")
     }
@@ -143,11 +144,10 @@ class CdDependencies4MontiarcPlugin : Plugin<Project> {
     val mainSourceSet = sourceSets.getByName(SourceSet.MAIN_SOURCE_SET_NAME)
     val testSourceSet = sourceSets.getByName(SourceSet.TEST_SOURCE_SET_NAME)
 
-    val mainConfig = configurations.named(mainSourceSet.cd2pojo4MaDeclarationConfigName)
-    val testConfig = configurations.named(testSourceSet.cd2pojo4MaDeclarationConfigName)
+    val mainConfig = configurations.named(mainSourceSet.cd2pojo4montiarcConfigName)
+    val testConfig = configurations.named(testSourceSet.cd2pojo4montiarcConfigName)
     testConfig.configure { it.extendsFrom(mainConfig.get())}
   }
 
 }
-
 

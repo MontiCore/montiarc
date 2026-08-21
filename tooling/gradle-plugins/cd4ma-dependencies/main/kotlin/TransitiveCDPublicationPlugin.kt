@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.gradle.montiarc
 
-import montiarc.gradle.cd2pojo.cd2PojoSymbolsJarTaskName
+import montiarc.gradle.cd2pojo.cd2pojoSymbolsJarTaskName
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
@@ -18,14 +18,14 @@ import org.gradle.jvm.tasks.Jar
  * the project. This way, other montiarc models will be able to find them and pull them as transitive
  * dependencies, too.
  */
-class TransitiveCdPublicationPlugin : Plugin<Project> {
+class TransitiveCDPublicationPlugin : Plugin<Project> {
 
   private lateinit var project: Project
   override fun apply(project: Project) {
     this.project = project
 
     with (project) {
-      pluginManager.apply(CdDependencies4MontiarcPlugin::class.java)
+      pluginManager.apply(CDDependencies4MontiArcPlugin::class.java)
 
       pluginManager.withPlugin("java") {
         val mainSourceSet = extensions.getByType(JavaPluginExtension::class.java)
@@ -47,7 +47,7 @@ class TransitiveCdPublicationPlugin : Plugin<Project> {
         "JavaPlugin is not applied!")
     }
 
-    val outgoingConfig = createCd4MaOutgoingConfigFor(sourceSet)
+    val outgoingConfig = createOutgoingApiElementsConfig(sourceSet)
     connectOutgoingConfigOf(sourceSet)
 
     (components.getByName("java") as AdhocComponentWithVariants)  // .mapToOptional results in the jar
@@ -55,7 +55,7 @@ class TransitiveCdPublicationPlugin : Plugin<Project> {
 
     // Copy the cd2pojo symbols jar if cd2pojo is applied
     pluginManager.withPlugin("cd2pojo") {
-      val jarTask = tasks.named(sourceSet.cd2PojoSymbolsJarTaskName, Jar::class.java)
+      val jarTask = tasks.named(sourceSet.cd2pojoSymbolsJarTaskName, Jar::class.java)
       val jar = jarTaskToPublishArtifact(jarTask)
       outgoingConfig.outgoing.artifacts.add(jar)
     }
@@ -65,14 +65,14 @@ class TransitiveCdPublicationPlugin : Plugin<Project> {
    * Creates an outgoing consumable configuration meant to contain all cd dependencies of the MontiArc models of the
    * source set.
    */
-  private fun createCd4MaOutgoingConfigFor(sourceSet: SourceSet): Configuration = with (project) {
-    val config = configurations.maybeCreate(sourceSet.outgoingCd4MaDependenciesConfigName)
+  private fun createOutgoingApiElementsConfig(sourceSet: SourceSet): Configuration = with (project) {
+    val config = configurations.maybeCreate(sourceSet.cd2pojo4montiarcApiElementsConfigName)
     config.isCanBeConsumed = true
     config.isCanBeResolved = false
     config.isVisible = false
     config.description = "Publication variant with the cd dependencies of the MontiArc models in source set " +
       "${sourceSet.name}. Moreover, a copy of the cd symbols jar is contained in this config."
-    addCd4maJarAttributesTo(config, project)
+    addCD4MAJarAttributesTo(config, project)
 
     return config
   }
@@ -81,8 +81,8 @@ class TransitiveCdPublicationPlugin : Plugin<Project> {
    * Lets the outgoing config of the source set extend the cd2pojo4montiarc config in order to transfer its dependencies
    */
   private fun connectOutgoingConfigOf(sourceSet: SourceSet) = with (project) {
-    val cd4maDeclConfig = configurations.named(sourceSet.cd2pojo4MaDeclarationConfigName)
-    val outgoingCd4maConfig = configurations.named(sourceSet.outgoingCd4MaDependenciesConfigName)
+    val cd4maDeclConfig = configurations.named(sourceSet.cd2pojo4montiarcConfigName)
+    val outgoingCd4maConfig = configurations.named(sourceSet.cd2pojo4montiarcApiElementsConfigName)
 
     outgoingCd4maConfig.configure { it.extendsFrom(cd4maDeclConfig.get()) }
   }

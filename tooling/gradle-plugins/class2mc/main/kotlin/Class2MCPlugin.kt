@@ -46,13 +46,13 @@ class Class2MCPlugin : Plugin<Project> {
       }
 
       sourceSetsOf(project).all { sourceSet ->
-        createDeclarationConfig(sourceSet)
+        addDeclarationConfigTo(sourceSet)
         createClasspathConfig(sourceSet)
-        createApiElementsConfig(sourceSet)
+        createOutgoingApiElementsConfig(sourceSet)
         connectDependencyConfigsOf(sourceSet)
       }
 
-      connectTestDependencies()
+      makeMainModelsAvailableInTests()
     }
   }
 
@@ -62,7 +62,7 @@ class Class2MCPlugin : Plugin<Project> {
   /**
    * Declarable-only bucket: `class2mc(...)`.
    */
-  private fun createDeclarationConfig(sourceSet: SourceSet): Configuration =
+  private fun addDeclarationConfigTo(sourceSet: SourceSet): Configuration =
     project.configurations.maybeCreate(sourceSet.class2mcConfigName).apply {
       isCanBeConsumed = false
       isCanBeResolved = false
@@ -81,7 +81,7 @@ class Class2MCPlugin : Plugin<Project> {
       isVisible = false
       description =
         "Resolves Java dependencies usable from models in source set '${sourceSet.name}'."
-      attributes { attachClass2mcAttributes(it, project, LibraryElements.CLASSES) }
+      attributes { attachClass2MCAttributes(it, project, LibraryElements.CLASSES) }
     }
 
   /**
@@ -92,14 +92,14 @@ class Class2MCPlugin : Plugin<Project> {
    * variant forwards them as well when the java-library plugin is applied,
    * because generated Java code may expose them in its public API.
    */
-  private fun createApiElementsConfig(sourceSet: SourceSet): Configuration =
+  private fun createOutgoingApiElementsConfig(sourceSet: SourceSet): Configuration =
     project.configurations.maybeCreate(sourceSet.class2mcApiElementsConfigName).apply {
       isCanBeConsumed = true
       isCanBeResolved = false
       isVisible = false
       description =
         "Forwards Java dependencies usable from models in source set '${sourceSet.name}' transitively."
-      attributes { attachClass2mcAttributes(it, project, LibraryElements.JAR) }
+      attributes { attachClass2MCAttributes(it, project, LibraryElements.JAR) }
     }
 
   private fun connectDependencyConfigsOf(sourceSet: SourceSet) = with(project) {
@@ -120,7 +120,7 @@ class Class2MCPlugin : Plugin<Project> {
     }
   }
 
-  private fun connectTestDependencies() = with(project) {
+  private fun makeMainModelsAvailableInTests() = with(project) {
     val sourceSets = sourceSetsOf(project)
     val main = sourceSets.named(SourceSet.MAIN_SOURCE_SET_NAME)
     val test = sourceSets.named(SourceSet.TEST_SOURCE_SET_NAME)

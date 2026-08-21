@@ -87,8 +87,8 @@ Therefore, the generated source code will automatically be compiled by `compileJ
       testCd2pojo("some.testModel.publisher:factory-testers:1.2.0")
     }
 
-    task.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pjo"
-      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+    tasks.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"
+      symbolpath.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
       useClass2Mc.set(true)  // Default value is false
     }
     ```
@@ -110,8 +110,8 @@ Therefore, the generated source code will automatically be compiled by `compileJ
       testCd2pojo "some.testModel.publisher:factory-testers:1.2.0"
     }
 
-    task.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"
-      symbolImportDir.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
+    tasks.compileCd2pojo {  // compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"
+      symbolpath.from("${projectDir}/src/SRC_SET_NAME/more_symbols")
       useClass2Mc.set(true)  // Default value is false
     }
     ```
@@ -128,16 +128,16 @@ Some configuration options only have default values if the task is created for a
 
 | Option          | Default value                                                | Description                                                                                                                                                                                                                                                                                                                                          |
 |-----------------|--------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| modelPath       | `$projectDir/src/SOURCE_SET_NAME/cd2pojo`                    | Where to find the class diagram models for which Java code should be generated. You can specify multiple locations with multiple `modelPath.from(...)` statements.                                                                                                                                                                                   |
+| modelpath       | `$projectDir/src/SOURCE_SET_NAME/cd2pojo`                    | Where to find the class diagram models for which Java code should be generated. You can specify multiple locations with multiple `modelpath.from(...)` statements.                                                                                                                                                                                   |
 | hwcPath         | All Java code from the same source set (main, or test, etc.) | Where to find the handwritten code extensions for the generated class diagram code.                                                                                                                                                                                                                                                                  |
-| symbolImportDir | The `cd2pojoSymbolDependencies` configuration                | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolImportDir.from(...)` statements.                                                                                                                                  |
-| useClass2Mc     | `false`                                                      | If you intend to use Java types (or other JVM types) in your class diagram models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `cd2pojoGenerator`) will be accessible from class diagram models. *Note*: This will be changed in the future. |
+| symbolpath      | The `cd2pojoSymbolpath` configuration                        | If you want to use `.sym` files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple `symbolpath.from(...)` statements.                                                                                                                                      |
+| useClass2Mc     | `false`                                                      | If you intend to use Java types (or other JVM types) in your class diagram models, then you set this configuration parameter to `true`. By this, all JVM types that are on the class path of the generator (which is the configuration `cd2pojoToolClasspath`) will be accessible from class diagram models. *Note*: This will be changed in the future. |
 | outputDir       | `$buildDir/cd2pojo/SOURCE_SET_NAME`                          | Where the generated files should be placed. Generated Java code ist placed in the `java` subfolder, exported symbol files are put in the `symbols` subfolder.                                                                                                                                                                                        |
 | debugTask       | `false`                                                      | If set to true, a debugger can be attached to the generator process for debugging purposes.                                                                                                                                                                                                                                                          |
 ---
 
 ## Added build elements
-* The Plugin adds the dependency configuration *cd2pojoGenerator* on which it places the dependency on the generator 
+* The Plugin adds the dependency configuration *cd2pojoToolClasspath* on which it places the dependency on the generator 
   that is used to generate .java code from the .cd files. If you use `class2mc`, then you can place the Java classes
   that you want to use in your models on this configuration.
 * For every SourceSet, the plugin
@@ -145,18 +145,18 @@ Some configuration options only have default values if the task is created for a
     to .java code. The task name is `compileCd2pojo` for main and `compileSourceSetNameCd2pojo` for others
   * Adds a jar task packaging the .cdsym models of the main source set, adding it to the default publication.
   * Adds three configurations:
-    * `cd2pojo` for the main source set and `sourceSetNameCd2Pojo` for others:\
+    * `cd2pojo` for the main source set and `sourceSetNameCd2pojo` for others:\
       Used to declare dependencies on other cd2pojo models. This configuration is not resolvable or consumable and only
       serves the purpose to declare dependencies. The models of the dependencies will automatically be added to the
-      symbolImportDir of the `compileCd2pojo` task and their Java implementations will automatically be added to the
+      symbolpath of the `compileCd2pojo` task and their Java implementations will automatically be added to the
       `implementation` configuration for compilation and runtime. To this end, `implementation` extends the `cd2pojo`
       configuration, as do:
-    * `cd2pojoSymbolDependencies` for the main source set and `sourceSetNameCd2pojoSymbolDependencies` for others:\
+    * `cd2pojoSymbolpath` for the main source set and `sourceSetNameCd2pojoSymbolpath` for others:\
       Only contains the cd models of the dependencies (represented by .cdsym files). Do not use
       this configuration to _declare_ the dependencies (use `cd2pojo` for this purpose instead), but use this
       configuration, when you want to access the cd2pojo models of the dependencies. (This configuration is derived
       from the `cd2pojo` configuration, only considering the cd2pojo models.)
-    * `cd2pojoSymbolElements` for the main source set and `sourceSetNameCd2pojoSymbolElements` for others:\
+    * `cd2pojoApiElements` for the main source set and `sourceSetNameCd2pojoApiElements` for others:\
       Contains the jar of the cd2pojo models (represented by .cdsym files) that is added to the default publication
       set. By default, this configuration is only added for the main source set.
   * Models declared in the main source set are also available in the test source sets.
