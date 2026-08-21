@@ -37,7 +37,6 @@ public class MA2JSimTestBase extends ATestBase {
   protected void init() {
     MontiArcTypeCheck.init();
     BasicSymbolsMill.initializePrimitives();
-    BasicSymbolsMill.initializeObject();
     BasicSymbolsMill.initializeString();
   }
 }

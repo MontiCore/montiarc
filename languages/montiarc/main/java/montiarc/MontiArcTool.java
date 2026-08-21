@@ -670,7 +670,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     if (c2mc) {
       this.initializeClass2MC();
     } else {
-      BasicSymbolsMill.initializeObject();
       BasicSymbolsMill.initializeString();
     }
   }

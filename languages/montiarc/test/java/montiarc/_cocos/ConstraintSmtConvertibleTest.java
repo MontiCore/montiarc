@@ -72,7 +72,7 @@ public class ConstraintSmtConvertibleTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1(Object obj) { constraint(obj); }", VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE)
+      arg("component Comp1(String p) { constraint(p); }", VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE)
     );
   }
 }
