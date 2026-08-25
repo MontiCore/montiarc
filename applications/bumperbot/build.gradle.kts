@@ -2,7 +2,7 @@
 
 plugins {
   id("montiarc.build.java-library")
-  id("montiarc")
+  id("montiarc-jsim")
   id("cd2pojo")
 }
 

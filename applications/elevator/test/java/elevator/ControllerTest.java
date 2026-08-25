@@ -1,229 +1,117 @@
 /* (c) https://github.com/MontiCore/monticore */
 package elevator;
 
-import com.google.common.base.Preconditions;
 import elevator.Commands.DoorCMD;
 import elevator.Commands.LiftCMD;
-import elevator.Controller.States;
-import org.codehaus.commons.nullanalysis.NotNull;
-import org.codehaus.commons.nullanalysis.Nullable;
-import org.junit.jupiter.api.Order;
+import montiarc.rte.port.PortObserver;
+import montiarc.rte.tests.JSimTest;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.stream.Stream;
-
+import static montiarc.rte.msg.MessageFactory.msg;
+import static montiarc.rte.msg.MessageFactory.tk;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ControllerTest {
+@JSimTest
+class ControllerTest {
 
   @Test
-  @Order(1)
-  public void testSetUp() {
-    // Given
-    Controller ctrl = new Controller();
+  void testHomesDownUntilFloorOneIsReached() {
+    ControllerComp sut = new ControllerCompBuilder().setName("sut").build();
+    PortObserver<LiftCMD> portLift = new PortObserver<>();
+    PortObserver<Integer> portClear = new PortObserver<>();
 
-    // When
-    ctrl.setUp();
+    sut.port_lift().connect(portLift);
+    sut.port_clear().connect(portClear);
 
-    // Then
-    assertThat(ctrl.getAt1()).isNotNull();
-    assertThat(ctrl.getAt3()).isNotNull();
-    assertThat(ctrl.getAt2()).isNotNull();
-    assertThat(ctrl.getAt4()).isNotNull();
-    assertThat(ctrl.getReq1()).isNotNull();
-    assertThat(ctrl.getReq2()).isNotNull();
-    assertThat(ctrl.getReq3()).isNotNull();
-    assertThat(ctrl.getReq4()).isNotNull();
-    assertThat(ctrl.getIsClosed()).isNotNull();
-    assertThat(ctrl.getDoor()).isNotNull();
-    assertThat(ctrl.getLift()).isNotNull();
-    assertThat(ctrl.getClear()).isNotNull();
+    repeat(sut, 8, false, false, false, false, false, true, true, true, true);
+
+    sut.runToCompletion();
+
+    assertThat(portLift.getObservedValues()).containsSubsequence(LiftCMD.DOWN);
+    assertThat(portClear.getObservedValues()).contains(0);
   }
 
   @Test
-  @Order(2)
-  public void testInit() {
-    // Given
-    Controller ctrl = new Controller();
-    ctrl.setUp();
+  void testMovesUpTowardSecondFloorRequest() {
+    ControllerComp sut = new ControllerCompBuilder().setName("sut").build();
+    PortObserver<LiftCMD> portLift = new PortObserver<>();
+    PortObserver<Integer> portClear = new PortObserver<>();
 
-    // When
-    ctrl.init();
+    sut.port_lift().connect(portLift);
+    sut.port_clear().connect(portClear);
 
-    // Then
-    assertThat(ctrl.getDoor().getValue()).isNull();
-    assertThat(ctrl.getLift().getValue()).isNull();
-    assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0);
-  }
+    repeat(sut, 8, false, true, false, false, true, false, false, false, true);
+    repeat(sut, 8, false, true, false, false, false, true, false, false, true);
 
-  @Order(3)
-  @ParameterizedTest
-  @MethodSource("transitions")
-  public void testCompute(@NotNull States sourceState,
-                          @NotNull boolean req1, @NotNull boolean req2,
-                          @NotNull boolean req3, @NotNull boolean req4,
-                          @NotNull boolean at1, @NotNull boolean at2,
-                          @NotNull boolean at3, @NotNull boolean at4,
-                          @NotNull boolean isClosed,
-                          @NotNull States targetState,
-                          @Nullable DoorCMD door,
-                          @Nullable LiftCMD lift,
-                          @Nullable Integer clear) {
-    Preconditions.checkNotNull(sourceState);
-    Preconditions.checkNotNull(targetState);
+    sut.runToCompletion();
 
-    // Given
-    Controller ctrl = new Controller();
-    ctrl.setUp();
-    ctrl.init();
-
-    ctrl.currentState = sourceState;
-    ctrl.getReq1().update(req1);
-    ctrl.getReq2().update(req2);
-    ctrl.getReq3().update(req3);
-    ctrl.getReq4().update(req4);
-    ctrl.getAt1().update(at1);
-    ctrl.getAt2().update(at2);
-    ctrl.getAt3().update(at3);
-    ctrl.getAt4().update(at4);
-    ctrl.getIsClosed().update(isClosed);
-
-    // When
-    ctrl.compute();
-    ctrl.getDoor().tick();
-    ctrl.getLift().tick();
-    ctrl.getClear().tick();
-
-    // Then
-    assertThat(ctrl.getCurrentState()).isEqualTo(targetState);
-    assertThat(ctrl.getDoor().getValue()).isEqualTo(door);
-    assertThat(ctrl.getLift().getValue()).isEqualTo(lift);
-    assertThat(ctrl.getClear().getValue()).isEqualTo(clear);
-  }
-
-  public static Stream<Arguments> transitions() {
-    return Stream.of(
-      // 1
-      Arguments.of(States.CloseDoor, false, false, false, false, false, false, false, false, false,
-        States.CloseDoor, null, null, 0),
-      // 2
-      Arguments.of(States.CloseDoor, true, true, true, true, true, true, true, true, false,
-        States.CloseDoor, null, null, 0),
-      // 3
-      Arguments.of(States.CloseDoor, false, false, false, false, false, false, false, false, true,
-        States.DriveDown, null, LiftCMD.DOWN, 0),
-      // 4
-      Arguments.of(States.CloseDoor, true, true, true, true, false, true, true, true, true,
-        States.DriveDown, null, LiftCMD.DOWN, 0),
-      // 5
-      Arguments.of(States.CloseDoor, false, false, false, false, true, false, false, false, true,
-        States.OK, null, null, 0),
-      // 6
-      Arguments.of(States.DriveDown, false, false, false, false, false, false, false, false, false,
-        States.DriveDown, null, null, 0),
-      // 7
-      Arguments.of(States.DriveDown, true, true, true, true, false, true, true, true, true,
-        States.DriveDown, null, null, 0),
-      // 8
-      Arguments.of(States.DriveDown, false, false, false, false, true, false, false, false, false,
-        States.OK, null, null, 0),
-      // 9
-      Arguments.of(States.OK, false, false, false, false, false, false, false, false, false,
-        States.SearchFloor1, null, null, 0),
-      // 10
-      Arguments.of(States.OK, true, true, true, true, true, true, true, true, true,
-        States.SearchFloor1, null, null, 0),
-      // 11
-      Arguments.of(States.Door1, false, false, false, false, false, false, false, false, false,
-        States.Door1, null, null, null),
-      // 12
-      Arguments.of(States.Door1, true, false, false, false, true, false, false, false, false,
-        States.Door1, DoorCMD.OPEN, null, 1),
-      // 13
-      Arguments.of(States.Door1, true, false, false, false, false, false, false, false, true,
-        States.Door1, null, null, null),
-      // 14
-      Arguments.of(States.Door1, false, false, false, false, false, false, false, false, true,
-        States.SearchFloor1, null, null, null),
-      // 15
-      Arguments.of(States.Door2, false, false, false, false, false, false, false, false, false,
-        States.Door2, null, null, null),
-      // 16
-      Arguments.of(States.Door2, false, true, false, false, false, true, false, false, false,
-        States.Door2, DoorCMD.OPEN, null, 2),
-      // 17
-      Arguments.of(States.Door2, false, true, false, false, false, false, false, false, true,
-        States.Door2, null, null, null),
-      // 18
-      Arguments.of(States.Door2, false, false, false, false, false, false, false, false, true,
-        States.SearchFloor2, null, null, null),
-      // 19
-      Arguments.of(States.Door3, false, false, false, false, false, false, false, false, false,
-        States.Door3, null, null, null),
-      // 20
-      Arguments.of(States.Door3, false, false, true, false, false, false, true, false, false,
-        States.Door3, DoorCMD.OPEN, null, 3),
-      // 21
-      Arguments.of(States.Door3, false, false, true, false, false, false, false, false, true,
-        States.Door3, null, null, null),
-      // 22
-      Arguments.of(States.Door3, false, false, false, false, false, false, false, false, true,
-        States.SearchFloor3, null, null, null),
-      // 23
-      Arguments.of(States.Door4, false, false, false, false, false, false, false, false, false,
-        States.Door4, null, null, null),
-      // 24
-      Arguments.of(States.Door4, false, false, false, true, false, false, false, true, false,
-        States.Door4, DoorCMD.OPEN, null, 4),
-      // 25
-      Arguments.of(States.Door4, false, false, false, true, false, false, false, false, true,
-        States.Door4, null, null, null),
-      // 26
-      Arguments.of(States.Door4, false, false, false, false, false, false, false, false, true,
-        States.SearchFloor4, null, null, null)
-
-    );
+    assertThat(portLift.getObservedValues()).contains(LiftCMD.UP);
+    assertThat(portClear.getObservedValues()).contains(0);
   }
 
   @Test
-  @Order(4)
-  public void testTick() {
-    // Given
-    Controller ctrl = new Controller();
-    ctrl.setUp();
+  void testServesRequestAtCurrentFloor() {
+    ControllerComp sut = new ControllerCompBuilder().setName("sut").build();
+    PortObserver<DoorCMD> portDoor = new PortObserver<>();
+    PortObserver<LiftCMD> portLift = new PortObserver<>();
+    PortObserver<Integer> portClear = new PortObserver<>();
 
-    ctrl.getReq1().update(true);
-    ctrl.getReq2().update(true);
-    ctrl.getReq3().update(true);
-    ctrl.getReq4().update(true);
-    ctrl.getAt1().update(true);
-    ctrl.getAt2().update(true);
-    ctrl.getAt3().update(true);
-    ctrl.getAt4().update(true);
-    ctrl.getIsClosed().update(true);
-    ctrl.getDoor().setValue(DoorCMD.OPEN);
-    ctrl.getLift().setValue(LiftCMD.STOP);
-    ctrl.getClear().setValue(0);
+    sut.port_door().connect(portDoor);
+    sut.port_lift().connect(portLift);
+    sut.port_clear().connect(portClear);
 
-    // When
-    ctrl.tick();
+    repeat(sut, 13, true, false, false, false, true, false, false, false, true);
 
-    // Then
-    assertThat(ctrl.getReq1().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getReq2().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getReq3().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getReq4().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getAt1().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getAt2().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getAt3().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getAt4().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getIsClosed().getValue()).isNotNull().isTrue();
-    assertThat(ctrl.getDoor().getValue()).isNotNull().isEqualTo(DoorCMD.OPEN);
-    assertThat(ctrl.getLift().getValue()).isNotNull().isEqualTo(LiftCMD.STOP);
-    assertThat(ctrl.getClear().getValue()).isNotNull().isEqualTo(0);
+    sut.runToCompletion();
+
+    assertThat(portLift.getObservedValues()).contains(LiftCMD.STOP);
+    assertThat(portDoor.getObservedValues()).contains(DoorCMD.OPEN);
+    assertThat(portClear.getObservedValues()).contains(1);
   }
 
+  private static void repeat(ControllerComp sut,
+                             int times,
+                             boolean req1,
+                             boolean req2,
+                             boolean req3,
+                             boolean req4,
+                             boolean at1,
+                             boolean at2,
+                             boolean at3,
+                             boolean at4,
+                             boolean isClosed) {
+    for (int i = 0; i < times; i++) {
+      receiveStep(sut, req1, req2, req3, req4, at1, at2, at3, at4, isClosed);
+    }
+  }
+
+  private static void receiveStep(ControllerComp sut,
+                                  boolean req1,
+                                  boolean req2,
+                                  boolean req3,
+                                  boolean req4,
+                                  boolean at1,
+                                  boolean at2,
+                                  boolean at3,
+                                  boolean at4,
+                                  boolean isClosed) {
+    sut.port_req1().receive(msg(req1));
+    sut.port_req2().receive(msg(req2));
+    sut.port_req3().receive(msg(req3));
+    sut.port_req4().receive(msg(req4));
+    sut.port_at1().receive(msg(at1));
+    sut.port_at2().receive(msg(at2));
+    sut.port_at3().receive(msg(at3));
+    sut.port_at4().receive(msg(at4));
+    sut.port_isClosed().receive(msg(isClosed));
+    sut.port_req1().receive(tk());
+    sut.port_req2().receive(tk());
+    sut.port_req3().receive(tk());
+    sut.port_req4().receive(tk());
+    sut.port_at1().receive(tk());
+    sut.port_at2().receive(tk());
+    sut.port_at3().receive(tk());
+    sut.port_at4().receive(tk());
+    sut.port_isClosed().receive(tk());
+  }
 }
