@@ -103,14 +103,14 @@ public class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     "component Comp43 { a.b.J j(1, p2 = 2, p3 = 3); }",
     "component Comp44 { a.b.J j(p1 = 1, p2 = 2, p3 = 3); }",
     "component Comp45 { a.b.J j(p3 = 1, p2 = 2, p1 = 3); }",
-    //"component Comp46 { a.b.K k(java.util.Arrays.asList(1)); }",
+    "component Comp46 { a.b.K k(java.util.Arrays.asList(1)); }",
     "component Comp47 { a.b.L l; }",
-    //"component Comp48 { a.b.L l(java.util.Arrays.asList(1)); }",
-    //"component Comp49 { a.b.L l(p = java.util.Arrays.asList(1)); }",
+    "component Comp48 { a.b.L l(java.util.Arrays.asList(1)); }",
+    "component Comp49 { a.b.L l(p = java.util.Arrays.asList(1)); }",
     "component Comp50 { a.b.M<java.lang.Integer> m(1); }",
     "component Comp51 { a.b.M<java.lang.Integer> m(java.lang.Integer.Integer(1)); }",
-    //"component Comp52 { a.b.N<java.lang.Integer> m(java.util.Arrays.asList(1)); }",
-    //"component Comp53 { a.b.N<java.lang.Integer> m(java.util.Collections.emptyList()); }"
+    "component Comp52 { a.b.N<java.lang.Integer> m(java.util.Arrays.asList(1)); }",
+    "component Comp53 { a.b.N<java.lang.Integer> m(java.util.Collections.emptyList()); }"
   })
   public void shouldNotReportErrorSubComponent(@NotNull String model) {
     Preconditions.checkNotNull(model);
