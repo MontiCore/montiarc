@@ -3613,7 +3613,6 @@ Therefore, the generated source code will automatically be compiled by <code>com
 
 <span class="n">tasks</span><span class="p">.</span><span class="na">compileCd2pojo</span><span class="w"> </span><span class="p">{</span><span class="w">  </span><span class="c1">// compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"</span>
 <span class="w">  </span><span class="n">symbolpath</span><span class="p">.</span><span class="na">from</span><span class="p">(</span><span class="s">"</span><span class="si">${</span><span class="n">projectDir</span><span class="si">}</span><span class="s">/src/SRC_SET_NAME/more_symbols"</span><span class="p">)</span>
-<span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span><span class="w">  </span><span class="c1">// Default value is false</span>
 <span class="p">}</span>
 </code></pre></div>
 </div>
@@ -3635,7 +3634,6 @@ Therefore, the generated source code will automatically be compiled by <code>com
 
 <span class="n">tasks</span><span class="o">.</span><span class="na">compileCd2pojo</span><span class="w"> </span><span class="o">{</span><span class="w">  </span><span class="c1">// compile task for other sourceSets: "compile{SRC_SET_NAME}Cd2pojo"</span>
 <span class="w">  </span><span class="n">symbolpath</span><span class="o">.</span><span class="na">from</span><span class="o">(</span><span class="s2">"${projectDir}/src/SRC_SET_NAME/more_symbols"</span><span class="o">)</span>
-<span class="w">  </span><span class="n">useClass2Mc</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span><span class="w">  </span><span class="c1">// Default value is false</span>
 <span class="o">}</span>
 </code></pre></div>
 </div>
@@ -3670,11 +3668,6 @@ Some configuration options only have default values if the task is created for a
 <td>symbolpath</td>
 <td>The <code>cd2pojoSymbolpath</code> configuration</td>
 <td>If you want to use <code>.sym</code> files, then you can use this configuration parameter to inform the generator where to find them. You can specify multiple locations with multiple <code>symbolpath.from(...)</code> statements.</td>
-</tr>
-<tr>
-<td>useClass2Mc</td>
-<td><code>false</code></td>
-<td>If you intend to use Java types (or other JVM types) in your class diagram models, then you set this configuration parameter to <code>true</code>. By this, all JVM types that are on the class path of the generator (which is the configuration <code>cd2pojoToolClasspath</code>) will be accessible from class diagram models. <em>Note</em>: This will be changed in the future.</td>
 </tr>
 <tr>
 <td>outputDir</td>

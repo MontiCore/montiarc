@@ -3412,6 +3412,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="Using java types">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-other-jvm-classes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Using other JVM classes
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -3665,13 +3682,9 @@ Check that no error occurs.
 Moreover, verify that the Java class <code>Status</code> has been generated to <code>build/cd2pojo/main/java/com/example/MyTypes/Status.java</code>.
 Note: If an error occurs, try running Gradle's <code>clean</code> task before. </p>
 <h2 id="using-java-types">Using java types<a class="headerlink" href="#using-java-types" title="Permanent link">&para;</a></h2>
-<p>You can use JDK classes from MontiArc models by setting the <code>useClass2Mc</code> option of the generation task in Gradle's build script:
-<div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="c1">// The syntax is the same for Kotlin and Groovy build scripts</span>
-<span class="n">tasks</span><span class="p">.</span><span class="na">compileMontiarc</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
-<span class="p">}</span>
-</code></pre></div></p>
-<p>Now use <code>String</code> in your MontiArc model <a href="#executing-the-generation-process"><code>MyComp</code></a>:
+<p>JDK classes (such as <code>java.lang.String</code> or <code>java.util.*</code>) are automatically usable from MontiArc and class diagram
+models — no configuration needed.</p>
+<p>Use <code>String</code> in your MontiArc model <a href="#executing-the-generation-process"><code>MyComp</code></a>:
 <div class="highlight"><pre><span></span><code><span class="kn">package</span><span class="w"> </span><span class="nn">com.example</span><span class="p">;</span>
 
 <span class="c1">// Types from java.lang are automatically imported.</span>
@@ -3683,18 +3696,21 @@ Note: If an error occurs, try running Gradle's <code>clean</code> task before. <
 </code></pre></div></p>
 <p>Execute the <code>compileMontiarc</code> task with Gradle.
 Check that no error occurs.</p>
-<p>Java types can be used similarly from within class diagram models.
-To this end, the <code>useClass2Mc</code> option has to be set for the <code>compileCd2pojo</code> task that under the hood processes the class diagram models:
-<div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="c1">// Add the following to your build file:</span>
-<span class="n">tasks</span><span class="p">.</span><span class="na">compileCd2pojo</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="n">useClass2Mc</span><span class="p">.</span><span class="na">set</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+<p>Java types can be used the same way from within class diagram models, without any further configuration.</p>
+<h3 id="using-other-jvm-classes">Using other JVM classes<a class="headerlink" href="#using-other-jvm-classes" title="Permanent link">&para;</a></h3>
+<p>To use JVM classes beyond the JDK (e.g. classes from another project of yours, or from a published library) in
+MontiArc or class diagram models, apply the <code>class2mc</code> plugin and declare a dependency on the <code>class2mc</code> (or
+<code>testClass2mc</code>) configuration:
+<div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"class2mc"</span><span class="p">)</span>
 <span class="p">}</span>
-</code></pre></div></p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>If you use Java types in class diagrams, then you also have to set the <code>useClass2Mc</code> option for your MontiArc models.
-Otherwise, you will encounter errors.</p>
-</div>
+
+<span class="n">dependencies</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">class2mc</span><span class="p">(</span><span class="s">"some.other:project.foo:2.0.0"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+Classes declared this way become resolvable from both MontiArc and class diagram models in the same project, the
+same way JDK types are.</p>
 <h2 id="further-references">Further references<a class="headerlink" href="#further-references" title="Permanent link">&para;</a></h2>
 <p>Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.
 It also enables fine configuration options.
