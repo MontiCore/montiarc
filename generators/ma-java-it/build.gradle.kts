@@ -58,9 +58,4 @@ val compileBaseJava: TaskProvider<JavaCompile> = tasks.named<JavaCompile>("compi
 
 tasks.compileCd2pojo {
   dependsOn(compileBaseJava)
-  useClass2Mc.set(true)
-}
-
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
 }

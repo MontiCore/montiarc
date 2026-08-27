@@ -13,6 +13,16 @@ import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
 /**
+ * Mirrors [de.monticore.gradle.class2mc.Class2MCConfigurations]' naming convention without a
+ * compile-time dependency on the `class2mc` plugin module: applying both `class2mc` and this
+ * plugin's `id(...)` in the same `plugins {}` block would otherwise make the `class2mc` module
+ * reachable both as a plugin marker and as a transitive library dependency, which Gradle cannot
+ * resolve unambiguously.
+ */
+private val SourceSet.class2mcClasspathConfigName: String
+  get() = if (SourceSet.isMain(this)) "class2mcClasspath" else "${name}Class2mcClasspath"
+
+/**
  * Configures dependency resolution and variant publication for CD2Pojo symbol artifacts.
  *
  * For every source set, this plugin configures:
@@ -47,6 +57,8 @@ class CD2PojoDistributionPlugin : Plugin<Project> {
             sourceSet,
             cd2PojoSymbolpathConfiguration
           )
+
+          configureClass2MCSymbolpath(sourceSet)
         }
 
       /*
@@ -132,6 +144,19 @@ class CD2PojoDistributionPlugin : Plugin<Project> {
   ) = with(project) {
     tasks.named(sourceSet.compileCD2PojoTaskName, CD2PojoCompile::class.java) {
       it.symbolpath.from(cd2PojoSymbolpathConfiguration)
+    }
+  }
+
+  /**
+   * Puts the resolved `class2mc` dependency bucket of [sourceSet] onto the symbol path of its CD2Pojo compile
+   * task, so that `--class2mc` (always passed by [CD2PojoCompile]) can resolve these classes. Only takes effect
+   * once the `class2mc` plugin is applied.
+   */
+  private fun configureClass2MCSymbolpath(sourceSet: SourceSet) = with(project) {
+    pluginManager.withPlugin("class2mc") {
+      tasks.named(sourceSet.compileCD2PojoTaskName, CD2PojoCompile::class.java).configure {
+        it.symbolpath.from(configurations.named(sourceSet.class2mcClasspathConfigName))
+      }
     }
   }
 

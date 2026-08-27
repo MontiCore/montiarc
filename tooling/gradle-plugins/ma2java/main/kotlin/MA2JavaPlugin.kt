@@ -16,6 +16,16 @@ import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 import org.gradle.jvm.tasks.Jar
 
+/**
+ * Mirrors [de.monticore.gradle.class2mc.Class2MCConfigurations]' naming convention without a
+ * compile-time dependency on the `class2mc` plugin module: applying both `class2mc` and this
+ * plugin's `id(...)` in the same `plugins {}` block would otherwise make the `class2mc` module
+ * reachable both as a plugin marker and as a transitive library dependency, which Gradle cannot
+ * resolve unambiguously.
+ */
+private val SourceSet.class2mcClasspathConfigName: String
+  get() = if (SourceSet.isMain(this)) "class2mcClasspath" else "${name}Class2mcClasspath"
+
 const val TOOL_CLASSPATH_CONFIG_NAME = "ma2javaToolClasspath"
 
 const val MA_TOOL_CLASS = "montiarc.generator.MA2JavaTool"
@@ -48,6 +58,7 @@ class MA2JavaPlugin : Plugin<Project> {
         // Enabling the declaration of model dependencies and prepare their extraction
         createCompileMontiArcTask(sourceSet)
         addRuntimeEnvironmentDependencyFor(sourceSet)
+        connectClass2MCSymbolpath(sourceSet)
       }
 
       // Special treatments for the main and test source sets. They only exist, if the java plugin is applied
@@ -128,6 +139,19 @@ class MA2JavaPlugin : Plugin<Project> {
     tasks.named(sourceSet.compileJavaTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
+  }
+
+  /**
+   * Puts the resolved `class2mc` dependency bucket of [sourceSet] onto the symbol path of its MontiArc compile
+   * task, so that `--class2mc` (always passed by [MontiArcCompile]) can resolve these classes. Only takes effect
+   * once the `class2mc` plugin is applied.
+   */
+  private fun connectClass2MCSymbolpath(sourceSet: SourceSet) = with(project) {
+    pluginManager.withPlugin("class2mc") {
+      tasks.named(sourceSet.compileMontiArcTaskName, MontiArcCompile::class.java).configure {
+        it.symbolpath.from(configurations.named(sourceSet.class2mcClasspathConfigName))
+      }
+    }
   }
 
   /**

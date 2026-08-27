@@ -38,20 +38,18 @@ A Fully qualified type contains all the parent packages separated by dots: `elev
 
 
 ## Java
-In addition to user-defined types, it is possible to use Java types. For this, [`class2mc`](../../Reference/Types/JavaIntegration.md) has to be enabled:
+In addition to user-defined types, it is possible to use Java types — see
+[Java Integration](../../Reference/Types/JavaIntegration.md) for details. This is enabled automatically when using
+the `montiarc-jsim`/`montiarc` Gradle plugins — no configuration is needed. When invoking the tool directly from the
+command line, pass the corresponding flag explicitly:
 
 === "CLI"
     ```powershell
     java -cp montiarc.jar montiarc.generator.MA2JSimTool -c2mc [...]
     ```
-=== "Gradle"
-    ```kotlin
-    tasks.compileMontiarc {
-      useClass2Mc.set(true)
-    }
-    ```
 
-Inside your MontiArc models, you can then access Java types like any other user-defined type.
+Inside your MontiArc models, you can then access Java types like any other user-defined type:
+
 === "ControlStation.arc"
     ```montiarc
     package elevator;

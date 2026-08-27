@@ -28,7 +28,6 @@ tasks.named<MontiArcCompile>(alteredConfigValuesSrcSet.compileMontiArcTaskName) 
   val srcSet = alteredConfigValuesSrcSet
   hwcPath.setFrom("$projectDir/src/${srcSet.name}/alteredJavaHwc")
   symbolpath.setFrom("$projectDir/src/${srcSet.name}/alteredSymbolsDir")
-  useClass2Mc.set(true)
 }
 
 val alteredConfigCheck = tasks.register("checkAlteringConfigValues", CheckFilesArePresent::class.java) {

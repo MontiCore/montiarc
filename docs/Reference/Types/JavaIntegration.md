@@ -6,7 +6,8 @@ hide:
 
 # Java Integration (a.k.a. Class2MC)
 
-When enabling the [`class2mc`](../../Usage/Gradle/index.md#using-java-types) option, then the Java standard library is available in all MontiArc models.
+When enabled ([Gradle](../../Usage/Gradle/index.md#using-java-types) / [CLI](../../Usage/CLI/MontiArc.md)), Java
+types can be used within MontiArc models, just like user-defined types.
 
 ## Special behavior of Java type usage in MontiArc
 Note that calling constructors of object-oriented types in MontiArc obeys a special syntax:

@@ -25,13 +25,6 @@ sourceSets {
   }
 }
 
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}
-
-tasks.compileTestMontiarc {
-  useClass2Mc.set(true)
-}
 
 // Don't run tests for certain architectures because fmus don't contain correct binaries
 tasks.withType<Test>().configureEach {

@@ -23,13 +23,9 @@ dependencies {
 }
 
 tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-
   debugTask.set(false)
 }
 
 tasks.compileMontiarc {
-  useClass2Mc.set(true)
-
   debugTask.set(false)
 }

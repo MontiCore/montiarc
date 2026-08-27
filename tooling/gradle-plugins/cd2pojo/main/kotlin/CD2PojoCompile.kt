@@ -54,9 +54,6 @@ abstract class CD2PojoCompile : DefaultTask() {
   @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val symbolpath: ConfigurableFileCollection
 
-  @get:Input
-  abstract val useClass2Mc: Property<Boolean>
-
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -106,8 +103,6 @@ abstract class CD2PojoCompile : DefaultTask() {
 
   init {
     description = "Generates Java code from class diagrams using CD2Pojo."
-
-    useClass2Mc.convention(false)
 
     printTaskInfo.convention(false)
 
@@ -165,10 +160,7 @@ abstract class CD2PojoCompile : DefaultTask() {
       it.args("--input", cleanModelpath.asPath)
       it.args("--output", javaOutputDir().get().asFile.path)
       it.args("--symboltable", symbolOutputDir().get().asFile.path)
-
-      if (useClass2Mc.get()) {
-        it.args("--class2mc")
-      }
+      it.args("--class2mc")
 
       if (templateDir.isPresent) {
         it.args("--template", templateDir.get())
@@ -209,8 +201,6 @@ abstract class CD2PojoCompile : DefaultTask() {
 
     println("HWCpath:")
     hwcPath.forEach { println("  $it") }
-
-    println("class2mc: " + useClass2Mc.get())
 
     println("OutputDir: " + outputDir.get())
 

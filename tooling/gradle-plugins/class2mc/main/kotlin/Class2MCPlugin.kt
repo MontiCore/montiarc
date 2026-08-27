@@ -94,7 +94,10 @@ class Class2MCPlugin : Plugin<Project> {
    */
   private fun createOutgoingApiElementsConfig(sourceSet: SourceSet): Configuration =
     project.configurations.maybeCreate(sourceSet.class2mcApiElementsConfigName).apply {
-      isCanBeConsumed = true
+      // Only main is exposed as a consumable variant; test/testFixtures configurations of the
+      // same project would otherwise share identical attributes with main, making the variant
+      // ambiguous for cross-project consumers (see Gradle's unique-attribute-sets requirement).
+      isCanBeConsumed = SourceSet.isMain(sourceSet)
       isCanBeResolved = false
       isVisible = false
       description =

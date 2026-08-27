@@ -36,17 +36,8 @@ sourceSets {
   }
 }
 
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}
-
 tasks.compileTestMontiarc {
   symbolpath.from(tasks.compileCd2pojo.get().symbolOutputDir())
-  useClass2Mc.set(true)
 }
 
 tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }

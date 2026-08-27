@@ -25,13 +25,8 @@ dependencies {
   testImplementation(libs.apache.poi)
 }
 
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
 tasks.compileMontiarc {
   dse.set(true)
-  useClass2Mc.set(true)
 }
 
 application {

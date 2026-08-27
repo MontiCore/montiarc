@@ -24,12 +24,5 @@ dependencies {
   implementation(libs.janino)
 }
 
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}
 
 tasks.compileMontiarc { dependsOn(tasks.compileCd2pojo) }

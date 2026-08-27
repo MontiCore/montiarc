@@ -24,22 +24,10 @@ sourceSets {
   }
 }
 
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
-tasks.compileTestCd2pojo {
-  useClass2Mc.set(true)
-}
-
 tasks.compileMontiarc {
-  useClass2Mc.set(true)
-
   debugTask.set(false)
 }
 
 tasks.compileTestMontiarc {
-  useClass2Mc.set(true)
-
   debugTask.set(false)
 }

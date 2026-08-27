@@ -38,11 +38,3 @@ dependencies {
   testImplementation(libs.janino)
   testImplementation(project(":libraries:simulator-test-rte"))
 }
-
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}
-
-tasks.compileTestMontiarc {
-  useClass2Mc.set(true)
-}

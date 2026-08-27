@@ -40,20 +40,14 @@ dependencies {
 val enableAttachDebugger = false
 
 tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-
   debugTask.set(enableAttachDebugger)
 }
 
 tasks.compileMontiarc {
-  useClass2Mc.set(true)
-
   debugTask.set(enableAttachDebugger)
 }
 
 tasks.compileTestMontiarc {
-  useClass2Mc.set(true)
-
   debugTask.set(enableAttachDebugger)
 }
 
@@ -62,7 +56,5 @@ tasks.compileTestSd2arc {
 }
 
 tasks.compileTestMontiarc {
-  useClass2Mc.set(true)
-
   debugTask.set(enableAttachDebugger)
 }

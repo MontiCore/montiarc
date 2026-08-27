@@ -17,11 +17,6 @@ sourceSets {
   }
 }
 
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
 tasks.compileMontiarc {
-  useClass2Mc.set(true)
   checkVariability.set(true)
 }

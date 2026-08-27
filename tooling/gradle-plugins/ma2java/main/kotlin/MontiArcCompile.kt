@@ -49,9 +49,6 @@ abstract class MontiArcCompile : DefaultTask() {
   @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val symbolpath : ConfigurableFileCollection
 
-  @get:Input
-  abstract val useClass2Mc : Property<Boolean>
-
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -98,7 +95,6 @@ abstract class MontiArcCompile : DefaultTask() {
   init {
     description = "Generates .java code from MontiArc models."
 
-    useClass2Mc.convention(false)
     dse.convention(false)
     printTaskInfo.convention(false)
     debugLog.convention(false)
@@ -160,8 +156,8 @@ abstract class MontiArcCompile : DefaultTask() {
       it.args("--output", this.javaOutputDir().get().asFile.path)
       it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
       it.args("--report", this.reportsOutputDir().get().asFile.path)
+      it.args("--class2mc")
 
-      if (useClass2Mc.get()) { it.args("--class2mc") }
       if (debugLog.get()) {
         it.args("--stacktrace=ERROR,WARN,INFO,TRACE,DEBUG")
       } else if (traceLog.get()) {
@@ -195,8 +191,6 @@ abstract class MontiArcCompile : DefaultTask() {
 
     println("HWCpath:")
     hwcPath.forEach { println("  $it") }
-
-    println("class2mc: " + useClass2Mc.get())
 
     println("Symbol import dir:")
     symbolpath.forEach { println("  $it") }

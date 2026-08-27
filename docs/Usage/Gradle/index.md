@@ -238,15 +238,10 @@ Moreover, verify that the Java class `Status` has been generated to `build/cd2po
 Note: If an error occurs, try running Gradle's `clean` task before. 
 
 ## Using java types
-You can use JDK classes from MontiArc models by setting the `useClass2Mc` option of the generation task in Gradle's build script:
-```kotlin title="build.gradle(.kts)"
-// The syntax is the same for Kotlin and Groovy build scripts
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}
-```
+JDK classes (such as `java.lang.String` or `java.util.*`) are automatically usable from MontiArc and class diagram
+models — no configuration needed.
 
-Now use `String` in your MontiArc model [`MyComp`](#executing-the-generation-process):
+Use `String` in your MontiArc model [`MyComp`](#executing-the-generation-process):
 ```montiarc
 package com.example;
 
@@ -261,18 +256,23 @@ component MyComp(String prefix) {}
 Execute the `compileMontiarc` task with Gradle.
 Check that no error occurs.
 
-Java types can be used similarly from within class diagram models.
-To this end, the `useClass2Mc` option has to be set for the `compileCd2pojo` task that under the hood processes the class diagram models:
+Java types can be used the same way from within class diagram models, without any further configuration.
+
+### Using other JVM classes
+To use JVM classes beyond the JDK (e.g. classes from another project of yours, or from a published library) in
+MontiArc or class diagram models, apply the `class2mc` plugin and declare a dependency on the `class2mc` (or
+`testClass2mc`) configuration:
 ```kotlin title="build.gradle(.kts)"
-// Add the following to your build file:
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
+plugins {
+  id("class2mc")
+}
+
+dependencies {
+  class2mc("some.other:project.foo:2.0.0")
 }
 ```
-
-!!! note 
-    If you use Java types in class diagrams, then you also have to set the `useClass2Mc` option for your MontiArc models.
-    Otherwise, you will encounter errors.
+Classes declared this way become resolvable from both MontiArc and class diagram models in the same project, the
+same way JDK types are.
 
 ## Further references 
 Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.

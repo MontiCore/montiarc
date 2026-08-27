@@ -4,6 +4,7 @@ plugins {
   application
   id("montiarc-jsim") version "7.10.0-SNAPSHOT"
   id("cd2pojo") version "7.10.0-SNAPSHOT"
+  id("class2mc") version "7.10.0-SNAPSHOT"
 }
 
 java {
@@ -24,18 +25,3 @@ repositories {
   }
 }
 
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}
-
-tasks.compileTestCd2pojo {
-  useClass2Mc.set(true)
-}
-
-tasks.compileTestMontiarc {
-  useClass2Mc.set(true)
-}

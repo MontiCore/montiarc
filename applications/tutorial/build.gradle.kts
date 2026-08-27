@@ -23,11 +23,3 @@ dependencies {
   implementation(seLibs.se.commons.logging)
   implementation(seLibs.se.commons.utilities)
 }
-
-tasks.compileCd2pojo {
-  useClass2Mc.set(true)
-}
-
-tasks.compileMontiarc {
-  useClass2Mc.set(true)
-}

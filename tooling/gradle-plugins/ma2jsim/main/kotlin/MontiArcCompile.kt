@@ -50,9 +50,6 @@ abstract class MontiArcCompile : DefaultTask() {
   @get:PathSensitive(PathSensitivity.RELATIVE)
   abstract val symbolpath : ConfigurableFileCollection
 
-  @get:Input
-  abstract val useClass2Mc : Property<Boolean>
-
   @get:InputFiles
   @get:IgnoreEmptyDirectories
   @get:PathSensitive(PathSensitivity.RELATIVE)
@@ -98,7 +95,6 @@ abstract class MontiArcCompile : DefaultTask() {
   init {
     description = "Generates .java code from MontiArc models."
 
-    useClass2Mc.convention(false)
     checkVariability.convention(false)
     debugLog.convention(false)
     traceLog.convention(false)
@@ -169,7 +165,7 @@ abstract class MontiArcCompile : DefaultTask() {
         it.args("--stacktrace=ERROR,WARN,INFO,TRACE")
       }
 
-      if(useClass2Mc.get()) { it.args("--class2mc") }
+      it.args("--class2mc")
 
       if (!cleanHwcPath.isEmpty) { it.args("--handwritten-code", cleanHwcPath.asPath); }
       if (!cleanSymbolpath.isEmpty) {
@@ -202,8 +198,6 @@ abstract class MontiArcCompile : DefaultTask() {
     hwcPath.forEach { println("  $it") }
 
     println("Check variability: " + checkVariability.get())
-
-    println("class2mc: " + useClass2Mc.get())
 
     println("Symbol import dir:")
     symbolpath.forEach { println("  $it") }

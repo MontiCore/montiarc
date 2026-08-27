@@ -21,6 +21,5 @@ dependencies {
 }
 
 tasks.compileCd2pojo {
-  useClass2Mc.set(true)
   templateDir.set(file("$projectDir/main/cd2pojo"))
 }
