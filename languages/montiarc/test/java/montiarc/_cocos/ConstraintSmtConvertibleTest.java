@@ -6,7 +6,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,26 +13,32 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.ConstraintSmtConvertible;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests for {@link ConstraintSmtConvertible}
+ * The class under test is {@link ConstraintSmtConvertible}.
  */
-public class ConstraintSmtConvertibleTest extends MontiArcTestBase {
+class ConstraintSmtConvertibleTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 { feature f; constraint(f); }",
-    "component Comp3 { feature f; constraint(!f); }",
-    "component Comp4 { feature f; constraint(f && !f); }",
-    "component Comp5 { feature f; constraint(f || !f); }",
-    "component Comp6(int p) { constraint(p > 0); }"
+    // component without a constraint
+    "component ValidComp1 { }",
+    // constraint referencing a feature
+    "component ValidComp2 { feature f; constraint(f); }",
+    // constraint negating a feature
+    "component ValidComp3 { feature f; constraint(!f); }",
+    // constraint conjunction of a feature and its negation
+    "component ValidComp4 { feature f; constraint(f && !f); }",
+    // constraint disjunction of a feature and its negation
+    "component ValidComp5 { feature f; constraint(f || !f); }",
+    // constraint comparing an int parameter
+    "component ValidComp6(int p) { constraint(p > 0); }"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -46,12 +51,13 @@ public class ConstraintSmtConvertibleTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -65,14 +71,20 @@ public class ConstraintSmtConvertibleTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1(String p) { constraint(p); }", VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE)
+      // constraint referencing a non-boolean (String) parameter
+      arg("""
+        component InvalidComp1(String p) {
+          constraint(p);
+        }
+        """,
+        EXPRESSION_NOT_SMT_CONVERTIBLE
+      )
     );
   }
 }
