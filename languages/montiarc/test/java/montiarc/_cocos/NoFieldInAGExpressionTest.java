@@ -13,31 +13,35 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static montiarc.util.ArcError.FIELD_REF_IN_STATIC_CONTEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class NoFieldInAGExpressionTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link NoFieldInAGExpression}.
+ */
+class NoFieldInAGExpressionTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
+    // assume and guarantee without any port or field reference
     """
-      component NoPort {
+      component ValidComp1 {
         assume: true;
         guarantee: true;
       }
     """,
+    // assume and guarantee referencing a port's stream length
     """
-      component UsePort {
+      component ValidComp2 {
         port in int a;
         assume: a.len() > 0;
         guarantee: a.len() > 0;
       }
     """,
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
     // Given
     ASTMACompilationUnit ast = compile(model);
@@ -49,12 +53,13 @@ public class NoFieldInAGExpressionTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -68,41 +73,43 @@ public class NoFieldInAGExpressionTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg(
-        """
-          component FieldInGuarantee {
-            int a = 0;
-            guarantee: a > 0;
-          }
+      // field referenced in the guarantee clause
+      arg("""
+        component InvalidComp1 {
+          int a = 0;
+          guarantee: a > 0;
+        }
         """,
-        FIELD_REF_IN_STATIC_CONTEXT),
-      arg(
-        """
-          component FieldInAssume {
-            int a = 0;
-            assume: a > 0;
-            guarantee: true;
-          }
+        FIELD_REF_IN_STATIC_CONTEXT
+      ),
+      // field referenced in the assume clause
+      arg("""
+        component InvalidComp2 {
+          int a = 0;
+          assume: a > 0;
+          guarantee: true;
+        }
         """,
-        FIELD_REF_IN_STATIC_CONTEXT),
-      arg(
-        """
-          component FieldInBoth {
-            port in int p;
-            int a = 0;
-            assume: a > 0 && p.len() > 0;
-            guarantee: a > 0 && p.len() > 0;
-          }
+        FIELD_REF_IN_STATIC_CONTEXT
+      ),
+      // field referenced in both the assume and guarantee clauses, alongside a valid port reference
+      arg("""
+        component InvalidComp3 {
+          port in int p;
+          int a = 0;
+          assume: a > 0 && p.len() > 0;
+          guarantee: a > 0 && p.len() > 0;
+        }
         """,
         FIELD_REF_IN_STATIC_CONTEXT,
-        FIELD_REF_IN_STATIC_CONTEXT)
+        FIELD_REF_IN_STATIC_CONTEXT
+      )
     );
   }
 }
