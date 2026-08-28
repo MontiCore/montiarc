@@ -6,7 +6,6 @@ import comfortablearc._cocos.MaxOneAutoConnect;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ComfortableArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,44 +14,33 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ComfortableArcError.MULTIPLE_AUTOCONNECTS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link MaxOneAutoConnect}.
  */
-public class MaxOneAutoConnectTest extends MontiArcTestBase {
+class MaxOneAutoConnectTest extends MontiArcTestBase {
 
   @BeforeEach
-  public void setUpComponent() {
+  protected void setUpComponent() {
     compile("component A { }");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // atomic no autoconnect
-    "component Comp1 { }",
-    // composed no autocnnect
-    "component Comp2 { " +
-      "A a; " +
-      "}",
-    // composed one autoconnect
-    "component Comp3 { " +
-      "A a; " +
-      "autoconnect port; " +
-      "}",
-    "component Comp4 { " +
-      "component Inner { " +
-      "A a; " +
-      "autoconnect port; " +
-      "}" +
-      "Inner sub; " +
-      "autoconnect port; " +
-      "}"
+    // atomic component, no autoconnect
+    "component ValidComp1 { }",
+    // composed component, no autoconnect
+    "component ValidComp2 { A a; }",
+    // composed component with one autoconnect
+    "component ValidComp3 { A a; autoconnect port; }",
+    // outer and inner component each with one autoconnect
+    "component ValidComp4 { component Inner { A a; autoconnect port; } Inner sub; autoconnect port; }"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -65,12 +53,13 @@ public class MaxOneAutoConnectTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -84,35 +73,43 @@ public class MaxOneAutoConnectTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // composed two autoconnects
-      arg("component Comp1 {" +
-          "A a; " +
-          "autoconnect port; " +
-          "autoconnect port; " +
-          "}",
-        ComfortableArcError.MULTIPLE_AUTOCONNECTS),
-      // composed two different autoconnects
-      arg("component Comp1 {" +
-          "A a; " +
-          "autoconnect port; " +
-          "autoconnect type; " +
-          "}",
-        ComfortableArcError.MULTIPLE_AUTOCONNECTS),
-      // composed three autoconnects
-      arg("component Comp1 {" +
-          "A a; " +
-          "autoconnect port; " +
-          "autoconnect port; " +
-          "autoconnect port; " +
-          "}",
-        ComfortableArcError.MULTIPLE_AUTOCONNECTS)
+      // two autoconnects of the same kind, reported as a single finding
+      arg("""
+        component InvalidComp1 {
+          A a;
+          autoconnect port;
+          autoconnect port;
+        }
+        """,
+        MULTIPLE_AUTOCONNECTS
+      ),
+      // two autoconnects of different kinds, reported as a single finding
+      arg("""
+        component InvalidComp2 {
+          A a;
+          autoconnect port;
+          autoconnect type;
+        }
+        """,
+        MULTIPLE_AUTOCONNECTS
+      ),
+      // three autoconnects, still reported as a single finding
+      arg("""
+        component InvalidComp3 {
+          A a;
+          autoconnect port;
+          autoconnect port;
+          autoconnect port;
+        }
+        """,
+        MULTIPLE_AUTOCONNECTS
+      )
     );
   }
 }
