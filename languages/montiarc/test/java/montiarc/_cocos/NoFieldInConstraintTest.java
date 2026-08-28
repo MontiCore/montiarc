@@ -35,11 +35,16 @@ class NoFieldInConstraintTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2(int p) { constraint(p > 1); }",
-    "component Comp3 { int x = 1; constraint(true); }",
-    "import montiarc.test.OOTypeWithFieldIO; component Comp4(OOTypeWithFieldIO p) { constraint(p.i > 1); constraint(p.o > 1); }",
-    "import montiarc.test.OOTypeWithStaticFieldIO; component Comp5 { constraint(OOTypeWithStaticFieldIO.i > 1); constraint(OOTypeWithStaticFieldIO.o > 1); }"
+    // component without a constraint
+    "component ValidComp1 { }",
+    // constraint referencing a parameter
+    "component ValidComp2(int p) { constraint(p > 1); }",
+    // field declared, but not referenced by the constraint
+    "component ValidComp3 { int x = 1; constraint(true); }",
+    // constraint referencing fields of a parameter (not of the component itself)
+    "import montiarc.test.OOTypeWithFieldIO; component ValidComp4(OOTypeWithFieldIO p) { constraint(p.i > 1); constraint(p.o > 1); }",
+    // constraint referencing static fields of an external type
+    "import montiarc.test.OOTypeWithStaticFieldIO; component ValidComp5 { constraint(OOTypeWithStaticFieldIO.i > 1); constraint(OOTypeWithStaticFieldIO.o > 1); }"
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -74,17 +79,21 @@ class NoFieldInConstraintTest extends MontiArcTestBase {
 
   static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1 { int x = 1; constraint(x > 0); }",
+      // constraint directly referencing the component's own field
+      arg("component InvalidComp1 { int x = 1; constraint(x > 0); }",
         FIELD_REF_IN_STATIC_CONTEXT
       ),
-      arg("component Comp2 { int x = 1; constraint(++x > 0); }",
+      // constraint referencing the component's own field via an increment expression
+      arg("component InvalidComp2 { int x = 1; constraint(++x > 0); }",
         FIELD_REF_IN_STATIC_CONTEXT
       ),
-      arg("component Comp3 { int x = 1; int y = 2; constraint(x > y); }",
+      // constraint referencing two of the component's own fields
+      arg("component InvalidComp3 { int x = 1; int y = 2; constraint(x > y); }",
         FIELD_REF_IN_STATIC_CONTEXT,
         FIELD_REF_IN_STATIC_CONTEXT
       ),
-      arg("component Comp4 { int x = 1; constraint(x == 1 ? true : false); }",
+      // constraint referencing the component's own field inside a conditional expression
+      arg("component InvalidComp4 { int x = 1; constraint(x == 1 ? true : false); }",
         FIELD_REF_IN_STATIC_CONTEXT
       )
     );
