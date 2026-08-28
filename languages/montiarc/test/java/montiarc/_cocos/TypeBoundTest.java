@@ -9,9 +9,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
-import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,12 +17,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.TOO_FEW_TYPE_ARGUMENTS;
+import static montiarc.util.ArcError.TOO_MANY_TYPE_ARGUMENTS;
+import static montiarc.util.ArcError.TYPE_ARG_IGNORES_UPPER_BOUND;
+import static montiarc.util.MCError.MISSING_COMPONENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class TypeBoundTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link TypeBound}.
+ */
+class TypeBoundTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void initSymbols() {
@@ -48,29 +52,47 @@ public class TypeBoundTest extends MontiArcTestBase {
   // Heritage TypeBound tests
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 extends a.b.A { }",
-    "component Comp2 extends a.b.B<int> { }",
-    "component Comp3 extends a.b.B<java.lang.Integer> { }",
-    "component Comp5 extends a.b.C<int, int> { }",
-    "component Comp5 extends a.b.C<java.lang.Integer, java.lang.String> { }",
-    "component Comp6 extends a.b.D<int> { }",
-    "component Comp7 extends a.b.E<java.lang.Integer> { }",
-    "component Comp8 extends a.b.F<java.lang.String, java.lang.Integer> { }",
-    //"component Comp9 extends a.b.G<java.lang.Integer, java.lang.Integer> { }",
-    //"component Comp10 extends a.b.H<java.lang.Integer, java.lang.Integer> { }",
-    "component Comp11<T> extends a.b.A { }",
-    "component Comp12<T> extends a.b.B<T> { }",
-    "component Comp13<T> extends a.b.C<T, T> { }",
-    "component comp14<T, U> extends a.b.C<T, U> { }",
-    //"component comp15<T extends int> extends a.b.D<T> { }",
-    "component comp16<T extends java.lang.Integer> extends a.b.E<T> { }",
-    "component Comp17 extends a.b.B { }",
-    "component Comp18 extends a.b.C { }",
-    "component Comp19 extends a.b.B, a.b.C { }",
-    "component Comp20 extends a.b.E<java.lang.Integer>, a.b.F<java.lang.String, java.lang.Integer> { }",
-    "component comp21<T, U> extends a.b.B<T>, a.b.C<T, U> { }"
+    // extends a non-generic supertype
+    "component ValidComp1 extends a.b.A { }",
+    // extends a generic supertype with a primitive type argument
+    "component ValidComp2 extends a.b.B<int> { }",
+    // extends a generic supertype with a boxed type argument
+    "component ValidComp3 extends a.b.B<java.lang.Integer> { }",
+    // extends a two-parameter generic supertype with matching primitive type arguments
+    "component ValidComp4 extends a.b.C<int, int> { }",
+    // extends a two-parameter generic supertype with different type arguments
+    "component ValidComp5 extends a.b.C<java.lang.Integer, java.lang.String> { }",
+    // extends a supertype with a primitive upper bound, with a matching argument
+    "component ValidComp6 extends a.b.D<int> { }",
+    // extends a supertype with a generic upper bound, with a satisfying argument
+    "component ValidComp7 extends a.b.E<java.lang.Integer> { }",
+    // extends a supertype with two independently-bounded type parameters, both satisfied
+    "component ValidComp8 extends a.b.F<java.lang.String, java.lang.Integer> { }",
+    //"component ValidComp9 extends a.b.G<java.lang.Integer, java.lang.Integer> { }",
+    //"component ValidComp10 extends a.b.H<java.lang.Integer, java.lang.Integer> { }",
+    // generic subtype extends a non-generic supertype
+    "component ValidComp11<T> extends a.b.A { }",
+    // generic subtype extends a supertype using its own type parameter
+    "component ValidComp12<T> extends a.b.B<T> { }",
+    // generic subtype extends a two-parameter supertype reusing its own type parameter for both
+    "component ValidComp13<T> extends a.b.C<T, T> { }",
+    // generic subtype (two type parameters) extends a two-parameter supertype with matching parameters
+    "component ValidComp14<T, U> extends a.b.C<T, U> { }",
+    //"component ValidComp15<T extends int> extends a.b.D<T> { }",
+    // generic subtype whose own type parameter bound is consistent with the supertype's bound
+    "component ValidComp16<T extends java.lang.Integer> extends a.b.E<T> { }",
+    // raw use of a generic supertype (no type argument to bound-check)
+    "component ValidComp17 extends a.b.B { }",
+    // raw use of a two-parameter generic supertype
+    "component ValidComp18 extends a.b.C { }",
+    // multi-inheritance with two raw generic supertypes
+    "component ValidComp19 extends a.b.B, a.b.C { }",
+    // multi-inheritance from two independently-bounded generic supertypes, both satisfied
+    "component ValidComp20 extends a.b.E<java.lang.Integer>, a.b.F<java.lang.String, java.lang.Integer> { }",
+    // generic subtype (two type parameters) with multi-inheritance reusing its parameters across both supertypes
+    "component ValidComp21<T, U> extends a.b.B<T>, a.b.C<T, U> { }"
   })
-  public void shouldNotReportErrorForHeritage(@NotNull String model) throws IOException {
+  void shouldNotReportErrorForHeritage(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -83,12 +105,12 @@ public class TypeBoundTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidHeritageModels")
-  public void shouldReportErrorForHeritage(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportErrorForHeritage(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -102,73 +124,97 @@ public class TypeBoundTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    //assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidHeritageModels() {
     return Stream.of(
-      arg("component Comp1 extends a.b.D<boolean> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp2 extends a.b.E<java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp3 extends a.b.F<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp4 extends a.b.F<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp5 extends a.b.G<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp6 extends a.b.H<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp7<T extends java.lang.String> extends a.b.E<T> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp8 extends a.b.C<java.lang.Integer> { }",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp8 extends a.b.F<java.lang.Integer> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp9 extends a.b.F<java.lang.String> { }",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp10 extends a.b.A<java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp11 extends a.b.B<java.lang.Integer, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp12 extends a.b.E<java.lang.String, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp13 extends a.b.E<java.lang.Integer, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp14 extends a.b.A<java.lang.Integer>, a.b.E<java.lang.String, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND)
+      // type argument violates a primitive upper bound
+      arg("component InvalidComp1 extends a.b.D<boolean> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates a generic upper bound
+      arg("component InvalidComp2 extends a.b.E<java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // both type arguments violate their respective (swapped) upper bounds
+      arg("component InvalidComp3 extends a.b.F<java.lang.Integer, java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates an upper bound that depends on another type parameter
+      arg("component InvalidComp4 extends a.b.G<java.lang.Integer, java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates an upper bound declared before the parameter it depends on
+      arg("component InvalidComp5 extends a.b.H<java.lang.Integer, java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // own type parameter's bound doesn't satisfy the supertype's required bound
+      arg("component InvalidComp6<T extends java.lang.String> extends a.b.E<T> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // missing one type argument for a two-parameter supertype
+      arg("component InvalidComp7 extends a.b.C<java.lang.Integer> { }",
+        TOO_FEW_TYPE_ARGUMENTS),
+      // missing one type argument, and the remaining one violates its upper bound
+      arg("component InvalidComp8 extends a.b.F<java.lang.Integer> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND,
+        TOO_FEW_TYPE_ARGUMENTS),
+      // missing one type argument, the remaining one satisfies its upper bound
+      arg("component InvalidComp9 extends a.b.F<java.lang.String> { }",
+        TOO_FEW_TYPE_ARGUMENTS),
+      // type argument given for a non-generic supertype
+      arg("component InvalidComp10 extends a.b.A<java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // one extra type argument for a single-parameter supertype
+      arg("component InvalidComp11 extends a.b.B<java.lang.Integer, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // one extra type argument, and the first argument violates its upper bound
+      arg("component InvalidComp12 extends a.b.E<java.lang.String, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // one extra type argument, the first argument satisfies its upper bound
+      arg("component InvalidComp13 extends a.b.E<java.lang.Integer, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // multi-inheritance where both supertypes have too many type arguments, one also violating its bound
+      arg("component InvalidComp14 extends a.b.A<java.lang.Integer>, a.b.E<java.lang.String, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS,
+        TOO_MANY_TYPE_ARGUMENTS,
+        TYPE_ARG_IGNORES_UPPER_BOUND)
     );
   }
 
   // Subcomponent TypeBound tests
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { a.b.A sub; }",
-    "component Comp2 { a.b.B<java.lang.Integer> sub; }",
-    "component Comp3 { a.b.B<java.lang.String> sub; }",
-    "component Comp4 { a.b.C<java.lang.Integer, java.lang.Integer> sub; }",
-    "component Comp5 { a.b.D<int> sub; }",
-    "component Comp6 { a.b.E<java.lang.Integer> sub; }",
-    "component Comp7 { a.b.F<java.lang.String, java.lang.Integer> sub; }",
-    //"component Comp8 { a.b.G<java.lang.Integer, java.lang.Integer> sub; }",
-    //"component Comp9 { a.b.H<java.lang.Integer, java.lang.Integer> sub; }"
-    "component Comp10<T> { a.b.A sub; }",
-    "component Comp11<T> { a.b.B<T> sub; }",
-    "component Comp12<T> { a.b.C<T, T> sub; }",
-    "component comp13<T, U> { a.b.C<T, U> sub; }",
-    "component comp14<T extends java.lang.Integer> { a.b.E<T> sub; }",
-    "component Comp17 { a.b.B sub; }",
-    "component Comp18 { a.b.C sub; }"
+    // subcomponent of a non-generic type
+    "component ValidComp1 { a.b.A sub; }",
+    // subcomponent of a generic type with a boxed type argument
+    "component ValidComp2 { a.b.B<java.lang.Integer> sub; }",
+    // subcomponent of a generic type with a different boxed type argument
+    "component ValidComp3 { a.b.B<java.lang.String> sub; }",
+    // subcomponent of a two-parameter generic type with matching arguments
+    "component ValidComp4 { a.b.C<java.lang.Integer, java.lang.Integer> sub; }",
+    // subcomponent of a type with a primitive upper bound, with a matching argument
+    "component ValidComp5 { a.b.D<int> sub; }",
+    // subcomponent of a type with a generic upper bound, with a satisfying argument
+    "component ValidComp6 { a.b.E<java.lang.Integer> sub; }",
+    // subcomponent of a type with two independently-bounded type parameters, both satisfied
+    "component ValidComp7 { a.b.F<java.lang.String, java.lang.Integer> sub; }",
+    //"component ValidComp8 { a.b.G<java.lang.Integer, java.lang.Integer> sub; }",
+    //"component ValidComp9 { a.b.H<java.lang.Integer, java.lang.Integer> sub; }"
+    // generic component with a subcomponent of a non-generic type
+    "component ValidComp10<T> { a.b.A sub; }",
+    // generic component with a subcomponent using its own type parameter
+    "component ValidComp11<T> { a.b.B<T> sub; }",
+    // generic component with a subcomponent reusing its own type parameter for both arguments
+    "component ValidComp12<T> { a.b.C<T, T> sub; }",
+    // generic component (two type parameters) with a subcomponent using matching parameters
+    "component ValidComp13<T, U> { a.b.C<T, U> sub; }",
+    // generic component whose own type parameter bound is consistent with the subcomponent type's bound
+    "component ValidComp14<T extends java.lang.Integer> { a.b.E<T> sub; }",
+    // subcomponent that is a raw use of a generic type
+    "component ValidComp15 { a.b.B sub; }",
+    // subcomponent that is a raw use of a two-parameter generic type
+    "component ValidComp16 { a.b.C sub; }"
   })
-  public void shouldNotReportErrorForSubcomponent(@NotNull String model) throws IOException {
+  void shouldNotReportErrorForSubcomponent(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -181,12 +227,12 @@ public class TypeBoundTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidSubcomponentModels")
-  public void shouldReportErrorForSubcomponent(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportErrorForSubcomponent(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -206,65 +252,93 @@ public class TypeBoundTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidSubcomponentModels() {
     return Stream.of(
-      arg("component Comp1 { a.b.D<boolean> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp2 { a.b.E<java.lang.String> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp3 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp4 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp5 { a.b.G<java.lang.Integer, java.lang.String> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp6 { a.b.H<java.lang.Integer, java.lang.String> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp7<T extends java.lang.String> { a.b.E<T> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp8 { a.b.C<java.lang.Integer> sub; }",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp8 { a.b.F<java.lang.Integer> sub; }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp9 { a.b.F<java.lang.String> sub; }",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp10 { a.b.A<java.lang.Integer> sub; }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp11 { a.b.B<java.lang.Integer, java.lang.Integer> sub; }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp12 { a.b.E<java.lang.String, java.lang.Integer> sub; }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp13 { a.b.E<java.lang.Integer, java.lang.Integer> sub; }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS)
+      // type argument violates a primitive upper bound
+      arg("component InvalidComp1 { a.b.D<boolean> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates a generic upper bound
+      arg("component InvalidComp2 { a.b.E<java.lang.String> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // both type arguments violate their respective (swapped) upper bounds
+      arg("component InvalidComp3 { a.b.F<java.lang.Integer, java.lang.String> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates an upper bound that depends on another type parameter
+      arg("component InvalidComp4 { a.b.G<java.lang.Integer, java.lang.String> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates an upper bound declared before the parameter it depends on
+      arg("component InvalidComp5 { a.b.H<java.lang.Integer, java.lang.String> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // own type parameter's bound doesn't satisfy the subcomponent type's required bound
+      arg("component InvalidComp6<T extends java.lang.String> { a.b.E<T> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // missing one type argument for a two-parameter type
+      arg("component InvalidComp7 { a.b.C<java.lang.Integer> sub; }",
+        TOO_FEW_TYPE_ARGUMENTS),
+      // missing one type argument, and the remaining one violates its upper bound
+      arg("component InvalidComp8 { a.b.F<java.lang.Integer> sub; }",
+        TYPE_ARG_IGNORES_UPPER_BOUND,
+        TOO_FEW_TYPE_ARGUMENTS),
+      // missing one type argument, the remaining one satisfies its upper bound
+      arg("component InvalidComp9 { a.b.F<java.lang.String> sub; }",
+        TOO_FEW_TYPE_ARGUMENTS),
+      // type argument given for a non-generic type
+      arg("component InvalidComp10 { a.b.A<java.lang.Integer> sub; }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // one extra type argument for a single-parameter type
+      arg("component InvalidComp11 { a.b.B<java.lang.Integer, java.lang.Integer> sub; }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // one extra type argument, and the first argument violates its upper bound
+      arg("component InvalidComp12 { a.b.E<java.lang.String, java.lang.Integer> sub; }",
+        TOO_MANY_TYPE_ARGUMENTS,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // one extra type argument, the first argument satisfies its upper bound
+      arg("component InvalidComp13 { a.b.E<java.lang.Integer, java.lang.Integer> sub; }",
+        TOO_MANY_TYPE_ARGUMENTS)
     );
   }
 
   // Refinement TypeBound tests
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 refines a.b.A { }",
-    "component Comp2 refines a.b.B<int> { }",
-    "component Comp3 refines a.b.B<java.lang.Integer> { }",
-    "component Comp5 refines a.b.C<int, int> { }",
-    "component Comp5 refines a.b.C<java.lang.Integer, java.lang.String> { }",
-    "component Comp6 refines a.b.D<int> { }",
-    "component Comp7 refines a.b.E<java.lang.Integer> { }",
-    "component Comp8 refines a.b.F<java.lang.String, java.lang.Integer> { }",
-    //"component Comp9 refines a.b.G<java.lang.Integer, java.lang.Integer> { }",
-    //"component Comp10 refines a.b.H<java.lang.Integer, java.lang.Integer> { }",
-    "component Comp11<T> refines a.b.A { }",
-    "component Comp12<T> refines a.b.B<T> { }",
-    "component Comp13<T> refines a.b.C<T, T> { }",
-    "component comp14<T, U> refines a.b.C<T, U> { }",
-    //"component comp15<T extends int> refines a.b.D<T> { }",
-    "component comp16<T extends java.lang.Integer> refines a.b.E<T> { }",
-    "component Comp17 refines a.b.B { }",
-    "component Comp18 refines a.b.C { }",
-    "component Comp19 refines a.b.B, a.b.C { }",
-    "component Comp20 refines a.b.E<java.lang.Integer>, a.b.F<java.lang.String, java.lang.Integer> { }",
-    "component comp21<T, U> refines a.b.B<T>, a.b.C<T, U> { }",
+    // refines a non-generic supertype
+    "component ValidComp1 refines a.b.A { }",
+    // refines a generic supertype with a primitive type argument
+    "component ValidComp2 refines a.b.B<int> { }",
+    // refines a generic supertype with a boxed type argument
+    "component ValidComp3 refines a.b.B<java.lang.Integer> { }",
+    // refines a two-parameter generic supertype with matching primitive type arguments
+    "component ValidComp4 refines a.b.C<int, int> { }",
+    // refines a two-parameter generic supertype with different type arguments
+    "component ValidComp5 refines a.b.C<java.lang.Integer, java.lang.String> { }",
+    // refines a supertype with a primitive upper bound, with a matching argument
+    "component ValidComp6 refines a.b.D<int> { }",
+    // refines a supertype with a generic upper bound, with a satisfying argument
+    "component ValidComp7 refines a.b.E<java.lang.Integer> { }",
+    // refines a supertype with two independently-bounded type parameters, both satisfied
+    "component ValidComp8 refines a.b.F<java.lang.String, java.lang.Integer> { }",
+    //"component ValidComp9 refines a.b.G<java.lang.Integer, java.lang.Integer> { }",
+    //"component ValidComp10 refines a.b.H<java.lang.Integer, java.lang.Integer> { }",
+    // generic subtype refines a non-generic supertype
+    "component ValidComp11<T> refines a.b.A { }",
+    // generic subtype refines a supertype using its own type parameter
+    "component ValidComp12<T> refines a.b.B<T> { }",
+    // generic subtype refines a two-parameter supertype reusing its own type parameter for both
+    "component ValidComp13<T> refines a.b.C<T, T> { }",
+    // generic subtype (two type parameters) refines a two-parameter supertype with matching parameters
+    "component ValidComp14<T, U> refines a.b.C<T, U> { }",
+    //"component ValidComp15<T extends int> refines a.b.D<T> { }",
+    // generic subtype whose own type parameter bound is consistent with the supertype's bound
+    "component ValidComp16<T extends java.lang.Integer> refines a.b.E<T> { }",
+    // raw use of a generic supertype (no type argument to bound-check)
+    "component ValidComp17 refines a.b.B { }",
+    // raw use of a two-parameter generic supertype
+    "component ValidComp18 refines a.b.C { }",
+    // multi-refinement with two raw generic supertypes
+    "component ValidComp19 refines a.b.B, a.b.C { }",
+    // multi-refinement from two independently-bounded generic supertypes, both satisfied
+    "component ValidComp20 refines a.b.E<java.lang.Integer>, a.b.F<java.lang.String, java.lang.Integer> { }",
+    // generic subtype (two type parameters) with multi-refinement reusing its parameters across both supertypes
+    "component ValidComp21<T, U> refines a.b.B<T>, a.b.C<T, U> { }",
   })
   void shouldNotReportErrorForRefinement(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -304,44 +378,56 @@ public class TypeBoundTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidRefinementModels() {
     return Stream.of(
-      arg("component Comp1 refines a.b.D<boolean> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp2 refines a.b.E<java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp3 refines a.b.F<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp4 refines a.b.F<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp5 refines a.b.G<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp6 refines a.b.H<java.lang.Integer, java.lang.String> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp7<T extends java.lang.String> refines a.b.E<T> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp8 refines a.b.C<java.lang.Integer> { }",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp8 refines a.b.F<java.lang.Integer> { }",
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND,
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp9 refines a.b.F<java.lang.String> { }",
-        ArcError.TOO_FEW_TYPE_ARGUMENTS),
-      arg("component Comp10 refines a.b.A<java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp11 refines a.b.B<java.lang.Integer, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp12 refines a.b.E<java.lang.String, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component Comp13 refines a.b.E<java.lang.Integer, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS),
-      arg("component Comp14 refines a.b.A<java.lang.Integer>, a.b.E<java.lang.String, java.lang.Integer> { }",
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TOO_MANY_TYPE_ARGUMENTS,
-        ArcError.TYPE_ARG_IGNORES_UPPER_BOUND),
-      arg("component comp15 refines a.b.X<java.lang.String> { }",
-        MCError.MISSING_COMPONENT)
+      // type argument violates a primitive upper bound
+      arg("component InvalidComp1 refines a.b.D<boolean> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates a generic upper bound
+      arg("component InvalidComp2 refines a.b.E<java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // both type arguments violate their respective (swapped) upper bounds
+      arg("component InvalidComp3 refines a.b.F<java.lang.Integer, java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates an upper bound that depends on another type parameter
+      arg("component InvalidComp4 refines a.b.G<java.lang.Integer, java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // type argument violates an upper bound declared before the parameter it depends on
+      arg("component InvalidComp5 refines a.b.H<java.lang.Integer, java.lang.String> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // own type parameter's bound doesn't satisfy the supertype's required bound
+      arg("component InvalidComp6<T extends java.lang.String> refines a.b.E<T> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // missing one type argument for a two-parameter supertype
+      arg("component InvalidComp7 refines a.b.C<java.lang.Integer> { }",
+        TOO_FEW_TYPE_ARGUMENTS),
+      // missing one type argument, and the remaining one violates its upper bound
+      arg("component InvalidComp8 refines a.b.F<java.lang.Integer> { }",
+        TYPE_ARG_IGNORES_UPPER_BOUND,
+        TOO_FEW_TYPE_ARGUMENTS),
+      // missing one type argument, the remaining one satisfies its upper bound
+      arg("component InvalidComp9 refines a.b.F<java.lang.String> { }",
+        TOO_FEW_TYPE_ARGUMENTS),
+      // type argument given for a non-generic supertype
+      arg("component InvalidComp10 refines a.b.A<java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // one extra type argument for a single-parameter supertype
+      arg("component InvalidComp11 refines a.b.B<java.lang.Integer, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // one extra type argument, and the first argument violates its upper bound
+      arg("component InvalidComp12 refines a.b.E<java.lang.String, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // one extra type argument, the first argument satisfies its upper bound
+      arg("component InvalidComp13 refines a.b.E<java.lang.Integer, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS),
+      // multi-refinement where both supertypes have too many type arguments, one also violating its bound
+      arg("component InvalidComp14 refines a.b.A<java.lang.Integer>, a.b.E<java.lang.String, java.lang.Integer> { }",
+        TOO_MANY_TYPE_ARGUMENTS,
+        TOO_MANY_TYPE_ARGUMENTS,
+        TYPE_ARG_IGNORES_UPPER_BOUND),
+      // refines an undeclared component type (robustness: no cascading error beyond the missing type)
+      arg("component InvalidComp15 refines a.b.X<java.lang.String> { }",
+        MISSING_COMPONENT)
     );
   }
 
