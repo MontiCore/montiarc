@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,38 +13,38 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.OPTIONAL_PARAMS_LAST;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link OptionalConfigurationParametersLast}.
  */
-public class OptionalConfigurationParametersLastTest extends MontiArcTestBase {
+class OptionalConfigurationParametersLastTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
     // no parameters
-    "component Comp1 { }",
+    "component ValidComp1 { }",
     // one mandatory parameter
-    "component Comp2(int p) { }",
+    "component ValidComp2(int p) { }",
     // two mandatory parameters
-    "component Comp3(int p1, int p2) { }",
+    "component ValidComp3(int p1, int p2) { }",
     // one optional parameter
-    "component Comp4(int p = 1) { }",
+    "component ValidComp4(int p = 1) { }",
     // two optional parameters
-    "component Comp5(int p1 = 1, int p2 = 2) { }",
+    "component ValidComp5(int p1 = 1, int p2 = 2) { }",
     // one mandatory and one optional parameter
-    "component Comp6(int p1, int p2 = 2) { }",
+    "component ValidComp6(int p1, int p2 = 2) { }",
     // two mandatory and one optional parameter
-    "component Comp7(int p1, int p2, int p3 = 3) { }",
+    "component ValidComp7(int p1, int p2, int p3 = 3) { }",
     // one mandatory and two optional parameters
-    "component Comp8(int p1, int p2 = 2, int p3 = 3) { }",
+    "component ValidComp8(int p1, int p2 = 2, int p3 = 3) { }",
     // two mandatory and two optional parameters
-    "component Comp9(int p1, int p2, int p3 = 3, int p4 = 4) { }"
+    "component ValidComp9(int p1, int p2, int p3 = 3, int p4 = 4) { }"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -58,12 +57,13 @@ public class OptionalConfigurationParametersLastTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -77,25 +77,24 @@ public class OptionalConfigurationParametersLastTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // one optional and one mandatory parameter
-      arg("component Comp1(int p2 = 1, int p1) { }",
-        ArcError.OPTIONAL_PARAMS_LAST),
-      // two optional and one mandatory parameter
-      arg("component Comp2(int p3 = 1, int p2 = 2, int p1) { }",
-        ArcError.OPTIONAL_PARAMS_LAST),
-      // one mandatory, one optional, and one mandatory parameter
-      arg("component Comp3(int p1, int p3 = 2, int p2) { }",
-        ArcError.OPTIONAL_PARAMS_LAST),
-      // two mandatory and two optional parameter intertwined
-      arg("component Comp4(int p1, int p3 = 2, int p2, int p4 = 4) { }",
-        ArcError.OPTIONAL_PARAMS_LAST)
+      // one optional parameter followed by one mandatory parameter
+      arg("component InvalidComp1(int p2 = 1, int p1) { }",
+        OPTIONAL_PARAMS_LAST),
+      // two optional parameters followed by one mandatory parameter
+      arg("component InvalidComp2(int p3 = 1, int p2 = 2, int p1) { }",
+        OPTIONAL_PARAMS_LAST),
+      // mandatory, optional, then mandatory parameter
+      arg("component InvalidComp3(int p1, int p3 = 2, int p2) { }",
+        OPTIONAL_PARAMS_LAST),
+      // mandatory and optional parameters intertwined
+      arg("component InvalidComp4(int p1, int p3 = 2, int p2, int p4 = 4) { }",
+        OPTIONAL_PARAMS_LAST)
     );
   }
 }
