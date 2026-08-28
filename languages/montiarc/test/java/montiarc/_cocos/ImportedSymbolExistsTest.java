@@ -10,7 +10,6 @@ import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc.util.Error;
-import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,15 +17,18 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.MontiArcError.IMPORTED_SYMBOL_MISSING;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * The class under test is {@link ImportedSymbolExists}.
+ */
 class ImportedSymbolExistsTest extends MontiArcTestBase {
 
   @BeforeEach
-  public void setUpSymbols() {
+  protected void setUpSymbols() {
     IMontiArcScope packageScope = MontiArcMill.scope();
     packageScope.setName("a");
     MontiArcMill.globalScope().addSubScope(packageScope);
@@ -59,34 +61,43 @@ class ImportedSymbolExistsTest extends MontiArcTestBase {
   @ParameterizedTest
   @ValueSource(strings = {
     // no import statement
-    "component Comp1 {}",
+    "component ValidComp1 {}",
+    // import of an existing component
     "import a.Comp;" +
-      "component Comp2 {}",
+      "component ValidComp2 {}",
+    // import of an existing OO type
     "import a.OOType;" +
-      "component Comp3 {}",
+      "component ValidComp3 {}",
+    // import of an existing function
     "import a.func;" +
-      "component Comp4 {}",
+      "component ValidComp4 {}",
+    // import of an existing static method
     "import a.method;" +
-      "component Comp5 {}",
+      "component ValidComp5 {}",
+    // import of an existing variable
     "import a.variable;" +
-      "component Comp6 {}",
+      "component ValidComp6 {}",
+    // import of an existing static field
     "import a.staticField;" +
-      "component Comp7 {}",
+      "component ValidComp7 {}",
+    // import of an existing enum type
     "import a.OnOff;" +
-      "component Comp8 {}",
+      "component ValidComp8 {}",
+    // import of an existing enum constant
     "import a.OnOff.ON;" +
-      "component Comp9 {}",
+      "component ValidComp9 {}",
+    // different package, no import referencing package a's symbols
     "package b;" +
-      "component Comp10 {}",
-    // Ignore Star imports
+      "component ValidComp10 {}",
+    // star import of a non-existing package is ignored
     "import nonExisting.*;" +
-      "component Comp11 {}",
-    // Partial import in same package?
+      "component ValidComp11 {}",
+    // import of a sibling symbol by partial name from within the same package
     "package a;" +
       "import OnOff;" +
-      "component Comp12 {}"
+      "component ValidComp12 {}"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -99,12 +110,13 @@ class ImportedSymbolExistsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -118,34 +130,39 @@ class ImportedSymbolExistsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
+      // import of a completely unknown package
       arg("import unknown;" +
-          "component Comp1 {}",
-        MontiArcError.IMPORTED_SYMBOL_MISSING),
+          "component InvalidComp1 {}",
+        IMPORTED_SYMBOL_MISSING),
+      // import of a symbol from an unknown package
       arg("import unknown.Comp;" +
-          "component Comp2 {}",
-        MontiArcError.IMPORTED_SYMBOL_MISSING),
+          "component InvalidComp2 {}",
+        IMPORTED_SYMBOL_MISSING),
+      // one unknown import alongside one valid import
       arg("import unknown.Comp;" +
           "import a.OnOff;" +
-          "component Comp3 {}",
-        MontiArcError.IMPORTED_SYMBOL_MISSING),
+          "component InvalidComp3 {}",
+        IMPORTED_SYMBOL_MISSING),
+      // two unknown imports
       arg("import unknown.Comp;" +
           "import unknown.Type;" +
-          "component Comp4 {}",
-        MontiArcError.IMPORTED_SYMBOL_MISSING,
-        MontiArcError.IMPORTED_SYMBOL_MISSING),
+          "component InvalidComp4 {}",
+        IMPORTED_SYMBOL_MISSING,
+        IMPORTED_SYMBOL_MISSING),
+      // import of an unknown symbol from a known package
       arg("import a.Unknown;" +
-          "component Comp5 {}",
-        MontiArcError.IMPORTED_SYMBOL_MISSING),
+          "component InvalidComp5 {}",
+        IMPORTED_SYMBOL_MISSING),
+      // import of a package as if it were a symbol
       arg("import a;" +
-          "component Comp6 {}",
-        MontiArcError.IMPORTED_SYMBOL_MISSING)
+          "component InvalidComp6 {}",
+        IMPORTED_SYMBOL_MISSING)
     );
   }
 }
