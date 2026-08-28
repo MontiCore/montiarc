@@ -232,7 +232,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
     return Stream.of(
       // write to input in compute block
       arg("""
-          component ValidComp1 {
+          component InvalidComp1 {
             port in int i;
             compute {
               i = 0;
@@ -243,7 +243,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // write to field of input in compute block
       arg("""
-          component ValidComp2 {
+          component InvalidComp2 {
             port in montiarc.test.OOTypeWithField i;
             compute {
               i.v = 0;
@@ -254,7 +254,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // access field of output in compute block
       arg("""
-          component ValidComp3 {
+          component InvalidComp3 {
             port sync out montiarc.test.OOTypeWithField o;
             compute {
               o.v = 0;
@@ -265,7 +265,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // access method of output in compute block
       arg("""
-          component ValidComp4 {
+          component InvalidComp4 {
             port sync out montiarc.test.OOTypeWithFunction o;
             compute {
               o.f();
@@ -276,7 +276,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // pass output as argument to method call in compute block
       arg("""
-          component ValidComp5 {
+          component InvalidComp5 {
             port in montiarc.test.OOTypeWithFunction i;
             port sync out int o;
             compute {
@@ -288,7 +288,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // write to input with inc suffix in compute block
       arg("""
-          component ValidComp6 {
+          component InvalidComp6 {
             port in int i;
             compute {
               i++;
@@ -299,7 +299,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // read from output with inc suffix in compute block
       arg("""
-          component ValidComp7 {
+          component InvalidComp7 {
             port sync out int o;
             compute {
               o++;
@@ -310,7 +310,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // write to input with dec suffix in compute block
       arg("""
-          component ValidComp8 {
+          component InvalidComp8 {
             port in int i;
             compute {
               i--;
@@ -321,7 +321,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // read from output with dec suffix in compute block
       arg("""
-          component ValidComp9 {
+          component InvalidComp9 {
             port sync out int o;
             compute {
               o--;
@@ -332,7 +332,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // write to input with inc prefix in compute block
       arg("""
-          component ValidComp10 {
+          component InvalidComp10 {
             port in int i;
             compute {
               ++i;
@@ -343,7 +343,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // read from output with inc prefix in compute block
       arg("""
-          component ValidComp11 {
+          component InvalidComp11 {
             port sync out int o;
             compute {
               ++o;
@@ -354,7 +354,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // write to input with dec prefix in compute block
       arg("""
-          component ValidComp12 {
+          component InvalidComp12 {
             port in int i;
             compute {
               --i;
@@ -365,7 +365,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // read from output with dec prefix in compute block
       arg("""
-          component ValidComp13 {
+          component InvalidComp13 {
             port sync out int o;
             compute {
               --o;
@@ -376,7 +376,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // write to input with assignment expression in compute block
       arg("""
-          component ValidComp14 {
+          component InvalidComp14 {
             port in int i1;
             port in boolean i2;
             compute {
@@ -401,7 +401,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // read from output with assignment expression in compute block
       arg("""
-          component ValidComp15 {
+          component InvalidComp15 {
             port sync out int o1;
             port sync out boolean o2;
             int v1 = 0;
@@ -428,7 +428,7 @@ class PortReadWriteInCompute4MontiArcTest extends MontiArcTestBase {
       ),
       // read from output with infix expression in compute block
       arg("""
-          component ValidComp16 {
+          component InvalidComp16 {
             port sync out int o1;
             port sync out boolean o2;
             compute {
