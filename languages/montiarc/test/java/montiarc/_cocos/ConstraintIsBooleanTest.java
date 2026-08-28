@@ -1,58 +1,83 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
-import montiarc.MontiArcMill;
+import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.VariableArcError;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import variablearc._ast.ASTArcConstraintDeclaration;
+import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.ConstraintIsBoolean;
 
 import java.util.stream.Stream;
 
+import static montiarc.util.VariableArcError.CONSTRAINT_EXPRESSION_WRONG_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ConstraintIsBooleanTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link ConstraintIsBoolean}.
+ */
+class ConstraintIsBooleanTest extends MontiArcTestBase {
 
-  protected static Stream<Arguments> provideConstraintAndError() {
-    return Stream.of(
-      Arguments.of(MontiArcMill.arcConstraintDeclarationBuilder().setExpression(
-            MontiArcMill
-              .literalExpressionBuilder()
-              .setLiteral(MontiArcMill.booleanLiteralBuilder()
-                .setSource(ASTConstantsMCCommonLiterals.FALSE).build())
-              .build())
-          .build(),
-        new Error[]{}
-      ),
-      Arguments.of(MontiArcMill.arcConstraintDeclarationBuilder().setExpression(
-            MontiArcMill
-              .literalExpressionBuilder()
-              .setLiteral(MontiArcMill.basicLongLiteralBuilder().setDigits("5")
-                .build())
-              .build())
-          .build(),
-        new Error[]{ VariableArcError.CONSTRAINT_EXPRESSION_WRONG_TYPE }
-      )
-    );
+  @ParameterizedTest
+  @ValueSource(strings = {
+    // constraint with a boolean literal
+    """
+      component ValidComp1 {
+        constraint(false);
+      }
+      """
+  })
+  void shouldNotReportError(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConstraintIsBoolean());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
-  @MethodSource("provideConstraintAndError")
-  public void testConstraintType(ASTArcConstraintDeclaration constraint,
-                                 Error[] errors) {
+  @MethodSource("invalidModels")
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
     // Given
-    ConstraintIsBoolean coco = new ConstraintIsBoolean();
+    ASTMACompilationUnit ast = compile(model);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConstraintIsBoolean());
 
     // When
-    coco.check(constraint);
+    checker.checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // constraint with a non-boolean (int) literal
+      arg("""
+        component InvalidComp1 {
+          constraint(5);
+        }
+        """,
+        CONSTRAINT_EXPRESSION_WRONG_TYPE
+      )
+    );
   }
 }
