@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,23 +13,36 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.VarIfNoAssignmentExpr;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.INVALID_CONTEXT_ASSIGNMENT;
+import static montiarc.util.ArcError.INVALID_CONTEXT_DEC_PREFIX;
+import static montiarc.util.ArcError.INVALID_CONTEXT_DEC_SUFFIX;
+import static montiarc.util.ArcError.INVALID_CONTEXT_INC_PREFIX;
+import static montiarc.util.ArcError.INVALID_CONTEXT_INC_SUFFIX;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VarIfNoAssignmentExprTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link VarIfNoAssignmentExpr}.
+ */
+class VarIfNoAssignmentExprTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 { feature f; varif (f) { } }",
-    "component Comp3 { feature f; varif (!f) { } }",
-    "component Comp4 { feature f; varif (f && !f) { } }",
-    "component Comp5 { feature f; varif (f || !f) { } }",
-    "component Comp6(int p) { varif (p > 0) { } }"
+    // component without a varif
+    "component ValidComp1 { }",
+    // varif condition referencing a feature
+    "component ValidComp2 { feature f; varif (f) { } }",
+    // varif condition negating a feature
+    "component ValidComp3 { feature f; varif (!f) { } }",
+    // varif condition conjunction of a feature and its negation
+    "component ValidComp4 { feature f; varif (f && !f) { } }",
+    // varif condition disjunction of a feature and its negation
+    "component ValidComp5 { feature f; varif (f || !f) { } }",
+    // varif condition comparing an int parameter
+    "component ValidComp6(int p) { varif (p > 0) { } }"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -43,12 +55,13 @@ public class VarIfNoAssignmentExprTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -62,29 +75,44 @@ public class VarIfNoAssignmentExprTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1 { feature f; varif (f = true) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp2 { feature f; varif (f &= true) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp3 { feature f; varif (f |= true) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp4 { feature f; varif (f ^= true) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp5(int p) { varif ((p += 0) > 1) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp6(int p) { varif ((p -= 0) > 1) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp7(int p) { varif ((p *= 0) > 1) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp8(int p) { varif ((p /= 0) > 1) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp9(int p) { varif ((p %= 0) > 1) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp10(int p) { varif ((p >>= 1) > 0) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp11(int p) { varif ((p >>>= 1) > 0) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp12(int p) { varif ((p <<= 1) > 0) { } }", ArcError.INVALID_CONTEXT_ASSIGNMENT),
-      arg("component Comp13(int p) { varif (++p > 0) { } }", ArcError.INVALID_CONTEXT_INC_PREFIX),
-      arg("component Comp14(int p) { varif (--p > 0) { } }", ArcError.INVALID_CONTEXT_DEC_PREFIX),
-      arg("component Comp15(int p) { varif (p++ > 0) { } }", ArcError.INVALID_CONTEXT_INC_SUFFIX),
-      arg("component Comp16(int p) { varif (p-- > 0) { } }", ArcError.INVALID_CONTEXT_DEC_SUFFIX)
+      // nested assignment (=) in varif condition on a feature
+      arg("component InvalidComp1 { feature f; varif (f = true) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested and-assignment (&=) in varif condition on a feature
+      arg("component InvalidComp2 { feature f; varif (f &= true) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested or-assignment (|=) in varif condition on a feature
+      arg("component InvalidComp3 { feature f; varif (f |= true) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested xor-assignment (^=) in varif condition on a feature
+      arg("component InvalidComp4 { feature f; varif (f ^= true) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested addition-assignment (+=) in varif condition on an int parameter
+      arg("component InvalidComp5(int p) { varif ((p += 0) > 1) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested subtraction-assignment (-=) in varif condition on an int parameter
+      arg("component InvalidComp6(int p) { varif ((p -= 0) > 1) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested multiplication-assignment (*=) in varif condition on an int parameter
+      arg("component InvalidComp7(int p) { varif ((p *= 0) > 1) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested division-assignment (/=) in varif condition on an int parameter
+      arg("component InvalidComp8(int p) { varif ((p /= 0) > 1) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested modulo-assignment (%=) in varif condition on an int parameter
+      arg("component InvalidComp9(int p) { varif ((p %= 0) > 1) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested right-shift-assignment (>>=) in varif condition on an int parameter
+      arg("component InvalidComp10(int p) { varif ((p >>= 1) > 0) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested unsigned-right-shift-assignment (>>>=) in varif condition on an int parameter
+      arg("component InvalidComp11(int p) { varif ((p >>>= 1) > 0) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // nested left-shift-assignment (<<=) in varif condition on an int parameter
+      arg("component InvalidComp12(int p) { varif ((p <<= 1) > 0) { } }", INVALID_CONTEXT_ASSIGNMENT),
+      // prefix increment expression in varif condition
+      arg("component InvalidComp13(int p) { varif (++p > 0) { } }", INVALID_CONTEXT_INC_PREFIX),
+      // prefix decrement expression in varif condition
+      arg("component InvalidComp14(int p) { varif (--p > 0) { } }", INVALID_CONTEXT_DEC_PREFIX),
+      // suffix increment expression in varif condition
+      arg("component InvalidComp15(int p) { varif (p++ > 0) { } }", INVALID_CONTEXT_INC_SUFFIX),
+      // suffix decrement expression in varif condition
+      arg("component InvalidComp16(int p) { varif (p-- > 0) { } }", INVALID_CONTEXT_DEC_SUFFIX)
     );
   }
 }
