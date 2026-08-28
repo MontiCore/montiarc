@@ -22,12 +22,15 @@ import java.util.stream.Stream;
 import static montiarc.util.ArcError.PORT_REF_IN_STATIC_CONTEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * The class under test is {@link NoPortInConstraint}.
+ */
 class NoPortInConstraintTest extends MontiArcTestBase {
 
   final static String SYMBOLS_DIR = "symbols";
 
   @BeforeEach
-  public void setUp() {
+  protected void setUp() {
     MontiArcMill.globalScope().setSymbolPath(
       new MCPath(Paths.get(TEST_RESOURCE, SYMBOLS_DIR))
     );
@@ -35,57 +38,22 @@ class NoPortInConstraintTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // 1 - No ports, no expressions
-    "component Comp1 { }",
-    // 2 - No expressions
-    "component Comp2 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "}",
-    // 3 - Constraint with literal
-    "component Comp3 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  constraint(true); " +
-      "}",
-    // 4 - Constraint, read value from parameter
-    "component Comp4(int p) { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  constraint(p > 1); " +
-      "}",
-    // 5 - Constraint, read value from field
-    "import montiarc.test.OOTypeWithFieldIO; " +
-      "component Comp5(OOTypeWithFieldIO p) { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  constraint(p.i > 1); " +
-      "  constraint(p.o > 1); " +
-      "}",
-    // 6 - Constraint, read value from function
-    "import montiarc.test.OOTypeWithFunctionIO; " +
-      "component Comp6(OOTypeWithFunctionIO p) { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  constraint(p.i() > 1); " +
-      "  constraint(p.o() > 1); " +
-      "}",
-    // 7 - Constraint, read value from static field
-    "import montiarc.test.OOTypeWithStaticFieldIO; " +
-      "component Comp7 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  constraint(OOTypeWithStaticFieldIO.i > 1); " +
-      "  constraint(OOTypeWithStaticFieldIO.o > 1); " +
-      "}",
-    // 8 - Constraint, read value from static function
-    "import montiarc.test.OOTypeWithStaticFunctionIO; " +
-      "component Comp8 { " +
-      "  port in int i; " +
-      "  port out int o; " +
-      "  constraint(OOTypeWithStaticFieldIO.i() > 1); " +
-      "  constraint(OOTypeWithStaticFieldIO.o() > 1); " +
-      "}",
+    // no ports, no constraint
+    "component ValidComp1 { }",
+    // ports, no constraint
+    "component ValidComp2 { port in int i; port out int o; }",
+    // constraint with a literal
+    "component ValidComp3 { port in int i; port out int o; constraint(true); }",
+    // constraint reading a value from a parameter
+    "component ValidComp4(int p) { port in int i; port out int o; constraint(p > 1); }",
+    // constraint reading values from a parameter's fields
+    "import montiarc.test.OOTypeWithFieldIO; component ValidComp5(OOTypeWithFieldIO p) { port in int i; port out int o; constraint(p.i > 1); constraint(p.o > 1); }",
+    // constraint reading values from a parameter's methods
+    "import montiarc.test.OOTypeWithFunctionIO; component ValidComp6(OOTypeWithFunctionIO p) { port in int i; port out int o; constraint(p.i() > 1); constraint(p.o() > 1); }",
+    // constraint reading values from an external type's static fields
+    "import montiarc.test.OOTypeWithStaticFieldIO; component ValidComp7 { port in int i; port out int o; constraint(OOTypeWithStaticFieldIO.i > 1); constraint(OOTypeWithStaticFieldIO.o > 1); }",
+    // constraint reading values from an external type's static functions
+    "import montiarc.test.OOTypeWithStaticFunctionIO; component ValidComp8 { port in int i; port out int o; constraint(OOTypeWithStaticFunctionIO.i() > 1); constraint(OOTypeWithStaticFunctionIO.o() > 1); }",
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -127,107 +95,73 @@ class NoPortInConstraintTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // 1 - No input port in constraint
-      arg("component Comp1 { " +
-          "  port in boolean i; " +
-          "  constraint(i); " +
-          "}",
+      // input port referenced directly in constraint
+      arg("component InvalidComp1 { port in boolean i; constraint(i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 2 - No output port in constraint
-      arg("component Comp2 { " +
-          "  port out boolean o; " +
-          "  constraint(o); " +
-          "}",
+      // output port referenced directly in constraint
+      arg("component InvalidComp2 { port out boolean o; constraint(o); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 3 - No port in assignment in constraint
-      arg("component Comp3 { " +
-          "  port out boolean o; " +
-          "  constraint(o = true); " +
-          "}",
+      // port referenced in an assignment expression in constraint
+      arg("component InvalidComp3 { port out boolean o; constraint(o = true); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 4 - No port in inc prefix expression in constraint
-      arg("component Comp4 { " +
-          "  port in int i; " +
-          "  constraint(++i); " +
-          "}",
+      // port referenced in a prefix increment expression in constraint
+      arg("component InvalidComp4 { port in int i; constraint(++i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 5 - No port in dec prefix expression in constraint
-      arg("component Comp5 { " +
-          "  port in int i; " +
-          "  constraint(--i); " +
-          "}",
+      // port referenced in a prefix decrement expression in constraint
+      arg("component InvalidComp5 { port in int i; constraint(--i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 6 - No port in inc suffix expression in constraint
-      arg("component Comp6 { " +
-          "  port in int i; " +
-          "  constraint(i++); " +
-          "}",
+      // port referenced in a suffix increment expression in constraint
+      arg("component InvalidComp6 { port in int i; constraint(i++); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 7 - No port in dec suffix expression in constraint
-      arg("component Comp7 { " +
-          "  port in int i; " +
-          "  constraint(i--); " +
-          "}",
+      // port referenced in a suffix decrement expression in constraint
+      arg("component InvalidComp7 { port in int i; constraint(i--); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 8 - No port in boolean not expression in constraint
-      arg("component Comp8 { " +
-          "  port in boolean i; " +
-          "  constraint(~i); " +
-          "}",
+      // port referenced in a boolean-not expression in constraint
+      arg("component InvalidComp8 { port in boolean i; constraint(~i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 9 - No port in logical not expression in constraint
-      arg("component Comp9 { " +
-          "  port in boolean i; " +
-          "  constraint(!i); " +
-          "}",
+      // port referenced in a logical-not expression in constraint
+      arg("component InvalidComp9 { port in boolean i; constraint(!i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 10 - No port in multiply expressions (left) in constraint
-      arg("component Comp10 { " +
-          "  port in int i; " +
-          "  constraint(2 == i * 2); " +
-          "}",
+      // port referenced on the left of a multiplication in constraint
+      arg("component InvalidComp10 { port in int i; constraint(2 == i * 2); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 11 - No port in multiply expressions (right) in constraint
-      arg("component Comp11 { " +
-          "  port in int i; " +
-          "  constraint(2 == 2 * i); " +
-          "}",
+      // port referenced on the right of a multiplication in constraint
+      arg("component InvalidComp11 { port in int i; constraint(2 == 2 * i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 12 - No port in multiply expressions (both) in constraint
-      arg("component Comp12 { " +
-          "  port in int i; " +
-          "  constraint(2 == i * i); " +
-          "}",
+      // port referenced on both sides of a multiplication in constraint
+      arg("component InvalidComp12 { port in int i; constraint(2 == i * i); }",
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 13 - No input port in infix expressions in constraint
-      arg("component Comp13 { " +
-          "  port in int i1, i2; " +
-          "  port in boolean i3, i4; " +
-          "  constraint(2 == 2 / i2); constraint(2 == i2 / 2); " +
-          "  constraint(2 == 2 % i2); constraint(2 == i2 % 2); " +
-          "  constraint(2 == 2 + i2); constraint(2 == i2 + 2); " +
-          "  constraint(2 == 2 - i2); constraint(2 == i2 - 2); " +
-          "  constraint(i2 <= 2); constraint(2 <= i2); " +
-          "  constraint(i2 >= 2); constraint(2 >= i2); " +
-          "  constraint(i2 < 2); constraint(2 < i2); " +
-          "  constraint(i2 > 2); constraint(2 > i2); " +
-          "  constraint(i2 == 2); constraint(2 == i2); " +
-          "  constraint(i2 != 2); constraint(2 != i2); " +
-          "  constraint(i4 && 2); constraint(2 && i4); " +
-          "  constraint(i4 || 2); constraint(2 || i4); " +
-          "}",
+      // port referenced on either side of every infix operator in constraint
+      arg("""
+        component InvalidComp13 {
+          port in int i1, i2;
+          port in boolean i3, i4;
+          constraint(2 == 2 / i2); constraint(2 == i2 / 2);
+          constraint(2 == 2 % i2); constraint(2 == i2 % 2);
+          constraint(2 == 2 + i2); constraint(2 == i2 + 2);
+          constraint(2 == 2 - i2); constraint(2 == i2 - 2);
+          constraint(i2 <= 2); constraint(2 <= i2);
+          constraint(i2 >= 2); constraint(2 >= i2);
+          constraint(i2 < 2); constraint(2 < i2);
+          constraint(i2 > 2); constraint(2 > i2);
+          constraint(i2 == 2); constraint(2 == i2);
+          constraint(i2 != 2); constraint(2 != i2);
+          constraint(i4 && 2); constraint(2 && i4);
+          constraint(i4 || 2); constraint(2 || i4);
+        }
+        """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
@@ -241,68 +175,62 @@ class NoPortInConstraintTest extends MontiArcTestBase {
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 14 - No input port in conditional expressions (condition) in constraint
-      arg("component Comp14 { " +
-          "  port in boolean i; " +
-          "  constraint(i ? true : false); " +
-          "}",
+      // port referenced in the condition of a conditional expression in constraint
+      arg("component InvalidComp14 { port in boolean i; constraint(i ? true : false); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 15 - No input port in conditional expressions (then) in constraint
-      arg("component Comp15 { " +
-          "  port in int i; " +
-          "  constraint(true ? i : false); " +
-          "}",
+      // port referenced in the then-branch of a conditional expression in constraint
+      arg("component InvalidComp15 { port in int i; constraint(true ? i : false); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 16 - No input port in conditional expressions (else) in constraint
-      arg("component Comp16 { " +
-          "  port in int i; " +
-          "  constraint(true ? true : i); " +
-          "}",
+      // port referenced in the else-branch of a conditional expression in constraint
+      arg("component InvalidComp16 { port in int i; constraint(true ? true : i); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 17 - No input port in bracket expressions in constraint
-      arg("component Comp17 { " +
-          "  port in boolean i; " +
-          "  constraint((i)); " +
-          "}",
+      // port referenced in a bracket expression in constraint
+      arg("component InvalidComp17 { port in boolean i; constraint((i)); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 18 - No input port in shift expressions in constraint
-      arg("component Comp18 { " +
-          "  port in int i; " +
-          "  constraint(2 == i << 1); " +
-          "  constraint(2 == 1 << i); " +
-          "  constraint(2 == i >> 1); " +
-          "  constraint(2 == 1 >> i); " +
-          "  constraint(2 == i >>> 1); " +
-          "  constraint(2 == 1 >>> i); " +
-          "}",
+      // port referenced on either side of every shift operator in constraint
+      arg("""
+        component InvalidComp18 {
+          port in int i;
+          constraint(2 == i << 1);
+          constraint(2 == 1 << i);
+          constraint(2 == i >> 1);
+          constraint(2 == 1 >> i);
+          constraint(2 == i >>> 1);
+          constraint(2 == 1 >>> i);
+        }
+        """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 19 - No input port in binary expressions in constraint
-      arg("component Comp19 { " +
-          "  port in boolean i; " +
-          "  constraint(i & true); " +
-          "  constraint(true & i); " +
-          "  constraint(i ^ true); " +
-          "  constraint(true ^ i); " +
-          "  constraint(i | true); " +
-          "  constraint(true | i); " +
-          "}",
+      // port referenced on either side of every binary bitwise/boolean operator in constraint
+      arg("""
+        component InvalidComp19 {
+          port in boolean i;
+          constraint(i & true);
+          constraint(true & i);
+          constraint(i ^ true);
+          constraint(true ^ i);
+          constraint(i | true);
+          constraint(true | i);
+        }
+        """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT
       ),
-      // 20 - No input port in method call argument in constraint
-      arg("import montiarc.test.FunctionWithBooleanParameter; " +
-          "component Comp20 { " +
-          "  port in boolean i; " +
-          "  constraint(FunctionWithBooleanParameter(i)); " +
-          "}",
+      // port referenced as a method call argument in constraint
+      arg("""
+        import montiarc.test.FunctionWithBooleanParameter;
+        component InvalidComp20 {
+          port in boolean i;
+          constraint(FunctionWithBooleanParameter(i));
+        }
+        """,
         PORT_REF_IN_STATIC_CONTEXT
       )
     );
