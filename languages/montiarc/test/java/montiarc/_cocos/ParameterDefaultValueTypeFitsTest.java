@@ -8,9 +8,7 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
-import montiarc.util.MCError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -18,15 +16,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.PARAM_DEFAULT_TYPE_MISMATCH;
+import static montiarc.util.MCError.TARGET_TYPE_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link ParameterDefaultValueTypeFits}.
  */
-public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
+class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void initSymbols() {
@@ -36,19 +35,28 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2(boolean p) { }",
-    "component Comp2(boolean p = true) { }",
-    "component Comp3(int p = 1) { }",
-    "component Comp4(int p1 = 1, int p2 = 2) { }",
-    "component Comp5(boolean p1 = true, int p2 = 2) { }",
-    "component Comp6(boolean p1, int p2 = 2) { }",
-    "component Comp7(java.lang.Double p = 5) { }",
-    "component Comp8(java.lang.Number p = 5) { }",
-    //"component Comp7(java.lang.Integer p = java.lang.Integer.Integer(1)) { }",
-    //"component Comp8(java.lang.Comparable<java.lang.Integer> p = java.lang.Integer.Integer(1)) { }"
+    // component without parameters
+    "component ValidComp1 { }",
+    // mandatory boolean parameter without a default value
+    "component ValidComp2(boolean p) { }",
+    // optional boolean parameter with a matching default value
+    "component ValidComp3(boolean p = true) { }",
+    // optional int parameter with a matching default value
+    "component ValidComp4(int p = 1) { }",
+    // two optional int parameters with matching default values
+    "component ValidComp5(int p1 = 1, int p2 = 2) { }",
+    // optional boolean and optional int parameter, both with matching default values
+    "component ValidComp6(boolean p1 = true, int p2 = 2) { }",
+    // mandatory boolean parameter and optional int parameter with a matching default value
+    "component ValidComp7(boolean p1, int p2 = 2) { }",
+    // optional Double parameter with an int literal default value
+    "component ValidComp8(java.lang.Double p = 5) { }",
+    // optional Number parameter with an int literal default value
+    "component ValidComp9(java.lang.Number p = 5) { }",
+    //"component ValidComp10(java.lang.Integer p = java.lang.Integer.Integer(1)) { }",
+    //"component ValidComp11(java.lang.Comparable<java.lang.Integer> p = java.lang.Integer.Integer(1)) { }"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -61,12 +69,13 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -80,35 +89,40 @@ public class ParameterDefaultValueTypeFitsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1(boolean p = 1) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp2(int p = true) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp3(int p1 = 1, int p2 = false) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp4(int p1 = true, int p2 = false) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH,
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp5(int p1 = true, int p2 = false) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH,
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp6(java.lang.Integer p = java.lang.String.String()) { }",
-        MCError.TARGET_TYPE_MISMATCH),
-      arg("component Comp6a(java.lang.Integer p = 5.0) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp6b(java.lang.Comparable<java.lang.Double> p = 5) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp7<T>(T p = 1) { }",
-        ArcError.PARAM_DEFAULT_TYPE_MISMATCH),
-      arg("component Comp8<T>(T p = java.lang.Integer.Integer(1)) { }",
-        MCError.TARGET_TYPE_MISMATCH)
+      // boolean parameter with a mismatching int literal default value
+      arg("component InvalidComp1(boolean p = 1) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // int parameter with a mismatching boolean literal default value
+      arg("component InvalidComp2(int p = true) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // one int parameter with a matching default value, one with a mismatching boolean default value
+      arg("component InvalidComp3(int p1 = 1, int p2 = false) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // two int parameters, both with mismatching boolean default values
+      arg("component InvalidComp4(int p1 = true, int p2 = false) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH,
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // Integer parameter with an incompatible String default value (general type mismatch)
+      arg("component InvalidComp5(java.lang.Integer p = java.lang.String.String()) { }",
+        TARGET_TYPE_MISMATCH),
+      // Integer parameter with a mismatching double literal default value
+      arg("component InvalidComp6(java.lang.Integer p = 5.0) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // Comparable<Double> parameter with a mismatching int literal default value
+      arg("component InvalidComp7(java.lang.Comparable<java.lang.Double> p = 5) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // unbound generic type parameter with a mismatching int literal default value
+      arg("component InvalidComp8<T>(T p = 1) { }",
+        PARAM_DEFAULT_TYPE_MISMATCH),
+      // unbound generic type parameter with an incompatible Integer default value (general type mismatch)
+      arg("component InvalidComp9<T>(T p = java.lang.Integer.Integer(1)) { }",
+        TARGET_TYPE_MISMATCH)
     );
   }
 }
