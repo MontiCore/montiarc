@@ -6,8 +6,6 @@ import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.MCError;
-import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -16,15 +14,16 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.SubcomponentsConstraint;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.MCError.MISSING_COMPONENT;
+import static montiarc.util.VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link SubcomponentsConstraint}.
  */
-public class SubcomponentsConstraintTest extends MontiArcTestBase {
+class SubcomponentsConstraintTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void setUpComponents() {
@@ -34,36 +33,22 @@ public class SubcomponentsConstraintTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // no constraint
-    "component Comp1 { }",
-    // tautology constraint
-    "component Comp2 { constraint(true); }",
-    // unsatisfiable constraint
-    "component Comp3 { constraint(false); }",
-    // feature constraint of instance satisfied
-    "component Comp4 { " +
-      "a.b.A a;" +
-      "}",
-    // feature constraint of instance satisfied
-    "component Comp5 { " +
-      "a.b.B b;" +
-      "constraint(b.f);" +
-      "}",
-    // feature constraint of instance indirectly bound
-    "component Comp6 { " +
-      "a.b.A a;" +
-      "a.b.B b;" +
-      "constraint(b.f == a.f);" +
-      "}",
-    // feature constraint of instance indirectly bound
-    "component Comp7 { " +
-      "feature f;" +
-      "a.b.B b1;" +
-      "a.b.B b2;" +
-      "constraint(b1.f == b2.f && b2.f == f);" +
-      "}",
+    // no constraint, no subcomponents
+    "component ValidComp1 { }",
+    // tautology constraint, no subcomponents
+    "component ValidComp2 { constraint(true); }",
+    // unsatisfiable constraint, no subcomponents
+    "component ValidComp3 { constraint(false); }",
+    // subcomponent whose own internal constraint already binds its feature
+    "component ValidComp4 { a.b.A a; }",
+    // subcomponent feature bound by an explicit outer constraint
+    "component ValidComp5 { a.b.B b; constraint(b.f); }",
+    // subcomponent feature indirectly bound via another subcomponent's already-constrained feature
+    "component ValidComp6 { a.b.A a; a.b.B b; constraint(b.f == a.f); }",
+    // two subcomponents' features chained together and bound to the enclosing component's own feature
+    "component ValidComp7 { feature f; a.b.B b1; a.b.B b2; constraint(b1.f == b2.f && b2.f == f); }",
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -76,12 +61,13 @@ public class SubcomponentsConstraintTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -95,25 +81,24 @@ public class SubcomponentsConstraintTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // unused subcomponent feature
-      arg("component Comp1 { a.b.B b; }",
-        VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT),
-      // underspecified constraint
-      arg("component Comp2 { a.b.B b1; a.b.B b2; constraint(b1.f != b2.f); }",
-        VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT),
-      // underspecified constraint dependent on implication
-      arg("component Comp3 { feature f; a.b.B b; constraint(!f || b.f); }",
-        VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT),
-      // Type not found (should not result in an error other than Missing Component -> Robustness)
-      arg("component Comp4 { a.b.X x; }",
-        MCError.MISSING_COMPONENT)
+      // subcomponent feature left unconstrained
+      arg("component InvalidComp1 { a.b.B b; }",
+        SUBCOMPONENTS_NOT_CONSTRAINT),
+      // constraint only excludes one combination, leaving the subcomponents' features underspecified
+      arg("component InvalidComp2 { a.b.B b1; a.b.B b2; constraint(b1.f != b2.f); }",
+        SUBCOMPONENTS_NOT_CONSTRAINT),
+      // constraint conditionally binds the subcomponent feature only via an implication
+      arg("component InvalidComp3 { feature f; a.b.B b; constraint(!f || b.f); }",
+        SUBCOMPONENTS_NOT_CONSTRAINT),
+      // reference to an undeclared component type (robustness: no cascading error beyond the missing type)
+      arg("component InvalidComp4 { a.b.X x; }",
+        MISSING_COMPONENT)
     );
   }
 }
