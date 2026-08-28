@@ -7,7 +7,6 @@ import modes._cocos.ModeAutomataInDecomposedComponent;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.ModesError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -15,60 +14,37 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ModesError.MODE_AUTOMATON_IN_ATOMIC_COMPONENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link ModeAutomataInDecomposedComponent}.
  */
-public class ModeAutomataInDecomposedComponentTest extends MontiArcTestBase {
+class ModeAutomataInDecomposedComponentTest extends MontiArcTestBase {
 
   @BeforeEach
-  public void setUpComponent() {
+  protected void setUpComponent() {
     compile("package a.b; component A { }");
   }
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // decomposed no mode
-    "component Comp1 { " +
-      "a.b.A a;" +
-      "}",
-    // decomposed with mode
-    "component Comp2 { " +
-      "a.b.A a;" +
-      "mode automaton { } " +
-      "}",
-    // inner with mode
-    "component Comp3 { " +
-      "component Inner { " +
-      "a.b.A a;" +
-      "mode automaton { } " +
-      "} " +
-      "}",
-    // two inner with modes
-    "component Comp4 { " +
-      "component Inner1 { " +
-      "a.b.A a;" +
-      "mode automaton { } " +
-      "} " +
-      "component Inner2 { " +
-      "a.b.A a;" +
-      "mode automaton { } " +
-      "} " +
-      "}",
-    // decomposed component with automaton and mode
-    "component Comp5 { " +
-      "a.b.A a;" +
-      "mode automaton { } " +
-      "automaton { } " +
-      "}",
-    // atomic component with no mode
-    "component Comp6 { }",
+    // decomposed component without a mode automaton
+    "component ValidComp1 { a.b.A a; }",
+    // decomposed component with a mode automaton
+    "component ValidComp2 { a.b.A a; mode automaton { } }",
+    // nested decomposed component type with a mode automaton
+    "component ValidComp3 { component Inner { a.b.A a; mode automaton { } } }",
+    // two nested decomposed component types, each with a mode automaton
+    "component ValidComp4 { component Inner1 { a.b.A a; mode automaton { } } component Inner2 { a.b.A a; mode automaton { } } }",
+    // decomposed component with both a mode automaton and a regular automaton
+    "component ValidComp5 { a.b.A a; mode automaton { } automaton { } }",
+    // atomic component without a mode automaton
+    "component ValidComp6 { }",
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -81,12 +57,13 @@ public class ModeAutomataInDecomposedComponentTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -100,31 +77,21 @@ public class ModeAutomataInDecomposedComponentTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // atomic with mode automaton
-      arg("component Comp1 { " +
-          "mode automaton { } " +
-          "}",
-        ModesError.MODE_AUTOMATON_IN_ATOMIC_COMPONENT),
-      // atomic inner with mode automaton
-      arg("component Comp2 { " +
-          "component Inner { " +
-          "mode automaton { } " +
-          "} " +
-          "}",
-        ModesError.MODE_AUTOMATON_IN_ATOMIC_COMPONENT),
-      // atomic with two mode automata
-      arg("component Comp1 { " +
-          "mode automaton { } " +
-          "mode automaton { } " +
-          "}",
-        ModesError.MODE_AUTOMATON_IN_ATOMIC_COMPONENT, ModesError.MODE_AUTOMATON_IN_ATOMIC_COMPONENT)
+      // atomic component with a mode automaton
+      arg("component InvalidComp1 { mode automaton { } }",
+        MODE_AUTOMATON_IN_ATOMIC_COMPONENT),
+      // nested atomic component type with a mode automaton
+      arg("component InvalidComp2 { component Inner { mode automaton { } } }",
+        MODE_AUTOMATON_IN_ATOMIC_COMPONENT),
+      // atomic component with two mode automata
+      arg("component InvalidComp3 { mode automaton { } mode automaton { } }",
+        MODE_AUTOMATON_IN_ATOMIC_COMPONENT, MODE_AUTOMATON_IN_ATOMIC_COMPONENT)
     );
   }
 }
