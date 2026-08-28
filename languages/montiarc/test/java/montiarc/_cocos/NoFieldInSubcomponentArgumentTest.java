@@ -21,6 +21,9 @@ import java.util.stream.Stream;
 import static montiarc.util.ArcError.FIELD_REF_IN_STATIC_CONTEXT;
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * The class under test is {@link NoFieldInSubcomponentArgument}.
+ */
 class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
 
   private static final String SYMBOLS_DIR = "symbols";
@@ -67,10 +70,9 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
 
   static Stream<Arguments> validModels() {
     return Stream.of(
-      arg("""
-        component ValidComp1 { }
-        """
-      ),
+      // component without subcomponents
+      arg("component ValidComp1 { }"),
+      // subcomponent argument as a literal
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component ValidComp2 {
@@ -78,6 +80,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
         }
         """
       ),
+      // subcomponent argument from a parameter
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component ValidComp3(int p) {
@@ -85,6 +88,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
         }
         """
       ),
+      // subcomponent arguments from a parameter's fields
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFieldIO;
@@ -94,6 +98,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
         }
         """
       ),
+      // subcomponent arguments from an external type's static fields
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithStaticFieldIO;
@@ -108,6 +113,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
 
   static Stream<Arguments> invalidModels() {
     return Stream.of(
+      // subcomponent argument directly referencing the component's own field
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component InvalidComp1 {
@@ -117,6 +123,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
         """,
         FIELD_REF_IN_STATIC_CONTEXT
       ),
+      // subcomponent argument referencing the component's own field in an arithmetic expression
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component InvalidComp2 {
@@ -126,6 +133,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
         """,
         FIELD_REF_IN_STATIC_CONTEXT
       ),
+      // keyed subcomponent argument referencing the component's own field
       arg("""
         import montiarc.test.ComponentTypeWithIntIOParameters;
         component InvalidComp3 {
@@ -135,6 +143,7 @@ class NoFieldInSubcomponentArgumentTest extends MontiArcTestBase {
         """,
         FIELD_REF_IN_STATIC_CONTEXT
       ),
+      // two keyed subcomponent arguments, both referencing the component's own field
       arg("""
         import montiarc.test.ComponentTypeWithIntIOParameters;
         component InvalidComp4 {
