@@ -29,7 +29,7 @@ class CircularInheritanceTest extends MontiArcTestBase {
   private final static String TEST_DIR = "cocos/CircularInheritance";
 
   @BeforeEach
-  public void setUp() {
+  protected void setUp() {
     MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(TEST_RESOURCE, TEST_DIR)));
   }
 
@@ -74,15 +74,25 @@ class CircularInheritanceTest extends MontiArcTestBase {
 
   static Stream<Arguments> validModels() {
     return Stream.of(
+      // no inheritance
       arg("component ValidComp1 { }"),
+      // extends an external supertype without its own supertype
       arg("component ValidComp2 extends ComponentWithoutSuperComponent { }"),
+      // extends an external supertype that itself has a supertype
       arg("component ValidComp3 extends ComponentWithSuperComponent { }"),
+      // multi-inheritance from two external supertypes
       arg("component ValidComp4 extends ComponentWithoutSuperComponent, ComponentWithSuperComponent { }"),
+      // extends an external supertype that is itself part of an unrelated circular inheritance chain (not involving this component)
       arg("component ValidComp5 extends ComponentWithCircularInheritance1A { }"),
+      // nested component type without inheritance
       arg("component ValidComp6 { component Inner { } }"),
+      // nested component type extends an external supertype without its own supertype
       arg("component ValidComp7 { component Inner extends ComponentWithoutSuperComponent { } }"),
+      // nested component type extends an external supertype that itself has a supertype
       arg("component ValidComp8 { component Inner extends ComponentWithSuperComponent { } }"),
+      // nested component type with multi-inheritance from two external supertypes
       arg("component ValidComp9 { component Inner extends ComponentWithoutSuperComponent, ComponentWithSuperComponent { } }"),
+      // nested component type extends an external supertype that is itself part of an unrelated circular inheritance chain
       arg("component ValidComp10 { component Inner extends ComponentWithCircularInheritance1A { } }")
     );
   }
@@ -91,16 +101,12 @@ class CircularInheritanceTest extends MontiArcTestBase {
     return Stream.of(
       // component with directed circular inheritance
       arg(
-        """
-          component InvalidComp1 extends ComponentWithTestDependentSuperComponent1 { }
-          """,
+        "component InvalidComp1 extends ComponentWithTestDependentSuperComponent1 { }",
         CIRCULAR_INHERITANCE
       ),
       // component with indirect circular inheritance
       arg(
-        """
-          component InvalidComp2 extends ComponentWithTestDependentSuperComponent2A { }
-          """,
+        "component InvalidComp2 extends ComponentWithTestDependentSuperComponent2A { }",
         CIRCULAR_INHERITANCE
       ),
       // inner component with direct circular inheritance
