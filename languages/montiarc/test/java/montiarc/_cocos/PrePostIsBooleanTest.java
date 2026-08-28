@@ -13,39 +13,41 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static montiarc.util.PrePostError.CONDITION_EXPRESSION_WRONG_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PrePostIsBooleanTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link PrePostIsBoolean}.
+ */
+class PrePostIsBooleanTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // only post condition
+    // only a post condition, no pre condition
     """
-      component OnlyPost {
+      component ValidComp1 {
         post: true;
       }
     """,
-    // Boolean constant
+    // pre and post both boolean constants
     """
-      component OnlyPost {
+      component ValidComp2 {
         pre: true;
         post: true;
       }
     """,
-    // expression
+    // pre and post both boolean expressions
     """
-      component OnlyPost {
+      component ValidComp3 {
         pre: true && false;
         post: true && false;
       }
     """,
-    // expression with symbols
+    // pre and post referencing ports
     """
-      component OnlyPost {
+      component ValidComp4 {
         port in int a;
         port in int b;
         pre: a == b;
@@ -53,7 +55,7 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
       }
    """,
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -66,12 +68,13 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -85,61 +88,60 @@ public class PrePostIsBooleanTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // post wrong type
-      arg(
-        """
-          component OnlyPost {
-            post: "Error";
-          }
+      // post condition with a non-boolean (String) literal, no pre condition
+      arg("""
+        component InvalidComp1 {
+          post: "Error";
+        }
         """,
-        CONDITION_EXPRESSION_WRONG_TYPE),
-      // pre wrong, post correct
-      arg(
-        """
-          component OnlyPost {
-            pre: "Error";
-            post: true;
-          }
+        CONDITION_EXPRESSION_WRONG_TYPE
+      ),
+      // pre condition with a non-boolean literal, post condition correct
+      arg("""
+        component InvalidComp2 {
+          pre: "Error";
+          post: true;
+        }
         """,
-        CONDITION_EXPRESSION_WRONG_TYPE),
-      // pre correct, post wrong
-      arg(
-        """
-          component OnlyPost {
-            pre: true;
-            post: "Error";
-          }
+        CONDITION_EXPRESSION_WRONG_TYPE
+      ),
+      // pre condition correct, post condition with a non-boolean literal
+      arg("""
+        component InvalidComp3 {
+          pre: true;
+          post: "Error";
+        }
         """,
-        CONDITION_EXPRESSION_WRONG_TYPE),
-      // both wrong
-      arg(
-        """
-          component OnlyPost {
-            pre: "Error";
-            post: "Error";
-          }
+        CONDITION_EXPRESSION_WRONG_TYPE
+      ),
+      // both pre and post conditions with non-boolean literals
+      arg("""
+        component InvalidComp4 {
+          pre: "Error";
+          post: "Error";
+        }
         """,
         CONDITION_EXPRESSION_WRONG_TYPE,
-        CONDITION_EXPRESSION_WRONG_TYPE),
-      // With symbols
-      arg(
-        """
-          component OnlyPost {
-            port in String a;
-            port in String b;
-            pre: a + b;
-            post: a + b;
-          }
+        CONDITION_EXPRESSION_WRONG_TYPE
+      ),
+      // both pre and post conditions are non-boolean (String concatenation) expressions referencing ports
+      arg("""
+        component InvalidComp5 {
+          port in String a;
+          port in String b;
+          pre: a + b;
+          post: a + b;
+        }
        """,
         CONDITION_EXPRESSION_WRONG_TYPE,
-        CONDITION_EXPRESSION_WRONG_TYPE)
+        CONDITION_EXPRESSION_WRONG_TYPE
+      )
     );
   }
 }
