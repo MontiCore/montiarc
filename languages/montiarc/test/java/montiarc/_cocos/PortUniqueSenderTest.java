@@ -32,7 +32,7 @@ class PortUniqueSenderTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @MethodSource("validModels")
-  void shouldReportError(@NotNull String model) {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
