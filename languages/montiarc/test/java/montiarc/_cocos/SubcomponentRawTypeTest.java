@@ -7,7 +7,6 @@ import arcbasis._cocos.SubcomponentRawType;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,9 +16,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.RAW_USE_OF_PARAMETRIZED_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class SubcomponentRawTypeTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link SubcomponentRawType}.
+ */
+class SubcomponentRawTypeTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void setUpComponents() {
@@ -29,15 +32,19 @@ public class SubcomponentRawTypeTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { a.b.A sub; }",
-    "component Comp2<T> { a.b.A sub; }",
-    "component Comp3 { a.b.B<int> sub; }",
-    "component Comp4<T> { a.b.B<T> sub; }"
+    // subcomponent instance of a non-generic type
+    "component ValidComp1 { a.b.A sub; }",
+    // generic component with a subcomponent instance of a non-generic type
+    "component ValidComp2<T> { a.b.A sub; }",
+    // subcomponent instance of a generic type with a concrete type argument
+    "component ValidComp3 { a.b.B<int> sub; }",
+    // generic component with a subcomponent instance of a generic type using its own type parameter as argument
+    "component ValidComp4<T> { a.b.B<T> sub; }"
   })
-  public void shouldNotReportErrors(@NotNull String model) {
+  void shouldNotReportErrors(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
-    //Given
+    // Given
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
@@ -47,12 +54,13 @@ public class SubcomponentRawTypeTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportErrors(@NotNull String model, @NotNull Error... errors) {
+  void shouldReportErrors(@NotNull String model,
+                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -66,17 +74,18 @@ public class SubcomponentRawTypeTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg("component Comp1 { a.b.B sub; }",
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE),
-      arg("component Comp2<T> { a.b.B sub; }",
-        ArcError.RAW_USE_OF_PARAMETRIZED_TYPE)
+      // raw use of a generic type as a subcomponent instance
+      arg("component InvalidComp1 { a.b.B sub; }",
+        RAW_USE_OF_PARAMETRIZED_TYPE),
+      // generic component with a raw use of a generic type as a subcomponent instance
+      arg("component InvalidComp2<T> { a.b.B sub; }",
+        RAW_USE_OF_PARAMETRIZED_TYPE)
     );
   }
 }
