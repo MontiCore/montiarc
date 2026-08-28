@@ -49,6 +49,10 @@ This builds all subprojects and executes all test.
 > project and then builds the project. See the [Gradle Website](https://gradle.org/) 
 > for more information about the Gradle build tool.
 
+#### Code Formatting
+
+Formatting is checked with [Spotless](https://github.com/diffplug/spotless) (`gradle spotlessCheck` / `gradle spotlessApply`). The first time you run any `gradle` command from the repository root, a Git `pre-push` hook is installed automatically (no manual setup needed) that runs `spotlessCheck` before every push. If it finds violations, it runs `spotlessApply` for you and aborts the push - just review/commit the resulting changes and push again.
+
 ### Documentation
 
 #### Prerequisites

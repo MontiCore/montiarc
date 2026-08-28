@@ -6,6 +6,7 @@ plugins {
   id("jacoco-report-aggregation")
   id("montiarc.build.repositories")
   id("montiarc.build.project-version")
+  id("montiarc.build.git-hooks")
   alias(libs.plugins.versions)
 }
 
