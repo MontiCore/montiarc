@@ -13,7 +13,6 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
 import static arcags.util.AGError.CONDITION_EXPRESSION_WRONG_TYPE;
@@ -21,23 +20,29 @@ import static montiarc.util.MCError.EXPR_NUMERIC_COMPARISON_OP_NOT_APPLICABLE;
 import static montiarc.util.MCError.QUALIFIED_NAME_NOT_FOUND;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AGGuaranteeIsBooleanTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link AGIsBoolean}.
+ */
+class AGGuaranteeIsBooleanTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
+    // assume and guarantee both boolean literals
     """
-      component Default {
+      component ValidComp1 {
         assume: true;
         guarantee: true;
       }
     """,
+    // guarantee only, no assume clause
     """
-      component OnlyGuarantee {
+      component ValidComp2 {
         guarantee: true;
       }
     """,
+    // one assume clause followed by two guarantee clauses
     """
-      component MultipleGuarantees1 {
+      component ValidComp3 {
         port in int a;
         port in int a;
         assume: true;
@@ -45,8 +50,9 @@ public class AGGuaranteeIsBooleanTest extends MontiArcTestBase {
         guarantee: true;
       }
     """,
+    // two separate assume/guarantee clause pairs
     """
-      component MultipleGuarantees2 {
+      component ValidComp4 {
         port in int a;
         port in int a;
         assume: true;
@@ -55,15 +61,16 @@ public class AGGuaranteeIsBooleanTest extends MontiArcTestBase {
         guarantee: true;
       }
     """,
+    // assume and guarantee referencing a port's stream length
     """
-      component UsePort {
+      component ValidComp5 {
         port in int a;
         assume: a.len() > 0;
         guarantee: a.len() > 0;
       }
     """,
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
     // Given
     ASTMACompilationUnit ast = compile(model);
@@ -75,12 +82,13 @@ public class AGGuaranteeIsBooleanTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -94,44 +102,37 @@ public class AGGuaranteeIsBooleanTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      arg(
-        """
-          component NotBoolean {
-            guarantee: "true";
-          }
+      // guarantee with a non-boolean (String) literal
+      arg("""
+        component InvalidComp1 {
+          guarantee: "true";
+        }
         """,
-        CONDITION_EXPRESSION_WRONG_TYPE),
-      arg(
-      """
-        component PortsUsedWithoutStream {
+        CONDITION_EXPRESSION_WRONG_TYPE
+      ),
+      // guarantee comparing a port directly instead of via stream operations
+      arg("""
+        component InvalidComp2 {
           port in int a;
           guarantee: a > 0;
         }
-      """,
-        EXPR_NUMERIC_COMPARISON_OP_NOT_APPLICABLE),
-      arg(
-      """
-        component PortsUsedWithoutStream {
-          port in int a;
-          guarantee: a > 0;
-        }
-      """,
-        EXPR_NUMERIC_COMPARISON_OP_NOT_APPLICABLE),
-      arg(
-      """
-        component PortDoesNotExist {
+        """,
+        EXPR_NUMERIC_COMPARISON_OP_NOT_APPLICABLE
+      ),
+      // guarantee referencing an undeclared port
+      arg("""
+        component InvalidComp3 {
           guarantee: p.len() > 0;
         }
-      """,
-        QUALIFIED_NAME_NOT_FOUND)
-
+        """,
+        QUALIFIED_NAME_NOT_FOUND
+      )
     );
   }
 }
