@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +14,16 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH;
+import static montiarc.util.ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class PortHeritageTypeFitsTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link PortHeritageTypeFits}.
+ */
+class PortHeritageTypeFitsTest extends MontiArcTestBase {
 
   @BeforeEach
   protected void setUpComponents() {
@@ -34,58 +37,31 @@ public class PortHeritageTypeFitsTest extends MontiArcTestBase {
   @ParameterizedTest
   @ValueSource(strings = {
     // no heritage
-    "component Comp1 { }",
+    "component ValidComp1 { }",
     // heritage without ports
-    "component Comp2 extends a.b.A { }",
-    // heritage adding ports, without super ports
-    "component Comp3 extends a.b.A { " +
-      "port in int i; " +
-      "port out int o; " +
-      "}",
-    // heritage with adding ports, with super ports
-    "component Comp4 extends a.b.B { }",
-    // heritage with adding ports, with super ports
-    "component Comp5 extends a.b.B { " +
-      "port in int i2; " +
-      "port out int o2; " +
-      "}",
-    // heritage with overriding super ports (same type)
-    "component Comp6 extends a.b.B { " +
-      "port in int i; " +
-      "port out int o; " +
-      "}",
-    // heritage with overriding super ports (incoming subtype)
-    "component Comp7 extends a.b.B { " +
-      "port in byte i; " +
-      "port out int o; " +
-      "}",
-    // heritage with overriding super ports (outgoing supertype)
-    "component Comp8 extends a.b.B { " +
-      "port in int i; " +
-      "port out long o; " +
-      "}",
-    // heritage with overriding super ports (incoming and outgoing)
-    "component Comp9 extends a.b.B { " +
-      "port in byte i; " +
-      "port out long o; " +
-      "}",
-    // heritage with overriding generic typed ports (matching type)
-    "component Comp10 extends a.b.C<int> { " +
-      "port in int i;" +
-      "port out int o; " +
-      "}",
-    // heritage with overriding generic typed ports (matching generic type)
-    "component Comp11<T> extends a.b.C<T> { " +
-      "port in T i;" +
-      "port out T o; " +
-      "}",
-    // multi heritage with overriding super ports (outgoing supertype)
-    "component Comp12 extends a.b.D, a.b.E { " +
-      "port in int i; " +
-      "port out long o; " +
-      "}",
+    "component ValidComp2 extends a.b.A { }",
+    // heritage adding ports, supertype has no ports
+    "component ValidComp3 extends a.b.A { port in int i; port out int o; }",
+    // heritage without additional ports, inheriting all super ports
+    "component ValidComp4 extends a.b.B { }",
+    // heritage adding new ports alongside inherited super ports
+    "component ValidComp5 extends a.b.B { port in int i2; port out int o2; }",
+    // heritage overriding super ports with the same type
+    "component ValidComp6 extends a.b.B { port in int i; port out int o; }",
+    // heritage overriding the incoming super port with a subtype
+    "component ValidComp7 extends a.b.B { port in byte i; port out int o; }",
+    // heritage overriding the outgoing super port with a supertype
+    "component ValidComp8 extends a.b.B { port in int i; port out long o; }",
+    // heritage overriding both incoming and outgoing super ports compatibly
+    "component ValidComp9 extends a.b.B { port in byte i; port out long o; }",
+    // heritage overriding generic typed ports with a matching bound type
+    "component ValidComp10 extends a.b.C<int> { port in int i; port out int o; }",
+    // heritage overriding generic typed ports with the same type parameter
+    "component ValidComp11<T> extends a.b.C<T> { port in T i; port out T o; }",
+    // multi-heritage overriding the outgoing super port with a supertype
+    "component ValidComp12 extends a.b.D, a.b.E { port in int i; port out long o; }",
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -98,12 +74,13 @@ public class PortHeritageTypeFitsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -117,51 +94,32 @@ public class PortHeritageTypeFitsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // heritage with overriding super ports (incoming supertype)
-      arg("component Comp1 extends a.b.B { " +
-          "port in double i; " +
-          "port out int o; " +
-          "}",
-        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH),
-      // heritage with overriding super ports (outgoing subtype)
-      arg("component Comp2 extends a.b.B { " +
-          "port in int i; " +
-          "port out byte o; " +
-          "}",
-        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH),
-      // heritage with incoming and outgoing port type mismatch
-      arg("component Comp3 extends a.b.B { " +
-          "port in double i; " +
-          "port out byte o; " +
-          "}",
-        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH,
-        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH),
-      // heritage with overriding generic typed ports (incoming supertype)
-      arg("component Comp4 extends a.b.C<int> { " +
-          "port in double i; " +
-          "port out int o; " +
-          "}",
-        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH),
-      // heritage with overriding super ports (outgoing subtype)
-      arg("component Comp5 extends a.b.C<int> { " +
-          "port in int i; " +
-          "port out byte o; " +
-          "}",
-        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH),
-      // multi heritage with incoming and outgoing port type mismatch
-      arg("component Comp6 extends a.b.D, a.b.E { " +
-          "port in double i; " +
-          "port out byte o; " +
-          "}",
-        ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH,
-        ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH)
+      // heritage overriding the incoming super port with a supertype
+      arg("component InvalidComp1 extends a.b.B { port in double i; port out int o; }",
+        HERITAGE_IN_PORT_TYPE_MISMATCH),
+      // heritage overriding the outgoing super port with a subtype
+      arg("component InvalidComp2 extends a.b.B { port in int i; port out byte o; }",
+        HERITAGE_OUT_PORT_TYPE_MISMATCH),
+      // heritage with both incoming and outgoing port type mismatches
+      arg("component InvalidComp3 extends a.b.B { port in double i; port out byte o; }",
+        HERITAGE_IN_PORT_TYPE_MISMATCH,
+        HERITAGE_OUT_PORT_TYPE_MISMATCH),
+      // heritage overriding a generic typed incoming port with an incompatible type
+      arg("component InvalidComp4 extends a.b.C<int> { port in double i; port out int o; }",
+        HERITAGE_IN_PORT_TYPE_MISMATCH),
+      // heritage overriding a generic typed outgoing port with an incompatible type
+      arg("component InvalidComp5 extends a.b.C<int> { port in int i; port out byte o; }",
+        HERITAGE_OUT_PORT_TYPE_MISMATCH),
+      // multi-heritage with both incoming and outgoing port type mismatches
+      arg("component InvalidComp6 extends a.b.D, a.b.E { port in double i; port out byte o; }",
+        HERITAGE_IN_PORT_TYPE_MISMATCH,
+        HERITAGE_OUT_PORT_TYPE_MISMATCH)
     );
   }
 }
