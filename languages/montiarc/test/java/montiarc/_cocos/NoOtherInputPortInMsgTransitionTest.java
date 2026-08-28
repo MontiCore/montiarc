@@ -216,7 +216,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       // read value from method call in message-event triggered transition
       arg("""
         import montiarc.test.OOTypeWithFunctionIO;
-        component ValidComp10 {
+        component ValidComp11 {
           port in int i, j;
           port out int o;
           OOTypeWithFunctionIO v = OOTypeWithFunctionIO.OOTypeWithFunctionIO();
@@ -362,7 +362,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
     return Stream.of(
       // read from other input port in var declaration statement in message-event triggered transition
       arg("""
-          component Comp1 {
+          component InvalidComp1 {
             port in int i1, i2;
             automaton {
               state S;
@@ -376,7 +376,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in assignment expressions in message-event triggered transition
       arg("""
-          component Comp2 {
+          component InvalidComp2 {
             port in int i1, i2;
             automaton {
               state S;
@@ -391,7 +391,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in inc prefix expressions in message-event triggered transition
       arg("""
-          component Comp3 {
+          component InvalidComp3 {
             port in int i1, i2;
             automaton {
               state S;
@@ -405,7 +405,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in dec prefix expressions in message-event triggered transition
       arg("""
-          component Comp4 {
+          component InvalidComp4 {
             port in int i1, i2;
             automaton {
               state S;
@@ -419,7 +419,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in inc suffix expressions in message-event triggered transition
       arg("""
-          component Comp5 {
+          component InvalidComp5 {
             port in int i1, i2;
             automaton {
               state S;
@@ -433,7 +433,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in dec suffix expressions in message-event triggered transition
       arg("""
-          component Comp6 {
+          component InvalidComp6 {
             port in int i1, i2;
             automaton {
               state S;
@@ -447,7 +447,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in boolean not expressions in message-event triggered transition
       arg("""
-          component Comp7 {
+          component InvalidComp7 {
             port in boolean i1, i2;
             automaton {
               state S;
@@ -462,7 +462,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in logical not expressions in message-event triggered transition
       arg("""
-          component Comp8 {
+          component InvalidComp8 {
             port in boolean i1, i2;
             automaton {
               state S;
@@ -477,7 +477,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in multiply expressions (right) in message-event triggered transition
       arg("""
-          component Comp9 {
+          component InvalidComp9 {
             port in int i1, i2;
             automaton {
               state S;
@@ -492,7 +492,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in multiply expressions (left) in message-event triggered transition
       arg("""
-          component Comp10 {
+          component InvalidComp10 {
             port in int i1, i2;
             automaton {
               state S;
@@ -507,7 +507,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in multiply expressions (both) in message-event triggered transition
       arg("""
-          component Comp11 {
+          component InvalidComp11 {
             port in int i1, i2;
             automaton {
               state S;
@@ -522,7 +522,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in multiply expressions (both) in message-event triggered transition
       arg("""
-          component Comp12 {
+          component InvalidComp12 {
             port in int i1, i2;
             automaton {
               state S;
@@ -537,7 +537,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in infix expressions in message-event triggered transition
       arg("""
-          component Comp13 {
+          component InvalidComp13 {
             port in int i1, i2;
             port in boolean i3, i4;
             automaton {
@@ -578,7 +578,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in conditional expressions (condition) in message-event triggered transition
       arg("""
-          component Comp14 {
+          component InvalidComp14 {
             port in boolean i1, i2;
             automaton {
               state S;
@@ -593,7 +593,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in conditional expressions (then) in message-event triggered transition
       arg("""
-          component Comp15 {
+          component InvalidComp15 {
             port in int i1, i2;
             automaton {
               state S;
@@ -608,7 +608,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in conditional expressions (else) in message-event triggered transition
       arg("""
-          component Comp16 {
+          component InvalidComp16 {
             port in int i1, i2;
             automaton {
               state S;
@@ -623,7 +623,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in bracket expressions in message-event triggered transition
       arg("""
-          component Comp17 {
+          component InvalidComp17 {
             port in int i1, i2;
             automaton {
               state S;
@@ -637,7 +637,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in shift expressions in message-event triggered transition
       arg("""
-          component Comp18 {
+          component InvalidComp18 {
             port in int i1, i2;
             automaton {
               state S;
@@ -656,7 +656,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in binary expressions in message-event triggered transition
       arg("""
-          component Comp19 {
+          component InvalidComp19 {
             port in boolean i1, i2;
             automaton {
               state S;
@@ -675,7 +675,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in if statement (condition) in message-event triggered transition
       arg("""
-          component Comp20 {
+          component InvalidComp20 {
             port in boolean i1, i2;
             automaton {
               state S;
@@ -689,7 +689,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in if statement (then) in message-event triggered transition
       arg("""
-          component Comp21 {
+          component InvalidComp21 {
             port in int i1, i2;
             automaton {
               state S;
@@ -703,7 +703,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in if statement (else) in message-event triggered transition
       arg("""
-          component Comp22 {
+          component InvalidComp22 {
             port in int i1, i2;
             automaton {
               state S;
@@ -717,7 +717,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in common for control (var dec) in message-event triggered transition
       arg("""
-          component Comp23 {
+          component InvalidComp23 {
             port in int i1, i2;
             automaton {
               state S;
@@ -731,7 +731,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in common for control (var assignment) in message-event triggered transition
       arg("""
-          component Comp24 {
+          component InvalidComp24 {
             port in int i1, i2;
             automaton {
               state S;
@@ -746,7 +746,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in common for control (condition) in message-event triggered transition
       arg("""
-          component Comp25 {
+          component InvalidComp25 {
             port in int i1, i2;
             automaton {
               state S;
@@ -760,7 +760,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in common for control (expression) in message-event triggered transition
       arg("""
-          component Comp26 {
+          component InvalidComp26 {
             port in int i1, i2;
             automaton {
               state S;
@@ -774,7 +774,7 @@ class NoOtherInputPortInMsgTransitionTest extends MontiArcTestBase {
       ),
       // read from other input port in common for control (expression) in message-event triggered transition
       arg("""
-          component Comp27 {
+          component InvalidComp27 {
             port in int i1, i2;
             automaton {
               state S;
