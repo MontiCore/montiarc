@@ -1,0 +1,34 @@
+{
+  "name": "Super2",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "Super2",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "i",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "timing": "timed",
+            "incoming": true
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "o",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "timing": "sync",
+            "outgoing": true
+          }
+        ]
+      }
+    }
+  ]
+}

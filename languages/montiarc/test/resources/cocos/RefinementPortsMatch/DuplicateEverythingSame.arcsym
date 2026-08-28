@@ -1,0 +1,34 @@
+{
+  "name": "DuplicateEverythingSame",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "DuplicateEverythingSame",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "timing": "timed",
+            "incoming": true
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "timing": "timed",
+            "incoming": true
+          }
+        ]
+      }
+    }
+  ]
+}

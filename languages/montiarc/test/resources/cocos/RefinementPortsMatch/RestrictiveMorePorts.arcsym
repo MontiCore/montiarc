@@ -1,0 +1,54 @@
+{
+  "name": "RestrictiveMorePorts",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "RestrictiveMorePorts",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "i1",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "timing": "timed",
+            "incoming": true
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "i2",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "OOType"
+            },
+            "timing": "timed",
+            "incoming": true
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "o1",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "timing": "sync",
+            "outgoing": true
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "o2",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "timing": "sync",
+            "outgoing": true
+          }
+        ]
+      }
+    }
+  ]
+}

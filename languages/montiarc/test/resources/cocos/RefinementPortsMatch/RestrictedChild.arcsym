@@ -1,0 +1,15 @@
+{
+  "name": "RestrictedChild",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "RestrictedChild",
+      "super": [
+        {
+          "kind": "de.monticore.types.check.CompKindOfComponentType",
+          "componentTypeName": "Restrictive"
+        }
+      ]
+    }
+  ]
+}

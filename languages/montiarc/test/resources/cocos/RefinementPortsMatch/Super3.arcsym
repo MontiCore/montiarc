@@ -1,0 +1,24 @@
+{
+  "name": "Super3",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "Super3",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "o",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypeOfObject",
+              "objName": "SubType"
+            },
+            "timing": "sync",
+            "outgoing": true
+          }
+        ]
+      }
+    }
+  ]
+}

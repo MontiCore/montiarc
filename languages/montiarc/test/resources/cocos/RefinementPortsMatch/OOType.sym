@@ -1,0 +1,9 @@
+{
+  "name": "OOType",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOType"
+    }
+  ]
+}

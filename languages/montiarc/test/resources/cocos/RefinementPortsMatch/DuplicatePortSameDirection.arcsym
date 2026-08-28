@@ -1,0 +1,34 @@
+{
+  "name": "DuplicatePortSameDirection",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol",
+      "name": "DuplicatePortSameDirection",
+      "spannedScope": {
+        "isShadowingScope": true,
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "incoming": true,
+            "timing": "timed"
+          },
+          {
+            "kind": "de.monticore.symbols.compsymbols._symboltable.PortSymbol",
+            "name": "a",
+            "type": {
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "long"
+            },
+            "incoming": true,
+            "timing": "sync"
+          }
+        ]
+      }
+    }
+  ]
+}
