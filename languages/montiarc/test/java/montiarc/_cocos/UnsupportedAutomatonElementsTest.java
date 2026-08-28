@@ -5,7 +5,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,34 +12,26 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.UNSUPPORTED_MODEL_ELEMENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link UnsupportedAutomatonElements}.
  */
-public class UnsupportedAutomatonElementsTest extends MontiArcTestBase {
+class UnsupportedAutomatonElementsTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
     // no automaton
-    "component Comp1 { }",
-    // no states
-    "component Comp2 {" +
-      "automaton { } " +
-      "}",
-    // no final state
-    "component Comp3 { " +
-      "automaton { " +
-      "initial state s1; " +
-      "state s2; " +
-      "state s3; " +
-      "} " +
-      "}"
+    "component ValidComp1 { }",
+    // automaton without states
+    "component ValidComp2 { automaton { } }",
+    // automaton without a final state
+    "component ValidComp3 { automaton { initial state s1; state s2; state s3; } }"
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -53,12 +44,13 @@ public class UnsupportedAutomatonElementsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -72,7 +64,6 @@ public class UnsupportedAutomatonElementsTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
@@ -80,31 +71,15 @@ public class UnsupportedAutomatonElementsTest extends MontiArcTestBase {
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
       // one final state
-      arg("component Comp1 { " +
-          "automaton { " +
-          "final state s; " +
-          "} " +
-          "}",
-        ArcError.UNSUPPORTED_MODEL_ELEMENT),
+      arg("component InvalidComp1 { automaton { final state s; } }",
+        UNSUPPORTED_MODEL_ELEMENT),
       // multiple states, one final state
-      arg("component Comp2 { " +
-          "automaton { " +
-          "initial state s1; " +
-          "state s2; " +
-          "state s3; " +
-          "final state s4; " +
-          "} " +
-          "}",
-        ArcError.UNSUPPORTED_MODEL_ELEMENT),
+      arg("component InvalidComp2 { automaton { initial state s1; state s2; state s3; final state s4; } }",
+        UNSUPPORTED_MODEL_ELEMENT),
       // multiple final states
-      arg("component Comp3 { " +
-          "automaton { " +
-          "final state s1; " +
-          "final state s2; " +
-          "} " +
-          "}",
-        ArcError.UNSUPPORTED_MODEL_ELEMENT,
-        ArcError.UNSUPPORTED_MODEL_ELEMENT)
+      arg("component InvalidComp3 { automaton { final state s1; final state s2; } }",
+        UNSUPPORTED_MODEL_ELEMENT,
+        UNSUPPORTED_MODEL_ELEMENT)
     );
   }
 }
