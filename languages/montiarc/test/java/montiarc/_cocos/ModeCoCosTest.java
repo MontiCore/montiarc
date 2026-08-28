@@ -74,7 +74,7 @@ class ModeCoCosTest extends MontiArcTestBase {
       }""",
     // in port forward and complex forwards and hidden channel
     """
-      component ValidComp5 {
+      component ValidComp6 {
         port in int i;
         mode automaton {
           initial mode M1 {
