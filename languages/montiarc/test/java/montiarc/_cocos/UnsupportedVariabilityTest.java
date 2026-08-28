@@ -10,21 +10,19 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link UnsupportedVariability}.
  */
-public class UnsupportedVariabilityTest extends MontiArcTestBase {
+class UnsupportedVariabilityTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // Nothing
-    "component Comp1 { }",
-    // Composed body
-    "component Comp2 {" +
+    // empty component
+    "component ValidComp1 { }",
+    // composed component body (block, port, field, subcomponent, connector)
+    "component ValidComp2 {" +
       "  {}" +
       "  port in int x;" +
       "  int y = 10;" +
@@ -35,8 +33,8 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
       "  Inner inner;" +
       "  x -> inner.x;" +
       "}",
-    // Wrapped within braces
-    "component Comp3 {" +
+    // composed component body wrapped within braces
+    "component ValidComp3 {" +
       "  {" +
       "  {}" +
       "  port in int x;" +
@@ -49,8 +47,8 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
       "  x -> inner.x;" +
       "  }" +
       "}",
-    // Wrapped within a component
-    "component Comp4 {" +
+    // composed component body wrapped within a nested component
+    "component ValidComp4 {" +
       "  component Nested {" +
       "  {}" +
       "  port in int x;" +
@@ -63,8 +61,8 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
       "  x -> inner.x;" +
       "  }" +
       "}",
-    // comfortable arc stuff
-    "component Comp5 {" +
+    // comfortable-arc elements (autoinstantiate, autoconnect, portComplete)
+    "component ValidComp5 {" +
       "  port in int x;" +
       "" +
       "  component Inner {" +
@@ -75,22 +73,22 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
       "  autoconnect port;" +
       "  portComplete;" +
       "}",
-    // Mode automaton
-    "component Comp6 {" +
+    // mode automaton
+    "component ValidComp6 {" +
       "  mode automaton { }" +
       "}",
-    // Automaton behavior
-    "component Comp7 {" +
+    // automaton behavior
+    "component ValidComp7 {" +
       "  automaton { }" +
       "}",
-    // Compute behavior
-    "component Comp8 {" +
+    // init and compute behavior
+    "component ValidComp8 {" +
       "  init { }" +
       "  compute { }" +
       "}",
     /*
-    // Assume-Guarantee
-    "component Comp9 {" +
+    // assume-guarantee (not yet supported)
+    "component ValidComp9 {" +
       "  guarantee : true;" +
       "  " +
       "  assume : true;" +
@@ -98,8 +96,8 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
       "}",
      */
     /*
-    // Pre-Post
-    "component Comp10 {" +
+    // pre-post (not yet supported)
+    "component ValidComp10 {" +
       "  \n" +
       "  post : true;" +
       "  \n" +
@@ -112,7 +110,7 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
       "}",
      */
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -125,25 +123,25 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isZero();
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // Direct
-    "component Comp1 { varif (true) port in int x; }",
-    // Nested in braces
-    "component Comp2 { { varif (true) port in int x; } }",
-    // Nested in inner component
-    "component Comp3 { component Inner { varif (true) port in int x; } }",
-    // Nested in inner component in braces
-    "component Comp4 { component Inner { { varif (true) port in int x; } } }",
-    // Nested in braces-contained component
-    "component Comp5 { { component Inner { varif (true) port in int x; } } }",
-    // Nested in braces-contained component + in braces
-    "component Comp6 { { component Inner { { varif (true) port in int x; } } } }",
+    // varif directly in the component body
+    "component InvalidComp1 { varif (true) port in int x; }",
+    // varif nested in braces
+    "component InvalidComp2 { { varif (true) port in int x; } }",
+    // varif nested in an inner component
+    "component InvalidComp3 { component Inner { varif (true) port in int x; } }",
+    // varif nested in an inner component, in braces
+    "component InvalidComp4 { component Inner { { varif (true) port in int x; } } }",
+    // varif nested in a braces-contained inner component
+    "component InvalidComp5 { { component Inner { varif (true) port in int x; } } }",
+    // varif nested in a braces-contained inner component, in braces
+    "component InvalidComp6 { { component Inner { { varif (true) port in int x; } } } }",
   })
-  public void shouldReportError(@NotNull String model) throws IOException {
+  void shouldReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -156,7 +154,6 @@ public class UnsupportedVariabilityTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsOnly(ArcError.UNSUPPORTED_MODEL_ELEMENT.getErrorCode());
   }
