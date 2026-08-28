@@ -1,64 +1,83 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
-import arcbasis._ast.ASTArcElement;
-import de.monticore.literals.mccommonliterals._ast.ASTConstantsMCCommonLiterals;
+import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
-import montiarc.MontiArcMill;
+import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.VariableArcError;
+import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.Mockito;
-import variablearc._ast.ASTArcVarIf;
+import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.VarIfIsBoolean;
 
 import java.util.stream.Stream;
 
+import static montiarc.util.VariableArcError.IF_STATEMENT_EXPRESSION_WRONG_TYPE;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class VarIfIsBooleanTest extends MontiArcTestBase {
+/**
+ * The class under test is {@link VarIfIsBoolean}.
+ */
+class VarIfIsBooleanTest extends MontiArcTestBase {
 
-  protected static Stream<Arguments> provideVarIfAndError() {
-    return Stream.of(
-      Arguments.of(MontiArcMill.arcVarIfBuilder().setCondition(
-            MontiArcMill
-              .literalExpressionBuilder()
-              .setLiteral(MontiArcMill.booleanLiteralBuilder()
-                .setSource(ASTConstantsMCCommonLiterals.FALSE).build())
-              .build())
-          .setThen(Mockito.mock(ASTArcElement.class))
-          .setOtherwiseAbsent()
-          .build(),
-        new Error[]{}
-      ),
-      Arguments.of(MontiArcMill.arcVarIfBuilder().setCondition(
-            MontiArcMill
-              .literalExpressionBuilder()
-              .setLiteral(MontiArcMill.basicLongLiteralBuilder().setDigits("5")
-                .build())
-              .build())
-          .setThen(Mockito.mock(ASTArcElement.class))
-          .setOtherwiseAbsent()
-          .build(),
-        new Error[]{ VariableArcError.IF_STATEMENT_EXPRESSION_WRONG_TYPE }
-      )
-    );
+  @ParameterizedTest
+  @ValueSource(strings = {
+    // varif condition with a boolean literal
+    """
+      component ValidComp1 {
+        varif (false) { }
+      }
+      """
+  })
+  void shouldNotReportError(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new VarIfIsBoolean());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
-  @MethodSource("provideVarIfAndError")
-  public void testVarIfType(ASTArcVarIf constraint,
-                            Error[] errors) {
+  @MethodSource("invalidModels")
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
     // Given
-    VarIfIsBoolean coco = new VarIfIsBoolean();
+    ASTMACompilationUnit ast = compile(model);
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new VarIfIsBoolean());
 
     // When
-    coco.check(constraint);
+    checker.checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> invalidModels() {
+    return Stream.of(
+      // varif condition with a non-boolean (int) literal
+      arg("""
+        component InvalidComp1 {
+          varif (5) { }
+        }
+        """,
+        IF_STATEMENT_EXPRESSION_WRONG_TYPE
+      )
+    );
   }
 }
