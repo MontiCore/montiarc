@@ -64,13 +64,10 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
   static Stream<Arguments> validModels() {
     return Stream.of(
       // component no behavior
-      arg("""
-        component Comp1 { }
-        """
-      ),
+      arg("component ValidComp1 { }"),
       // transition without precondition
       arg("""
-        component Comp2 {
+        component ValidComp2 {
           automaton {
             initial state S;
             S -> S;
@@ -80,7 +77,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition with boolean precondition
       arg("""
-        component Comp3 {
+        component ValidComp3 {
           automaton {
             initial state S;
             S -> S [true];
@@ -90,7 +87,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // multiple transitions with boolean preconditions
       arg("""
-        component Comp4 {
+        component ValidComp4 {
           automaton {
             initial state S;
             S -> S [true];
@@ -101,7 +98,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition precondition over boolean port
       arg("""
-        component Comp5 {
+        component ValidComp5 {
           port in boolean i;
           automaton {
             initial state S;
@@ -112,7 +109,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition precondition over boolean parameter
       arg("""
-        component Comp6(boolean p) {
+        component ValidComp6(boolean p) {
           automaton {
             initial state S;
             S -> S [p];
@@ -122,7 +119,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition precondition over boolean component field
       arg("""
-        component Comp7 {
+        component ValidComp7 {
           boolean v = true;
           automaton {
             initial state S;
@@ -138,7 +135,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
     return Stream.of(
       // transition with non-boolean precondition
       arg("""
-          component Comp1 {
+          component InvalidComp1 {
             automaton {
               initial state S;
               S -> S [1];
@@ -149,7 +146,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // multiple transitions, one transition with non-boolean precondition
       arg("""
-          component Comp2 {
+          component InvalidComp2 {
             automaton {
               initial state S;
               S -> S [true];
@@ -161,7 +158,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // two transitions with non-boolean preconditions
       arg("""
-          component Comp3 {
+          component InvalidComp3 {
             automaton {
               initial state S;
               S -> S [1];
@@ -172,7 +169,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition with non-boolean precondition (port access)
       arg("""
-          component Comp4 {
+          component InvalidComp4 {
             port in int i;
             automaton {
               initial state S;
@@ -183,7 +180,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition with non-boolean precondition (parameter access)
       arg("""
-          component Comp5(int p) {
+          component InvalidComp5(int p) {
             automaton {
               initial state S;
               S -> S [p];
@@ -193,7 +190,7 @@ class TransitionPreconditionsAreBooleanTest extends MontiArcTestBase {
       ),
       // transition with non-boolean precondition (variable access)
       arg("""
-          component Comp6 {
+          component InvalidComp6 {
             int v = 1;
             automaton {
               initial state S;
