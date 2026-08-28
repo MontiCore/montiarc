@@ -6,7 +6,6 @@ import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
-import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -14,24 +13,28 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.COMPONENT_REFERENCE_CYCLE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link NoComponentReferenceCycle}.
  */
-public class NoComponentReferenceCycleTest extends MontiArcTestBase {
+class NoComponentReferenceCycleTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    "component Comp1 { }",
-    "component Comp2 { component Comp1 sub { } }",
-    "component Comp3 { component Comp2 sub { component Comp1 sub { } } }",
-    "component Comp4 { component Comp3 sub1, sub2 { component Comp2 sub { } } }",
+    // component without nested types
+    "component ValidComp1 { }",
+    // component containing an instantiated nested type
+    "component ValidComp2 { component Inner sub { } }",
+    // two levels of nested types, no cycle
+    "component ValidComp3 { component Middle sub { component Innermost sub { } } }",
+    // two instances of a nested type, no cycle
+    "component ValidComp4 { component Middle sub1, sub2 { component Innermost sub { } } }",
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -44,12 +47,13 @@ public class NoComponentReferenceCycleTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(() -> Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -63,60 +67,64 @@ public class NoComponentReferenceCycleTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
+      // component directly containing itself as a subcomponent
       arg("""
-        component Comp1 {
-          Comp1 sub;
+        component InvalidComp1 {
+          InvalidComp1 sub;
         }
         """,
-        ArcError.COMPONENT_REFERENCE_CYCLE
+        COMPONENT_REFERENCE_CYCLE
       ),
+      // component containing two subcomponent instances of itself
       arg("""
-        component Comp2 {
-          Comp2 sub1;
-          Comp2 sub2;
+        component InvalidComp2 {
+          InvalidComp2 sub1;
+          InvalidComp2 sub2;
         }
         """,
-        ArcError.COMPONENT_REFERENCE_CYCLE,
-        ArcError.COMPONENT_REFERENCE_CYCLE
+        COMPONENT_REFERENCE_CYCLE,
+        COMPONENT_REFERENCE_CYCLE
       ),
+      // nested types forming a 2-step cycle (each contains an instance of the other)
       arg("""
-        component Comp3A {
-          component Comp3B {
-            Comp3A subA;
+        component InvalidComp3A {
+          component InvalidComp3B {
+            InvalidComp3A subA;
           }
-          Comp3B subB;
+          InvalidComp3B subB;
         }""",
-        ArcError.COMPONENT_REFERENCE_CYCLE,
-        ArcError.COMPONENT_REFERENCE_CYCLE
+        COMPONENT_REFERENCE_CYCLE,
+        COMPONENT_REFERENCE_CYCLE
       ),
+      // nested type instantiated inline, forming a 2-step cycle back to the enclosing type
       arg("""
-        component Comp4A {
-          component Comp4B subB {
-            Comp4A subA;
+        component InvalidComp4A {
+          component InvalidComp4B subB {
+            InvalidComp4A subA;
           }
         }""",
-        ArcError.COMPONENT_REFERENCE_CYCLE,
-        ArcError.COMPONENT_REFERENCE_CYCLE
+        COMPONENT_REFERENCE_CYCLE,
+        COMPONENT_REFERENCE_CYCLE
       ),
+      // nested types forming a 3-step cycle
       arg("""
-        component Comp5A {
-          component Comp5B {
-            component Comp5C {
-              Comp5A subA;
+        component InvalidComp5A {
+          component InvalidComp5B {
+            component InvalidComp5C {
+              InvalidComp5A subA;
             }
-            Comp5C subC;
+            InvalidComp5C subC;
           }
-          Comp5B subB;
+          InvalidComp5B subB;
         }""",
-        ArcError.COMPONENT_REFERENCE_CYCLE,
-        ArcError.COMPONENT_REFERENCE_CYCLE,
-        ArcError.COMPONENT_REFERENCE_CYCLE
+        COMPONENT_REFERENCE_CYCLE,
+        COMPONENT_REFERENCE_CYCLE,
+        COMPONENT_REFERENCE_CYCLE
       )
     );
   }
