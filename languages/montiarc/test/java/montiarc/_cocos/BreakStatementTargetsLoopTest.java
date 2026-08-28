@@ -1,12 +1,16 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
+import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -19,104 +23,123 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BreakStatementTargetsLoopTest extends MontiArcTestBase {
 
   @ParameterizedTest
-  @MethodSource("validModels")
+  @ValueSource(strings = {
+    // break directly inside a while loop
+    """
+      component ValidComp1 {
+        compute {
+          while (true) {
+            break;
+          }
+        }
+      }
+      """,
+    // break inside an if nested in a for loop
+    """
+      component ValidComp2 {
+        compute {
+          for (int i = 0; i < 10; i++) {
+            if (i == 5) {
+              break;
+            }
+          }
+        }
+      }
+      """,
+    // break directly inside a do-while loop
+    """
+      component ValidComp3 {
+        compute {
+          do {
+            break;
+          } while (true);
+        }
+      }
+      """,
+    // break inside a while loop nested in a switch case
+    """
+      component ValidComp4 {
+        port sync in int i;
+        compute {
+          switch (i) {
+            case 1: {
+              while (true) {
+                break;
+              }
+            }
+            default: { }
+          }
+        }
+      }
+      """,
+    // break inside a switch case nested in a while loop
+    """
+      component ValidComp5 {
+        port sync in int i;
+        compute {
+          while (true) {
+            switch (i) {
+              case 1: {
+                break;
+              }
+              default: { }
+            }
+          }
+        }
+      }
+      """
+  })
   void shouldNotReportError(@NotNull String model) {
+    Preconditions.checkNotNull(model);
+
+    // Given
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new BreakStatementTargetsLoop());
+
+    // When
     checker.checkAll(ast);
 
+    // Then
     assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  void shouldReportError(@NotNull String model) {
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
+    Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
+
+    // Given
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new BreakStatementTargetsLoop());
+
+    // When
     checker.checkAll(ast);
 
-    assertThat(getLoggedErrorCodes()).containsExactly(BREAK_STATEMENT_TARGETS_NO_LOOP.getErrorCode());
+    // Then
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  static Stream<String> validModels() {
+  protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      """
-        component BreakInWhile {
-          compute {
-            while (true) {
-              break;
-            }
-          }
-        }
-        """,
-      """
-        component BreakInIfInFor {
-          compute {
-            for (int i = 0; i < 10; i++) {
-              if (i == 5) {
-                break;
-              }
-            }
-          }
-        }
-        """,
-      """
-        component BreakInDoWhile {
-          compute {
-            do {
-              break;
-            } while (true);
-          }
-        }
-        """,
-      """
-        component BreakInLoopInsideSwitch {
-          port sync in int i;
-          compute {
-            switch (i) {
-              case 1: {
-                while (true) {
-                  break;
-                }
-              }
-              default: { }
-            }
-          }
-        }
-        """,
-      """
-        component BreakInSwitchInsideLoop {
-          port sync in int i;
-          compute {
-            while (true) {
-              switch (i) {
-                case 1: {
-                  break;
-                }
-                default: { }
-              }
-            }
-          }
-        }
-        """
-    );
-  }
-
-  static Stream<String> invalidModels() {
-    return Stream.of(
-      """
-        component BreakWithoutTarget {
+      // break with no enclosing loop
+      arg("""
+        component InvalidComp1 {
           compute {
             break;
           }
         }
         """,
-      """
-        component BreakInSwitch {
+        BREAK_STATEMENT_TARGETS_NO_LOOP
+      ),
+      // break directly inside a switch case, no enclosing loop
+      arg("""
+        component InvalidComp2 {
           port sync in int i;
           compute {
             switch (i) {
@@ -128,8 +151,11 @@ class BreakStatementTargetsLoopTest extends MontiArcTestBase {
           }
         }
         """,
-      """
-        component BreakInIfInSwitch {
+        BREAK_STATEMENT_TARGETS_NO_LOOP
+      ),
+      // break inside an if nested in a switch case, no enclosing loop
+      arg("""
+        component InvalidComp3 {
           port sync in int i;
           compute {
             switch (i) {
@@ -142,7 +168,21 @@ class BreakStatementTargetsLoopTest extends MontiArcTestBase {
             }
           }
         }
-        """
+        """,
+        BREAK_STATEMENT_TARGETS_NO_LOOP
+      ),
+      // two breaks with no enclosing loop -> two errors
+      arg("""
+        component InvalidComp4 {
+          compute {
+            break;
+            break;
+          }
+        }
+        """,
+        BREAK_STATEMENT_TARGETS_NO_LOOP,
+        BREAK_STATEMENT_TARGETS_NO_LOOP
+      )
     );
   }
 }
