@@ -7,71 +7,40 @@ import modes._cocos.ModeAutomatonContainsNoStates;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
-import montiarc.util.ModesError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.io.IOException;
 import java.util.stream.Stream;
 
+import static montiarc.util.ModesError.MODE_AUTOMATON_CONTAINS_STATE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * The class under test is {@link ModeAutomatonContainsNoStates}.
  */
-public class ModeAutomatonContainsNoStatesTest extends MontiArcTestBase {
+class ModeAutomatonContainsNoStatesTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // no mode automata
-    "component Comp1 { }",
-    // mode automaton with no modes
-    "component Comp2 { " +
-      "mode automaton { } " +
-      "}",
-    // inner with mode automaton and one mode
-    "component Comp3 { " +
-      "component Inner { " +
-      "mode automaton { " +
-      "mode m1 { } " +
-      " } " +
-      "} " +
-      "}",
-    // two inner with modes
-    "component Comp4 { " +
-      "component Inner1 { " +
-      "mode automaton { " +
-      "mode m1 { }" +
-      " } " +
-      "} " +
-      "component Inner2 { " +
-      "mode automaton { " +
-      "mode m1 { }" +
-      " } " +
-      "} " +
-      "}",
-    // component with automaton and mode
-    "component Comp5 { " +
-      "mode automaton { mode m1 {} } " +
-      "automaton { } " +
-      "}",
-    // component with two mode automata
-    "component Comp6 { " +
-      "mode automaton { mode m1 {} } " +
-      "mode automaton { mode m1 {} } " +
-      "}",
-    // component with multiple modes
-    "component Comp6 { " +
-      "mode automaton { " +
-      "mode m1 {} " +
-      "mode m2 {}" +
-      "} " +
-      "}",
+    // component without a mode automaton
+    "component ValidComp1 { }",
+    // empty mode automaton
+    "component ValidComp2 { mode automaton { } }",
+    // nested component type with a mode automaton containing one mode
+    "component ValidComp3 { component Inner { mode automaton { mode m1 { } } } }",
+    // two nested component types, each with a mode automaton
+    "component ValidComp4 { component Inner1 { mode automaton { mode m1 { } } } component Inner2 { mode automaton { mode m1 { } } } }",
+    // mode automaton with a mode, alongside a regular automaton
+    "component ValidComp5 { mode automaton { mode m1 {} } automaton { } }",
+    // two mode automata, each containing a mode (this CoCo doesn't check automaton count)
+    "component ValidComp6 { mode automaton { mode m1 {} } mode automaton { mode m1 {} } }",
+    // mode automaton containing multiple modes
+    "component ValidComp7 { mode automaton { mode m1 {} mode m2 {} } }",
   })
-  public void shouldNotReportError(@NotNull String model) throws IOException {
+  void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
@@ -84,12 +53,13 @@ public class ModeAutomatonContainsNoStatesTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindingsCount()).as(Log.getFindings().toString()).isEqualTo(0);
+    assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  public void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
+  void shouldReportError(@NotNull String model,
+                         @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
@@ -103,35 +73,21 @@ public class ModeAutomatonContainsNoStatesTest extends MontiArcTestBase {
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).as(Log.getFindings().toString()).isNotEmpty();
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
   protected static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // mode automaton with a state
-      arg("component Comp1 { " +
-          "mode automaton { state s1; } " +
-          "}",
-        ModesError.MODE_AUTOMATON_CONTAINS_STATE),
-      // mode automaton with multiple states and modes
-      arg("component Comp2 { " +
-          "mode automaton { " +
-          "state s1; " +
-          "mode m1 { }" +
-          "state s2; " +
-          "} " +
-          "}",
-        ModesError.MODE_AUTOMATON_CONTAINS_STATE),
-      // inner with two mode automata where one has a state
-      arg("component Comp3 { " +
-          "component Inner { " +
-          "mode automaton { mode m1 {} } " +
-          "mode automaton { state s1; mode m1 { } } " +
-          "} " +
-          "}",
-        ModesError.MODE_AUTOMATON_CONTAINS_STATE)
+      // mode automaton containing a state
+      arg("component InvalidComp1 { mode automaton { state s1; } }",
+        MODE_AUTOMATON_CONTAINS_STATE),
+      // mode automaton containing both modes and states
+      arg("component InvalidComp2 { mode automaton { state s1; mode m1 { } state s2; } }",
+        MODE_AUTOMATON_CONTAINS_STATE),
+      // nested component type with two mode automata, one containing a state
+      arg("component InvalidComp3 { component Inner { mode automaton { mode m1 {} } mode automaton { state s1; mode m1 { } } } }",
+        MODE_AUTOMATON_CONTAINS_STATE)
     );
   }
 }
