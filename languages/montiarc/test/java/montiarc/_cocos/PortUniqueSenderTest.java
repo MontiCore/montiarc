@@ -72,10 +72,7 @@ class PortUniqueSenderTest extends MontiArcTestBase {
   static Stream<Arguments> validModels() {
     return Stream.of(
       // component without ports
-      arg("""
-        component ValidComp1 { }
-        """
-      ),
+      arg("component ValidComp1 { }"),
       // input forward
       arg("""
         component ValidComp2 {
