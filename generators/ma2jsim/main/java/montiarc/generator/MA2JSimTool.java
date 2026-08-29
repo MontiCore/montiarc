@@ -241,6 +241,9 @@ public class MA2JSimTool extends MontiArcTool {
 
     MCPath modelPaths = new MCPath(input);
 
+    List<Path> hwcsAsPaths = Arrays.stream(hwc).map(Paths::get).collect(Collectors.toList());
+    MA2JSimGen generator = new MA2JSimGen(Paths.get(o), hwcsAsPaths);
+
     for (ASTMACompilationUnit ast : models4NewGeneration) {
       Optional<Path> modelLocation = IncCheckUtil.findModelLocation(modelPaths, ast);
       boolean writeReport4ThisModel = writeReports && modelLocation.isPresent();
@@ -250,8 +253,7 @@ public class MA2JSimTool extends MontiArcTool {
         IncCheckUtil.setIncCheckReportingOn(ast, modelLocation.get());
       }
 
-      // In all cases
-      this.generate(ast, o, hwc);
+      this.generate(generator, ast);
 
       if (writeReport4ThisModel) {
         Reporting.flush(ast);
@@ -259,15 +261,10 @@ public class MA2JSimTool extends MontiArcTool {
     }
   }
 
-  public void generate(@NotNull ASTMACompilationUnit ast, @NotNull String target, @NotNull String[] hwc) {
+  public void generate(@NotNull MA2JSimGen generator, @NotNull ASTMACompilationUnit ast) {
+    Preconditions.checkNotNull(generator);
     Preconditions.checkNotNull(ast);
-    Preconditions.checkNotNull(target);
-    Preconditions.checkNotNull(hwc);
-    Preconditions.checkArgument(ast.getArcComponentType().isPresentSymbol());
-    Preconditions.checkArgument(!target.isEmpty());
 
-    List<Path> hwcsAsPaths = Arrays.stream(hwc).map(Paths::get).collect(Collectors.toList());
-    MA2JSimGen generator = new MA2JSimGen(Paths.get(target), hwcsAsPaths);
     generator.generate(ast);
   }
 
