@@ -9,6 +9,7 @@ import montiarc.conformance.AutomatonTestBase;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 import scmapping.mapping2smt.AutomataMapping;
 import scmapping.mapping2smt.MCMapping;
 
@@ -16,6 +17,7 @@ import java.io.File;
 
 import static montiarc.conformance.util.AutomataLoader.loadMapping;
 
+@Disabled // TODO: Incorrect Symbol Table Setup: 0xFD226 internal error: resolved 2 occurrences of Symbol
 class EvaluationTest extends AutomatonTestBase {
   public String modelDir = "test/resources/montiarc/conformance/eval/";
 

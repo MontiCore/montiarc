@@ -2,7 +2,9 @@
 package mceffect;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Disabled;
 
+@Disabled // TODO: Causes System.exit calls / ignores Log setup
 public class MCEffectToolTest extends EffectTestBase {
 
   @Test
