@@ -4,6 +4,7 @@ import java.io.File
 
 plugins {
   id("montiarc.build.language-server")
+  id("montiarc.build.publish-java")
 }
 
 dependencies {
