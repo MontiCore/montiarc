@@ -180,6 +180,7 @@ public class MontiArcCoCos {
     if (checkVariants) {
       varChecker.get4FullVariant().addCoCo(new NoPortInDefaultParameterValue4Family());
       varChecker.get4FullVariant().addCoCo(new NoPortInFieldDeclaration4Family());
+      varChecker.get4FullVariant().addCoCo(new NoFieldInSubcomponentArgument4Family());
       varChecker.get4FullVariant().addCoCo(new NoPortInSubcomponentArgument4Family());
       varChecker.get4FullVariant().addCoCo(new NoPortInSuperComponentArgument4Family());
     } else {

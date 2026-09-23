@@ -971,6 +971,7 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       ),
       arg("FieldReferenceInStaticContextVariabilityTest",
         mpk(PKG_VARI, "FieldReferenceInStaticContext.arc", "ParameterizedSuperComponent.arc"),
+        fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 8, 13, 8, 14, FIELD_REF_IN_STATIC_CONTEXT, "x"),
         fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 10, 14, 10, 15, FIELD_REF_IN_STATIC_CONTEXT, "x"),
         fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 11, 9, 11, 10, FIELD_REF_IN_STATIC_CONTEXT, "x")
       ),
