@@ -3,12 +3,9 @@ package de.monticore.cd2pojo;
 
 import de.monticore.cd4analysis._symboltable.ICD4AnalysisScope;
 import de.monticore.cd4code.CD4CodeMill;
-import de.monticore.cd4code._cocos.CD4CodeCoCoChecker;
 import de.monticore.cd4code._symboltable.ICD4CodeArtifactScope;
-import de.monticore.cdbasis._ast.ASTCDCompilationUnit;
 import de.monticore.cdbasis._symboltable.CDTypeSymbol;
 import de.monticore.cdgen.CDGenTool;
-import de.monticore.cdgen.cocos.CD2JavaGenCoCos;
 import de.monticore.symboltable.ISymbol;
 import de.se_rwth.commons.Names;
 
@@ -71,11 +68,5 @@ public class CD2PojoTool extends CDGenTool {
     } else {
       return userArgs;
     }
-  }
-
-  @Override
-  public void runCoCos(ASTCDCompilationUnit ast) {
-    CD4CodeCoCoChecker checker = new CD2JavaGenCoCos().getCheckerForAllCoCos();
-    checker.checkAll(ast);
   }
 }
