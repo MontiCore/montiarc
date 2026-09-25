@@ -1,4 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
+import de.mclsg.LanguageAggregationPipelineSpec
+import de.mclsg.LanguageServersExtension
+import de.mclsg.TaskTypes
 import montiarc.build.VscodeGenConfig
 import java.io.File
 
@@ -37,21 +40,19 @@ java {
   withSourcesJar()
 }
 
-// Eager task creation because the task creates other tasks
-val autoconfigure = tasks.create<de.mclsg.task.AutoconfigureTask>("autoconfigure") {
-  configure<de.mclsg.MCLSGPluginAggregationExtension> {
-    setLanguageAggregationName("MontiArcWithCD")
-    setTargetPackage("montiarc_with_cd")
-    setHandCodedDirBase("${projectDir}/main")
+lateinit var languageAggregation: LanguageAggregationPipelineSpec
+extensions.getByType<LanguageServersExtension>().languageAggr("MontiArcWithCD") {
+  languageAggregation = this
+  languageAggregationName = "MontiArcWithCD"
+  targetPackage = "montiarc_with_cd"
+  setHandCodedDirBase("${projectDir}/main")
 
-    member("MontiArc", "arc", true)
-    member("de.monticore.CD4Code", "cd", false)
-  }
+  member("MontiArc", "arc", true)
+  member("de.monticore.CD4Code", "cd", false)
   including(
-    de.mclsg.TaskTypes.LANGUAGE_SERVER,
-    de.mclsg.TaskTypes.VSCODE_PLUGIN
+    TaskTypes.LANGUAGE_SERVER,
+    TaskTypes.VSCODE_PLUGIN
   )
-  autoconfigureLspTasks()
 }
 
 extensions.configure<VscodeGenConfig>(VscodeGenConfig::class) {
@@ -65,14 +66,14 @@ extensions.configure<VscodeGenConfig>(VscodeGenConfig::class) {
   )
   extensionProjectLocation.set(
     file(
-      autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir()
+      languageAggregation.getFullVscodePluginDir()
     )
   )
 }
 
 // Extract these values at configuration time
 val projectVersion = version.toString()
-val packageJsonFile = File(autoconfigure.getMclsgPluginAggregationExtension().getFullVscodePluginDir(), "package.json")
+val packageJsonFile = File(languageAggregation.getFullVscodePluginDir(), "package.json")
 
 tasks.register("editPackageJson") {
   val targetFile = packageJsonFile

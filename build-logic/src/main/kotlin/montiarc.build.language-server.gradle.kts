@@ -1,8 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-import de.mclsg.task.AutoconfigureTask
 import de.mclsg.task.LanguageServerJarTask
-import de.mclsg.task.MCLSGAggregationTask
-import de.mclsg.task.MCLSGTask
 import de.mclsg.task.RunVscodePluginAttachedTask
 import de.mclsg.task.VscodePluginTask
 import de.monticore.gradle.dependencies.MCSourceSets
@@ -88,15 +85,6 @@ pluginManager.withPlugin("java") {
 
 
 
-// Fix for MC tasks that do not declare the grammarSymbolDependencies(...) config as input
-tasks.withType<MCLSGAggregationTask> {
-  inputs.files(grammarContentConfig)
-}
-
-tasks.withType<MCLSGTask> {
-  inputs.files(grammarContentConfig)
-}
-
 // If we are building a multi-project lang server, set the option for vscode
 // runners
 val multiProjectArgProvider =
@@ -118,8 +106,4 @@ tasks.withType<VscodePluginTask> {
 // Add additional task dependencies
 tasks.withType<VscodePluginTask> {
   finalizedBy("editPackageJson", "copyVscodeResources")
-}
-
-tasks.build {
-  dependsOn(tasks.withType<AutoconfigureTask>())
 }
