@@ -10,13 +10,14 @@ Likewise, MontiArc provides plugins for Gradle such that you can easily work wit
 
 
 ## Creating a Project with Gradle
-Navigate to a directory where you want to create your project. Create a new project by running: 
+
+[Download the empty project template](https://github.com/MontiCore/montiarc/releases/download/snapshot/empty.zip), unzip it, and rename the resulting folder to your project name.
+
+Alternatively, if you have the [MontiArc CLI installed](./Setup.md#install-the-cli-beta), you can create a new project by running:
 ```bash
 montiarc create MyMontiArcProject
 ```
 This will create a new directory called `MyMontiArcProject` which contains a near-empty MontiArc Gradle project.
-
-Or [download the template](https://github.com/MontiCore/montiarc/releases/download/snapshot/empty.zip) unzip and copy it into your folder.
 
 Inside the project open `src/main/montiarc/pkg/HelloWorld.arc`:
 
