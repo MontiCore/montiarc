@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import arcautomaton.ArcAutomatonMill;
 import arcautomaton._ast.ASTArcStatechart;
+import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcPort;
@@ -36,7 +37,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static arcautomaton.ArcAutomatonMill.typeDispatcher;
 import static arcautomaton._cocos.NoOtherInputPortInMsgTransition.CONTEXT;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 
@@ -128,7 +128,7 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
       transitionEntryExpressionList.clear();
 
       if (!(transitionEntry.getKey().isPresentSCEvent()
-        && typeDispatcher().isArcAutomatonASTMsgEvent(transitionEntry.getKey().getSCEvent()))) {
+        && transitionEntry.getKey().getSCEvent() instanceof ASTMsgEvent messageEvent)) {
         continue;
       }
 
@@ -145,9 +145,7 @@ public class NoOtherInputPortInMsgTransition4Family implements ArcBasisASTArcCom
       transitionEntry.getKey().accept(variableTraverser);
 
       // event of the transition
-      String event = "";
-      if (transitionEntry.getKey().isPresentSCEvent())
-        event = typeDispatcher().asArcAutomatonASTMsgEvent(transitionEntry.getKey().getSCEvent()).getName();
+      String event = messageEvent.getName();
 
       // Step 3: Check if there is a potential violation
       if (!nameExpressions.isEmpty()) {

@@ -10,7 +10,6 @@ import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
 import variablearc._cocos.util.ExpressionSolverService;
@@ -132,8 +131,8 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
       for (Map.Entry<ASTArcComponentType, BoolExpr> componentEntry : componentConditions.entrySet()) {
         var componentExtensions = getComponentExtensionList(componentEntry.getKey(), componentEntry.getKey().getSymbol(), new ArrayList<>(), new ArrayList<>());
         for (ComponentExtension ext : componentExtensions) {
-          var extSource = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(ext.source.getAstNode());
-          var extTarget = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(ext.target.getAstNode());
+          ASTArcComponentType extSource = (ASTArcComponentType) ext.source.getAstNode();
+          ASTArcComponentType extTarget = (ASTArcComponentType) ext.target.getAstNode();
           if (currentComponentExtensions.stream().anyMatch(e -> (e.source.equals(extSource.getSymbol()) && (e.target.equals(extTarget.getSymbol())))))
             continue;
           currentComponentExtensions.add(ext);
@@ -151,8 +150,8 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
         componentConditions.put(component, ctx.mkTrue());
         var componentExtensions = getComponentExtensionList(component, component.getSymbol(), new ArrayList<>(), new ArrayList<>());
         for (ComponentExtension ext : componentExtensions) {
-          var extSource = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(ext.source.getAstNode());
-          var extTarget = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(ext.target.getAstNode());
+          ASTArcComponentType extSource = (ASTArcComponentType) ext.source.getAstNode();
+          ASTArcComponentType extTarget = (ASTArcComponentType) ext.target.getAstNode();
           if (currentComponentExtensions.stream().anyMatch(e -> (e.source.equals(extSource.getSymbol()) && (e.target.equals(extTarget.getSymbol())))))
             continue;
           currentComponentExtensions.add(ext);
@@ -169,7 +168,7 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
 
     // Setting the conditions for each extension
     for (ComponentExtension ext : currentComponentExtensions) {
-      var extSource = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(ext.source.getAstNode());
+      ASTArcComponentType extSource = (ASTArcComponentType) ext.source.getAstNode();
       if (componentConditions.containsKey(extSource)) {
         ext.condition = componentConditions.get(extSource);
       } else {

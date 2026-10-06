@@ -15,7 +15,6 @@ import variablearc._cocos.util.ComponentVarIfHandler;
 import variablearc._cocos.util.GenericASTNameExpressionVisitor;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc._util.IVariableArcTypeDispatcher;
 import variablearc._visitor.VariableArcTraverser;
 
 import java.util.ArrayList;
@@ -77,11 +76,9 @@ public class FeatureUsage implements ArcBasisASTArcComponentTypeCoCo {
       astNameExpression -> names.add(astNameExpression.getName())))
     );
 
-    IVariableArcTypeDispatcher typeDispatcher = VariableArcMill.typeDispatcher();
-
     node.getBody().getArcElementList().stream()
-      .filter(typeDispatcher::isVariableArcASTArcConstraintDeclaration)
-      .map(typeDispatcher::asVariableArcASTArcConstraintDeclaration)
+      .filter(ASTArcConstraintDeclaration.class::isInstance)
+      .map(ASTArcConstraintDeclaration.class::cast)
       .map(ASTArcConstraintDeclaration::getExpression)
       .forEach(e -> e.accept(traverser));
     return names;

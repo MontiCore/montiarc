@@ -33,15 +33,17 @@ public class CommonExpressionsJavaPrinter extends CommonExpressionsPrettyPrinter
     TypeCheck3.typeOf(node);
     SymTypeExpression expr = TypeCheck3.typeOf(node.getExpression());
     if (expr.isFunctionType()
-      && expr instanceof SymTypeOfFunction
-      && ((SymTypeOfFunction) expr).getSymbol() instanceof MethodSymbol
-      && ((MethodSymbol) ((SymTypeOfFunction) expr).getSymbol()).isIsConstructor()) {
+      && expr instanceof SymTypeOfFunction func
+      && func.getSymbol() instanceof MethodSymbol method
+      && method.isIsConstructor()) {
       Preconditions.checkState(node.getExpression() instanceof ASTFieldAccessExpression);
       this.getPrinter().print("new ");
       // We call constructors in the name space of the respective type (e.g., Object.Object()).
       // But Java uses new instead, so we have to strip this qualification.
       // See https://git.rwth-aachen.de/monticore/montiarc/core/-/merge_requests/677
-      ((ASTFieldAccessExpression) node.getExpression()).getExpression().accept(getTraverser());
+      if (node.getExpression() instanceof ASTFieldAccessExpression fieldAccess) {
+        fieldAccess.getExpression().accept(getTraverser());
+      }
     } else {
       node.getExpression().accept(getTraverser());
     }

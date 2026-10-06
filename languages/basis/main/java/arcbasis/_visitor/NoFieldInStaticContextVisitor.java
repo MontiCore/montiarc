@@ -1,7 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package arcbasis._visitor;
 
-import arcbasis.ArcBasisMill;
+import arcbasis._ast.ASTArcField;
 import arcbasis._symboltable.IArcBasisScope;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
@@ -44,7 +44,6 @@ public class NoFieldInStaticContextVisitor implements ExpressionsBasisVisitor2 {
 
   protected boolean isField(VariableSymbol symbol) {
     Preconditions.checkNotNull(symbol);
-    return symbol.isPresentAstNode()
-      && ArcBasisMill.typeDispatcher().isArcBasisASTArcField(symbol.getAstNode());
+    return symbol.isPresentAstNode() && symbol.getAstNode() instanceof ASTArcField;
   }
 }

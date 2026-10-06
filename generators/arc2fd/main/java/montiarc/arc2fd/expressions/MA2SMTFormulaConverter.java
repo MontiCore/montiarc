@@ -442,14 +442,12 @@ public class MA2SMTFormulaConverter {
 
     // Apply Correct Operation Function (depending on DataType)
     boolean res = false;
-    if (formula instanceof BooleanFormula && op instanceof BooleanOperation) {
+    if (formula instanceof BooleanFormula boolFormula && op instanceof BooleanOperation boolOp) {
       removeFormulasFromStack(1);
-      res = combineFormulasByOperation((BooleanOperation) op,
-        (BooleanFormula) formula);
-    } else if (formula instanceof IntegerFormula && op instanceof NumericOperation) {
+      res = combineFormulasByOperation(boolOp, boolFormula);
+    } else if (formula instanceof IntegerFormula intFormula && op instanceof NumericOperation numOp) {
       removeFormulasFromStack(1);
-      res = combineFormulasByOperation((NumericOperation) op,
-        (IntegerFormula) formula);
+      res = combineFormulasByOperation(numOp, intFormula);
     } else {
       Log.error("Tried to apply an operation to neither boolean nor integer " +
         "formula!");
@@ -482,14 +480,14 @@ public class MA2SMTFormulaConverter {
     Formula leftFormula = formulaStack.get(numFormulas - 2);
 
     boolean res = false;
-    if ((leftFormula instanceof BooleanFormula) && (rightFormula instanceof BooleanFormula) && (op instanceof BooleanOperation)) {
+    if ((leftFormula instanceof BooleanFormula leftBool) && (rightFormula instanceof BooleanFormula rightBool) && (op instanceof BooleanOperation boolOp)) {
       removeFormulasFromStack(2);
-      res = combineFormulasByOperation((BooleanOperation) op,
-        (BooleanFormula) leftFormula, (BooleanFormula) rightFormula);
-    } else if ((leftFormula instanceof IntegerFormula) && (rightFormula instanceof IntegerFormula) && (op instanceof NumericOperation)) {
+      res = combineFormulasByOperation(boolOp,
+        leftBool, rightBool);
+    } else if ((leftFormula instanceof IntegerFormula leftInt) && (rightFormula instanceof IntegerFormula rightInt) && (op instanceof NumericOperation numOp)) {
       removeFormulasFromStack(2);
-      res = combineFormulasByOperation((NumericOperation) op,
-        (IntegerFormula) leftFormula, (IntegerFormula) rightFormula);
+      res = combineFormulasByOperation(numOp,
+        leftInt, rightInt);
     } else if (op instanceof NumericOperation || op instanceof BooleanOperation) {
       // At least one formula is NOT IntegerFormula, but we have an integer
       // operation
@@ -546,10 +544,10 @@ public class MA2SMTFormulaConverter {
 
     boolean res = false;
     // Condition must be of Type Boolean Formula, otherwise something went wrong
-    if ((left instanceof BooleanFormula) && op instanceof BooleanOperation) {
+    if ((left instanceof BooleanFormula boolLeft) && op instanceof BooleanOperation boolOp) {
       removeFormulasFromStack(3);
-      res = combineFormulasByOperation((BooleanOperation) op,
-        (BooleanFormula) left, center, right);
+      res = combineFormulasByOperation(boolOp,
+        boolLeft, center, right);
     } else {
       System.out.println("Something went wrong...");
     }

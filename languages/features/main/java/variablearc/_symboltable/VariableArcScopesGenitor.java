@@ -4,11 +4,11 @@ package variablearc._symboltable;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcPort;
+import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
 import variablearc._ast.ASTArcVarIf;
 import variablearc.evaluation.ExpressionSet;
@@ -77,7 +77,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     putOnStack(new VariableArcVariationPoint(
       new Expression(node.getCondition()),
       this.getCurrentVariationPoint().orElse(null),
-      VariableArcMill.typeDispatcher().isArcBasisASTComponentBody(node.getThen()) ? VariableArcMill.typeDispatcher().asArcBasisASTComponentBody(node.getThen()).getArcElementList() : List.of(node.getThen())
+      node.getThen() instanceof ASTComponentBody body ? body.getArcElementList() : List.of(node.getThen())
     ));
     node.getThen().accept(this.getTraverser());
     removeCurrentVariationPoint();
@@ -86,7 +86,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
       putOnStack(new VariableArcVariationPoint(
         new NegatedExpression(node.getCondition()),
         this.getCurrentVariationPoint().orElse(null),
-        VariableArcMill.typeDispatcher().isArcBasisASTComponentBody(node.getOtherwise()) ? VariableArcMill.typeDispatcher().asArcBasisASTComponentBody(node.getOtherwise()).getArcElementList() : List.of(node.getOtherwise())
+        node.getOtherwise() instanceof ASTComponentBody body ? body.getArcElementList() : List.of(node.getOtherwise())
       ));
       node.getOtherwise().accept(this.getTraverser());
       removeCurrentVariationPoint();

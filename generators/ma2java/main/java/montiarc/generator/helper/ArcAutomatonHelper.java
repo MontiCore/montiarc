@@ -73,9 +73,8 @@ public class ArcAutomatonHelper {
   public boolean hasEntryAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
 
-    if (!state.isPresentSCSBody() || !(state.getSCSBody() instanceof ASTSCHierarchyBody))
+    if (!state.isPresentSCSBody() || !(state.getSCSBody() instanceof ASTSCHierarchyBody stateBody))
       return false;
-    ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
       .anyMatch(elem -> elem instanceof ASTSCEntryAction);
   }
@@ -86,7 +85,7 @@ public class ArcAutomatonHelper {
 
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     ASTSCEntryAction entryAction = stateBody.getSCStateElementList().stream()
-      .filter(elem -> elem instanceof ASTSCEntryAction).map(elem -> (ASTSCEntryAction) elem)
+      .filter(ASTSCEntryAction.class::isInstance).map(ASTSCEntryAction.class::cast)
       .findFirst().get();
     return scABodyToTransitionAction(entryAction.getSCABody()).getMCStatement();
   }
@@ -94,9 +93,8 @@ public class ArcAutomatonHelper {
   public boolean hasExitAction(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
 
-    if (!state.isPresentSCSBody() || !(state.getSCSBody() instanceof ASTSCHierarchyBody))
+    if (!state.isPresentSCSBody() || !(state.getSCSBody() instanceof ASTSCHierarchyBody stateBody))
       return false;
-    ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     return stateBody.getSCStateElementList().stream()
       .anyMatch(elem -> elem instanceof ASTSCExitAction);
   }
@@ -107,21 +105,21 @@ public class ArcAutomatonHelper {
 
     ASTSCHierarchyBody stateBody = (ASTSCHierarchyBody) state.getSCSBody();
     ASTSCExitAction exitAction = stateBody.getSCStateElementList().stream()
-      .filter(elem -> elem instanceof ASTSCExitAction).map(elem -> (ASTSCExitAction) elem)
+      .filter(ASTSCExitAction.class::isInstance).map(ASTSCExitAction.class::cast)
       .findFirst().get();
     return scABodyToTransitionAction(exitAction.getSCABody()).getMCStatement();
   }
 
   public boolean hasSubStates(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-    return state.isPresentSCSBody() && state.getSCSBody() instanceof ASTSCHierarchyBody
-      && ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().anyMatch(ASTSCState.class::isInstance);
+    return state.isPresentSCSBody() && state.getSCSBody() instanceof ASTSCHierarchyBody hierarchyBody
+      && hierarchyBody.getSCStateElementList().stream().anyMatch(ASTSCState.class::isInstance);
   }
 
   public Stream<ASTSCState> getSubStatesStream(@NotNull ASTSCState state) {
     Preconditions.checkNotNull(state);
-    if (state.isPresentSCSBody() && state.getSCSBody() instanceof ASTSCHierarchyBody) {
-      return ((ASTSCHierarchyBody) state.getSCSBody()).getSCStateElementList().stream().filter(ASTSCState.class::isInstance)
+    if (state.isPresentSCSBody() && state.getSCSBody() instanceof ASTSCHierarchyBody hierarchyBody) {
+      return hierarchyBody.getSCStateElementList().stream().filter(ASTSCState.class::isInstance)
         .map(ASTSCState.class::cast);
     }
     return Stream.empty();

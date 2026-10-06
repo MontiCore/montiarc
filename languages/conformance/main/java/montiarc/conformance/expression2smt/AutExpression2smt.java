@@ -83,13 +83,13 @@ public class AutExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
   @Override
   public Z3ExprAdapter convertExpr(ASTExpression node) {
     Z3ExprAdapter res;
-    if (node instanceof ASTEqualsExpression) {
-      ASTExpression left = ((ASTEqualsExpression) node).getLeft();
-      ASTExpression right = ((ASTEqualsExpression) node).getRight();
+    if (node instanceof ASTEqualsExpression eq) {
+      ASTExpression left = eq.getLeft();
+      ASTExpression right = eq.getRight();
       res = convertEq(left, right);
-    } else if (node instanceof ASTNotEqualsExpression) {
-      ASTExpression left = ((ASTNotEqualsExpression) node).getLeft();
-      ASTExpression right = ((ASTNotEqualsExpression) node).getRight();
+    } else if (node instanceof ASTNotEqualsExpression neq) {
+      ASTExpression left = neq.getLeft();
+      ASTExpression right = neq.getRight();
       res = eFactory.mkNot(convertEq(left, right));
     } else {
       res = super.convertExpr(node);
@@ -99,10 +99,10 @@ public class AutExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
 
   public Z3ExprAdapter convertEq(ASTExpression left, ASTExpression right) {
     Z3ExprAdapter cond = eFactory.mkBool(true);
-    if (left instanceof ASTNameExpression) {
+    if (left instanceof ASTNameExpression nameExpr) {
 
       Optional<PortSymbol> portSym =
-          SymbolTableUtil.resolvePort(((ASTNameExpression) left).getName(), smtAut.getComponent());
+          SymbolTableUtil.resolvePort(nameExpr.getName(), smtAut.getComponent());
       if (portSym.isPresent() && portSym.get().isIncoming()) {
         BoolExpr expr = smtAut.checkConstructor(in, portSym.get());
         cond = new Z3ExprAdapter(expr, tFactory.mkBoolType());

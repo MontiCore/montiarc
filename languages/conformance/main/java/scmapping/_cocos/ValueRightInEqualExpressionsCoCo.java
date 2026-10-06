@@ -37,8 +37,7 @@ public class ValueRightInEqualExpressionsCoCo implements CommonExpressionsASTEqu
 
   @Override
   public void check(ASTEqualsExpression node) {
-    if (node.getLeft() instanceof ASTNameExpression) {
-      ASTNameExpression left = (ASTNameExpression) node.getLeft();
+    if (node.getLeft() instanceof ASTNameExpression left) {
       if (!validLeftNames.contains((left.getName()))) {
         Log.error(ConformanceError.VALUE_RIGHT_IN_EQUAL_EXPRESSIONS.format(left.getName(), printPosition(node)));
       }

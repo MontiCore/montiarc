@@ -40,11 +40,11 @@ public class SymbolTableUtil {
   }
 
   public static boolean isInPort(ISymbol symbol) {
-    return (symbol instanceof PortSymbol && ((PortSymbol) symbol).isIncoming());
+    return (symbol instanceof PortSymbol portSymbol && portSymbol.isIncoming());
   }
 
   public static boolean isOutPort(ISymbol symbol) {
-    return (symbol instanceof PortSymbol && ((PortSymbol) symbol).isOutgoing());
+    return (symbol instanceof PortSymbol portSymbol && portSymbol.isOutgoing());
   }
 
   public static boolean isOutPortVar(ISymbol symbol, ASTArcComponentType comp) {

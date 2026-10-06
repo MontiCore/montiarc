@@ -9,7 +9,6 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ISymbol;
-import montiarc.MontiArcMill;
 import montiarc._symboltable.MontiArcComponentTypeSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTVariantArcComponentType;
@@ -34,7 +33,10 @@ import java.util.stream.Collectors;
 public class VariantHelper {
 
   public List<ASTConnector> getVariationPointConnectors(@NotNull VariableArcVariationPoint vp) {
-    return vp.getArcElements().stream().filter(e -> MontiArcMill.typeDispatcher().isArcBasisASTConnector(e)).map(e -> MontiArcMill.typeDispatcher().asArcBasisASTConnector(e)).collect(Collectors.toList());
+    return vp.getArcElements().stream()
+      .filter(ASTConnector.class::isInstance)
+      .map(ASTConnector.class::cast)
+      .collect(Collectors.toList());
   }
 
   public List<VariableArcVariantComponentTypeSymbol> getVariants(@NotNull ASTArcComponentType ast) {

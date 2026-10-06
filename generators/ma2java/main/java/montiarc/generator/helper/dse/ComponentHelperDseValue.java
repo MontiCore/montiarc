@@ -20,7 +20,6 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
-import montiarc.MontiArcMill;
 import montiarc.generator.dse.MA2JavaDseFullPrettyPrinterValue;
 import montiarc.generator.helper.ComponentHelper;
 
@@ -175,8 +174,7 @@ public class ComponentHelperDseValue {
     List<String> outputParameters = new ArrayList<>();
 
     //can only print default parameters if ASTNode exists.
-    if (comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTArcComponentType(comp.getAstNode())) {
-      final ASTArcComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTArcComponentType(comp.getAstNode());
+    if (comp.isPresentAstNode() && comp.getAstNode() instanceof ASTArcComponentType astNode) {
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 

@@ -116,7 +116,7 @@ public class ASTArcStatechart extends ASTArcStatechartTOP {
       if (!s.isPresentSCSBody())
         continue;
       for (ASTSCStateElement body : ((ASTSCHierarchyBody) s.getSCSBody()).getSCStateElementList()) {
-        if (ArcAutomatonMill.typeDispatcher().isSCBasisASTSCState(body) && ArcAutomatonMill.typeDispatcher().asSCBasisASTSCState(body).getName().equals(state.getName()))
+        if (body instanceof ASTSCState child && child.getName().equals(state.getName()))
           path.addAll(getAncestors(s));
       }
     }

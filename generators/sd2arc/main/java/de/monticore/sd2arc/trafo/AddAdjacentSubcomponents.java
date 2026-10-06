@@ -10,6 +10,7 @@ import de.monticore.lang.sd4components._visitor.SD4ComponentsTraverser;
 import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
 import de.monticore.lang.sdbasis._ast.ASTSDObject;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
+import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.monticore.lang.sdbasis._visitor.SDBasisVisitor2;
 import de.monticore.sd2arc._ast.ASTSDHiddenFreeModifier;
 
@@ -46,8 +47,8 @@ public class AddAdjacentSubcomponents implements SDBasisVisitor2 {
 
   protected List<ASTSDComponent> getComponents(ASTSequenceDiagram node) {
     return node.streamSDObjects()
-      .filter(o -> SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDComponent(o))
-      .map(o -> SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDComponent(o))
+      .filter(ASTSDComponent.class::isInstance)
+      .map(ASTSDComponent.class::cast)
       .collect(Collectors.toList());
   }
 
@@ -63,10 +64,10 @@ public class AddAdjacentSubcomponents implements SDBasisVisitor2 {
 
   protected Optional<ASTSDComponent> toSDComponent(ASTArcComponentType componentType, String subcomponentName) {
     for (ASTComponentInstantiation instantiation : componentType.getSubComponentInstantiations()) {
-      if (instantiation.getInstancesNames().contains(subcomponentName) && SD4ComponentsMill.typeDispatcher().isMCBasicTypesASTMCObjectType(instantiation.getMCType())) {
+      if (instantiation.getInstancesNames().contains(subcomponentName) && instantiation.getMCType() instanceof ASTMCObjectType objectType) {
         return Optional.of(SD4ComponentsMill.sDComponentBuilder()
           .setName(subcomponentName)
-          .setMCObjectType(SD4ComponentsMill.typeDispatcher().asMCBasicTypesASTMCObjectType(instantiation.getMCType()))
+          .setMCObjectType(objectType)
           .addSDModifier(new ASTSDHiddenFreeModifier())
           .build());
       }

@@ -6,8 +6,8 @@ import arcbasis._ast.ASTArcComponentType;
 import com.google.common.base.Preconditions;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
+import de.monticore.ocl.setexpressions._ast.ASTSetValueItem;
 import de.monticore.umlstereotype._ast.ASTStereoValue;
-import montiarc.MontiArcMill;
 import variablearc._ast.ASTArcFeature;
 import variablearc._ast.ASTArcFeatureDeclaration;
 
@@ -37,12 +37,15 @@ public class MaUnitHelper {
       node.getStereotype().getValuesList().stream()
         .filter(sv -> names.contains(sv.getName()))
         .filter(ASTStereoValue::isPresentExpression)
-        .filter(stereo -> MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()) && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList())
-        .map(stereo -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size())
+        .map(ASTStereoValue::getExpression)
+        .filter(ASTSetEnumeration.class::isInstance)
+        .map(ASTSetEnumeration.class::cast)
+        .filter(ASTSetEnumeration::isList)
+        .map(enumeration -> enumeration.getSetCollectionItemList().size())
         .reduce(1, Math::max),
       getStereoValue(node, "test").map(stereo -> {
-        if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()))
-          return MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size();
+        if (stereo.getExpression() instanceof ASTSetEnumeration enumeration)
+          return enumeration.getSetCollectionItemList().size();
         else return 1;
       }).orElse(1)
     );
@@ -50,8 +53,8 @@ public class MaUnitHelper {
 
   public boolean isStereoValueList(ASTStereoValue stereo) {
     return stereo.isPresentExpression()
-      && MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
-      && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList();
+      && stereo.getExpression() instanceof ASTSetEnumeration enumeration
+      && enumeration.isList();
   }
 
   public Optional<ASTStereoValue> getStereoValue(ASTArcComponentType comp, String name) {
@@ -65,14 +68,19 @@ public class MaUnitHelper {
   public List<ASTExpression> getTestValues(ASTArcComponentType comp, int index) {
     Optional<ASTSetEnumeration> testDefinition = getStereoValue(comp, "test")
       .map(ASTStereoValue::getExpression)
-      .filter(MontiArcMill.typeDispatcher()::isSetExpressionsASTSetEnumeration)
-      .map(MontiArcMill.typeDispatcher()::asSetExpressionsASTSetEnumeration);
+      .filter(ASTSetEnumeration.class::isInstance)
+      .map(ASTSetEnumeration.class::cast);
     Preconditions.checkArgument(testDefinition.isPresent());
 
     ArrayList<ASTExpression> testValues = new ArrayList<>();
     for (List<ASTExpression> testCaseDefinition : testDefinition.get().getSetCollectionItemList().stream()
-      .map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).getSetCollectionItemList())
-      .map(list -> list.stream().map(item -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetValueItem(item).getExpression()).collect(Collectors.toList())).toList()) {
+      .map(ASTSetValueItem.class::cast)
+      .map(ASTSetValueItem::getExpression)
+      .map(ASTSetEnumeration.class::cast)
+      .map(ASTSetEnumeration::getSetCollectionItemList)
+      .map(list -> list.stream()
+        .map(ASTSetValueItem.class::cast)
+        .map(ASTSetValueItem::getExpression).collect(Collectors.toList())).toList()) {
       if (index < testCaseDefinition.size())
         testValues.add(testCaseDefinition.get(index));
     }

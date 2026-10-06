@@ -90,12 +90,10 @@ public abstract class DseSupportedTypes {
           printError(componentType.getName(), port.getSymbol().getType()
             .print(), port.get_SourcePositionStart(), port.get_SourcePositionEnd());
         }
-        if (port.getSymbol().getTypeInfo() instanceof OOTypeSymbol) {
-          if (!(((OOTypeSymbol) port.getSymbol().getType()
-            .getTypeInfo()).isIsEnum()) && !checkSupported(port.getSymbol().getType().print())) {
+        if (port.getSymbol().getTypeInfo() instanceof OOTypeSymbol ooType) {
+          if (!ooType.isIsEnum() && !checkSupported(port.getSymbol().getType().print())) {
             printError(componentType.getName(), port.getSymbol().getType()
               .print(), port.get_SourcePositionStart(), port.get_SourcePositionEnd());
-
           }
         }
       }
@@ -116,10 +114,9 @@ public abstract class DseSupportedTypes {
         }
       }
       for (VariableSymbol symbol : componentType.getSymbol().getFields()) {
-        if (symbol.getType().getTypeInfo() instanceof OOTypeSymbol) {
+        if (symbol.getType().getTypeInfo() instanceof OOTypeSymbol ooType) {
 
-          if (!((OOTypeSymbol) symbol.getType()
-            .getTypeInfo()).isIsEnum() && !checkSupported(symbol.getType().print())) {
+          if (!ooType.isIsEnum() && !checkSupported(symbol.getType().print())) {
             printError(componentType.getName(), symbol.getType()
               .print(), symbol.getSourcePosition());
 

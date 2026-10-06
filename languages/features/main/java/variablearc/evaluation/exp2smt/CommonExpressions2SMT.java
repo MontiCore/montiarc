@@ -9,7 +9,6 @@ import com.microsoft.z3.EnumSort;
 import com.microsoft.z3.Expr;
 import com.microsoft.z3.IntExpr;
 import com.microsoft.z3.Sort;
-import de.monticore.expressions.commonexpressions.CommonExpressionsMill;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanAndOpExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanNotExpression;
 import de.monticore.expressions.commonexpressions._ast.ASTBooleanOrOpExpression;
@@ -88,9 +87,9 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     getResult().clear();
 
     IVariableArcScope scope = (IVariableArcScope) node.getEnclosingScope();
-    if (CommonExpressionsMill.typeDispatcher().isExpressionsBasisASTNameExpression(node.getExpression())) {
+    if (node.getExpression() instanceof ASTNameExpression nameExpression) {
       // Handle only features of subcomponent of form x.f
-      String name = CommonExpressionsMill.typeDispatcher().asExpressionsBasisASTNameExpression(node.getExpression()).getName();
+      String name = nameExpression.getName();
       Optional<SubcomponentSymbol> instanceSymbol =
         scope.resolveSubcomponentMany(name).stream().findFirst();
       if (instanceSymbol.isPresent() && instanceSymbol.get().isTypePresent() &&
@@ -131,11 +130,9 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   }
 
   protected Optional<String> getExprAsQName(ASTExpression expr) {
-    if (CommonExpressionsMill.typeDispatcher().isExpressionsBasisASTNameExpression(expr)) {
-      ASTNameExpression nameExpr = CommonExpressionsMill.typeDispatcher().asExpressionsBasisASTNameExpression(expr);
+    if (expr instanceof ASTNameExpression nameExpr) {
       return Optional.of(nameExpr.getName());
-    } else if (CommonExpressionsMill.typeDispatcher().isCommonExpressionsASTFieldAccessExpression(expr)) {
-      ASTFieldAccessExpression fieldAccessExpression = CommonExpressionsMill.typeDispatcher().asCommonExpressionsASTFieldAccessExpression(expr);
+    } else if (expr instanceof ASTFieldAccessExpression fieldAccessExpression) {
       return getExprAsQName(fieldAccessExpression.getExpression())
         .map(qualifier ->
           Names.getQualifiedName(qualifier, fieldAccessExpression.getName())

@@ -9,7 +9,6 @@ import com.microsoft.z3.*;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
 import variablearc._cocos.util.ExpressionSolverService;
@@ -116,7 +115,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
     for (SubcomponentSymbol sub : node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).map(ASTComponentInstance::getSymbol).toList()) {
       if (!sub.isPresentAstNode() || !sub.getAstNode().getSymbol().isTypePresent() || !sub.getAstNode().getSymbol().getType().getTypeInfo().isPresentAstNode())
         continue;
-      var subComp = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode());
+      ASTArcComponentType subComp = (ASTArcComponentType) sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode();
       var subFeatures = subComp.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).toList();
       allFeatures.addAll(subFeatures);
 

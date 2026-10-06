@@ -25,11 +25,11 @@ public class CD2PojoTool extends CDGenTool {
     for (ICD4AnalysisScope subscope : scope.getSubScopes()) {
       // store each type symbol in its own symbol-table
       ISymbol symbol = subscope.getSpanningSymbol();
-      if (symbol instanceof CDTypeSymbol) {
+      if (symbol instanceof CDTypeSymbol typeSymbol) {
         ICD4CodeArtifactScope as2store = CD4CodeMill.artifactScope();
         as2store.setPackageName(Names.getQualifiedName(scope.getPackageName(), scope.getName()));
         as2store.setName(subscope.getName());
-        as2store.add((CDTypeSymbol) subscope.getSpanningSymbol());
+        as2store.add(typeSymbol);
         super.storeSymTab(as2store, path);
       }
     }

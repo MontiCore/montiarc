@@ -57,57 +57,57 @@ public class VariationConditionHelper {
   }
 
   private static void saveFieldAccessScopesFromExpression(ASTExpression expr) {
-    if (expr instanceof ASTFieldAccessExpression) {
-      fieldAccessScopes.put(((ASTFieldAccessExpression) expr).getName(), ((ASTFieldAccessExpression) expr).getEnclosingScope());
+    if (expr instanceof ASTFieldAccessExpression fieldAccess) {
+      fieldAccessScopes.put(fieldAccess.getName(), fieldAccess.getEnclosingScope());
     }
 
-    if (expr instanceof ASTBooleanAndOpExpression) {
-      saveFieldAccessScopesFromExpression(((ASTBooleanAndOpExpression) expr).getLeft());
-      saveFieldAccessScopesFromExpression(((ASTBooleanAndOpExpression) expr).getRight());
+    if (expr instanceof ASTBooleanAndOpExpression andOp) {
+      saveFieldAccessScopesFromExpression(andOp.getLeft());
+      saveFieldAccessScopesFromExpression(andOp.getRight());
     }
-    if (expr instanceof ASTBooleanOrOpExpression) {
-      saveFieldAccessScopesFromExpression(((ASTBooleanOrOpExpression) expr).getLeft());
-      saveFieldAccessScopesFromExpression(((ASTBooleanOrOpExpression) expr).getRight());
-    }
-
-    if (expr instanceof ASTEqualsExpression) {
-      saveFieldAccessScopesFromExpression(((ASTEqualsExpression) expr).getLeft());
-      saveFieldAccessScopesFromExpression(((ASTEqualsExpression) expr).getRight());
+    if (expr instanceof ASTBooleanOrOpExpression orOp) {
+      saveFieldAccessScopesFromExpression(orOp.getLeft());
+      saveFieldAccessScopesFromExpression(orOp.getRight());
     }
 
-    if (expr instanceof ASTLogicalNotExpression)
-      saveFieldAccessScopesFromExpression(((ASTLogicalNotExpression) expr).getExpression());
+    if (expr instanceof ASTEqualsExpression eq) {
+      saveFieldAccessScopesFromExpression(eq.getLeft());
+      saveFieldAccessScopesFromExpression(eq.getRight());
+    }
+
+    if (expr instanceof ASTLogicalNotExpression notOp)
+      saveFieldAccessScopesFromExpression(notOp.getExpression());
   }
 
   public static ASTExpression changeNameExpressionInCondition(ASTExpression expr) {
 
-    if (expr instanceof ASTNameExpression) {
+    if (expr instanceof ASTNameExpression nameExpr) {
 
-      if ((((ASTNameExpression) expr).getName().contains(expr.getEnclosingScope().getSpanningSymbol().getPackageName()) && !expr.getEnclosingScope().getSpanningSymbol().getPackageName().isEmpty()) || ((ASTNameExpression) expr).getName().contains(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "."))
+      if ((nameExpr.getName().contains(expr.getEnclosingScope().getSpanningSymbol().getPackageName()) && !expr.getEnclosingScope().getSpanningSymbol().getPackageName().isEmpty()) || nameExpr.getName().contains(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "."))
         return expr;
 
-      ((ASTNameExpression) expr).setName(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "." + ((ASTNameExpression) expr).getName());
+      nameExpr.setName(expr.getEnclosingScope().getSpanningSymbol().getFullName() + "." + nameExpr.getName());
       return expr;
-    } else if (expr instanceof ASTFieldAccessExpression) {
-      expr.setEnclosingScope(fieldAccessScopes.get(((ASTFieldAccessExpression) expr).getName()));
+    } else if (expr instanceof ASTFieldAccessExpression fieldAccess) {
+      expr.setEnclosingScope(fieldAccessScopes.get(fieldAccess.getName()));
     }
 
-    if (expr instanceof ASTBooleanAndOpExpression) {
-      changeNameExpressionInCondition(((ASTBooleanAndOpExpression) expr).getLeft());
-      changeNameExpressionInCondition(((ASTBooleanAndOpExpression) expr).getRight());
+    if (expr instanceof ASTBooleanAndOpExpression andOp) {
+      changeNameExpressionInCondition(andOp.getLeft());
+      changeNameExpressionInCondition(andOp.getRight());
     }
-    if (expr instanceof ASTBooleanOrOpExpression) {
-      changeNameExpressionInCondition(((ASTBooleanOrOpExpression) expr).getLeft());
-      changeNameExpressionInCondition(((ASTBooleanOrOpExpression) expr).getRight());
-    }
-
-    if (expr instanceof ASTEqualsExpression) {
-      changeNameExpressionInCondition(((ASTEqualsExpression) expr).getLeft());
-      changeNameExpressionInCondition(((ASTEqualsExpression) expr).getRight());
+    if (expr instanceof ASTBooleanOrOpExpression orOp) {
+      changeNameExpressionInCondition(orOp.getLeft());
+      changeNameExpressionInCondition(orOp.getRight());
     }
 
-    if (expr instanceof ASTLogicalNotExpression)
-      return changeNameExpressionInCondition(((ASTLogicalNotExpression) expr).getExpression());
+    if (expr instanceof ASTEqualsExpression eq) {
+      changeNameExpressionInCondition(eq.getLeft());
+      changeNameExpressionInCondition(eq.getRight());
+    }
+
+    if (expr instanceof ASTLogicalNotExpression notOp)
+      return changeNameExpressionInCondition(notOp.getExpression());
 
     return expr;
   }
@@ -170,8 +170,8 @@ public class VariationConditionHelper {
     if (e.isNot()) {
       Context ctx = ExpressionSolverService.getContext();
       Expr arg = e.getArgs()[0];
-      if (arg instanceof BoolExpr) {
-        return ctx.mkEq(arg, ctx.mkFalse());
+      if (arg instanceof BoolExpr boolExpr) {
+        return ctx.mkEq(boolExpr, ctx.mkFalse());
       }
     }
     return e;

@@ -8,6 +8,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
+import de.monticore.ocl.setexpressions._ast.ASTSetValueItem;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.monticore.types.check.SymTypeOfGenerics;
@@ -16,7 +17,6 @@ import de.monticore.types3.SymTypeRelations;
 import de.monticore.types3.TypeCheck3;
 import de.monticore.umlstereotype._ast.ASTStereoValue;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
 import montiarc.util.MontiArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._ast.ASTArcFeature;
@@ -93,8 +93,8 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
     Optional<ASTSetEnumeration> testDefinition = getStereo(node, "test")
       .filter(ASTStereoValue::isPresentExpression)
       .map(ASTStereoValue::getExpression)
-      .filter(MontiArcMill.typeDispatcher()::isSetExpressionsASTSetEnumeration)
-      .map(MontiArcMill.typeDispatcher()::asSetExpressionsASTSetEnumeration);
+      .filter(ASTSetEnumeration.class::isInstance)
+      .map(ASTSetEnumeration.class::cast);
 
     if (testDefinition.isEmpty())
       Log.error(MontiArcError.UNIT_TEST_SOURCE_MISCONFIGURED.format());
@@ -102,27 +102,11 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
     if (testDefinition.isPresent()) {
       for (int testIndex = 0; testIndex < testDefinition.get()
         .getSetCollectionItemList().size(); testIndex++) {
-        if (MontiArcMill.typeDispatcher()
-          .isSetExpressionsASTSetValueItem(testDefinition.get()
-            .getSetCollectionItem(testIndex))
-          && MontiArcMill.typeDispatcher()
-          .isSetExpressionsASTSetEnumeration(MontiArcMill.typeDispatcher()
-            .asSetExpressionsASTSetValueItem(testDefinition.get()
-              .getSetCollectionItem(testIndex)).getExpression())
-          && MontiArcMill.typeDispatcher()
-          .asSetExpressionsASTSetEnumeration(MontiArcMill.typeDispatcher()
-            .asSetExpressionsASTSetValueItem(testDefinition.get()
-              .getSetCollectionItem(testIndex))
-            .getExpression())
-          .isList()) {
-          ASTSetEnumeration testCaseDefinitionList = MontiArcMill.typeDispatcher()
-            .asSetExpressionsASTSetEnumeration(MontiArcMill.typeDispatcher()
-              .asSetExpressionsASTSetValueItem(testDefinition.get()
-                .getSetCollectionItem(testIndex)).getExpression());
+        if (testDefinition.get().getSetCollectionItem(testIndex) instanceof ASTSetValueItem testCase
+          && testCase.getExpression() instanceof ASTSetEnumeration testCaseDefinitionList
+          && testCaseDefinitionList.isList()) {
           for (int i = 0; i < testCaseDefinitionList.getSetCollectionItemList().size(); i++) {
-            if (!MontiArcMill.typeDispatcher()
-              .isSetExpressionsASTSetValueItem(testCaseDefinitionList
-                .getSetCollectionItem(i))) {
+            if (!(testCaseDefinitionList.getSetCollectionItem(i) instanceof ASTSetValueItem valueItem)) {
               Log.error(MontiArcError.UNIT_TEST_CASE_PARAMETER_MISCONFIGURED.format(testIndex, i),
                 testCaseDefinitionList.getSetCollectionItem(i).get_SourcePositionStart(),
                 testCaseDefinitionList.getSetCollectionItem(i).get_SourcePositionEnd());
@@ -133,9 +117,7 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
             }
 
             // Check type fits
-            ASTExpression assignment = MontiArcMill.typeDispatcher()
-              .asSetExpressionsASTSetValueItem(testCaseDefinitionList
-                .getSetCollectionItem(i)).getExpression();
+            ASTExpression assignment = valueItem.getExpression();
             SymTypeExpression parameterType = node.getHead().getArcParameter(i).getSymbol().getType();
             checkTypeFits(node.getHead().getArcParameter(i).getName(), assignment, parameterType, TypeCheck3.typeOf(assignment, parameterType));
           }
@@ -220,10 +202,10 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
 
   protected void checkTestCountFits(@NotNull ASTStereoValue stereo, int testCount) {
     Preconditions.checkNotNull(stereo);
-    if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
-      && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList()
-      && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size() != testCount) {
-      Log.error(MontiArcError.UNIT_TEST_COUNT_MISMATCH.format(testCount, MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size()),
+    if (stereo.getExpression() instanceof ASTSetEnumeration enumeration
+      && enumeration.isList()
+      && enumeration.getSetCollectionItemList().size() != testCount) {
+      Log.error(MontiArcError.UNIT_TEST_COUNT_MISMATCH.format(testCount, enumeration.getSetCollectionItemList().size()),
         stereo.get_SourcePositionStart(), stereo.get_SourcePositionEnd());
     }
   }
@@ -235,8 +217,8 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
     Preconditions.checkNotNull(stereo);
     Preconditions.checkNotNull(type);
 
-    if (MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression())
-      && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList()) {
+    if (stereo.getExpression() instanceof ASTSetEnumeration enumeration
+      && enumeration.isList()) {
 
       // The stereo value should be of type List<X> where X is the type of the
       // corresponding parameter. We create the target type for the stereo
@@ -278,12 +260,15 @@ public class MaUnitTestConfiguredCorrectly implements ArcBasisASTArcComponentTyp
       node.getStereotype().getValuesList().stream()
         .filter(sv -> names.contains(sv.getName()))
         .filter(ASTStereoValue::isPresentExpression)
-        .filter(stereo -> MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()) && MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).isList())
-        .map(stereo -> MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size())
+        .map(ASTStereoValue::getExpression)
+        .filter(ASTSetEnumeration.class::isInstance)
+        .map(ASTSetEnumeration.class::cast)
+        .filter(ASTSetEnumeration::isList)
+        .map(enumeration -> enumeration.getSetCollectionItemList().size())
         .reduce(1, Math::max),
       getStereo(node, "test").map(stereo -> {
-        if (stereo.isPresentExpression() && MontiArcMill.typeDispatcher().isSetExpressionsASTSetEnumeration(stereo.getExpression()))
-          return MontiArcMill.typeDispatcher().asSetExpressionsASTSetEnumeration(stereo.getExpression()).getSetCollectionItemList().size();
+        if (stereo.isPresentExpression() && stereo.getExpression() instanceof ASTSetEnumeration enumeration)
+          return enumeration.getSetCollectionItemList().size();
         else return 1;
       }).orElse(1)
     );

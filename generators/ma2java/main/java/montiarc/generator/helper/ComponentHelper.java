@@ -20,7 +20,6 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.types.check.CompKindExpression;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypePrimitive;
-import montiarc.MontiArcMill;
 import montiarc.generator.MA2JavaFullPrettyPrinter;
 
 import java.util.ArrayList;
@@ -133,8 +132,7 @@ public class ComponentHelper {
 
 
     //can only print default parameters if ASTNode exists.
-    if(comp.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTArcComponentType(comp.getAstNode())){
-      final ASTArcComponentType astNode = MontiArcMill.typeDispatcher().asArcBasisASTArcComponentType(comp.getAstNode());
+    if(comp.isPresentAstNode() && comp.getAstNode() instanceof ASTArcComponentType astNode){
 
       final List<ASTArcParameter> parameters = astNode.getHead().getArcParameterList();
 
@@ -174,8 +172,8 @@ public class ComponentHelper {
   public static String getSubComponentTypeName(SubcomponentSymbol instance) {
     String result = "";
     ComponentTypeSymbol componentTypeReference = instance.getType().getTypeInfo();
-    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate) {
-      componentTypeReference = ((ComponentTypeSymbolSurrogate) componentTypeReference).lazyLoadDelegate();
+    if (componentTypeReference instanceof ComponentTypeSymbolSurrogate surrogate) {
+      componentTypeReference = surrogate.lazyLoadDelegate();
     }
     String packageName = ComponentHelper.printPackageWithoutKeyWordAndSemicolon(componentTypeReference);
     if (packageName != null && !packageName.equals("")) {

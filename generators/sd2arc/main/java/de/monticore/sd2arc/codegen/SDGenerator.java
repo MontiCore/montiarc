@@ -6,7 +6,6 @@ import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
 import de.monticore.generating.templateengine.GlobalExtensionManagement;
 import de.monticore.io.FileReaderWriter;
-import de.monticore.lang.sd4components.SD4ComponentsMill;
 import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
 import de.monticore.symbols.basicsymbols._symboltable.DiagramSymbol;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -34,7 +33,6 @@ public class SDGenerator {
     setup.setOutputDirectory(targetDir.toFile());
     GlobalExtensionManagement glex = new GlobalExtensionManagement();
     glex.setGlobalValue("helper", new SDHelper());
-    glex.setGlobalValue("typeDispatcher", SD4ComponentsMill.typeDispatcher());
     glex.setGlobalValue("prettyPrinter", new SD2ArcPrinter());
     glex.setGlobalValue("arcPrinter", new Arc2ArcPrinter());
     setup.setGlex(glex);

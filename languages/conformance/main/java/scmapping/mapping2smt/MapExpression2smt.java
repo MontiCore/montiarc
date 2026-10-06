@@ -131,13 +131,13 @@ public class MapExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
   @Override
   public Z3ExprAdapter convertExpr(ASTExpression node) {
     Z3ExprAdapter res;
-    if (node instanceof ASTEqualsExpression) {
-      ASTExpression left = ((ASTEqualsExpression) node).getLeft();
-      ASTExpression right = ((ASTEqualsExpression) node).getRight();
+    if (node instanceof ASTEqualsExpression eq) {
+      ASTExpression left = eq.getLeft();
+      ASTExpression right = eq.getRight();
       res = convertEq(left, right);
-    } else if (node instanceof ASTNotEqualsExpression) {
-      ASTExpression left = ((ASTNotEqualsExpression) node).getLeft();
-      ASTExpression right = ((ASTNotEqualsExpression) node).getRight();
+    } else if (node instanceof ASTNotEqualsExpression neq) {
+      ASTExpression left = neq.getLeft();
+      ASTExpression right = neq.getRight();
       res = eFactory.mkNot(convertEq(left, right));
     } else {
       res = super.convertExpr(node);
@@ -147,10 +147,10 @@ public class MapExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
 
   public Z3ExprAdapter convertEq(ASTExpression left, ASTExpression right) {
     // case: state == Known
-    if (right instanceof ASTNameExpression) {
+    if (right instanceof ASTNameExpression nameExpr) {
 
       Optional<SCStateSymbol> stateSym =
-          resolveState(((ASTNameExpression) right).getName(), smtAut.getComponent());
+          resolveState(nameExpr.getName(), smtAut.getComponent());
       if (stateSym.isPresent()) {
         BoolExpr expr = smtAut.checkConstructor(state, stateSym.get());
         return new Z3ExprAdapter(expr, tFactory.mkBoolType());
@@ -159,9 +159,9 @@ public class MapExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
 
     Z3ExprAdapter cond = eFactory.mkBool(true);
     // case: port == value or var == value
-    if (left instanceof ASTNameExpression) {
+    if (left instanceof ASTNameExpression nameExpr) {
       Optional<PortSymbol> portSym =
-          resolvePort(((ASTNameExpression) left).getName(), smtAut.getComponent());
+          resolvePort(nameExpr.getName(), smtAut.getComponent());
       if (portSym.isPresent() && portSym.get().isIncoming()) {
         BoolExpr expr = smtAut.checkConstructor(getInput(), portSym.get());
         cond = new Z3ExprAdapter(expr, tFactory.mkBoolType());
@@ -171,8 +171,8 @@ public class MapExpression2smt extends OCLExprConverter<Z3ExprAdapter> {
     Z3ExprAdapter leftExpr = convertExpr(left);
     Z3ExprAdapter rightExpr;
 
-    if (right instanceof ASTSeqExpression) {
-      rightExpr = convertSeq((ASTSeqExpression) right, ctx.mkSeqSort(leftExpr.getType().getSort()));
+    if (right instanceof ASTSeqExpression seqExpr) {
+      rightExpr = convertSeq(seqExpr, ctx.mkSeqSort(leftExpr.getType().getSort()));
     } else {
       rightExpr = convertExpr(right);
     }

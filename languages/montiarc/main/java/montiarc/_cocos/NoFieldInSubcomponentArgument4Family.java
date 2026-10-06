@@ -155,7 +155,6 @@ public class NoFieldInSubcomponentArgument4Family implements ArcBasisASTArcCompo
 
   protected boolean isField(@NotNull VariableSymbol symbol) {
     Preconditions.checkNotNull(symbol);
-    return symbol.isPresentAstNode()
-      && MontiArcMill.typeDispatcher().isArcBasisASTArcField(symbol.getAstNode());
+    return symbol.isPresentAstNode() && symbol.getAstNode() instanceof ASTArcField;
   }
 }

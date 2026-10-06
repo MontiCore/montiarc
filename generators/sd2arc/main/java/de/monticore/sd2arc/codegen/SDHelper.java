@@ -4,12 +4,16 @@ package de.monticore.sd2arc.codegen;
 import arcbasis._ast.ASTArcElement;
 import arcbasis._ast.ASTConnectorTOP;
 import arcbasis._ast.ASTPortAccess;
-import de.monticore.lang.sd4components.SD4ComponentsMill;
+import de.monticore.lang.sd4components._ast.ASTSDCondition;
+import de.monticore.lang.sd4components._ast.ASTSDIncompleteAction;
 import de.monticore.lang.sd4components._ast.ASTSDComponent;
+import de.monticore.lang.sd4components._ast.ASTSDMessage;
 import de.monticore.lang.sd4components._ast.ASTSDPort;
 import de.monticore.lang.sd4components._ast.ASTSDVariableDeclaration;
 import de.monticore.lang.sd4components._symboltable.SD4ComponentsScope;
 import de.monticore.lang.sdbasis._ast.ASTSDSendMessage;
+import de.monticore.lang.sdbasis._ast.ASTSDCompleteModifier;
+import de.monticore.lang.sdbasis._ast.ASTSDVisibleModifier;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.sd2arc._ast.ASTSDHiddenFreeModifier;
 import de.monticore.sd2arc.trafo.EmbeddingComponent;
@@ -30,25 +34,41 @@ public class SDHelper {
 
   public static long defaultTicks = 9999;
 
+  public boolean isSendMessage(Object element) {
+    return element instanceof ASTSDSendMessage;
+  }
+
+  public boolean isMessage(Object action) {
+    return action instanceof ASTSDMessage;
+  }
+
+  public boolean isIncompleteAction(Object action) {
+    return action instanceof ASTSDIncompleteAction;
+  }
+
+  public boolean isCondition(Object element) {
+    return element instanceof ASTSDCondition;
+  }
+
+  public boolean isVariableDeclaration(Object element) {
+    return element instanceof ASTSDVariableDeclaration;
+  }
+
   public List<ASTSDComponent> getVisibleComponents(ASTSequenceDiagram diagram) {
     return diagram.streamSDObjects()
-      .filter(SD4ComponentsMill.typeDispatcher()::isSD4ComponentsASTSDComponent)
-      .map(SD4ComponentsMill.typeDispatcher()::asSD4ComponentsASTSDComponent)
+      .filter(ASTSDComponent.class::isInstance)
+      .map(ASTSDComponent.class::cast)
       .collect(Collectors.toList());
   }
 
   public Map<String, String> getImpliedConnectors(ASTSequenceDiagram diagram) {
     Map<String, String> targetSource = new HashMap<>();
     for (ASTSDSendMessage connector : diagram.getSDBody().streamSDElements()
-      .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
-      .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
+      .filter(ASTSDSendMessage.class::isInstance)
+      .map(ASTSDSendMessage.class::cast)
       .toList()) {
-      if (connector.isPresentSDTarget()
-        && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
-        && connector.isPresentSDSource()
-        && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDSource())) {
-        ASTSDPort astSource = SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(connector.getSDSource());
-        ASTSDPort astTarget = SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(connector.getSDTarget());
+      if (connector.isPresentSDTarget() && connector.getSDTarget() instanceof ASTSDPort astTarget
+        && connector.isPresentSDSource() && connector.getSDSource() instanceof ASTSDPort astSource) {
         String source = astSource.getName() + "." + astSource.getPort();
         String target = astTarget.getName() + "." + astTarget.getPort();
 
@@ -64,8 +84,8 @@ public class SDHelper {
 
   public List<ASTSDVariableDeclaration> getVariableDeclarations(ASTSequenceDiagram diagram) {
     return diagram.getSDBody().streamSDElements()
-      .filter(SD4ComponentsMill.typeDispatcher()::isSD4ComponentsASTSDVariableDeclaration)
-      .map(SD4ComponentsMill.typeDispatcher()::asSD4ComponentsASTSDVariableDeclaration)
+      .filter(ASTSDVariableDeclaration.class::isInstance)
+      .map(ASTSDVariableDeclaration.class::cast)
       .collect(Collectors.toList());
   }
 
@@ -100,41 +120,39 @@ public class SDHelper {
 
   public boolean isPortSourceAtObserveInteractionIndex(int index, ASTSequenceDiagram diagram, ASTSDComponent component, PortSymbol port) {
     ASTSDSendMessage element = diagram.getSDBody().streamSDElements()
-      .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
-      .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
-      .filter(e -> !SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDMessage(e.getSDAction()) || !SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDMessage(e.getSDAction()).isTrigger())
+      .filter(ASTSDSendMessage.class::isInstance)
+      .map(ASTSDSendMessage.class::cast)
+      .filter(e -> !(e.getSDAction() instanceof ASTSDMessage message) || !message.isTrigger())
       .toList().get(index);
 
-    return element.isPresentSDSource()
-      && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(element.getSDSource())
-      && Objects.equals(SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(element.getSDSource()).getName(), component.getName())
-      && Objects.equals(SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(element.getSDSource()).getPort(), port.getName());
+    return element.isPresentSDSource() && element.getSDSource() instanceof ASTSDPort source
+      && Objects.equals(source.getName(), component.getName())
+      && Objects.equals(source.getPort(), port.getName());
   }
 
   public boolean isFree(ASTSequenceDiagram diagram, ASTSDSendMessage interaction) {
-    if (!interaction.isPresentSDSource() || !SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(interaction.getSDSource()))
+    if (!interaction.isPresentSDSource() || !(interaction.getSDSource() instanceof ASTSDPort source))
       return true;
-    ASTSDPort source = SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(interaction.getSDSource());
     Optional<ASTSDComponent> sourceComp = getComponentByName(diagram, source.getName());
     return sourceComp.map(component -> isFree(diagram, component, source.getPortSymbol())).orElse(true);
   }
 
   public boolean isFree(ASTSequenceDiagram diagram, ASTSDComponent component, PortSymbol port) {
     //    c is match-complete.
-    if (component.getSDModifierList().stream().anyMatch(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDCompleteModifier))
+    if (component.getSDModifierList().stream().anyMatch(ASTSDCompleteModifier.class::isInstance))
       return false;
     List<ASTSDComponent> targetComponents = getTargetComponents(diagram, component.getName() + "." + port.getName()).stream()
       .filter(c -> c.streamSDModifiers().noneMatch(m -> m instanceof ASTSDHiddenFreeModifier))
       .toList();
     if (targetComponents.isEmpty()) return true;
     //    c is match-visible, and p is connected to a visible component.
-    if (component.getSDModifierList().stream().anyMatch(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDVisibleModifier))
+    if (component.getSDModifierList().stream().anyMatch(ASTSDVisibleModifier.class::isInstance))
       return false;
     //    p is connected to a match-complete component.
-    if (targetComponents.stream().flatMap(ASTSDComponent::streamSDModifiers).anyMatch(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDCompleteModifier))
+    if (targetComponents.stream().flatMap(ASTSDComponent::streamSDModifiers).anyMatch(ASTSDCompleteModifier.class::isInstance))
       return false;
     //    c is not hidden and p is connected to a match-visible component.
-    if (component.getSDModifierList().stream().noneMatch(m -> m instanceof ASTSDHiddenFreeModifier) && targetComponents.stream().flatMap(ASTSDComponent::streamSDModifiers).anyMatch(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDVisibleModifier))
+    if (component.getSDModifierList().stream().noneMatch(ASTSDHiddenFreeModifier.class::isInstance) && targetComponents.stream().flatMap(ASTSDComponent::streamSDModifiers).anyMatch(ASTSDVisibleModifier.class::isInstance))
       return false;
     return true;
   }

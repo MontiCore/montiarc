@@ -20,13 +20,12 @@ public class ArcBasisTypeContextCalculator extends TypeContextCalculator {
     Optional<TypeSymbol> enclosingType = Optional.empty();
 
     for (IScope scope = enclosingScope; scope != null && enclosingType.isEmpty(); scope = scope.getEnclosingScope()) {
-      //TODO: use TypeDispatcher as soon as it is fixed
-      if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof TypeSymbol) {
+      if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof TypeSymbol typeSymbol) {
         // Default behavior: enclosing scope is type
-        enclosingType = Optional.of((TypeSymbol) scope.getSpanningSymbol());
-      } else if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof ComponentTypeSymbol) {
+        enclosingType = Optional.of(typeSymbol);
+      } else if (scope.isPresentSpanningSymbol() && scope.getSpanningSymbol() instanceof ComponentTypeSymbol componentTypeSymbol) {
         // Enclosing scope is ComponentType
-        enclosingType = Optional.of(new ComponentType2TypeSymbolAdapter((ComponentTypeSymbol) scope.getSpanningSymbol()));
+        enclosingType = Optional.of(new ComponentType2TypeSymbolAdapter(componentTypeSymbol));
       }
     }
 

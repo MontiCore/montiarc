@@ -38,9 +38,9 @@ public class SCZ3TypeFactory extends Z3TypeFactory {
       String typeName = parts[parts.length - 1];
       Optional<ASTCDType> astcdType =
           Optional.ofNullable(CDHelper.getASTCDType(typeName, cd.getCDDefinition()));
-      if (astcdType.isPresent() && astcdType.get() instanceof ASTCDEnum) {
-        Sort sort = getSort.apply((ASTCDEnum) astcdType.get());
-        res = Optional.ofNullable(mkType(astcdType.get().getName(), sort, ExprKind.ENUM));
+      if (astcdType.isPresent() && astcdType.get() instanceof ASTCDEnum cdEnum) {
+        Sort sort = getSort.apply(cdEnum);
+        res = Optional.ofNullable(mkType(cdEnum.getName(), sort, ExprKind.ENUM));
       }
     }
 

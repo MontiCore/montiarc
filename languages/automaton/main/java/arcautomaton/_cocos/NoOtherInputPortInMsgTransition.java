@@ -2,14 +2,13 @@
 package arcautomaton._cocos;
 
 import arcautomaton.ArcAutomatonMill;
+import arcautomaton._ast.ASTMsgEvent;
 import arcautomaton._visitor.ArcAutomatonTraverser;
 import arcautomaton._visitor.NoOtherInputPortInEventContextVisitor;
 import com.google.common.base.Preconditions;
 import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.sctransitions4code._cocos.SCTransitions4CodeASTTransitionBodyCoCo;
 import org.codehaus.commons.nullanalysis.NotNull;
-
-import static arcautomaton.ArcAutomatonMill.typeDispatcher;
 
 /**
  * Checks that transitions triggered by message events do not reference input
@@ -25,10 +24,9 @@ public class NoOtherInputPortInMsgTransition implements SCTransitions4CodeASTTra
   public void check(@NotNull ASTTransitionBody node) {
     Preconditions.checkNotNull(node);
 
-    if (node.isPresentSCEvent()
-      && typeDispatcher().isArcAutomatonASTMsgEvent(node.getSCEvent())) {
+    if (node.isPresentSCEvent() && node.getSCEvent() instanceof ASTMsgEvent messageEvent) {
 
-      String event = typeDispatcher().asArcAutomatonASTMsgEvent(node.getSCEvent()).getName();
+      String event = messageEvent.getName();
       ArcAutomatonTraverser traverser = ArcAutomatonMill.traverser();
       traverser.add4ExpressionsBasis(createVisitor(event));
       node.accept(traverser);

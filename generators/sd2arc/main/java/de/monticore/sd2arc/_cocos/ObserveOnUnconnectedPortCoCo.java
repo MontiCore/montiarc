@@ -2,7 +2,7 @@
 package de.monticore.sd2arc._cocos;
 
 import arcbasis._ast.ASTPortAccess;
-import de.monticore.lang.sd4components.SD4ComponentsMill;
+import de.monticore.lang.sd4components._ast.ASTSDMessage;
 import de.monticore.lang.sd4components._ast.ASTSDPort;
 import de.monticore.lang.sdbasis._ast.ASTSDSendMessage;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
@@ -24,12 +24,13 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
   @Override
   public void check(ASTSequenceDiagram node) {
     List<ASTSDPort> targets = node.getSDBody().streamSDElements()
-      .filter(e -> SD4ComponentsMill.typeDispatcher().isSDBasisASTSDSendMessage(e))
-      .filter(e -> !SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDMessage(SD4ComponentsMill.typeDispatcher().asSDBasisASTSDSendMessage(e).getSDAction()) || !SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDMessage(SD4ComponentsMill.typeDispatcher().asSDBasisASTSDSendMessage(e).getSDAction()).isTrigger())
-      .filter(e -> SD4ComponentsMill.typeDispatcher().asSDBasisASTSDSendMessage(e).isPresentSDTarget())
-      .map(e -> SD4ComponentsMill.typeDispatcher().asSDBasisASTSDSendMessage(e).getSDTarget())
-      .filter(e -> SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(e))
-      .map(e -> SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(e))
+      .filter(ASTSDSendMessage.class::isInstance)
+      .map(ASTSDSendMessage.class::cast)
+      .filter(e -> !(e.getSDAction() instanceof ASTSDMessage message) || !message.isTrigger())
+      .filter(ASTSDSendMessage::isPresentSDTarget)
+      .map(ASTSDSendMessage::getSDTarget)
+      .filter(ASTSDPort.class::isInstance)
+      .map(ASTSDPort.class::cast)
       .toList();
 
     Set<String> connectedPorts = getConnectedPorts(node);
@@ -49,14 +50,11 @@ public class ObserveOnUnconnectedPortCoCo implements SDBasisASTSequenceDiagramCo
     // Get implied connectors
     Set<String> targets = new HashSet<>();
     for (ASTSDSendMessage connector : node.getSDBody().streamSDElements()
-      .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
-      .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
+      .filter(ASTSDSendMessage.class::isInstance)
+      .map(ASTSDSendMessage.class::cast)
       .toList()) {
-      if (connector.isPresentSDTarget()
-        && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
-        && connector.isPresentSDSource()
-        && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDSource())) {
-        ASTSDPort astTarget = SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(connector.getSDTarget());
+      if (connector.isPresentSDTarget() && connector.getSDTarget() instanceof ASTSDPort astTarget
+        && connector.isPresentSDSource() && connector.getSDSource() instanceof ASTSDPort) {
         targets.add(astTarget.getName() + "." + astTarget.getPort());
       }
     }

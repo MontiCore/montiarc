@@ -20,7 +20,6 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
 import variablearc._cocos.util.ExpressionSolverService;
@@ -120,7 +119,7 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
 
       var subVariationPoints = ((IVariableArcComponentTypeSymbol) (sub.getType().getTypeInfo().getAstNode().getSymbol())).getAllVariationPoints();
 
-      var compTypeSymbol = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode());
+      ASTArcComponentType compTypeSymbol = (ASTArcComponentType) sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode();
       var subFeatures = compTypeSymbol.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).toList();
       allFeatures.addAll(subFeatures);
       if (sub.isTypePresent()) {

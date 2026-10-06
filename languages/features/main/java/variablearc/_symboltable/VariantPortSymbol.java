@@ -7,7 +7,6 @@ import arcbasis._ast.ASTPortAccess;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
-import variablearc.VariableArcMill;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +57,7 @@ public class VariantPortSymbol extends PortSymbol {
   protected boolean isHereditaryStronglyCausal() {
     if (!component.isPresentAstNode()) return false;
 
-    ASTArcComponentType astComponent = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(component.getAstNode());
+    ASTArcComponentType astComponent = (ASTArcComponentType) component.getAstNode();
 
     if (this.isOutgoing() && this.component.isAtomic()) {
       // outgoing ports of atomic components are strongly causal if their behavior specification is strongly causal
@@ -77,7 +76,7 @@ public class VariantPortSymbol extends PortSymbol {
       return false;
     }
 
-    ASTArcComponentType astComponent = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(component.getAstNode());
+    ASTArcComponentType astComponent = (ASTArcComponentType) component.getAstNode();
 
     List<List<ASTConnector>> paths = new ArrayList<>();
     paths.add(new ArrayList<>(astComponent.getConnectorsMatchingTarget(this.getName())));

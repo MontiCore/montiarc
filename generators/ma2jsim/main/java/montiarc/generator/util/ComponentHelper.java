@@ -2,6 +2,7 @@
 package montiarc.generator.util;
 
 import arcbasis._ast.ASTArcArgument;
+import arcbasis._ast.ASTArcField;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentBody;
 import arcbasis._ast.ASTComponentInstance;
@@ -159,8 +160,8 @@ public class ComponentHelper {
   }
 
   public ASTExpression getInitialForVariable(VariableSymbol variableSymbol) {
-    if (variableSymbol.isPresentAstNode() && MontiArcMill.typeDispatcher().isArcBasisASTArcField(variableSymbol.getAstNode()))
-      return MontiArcMill.typeDispatcher().asArcBasisASTArcField(variableSymbol.getAstNode()).getInitial();
+    if (variableSymbol.isPresentAstNode() && variableSymbol.getAstNode() instanceof ASTArcField field)
+      return field.getInitial();
     return MontiArcMill.literalExpressionBuilder().setLiteral(MontiArcMill.nullLiteralBuilder().build()).build();
   }
 

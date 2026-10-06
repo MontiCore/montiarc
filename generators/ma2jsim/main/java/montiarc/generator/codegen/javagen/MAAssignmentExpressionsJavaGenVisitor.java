@@ -49,8 +49,8 @@ public class MAAssignmentExpressionsJavaGenVisitor extends AssignmentExpressions
           this.getPrinter().print(String.format("if (%s != null) ", name));
         }
         // calc variant suffix
-        if (port.get() instanceof VariantPortSymbol) {
-          port = port.map(p -> ((VariantPortSymbol) p).getOriginal());
+        if (port.get() instanceof VariantPortSymbol variantPort) {
+          port = Optional.of(variantPort.getOriginal());
         }
         List<PortSymbol> ports = ISymbol.sortSymbolsByPosition(port.get().getEnclosingScope().resolvePortMany(name));
         String suffix = ports.size() <= 1 ? "" : Integer.toString(ports.indexOf(port.get()));

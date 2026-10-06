@@ -81,10 +81,7 @@ public class GlobalVariableTrafo {
       ASTTransitionBody body = (ASTTransitionBody) node.getSCTBody();
 
       if (body.isPresentTransitionAction()) {
-        if (body.getTransitionAction().getMCStatement() instanceof ASTMCJavaBlock) {
-          ASTMCJavaBlock actionBody =
-              (ASTMCJavaBlock) body.getTransitionAction().getMCStatement();
-
+        if (body.getTransitionAction().getMCStatement() instanceof ASTMCJavaBlock actionBody) {
           MontiArcTraverser traverser = MontiArcMill.traverser();
           AssignmentsFilter filter = new AssignmentsFilter(new HashMap<>(actions));
           traverser.add4AssignmentExpressions(filter);

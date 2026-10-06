@@ -9,10 +9,10 @@ import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisHandle
 import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisTraverser;
 import de.monticore.symbols.oosymbols._symboltable.FieldSymbol;
 import de.monticore.symbols.oosymbols._symboltable.IOOSymbolsScope;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
 
 import java.util.Optional;
 
@@ -64,9 +64,9 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
     if (sort.isPresent()) {
       SymTypeExpression type = TypeCheck3.typeOf(node);
       // Handle enum constants
-      if (type.isObjectType() && type.asObjectType().hasTypeInfo() && VariableArcMill.typeDispatcher().isOOSymbolsOOType(
-        type.asObjectType().getTypeInfo()) && VariableArcMill.typeDispatcher().asOOSymbolsOOType(type.asObjectType().getTypeInfo()).isIsEnum()) {
-        IOOSymbolsScope ooScope = VariableArcMill.typeDispatcher().asOOSymbolsOOType(type.asObjectType().getTypeInfo()).getSpannedScope();
+      if (type.isObjectType() && type.asObjectType().hasTypeInfo()
+        && type.asObjectType().getTypeInfo() instanceof OOTypeSymbol ooType && ooType.isIsEnum()) {
+        IOOSymbolsScope ooScope = ooType.getSpannedScope();
         Optional<FieldSymbol> field = ooScope.resolveFieldMany(node.getName()).stream().findFirst();
         if (field.isPresent() && field.get().isIsPublic() && field.get().isIsStatic() && field.get().isIsFinal() && field.get().isIsReadOnly()) {
           this.getResult().setValue(this.getContext().mkInt(ooScope.getLocalFieldSymbols().indexOf(field.get())));

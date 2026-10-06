@@ -534,11 +534,10 @@ public class MAExtractionHelper<T extends Formula> {
       Set<String> elseFeatureList = new HashSet<>();
 
       // Process If-Statement
-      if (varif.getThen() instanceof ASTComponentBody) {
+      if (varif.getThen() instanceof ASTComponentBody body) {
         T newRootName =
           (T) bmgr.makeVariable(root + "_If" + ((varifs.size() > 1) ? ifCounter : ""));
-        List<ASTArcElement> elements =
-          ((ASTComponentBody) varif.getThen()).getArcElementList();
+        List<ASTArcElement> elements = body.getArcElementList();
         featureList = new HashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         ifFeatureList = featureList;
@@ -547,11 +546,10 @@ public class MAExtractionHelper<T extends Formula> {
       }
 
       // Process Else-Statement (is existent)
-      if (varif.isPresentOtherwise() && varif.getThen() instanceof ASTComponentBody) {
+      if (varif.isPresentOtherwise() && varif.getThen() instanceof ASTComponentBody body) {
         T newRootName =
           (T) bmgr.makeVariable(root + "_Else" + ((varifs.size() > 1) ? ifCounter : ""));
-        List<ASTArcElement> elements =
-          ((ASTComponentBody) varif.getThen()).getArcElementList();
+        List<ASTArcElement> elements = body.getArcElementList();
         featureList = new HashSet<>();
         processIfElseBlock(tmpStorageCache, elements, newRootName);
         elseFeatureList = featureList;

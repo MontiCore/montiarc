@@ -657,7 +657,7 @@ public class ComponentTypeSymbolSurrogateTest extends ArcBasisTestBase {
     comp.setAstNode(astComp);
 
     // When
-    Optional<ASTArcBehaviorElement> behaviorOpt = ArcBasisMill.typeDispatcher().asArcBasisASTArcComponentType(surrogate.getAstNode()).getBehavior();
+    Optional<ASTArcBehaviorElement> behaviorOpt = ((ASTArcComponentType) surrogate.getAstNode()).getBehavior();
 
     // Then
     Assertions.assertTrue(behaviorOpt.isPresent(), "Port is not present");

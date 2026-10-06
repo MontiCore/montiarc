@@ -15,7 +15,6 @@ import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Status;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
-import de.monticore.statements.mcvardeclarationstatements.MCVarDeclarationStatementsMill;
 import de.monticore.statements.mcvardeclarationstatements._ast.ASTSimpleInit;
 import de.monticore.statements.mcvardeclarationstatements._ast.ASTVariableDeclarator;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -264,7 +263,10 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
   }
 
   public void check(ASTVariableDeclarator node) {
-    if (!node.isPresentVariableInit() || !(node.getVariableInit() instanceof ASTSimpleInit)) {
+    if (!node.isPresentVariableInit()) {
+      return;
+    }
+    if (!(node.getVariableInit() instanceof ASTSimpleInit simpleInit)) {
       return; // We can only check initializations of the form of expressions (as defined in SimpleInit).
 
     } else if (!node.getDeclarator().isPresentSymbol()) {
@@ -276,9 +278,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
       SymTypeExpression varType = node.getDeclarator().getSymbol().getType();
       SymTypeExpression initType;
 
-      ASTExpression initExpr = MCVarDeclarationStatementsMill.typeDispatcher()
-        .asMCVarDeclarationStatementsASTSimpleInit(node.getVariableInit())
-        .getExpression();
+      ASTExpression initExpr = simpleInit.getExpression();
       initType = TypeCheck3.typeOf(initExpr, varType);
 
       if (initType.isObscureType()) {

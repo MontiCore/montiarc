@@ -200,10 +200,10 @@ public class SMTAutomaton implements ISMTAutomaton {
 
   @Override
   public Expr<?> mkConst(ISymbol constrSymbol, Map<ISymbol, Expr<?>> args) {
-    if (constrSymbol instanceof SCStateSymbol) {
+    if (constrSymbol instanceof SCStateSymbol stateSymbol) {
       Map<VariableSymbol, Expr<?>> sArgs = new HashMap<>();
       args.forEach((key, value) -> sArgs.put((VariableSymbol) key, value));
-      return smtState.mkConst((SCStateSymbol) constrSymbol, sArgs);
+      return smtState.mkConst(stateSymbol, sArgs);
     } else if (SymbolTableUtil.isInPort(constrSymbol)) {
       Map<PortSymbol, Expr<?>> sArgs = new HashMap<>();
       args.forEach((key, value) -> sArgs.put((PortSymbol) key, value));
@@ -237,8 +237,8 @@ public class SMTAutomaton implements ISMTAutomaton {
 
   @Override
   public BoolExpr checkConstructor(Expr<?> expr, ISymbol constrSymbol) {
-    if (constrSymbol instanceof SCStateSymbol) {
-      return smtState.checkConstructor(expr, (SCStateSymbol) constrSymbol);
+    if (constrSymbol instanceof SCStateSymbol stateSymbol) {
+      return smtState.checkConstructor(expr, stateSymbol);
     } else if (SymbolTableUtil.isOutPort(constrSymbol)) {
       return outputPort.checkConstructor(expr, VoidSymbol.getInstance());
     } else if (SymbolTableUtil.isInPort(constrSymbol)) {

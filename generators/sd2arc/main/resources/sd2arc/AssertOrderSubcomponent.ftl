@@ -31,12 +31,12 @@
         entry / {
   <#list ast.getSDBody().getSDElementList() as element>
     <#-- Trigger interaction -->
-    <#if typeDispatcher.isSDBasisASTSDSendMessage(element) && element.isPresentSDTarget() && typeDispatcher.isSD4ComponentsASTSDMessage(element.getSDAction()) && element.getSDAction().isTrigger()>
+    <#if helper.isSendMessage(element) && element.isPresentSDTarget() && helper.isMessage(element.getSDAction()) && element.getSDAction().isTrigger()>
         <#-- TODO in embedded send to all ports this target's source is connected to -->
           ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${prettyPrinter.prettyprint(element.getSDAction().getExpression())};
           port_${element.getSDTarget().getName()}_${element.getSDTarget().getPort()} = ${element.getSDTarget().getName()}_${element.getSDTarget().getPort()};
     <#-- Observe interaction -->
-    <#elseif typeDispatcher.isSDBasisASTSDSendMessage(element) && element.isPresentSDSource()>
+    <#elseif helper.isSendMessage(element) && element.isPresentSDSource()>
       <#if (stateCount == 0)>
         }
       }
@@ -50,18 +50,18 @@
       Init -> S0;
       </#if>
       <#-- Transition to failed state if wrong message and not free -->
-      <#if !typeDispatcher.isSD4ComponentsASTSDIncompleteAction(element.getSDAction()) && helper.isFree(ast, element)>
+      <#if !helper.isIncompleteAction(element.getSDAction()) && helper.isFree(ast, element)>
       S${stateCount} -> Failed [${portName} != (${prettyPrinter.prettyprint(element.getSDAction().getExpression())})] ${portName};
       </#if>
       <#-- Next documented transition -->
-      S${stateCount} -> S${stateCount + 1} <#if !typeDispatcher.isSD4ComponentsASTSDIncompleteAction(element.getSDAction())>[${portName} == (${prettyPrinter.prettyprint(element.getSDAction().getExpression())})]</#if> ${portName} / {
+      S${stateCount} -> S${stateCount + 1} <#if !helper.isIncompleteAction(element.getSDAction())>[${portName} == (${prettyPrinter.prettyprint(element.getSDAction().getExpression())})]</#if> ${portName} / {
       <#assign stateCount = stateCount + 1>
         ${portVarName} = ${portName};
     <#-- Assert statement -->
-    <#elseif typeDispatcher.isSD4ComponentsASTSDCondition(element)>
+    <#elseif helper.isCondition(element)>
         montiarc.maunit.api.Assertions.assertTrue(${prettyPrinter.prettyprint(element.getExpression())});
     <#-- Variable interaction -->
-    <#elseif typeDispatcher.isSD4ComponentsASTSDVariableDeclaration(element)>
+    <#elseif helper.isVariableDeclaration(element)>
         ${element.getName()} = ${prettyPrinter.prettyprint(element.getAssignment())};
     </#if>
   </#list>

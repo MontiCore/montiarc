@@ -19,7 +19,6 @@ import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcFeatureDeclaration;
 import variablearc._ast.ASTVariableArcFullVariantComponentType;
 import variablearc._cocos.util.ExpressionSolverService;
@@ -132,7 +131,7 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
       } else {
         subVariationPoints = ((IVariableArcComponentTypeSymbol) sub.getType().asComponentType().getTypeInfo()).getAllVariationPoints();
         if (sub.isPresentAstNode() && sub.getAstNode().isPresentSymbol() && sub.getAstNode().getSymbol().getType().getTypeInfo().isPresentAstNode()) {
-          compTypeSymbol = VariableArcMill.typeDispatcher().asArcBasisASTArcComponentType(sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode());
+          compTypeSymbol = (ASTArcComponentType) sub.getAstNode().getSymbol().getType().getTypeInfo().getAstNode();
           var subFeatures = compTypeSymbol.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(l -> sub.getFullName() + "." + l.getSymbol().getName()).toList();
           allFeatures.addAll(subFeatures);
         }

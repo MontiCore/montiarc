@@ -3,12 +3,16 @@ package de.monticore.sd2arc.trafo;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentInstantiation;
+import arcbasis._ast.ASTComponentInterface;
+import arcbasis._ast.ASTConnector;
 import de.monticore.lang.sd4components.SD4ComponentsMill;
+import de.monticore.lang.sd4components._ast.ASTSDComponent;
 import de.monticore.lang.sd4components._visitor.SD4ComponentsTraverser;
 import de.monticore.lang.sdbasis._ast.ASTSDArtifact;
 import de.monticore.lang.sdbasis._ast.ASTSDObject;
 import de.monticore.lang.sdbasis._ast.ASTSequenceDiagram;
 import de.monticore.lang.sdbasis._visitor.SDBasisVisitor2;
+import de.monticore.types.mcbasictypes._ast.ASTMCObjectType;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
@@ -58,15 +62,15 @@ public class EmbeddingComponent implements SDBasisVisitor2 {
       // -- remove superfluous arc elements --
       // remove interface
       compilationUnit.getArcComponentType().getBody().getArcElementList()
-        .removeIf(e -> MontiArcMill.typeDispatcher().isArcBasisASTComponentInterface(e));
+        .removeIf(e -> e instanceof ASTComponentInterface);
       // remove connectors from incoming interface ports
       compilationUnit.getArcComponentType().getBody().getArcElementList()
-        .removeIf(e -> MontiArcMill.typeDispatcher().isArcBasisASTConnector(e) && !MontiArcMill.typeDispatcher().asArcBasisASTConnector(e).getSource().isPresentComponent());
+        .removeIf(e -> e instanceof ASTConnector connector && !connector.getSource().isPresentComponent());
       // remove connectors from outgoing interface ports
       compilationUnit.getArcComponentType().getBody().getArcElementList().removeIf(e -> {
-        if (MontiArcMill.typeDispatcher().isArcBasisASTConnector(e)) {
-          MontiArcMill.typeDispatcher().asArcBasisASTConnector(e).getTargetList().removeIf(t -> !t.isPresentComponent());
-          return MontiArcMill.typeDispatcher().asArcBasisASTConnector(e).getTargetList().isEmpty();
+        if (e instanceof ASTConnector connector) {
+          connector.getTargetList().removeIf(t -> !t.isPresentComponent());
+          return connector.getTargetList().isEmpty();
         }
         return false;
       });
@@ -82,10 +86,10 @@ public class EmbeddingComponent implements SDBasisVisitor2 {
 
       // Inject component type
       for (ASTSDObject o : node.getSDObjectList()) {
-        if (SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDComponent(o) && !o.isPresentMCObjectType()) {
+        if (o instanceof ASTSDComponent component && !component.isPresentMCObjectType()) {
           for (ASTComponentInstantiation instantiation : compilationUnit.getArcComponentType().getSubComponentInstantiations()) {
-            if (instantiation.getInstancesNames().contains(o.getName()) && SD4ComponentsMill.typeDispatcher().isMCBasicTypesASTMCObjectType(instantiation.getMCType())) {
-              SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDComponent(o).setMCObjectType(SD4ComponentsMill.typeDispatcher().asMCBasicTypesASTMCObjectType(instantiation.getMCType()));
+            if (instantiation.getInstancesNames().contains(o.getName()) && instantiation.getMCType() instanceof ASTMCObjectType objectType) {
+              component.setMCObjectType(objectType);
               break;
             }
           }

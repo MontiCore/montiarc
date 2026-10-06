@@ -86,15 +86,11 @@ public class CompleteInteractionsTrafo implements SDBasisVisitor2 {
   protected Map<String, String> getImpliedConnectors() {
     Map<String, String> targetSource = new HashMap<>();
     for (ASTSDSendMessage connector : currentDiagram.getSDBody().streamSDElements()
-      .filter(SD4ComponentsMill.typeDispatcher()::isSDBasisASTSDSendMessage)
-      .map(SD4ComponentsMill.typeDispatcher()::asSDBasisASTSDSendMessage)
+      .filter(ASTSDSendMessage.class::isInstance)
+      .map(ASTSDSendMessage.class::cast)
       .toList()) {
-      if (connector.isPresentSDTarget()
-        && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDTarget())
-        && connector.isPresentSDSource()
-        && SD4ComponentsMill.typeDispatcher().isSD4ComponentsASTSDPort(connector.getSDSource())) {
-        ASTSDPort astSource = SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(connector.getSDSource());
-        ASTSDPort astTarget = SD4ComponentsMill.typeDispatcher().asSD4ComponentsASTSDPort(connector.getSDTarget());
+      if (connector.isPresentSDTarget() && connector.getSDTarget() instanceof ASTSDPort astTarget
+        && connector.isPresentSDSource() && connector.getSDSource() instanceof ASTSDPort astSource) {
         String source = astSource.getName() + "." + astSource.getPort();
         String target = astTarget.getName() + "." + astTarget.getPort();
 
