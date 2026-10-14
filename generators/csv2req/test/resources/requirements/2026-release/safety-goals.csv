@@ -1,0 +1,2 @@
+ID,Title,Text,Type,Priority,Source,Status
+SG.1,Safe state,The system shall reach a safe state on failure.,Safety,High,Hazard Analysis,Approved

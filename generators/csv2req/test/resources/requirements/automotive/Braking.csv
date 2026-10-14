@@ -1,0 +1,4 @@
+ID,Title,Text,Type,Priority,Source,Status
+REQ-101,Emergency braking,"The vehicle shall brake if an obstacle is detected, regardless of the driver input.",Functional,High,Safety Analysis,Approved
+REQ-102,"Brake light ""on""","The brake light shall be on
+while the vehicle brakes.",Functional,Medium,Regulation,Draft

@@ -1,0 +1,3 @@
+ID,Title,Text,Type,Priority,Source,Status
+REQ-001,Example requirement,The system shall <do something>.,Functional,High,Stakeholder,Draft
+REQ-002,Response time,The system shall respond within 100 ms.,Non-Functional,Medium,Architect,Approved
