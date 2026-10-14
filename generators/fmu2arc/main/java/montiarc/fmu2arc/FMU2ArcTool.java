@@ -1,8 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarc.generator;
+package montiarc.fmu2arc;
 
 import com.google.common.base.Preconditions;
-import de.montiarc.generator.codegen.FMU2ArcGen;
 import de.monticore.io.FileReaderWriter;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
@@ -13,6 +12,7 @@ import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTool.*;
 import montiarc._symboltable.IMontiArcArtifactScope;
+import montiarc.fmu2arc.codegen.FMU2ArcGen;
 import montiarc.util.MontiArcError;
 import no.ntnu.ihb.fmi4j.importer.fmi2.*;
 import no.ntnu.ihb.fmi4j.*;

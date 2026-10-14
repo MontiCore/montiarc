@@ -13,7 +13,7 @@ import org.gradle.api.tasks.TaskProvider
 
 const val TOOL_CLASSPATH_CONFIG_NAME = "fmu2arcToolClasspath"
 
-const val FMU2ARC_TOOL_CLASS = "de.montiarc.generator.FMU2ArcTool"
+const val FMU2ARC_TOOL_CLASS = "montiarc.fmu2arc.FMU2ArcTool"
 
 const val MAVEN_GENERATOR_PROJECT_REF = "montiarc.generators:fmu2arc:${VERSION}"
 

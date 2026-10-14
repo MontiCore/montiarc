@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarc.generator;
+package montiarc.fmu2arc;
 
 import de.se_rwth.commons.logging.Log;
 import org.apache.commons.io.FileUtils;

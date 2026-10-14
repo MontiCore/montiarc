@@ -1,5 +1,5 @@
 /* (c) https://github.com/MontiCore/monticore */
-package de.montiarc.generator.codegen;
+package montiarc.fmu2arc.codegen;
 
 import de.monticore.generating.GeneratorEngine;
 import de.monticore.generating.GeneratorSetup;
