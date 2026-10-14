@@ -1,0 +1,5 @@
+featurediagram SimpleExcludes {
+  SimpleExcludes->a?&b?;
+  a excludes b;
+
+}

@@ -1,0 +1,7 @@
+featurediagram CarExample {
+  CarExample->car&body&engine&gear&powerLocks?;
+  powerLocks->keylessEntry?;
+  CarExample->electric|gas;
+  CarExample->manual^automatic;
+
+}

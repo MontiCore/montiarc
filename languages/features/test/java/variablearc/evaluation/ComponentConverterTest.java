@@ -147,8 +147,7 @@ public class ComponentConverterTest extends VariableArcTestBase {
     // Then
     Assertions.assertEquals(3, exprs.getExpressions().size());
     Assertions.assertIterableEquals(Collections.emptyList(), exprs.getNegatedConjunctions());
-    Assertions.assertEquals(1, visited.size());
-    Assertions.assertTrue(visited.contains(subcomponent.getType().getTypeInfo()));
+    Assertions.assertIterableEquals(Collections.emptyList(), visited, "Visited differs");
     // Assert first expression
     Assertions.assertEquals(Optional.empty(), exprs.getExpressions().get(0).getPrefix());
     Assertions.assertTrue(getTrueExpression().deepEquals(exprs.getExpressions().get(0).getAstExpression()));
@@ -160,5 +159,35 @@ public class ComponentConverterTest extends VariableArcTestBase {
     // Assert third expression
     Assertions.assertEquals(Optional.of("comp1"), exprs.getExpressions().get(2).getPrefix());
     Assertions.assertTrue(getNameExpression("a").deepEquals(exprs.getExpressions().get(2).getAstExpression()));
+  }
+
+  @Test
+  public void convertComponentWithSubcomponentsOfSameType() {
+    // Given
+    ComponentConverter converter = new ComponentConverter();
+
+    ComponentTypeSymbol subType = createComponentTypeSymbolWithVariableConstraint("a", Collections.emptyList()).getTypeInfo();
+    SubcomponentSymbol subcomponent1 = createInstance("comp1", subType);
+    SubcomponentSymbol subcomponent2 = createInstance("comp2", subType);
+
+    IVariableArcComponentTypeSymbol component = createComponentTypeSymbolWithTrueConstraint(List.of(
+      subcomponent1, subcomponent2
+    ));
+    HashSet<ComponentTypeSymbol> visited = new HashSet<>();
+
+    ArcBasisScopesGenitorP2 scopesGenP2 = new ArcBasisScopesGenitorP2();
+    for (SubcomponentSymbol subcomponentSymbol : component.getTypeInfo().getSubcomponents()) {
+      scopesGenP2.visit(subcomponentSymbol);
+    }
+
+    // When
+    ExpressionSet exprs = converter.convert(component, visited);
+
+    // Then: the parameter binding and the constraint of each subcomponent
+    Assertions.assertEquals(5, exprs.getExpressions().size());
+    Assertions.assertIterableEquals(Collections.emptyList(), visited, "Visited differs");
+    Assertions.assertEquals(
+      List.of(Optional.empty(), Optional.of("comp1"), Optional.of("comp1"), Optional.of("comp2"), Optional.of("comp2")),
+      exprs.getExpressions().stream().map(Expression::getPrefix).toList());
   }
 }

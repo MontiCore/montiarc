@@ -1,0 +1,6 @@
+featurediagram ComplexImplies {
+  ComplexImplies->a?&b?&c?;
+  a requires b;
+  a requires c;
+
+}

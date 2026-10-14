@@ -36,7 +36,7 @@ public class ComponentConverter {
 
   /**
    * @param componentTypeSymbol the component which constraints are calculated
-   * @param visited             already visited components (used to detect circles)
+   * @param visited             components on the path from the root to this component (used to detect circles)
    * @return the expression set of all the component's constraints
    */
   public ExpressionSet convert(@NotNull IVariableArcComponentTypeSymbol componentTypeSymbol, @NotNull Collection<ComponentTypeSymbol> visited) {

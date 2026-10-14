@@ -1,0 +1,4 @@
+featurediagram SimpleSubcomponentFeatures {
+  SimpleSubcomponentFeatures->a;
+
+}

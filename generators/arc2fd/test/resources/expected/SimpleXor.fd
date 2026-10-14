@@ -1,0 +1,4 @@
+featurediagram SimpleXor {
+  SimpleXor->a^b;
+
+}

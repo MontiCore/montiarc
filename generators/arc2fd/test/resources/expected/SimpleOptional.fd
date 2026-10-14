@@ -1,0 +1,4 @@
+featurediagram SimpleOptional {
+  SimpleOptional->a?;
+
+}

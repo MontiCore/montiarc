@@ -1,0 +1,4 @@
+featurediagram Twice {
+  Twice->p1$f&p2$f&g?;
+
+}

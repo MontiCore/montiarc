@@ -36,6 +36,8 @@ gradle.beforeProject {
       // The montiarc gradle-plugins declare external dependencies.
       // We substitute these with local project dependencies here
       // so that tests and applications run on the latest local changes.
+      substitute(module("montiarc.generators:arc2fd"))
+        .using(project(":generators:arc2fd"))
       substitute(module("montiarc.generators:cd2pojo"))
         .using(project(":generators:cd2pojo"))
       substitute(module("montiarc.generators:ma2java"))

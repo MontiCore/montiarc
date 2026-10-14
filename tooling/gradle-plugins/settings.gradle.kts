@@ -16,6 +16,7 @@ pluginManagement {
 
 rootProject.name = "gradle-plugins"
 
+include(":arc2fd")
 include(":cd2pojo")
 include(":cd4ma-dependencies")
 include(":fmu2arc")

@@ -1,0 +1,5 @@
+featurediagram Derived {
+  x->y?;
+  Derived->x|z;
+
+}

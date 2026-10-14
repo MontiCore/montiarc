@@ -1,0 +1,5 @@
+featurediagram ComplexSubcomponentFeatures {
+  ComplexSubcomponentFeatures->b?;
+  b->a?;
+
+}

@@ -1,0 +1,4 @@
+featurediagram ComplexXor {
+  ComplexXor->a^b;
+
+}

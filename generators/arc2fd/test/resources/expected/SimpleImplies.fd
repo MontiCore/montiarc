@@ -1,0 +1,5 @@
+featurediagram SimpleImplies {
+  SimpleImplies->b?;
+  b->a?;
+
+}

@@ -1,0 +1,4 @@
+featurediagram SimpleOr {
+  SimpleOr->a|b;
+
+}

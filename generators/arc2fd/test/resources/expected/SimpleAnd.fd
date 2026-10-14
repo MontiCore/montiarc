@@ -1,0 +1,4 @@
+featurediagram SimpleAnd {
+  SimpleAnd->a&b;
+
+}

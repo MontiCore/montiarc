@@ -7,6 +7,10 @@ plugins {
 
 tasks.test {
   useJUnitPlatform()
+  testLogging {
+    events("passed", "skipped", "failed")
+    exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+  }
 }
 
 dependencies {
@@ -14,16 +18,15 @@ dependencies {
 
   implementation(libs.janino)
   implementation(libs.guava)
-  implementation(libs.smt)
+  implementation(seLibs.mc.fd)
+  implementation(libs.z3)
 
   testImplementation(testFixtures(project(":languages:basis")))
-  testImplementation(seLibs.mc.fd)
 }
 
 tasks.shadowJar {
-  minimize()
   manifest {
-    attributes["Main-Class"] = "montiarc.arc2fd.FDGenerator"
+    attributes["Main-Class"] = "montiarc.arc2fd.Arc2FDTool"
   }
   isZip64 = true
   archiveClassifier.set("mc-tool")
