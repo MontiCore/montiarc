@@ -2,6 +2,7 @@
 package variablearc._cocos.util;
 
 import arcbasis._ast.ASTArcComponentType;
+import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
@@ -13,6 +14,9 @@ import de.monticore.expressions.commonexpressions._ast.ASTLogicalNotExpression;
 import de.monticore.expressions.commonexpressions._symboltable.ICommonExpressionsScope;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
+import de.monticore.literals.mcliteralsbasis._ast.ASTLiteral;
+import de.monticore.literals.mcliteralsbasis._visitor.MCLiteralsBasisVisitor2;
 import variablearc.VariableArcMill;
 import variablearc._visitor.VariableArcTraverser;
 import variablearc.evaluation.ExpressionSet;
@@ -42,10 +46,12 @@ public class VariationConditionHelper {
     for (Expression expr : originalExpressions) {
       saveFieldAccessScopesFromExpression(expr.getAstExpression());
       Expression copiedExpression;
+      ASTExpression astCopy = expr.getAstExpression().deepClone();
+      copyEnclosingScopes(expr.getAstExpression(), astCopy);
       if (expr instanceof NegatedExpression) {
-        copiedExpression = new NegatedExpression(expr.getAstExpression().deepClone());
+        copiedExpression = new NegatedExpression(astCopy);
       } else {
-        copiedExpression = new Expression(expr.getAstExpression().deepClone());
+        copiedExpression = new Expression(astCopy);
       }
       expr.getAstExpression().accept(traverser);
       copiedExpression.getAstExpression().accept(traverser);
@@ -54,6 +60,41 @@ public class VariationConditionHelper {
     changeContextNameExpression.clearScopeMap();
 
     return new ExpressionSet(expressionCopies);
+  }
+
+  protected static void copyEnclosingScopes(ASTExpression original, ASTExpression copy) {
+    List<ASTExpression> originalExpressions = new ArrayList<>();
+    List<ASTLiteral> originalLiterals = new ArrayList<>();
+    collectNodes(original, originalExpressions, originalLiterals);
+    List<ASTExpression> copiedExpressions = new ArrayList<>();
+    List<ASTLiteral> copiedLiterals = new ArrayList<>();
+    collectNodes(copy, copiedExpressions, copiedLiterals);
+    Preconditions.checkState(originalExpressions.size() == copiedExpressions.size());
+    Preconditions.checkState(originalLiterals.size() == copiedLiterals.size());
+
+    for (int i = 0; i < originalExpressions.size(); i++) {
+      copiedExpressions.get(i).setEnclosingScope(originalExpressions.get(i).getEnclosingScope());
+    }
+    for (int i = 0; i < originalLiterals.size(); i++) {
+      copiedLiterals.get(i).setEnclosingScope(originalLiterals.get(i).getEnclosingScope());
+    }
+  }
+
+  protected static void collectNodes(ASTExpression expr, List<ASTExpression> expressions, List<ASTLiteral> literals) {
+    VariableArcTraverser traverser = VariableArcMill.inheritanceTraverser();
+    traverser.add4ExpressionsBasis(new ExpressionsBasisVisitor2() {
+      @Override
+      public void visit(ASTExpression node) {
+        expressions.add(node);
+      }
+    });
+    traverser.add4MCLiteralsBasis(new MCLiteralsBasisVisitor2() {
+      @Override
+      public void visit(ASTLiteral node) {
+        literals.add(node);
+      }
+    });
+    expr.accept(traverser);
   }
 
   private static void saveFieldAccessScopesFromExpression(ASTExpression expr) {
