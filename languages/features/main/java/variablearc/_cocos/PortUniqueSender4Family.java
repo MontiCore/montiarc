@@ -72,6 +72,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
 
       connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
       allConnectors.addAll(connectorConditions.keySet());
+      allConnectors.sort(Comparator.comparing(ASTConnector::get_SourcePositionStart));
 
       for (Map.Entry<ASTArcPort, BoolExpr> entry : ((ASTVariableArcFullVariantComponentType) node).getPortConditions().entrySet()) {
         portConditions.put(entry.getKey(), entry.getValue());
@@ -153,7 +154,7 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
 
       for (String connectorName : connectorNames) {
         String portName = connectorName.substring("connectorTo_".length());
-        portNameConnectorMap.computeIfAbsent(portName, k -> new HashSet<>()).add(connector);
+        portNameConnectorMap.computeIfAbsent(portName, k -> new LinkedHashSet<>()).add(connector);
       }
     }
 
@@ -197,9 +198,17 @@ public class PortUniqueSender4Family implements ArcBasisASTArcComponentTypeCoCo 
         for (int k = 0; k < violationsCount; k++) {
           ASTConnector violatingConnector = connectors.stream().findFirst().isPresent() ? connectors.stream().findFirst().get() : null;
           if (violatingConnector != null) {
-            Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName), violatingConnector.get_SourcePositionStart(), violatingConnector.get_SourcePositionEnd());
+            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList)) {
+              Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName), violatingConnector.get_SourcePositionStart(), violatingConnector.get_SourcePositionEnd());
+            } else {
+              Log.warn(ArcError.PORT_MULTIPLE_SENDER.format(portName), violatingConnector.get_SourcePositionStart(), violatingConnector.get_SourcePositionEnd());
+            }
           } else {
-            Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName), null, null);
+            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList)) {
+              Log.error(ArcError.PORT_MULTIPLE_SENDER.format(portName), null, null);
+            } else {
+              Log.warn(ArcError.PORT_MULTIPLE_SENDER.format(portName), null, null);
+            }
           }
         }
       }

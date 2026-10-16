@@ -75,8 +75,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
   @Override
   public void handle(@NotNull ASTCallExpression node) {
     Preconditions.checkNotNull(node);
-    this.getResult().clear();
-    this.getResult().markFailure(node, "method calls are not supported in this context");
+    this.deriveSMTExpr.setUnknown(node);
   }
 
   @Override
@@ -110,9 +109,6 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
         } else {
           this.getResult().setValue(this.getContext().mkConst(prefix + getExprAsQName(node), sort.get()));
         }
-      } else {
-        this.getResult().clear();
-        this.getResult().markFailure(node, "field accesses of this type cannot be encoded as an SMT expression");
       }
     }
   }
@@ -150,7 +146,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
       this.getResult()
         .setValue(this.getContext().mkMul(this.getContext().mkInt(-1), this.getResult().getValueAsArith().get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -161,7 +157,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (this.getResult().getValueAsBool().isPresent()) {
       this.getResult().setValue(this.getContext().mkNot(this.getResult().getValueAsBool().get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -172,7 +168,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (this.getResult().getValueAsBool().isPresent()) {
       this.getResult().setValue(this.getContext().mkNot(this.getResult().getValueAsBool().get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -188,7 +184,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkMul(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -204,7 +200,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkDiv(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -220,7 +216,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkMod(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -236,7 +232,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkAdd(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -252,7 +248,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkSub(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -268,7 +264,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkLe(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -284,7 +280,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkGe(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -300,7 +296,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkLt(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -316,7 +312,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkGt(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -332,7 +328,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkEq(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -348,7 +344,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkNot(this.getContext().mkEq(left.get(), right.get())));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -364,7 +360,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkAnd(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -380,7 +376,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (left.isPresent() && right.isPresent()) {
       this.getResult().setValue(this.getContext().mkOr(left.get(), right.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node, this.getContext().getBoolSort());
     }
   }
 
@@ -396,7 +392,7 @@ public class CommonExpressions2SMT implements CommonExpressionsHandler {
     if (condition.isPresent() && trueExpr.isPresent() && falseExpr.isPresent()) {
       this.getResult().setValue(this.getContext().mkITE(condition.get(), trueExpr.get(), falseExpr.get()));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 }

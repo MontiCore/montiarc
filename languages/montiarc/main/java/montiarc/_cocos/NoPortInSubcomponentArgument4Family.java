@@ -109,7 +109,11 @@ public class NoPortInSubcomponentArgument4Family implements ArcBasisASTArcCompon
               componentEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(componentEntryExpressionList) == Status.SATISFIABLE) {
                 SourcePosition sourcePosition = argument.getExpression().get_SourcePositionStart();
-                Log.error(PORT_REF_IN_STATIC_CONTEXT.format(componentEntry.getKey().getName()), sourcePosition);
+                if (ExpressionSolverService.isSatisfiableForAllUnknownValues(componentEntryExpressionList)) {
+                  Log.error(PORT_REF_IN_STATIC_CONTEXT.format(componentEntry.getKey().getName()), sourcePosition);
+                } else {
+                  Log.warn(PORT_REF_IN_STATIC_CONTEXT.format(componentEntry.getKey().getName()), sourcePosition);
+                }
               }
             }
           }

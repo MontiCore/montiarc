@@ -39,6 +39,7 @@ import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -150,7 +151,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
 
     for (Map.Entry<ASTVariableDeclarator, BoolExpr> declaratorEntry : varDeclaratorConditions.entrySet()) {
 
-      List<ASTExpression> possibleExpressions = new ArrayList<>();
+      Map<ASTExpression, Boolean> possibleExpressions = new LinkedHashMap<>();
       if (node instanceof ASTVariableArcFullVariantComponentType) {
         // Step 1: Check if Expression can be active
         List<BoolExpr> declaratorEntryExpressionList = new ArrayList<>(List.of(featureConstraints, declaratorEntry.getValue()));
@@ -191,7 +192,7 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
           }
 
           if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
-            possibleExpressions.add(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression());
+            possibleExpressions.put(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression(), true);
             break;
           } else {
             ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
@@ -222,28 +223,29 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
                 declaratorEntryExpressionList.add(variableCondition);
             }
             if (ExpressionSolverService.solve(declaratorEntryExpressionList) == Status.SATISFIABLE)
-              possibleExpressions.add(potentialExpression);
+              possibleExpressions.put(potentialExpression, ExpressionSolverService.isSatisfiableForAllUnknownValues(declaratorEntryExpressionList));
             declaratorEntryExpressionList.clear();
           }
           fieldNameVariations.clear();
         } else {
           if (declaratorEntry.getKey().isPresentVariableInit()) {
-            possibleExpressions.add(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression());
+            possibleExpressions.put(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression(), true);
           }
         }
       } else {
         if (declaratorEntry.getKey().isPresentVariableInit()) {
-          possibleExpressions.add(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression());
+          possibleExpressions.put(((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression(), true);
         }
       }
-      for (ASTExpression possibleExpression : possibleExpressions) {
+      for (Map.Entry<ASTExpression, Boolean> possibleEntry : possibleExpressions.entrySet()) {
+        ASTExpression possibleExpression = possibleEntry.getKey();
         if (declaratorEntry.getKey().isPresentVariableInit()) {
           var originalExpression = ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression();
           ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).setExpression(possibleExpression);
           if (ExpressionBuildHelper.getScope() != null) {
             ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).getExpression().setEnclosingScope(ExpressionBuildHelper.getScope());
           }
-          check(declaratorEntry.getKey());
+          check(declaratorEntry.getKey(), possibleEntry.getValue());
           ((ASTSimpleInit) declaratorEntry.getKey().getVariableInit()).setExpression(originalExpression);
         }
       }
@@ -263,6 +265,15 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
   }
 
   public void check(ASTVariableDeclarator node) {
+    check(node, true);
+  }
+
+  /**
+   * @param occurrence whether the checked initialization is present in the configurations of the component family
+   *                   always or only for some unknown values; determines whether a type mismatch is reported as
+   *                   error or warning
+   */
+  protected void check(ASTVariableDeclarator node, boolean definite) {
     if (!node.isPresentVariableInit()) {
       return;
     }
@@ -289,8 +300,13 @@ public class VarDeclarationInitializationHasCorrectType4Family implements ArcBas
           node.getDeclarator().getName(), node.get_SourcePositionStart(), this.getClass().getSimpleName()), "Cocos");
 
       } else if (!SymTypeRelations.isCompatible(varType, initType)) {
-        Log.error(MCError.VAR_DECLARATION_TYPE_MISMATCH.format(
-          initType.printFullName(), node.getDeclarator().getName(), varType.printFullName()));
+        if (definite) {
+          Log.error(MCError.VAR_DECLARATION_TYPE_MISMATCH.format(
+            initType.printFullName(), node.getDeclarator().getName(), varType.printFullName()));
+        } else {
+          Log.warn(MCError.VAR_DECLARATION_TYPE_MISMATCH.format(
+            initType.printFullName(), node.getDeclarator().getName(), varType.printFullName()));
+        }
       }
     }
   }

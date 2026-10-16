@@ -141,9 +141,15 @@ public class NoNonSyncInputPortInCompute4Family implements ArcBasisASTArcCompone
             computeEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
             if (ExpressionSolverService.solve(computeEntryExpressionList) == Status.SATISFIABLE) {
               if (shadowingFields.isEmpty()) {
-                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
-                  nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
-                );
+                if (ExpressionSolverService.isSatisfiableForAllUnknownValues(computeEntryExpressionList)) {
+                  Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                    nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                  );
+                } else {
+                  Log.warn(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                    nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                  );
+                }
               }
             }
             computeEntryExpressionList.clear();

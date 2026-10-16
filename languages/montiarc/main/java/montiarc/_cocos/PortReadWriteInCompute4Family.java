@@ -145,10 +145,17 @@ public class PortReadWriteInCompute4Family implements ArcBasisASTArcComponentTyp
                   continue;
 
                 if (context.isInWriteContext()) {
-                  Log.error(ArcError.WRITE_TO_INCOMING_PORT.format(incoming.getKey().getName()),
-                    computeEntry.getKey().get_SourcePositionStart(),
-                    computeEntry.getKey().get_SourcePositionEnd()
-                  );
+                  if (ExpressionSolverService.isSatisfiableForAllUnknownValues(computeEntryExpressionList)) {
+                    Log.error(ArcError.WRITE_TO_INCOMING_PORT.format(incoming.getKey().getName()),
+                      computeEntry.getKey().get_SourcePositionStart(),
+                      computeEntry.getKey().get_SourcePositionEnd()
+                    );
+                  } else {
+                    Log.warn(ArcError.WRITE_TO_INCOMING_PORT.format(incoming.getKey().getName()),
+                      computeEntry.getKey().get_SourcePositionStart(),
+                      computeEntry.getKey().get_SourcePositionEnd()
+                    );
+                  }
                 }
               }
             }
@@ -170,10 +177,17 @@ public class PortReadWriteInCompute4Family implements ArcBasisASTArcComponentTyp
                   continue;
 
                 if (context.isInReadContext()) {
-                  Log.error(ArcError.READ_FROM_OUTGOING_PORT.format(outgoing.getKey().getName()),
-                    computeEntry.getKey().get_SourcePositionStart(),
-                    computeEntry.getKey().get_SourcePositionEnd()
-                  );
+                  if (ExpressionSolverService.isSatisfiableForAllUnknownValues(computeEntryExpressionList)) {
+                    Log.error(ArcError.READ_FROM_OUTGOING_PORT.format(outgoing.getKey().getName()),
+                      computeEntry.getKey().get_SourcePositionStart(),
+                      computeEntry.getKey().get_SourcePositionEnd()
+                    );
+                  } else {
+                    Log.warn(ArcError.READ_FROM_OUTGOING_PORT.format(outgoing.getKey().getName()),
+                      computeEntry.getKey().get_SourcePositionStart(),
+                      computeEntry.getKey().get_SourcePositionEnd()
+                    );
+                  }
                 }
               }
             }

@@ -56,7 +56,8 @@
 | ☑     | ☒           | ParameterNameCapitalization             | ArcBasis | 0xC1147                                                       |
 | ☑     | ☑           | UniqueIdentifierNames                   | ArcBasis | 0xC1148                                                       |
 | ☒     | ☒           | RestrictedIdentifier                    | ArcBasis | 0xC1149                                                       |
-| ☑     | ☒           | CompArgNoAssignmentExpr                 | ArcBasis | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158                   |
+| ☑     | ☒           | CompArgSideEffectFree                   | ArcBasis | 0xC1154                                                       |
+| ☑     | ☒           | ParameterDefaultValueSideEffectFree     | ArcBasis | 0xC1154                                                       |
 | ☐     | ☒           | ImportsAreUnique                        |          |                                                               |
 | ☐     | ☒           | ImportsAreUsed                          |          |                                                               |
 | ☑     | ☑           | AtomicNoConnector                       | ArcBasis | 0xC1174                                                       |
@@ -84,16 +85,14 @@
 | ☑     | ConstraintsOmitPortReferences  | VariableArc | 0xC1175                                     |       |
 | ☑     | ConstraintsOmitFieldReferences | VariableArc | 0xC1415                                     |       |
 | ☑     | ConstraintIsBoolean            | VariableArc | 0xC1400                                     |       |
-| ☑     | ConstraintNoAssignmentExpr     | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |       |
-| ☑     | ConstraintSmtConvertible       | VariableArc | 0xC1417                                     |       |
+| ☑     | ConstraintSideEffectFree       | VariableArc | 0xC1154                                     |       |
 | ☑     | FeatureNameCapitalization      | VariableArc | 0xC1402                                     |       |
 | ☑     | FeatureUsage                   | VariableArc | 0xC1403                                     |       |
 | ☑     | SubcomponentsConstraint        | VariableArc | 0xC1404                                     |       |
 | ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1175                                     |       |
 | ☑     | VarIfOmitFieldReferences       | VariableArc | 0xC1416                                     |       |
 | ☑     | VarIfIsBoolean                 | VariableArc | 0xC1404                                     |       |
-| ☑     | VarIfNoAssignmentExpr          | VariableArc | 0xC1154, 0xC1155, 0xC1156, 0xC1157, 0xC1158 |       |
-| ☑     | VarIfSmtConvertible            | VariableArc | 0xC1417                                     |       |
+| ☑     | VarIfSideEffectFree            | VariableArc | 0xC1154                                     |       |
 | ☑     | FeatureNamedTick               | VariableArc | 0xC1173                                     |       |
 
 ## Mode Automata

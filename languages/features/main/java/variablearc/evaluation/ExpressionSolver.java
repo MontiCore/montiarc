@@ -4,13 +4,20 @@ package variablearc.evaluation;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
+import com.microsoft.z3.Expr;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
+import com.microsoft.z3.enumerations.Z3_decl_kind;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 /**
@@ -112,5 +119,71 @@ public class ExpressionSolver {
    */
   public void close() {
     context.close();
+  }
+
+  /**
+   * Checks whether {@code formula} is satisfiable whatever the values of expressions that cannot
+   * be determined statically are (see {@link IDeriveSMTExpr#setUnknown}), i.e., whether
+   * {@code ∀ unknowns ∃ others: formula} holds. Without unknown values, this is plain
+   * satisfiability. If the solver cannot decide this, the formula is assumed to not be satisfiable
+   * for all unknown values.
+   *
+   * @param solver a solver of {@code context}, which is left unchanged
+   */
+  public static boolean isSatisfiableForAllUnknownValues(@NotNull Context context, @NotNull Solver solver,
+                                                         @NotNull BoolExpr formula) {
+    Preconditions.checkNotNull(context);
+    Preconditions.checkNotNull(solver);
+    Preconditions.checkNotNull(formula);
+    Set<Expr<?>> constants = collectConstants(formula);
+    if (constants.stream().noneMatch(IDeriveSMTExpr::isUnknown)) {
+      return check(solver, formula) == Status.SATISFIABLE;
+    }
+    Expr<?>[] others = constants.stream().filter(c -> !IDeriveSMTExpr.isUnknown(c)).toArray(Expr<?>[]::new);
+    BoolExpr noneSatisfies = others.length == 0 ? context.mkNot(formula)
+      : context.mkForall(others, context.mkNot(formula), 1, null, null, null, null);
+    return check(solver, noneSatisfies) == Status.UNSATISFIABLE;
+  }
+
+  /**
+   * Checks whether {@code formula} is unsatisfiable for some values of expressions that cannot be
+   * determined statically (see {@link IDeriveSMTExpr#setUnknown}), i.e., the negation of
+   * {@link #isSatisfiableForAllUnknownValues}.
+   *
+   * @param solver a solver of {@code context}, which is left unchanged
+   */
+  public static boolean isUnsatisfiableForSomeUnknownValues(@NotNull Context context, @NotNull Solver solver,
+                                                            @NotNull BoolExpr formula) {
+    return !isSatisfiableForAllUnknownValues(context, solver, formula);
+  }
+
+  private static Status check(@NotNull Solver solver, @NotNull BoolExpr formula) {
+    solver.push();
+    try {
+      solver.add(formula);
+      return solver.check();
+    } finally {
+      solver.pop();
+    }
+  }
+
+  private static Set<Expr<?>> collectConstants(@NotNull Expr<?> expr) {
+    Set<Expr<?>> constants = new LinkedHashSet<>();
+    Set<Expr<?>> visited = new HashSet<>();
+    Deque<Expr<?>> worklist = new ArrayDeque<>();
+    worklist.push(expr);
+    while (!worklist.isEmpty()) {
+      Expr<?> current = worklist.pop();
+      if (!current.isApp() || !visited.add(current)) {
+        continue;
+      }
+      if (current.isConst() && current.getFuncDecl().getDeclKind() == Z3_decl_kind.Z3_OP_UNINTERPRETED) {
+        constants.add(current);
+      }
+      for (Expr<?> arg : current.getArgs()) {
+        worklist.push(arg);
+      }
+    }
+    return constants;
   }
 }

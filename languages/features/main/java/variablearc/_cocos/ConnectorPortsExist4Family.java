@@ -189,13 +189,24 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
 
       if (ExpressionSolverService.solve(sourcePortExpressionList) == Status.SATISFIABLE) {
         if (!source.isPresentComponent()) {
-          Log.error(ArcError.MISSING_PORT.format(source.getQName()),
-            source.get_SourcePositionStart(), source.get_SourcePositionEnd()
-          );
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(sourcePortExpressionList)) {
+            Log.error(ArcError.MISSING_PORT.format(source.getQName()),
+              source.get_SourcePositionStart(), source.get_SourcePositionEnd()
+            );
+          } else {
+            Log.warn(ArcError.MISSING_PORT.format(source.getQName()),
+              source.get_SourcePositionStart(), source.get_SourcePositionEnd()
+            );
+          }
 
         } else {
-          Log.error(ArcError.MISSING_SUBCOMPONENT.format(source.getComponent()),
-            source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(sourcePortExpressionList)) {
+            Log.error(ArcError.MISSING_SUBCOMPONENT.format(source.getComponent()),
+              source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+          } else {
+            Log.warn(ArcError.MISSING_SUBCOMPONENT.format(source.getComponent()),
+              source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+          }
         }
         missingSourceElementDetected = true;
       }
@@ -205,8 +216,13 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
         sourcePortExpressionList.add(ctx.mkAnd(condition, featureConstraints, srcExists, ctx.mkNot(sourcePortDefined)));
 
         if (ExpressionSolverService.solve(sourcePortExpressionList) == Status.SATISFIABLE) {
-          Log.error(ArcError.MISSING_PORT.format(source.getQName()),
-            source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(sourcePortExpressionList)) {
+            Log.error(ArcError.MISSING_PORT.format(source.getQName()),
+              source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+          } else {
+            Log.warn(ArcError.MISSING_PORT.format(source.getQName()),
+              source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+          }
         }
       }
 
@@ -232,12 +248,23 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
 
         if (ExpressionSolverService.solve(targetPortExpressionList) == Status.SATISFIABLE) {
           if (!target.isPresentComponent()) {
-            Log.error(ArcError.MISSING_PORT.format(target.getQName()),
-              target.get_SourcePositionStart(), target.get_SourcePositionEnd()
-            );
+            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(targetPortExpressionList)) {
+              Log.error(ArcError.MISSING_PORT.format(target.getQName()),
+                target.get_SourcePositionStart(), target.get_SourcePositionEnd()
+              );
+            } else {
+              Log.warn(ArcError.MISSING_PORT.format(target.getQName()),
+                target.get_SourcePositionStart(), target.get_SourcePositionEnd()
+              );
+            }
           } else {
-            Log.error(ArcError.MISSING_SUBCOMPONENT.format(target.getComponent()),
-              target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(targetPortExpressionList)) {
+              Log.error(ArcError.MISSING_SUBCOMPONENT.format(target.getComponent()),
+                target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+            } else {
+              Log.warn(ArcError.MISSING_SUBCOMPONENT.format(target.getComponent()),
+                target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+            }
           }
           missingTargetElementDetected = true;
         }
@@ -250,8 +277,13 @@ public class ConnectorPortsExist4Family implements ArcBasisASTArcComponentTypeCo
 
         if (ExpressionSolverService.solve(targetPortExpressionList) == Status.SATISFIABLE) {
 
-          Log.error(ArcError.MISSING_PORT.format(target.getQName()),
-            target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(targetPortExpressionList)) {
+            Log.error(ArcError.MISSING_PORT.format(target.getQName()),
+              target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+          } else {
+            Log.warn(ArcError.MISSING_PORT.format(target.getQName()),
+              target.get_SourcePositionStart(), target.get_SourcePositionEnd());
+          }
         }
       }
     }

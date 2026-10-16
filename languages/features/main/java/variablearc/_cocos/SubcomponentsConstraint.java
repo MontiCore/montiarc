@@ -77,8 +77,14 @@ public class SubcomponentsConstraint implements ArcBasisASTArcComponentTypeCoCo 
               != model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__")).getBoolValue()
           ).map(feature -> instance.getName() + "." + feature.getName())).toList();
 
-        Log.error(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(causingFeatures.toString()),
-          node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+        if (ExpressionSolver.isSatisfiableForAllUnknownValues(solver.getContext(),
+          solver.getContext().mkSolver(), solver.getContext().mkAnd(smtSolver.get().getAssertions()))) {
+          Log.error(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(causingFeatures.toString()),
+            node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+        } else {
+          Log.warn(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(causingFeatures.toString()),
+            node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+        }
       }
     } else {
       Log.debug(() -> String.format(

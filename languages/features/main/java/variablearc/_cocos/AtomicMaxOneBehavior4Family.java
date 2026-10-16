@@ -116,8 +116,15 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
       for (Map.Entry<ASTArcBehaviorElement, BoolExpr> behavior : behaviorConditions.entrySet()) {
         if (evaluateCondition(model, behavior.getValue())) {
           if (first) first = false;
-          else
-            Log.error(ArcError.MULTIPLE_BEHAVIOR.toString(), behavior.getKey().get_SourcePositionStart(), behavior.getKey().get_SourcePositionEnd());
+          else {
+            List<BoolExpr> behaviorList = new ArrayList<>(multipleBehaviorExpressionList);
+            behaviorList.add(behavior.getValue());
+            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(behaviorList)) {
+              Log.error(ArcError.MULTIPLE_BEHAVIOR.toString(), behavior.getKey().get_SourcePositionStart(), behavior.getKey().get_SourcePositionEnd());
+            } else {
+              Log.warn(ArcError.MULTIPLE_BEHAVIOR.toString(), behavior.getKey().get_SourcePositionStart(), behavior.getKey().get_SourcePositionEnd());
+            }
+          }
         }
       }
     }

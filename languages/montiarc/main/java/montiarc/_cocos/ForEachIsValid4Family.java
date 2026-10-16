@@ -39,6 +39,7 @@ import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -151,7 +152,7 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
 
     for (Map.Entry<ASTEnhancedForControl, BoolExpr> forStatementEntry : forStatementConditions.entrySet()) {
 
-      List<ASTExpression> possibleExpressions = new ArrayList<>();
+      Map<ASTExpression, Boolean> possibleExpressions = new LinkedHashMap<>();
       if(node instanceof ASTVariableArcFullVariantComponentType) {
         // Step 1: Check if Expression can be active
         List<BoolExpr> forStatementEntryExpressionList = new ArrayList<>(List.of(featureConstraints, forStatementEntry.getValue()));
@@ -192,7 +193,7 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
           }
 
           if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
-            possibleExpressions.add(forStatementEntry.getKey().getExpression());
+            possibleExpressions.put(forStatementEntry.getKey().getExpression(), true);
             break;
           } else {
             ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
@@ -222,17 +223,18 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
                 forStatementEntryExpressionList.add(variableCondition);
             }
             if (ExpressionSolverService.solve(forStatementEntryExpressionList) == Status.SATISFIABLE)
-              possibleExpressions.add(potentialExpression);
+              possibleExpressions.put(potentialExpression, ExpressionSolverService.isSatisfiableForAllUnknownValues(forStatementEntryExpressionList));
             forStatementEntryExpressionList.clear();
           }
           fieldNameVariations.clear();
         } else {
-          possibleExpressions.add(forStatementEntry.getKey().getExpression());
+          possibleExpressions.put(forStatementEntry.getKey().getExpression(), true);
         }
       }else{
-        possibleExpressions.add(forStatementEntry.getKey().getExpression());
+        possibleExpressions.put(forStatementEntry.getKey().getExpression(), true);
       }
-      for (ASTExpression possibleExpression : possibleExpressions) {
+      for (Map.Entry<ASTExpression, Boolean> possibleEntry : possibleExpressions.entrySet()) {
+        ASTExpression possibleExpression = possibleEntry.getKey();
         SymTypeExpression expression = TypeCheck3.typeOf(possibleExpression);
 
         SymTypeExpression arrays = SymTypeExpressionFactory.createTypeObject(MontiArcMill.typeSymbolBuilder().setName("java.util.Arrays").setSpannedScope(MontiArcMill.scope()).setEnclosingScope(node.getEnclosingScope()).build());
@@ -241,7 +243,11 @@ public class ForEachIsValid4Family implements ArcBasisASTArcComponentTypeCoCo {
         if (!SymTypeRelations.isSubTypeOf(expression, arrays)
           && !SymTypeRelations.isSubTypeOf(expression, lists)
           && !SymTypeRelations.isString(expression)) {
-          Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(expression.printFullName()), forStatementEntry.getKey().get_SourcePositionStart());
+          if (possibleEntry.getValue()) {
+            Log.error(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(expression.printFullName()), forStatementEntry.getKey().get_SourcePositionStart());
+          } else {
+            Log.warn(MCError.FOR_EACH_EXPR_NOT_ITERABLE.format(expression.printFullName()), forStatementEntry.getKey().get_SourcePositionStart());
+          }
         }
       }
     }

@@ -140,12 +140,21 @@ public class ConnectorTimingsFit4Family implements ArcBasisASTArcComponentTypeCo
         List<BoolExpr> timingMismatchExpressionList = new ArrayList<>(List.of(featureConstraints, timingMismatch));
 
         if (ExpressionSolverService.solve(timingMismatchExpressionList) == Status.SATISFIABLE) {
-          Log.error(ArcError.CONNECTOR_TIMING_MISMATCH.format(
-              target.getPortSymbol().getTiming().getName(),
-              source.getPortSymbol().getTiming().getName()
-            ),
-            target.get_SourcePositionStart(), target.get_SourcePositionEnd()
-          );
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(timingMismatchExpressionList)) {
+            Log.error(ArcError.CONNECTOR_TIMING_MISMATCH.format(
+                target.getPortSymbol().getTiming().getName(),
+                source.getPortSymbol().getTiming().getName()
+              ),
+              target.get_SourcePositionStart(), target.get_SourcePositionEnd()
+            );
+          } else {
+            Log.warn(ArcError.CONNECTOR_TIMING_MISMATCH.format(
+                target.getPortSymbol().getTiming().getName(),
+                source.getPortSymbol().getTiming().getName()
+              ),
+              target.get_SourcePositionStart(), target.get_SourcePositionEnd()
+            );
+          }
         }
       }
     }

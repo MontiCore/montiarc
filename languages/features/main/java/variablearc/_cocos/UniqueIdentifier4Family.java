@@ -174,8 +174,13 @@ public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo 
 
           if (active.size() > 1) {
             DuplicateElementsService.setComponent(node, true);
-            Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
-              node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
+            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(List.of(potentialConflict.getValue(), featureConstraints))) {
+              Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
+                node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
+            } else {
+              Log.warn(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
+                node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
+            }
           }
         }
       }

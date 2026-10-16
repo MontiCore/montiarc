@@ -6,6 +6,9 @@ import com.microsoft.z3.Context;
 import com.microsoft.z3.Expr;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.types.check.SymTypeExpression;
+import de.monticore.types3.SymTypeRelations;
+import de.monticore.types3.TypeCheck3;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
 import variablearc.VariableArcMill;
@@ -41,6 +44,13 @@ public class AssignmentExpression extends Expression {
     String[] prefixes = getPrefix().orElse("").split("\\.");
     String parentPrefix = Arrays.stream(prefixes).limit(prefixes.length - 1).reduce((a, b) -> a + "." + b).orElse("");
     converter.setPrefix(parentPrefix);
+    if (converter.getSortDerive().toSort(variable.getType()).isEmpty()) {
+      return Optional.of(context.mkTrue());
+    }
+    SymTypeExpression bindingType = TypeCheck3.typeOf(getAstExpression(), variable.getType());
+    if (bindingType.isObscureType() || !SymTypeRelations.isCompatible(variable.getType(), bindingType)) {
+      return Optional.empty();
+    }
     Optional<Expr<?>> nameExpression =
       converter.getSortDerive().toSort(variable.getType())
         .map(s -> context.mkConst(prefix + "." + variable.getName(), s));

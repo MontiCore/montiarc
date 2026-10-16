@@ -7,14 +7,17 @@ import com.microsoft.z3.FuncDecl;
 import com.microsoft.z3.IntExpr;
 import com.microsoft.z3.Symbol;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._symboltable.IMontiArcScope;
 import montiarc._symboltable.TransitiveScopeSetter;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
 
 import java.io.IOException;
 import java.util.function.Function;
@@ -22,6 +25,7 @@ import java.util.stream.Stream;
 
 import static de.monticore.symbols.basicsymbols.BasicSymbolsMill.INT;
 import static de.monticore.types.check.SymTypeExpressionFactory.createPrimitive;
+import static de.monticore.types.check.SymTypeExpressionFactory.createTypeObject;
 import static montiarc.MontiArcMill.parser;
 import static montiarc.MontiArcMillTOP.variableSymbolBuilder;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -134,6 +138,38 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
     }
   }
 
+  @Test
+  void testUnknownValueIsSameForSameExpressionAndPrefix() throws IOException {
+    try (Context ctx = new Context()) {
+      // Given
+      ASTExpression ast = parser().parse_StringExpression("s1 == s2").orElseThrow();
+
+      IMontiArcScope scope = MontiArcMill.scope();
+      OOTypeSymbol string = MontiArcMill.oOTypeSymbolBuilder()
+        .setName("String").setSpannedScope(MontiArcMill.scope()).setEnclosingScope(scope).build();
+      scope.add(string);
+      scope.add(variableSymbolBuilder().setName("s1").setType(createTypeObject(string)).setEnclosingScope(scope).build());
+      scope.add(variableSymbolBuilder().setName("s2").setType(createTypeObject(string)).setEnclosingScope(scope).build());
+
+      TransitiveScopeSetter setScope = new TransitiveScopeSetter();
+      setScope.setScope(ast, scope);
+
+      MontiArcDeriveSMTExpr toSmt = new MontiArcDeriveSMTExpr(ctx);
+
+      // When
+      BoolExpr first = toSmt.toBool(ast).orElseThrow();
+      BoolExpr second = toSmt.toBool(ast).orElseThrow();
+      toSmt.setPrefix("sub");
+      BoolExpr prefixed = toSmt.toBool(ast).orElseThrow();
+
+      // Then
+      assertThat(IDeriveSMTExpr.isUnknown(first)).isTrue();
+      assertThat(second).isEqualTo(first);
+      assertThat(IDeriveSMTExpr.isUnknown(prefixed)).isTrue();
+      assertThat(prefixed).isNotEqualTo(first);
+    }
+  }
+
   static Stream<Arguments> boolExpr() {
     return Stream.of(
       arg("true", "true"),
@@ -142,7 +178,6 @@ class MontiArcDeriveSMTExprTest extends MontiArcTestBase {
       arg("f2", "f2"),
       arg("f3", "f3"),
       arg("!true", "(not true)"),
-      arg("~true", "(not true)"),
       arg("f1 ? f2 : f3", "(ite f1 f2 f3)"),
       arg("1 <= 2", "(<= 1 2)"),
       arg("1 >= 2", "(>= 1 2)"),

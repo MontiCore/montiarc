@@ -1,0 +1,23 @@
+{
+  "name": "OOTypeWithStaticBooleanFunction",
+  "symbols": [
+    {
+      "kind": "de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol",
+      "name": "OOTypeWithStaticBooleanFunction",
+      "isPublic": true,
+      "spannedScope": {
+        "symbols": [
+          {
+            "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
+            "name": "m",
+            "type": {
+              "kind":"de.monticore.types.check.SymTypePrimitive",
+              "primitiveName":"boolean"
+            },
+            "isStatic": true
+          }
+        ]
+      }
+    }
+  ]
+}

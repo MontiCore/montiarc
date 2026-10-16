@@ -154,10 +154,17 @@ public class PortReadWriteInDoAction4Family implements ArcBasisASTArcComponentTy
                   continue;
 
                 if (context.isInWriteContext()) {
-                  Log.error(ArcError.WRITE_TO_INCOMING_PORT.format(incoming.getKey().getName()),
-                    doEntry.getKey().get_SourcePositionStart(),
-                    doEntry.getKey().get_SourcePositionEnd()
-                  );
+                  if (ExpressionSolverService.isSatisfiableForAllUnknownValues(doEntryExpressionList)) {
+                    Log.error(ArcError.WRITE_TO_INCOMING_PORT.format(incoming.getKey().getName()),
+                      doEntry.getKey().get_SourcePositionStart(),
+                      doEntry.getKey().get_SourcePositionEnd()
+                    );
+                  } else {
+                    Log.warn(ArcError.WRITE_TO_INCOMING_PORT.format(incoming.getKey().getName()),
+                      doEntry.getKey().get_SourcePositionStart(),
+                      doEntry.getKey().get_SourcePositionEnd()
+                    );
+                  }
                 }
               }
             }
@@ -179,10 +186,17 @@ public class PortReadWriteInDoAction4Family implements ArcBasisASTArcComponentTy
                   continue;
 
                 if (context.isInReadContext()) {
-                  Log.error(ArcError.READ_FROM_OUTGOING_PORT.format(outgoing.getKey().getName()),
-                    doEntry.getKey().get_SourcePositionStart(),
-                    doEntry.getKey().get_SourcePositionEnd()
-                  );
+                  if (ExpressionSolverService.isSatisfiableForAllUnknownValues(doEntryExpressionList)) {
+                    Log.error(ArcError.READ_FROM_OUTGOING_PORT.format(outgoing.getKey().getName()),
+                      doEntry.getKey().get_SourcePositionStart(),
+                      doEntry.getKey().get_SourcePositionEnd()
+                    );
+                  } else {
+                    Log.warn(ArcError.READ_FROM_OUTGOING_PORT.format(outgoing.getKey().getName()),
+                      doEntry.getKey().get_SourcePositionStart(),
+                      doEntry.getKey().get_SourcePositionEnd()
+                    );
+                  }
                 }
               }
             }

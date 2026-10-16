@@ -224,9 +224,15 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
         expressionList_DirectExtension.add(ctx.mkEq(selfVar, ctx.mkTrue()));
       // Checking for direct extension
       if (ExpressionSolverService.solve(expressionList_DirectExtension) == Status.SATISFIABLE) {
-        Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
-          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+        if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList_DirectExtension)) {
+          Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+        } else {
+          Log.warn(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+        }
       }
 
       // Checking for transitive extension
@@ -241,9 +247,15 @@ public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCo
       }
 
       if (ExpressionSolverService.solve(expressionList_TransitiveExtension) == Status.SATISFIABLE) {
-        Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
-          ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+        if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList_TransitiveExtension)) {
+          Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+        } else {
+          Log.warn(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
+            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+        }
       }
     }
     alreadyCheckedComponents.addAll(componentConditions.keySet());

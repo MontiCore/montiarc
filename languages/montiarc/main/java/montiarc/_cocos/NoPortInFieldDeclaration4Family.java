@@ -99,7 +99,11 @@ public class NoPortInFieldDeclaration4Family implements ArcBasisASTArcComponentT
             fieldEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
             if (ExpressionSolverService.solve(fieldEntryExpressionList) == Status.SATISFIABLE) {
               SourcePosition sourcePosition = fieldEntry.getKey().getInitial().get_SourcePositionStart();
-              Log.error(PORT_REF_IN_STATIC_CONTEXT.format(fieldEntry.getKey().getName()), sourcePosition);
+              if (ExpressionSolverService.isSatisfiableForAllUnknownValues(fieldEntryExpressionList)) {
+                Log.error(PORT_REF_IN_STATIC_CONTEXT.format(fieldEntry.getKey().getName()), sourcePosition);
+              } else {
+                Log.warn(PORT_REF_IN_STATIC_CONTEXT.format(fieldEntry.getKey().getName()), sourcePosition);
+              }
             }
           }
         }

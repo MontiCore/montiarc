@@ -175,8 +175,13 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
       List<BoolExpr> sourceDirectionExpressionList = new ArrayList<>(List.of(featureConstraints, srcExists, sourceInValid));
 
       if (ExpressionSolverService.solve(sourceDirectionExpressionList) == Status.SATISFIABLE) {
-        Log.error(ArcError.SOURCE_DIRECTION_MISMATCH.format(source.getQName()),
-          source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+        if (ExpressionSolverService.isSatisfiableForAllUnknownValues(sourceDirectionExpressionList)) {
+          Log.error(ArcError.SOURCE_DIRECTION_MISMATCH.format(source.getQName()),
+            source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+        } else {
+          Log.warn(ArcError.SOURCE_DIRECTION_MISMATCH.format(source.getQName()),
+            source.get_SourcePositionStart(), source.get_SourcePositionEnd());
+        }
       }
 
       for (ASTPortAccess target : connector.getTargetList()) {
@@ -202,9 +207,15 @@ public class ConnectorDirectionsFit4Family implements ArcBasisASTArcComponentTyp
         List<BoolExpr> targetDirectionExpressionList = new ArrayList<>(List.of(featureConstraints, trgtExists, targetInValid));
 
         if (ExpressionSolverService.solve(targetDirectionExpressionList) == Status.SATISFIABLE) {
-          Log.error(ArcError.TARGET_DIRECTION_MISMATCH.format(target.getQName()),
-            target.get_SourcePositionStart(), target.get_SourcePositionEnd()
-          );
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(targetDirectionExpressionList)) {
+            Log.error(ArcError.TARGET_DIRECTION_MISMATCH.format(target.getQName()),
+              target.get_SourcePositionStart(), target.get_SourcePositionEnd()
+            );
+          } else {
+            Log.warn(ArcError.TARGET_DIRECTION_MISMATCH.format(target.getQName()),
+              target.get_SourcePositionStart(), target.get_SourcePositionEnd()
+            );
+          }
         }
       }
     }

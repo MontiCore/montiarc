@@ -39,13 +39,13 @@ import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_INIT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.FIELD_REF_IN_STATIC_CONTEXT;
 import static montiarc.util.ArcError.FIELD_UPPER_CASE;
-import static montiarc.util.ArcError.INVALID_CONTEXT_ASSIGNMENT;
 import static montiarc.util.ArcError.IN_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.IN_PORT_REF_IN_INVALID_CONTEXT;
 import static montiarc.util.ArcError.IN_PORT_UNUSED;
 import static montiarc.util.ArcError.MISSING_PORT;
 import static montiarc.util.ArcError.MISSING_SUBCOMPONENT;
 import static montiarc.util.ArcError.MULTIPLE_BEHAVIOR;
+import static montiarc.util.ArcError.NON_PURE_EXPRESSION;
 import static montiarc.util.ArcError.OPTIONAL_PARAMS_LAST;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
@@ -77,9 +77,8 @@ import static montiarc.util.SCError.CANT_FIND_SOURCE;
 import static montiarc.util.SCError.CANT_FIND_TARGET;
 import static montiarc.util.SCError.DUPLICATE_STATE;
 import static montiarc.util.SCError.MISSING_INITIAL_STATE;
-import static montiarc.util.VariableArcError.CONSTRAINT_NOT_SATISFIED;
-import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
 import static montiarc.util.VariableArcError.FEATURE_UPPER_CASE;
+import static montiarc.util.VariableArcError.CONSTRAINT_NOT_SATISFIED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -432,6 +431,14 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "MissingComponent5.arc"),
         fn(ERROR, PKG_COMP, "MissingComponent5.arc", 14, 5, 14, 12, MISSING_COMPONENT, "Missing")
       ),
+      arg("SideEffectInComponentArgumentTest",
+        mpk(PKG_COMP, "SideEffectInComponentArgument.arc"),
+        fn(ERROR, PKG_COMP, "SideEffectInComponentArgument.arc", 12, 13, 12, 16, NON_PURE_EXPRESSION, "component arguments")
+      ),
+      arg("SideEffectInDefaultParameterValueTest",
+        mpk(PKG_COMP, "SideEffectInDefaultParameterValue.arc"),
+        fn(ERROR, PKG_COMP, "SideEffectInDefaultParameterValue.arc", 8, 60, 8, 63, NON_PURE_EXPRESSION, "default parameter values")
+      ),
       arg("MissingComponentTest7",
         mpk(PKG_COMP, "MissingComponent7.arc"),
         fn(ERROR, PKG_COMP, "MissingComponent7.arc", 10, 3, 10, 10, MISSING_COMPONENT, "Missing")
@@ -581,10 +588,15 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_COMP, "SelfReferentialComponent5A.arc"),
         fn(ERROR, PKG_COMP, "SelfReferentialComponent5A.arc", 13, 30, 13, 34, COMPONENT_REFERENCE_CYCLE, "SelfReferentialComponent5A", "SelfReferentialComponent5A -> SelfReferentialComponent5B -> SelfReferentialComponent5A")
       ),
+      // note: "b" is never referenced by any constraint/varif anywhere in this model, so its
+      // (type-mismatched) binding is no longer even considered by the constraint solver -
+      // previously it was incidentally still asserted into the (otherwise constraint-less)
+      // solver and made it report the whole component's - empty - constraint set as
+      // unsatisfiable, duplicating the COMP_ARG_TYPE_MISMATCH finding below with a second,
+      // unrelated-looking CONSTRAINT_NOT_SATISFIED finding
       arg("TypeMismatchOfConfigurationParameterValue1",
         mpk(PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc"),
-        fn(ERROR, PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc", 9, 7, 9, 8, COMP_ARG_TYPE_MISMATCH, "boolean", "int"),
-        fn(ERROR, PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc", 7, 1, 10, 2, CONSTRAINT_NOT_SATISFIED)
+        fn(ERROR, PKG_COMP, "TypeMismatchOfConfigurationParameterValue1.arc", 9, 7, 9, 8, COMP_ARG_TYPE_MISMATCH, "boolean", "int")
       ),
       arg("TypeMismatchOfConfigurationParameterValue2",
         mpk(PKG_COMP, "TypeMismatchOfConfigurationParameterValue2.arc"),
@@ -833,10 +845,6 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         mpk(PKG_CB, "NonSyncInputPortInCompute.arc"),
         fn(ERROR, PKG_CB, "NonSyncInputPortInCompute.arc", 11, 13, 11, 14, IN_PORT_REF_IN_INVALID_CONTEXT, "i", NoNonSyncInputPortInCompute.CONTEXT)
       ),
-      arg("ConstraintNoAssignmentExpressionTest",
-        mpk(PKG_VARI, "ConstraintNoAssignmentExpression.arc"),
-        fn(ERROR, PKG_VARI, "ConstraintNoAssignmentExpression.arc", 8, 14, 8, 22, INVALID_CONTEXT_ASSIGNMENT)
-      ),
       arg("MissingSymbolsInConstraintTest1",
         mpk(PKG_VARI, "MissingSymbolsInConstraint1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInConstraint1.arc", 10, 14, 10, 15, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
@@ -965,16 +973,21 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModelAndError4VariabilityProvider() {
     return Stream.of(
-      arg("ConstraintSmtConvertibleTest",
-        mpk(PKG_VARI, "ConstraintSmtConvertible.arc"),
-        fn(WARNING, PKG_VARI, "ConstraintSmtConvertible.arc", 8, 14, 8, 29, EXPRESSION_NOT_SMT_CONVERTIBLE, "obj.isPresent()", "method calls are not supported in this context")
-      ),
       arg("FieldReferenceInStaticContextVariabilityTest",
         mpk(PKG_VARI, "FieldReferenceInStaticContext.arc", "ParameterizedSuperComponent.arc"),
         fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 8, 13, 8, 14, FIELD_REF_IN_STATIC_CONTEXT, "x"),
         fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 10, 14, 10, 15, FIELD_REF_IN_STATIC_CONTEXT, "x"),
         fn(ERROR, PKG_VARI, "FieldReferenceInStaticContext.arc", 11, 9, 11, 10, FIELD_REF_IN_STATIC_CONTEXT, "x")
       ),
+      arg("FunctionCallInConstraintTest",
+        mpk(PKG_VARI, "FunctionCallInConstraint.arc"),
+        fn(WARNING, PKG_VARI, "FunctionCallInConstraint.arc", 8, 1, 10, 2, CONSTRAINT_NOT_SATISFIED)
+      ),
+      arg("FunctionCallInVarIfTest",
+        mpk(PKG_VARI, "FunctionCallInVarIf.arc"),
+        fn(WARNING, PKG_VARI, "FunctionCallInVarIf.arc", 17, 3, 17, 12, PORT_MULTIPLE_SENDER, "variability.FunctionCallInVarIf.o"),
+        fn(WARNING, PKG_VARI, "FunctionCallInVarIf.arc", 15, 12, 15, 13, OUT_PORT_NOT_CONNECTED, "b.o")
+       ),
       arg("MissingSymbolsInVarIfTest1",
         mpk(PKG_VARI, "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 9, 10, 10, CANT_FIND_SYMBOL_IN_EXPRESSION, "e")
@@ -1057,6 +1070,30 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
         fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 22, 22, 22, 23, TYPE_PARAMETER_UPPER_CASE),
         fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 23, 19, 23, 20, PORT_UPPER_CASE),
         fn(WARNING, PKG_VARI, "NamesCapitalizationWithVariability.arc", 25, 17, 25, 23, SUBCOMPONENT_UPPER_CASE)
+      ),
+      arg("ConstraintSideEffectFreeTest1",
+        mpk(PKG_VARI, "SideEffectInConstraint1.arc"),
+        fn(ERROR, PKG_VARI, "SideEffectInConstraint1.arc", 9, 15, 9, 23, NON_PURE_EXPRESSION, "constraints"),
+        fn(WARNING, PKG_VARI, "SideEffectInConstraint1.arc", 8, 1, 10, 2, CONSTRAINT_NOT_SATISFIED)
+      ),
+      arg("ConstraintSideEffectFreeTest2",
+        mpk(PKG_VARI, "SideEffectInConstraint2.arc"),
+        fn(ERROR, PKG_VARI, "SideEffectInConstraint2.arc", 9, 15, 9, 18, NON_PURE_EXPRESSION, "constraints"),
+        fn(ERROR, PKG_VARI, "SideEffectInConstraint2.arc", 10, 15, 10, 18, NON_PURE_EXPRESSION, "constraints"),
+        fn(ERROR, PKG_VARI, "SideEffectInConstraint2.arc", 11, 15, 11, 18, NON_PURE_EXPRESSION, "constraints"),
+        fn(ERROR, PKG_VARI, "SideEffectInConstraint2.arc", 12, 15, 12, 18, NON_PURE_EXPRESSION, "constraints"),
+        fn(WARNING, PKG_VARI, "SideEffectInConstraint2.arc", 8, 1, 13, 2, CONSTRAINT_NOT_SATISFIED)
+      ),
+      arg("VarifConditionSideEffectFreeTest1",
+        mpk(PKG_VARI, "SideEffectInVarifCondition1.arc"),
+        fn(ERROR, PKG_VARI, "SideEffectInVarifCondition1.arc", 9, 10, 9, 18, NON_PURE_EXPRESSION, "varif conditions")
+      ),
+      arg("VarifConditionSideEffectFreeTest2",
+        mpk(PKG_VARI, "SideEffectInVarifCondition2.arc"),
+        fn(ERROR, PKG_VARI, "SideEffectInVarifCondition2.arc", 9, 10, 9, 13, NON_PURE_EXPRESSION, "varif conditions"),
+        fn(ERROR, PKG_VARI, "SideEffectInVarifCondition2.arc", 10, 10, 10, 13, NON_PURE_EXPRESSION, "varif conditions"),
+        fn(ERROR, PKG_VARI, "SideEffectInVarifCondition2.arc", 11, 10, 11, 13, NON_PURE_EXPRESSION, "varif conditions"),
+        fn(ERROR, PKG_VARI, "SideEffectInVarifCondition2.arc", 12, 10, 12, 13, NON_PURE_EXPRESSION, "varif conditions")
       )
     );
   }

@@ -197,6 +197,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     List<BoolExpr> cycleExistsExpressionList = new ArrayList<>(List.of(cycleExists, featureConstraints));
 
     if (ExpressionSolverService.solve(cycleExistsExpressionList) == Status.SATISFIABLE) {
+      boolean definite = ExpressionSolverService.isSatisfiableForAllUnknownValues(cycleExistsExpressionList);
       Model model = ExpressionSolverService.getModel();
 
       List<ASTConnector> involvedConnectors = new ArrayList<>();
@@ -213,7 +214,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
 
       for (SubcomponentSymbol vertex : allSubComponents) {
         if (!visited.contains(vertex)) {
-          this.check(involvedConnectors, vertex, new Stack<>(), visited);
+          this.check(involvedConnectors, vertex, new Stack<>(), visited, definite);
         }
       }
 
@@ -224,7 +225,8 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
   protected void check(@NotNull List<ASTConnector> validConnectors,
                        @NotNull SubcomponentSymbol next,
                        @NotNull Stack<SubcomponentSymbol> path,
-                       @NotNull Set<SubcomponentSymbol> visited) {
+                       @NotNull Set<SubcomponentSymbol> visited,
+                       boolean definite) {
     Preconditions.checkNotNull(validConnectors);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
@@ -232,7 +234,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
 
     path.push(next);
     for (ASTConnector connector : getConnectorsFromSubcomponent(validConnectors, next)) {
-      this.check(validConnectors, connector, path, visited);
+      this.check(validConnectors, connector, path, visited, definite);
     }
     visited.add(path.pop());
   }
@@ -240,7 +242,8 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
   protected void check(@NotNull List<ASTConnector> validConnectors,
                        @NotNull ASTConnector next,
                        @NotNull Stack<SubcomponentSymbol> path,
-                       @NotNull Set<SubcomponentSymbol> visited) {
+                       @NotNull Set<SubcomponentSymbol> visited,
+                       boolean definite) {
     Preconditions.checkNotNull(validConnectors);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
@@ -248,7 +251,7 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
 
     if (next.getSource().isPresentPortSymbol() && !next.getSource().getPortSymbol().getStronglyCausal()) {
       for (ASTPortAccess target : next.getTargetList()) {
-        this.check(validConnectors, target, path, visited);
+        this.check(validConnectors, target, path, visited, definite);
       }
     }
 
@@ -257,7 +260,8 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
   protected void check(@NotNull List<ASTConnector> validConnectors,
                        @NotNull ASTPortAccess next,
                        @NotNull Stack<SubcomponentSymbol> path,
-                       @NotNull Set<SubcomponentSymbol> visited) {
+                       @NotNull Set<SubcomponentSymbol> visited,
+                       boolean definite) {
     Preconditions.checkNotNull(validConnectors);
     Preconditions.checkNotNull(next);
     Preconditions.checkNotNull(path);
@@ -268,11 +272,17 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     }
 
     if (path.contains(next.getComponentSymbol())) {
-      Log.error(ArcError.FEEDBACK_CAUSALITY.toString(),
-        next.get_SourcePositionStart(), next.get_SourcePositionEnd()
-      );
+      if (definite) {
+        Log.error(ArcError.FEEDBACK_CAUSALITY.toString(),
+          next.get_SourcePositionStart(), next.get_SourcePositionEnd()
+        );
+      } else {
+        Log.warn(ArcError.FEEDBACK_CAUSALITY.toString(),
+          next.get_SourcePositionStart(), next.get_SourcePositionEnd()
+        );
+      }
     } else {
-      this.check(validConnectors, next.getComponentSymbol(), path, visited);
+      this.check(validConnectors, next.getComponentSymbol(), path, visited, definite);
     }
   }
 

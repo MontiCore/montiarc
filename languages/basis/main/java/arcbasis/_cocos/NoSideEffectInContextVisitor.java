@@ -9,27 +9,40 @@ import de.monticore.expressions.assignmentexpressions._ast.ASTIncPrefixExpressio
 import de.monticore.expressions.assignmentexpressions._ast.ASTIncSuffixExpression;
 import de.monticore.expressions.assignmentexpressions._visitor.AssignmentExpressionsVisitor2;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
+import static montiarc.util.ArcError.NON_PURE_EXPRESSION;
+
 /**
- * The visitor applies to assignment expressions and reports an error for each
- * assignment expression stating that the assignment expression was used in
- * an invalid context.
+ * The visitor logs an error for non-pure expressions, i.e., any expression
+ * that (potentially) has side effects. Function calls are permitted, as they
+ * are assumed (but not verified) to be free of side effects.
  */
-public class OmitAssignmentExprVisitor implements AssignmentExpressionsVisitor2 {
+public class NoSideEffectInContextVisitor implements AssignmentExpressionsVisitor2 {
+
+  private final String context;
+
+  /**
+   * @param context A human-readable description of the context in which this
+   *                check is applied. The context is reported as part of the
+   *                logged error message for non-pure expressions.
+   */
+  public NoSideEffectInContextVisitor(@NotNull String context) {
+    this.context = Preconditions.checkNotNull(context);
+  }
 
   @Override
   public void visit(@NotNull ASTAssignmentExpression node) {
     Preconditions.checkNotNull(node);
-    Log.error(ArcError.INVALID_CONTEXT_ASSIGNMENT.toString(),
+    Log.error(NON_PURE_EXPRESSION.format(this.context),
       node.get_SourcePositionStart(), node.get_SourcePositionEnd()
     );
   }
+
   @Override
   public void visit(@NotNull ASTIncPrefixExpression node) {
     Preconditions.checkNotNull(node);
-    Log.error(ArcError.INVALID_CONTEXT_INC_PREFIX.toString(),
+    Log.error(NON_PURE_EXPRESSION.format(this.context),
       node.get_SourcePositionStart(), node.get_SourcePositionEnd()
     );
   }
@@ -37,7 +50,7 @@ public class OmitAssignmentExprVisitor implements AssignmentExpressionsVisitor2 
   @Override
   public void visit(@NotNull ASTDecPrefixExpression node) {
     Preconditions.checkNotNull(node);
-    Log.error(ArcError.INVALID_CONTEXT_DEC_PREFIX.toString(),
+    Log.error(NON_PURE_EXPRESSION.format(this.context),
       node.get_SourcePositionStart(), node.get_SourcePositionEnd()
     );
   }
@@ -45,7 +58,7 @@ public class OmitAssignmentExprVisitor implements AssignmentExpressionsVisitor2 
   @Override
   public void visit(@NotNull ASTIncSuffixExpression node) {
     Preconditions.checkNotNull(node);
-    Log.error(ArcError.INVALID_CONTEXT_INC_SUFFIX.toString(),
+    Log.error(NON_PURE_EXPRESSION.format(this.context),
       node.get_SourcePositionStart(), node.get_SourcePositionEnd()
     );
   }
@@ -53,7 +66,7 @@ public class OmitAssignmentExprVisitor implements AssignmentExpressionsVisitor2 
   @Override
   public void visit(@NotNull ASTDecSuffixExpression node) {
     Preconditions.checkNotNull(node);
-    Log.error(ArcError.INVALID_CONTEXT_DEC_SUFFIX.toString(),
+    Log.error(NON_PURE_EXPRESSION.format(this.context),
       node.get_SourcePositionStart(), node.get_SourcePositionEnd()
     );
   }

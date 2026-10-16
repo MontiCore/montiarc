@@ -15,8 +15,7 @@ public enum VariableArcError implements Error {
   SUBCOMPONENTS_NOT_CONSTRAINT("0xC1404", "Features %s are not correctly constraint by this component"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1405", "Incompatible types: '%s' cannot be converted to 'boolean'"),
   FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Value of field '%s' not available in static context"),
-  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Value of field '%s' not available in static context"),
-  EXPRESSION_NOT_SMT_CONVERTIBLE("0xC1417", "Unsupported subexpression '%s': %s");
+  FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Value of field '%s' not available in static context");
 
   private final String errorCode;
   private final String errorMsgFormat;

@@ -57,12 +57,12 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
   @Override
   public void handle(@NotNull ASTNameExpression node) {
     Preconditions.checkNotNull(node);
+    SymTypeExpression type = TypeCheck3.typeOf(node);
     Optional<Sort> sort = this.getExpr2Sort().toSort(node);
 
     this.getResult().clear();
 
     if (sort.isPresent()) {
-      SymTypeExpression type = TypeCheck3.typeOf(node);
       // Handle enum constants
       if (type.isObjectType() && type.asObjectType().hasTypeInfo()
         && type.asObjectType().getTypeInfo() instanceof OOTypeSymbol ooType && ooType.isIsEnum()) {
@@ -76,8 +76,6 @@ public class ExpressionsBasis2SMT implements ExpressionsBasisHandler {
         // Handle variables
         this.getResult().setValue(this.getContext().mkConst((getPrefix().isEmpty() ? "" : getPrefix() + ".") + node.getName(), sort.get()));
       }
-    } else {
-      this.getResult().markFailure(node, "names of this type cannot be encoded as an SMT expression");
     }
   }
 }

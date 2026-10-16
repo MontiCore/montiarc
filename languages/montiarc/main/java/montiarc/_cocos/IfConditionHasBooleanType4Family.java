@@ -38,6 +38,7 @@ import variablearc.evaluation.ExpressionSolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -150,7 +151,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
 
     for (Map.Entry<ASTIfStatement, BoolExpr> ifStatementEntry : ifStatementConditions.entrySet()) {
 
-      List<ASTExpression> possibleExpressions = new ArrayList<>();
+      Map<ASTExpression, Boolean> possibleExpressions = new LinkedHashMap<>();
       if (node instanceof ASTVariableArcFullVariantComponentType) {
         // Step 1: Check if Expression can be active
         List<BoolExpr> ifStatementEntryExpressionList = new ArrayList<>(List.of(featureConstraints, ifStatementEntry.getValue()));
@@ -191,7 +192,7 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
           }
 
           if (expressionFields.isEmpty() && expressionPorts.isEmpty()) {
-            possibleExpressions.add(ifStatementEntry.getKey().getCondition());
+            possibleExpressions.put(ifStatementEntry.getKey().getCondition(), true);
             break;
           } else {
             ExpressionBuildHelper.setScope(expressionFields.isEmpty() ? expressionPorts.get(0).getEnclosingScope() : expressionFields.get(0).getEnclosingScope());
@@ -221,20 +222,25 @@ public class IfConditionHasBooleanType4Family implements ArcBasisASTArcComponent
                 ifStatementEntryExpressionList.add(variableCondition);
             }
             if (ExpressionSolverService.solve(ifStatementEntryExpressionList) == Status.SATISFIABLE)
-              possibleExpressions.add(potentialExpression);
+              possibleExpressions.put(potentialExpression, ExpressionSolverService.isSatisfiableForAllUnknownValues(ifStatementEntryExpressionList));
             ifStatementEntryExpressionList.clear();
           }
           fieldNameVariations.clear();
         } else {
-          possibleExpressions.add(ifStatementEntry.getKey().getCondition());
+          possibleExpressions.put(ifStatementEntry.getKey().getCondition(), true);
         }
       } else {
-        possibleExpressions.add(ifStatementEntry.getKey().getCondition());
+        possibleExpressions.put(ifStatementEntry.getKey().getCondition(), true);
       }
-      for (ASTExpression possibleExpression : possibleExpressions) {
+      for (Map.Entry<ASTExpression, Boolean> possibleEntry : possibleExpressions.entrySet()) {
+        ASTExpression possibleExpression = possibleEntry.getKey();
         SymTypeExpression result = TypeCheck3.typeOf(possibleExpression);
         if (!SymTypeRelations.isBoolean(result)) {
-          Log.error(MCError.IF_CONDITION_NOT_BOOLEAN.format(), ifStatementEntry.getKey().get_SourcePositionStart());
+          if (possibleEntry.getValue()) {
+            Log.error(MCError.IF_CONDITION_NOT_BOOLEAN.format(), ifStatementEntry.getKey().get_SourcePositionStart());
+          } else {
+            Log.warn(MCError.IF_CONDITION_NOT_BOOLEAN.format(), ifStatementEntry.getKey().get_SourcePositionStart());
+          }
         }
       }
     }

@@ -105,7 +105,11 @@ public class NoPortInSuperComponentArgument4Family implements ArcBasisASTArcComp
               parentEntryExpressionList.addAll(List.of(featureConstraints, entry.getValue()));
               if (ExpressionSolverService.solve(parentEntryExpressionList) == Status.SATISFIABLE) {
                 SourcePosition sourcePosition = argument.getExpression().get_SourcePositionStart();
-                Log.error(PORT_REF_IN_STATIC_CONTEXT.format(parentEntry.getKey()), sourcePosition);
+                if (ExpressionSolverService.isSatisfiableForAllUnknownValues(parentEntryExpressionList)) {
+                  Log.error(PORT_REF_IN_STATIC_CONTEXT.format(parentEntry.getKey()), sourcePosition);
+                } else {
+                  Log.warn(PORT_REF_IN_STATIC_CONTEXT.format(parentEntry.getKey()), sourcePosition);
+                }
               }
             }
           }

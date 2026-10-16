@@ -123,11 +123,19 @@ public class NoFieldInSubcomponentArgument4Family implements ArcBasisASTArcCompo
               new ArrayList<>(List.of(featureConstraints, componentEntry.getValue(), fieldEntry.getValue()));
             if (ExpressionSolverService.solve(fieldAndSubcomponentActiveConditions) == Status.SATISFIABLE) {
               SourcePosition sourcePosition = argument.getExpression().get_SourcePositionStart();
-              Log.error(
-                FIELD_REF_IN_STATIC_CONTEXT.format(fieldEntry.getKey().getName()),
-                sourcePosition,
-                argument.getExpression().get_SourcePositionEnd()
-              );
+              if (ExpressionSolverService.isSatisfiableForAllUnknownValues(fieldAndSubcomponentActiveConditions)) {
+                Log.error(
+                  FIELD_REF_IN_STATIC_CONTEXT.format(fieldEntry.getKey().getName()),
+                  sourcePosition,
+                  argument.getExpression().get_SourcePositionEnd()
+                );
+              } else {
+                Log.warn(
+                  FIELD_REF_IN_STATIC_CONTEXT.format(fieldEntry.getKey().getName()),
+                  sourcePosition,
+                  argument.getExpression().get_SourcePositionEnd()
+                );
+              }
             }
           }
         }

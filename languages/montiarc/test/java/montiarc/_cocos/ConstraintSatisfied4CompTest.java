@@ -3,6 +3,7 @@ package montiarc._cocos;
 
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
@@ -138,6 +139,55 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
       // implicit inherited constraint in instance contradiction
       arg("component InvalidComp12 { a.b.D d; constraint(!d.ff); }",
         CONSTRAINT_NOT_SATISFIED)
+    );
+  }
+
+  /**
+   * Constraints containing values that cannot be determined statically (here: method calls and
+   * a variable of a type without SMT representation) are reported as error if they are
+   * unsatisfiable for all of these values, as warning if they are unsatisfiable for some of
+   * them, and not at all if they are satisfiable for all of them.
+   */
+  @ParameterizedTest
+  @MethodSource("modelsWithUnknownValues")
+  void shouldClassifyConstraintsWithUnknownValues(@NotNull String model, boolean error, boolean warning) {
+    Preconditions.checkNotNull(model);
+
+    // Given
+    ASTMACompilationUnit ast = compile(model);
+    Log.clearFindings();
+
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConstraintSatisfied4Comp());
+
+    // When
+    checker.checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).filteredOn(Finding::isError)
+      .extracting(Finding::getMsg)
+      .allMatch(msg -> msg.startsWith(CONSTRAINT_NOT_SATISFIED.getErrorCode()))
+      .hasSize(error ? 1 : 0);
+    assertThat(Log.getFindings()).filteredOn(Finding::isWarning)
+      .extracting(Finding::getMsg)
+      .allMatch(msg -> msg.startsWith(CONSTRAINT_NOT_SATISFIED.getErrorCode()))
+      .hasSize(warning ? 1 : 0);
+  }
+
+  protected static Stream<Arguments> modelsWithUnknownValues() {
+    return Stream.of(
+      // unsatisfiable whatever the method returns
+      Arguments.of("component UnknownComp1 { constraint((java.lang.Math.abs(1) > 0) && false); }", true, false),
+      // satisfiable whatever the method returns
+      Arguments.of("component UnknownComp2 { constraint((java.lang.Math.abs(1) > 0) || true); }", false, false),
+      // satisfiable only if the method returns true
+      Arguments.of("component UnknownComp3 { constraint((java.lang.Math.abs(1) > 0)); }", false, true),
+      // the feature can adapt to whatever the method returns
+      Arguments.of("component UnknownComp4 { feature f; constraint(f == (java.lang.Math.abs(1) > 0)); }", false, false),
+      // parameter bound to a method call, satisfiable only for positive results
+      Arguments.of("component UnknownComp5 { component Inner(int p) { constraint(p > 0); } Inner sub(java.lang.Math.abs(-1)); }", false, true),
+      // the parameter's type has no SMT representation, hence, the comparison is unknown
+      Arguments.of("component UnknownComp6(String s) { constraint(s == \"x\"); }", false, true)
     );
   }
 }

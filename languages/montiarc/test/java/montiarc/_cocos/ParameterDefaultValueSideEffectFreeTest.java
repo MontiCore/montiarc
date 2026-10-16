@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis._cocos.ParameterDefaultValueSideEffectFree;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
@@ -11,32 +12,25 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import variablearc._cocos.ConstraintSmtConvertible;
 
 import java.util.stream.Stream;
 
-import static montiarc.util.VariableArcError.EXPRESSION_NOT_SMT_CONVERTIBLE;
+import static montiarc.util.ArcError.NON_PURE_EXPRESSION;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * The class under test is {@link ConstraintSmtConvertible}.
+ * The class under test is {@link ParameterDefaultValueSideEffectFree}.
  */
-class ConstraintSmtConvertibleTest extends MontiArcTestBase {
+class ParameterDefaultValueSideEffectFreeTest extends MontiArcTestBase {
 
   @ParameterizedTest
   @ValueSource(strings = {
-    // component without a constraint
-    "component ValidComp1 { }",
-    // constraint referencing a feature
-    "component ValidComp2 { feature f; constraint(f); }",
-    // constraint negating a feature
-    "component ValidComp3 { feature f; constraint(!f); }",
-    // constraint conjunction of a feature and its negation
-    "component ValidComp4 { feature f; constraint(f && !f); }",
-    // constraint disjunction of a feature and its negation
-    "component ValidComp5 { feature f; constraint(f || !f); }",
-    // constraint comparing an int parameter
-    "component ValidComp6(int p) { constraint(p > 0); }"
+    "component ValidComp1(int p) { }",
+    "component ValidComp2(int p = 1) { }",
+    "component ValidComp3(int p = 1 + 2) { }",
+    "component ValidComp4(int p1, int p2 = p1) { }",
+    "component ValidComp5(int p = m()) { }",
+    "component ValidComp6(int p1 = 1, int p2 = m(p1)) { }"
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -45,7 +39,7 @@ class ConstraintSmtConvertibleTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConstraintSmtConvertible());
+    checker.addCoCo(new ParameterDefaultValueSideEffectFree());
 
     // When
     checker.checkAll(ast);
@@ -65,7 +59,7 @@ class ConstraintSmtConvertibleTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConstraintSmtConvertible());
+    checker.addCoCo(new ParameterDefaultValueSideEffectFree());
 
     // When
     checker.checkAll(ast);
@@ -75,16 +69,24 @@ class ConstraintSmtConvertibleTest extends MontiArcTestBase {
       .containsExactlyInAnyOrder(getErrorCodes(errors));
   }
 
-  protected static Stream<Arguments> invalidModels() {
+  static Stream<Arguments> invalidModels() {
     return Stream.of(
-      // constraint referencing a non-boolean (String) parameter
-      arg("""
-        component InvalidComp1(String p) {
-          constraint(p);
-        }
-        """,
-        EXPRESSION_NOT_SMT_CONVERTIBLE
-      )
+      arg("component InvalidComp1(int p1, int p2 = p1 = 1) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp2(int p1, int p2 = p1 += 1) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp3(int p1, int p2 = ++p1) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp4(int p1, int p2 = --p1) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp5(int p1, int p2 = p1++) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp6(int p1, int p2 = p1--) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp7(int p1, int p2 = m(p1++)) { }",
+        NON_PURE_EXPRESSION),
+      arg("component InvalidComp8(int p1, int p2 = p1++, int p3 = p1--) { }",
+        NON_PURE_EXPRESSION, NON_PURE_EXPRESSION)
     );
   }
 }

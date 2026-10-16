@@ -63,7 +63,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
         ), true)
       );
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -84,7 +84,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
         ), true)
       );
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -104,7 +104,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
           this.getContext().mkInt2BV(64, right.get())
         ), true));
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -129,7 +129,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
         ), true)
       );
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -154,7 +154,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
         ), true)
       );
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 
@@ -179,7 +179,7 @@ public class BitExpressions2SMT implements BitExpressionsHandler {
         ), true)
       );
     } else {
-      this.getResult().clear();
+      this.deriveSMTExpr.setUnknown(node);
     }
   }
 }

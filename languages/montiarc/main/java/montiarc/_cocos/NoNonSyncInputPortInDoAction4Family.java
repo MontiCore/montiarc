@@ -150,9 +150,15 @@ public class NoNonSyncInputPortInDoAction4Family implements ArcBasisASTArcCompon
             doEntryExpressionList.addAll(List.of(featureConstraints, ctx.mkAnd(doEntry.getValue(), entry.getValue())));
             if (ExpressionSolverService.solve(doEntryExpressionList) == Status.SATISFIABLE) {
               if (shadowingFields.isEmpty()) {
-                Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
-                  nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
-                );
+                if (ExpressionSolverService.isSatisfiableForAllUnknownValues(doEntryExpressionList)) {
+                  Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                    nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                  );
+                } else {
+                  Log.warn(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                    nameExpression.get_SourcePositionStart(), nameExpression.get_SourcePositionEnd()
+                  );
+                }
               }
             }
           }

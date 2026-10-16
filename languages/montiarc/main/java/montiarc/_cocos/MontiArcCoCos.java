@@ -14,7 +14,7 @@ import arcbasis._cocos.AtomicNoConnector;
 import arcbasis._cocos.BehaviorInDecomposed;
 import arcbasis._cocos.CheckNoFieldDependencyCycles;
 import arcbasis._cocos.CircularInheritance;
-import arcbasis._cocos.CompArgNoAssignmentExpr;
+import arcbasis._cocos.CompArgSideEffectFree;
 import arcbasis._cocos.ComponentHeritageRawType;
 import arcbasis._cocos.ComponentNameCapitalization;
 import arcbasis._cocos.ConfigurationParameterAssignment;
@@ -27,8 +27,8 @@ import arcbasis._cocos.FieldInitTypeFits;
 import arcbasis._cocos.FieldNameCapitalization;
 import arcbasis._cocos.NoComponentReferenceCycle;
 import arcbasis._cocos.NoFieldInDefaultParameterValue;
-import arcbasis._cocos.NoFieldInSuperComponentArgument;
 import arcbasis._cocos.NoFieldInSubcomponentArgument;
+import arcbasis._cocos.NoFieldInSuperComponentArgument;
 import arcbasis._cocos.NoPortInDefaultParameterValue;
 import arcbasis._cocos.NoPortInFieldDeclaration;
 import arcbasis._cocos.NoPortInSubcomponentArgument;
@@ -37,6 +37,7 @@ import arcbasis._cocos.OnlyAssignmentOrCallExpressionStatement;
 import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis._cocos.OracleStereotypeValueExists;
+import arcbasis._cocos.ParameterDefaultValueSideEffectFree;
 import arcbasis._cocos.ParameterDefaultValueTypeFits;
 import arcbasis._cocos.ParameterNameCapitalization;
 import arcbasis._cocos.PortHeritageTimingFits;
@@ -88,13 +89,12 @@ import variablearc._cocos.ConnectorDirectionsFit4Family;
 import variablearc._cocos.ConnectorPortsExist4Family;
 import variablearc._cocos.ConnectorTimingsFit4Family;
 import variablearc._cocos.ConstraintIsBoolean;
-import variablearc._cocos.ConstraintNoAssignmentExpr;
 import variablearc._cocos.ConstraintSatisfied4Comp;
-import variablearc._cocos.ConstraintSmtConvertible;
-import variablearc._cocos.NoFieldInConstraint;
+import variablearc._cocos.ConstraintSideEffectFree;
 import variablearc._cocos.FeatureNameCapitalization;
 import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.FeedbackStrongCausality4Family;
+import variablearc._cocos.NoFieldInConstraint;
 import variablearc._cocos.NoFieldInVarIfCondition;
 import variablearc._cocos.NoPortInConstraint;
 import variablearc._cocos.NoPortInVarIfCondition;
@@ -104,9 +104,7 @@ import variablearc._cocos.SubPortsConnected4Family;
 import variablearc._cocos.SubcomponentsConstraint;
 import variablearc._cocos.UniqueIdentifier4Family;
 import variablearc._cocos.VarIfIsBoolean;
-import variablearc._cocos.VarIfNoAssignmentExpr;
-
-import variablearc._cocos.VarIfSmtConvertible;
+import variablearc._cocos.VarIfSideEffectFree;
 import variablearc._cocos.arcbasis.UniqueIdentifier;
 
 /**
@@ -117,9 +115,10 @@ public class MontiArcCoCos {
   public static MontiArcCoCoChecker afterParser() {
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
 
-    checker.addCoCo(new CompArgNoAssignmentExpr());
-    checker.addCoCo(new ConstraintNoAssignmentExpr());
-    checker.addCoCo(new VarIfNoAssignmentExpr());
+    checker.addCoCo(new CompArgSideEffectFree());
+    checker.addCoCo(new ParameterDefaultValueSideEffectFree());
+    checker.addCoCo(new ConstraintSideEffectFree());
+    checker.addCoCo(new VarIfSideEffectFree());
 
     return checker;
   }
@@ -222,7 +221,6 @@ public class MontiArcCoCos {
     // VariableArc
     checker.addCoCo(new NoFieldInConstraint());
     checker.addCoCo(new ConstraintIsBoolean());
-    checker.addCoCo(new ConstraintSmtConvertible());
     checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
@@ -232,7 +230,6 @@ public class MontiArcCoCos {
       checker.addCoCo(new NoFieldInVarIfCondition());
       checker.addCoCo(new NoPortInVarIfCondition());
       checker.addCoCo(new VarIfIsBoolean());
-      checker.addCoCo(new VarIfSmtConvertible());
     }
 
     // Modes
@@ -316,12 +313,12 @@ public class MontiArcCoCos {
     // Basic MontiCore cocos
     checker.addCoCo((AssignmentExpressionsASTAssignmentExpressionCoCo) new AssignmentExpressionsOnlyAssignToLValuesCoCo());
     if (checkVariants) {
-        varChecker.get4FullVariant().addCoCo(new ExpressionStatementIsValid4Family());
-        varChecker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
-        varChecker.get4FullVariant().addCoCo(new ForConditionHasBooleanType4Family());
-        varChecker.get4FullVariant().addCoCo(new ForEachIsValid4Family());
-        varChecker.get4FullVariant().addCoCo(new IfConditionHasBooleanType4Family());
-        //varChecker.get4FullVariant().addCoCo(new SwitchCaseCompatible4Family());
+      varChecker.get4FullVariant().addCoCo(new ExpressionStatementIsValid4Family());
+      varChecker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
+      varChecker.get4FullVariant().addCoCo(new ForConditionHasBooleanType4Family());
+      varChecker.get4FullVariant().addCoCo(new ForEachIsValid4Family());
+      varChecker.get4FullVariant().addCoCo(new IfConditionHasBooleanType4Family());
+      //varChecker.get4FullVariant().addCoCo(new SwitchCaseCompatible4Family());
     } else {
       checker.addCoCo(new ExpressionStatementIsValid());
       checker.addCoCo(new VarDeclarationInitializationHasCorrectType());
@@ -338,6 +335,6 @@ public class MontiArcCoCos {
     checker.addCoCo(new PrePostIsBoolean());
     checker.addCoCo(new TriggerPortExists());
 
-    return checkVariants? varChecker : checker;
+    return checkVariants ? varChecker : checker;
   }
 }

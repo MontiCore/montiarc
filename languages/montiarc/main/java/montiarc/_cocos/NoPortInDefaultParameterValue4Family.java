@@ -92,7 +92,11 @@ public class NoPortInDefaultParameterValue4Family implements ArcBasisASTArcCompo
             List<BoolExpr> portInDefaultParamExpressionList = new ArrayList<>(List.of(featureConstraints, entry.getValue()));
             if (ExpressionSolverService.solve(portInDefaultParamExpressionList) == Status.SATISFIABLE) {
               SourcePosition sourcePosition = param.get_SourcePositionStart();
-              Log.error(PORT_REF_IN_STATIC_CONTEXT.format(entry.getKey().getName()), sourcePosition);
+              if (ExpressionSolverService.isSatisfiableForAllUnknownValues(portInDefaultParamExpressionList)) {
+                Log.error(PORT_REF_IN_STATIC_CONTEXT.format(entry.getKey().getName()), sourcePosition);
+              } else {
+                Log.warn(PORT_REF_IN_STATIC_CONTEXT.format(entry.getKey().getName()), sourcePosition);
+              }
             }
           }
         }

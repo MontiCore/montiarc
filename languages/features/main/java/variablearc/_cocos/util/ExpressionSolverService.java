@@ -44,6 +44,14 @@ public class ExpressionSolverService {
     return lastStatus;
   }
 
+  /**
+   * @return whether the conjunction of {@code constraints} is satisfiable for all unknown values,
+   * see {@link ExpressionSolver#isSatisfiableForAllUnknownValues}
+   */
+  public static synchronized boolean isSatisfiableForAllUnknownValues(List<BoolExpr> constraints) {
+    return ExpressionSolver.isSatisfiableForAllUnknownValues(ctx, solver, ctx.mkAnd(constraints.toArray(new BoolExpr[0])));
+  }
+
   public static Model getModel() {
     if (lastStatus == Status.SATISFIABLE && lastModel != null) {
       return lastModel;

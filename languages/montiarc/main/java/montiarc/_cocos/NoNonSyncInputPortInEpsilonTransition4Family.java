@@ -176,9 +176,15 @@ public class NoNonSyncInputPortInEpsilonTransition4Family implements ArcBasisAST
                   PortSymbol port = ((Port2VariableAdapter) portSymbol).getAdaptee();
                   if (port.isIncoming() && !port.getTiming().matches(TIMED_SYNC)) {
                     if (shadowingFields.isEmpty()) {
-                      Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
-                        nameExpr.get_SourcePositionStart(), nameExpr.get_SourcePositionEnd()
-                      );
+                      if (ExpressionSolverService.isSatisfiableForAllUnknownValues(doEntryExpressionList)) {
+                        Log.error(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                          nameExpr.get_SourcePositionStart(), nameExpr.get_SourcePositionEnd()
+                        );
+                      } else {
+                        Log.warn(IN_PORT_REF_IN_INVALID_CONTEXT.format(variableName, CONTEXT),
+                          nameExpr.get_SourcePositionStart(), nameExpr.get_SourcePositionEnd()
+                        );
+                      }
                     }
                   }
                 }

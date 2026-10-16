@@ -8,6 +8,7 @@ import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.evaluation.VariableArcDeriveSMTSort;
+import variablearc.evaluation.exp2smt.AssignmentExpressions2SMT;
 import variablearc.evaluation.exp2smt.BitExpressions2SMT;
 import variablearc.evaluation.exp2smt.CommonExpressions2SMT;
 import variablearc.evaluation.exp2smt.Expr2SMTResult;
@@ -36,6 +37,7 @@ public class MontiArcDeriveSMTExpr implements IDeriveSMTExpr {
     this.traverser.setMCCommonLiteralsHandler(new MCCommonLiterals2SMT(this));
     this.traverser.setCommonExpressionsHandler(new CommonExpressions2SMT(this));
     this.traverser.setBitExpressionsHandler(new BitExpressions2SMT(this));
+    this.traverser.setAssignmentExpressionsHandler(new AssignmentExpressions2SMT(this));
   }
 
   @Override

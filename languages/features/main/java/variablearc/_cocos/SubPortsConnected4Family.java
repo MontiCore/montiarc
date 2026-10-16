@@ -227,7 +227,11 @@ public class SubPortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo
         ASTComponentInstance subComponent = portToSubcomponent.get(port);
         String portIdentifier = subComponent.getName() + "." + port.substring(subComponent.getSymbol().getFullName().length() + 1);
         if (portSymbol.isIncoming()) {
-          Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(portIdentifier), subComponent.getSymbol().getAstNode().get_SourcePositionStart(), subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
+          if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList)) {
+            Log.error(ArcError.IN_PORT_NOT_CONNECTED.format(portIdentifier), subComponent.getSymbol().getAstNode().get_SourcePositionStart(), subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
+          } else {
+            Log.warn(ArcError.IN_PORT_NOT_CONNECTED.format(portIdentifier), subComponent.getSymbol().getAstNode().get_SourcePositionStart(), subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
+          }
         } else {
           Log.warn(ArcError.OUT_PORT_NOT_CONNECTED.format(portIdentifier), subComponent.getSymbol().getAstNode().get_SourcePositionStart(), subComponent.getSymbol().getAstNode().get_SourcePositionEnd());
         }
