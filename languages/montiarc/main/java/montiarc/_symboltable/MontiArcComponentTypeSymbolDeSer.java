@@ -51,6 +51,7 @@ public class MontiArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer
     serializeSuperComponents(toSerialize.getSuperComponentsList(), s2j);
     serializeRefinements(toSerialize.getRefinementsList(), s2j);
     serializeParameter(toSerialize.getParameterList(), s2j);
+    serializeEffectChains(toSerialize.getEffectChains(), s2j);
 
     // ---- Start Override
     // Variable symbols need to be serialized before the spanned scope

@@ -4,8 +4,11 @@ package montiarc._symboltable;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import arcbasis._cocos.ConfigurationParameterAssignment;
 import com.google.common.base.Preconditions;
+import de.monticore.symbols.basicsymbols.BasicSymbolsMill;
 import de.monticore.symbols.basicsymbols._symboltable.TypeSymbol;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.types.check.SymTypeExpressionFactory;
 import de.se_rwth.commons.logging.Log;
@@ -16,6 +19,7 @@ import montiarc._cocos.MontiArcCoCoChecker;
 import montiarc.util.ArcError;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -434,6 +438,24 @@ class MontiArcDeSerializationEndToEndTest extends MontiArcTestBase {
 
   protected static String createComponentWithInstantiation(String instantiationStatement) {
     return String.format("import foo.Comp; component Instantiating { %s }", instantiationStatement);
+  }
+
+  @Test
+  void shouldPreserveEffectChains() {
+    // Given
+    ASTMACompilationUnit ast = compile("package a; component Atomic { port in int i; port out int o; }");
+
+    // When
+    String json = new MontiArcSymbols2Json().serialize((IMontiArcArtifactScope) ast.getEnclosingScope());
+    MontiArcMill.globalScope().clear();
+    BasicSymbolsMill.initializePrimitives();
+    MontiArcMill.globalScope().addSubScope(new MontiArcSymbols2Json().deserialize(json));
+
+    // Then
+    ComponentTypeSymbol loaded = MontiArcMill.globalScope().resolveComponentType("a.Atomic").orElseThrow();
+    PortSymbol i = loaded.getPort("i").orElseThrow();
+    PortSymbol o = loaded.getPort("o").orElseThrow();
+    assertThat(loaded.getEffectChains().get(i)).containsExactly(o);
   }
 
   /**
