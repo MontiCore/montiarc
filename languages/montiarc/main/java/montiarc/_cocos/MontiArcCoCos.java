@@ -34,7 +34,6 @@ import arcbasis._cocos.NoPortInFieldDeclaration;
 import arcbasis._cocos.NoPortInSubcomponentArgument;
 import arcbasis._cocos.NoPortInSuperComponentArgument;
 import arcbasis._cocos.OnlyAssignmentOrCallExpressionStatement;
-import arcbasis._cocos.OnlyOneTiming;
 import arcbasis._cocos.OptionalConfigurationParametersLast;
 import arcbasis._cocos.OracleStereotypeValueExists;
 import arcbasis._cocos.ParameterDefaultValueSideEffectFree;
@@ -164,7 +163,6 @@ public class MontiArcCoCos {
       checker.addCoCo(new ConnectorTypesFit());
       checker.addCoCo(new ConnectorDirectionsFit());
       checker.addCoCo(new ConnectorTimingsFit());
-      checker.addCoCo(new OnlyOneTiming());
       checker.addCoCo(new AtomicNoConnector());
       checker.addCoCo(new AtomicMaxOneBehavior());
       checker.addCoCo(new FeedbackStrongCausality());

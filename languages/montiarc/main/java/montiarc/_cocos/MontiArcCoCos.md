@@ -36,7 +36,6 @@
 | ☑     | ☑           | ConnectorTypesFit                       | ArcBasis | 0xC1110                                                       |
 | ☑     | ☑           | ConnectorDirectionsFit                  | ArcBasis | 0xC1111, 0xC1112                                              |
 | ☑     | ☑           | ConnectorTimingsFit                     | ArcBasis | 0xC1113                                                       |
-| ☑     | ☒           | OnlyOneTiming                           | ArcBasis | 0xC1114                                                       |
 | ☑     | ☑           | AtomicMaxOneBehavior                    | ArcBasis | 0xC1115                                                       |
 | ☑     | ☑           | BehaviorInDecomposed                    | ArcBasis | 0xC1116                                                       |
 | ☑     | ☑           | FeedbackStrongCausality                 | ArcBasis | 0xC1117                                                       |

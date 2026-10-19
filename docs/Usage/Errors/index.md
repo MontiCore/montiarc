@@ -264,21 +264,6 @@ component A {
 
 ---
 
-### 0xC1114 - *Multiple Timing Annotations*
-
-##### Description
-A port has been annotated with more than one timing modifier.
-
-##### Example
-
-```montiarc
-component A {
-  port sync delay out Integer x;
-}
-```
-
----
-
 ### 0xC1115 - *Multiple Behavior*
 
 ##### Description
