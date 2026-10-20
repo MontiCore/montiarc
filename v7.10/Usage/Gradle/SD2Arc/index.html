@@ -3598,12 +3598,7 @@ Some configuration options only have default values if the task is created for a
 <tr>
 <td>symbolpath</td>
 <td><em>(none)</em></td>
-<td>Unlike cd2pojo/fmu2arc/MontiArc, sd2arc does not have its own dependency-declaration configuration for this. Instead, it is populated automatically: if the <code>cd2pojo</code> plugin is applied, <code>main</code>'s compiled class diagram symbols are added here; if the <code>montiarc-jsim</code> plugin is applied, <code>main</code>'s compiled MontiArc symbols are added here. You can specify additional locations yourself with <code>symbolpath.from(...)</code> statements.</td>
-</tr>
-<tr>
-<td>useClass2Mc</td>
-<td><code>false</code></td>
-<td>If you intend to use Java types (or other JVM types) in your sequence diagram models, then you set this configuration parameter to <code>true</code>. By this, all JVM types that are on the class path of the generator (which is the configuration <code>sd2arcToolClasspath</code>) will be accessible from sequence diagram models. <em>Note</em>: This will be changed in the future.</td>
+<td>Unlike cd2pojo/fmu2arc/MontiArc, sd2arc does not have its own dependency-declaration configuration for this. Instead, it is populated automatically: if the <code>cd2pojo</code> plugin is applied, <code>main</code>'s compiled class diagram symbols are added here; if the <code>montiarc-jsim</code> plugin is applied, <code>main</code>'s compiled MontiArc symbols are added here; if the <code>class2mc</code> plugin is applied, the JVM classes declared via <code>class2mc(...)</code> are added here. You can specify additional locations yourself with <code>symbolpath.from(...)</code> statements.</td>
 </tr>
 <tr>
 <td>outputDir</td>

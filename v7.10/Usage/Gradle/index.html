@@ -3699,7 +3699,7 @@ Check that no error occurs.</p>
 <p>Java types can be used the same way from within class diagram models, without any further configuration.</p>
 <h3 id="using-other-jvm-classes">Using other JVM classes<a class="headerlink" href="#using-other-jvm-classes" title="Permanent link">&para;</a></h3>
 <p>To use JVM classes beyond the JDK (e.g. classes from another project of yours, or from a published library) in
-MontiArc or class diagram models, apply the <code>class2mc</code> plugin and declare a dependency on the <code>class2mc</code> (or
+MontiArc, class diagram, or sequence diagram models, apply the <code>class2mc</code> plugin and declare a dependency on the <code>class2mc</code> (or
 <code>testClass2mc</code>) configuration:
 <div class="highlight"><span class="filename">build.gradle(.kts)</span><pre><span></span><code><span class="n">plugins</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="n">id</span><span class="p">(</span><span class="s">"class2mc"</span><span class="p">)</span>
@@ -3709,8 +3709,8 @@ MontiArc or class diagram models, apply the <code>class2mc</code> plugin and dec
 <span class="w">  </span><span class="n">class2mc</span><span class="p">(</span><span class="s">"some.other:project.foo:2.0.0"</span><span class="p">)</span>
 <span class="p">}</span>
 </code></pre></div>
-Classes declared this way become resolvable from both MontiArc and class diagram models in the same project, the
-same way JDK types are.</p>
+Classes declared this way become resolvable from MontiArc, class diagram, and sequence diagram models in the same
+project, the same way JDK types are.</p>
 <h2 id="further-references">Further references<a class="headerlink" href="#further-references" title="Permanent link">&para;</a></h2>
 <p>Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.
 It also enables fine configuration options.
