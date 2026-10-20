@@ -68,6 +68,7 @@
 | ☑     | ☒           | CheckNoFieldDependencyCycles            | ArcBasis | 0xC1190                                                       |
 | ☑     | ☒           | PortInheritanceTiming                   | ArcBasis | 0xC1191                                                       |
 | ☑     | ☒           | OnlyAssignmentOrCallExpressionStatement | ArcBasis | 0xC1194                                                       |
+| ☑     | ☒           | NoParameterDefaultForwardReference      | ArcBasis | 0xC1197                                                       |
 
 ## MontiArc CoCos
 

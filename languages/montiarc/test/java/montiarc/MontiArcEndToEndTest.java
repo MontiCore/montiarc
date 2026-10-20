@@ -49,6 +49,7 @@ import static montiarc.util.ArcError.NON_PURE_EXPRESSION;
 import static montiarc.util.ArcError.OPTIONAL_PARAMS_LAST;
 import static montiarc.util.ArcError.OUT_PORT_NOT_CONNECTED;
 import static montiarc.util.ArcError.OUT_PORT_UNUSED;
+import static montiarc.util.ArcError.PARAMETER_DEFAULT_FORWARD_REFERENCE;
 import static montiarc.util.ArcError.PARAMETER_UPPER_CASE;
 import static montiarc.util.ArcError.PARAM_DEFAULT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
@@ -438,6 +439,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
       arg("SideEffectInDefaultParameterValueTest",
         mpk(PKG_COMP, "SideEffectInDefaultParameterValue.arc"),
         fn(ERROR, PKG_COMP, "SideEffectInDefaultParameterValue.arc", 8, 60, 8, 63, NON_PURE_EXPRESSION, "default parameter values")
+      ),
+      arg("ParameterDefaultForwardReferenceTest",
+        mpk(PKG_COMP, "ParameterDefaultForwardReference.arc"),
+        fn(ERROR, PKG_COMP, "ParameterDefaultForwardReference.arc", 8, 52, 8, 53, PARAMETER_DEFAULT_FORWARD_REFERENCE, "a", "b")
       ),
       arg("MissingComponentTest7",
         mpk(PKG_COMP, "MissingComponent7.arc"),

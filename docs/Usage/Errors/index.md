@@ -1096,3 +1096,22 @@ A port cannot override its timing annotation to an incompatible value.
 component Base { port in Integer o; }
 component Sub extends Base { port sync in Integer o; }
 ```
+
+---
+
+### 0xC1197 - *Forward Reference in Default Parameter Value*
+
+##### Description
+The default value of a parameter references either the parameter itself or a 
+parameter declared after it. Default values may only reference preceding parameters.
+
+##### Example
+
+```montiarc
+component A(int p = q, int q = 1) { }
+```
+
+##### How to fix
+Reorder the parameters so that each default value references only preceding 
+parameters, e.g., component A(int q = 1, int p = q) { }, or remove the 
+references to other parameters from the default values.
