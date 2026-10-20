@@ -6196,6 +6196,56 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#0xc1197-forward-reference-in-default-parameter-value" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0xC1197 - Forward Reference in Default Parameter Value
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="0xC1197 - Forward Reference in Default Parameter Value">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#description_65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Description
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example_65" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Example
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-fix_27" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How to fix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -6894,6 +6944,18 @@ Read more about causality and feedback loops <a href="../../Reference/Component/
 <div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nc">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 <span class="kd">component</span> <span class="nc">Sub</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Base</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="k">port</span><span class="w"> </span><span class="k">sync</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">Integer</span><span class="w"> </span><span class="n">o</span><span class="p">;</span><span class="w"> </span><span class="p">}</span>
 </code></pre></div>
+<hr />
+<h3 id="0xc1197-forward-reference-in-default-parameter-value">0xC1197 - <em>Forward Reference in Default Parameter Value</em><a class="headerlink" href="#0xc1197-forward-reference-in-default-parameter-value" title="Permanent link">&para;</a></h3>
+<h5 id="description_65">Description<a class="headerlink" href="#description_65" title="Permanent link">&para;</a></h5>
+<p>The default value of a parameter references either the parameter itself or a 
+parameter declared after it. Default values may only reference preceding parameters.</p>
+<h5 id="example_65">Example<a class="headerlink" href="#example_65" title="Permanent link">&para;</a></h5>
+<div class="highlight"><pre><span></span><code><span class="kd">component</span> <span class="nf">A</span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">q</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">q</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<h5 id="how-to-fix_27">How to fix<a class="headerlink" href="#how-to-fix_27" title="Permanent link">&para;</a></h5>
+<p>Reorder the parameters so that each default value references only preceding 
+parameters, e.g., component A(int q = 1, int p = q) { }, or remove the 
+references to other parameters from the default values.</p>
 
 
 
