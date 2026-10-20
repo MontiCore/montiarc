@@ -1,0 +1,11 @@
+/* (c) https://github.com/MontiCore/monticore */
+package sd2arc.class2mc;
+
+import montiarc.timed.Inverter;
+
+sequencediagram JavaLangSD {
+  inv:Inverter;
+
+  let Integer i = 1;
+  let String s = "s";
+}

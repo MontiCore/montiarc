@@ -260,7 +260,7 @@ Java types can be used the same way from within class diagram models, without an
 
 ### Using other JVM classes
 To use JVM classes beyond the JDK (e.g. classes from another project of yours, or from a published library) in
-MontiArc or class diagram models, apply the `class2mc` plugin and declare a dependency on the `class2mc` (or
+MontiArc, class diagram, or sequence diagram models, apply the `class2mc` plugin and declare a dependency on the `class2mc` (or
 `testClass2mc`) configuration:
 ```kotlin title="build.gradle(.kts)"
 plugins {
@@ -271,8 +271,8 @@ dependencies {
   class2mc("some.other:project.foo:2.0.0")
 }
 ```
-Classes declared this way become resolvable from both MontiArc and class diagram models in the same project, the
-same way JDK types are.
+Classes declared this way become resolvable from MontiArc, class diagram, and sequence diagram models in the same
+project, the same way JDK types are.
 
 ## Further references 
 Applying the MontiArc Gradle plugin provides further benefits, like publishing your MontiArc models and depending on the models of other people.

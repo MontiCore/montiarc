@@ -48,9 +48,6 @@ abstract class SD2ArcCompile : DefaultTask() {
   abstract val outputDir : DirectoryProperty
 
   @get:Input
-  abstract val useClass2Mc : Property<Boolean>
-
-  @get:Input
   @get:Optional
   abstract val defaultTicks : Property<Long>
 
@@ -81,8 +78,6 @@ abstract class SD2ArcCompile : DefaultTask() {
 
   init {
     description = "Generates .arc components from sequence diagrams using sd2arc."
-
-    useClass2Mc.convention(false)
 
     printTaskInfo.convention(false)
 
@@ -141,9 +136,7 @@ abstract class SD2ArcCompile : DefaultTask() {
         it.args("-path", cleanSymbolpath.asPath)
       }
 
-      if (useClass2Mc.get()) {
-        it.args("--class2mc")
-      }
+      it.args("--class2mc")
 
       if (defaultTicks.isPresent) {
         it.args("--defaultTicks", defaultTicks.get())

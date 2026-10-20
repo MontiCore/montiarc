@@ -15,6 +15,9 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
 
+private val SourceSet.class2mcClasspathConfigName: String
+  get() = if (SourceSet.isMain(this)) "class2mcClasspath" else "${name}Class2mcClasspath"
+
 const val TOOL_CLASSPATH_CONFIG_NAME = "sd2arcToolClasspath"
 
 const val SD2ARC_TOOL_CLASS = "de.monticore.sd2arc.SD2ArcTool"
@@ -43,6 +46,7 @@ class SD2ArcPlugin : Plugin<Project> {
         // Adding an entry for sd2arc to all source sets and creating compile tasks from them
         addSD2ArcEntryToSourceSet(sourceSet)
         createCompileSD2ArcTask(sourceSet)
+        connectClass2MCSymbolpath(sourceSet)
         dependencies.addProvider(sourceSet.implementationConfigurationName, provider { SE_LOGGING_PROJECT_REF })
       }
 
@@ -126,5 +130,18 @@ class SD2ArcPlugin : Plugin<Project> {
     tasks.named(sourceSet.compileMontiArcTaskName) { it.dependsOn(generateTask) }
 
     return generateTask
+  }
+
+  /**
+   * Puts the resolved `class2mc` dependency bucket of [sourceSet] onto the symbol path of its SD2Arc compile
+   * task, so that `--class2mc` (always passed by [SD2ArcCompile]) can resolve these classes. Only takes effect
+   * once the `class2mc` plugin is applied.
+   */
+  private fun connectClass2MCSymbolpath(sourceSet: SourceSet) = with(project) {
+    pluginManager.withPlugin("class2mc") {
+      tasks.named(sourceSet.compileSD2ArcTaskName, SD2ArcCompile::class.java).configure {
+        it.symbolpath.from(configurations.named(sourceSet.class2mcClasspathConfigName))
+      }
+    }
   }
 }
