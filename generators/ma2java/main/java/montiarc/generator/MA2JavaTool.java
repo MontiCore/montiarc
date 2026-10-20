@@ -282,8 +282,9 @@ public class MA2JavaTool extends MontiArcTool {
   }
 
   @Override
-  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean checkVariability) {
     Preconditions.checkNotNull(ast);
+    super.runAdditionalCoCos(ast, checkVariability);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords());

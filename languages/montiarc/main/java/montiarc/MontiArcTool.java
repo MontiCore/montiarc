@@ -516,7 +516,7 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    MontiArcCoCos.afterSymTab2().checkAll(ast);
+    this.runAdditionalCoCos(ast, true);
   }
 
   public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts, boolean checkVariability) {

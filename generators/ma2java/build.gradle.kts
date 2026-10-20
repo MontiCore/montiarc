@@ -12,6 +12,7 @@ dependencies {
   implementation(libs.guava)
   implementation(libs.janino)
 
+  testImplementation(testFixtures(project(":languages:basis")))
   testImplementation(project(":generators:cd2pojo"))
   testImplementation(seLibs.mc.c2mc)
   testImplementation(libs.mockito)

@@ -269,18 +269,12 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
-  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean checkVariability) {
     Preconditions.checkNotNull(ast);
+    super.runAdditionalCoCos(ast, checkVariability);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords());
-    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ParameterNamesAreNoJavaKeywords());
     checker.addCoCo(new IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords());
-    checker.addCoCo(new IdentifiersAreNoJavaKeywords.FieldNamesAreNoJavaKeywords());
-    checker.addCoCo(new IdentifiersAreNoJavaKeywords.AutomatonStateNamesAreNoJavaKeywords());
-    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ComponentTypeNamesAreNoJavaKeywords());
-    checker.addCoCo(new IdentifiersAreNoJavaKeywords.ComponentInstanceNamesAreNoJavaKeywords());
-
     checker.checkAll(ast);
   }
 
