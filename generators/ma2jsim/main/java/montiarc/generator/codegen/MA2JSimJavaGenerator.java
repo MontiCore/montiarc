@@ -9,6 +9,7 @@ import de.monticore.codegen.javagen.JavaOperationPrinter;
 import de.monticore.codegen.javagen.SymTypeExpression2JavaConverter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.expressions.expressionsbasis.codegen.javagen.ExpressionsBasisJavaGenVisitor;
+import de.monticore.expressions.tupleexpressions.codegen.javagen.TupleExpressionsJavaGenVisitor;
 import de.monticore.literals.mccommonliterals.codegen.javagen.MCCommonLiteralsJavaGenVisitor;
 import de.monticore.ocl.setexpressions.codegen.javagen.SetExpressionsJavaGenVisitor;
 import de.monticore.prettyprint.IndentPrinter;
@@ -88,6 +89,10 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
     ExpressionsBasisJavaGenVisitor visExpressionBasis =
       new ExpressionsBasisJavaGenVisitor(state);
     traverser.setExpressionsBasisHandler(visExpressionBasis);
+
+    TupleExpressionsJavaGenVisitor visTupleExpressions =
+      new TupleExpressionsJavaGenVisitor(state);
+    traverser.setTupleExpressionsHandler(visTupleExpressions);
 
     StreamExpressionsJavaPrinter streamExpressionsJavaPrinter = new StreamExpressionsJavaPrinter(getPrinter(), printComments);
     this.traverser.setStreamExpressionsHandler(streamExpressionsJavaPrinter);

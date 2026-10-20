@@ -24,7 +24,7 @@ public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top(
     throws org.eclipse.paho.client.mqttv3.MqttException {
     <#list comp.getAllIncomingPorts() as port>
       <#if !port.getType().isGenericType()>
-      mqtt.subscribe(getTopic("${comp.getName()}", "${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}"), str -> deSerializer.deserialize(str, <@Util.getPortTypeString port.getType()/>.class)
+      mqtt.subscribe(getTopic("${comp.getName()}", "${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}"), str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
         .ifPresent(m -> component.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}().receive(montiarc.rte.msg.Message.of(m)))
       );
       </#if>

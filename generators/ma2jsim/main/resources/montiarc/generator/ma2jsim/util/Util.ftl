@@ -7,6 +7,15 @@
 </#macro>
 
 <#-- SymTypeExpression type -->
+<#macro getPortTypeReference type>
+  <#if type.isTupleType()>
+    new tools.jackson.core.type.TypeReference<<@getPortTypeString type/>>() {}
+  <#else>
+    <@getPortTypeString type/>.class
+  </#if>
+</#macro>
+
+<#-- SymTypeExpression type -->
 <#macro getTypeString type boxPrimitives=false>
   ${javaPrinter.generateCode(type, boxPrimitives)}
 </#macro>

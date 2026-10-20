@@ -10,10 +10,12 @@ import de.monticore.expressions.bitexpressions.types3.BitExpressionsTypeVisitor;
 import de.monticore.expressions.commonexpressions.types3.CommonExpressionsCTTIVisitor;
 import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsLValueRelations;
 import de.monticore.expressions.streamexpressions.types3.StreamExpressionsTypeVisitor;
+import de.monticore.expressions.tupleexpressions.types3.TupleExpressionsCTTIVisitor;
 import de.monticore.ocl.setexpressions.types3.SetExpressionsCTTIVisitor;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
+import de.monticore.types.mcstructuraltypes.types3.MCStructuralTypesTypeVisitor;
 import de.monticore.types3.Type4Ast;
 import de.monticore.types3.generics.context.InferenceContext4Ast;
 import de.se_rwth.commons.logging.Log;
@@ -42,6 +44,8 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
   static MCSimpleGenericTypesTypeVisitor mcGenericTypes;
   static SetExpressionsCTTIVisitor setExpressions;
   static StreamExpressionsTypeVisitor streamExpressions;
+  static TupleExpressionsCTTIVisitor tupleExpressions;
+  static MCStructuralTypesTypeVisitor mcStructuralTypes;
 
   /**
    * @see de.monticore.types3.util.MapBasedTypeCheck3(de.monticore.visitor.ITraverser, Type4Ast, InferenceContext4Ast)
@@ -106,6 +110,8 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     initMCSimpleGenericTypesTypeVisitor(traverser, type4Ast, ctx4Ast);
     initSetExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
     initStreamExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
+    initTupleExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
+    initMCStructuralTypesTypeVisitor(traverser, type4Ast, ctx4Ast);
     Log.trace(() -> "Finish initializing the visitors of the type-check delegate", LOG_NAME);
   }
 
@@ -210,6 +216,34 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     Log.trace(() -> "Finish initializing the StreamExpressionsType visitor of the type-check delegate", LOG_NAME);
   }
 
+  protected static void initTupleExpressionsTypeVisitor(@NotNull MontiArcTraverser traverser,
+                                                        @NotNull Type4Ast type4Ast,
+                                                        @NotNull InferenceContext4Ast ctx4Ast) {
+    Preconditions.checkNotNull(traverser);
+    Preconditions.checkNotNull(type4Ast);
+    Preconditions.checkNotNull(ctx4Ast);
+    Log.trace(() -> "Start initializing the TupleExpressions visitor of the type-check delegate", LOG_NAME);
+    tupleExpressions = new TupleExpressionsCTTIVisitor();
+    tupleExpressions.setType4Ast(type4Ast);
+    tupleExpressions.setContext4Ast(ctx4Ast);
+    traverser.add4TupleExpressions(tupleExpressions);
+    traverser.setTupleExpressionsHandler(tupleExpressions);
+    Log.trace(() -> "Finish initializing the TupleExpressions visitor of the type-check delegate", LOG_NAME);
+  }
+
+  protected static void initMCStructuralTypesTypeVisitor(@NotNull MontiArcTraverser traverser,
+                                                         @NotNull Type4Ast type4Ast,
+                                                         @NotNull InferenceContext4Ast ctx4Ast) {
+    Preconditions.checkNotNull(traverser);
+    Preconditions.checkNotNull(type4Ast);
+    Preconditions.checkNotNull(ctx4Ast);
+    Log.trace(() -> "Start initializing the MCStructuralTypes visitor of the type-check delegate", LOG_NAME);
+    mcStructuralTypes = new MCStructuralTypesTypeVisitor();
+    mcStructuralTypes.setType4Ast(type4Ast);
+    traverser.add4MCStructuralTypes(mcStructuralTypes);
+    Log.trace(() -> "Finish initializing the MCStructuralTypes visitor of the type-check delegate", LOG_NAME);
+  }
+
   static Map<ComponentTypeSymbol, Type4Ast> context2Type4AST;
   static ComponentTypeSymbol defaultContext;
   static MontiArcTypeCheck maDelegate;
@@ -261,6 +295,8 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     mcCollectionTypes.setType4Ast(type4Ast);
     mcGenericTypes.setType4Ast(type4Ast);
     setExpressions.setType4Ast(type4Ast);
+    tupleExpressions.setType4Ast(type4Ast);
+    mcStructuralTypes.setType4Ast(type4Ast);
     getMADelegate().setType4AST(type4Ast);
   }
 }
