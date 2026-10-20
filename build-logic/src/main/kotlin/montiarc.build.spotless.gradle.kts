@@ -6,16 +6,23 @@ plugins {
   id("com.diffplug.spotless")
 }
 
+fun sourcesOutsideBuildDirectory(sources: (SourceSet) -> SourceDirectorySet, vararg includes: String) = provider {
+  sourceSets.flatMap { sources(it).srcDirs }
+    .filterNot { it.startsWith(layout.buildDirectory.get().asFile) }
+    .map { fileTree(it) { include(*includes) } }
+}
+
 spotless {
   isEnforceCheck = false
   java {
-    targetExclude(fileTree(layout.buildDirectory) { include("**/*.java") })
+    target(sourcesOutsideBuildDirectory(SourceSet::getAllJava, "**/*.java"))
 
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */")
     removeUnusedImports()
     endWithNewline()
   }
   kotlin {
+    target(sourcesOutsideBuildDirectory(SourceSet::getAllSource, "**/*.kt", "**/*.kts"))
     licenseHeader("/* (c) https://github.com/MontiCore/monticore */")
     endWithNewline()
   }
