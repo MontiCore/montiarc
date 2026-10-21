@@ -38,10 +38,6 @@ public static class ${ast.getName()}TestContext implements montiarc.maunit.api.M
         <#if param.isPresentDefault()><#assign default = javaPrinter.generateCode(param.getDefault(), param.getSymbol().getType())></#if>
         <#if helper.getMaUnitHelper().isTestSource(ast)><@returnTestValue param?index default/><#else><@returnStereoValue param.getName() default/></#if>
     </#list>
-    <#list helper.getComponentHelper().getFeatures(ast) as feature>
-      case ${feature?index+ast.getHead().getArcParameterList()?size}: // ${feature.getName()}
-        <@returnStereoValue feature.getName() false?c/>
-    </#list>
     }
     throw new montiarc.maunit.api.ParameterResolutionException();
   }

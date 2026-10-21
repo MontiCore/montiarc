@@ -8,6 +8,9 @@
 - ☒ Intentionally not included
 - ☐ Inclusion pending or to be discussed
 
+The column *4Family* states whether the analysis of variable components checks the CoCo with a variability-aware
+variant (`*4Family`), which reports a violation if it occurs in some valid configuration.
+
 #### Code Ranges
 
 | Language                                          | Range             |
@@ -26,9 +29,9 @@
 
 ## ArcBasis CoCos
 
-| in MA | VariantCoCo | CoCo(s)                                 | Language | Code(s)                                                       |
+| in MA | 4Family     | CoCo(s)                                 | Language | Code(s)                                                       |
 |-------|-------------|-----------------------------------------|----------|---------------------------------------------------------------|
-| ☑     | ☒           | CircularInheritance                     | ArcBasis | 0xC1100                                                       |
+| ☑     | ☑           | CircularInheritance                     | ArcBasis | 0xC1100                                                       |
 | ☑     | ☑           | PortsConnected                          | ArcBasis | 0xC1103, 0xC1104                                              |
 | ☑     | ☑           | PortUniqueSender                        | ArcBasis | 0xC1105                                                       |
 | ☑     | ☑           | SubPortsConnected                       | ArcBasis | 0xC1106, 0xC1107                                              |
@@ -41,13 +44,13 @@
 | ☑     | ☑           | FeedbackStrongCausality                 | ArcBasis | 0xC1117                                                       |
 | ☑     | ☒           | ConfigurationParameterAssignment        | ArcBasis | 0xC1119, 0xC1120, 0xC1121, 0xC1122, 0xC1123, 0xC1124, 0xC1125 |
 | ☑     | ☒           | OptionalConfigurationParametersLast     | ArcBasis | 0xC1126                                                       |
-| ☑     | ☒           | NoSubcomponentReferenceCycle            | ArcBasis | 0xC1127                                                       |
-| ☑     | ☑           | PortHeritageTypeFits                    | ArcBasis | 0xC1132, 0xC1133, 0xC1134                                     |
-| ☑     | ☒           | FieldInitOmitPortReferences             | ArcBasis | 0xC1135                                                       |
-| ☑     | ☒           | FieldInitTypeFits                       | ArcBasis | 0xC1137                                                       |
-| ☑     | ☒           | ParameterDefaultValueOmitsPortRef       | ArcBasis | 0xC1138                                                       |
+| ☑     | ☑           | NoSubcomponentReferenceCycle            | ArcBasis | 0xC1127                                                       |
+| ☑     | ☒           | PortHeritageTypeFits                    | ArcBasis | 0xC1132, 0xC1133, 0xC1134                                     |
+| ☑     | ☑           | FieldInitOmitPortReferences             | ArcBasis | 0xC1135                                                       |
+| ☑     | ☑           | FieldInitTypeFits                       | ArcBasis | 0xC1137                                                       |
+| ☑     | ☑           | ParameterDefaultValueOmitsPortRef       | ArcBasis | 0xC1138                                                       |
 | ☑     | ☒           | ParameterDefaultValueTypeFits           | ArcBasis | 0xC1139                                                       |
-| ☑     | ☒           | ComponentArgumentsOmitPortRef           | ArcBasis | 0xC1141                                                       |
+| ☑     | ☑           | ComponentArgumentsOmitPortRef           | ArcBasis | 0xC1141                                                       |
 | ☑     | ☒           | ComponentNameCapitalization             | ArcBasis | 0xC1143                                                       |
 | ☑     | ☒           | SubcomponentNameCapitalization          | ArcBasis | 0xC1144                                                       |
 | ☑     | ☒           | PortNameCapitalization                  | ArcBasis | 0xC1145                                                       |
@@ -65,7 +68,7 @@
 | ☑     | ☒           | ComponentHeritageRawType                | ArcBasis | 0xC1182                                                       |
 | ☑     | ☒           | RefinementRawType                       | ArcBasis | 0xC1182                                                       |
 | ☑     | ☒           | RefinementPortsMatch                    | ArcBasis | 0xC1184, 0xC1185, 0xC1186, 0xC1187, 0xC1188, 0xC1189          |
-| ☑     | ☒           | CheckNoFieldDependencyCycles            | ArcBasis | 0xC1190                                                       |
+| ☑     | ☑           | CheckNoFieldDependencyCycles            | ArcBasis | 0xC1190                                                       |
 | ☑     | ☒           | PortInheritanceTiming                   | ArcBasis | 0xC1191                                                       |
 | ☑     | ☒           | OnlyAssignmentOrCallExpressionStatement | ArcBasis | 0xC1194                                                       |
 | ☑     | ☒           | NoParameterDefaultForwardReference      | ArcBasis | 0xC1197                                                       |
@@ -91,9 +94,13 @@
 | ☑     | SubcomponentsConstraint        | VariableArc | 0xC1404                                     |       |
 | ☑     | VarIfOmitPortReferences        | VariableArc | 0xC1175                                     |       |
 | ☑     | VarIfOmitFieldReferences       | VariableArc | 0xC1416                                     |       |
-| ☑     | VarIfIsBoolean                 | VariableArc | 0xC1404                                     |       |
+| ☑     | VarIfIsBoolean                 | VariableArc | 0xC1405                                     |       |
 | ☑     | VarIfSideEffectFree            | VariableArc | 0xC1154                                     |       |
 | ☑     | FeatureNamedTick               | VariableArc | 0xC1173                                     |       |
+| ☑     | SubcomponentConstraintsImplied | VariableArc | 0xC1406                                     | Only with the analysis of variable components |
+| ☑     | FeatureSelectable              | VariableArc | 0xC1407                                     | Only with the analysis of variable components |
+| ☑     | VariationPointPresent          | VariableArc | 0xC1408                                     | Only with the analysis of variable components |
+| ☑     | UnsupportedVariability         | MontiArc    | 0xC1198                                     | Only without the analysis of variable components |
 
 ## Mode Automata
 
@@ -127,7 +134,7 @@
 
 ## ArcCompute CoCos
 
-| in MA | VariantCoCo | CoCo(s)                   | Language   | Code(s) |
+| in MA | 4Family     | CoCo(s)                   | Language   | Code(s) |
 |-------|-------------|---------------------------|------------|---------|
 | ☑     | ☑           | NoInitBlockWithoutCompute | ArcCompute | 0xC1550 |
 | ☑     | ☑           | MaxOneInit                | ArcCompute | 0xC1551 |
@@ -147,10 +154,11 @@
 
 ## Statement CoCos
 
-| in MA | VariantCoCo | CoCo(s)                                    | Language   | Notes |
+| in MA | 4Family     | CoCo(s)                                    | Language   | Notes |
 |-------|-------------|--------------------------------------------|------------|-------|
 | ☑     | ☑           | ExpressionStatementIsValid                 | Statements |       |
 | ☑     | ☑           | VarDeclarationInitializationHasCorrectType | Statements |       |
+| ☑     | ☑           | VarDeclarationNameAlreadyDefinedInScope    | Statements |       |
 | ☑     | ☑           | ForConditionHasBooleanType                 | Statements |       |
 | ☑     | ☑           | ForEachIsValid                             | Statements |       |
 | ☑     | ☑           | IfConditionHasBooleanType                  | Statements |       |
@@ -158,7 +166,7 @@
 
 ## PrePost CoCos
 
-| in MA | VariantCoCo | CoCo(s)           | Language   | Codes            |
+| in MA | 4Family     | CoCo(s)           | Language   | Codes            |
 |-------|-------------|-------------------|------------|------------------|
 | ☑     | ☑           | PrePostIsBoolean  | ArcPrePost | 0xC1600          |
 | ☑     | ☑           | TriggerPortExists | ArcPrePost | 0xC1601, 0xC1602 |
@@ -166,6 +174,6 @@
 
 ## Assumption Guarantee CoCos
 
-| in MA | VariantCoCo | CoCo(s)         | Language | Codes           |
+| in MA | 4Family     | CoCo(s)         | Language | Codes           |
 |-------|-------------|-----------------|----------|-----------------|
 | ☑     | ☑           | AGIsBoolean     | ag       | 0xC1650         |

@@ -7,8 +7,10 @@
       "name": "FunctionWithIntParameter",
       "type": {
         "kind": "de.monticore.types.check.SymTypePrimitive",
-        "primitiveName": "int",
-        "parameters": [
+        "primitiveName": "int"
+      },
+      "spannedScope": {
+        "symbols": [
           {
             "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
             "name": "p",

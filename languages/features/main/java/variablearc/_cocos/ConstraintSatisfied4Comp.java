@@ -4,41 +4,44 @@ package variablearc._cocos;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
+import com.microsoft.z3.BoolExpr;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.ExpressionSolver;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
-import java.util.Optional;
-
+/**
+ * Checks that the constraints of a component type, including those of its
+ * super components, are satisfiable.
+ */
 public class ConstraintSatisfied4Comp implements ArcBasisASTArcComponentTypeCoCo {
+
+  protected static final String LOG_NAME = ConstraintSatisfied4Comp.class.getSimpleName();
+
+  protected final PresenceResolver presenceResolver;
+
+  public ConstraintSatisfied4Comp(@NotNull PresenceResolver presenceResolver) {
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
+  }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    if (!(node.getSymbol() instanceof IVariableArcComponentTypeSymbol)) return;
-    if (((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints().isEmpty()) return;
 
-    ExpressionSolver solver = new ExpressionSolver();
-    ExpressionSet constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-    Optional<Boolean> eval = solver.solve(constraints);
-    if (eval.isPresent()) {
-      if (!eval.get()) {
-        Log.error(VariableArcError.CONSTRAINT_NOT_SATISFIED.format(),
-          node.get_SourcePositionStart(), node.get_SourcePositionEnd());
-      } else if (ExpressionSolver.isUnsatisfiableForSomeUnknownValues(solver.getContext(),
-        solver.getContext().mkSolver(), solver.getContext().mkAnd(solver.convert(constraints).orElseThrow()))) {
-        Log.warn(VariableArcError.CONSTRAINT_NOT_SATISFIED.format(),
-          node.get_SourcePositionStart(), node.get_SourcePositionEnd());
-      }
-    } else {
-      Log.debug(() -> String.format(
-        "'%s' Skipping constraint evaluation for '%s', could not calculate expression.",
-        node.get_SourcePositionStart(), this.getClass().getSimpleName()), "ConstraintSatisfied4Comp");
+    FormulaSolver solver = this.presenceResolver.solver();
+    BoolExpr constraints = this.presenceResolver.presenceOf(node.getSymbol());
+    if (solver.isObscure(constraints)) {
+      Log.debug(() -> "Skip CoCo check, the type of a constraint is obscure.", LOG_NAME);
+      return;
     }
-    solver.close();
+    switch (solver.check(constraints)) {
+      case UNSATISFIABLE -> Log.error(VariableArcError.CONSTRAINT_NOT_SATISFIED.format(),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+      case UNKNOWN -> Log.warn(VariableArcError.CONSTRAINT_NOT_SATISFIED.format(),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+      case SATISFIABLE -> { }
+    }
   }
 }

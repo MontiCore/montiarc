@@ -123,8 +123,8 @@ class NoPortInConstraintTest extends MontiArcTestBase {
       arg("component InvalidComp7 { port in int i; constraint(i--); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // port referenced in a boolean-not expression in constraint
-      arg("component InvalidComp8 { port in boolean i; constraint(~i); }",
+      // port referenced in a bitwise complement expression in constraint
+      arg("component InvalidComp8 { port in int i; constraint(~i == 0); }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
       // port referenced in a logical-not expression in constraint
@@ -158,8 +158,8 @@ class NoPortInConstraintTest extends MontiArcTestBase {
           constraint(i2 > 2); constraint(2 > i2);
           constraint(i2 == 2); constraint(2 == i2);
           constraint(i2 != 2); constraint(2 != i2);
-          constraint(i4 && 2); constraint(2 && i4);
-          constraint(i4 || 2); constraint(2 || i4);
+          constraint(i4 && true); constraint(true && i4);
+          constraint(i4 || true); constraint(true || i4);
         }
         """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,

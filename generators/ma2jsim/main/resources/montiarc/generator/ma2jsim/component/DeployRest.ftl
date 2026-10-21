@@ -8,7 +8,7 @@
   ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-<#assign comp=variant!ast.getArcComponentType().getSymbol()/>
+<#assign comp=ast.getArcComponentType().getSymbol()/>
 <#-- @ftlvariable name="comp" type="de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol" -->
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
@@ -23,9 +23,9 @@ public class ${prefixes.deploy()}Rest${comp.getName()}<#if isTop>${suffixes.top(
   protected void setupEndpoints(${comp.getName()}${suffixes.comp()} component) {
     <#list comp.getAllIncomingPorts() as port>
       <#if !port.getType().isGenericType()>
-      server.subscribe("/${comp.getName()}/${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}", str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
+      server.subscribe("/${comp.getName()}/${port.getName()}", str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
         .map(m -> {
-          component.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}().receive(montiarc.rte.msg.Message.of(m));
+          component.${prefixes.port()}${port.getName()}().receive(montiarc.rte.msg.Message.of(m));
           return true;
         }).orElse(false)
       );

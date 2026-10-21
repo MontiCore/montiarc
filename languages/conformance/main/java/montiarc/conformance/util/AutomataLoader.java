@@ -2,6 +2,7 @@
 package montiarc.conformance.util;
 
 import arcbasis._ast.ASTArcComponentType;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.cd._symboltable.BuiltInTypes;
 import de.monticore.cd4code.CD4CodeMill;
@@ -34,6 +35,8 @@ import scmapping._cocos.SCMappingCoCoChecker;
 import scmapping._cocos.ValidNamesInRulesCoCo;
 import scmapping._cocos.ValueRightInEqualExpressionsCoCo;
 import scmapping._cocos.ValueRightInNotEqualExpressionsCoCo;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -110,13 +113,14 @@ public class AutomataLoader {
   }
 
   private static void checkMACoCos(ASTMACompilationUnit ast) {
-    MontiArcCoCoChecker checker1 = MontiArcCoCos.afterSymTab1();
-    MontiArcCoCoChecker checker2 = MontiArcCoCos.afterSymTab2();
-    checker2.addCoCo(new ActionsMustBeAssignmentsCoCo());
-    checker2.addCoCo(new AtLeastOneInAndOutPort());
-    checker2.addCoCo(new UniqueVarAssignmentInTransActions(ast));
-    checker1.checkAll(ast);
-    checker2.checkAll(ast);
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    // the conformance check does not support variability, which is thus rejected
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab(true, withinComponentResolver,
+      new PresenceResolver(withinComponentResolver));
+    checker.addCoCo(new ActionsMustBeAssignmentsCoCo());
+    checker.addCoCo(new AtLeastOneInAndOutPort());
+    checker.addCoCo(new UniqueVarAssignmentInTransActions(ast));
+    checker.checkAll(ast);
   }
 
   private static void createMASymbolTab(ASTMACompilationUnit ast) {

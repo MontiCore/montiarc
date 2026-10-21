@@ -72,7 +72,9 @@ public enum ArcError implements Error {
   INVALID_STATEMENT("0xC1194", "The expression is not a valid statement; only assignments or method calls are allowed as statements"),
   FIELD_REF_IN_STATIC_CONTEXT("0xC1195", "Value of field '%s' not available in static context"),
   UNEXPECTED_ORACLE_TYPE("0xC1196", "Value of '%s' is not a known oracle strategy"),
-  PARAMETER_DEFAULT_FORWARD_REFERENCE("0xC1197", "Default value of parameter '%s' references parameter '%s'; only preceding parameters may be referenced");
+  PARAMETER_DEFAULT_FORWARD_REFERENCE("0xC1197", "Default value of parameter '%s' references parameter '%s'; only preceding parameters may be referenced"),
+  VARIABILITY_NOT_ANALYZED("0xC1198", "The usage of '%s' requires the analysis of variable components, which is "
+    + "disabled explicitly or by code generation, as code generation does not support variability");
 
   private final String errorCode;
   private final String errorMsgFormat;

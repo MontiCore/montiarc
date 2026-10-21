@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -10,8 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.SubPortsConnected4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -33,28 +36,24 @@ class SubPortsConnected4FamilyTest extends SubPortsConnectedTest {
     compile("package a.b; component I { feature f; varif (f) { port in int i; port out int o; } }");
   }
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new SubPortsConnected4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability7",
-    "ValidCompWithVariability8",
-    "ValidCompWithVariability9",
-    "ValidCompWithVariability13",
-    "ValidCompWithVariability14",
-    "ValidCompWithVariability15"
-  })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new SubPortsConnected4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -63,14 +62,6 @@ class SubPortsConnected4FamilyTest extends SubPortsConnectedTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability1",
-    "InvalidCompWithVariability2",
-    "InvalidCompWithVariability3",
-    "InvalidCompWithVariability4",
-    "InvalidCompWithVariability5",
-    "InvalidCompWithVariability6"
-  })
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -79,15 +70,18 @@ class SubPortsConnected4FamilyTest extends SubPortsConnectedTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new SubPortsConnected4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("unconnected incoming ports of subcomponents are errors")
+      .filteredOn(finding -> finding.getMsg().startsWith(IN_PORT_NOT_CONNECTED.getErrorCode()))
+      .allMatch(Finding::isError);
+    assertThat(Log.getFindings()).as("unconnected outgoing ports of subcomponents are warnings")
+      .filteredOn(finding -> finding.getMsg().startsWith(OUT_PORT_NOT_CONNECTED.getErrorCode()))
+      .allMatch(Finding::isWarning);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -409,7 +403,7 @@ class SubPortsConnected4FamilyTest extends SubPortsConnectedTest {
             varif (f2) {
               i -> sub.i;
             }
-            constraint (!(f2 && !f1);
+            constraint (!(f2 && !f1));
           }
           """,
         IN_PORT_NOT_CONNECTED
@@ -426,7 +420,7 @@ class SubPortsConnected4FamilyTest extends SubPortsConnectedTest {
             varif (f2) {
               sub.o -> o;
             }
-            constraint (!(f2 && !f1);
+            constraint (!(f2 && !f1));
           }
           """,
         OUT_PORT_NOT_CONNECTED
@@ -445,7 +439,7 @@ class SubPortsConnected4FamilyTest extends SubPortsConnectedTest {
               i -> sub.i;
               sub.o -> o;
             }
-            constraint (!(f2 && !f1);
+            constraint (!(f2 && !f1));
           }
           """,
         IN_PORT_NOT_CONNECTED,

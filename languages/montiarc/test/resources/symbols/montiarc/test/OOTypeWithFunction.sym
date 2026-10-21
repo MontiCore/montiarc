@@ -12,27 +12,29 @@
             "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
             "name": "f",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             }
           },
           {
             "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
             "name": "f",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             },
-            "parameters": [
-              {
-                "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
-                "name": "p",
-                "type": {
-                  "kind": "de.monticore.types.check.SymTypePrimitive",
-                  "primitiveName": "int"
+            "spannedScope": {
+              "symbols": [
+                {
+                  "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+                  "name": "p",
+                  "type": {
+                    "kind": "de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName": "int"
+                  }
                 }
-              }
-            ]
+              ]
+            }
           },
           {
             "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",

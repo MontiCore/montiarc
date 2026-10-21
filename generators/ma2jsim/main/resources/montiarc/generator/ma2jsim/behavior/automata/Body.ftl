@@ -4,7 +4,7 @@
 ${tc.signature("automaton")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
-<#assign compAutomatonClass>${ast.getName()}${suffixes.automaton()}${helper.getVariantHelper().variantSuffix(ast.getSymbol())}<#if isTop>TOP</#if></#assign>
+<#assign compAutomatonClass>${ast.getName()}${suffixes.automaton()}<#if isTop>TOP</#if></#assign>
 <#assign contextClass>${ast.getName()}${suffixes.context()}<@Util.printTypeParameters ast false/></#assign>
 <#assign contextObj = ast.getName()?uncap_first + suffixes.context()/>
 <#assign syncMsgType>${ast.getName()}${suffixes.syncMsg()}<@Util.printTypeParameters ast false/></#assign>
@@ -19,7 +19,7 @@ ${tc.signature("automaton")}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/automata/MsgActionInterface.ftl", [])}
 </#if>
 
-protected ${ast.getName()}${suffixes.states()}${helper.getVariantHelper().variantSuffix(ast.getSymbol())}<@Util.printTypeParameters ast false/> states;
+protected ${ast.getName()}${suffixes.states()}<@Util.printTypeParameters ast false/> states;
 
 <#-- Declaring transition fields for tick-triggered transitions -->
 <#assign transitionsForTickEvent = helper.getBehaviorHelper().getTransitionsWithoutEvent(automaton)/>
@@ -34,7 +34,7 @@ protected ${ast.getName()}${suffixes.states()}${helper.getVariantHelper().varian
 
 protected ${compAutomatonClass} (
   ${contextClass} ${contextObj},
-  ${ast.getName()}${suffixes.states()}${helper.getVariantHelper().variantSuffix(ast.getSymbol())}<@Util.printTypeParameters ast false/> states,
+  ${ast.getName()}${suffixes.states()}<@Util.printTypeParameters ast false/> states,
   montiarc.rte.automaton.State initial, String name) {
     super(${contextObj}, initial, name);
     this.states = states;
@@ -114,7 +114,7 @@ public void tick(${syncMsgType} syncedInputs) {
   -->
 <#list portList as port>
   <#assign portName = port.getName()/>
-  <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}</#assign>
+  <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}</#assign>
 
   <#assign msgTriggeredTransitions = helper.getBehaviorHelper().getAllTransitionsForPortWithEventTrigger(ast, automaton, port)/>
   <#list msgTriggeredTransitions as transition>
@@ -166,14 +166,4 @@ public void tick(${syncMsgType} syncedInputs) {
       </#if>
     }
   </#if>
-</#list>
-
-<#-- Methods for ports from other variants of the same component -->
-<#list helper.getVariantHelper().getInPortsWithSuffixesOfOtherVariants(ast.getSymbol()) as port, varSuffix>
-  <#assign handleMsgOnPort>${prefixes.message()}${port.getName()}${varSuffix}</#assign>
-
-  @Override
-  public void ${handleMsgOnPort}(<@Util.getTypeString port.getType()/> msg) {
-    throw new IllegalStateException("This event method is not available in this variant (${port.getName()}${varSuffix}).");
-  }
 </#list>

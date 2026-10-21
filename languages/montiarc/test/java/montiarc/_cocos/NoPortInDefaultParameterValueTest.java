@@ -156,7 +156,7 @@ class NoPortInDefaultParameterValueTest extends MontiArcTestBase {
         component ValidComp10(int p) {
           port in int i;
           port out int o;
-          component Inner(int v = p) { }
+          component Inner(int w, int v = w) { }
         }
         """
       ),
@@ -196,8 +196,8 @@ class NoPortInDefaultParameterValueTest extends MontiArcTestBase {
         component ValidComp14(int p) {
           port in int i;
           port out int o;
-          component Inner1(int i = p) { }
-          component Inner1(int o = p) { }
+          component Inner1(int q, int i = q) { }
+          component Inner2(int q, int o = q) { }
         }
         """
       ),
@@ -303,10 +303,10 @@ class NoPortInDefaultParameterValueTest extends MontiArcTestBase {
           """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // port in boolean not expression in default parameter value
+      // port in bitwise complement expression in default parameter value
       arg("""
-          component InvalidComp8(boolean p = ~i) {
-            port in boolean i;
+          component InvalidComp8(int p = ~i) {
+            port in int i;
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
@@ -356,8 +356,8 @@ class NoPortInDefaultParameterValueTest extends MontiArcTestBase {
                            boolean p15 = i2 > 2,  boolean p16 = 2 > i2,
                            boolean p17 = i2 == 2, boolean p18 = 2 == i2,
                            boolean p19 = i2 != 2, boolean p20 = 2 != i2,
-                           boolean p21 = i4 && 2, boolean p22 = 2 && i4,
-                           boolean p23 = i4 || 2, boolean p24 = 2 || i4) {
+                           boolean p21 = i4 && true, boolean p22 = true && i4,
+                           boolean p23 = i4 || true, boolean p24 = true || i4) {
             port in int i1, i2;
             port in boolean i3, i4;
           }
@@ -511,11 +511,11 @@ class NoPortInDefaultParameterValueTest extends MontiArcTestBase {
           """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // port in boolean not expression in default parameter value of inner component
+      // port in bitwise complement expression in default parameter value of inner component
       arg("""
           component InvalidComp28 {
-            component Inner(boolean p = ~i) {
-              port in boolean i;
+            component Inner(int p = ~i) {
+              port in int i;
             }
           }
           """,
@@ -575,8 +575,8 @@ class NoPortInDefaultParameterValueTest extends MontiArcTestBase {
                             boolean p15 = i2 > 2,  boolean p16 = 2 > i2,
                             boolean p17 = i2 == 2, boolean p18 = 2 == i2,
                             boolean p19 = i2 != 2, boolean p20 = 2 != i2,
-                            boolean p21 = i4 && 2, boolean p22 = 2 && i4,
-                            boolean p23 = i4 || 2, boolean p24 = 2 || i4) {
+                            boolean p21 = i4 && true, boolean p22 = true && i4,
+                            boolean p23 = i4 || true, boolean p24 = true || i4) {
               port in int i1, i2;
               port in boolean i3, i4;
             }

@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -10,9 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.ConnectorDirectionsFit4Family;
-import variablearc._cocos.ConnectorPortsExist4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -34,28 +36,25 @@ class ConnectorDirectionsFit4FamilyTest extends ConnectorDirectionsFitTest {
     compile("package a.b; component G { port out int io; }");
   }
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorDirectionsFit4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability19 ",
-    "ValidCompWithVariability20 ",
-    "ValidCompWithVariability21 ",
-    "ValidCompWithVariability22 ",
-    "ValidCompWithVariability23 "
-  })
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-    checker.get4FullVariant().addCoCo(new ConnectorDirectionsFit4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -64,31 +63,21 @@ class ConnectorDirectionsFit4FamilyTest extends ConnectorDirectionsFitTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability14 ",
-    "InvalidCompWithVariability15 ",
-    "InvalidCompWithVariability16 ",
-    "InvalidCompWithVariability17 ",
-    "InvalidCompWithVariability18 ",
-    "InvalidCompWithVariability19 ",
-    "InvalidCompWithVariability20 "
-  })
-  void shouldReportError(@NotNull String model,
-                         @NotNull Error... errors) {
+  @Override
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorDirectionsFit4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -515,7 +504,7 @@ class ConnectorDirectionsFit4FamilyTest extends ConnectorDirectionsFitTest {
             port out int o;
             a.b.E sub;
             sub.io -> o;
-            constraint (!sub.ff);
+            constraint (sub.ff);
           }""",
         SOURCE_DIRECTION_MISMATCH
       ),

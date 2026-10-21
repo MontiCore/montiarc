@@ -8,12 +8,10 @@ package variability;
  * composition, the constraint of the outer component should be valid (hence
  * ignore the invalid constraint).
  */
-component MissingSymbolsInConstraintWithComposition2 {
-
-  feature f;
+component MissingSymbolsInConstraintWithComposition2(boolean p) {
 
   MissingSymbolsInConstraint1 sub;
 
-  constraint(f);
+  constraint(p);
 
 }

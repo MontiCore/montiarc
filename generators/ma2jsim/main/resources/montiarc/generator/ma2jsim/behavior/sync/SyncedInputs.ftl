@@ -8,18 +8,18 @@
 public <#if isTop>abstract</#if> class ${CLASS} <@Util.printTypeParameters ast/> {
 
   <#list ast.getSymbol().getAllIncomingPorts() as port>
-    public final <@Util.getTypeString port.getType()/> ${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)};
+    public final <@Util.getTypeString port.getType()/> ${port.getName()};
   </#list>
 
   public ${CLASS}(
     <#list ast.getSymbol().getAllIncomingPorts() as port>
-      <@Util.getTypeString port.getType()/> ${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}
+      <@Util.getTypeString port.getType()/> ${port.getName()}
       <#sep>, </#sep>
     </#list>
 
   ) {
   <#list ast.getSymbol().getAllIncomingPorts() as port>
-    <#assign portFieldName = port.getName() + helper.getVariantHelper().portVariantSuffix(ast, port)>
+    <#assign portFieldName = port.getName()>
     this.${portFieldName} = ${portFieldName};
   </#list>
   }

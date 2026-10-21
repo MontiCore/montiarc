@@ -5,6 +5,7 @@ import com.google.common.base.Preconditions;
 import de.monticore.generating.templateengine.reporting.Reporting;
 import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc.MontiArcTool;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc._cocos.MontiArcCoCoChecker;
@@ -124,6 +125,8 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(i.length > 0);
 
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.globalScope().init(novar || o != null);
     this.initGlobalScope(p);
     this.initBuiltInSymbols(c2mc);
     this.compile(i, hwc, o, pp, s, r, c2mc, dse, novar);
@@ -136,8 +139,10 @@ public class MA2JavaTool extends MontiArcTool {
    * and translates the models to java code.
    * <p>
    * Class2MC (c2mc) can be enabled to import symbols from the Java runtime
-   * environment (Java RTE). Context-condition checking for variable components
-   * can be skipped (novar) to improve performance.
+   * environment (Java RTE). The analysis of variable components can be
+   * disabled (novar), in which case features, variation points, and
+   * constraints are rejected. Code generation does not support variable
+   * components, thus generating code (o) disables their analysis, too.
    *
    * @param i     Array of file and directory paths that form the model path,
    *              i.e, the paths that contain the MontiArc models to be compiled.
@@ -156,7 +161,8 @@ public class MA2JavaTool extends MontiArcTool {
    *              If {@code null}, report generation is disabled.
    * @param c2mc  Enables importing of Java symbols (via Class2MC).
    * @param dse   Enables code generation for dynamic symbolic execution.
-   * @param novar Disables context-condition checking for variable components to improve performance.
+   * @param novar Disables the analysis of variable components and rejects features, variation points, and constraints;
+   *              implied by {@code o}.
    * @return A collection of the abstract syntay trees (ASTs) of the parsed
    * input models found in the given model paths.
    */
@@ -173,7 +179,7 @@ public class MA2JavaTool extends MontiArcTool {
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(i.length > 0);
 
-    Set<ASTMACompilationUnit> asts = super.compile(i, pp, s, r, c2mc, novar);
+    Set<ASTMACompilationUnit> asts = super.compile(i, pp, s, r, c2mc, novar || o != null);
 
     if (dse) {
       Log.info(() -> "Check dse-specific context-conditions", "MA2JavaTool-dse");
@@ -282,9 +288,9 @@ public class MA2JavaTool extends MontiArcTool {
   }
 
   @Override
-  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean checkVariability) {
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean novar) {
     Preconditions.checkNotNull(ast);
-    super.runAdditionalCoCos(ast, checkVariability);
+    super.runAdditionalCoCos(ast, novar);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new IdentifiersAreNoJavaKeywords.PortNoNamesAreNoJavaKeywords());

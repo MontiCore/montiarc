@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,7 +11,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc._cocos.NoOtherInputPortInMsgTransition4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -21,24 +25,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class NoOtherInputPortInMsgTransition4FamilyTest extends NoOtherInputPortInMsgTransitionTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new NoOtherInputPortInMsgTransition4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability1 ",
-    "ValidCompWithVariability2 "
-  })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new NoOtherInputPortInMsgTransition4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -55,15 +59,14 @@ class NoOtherInputPortInMsgTransition4FamilyTest extends NoOtherInputPortInMsgTr
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new NoOtherInputPortInMsgTransition4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {

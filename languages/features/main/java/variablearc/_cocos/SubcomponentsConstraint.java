@@ -3,104 +3,109 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.BoolSort;
-import com.microsoft.z3.Expr;
-import com.microsoft.z3.Model;
-import com.microsoft.z3.Solver;
-import com.microsoft.z3.Status;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.ArcFeatureSymbol;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc._symboltable.IVariableArcScope;
-import variablearc.evaluation.ExpressionSolver;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * Checks if a component's subcomponents' features are bound correctly to a discrete value.
- * This is accomplished by building a new SMT formula based on the components constraints:
- * 1. Duplicate all constraints and substitute all subcomponents' features by a new variable (x.f -> x.f__dup__)
- * 2. Add constraint that at least one feature of the new feature has to be different from its original feature (x.f != x.f__dup__ || ...)
- * 3. If the new formula has a solution at least one subcomponents' feature can have multiple values independent of the component's feature assignment -> Error
+ * Checks that the constraints of a component type determine the features of
+ * its present subcomponents, i.e., that no configuration of the component
+ * type admits two different assignments of a subcomponent's feature.
  */
 public class SubcomponentsConstraint implements ArcBasisASTArcComponentTypeCoCo {
+
+  protected static final String LOG_NAME = SubcomponentsConstraint.class.getSimpleName();
+
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
+  protected final SubcomponentConstraintsImplied subcomponentConstraintsImplied;
+
+  public SubcomponentsConstraint(@NotNull WithinComponentResolver withinComponentResolver,
+                                 @NotNull PresenceResolver presenceResolver) {
+    this(withinComponentResolver, presenceResolver,
+      new SubcomponentConstraintsImplied(withinComponentResolver, presenceResolver));
+  }
+
+  /**
+   * @param subcomponentConstraintsImplied the CoCo that reports the
+   *                                       subcomponents excluded by this one,
+   *                                       whose results are reused
+   */
+  public SubcomponentsConstraint(@NotNull WithinComponentResolver withinComponentResolver,
+                                 @NotNull PresenceResolver presenceResolver,
+                                 @NotNull SubcomponentConstraintsImplied subcomponentConstraintsImplied) {
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
+    this.subcomponentConstraintsImplied = Preconditions.checkNotNull(subcomponentConstraintsImplied);
+  }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
-    if (!(node.getSymbol() instanceof IVariableArcComponentTypeSymbol)) return;
 
-    IVariableArcComponentTypeSymbol componentTypeSymbol = (IVariableArcComponentTypeSymbol) node.getSymbol();
-
-    ExpressionSolver solver = new ExpressionSolver();
-    Optional<Expr<BoolSort>> eval = solver.convert(componentTypeSymbol.getConstraints())
-      .map(boolExprs -> solver.getContext().mkAnd(boolExprs).substitute(
-        componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
-          .flatMap(instance -> getFeaturesOfInstance(instance).stream()
-            .map(feature -> solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName()))
-          ).toArray(BoolExpr[]::new),
-        componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
-          .flatMap(instance -> getFeaturesOfInstance(instance).stream()
-            .map(feature -> solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__"))
-          ).toArray(BoolExpr[]::new)
-      ));
-
-    Optional<Solver> smtSolver = solver.getSolver(componentTypeSymbol.getConstraints());
-    if (smtSolver.isPresent() && eval.isPresent()) {
-      smtSolver.get().add(eval.get());
-      smtSolver.get().add(
-        solver.getContext().mkOr(
-          componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
-            .flatMap(instance -> getFeaturesOfInstance(instance).stream().map(feature -> solver.getContext().mkNot(
-                solver.getContext().mkEq(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName()),
-                  solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__"))
-              ))
-            ).toArray(BoolExpr[]::new)
-        )
-      );
-      boolean result = smtSolver.get().check() == Status.SATISFIABLE;
-
-      if (result) {
-        // Collect which features caused this error (the list might not be complete)
-        Model model = smtSolver.get().getModel();
-        List<String> causingFeatures = componentTypeSymbol.getTypeInfo().getSubcomponents().stream()
-          .flatMap(instance -> getFeaturesOfInstance(instance).stream().filter(feature ->
-            model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName())).getBoolValue()
-              != model.getConstInterp(solver.getContext().mkBoolConst(instance.getName() + "." + feature.getName() + "__dup__")).getBoolValue()
-          ).map(feature -> instance.getName() + "." + feature.getName())).toList();
-
-        if (ExpressionSolver.isSatisfiableForAllUnknownValues(solver.getContext(),
-          solver.getContext().mkSolver(), solver.getContext().mkAnd(smtSolver.get().getAssertions()))) {
-          Log.error(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(causingFeatures.toString()),
-            node.get_SourcePositionStart(), node.get_SourcePositionEnd());
-        } else {
-          Log.warn(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(causingFeatures.toString()),
-            node.get_SourcePositionStart(), node.get_SourcePositionEnd());
-        }
-      }
-    } else {
-      Log.debug(() -> String.format(
-        "'%s' Skipping constraint evaluation for '%s', could not calculate expression.",
-        node.get_SourcePositionStart(), this.getClass().getSimpleName()), "SubcomponentsConstraint");
+    ComponentTypeSymbol component = node.getSymbol();
+    List<String> undetermined = new ArrayList<>();
+    List<String> possiblyUndetermined = new ArrayList<>();
+    FormulaSolver solver = this.presenceResolver.solverFor(component);
+    if (solver.isObscure(this.presenceResolver.presenceOf(component))) {
+      Log.debug(() -> "Skip CoCo check, the type of a constraint is obscure.", LOG_NAME);
+      return;
     }
-    solver.close();
+    Map<String, List<SubcomponentSymbol>> features = this.featuresOfSubcomponents(solver, component);
+    for (Map.Entry<String, List<SubcomponentSymbol>> feature : features.entrySet()) {
+      BoolExpr present = solver.or(feature.getValue().stream()
+        .map(subcomponent -> this.presenceResolver.presenceOf(component, subcomponent))
+        .toList());
+      switch (solver.checkUndetermined(present, features.keySet(), feature.getKey())) {
+        case SATISFIABLE -> undetermined.add(feature.getKey());
+        case UNKNOWN -> possiblyUndetermined.add(feature.getKey());
+        case UNSATISFIABLE -> { }
+      }
+    }
+    if (!undetermined.isEmpty()) {
+      Log.error(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(undetermined.toString()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+    }
+    if (!possiblyUndetermined.isEmpty()) {
+      Log.warn(VariableArcError.SUBCOMPONENTS_NOT_CONSTRAINT.format(possiblyUndetermined.toString()),
+        node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+    }
   }
 
-  protected List<ArcFeatureSymbol> getFeaturesOfInstance(@NotNull SubcomponentSymbol instance) {
-    Preconditions.checkNotNull(instance);
-
-    if (instance.isTypePresent()) {
-      return ((IVariableArcScope) instance.getType().getTypeInfo().getSpannedScope())
-        .getLocalArcFeatureSymbols();
+  /**
+   * @return the subcomponents declared by the component type by the names of
+   * their features in its vocabulary, which same-named subcomponents share,
+   * excluding subcomponents whose constraints the component type does not
+   * imply, which {@link SubcomponentConstraintsImplied} reports
+   */
+  protected Map<String, List<SubcomponentSymbol>> featuresOfSubcomponents(@NotNull FormulaSolver solver,
+                                                                          @NotNull ComponentTypeSymbol component) {
+    Map<String, List<SubcomponentSymbol>> features = new LinkedHashMap<>();
+    for (SubcomponentSymbol subcomponent : component.getSubcomponents()) {
+      if (!subcomponent.isTypePresent()) continue;
+      if (!this.subcomponentConstraintsImplied.checkNotImplied(solver, component, subcomponent)
+        .equals(Optional.of(FormulaSolver.Satisfiability.UNSATISFIABLE))) continue;
+      for (ArcFeatureSymbol feature : this.withinComponentResolver.getAll(subcomponent.getType().getTypeInfo(),
+        ArcFeatureSymbol.class)) {
+        features.computeIfAbsent(PresenceResolver.qualify(subcomponent, feature.getName()), name -> new ArrayList<>())
+          .add(subcomponent);
+      }
     }
-    return Collections.emptyList();
+    return features;
   }
 }

@@ -10,9 +10,17 @@ public class VariableSymbolDeSer extends de.monticore.symbols.basicsymbols._symb
 
   @Override
   public String serialize(VariableSymbol toSerialize, BasicSymbolsSymbols2Json s2j) {
-    if (!(toSerialize instanceof Port2VariableAdapter || toSerialize instanceof Subcomponent2VariableAdapter)) {
+    if (!this.isAdapter(toSerialize)) {
       return super.serialize(toSerialize, s2j);
     }
     return "";
+  }
+
+  /**
+   * @return whether the variable adapts another symbol, which is serialized
+   * itself
+   */
+  protected boolean isAdapter(VariableSymbol variable) {
+    return variable instanceof Port2VariableAdapter || variable instanceof Subcomponent2VariableAdapter;
   }
 }

@@ -13,7 +13,6 @@ import de.monticore.expressions.tupleexpressions.codegen.javagen.TupleExpression
 import de.monticore.literals.mccommonliterals.codegen.javagen.MCCommonLiteralsJavaGenVisitor;
 import de.monticore.ocl.setexpressions.codegen.javagen.SetExpressionsJavaGenVisitor;
 import de.monticore.prettyprint.IndentPrinter;
-import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.mcbasictypes.codegen.javagen.MCBasicTypesJavaGenVisitor;
 import de.monticore.types3.TypeCheck3;
@@ -26,15 +25,7 @@ import montiarc.generator.codegen.javagen.MACommonExpressionsJavaGenVisitor;
 import montiarc.generator.codegen.javagen.MACommonStatementsJavaGenVisitor;
 import montiarc.generator.codegen.javagen.MAVarDeclarationStatementsJavaGenVisitor;
 import montiarc.generator.codegen.javagen.StreamExpressionsJavaPrinter;
-import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.expressions.AssignmentExpression;
-import variablearc.evaluation.expressions.Expression;
-import variablearc.evaluation.expressions.NegatedExpression;
 
-import java.util.Iterator;
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
@@ -44,14 +35,10 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
   protected JavaGenVisitorState state;
 
   public MA2JSimJavaGenerator() {
-    init(null);
+    init();
   }
 
-  public MA2JSimJavaGenerator(@Nullable ComponentTypeSymbol currentVariant) {
-    init(currentVariant);
-  }
-
-  public void init(@Nullable ComponentTypeSymbol currentVariant) {
+  public void init() {
     JavaGenSymTypeExpressionConverter.init();
     JavaOperationPrinter.init();
     SymTypeExpression2JavaConverter.init();
@@ -75,7 +62,7 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
     // Expressions
 
     MAAssignmentExpressionsJavaGenVisitor visAssignmentExpressions =
-      new MAAssignmentExpressionsJavaGenVisitor(state, currentVariant);
+      new MAAssignmentExpressionsJavaGenVisitor(state);
     traverser.setAssignmentExpressionsHandler(visAssignmentExpressions);
 
     BitExpressionsJavaPrinter bitExpressions = new BitExpressionsJavaPrinter(getPrinter());
@@ -127,51 +114,6 @@ public class MA2JSimJavaGenerator implements TraverserBasedCodeGenerator {
     de.monticore.symbols.basicsymbols._prettyprint.BasicSymbolsPrettyPrinter basicSymbols = new de.monticore.symbols.basicsymbols._prettyprint.BasicSymbolsPrettyPrinter(getPrinter(), printComments);
     this.traverser.setBasicSymbolsHandler(basicSymbols);
     this.traverser.add4BasicSymbols(basicSymbols);
-  }
-
-  public String generateCode(List<Expression> expressions) {
-    StringBuilder prettyprinted = new StringBuilder();
-    Iterator<Expression> iterator = expressions.iterator();
-    while (iterator.hasNext()) {
-      Expression expression = iterator.next();
-      prettyprinted.append("(").append(generateCode(expression)).append(")");
-      if (iterator.hasNext()) prettyprinted.append("&&");
-    }
-    return prettyprinted.toString();
-  }
-
-  public String generateCodeCondition(VariableArcVariantComponentTypeSymbol variant) {
-    ExpressionSet conditions = variant.getLocalConditions();
-    StringBuilder prettyprinted = new StringBuilder();
-    if (!conditions.getExpressions().isEmpty()) {
-      prettyprinted.append(generateCode(conditions.getExpressions()));
-    }
-
-    Iterator<String> iterator = conditions.getNegatedConjunctions().stream().map(this::generateCode).iterator();
-    if (!conditions.getExpressions().isEmpty() && iterator.hasNext()) {
-      prettyprinted.append(" && ");
-    }
-    if (iterator.hasNext()) {
-      prettyprinted.append("!(");
-      while (iterator.hasNext()) {
-        String expression = iterator.next();
-        prettyprinted.append("(").append(expression).append(")");
-        if (iterator.hasNext()) prettyprinted.append("||");
-      }
-      prettyprinted.append(")");
-    }
-
-    return prettyprinted.toString().isEmpty() ? "true" : prettyprinted.toString();
-  }
-
-  public String generateCode(Expression expression) {
-    if (expression instanceof AssignmentExpression) {
-      return ((AssignmentExpression) expression).getVariable().getName() + " = " + this.generateCode(expression.getAstExpression());
-    } else if (expression instanceof NegatedExpression) {
-      return "!(" + this.generateCode(expression.getAstExpression()) + ")";
-    }
-
-    return this.generateCode(expression.getAstExpression());
   }
 
   public String generateCode(ASTExpression expression, SymTypeExpression targetType) {

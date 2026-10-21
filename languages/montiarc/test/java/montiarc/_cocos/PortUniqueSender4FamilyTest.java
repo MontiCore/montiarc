@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,8 +11,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.PortUniqueSender4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -22,20 +25,25 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class PortUniqueSender4FamilyTest extends PortUniqueSenderTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new PortUniqueSender4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortUniqueSender4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -44,31 +52,21 @@ class PortUniqueSender4FamilyTest extends PortUniqueSenderTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability1",
-    "InvalidCompWithVariability2",
-    "InvalidCompWithVariability3",
-    "InvalidCompWithVariability4",
-    "InvalidCompWithVariability5",
-    "InvalidCompWithVariability6"
-  })
-  void shouldReportError(@NotNull String model,
-                         @NotNull Error... errors) {
+  @Override
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortUniqueSender4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -172,7 +170,7 @@ class PortUniqueSender4FamilyTest extends PortUniqueSenderTest {
             port in int i;
             feature f;
             a.b.A sub;
-            varif (false) {
+            varif (true) {
               i -> sub.i;
               i -> sub.i;
             }
@@ -186,7 +184,7 @@ class PortUniqueSender4FamilyTest extends PortUniqueSenderTest {
             port out int o;
             feature f;
             a.b.B sub;
-            varif (false) {
+            varif (true) {
               sub.o -> o;
               sub.o -> o;
             }
@@ -204,7 +202,7 @@ class PortUniqueSender4FamilyTest extends PortUniqueSenderTest {
               i -> sub.i;
               i -> sub.i;
             }
-            constraint (!f);
+            constraint (f);
           }
           """,
         PORT_MULTIPLE_SENDER
@@ -219,7 +217,7 @@ class PortUniqueSender4FamilyTest extends PortUniqueSenderTest {
               sub.o -> o;
               sub.o -> o;
             }
-            constraint (!f);
+            constraint (f);
           }
           """,
         PORT_MULTIPLE_SENDER

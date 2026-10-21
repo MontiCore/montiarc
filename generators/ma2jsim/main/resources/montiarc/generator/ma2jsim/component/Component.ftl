@@ -7,10 +7,6 @@ ${tc.include("montiarc.generator.ma2jsim.component.Header.ftl")} {
 
   ${tc.include("montiarc.generator.ma2jsim.component.parameters.Parameters.ftl")}
 
-  ${tc.include("montiarc.generator.ma2jsim.component.features.DetermineVariant.ftl")}
-
-  ${tc.include("montiarc.generator.ma2jsim.component.features.Features.ftl")}
-
   ${tc.include("montiarc.generator.ma2jsim.component.fields.Fields.ftl")}
 
   ${tc.include("montiarc.generator.ma2jsim.component.ports.Ports.ftl")}

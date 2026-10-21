@@ -1,30 +1,39 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._symboltable;
 
+import arcbasis._symboltable.IArcBasisScope;
+import arcbasis._symboltable.TransitiveNameExpressionScopeSetter;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.CompSymbolsSymbols2Json;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolDeSer;
+import de.monticore.symboltable.serialization.JsonPrinter;
+import de.monticore.symboltable.serialization.json.JsonElement;
 import de.monticore.symboltable.serialization.json.JsonObject;
+import de.monticore.types.check.CompKindExpression;
+import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc._symboltable.IVariableArcComponentTypeSymbolDeSer;
-import variablearc._symboltable.VariableArcVariationPointDeSer;
-import variablearc.evaluation.ExpressionSetDeSer;
+import variablearc.presence.PresenceFormulasDeSer;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
-public class MontiArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer
-  implements IVariableArcComponentTypeSymbolDeSer {
+public class MontiArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer {
 
-  protected final ExpressionSetDeSer expressionSetDeSer;
-  protected final VariableArcVariationPointDeSer variationPointDeSer;
+  public static final String PARAMETER_DEFAULTS = "parameterDefaults";
+  public static final String SUPER_COMPONENT_ARGUMENTS = "superComponentArguments";
+
+  protected final PresenceFormulasDeSer presenceFormulasDeSer;
+  protected final ComponentArgumentsDeSer argumentsDeSer;
 
   public MontiArcComponentTypeSymbolDeSer() {
-    expressionSetDeSer = new ExpressionSetDeSer(this::parse);
-    variationPointDeSer = new VariableArcVariationPointDeSer(this::parse);
+    presenceFormulasDeSer = new PresenceFormulasDeSer();
+    argumentsDeSer = new ComponentArgumentsDeSer(this::parse);
   }
 
   protected Optional<ASTExpression> parse(String e) {
@@ -49,16 +58,15 @@ public class MontiArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer
     // serialize symbolrule attributes
     serializeNumOptParams(toSerialize.getNumOptParams(), s2j);
     serializeSuperComponents(toSerialize.getSuperComponentsList(), s2j);
+    serializeSuperComponentArguments(toSerialize.getSuperComponentsList(), s2j);
     serializeRefinements(toSerialize.getRefinementsList(), s2j);
     serializeParameter(toSerialize.getParameterList(), s2j);
+    serializeParameterDefaults(toSerialize, s2j);
     serializeEffectChains(toSerialize.getEffectChains(), s2j);
 
     // ---- Start Override
-    // Variable symbols need to be serialized before the spanned scope
-    if (toSerialize instanceof IVariableArcComponentTypeSymbol) {
-      serializeConstraints((IVariableArcComponentTypeSymbol) toSerialize, s2j);
-      serializeVariationPoint((IVariableArcComponentTypeSymbol) toSerialize, s2j);
-    }
+    // Conditional symbols need to be serialized before the spanned scope
+    presenceFormulasDeSer.serialize(toSerialize, s2j);
     // ---- End Override
 
     // serialize spanned scope
@@ -74,22 +82,70 @@ public class MontiArcComponentTypeSymbolDeSer extends ComponentTypeSymbolDeSer
     return p.toString();
   }
 
-  @Override
-  protected void deserializeAddons(@NotNull ComponentTypeSymbol component, @NotNull JsonObject json) {
-    super.deserializeAddons(component, json);
-    if (component instanceof IVariableArcComponentTypeSymbol) {
-      deserializeConstraints((IVariableArcComponentTypeSymbol) component, json);
-      deserializeVariationPoints((IVariableArcComponentTypeSymbol) component, json);
+  /**
+   * Prints the arguments of each super component, in the order of the super
+   * components.
+   */
+  protected void serializeSuperComponentArguments(@NotNull List<CompKindExpression> superComponents,
+                                                  @NotNull CompSymbolsSymbols2Json s2j) {
+    if (superComponents.stream().allMatch(superComponent -> superComponent.getArguments().isEmpty())) return;
+    JsonPrinter printer = s2j.getJsonPrinter();
+    printer.beginArray(SUPER_COMPONENT_ARGUMENTS);
+    for (CompKindExpression superComponent : superComponents) {
+      printer.beginArray();
+      this.argumentsDeSer.serialize(printer, superComponent);
+      printer.endArray();
+    }
+    printer.endArray();
+  }
+
+  protected void deserializeSuperComponentArguments(@NotNull ComponentTypeSymbol component, @NotNull JsonObject json) {
+    if (!json.hasArrayMember(SUPER_COMPONENT_ARGUMENTS)) return;
+    List<JsonElement> arguments = json.getArrayMember(SUPER_COMPONENT_ARGUMENTS);
+    List<CompKindExpression> superComponents = component.getSuperComponentsList();
+    for (int i = 0; i < Math.min(arguments.size(), superComponents.size()); i++) {
+      this.argumentsDeSer.deserialize(arguments.get(i).getAsJsonArray().getValues(), superComponents.get(i),
+        (IArcBasisScope) component.getSpannedScope());
+    }
+  }
+
+  protected void serializeParameterDefaults(@NotNull ComponentTypeSymbol component, @NotNull CompSymbolsSymbols2Json s2j) {
+    if (!(component instanceof IVariableArcComponentTypeSymbol variable)) return;
+    List<VariableSymbol> parameters = component.getParameterList().stream()
+      .filter(parameter -> variable.getParameterDefault(parameter.getName()).isPresent())
+      .toList();
+    if (parameters.isEmpty()) return;
+    JsonPrinter printer = s2j.getJsonPrinter();
+    printer.beginObject(PARAMETER_DEFAULTS);
+    for (VariableSymbol parameter : parameters) {
+      printer.member(parameter.getName(),
+        MontiArcMill.prettyPrint(variable.getParameterDefault(parameter.getName()).orElseThrow(), false).trim());
+    }
+    printer.endObject();
+  }
+
+  protected void deserializeParameterDefaults(@NotNull IVariableArcComponentTypeSymbol component, @NotNull JsonObject json) {
+    if (!json.hasObjectMember(PARAMETER_DEFAULTS)) return;
+    for (Map.Entry<String, JsonElement> entry : json.getObjectMember(PARAMETER_DEFAULTS).getMembers().entrySet()) {
+      String value = entry.getValue().getAsJsonString().getValue();
+      Optional<ASTExpression> parsed = this.parse(value);
+      if (parsed.isEmpty()) {
+        Log.error(String.format("Could not deserialize the default value '%s' of parameter '%s' of component '%s'",
+          value, entry.getKey(), component.getTypeInfo().getName()));
+        continue;
+      }
+      new TransitiveNameExpressionScopeSetter((IArcBasisScope) component.getTypeInfo().getSpannedScope()).set(parsed.get());
+      component.setParameterDefault(entry.getKey(), parsed.get());
     }
   }
 
   @Override
-  public ExpressionSetDeSer getExpressionSetDeSer() {
-    return expressionSetDeSer;
-  }
-
-  @Override
-  public VariableArcVariationPointDeSer getVariationPointDeSer() {
-    return variationPointDeSer;
+  protected void deserializeAddons(@NotNull ComponentTypeSymbol component, @NotNull JsonObject json) {
+    super.deserializeAddons(component, json);
+    deserializeSuperComponentArguments(component, json);
+    if (component instanceof IVariableArcComponentTypeSymbol variable) {
+      deserializeParameterDefaults(variable, json);
+      presenceFormulasDeSer.deserialize(variable, json);
+    }
   }
 }

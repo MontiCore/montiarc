@@ -4,6 +4,9 @@ package variablearc._cocos;
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
 import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
+import de.monticore.expressions.expressionsbasis._ast.ASTNameExpression;
+import de.monticore.expressions.expressionsbasis._visitor.ExpressionsBasisVisitor2;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
@@ -11,8 +14,8 @@ import montiarc.util.VariableArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.VariableArcMill;
 import variablearc._ast.ASTArcConstraintDeclaration;
-import variablearc._cocos.util.ComponentVarIfHandler;
-import variablearc._cocos.util.GenericASTNameExpressionVisitor;
+import variablearc._ast.ASTArcVarIf;
+import variablearc._ast.VariableArcElements;
 import variablearc._symboltable.ArcFeatureSymbol;
 import variablearc._symboltable.IVariableArcScope;
 import variablearc._visitor.VariableArcTraverser;
@@ -56,31 +59,27 @@ public class FeatureUsage implements ArcBasisASTArcComponentTypeCoCo {
   }
 
   protected Collection<String> getNamesInIfConditions(@NotNull ASTArcComponentType node) {
-    List<String> names = new ArrayList<>();
-    ComponentVarIfHandler handler = new ComponentVarIfHandler(node, (varif) -> {
-      Preconditions.checkNotNull(varif);
-      VariableArcTraverser traverser = VariableArcMill.traverser();
-      traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((
-        astNameExpression -> names.add(astNameExpression.getName())))
-      );
-      varif.getCondition().accept(traverser);
-    });
-    node.accept(handler.getTraverser());
-    return names;
+    return this.getNamesIn(VariableArcElements.of(node, ASTArcVarIf.class).stream()
+      .map(ASTArcVarIf::getCondition)
+      .toList());
   }
 
   protected Collection<String> getNamesInConstraints(@NotNull ASTArcComponentType node) {
+    return this.getNamesIn(VariableArcElements.of(node, ASTArcConstraintDeclaration.class).stream()
+      .map(ASTArcConstraintDeclaration::getExpression)
+      .toList());
+  }
+
+  protected Collection<String> getNamesIn(@NotNull List<ASTExpression> expressions) {
     List<String> names = new ArrayList<>();
     VariableArcTraverser traverser = VariableArcMill.traverser();
-    traverser.add4ExpressionsBasis(new GenericASTNameExpressionVisitor((
-      astNameExpression -> names.add(astNameExpression.getName())))
-    );
-
-    node.getBody().getArcElementList().stream()
-      .filter(ASTArcConstraintDeclaration.class::isInstance)
-      .map(ASTArcConstraintDeclaration.class::cast)
-      .map(ASTArcConstraintDeclaration::getExpression)
-      .forEach(e -> e.accept(traverser));
+    traverser.add4ExpressionsBasis(new ExpressionsBasisVisitor2() {
+      @Override
+      public void visit(ASTNameExpression node) {
+        names.add(node.getName());
+      }
+    });
+    expressions.forEach(expression -> expression.accept(traverser));
     return names;
   }
 

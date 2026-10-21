@@ -8,7 +8,7 @@
   ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-<#assign comp=variant!ast.getArcComponentType().getSymbol()/>
+<#assign comp=ast.getArcComponentType().getSymbol()/>
 <#-- @ftlvariable name="comp" type="de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol" -->
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
@@ -24,14 +24,14 @@ public class ${prefixes.deploy()}Mqtt${comp.getName()}<#if isTop>${suffixes.top(
     throws org.eclipse.paho.client.mqttv3.MqttException {
     <#list comp.getAllIncomingPorts() as port>
       <#if !port.getType().isGenericType()>
-      mqtt.subscribe(getTopic("${comp.getName()}", "${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}"), str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
-        .ifPresent(m -> component.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}().receive(montiarc.rte.msg.Message.of(m)))
+      mqtt.subscribe(getTopic("${comp.getName()}", "${port.getName()}"), str -> deSerializer.deserialize(str, <@Util.getPortTypeReference port.getType()/>)
+        .ifPresent(m -> component.${prefixes.port()}${port.getName()}().receive(montiarc.rte.msg.Message.of(m)))
       );
       </#if>
     </#list>
     <#list comp.getAllOutgoingPorts() as port>
-      component.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}()
-        .connect(new montiarc.rte.deploy.mqtt.MqttOutPort<>(mqtt, getTopic("${comp.getName()}", "${port.getName()}${helper.getVariantHelper().portVariantSuffix(comp.getAstNode(), port)}"), deSerializer));
+      component.${prefixes.port()}${port.getName()}()
+        .connect(new montiarc.rte.deploy.mqtt.MqttOutPort<>(mqtt, getTopic("${comp.getName()}", "${port.getName()}"), deSerializer));
     </#list>
   }
 }

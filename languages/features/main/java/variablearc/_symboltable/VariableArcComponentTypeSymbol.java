@@ -1,31 +1,30 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._symboltable;
 
+import com.google.common.base.Preconditions;
+import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.variability.VariableArcVariantCalculator;
+import org.codehaus.commons.nullanalysis.NotNull;
+import variablearc.presence.IPresenceFormulasOwner;
+import variablearc.presence.PresenceFormulas;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-public class VariableArcComponentTypeSymbol extends ComponentTypeSymbol implements IVariableArcComponentTypeSymbol {
+public class VariableArcComponentTypeSymbol extends ComponentTypeSymbol implements IVariableArcComponentTypeSymbol, IPresenceFormulasOwner {
 
-  protected ExpressionSet localConstraints;
-  protected ExpressionSet constraints;
-  protected List<VariableArcVariantComponentTypeSymbol> variants;
-  protected List<VariableArcVariationPoint> variationPoints;
+  protected PresenceFormulas presenceFormulas;
+  protected final Map<String, ASTExpression> parameterDefaults = new LinkedHashMap<>();
 
   /**
    * @param name the name of this component type.
    */
   protected VariableArcComponentTypeSymbol(String name) {
     super(name);
-    variationPoints = new ArrayList<>();
-    localConstraints = new ExpressionSet();
   }
 
   @Override
@@ -34,47 +33,32 @@ public class VariableArcComponentTypeSymbol extends ComponentTypeSymbol implemen
   }
 
   @Override
-  public List<VariableArcVariantComponentTypeSymbol> getVariableArcVariants() {
-    if (variants == null) {
-      variants = Collections.emptyList();
-      VariableArcVariantCalculator calculator = new VariableArcVariantCalculator(this);
-      variants = calculator.calculateVariants();
-    }
-    return variants;
-  }
-
-  @Override
-  public void add(VariableArcVariationPoint variationPoint) {
-    variationPoints.add(variationPoint);
-  }
-
-  @Override
-  public ExpressionSet getConstraints() {
-    if (constraints == null) {
-      constraints = getConstraints(new HashSet<>());
-    }
-    return constraints;
-  }
-
-  @Override
-  public ExpressionSet getLocalConstraints() {
-    return localConstraints;
-  }
-
-  @Override
-  public void setLocalConstraints(ExpressionSet constraints) {
-    this.localConstraints = constraints;
-  }
-
-  @Override
-  public List<VariableArcVariationPoint> getAllVariationPoints() {
-    return variationPoints;
-  }
-
-  @Override
   public List<VariableSymbol> getFields() {
     return super.getFields().stream()
       .filter(f -> !(f instanceof ArcFeature2VariableAdapter))
       .collect(Collectors.toList());
+  }
+
+  @Override
+  public Optional<PresenceFormulas> getPresenceFormulas() {
+    return Optional.ofNullable(this.presenceFormulas);
+  }
+
+  @Override
+  public void setPresenceFormulas(@NotNull PresenceFormulas formulas) {
+    this.presenceFormulas = Preconditions.checkNotNull(formulas);
+  }
+
+  @Override
+  public Optional<ASTExpression> getParameterDefault(@NotNull String parameter) {
+    Preconditions.checkNotNull(parameter);
+    return Optional.ofNullable(this.parameterDefaults.get(parameter));
+  }
+
+  @Override
+  public void setParameterDefault(@NotNull String parameter, @NotNull ASTExpression value) {
+    Preconditions.checkNotNull(parameter);
+    Preconditions.checkNotNull(value);
+    this.parameterDefaults.put(parameter, value);
   }
 }

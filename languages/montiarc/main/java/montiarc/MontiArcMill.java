@@ -6,8 +6,9 @@ import de.monticore.prettyprint.IndentPrinter;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
 import montiarc._symboltable.MontiArcScopesGenitorP2Delegator;
 import montiarc._symboltable.MontiArcScopesGenitorP3Delegator;
-import montiarc.evaluation.MontiArcDeriveSMTExpr;
-import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
+import montiarc.smt.MontiArcDeriveSMTExpr;
+import variablearc.presence.PresenceFormulaCalculator;
+import variablearc.smt.exp2smt.IDeriveSMTExpr;
 
 public class MontiArcMill extends MontiArcMillTOP {
 
@@ -16,6 +17,8 @@ public class MontiArcMill extends MontiArcMillTOP {
   protected static MontiArcMill millMontiArcScopesGenitorP3Delegator;
 
   protected static MontiArcMill millMontiArcFullConverter;
+
+  protected static MontiArcMill millMontiArcPresenceFormulaCalculator;
 
   public static MontiArcScopesGenitorP2Delegator scopesGenitorP2Delegator() {
     if (millMontiArcScopesGenitorP2Delegator == null) {
@@ -50,18 +53,34 @@ public class MontiArcMill extends MontiArcMillTOP {
     return new MontiArcDeriveSMTExpr(context);
   }
 
+  public static PresenceFormulaCalculator presenceFormulaCalculator() {
+    if (millMontiArcPresenceFormulaCalculator == null) {
+      millMontiArcPresenceFormulaCalculator = getMill();
+    }
+    return millMontiArcPresenceFormulaCalculator._presenceFormulaCalculator();
+  }
+
+  protected PresenceFormulaCalculator _presenceFormulaCalculator() {
+    return new PresenceFormulaCalculator();
+  }
+
   public static void initMe(MontiArcMill a) {
     MontiArcMillTOP.initMe(a);
     millMontiArcScopesGenitorP2Delegator = a;
     millMontiArcScopesGenitorP3Delegator = a;
     millMontiArcFullConverter = a;
+    millMontiArcPresenceFormulaCalculator = a;
   }
 
   public static void reset() {
+    if (mill != null && mill.montiArcGlobalScope != null) {
+      mill.montiArcGlobalScope.closePresenceContext();
+    }
     MontiArcMillTOP.reset();
     millMontiArcScopesGenitorP2Delegator = null;
     millMontiArcScopesGenitorP3Delegator = null;
     millMontiArcFullConverter = null;
+    millMontiArcPresenceFormulaCalculator = null;
   }
 
   @Override

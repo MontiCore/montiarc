@@ -2,52 +2,48 @@
 package variablearc._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis._cocos.FeedbackStrongCausality;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.IntExpr;
-import com.microsoft.z3.Model;
-import com.microsoft.z3.Status;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTVariableArcFullVariantComponentType;
-import variablearc._cocos.util.ExpressionSolverService;
-import variablearc._cocos.util.VariationConditionHelper;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.ExpressionSolver;
+import variablearc._ast.VariableArcElements;
+import variablearc.causality.CausalityResolver;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Stack;
-import java.util.stream.Collectors;
 
-public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTypeCoCo {
+/**
+ * Checks that no feedback loop without a strongly causal port is present in
+ * any configuration. The loops are cycles in the graph of the connectors of
+ * the component and the effects between the ports of its subcomponents; a
+ * cycle is present in a configuration if all its edges are present.
+ */
+public class FeedbackStrongCausality4Family extends FeedbackStrongCausality {
 
-  protected static class ConnectorInfo {
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
+  protected final CausalityResolver causalityResolver;
 
-    ASTConnector connector;
-    BoolExpr condition;
-    Boolean stronglyCausal;
-
-    ConnectorInfo(ASTConnector connector, BoolExpr condition, Boolean stronglyCausal) {
-      this.connector = connector;
-      this.condition = condition;
-      this.stronglyCausal = stronglyCausal;
-    }
+  public FeedbackStrongCausality4Family(@NotNull WithinComponentResolver withinComponentResolver,
+                                        @NotNull PresenceResolver presenceResolver,
+                                        @NotNull CausalityResolver causalityResolver) {
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
+    this.causalityResolver = Preconditions.checkNotNull(causalityResolver);
   }
 
   @Override
@@ -55,243 +51,67 @@ public class FeedbackStrongCausality4Family implements ArcBasisASTArcComponentTy
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    Context ctx = ExpressionSolverService.getContext();
+    ComponentTypeSymbol component = node.getSymbol();
+    FormulaSolver solver = this.presenceResolver.solverFor(component);
+    Map<String, Map<String, List<BoolExpr>>> edges = new HashMap<>();
+    this.addConnectorEdges(solver, component, node, edges);
+    this.addEffectChainEdges(solver, component, edges);
 
-    List<ConnectorInfo> connectorInfos = new ArrayList<>();
-    Map<ASTConnector, BoolExpr> connectorConditions;
-    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
-    Map<SubcomponentSymbol, Integer> subcomponentToInt = new HashMap<>();
+    Multimap<String, String> graph = HashMultimap.create();
+    edges.forEach((source, targets) -> graph.putAll(source, targets.keySet()));
 
-    // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
-
-    // Managing all features, variations, constraints and connectors
-    List<String> allFeatures;
-    ExpressionSet constraints;
-    List<SubcomponentSymbol> allSubComponents;
-
-    // Getting all features, ports and variations from the Main-Component
-    allFeatures = new ArrayList<>(mainFeatures);
-    allSubComponents = new ArrayList<>();
-
-    if (node instanceof ASTVariableArcFullVariantComponentType) {
-      constraints = ((IVariableArcComponentTypeSymbol) (((ASTVariableArcFullVariantComponentType) node).getOriginal()).getSymbol()).getConstraints();
-
-      connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
-      subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
-      allSubComponents.addAll(subcomponentConditions.keySet().stream().map(ASTComponentInstance::getSymbol).toList());
-      for (Map.Entry<ASTConnector, BoolExpr> connectorEntry : connectorConditions.entrySet()) {
-        Boolean sourceStronglyCausal = connectorEntry.getKey().getSource().isPresentPortSymbol() ? connectorEntry.getKey().getSource().getPortSymbol().getStronglyCausal() : false;
-        var newConnector = new ConnectorInfo(connectorEntry.getKey(), connectorEntry.getValue(), sourceStronglyCausal);
-        connectorInfos.add(newConnector);
+    for (List<String> cycle : this.findAllCycles(graph)) {
+      List<BoolExpr> presence = new ArrayList<>();
+      for (int i = 0; i < cycle.size(); i++) {
+        presence.add(solver.or(edges.get(cycle.get(i)).get(cycle.get((i + 1) % cycle.size()))));
       }
-
-    } else {
-      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-
-      List<ASTConnector> mainConnectors = node.getConnectors();
-
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
-      for (ASTComponentInstance mainSubComp : mainSubComps) {
-        subcomponentConditions.put(mainSubComp, ctx.mkTrue());
+      cycle.add(cycle.getFirst());
+      String message = ArcError.FEEDBACK_CAUSALITY + ": " + String.join(" -> ", cycle);
+      switch (solver.check(solver.and(presence))) {
+        case SATISFIABLE -> Log.error(message);
+        case UNKNOWN -> Log.warn(message);
+        case UNSATISFIABLE -> { }
       }
-      allSubComponents.addAll(mainSubComps.stream().map(ASTComponentInstance::getSymbol).toList());
-      for (ASTConnector connector : mainConnectors) {
-        Boolean sourceStronglyCausal = connector.getSource().isPresentPortSymbol() ? connector.getSource().getPortSymbol().getStronglyCausal() : false;
-        var newConnector = new ConnectorInfo(connector, ctx.mkTrue(), sourceStronglyCausal);
-        connectorInfos.add(newConnector);
-      }
-    }
-
-    // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
-
-    // Indexing subcomponents, to later access them in the edge-matrix
-    int subIndex = 1;
-    for (SubcomponentSymbol subcomp : allSubComponents) {
-      subcomponentToInt.put(subcomp, subIndex++);
-    }
-
-    // Creating the edge-matrix, to manage all conenctions between subcomponents
-    // The matrix defines which connectors are active and under which conditions
-    int componentCount = allSubComponents.size() + 1;
-    BoolExpr[][] edge = new BoolExpr[componentCount][componentCount];
-    for (int i = 0; i < componentCount; i++) {
-      for (int j = 0; j < componentCount; j++) {
-        edge[i][j] = ctx.mkFalse();
-      }
-    }
-
-    // Saving all connectors, that are active, when a feedback-loop exists
-    List<BoolExpr> activeConnectorExprs = new ArrayList<>();
-    // Mapping each connector with an id
-    Map<Integer, ConnectorInfo> indexToConnector = new HashMap<>();
-    int connectorIndex = 0;
-    for (ConnectorInfo connectorInfo : connectorInfos) {
-      for (ASTPortAccess target : connectorInfo.connector.getTargetList()) {
-        // If the source-port of the connector is not strongly-causal, add the connector to the edge-matrix
-        if (!connectorInfo.stronglyCausal) {
-          BoolExpr isActive = connectorInfo.condition;
-          int sourceIndex = connectorInfo.connector.getSource().isPresentComponentSymbol()
-            ? subcomponentToInt.get(connectorInfo.connector.getSource().getComponentSymbol())
-            : 0;
-          int targetIndex = target.isPresentComponentSymbol()
-            ? subcomponentToInt.get(target.getComponentSymbol())
-            : 0;
-          edge[sourceIndex][targetIndex] = ctx.mkOr(edge[sourceIndex][targetIndex], isActive);
-          activeConnectorExprs.add(isActive);
-          indexToConnector.put(connectorIndex++, connectorInfo);
-        }
-      }
-    }
-
-    BoolExpr cycleExists = ctx.mkFalse();
-    // try to identify if cycle of length cycleLen exists
-    for (int cycleLen = 2; cycleLen <= componentCount; cycleLen++) {
-      IntExpr[] path = new IntExpr[cycleLen + 1];
-      for (int i = 0; i <= cycleLen; i++) {
-        path[i] = ctx.mkIntConst("n" + i);
-      }
-
-      List<BoolExpr> causalConstraints = new ArrayList<>();
-
-      // Check that each index is within bounds
-      for (IntExpr pathNode : path) {
-        causalConstraints.add(ctx.mkAnd(ctx.mkLe(ctx.mkInt(0), pathNode), ctx.mkLt(pathNode, ctx.mkInt(componentCount))));
-      }
-
-      // The starting node has to be equal to the ending node, to form a cycle
-      causalConstraints.add(ctx.mkEq(path[0], path[cycleLen]));
-
-      // If the cycle is of lenght > 2, then each intermediate node should be distinct
-      if (cycleLen > 2) {
-        for (int i = 0; i < cycleLen; i++) {
-          for (int j = i + 1; j < cycleLen; j++) {
-            causalConstraints.add(ctx.mkNot(ctx.mkEq(path[i], path[j])));
-          }
-        }
-      }
-
-      // Add conditions that need to hold, for edges (connections) to exist
-      for (int i = 0; i < cycleLen; i++) {
-        IntExpr from = path[i];
-        IntExpr to = path[i + 1];
-        BoolExpr edgeExists = ctx.mkFalse();
-
-        for (int src = 0; src < componentCount; src++) {
-          for (int target = 0; target < componentCount; target++) {
-            if (!edge[src][target].isFalse()) {
-              BoolExpr match = ctx.mkAnd(ctx.mkEq(from, ctx.mkInt(src)), ctx.mkEq(to, ctx.mkInt(target)));
-              edgeExists = ctx.mkOr(edgeExists, ctx.mkAnd(match, edge[src][target]));
-            }
-          }
-        }
-        causalConstraints.add(edgeExists);
-      }
-      // Comnbine all constraints, to ensure that a cycle exists
-      BoolExpr cycleConstraints = ctx.mkAnd(causalConstraints.toArray(new BoolExpr[0]));
-      cycleExists = ctx.mkOr(cycleExists, cycleConstraints);
-    }
-
-    List<BoolExpr> cycleExistsExpressionList = new ArrayList<>(List.of(cycleExists, featureConstraints));
-
-    if (ExpressionSolverService.solve(cycleExistsExpressionList) == Status.SATISFIABLE) {
-      boolean definite = ExpressionSolverService.isSatisfiableForAllUnknownValues(cycleExistsExpressionList);
-      Model model = ExpressionSolverService.getModel();
-
-      List<ASTConnector> involvedConnectors = new ArrayList<>();
-      for (ConnectorInfo connector : connectorInfos) {
-        if (!connector.stronglyCausal) {
-          BoolExpr isActive = connector.condition;
-          if (model.evaluate(isActive, false).isTrue()) {
-            involvedConnectors.add(connector.connector);
-          }
-        }
-      }
-
-      Set<SubcomponentSymbol> visited = new HashSet<>();
-
-      for (SubcomponentSymbol vertex : allSubComponents) {
-        if (!visited.contains(vertex)) {
-          this.check(involvedConnectors, vertex, new Stack<>(), visited, definite);
-        }
-      }
-
-    }
-
-  }
-
-  protected void check(@NotNull List<ASTConnector> validConnectors,
-                       @NotNull SubcomponentSymbol next,
-                       @NotNull Stack<SubcomponentSymbol> path,
-                       @NotNull Set<SubcomponentSymbol> visited,
-                       boolean definite) {
-    Preconditions.checkNotNull(validConnectors);
-    Preconditions.checkNotNull(next);
-    Preconditions.checkNotNull(path);
-    Preconditions.checkNotNull(visited);
-
-    path.push(next);
-    for (ASTConnector connector : getConnectorsFromSubcomponent(validConnectors, next)) {
-      this.check(validConnectors, connector, path, visited, definite);
-    }
-    visited.add(path.pop());
-  }
-
-  protected void check(@NotNull List<ASTConnector> validConnectors,
-                       @NotNull ASTConnector next,
-                       @NotNull Stack<SubcomponentSymbol> path,
-                       @NotNull Set<SubcomponentSymbol> visited,
-                       boolean definite) {
-    Preconditions.checkNotNull(validConnectors);
-    Preconditions.checkNotNull(next);
-    Preconditions.checkNotNull(path);
-    Preconditions.checkNotNull(visited);
-
-    if (next.getSource().isPresentPortSymbol() && !next.getSource().getPortSymbol().getStronglyCausal()) {
-      for (ASTPortAccess target : next.getTargetList()) {
-        this.check(validConnectors, target, path, visited, definite);
-      }
-    }
-
-  }
-
-  protected void check(@NotNull List<ASTConnector> validConnectors,
-                       @NotNull ASTPortAccess next,
-                       @NotNull Stack<SubcomponentSymbol> path,
-                       @NotNull Set<SubcomponentSymbol> visited,
-                       boolean definite) {
-    Preconditions.checkNotNull(validConnectors);
-    Preconditions.checkNotNull(next);
-    Preconditions.checkNotNull(path);
-    Preconditions.checkNotNull(visited);
-
-    if (!next.isPresentComponent() || !next.isPresentComponentSymbol()) {
-      return;
-    }
-
-    if (path.contains(next.getComponentSymbol())) {
-      if (definite) {
-        Log.error(ArcError.FEEDBACK_CAUSALITY.toString(),
-          next.get_SourcePositionStart(), next.get_SourcePositionEnd()
-        );
-      } else {
-        Log.warn(ArcError.FEEDBACK_CAUSALITY.toString(),
-          next.get_SourcePositionStart(), next.get_SourcePositionEnd()
-        );
-      }
-    } else {
-      this.check(validConnectors, next.getComponentSymbol(), path, visited, definite);
     }
   }
 
-  protected List<ASTConnector> getConnectorsFromSubcomponent(@NotNull List<ASTConnector> validConnectors, @NotNull SubcomponentSymbol subcomponent) {
-    Preconditions.checkNotNull(subcomponent);
-    return validConnectors.stream().filter(connector -> connector.getSource().isPresentComponent()
-        && connector.getSource().isPresentComponentSymbol()
-        && connector.getSource().getComponentSymbol().equals(subcomponent))
-      .collect(Collectors.toList());
+  protected void addConnectorEdges(@NotNull FormulaSolver solver,
+                                   @NotNull ComponentTypeSymbol component,
+                                   @NotNull ASTArcComponentType node,
+                                   @NotNull Map<String, Map<String, List<BoolExpr>>> edges) {
+    for (ASTConnector connector : VariableArcElements.of(node, ASTConnector.class)) {
+      BoolExpr presence = this.presenceResolver.presenceOf(component, connector);
+      for (ASTPortAccess target : connector.getTargetList()) {
+        this.addEdge(edges, connector.getSource().getQName(), target.getQName(), presence);
+      }
+    }
   }
 
+  protected void addEffectChainEdges(@NotNull FormulaSolver solver,
+                                     @NotNull ComponentTypeSymbol component,
+                                     @NotNull Map<String, Map<String, List<BoolExpr>>> edges) {
+    for (SubcomponentSymbol subcomponent : component.getSubcomponents()) {
+      if (!subcomponent.isTypePresent()) continue;
+      ComponentTypeSymbol type = subcomponent.getType().getTypeInfo();
+      List<PortSymbol> ports = this.withinComponentResolver.getAll(type, PortSymbol.class);
+      for (PortSymbol incoming : ports.stream().filter(PortSymbol::isIncoming).toList()) {
+        for (PortSymbol outgoing : ports.stream().filter(PortSymbol::isOutgoing).toList()) {
+          BoolExpr effect = this.causalityResolver.effectOf(solver, type, incoming, outgoing);
+          if (effect.isFalse()) continue;
+          this.addEdge(edges,
+            subcomponent.getName() + "." + incoming.getName(),
+            subcomponent.getName() + "." + outgoing.getName(),
+            solver.and(this.presenceResolver.presenceOf(component, subcomponent),
+              this.presenceResolver.lift(component, subcomponent, effect)));
+        }
+      }
+    }
+  }
+
+  protected void addEdge(@NotNull Map<String, Map<String, List<BoolExpr>>> edges,
+                         @NotNull String source,
+                         @NotNull String target,
+                         @NotNull BoolExpr presence) {
+    edges.computeIfAbsent(source, s -> new HashMap<>()).computeIfAbsent(target, t -> new ArrayList<>()).add(presence);
+  }
 }

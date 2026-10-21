@@ -8,7 +8,3 @@
   final <@Util.getTypeString param.getSymbol().getType()/> ${param.getName()} =
   getContext().${prefixes.parameter()}${param.getName()}();
 </#list>
-<#-- Shadow features -->
-<#list helper.getComponentHelper().getFeatures(ast) as feature>
-  final boolean ${feature.getName()} = getContext() .${prefixes.feature()}${feature.getName()}();
-</#list>

@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
@@ -12,6 +13,7 @@ import montiarc.arc2fd.solver.ConstraintSolver;
 import montiarc.arc2fd.solver.SolverResult;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc.presence.PresenceResolver;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -32,8 +34,10 @@ public class Arc2FDTransformer {
   /**
    * @param recursive Whether to include the features of subcomponents
    */
-  public Arc2FDTransformer(boolean recursive) {
-    this(new FeatureCollector(recursive), new FeatureDiagramBuilder());
+  public Arc2FDTransformer(boolean recursive,
+                           @NotNull WithinComponentResolver withinComponentResolver,
+                           @NotNull PresenceResolver presenceResolver) {
+    this(new FeatureCollector(recursive, withinComponentResolver, presenceResolver), new FeatureDiagramBuilder());
   }
 
   public Arc2FDTransformer(@NotNull FeatureCollector collector, @NotNull FeatureDiagramBuilder builder) {
@@ -68,35 +72,34 @@ public class Arc2FDTransformer {
 
     List<String> pkg = ast.isPresentPackage() ? ast.getPackage().getPartsList() : List.of();
 
-    try (Context context = new Context()) {
-      Optional<List<BoolExpr>> constraints = collector.collectConstraints(component, context);
-      if (constraints.isEmpty()) {
-        Log.error(Arc2FDError.SMT_CONVERSION_ERROR.format(name));
-        return Optional.empty();
-      }
-
-      Solver solver = context.mkSolver();
-      solver.add(constraints.get().toArray(BoolExpr[]::new));
-
-      Map<String, BoolExpr> vars = new LinkedHashMap<>();
-      features.get().forEach((fdName, smtName) -> vars.put(fdName, context.mkBoolConst(smtName)));
-
-      SolverResult result = new ConstraintSolver(context, solver, name, vars).trySolve();
-
-      if (result instanceof SolverResult.Unsatisfiable) {
-        Log.error(Arc2FDError.SMT_UNSAT.format(name));
-        return Optional.empty();
-      }
-      if (!(result instanceof SolverResult.Solved solved)) {
-        Log.error(Arc2FDError.SMT_UNKNOWN.format(name));
-        return Optional.empty();
-      }
-
-      solved.deadFeatures().forEach(f -> Log.warn(Arc2FDError.DEAD_FEATURE.format(f, name)));
-      if (solved.incomplete())
-        Log.warn(Arc2FDError.SMT_STRICTNESS.format(name));
-
-      return Optional.of(builder.build(solved.fd(), pkg));
+    Context context = collector.getContext();
+    Optional<List<BoolExpr>> constraints = collector.collectConstraints(component);
+    if (constraints.isEmpty()) {
+      Log.error(Arc2FDError.SMT_CONVERSION_ERROR.format(name));
+      return Optional.empty();
     }
+
+    Solver solver = context.mkSolver();
+    solver.add(constraints.get().toArray(BoolExpr[]::new));
+
+    Map<String, BoolExpr> vars = new LinkedHashMap<>();
+    features.get().forEach((fdName, smtName) -> vars.put(fdName, context.mkBoolConst(smtName)));
+
+    SolverResult result = new ConstraintSolver(context, solver, name, vars).trySolve();
+
+    if (result instanceof SolverResult.Unsatisfiable) {
+      Log.error(Arc2FDError.SMT_UNSAT.format(name));
+      return Optional.empty();
+    }
+    if (!(result instanceof SolverResult.Solved solved)) {
+      Log.error(Arc2FDError.SMT_UNKNOWN.format(name));
+      return Optional.empty();
+    }
+
+    solved.deadFeatures().forEach(f -> Log.warn(Arc2FDError.DEAD_FEATURE.format(f, name)));
+    if (solved.incomplete())
+      Log.warn(Arc2FDError.SMT_STRICTNESS.format(name));
+
+    return Optional.of(builder.build(solved.fd(), pkg));
   }
 }

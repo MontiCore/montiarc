@@ -6,10 +6,6 @@ component TestModel(double param1, char param2, int defaultParam = 1) {
   port sync in Integer i;
   port sync out boolean o;
 
-  feature myFeature;
-
-  constraint (myFeature);
-
   int myField = 0;
   String fieldWithInitial = "abcd";
 

@@ -78,6 +78,34 @@ public class FeatureUsageTest extends VariableArcTestBase {
             .build())
           .build(),
         new Error[]{ VariableArcError.FEATURE_UNUSED }
+      ),
+      // feature used only in a constraint nested in a variation point
+      Arguments.of(VariableArcMill.arcComponentTypeBuilder()
+          .setName("comp4")
+          .setHead(Mockito.mock(ASTComponentHead.class))
+          .setBody(VariableArcMill.componentBodyBuilder()
+            .setArcElementsList(List.of(
+              VariableArcMill.arcFeatureDeclarationBuilder()
+                .setArcFeaturesList(List.of(
+                  VariableArcMill.arcFeatureBuilder().setName("f1").build(),
+                  VariableArcMill.arcFeatureBuilder().setName("f2").build()
+                ))
+                .build(),
+              VariableArcMill.componentInstantiationBuilder()
+                .setComponentInstanceList("i")
+                .setMCType(VariableArcMill.mCPrimitiveTypeBuilder().build())
+                .build(),
+              VariableArcMill.arcVarIfBuilder()
+                .setCondition(VariableArcMill.nameExpressionBuilder().setName("f2").build())
+                .setThen(VariableArcMill.arcConstraintDeclarationBuilder()
+                  .setExpression(VariableArcMill.nameExpressionBuilder().setName("f1").build())
+                  .build())
+                .setOtherwiseAbsent()
+                .build()
+            ))
+            .build())
+          .build(),
+        new Error[]{}
       )
     );
   }

@@ -8,8 +8,6 @@ import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
 import de.monticore.ocl.setexpressions._ast.ASTSetEnumeration;
 import de.monticore.ocl.setexpressions._ast.ASTSetValueItem;
 import de.monticore.umlstereotype._ast.ASTStereoValue;
-import variablearc._ast.ASTArcFeature;
-import variablearc._ast.ASTArcFeatureDeclaration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +27,6 @@ public class MaUnitHelper {
     if (!node.isPresentStereotype()) return 0;
 
     Set<String> names = node.getHead().getArcParameterList().stream().map(ASTArcParameter::getName).collect(Collectors.toSet());
-    names.addAll(node.getBody().streamArcElementsOfType(ASTArcFeatureDeclaration.class).flatMap(ASTArcFeatureDeclaration::streamArcFeatures).map(ASTArcFeature::getName).collect(Collectors.toSet()));
     names.add("ticks");
     names.add("simulatedTickLength");
 

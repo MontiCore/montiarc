@@ -14,6 +14,10 @@ public enum VariableArcError implements Error {
   FEATURE_UNUSED("0xC1403", "Feature '%s' is never used"),
   SUBCOMPONENTS_NOT_CONSTRAINT("0xC1404", "Features %s are not correctly constraint by this component"),
   IF_STATEMENT_EXPRESSION_WRONG_TYPE("0xC1405", "Incompatible types: '%s' cannot be converted to 'boolean'"),
+  SUBCOMPONENT_CONSTRAINTS_NOT_IMPLIED("0xC1406", "The constraints of this component do not imply the constraints of subcomponent '%s'"),
+  FEATURE_NOT_SELECTABLE("0xC1407", "Feature '%s' is not selected in any valid configuration"),
+  VARIATION_POINT_NOT_PRESENT("0xC1408", "This variation point is not present in any valid configuration"),
+  PRESENCE_NOT_DESERIALIZABLE("0xC1409", "Could not load the presence formulas of component '%s' from its symbol file: %s"),
   FIELD_REFERENCE_IN_IF_STATEMENT_ILLEGAL("0xC1415", "Value of field '%s' not available in static context"),
   FIELD_REFERENCE_IN_CONSTRAINT_ILLEGAL("0xC1416", "Value of field '%s' not available in static context");
 

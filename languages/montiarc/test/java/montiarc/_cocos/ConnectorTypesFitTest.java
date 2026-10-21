@@ -47,8 +47,8 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
     compile("package a.b;component J { port out java.lang.Comparable<java.lang.Integer> o;}");
     compile("package a.b;component K<T> { port in T i;} ");
     compile("package a.b;component L<T> { port out T o;}");
-    compile("package a.b;component P<T> { port in T pi; port out T po; }");
-    compile("package a.b;component Q extends a.b.P<int> { }");
+    compile("package a.b;component R<T> { port in T pi; port out T po; }");
+    compile("package a.b;component S extends a.b.R<int> { }");
   }
 
   @ParameterizedTest
@@ -389,7 +389,7 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
       ),
       // int -> int (input forward, inherited port bound by the super component)
       arg("""
-        component ValidComp33 extends a.b.P<int> {
+        component ValidComp33 extends a.b.R<int> {
           a.b.D sub;
           pi -> sub.i;
         }
@@ -397,7 +397,7 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
       ),
       // int -> int (output forward, inherited port bound by the super component)
       arg("""
-        component ValidComp34 extends a.b.P<int> {
+        component ValidComp34 extends a.b.R<int> {
           a.b.E sub;
           sub.o -> po;
         }
@@ -405,7 +405,7 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
       ),
       // int -> int (input forward, port inherited from a super component of the super component)
       arg("""
-        component ValidComp35 extends a.b.Q {
+        component ValidComp35 extends a.b.S {
           a.b.D sub;
           pi -> sub.i;
         }
@@ -604,7 +604,7 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
       ),
       // boolean -> int (input forward, inherited port bound by the super component)
       arg("""
-        component InvalidComp19 extends a.b.P<boolean> {
+        component InvalidComp19 extends a.b.R<boolean> {
           a.b.D sub;
           pi -> sub.i;
         }
@@ -613,7 +613,7 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
       ),
       // boolean -> int (output forward, inherited port bound by the super component)
       arg("""
-        component InvalidComp20 extends a.b.P<int> {
+        component InvalidComp20 extends a.b.R<int> {
           a.b.C sub;
           sub.o -> po;
         }

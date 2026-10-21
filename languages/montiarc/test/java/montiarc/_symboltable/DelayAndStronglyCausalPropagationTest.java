@@ -30,7 +30,6 @@ public class DelayAndStronglyCausalPropagationTest extends MontiArcTestBase {
     tool.runSymbolTablePhase2(ast);
     tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runDefaultCoCos(ast);
     IArcBasisScope scope = ast.getArcComponentType().getSpannedScope();
 
     // Then

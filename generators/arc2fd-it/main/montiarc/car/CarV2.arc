@@ -10,6 +10,8 @@ component CarV2 {
 
   constraint (body);
   constraint (!keylessEntry || powerLocks);
+  constraint ((manual || automatic) && !(manual && automatic));
+  constraint (electric || gas);
   constraint (manual == gear.manual);
   constraint (automatic == gear.automatic);
   constraint (electric == engine.electric);

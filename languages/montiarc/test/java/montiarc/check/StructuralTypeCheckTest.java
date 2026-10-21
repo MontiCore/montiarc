@@ -111,7 +111,7 @@ class StructuralTypeCheckTest extends MontiArcTestBase {
       .isEqualTo("Bounded.A & Bounded.B");
   }
 
-  private static ASTExpression parseInStructuralScope(String expression) {
+  private ASTExpression parseInStructuralScope(String expression) {
     ASTMACompilationUnit compilationUnit = compile(
       "component StructuralScope<A, B>(A a, B b) {" +
         "  int | boolean choice = 1;" +

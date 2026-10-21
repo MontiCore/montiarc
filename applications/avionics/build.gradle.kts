@@ -19,4 +19,5 @@ sourceSets {
 
 tasks.compileMontiarc {
   checkVariability.set(true)
+  generateCode.set(false)
 }

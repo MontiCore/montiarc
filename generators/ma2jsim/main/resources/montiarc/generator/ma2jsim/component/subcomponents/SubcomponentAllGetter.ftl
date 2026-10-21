@@ -4,28 +4,14 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign modeAutomatonOpt = helper.getComponentHelper().getModeAutomaton(ast)>
-<#assign hasOnlyOneVariant = helper.getVariantHelper().getVariants(ast)?size == 1>
 
 @Override
 public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubcomponents() {
   final java.util.ArrayList${"<"}montiarc.rte.component.SimComponent${">"} allSubcomponentList = new java.util.ArrayList<>();
 
-  <#if hasOnlyOneVariant>
-    <#list ast.getSymbol().getSubcomponents() as subcomponent>
-      allSubcomponentList.add(<@subCompAccessor subcomponent/>);
-    </#list>
-  <#else>
-    switch (this.variantID) {
-      <#list helper.getVariantHelper().getVariants(ast) as variant>
-        case ${helper.getVariantHelper().variantSuffix(variant)}:
-        <#list variant.getSubcomponents() as subcomponent>
-          allSubcomponentList.add(<@subCompAccessor subcomponent/>);
-        </#list>
-          break;
-      </#list>
-      default: assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
-    }
-  </#if>
+  <#list ast.getSymbol().getSubcomponents() as subcomponent>
+    allSubcomponentList.add(<@subCompAccessor subcomponent/>);
+  </#list>
 
   <#if modeAutomatonOpt.isPresent()>
   switch (this.modeAutomaton.currentMode) {
@@ -43,11 +29,9 @@ public java.util.List${"<"}montiarc.rte.component.SimComponent${">"} getAllSubco
 }
 
 <#macro subCompAccessor subSymbol>
-  <#assign variantSuffix = helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)>
-  this.${prefixes.subcomp()}${subSymbol.getName()}${variantSuffix}()
+  this.${prefixes.subcomp()}${subSymbol.getName()}()
 </#macro>
 
 <#macro modeSubCompAccessor subSymbol mode>
-  <#assign variantSuffix = helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)>
-  this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${variantSuffix}()
+  this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}()
 </#macro>

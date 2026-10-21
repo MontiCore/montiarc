@@ -3,6 +3,7 @@ package arcbasis._symboltable;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTConnector;
 import arcbasis._visitor.ArcBasisVisitor2;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
@@ -51,7 +52,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
     }
 
     Multimap<PortSymbol, PortSymbol> chain = symbol.getEffectChains();
-    if (symbol.isAtomic()) {
+    if (this.isAtomic(node)) {
 
       // atomic not delayed components are considered to effect all out ports
       List<PortSymbol> inPorts = symbol.getIncomingPorts();
@@ -59,7 +60,8 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
       for (PortSymbol inport : inPorts) {
         chain.putAll(inport, outPorts);
       }
-    } else {
+    }
+    if (this.isDecomposed(node)) {
       // starting at every port, perform dfs to find all affected ports
       List<PortSymbol> inPorts = symbol.getIncomingPorts()
         .stream().toList();
@@ -69,7 +71,7 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
       if (known.isEmpty()) {
         known.add(node.getSymbol());
       }
-      for (ASTComponentInstance subComponent : node.getSubComponents()) {
+      for (ASTComponentInstance subComponent : this.subcomponentsOf(node)) {
         if (!subComponent.getSymbol().isTypePresent()) {
           continue;
         }
@@ -85,8 +87,8 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
         }
       }
 
-      Multimap<String, String> connectors = connectionsToMultimap(node);
-      Multimap<String, String> subConnectors = subcomponentEffectChainsToMultimap(node);
+      Multimap<String, String> connectors = connectionsToMultimap(this.connectorsOf(node));
+      Multimap<String, String> subConnectors = subcomponentEffectChainsToMultimap(this.subcomponentsOf(node));
       connectors.putAll(subConnectors);
 
       for (PortSymbol inPort : inPorts) {
@@ -96,6 +98,22 @@ public class ArcBasisScopesGenitorP3 implements ArcBasisVisitor2 {
         chain.putAll(inPort, ports);
       }
     }
+  }
+
+  protected boolean isAtomic(@NotNull ASTArcComponentType node) {
+    return node.getSymbol().isAtomic();
+  }
+
+  protected boolean isDecomposed(@NotNull ASTArcComponentType node) {
+    return !node.getSymbol().isAtomic();
+  }
+
+  protected List<ASTComponentInstance> subcomponentsOf(@NotNull ASTArcComponentType node) {
+    return node.getSubComponents();
+  }
+
+  protected List<ASTConnector> connectorsOf(@NotNull ASTArcComponentType node) {
+    return node.getConnectors();
   }
 
   /**

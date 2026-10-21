@@ -11,13 +11,19 @@ import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 
+import java.util.Collection;
+
 public final class PortTraversalUtil {
 
   private PortTraversalUtil(){}
 
   public static Multimap<String, String> connectionsToMultimap(ASTArcComponentType node){
+    return connectionsToMultimap(node.getConnectors());
+  }
+
+  public static Multimap<String, String> connectionsToMultimap(Collection<ASTConnector> connectors){
     Multimap<String, String> result = HashMultimap.create();
-    for (ASTConnector connection: node.getConnectors()){
+    for (ASTConnector connection: connectors){
       String source = connection.getSource().getQName();
       for (ASTPortAccess target: connection.getTargetList()){
         result.put(source, target.getQName());
@@ -27,8 +33,12 @@ public final class PortTraversalUtil {
   }
 
   public static Multimap<String, String> subcomponentEffectChainsToMultimap(ASTArcComponentType node){
+    return subcomponentEffectChainsToMultimap(node.getSubComponents());
+  }
+
+  public static Multimap<String, String> subcomponentEffectChainsToMultimap(Collection<ASTComponentInstance> subComponents){
     Multimap<String, String> result = HashMultimap.create();
-    for (ASTComponentInstance subComponent: node.getSubComponents()){
+    for (ASTComponentInstance subComponent: subComponents){
       SubcomponentSymbol subcomponentSymbol = subComponent.getSymbol();
       if (!subcomponentSymbol.isTypePresent()){
         continue;

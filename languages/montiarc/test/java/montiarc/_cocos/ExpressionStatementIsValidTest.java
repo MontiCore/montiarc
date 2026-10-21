@@ -28,7 +28,7 @@ class ExpressionStatementIsValidTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ExpressionStatementIsValid());
 
     // When
@@ -46,7 +46,7 @@ class ExpressionStatementIsValidTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new ExpressionStatementIsValid());
 
     // When

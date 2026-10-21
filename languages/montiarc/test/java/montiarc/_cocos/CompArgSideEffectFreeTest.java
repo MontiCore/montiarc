@@ -3,7 +3,9 @@ package montiarc._cocos;
 
 import arcbasis._cocos.CompArgSideEffectFree;
 import com.google.common.base.Preconditions;
+import de.monticore.io.paths.MCPath;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc.MontiArcTestBase;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -13,6 +15,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static montiarc.util.ArcError.NON_PURE_EXPRESSION;
@@ -24,6 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CompArgSideEffectFreeTest extends MontiArcTestBase {
 
   @BeforeEach
+  @Override
+  protected void init() {
+    super.init();
+    MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(TEST_RESOURCE, "symbols")));
+    this.setUpComponents();
+  }
+
   protected void setUpComponents() {
     compile("package a.b; component A { }");
     compile("package a.b; component B(int p) { }");
@@ -108,26 +118,30 @@ class CompArgSideEffectFreeTest extends MontiArcTestBase {
         """
       ),
       arg("""
+        import montiarc.test.FunctionWithIntParameter;
         component ValidComp7 {
-          a.b.B b(m());
+          a.b.B b(FunctionWithIntParameter(1));
         }
         """
       ),
       arg("""
+        import montiarc.test.FunctionWithIntParameter;
         component ValidComp8 {
-          a.b.C c(m(), m());
+          a.b.C c(FunctionWithIntParameter(1), FunctionWithIntParameter(1));
         }
         """
       ),
       arg("""
+        import montiarc.test.FunctionWithIntParameter;
         component ValidComp9 {
-          a.b.B b(p = m());
+          a.b.B b(p = FunctionWithIntParameter(1));
         }
         """
       ),
       arg("""
+        import montiarc.test.FunctionWithIntParameter;
         component ValidComp10 {
-          a.b.C c(p1 = m(), p2 = m());
+          a.b.C c(p1 = FunctionWithIntParameter(1), p2 = FunctionWithIntParameter(1));
         }
         """
       ),
@@ -136,7 +150,8 @@ class CompArgSideEffectFreeTest extends MontiArcTestBase {
         """
       ),
       arg("""
-        component ValidComp12 extends a.b.C(p1 = m(), p2 = 2) { }
+        import montiarc.test.FunctionWithIntParameter;
+        component ValidComp12 extends a.b.C(p1 = FunctionWithIntParameter(1), p2 = 2) { }
         """
       )
     );

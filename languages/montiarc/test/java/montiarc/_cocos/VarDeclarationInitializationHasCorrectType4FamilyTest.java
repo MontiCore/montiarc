@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,7 +11,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc._cocos.VarDeclarationInitializationHasCorrectType4Family;
+import variablearc.check.TypeCheck4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -21,21 +26,25 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarationInitializationHasCorrectTypeTest {
 
+  protected MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new VarDeclarationInitializationHasCorrectType4Family(new TypeCheck4Family(withinComponentResolver,
+      new PresenceResolver(withinComponentResolver))));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability2 ",
-    "ValidCompWithVariability3 "
-  })
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
+    MontiArcCoCoChecker checker = this.checker();
 
     // When
     checker.checkAll(ast);
@@ -47,6 +56,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
+  @Override
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -55,8 +65,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
+    MontiArcCoCoChecker checker = this.checker();
 
     // When
     checker.checkAll(ast);
@@ -64,6 +73,8 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -114,7 +125,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
             automaton {
               initial state S;
               S -> S / {
-                int v = true;
+                int w = v;
               }
             }
           }
@@ -129,7 +140,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
     return Stream.of(
       // type mismatch, var declaration with primitive type, tautological variation point
       arg("""
-          component ValidCompWithVariability1 {
+          component InvalidCompWithVariability1 {
             varif (true) {
               automaton {
                 initial state S;
@@ -144,7 +155,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
       ),
       // type mismatch, var declaration with primitive type, core feature
       arg("""
-          component ValidCompWithVariability2 {
+          component InvalidCompWithVariability2 {
             feature f;
             int v = 0;
             varif (f) {
@@ -162,7 +173,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
       ),
       // var declaration with conditional type
       arg("""
-          component ValidCompWithVariability3 {
+          component InvalidCompWithVariability3 {
             feature f1;
             feature f2;
             varif (f1) {
@@ -175,7 +186,7 @@ class VarDeclarationInitializationHasCorrectType4FamilyTest extends VarDeclarati
               automaton {
                 initial state S;
                 S -> S / {
-                  int v = true;
+                  int w = v;
                 }
               }
             }

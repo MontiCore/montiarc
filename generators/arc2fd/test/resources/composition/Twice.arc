@@ -5,4 +5,6 @@ component Twice {
 
   Param p1(1);
   Param p2(1);
+
+  constraint (p1.f && p2.f);
 }

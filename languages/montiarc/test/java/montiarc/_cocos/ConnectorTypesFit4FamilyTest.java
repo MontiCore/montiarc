@@ -1,17 +1,22 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.params.DisableIfDisplayName;
-import variablearc._cocos.ConnectorPortsExist4Family;
+import variablearc._cocos.ConnectorTypesFit4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -29,31 +34,34 @@ class ConnectorTypesFit4FamilyTest extends ConnectorTypesFitTest {
     super.setUp();
     compile("package a.b; component M { feature ff; varif (ff) { port in int i; } else { port in boolean i; } }");
     compile("package a.b; component N { feature ff; varif (ff) { port out int o; } else { port out boolean o; } }");
+    compile("package a.b; component P<T> { port in T i; }");
+    compile("package a.b; component CP extends a.b.P<int> { }");
+    compile("package a.b; component GP<U> extends a.b.P<U> { }");
+    compile("package a.b; component Q(int n) { varif (n > 3) { port in int i; } else { port in boolean i; } }");
+    compile("package a.b; component QD(int n = 5) { varif (n > 3) { port in int i; } else { port in boolean i; } }");
+    compile("package a.b; component WP { feature F; varif (F) { port in int i; } else { port in boolean i; } }");
+  }
+
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorTypesFit4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
   }
 
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability7 ",
-    "ValidCompWithVariability8 ",
-    "ValidCompWithVariability9 ",
-    "ValidComp33 ",
-    "ValidComp34 ",
-    "ValidComp35 "
-  })
+  @MethodSource("validModelsInContext")
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorTypesFit4Family());
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -62,28 +70,23 @@ class ConnectorTypesFit4FamilyTest extends ConnectorTypesFitTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidComp19 ",
-    "InvalidComp20 "
-  })
-  void shouldReportError(@NotNull String model,
-                         @NotNull Error... errors) {
+  @MethodSource("invalidModelsInContext")
+  @DisableIfDisplayName(contains = "InvalidComp21 ")
+  @Override
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorTypesFit4Family());
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -347,5 +350,158 @@ class ConnectorTypesFit4FamilyTest extends ConnectorTypesFitTest {
         CONNECTOR_TYPE_MISMATCH
       )
     );
+  }
+
+  static Stream<Arguments> validModelsInContext() {
+    return Stream.of(
+      arg("""
+        component ValidGenericSubcomponentInVarIf {
+          feature f;
+          port in int x;
+          port in boolean y;
+          varif (f) { a.b.K<int> sub; } else { a.b.K<boolean> sub; }
+          varif (f) { x -> sub.i; } else { y -> sub.i; }
+        }"""
+      ),
+      arg("""
+        component ValidGenericSubcomponentConstrained {
+          feature f;
+          port in int x;
+          varif (f) { a.b.K<int> sub; } else { a.b.K<boolean> sub; }
+          x -> sub.i;
+          constraint (f);
+        }"""
+      ),
+      arg("""
+        component ValidInheritedGenericPort {
+          port in int x;
+          a.b.CP sub;
+          x -> sub.i;
+        }"""
+      ),
+      arg("""
+        component ValidInheritedPortOfGenericChild {
+          port in int x;
+          a.b.GP<int> sub;
+          x -> sub.i;
+        }"""
+      ),
+      arg("""
+        component ValidParameterDependentPort {
+          port in int x;
+          a.b.Q sub(5);
+          x -> sub.i;
+        }"""
+      ),
+      arg("""
+        component ValidDefaultParameterDependentPort {
+          port in int x;
+          a.b.QD sub;
+          x -> sub.i;
+        }"""
+      ),
+      arg("""
+        component ValidInheritedFeature extends a.b.WP {
+          port out int x;
+          i -> x;
+          constraint (F);
+        }"""
+      )
+    );
+  }
+
+  static Stream<Arguments> invalidModelsInContext() {
+    return Stream.of(
+      arg("""
+        component InvalidGenericSubcomponentInVarIf {
+          feature f;
+          port in int x;
+          varif (f) { a.b.K<int> sub; } else { a.b.K<boolean> sub; }
+          x -> sub.i;
+        }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
+      arg("""
+        component InvalidInheritedGenericPort {
+          port in boolean x;
+          a.b.CP sub;
+          x -> sub.i;
+        }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
+      arg("""
+        component InvalidInheritedPortOfGenericChild {
+          port in int x;
+          a.b.GP<boolean> sub;
+          x -> sub.i;
+        }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
+      arg("""
+        component InvalidParameterDependentPort {
+          port in int x;
+          a.b.Q sub(1);
+          x -> sub.i;
+        }""",
+        CONNECTOR_TYPE_MISMATCH
+      ),
+      arg("""
+        component InvalidInheritedFeature extends a.b.WP {
+          port out int x;
+          i -> x;
+          constraint (!F);
+        }""",
+        CONNECTOR_TYPE_MISMATCH
+      )
+    );
+  }
+
+  @Test
+  void shouldReportErrorIfAnotherSourceMismatchesForUnknownValues() {
+    // Given
+    ASTMACompilationUnit ast = compile("""
+      component UnknownComp1 {
+        feature f;
+        port out int o;
+        varif (java.lang.Math.abs(-1) > 0) {
+          port in boolean i;
+        }
+        varif (f) {
+          port in boolean i;
+        }
+        i -> o;
+      }""");
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
+
+    // When
+    checker().checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).singleElement()
+      .matches(Finding::isError)
+      .extracting(Finding::getMsg).asString()
+      .startsWith(CONNECTOR_TYPE_MISMATCH.getErrorCode());
+  }
+
+  @Test
+  void shouldReportErrorIfConstraintsDependOnUnknownValues() {
+    // Given
+    ASTMACompilationUnit ast = compile("""
+      component UnknownComp2(int n) {
+        port in int i;
+        port out boolean o;
+        i -> o;
+        constraint (java.lang.Math.abs(n) > 3);
+      }""");
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
+
+    // When
+    checker().checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).singleElement()
+      .matches(Finding::isError)
+      .extracting(Finding::getMsg).asString()
+      .startsWith(CONNECTOR_TYPE_MISMATCH.getErrorCode());
   }
 }

@@ -24,8 +24,6 @@ import modes._ast.ASTArcMode;
 import modes._ast.ASTModeAutomaton;
 import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcConstraintDeclaration;
-import variablearc._ast.ASTArcFeatureDeclaration;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -133,24 +131,6 @@ public class ComponentHelper {
       }
     });
     return result;
-  }
-
-  public List<?> getFeatures(@NotNull ASTArcComponentType ast) {
-    Preconditions.checkNotNull(ast);
-
-    return ast.getBody()
-      .streamArcElementsOfType(ASTArcFeatureDeclaration.class)
-      .flatMap(ASTArcFeatureDeclaration::streamArcFeatures)
-      .collect(Collectors.toList());
-  }
-
-  public List<?> getConstraintExpressions(@NotNull ASTArcComponentType ast) {
-    Preconditions.checkNotNull(ast);
-
-    return ast.getBody()
-      .streamArcElementsOfType(ASTArcConstraintDeclaration.class)
-      .map(ASTArcConstraintDeclaration::getExpression)
-      .collect(Collectors.toList());
   }
 
   public List<?> getNonPrimitiveParameters(@NotNull ASTArcComponentType ast) {

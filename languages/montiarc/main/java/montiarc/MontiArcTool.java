@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.generating.templateengine.reporting.Reporting;
@@ -31,6 +32,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceFormulaCalculator;
+import variablearc.presence.PresenceResolver;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -62,6 +66,9 @@ import java.util.zip.ZipFile;
 
 public class MontiArcTool extends MontiArcToolTOP {
 
+  protected final WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+  protected final PresenceResolver presenceResolver = new PresenceResolver(this.withinComponentResolver);
+
   public static final String SYMBOLS_REPORT_DIR = "symbols-inc-data";
   public static final String INC_CHECK_VERSION_PATH = "buildInfo.properties";
 
@@ -90,9 +97,6 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void run(@NotNull String[] args) {
     Preconditions.checkNotNull(args);
-
-    MontiArcMill.globalScope().clear();
-    MontiArcMill.globalScope().init();
 
     try {
       // parse input options from the command line
@@ -173,7 +177,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     Preconditions.checkArgument(i.length > 0);
 
     MontiArcMill.globalScope().clear();
-    MontiArcMill.globalScope().init();
+    MontiArcMill.globalScope().init(novar);
     this.initGlobalScope(p);
     this.initBuiltInSymbols(c2mc);
     this.compile(i, pp, s, r, c2mc, novar);
@@ -185,8 +189,9 @@ public class MontiArcTool extends MontiArcToolTOP {
    * the models, serializes their symbol table, and generates reports.
    * <p>
    * Class2MC (c2mc) can be enabled to import symbols from the Java runtime
-   * environment (Java RTE). Context-condition checking for variable components
-   * can be skipped (novar) to improve performance.
+   * environment (Java RTE). The analysis of variable components can be
+   * disabled (novar), in which case features, variation points, and
+   * constraints are rejected.
    *
    * @param i     Array of file and directory paths that form the modelpath,
    *              i.e, the paths that contain the MontiArc models to be compiled.
@@ -199,7 +204,7 @@ public class MontiArcTool extends MontiArcToolTOP {
    * @param r     Path to the directory where reports should be stored.
    *              If {@code null}, report generation is disabled.
    * @param c2mc  Enables importing of Java symbols (via Class2MC).
-   * @param novar Disables context-condition checking for variable components to improve performance.
+   * @param novar Disables the analysis of variable components and rejects features, variation points, and constraints.
    * @return A collection of the abstract syntay trees (ASTs) of the parsed
    * input models found in the given model paths.
    */
@@ -211,7 +216,6 @@ public class MontiArcTool extends MontiArcToolTOP {
                                            boolean novar) {
     Preconditions.checkNotNull(i);
     Preconditions.checkArgument(i.length > 0);
-
     Log.info(() -> "Parse the input models", "MontiArcTool");
     Set<ASTMACompilationUnit> asts = this.parse(i);
 
@@ -238,11 +242,13 @@ public class MontiArcTool extends MontiArcToolTOP {
     Log.info(() -> "Run symbol-table creation phase 3", "MontiArcTool");
     this.runSymbolTablePhase3(asts);
 
-    Log.info(() -> "Perform initial context-condition checks", "MontiArcTool");
-    this.runDefaultCoCos(asts);
+    if (!novar) {
+      Log.info(() -> "Calculate the presence formulas", "MontiArcTool");
+      this.calculatePresenceFormulas(asts);
+    }
 
-    Log.info(() -> "Perform remaining context-condition checks", "MontiArcTool");
-    this.runAdditionalCoCos(asts, !novar);
+    Log.info(() -> "Perform context-condition checks", "MontiArcTool");
+    this.runAdditionalCoCos(asts, novar);
 
     Log.enableFailQuick(true);
 
@@ -477,6 +483,12 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcTrafos.afterParsing().applyAll(ast);
   }
 
+  public void calculatePresenceFormulas(@NotNull Collection<ASTMACompilationUnit> asts) {
+    Preconditions.checkNotNull(asts);
+    PresenceFormulaCalculator calculator = MontiArcMill.presenceFormulaCalculator();
+    asts.forEach(ast -> calculator.calculate(ast.getArcComponentType()));
+  }
+
   public void runAfterSymbolTablePhase2Trafos(@NotNull Collection<ASTMACompilationUnit> asts) {
     Preconditions.checkNotNull(asts);
     asts.forEach(this::runAfterSymbolTablePhase2Trafos);
@@ -497,17 +509,6 @@ public class MontiArcTool extends MontiArcToolTOP {
     MontiArcCoCos.afterParser().checkAll(ast);
   }
 
-  public void runDefaultCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
-    Preconditions.checkNotNull(asts);
-    asts.forEach(this::runDefaultCoCos);
-  }
-
-  @Override
-  public void runDefaultCoCos(@NotNull ASTMACompilationUnit ast) {
-    Preconditions.checkNotNull(ast);
-    MontiArcCoCos.afterSymTab1().checkAll(ast);
-  }
-
   public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts) {
     Preconditions.checkNotNull(asts);
     asts.forEach(this::runAdditionalCoCos);
@@ -516,17 +517,17 @@ public class MontiArcTool extends MontiArcToolTOP {
   @Override
   public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast) {
     Preconditions.checkNotNull(ast);
-    this.runAdditionalCoCos(ast, true);
+    this.runAdditionalCoCos(ast, false);
   }
 
-  public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts, boolean checkVariability) {
+  public void runAdditionalCoCos(@NotNull Collection<ASTMACompilationUnit> asts, boolean novar) {
     Preconditions.checkNotNull(asts);
-    asts.forEach(a -> this.runAdditionalCoCos(a, checkVariability));
+    asts.forEach(a -> this.runAdditionalCoCos(a, novar));
   }
 
-  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean checkVariability) {
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean novar) {
     Preconditions.checkNotNull(ast);
-    MontiArcCoCos.afterSymTab2(checkVariability).checkAll(ast);
+    MontiArcCoCos.afterSymTab(novar, this.withinComponentResolver, this.presenceResolver).checkAll(ast);
   }
 
   public void prettyPrint(@NotNull Collection<ASTMACompilationUnit> asts, @NotNull String file) {
@@ -653,6 +654,7 @@ public class MontiArcTool extends MontiArcToolTOP {
     entries.forEach(entry -> MontiArcMill.globalScope().getSymbolPath().addEntry(entry));
   }
 
+
   public void initializeStreams() {
     try {
       SymbolPathLoader.addResource("Stream.symtabdefinitionsym");
@@ -709,7 +711,7 @@ public class MontiArcTool extends MontiArcToolTOP {
 
     options.addOption(Option.builder("novar")
       .longOpt("no-variability-checks")
-      .desc("Disable the analysis of variable components for better performance")
+      .desc("Disables the analysis of variable components and rejects features, variation points, and constraints")
       .get());
 
     return options;

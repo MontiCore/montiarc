@@ -7,22 +7,8 @@ ${tc.signature("subcomponentSym", "modeName")}
 
 <#assign subCompType><@Util.getCompTypeString subcomponentSym.getType() suffixes.compImpl()/></#assign>
 <#assign modeNamePart>${modeName}<#if modeName?has_content>_</#if></#assign>
-<#assign subCompName>${prefixes.subcomp()}${modeNamePart}${subcomponentSym.getName()}${helper.getVariantHelper().subcomponentVariantSuffix(ast, subcomponentSym)}</#assign>
-
-<#assign variants = helper.getVariantHelper().getVariants(ast)>
-<#assign hasOnlyOneVariant = variants?size == 1>
+<#assign subCompName>${prefixes.subcomp()}${modeNamePart}${subcomponentSym.getName()}</#assign>
 
 protected ${subCompType} ${subCompName}() {
-  <#if hasOnlyOneVariant>
-    return this.${subCompName};
-  <#else>
-    if (java.util.Set.of(
-        <#list helper.getVariantHelper().getVariantsWithSubcomponent(ast, subcomponentSym) as v> ${helper.getVariantHelper().variantSuffix(v)} <sep>, </#list>
-      ).contains(this.variantID)) {
-      return this.${subCompName};
-    } else {
-      assert false : "Component ${ast.getName()} is not correctly configured, no variant selected";
-      return null;
-    }
-  </#if>
+  return this.${subCompName};
 }

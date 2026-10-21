@@ -4,12 +4,11 @@
 ${tc.signature("field")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#import "/montiarc/generator/ma2jsim/logging/CompLogging.ftl" as Log>
-<#assign existenceConditions = helper.getVariantHelper().getExistenceCondition(ast, field)/>
 
 @Override
-public void ${prefixes.setterMethod()}${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)}(<@Util.getTypeString field.getType()/> value) {
-  this.${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)} = value;
+public void ${prefixes.setterMethod()}${prefixes.field()}${field.getName()}(<@Util.getTypeString field.getType()/> value) {
+  this.${prefixes.field()}${field.getName()} = value;
   <@Log.info log_aspects.fieldValue() "getName()">
-    "${field.getName()} = " + montiarc.rte.logging.DataFormatter.format(this.${prefixes.field()}${field.getName()}${helper.getVariantHelper().fieldVariantSuffix(ast, field)})
+    "${field.getName()} = " + montiarc.rte.logging.DataFormatter.format(this.${prefixes.field()}${field.getName()})
   </@Log.info>
 }

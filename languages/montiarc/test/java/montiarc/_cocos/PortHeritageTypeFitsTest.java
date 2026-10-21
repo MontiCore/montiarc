@@ -12,7 +12,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -37,34 +36,7 @@ class PortHeritageTypeFitsTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // no heritage
-    "component ValidComp1 { }",
-    // heritage without ports
-    "component ValidComp2 extends a.b.A { }",
-    // heritage adding ports, supertype has no ports
-    "component ValidComp3 extends a.b.A { port in int i; port out int o; }",
-    // heritage without additional ports, inheriting all super ports
-    "component ValidComp4 extends a.b.B { }",
-    // heritage adding new ports alongside inherited super ports
-    "component ValidComp5 extends a.b.B { port in int i2; port out int o2; }",
-    // heritage overriding super ports with the same type
-    "component ValidComp6 extends a.b.B { port in int i; port out int o; }",
-    // heritage overriding the incoming super port with a subtype
-    "component ValidComp7 extends a.b.B { port in byte i; port out int o; }",
-    // heritage overriding the outgoing super port with a supertype
-    "component ValidComp8 extends a.b.B { port in int i; port out long o; }",
-    // heritage overriding both incoming and outgoing super ports compatibly
-    "component ValidComp9 extends a.b.B { port in byte i; port out long o; }",
-    // heritage overriding generic typed ports with a matching bound type
-    "component ValidComp10 extends a.b.C<int> { port in int i; port out int o; }",
-    // heritage overriding generic typed ports with the same type parameter
-    "component ValidComp11<T> extends a.b.C<T> { port in T i; port out T o; }",
-    // multi-heritage overriding the outgoing super port with a supertype
-    "component ValidComp12 extends a.b.D, a.b.E { port in int i; port out long o; }",
-    // heritage overriding generic typed ports of the super component's super component with a matching bound type
-    "component ValidComp13 extends a.b.F { port in int i; port out int o; }",
-  })
+  @MethodSource("validModels")
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
@@ -100,6 +72,37 @@ class PortHeritageTypeFitsTest extends MontiArcTestBase {
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // no heritage
+      arg("component ValidComp1 { }"),
+      // heritage without ports
+      arg("component ValidComp2 extends a.b.A { }"),
+      // heritage adding ports, supertype has no ports
+      arg("component ValidComp3 extends a.b.A { port in int i; port out int o; }"),
+      // heritage without additional ports, inheriting all super ports
+      arg("component ValidComp4 extends a.b.B { }"),
+      // heritage adding new ports alongside inherited super ports
+      arg("component ValidComp5 extends a.b.B { port in int i2; port out int o2; }"),
+      // heritage overriding super ports with the same type
+      arg("component ValidComp6 extends a.b.B { port in int i; port out int o; }"),
+      // heritage overriding the incoming super port with a subtype
+      arg("component ValidComp7 extends a.b.B { port in byte i; port out int o; }"),
+      // heritage overriding the outgoing super port with a supertype
+      arg("component ValidComp8 extends a.b.B { port in int i; port out long o; }"),
+      // heritage overriding both incoming and outgoing super ports compatibly
+      arg("component ValidComp9 extends a.b.B { port in byte i; port out long o; }"),
+      // heritage overriding generic typed ports with a matching bound type
+      arg("component ValidComp10 extends a.b.C<int> { port in int i; port out int o; }"),
+      // heritage overriding generic typed ports with the same type parameter
+      arg("component ValidComp11<T> extends a.b.C<T> { port in T i; port out T o; }"),
+      // multi-heritage overriding the outgoing super port with a supertype
+      arg("component ValidComp12 extends a.b.D, a.b.E { port in int i; port out long o; }"),
+      // heritage overriding generic typed ports of the super component's super component with a matching bound type
+      arg("component ValidComp13 extends a.b.F { port in int i; port out int o; }")
+    );
   }
 
   protected static Stream<Arguments> invalidModels() {

@@ -18,6 +18,7 @@ import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
+import org.codehaus.commons.nullanalysis.Nullable;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,6 +29,8 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static montiarc.util.ArcError.COMP_ARG_KEY_INVALID;
 
 /**
  * Checks coco R10 of [Hab16]: If a configurable component is instantiated as a subcomponent, all configuration
@@ -137,7 +140,7 @@ public class ConfigurationParameterAssignment
       ASTSubcomponentArgument firstIllegalArg = componentExpression.getArguments().get(parameters.size());
       ASTSubcomponentArgument lastIllegalArg = componentExpression.getArguments().get(arguments.size() - 1);
 
-      Log.error(ArcError.TOO_MANY_ARGUMENTS.format(parameters.size(), arguments.size()),
+      this.report(ArcError.TOO_MANY_ARGUMENTS.format(parameters.size(), arguments.size()),
         firstIllegalArg.get_SourcePositionStart(),
         lastIllegalArg.get_SourcePositionEnd()
       );
@@ -183,11 +186,7 @@ public class ConfigurationParameterAssignment
     if (mandatoryParamsAmount + defaultAssignedByKey > arguments.size()) {
       String errorMsg = ArcError.TOO_FEW_ARGUMENTS.format(mandatoryParamsAmount, arguments.size());
 
-      if (srcStart.isPresent() && srcEnd.isPresent()) {
-        Log.error(errorMsg, srcStart.get(), srcEnd.get());
-      } else {
-        Log.error(errorMsg);
-      }
+      this.report(errorMsg, srcStart.orElse(null), srcEnd.orElse(null));
     }
   }
 
@@ -229,7 +228,7 @@ public class ConfigurationParameterAssignment
         && !argType.isObscureType()
         && !SymTypeRelations.isCompatible(paramType.get(), argType)) {
 
-        Log.error(ArcError.COMP_ARG_TYPE_MISMATCH.format(
+        this.report(ArcError.COMP_ARG_TYPE_MISMATCH.format(
             paramType.map(SymTypeExpression::print).orElse(""), argType.print()
           ),
           exprs.get(i).get_SourcePositionStart(),
@@ -257,7 +256,7 @@ public class ConfigurationParameterAssignment
         keywordCounter = keyArguments.size();
         keyArguments.add(argument.getName());
         if (keywordCounter == keyArguments.size()) {
-          Log.error(ArcError.KEY_NOT_UNIQUE.format(argument.getName()),
+          this.report(ArcError.KEY_NOT_UNIQUE.format(argument.getName()),
             argument.get_SourcePositionStart(),
             argument.get_SourcePositionEnd()
           );
@@ -294,7 +293,7 @@ public class ConfigurationParameterAssignment
         String key = argument.getName();
         int paramIndex = paramIndices.get(key);
         if (paramIndex < posArgsAmount) {
-          Log.error(ArcError.COMP_ARG_MULTIPLE_VALUES.format(key),
+          this.report(ArcError.COMP_ARG_MULTIPLE_VALUES.format(key),
             argument.get_SourcePositionStart(),
             argument.get_SourcePositionEnd()
           );
@@ -324,7 +323,7 @@ public class ConfigurationParameterAssignment
       if (argument.isPresentName()) {
         keywordAssignmentPresent = true;
       } else if (keywordAssignmentPresent) {
-        Log.error(ArcError.COMP_ARG_VALUE_AFTER_KEY.format(),
+        this.report(ArcError.COMP_ARG_VALUE_AFTER_KEY.format(),
           argument.get_SourcePositionStart(),
           argument.get_SourcePositionEnd()
         );
@@ -348,7 +347,7 @@ public class ConfigurationParameterAssignment
 
     for (ASTSubcomponentArgument argument : componentExpression.getArguments()) {
       if (argument.isPresentName() && component.getParameter(argument.getName()).isEmpty()) {
-        Log.error(ArcError.COMP_ARG_KEY_INVALID.format(argument.getName()),
+        this.report(COMP_ARG_KEY_INVALID.format(argument.getName()),
           argument.get_SourcePositionStart(),
           argument.get_SourcePositionEnd()
         );
@@ -380,6 +379,17 @@ public class ConfigurationParameterAssignment
       return Optional.empty();
     } else {
       return Optional.of(nodes.get(nodes.size() - 1).get_SourcePositionEnd());
+    }
+  }
+
+  /**
+   * Reports the violation at the given source positions, if any.
+   */
+  protected void report(@NotNull String message, @Nullable SourcePosition start, @Nullable SourcePosition end) {
+    if (start != null && end != null) {
+      Log.error(message, start, end);
+    } else {
+      Log.error(message);
     }
   }
 }

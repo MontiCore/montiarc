@@ -1,18 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
-import variablearc._cocos.ConnectorPortsExist4Family;
 import variablearc._cocos.ConnectorTimingsFit4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -32,56 +37,48 @@ class ConnectorTimingsFit4FamilyTest extends ConnectorTimingsFitTest {
     compile("package a.b; component F { feature ff; varif (ff) { port out int o; } else { port sync out int o; } }");
   }
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorTimingsFit4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability7 ",
-    "ValidCompWithVariability10 ",
-    "ValidCompWithVariability11 "
-  })
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorTimingsFit4Family());
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
   }
 
   @ParameterizedTest
-
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability8 ",
-    "InvalidCompWithVariability9 "
-  })
-  void shouldReportError(@NotNull String model,
-                         @NotNull Error... errors) {
+  @Override
+  void shouldReportError(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
+    Preconditions.checkNotNull(errors);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorTimingsFit4Family());
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
-    assertThat(getLoggedErrorCodes())
-      .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -319,5 +316,34 @@ class ConnectorTimingsFit4FamilyTest extends ConnectorTimingsFitTest {
         CONNECTOR_TIMING_MISMATCH
       )
     );
+  }
+
+  @Test
+  void shouldReportErrorIfAnotherSourceMismatchesForUnknownValues() {
+    // Given
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    ASTMACompilationUnit ast = compile("""
+      component UnknownComp1(int n) {
+        feature f;
+        port sync out int o;
+        varif (java.lang.Math.abs(n) > 3) {
+          port in int i;
+        }
+        varif (f) {
+          port in int i;
+        }
+        i -> o;
+      }""");
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
+
+    // When
+    checker().checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).singleElement()
+      .matches(Finding::isError)
+      .extracting(Finding::getMsg).asString()
+      .startsWith(CONNECTOR_TIMING_MISMATCH.getErrorCode());
   }
 }

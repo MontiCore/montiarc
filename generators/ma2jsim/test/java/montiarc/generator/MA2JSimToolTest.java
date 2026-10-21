@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 
 import static montiarc.util.ArcError.RESTRICTED_IDENTIFIER;
 import static montiarc.util.ArcError.TYPE_PARAMETER_UPPER_CASE;
+import static montiarc.util.ArcError.VARIABILITY_NOT_ANALYZED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class MA2JSimToolTest extends MA2JSimTestBase {
@@ -80,6 +81,23 @@ public class MA2JSimToolTest extends MA2JSimTestBase {
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(RESTRICTED_IDENTIFIER, TYPE_PARAMETER_UPPER_CASE));
+  }
+
+  @Test
+  public void testBuildRejectsVariability(@TempDir Path models, @TempDir Path target) throws IOException {
+    // Given
+    Files.writeString(models.resolve("Comp.arc"), "component Comp { feature f; varif (f) { port in int i; } }");
+    String[] args = new String[] {
+      "-i", models.toAbsolutePath().toString(),
+      "-o", target.toAbsolutePath().toString()
+    };
+
+    // When
+    MA2JSimTool.main(args);
+
+    // Then
+    assertThat(getLoggedErrorCodes())
+      .containsExactlyInAnyOrder(getErrorCodes(VARIABILITY_NOT_ANALYZED, VARIABILITY_NOT_ANALYZED));
   }
 
   @Test

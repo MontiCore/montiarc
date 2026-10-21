@@ -344,10 +344,10 @@ class NoPortInSubcomponentArgumentTest extends MontiArcTestBase {
       ),
       // read value from port in boolean not expression in subcomponent argument
       arg("""
-          import montiarc.test.ComponentTypeWithBooleanParameter;
+          import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp8 {
-            port in boolean i;
-            ComponentTypeWithBooleanParameter sub(~i);
+            port in int i;
+            ComponentTypeWithIntParameter sub(~i);
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
@@ -419,10 +419,10 @@ class NoPortInSubcomponentArgumentTest extends MontiArcTestBase {
             ComponentTypeWithBooleanParameter sub18(2 == i2);
             ComponentTypeWithBooleanParameter sub19(i2 != 2);
             ComponentTypeWithBooleanParameter sub20(2 != i2);
-            ComponentTypeWithBooleanParameter sub21(i4 && 2);
-            ComponentTypeWithBooleanParameter sub22(2 && i4);
-            ComponentTypeWithBooleanParameter sub23(i4 || 2);
-            ComponentTypeWithBooleanParameter sub24(2 || i4);
+            ComponentTypeWithBooleanParameter sub21(i4 && true);
+            ComponentTypeWithBooleanParameter sub22(true && i4);
+            ComponentTypeWithBooleanParameter sub23(i4 || true);
+            ComponentTypeWithBooleanParameter sub24(true || i4);
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
@@ -517,7 +517,7 @@ class NoPortInSubcomponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.ComponentTypeWithIntParameter;
           import montiarc.test.FunctionWithIntParameter;
           component InvalidComp20 {
-            port in boolean i;
+            port in int i;
             ComponentTypeWithIntParameter sub(FunctionWithIntParameter(i));
           }
           """,
@@ -595,10 +595,10 @@ class NoPortInSubcomponentArgumentTest extends MontiArcTestBase {
       ),
       // read value from port in boolean not expression in subcomponent argument
       arg("""
-          import montiarc.test.ComponentTypeWithBooleanParameter;
+          import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp28 {
-            port in boolean i;
-            ComponentTypeWithBooleanParameter sub(p = ~i);
+            port in int i;
+            ComponentTypeWithIntParameter sub(p = ~i);
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
@@ -670,10 +670,10 @@ class NoPortInSubcomponentArgumentTest extends MontiArcTestBase {
             ComponentTypeWithBooleanParameter sub18(p = 2 == i2);
             ComponentTypeWithBooleanParameter sub19(p = i2 != 2);
             ComponentTypeWithBooleanParameter sub20(p = 2 != i2);
-            ComponentTypeWithBooleanParameter sub21(p = i4 && 2);
-            ComponentTypeWithBooleanParameter sub22(p = 2 && i4);
-            ComponentTypeWithBooleanParameter sub23(p = i4 || 2);
-            ComponentTypeWithBooleanParameter sub24(p = 2 || i4);
+            ComponentTypeWithBooleanParameter sub21(p = i4 && true);
+            ComponentTypeWithBooleanParameter sub22(p = true && i4);
+            ComponentTypeWithBooleanParameter sub23(p = i4 || true);
+            ComponentTypeWithBooleanParameter sub24(p = true || i4);
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,
@@ -768,7 +768,7 @@ class NoPortInSubcomponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.ComponentTypeWithIntParameter;
           import montiarc.test.FunctionWithIntParameter;
           component InvalidComp40 {
-            port in boolean i;
+            port in int i;
             ComponentTypeWithIntParameter sub(p = FunctionWithIntParameter(i));
           }
           """,

@@ -7,6 +7,7 @@ import montiarc.types.OnOff;
 
 component InverterOrMediumUser {
   constraint(sub.inv == true);
+  constraint(sub.inv != sub.med);
 
   port in OnOff i;
   port out OnOff o;

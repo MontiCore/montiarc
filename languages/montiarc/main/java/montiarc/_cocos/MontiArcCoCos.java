@@ -52,12 +52,14 @@ import arcbasis._cocos.SubcomponentNameCapitalization;
 import arcbasis._cocos.SubcomponentRawType;
 import arcbasis._cocos.TypeBound;
 import arcbasis._cocos.TypeParameterCapitalization;
+import arcbasis.context.WithinComponentResolver;
 import arccompute._cocos.MaxOneInit;
 import arccompute._cocos.NoInitWithoutCompute;
 import arccompute._cocos.NoInputPortsInInitialCompute;
 import arccompute._cocos.NoNonSyncInputPortInCompute;
 import arcprepost._cocos.PrePostIsBoolean;
 import arcprepost._cocos.TriggerPortExists;
+import com.google.common.base.Preconditions;
 import comfortablearc._cocos.AtomicNoAutoConnect;
 import comfortablearc._cocos.MaxOneAutoConnect;
 import de.monticore.expressions.assignmentexpressions._cocos.AssignmentExpressionsASTAssignmentExpressionCoCo;
@@ -82,30 +84,71 @@ import modes._cocos.NoCodeBlockInModeTransitions;
 import modes._cocos.StatechartContainsNoMode;
 import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
+import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._cocos.AtomicMaxOneBehavior4Family;
 import variablearc._cocos.AtomicNoConnector4Family;
+import variablearc._cocos.BehaviorInDecomposed4Family;
+import variablearc._cocos.CheckNoFieldDependencyCycles4Family;
 import variablearc._cocos.CircularInheritance4Family;
+import variablearc._cocos.ConfigurationParameterAssignment4Family;
 import variablearc._cocos.ConnectorDirectionsFit4Family;
 import variablearc._cocos.ConnectorPortsExist4Family;
 import variablearc._cocos.ConnectorTimingsFit4Family;
+import variablearc._cocos.ConnectorTypesFit4Family;
 import variablearc._cocos.ConstraintIsBoolean;
 import variablearc._cocos.ConstraintSatisfied4Comp;
 import variablearc._cocos.ConstraintSideEffectFree;
+import variablearc._cocos.EventTriggerExists4Family;
+import variablearc._cocos.ExpressionStatementIsValid4Family;
 import variablearc._cocos.FeatureNameCapitalization;
+import variablearc._cocos.FeatureSelectable;
 import variablearc._cocos.FeatureUsage;
 import variablearc._cocos.FeedbackStrongCausality4Family;
+import variablearc._cocos.FieldInitTypeFits4Family;
+import variablearc._cocos.ForConditionHasBooleanType4Family;
+import variablearc._cocos.IfConditionHasBooleanType4Family;
+import variablearc._cocos.MaxOneInit4Family;
+import variablearc._cocos.NoComponentReferenceCycle4Family;
 import variablearc._cocos.NoFieldInConstraint;
+import variablearc._cocos.NoFieldInDefaultParameterValue4Family;
+import variablearc._cocos.NoFieldInSubcomponentArgument4Family;
+import variablearc._cocos.NoFieldInSuperComponentArgument4Family;
 import variablearc._cocos.NoFieldInVarIfCondition;
+import variablearc._cocos.NoInitWithoutCompute4Family;
+import variablearc._cocos.NoInputPortInEntryAction4Family;
+import variablearc._cocos.NoInputPortInExitAction4Family;
+import variablearc._cocos.NoInputPortsInInitialCompute4Family;
+import variablearc._cocos.NoNonSyncInputPortInCompute4Family;
+import variablearc._cocos.NoNonSyncInputPortInDoAction4Family;
+import variablearc._cocos.NoNonSyncInputPortInEpsilonTransition4Family;
+import variablearc._cocos.NoOtherInputPortInMsgTransition4Family;
 import variablearc._cocos.NoPortInConstraint;
+import variablearc._cocos.NoPortInDefaultParameterValue4Family;
+import variablearc._cocos.NoPortInFieldDeclaration4Family;
+import variablearc._cocos.NoPortInSubcomponentArgument4Family;
+import variablearc._cocos.NoPortInSuperComponentArgument4Family;
 import variablearc._cocos.NoPortInVarIfCondition;
+import variablearc._cocos.PortHeritageTimingFits4Family;
+import variablearc._cocos.PortHeritageTypeFits4Family;
 import variablearc._cocos.PortUniqueSender4Family;
 import variablearc._cocos.PortsConnected4Family;
 import variablearc._cocos.SubPortsConnected4Family;
+import variablearc._cocos.SubcomponentConstraintsImplied;
 import variablearc._cocos.SubcomponentsConstraint;
+import variablearc._cocos.SwitchCaseTypesValid4Family;
+import variablearc._cocos.TransitionPreconditionsAreBoolean4Family;
+import variablearc._cocos.TypeBound4Family;
 import variablearc._cocos.UniqueIdentifier4Family;
+import variablearc._cocos.VarDeclarationInitializationHasCorrectType4Family;
+import variablearc._cocos.VarDeclarationNameAlreadyDefinedInScope4Family;
 import variablearc._cocos.VarIfIsBoolean;
 import variablearc._cocos.VarIfSideEffectFree;
+import variablearc._cocos.VariableArcASTArcVarIfCoCo;
+import variablearc._cocos.VariationPointPresent;
 import variablearc._cocos.arcbasis.UniqueIdentifier;
+import variablearc.causality.CausalityResolver;
+import variablearc.check.TypeCheck4Family;
+import variablearc.presence.PresenceResolver;
 
 /**
  * Bundle of CoCos for the MontiArc language.
@@ -123,38 +166,38 @@ public class MontiArcCoCos {
     return checker;
   }
 
-  public static MontiArcCoCoChecker afterSymTab1() {
+  public static MontiArcCoCoChecker afterSymTab(@NotNull WithinComponentResolver withinComponentResolver,
+                                                 @NotNull PresenceResolver presenceResolver) {
+    return afterSymTab(false, withinComponentResolver, presenceResolver);
+  }
+
+  public static MontiArcCoCoChecker afterSymTab(boolean novar,
+                                                 @NotNull WithinComponentResolver withinComponentResolver,
+                                                 @NotNull PresenceResolver presenceResolver) {
+    Preconditions.checkNotNull(withinComponentResolver);
+    Preconditions.checkNotNull(presenceResolver);
+    TypeCheck4Family typeCheck = new TypeCheck4Family(withinComponentResolver, presenceResolver);
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
-    return checker;
-  }
-
-  public static MontiArcCoCoChecker afterSymTab2() {
-    return afterSymTab2(true);
-  }
-
-  public static MontiArcCoCoChecker afterSymTab2(boolean checkVariants) {
-    MontiArcFullVariantCoCoChecker varChecker = new MontiArcFullVariantCoCoChecker();
-    MontiArcCoCoChecker checker = checkVariants ? varChecker : new MontiArcCoCoChecker();
     MontiArcTraverser traverser;
 
-    if (!checkVariants) {
-      checker.addCoCo(new UnsupportedVariability());
+    if (novar) {
+      checker.addCoCo((VariableArcASTArcVarIfCoCo) new UnsupportedVariability());
     }
 
     // ArcBasis CoCos
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new CircularInheritance4Family());
-      varChecker.get4FullVariant().addCoCo(new PortsConnected4Family());
-      varChecker.get4FullVariant().addCoCo(new PortUniqueSender4Family());
-      varChecker.get4FullVariant().addCoCo(new SubPortsConnected4Family());
-      varChecker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-      varChecker.get4FullVariant().addCoCo(new ConnectorTypesFit4Family());
-      varChecker.get4FullVariant().addCoCo(new ConnectorDirectionsFit4Family());
-      varChecker.get4FullVariant().addCoCo(new ConnectorTimingsFit4Family());
-      varChecker.get4FullVariant().addCoCo(new AtomicNoConnector4Family());
-      varChecker.get4FullVariant().addCoCo(new AtomicMaxOneBehavior4Family());
-      varChecker.get4FullVariant().addCoCo(new FeedbackStrongCausality4Family());
+    if (!novar) {
+      checker.addCoCo(new CircularInheritance4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new PortsConnected4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new PortUniqueSender4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new SubPortsConnected4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new ConnectorPortsExist4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new ConnectorTypesFit4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new ConnectorDirectionsFit4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new ConnectorTimingsFit4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new AtomicNoConnector4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new AtomicMaxOneBehavior4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new FeedbackStrongCausality4Family(withinComponentResolver, presenceResolver,
+        new CausalityResolver(withinComponentResolver, presenceResolver)));
     } else {
       checker.addCoCo(new CircularInheritance());
       checker.addCoCo(new PortsConnected());
@@ -170,18 +213,35 @@ public class MontiArcCoCos {
     }
     checker.addCoCo(new OptionalConfigurationParametersLast());
     checker.addCoCo(new NoParameterDefaultForwardReference());
-    checker.addCoCo(new NoComponentReferenceCycle());
-    checker.addCoCo(new PortHeritageTimingFits());
-    checker.addCoCo(new PortHeritageTypeFits());
-    checker.addCoCo(new FieldInitTypeFits());
+    if (!novar) {
+      checker.addCoCo(new NoComponentReferenceCycle4Family(presenceResolver));
+    } else {
+      checker.addCoCo(new NoComponentReferenceCycle());
+    }
+    if (!novar) {
+      checker.addCoCo(new PortHeritageTimingFits4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new PortHeritageTypeFits4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment4Family(withinComponentResolver, presenceResolver));
+    } else {
+      checker.addCoCo(new PortHeritageTimingFits());
+      checker.addCoCo(new PortHeritageTypeFits());
+      checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new ConfigurationParameterAssignment());
+    }
+    if (!novar) {
+      checker.addCoCo(new FieldInitTypeFits4Family(typeCheck));
+    } else {
+      checker.addCoCo(new FieldInitTypeFits());
+    }
     checker.addCoCo(new ParameterDefaultValueTypeFits());
     checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new OracleStereotypeValueExists());
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new NoPortInDefaultParameterValue4Family());
-      varChecker.get4FullVariant().addCoCo(new NoPortInFieldDeclaration4Family());
-      varChecker.get4FullVariant().addCoCo(new NoFieldInSubcomponentArgument4Family());
-      varChecker.get4FullVariant().addCoCo(new NoPortInSubcomponentArgument4Family());
-      varChecker.get4FullVariant().addCoCo(new NoPortInSuperComponentArgument4Family());
+    if (!novar) {
+      checker.addCoCo(new NoFieldInDefaultParameterValue4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoFieldInSuperComponentArgument4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoPortInDefaultParameterValue4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoPortInFieldDeclaration4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoFieldInSubcomponentArgument4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoPortInSubcomponentArgument4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoPortInSuperComponentArgument4Family(withinComponentResolver, presenceResolver));
     } else {
       checker.addCoCo(new NoFieldInSuperComponentArgument());
       checker.addCoCo(new NoFieldInDefaultParameterValue());
@@ -196,16 +256,24 @@ public class MontiArcCoCos {
     checker.addCoCo(new PortNameCapitalization());
     checker.addCoCo(new FieldNameCapitalization());
     checker.addCoCo(new ParameterNameCapitalization());
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new UniqueIdentifier4Family());
+    if (!novar) {
+      checker.addCoCo(new UniqueIdentifier4Family(withinComponentResolver, presenceResolver));
     } else {
       checker.addCoCo(new UniqueIdentifier());
     }
     checker.addCoCo(new RefinementPortsMatch());
-    checker.addCoCo(new CheckNoFieldDependencyCycles());
-    checker.addCoCo(new VarDeclarationNameAlreadyDefinedInScope());
-    if (checkVariants) {
-      //varChecker.get4FullVariant().addCoCo(new BehaviorInDecomposed4Family());
+    if (!novar) {
+      checker.addCoCo(new CheckNoFieldDependencyCycles4Family(presenceResolver));
+    } else {
+      checker.addCoCo(new CheckNoFieldDependencyCycles());
+    }
+    if (!novar) {
+      checker.addCoCo(new VarDeclarationNameAlreadyDefinedInScope4Family(withinComponentResolver, presenceResolver));
+    } else {
+      checker.addCoCo(new VarDeclarationNameAlreadyDefinedInScope());
+    }
+    if (!novar) {
+      checker.addCoCo(new BehaviorInDecomposed4Family(withinComponentResolver, presenceResolver));
     } else {
       checker.addCoCo(new BehaviorInDecomposed());
     }
@@ -221,12 +289,17 @@ public class MontiArcCoCos {
     // VariableArc
     checker.addCoCo(new NoFieldInConstraint());
     checker.addCoCo(new ConstraintIsBoolean());
-    checker.addCoCo(new ConstraintSatisfied4Comp());
     checker.addCoCo(new FeatureNameCapitalization());
     checker.addCoCo(new FeatureUsage());
     checker.addCoCo(new NoPortInConstraint());
-    if (checkVariants) {
-      checker.addCoCo(new SubcomponentsConstraint());
+    if (!novar) {
+      checker.addCoCo(new ConstraintSatisfied4Comp(presenceResolver));
+      SubcomponentConstraintsImplied subcomponentConstraintsImplied =
+        new SubcomponentConstraintsImplied(withinComponentResolver, presenceResolver);
+      checker.addCoCo(subcomponentConstraintsImplied);
+      checker.addCoCo(new SubcomponentsConstraint(withinComponentResolver, presenceResolver, subcomponentConstraintsImplied));
+      checker.addCoCo(new FeatureSelectable(presenceResolver));
+      checker.addCoCo(new VariationPointPresent(presenceResolver));
       checker.addCoCo(new NoFieldInVarIfCondition());
       checker.addCoCo(new NoPortInVarIfCondition());
       checker.addCoCo(new VarIfIsBoolean());
@@ -243,8 +316,8 @@ public class MontiArcCoCos {
     // SCBasis, SCActions, and SCTransitions4Code CoCos
     checker.addCoCo(new UniqueStates(MontiArcMill.inheritanceTraverser()));
     checker.addCoCo(new TransitionSourceTargetExists());
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new TransitionPreconditionsAreBoolean4Family());
+    if (!novar) {
+      checker.addCoCo(new TransitionPreconditionsAreBoolean4Family(typeCheck));
     } else {
       checker.addCoCo(new TransitionPreconditionsAreBoolean());
     }
@@ -254,24 +327,23 @@ public class MontiArcCoCos {
     checker.addCoCo(new AnteBlockOnlyWithInitialStateModifier());
 
     // ArcAutomaton CoCos
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new EventTriggerExists4Family());
-      varChecker.get4FullVariant().addCoCo(new NoStatechartAnteAction());
+    if (!novar) {
+      checker.addCoCo(new EventTriggerExists4Family(withinComponentResolver, presenceResolver));
     } else {
       checker.addCoCo(new EventTriggerExists());
-      checker.addCoCo(new NoStatechartAnteAction());
     }
+    checker.addCoCo(new NoStatechartAnteAction());
     traverser = MontiArcMill.inheritanceTraverser();
     traverser.setSCStateHierarchyHandler(new NoSubstatesHandler());
     checker.addCoCo(new MaxOneInitialState(traverser));
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new NoInputPortInEntryAction4Family());
-      varChecker.get4FullVariant().addCoCo(new NoInputPortInExitAction4Family());
-      varChecker.get4FullVariant().addCoCo(new NoNonSyncInputPortInDoAction4Family());
-      varChecker.get4FullVariant().addCoCo(new NoNonSyncInputPortInEpsilonTransition4Family());
-      varChecker.get4FullVariant().addCoCo(new NoOtherInputPortInMsgTransition4Family());
-      varChecker.get4FullVariant().addCoCo(new PortReadWriteInDoAction4Family());
-      //varChecker.get4FullVariant().addCoCo(new PortReadWriteInTransition4MontiArc4Family());
+    if (!novar) {
+      checker.addCoCo(new NoInputPortInEntryAction4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoInputPortInExitAction4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoNonSyncInputPortInDoAction4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoNonSyncInputPortInEpsilonTransition4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoOtherInputPortInMsgTransition4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new PortReadWriteInDoAction4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new PortReadWriteInTransition4Family(withinComponentResolver, presenceResolver));
     } else {
       checker.addCoCo(new NoInputPortInEntryAction());
       checker.addCoCo(new NoInputPortInExitAction());
@@ -287,12 +359,12 @@ public class MontiArcCoCos {
     checker.addCoCo(new MaUnitTestConfiguredCorrectly());
 
     // ArcCompute CoCos
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new NoInputPortsInInitialCompute4Family());
-      varChecker.get4FullVariant().addCoCo(new NoNonSyncInputPortInCompute4Family());
-      varChecker.get4FullVariant().addCoCo(new PortReadWriteInCompute4Family());
-      //varChecker.get4FullVariant().addCoCo(new NoInitWithoutCompute4Family());
-      //varChecker.get4FullVariant().addCoCo(new MaxOneInit4Family());
+    if (!novar) {
+      checker.addCoCo(new NoInputPortsInInitialCompute4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoNonSyncInputPortInCompute4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new PortReadWriteInCompute4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new NoInitWithoutCompute4Family(withinComponentResolver, presenceResolver));
+      checker.addCoCo(new MaxOneInit4Family(withinComponentResolver, presenceResolver));
     } else {
       checker.addCoCo(new NoInputPortsInInitialCompute());
       checker.addCoCo(new NoNonSyncInputPortInCompute());
@@ -302,23 +374,32 @@ public class MontiArcCoCos {
     }
 
     // MontiArc CoCos
-    checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
+    if (!novar) {
+      checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound4Family(withinComponentResolver, presenceResolver));
+    } else {
+      checker.addCoCo((ArcBasisASTArcComponentTypeCoCo) new TypeBound());
+    }
     checker.addCoCo(new RootNoInstance());
     checker.addCoCo(new ImportedSymbolExists());
 
     // ComfortableArc Cocos
-    checker.addCoCo(new MaxOneAutoConnect());
-    checker.addCoCo(new AtomicNoAutoConnect());
+    if (!novar) {
+      checker.addCoCo(new MaxOneAutoConnect4Family(presenceResolver));
+      checker.addCoCo(new AtomicNoAutoConnect4Family(presenceResolver));
+    } else {
+      checker.addCoCo(new MaxOneAutoConnect());
+      checker.addCoCo(new AtomicNoAutoConnect());
+    }
 
     // Basic MontiCore cocos
     checker.addCoCo((AssignmentExpressionsASTAssignmentExpressionCoCo) new AssignmentExpressionsOnlyAssignToLValuesCoCo());
-    if (checkVariants) {
-      varChecker.get4FullVariant().addCoCo(new ExpressionStatementIsValid4Family());
-      varChecker.get4FullVariant().addCoCo(new VarDeclarationInitializationHasCorrectType4Family());
-      varChecker.get4FullVariant().addCoCo(new ForConditionHasBooleanType4Family());
-      varChecker.get4FullVariant().addCoCo(new ForEachIsValid4Family());
-      varChecker.get4FullVariant().addCoCo(new IfConditionHasBooleanType4Family());
-      //varChecker.get4FullVariant().addCoCo(new SwitchCaseCompatible4Family());
+    if (!novar) {
+      checker.addCoCo(new ExpressionStatementIsValid4Family(typeCheck));
+      checker.addCoCo(new VarDeclarationInitializationHasCorrectType4Family(typeCheck));
+      checker.addCoCo(new ForConditionHasBooleanType4Family(typeCheck));
+      checker.addCoCo(new ForEachIsValid4Family(typeCheck));
+      checker.addCoCo(new IfConditionHasBooleanType4Family(typeCheck));
+      checker.addCoCo(new SwitchCaseTypesValid4Family(typeCheck));
     } else {
       checker.addCoCo(new ExpressionStatementIsValid());
       checker.addCoCo(new VarDeclarationInitializationHasCorrectType());
@@ -332,9 +413,14 @@ public class MontiArcCoCos {
     checker.addCoCo(new UnsupportedAutomatonElements.FinalStates());
 
     // PrePost
-    checker.addCoCo(new PrePostIsBoolean());
-    checker.addCoCo(new TriggerPortExists());
+    if (!novar) {
+      checker.addCoCo(new PrePostIsBoolean4Family(typeCheck));
+      checker.addCoCo(new TriggerPortExists4Family(withinComponentResolver, presenceResolver));
+    } else {
+      checker.addCoCo(new PrePostIsBoolean());
+      checker.addCoCo(new TriggerPortExists());
+    }
 
-    return checkVariants ? varChecker : checker;
+    return checker;
   }
 }

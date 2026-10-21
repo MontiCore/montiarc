@@ -207,6 +207,74 @@ public class MontiArcScopesGenitorP3Test extends MontiArcTestBase {
   }
 
   @Test
+  void test_goThroughInstanceOfInnerComponent() {
+    //given
+    String model = """
+      component WithInnerInstance {
+        port in int input;
+        port out int output;
+
+        component Inner inner {
+          port in int in;
+          port out int out;
+
+          in -> out;
+        }
+
+        input -> inner.in;
+        inner.out -> output;
+      }
+      """;
+
+    //when
+    ASTMACompilationUnit unit = compile(model);
+
+    //then
+    ComponentTypeSymbol symbol = unit.getArcComponentType().getSymbol();
+    Multimap<PortSymbol, PortSymbol> chain = symbol.getEffectChains();
+    PortSymbol outputPort = symbol.getPort("output").orElseThrow();
+    PortSymbol inputPort = symbol.getPort("input").orElseThrow();
+
+    assertEquals(1, chain.size());
+    assertTrue(chain.get(inputPort).contains(outputPort));
+  }
+
+  @Test
+  void test_goThroughInstanceOfInnerComponentInVariationPoint() {
+    //given
+    String model = """
+      component WithVariableInnerInstance {
+        feature f;
+        port in int input;
+        port out int output;
+
+        varif (f) {
+          component Inner inner {
+            port in int in;
+            port out int out;
+
+            in -> out;
+          }
+
+          input -> inner.in;
+          inner.out -> output;
+        }
+      }
+      """;
+
+    //when
+    ASTMACompilationUnit unit = compile(model);
+
+    //then
+    ComponentTypeSymbol symbol = unit.getArcComponentType().getSymbol();
+    Multimap<PortSymbol, PortSymbol> chain = symbol.getEffectChains();
+    PortSymbol outputPort = symbol.getPort("output").orElseThrow();
+    PortSymbol inputPort = symbol.getPort("input").orElseThrow();
+
+    assertTrue(chain.get(inputPort).contains(outputPort));
+  }
+
+  @Test
   void test_outPortWithTheSameName() {
     //given
     String model = """

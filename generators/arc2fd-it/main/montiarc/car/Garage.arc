@@ -7,6 +7,11 @@ component Garage {
   CarV2 car1, car2, car3, car4;
   CarV1 car5, car6;
 
+  constraint (body);
+  constraint (!keylessEntry || powerLocks);
+  constraint (engine && (electric || gas));
+  constraint (gear && (manual || automatic) && !(manual && automatic));
+
   constraint (body == car1.body);
   constraint (body == car2.body);
   constraint (body == car3.body);

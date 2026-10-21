@@ -52,34 +52,6 @@ public class VariableArcScopesGenitorTest extends VariableArcTestBase {
     Assertions.assertEquals(scope, ast.getEnclosingScope());
   }
 
-  @Test
-  public void shouldTraverseVarIf() {
-    // Given
-    IVariableArcComponentTypeSymbol typeSymbol = (IVariableArcComponentTypeSymbol) VariableArcMill.componentTypeSymbolBuilder()
-      .setName("A")
-      .setSpannedScope(this.getSymTab().createScope(false))
-      .build();
-    this.getSymTab().putOnStack(typeSymbol);
-    int size = this.getSymTab().getVariationPointStack().size();
-    int variationPointSize = typeSymbol.getAllVariationPoints().size();
-    ASTArcVarIf ast = VariableArcMill.arcVarIfBuilder()
-      .setCondition(Mockito.mock(ASTExpression.class))
-      .setThen(VariableArcMill.componentBodyBuilder().build())
-      .setOtherwise(VariableArcMill.componentBodyBuilder().build())
-      .build();
-
-    // When
-    this.getSymTab().traverse(ast);
-
-    // Then
-    Assertions.assertEquals(typeSymbol, this.getSymTab().getCurrentComponent()
-      .orElse(null));
-    Assertions.assertEquals(size, this.getSymTab().getVariationPointStack()
-      .size());
-    Assertions.assertEquals(variationPointSize + 2, typeSymbol.getAllVariationPoints()
-      .size());
-  }
-
   /**
    * grants access to the usually encapsulated genitor
    */

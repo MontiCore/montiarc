@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,7 +11,8 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -22,26 +25,25 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class PortReadWriteInCompute4FamilyTest extends PortReadWriteInCompute4MontiArcTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new PortReadWriteInCompute4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability1 ",
-    "ValidCompWithVariability2 ",
-    "ValidCompWithVariability3 ",
-    "ValidCompWithVariability4 ",
-  })
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortReadWriteInCompute4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -50,10 +52,7 @@ class PortReadWriteInCompute4FamilyTest extends PortReadWriteInCompute4MontiArcT
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability5 ",
-    "InvalidCompWithVariability6 "
-  })
+  @Override
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -62,19 +61,32 @@ class PortReadWriteInCompute4FamilyTest extends PortReadWriteInCompute4MontiArcT
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortReadWriteInCompute4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
+      // write to local variable that hides an input port of the same name
+      arg("""
+        component ValidCompWithVariability7 {
+          feature f;
+          varif (f) {
+            port in int x;
+          }
+          compute {
+            int x = 0;
+            x = 1;
+          }
+        }
+        """
+      ),
       // write to in input in compute block, dead variation point
       arg("""
         component ValidCompWithVariability1 {
@@ -170,6 +182,38 @@ class PortReadWriteInCompute4FamilyTest extends PortReadWriteInCompute4MontiArcT
 
   static Stream<Arguments> invalidModelsWithVariability() {
     return Stream.of(
+      // write to input that is a field in another configuration
+      arg("""
+          component InvalidCompWithVariability7 {
+            feature f;
+            varif (f) {
+              int x = 0;
+            } else {
+              port in int x;
+            }
+            compute {
+              x = 1;
+            }
+          }
+          """,
+        WRITE_TO_INCOMING_PORT
+      ),
+      // read from output that is a field in another configuration
+      arg("""
+          component InvalidCompWithVariability8 {
+            feature f;
+            varif (f) {
+              int x = 0;
+            } else {
+              port out int x;
+            }
+            compute {
+              int v = x;
+            }
+          }
+          """,
+        READ_FROM_OUTGOING_PORT
+      ),
       // write to in input in compute block, tautological variation point
       arg("""
           component InvalidCompWithVariability1 {

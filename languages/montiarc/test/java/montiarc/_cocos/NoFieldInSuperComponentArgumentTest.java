@@ -119,7 +119,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFieldIO;
-        component ValidComp6(OOTypeWithFieldIO p) extends ComponentTypeWithIntParameter(p.i) {
+        component ValidComp6(OOTypeWithFieldIO q) extends ComponentTypeWithIntParameter(q.i) {
           port in int i;
         }
         """
@@ -128,7 +128,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFieldIO;
-        component ValidComp7(OOTypeWithFieldIO p) extends ComponentTypeWithIntParameter(p.o) {
+        component ValidComp7(OOTypeWithFieldIO q) extends ComponentTypeWithIntParameter(q.o) {
           port out int o;
         }
         """
@@ -137,7 +137,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFunctionIO;
-        component ValidComp9(OOTypeWithFunctionIO p) extends ComponentTypeWithIntParameter(p.i()) {
+        component ValidComp9(OOTypeWithFunctionIO q) extends ComponentTypeWithIntParameter(q.i()) {
           port in int i;
         }
         """
@@ -146,7 +146,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFunctionIO;
-        component ValidComp19(OOTypeWithFunctionIO p) extends ComponentTypeWithIntParameter(p.o()) {
+        component ValidComp19(OOTypeWithFunctionIO q) extends ComponentTypeWithIntParameter(q.o()) {
           port out int o;
         }
         """
@@ -301,7 +301,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component InvalidComp6 extends ComponentTypeWithIntParameter(~p) {
-          boolean p = true;
+          int p = 1;
         }
         """,
         FIELD_REF_IN_STATIC_CONTEXT
@@ -348,10 +348,10 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
                                    ComponentTypeWithBooleanParameter(2 == i2),
                                    ComponentTypeWithBooleanParameter(i2 != 2),
                                    ComponentTypeWithBooleanParameter(2 != i2),
-                                   ComponentTypeWithBooleanParameter(b && 2),
-                                   ComponentTypeWithBooleanParameter(2 && b),
-                                   ComponentTypeWithBooleanParameter(b || 2),
-                                   ComponentTypeWithBooleanParameter(2 || b) {
+                                   ComponentTypeWithBooleanParameter(b && true),
+                                   ComponentTypeWithBooleanParameter(true && b),
+                                   ComponentTypeWithBooleanParameter(b || true),
+                                   ComponentTypeWithBooleanParameter(true || b) {
             int i1 = 1;
             int i2 = 1;
             boolean b = true;
@@ -374,7 +374,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
           import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp10 extends ComponentTypeWithIntParameter(b ? -2 : 2) {
-            boolean b = 1;
+            boolean b = true;
           }
           """,
         FIELD_REF_IN_STATIC_CONTEXT
@@ -443,7 +443,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.ComponentTypeWithIntParameter;
           import montiarc.test.FunctionWithIntParameter;
           component InvalidComp16 extends ComponentTypeWithIntParameter(FunctionWithIntParameter(b)) {
-            boolean b = true;
+            int b = 1;
           }
           """,
         FIELD_REF_IN_STATIC_CONTEXT
@@ -516,10 +516,10 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
       ),
       //  field boolean not expression in super component argument of inner component
       arg("""
-          import montiarc.test.ComponentTypeWithBooleanParameter;
+          import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp23 {
-            component Inner extends ComponentTypeWithBooleanParameter(p = ~b) {
-              boolean b = true;
+            component Inner extends ComponentTypeWithIntParameter(p = ~b) {
+              int b = 1;
             }
           }
           """,
@@ -594,10 +594,10 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
                                     ComponentTypeWithBooleanParameter(p = 2 == i2),
                                     ComponentTypeWithBooleanParameter(p = i2 != 2),
                                     ComponentTypeWithBooleanParameter(p = 2 != i2),
-                                    ComponentTypeWithBooleanParameter(p = b && 2),
-                                    ComponentTypeWithBooleanParameter(p = 2 && b),
-                                    ComponentTypeWithBooleanParameter(p = b || 2),
-                                    ComponentTypeWithBooleanParameter(p = 2 || b) {
+                                    ComponentTypeWithBooleanParameter(p = b && true),
+                                    ComponentTypeWithBooleanParameter(p = true && b),
+                                    ComponentTypeWithBooleanParameter(p = b || true),
+                                    ComponentTypeWithBooleanParameter(p = true || b) {
               int i1 = 1;
               int i2 = 1;
               boolean b = true;
@@ -622,7 +622,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp29 {
             component Inner extends ComponentTypeWithIntParameter(p = i ? -2 : 2) {
-              int i = 1;
+              boolean i = true;
             }
           }
           """,
@@ -703,7 +703,7 @@ public class NoFieldInSuperComponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.FunctionWithIntParameter;
           component InvalidComp35 {
             component Inner extends ComponentTypeWithIntParameter(p = FunctionWithIntParameter(b)) {
-              boolean b = true;
+              int b = 1;
             }
           }
           """,

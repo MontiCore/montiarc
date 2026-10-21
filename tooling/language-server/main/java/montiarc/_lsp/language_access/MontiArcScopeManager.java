@@ -109,6 +109,14 @@ public class MontiArcScopeManager extends MontiArcScopeManagerTOP {
           res.get(node).findings.addAll(Log.getFindings());
         }
       }
+
+      for (ASTMACompilationUnit node : astNodes) {
+        Log.clearFindings();
+        tool.calculatePresenceFormulas(List.of(node));
+        if (res.containsKey(node)) {
+          res.get(node).findings.addAll(Log.getFindings());
+        }
+      }
     });
 
     return res;

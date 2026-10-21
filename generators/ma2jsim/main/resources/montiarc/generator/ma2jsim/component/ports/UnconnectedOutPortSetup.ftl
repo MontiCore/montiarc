@@ -7,14 +7,12 @@
 <#assign modeAutomatonOpt = helper.getComponentHelper().getModeAutomaton(ast)/>
 
 <#if !modeAutomatonOpt.isPresent()>
-  <#list helper.getVariantHelper().getVariants(ast) as variant>
-    protected void <@MethodNames.setupUnconnectedOutPorts/>${helper.getVariantHelper().variantSuffix(variant)}() {
-      this.unconnectedOutputs = java.util.Set.of(
-      <#list helper.getComponentHelper().getUnconnectedOutPortsWithoutModes(variant) as port>
-        this.${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(ast, port)}()
-      <#sep>,
-      </#list>
-      );
-    }
-  </#list>
+  protected void <@MethodNames.setupUnconnectedOutPorts/>() {
+    this.unconnectedOutputs = java.util.Set.of(
+    <#list helper.getComponentHelper().getUnconnectedOutPortsWithoutModes(ast.getSymbol()) as port>
+      this.${prefixes.port()}${port.getName()}()
+    <#sep>,
+    </#list>
+    );
+  }
 </#if>

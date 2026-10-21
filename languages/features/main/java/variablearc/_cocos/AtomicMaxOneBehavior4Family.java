@@ -3,42 +3,36 @@ package variablearc._cocos;
 
 import arcbasis._ast.ASTArcBehaviorElement;
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentInstantiationTOP;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Expr;
-import com.microsoft.z3.Model;
-import com.microsoft.z3.Status;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTVariableArcFullVariantComponentType;
-import variablearc._cocos.util.ExpressionSolverService;
-import variablearc._cocos.util.VariationConditionHelper;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.ExpressionSolver;
+import variablearc._ast.VariableArcElements;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+/**
+ * Checks that a behavior description of a component is not present in any
+ * configuration in which the component is atomic, i.e., has no present
+ * subcomponent, and a preceding behavior description is present.
+ */
 public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeCoCo {
 
-  private static boolean evaluateCondition(Model model, BoolExpr condition) {
-    try {
-      Expr<?> eval = model.evaluate(condition, true);
-      return eval.isTrue();
-    } catch (Exception e) {
-      return false;
-    }
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
+
+  public AtomicMaxOneBehavior4Family(@NotNull WithinComponentResolver withinComponentResolver,
+                                     @NotNull PresenceResolver presenceResolver) {
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
   }
 
   @Override
@@ -46,87 +40,32 @@ public class AtomicMaxOneBehavior4Family implements ArcBasisASTArcComponentTypeC
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    Context ctx = ExpressionSolverService.getContext();
+    ComponentTypeSymbol component = node.getSymbol();
+    List<ASTArcBehaviorElement> behaviors = VariableArcElements.of(node, ASTArcBehaviorElement.class);
+    if (behaviors.size() < 2) return;
 
-    Map<ASTArcBehaviorElement, BoolExpr> behaviorConditions = new HashMap<>();
-    Map<ASTComponentInstance, BoolExpr> subcomponentConditions = new HashMap<>();
-
-    // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
-
-    // Maintaining all features, variations, constraints, behaviors and subcomponents
-    List<String> allFeatures;
-    ExpressionSet constraints;
-
-    // Getting all features, variations, constraints, connectors and subcomponents from the Main-Component
-    allFeatures = new ArrayList<>(mainFeatures);
-
-    if (node instanceof ASTVariableArcFullVariantComponentType) {
-      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-
-      subcomponentConditions = ((ASTVariableArcFullVariantComponentType) node).getSubcomponentConditions();
-      behaviorConditions = ((ASTVariableArcFullVariantComponentType) node).getBehaviorConditions();
-
-    } else {
-      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-
-      List<ASTComponentInstance> mainSubComps = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInstantiation).map(l -> (ASTComponentInstantiation) l).map(ASTComponentInstantiationTOP::getComponentInstanceList).flatMap(List::stream).toList();
-      for (ASTComponentInstance mainSubComp : mainSubComps) {
-        subcomponentConditions.put(mainSubComp, ctx.mkTrue());
-      }
-
-      List<ASTArcBehaviorElement> mainBehaviors = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcBehaviorElement).map(k -> (ASTArcBehaviorElement) k).toList();
-      for (ASTArcBehaviorElement behavior : mainBehaviors) {
-        behaviorConditions.put(behavior, ctx.mkTrue());
-      }
-    }
-
-    // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
-
-    // Adding all subcomponent-conditions
-    List<BoolExpr> allSubcomponentConditions = new ArrayList<>();
-    for (Map.Entry<ASTComponentInstance, BoolExpr> sub : subcomponentConditions.entrySet()) {
-      allSubcomponentConditions.add(sub.getValue());
-    }
-
-    // Adding all connector-conditions
-    List<BoolExpr> allBehaviorConditions = new ArrayList<>();
-    for (Map.Entry<ASTArcBehaviorElement, BoolExpr> connector : behaviorConditions.entrySet()) {
-      allBehaviorConditions.add(connector.getValue());
-    }
-
-    int[] behaviorWeights = new int[allBehaviorConditions.size()];
-    Arrays.fill(behaviorWeights, 1);
-
-    // At most one behavior, if component is atomic
-    BoolExpr atMostOneBehavior = ctx.mkPBLe(behaviorWeights, behaviorConditions.values().toArray(new Expr[0]), 1);
-    // There exist a subcomponent, if any of the conditions hold
-    BoolExpr subComponentsExists = ctx.mkOr(allSubcomponentConditions.toArray(new BoolExpr[0]));
-    // If no SubComponet exist
-    BoolExpr noSubComponents = ctx.mkNot(subComponentsExists);
-    // If the component is atomic and there are multiple behaviors
-    BoolExpr violation = ctx.mkAnd(noSubComponents, ctx.mkNot(atMostOneBehavior));
-
-    List<BoolExpr> multipleBehaviorExpressionList = new ArrayList<>(List.of(violation, featureConstraints));
-    boolean first = true;
-    if (ExpressionSolverService.solve(multipleBehaviorExpressionList) == Status.SATISFIABLE) {
-      Model model = ExpressionSolverService.getModel();
-      for (Map.Entry<ASTArcBehaviorElement, BoolExpr> behavior : behaviorConditions.entrySet()) {
-        if (evaluateCondition(model, behavior.getValue())) {
-          if (first) first = false;
-          else {
-            List<BoolExpr> behaviorList = new ArrayList<>(multipleBehaviorExpressionList);
-            behaviorList.add(behavior.getValue());
-            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(behaviorList)) {
-              Log.error(ArcError.MULTIPLE_BEHAVIOR.toString(), behavior.getKey().get_SourcePositionStart(), behavior.getKey().get_SourcePositionEnd());
-            } else {
-              Log.warn(ArcError.MULTIPLE_BEHAVIOR.toString(), behavior.getKey().get_SourcePositionStart(), behavior.getKey().get_SourcePositionEnd());
-            }
-          }
+    List<BoolExpr> preceding = new ArrayList<>();
+    FormulaSolver solver = this.presenceResolver.solverFor(component);
+    BoolExpr atomic = solver.not(this.decomposed(solver, component));
+    for (ASTArcBehaviorElement behavior : behaviors) {
+      BoolExpr presence = this.presenceResolver.presenceOf(component, behavior);
+      if (!preceding.isEmpty()) {
+        BoolExpr violation = solver.and(atomic, presence, solver.or(preceding));
+        switch (solver.check(violation)) {
+          case SATISFIABLE -> Log.error(ArcError.MULTIPLE_BEHAVIOR.toString(),
+            behavior.get_SourcePositionStart(), behavior.get_SourcePositionEnd());
+          case UNKNOWN -> Log.warn(ArcError.MULTIPLE_BEHAVIOR.toString(),
+            behavior.get_SourcePositionStart(), behavior.get_SourcePositionEnd());
+          case UNSATISFIABLE -> { }
         }
       }
+      preceding.add(presence);
     }
+  }
+
+  protected BoolExpr decomposed(@NotNull FormulaSolver solver, @NotNull ComponentTypeSymbol component) {
+    return solver.or(this.withinComponentResolver.getAll(component, SubcomponentSymbol.class).stream()
+      .map(subcomponent -> this.presenceResolver.presenceOf(component, subcomponent))
+      .toList());
   }
 }

@@ -19,7 +19,7 @@ protected interface ${ast.getName()}${suffixes.msgAction()}<@Util.printTypeParam
   @Override
   default void execute(${syncMsg} msg) {
     realExecute(
-      <#list inPorts as inPort> msg.${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)} <#sep>,</#list>
+      <#list inPorts as inPort> msg.${inPort.getName()} <#sep>,</#list>
     );
   }
   void realExecute(

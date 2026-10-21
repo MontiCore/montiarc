@@ -120,7 +120,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFieldIO;
-        component ValidComp6(OOTypeWithFieldIO p) extends ComponentTypeWithIntParameter(p.i) {
+        component ValidComp6(OOTypeWithFieldIO q) extends ComponentTypeWithIntParameter(q.i) {
           port in int i;
         }
         """
@@ -129,7 +129,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFieldIO;
-        component ValidComp7(OOTypeWithFieldIO p) extends ComponentTypeWithIntParameter(p.o) {
+        component ValidComp7(OOTypeWithFieldIO q) extends ComponentTypeWithIntParameter(q.o) {
           port out int o;
         }
         """
@@ -138,7 +138,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFunctionIO;
-        component ValidComp9(OOTypeWithFunctionIO p) extends ComponentTypeWithIntParameter(p.i()) {
+        component ValidComp9(OOTypeWithFunctionIO q) extends ComponentTypeWithIntParameter(q.i()) {
           port in int i;
         }
         """
@@ -147,7 +147,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         import montiarc.test.OOTypeWithFunctionIO;
-        component ValidComp19(OOTypeWithFunctionIO p) extends ComponentTypeWithIntParameter(p.o()) {
+        component ValidComp19(OOTypeWithFunctionIO q) extends ComponentTypeWithIntParameter(q.o()) {
           port out int o;
         }
         """
@@ -316,11 +316,11 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
           """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      //  port in boolean not expression in super component argument
+      //  port in bitwise complement expression in super component argument
       arg("""
-          import montiarc.test.ComponentTypeWithBooleanParameter;
-          component InvalidComp8 extends ComponentTypeWithBooleanParameter(~i) {
-            port in boolean i;
+          import montiarc.test.ComponentTypeWithIntParameter;
+          component InvalidComp8 extends ComponentTypeWithIntParameter(~i) {
+            port in int i;
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
@@ -385,10 +385,10 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
                                    ComponentTypeWithBooleanParameter(2 == i2),
                                    ComponentTypeWithBooleanParameter(i2 != 2),
                                    ComponentTypeWithBooleanParameter(2 != i2),
-                                   ComponentTypeWithBooleanParameter(i4 && 2),
-                                   ComponentTypeWithBooleanParameter(2 && i4),
-                                   ComponentTypeWithBooleanParameter(i4 || 2),
-                                   ComponentTypeWithBooleanParameter(2 || i4) {
+                                   ComponentTypeWithBooleanParameter(i4 && true),
+                                   ComponentTypeWithBooleanParameter(true && i4),
+                                   ComponentTypeWithBooleanParameter(i4 || true),
+                                   ComponentTypeWithBooleanParameter(true || i4) {
             port in int i1, i2;
             port in boolean i3, i4;
           }
@@ -479,7 +479,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.ComponentTypeWithIntParameter;
           import montiarc.test.FunctionWithIntParameter;
           component InvalidComp20 extends ComponentTypeWithIntParameter(FunctionWithIntParameter(i)) {
-            port in boolean i;
+            port in int i;
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
@@ -563,10 +563,10 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
       ),
       //  port in boolean not expression in super component argument of inner component
       arg("""
-          import montiarc.test.ComponentTypeWithBooleanParameter;
+          import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp28 {
-            component Inner extends ComponentTypeWithBooleanParameter(p = ~i) {
-              port in boolean i;
+            component Inner extends ComponentTypeWithIntParameter(p = ~i) {
+              port in int i;
             }
           }
           """,
@@ -641,10 +641,10 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
                                     ComponentTypeWithBooleanParameter(p = 2 == i2),
                                     ComponentTypeWithBooleanParameter(p = i2 != 2),
                                     ComponentTypeWithBooleanParameter(p = 2 != i2),
-                                    ComponentTypeWithBooleanParameter(p = i4 && 2),
-                                    ComponentTypeWithBooleanParameter(p = 2 && i4),
-                                    ComponentTypeWithBooleanParameter(p = i4 || 2),
-                                    ComponentTypeWithBooleanParameter(p = 2 || i4) {
+                                    ComponentTypeWithBooleanParameter(p = i4 && true),
+                                    ComponentTypeWithBooleanParameter(p = true && i4),
+                                    ComponentTypeWithBooleanParameter(p = i4 || true),
+                                    ComponentTypeWithBooleanParameter(p = true || i4) {
               port in int i1, i2;
               port in boolean i3, i4;
             }
@@ -668,7 +668,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidComp34 {
             component Inner extends ComponentTypeWithIntParameter(p = i ? -2 : 2) {
-              port in int i;
+              port in boolean i;
             }
           }
           """,
@@ -749,7 +749,7 @@ class NoPortInSuperComponentArgumentTest extends MontiArcTestBase {
           import montiarc.test.FunctionWithIntParameter;
           component InvalidComp40 {
             component Inner extends ComponentTypeWithIntParameter(p = FunctionWithIntParameter(i)) {
-              port in boolean i;
+              port in int i;
             }
           }
           """,

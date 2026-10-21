@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 
 import java.util.stream.Stream;
@@ -43,7 +42,7 @@ class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     setUpComponents();
   }
 
-  protected static void setUpComponents() {
+  protected void setUpComponents() {
     compile("package a.b; component A { }");
     compile("package a.b; component B(int p) { }");
     compile("package a.b; component C(java.lang.String p) { }");
@@ -65,422 +64,7 @@ class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {
-    // Component without subcomponents, inheritance, or refinement
-    "component ValidCompS01 {  }",
-    // Subcomponent without arguments
-    "component ValidCompS02 { a.b.A a; }",
-    // Multiple subcomponents without arguments
-    "component ValidCompS03 { a.b.A a1, a2; }",
-    // Subcomponent with one mandatory parameter (assign value)
-    "component ValidCompS04 { a.b.B b(1); }",
-    // Multiple subcomponents with one mandatory parameter each (assign value)
-    "component ValidCompS05 { a.b.B b1(1), b2(1); }",
-    // Subcomponent with one mandatory parameter (assign boxed value)
-    "component ValidCompS06 { a.b.B b(java.lang.Integer.Integer(1)); }",
-    // Subcomponent with one mandatory String parameter (assign constructor-call value)
-    "component ValidCompS07 { a.b.C c(java.lang.String.String()); }",
-    // Subcomponent with two mandatory parameters (assign values)
-    "component ValidCompS08 { a.b.D d(1, 2); }",
-    // Subcomponent with one optional parameter (default value)
-    "component ValidCompS09 { a.b.E e; }",
-    // Subcomponent with one optional parameter (assign value)
-    "component ValidCompS10 { a.b.E e(1); }",
-    // Subcomponent with one optional parameter (assign boxed value)
-    "component ValidCompS11 { a.b.E e(java.lang.Integer.Integer(1)); }",
-    // Subcomponent with one optional parameter (assign value via key)
-    "component ValidCompS12 { a.b.E e(p = 1); }",
-    // Subcomponent with one optional parameter (assign boxed value via key)
-    "component ValidCompS13 { a.b.E e(p = java.lang.Integer.Integer(1)); }",
-    // Subcomponent with one optional String parameter (default value)
-    "component ValidCompS14 { a.b.F f; }",
-    // Subcomponent with one optional String parameter (assign value)
-    "component ValidCompS15 { a.b.F f(java.lang.String.String()); }",
-    // Subcomponent with one optional String parameter (assign value via key)
-    "component ValidCompS16 { a.b.F f(p = java.lang.String.String()); }",
-    // Subcomponent with two optional parameters (default values)
-    "component ValidCompS17 { a.b.G g; }",
-    // Subcomponent with two optional parameters (assign first value, second default)
-    "component ValidCompS18 { a.b.G g(java.lang.String.String()); }",
-    // Subcomponent with two optional parameters (assign values)
-    "component ValidCompS19 { a.b.G g(java.lang.String.String(), 1); }",
-    // Subcomponent with two optional parameters (assign values, second boxed)
-    "component ValidCompS20 { a.b.G g(java.lang.String.String(), java.lang.Integer.Integer(1)); }",
-    // Subcomponent with two optional parameters (assign values via key in order)
-    "component ValidCompS21 { a.b.G g(p1 = java.lang.String.String(), p2 = 1); }",
-    // Subcomponent with two optional parameters (assign values via key in order, second boxed)
-    "component ValidCompS22 { a.b.G g(p1 = java.lang.String.String(), p2 = java.lang.Integer.Integer(1)); }",
-    // Subcomponent with two optional parameters (assign values via key in reverse order, second boxed)
-    "component ValidCompS23 { a.b.G g(p2 = java.lang.Integer.Integer(1), p1 = java.lang.String.String()); }",
-    // Subcomponent with two optional parameters (assign first by value, second by key)
-    "component ValidCompS24 { a.b.G g(java.lang.String.String(), p2 = 1); }",
-    // Subcomponent with two optional parameters (assign first by value, second by key, boxed)
-    "component ValidCompS25 { a.b.G g(java.lang.String.String(), p2 = java.lang.Integer.Integer(1)); }",
-    // Subcomponent with two optional parameters (assign first value via key, omit second)
-    "component ValidCompS26 { a.b.G g(p1 = java.lang.String.String()); }",
-    // Subcomponent with two optional parameters (omit first, assign second value via key)
-    "component ValidCompS27 { a.b.G g(p2 = 1); }",
-    // Subcomponent with two optional parameters (omit first, assign second boxed value via key)
-    "component ValidCompS28 { a.b.G g(p2 = java.lang.Integer.Integer(1)); }",
-    // Subcomponent with three mandatory parameters (assign values)
-    "component ValidCompS29 { a.b.H h(1, 2, 3); }",
-    // Subcomponent with three mandatory and three optional parameters (assign first three by position)
-    "component ValidCompS30 { a.b.I i(1, 2, 3); }",
-    // Subcomponent with three mandatory and three optional parameters (assign first four by position)
-    "component ValidCompS31 { a.b.I i(1, 2, 3, 4); }",
-    // Subcomponent with three mandatory and three optional parameters (assign first five by position)
-    "component ValidCompS32 { a.b.I i(1, 2, 3, 4, 5); }",
-    // Subcomponent with three mandatory and three optional parameters (assign all six by position)
-    "component ValidCompS33 { a.b.I i(1, 2, 3, 4, 5, 6); }",
-    // Subcomponent with three mandatory and three optional parameters (assign first five by position, last by key)
-    "component ValidCompS34 { a.b.I i(1, 2, 3, 4, 5, p6 = 6); }",
-    // Subcomponent with three mandatory and three optional parameters (assign first four by position, last two by key)
-    "component ValidCompS35 { a.b.I i(1, 2, 3, 4, p5 = 5, p6 = 6); }",
-    // Subcomponent with three mandatory and three optional parameters (assign all by key in order)
-    "component ValidCompS36 { a.b.I i(p1 = 1, p2 = 2, p3 = 3, p4 = 4, p5 = 5, p6 = 6); }",
-    // Subcomponent with three mandatory and three optional parameters (assign all by key in reverse order)
-    "component ValidCompS37 { a.b.I i(p6 = 1, p5 = 2, p4 = 3, p3 = 4, p2 = 5, p1 = 6); }",
-    // Subcomponent with three optional parameters (default values)
-    "component ValidCompS38 { a.b.J j; }",
-    // Subcomponent with three optional parameters (assign first)
-    "component ValidCompS39 { a.b.J j(1); }",
-    // Subcomponent with three optional parameters (assign first two)
-    "component ValidCompS40 { a.b.J j(1, 2); }",
-    // Subcomponent with three optional parameters (assign all by position)
-    "component ValidCompS41 { a.b.J j(1, 2, 3); }",
-    // Subcomponent with three optional parameters (assign first two by position, last by key)
-    "component ValidCompS42 { a.b.J j(1, 2, p3 = 3); }",
-    // Subcomponent with three optional parameters (assign first by position, last two by key)
-    "component ValidCompS43 { a.b.J j(1, p2 = 2, p3 = 3); }",
-    // Subcomponent with three optional parameters (assign all by key in order)
-    "component ValidCompS44 { a.b.J j(p1 = 1, p2 = 2, p3 = 3); }",
-    // Subcomponent with three optional parameters (assign all by key in reverse order)
-    "component ValidCompS45 { a.b.J j(p3 = 1, p2 = 2, p1 = 3); }",
-    // Subcomponent with one mandatory generic-collection parameter (assign value)
-    "component ValidCompS46 { a.b.K k(java.util.Arrays.asList(1)); }",
-    // Subcomponent with one optional generic-collection parameter (default value)
-    "component ValidCompS47 { a.b.L l; }",
-    // Subcomponent with one optional generic-collection parameter (assign value)
-    "component ValidCompS48 { a.b.L l(java.util.Arrays.asList(1)); }",
-    // Subcomponent with one optional generic-collection parameter (assign value via key)
-    "component ValidCompS49 { a.b.L l(p = java.util.Arrays.asList(1)); }",
-    // Subcomponent with one mandatory generic parameter (bind type, assign value)
-    "component ValidCompS50 { a.b.M<java.lang.Integer> m(1); }",
-    // Subcomponent with one mandatory generic parameter (bind type, assign boxed value)
-    "component ValidCompS51 { a.b.M<java.lang.Integer> m(java.lang.Integer.Integer(1)); }",
-    // Subcomponent with one mandatory generic-list parameter (bind type, assign value)
-    "component ValidCompS52 { a.b.N<java.lang.Integer> m(java.util.Arrays.asList(1)); }",
-    // Subcomponent with one mandatory generic-list parameter (bind type, assign empty list)
-    "component ValidCompS53 { a.b.N<java.lang.Integer> m(java.util.Collections.emptyList()); }",
-    // Inheritance without parameters
-    "component ValidCompI01 extends a.b.A { }",
-    // Inheritance adding a parameter
-    "component ValidCompI02(int p) extends a.b.A { }",
-    // Inheritance with one mandatory parameter (assign value)
-    "component ValidCompI03 extends a.b.B(1) { }",
-    // Inheritance with one mandatory parameter (pass parameter, different names)
-    "component ValidCompI04(int q) extends a.b.B(q) { }",
-    // Inheritance with one mandatory parameter (pass parameter, same name)
-    "component ValidCompI05(int p) extends a.b.B(p) { }",
-    // Inheritance with one mandatory parameter (assign value via key)
-    "component ValidCompI06 extends a.b.B(p = 1) { }",
-    // Inheritance with one mandatory parameter (pass parameter via key, different name)
-    "component ValidCompI07(int q) extends a.b.B(p = q) { }",
-    // Inheritance with one mandatory parameter (pass parameter via key, same name)
-    "component ValidCompI08(int p) extends a.b.B(p = p) { }",
-    // Inheritance with one optional parameter (default value)
-    "component ValidCompI09 extends a.b.E { }",
-    // Inheritance with one optional parameter (assign value)
-    "component ValidCompI10 extends a.b.E(1) { }",
-    // Inheritance with one optional parameter (pass parameter, different name)
-    "component ValidCompI11(int q) extends a.b.E(q) { }",
-    // Inheritance with one optional parameter (pass parameter, same name)
-    "component ValidCompI12(int p) extends a.b.E(p) { }",
-    // Inheritance with one optional parameter (assign value via key)
-    "component ValidCompI13 extends a.b.E(p = 1) { }",
-    // Inheritance with one optional parameter (pass parameter via key, different name)
-    "component ValidCompI14(int q) extends a.b.E(p = q) { }",
-    // Inheritance with one optional parameter (pass parameter via key, same name)
-    "component ValidCompI15(int p) extends a.b.E(p = p) { }",
-    // Inheritance with one mandatory and one optional parameter (default value)
-    "component ValidCompI16 extends a.b.R(1) { }",
-    // Inheritance with one mandatory and one optional parameter (assign values)
-    "component ValidCompI17 extends a.b.R(1, false) { }",
-    // Inheritance with one mandatory and one optional parameter (pass parameter, default value)
-    "component ValidCompI18(int p) extends a.b.R(p) { }",
-    // Inheritance with one mandatory and one optional parameter (pass parameters)
-    "component ValidCompI19(int p1, boolean p2) extends a.b.R(p1, p2) { }",
-    // Inheritance with one mandatory and one optional parameter (assign values via key in order)
-    "component ValidCompI20 extends a.b.R(p1 = 1, p2 = false) { }",
-    // Inheritance with one mandatory and one optional parameter (assign values via key reverse order)
-    "component ValidCompI21 extends a.b.R(p2 = false, p1 = 1) { }",
-    // Inheritance with one mandatory and one optional parameter (pass parameters via key, default value)
-    "component ValidCompI22(int p) extends a.b.R(p1 = p) { }",
-    // Inheritance with one mandatory and one optional parameter (pass parameters via key in order)
-    "component ValidCompI23(int p1, boolean p2) extends a.b.R(p1 = p1, p2 = p2) { }",
-    // Inheritance with one mandatory and one optional parameter (pass parameters via key reverse order)
-    "component ValidCompI24(int p1, boolean p2) extends a.b.R(p2 = p2, p1 = p1) { }",
-    // Inheritance with two optional parameters (default values)
-    "component ValidCompI25 extends a.b.Q { }",
-    // Inheritance with two optional parameters (assign single value)
-    "component ValidCompI26 extends a.b.Q(1) { }",
-    // Inheritance with two optional parameters (assign values)
-    "component ValidCompI27 extends a.b.Q(1, false) { }",
-    // Inheritance with two optional parameters (pass single parameter)
-    "component ValidCompI28(int p) extends a.b.Q(p) { }",
-    // Inheritance with two optional parameters (pass parameters)
-    "component ValidCompI29(int p1, boolean p2) extends a.b.Q(p1, p2) { }",
-    // Inheritance with two optional parameters (assign first value via key)
-    "component ValidCompI30 extends a.b.Q(p1 = 1) { }",
-    // Inheritance with two optional parameters (assign second value via key)
-    "component ValidCompI31 extends a.b.Q(p2 = false) { }",
-    // Inheritance with two optional parameters (assign values via key in order)
-    "component ValidCompI32 extends a.b.Q(p1 = 1, p2 = false) { }",
-    // Inheritance with two optional parameters (assign values via key reverse order)
-    "component ValidCompI33 extends a.b.Q(p2 = false, p1 = 1) { }",
-    // Inheritance with two optional parameters (pass first parameter via key)
-    "component ValidCompI34(int p) extends a.b.Q(p1 = p) { }",
-    // Inheritance with two optional parameters (pass second parameter via key)
-    "component ValidCompI35(boolean p) extends a.b.Q(p2 = p) { }",
-    // Inheritance with two optional parameters (pass parameters via key in order)
-    "component ValidCompI36(int p1, boolean p2) extends a.b.Q(p1 = p1, p2 = p2) { }",
-    // Inheritance with two optional parameters (pass parameters via key reverse order)
-    "component ValidCompI37(int p1, boolean p2) extends a.b.Q(p2 = p2, p1 = p1) { }",
-    // Inheritance with two mandatory parameters (assign values)
-    "component ValidCompI38 extends a.b.P(1, false) { }",
-    // Inheritance with two mandatory parameters (pass parameters)
-    "component ValidCompI39(int p1, boolean p2) extends a.b.P(p1, p2) { }",
-    // Inheritance with two mandatory parameters (assign values via key in order)
-    "component ValidCompI40 extends a.b.P(p1 = 1, p2 = false) { }",
-    // Inheritance with two mandatory parameters (assign values via key reverse order)
-    "component ValidCompI41 extends a.b.P(p2 = false, p1 = 1) { }",
-    // Inheritance with two mandatory parameters (pass parameters via key in order)
-    "component ValidCompI42(int p1, boolean p2) extends a.b.P(p1 = p1, p2 = p2) { }",
-    // Inheritance with two mandatory parameters (pass parameters via key reverse order)
-    "component ValidCompI43(int p1, boolean p2) extends a.b.P(p2 = p2, p1 = p1) { }",
-    // Inheritance with one mandatory generic parameter (bind type, assign value)
-    "component ValidCompI44 extends a.b.M<int>(1) { }",
-    // Inheritance with one mandatory generic parameter (bind type, pass parameter)
-    "component ValidCompI45(int p) extends a.b.M<int>(p) { }",
-    // Inheritance with one mandatory generic parameter (pass type, pass parameter)
-    "component ValidCompI46<T>(T p) extends a.b.M<T>(p) { }",
-    // Inheritance with one mandatory generic parameter (bind type, assign value via key)
-    "component ValidCompI47 extends a.b.M<int>(p = 1) { }",
-    // Inheritance with one mandatory generic parameter (bind type, pass parameter via key, different name)
-    "component ValidCompI48(int q) extends a.b.M<int>(p = q) { }",
-    // Inheritance with one mandatory generic parameter (bind type, pass parameter via key, same name)
-    "component ValidCompI49(int p) extends a.b.M<int>(p = p) { }",
-    // Inheritance with one mandatory generic parameter (pass parameter via key, different name, same type name)
-    "component ValidCompI50<T>(T q) extends a.b.M<T>(p = q) { }",
-    // Inheritance with one mandatory generic parameter (pass parameter via key, same name, same type name)
-    "component ValidCompI51<T>(T p) extends a.b.M<T>(p = p) { }",
-    // Inheritance with one mandatory generic parameter (pass parameter via key, different name, different type name)
-    "component ValidCompI52<S>(S q) extends a.b.M<S>(p = q) { }",
-    // Inheritance with one mandatory generic parameter (pass parameter via key, same name, different type name)
-    "component ValidCompI53<S>(S p) extends a.b.M<S>(p = p) { }",
-    // Inheritance with two mandatory generic parameters (bind type, assign values)
-    "component ValidCompI54 extends a.b.O<int, boolean>(1, false) { }",
-    // Inheritance with two mandatory generic parameters (bind type, pass parameters)
-    "component ValidCompI55(int p1, boolean p2) extends a.b.O<int, boolean>(p1, p2) { }",
-    // Inheritance with two mandatory generic parameters (pass type, pass parameters)
-    "component ValidCompI56<U, V>(U p1, V p2) extends a.b.O<U, V>(p1, p2) { }",
-    // Inheritance with one mandatory generic parameter (bind type, assign value via key) and with two mandatory generic parameters (pass type, pass parameters)
-    "component ValidCompI57<U, V>(U p1, V p2) extends a.b.M<int>(p = 1), a.b.O<U, V>(p1, p2) { }",
-    // Refinement without parameters
-    "component ValidCompR01 refines a.b.A  { }",
-    // Multi-Refinement without parameters
-    "component ValidCompR02 refines a.b.A, a.b.A { }",
-    // Refinement with one mandatory parameter (assign value)
-    "component ValidCompR03 refines a.b.B (1) { }",
-    // Refinement with a boxed version of the parameter's primitive type
-    "component ValidCompR04 refines a.b.B (java.lang.Integer.Integer(1)) { }",
-    // Refinement with one mandatory parameter (pass parameter, different name)
-    "component ValidCompR05(int q) refines a.b.B(q) { }",
-    // Refinement with one mandatory parameter (pass parameter, same name)
-    "component ValidCompR06(int p) refines a.b.B(p) { }",
-    // Refinement with one mandatory parameter (assign value via key)
-    "component ValidCompR07 refines a.b.B(p = 1) { }",
-    // Refinement with one mandatory parameter (pass parameter via key, different name)
-    "component ValidCompR08(int q) refines a.b.B(p = q) { }",
-    // Refinement with one mandatory parameter (pass parameter via key, same name)
-    "component ValidCompR09(int p) refines a.b.B(p = p) { }",
-    // Refinement with a constructor call as the argument
-    "component ValidCompR10 refines a.b.C (java.lang.String.String()) { }",
-    // Assigning both mandatory params
-    "component ValidCompR11 refines a.b.D (1, 2) { }",
-    // Refinement with one optional parameter (default value)
-    "component ValidCompR12 refines a.b.E { }",
-    // Refinement with one optional parameter (assign value)
-    "component ValidCompR13 refines a.b.E (1) { }",
-    // Refinement with a boxed version of the parameter's primitive type
-    "component ValidCompR14 refines a.b.E (java.lang.Integer.Integer(1)) { }",
-    // Refinement with one optional parameter (assign value via key)
-    "component ValidCompR15 refines a.b.E (p = 1) { }",
-    // Refinement with a boxed version of the parameter's primitive type, assigned by key
-    "component ValidCompR16 refines a.b.E (p = java.lang.Integer.Integer(1)) { }",
-    // Refinement with one optional parameter (pass parameter, different name)
-    "component ValidCompR17(int q) refines a.b.E(q) { }",
-    // Refinement with one optional parameter (pass parameter, same name)
-    "component ValidCompR18(int p) refines a.b.E(p) { }",
-    // Refinement with one optional parameter (pass parameter via key, different name)
-    "component ValidCompR19(int q) refines a.b.E(p = q) { }",
-    // Refinement with one optional parameter (pass parameter via key, same name)
-    "component ValidCompR20(int p) refines a.b.E(p = p) { }",
-    // Refinement with one optional parameter (default value)
-    "component ValidCompR21 refines a.b.F { }",
-    // Refinement with one optional parameter (assign value with constructor call)
-    "component ValidCompR22 refines a.b.F (java.lang.String.String()) { }",
-    // Refinement with one optional parameter (assign value by key with constructor call)
-    "component ValidCompR23 refines a.b.F (p = java.lang.String.String()) { }",
-    // Refinement with two optional parameters (default values)
-    "component ValidCompR24 refines a.b.G { }",
-    // Refinement with two optional parameters (1. assign value, 2. default value)
-    "component ValidCompR25 refines a.b.G (java.lang.String.String()) { }",
-    // Refinement with two optional parameters (assigned values)
-    "component ValidCompR26 refines a.b.G (java.lang.String.String(), 1) { }",
-    // Refinement with two optional parameters (assigned values, with boxed value for primitive parameter type)
-    "component ValidCompR27 refines a.b.G (java.lang.String.String(), java.lang.Integer.Integer(1)) { }",
-    // Refinement with two optional parameters (assign by key)
-    "component ValidCompR28 refines a.b.G (p1 = java.lang.String.String(), p2 = 1) { }",
-    // Refinement with two optional parameters (assign by key, with boxed value for primitive parameter type)
-    "component ValidCompR29 refines a.b.G (p1 = java.lang.String.String(), p2 = java.lang.Integer.Integer(1)) { }",
-    // Refinement with two optional parameters (assign by key, in changed order, with boxed value for primitive parameter type)
-    "component ValidCompR30 refines a.b.G (p2 = java.lang.Integer.Integer(1), p1 = java.lang.String.String()) { }",
-    // Refinement with two optional parameters (1. assign value, 2. assign by key)
-    "component ValidCompR31 refines a.b.G (java.lang.String.String(), p2 = 1) { }",
-    // Refinement with two optional parameters (1. assign value, 2. assign by key and with boxed value)
-    "component ValidCompR32 refines a.b.G (java.lang.String.String(), p2 = java.lang.Integer.Integer(1)) { }",
-    // Refinement with two optional parameters (1. assign by key, omit 2nd)
-    "component ValidCompR33 refines a.b.G (p1 = java.lang.String.String()) { }",
-    // Refinement with two optional parameters (omit first, assign 2nd)
-    "component ValidCompR34 refines a.b.G (p2 = 1) { }",
-    // Refinement with two optional parameters (omit first, assign 2nd with boxed value)
-    "component ValidCompR35 refines a.b.G (p2 = java.lang.Integer.Integer(1)) { }",
-    // Refinement with three mandatory parameters
-    "component ValidCompR36 refines a.b.H (1, 2, 3) { }",
-    // Refinement with three mandatory and three optional parameters. Assign first three params by position
-    "component ValidCompR37 refines a.b.I (1, 2, 3) { }",
-    // Refinement with three mandatory and three optional parameters. Assign first four params by position
-    "component ValidCompR38 refines a.b.I (1, 2, 3, 4) { }",
-    // Refinement with three mandatory and three optional parameters. Assign first five params by position
-    "component ValidCompR39 refines a.b.I (1, 2, 3, 4, 5) { }",
-    // Refinement with three mandatory and three optional parameters. Assign all params by position
-    "component ValidCompR40 refines a.b.I (1, 2, 3, 4, 5, 6) { }",
-    // Refinement with three mandatory and three optional parameters. Assign first five params by position, last by key
-    "component ValidCompR41 refines a.b.I (1, 2, 3, 4, 5, p6 = 6) { }",
-    // Refinement with three mandatory and three optional parameters. Assign first 4 params by position, last two by key
-    "component ValidCompR42 refines a.b.I (1, 2, 3, 4, p5 = 5, p6 = 6) { }",
-    // Refinement with three mandatory and three optional parameters. Assign all params by key
-    "component ValidCompR43 refines a.b.I (p1 = 1, p2 = 2, p3 = 3, p4 = 4, p5 = 5, p6 = 6) { }",
-    // Refinement with three mandatory and three optional parameters. Assign all params by key in changed order
-    "component ValidCompR44 refines a.b.I (p6 = 1, p5 = 2, p4 = 3, p3 = 4, p2 = 5, p1 = 6) { }",
-    // Refinement with three optional parameters (omit args)
-    "component ValidCompR45 refines a.b.J { }",
-    // Refinement with three optional parameters. Assign first arg
-    "component ValidCompR46 refines a.b.J (1) { }",
-    // Refinement with three optional parameters. Assign first two args
-    "component ValidCompR47 refines a.b.J (1, 2) { }",
-    // Refinement with three optional parameters. Assign all args
-    "component ValidCompR48 refines a.b.J (1, 2, 3) { }",
-    // Refinement with three optional parameters. Assign first two args by value, last by key
-    "component ValidCompR49 refines a.b.J (1, 2, p3 = 3) { }",
-    // Refinement with three optional parameters. Assign first arg by value, last two by key
-    "component ValidCompR50 refines a.b.J (1, p2 = 2, p3 = 3) { }",
-    // Refinement with three optional parameters. Assign all args by key
-    "component ValidCompR51 refines a.b.J (p1 = 1, p2 = 2, p3 = 3) { }",
-    // Refinement with three optional parameters. Assign all args by key in changed order
-    "component ValidCompR52 refines a.b.J (p3 = 1, p2 = 2, p1 = 3) { }",
-    // Refinement with optional list parameter (omit arg)
-    "component ValidCompR53 refines a.b.L { }",
-    // Refinement with one mandatory generic parameter (bind type, assign primitive value)
-    "component ValidCompR54 refines a.b.M<java.lang.Integer>(1) { }",
-    // Refinement with one mandatory generic parameter (bind type, assign boxed value)
-    "component ValidCompR55 refines a.b.M<java.lang.Integer>(java.lang.Integer.Integer(1)) { }",
-    // Refinement with one mandatory generic parameter (bind type, assign value)
-    "component ValidCompR56 refines a.b.M<int>(1) { }",
-    // Refinement with one mandatory generic parameter (bind type, pass parameter)
-    "component ValidCompR57(int p) refines a.b.M<int>(p) { }",
-    // Refinement with one mandatory generic parameter (pass type, pass parameter)
-    "component ValidCompR58<T>(T p) refines a.b.M<T>(p) { }",
-    // Refinement with one mandatory generic parameter (bind type, assign value via key)
-    "component ValidCompR59 refines a.b.M<int>(p = 1) { }",
-    // Refinement with one mandatory generic parameter (bind type, pass parameter via key, different name)
-    "component ValidCompR60(int q) refines a.b.M<int>(p = q) { }",
-    // Refinement with one mandatory generic parameter (bind type, pass parameter via key, same name)
-    "component ValidCompR61(int p) refines a.b.M<int>(p = p) { }",
-    // Refinement with one mandatory generic parameter (pass parameter via key, different name, same type name)
-    "component ValidCompR62<T>(T q) refines a.b.M<T>(p = q) { }",
-    // Refinement with one mandatory generic parameter (pass parameter via key, same name, same type name)
-    "component ValidCompR63<T>(T p) refines a.b.M<T>(p = p) { }",
-    // Refinement with one mandatory generic parameter (pass parameter via key, different name, different type name)
-    "component ValidCompR64<S>(S q) refines a.b.M<S>(p = q) { }",
-    // Refinement with one mandatory generic parameter (pass parameter via key, same name, different type name)
-    "component ValidCompR65<S>(S p) refines a.b.M<S>(p = p) { }",
-    // Refinement with two mandatory generic parameters (bind type, assign values)
-    "component ValidCompR66 refines a.b.O<int, boolean>(1, false) { }",
-    // Refinement with two mandatory generic parameters (bind type, pass parameters)
-    "component ValidCompR67(int p1, boolean p2) refines a.b.O<int, boolean>(p1, p2) { }",
-    // Refinement with two mandatory generic parameters (pass type, pass parameters)
-    "component ValidCompR68<U, V>(U p1, V p2) refines a.b.O<U, V>(p1, p2) { }",
-    // Refinement with one mandatory generic parameter (bind type, assign value via key) and with two mandatory generic parameters (pass type, pass parameters)
-    "component ValidCompR69<U, V>(U p1, V p2) refines a.b.M<int>(p = 1), a.b.O<U, V>(p1, p2) { }",
-    // Refinement with one mandatory and one optional parameter (default value)
-    "component ValidCompR70 refines a.b.R(1) { }",
-    // Refinement with one mandatory and one optional parameter (assign values)
-    "component ValidCompR71 refines a.b.R(1, false) { }",
-    // Refinement with one mandatory and one optional parameter (pass parameter, default value)
-    "component ValidCompR72(int p) refines a.b.R(p) { }",
-    // Refinement with one mandatory and one optional parameter (pass parameters)
-    "component ValidCompR73(int p1, boolean p2) refines a.b.R(p1, p2) { }",
-    // Refinement with one mandatory and one optional parameter (assign values via key in order)
-    "component ValidCompR74 refines a.b.R(p1 = 1, p2 = false) { }",
-    // Refinement with one mandatory and one optional parameter (assign values via key reverse order)
-    "component ValidCompR75 refines a.b.R(p2 = false, p1 = 1) { }",
-    // Refinement with one mandatory and one optional parameter (pass parameters via key, default value)
-    "component ValidCompR76(int p) refines a.b.R(p1 = p) { }",
-    // Refinement with one mandatory and one optional parameter (pass parameters via key in order)
-    "component ValidCompR77(int p1, boolean p2) refines a.b.R(p1 = p1, p2 = p2) { }",
-    // Refinement with one mandatory and one optional parameter (pass parameters via key reverse order)
-    "component ValidCompR78(int p1, boolean p2) refines a.b.R(p2 = p2, p1 = p1) { }",
-    // Refinement with two optional parameters (default values)
-    "component ValidCompR79 refines a.b.Q { }",
-    // Refinement with two optional parameters (assign single value)
-    "component ValidCompR80 refines a.b.Q(1) { }",
-    // Refinement with two optional parameters (assign values)
-    "component ValidCompR81 refines a.b.Q(1, false) { }",
-    // Refinement with two optional parameters (pass single parameter)
-    "component ValidCompR82(int p) refines a.b.Q(p) { }",
-    // Refinement with two optional parameters (pass parameters)
-    "component ValidCompR83(int p1, boolean p2) refines a.b.Q(p1, p2) { }",
-    // Refinement with two optional parameters (assign first value via key)
-    "component ValidCompR84 refines a.b.Q(p1 = 1) { }",
-    // Refinement with two optional parameters (assign second value via key)
-    "component ValidCompR85 refines a.b.Q(p2 = false) { }",
-    // Refinement with two optional parameters (assign values via key in order)
-    "component ValidCompR86 refines a.b.Q(p1 = 1, p2 = false) { }",
-    // Refinement with two optional parameters (assign values via key reverse order)
-    "component ValidCompR87 refines a.b.Q(p2 = false, p1 = 1) { }",
-    // Refinement with two optional parameters (pass first parameter via key)
-    "component ValidCompR88(int p) refines a.b.Q(p1 = p) { }",
-    // Refinement with two optional parameters (pass second parameter via key)
-    "component ValidCompR89(boolean p) refines a.b.Q(p2 = p) { }",
-    // Refinement with two optional parameters (pass parameters via key in order)
-    "component ValidCompR90(int p1, boolean p2) refines a.b.Q(p1 = p1, p2 = p2) { }",
-    // Refinement with two optional parameters (pass parameters via key reverse order)
-    "component ValidCompR91(int p1, boolean p2) refines a.b.Q(p2 = p2, p1 = p1) { }",
-    // Refinement with two mandatory parameters (assign values)
-    "component ValidCompR92 refines a.b.P(1, false) { }",
-    // Refinement with two mandatory parameters (pass parameters)
-    "component ValidCompR93(int p1, boolean p2) refines a.b.P(p1, p2) { }",
-    // Refinement with two mandatory parameters (assign values via key in order)
-    "component ValidCompR94 refines a.b.P(p1 = 1, p2 = false) { }",
-    // Refinement with two mandatory parameters (assign values via key reverse order)
-    "component ValidCompR95 refines a.b.P(p2 = false, p1 = 1) { }",
-    // Refinement with two mandatory parameters (pass parameters via key in order)
-    "component ValidCompR96(int p1, boolean p2) refines a.b.P(p1 = p1, p2 = p2) { }",
-    // Refinement with two mandatory parameters (pass parameters via key reverse order)
-    "component ValidCompR97(int p1, boolean p2) refines a.b.P(p2 = p2, p1 = p1) { }",
-  })
+  @MethodSource("validModels")
   @DisableIfDisplayName(contains = {
     "ValidCompS53"
   })
@@ -519,6 +103,425 @@ class ConfigurationParameterAssignmentTest extends MontiArcTestBase {
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+  }
+
+  protected static Stream<Arguments> validModels() {
+    return Stream.of(
+      // Component without subcomponents, inheritance, or refinement
+      arg("component ValidCompS01 {  }"),
+      // Subcomponent without arguments
+      arg("component ValidCompS02 { a.b.A a; }"),
+      // Multiple subcomponents without arguments
+      arg("component ValidCompS03 { a.b.A a1, a2; }"),
+      // Subcomponent with one mandatory parameter (assign value)
+      arg("component ValidCompS04 { a.b.B b(1); }"),
+      // Multiple subcomponents with one mandatory parameter each (assign value)
+      arg("component ValidCompS05 { a.b.B b1(1), b2(1); }"),
+      // Subcomponent with one mandatory parameter (assign boxed value)
+      arg("component ValidCompS06 { a.b.B b(java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with one mandatory String parameter (assign constructor-call value)
+      arg("component ValidCompS07 { a.b.C c(java.lang.String.String()); }"),
+      // Subcomponent with two mandatory parameters (assign values)
+      arg("component ValidCompS08 { a.b.D d(1, 2); }"),
+      // Subcomponent with one optional parameter (default value)
+      arg("component ValidCompS09 { a.b.E e; }"),
+      // Subcomponent with one optional parameter (assign value)
+      arg("component ValidCompS10 { a.b.E e(1); }"),
+      // Subcomponent with one optional parameter (assign boxed value)
+      arg("component ValidCompS11 { a.b.E e(java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with one optional parameter (assign value via key)
+      arg("component ValidCompS12 { a.b.E e(p = 1); }"),
+      // Subcomponent with one optional parameter (assign boxed value via key)
+      arg("component ValidCompS13 { a.b.E e(p = java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with one optional String parameter (default value)
+      arg("component ValidCompS14 { a.b.F f; }"),
+      // Subcomponent with one optional String parameter (assign value)
+      arg("component ValidCompS15 { a.b.F f(java.lang.String.String()); }"),
+      // Subcomponent with one optional String parameter (assign value via key)
+      arg("component ValidCompS16 { a.b.F f(p = java.lang.String.String()); }"),
+      // Subcomponent with two optional parameters (default values)
+      arg("component ValidCompS17 { a.b.G g; }"),
+      // Subcomponent with two optional parameters (assign first value, second default)
+      arg("component ValidCompS18 { a.b.G g(java.lang.String.String()); }"),
+      // Subcomponent with two optional parameters (assign values)
+      arg("component ValidCompS19 { a.b.G g(java.lang.String.String(), 1); }"),
+      // Subcomponent with two optional parameters (assign values, second boxed)
+      arg("component ValidCompS20 { a.b.G g(java.lang.String.String(), java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with two optional parameters (assign values via key in order)
+      arg("component ValidCompS21 { a.b.G g(p1 = java.lang.String.String(), p2 = 1); }"),
+      // Subcomponent with two optional parameters (assign values via key in order, second boxed)
+      arg("component ValidCompS22 { a.b.G g(p1 = java.lang.String.String(), p2 = java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with two optional parameters (assign values via key in reverse order, second boxed)
+      arg("component ValidCompS23 { a.b.G g(p2 = java.lang.Integer.Integer(1), p1 = java.lang.String.String()); }"),
+      // Subcomponent with two optional parameters (assign first by value, second by key)
+      arg("component ValidCompS24 { a.b.G g(java.lang.String.String(), p2 = 1); }"),
+      // Subcomponent with two optional parameters (assign first by value, second by key, boxed)
+      arg("component ValidCompS25 { a.b.G g(java.lang.String.String(), p2 = java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with two optional parameters (assign first value via key, omit second)
+      arg("component ValidCompS26 { a.b.G g(p1 = java.lang.String.String()); }"),
+      // Subcomponent with two optional parameters (omit first, assign second value via key)
+      arg("component ValidCompS27 { a.b.G g(p2 = 1); }"),
+      // Subcomponent with two optional parameters (omit first, assign second boxed value via key)
+      arg("component ValidCompS28 { a.b.G g(p2 = java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with three mandatory parameters (assign values)
+      arg("component ValidCompS29 { a.b.H h(1, 2, 3); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign first three by position)
+      arg("component ValidCompS30 { a.b.I i(1, 2, 3); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign first four by position)
+      arg("component ValidCompS31 { a.b.I i(1, 2, 3, 4); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign first five by position)
+      arg("component ValidCompS32 { a.b.I i(1, 2, 3, 4, 5); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign all six by position)
+      arg("component ValidCompS33 { a.b.I i(1, 2, 3, 4, 5, 6); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign first five by position, last by key)
+      arg("component ValidCompS34 { a.b.I i(1, 2, 3, 4, 5, p6 = 6); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign first four by position, last two by key)
+      arg("component ValidCompS35 { a.b.I i(1, 2, 3, 4, p5 = 5, p6 = 6); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign all by key in order)
+      arg("component ValidCompS36 { a.b.I i(p1 = 1, p2 = 2, p3 = 3, p4 = 4, p5 = 5, p6 = 6); }"),
+      // Subcomponent with three mandatory and three optional parameters (assign all by key in reverse order)
+      arg("component ValidCompS37 { a.b.I i(p6 = 1, p5 = 2, p4 = 3, p3 = 4, p2 = 5, p1 = 6); }"),
+      // Subcomponent with three optional parameters (default values)
+      arg("component ValidCompS38 { a.b.J j; }"),
+      // Subcomponent with three optional parameters (assign first)
+      arg("component ValidCompS39 { a.b.J j(1); }"),
+      // Subcomponent with three optional parameters (assign first two)
+      arg("component ValidCompS40 { a.b.J j(1, 2); }"),
+      // Subcomponent with three optional parameters (assign all by position)
+      arg("component ValidCompS41 { a.b.J j(1, 2, 3); }"),
+      // Subcomponent with three optional parameters (assign first two by position, last by key)
+      arg("component ValidCompS42 { a.b.J j(1, 2, p3 = 3); }"),
+      // Subcomponent with three optional parameters (assign first by position, last two by key)
+      arg("component ValidCompS43 { a.b.J j(1, p2 = 2, p3 = 3); }"),
+      // Subcomponent with three optional parameters (assign all by key in order)
+      arg("component ValidCompS44 { a.b.J j(p1 = 1, p2 = 2, p3 = 3); }"),
+      // Subcomponent with three optional parameters (assign all by key in reverse order)
+      arg("component ValidCompS45 { a.b.J j(p3 = 1, p2 = 2, p1 = 3); }"),
+      // Subcomponent with one mandatory generic-collection parameter (assign value)
+      arg("component ValidCompS46 { a.b.K k(java.util.Arrays.asList(1)); }"),
+      // Subcomponent with one optional generic-collection parameter (default value)
+      arg("component ValidCompS47 { a.b.L l; }"),
+      // Subcomponent with one optional generic-collection parameter (assign value)
+      arg("component ValidCompS48 { a.b.L l(java.util.Arrays.asList(1)); }"),
+      // Subcomponent with one optional generic-collection parameter (assign value via key)
+      arg("component ValidCompS49 { a.b.L l(p = java.util.Arrays.asList(1)); }"),
+      // Subcomponent with one mandatory generic parameter (bind type, assign value)
+      arg("component ValidCompS50 { a.b.M<java.lang.Integer> m(1); }"),
+      // Subcomponent with one mandatory generic parameter (bind type, assign boxed value)
+      arg("component ValidCompS51 { a.b.M<java.lang.Integer> m(java.lang.Integer.Integer(1)); }"),
+      // Subcomponent with one mandatory generic-list parameter (bind type, assign value)
+      arg("component ValidCompS52 { a.b.N<java.lang.Integer> m(java.util.Arrays.asList(1)); }"),
+      // Subcomponent with one mandatory generic-list parameter (bind type, assign empty list)
+      arg("component ValidCompS53 { a.b.N<java.lang.Integer> m(java.util.Collections.emptyList()); }"),
+      // Inheritance without parameters
+      arg("component ValidCompI01 extends a.b.A { }"),
+      // Inheritance adding a parameter
+      arg("component ValidCompI02(int p) extends a.b.A { }"),
+      // Inheritance with one mandatory parameter (assign value)
+      arg("component ValidCompI03 extends a.b.B(1) { }"),
+      // Inheritance with one mandatory parameter (pass parameter, different names)
+      arg("component ValidCompI04(int q) extends a.b.B(q) { }"),
+      // Inheritance with one mandatory parameter (pass parameter, same name)
+      arg("component ValidCompI05(int p) extends a.b.B(p) { }"),
+      // Inheritance with one mandatory parameter (assign value via key)
+      arg("component ValidCompI06 extends a.b.B(p = 1) { }"),
+      // Inheritance with one mandatory parameter (pass parameter via key, different name)
+      arg("component ValidCompI07(int q) extends a.b.B(p = q) { }"),
+      // Inheritance with one mandatory parameter (pass parameter via key, same name)
+      arg("component ValidCompI08(int p) extends a.b.B(p = p) { }"),
+      // Inheritance with one optional parameter (default value)
+      arg("component ValidCompI09 extends a.b.E { }"),
+      // Inheritance with one optional parameter (assign value)
+      arg("component ValidCompI10 extends a.b.E(1) { }"),
+      // Inheritance with one optional parameter (pass parameter, different name)
+      arg("component ValidCompI11(int q) extends a.b.E(q) { }"),
+      // Inheritance with one optional parameter (pass parameter, same name)
+      arg("component ValidCompI12(int p) extends a.b.E(p) { }"),
+      // Inheritance with one optional parameter (assign value via key)
+      arg("component ValidCompI13 extends a.b.E(p = 1) { }"),
+      // Inheritance with one optional parameter (pass parameter via key, different name)
+      arg("component ValidCompI14(int q) extends a.b.E(p = q) { }"),
+      // Inheritance with one optional parameter (pass parameter via key, same name)
+      arg("component ValidCompI15(int p) extends a.b.E(p = p) { }"),
+      // Inheritance with one mandatory and one optional parameter (default value)
+      arg("component ValidCompI16 extends a.b.R(1) { }"),
+      // Inheritance with one mandatory and one optional parameter (assign values)
+      arg("component ValidCompI17 extends a.b.R(1, false) { }"),
+      // Inheritance with one mandatory and one optional parameter (pass parameter, default value)
+      arg("component ValidCompI18(int p) extends a.b.R(p) { }"),
+      // Inheritance with one mandatory and one optional parameter (pass parameters)
+      arg("component ValidCompI19(int p1, boolean p2) extends a.b.R(p1, p2) { }"),
+      // Inheritance with one mandatory and one optional parameter (assign values via key in order)
+      arg("component ValidCompI20 extends a.b.R(p1 = 1, p2 = false) { }"),
+      // Inheritance with one mandatory and one optional parameter (assign values via key reverse order)
+      arg("component ValidCompI21 extends a.b.R(p2 = false, p1 = 1) { }"),
+      // Inheritance with one mandatory and one optional parameter (pass parameters via key, default value)
+      arg("component ValidCompI22(int p) extends a.b.R(p1 = p) { }"),
+      // Inheritance with one mandatory and one optional parameter (pass parameters via key in order)
+      arg("component ValidCompI23(int p1, boolean p2) extends a.b.R(p1 = p1, p2 = p2) { }"),
+      // Inheritance with one mandatory and one optional parameter (pass parameters via key reverse order)
+      arg("component ValidCompI24(int p1, boolean p2) extends a.b.R(p2 = p2, p1 = p1) { }"),
+      // Inheritance with two optional parameters (default values)
+      arg("component ValidCompI25 extends a.b.Q { }"),
+      // Inheritance with two optional parameters (assign single value)
+      arg("component ValidCompI26 extends a.b.Q(1) { }"),
+      // Inheritance with two optional parameters (assign values)
+      arg("component ValidCompI27 extends a.b.Q(1, false) { }"),
+      // Inheritance with two optional parameters (pass single parameter)
+      arg("component ValidCompI28(int p) extends a.b.Q(p) { }"),
+      // Inheritance with two optional parameters (pass parameters)
+      arg("component ValidCompI29(int p1, boolean p2) extends a.b.Q(p1, p2) { }"),
+      // Inheritance with two optional parameters (assign first value via key)
+      arg("component ValidCompI30 extends a.b.Q(p1 = 1) { }"),
+      // Inheritance with two optional parameters (assign second value via key)
+      arg("component ValidCompI31 extends a.b.Q(p2 = false) { }"),
+      // Inheritance with two optional parameters (assign values via key in order)
+      arg("component ValidCompI32 extends a.b.Q(p1 = 1, p2 = false) { }"),
+      // Inheritance with two optional parameters (assign values via key reverse order)
+      arg("component ValidCompI33 extends a.b.Q(p2 = false, p1 = 1) { }"),
+      // Inheritance with two optional parameters (pass first parameter via key)
+      arg("component ValidCompI34(int p) extends a.b.Q(p1 = p) { }"),
+      // Inheritance with two optional parameters (pass second parameter via key)
+      arg("component ValidCompI35(boolean p) extends a.b.Q(p2 = p) { }"),
+      // Inheritance with two optional parameters (pass parameters via key in order)
+      arg("component ValidCompI36(int p1, boolean p2) extends a.b.Q(p1 = p1, p2 = p2) { }"),
+      // Inheritance with two optional parameters (pass parameters via key reverse order)
+      arg("component ValidCompI37(int p1, boolean p2) extends a.b.Q(p2 = p2, p1 = p1) { }"),
+      // Inheritance with two mandatory parameters (assign values)
+      arg("component ValidCompI38 extends a.b.P(1, false) { }"),
+      // Inheritance with two mandatory parameters (pass parameters)
+      arg("component ValidCompI39(int p1, boolean p2) extends a.b.P(p1, p2) { }"),
+      // Inheritance with two mandatory parameters (assign values via key in order)
+      arg("component ValidCompI40 extends a.b.P(p1 = 1, p2 = false) { }"),
+      // Inheritance with two mandatory parameters (assign values via key reverse order)
+      arg("component ValidCompI41 extends a.b.P(p2 = false, p1 = 1) { }"),
+      // Inheritance with two mandatory parameters (pass parameters via key in order)
+      arg("component ValidCompI42(int p1, boolean p2) extends a.b.P(p1 = p1, p2 = p2) { }"),
+      // Inheritance with two mandatory parameters (pass parameters via key reverse order)
+      arg("component ValidCompI43(int p1, boolean p2) extends a.b.P(p2 = p2, p1 = p1) { }"),
+      // Inheritance with one mandatory generic parameter (bind type, assign value)
+      arg("component ValidCompI44 extends a.b.M<int>(1) { }"),
+      // Inheritance with one mandatory generic parameter (bind type, pass parameter)
+      arg("component ValidCompI45(int p) extends a.b.M<int>(p) { }"),
+      // Inheritance with one mandatory generic parameter (pass type, pass parameter)
+      arg("component ValidCompI46<T>(T p) extends a.b.M<T>(p) { }"),
+      // Inheritance with one mandatory generic parameter (bind type, assign value via key)
+      arg("component ValidCompI47 extends a.b.M<int>(p = 1) { }"),
+      // Inheritance with one mandatory generic parameter (bind type, pass parameter via key, different name)
+      arg("component ValidCompI48(int q) extends a.b.M<int>(p = q) { }"),
+      // Inheritance with one mandatory generic parameter (bind type, pass parameter via key, same name)
+      arg("component ValidCompI49(int p) extends a.b.M<int>(p = p) { }"),
+      // Inheritance with one mandatory generic parameter (pass parameter via key, different name, same type name)
+      arg("component ValidCompI50<T>(T q) extends a.b.M<T>(p = q) { }"),
+      // Inheritance with one mandatory generic parameter (pass parameter via key, same name, same type name)
+      arg("component ValidCompI51<T>(T p) extends a.b.M<T>(p = p) { }"),
+      // Inheritance with one mandatory generic parameter (pass parameter via key, different name, different type name)
+      arg("component ValidCompI52<S>(S q) extends a.b.M<S>(p = q) { }"),
+      // Inheritance with one mandatory generic parameter (pass parameter via key, same name, different type name)
+      arg("component ValidCompI53<S>(S p) extends a.b.M<S>(p = p) { }"),
+      // Inheritance with two mandatory generic parameters (bind type, assign values)
+      arg("component ValidCompI54 extends a.b.O<int, boolean>(1, false) { }"),
+      // Inheritance with two mandatory generic parameters (bind type, pass parameters)
+      arg("component ValidCompI55(int p1, boolean p2) extends a.b.O<int, boolean>(p1, p2) { }"),
+      // Inheritance with two mandatory generic parameters (pass type, pass parameters)
+      arg("component ValidCompI56<U, V>(U p1, V p2) extends a.b.O<U, V>(p1, p2) { }"),
+      // Inheritance with one mandatory generic parameter (bind type, assign value via key) and with two mandatory generic parameters (pass type, pass parameters)
+      arg("component ValidCompI57<U, V>(U p1, V p2) extends a.b.M<int>(p = 1), a.b.O<U, V>(p1, p2) { }"),
+      // Refinement without parameters
+      arg("component ValidCompR01 refines a.b.A  { }"),
+      // Multi-Refinement without parameters
+      arg("component ValidCompR02 refines a.b.A, a.b.A { }"),
+      // Refinement with one mandatory parameter (assign value)
+      arg("component ValidCompR03 refines a.b.B (1) { }"),
+      // Refinement with a boxed version of the parameter's primitive type
+      arg("component ValidCompR04 refines a.b.B (java.lang.Integer.Integer(1)) { }"),
+      // Refinement with one mandatory parameter (pass parameter, different name)
+      arg("component ValidCompR05(int q) refines a.b.B(q) { }"),
+      // Refinement with one mandatory parameter (pass parameter, same name)
+      arg("component ValidCompR06(int p) refines a.b.B(p) { }"),
+      // Refinement with one mandatory parameter (assign value via key)
+      arg("component ValidCompR07 refines a.b.B(p = 1) { }"),
+      // Refinement with one mandatory parameter (pass parameter via key, different name)
+      arg("component ValidCompR08(int q) refines a.b.B(p = q) { }"),
+      // Refinement with one mandatory parameter (pass parameter via key, same name)
+      arg("component ValidCompR09(int p) refines a.b.B(p = p) { }"),
+      // Refinement with a constructor call as the argument
+      arg("component ValidCompR10 refines a.b.C (java.lang.String.String()) { }"),
+      // Assigning both mandatory params
+      arg("component ValidCompR11 refines a.b.D (1, 2) { }"),
+      // Refinement with one optional parameter (default value)
+      arg("component ValidCompR12 refines a.b.E { }"),
+      // Refinement with one optional parameter (assign value)
+      arg("component ValidCompR13 refines a.b.E (1) { }"),
+      // Refinement with a boxed version of the parameter's primitive type
+      arg("component ValidCompR14 refines a.b.E (java.lang.Integer.Integer(1)) { }"),
+      // Refinement with one optional parameter (assign value via key)
+      arg("component ValidCompR15 refines a.b.E (p = 1) { }"),
+      // Refinement with a boxed version of the parameter's primitive type, assigned by key
+      arg("component ValidCompR16 refines a.b.E (p = java.lang.Integer.Integer(1)) { }"),
+      // Refinement with one optional parameter (pass parameter, different name)
+      arg("component ValidCompR17(int q) refines a.b.E(q) { }"),
+      // Refinement with one optional parameter (pass parameter, same name)
+      arg("component ValidCompR18(int p) refines a.b.E(p) { }"),
+      // Refinement with one optional parameter (pass parameter via key, different name)
+      arg("component ValidCompR19(int q) refines a.b.E(p = q) { }"),
+      // Refinement with one optional parameter (pass parameter via key, same name)
+      arg("component ValidCompR20(int p) refines a.b.E(p = p) { }"),
+      // Refinement with one optional parameter (default value)
+      arg("component ValidCompR21 refines a.b.F { }"),
+      // Refinement with one optional parameter (assign value with constructor call)
+      arg("component ValidCompR22 refines a.b.F (java.lang.String.String()) { }"),
+      // Refinement with one optional parameter (assign value by key with constructor call)
+      arg("component ValidCompR23 refines a.b.F (p = java.lang.String.String()) { }"),
+      // Refinement with two optional parameters (default values)
+      arg("component ValidCompR24 refines a.b.G { }"),
+      // Refinement with two optional parameters (1. assign value, 2. default value)
+      arg("component ValidCompR25 refines a.b.G (java.lang.String.String()) { }"),
+      // Refinement with two optional parameters (assigned values)
+      arg("component ValidCompR26 refines a.b.G (java.lang.String.String(), 1) { }"),
+      // Refinement with two optional parameters (assigned values, with boxed value for primitive parameter type)
+      arg("component ValidCompR27 refines a.b.G (java.lang.String.String(), java.lang.Integer.Integer(1)) { }"),
+      // Refinement with two optional parameters (assign by key)
+      arg("component ValidCompR28 refines a.b.G (p1 = java.lang.String.String(), p2 = 1) { }"),
+      // Refinement with two optional parameters (assign by key, with boxed value for primitive parameter type)
+      arg("component ValidCompR29 refines a.b.G (p1 = java.lang.String.String(), p2 = java.lang.Integer.Integer(1)) { }"),
+      // Refinement with two optional parameters (assign by key, in changed order, with boxed value for primitive parameter type)
+      arg("component ValidCompR30 refines a.b.G (p2 = java.lang.Integer.Integer(1), p1 = java.lang.String.String()) { }"),
+      // Refinement with two optional parameters (1. assign value, 2. assign by key)
+      arg("component ValidCompR31 refines a.b.G (java.lang.String.String(), p2 = 1) { }"),
+      // Refinement with two optional parameters (1. assign value, 2. assign by key and with boxed value)
+      arg("component ValidCompR32 refines a.b.G (java.lang.String.String(), p2 = java.lang.Integer.Integer(1)) { }"),
+      // Refinement with two optional parameters (1. assign by key, omit 2nd)
+      arg("component ValidCompR33 refines a.b.G (p1 = java.lang.String.String()) { }"),
+      // Refinement with two optional parameters (omit first, assign 2nd)
+      arg("component ValidCompR34 refines a.b.G (p2 = 1) { }"),
+      // Refinement with two optional parameters (omit first, assign 2nd with boxed value)
+      arg("component ValidCompR35 refines a.b.G (p2 = java.lang.Integer.Integer(1)) { }"),
+      // Refinement with three mandatory parameters
+      arg("component ValidCompR36 refines a.b.H (1, 2, 3) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign first three params by position
+      arg("component ValidCompR37 refines a.b.I (1, 2, 3) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign first four params by position
+      arg("component ValidCompR38 refines a.b.I (1, 2, 3, 4) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign first five params by position
+      arg("component ValidCompR39 refines a.b.I (1, 2, 3, 4, 5) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign all params by position
+      arg("component ValidCompR40 refines a.b.I (1, 2, 3, 4, 5, 6) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign first five params by position, last by key
+      arg("component ValidCompR41 refines a.b.I (1, 2, 3, 4, 5, p6 = 6) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign first 4 params by position, last two by key
+      arg("component ValidCompR42 refines a.b.I (1, 2, 3, 4, p5 = 5, p6 = 6) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign all params by key
+      arg("component ValidCompR43 refines a.b.I (p1 = 1, p2 = 2, p3 = 3, p4 = 4, p5 = 5, p6 = 6) { }"),
+      // Refinement with three mandatory and three optional parameters. Assign all params by key in changed order
+      arg("component ValidCompR44 refines a.b.I (p6 = 1, p5 = 2, p4 = 3, p3 = 4, p2 = 5, p1 = 6) { }"),
+      // Refinement with three optional parameters (omit args)
+      arg("component ValidCompR45 refines a.b.J { }"),
+      // Refinement with three optional parameters. Assign first arg
+      arg("component ValidCompR46 refines a.b.J (1) { }"),
+      // Refinement with three optional parameters. Assign first two args
+      arg("component ValidCompR47 refines a.b.J (1, 2) { }"),
+      // Refinement with three optional parameters. Assign all args
+      arg("component ValidCompR48 refines a.b.J (1, 2, 3) { }"),
+      // Refinement with three optional parameters. Assign first two args by value, last by key
+      arg("component ValidCompR49 refines a.b.J (1, 2, p3 = 3) { }"),
+      // Refinement with three optional parameters. Assign first arg by value, last two by key
+      arg("component ValidCompR50 refines a.b.J (1, p2 = 2, p3 = 3) { }"),
+      // Refinement with three optional parameters. Assign all args by key
+      arg("component ValidCompR51 refines a.b.J (p1 = 1, p2 = 2, p3 = 3) { }"),
+      // Refinement with three optional parameters. Assign all args by key in changed order
+      arg("component ValidCompR52 refines a.b.J (p3 = 1, p2 = 2, p1 = 3) { }"),
+      // Refinement with optional list parameter (omit arg)
+      arg("component ValidCompR53 refines a.b.L { }"),
+      // Refinement with one mandatory generic parameter (bind type, assign primitive value)
+      arg("component ValidCompR54 refines a.b.M<java.lang.Integer>(1) { }"),
+      // Refinement with one mandatory generic parameter (bind type, assign boxed value)
+      arg("component ValidCompR55 refines a.b.M<java.lang.Integer>(java.lang.Integer.Integer(1)) { }"),
+      // Refinement with one mandatory generic parameter (bind type, assign value)
+      arg("component ValidCompR56 refines a.b.M<int>(1) { }"),
+      // Refinement with one mandatory generic parameter (bind type, pass parameter)
+      arg("component ValidCompR57(int p) refines a.b.M<int>(p) { }"),
+      // Refinement with one mandatory generic parameter (pass type, pass parameter)
+      arg("component ValidCompR58<T>(T p) refines a.b.M<T>(p) { }"),
+      // Refinement with one mandatory generic parameter (bind type, assign value via key)
+      arg("component ValidCompR59 refines a.b.M<int>(p = 1) { }"),
+      // Refinement with one mandatory generic parameter (bind type, pass parameter via key, different name)
+      arg("component ValidCompR60(int q) refines a.b.M<int>(p = q) { }"),
+      // Refinement with one mandatory generic parameter (bind type, pass parameter via key, same name)
+      arg("component ValidCompR61(int p) refines a.b.M<int>(p = p) { }"),
+      // Refinement with one mandatory generic parameter (pass parameter via key, different name, same type name)
+      arg("component ValidCompR62<T>(T q) refines a.b.M<T>(p = q) { }"),
+      // Refinement with one mandatory generic parameter (pass parameter via key, same name, same type name)
+      arg("component ValidCompR63<T>(T p) refines a.b.M<T>(p = p) { }"),
+      // Refinement with one mandatory generic parameter (pass parameter via key, different name, different type name)
+      arg("component ValidCompR64<S>(S q) refines a.b.M<S>(p = q) { }"),
+      // Refinement with one mandatory generic parameter (pass parameter via key, same name, different type name)
+      arg("component ValidCompR65<S>(S p) refines a.b.M<S>(p = p) { }"),
+      // Refinement with two mandatory generic parameters (bind type, assign values)
+      arg("component ValidCompR66 refines a.b.O<int, boolean>(1, false) { }"),
+      // Refinement with two mandatory generic parameters (bind type, pass parameters)
+      arg("component ValidCompR67(int p1, boolean p2) refines a.b.O<int, boolean>(p1, p2) { }"),
+      // Refinement with two mandatory generic parameters (pass type, pass parameters)
+      arg("component ValidCompR68<U, V>(U p1, V p2) refines a.b.O<U, V>(p1, p2) { }"),
+      // Refinement with one mandatory generic parameter (bind type, assign value via key) and with two mandatory generic parameters (pass type, pass parameters)
+      arg("component ValidCompR69<U, V>(U p1, V p2) refines a.b.M<int>(p = 1), a.b.O<U, V>(p1, p2) { }"),
+      // Refinement with one mandatory and one optional parameter (default value)
+      arg("component ValidCompR70 refines a.b.R(1) { }"),
+      // Refinement with one mandatory and one optional parameter (assign values)
+      arg("component ValidCompR71 refines a.b.R(1, false) { }"),
+      // Refinement with one mandatory and one optional parameter (pass parameter, default value)
+      arg("component ValidCompR72(int p) refines a.b.R(p) { }"),
+      // Refinement with one mandatory and one optional parameter (pass parameters)
+      arg("component ValidCompR73(int p1, boolean p2) refines a.b.R(p1, p2) { }"),
+      // Refinement with one mandatory and one optional parameter (assign values via key in order)
+      arg("component ValidCompR74 refines a.b.R(p1 = 1, p2 = false) { }"),
+      // Refinement with one mandatory and one optional parameter (assign values via key reverse order)
+      arg("component ValidCompR75 refines a.b.R(p2 = false, p1 = 1) { }"),
+      // Refinement with one mandatory and one optional parameter (pass parameters via key, default value)
+      arg("component ValidCompR76(int p) refines a.b.R(p1 = p) { }"),
+      // Refinement with one mandatory and one optional parameter (pass parameters via key in order)
+      arg("component ValidCompR77(int p1, boolean p2) refines a.b.R(p1 = p1, p2 = p2) { }"),
+      // Refinement with one mandatory and one optional parameter (pass parameters via key reverse order)
+      arg("component ValidCompR78(int p1, boolean p2) refines a.b.R(p2 = p2, p1 = p1) { }"),
+      // Refinement with two optional parameters (default values)
+      arg("component ValidCompR79 refines a.b.Q { }"),
+      // Refinement with two optional parameters (assign single value)
+      arg("component ValidCompR80 refines a.b.Q(1) { }"),
+      // Refinement with two optional parameters (assign values)
+      arg("component ValidCompR81 refines a.b.Q(1, false) { }"),
+      // Refinement with two optional parameters (pass single parameter)
+      arg("component ValidCompR82(int p) refines a.b.Q(p) { }"),
+      // Refinement with two optional parameters (pass parameters)
+      arg("component ValidCompR83(int p1, boolean p2) refines a.b.Q(p1, p2) { }"),
+      // Refinement with two optional parameters (assign first value via key)
+      arg("component ValidCompR84 refines a.b.Q(p1 = 1) { }"),
+      // Refinement with two optional parameters (assign second value via key)
+      arg("component ValidCompR85 refines a.b.Q(p2 = false) { }"),
+      // Refinement with two optional parameters (assign values via key in order)
+      arg("component ValidCompR86 refines a.b.Q(p1 = 1, p2 = false) { }"),
+      // Refinement with two optional parameters (assign values via key reverse order)
+      arg("component ValidCompR87 refines a.b.Q(p2 = false, p1 = 1) { }"),
+      // Refinement with two optional parameters (pass first parameter via key)
+      arg("component ValidCompR88(int p) refines a.b.Q(p1 = p) { }"),
+      // Refinement with two optional parameters (pass second parameter via key)
+      arg("component ValidCompR89(boolean p) refines a.b.Q(p2 = p) { }"),
+      // Refinement with two optional parameters (pass parameters via key in order)
+      arg("component ValidCompR90(int p1, boolean p2) refines a.b.Q(p1 = p1, p2 = p2) { }"),
+      // Refinement with two optional parameters (pass parameters via key reverse order)
+      arg("component ValidCompR91(int p1, boolean p2) refines a.b.Q(p2 = p2, p1 = p1) { }"),
+      // Refinement with two mandatory parameters (assign values)
+      arg("component ValidCompR92 refines a.b.P(1, false) { }"),
+      // Refinement with two mandatory parameters (pass parameters)
+      arg("component ValidCompR93(int p1, boolean p2) refines a.b.P(p1, p2) { }"),
+      // Refinement with two mandatory parameters (assign values via key in order)
+      arg("component ValidCompR94 refines a.b.P(p1 = 1, p2 = false) { }"),
+      // Refinement with two mandatory parameters (assign values via key reverse order)
+      arg("component ValidCompR95 refines a.b.P(p2 = false, p1 = 1) { }"),
+      // Refinement with two mandatory parameters (pass parameters via key in order)
+      arg("component ValidCompR96(int p1, boolean p2) refines a.b.P(p1 = p1, p2 = p2) { }"),
+      // Refinement with two mandatory parameters (pass parameters via key reverse order)
+      arg("component ValidCompR97(int p1, boolean p2) refines a.b.P(p2 = p2, p1 = p1) { }")
+    );
   }
 
   protected static Stream<Arguments> invalidModelsSubComponent() {

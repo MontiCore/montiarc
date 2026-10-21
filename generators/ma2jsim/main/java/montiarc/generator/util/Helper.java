@@ -10,7 +10,6 @@ import java.util.stream.Stream;
 public class Helper {
 
   private TypeHelper typeHelper = new TypeHelper();
-  private VariantHelper variantHelper = new VariantHelper();
   private BehaviorHelper behaviorHelper = new BehaviorHelper();
   private ModeHelper modeHelper = new ModeHelper();
   private ComponentHelper componentHelper = new ComponentHelper();
@@ -18,10 +17,6 @@ public class Helper {
 
   public TypeHelper getTypeHelper() {
     return typeHelper;
-  }
-
-  public VariantHelper getVariantHelper() {
-    return variantHelper;
   }
 
   public BehaviorHelper getBehaviorHelper() {

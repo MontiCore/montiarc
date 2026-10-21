@@ -12,9 +12,10 @@
             "kind": "de.monticore.symbols.oosymbols._symboltable.FieldSymbol",
             "name": "v",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
-            }
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
+            },
+            "isPublic": true
           },
           {
             "kind": "de.monticore.symbols.oosymbols._symboltable.MethodSymbol",

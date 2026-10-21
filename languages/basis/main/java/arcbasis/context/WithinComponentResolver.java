@@ -272,6 +272,45 @@ public class WithinComponentResolver {
   }
 
   /**
+   * @return all ports the port access may refer to, i.e., ports of the
+   * component or, for qualified accesses, ports of the subcomponents of that
+   * name, including inherited ones
+   */
+  public List<PortAccessCandidate> resolvePortAccess(@NotNull ComponentTypeSymbol component,
+                                                     @NotNull ASTPortAccess access) {
+    Preconditions.checkNotNull(component);
+    Preconditions.checkNotNull(access);
+    List<PortAccessCandidate> candidates = new ArrayList<>();
+    if (!access.isPresentComponent()) {
+      for (PortSymbol port : this.resolveMany(access.getEnclosingScope(), access.getPort(), PortSymbol.class)) {
+        candidates.add(new PortAccessCandidate(Optional.empty(), port));
+      }
+      return candidates;
+    }
+    for (SubcomponentSymbol subcomponent : this.resolveMany(access.getEnclosingScope(), access.getComponent(), SubcomponentSymbol.class)) {
+      if (!subcomponent.isTypePresent()) continue;
+      for (PortSymbol port : this.resolveMany(subcomponent.getType().getTypeInfo(), access.getPort(), PortSymbol.class)) {
+        candidates.add(new PortAccessCandidate(Optional.of(subcomponent), port));
+      }
+    }
+    return candidates;
+  }
+
+  /**
+   * @return the type of the candidate's port as seen in the component
+   */
+  public Optional<SymTypeExpression> typeOf(@NotNull ComponentTypeSymbol component,
+                                            @NotNull PortAccessCandidate candidate) {
+    Preconditions.checkNotNull(component);
+    Preconditions.checkNotNull(candidate);
+    CompKindExpression self = this.kindOf(component);
+    Optional<CompKindExpression> owner = candidate.subcomponent().isPresent()
+      ? this.kindOf(self, candidate.subcomponent().get())
+      : Optional.of(self);
+    return owner.flatMap(kind -> this.typeOf(kind, candidate.port()));
+  }
+
+  /**
    * @return the type of the accessed port as seen in the component type that
    * encloses the port access, i.e., with the type parameters bound by the
    * component type and, for qualified accesses, by the subcomponent's type;
@@ -450,7 +489,13 @@ public class WithinComponentResolver {
       .toList());
   }
 
-  protected <S extends ISymbol> List<S> getLocalSymbols(@NotNull ComponentTypeSymbol type, @NotNull Class<S> kind) {
+  /**
+   * @return the symbols of the kind declared by the component type itself,
+   * i.e., in its spanned scope, excluding adapters
+   */
+  public <S extends ISymbol> List<S> getLocalSymbols(@NotNull ComponentTypeSymbol type, @NotNull Class<S> kind) {
+    Preconditions.checkNotNull(type);
+    Preconditions.checkNotNull(kind);
     return this.getLocalSymbols(type.getSpannedScope(), kind);
   }
 

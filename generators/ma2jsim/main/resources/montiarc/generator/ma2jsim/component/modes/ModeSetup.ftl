@@ -25,7 +25,7 @@
   // Set up sub components
   <#list helper.getModeHelper().getInstancesFromMode(mode) as sub>
     <#assign subSymbol = sub.getSymbol()>
-    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)}</#assign>
+    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}</#assign>
     <#assign subCompType><@Util.getCompTypeString subSymbol.getType() "${suffixes.compImpl()}"/></#assign>
     <#assign builderType><@Util.getCompTypeString subSymbol.getType() "${suffixes.comp()}${suffixes.builder()}"/></#assign>
 
@@ -61,7 +61,7 @@
 <#macro updateUnconnectedOutputs mode compAst>
   this.unconnectedOutputs = java.util.Set.of(
     <#list helper.getComponentHelper().getUnconnectedOutPortsIncludingMode(compAst.getSymbol(), mode) as port>
-      ${prefixes.port()}${port.getName()}${helper.getVariantHelper().portVariantSuffix(compAst, port)}()
+      ${prefixes.port()}${port.getName()}()
     <#sep>,
     </#list>
   );

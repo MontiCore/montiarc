@@ -9,6 +9,7 @@ import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import variablearc._cocos.VariableArcASTArcVarIfCoCo;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -117,7 +118,7 @@ class UnsupportedVariabilityTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new UnsupportedVariability());
+    checker.addCoCo((VariableArcASTArcVarIfCoCo) new UnsupportedVariability());
 
     // When
     checker.checkAll(ast);
@@ -140,6 +141,16 @@ class UnsupportedVariabilityTest extends MontiArcTestBase {
     "component InvalidComp5 { { component Inner { varif (true) port in int x; } } }",
     // varif nested in a braces-contained inner component, in braces
     "component InvalidComp6 { { component Inner { { varif (true) port in int x; } } } }",
+    // feature directly in the component body
+    "component InvalidComp7 { feature f; }",
+    // feature used in a behavior
+    "component InvalidComp8 { feature f; port out int o; compute { o = f ? 1 : 0; } }",
+    // feature nested in an inner component
+    "component InvalidComp9 { component Inner { feature f; } }",
+    // constraint directly in the component body
+    "component InvalidComp10(int n) { constraint (n > 0); }",
+    // constraint nested in an inner component
+    "component InvalidComp11 { component Inner(int n) { constraint (n > 0); } }",
   })
   void shouldReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -148,13 +159,13 @@ class UnsupportedVariabilityTest extends MontiArcTestBase {
     ASTMACompilationUnit ast = compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new UnsupportedVariability());
+    checker.addCoCo((VariableArcASTArcVarIfCoCo) new UnsupportedVariability());
 
     // When
     checker.checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
-      .containsOnly(ArcError.UNSUPPORTED_MODEL_ELEMENT.getErrorCode());
+      .containsExactly(ArcError.VARIABILITY_NOT_ANALYZED.getErrorCode());
   }
 }

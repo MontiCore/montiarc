@@ -1,8 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc.arc2fd;
 
+import arcbasis.context.WithinComponentResolver;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
 import com.microsoft.z3.Solver;
 import com.microsoft.z3.Status;
 import de.monticore.featurediagram.FeatureDiagramMill;
@@ -15,6 +15,8 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.io.File;
 import java.io.IOException;
@@ -111,6 +113,18 @@ public class Arc2FDToolTest extends Arc2FDToolTestBase {
   }
 
   @Test
+  void testMainWithoutVariabilityChecks(@TempDir Path outputDirPath) {
+    Arc2FDTool.main(new String[]{
+      "-i", getModelPath("valid/SimpleAnd.arc").toString(),
+      "-o", outputDirPath.toString(),
+      "-novar"
+    });
+
+    assertLoggedError(MontiArcError.TOOL_PARSE_IOEXCEPTION.getErrorCode());
+    assertFalse(Files.exists(outputDirPath.resolve("SimpleAnd.fd")));
+  }
+
+  @Test
   void testMainHelp() {
     Arc2FDTool.main(new String[]{"-h"});
 
@@ -180,6 +194,11 @@ public class Arc2FDToolTest extends Arc2FDToolTestBase {
     Arrays.asList(errorCodes).forEach(Arc2FDToolTest::assertLoggedError);
   }
 
+  protected FeatureCollector collector() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    return new FeatureCollector(true, withinComponentResolver, new PresenceResolver(withinComponentResolver));
+  }
+
   /* ---------------------------------------------------------------------- */
   /* Pipeline stages                                                        */
   /* ---------------------------------------------------------------------- */
@@ -189,21 +208,19 @@ public class Arc2FDToolTest extends Arc2FDToolTestBase {
   void testCollectedConstraintsAreSatisfiable(String fileName) {
     IVariableArcComponentTypeSymbol component = compile("valid/" + fileName);
 
-    try (Context context = new Context()) {
-      Optional<List<BoolExpr>> constraints = new FeatureCollector(true).collectConstraints(component, context);
-      assertTrue(constraints.isPresent());
+    Optional<List<BoolExpr>> constraints = this.collector().collectConstraints(component);
+    assertTrue(constraints.isPresent());
 
-      Solver solver = context.mkSolver();
-      solver.add(constraints.get().toArray(BoolExpr[]::new));
-      assertEquals(Status.SATISFIABLE, solver.check());
-    }
+    Solver solver = this.collector().getContext().mkSolver();
+    solver.add(constraints.get().toArray(BoolExpr[]::new));
+    assertEquals(Status.SATISFIABLE, solver.check());
   }
 
   @Test
   void testFlattenedFeatureNames() {
     IVariableArcComponentTypeSymbol component = compile("valid/UnderscoreNames.arc");
 
-    Optional<Map<String, String>> features = new FeatureCollector(true).collectFeatures(component);
+    Optional<Map<String, String>> features = this.collector().collectFeatures(component);
 
     assertTrue(features.isPresent());
     assertEquals(Map.of("a_b$c", "a_b.c", "a$b_c", "a.b_c"), features.get());

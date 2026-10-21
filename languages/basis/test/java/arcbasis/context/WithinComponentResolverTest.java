@@ -28,6 +28,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -584,6 +585,49 @@ public class WithinComponentResolverTest extends ArcBasisTestBase {
   }
 
   @Test
+  public void shouldResolveAllCandidatesOfPortAccesses() {
+    // Given
+    ComponentTypeSymbol k1 = component("K1");
+    PortSymbol k1i = port(k1, "i", intType());
+    ComponentTypeSymbol k2 = component("K2");
+    PortSymbol k2i = port(k2, "i", boolType());
+    ComponentTypeSymbol comp = component("C");
+    PortSymbol i1 = port(comp, "i", intType());
+    PortSymbol i2 = port(comp, "i", boolType());
+    SubcomponentSymbol s1 = subcomponent(comp, "s", new CompKindOfComponentType(k1));
+    SubcomponentSymbol s2 = subcomponent(comp, "s", new CompKindOfComponentType(k2));
+    SymbolService.link((IArcBasisScope) comp.getSpannedScope(), ArcBasisMill.subcomponentSymbolBuilder().setName("s").build());
+
+    // When && Then
+    assertThat(resolver.resolvePortAccess(comp, portAccess(comp.getSpannedScope(), "i")))
+      .containsExactly(new PortAccessCandidate(Optional.empty(), i1), new PortAccessCandidate(Optional.empty(), i2));
+    assertThat(resolver.resolvePortAccess(comp, portAccess(comp.getSpannedScope(), "s", "i")))
+      .containsExactly(new PortAccessCandidate(Optional.of(s1), k1i), new PortAccessCandidate(Optional.of(s2), k2i));
+    assertThat(resolver.resolvePortAccess(comp, portAccess(comp.getSpannedScope(), "unknown"))).isEmpty();
+  }
+
+  @Test
+  public void shouldTypePortAccessCandidatesAsSeenInComponent() {
+    // Given
+    ComponentTypeSymbol parent = component("P", "S");
+    PortSymbol pi = port(parent, "pi", typeVar(parent, 0));
+    ComponentTypeSymbol k = component("K", "U");
+    PortSymbol ki = port(k, "ki", typeVar(k, 0));
+    ComponentTypeSymbol comp = component("C");
+    extend(comp, new CompKindOfGenericComponentType(parent, List.of(intType())));
+    SubcomponentSymbol kInst = subcomponent(comp, "k", new CompKindOfGenericComponentType(k, List.of(boolType())));
+    SubcomponentSymbol untyped = ArcBasisMill.subcomponentSymbolBuilder().setName("u").build();
+    SymbolService.link((IArcBasisScope) comp.getSpannedScope(), untyped);
+
+    // When && Then
+    assertThat(resolver.typeOf(comp, new PortAccessCandidate(Optional.empty(), pi)))
+      .hasValueSatisfying(type -> assertThat(type.printFullName()).isEqualTo("int"));
+    assertThat(resolver.typeOf(comp, new PortAccessCandidate(Optional.of(kInst), ki)))
+      .hasValueSatisfying(type -> assertThat(type.printFullName()).isEqualTo("boolean"));
+    assertThat(resolver.typeOf(comp, new PortAccessCandidate(Optional.of(untyped), ki))).isEmpty();
+  }
+
+  @Test
   public void shouldResolveKindsOfInheritedAndNonGenericSubcomponents() {
     // Given
     ComponentTypeSymbol parent = component("P");
@@ -638,6 +682,25 @@ public class WithinComponentResolverTest extends ArcBasisTestBase {
   }
 
   @Test
+  public void shouldGetOnlyDeclaredSymbolsOfKind() {
+    // Given
+    ComponentTypeSymbol parent = component("P");
+    port(parent, "p", intType());
+    ComponentTypeSymbol child = component("C");
+    extend(child, new CompKindOfComponentType(parent));
+    PortSymbol i = port(child, "i", intType());
+    VariableSymbol j = variable(child.getSpannedScope(), "j");
+
+    // When
+    List<PortSymbol> ports = resolver.getLocalSymbols(child, PortSymbol.class);
+    List<ISymbol> symbols = resolver.getLocalSymbols(child, ISymbol.class);
+
+    // Then
+    assertThat(ports).containsExactly(i);
+    assertThat(symbols).containsExactlyInAnyOrder(i, j);
+  }
+
+  @Test
   public void shouldTerminateOnCircularInheritance() {
     // Given
     ComponentTypeSymbol a = component("A");
@@ -686,10 +749,16 @@ public class WithinComponentResolverTest extends ArcBasisTestBase {
     assertThatNullPointerException().isThrownBy(() -> resolver.kindOf(owner, null));
     assertThatNullPointerException().isThrownBy(() -> resolver.getSuperComponents(null));
     assertThatNullPointerException().isThrownBy(() -> resolver.typeOf((ASTPortAccess) null));
+    assertThatNullPointerException().isThrownBy(() -> resolver.resolvePortAccess(null, portAccess(scope, "i")));
+    assertThatNullPointerException().isThrownBy(() -> resolver.resolvePortAccess(comp, null));
+    assertThatNullPointerException().isThrownBy(() -> resolver.typeOf(null, new PortAccessCandidate(Optional.empty(), port)));
+    assertThatNullPointerException().isThrownBy(() -> resolver.typeOf(comp, (PortAccessCandidate) null));
     assertThatNullPointerException().isThrownBy(() -> resolver.boundsOf(null, ArcBasisMill.typeVarSymbolBuilder().setName("T").build()));
     assertThatNullPointerException().isThrownBy(() -> resolver.boundsOf(owner, null));
     assertThatNullPointerException().isThrownBy(() -> resolver.getLocalSymbols(null, "i"));
     assertThatNullPointerException().isThrownBy(() -> resolver.getLocalSymbols(comp, (String) null));
+    assertThatNullPointerException().isThrownBy(() -> resolver.getLocalSymbols((ComponentTypeSymbol) null, PortSymbol.class));
+    assertThatNullPointerException().isThrownBy(() -> resolver.getLocalSymbols(comp, (Class<PortSymbol>) null));
   }
 
   protected static ComponentTypeSymbol component(String name, String... typeVarNames) {

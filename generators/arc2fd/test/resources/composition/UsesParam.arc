@@ -5,4 +5,6 @@ component UsesParam {
 
   // binds n = 1, hence p.f is mandatory
   Param p(1);
+
+  constraint (p.f);
 }

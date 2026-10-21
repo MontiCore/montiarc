@@ -107,18 +107,18 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
       // component with default parameter value, read from static field
       arg("""
         import montiarc.test.OOTypeWithStaticFieldIO;
-        component ValidComp5(int p = OOTypeWithStaticFieldIO.i1) {
-          int i1 = 1;
-          int i2 = 2;
+        component ValidComp5(int p = OOTypeWithStaticFieldIO.i) {
+          int i = 1;
+          int o = 2;
         }
         """
       ),
       // component with default parameter value, read from static field
       arg("""
         import montiarc.test.OOTypeWithStaticFieldIO;
-        component ValidComp6(int p = OOTypeWithStaticFieldIO.i2) {
-          int i1 = 1;
-          int i2 = 2;
+        component ValidComp6(int p = OOTypeWithStaticFieldIO.o) {
+          int i = 1;
+          int o = 2;
         }
         """
       ),
@@ -143,7 +143,7 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
       arg("""
         component ValidComp10(int p) {
           int i = 1;
-          component Inner(int v = p) { }
+          component Inner(int w, int v = w) { }
         }
         """
       ),
@@ -151,10 +151,10 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
       arg("""
         import montiarc.test.OOTypeWithStaticFieldIO;
         component ValidComp11 {
-          int i1 = 1;
-          int i2 = 2;
-          component Inner1(int p = OOTypeWithStaticFieldIO.i1) { }
-          component Inner2(int p = OOTypeWithStaticFieldIO.i2) { }
+          int i = 1;
+          int o = 2;
+          component Inner1(int p = OOTypeWithStaticFieldIO.i) { }
+          component Inner2(int p = OOTypeWithStaticFieldIO.o) { }
         }
         """
       ),
@@ -181,8 +181,8 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
         component ValidComp14(int p) {
           port in int i;
           port out int o;
-          component Inner1(int i = p) { }
-          component Inner1(int o = p) { }
+          component Inner1(int q, int i = q) { }
+          component Inner2(int q, int o = q) { }
         }
         """
       ),
@@ -276,10 +276,10 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
           """,
         FIELD_REF_IN_STATIC_CONTEXT
       ),
-      // port in boolean not expression in default parameter value
+      // field in bitwise complement expression in default parameter value
       arg("""
-          component InvalidComp7(boolean p = ~b) {
-            boolean b = true;
+          component InvalidComp7(int p = ~b) {
+            int b = 1;
           }
           """,
         FIELD_REF_IN_STATIC_CONTEXT
@@ -329,8 +329,8 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
                            boolean p15 = i2 > 2,  boolean p16 = 2 > i2,
                            boolean p17 = i2 == 2, boolean p18 = 2 == i2,
                            boolean p19 = i2 != 2, boolean p20 = 2 != i2,
-                           boolean p21 = b && 2, boolean p22 = 2 && b,
-                           boolean p23 = b || 2, boolean p24 = 2 || b) {
+                           boolean p21 = b && true, boolean p22 = true && b,
+                           boolean p23 = b || true, boolean p24 = true || b) {
             int i1 = 1;
             int i2 = 2;
             boolean b = true;
@@ -485,11 +485,11 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
           """,
         FIELD_REF_IN_STATIC_CONTEXT
       ),
-      // port in boolean not expression in default parameter value of inner component
+      // field in bitwise complement expression in default parameter value of inner component
       arg("""
           component InvalidComp27 {
-            component Inner(boolean p = ~b) {
-              boolean b = true;
+            component Inner(int p = ~b) {
+              int b = 1;
             }
           }
           """,
@@ -549,8 +549,8 @@ public class NoFieldInDefaultParameterValueTest extends MontiArcTestBase {
                             boolean p15 = i2 > 2,  boolean p16 = 2 > i2,
                             boolean p17 = i2 == 2, boolean p18 = 2 == i2,
                             boolean p19 = i2 != 2, boolean p20 = 2 != i2,
-                            boolean p21 = b && 2, boolean p22 = 2 && b,
-                            boolean p23 = b || 2, boolean p24 = 2 || b) {
+                            boolean p21 = b && true, boolean p22 = true && b,
+                            boolean p23 = b || true, boolean p24 = true || b) {
               int i1 = 1;
               int i2 = 2;
               boolean b = ture;

@@ -12,7 +12,6 @@ import de.monticore.expressions.commonexpressions.types3.util.CommonExpressionsL
 import de.monticore.expressions.streamexpressions.types3.StreamExpressionsTypeVisitor;
 import de.monticore.expressions.tupleexpressions.types3.TupleExpressionsCTTIVisitor;
 import de.monticore.ocl.setexpressions.types3.SetExpressionsCTTIVisitor;
-import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.types.mccollectiontypes.types3.MCCollectionTypesTypeVisitor;
 import de.monticore.types.mcsimplegenerictypes.types3.MCSimpleGenericTypesTypeVisitor;
 import de.monticore.types.mcstructuraltypes.types3.MCStructuralTypesTypeVisitor;
@@ -23,11 +22,10 @@ import montiarc.MontiArcMill;
 import montiarc._visitor.MontiArcTraverser;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc.check.VariableArcTypeCheck;
-import variablearc.check.VariableArcVariantWithinScopeBasicSymbolsResolver;
-import variablearc.check.VariableArcVariantWithinTypeBasicSymbolsResolver;
+import variablearc.check.SymbolSelection;
+import variablearc.check.VariableArcWithinScopeBasicSymbolsResolver;
+import variablearc.check.VariableArcWithinTypeBasicSymbolsResolver;
 
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * TypeCheck3 implementation for Montiarc. After calling {@link #init()}, this
@@ -52,8 +50,9 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
    */
   protected MontiArcTypeCheck(MontiArcTraverser typeTraverser,
                               Type4Ast type4Ast,
-                              InferenceContext4Ast ctx4Ast) {
-    super(typeTraverser, type4Ast, ctx4Ast);
+                              InferenceContext4Ast ctx4Ast,
+                              SymbolSelection selection) {
+    super(typeTraverser, type4Ast, ctx4Ast, selection);
   }
 
   public static void init() {
@@ -77,17 +76,16 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
     Log.trace(() -> "Start initializing the type-check delegate", LOG_NAME);
-    VariableArcVariantWithinScopeBasicSymbolsResolver.init();
-    VariableArcVariantWithinTypeBasicSymbolsResolver.init();
-    MAOOWithinTypeBasicSymbolsResolver.init();
+    SymbolSelection selection = new SymbolSelection(type4Ast, ctx4Ast);
+    VariableArcWithinScopeBasicSymbolsResolver.init(selection);
+    VariableArcWithinTypeBasicSymbolsResolver.init(selection);
+    MAOOWithinTypeBasicSymbolsResolver.init(selection);
     ArcBasisTypeContextCalculator.init();
     ArcBasisTypeVisitorOperatorCalculator.init();
     CommonExpressionsLValueRelations.init();
     initTypeVisitors(traverser, type4Ast, ctx4Ast);
     Log.trace(() -> "Set the type-check delegate as global type-check delegate", LOG_NAME);
-    MontiArcTypeCheck delegate = new MontiArcTypeCheck(traverser, type4Ast, ctx4Ast);
-    setMADelegate(delegate);
-    setDelegate(delegate);
+    setDelegate(new MontiArcTypeCheck(traverser, type4Ast, ctx4Ast, selection));
     Log.trace(() -> "Finish initializing the type-check delegate", LOG_NAME);
   }
 
@@ -98,10 +96,6 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     Preconditions.checkNotNull(type4Ast);
     Preconditions.checkNotNull(ctx4Ast);
     Log.trace(() -> "Start initializing the visitors of the type-check delegate", LOG_NAME);
-    defaultContext = MontiArcMill.componentTypeSymbolBuilder()
-      .setName("?DEFAULT_CONTEXT?").setSpannedScope(MontiArcMill.scope()).build();
-    context2Type4AST = new HashMap<>();
-    context2Type4AST.put(defaultContext, type4Ast);
     ArcBasisTypeCheck.initTypeVisitors(traverser, type4Ast, ctx4Ast);
     initCommonExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
     initAssignmentExpressionsTypeVisitor(traverser, type4Ast, ctx4Ast);
@@ -242,61 +236,5 @@ public class MontiArcTypeCheck extends VariableArcTypeCheck {
     mcStructuralTypes.setType4Ast(type4Ast);
     traverser.add4MCStructuralTypes(mcStructuralTypes);
     Log.trace(() -> "Finish initializing the MCStructuralTypes visitor of the type-check delegate", LOG_NAME);
-  }
-
-  static Map<ComponentTypeSymbol, Type4Ast> context2Type4AST;
-  static ComponentTypeSymbol defaultContext;
-  static MontiArcTypeCheck maDelegate;
-
-  protected static Map<ComponentTypeSymbol, Type4Ast> getContext2Type4AST() {
-    return context2Type4AST;
-  }
-
-  protected static ComponentTypeSymbol getDefaultContext() {
-    return defaultContext;
-  }
-
-  protected static void setMADelegate(@NotNull MontiArcTypeCheck delegate) {
-    Preconditions.checkNotNull(delegate);
-    maDelegate = delegate;
-  }
-
-  protected static MontiArcTypeCheck getMADelegate() {
-    return maDelegate;
-  }
-
-  protected void setType4AST(@NotNull Type4Ast type4Ast) {
-    Preconditions.checkNotNull(type4Ast);
-    this.type4Ast = type4Ast;
-  }
-
-  public static void enterContext(ComponentTypeSymbol context) {
-    if (!getContext2Type4AST().containsKey(context)) {
-      Type4Ast type4Ast = new Type4Ast();
-      getContext2Type4AST().put(context, type4Ast);
-    }
-    setTyp4AST(getContext2Type4AST().get(context));
-    VariableArcTypeCheck.setCurrentVariant(context);
-  }
-
-  public static void leaveContext() {
-    setTyp4AST(getContext2Type4AST().get(getDefaultContext()));
-    VariableArcTypeCheck.setCurrentVariant(null);
-  }
-
-  protected static void setTyp4AST(@NotNull Type4Ast type4Ast) {
-    Preconditions.checkNotNull(type4Ast);
-    expressionBasis.setType4Ast(type4Ast);
-    mcBasicTypes.setType4Ast(type4Ast);
-    mcCommonLiterals.setType4Ast(type4Ast);
-    commonExpressions.setType4Ast(type4Ast);
-    assignmentExpressions.setType4Ast(type4Ast);
-    bitExpressions.setType4Ast(type4Ast);
-    mcCollectionTypes.setType4Ast(type4Ast);
-    mcGenericTypes.setType4Ast(type4Ast);
-    setExpressions.setType4Ast(type4Ast);
-    tupleExpressions.setType4Ast(type4Ast);
-    mcStructuralTypes.setType4Ast(type4Ast);
-    getMADelegate().setType4AST(type4Ast);
   }
 }

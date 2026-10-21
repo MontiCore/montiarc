@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,7 +11,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc._cocos.NoPortInDefaultParameterValue4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -21,24 +25,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class NoPortInDefaultParameterValue4FamilyTest extends NoPortInDefaultParameterValueTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new NoPortInDefaultParameterValue4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability1 ",
-    "ValidCompWithVariability2 "
-  })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new NoPortInDefaultParameterValue4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -47,12 +51,6 @@ class NoPortInDefaultParameterValue4FamilyTest extends NoPortInDefaultParameterV
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability1 ",
-    "InvalidCompWithVariability2 ",
-    "InvalidCompWithVariability3 ",
-    "InvalidCompWithVariability4("
-  })
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -61,55 +59,54 @@ class NoPortInDefaultParameterValue4FamilyTest extends NoPortInDefaultParameterV
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new NoPortInDefaultParameterValue4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
-      // port in default parameter value of inner component, dead variation point
+      // port of inner component in its default parameter value, dead variation point
       arg("""
         component ValidCompWithVariability1 {
-          port in int i;
-          varif (false) {
-            component Inner(int p = i) { }
+          component Inner(int p = i) {
+            varif (false) {
+              port in int i;
+            }
           }
         }
         """
       ),
-      // port in default parameter value of inner component, dead feature
+      // port of inner component in its default parameter value, dead feature
       arg("""
         component ValidCompWithVariability2 {
-          feature f;
-          port in int i;
-          varif (f) {
-            component Inner(int p = i) { }
+          component Inner(int p = i) {
+            feature f;
+            varif (f) {
+              port in int i;
+            }
+            constraint (!f);
           }
-          constraint (!f);
         }
         """
       ),
-      // conditional port in default parameter value of inner component
+      // conditional port of inner component in its default parameter value
       arg("""
         component ValidCompWithVariability3 {
-          feature f1;
-          feature f2;
-          varif (f1) {
-            port in int iv;
-          } else {
-            int iv = 0;
+          component Inner(int p = iv) {
+            feature f;
+            varif (f) {
+              port in int iv;
+            } else {
+              int iv = 0;
+            }
+            constraint (!f);
           }
-          varif (f2) {
-            component Inner(int p = iv) { }
-          }
-          constraint (!(f1 && f2));
         }
         """
       ),
@@ -131,42 +128,42 @@ class NoPortInDefaultParameterValue4FamilyTest extends NoPortInDefaultParameterV
 
   static Stream<Arguments> invalidModelsWithVariability() {
     return Stream.of(
-      // port in default parameter value of inner component, tautological variation point
+      // port of inner component in its default parameter value, tautological variation point
       arg("""
         component InvalidCompWithVariability1 {
-          port in int i;
-          varif (true) {
-            component Inner(int p = i) { }
+          component Inner(int p = i) {
+            varif (true) {
+              port in int i;
+            }
           }
         }
         """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // port in default parameter value of inner component, core feature
+      // port of inner component in its default parameter value, core feature
       arg("""
         component InvalidCompWithVariability2 {
-          feature f;
-          port in int i;
-          varif (f) {
-            component Inner(int p = i) { }
+          component Inner(int p = i) {
+            feature f;
+            varif (f) {
+              port in int i;
+            }
+            constraint (f);
           }
-          constraint (f);
         }
         """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // conditional port in default parameter value of inner component
+      // conditional port of inner component in its default parameter value
       arg("""
         component InvalidCompWithVariability3 {
-          feature f1;
-          feature f2;
-          varif (f1) {
-            port in int iv;
-          } else {
-            int iv = 0;
-          }
-          varif (f2) {
-            component Inner(int p = iv) { }
+          component Inner(int p = iv) {
+            feature f;
+            varif (f) {
+              port in int iv;
+            } else {
+              int iv = 0;
+            }
           }
         }
         """,

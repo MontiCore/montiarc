@@ -3,24 +3,23 @@
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
 <#import "/montiarc/generator/ma2jsim/util/MethodNames.ftl" as MethodNames/>
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
-<#list helper.getVariantHelper().getVariants(ast) as variant>
-<#if variant.isAtomic()>
-    <#assign automaton = helper.getBehaviorHelper().getAutomatonBehavior(variant.getAstNode())/>
+
+<#if ast.getSymbol().isAtomic()>
+    <#assign automaton = helper.getBehaviorHelper().getAutomatonBehavior(ast)/>
     <#assign hasAutomaton = automaton.isPresent()/>
-    <#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(variant.getAstNode())>
+    <#assign modeAutomaton = helper.getComponentHelper().getModeAutomaton(ast)>
     <#assign hasModeAutomaton = modeAutomaton.isPresent()>
-    <#assign compute = helper.getBehaviorHelper().getComputeBehavior(variant.getAstNode())/>
+    <#assign compute = helper.getBehaviorHelper().getComputeBehavior(ast)/>
     <#assign hasCompute = compute.isPresent()/>
-  protected void <@MethodNames.behaviorSetup/>${helper.getVariantHelper().variantSuffix(variant)}() {
+  protected void <@MethodNames.behaviorSetup/>() {
     <#if hasAutomaton>
-      this.behavior = new ${ast.getName()}${suffixes.automaton()}${helper.getVariantHelper().variantSuffix(variant)}${suffixes.builder()}<@Util.printTypeParameters ast false/>(this)
+      this.behavior = new ${ast.getName()}${suffixes.automaton()}${suffixes.builder()}<@Util.printTypeParameters ast false/>(this)
       .addDefaultStates()
       .setDefaultInitial()
       .setName(this.getName())
       .build();
     <#elseif hasCompute>
-      this.behavior = new ${ast.getName()}${suffixes.compute()}${helper.getVariantHelper().variantSuffix(variant)}<@Util.printTypeParameters ast false/>(this, this.getName());
+      this.behavior = new ${ast.getName()}${suffixes.compute()}<@Util.printTypeParameters ast false/>(this, this.getName());
     </#if>
   }
 </#if>
-</#list>

@@ -50,7 +50,6 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
     tool.runSymbolTablePhase2(ast);
     tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runDefaultCoCos(ast);
 
     // Then
     // Check that all NameExpressions representing local variables resolve to a variable symbol
@@ -79,7 +78,6 @@ public class LocalVarDeclarationTest extends MontiArcTestBase {
     tool.runSymbolTablePhase2(ast);
     tool.runAfterSymbolTablePhase2Trafos(ast);
     tool.runSymbolTablePhase3(ast);
-    tool.runDefaultCoCos(ast);
 
     // Then
     // Check that all NameExpressions representing local variables resolve to a variable symbol

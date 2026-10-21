@@ -19,8 +19,6 @@ ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/Constructors.ftl"
 
 ${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/Parameters.ftl", ast, [classNameWithGenerics])}
 
-${tc.includeArgs("montiarc/generator/ma2jsim/component/builder/Features.ftl", ast, [classNameWithGenerics])}
-
 ${tc.include("montiarc/generator/ma2jsim/component/builder/Validation.ftl", ast)}
 
 ${tc.include("montiarc/generator/ma2jsim/component/builder/Build.ftl", ast)}

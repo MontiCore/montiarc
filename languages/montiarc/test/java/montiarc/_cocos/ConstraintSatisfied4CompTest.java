@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.se_rwth.commons.logging.Finding;
@@ -16,6 +17,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import variablearc._cocos.ConstraintSatisfied4Comp;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -27,6 +30,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class ConstraintSatisfied4CompTest extends MontiArcTestBase {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConstraintSatisfied4Comp(new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @BeforeEach
   protected void initSymbols() {
     MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
@@ -36,9 +46,6 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
 
   protected void setUpComponents() {
     compile("package a.b; component A { feature ff; constraint(ff); }");
-    compile("package a.b; component B extends a.b.A { }");
-    compile("package a.b; component C { feature ff; a.b.B b; constraint(ff == b.ff); }");
-    compile("package a.b; component D extends a.b.C { }");
   }
 
   @ParameterizedTest
@@ -53,16 +60,12 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
     "component ValidComp4 { feature f; constraint(f); } ",
     // parameter constraint satisfiable
     "component ValidComp5(boolean p) { constraint(p); } ",
-    // feature constraint of instance satisfied
-    "component ValidComp6 { component Inner { feature f; constraint(f); } Inner sub; constraint(sub.f); }",
-    // parameter constraint of instance satisfied
-    "component ValidComp7 { component Inner(boolean p) { constraint(p); } Inner sub(true); }",
-    // parameter constraint of instance depth 2 satisfied
-    "component ValidComp8 { component Inner1(boolean p) { component Inner2(boolean p) { constraint(p); } Inner2 sub(p); } Inner1 sub(true); }",
     // inherited constraint satisfiable
-    "component ValidComp9 extends a.b.A { }",
-    // implicit inherited constraint in instance satisfiable
-    "component ValidComp10 extends a.b.A { a.b.D d; } "
+    "component ValidComp6 extends a.b.A { }",
+    // unsatisfiable constraint only enforced in configurations excluded by another constraint
+    "component ValidComp7 { feature f; constraint(!f); varif (f) { constraint(false); } }",
+    // constraints of subcomponents are not part of the check
+    "component ValidComp8 { component Inner(boolean p) { constraint(p); } Inner sub(false); }"
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -70,8 +73,7 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConstraintSatisfied4Comp());
+    MontiArcCoCoChecker checker = checker();
 
     // When
     checker.checkAll(ast);
@@ -90,8 +92,7 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConstraintSatisfied4Comp());
+    MontiArcCoCoChecker checker = checker();
 
     // When
     checker.checkAll(ast);
@@ -115,29 +116,17 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
       // parameter constraint unsatisfiable
       arg("component InvalidComp4(boolean p) { constraint(p && !p); } ",
         CONSTRAINT_NOT_SATISFIED),
-      // feature constraint of instance unsatisfied
-      arg("component InvalidComp5 { component Inner { feature f; constraint(f); } Inner sub; constraint(!sub.f); }",
-        CONSTRAINT_NOT_SATISFIED),
-      // parameter constraint of instance unsatisfied
-      arg("component InvalidComp6 { component Inner(boolean p) { constraint(p); } Inner sub(false); }",
-        CONSTRAINT_NOT_SATISFIED),
-      // parameter constraint of instance (depth 2) unsatisfied
-      arg("component InvalidComp7 { component Inner1(boolean p) { component Inner2(boolean p) { constraint(p); } Inner2 sub(p); } Inner1 sub(false); }",
-        CONSTRAINT_NOT_SATISFIED),
       // two unsatisfiable constraints
-      arg("component InvalidComp8 { constraint(false); constraint (false); }",
+      arg("component InvalidComp5 { constraint(false); constraint (false); }",
         CONSTRAINT_NOT_SATISFIED),
       // tautology and unsatisfiable constraint
-      arg("component InvalidComp9 { constraint(true); constraint (false); }",
+      arg("component InvalidComp6 { constraint(true); constraint (false); }",
         CONSTRAINT_NOT_SATISFIED),
       // inherited constraint contradiction
-      arg("component InvalidComp10 extends a.b.A { constraint(!ff); }",
+      arg("component InvalidComp7 extends a.b.A { constraint(!ff); }",
         CONSTRAINT_NOT_SATISFIED),
-      // inherited constraint of instance contradiction
-      arg("component InvalidComp11 { a.b.B b; constraint(!b.ff); }",
-        CONSTRAINT_NOT_SATISFIED),
-      // implicit inherited constraint in instance contradiction
-      arg("component InvalidComp12 { a.b.D d; constraint(!d.ff); }",
+      // unsatisfiable constraint enforced in all configurations
+      arg("component InvalidComp8 { feature f; constraint(f); varif (f) { constraint(false); } }",
         CONSTRAINT_NOT_SATISFIED)
     );
   }
@@ -155,10 +144,9 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
-    Log.clearFindings();
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new ConstraintSatisfied4Comp());
+    MontiArcCoCoChecker checker = checker();
 
     // When
     checker.checkAll(ast);
@@ -184,10 +172,8 @@ class ConstraintSatisfied4CompTest extends MontiArcTestBase {
       Arguments.of("component UnknownComp3 { constraint((java.lang.Math.abs(1) > 0)); }", false, true),
       // the feature can adapt to whatever the method returns
       Arguments.of("component UnknownComp4 { feature f; constraint(f == (java.lang.Math.abs(1) > 0)); }", false, false),
-      // parameter bound to a method call, satisfiable only for positive results
-      Arguments.of("component UnknownComp5 { component Inner(int p) { constraint(p > 0); } Inner sub(java.lang.Math.abs(-1)); }", false, true),
       // the parameter's type has no SMT representation, hence, the comparison is unknown
-      Arguments.of("component UnknownComp6(String s) { constraint(s == \"x\"); }", false, true)
+      Arguments.of("component UnknownComp5(String s) { constraint(s == \"x\"); }", false, true)
     );
   }
 }

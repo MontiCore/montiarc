@@ -3,10 +3,10 @@ package montiarc;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import com.google.common.base.Preconditions;
 import de.monticore.io.paths.MCPath;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.monticore.symboltable.ImportStatement;
 import de.se_rwth.commons.logging.Log;
@@ -26,8 +26,10 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,6 +38,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import static montiarc.util.ArcError.VARIABILITY_NOT_ANALYZED;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -83,6 +86,23 @@ public class MontiArcToolTest extends MontiArcTestBase {
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(MontiArcError.TOOL_PARSE_IOEXCEPTION));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#run(String[])}
+   */
+  @ParameterizedTest
+  @ValueSource(strings = {"-h", "-v"})
+  public void runHelpOrVersionShouldNotInitializeGlobalScope(@NotNull String option) {
+    // Given
+    MontiArcTool tool = new MontiArcTool();
+    MontiArcMill.globalScope().init(true);
+
+    // When
+    tool.run(new String[]{option});
+
+    // Then
+    assertThat(MontiArcMill.globalScope().getPresenceContext()).isEmpty();
   }
 
   /**
@@ -680,32 +700,6 @@ public class MontiArcToolTest extends MontiArcTestBase {
   }
 
   /**
-   * Method under test {@link MontiArcTool#runDefaultCoCos(Collection)}
-   */
-  @Test
-  public void runDefaultCoCosCollectionShouldThrowNullPointerException() {
-    // Given
-    MontiArcTool tool = new MontiArcTool();
-
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class,
-      () -> tool.runDefaultCoCos((Collection<ASTMACompilationUnit>) null));
-  }
-
-  /**
-   * Method under test {@link MontiArcTool#runDefaultCoCos(ASTMACompilationUnit)}
-   */
-  @Test
-  public void runDefaultCoCosShouldThrowNullPointerException() {
-    // Given
-    MontiArcTool tool = new MontiArcTool();
-
-    // When && Then
-    Assertions.assertThrows(NullPointerException.class,
-      () -> tool.runDefaultCoCos((ASTMACompilationUnit) null));
-  }
-
-  /**
    * Method under test {@link MontiArcTool#runAdditionalCoCos(ASTMACompilationUnit)}
    */
   @Test
@@ -729,6 +723,66 @@ public class MontiArcToolTest extends MontiArcTestBase {
     // When && Then
     Assertions.assertThrows(NullPointerException.class,
       () -> tool.runAdditionalCoCos((ASTMACompilationUnit) null));
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#run(String[])}
+   */
+  @Test
+  void runShouldAllowVariabilityWithVariabilityTurnedOn(@TempDir Path models) throws IOException {
+    // Given
+    Files.writeString(models.resolve("Comp.arc"), """
+      component Comp {
+        feature f;
+        port in int i;
+        port out int o;
+        component Inner {
+          port in int i;
+          port out int o;
+        }
+        Inner sub1;
+        i -> sub1.i;
+        varif (f) {
+          Inner sub2;
+          sub1.o -> sub2.i;
+          sub2.o -> o;
+        } else {
+          sub1.o -> o;
+        }
+      }"""
+    );
+
+    // When
+    new MontiArcTool().run(new String[]{"-i", models.toString()});
+
+    // Then
+    assertThat(Log.getFindings()).as(() -> Log.getFindings().toString()).isEmpty();
+  }
+
+  /**
+   * Method under test {@link MontiArcTool#run(String[])}
+   */
+  @Test
+  void runShouldRejectVariabilityWithVariabilityTurnedOff(@TempDir Path models) throws IOException {
+    // Given
+    Files.writeString(models.resolve("Comp.arc"), """
+      component Comp {
+        feature f;
+        port in int i;
+        port out int o;
+        varif (f) {
+          i -> o;
+        }
+      }"""
+    );
+
+    // When
+    new MontiArcTool().run(new String[]{"-i", models.toString(), "-novar"});
+
+    // Then
+    assertThat(getLoggedErrorCodes()).containsExactly(
+      getErrorCodes(VARIABILITY_NOT_ANALYZED, VARIABILITY_NOT_ANALYZED)
+    );
   }
 
   @Test

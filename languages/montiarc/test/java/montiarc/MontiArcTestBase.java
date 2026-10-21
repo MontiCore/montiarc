@@ -52,10 +52,10 @@ public abstract class MontiArcTestBase extends ATestBase {
 
   /**
    * Compiles the given montiarc diagram, creating its abstract syntax tree and
-   * symbol-table, as well as apply after parsing and after symbol table
-   * transformations.
-   * @param model the model to parse as a string
-   * @return the ast of the parsed montiarc diagram
+   * symbol-table, applies after parsing and after symbol table transformations,
+   * and calculates its presence formulas.
+   * @param model the component to parse as a string
+   * @return the ast of the parsed component
    */
   public static ASTMACompilationUnit compile(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -67,6 +67,7 @@ public abstract class MontiArcTestBase extends ATestBase {
       MontiArcMill.scopesGenitorP2Delegator().createFromAST(ast);
       MontiArcTrafos.afterSymTabP2().applyAll(ast);
       MontiArcMill.scopesGenitorP3Delegator().createFromAST(ast);
+      MontiArcMill.presenceFormulaCalculator().calculate(ast.getArcComponentType());
       return ast;
     } catch (IOException e) {
       throw new RuntimeException(e);

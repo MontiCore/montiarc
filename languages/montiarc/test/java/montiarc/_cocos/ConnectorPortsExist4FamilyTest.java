@@ -1,17 +1,23 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.monticore.class2mc.OOClass2MCResolver;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
+import montiarc.MontiArcMill;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.ConnectorPortsExist4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -32,20 +38,25 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
     compile("package a.b; component G { feature ff; varif (ff) { port out int o; }}");
   }
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ConnectorPortsExist4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
+  @Override
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -54,13 +65,7 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability14 ",
-    "InvalidCompWithVariability15 ",
-    "InvalidCompWithVariability17 ",
-    "InvalidCompWithVariability18 ",
-    "InvalidCompWithVariability19 "
-  })
+  @Override
   void shouldReportError(@NotNull String model, @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
@@ -68,14 +73,13 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ConnectorPortsExist4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes()).containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -507,6 +511,7 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
               port in int i;
             }
             a.b.F sub;
+            i -> sub.i;
             constraint (sub.ff == !f);
           }""",
         MISSING_PORT, MISSING_PORT
@@ -542,6 +547,7 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
               port out int o;
             }
             a.b.G sub;
+            sub.o -> o;
             constraint (sub.ff == !f);
           }""",
         MISSING_PORT, MISSING_PORT
@@ -552,7 +558,7 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
             a.b.F sub1;
             a.b.G sub2;
             sub2.o -> sub1.i;
-            constraint (sub1.ff && !sub2.ff);
+            constraint (!sub1.ff && !sub2.ff);
           }""",
         MISSING_PORT, MISSING_PORT
       ),
@@ -583,5 +589,30 @@ class ConnectorPortsExist4FamilyTest extends ConnectorPortsExistTest {
         MISSING_SUBCOMPONENT
       )
     );
+  }
+
+  @Test
+  void shouldNotReportErrorIfPresenceDependsOnStaticFields() {
+    // Given
+    MontiArcMill.globalScope().addAdaptedTypeSymbolResolver(new OOClass2MCResolver());
+    MontiArcMill.globalScope().addAdaptedOOTypeSymbolResolver(new OOClass2MCResolver());
+    ASTMACompilationUnit ast = compile("""
+      component StaticFieldComp1 {
+        port in int x;
+        component Inner(int n) {
+          varif (n < java.lang.Integer.MAX_VALUE) {
+            port in int i;
+          }
+        }
+        Inner sub(5);
+        x -> sub.i;
+      }""");
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
+
+    // When
+    checker().checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).noneMatch(Finding::isError);
   }
 }

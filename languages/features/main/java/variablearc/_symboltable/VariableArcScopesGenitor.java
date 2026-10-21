@@ -2,21 +2,12 @@
 package variablearc._symboltable;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTArcField;
-import arcbasis._ast.ASTArcPort;
-import arcbasis._ast.ASTComponentBody;
-import arcbasis._ast.ASTComponentInstance;
+import arcbasis._ast.ASTArcParameter;
 import com.google.common.base.Preconditions;
 import org.codehaus.commons.nullanalysis.NotNull;
 import org.codehaus.commons.nullanalysis.Nullable;
-import variablearc._ast.ASTArcConstraintDeclaration;
-import variablearc._ast.ASTArcVarIf;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.expressions.Expression;
-import variablearc.evaluation.expressions.NegatedExpression;
+import variablearc.presence.LocalPresenceCalculator;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
 
@@ -24,7 +15,7 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
   implements arcbasis._visitor.ArcBasisVisitor2 {
 
   protected Stack<IVariableArcComponentTypeSymbol> componentStack = new Stack<>();
-  protected Stack<VariableArcVariationPoint> variationPointStack = new Stack<>();
+  protected LocalPresenceCalculator localPresenceCalculator = new LocalPresenceCalculator();
 
   protected Stack<IVariableArcComponentTypeSymbol> getComponentStack() {
     return this.componentStack;
@@ -45,54 +36,6 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     this.getComponentStack().push(symbol);
   }
 
-  protected Stack<VariableArcVariationPoint> getVariationPointStack() {
-    return this.variationPointStack;
-  }
-
-  protected Optional<VariableArcVariationPoint> getCurrentVariationPoint() {
-    if (!this.getVariationPointStack().isEmpty()) {
-      return Optional.ofNullable(this.getVariationPointStack().peek());
-    }
-    return Optional.empty();
-  }
-
-  protected void removeCurrentVariationPoint() {
-    if (!this.getVariationPointStack().isEmpty()) {
-      this.getVariationPointStack().pop();
-    }
-  }
-
-  protected void putOnStack(@Nullable VariableArcVariationPoint variationPoint) {
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    if (getCurrentComponent().isPresent()) {
-      this.getCurrentComponent().get().add(variationPoint);
-    }
-    this.getVariationPointStack().push(variationPoint);
-  }
-
-  @Override
-  public void traverse(@NotNull ASTArcVarIf node) {
-    node.getCondition().accept(this.getTraverser());
-
-    putOnStack(new VariableArcVariationPoint(
-      new Expression(node.getCondition()),
-      this.getCurrentVariationPoint().orElse(null),
-      node.getThen() instanceof ASTComponentBody body ? body.getArcElementList() : List.of(node.getThen())
-    ));
-    node.getThen().accept(this.getTraverser());
-    removeCurrentVariationPoint();
-
-    if (node.isPresentOtherwise()) {
-      putOnStack(new VariableArcVariationPoint(
-        new NegatedExpression(node.getCondition()),
-        this.getCurrentVariationPoint().orElse(null),
-        node.getOtherwise() instanceof ASTComponentBody body ? body.getArcElementList() : List.of(node.getOtherwise())
-      ));
-      node.getOtherwise().accept(this.getTraverser());
-      removeCurrentVariationPoint();
-    }
-  }
-
   @Override
   public void visit(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
@@ -106,39 +49,13 @@ public class VariableArcScopesGenitor extends VariableArcScopesGenitorTOP
     Preconditions.checkState(this.getCurrentComponent().isPresent());
     Preconditions.checkState(this.getCurrentComponent().get().getTypeInfo().isPresentAstNode());
     Preconditions.checkState(this.getCurrentComponent().get().getTypeInfo().getAstNode().equals(node));
+    IVariableArcComponentTypeSymbol component = this.getCurrentComponent().get();
+    node.getHead().streamArcParameters()
+      .filter(ASTArcParameter::isPresentDefault)
+      .forEach(parameter -> component.setParameterDefault(parameter.getName(), parameter.getDefault()));
     this.removeCurrentComponent();
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTArcPort node) {
-    Preconditions.checkNotNull(node.getSymbol());
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    if (this.getCurrentVariationPoint().isPresent()) {
-      this.getCurrentVariationPoint().get().add(node.getSymbol());
+    if (this.getComponentStack().isEmpty()) {
+      this.localPresenceCalculator.calculate(node);
     }
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTComponentInstance node) {
-    Preconditions.checkNotNull(node.getSymbol());
-    Preconditions.checkState(this.getCurrentScope().isPresent());
-    if (this.getCurrentVariationPoint().isPresent()) {
-      this.getCurrentVariationPoint().get().add(node.getSymbol());
-    }
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTArcField node) {
-    Preconditions.checkNotNull(node.getSymbol());
-    if (this.getCurrentVariationPoint().isPresent()) {
-      this.getCurrentVariationPoint().get().add(node.getSymbol());
-    }
-  }
-
-  @Override
-  public void endVisit(@NotNull ASTArcConstraintDeclaration node) {
-    Preconditions.checkNotNull(node);
-    if (this.getCurrentComponent().isEmpty()) return;
-    this.getCurrentComponent().get().getLocalConstraints().add(new ExpressionSet(Collections.singletonList(new Expression(node.getExpression()))));
   }
 }

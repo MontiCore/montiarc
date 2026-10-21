@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -8,7 +10,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc._cocos.ForConditionHasBooleanType4Family;
+import variablearc.check.TypeCheck4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -20,23 +25,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTest {
 
+  protected MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ForConditionHasBooleanType4Family(new TypeCheck4Family(withinComponentResolver,
+      new PresenceResolver(withinComponentResolver))));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidComp10 ",
-    "ValidCompWithVariability4 ",
-    "ValidCompWithVariability5 ",
-    "ValidCompWithVariability6 ",
-    "ValidCompWithVariability7 "
-  })
+  @Override
   void shouldNotReportError(@NotNull String model) {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ForConditionHasBooleanType4Family());
+    MontiArcCoCoChecker checker = this.checker();
 
     // When
     checker.checkAll(ast);
@@ -48,18 +54,14 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability8 ",
-    "InvalidCompWithVariability9 "
-  })
+  @Override
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ForConditionHasBooleanType4Family());
+    MontiArcCoCoChecker checker = this.checker();
 
     // When
     checker.checkAll(ast);
@@ -67,6 +69,8 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -161,9 +165,9 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
           feature f1;
           feature f2;
           varif (f1) {
-            int v = 1;
-          } else {
             boolean v = false;
+          } else {
+            int v = 1;
           }
           varif (f2) {
             automaton {
@@ -183,13 +187,13 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
           feature f1;
           feature f2;
           varif (f1) {
-            int v = 1;
-          } else {
             boolean v = false;
+          } else {
+            int v = 1;
           }
           varif (f2) {
             init {
-              v = 1;
+              for (; v; ) { }
             }
           }
           constraint (!(f2 && !f1));
@@ -202,13 +206,13 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
           feature f1;
           feature f2;
           varif (f1) {
-            int v = 1;
-          } else {
             boolean v = false;
+          } else {
+            int v = 1;
           }
           varif (f2) {
             compute {
-              v = 1;
+              for (; v; ) { }
             }
           }
           constraint (!(f2 && !f1));
@@ -344,7 +348,7 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
             }
             varif (f2) {
               init {
-                v = 1;
+                for (; v; ) { }
               }
             }
           }
@@ -362,8 +366,8 @@ class ForConditionHasBooleanType4FamilyTest extends ForConditionHasBooleanTypeTe
               boolean v = false;
             }
             varif (f2) {
-              init {
-                v = 1;
+              compute {
+                for (; v; ) { }
               }
             }
           }

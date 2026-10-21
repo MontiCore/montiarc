@@ -1,6 +1,8 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -8,7 +10,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc._cocos.ExpressionStatementIsValid4Family;
+import variablearc.check.TypeCheck4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -20,25 +25,24 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class ExpressionStatementIsValid4FamilyTest extends ExpressionStatementIsValidTest {
 
+  protected MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new ExpressionStatementIsValid4Family(new TypeCheck4Family(withinComponentResolver,
+      new PresenceResolver(withinComponentResolver))));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability4 ",
-    "ValidCompWithVariability5 ",
-    "ValidCompWithVariability6 ",
-    "ValidCompWithVariability6 ",
-    "ValidCompWithVariability7 ",
-    "ValidCompWithVariability8 ",
-    "ValidCompWithVariability9 "
-  })
+  @Override
   void shouldNotReportError(@NotNull String model) {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ExpressionStatementIsValid4Family());
+    MontiArcCoCoChecker checker = this.checker();
 
     // When
     checker.checkAll(ast);
@@ -50,14 +54,14 @@ class ExpressionStatementIsValid4FamilyTest extends ExpressionStatementIsValidTe
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
+  @Override
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new ExpressionStatementIsValid4Family());
+    MontiArcCoCoChecker checker = this.checker();
 
     // When
     checker.checkAll(ast);
@@ -65,6 +69,8 @@ class ExpressionStatementIsValid4FamilyTest extends ExpressionStatementIsValidTe
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {

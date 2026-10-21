@@ -50,4 +50,5 @@ dependencies {
 
 tasks.named(variabilitySources!!.compileMontiArcTaskName, MontiArcCompile::class.java) {
   checkVariability.set(true)
+  generateCode.set(false)
 }

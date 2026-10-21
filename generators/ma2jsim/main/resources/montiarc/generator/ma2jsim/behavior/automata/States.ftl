@@ -1,11 +1,10 @@
 <#-- (c) https://github.com/MontiCore/monticore -->
 <#-- @ftlvariable name="ast" type=" arcbasis._ast.ASTArcComponentType" -->
 <#-- @ftlvariable name="helper" type="montiarc.generator.util.Helper" -->
-${tc.signature("variant")}
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 <#assign ubGenerics><@Util.printTypeParameters ast false/></#assign>
 <#assign CONTEXT>${ast.getName()}${suffixes.context()}${ubGenerics}</#assign>
-<#assign CLASS>${ast.getName()}${suffixes.states()}${helper.getVariantHelper().variantSuffix(variant)}<#if isTop>${suffixes.top()}</#if></#assign>
+<#assign CLASS>${ast.getName()}${suffixes.states()}<#if isTop>${suffixes.top()}</#if></#assign>
 <#assign automaton = helper.getBehaviorHelper().getAutomatonBehavior(ast).get() />
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
@@ -97,7 +96,6 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
     public boolean ${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant() {
       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
       ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-      ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
 
       return ${helper.getBehaviorHelper().getStateInvariant(state)}
       <#list automaton.getStates()?reverse as superstate>
@@ -117,7 +115,6 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
             public boolean ${state.getName()?substring(0, 1)?lower_case + state.getName()?substring(1)}Invariant() {
               ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
               ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-              ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
 
               return ${superstate.getName()?substring(0, 1)?lower_case + superstate.getName()?substring(1)}Invariant();
             }
@@ -133,7 +130,6 @@ public class ${CLASS}<@Util.printTypeParameters ast/> {
 <#macro executeAction>
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowParameters.ftl", [ast.getHead().getArcParameterList()])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFields.ftl", [ast.getFields()])}
-  ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowFeatures.ftl", [helper.getComponentHelper().getFeatures(ast)])}
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/ShadowOutputs.ftl", [ast.getSymbol().getAllOutgoingPorts()])}
   <#nested> <#-- = Everything that goes inbetween the applied <@executeAction> ... </@executeAction> tags-->
   ${tc.includeArgs("montiarc/generator/ma2jsim/behavior/SetShadowedFields.ftl", [ast.getFields()])}

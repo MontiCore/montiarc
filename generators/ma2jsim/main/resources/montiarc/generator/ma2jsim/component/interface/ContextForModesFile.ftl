@@ -12,7 +12,6 @@
 public interface ${comp.getName()}${suffixes.contextForModes()}<#if isTop>${suffixes.top()}</#if> <@Util.printTypeParameters comp/>
   extends ${comp.getName()}${suffixes.parameters()} <@Util.printTypeParameters comp false/>,
           ${comp.getName()}${suffixes.fields()} <@Util.printTypeParameters comp false/>,
-          ${comp.getName()}${suffixes.features()} <@Util.printTypeParameters comp false/>,
           ${comp.getName()}${suffixes.modes()} <@Util.printTypeParameters comp false/>,
           montiarc.rte.oracle.OracleOwner {
   }

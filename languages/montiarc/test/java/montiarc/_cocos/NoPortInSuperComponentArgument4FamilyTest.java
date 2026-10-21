@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,7 +11,9 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc._cocos.NoPortInSuperComponentArgument4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -21,6 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class NoPortInSuperComponentArgument4FamilyTest extends NoPortInSuperComponentArgumentTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new NoPortInSuperComponentArgument4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
@@ -30,11 +41,8 @@ class NoPortInSuperComponentArgument4FamilyTest extends NoPortInSuperComponentAr
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new NoPortInSuperComponentArgument4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -43,11 +51,6 @@ class NoPortInSuperComponentArgument4FamilyTest extends NoPortInSuperComponentAr
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability1 ",
-    "InvalidCompWithVariability2 ",
-    "InvalidCompWithVariability3 "
-  })
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -56,58 +59,57 @@ class NoPortInSuperComponentArgument4FamilyTest extends NoPortInSuperComponentAr
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new NoPortInSuperComponentArgument4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
     return Stream.of(
-      // port in super component argument of inner component, dead variation point
+      // port of inner component in its super component argument, dead variation point
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component ValidCompWithVariability1 {
-          port in int i;
-          varif (false) {
-            component Inner extends ComponentTypeWithIntParameter sub(i) { }
+          component Inner extends ComponentTypeWithIntParameter(i) {
+            varif (false) {
+              port in int i;
+            }
           }
         }
         """
       ),
-      // port in super component argument of inner component, dead feature
+      // port of inner component in its super component argument, dead feature
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component ValidCompWithVariability2 {
-          feature f;
-          port in int i;
-          varif (f) {
-            component Inner extends ComponentTypeWithIntParameter sub(i) { }
+          component Inner extends ComponentTypeWithIntParameter(i) {
+            feature f;
+            varif (f) {
+              port in int i;
+            }
+            constraint (!f);
           }
-          constraint (!f);
         }
         """
       ),
-      // conditional port in super component argument of inner component
+      // conditional port of inner component in its super component argument
       arg("""
         import montiarc.test.ComponentTypeWithIntParameter;
         component ValidCompWithVariability3 {
-          feature f1;
-          feature f2;
-          varif (f1) {
-            port in int iv;
-          } else {
-            int iv = 0;
+          component Inner extends ComponentTypeWithIntParameter(iv) {
+            feature f;
+            varif (f) {
+              port in int iv;
+            } else {
+              int iv = 0;
+            }
+            constraint (!f);
           }
-          varif (f2) {
-            component Inner extends ComponentTypeWithIntParameter sub(iv) { }
-          }
-          constraint (!(f1 && f2));
         }
         """
       )
@@ -116,44 +118,45 @@ class NoPortInSuperComponentArgument4FamilyTest extends NoPortInSuperComponentAr
 
   static Stream<Arguments> invalidModelsWithVariability() {
     return Stream.of(
-      // port in super component argument of inner component, tautological variation point
+      // port of inner component in its super component argument, tautological variation point
       arg("""
           import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidCompWithVariability1 {
-            port in int i;
-            varif (true) {
-              component Inner extends ComponentTypeWithIntParameter sub(i) { }
+            component Inner extends ComponentTypeWithIntParameter(i) {
+              varif (true) {
+                port in int i;
+              }
             }
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // port in super component argument of inner component, core feature
+      // port of inner component in its super component argument, core feature
       arg("""
           import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidCompWithVariability2 {
-            feature f;
-            port in int i;
-            varif (f) {
-              component Inner extends ComponentTypeWithIntParameter sub(i) { }
+            component Inner extends ComponentTypeWithIntParameter(i) {
+              feature f;
+              varif (f) {
+                port in int i;
+              }
+              constraint (f);
             }
           }
           """,
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // conditional port in super component argument of inner component
+      // conditional port of inner component in its super component argument
       arg("""
           import montiarc.test.ComponentTypeWithIntParameter;
           component InvalidCompWithVariability3 {
-            feature f1;
-            feature f2;
-            varif (f1) {
-              port in int iv;
-            } else {
-              int iv = 0;
-            }
-            varif (f2) {
-              component Inner extends ComponentTypeWithIntParameter sub(iv) { }
+            component Inner extends ComponentTypeWithIntParameter(iv) {
+              feature f;
+              varif (f) {
+                port in int iv;
+              } else {
+                int iv = 0;
+              }
             }
           }
           """,

@@ -123,8 +123,8 @@ class NoPortInVarifConditionTest extends MontiArcTestBase {
       arg("component InvalidComp7 { port in int i; varif(2 == i--) { } }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
-      // port referenced in a boolean-not expression in varif condition
-      arg("component InvalidComp8 { port in boolean i; varif(~i) { } }",
+      // port referenced in a bitwise complement expression in varif condition
+      arg("component InvalidComp8 { port in int i; varif(~i == 0) { } }",
         PORT_REF_IN_STATIC_CONTEXT
       ),
       // port referenced in a logical-not expression in varif condition
@@ -158,8 +158,8 @@ class NoPortInVarifConditionTest extends MontiArcTestBase {
           varif(i2 > 2) { } varif(2 > i2) { }
           varif(i2 == 2) { } varif(2 == i2) { }
           varif(i2 != 2) { } varif(2 != i2) { }
-          varif(i4 && 2) { } varif(2 && i4) { }
-          varif(i4 || 2) { } varif(2 || i4) { }
+          varif(i4 && true) { } varif(true && i4) { }
+          varif(i4 || true) { } varif(true || i4) { }
         }
         """,
         PORT_REF_IN_STATIC_CONTEXT, PORT_REF_IN_STATIC_CONTEXT,

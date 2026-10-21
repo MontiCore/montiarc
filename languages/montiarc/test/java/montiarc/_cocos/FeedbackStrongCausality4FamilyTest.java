@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -9,8 +11,10 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.FeedbackStrongCausality4Family;
+import variablearc.causality.CausalityResolver;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -22,8 +26,18 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class FeedbackStrongCausality4FamilyTest extends FeedbackStrongCausalityTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    PresenceResolver presenceResolver = new PresenceResolver(withinComponentResolver);
+    checker.addCoCo(new FeedbackStrongCausality4Family(withinComponentResolver, presenceResolver,
+      new CausalityResolver(withinComponentResolver, presenceResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
+  @MethodSource("validModelsWithEffectChains")
   @MethodSource("validModelsWithVariability")
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -31,11 +45,8 @@ class FeedbackStrongCausality4FamilyTest extends FeedbackStrongCausalityTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new FeedbackStrongCausality4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -43,14 +54,8 @@ class FeedbackStrongCausality4FamilyTest extends FeedbackStrongCausalityTest {
 
   @ParameterizedTest
   @MethodSource("invalidModels")
+  @MethodSource("invalidModelsWithEffectChains")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability1",
-    "InvalidCompWithVariability2",
-    "InvalidCompWithVariability3",
-    "InvalidCompWithVariability4",
-    "InvalidCompWithVariability5"
-  })
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -59,15 +64,14 @@ class FeedbackStrongCausality4FamilyTest extends FeedbackStrongCausalityTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new FeedbackStrongCausality4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {

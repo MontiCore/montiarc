@@ -25,7 +25,7 @@ Where the arguments are:
 | `-s, --symboltable <dir>`         | Serializes the symbol table of the given artifacts to the specified directory     |
 | `-r, --report <dir>`              | Prints reports of the artifact to the specified directory                         |
 | `-c2mc, --class2mc`               | Enables importing java symbols from the java runtime environment                  |
-| `-novar, --no-variability-checks` | Disable the analysis of variable components for better performance                |
+| `-novar, --no-variability-checks` | Disables the analysis of variable components and rejects features, variation points, and constraints; implied by `-o` |
 | `-d, --debug`                     | Enables verbose logging with debug-level information                              |
 | `-t, --trace`                     | Enables verbose logging with trace-level information                              |
 

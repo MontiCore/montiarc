@@ -17,7 +17,6 @@ public class Prefixes {
   public final static String PORT_VALUE_OF = "portValueOf_";
   public final static String PARAMETER = "param_";
   public final static String FIELD = "field_";
-  public final static String FEATURE = "feature_";
   public final static String SUBCOMP = "subcomp_";
   public final static String SETTER_METHOD = "set_";
   public final static String GETTER_METHOD = "get_";
@@ -35,7 +34,6 @@ public class Prefixes {
   public String portValueOf() { return PORT_VALUE_OF; }
   public String parameter() { return PARAMETER; }
   public String field() { return FIELD; }
-  public String feature() { return FEATURE; }
   public String subcomp() { return SUBCOMP; }
   public String setterMethod() { return SETTER_METHOD; }
   public String getterMethod() { return GETTER_METHOD; }

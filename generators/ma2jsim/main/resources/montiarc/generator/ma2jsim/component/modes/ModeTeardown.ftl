@@ -36,7 +36,7 @@
   // Tear down sub components
   <#list helper.getModeHelper().getInstancesFromMode(mode) as sub>
     <#assign subSymbol = sub.getSymbol()>
-    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}${helper.getVariantHelper().subcomponentVariantSuffix(ast, subSymbol)}</#assign>
+    <#assign subCompName>this.${prefixes.subcomp()}${mode.getName()}_${subSymbol.getName()}</#assign>
     ${subCompName} = null;
     <@Log.trace log_aspects.removeComponent() "getName()">"${subSymbol.getName()}"</@Log.trace>
   </#list>

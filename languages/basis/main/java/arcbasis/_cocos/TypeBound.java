@@ -14,12 +14,14 @@ import de.monticore.types.check.CompKindOfGenericComponentType;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types3.SymTypeRelations;
 import de.se_rwth.commons.logging.Log;
-import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
 
 import java.util.List;
 import java.util.Optional;
 
+import static montiarc.util.ArcError.TOO_FEW_TYPE_ARGUMENTS;
+import static montiarc.util.ArcError.TOO_MANY_TYPE_ARGUMENTS;
+import static montiarc.util.ArcError.TYPE_ARG_IGNORES_UPPER_BOUND;
 
 /**
  * A generic component may have type parameters that have upper bounds. In this case this coco either checks
@@ -103,10 +105,7 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
     List<SymTypeExpression> args = compTypeExpr.getTypeBindingsAsList();
 
     if (parentSymTypeParameters.size() > args.size()) {
-      Log.error(
-        ArcError.TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
-        compTypeExpr.getSourceNode().map(ASTNode::get_SourcePositionStart).orElse(null), compTypeExpr.getSourceNode().map(ASTNode::get_SourcePositionEnd).orElse(null)
-      );
+      this.report(TOO_FEW_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()), compTypeExpr);
     }
   }
 
@@ -122,10 +121,7 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
     List<SymTypeExpression> args = compTypeExpr.getTypeBindingsAsList();
 
     if (parentSymTypeParameters.size() < args.size()) {
-      Log.error(
-        ArcError.TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()),
-        compTypeExpr.getSourceNode().map(ASTNode::get_SourcePositionStart).orElse(null), compTypeExpr.getSourceNode().map(ASTNode::get_SourcePositionEnd).orElse(null)
-      );
+      this.report(TOO_MANY_TYPE_ARGUMENTS.format(parentSymTypeParameters.size(), args.size()), compTypeExpr);
     }
   }
 
@@ -144,9 +140,7 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
             : SymTypeRelations.isCompatible(bound, typeVarBinding.get());
 
           if (!isValid) {
-            Log.error(
-              ArcError.TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()),
-              typeExpr.getSourceNode().map(ASTNode::get_SourcePositionStart).orElse(null), typeExpr.getSourceNode().map(ASTNode::get_SourcePositionEnd).orElse(null));
+            this.report(TYPE_ARG_IGNORES_UPPER_BOUND.format(typeVarBinding.get().print(), bound.print()), typeExpr);
           }
         }
       } else {
@@ -156,5 +150,12 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
     }
   }
 
-
+  /**
+   * Reports the violation at the source of the component type expression.
+   */
+  protected void report(@NotNull String message, @NotNull CompKindExpression typeExpr) {
+    Log.error(message,
+      typeExpr.getSourceNode().map(ASTNode::get_SourcePositionStart).orElse(null),
+      typeExpr.getSourceNode().map(ASTNode::get_SourcePositionEnd).orElse(null));
+  }
 }

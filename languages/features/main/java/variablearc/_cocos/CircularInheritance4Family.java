@@ -1,263 +1,121 @@
 /* (c) https://github.com/MontiCore/monticore */
 package variablearc._cocos;
 
-import arcbasis._ast.*;
+import arcbasis._ast.ASTArcComponentType;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
-import com.microsoft.z3.*;
+import com.microsoft.z3.BoolExpr;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbolSurrogate;
 import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTVariableArcFullVariantComponentType;
-import variablearc._cocos.util.ExpressionSolverService;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.ExpressionSolver;
-import variablearc._cocos.util.VariationConditionHelper;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
-import java.util.*;
-import java.util.stream.Stream;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
+/**
+ * Checks that no component type extends itself, directly or transitively, in
+ * any configuration of its enclosing component type. Inheritance itself is
+ * not variable, but inner component types are present only in some
+ * configurations, and inner component types of the same name in exclusive
+ * variation points are alternative super components.
+ */
 public class CircularInheritance4Family implements ArcBasisASTArcComponentTypeCoCo {
 
-  static List<ASTArcComponentType> alreadyCheckedComponents = new ArrayList<>();
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
 
-  public static Set<BoolExpr> extractExtends(BoolExpr expr) {
-    Set<BoolExpr> result = new HashSet<>();
-    extract(expr, result);
-    return result;
-  }
-
-  private static void extract(Expr e, Set<BoolExpr> out) {
-    if (e.isConst() && e.isBool() && e.getFuncDecl().getName().toString().toLowerCase().contains("_extend_")) {
-      out.add((BoolExpr) e);
-    } else {
-      for (Expr arg : e.getArgs()) {
-        extract(arg, out);
-      }
-    }
-  }
-
-  protected BoolExpr[][] constructTransitiveClosure(Context ctx, BoolExpr[][] extendsDirectly) {
-    int matrixLength = extendsDirectly.length;
-    BoolExpr[][] reachable = new BoolExpr[matrixLength][matrixLength];
-
-    // Initializing matrix reachable
-    for (int i = 0; i < matrixLength; i++)
-      System.arraycopy(extendsDirectly[i], 0, reachable[i], 0, matrixLength);
-
-    // Creating closure
-    for (int i = 0; i < matrixLength; i++) {
-      for (int j = 0; j < matrixLength; j++) {
-        for (int k = 0; k < matrixLength; k++) {
-          BoolExpr viaConnection = ctx.mkAnd(reachable[j][i], reachable[i][k]);
-          reachable[j][k] = ctx.mkOr(reachable[j][k], viaConnection);
-        }
-      }
-    }
-    return reachable;
-  }
-
-  protected static class ComponentExtension {
-
-    ComponentTypeSymbol source;
-    ComponentTypeSymbol target;
-    BoolExpr condition;
-
-    ComponentExtension(ComponentTypeSymbol source, ComponentTypeSymbol target, BoolExpr condition) {
-      this.source = source;
-      this.target = target;
-      this.condition = condition;
-    }
-
-    void setCondition(BoolExpr condition) {
-      this.condition = condition;
-    }
-  }
-
-  protected List<ComponentExtension> getComponentExtensionList(@NotNull ASTArcComponentType root,
-                                                               @NotNull ComponentTypeSymbol next, @NotNull List<ComponentTypeSymbol> visited, @NotNull List<ComponentExtension> extensions) {
-    Preconditions.checkNotNull(root);
-    Preconditions.checkNotNull(next);
-    Preconditions.checkNotNull(visited);
-    Preconditions.checkNotNull(extensions);
-
-    for (CompKindExpression parent : next.getSuperComponentsList()) {
-      if (parent.getTypeInfo().equals(root.getSymbol())) {
-        extensions.add(new ComponentExtension(next, parent.getTypeInfo(), null));
-      } else if (!visited.contains(parent.getTypeInfo())) {
-        visited.add(parent.getTypeInfo());
-        extensions.add(new ComponentExtension(next, parent.getTypeInfo(), null));
-        this.getComponentExtensionList(root, parent.getTypeInfo(), visited, extensions);
-      }
-
-    }
-    return extensions;
+  public CircularInheritance4Family(@NotNull WithinComponentResolver withinComponentResolver,
+                                    @NotNull PresenceResolver presenceResolver) {
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
   }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
-    ASTArcComponentType currentNode = node instanceof ASTVariableArcFullVariantComponentType ? ((ASTVariableArcFullVariantComponentType) node).getOriginal() : node;
-    if (alreadyCheckedComponents.contains(currentNode))
-      return;
     Preconditions.checkNotNull(node);
     Preconditions.checkArgument(node.isPresentSymbol());
 
-    ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    Context ctx = ExpressionSolverService.getContext();
-
-    Map<ASTArcComponentType, BoolExpr> componentConditions = new HashMap<>();
-
-    List<String> allFeatures;
-    ExpressionSet constraints;
-
-    // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
-
-    // Getting alls features, variations and constraints from the Main-Component
-    allFeatures = new ArrayList<>(mainFeatures);
-
-    List<ComponentExtension> currentComponentExtensions = new ArrayList<>();
-
-    if (node instanceof ASTVariableArcFullVariantComponentType) {
-
-      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-
-      componentConditions = ((ASTVariableArcFullVariantComponentType) node).getComponentConditions();
-
-      for (Map.Entry<ASTArcComponentType, BoolExpr> componentEntry : componentConditions.entrySet()) {
-        var componentExtensions = getComponentExtensionList(componentEntry.getKey(), componentEntry.getKey().getSymbol(), new ArrayList<>(), new ArrayList<>());
-        for (ComponentExtension ext : componentExtensions) {
-          ASTArcComponentType extSource = (ASTArcComponentType) ext.source.getAstNode();
-          ASTArcComponentType extTarget = (ASTArcComponentType) ext.target.getAstNode();
-          if (currentComponentExtensions.stream().anyMatch(e -> (e.source.equals(extSource.getSymbol()) && (e.target.equals(extTarget.getSymbol())))))
-            continue;
-          currentComponentExtensions.add(ext);
-        }
-      }
-
-    } else {
-      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-
-      componentConditions.put(node, ctx.mkTrue());
-      currentComponentExtensions = getComponentExtensionList(node, node.getSymbol(), new ArrayList<>(), new ArrayList<>());
-
-      var componentsInBody = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcComponentType).map(l -> (ASTArcComponentType) l).toList();
-      for (ASTArcComponentType component : componentsInBody) {
-        componentConditions.put(component, ctx.mkTrue());
-        var componentExtensions = getComponentExtensionList(component, component.getSymbol(), new ArrayList<>(), new ArrayList<>());
-        for (ComponentExtension ext : componentExtensions) {
-          ASTArcComponentType extSource = (ASTArcComponentType) ext.source.getAstNode();
-          ASTArcComponentType extTarget = (ASTArcComponentType) ext.target.getAstNode();
-          if (currentComponentExtensions.stream().anyMatch(e -> (e.source.equals(extSource.getSymbol()) && (e.target.equals(extTarget.getSymbol())))))
-            continue;
-          currentComponentExtensions.add(ext);
-        }
-      }
-
-      for (ComponentExtension ext : currentComponentExtensions) {
-        ext.setCondition(ctx.mkTrue());
+    ComponentTypeSymbol root = node.getSymbol();
+    Optional<ComponentTypeSymbol> owner = this.withinComponentResolver.enclosingComponentOf(root.getEnclosingScope());
+    String message = ArcError.CIRCULAR_INHERITANCE.format(node.getName());
+    FormulaSolver solver = this.presenceResolver.solver();
+    Map<ComponentTypeSymbol, List<BoolExpr>> cycles = new LinkedHashMap<>();
+    Set<ComponentTypeSymbol> onPath = new HashSet<>();
+    onPath.add(root);
+    this.collectCycles(solver, owner, root, root, this.presenceOf(solver, owner, root), onPath, cycles);
+    for (List<BoolExpr> cycle : cycles.values()) {
+      switch (solver.check(solver.or(cycle))) {
+        case SATISFIABLE -> Log.error(message, node.getHead().get_SourcePositionStart(), node.getHead().get_SourcePositionEnd());
+        case UNKNOWN -> Log.warn(message, node.getHead().get_SourcePositionStart(), node.getHead().get_SourcePositionEnd());
+        case UNSATISFIABLE -> { }
       }
     }
+  }
 
-    // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
-
-    // Setting the conditions for each extension
-    for (ComponentExtension ext : currentComponentExtensions) {
-      ASTArcComponentType extSource = (ASTArcComponentType) ext.source.getAstNode();
-      if (componentConditions.containsKey(extSource)) {
-        ext.condition = componentConditions.get(extSource);
-      } else {
-        ext.condition = ctx.mkTrue();
-      }
-    }
-
-    // Manages the component symbols
-    List<ComponentTypeSymbol> components = currentComponentExtensions.stream()
-      .flatMap(e -> Stream.of(e.source, e.target))
-      .distinct()
-      .toList();
-
-    int componentCount = components.size();
-
-    // Mapping the symbols of components to indices
-    Map<ComponentTypeSymbol, Integer> compIndex = new HashMap<>();
-    int compId = 0;
-    for (ComponentTypeSymbol component : components) {
-      compIndex.put(component, compId++);
-    }
-
-    // Initializing the direct extension matrix
-    BoolExpr[][] extendsDirectly = new BoolExpr[componentCount][componentCount];
-    for (int i = 0; i < componentCount; i++)
-      for (int j = 0; j < componentCount; j++)
-        extendsDirectly[i][j] = ctx.mkFalse();
-
-    // Filling the direct-extension-Matrix
-    for (ComponentExtension ext : currentComponentExtensions) {
-      extendsDirectly[compIndex.get(ext.source)][compIndex.get(ext.target)] = ctx.mkEq(ctx.mkBoolConst(ext.source.getName() + "_extend_" + ext.target.getName()), ext.condition);
-    }
-
-    // Compute transitive closure
-    BoolExpr[][] reachable = constructTransitiveClosure(ctx, extendsDirectly);
-
-    for (ASTArcComponentType componentType : componentConditions.keySet()) {
-
-      int index = components.indexOf(componentType.getSymbol());
-      if (index == -1) continue;
-
-      ComponentTypeSymbol comp = components.get(index);
-      BoolExpr selfDirectExtension = extendsDirectly[index][index];
-      BoolExpr selfTransitiveExtension = reachable[index][index];
-      Set<BoolExpr> selfExtVars = extractExtends(selfDirectExtension);
-      Set<BoolExpr> transitiveExtVars = extractExtends(selfTransitiveExtension);
-      transitiveExtVars.removeIf(e -> selfExtVars.stream().anyMatch(r -> e.getFuncDecl().equals(r.getFuncDecl())));
-
-      List<BoolExpr> expressionList_DirectExtension = new ArrayList<>();
-
-      expressionList_DirectExtension.add(ctx.mkAnd(selfDirectExtension, featureConstraints));
-      for (BoolExpr selfVar : selfExtVars)
-        expressionList_DirectExtension.add(ctx.mkEq(selfVar, ctx.mkTrue()));
-      // Checking for direct extension
-      if (ExpressionSolverService.solve(expressionList_DirectExtension) == Status.SATISFIABLE) {
-        if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList_DirectExtension)) {
-          Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
-        } else {
-          Log.warn(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
-        }
-      }
-
-      // Checking for transitive extension
-      List<BoolExpr> expressionList_TransitiveExtension = new ArrayList<>(List.of(selfTransitiveExtension, ctx.mkNot(selfDirectExtension), featureConstraints));
-
-      if (!transitiveExtVars.isEmpty()) {
-        BoolExpr transitiveVariable = ctx.mkBoolConst("transitive");
-        BoolExpr transitiveBody = ctx.mkTrue();
-        for (BoolExpr extendVar : transitiveExtVars)
-          transitiveBody = ctx.mkAnd(extendVar, transitiveBody);
-        expressionList_TransitiveExtension.addAll(List.of(ctx.mkEq(transitiveVariable, transitiveBody), transitiveVariable));
-      }
-
-      if (ExpressionSolverService.solve(expressionList_TransitiveExtension) == Status.SATISFIABLE) {
-        if (ExpressionSolverService.isSatisfiableForAllUnknownValues(expressionList_TransitiveExtension)) {
-          Log.error(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
-        } else {
-          Log.warn(ArcError.CIRCULAR_INHERITANCE.format(comp.getName()),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionStart(),
-            ((ASTArcComponentType) comp.getAstNode()).getHead().get_SourcePositionEnd());
+  /**
+   * Collects the presence of each inheritance path from the root back to
+   * itself, grouped by the last component type of the path, i.e., the one
+   * that extends the root.
+   */
+  protected void collectCycles(@NotNull FormulaSolver solver,
+                               @NotNull Optional<ComponentTypeSymbol> owner,
+                               @NotNull ComponentTypeSymbol root,
+                               @NotNull ComponentTypeSymbol next,
+                               @NotNull BoolExpr presence,
+                               @NotNull Set<ComponentTypeSymbol> onPath,
+                               @NotNull Map<ComponentTypeSymbol, List<BoolExpr>> cycles) {
+    for (CompKindExpression superComponent : next.getSuperComponentsList()) {
+      for (ComponentTypeSymbol parent : this.alternativesOf(owner, superComponent)) {
+        if (parent == root) {
+          cycles.computeIfAbsent(next, n -> new ArrayList<>()).add(presence);
+        } else if (onPath.add(parent)) {
+          this.collectCycles(solver, owner, root, parent, solver.and(presence, this.presenceOf(solver, owner, parent)), onPath, cycles);
+          onPath.remove(parent);
         }
       }
     }
-    alreadyCheckedComponents.addAll(componentConditions.keySet());
+  }
+
+  /**
+   * @return the super component, or, if it is an inner component type of the
+   * owner, all inner component types of the owner with its name
+   */
+  protected List<ComponentTypeSymbol> alternativesOf(@NotNull Optional<ComponentTypeSymbol> owner,
+                                                     @NotNull CompKindExpression superComponent) {
+    ComponentTypeSymbol type = this.unwrap(superComponent.getTypeInfo());
+    if (owner.isPresent() && this.isInnerTypeOf(owner.get(), type)) {
+      return this.withinComponentResolver.resolveMany(owner.get(), type.getName(), ComponentTypeSymbol.class).stream()
+        .filter(alternative -> this.isInnerTypeOf(owner.get(), alternative))
+        .toList();
+    }
+    return List.of(type);
+  }
+
+  protected BoolExpr presenceOf(@NotNull FormulaSolver solver,
+                                @NotNull Optional<ComponentTypeSymbol> owner,
+                                @NotNull ComponentTypeSymbol type) {
+    if (owner.isPresent() && this.isInnerTypeOf(owner.get(), type)) {
+      return this.presenceResolver.presenceOf(owner.get(), type);
+    }
+    return solver.top();
+  }
+
+  protected boolean isInnerTypeOf(@NotNull ComponentTypeSymbol owner, @NotNull ComponentTypeSymbol type) {
+    return type.getEnclosingScope() == owner.getSpannedScope();
+  }
+
+  protected ComponentTypeSymbol unwrap(@NotNull ComponentTypeSymbol type) {
+    return type instanceof ComponentTypeSymbolSurrogate surrogate ? surrogate.lazyLoadDelegate() : type;
   }
 }

@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -10,8 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.PortsConnected4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -25,25 +28,24 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
  */
 class PortsConnected4FamilyTest extends PortsConnectedTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new PortsConnected4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "ValidCompWithVariability7",
-    "ValidCompWithVariability8",
-    "ValidCompWithVariability9"
-  })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortsConnected4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -52,17 +54,6 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
-  @DisableIfDisplayName(contains = {
-    "InvalidCompWithVariability1 ",
-    "InvalidCompWithVariability2 ",
-    "InvalidCompWithVariability3 ",
-    "InvalidCompWithVariability4 ",
-    "InvalidCompWithVariability5 ",
-    "InvalidCompWithVariability6 ",
-    "InvalidCompWithVariability10 ",
-    "InvalidCompWithVariability11 ",
-    "InvalidCompWithVariability12 "
-  })
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);
@@ -71,15 +62,13 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortsConnected4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("unused ports are warnings").allMatch(Finding::isWarning);
   }
 
   static Stream<Arguments> validModelsWithVariability() {
@@ -304,7 +293,7 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
               port out int o;
             }
             a.b.A sub;
-            constraint (!f);
+            constraint (f);
           }
           """,
         OUT_PORT_UNUSED
@@ -318,7 +307,7 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
               port out int o;
             }
             a.b.A sub;
-            constraint (!f);
+            constraint (f);
           }
           """,
         IN_PORT_UNUSED,
@@ -424,6 +413,52 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
   }
 
   @Test
+  void shouldConsiderConnectorsOfSuperComponents() {
+    // Given
+    compile("package a; component Inner { port in int i; port out int o; }");
+    compile("""
+      package a;
+      component Base {
+        port in int i;
+        port out int o;
+        a.Inner inner;
+        i -> inner.i;
+        inner.o -> o;
+      }""");
+    ASTMACompilationUnit ast = compile("package a; component Child extends a.Base { }");
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
+
+    // When
+    checker().checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).isEmpty();
+  }
+
+  @Test
+  void shouldReportUnusedInheritedPortsAtTheComponent() {
+    // Given
+    compile("package a; component Inner { port in int i; port out int o; }");
+    compile("package a; component AtomicBase { port in int i; port out int o; }");
+    ASTMACompilationUnit ast = compile("""
+      package a;
+      component DecomposedChild extends a.AtomicBase {
+        a.Inner inner;
+        inner.o -> o;
+      }""");
+    assertThat(Log.getFindings()).as("findings of the compilation").isEmpty();
+
+    // When
+    checker().checkAll(ast);
+
+    // Then
+    assertThat(Log.getFindings()).singleElement()
+      .satisfies(finding -> assertThat(finding.getMsg()).startsWith(IN_PORT_UNUSED.getErrorCode()))
+      .satisfies(finding -> assertThat(finding.getSourcePosition()).hasValueSatisfying(start ->
+        assertThat(start.getLine()).as("line of the component").isEqualTo(2)));
+  }
+
+  @Test
   void shouldNotCrashOnUnresolvedSourcePort() {
     // Given
     ASTMACompilationUnit ast = compile("""
@@ -435,10 +470,7 @@ class PortsConnected4FamilyTest extends PortsConnectedTest {
       }
       """);
 
-    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
-    checker.addCoCo(new PortsConnected4Family());
-
     // Then
-    assertDoesNotThrow(() -> checker.checkAll(ast));
+    assertDoesNotThrow(() -> checker().checkAll(ast));
   }
 }

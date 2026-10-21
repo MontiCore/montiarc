@@ -3,10 +3,6 @@ package montiarc.ma2jsim.test;
 
 component TestDeploy() {
 
-  feature myFeature;
-
-  constraint (!myFeature);
-
   int myField = 0;
   String fieldWithInitial = "abcd";
 

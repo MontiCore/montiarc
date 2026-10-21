@@ -16,6 +16,8 @@ import variablearc._ast.ASTArcVarIf;
  */
 public class VarIfIsBoolean implements VariableArcASTArcVarIfCoCo {
 
+  protected static final String LOG_NAME = VarIfIsBoolean.class.getSimpleName();
+
   public VarIfIsBoolean() { }
 
   @Override
@@ -25,7 +27,9 @@ public class VarIfIsBoolean implements VariableArcASTArcVarIfCoCo {
     ASTExpression expr = varif.getCondition();
     SymTypeExpression typeOfExpr = TypeCheck3.typeOf(expr);
 
-    if (!SymTypeRelations.isBoolean(typeOfExpr)) {
+    if (typeOfExpr.isObscureType()) {
+      Log.debug(() -> "Skip CoCo check, the type of the varif condition is obscure.", LOG_NAME);
+    } else if (!SymTypeRelations.isBoolean(typeOfExpr)) {
       Log.error(VariableArcError.IF_STATEMENT_EXPRESSION_WRONG_TYPE.format(typeOfExpr.print()),
         varif.get_SourcePositionStart(), varif.get_SourcePositionEnd()
       );

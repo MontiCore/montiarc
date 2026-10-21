@@ -19,7 +19,7 @@ protected interface ${ast.getName()}${suffixes.msgGuard()} <@Util.printTypeParam
   @Override
   default boolean check(${syncMsg} msg) {
     return realCheck(
-      <#list inPorts as inPort> msg.${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)} <#sep>,</#list>
+      <#list inPorts as inPort> msg.${inPort.getName()} <#sep>,</#list>
     );
   }
   boolean realCheck(

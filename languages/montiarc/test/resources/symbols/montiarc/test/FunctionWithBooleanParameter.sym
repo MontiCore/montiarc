@@ -7,8 +7,10 @@
       "name": "FunctionWithBooleanParameter",
       "type": {
         "kind": "de.monticore.types.check.SymTypePrimitive",
-        "primitiveName": "boolean",
-        "parameters": [
+        "primitiveName": "boolean"
+      },
+      "spannedScope": {
+        "symbols": [
           {
             "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
             "name": "p",

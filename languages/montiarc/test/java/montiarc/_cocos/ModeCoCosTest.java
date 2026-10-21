@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.se_rwth.commons.logging.Log;
 import montiarc.MontiArcTestBase;
@@ -13,6 +14,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -98,7 +101,8 @@ class ModeCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab2(true);
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab(false, withinComponentResolver, new PresenceResolver(withinComponentResolver));
 
     // When
     checker.checkAll(ast);
@@ -110,8 +114,6 @@ class ModeCoCosTest extends MontiArcTestBase {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @DisableIfDisplayName(contains = {
-    "InvalidComp7",
-    "InvalidComp8",
     "InvalidComp9"
   })
   void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
@@ -121,7 +123,8 @@ class ModeCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab2(true);
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab(false, withinComponentResolver, new PresenceResolver(withinComponentResolver));
 
     // When
     checker.checkAll(ast);

@@ -7,18 +7,23 @@ import de.monticore.symboltable.modifiers.AccessModifier;
 import de.monticore.symboltable.modifiers.StaticAccessModifier;
 import de.se_rwth.commons.logging.Log;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc.check.VariableArcVariantOOWithinTypeBasicSymbolsResolver;
+import variablearc.check.SymbolSelection;
+import variablearc.check.VariableArcOOWithinTypeBasicSymbolsResolver;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public class MAOOWithinTypeBasicSymbolsResolver extends VariableArcVariantOOWithinTypeBasicSymbolsResolver {
+public class MAOOWithinTypeBasicSymbolsResolver extends VariableArcOOWithinTypeBasicSymbolsResolver {
 
   private static final String LOG_NAME = MAOOWithinTypeBasicSymbolsResolver.class.getSimpleName();
 
-  public static void init() {
+  public static void init(@NotNull SymbolSelection selection) {
     Log.trace(() -> "Initialize MAOOWithinTypeBasicSymbolsResolver as within type resolver", LOG_NAME);
-    setDelegate(new MAOOWithinTypeBasicSymbolsResolver());
+    setDelegate(new MAOOWithinTypeBasicSymbolsResolver(selection));
+  }
+
+  public MAOOWithinTypeBasicSymbolsResolver(@NotNull SymbolSelection selection) {
+    super(selection);
   }
 
   @Override

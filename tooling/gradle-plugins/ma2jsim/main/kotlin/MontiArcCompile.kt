@@ -62,6 +62,9 @@ abstract class MontiArcCompile : DefaultTask() {
   abstract val checkVariability : Property<Boolean>
 
   @get:Input
+  abstract val generateCode : Property<Boolean>
+
+  @get:Input
   abstract val printTaskInfo : Property<Boolean>
 
   @get:Input
@@ -96,6 +99,7 @@ abstract class MontiArcCompile : DefaultTask() {
     description = "Generates .java code from MontiArc models."
 
     checkVariability.convention(false)
+    generateCode.convention(true)
     debugLog.convention(false)
     traceLog.convention(false)
 
@@ -155,7 +159,7 @@ abstract class MontiArcCompile : DefaultTask() {
 
       // Set build args for the montiarc generator
       it.args("--input", cleanModelpath.asPath)
-      it.args("--output", this.javaOutputDir().get().asFile.path)
+      if (generateCode.get()) { it.args("--output", this.javaOutputDir().get().asFile.path) }
       it.args("--symboltable", this.symbolOutputDir().get().asFile.path)
       it.args("--report", this.reportsOutputDir().get().asFile.path)
 

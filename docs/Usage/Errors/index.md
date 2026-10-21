@@ -752,85 +752,24 @@ component A { final int x; x = 1; }
 
 ---
 
-### 0xC1154 - *Invalid Context Assignment*
+### 0xC1154 - *Non-Pure Expression*
 
 ##### Description
-Assignments are not allowed in this syntactic context. You cannot use an assignment expression (=, +=, -=, etc.) in places where MontiArc does not expect it namely inside subcomponent argument lists or in connector declarations. Such contexts only allow simple parameter bindings or connector arrows, not arbitrary assignments.
+Expressions with side effects, such as assignments, increments, and decrements, are not allowed in contexts that are
+evaluated statically, namely in the arguments of subcomponents, the default values of parameters, constraints, and the
+conditions of variation points.
 
 ##### Example
 
 ```montiarc
-Component A {
-  port out int o;
-  port in int i;
-  B b(p = p = 1); // Nested assignment in a subcomponent instantiation
-  o = i;     // Using '=' instead of '->'
+component A(int n) {
+  B b(n = 1);      // Assignment in a subcomponent argument
+  constraint(n++); // Increment in a constraint
 }
 ```
 
----
-
-### 0xC1155 - *Invalid Context Increment Prefix*
-
-##### Description
-Prefix increment (`++x`) is used in a context where disallowed.
-
-##### Example
-
-```montiarc
-component A { B b(p = ++p); }
-```
-
 ##### How to fix
-Perform increments within allowed behavioral code blocks.
-
----
-
-### 0xC1156 - *Invalid Context Decrement Prefix*
-
-##### Description
-Prefix decrement (`--x`) is used where not permitted.
-
-##### Example
-
-```montiarc
-component A { B b(p = --p); }
-```
-
-##### How to fix
-Use within valid behavioral blocks.
-
----
-
-### 0xC1157 - *Invalid Context Increment Suffix*
-
-##### Description
-Suffix increment (`x++`) is disallowed in this context.
-
-##### Example
-
-```montiarc
-component A { B b(p = p++); }
-```
-
-##### How to fix
-Place increments in behavior sections.
-
----
-
-### 0xC1158 - *Invalid Context Decrement Suffix*
-
-##### Description
-Suffix decrement (`x--`) is disallowed here.
-
-##### Example
-
-```montiarc
-component A { B b(p = p--); }
-```
-
-##### How to fix
-Use within valid operational code.
+Remove the side effect, e.g., use `==` and `n+1` instead.
 
 ---
 
@@ -1115,3 +1054,118 @@ component A(int p = q, int q = 1) { }
 Reorder the parameters so that each default value references only preceding 
 parameters, e.g., component A(int q = 1, int p = q) { }, or remove the 
 references to other parameters from the default values.
+
+---
+
+### 0xC1198 - *Variability Not Analyzed*
+
+##### Description
+A model contains variability elements, such as features, variation points, or 
+constraints, but the analysis of variable components is disabled.
+
+##### Example
+
+```montiarc
+component A {
+  feature f;
+  varif (f) { port in int i; }
+}
+```
+
+##### How to fix
+Enable the analysis of variable components or remove the variability.
+
+---
+
+### 0xC1401 - *Constraint Not Satisfied*
+
+##### Description
+The constraints of a component cannot be satisfied, i.e., the component has no 
+valid configuration. 
+
+##### Example
+
+```montiarc
+component A {
+  feature f;
+  constraint(f && !f);
+}
+```
+
+##### How to fix
+Change the constraint to be satisfiable.
+
+---
+
+### 0xC1404 - *Subcomponents Not Constraint*
+
+##### Description
+The constraints of a component do not uniquely determine the feature selections 
+of its subcomponents. For a given valid configuration of the component, 
+a subcomponent’s feature can still have different selections.
+
+##### Example
+
+```montiarc
+component A {
+  component B { feature f; }
+  B b; // The feature b.f is not determined
+}
+```
+
+##### How to fix
+Bind the features of the subcomponents with constraints, e.g., `constraint(b.f);`.
+
+---
+
+### 0xC1406 - *Subcomponent Constraints Not Implied*
+
+##### Description
+The constraints of a component do not guarantee that its subcomponents satisfy 
+their own constraints. A valid configuration of the component can therefore 
+result in an invalid configuration of a subcomponent.
+
+##### Example
+
+```montiarc
+component A {
+  component B { feature f; constraint(f); }
+  B b; // A does not ensure b.f
+}
+```
+
+##### How to fix
+Bind the features of the subcomponents in accordance to their constraints, e.g., `constraint(b.f);`.
+
+---
+
+### 0xC1407 - *Feature Not Selectable*
+
+##### Description
+A feature is not selectable in any valid configuration of its component.
+
+##### Example
+
+```montiarc
+component A {
+  feature f;
+  constraint(!f);
+}
+```
+
+---
+
+### 0xC1408 - *Variation Point Not Present*
+
+##### Description
+A branch of a variation point is not present in any valid configuration of its component.
+
+##### Example
+
+```montiarc
+component A {
+  feature f;
+  constraint(f);
+  varif (f) { port in int i; } else { port in int j; } // The else branch is never present
+}
+```

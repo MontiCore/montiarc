@@ -5,10 +5,9 @@
 <#import "/montiarc/generator/ma2jsim/util/Util.ftl" as Util>
 
 <#assign index = 0>
-<#list helper.getVariantHelper().getVariants(ast) as variant>
-<#if !variant.isAtomic()>
-protected void <@MethodNames.connectorSetup/>${helper.getVariantHelper().variantSuffix(variant)}() {
-<#list variant.getAstNode().getConnectors() as connector>
+<#if !ast.getSymbol().isAtomic()>
+protected void <@MethodNames.connectorSetup/>() {
+<#list ast.getConnectors() as connector>
   <#assign source = connector.getSource()>
   <#assign sourceType = helper.getComponentHelper().getTypeOfPortIfPresent(source).get()>
   <#assign unboxSourceType = SymTypeRelations.unbox(sourceType)>
@@ -60,25 +59,18 @@ protected void <@MethodNames.connectorSetup/>${helper.getVariantHelper().variant
 </#list>
 }
 </#if>
-</#list>
 
 <#-- connectorEndPoint may be the source of a connector, or one of its targets -->
 <#macro portAccessorOf connectorEndPoint>
   <#assign IsSubcompTheOwner = connectorEndPoint.isPresentComponent()>
 
-  <#assign variantSuffix = IsSubcompTheOwner?then(
-    helper.getVariantHelper().portVariantSuffix(connectorEndPoint.getComponentSymbol(), connectorEndPoint.getPortSymbol()),
-    helper.getVariantHelper().portVariantSuffix(ast, connectorEndPoint.getPortSymbol())
-  )>
-
   <#if IsSubcompTheOwner>
-    <#assign owningComp = connectorEndPoint.getComponentSymbol()>
-    <#assign compAccessor = prefixes.subcomp() + connectorEndPoint.getComponent() + helper.getVariantHelper().subcomponentVariantSuffix(ast, owningComp) + "()">
-    ${compAccessor}.${prefixes.port()}${connectorEndPoint.getPort()}${variantSuffix}()
+    <#assign compAccessor = prefixes.subcomp() + connectorEndPoint.getComponent() + "()">
+    ${compAccessor}.${prefixes.port()}${connectorEndPoint.getPort()}()
 
   <#else>
     <#-- We directly access the field because we need to know that the port is an InOutPort -->
-    ${prefixes.port()}${connectorEndPoint.getPort()}${variantSuffix}
+    ${prefixes.port()}${connectorEndPoint.getPort()}
 
   </#if>
 </#macro>

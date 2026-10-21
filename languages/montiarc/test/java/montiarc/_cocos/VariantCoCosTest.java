@@ -1,6 +1,7 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.class2mc.OOClass2MCResolver;
 import de.monticore.symbols.oosymbols._symboltable.OOTypeSymbol;
@@ -15,7 +16,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.junitpioneer.jupiter.params.DisableIfDisplayName;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.io.IOException;
 import java.util.stream.Stream;
@@ -44,6 +46,7 @@ import static montiarc.util.ArcError.UNIQUE_IDENTIFIER_NAMES;
 import static montiarc.util.MCError.CANT_FIND_SYMBOL_IN_EXPRESSION;
 import static montiarc.util.MCError.EXPR_EQUAL_OP_NOT_APPLICABLE;
 import static montiarc.util.SCError.PRECONDITION_NOT_BOOLEAN;
+import static montiarc.util.VariableArcError.VARIATION_POINT_NOT_PRESENT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class VariantCoCosTest extends MontiArcTestBase {
@@ -399,13 +402,13 @@ class VariantCoCosTest extends MontiArcTestBase {
       component ValidComp53 {
         feature f;
         varif (f) {
-          port in int i;
+          port sync in int i;
           automaton {
             initial state A;
             A -> A [i > 1];
           }
         } else {
-          port in boolean i;
+          port sync in boolean i;
           automaton {
             initial state A;
             A -> A [i];
@@ -470,59 +473,26 @@ class VariantCoCosTest extends MontiArcTestBase {
         constraint (f);
       }""",
   })
-  @DisableIfDisplayName(contains = {
-    "ValidComp23",
-    "ValidComp27",
-    "ValidComp28",
-    "ValidComp29",
-    "ValidComp33",
-    "ValidComp35",
-    "ValidComp37",
-    "ValidComp38",
-    "ValidComp45",
-    "ValidComp46",
-    "ValidComp47",
-    "ValidComp48",
-    "ValidComp49",
-    "ValidComp53",
-  })
   void shouldNotReportError(@NotNull String model) throws IOException {
     Preconditions.checkNotNull(model);
 
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab2(true);
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab(false, withinComponentResolver, new PresenceResolver(withinComponentResolver));
 
     // When
     checker.checkAll(ast);
 
     // Then
-    assertThat(Log.getFindings()).isEmpty();
+    assertThat(Log.getFindings())
+      .filteredOn(finding -> !finding.getMsg().startsWith(VARIATION_POINT_NOT_PRESENT.getErrorCode()))
+      .isEmpty();
   }
 
   @ParameterizedTest
   @MethodSource("invalidModels")
-  @DisableIfDisplayName(contains = {
-    "InvalidComp26",
-    "InvalidComp27",
-    "InvalidComp29",
-    "InvalidComp34",
-    "InvalidComp35",
-    "InvalidComp37",
-    "InvalidComp38",
-    "InvalidComp41",
-    "InvalidComp60",
-    "InvalidComp61",
-    "InvalidComp62",
-    "InvalidComp63",
-    "InvalidComp64",
-    "InvalidComp69",
-    "InvalidComp74",
-    "InvalidComp75",
-    "InvalidComp76",
-    "InvalidComp77"
-  })
   void shouldReportError(@NotNull String model, @NotNull Error... errors) throws IOException {
     Preconditions.checkNotNull(model);
     Preconditions.checkNotNull(errors);
@@ -530,7 +500,8 @@ class VariantCoCosTest extends MontiArcTestBase {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab2(true);
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = MontiArcCoCos.afterSymTab(false, withinComponentResolver, new PresenceResolver(withinComponentResolver));
 
     // When
     checker.checkAll(ast);
@@ -1242,8 +1213,7 @@ class VariantCoCosTest extends MontiArcTestBase {
               constraint (!sub.ff);
             }
           }""",
-        MULTIPLE_BEHAVIOR,
-        DECOMPOSED_COMPONENT_WITH_BEHAVIOR
+        MULTIPLE_BEHAVIOR
       ),
       // out port forward, subcomponent with variable generic interface type (deselected feature)
       arg("""
@@ -1345,13 +1315,13 @@ class VariantCoCosTest extends MontiArcTestBase {
           component InvalidComp69 {
             feature f;
             varif(f){
-              port in int i;
+              port sync in int i;
               automaton {
                 initial state B;
                 B -> B [i];
               }
             } else {
-              port in boolean i;
+              port sync in boolean i;
               automaton {
                 initial state A;
                 A -> A [i == "a"];

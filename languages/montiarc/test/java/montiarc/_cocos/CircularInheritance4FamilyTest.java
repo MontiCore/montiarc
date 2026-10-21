@@ -1,7 +1,9 @@
 /* (c) https://github.com/MontiCore/monticore */
 package montiarc._cocos;
 
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
+import de.se_rwth.commons.logging.Finding;
 import de.se_rwth.commons.logging.Log;
 import montiarc._ast.ASTMACompilationUnit;
 import montiarc.util.Error;
@@ -11,6 +13,8 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junitpioneer.jupiter.params.DisableIfDisplayName;
 import variablearc._cocos.CircularInheritance4Family;
+import variablearc.context.VariableArcWithinComponentResolver;
+import variablearc.presence.PresenceResolver;
 
 import java.util.stream.Stream;
 
@@ -22,18 +26,17 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 class CircularInheritance4FamilyTest extends CircularInheritanceTest {
 
+  protected static MontiArcCoCoChecker checker() {
+    WithinComponentResolver withinComponentResolver = new VariableArcWithinComponentResolver();
+    MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
+    checker.addCoCo(new CircularInheritance4Family(withinComponentResolver, new PresenceResolver(withinComponentResolver)));
+    return checker;
+  }
+
   @ParameterizedTest
   @MethodSource("validModels")
   @MethodSource("validModelsWithVariability")
   @DisableIfDisplayName(contains = {
-    "ValidComp2",
-    "ValidComp3",
-    "ValidComp4",
-    "ValidComp5",
-    "ValidComp7",
-    "ValidComp8",
-    "ValidComp9",
-    "ValidComp10",
     "ValidCompWithVariability3"
   })
   void shouldNotReportError(@NotNull String model) {
@@ -42,11 +45,8 @@ class CircularInheritance4FamilyTest extends CircularInheritanceTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new CircularInheritance4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(Log.getFindings()).isEmpty();
@@ -56,9 +56,6 @@ class CircularInheritance4FamilyTest extends CircularInheritanceTest {
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
   @DisableIfDisplayName(contains = {
-    "InvalidComp1",
-    "InvalidComp2",
-    "InvalidComp6",
     "InvalidCompWithVariability2"
   })
   void shouldReportError(@NotNull String model,
@@ -69,15 +66,14 @@ class CircularInheritance4FamilyTest extends CircularInheritanceTest {
     // Given
     ASTMACompilationUnit ast = compile(model);
 
-    MontiArcFullVariantCoCoChecker checker = new MontiArcFullVariantCoCoChecker();
-    checker.get4FullVariant().addCoCo(new CircularInheritance4Family());
-
     // When
-    checker.checkAll(ast);
+    checker().checkAll(ast);
 
     // Then
     assertThat(getLoggedErrorCodes())
       .containsExactlyInAnyOrder(getErrorCodes(errors));
+    assertThat(Log.getFindings()).as("findings independent of unknown values are errors")
+      .allMatch(Finding::isError);
   }
 
   static Stream<Arguments> validModelsWithVariability() {

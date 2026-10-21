@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * Derives feature diagrams from the features and constraints of MontiArc
  * components. Extends the MontiArc CLI by the options <code>--output</code>
- * and <code>--include-subcomponents</code>.
+ * and <code>--include-subcomponents</code>, but omits <code>--no-variability-checks</code>.
  */
 public class Arc2FDTool extends MontiArcTool {
 
@@ -52,7 +52,9 @@ public class Arc2FDTool extends MontiArcTool {
   @Override
   public Options addStandardOptions(@NotNull Options options) {
     Preconditions.checkNotNull(options);
-    super.addStandardOptions(options);
+    super.addStandardOptions(new Options()).getOptions().stream()
+      .filter(option -> !"novar".equals(option.getOpt()))
+      .forEach(options::addOption);
     options.addOption(Option.builder(OPT_OUTPUT)
       .longOpt("output")
       .desc("Writes the feature diagrams to the specified directory")
@@ -100,11 +102,9 @@ public class Arc2FDTool extends MontiArcTool {
 
     boolean c2mc = cl.hasOption("c2mc");
 
-    boolean novar = cl.hasOption("novar");
-
     boolean recursive = cl.hasOption(OPT_INCLUDE_SUBCOMPONENTS);
 
-    this.doRun(i, p, o, pp, s, r, c2mc, novar, recursive);
+    this.doRun(i, p, o, pp, s, r, c2mc, recursive);
   }
 
   /**
@@ -121,7 +121,6 @@ public class Arc2FDTool extends MontiArcTool {
                        @Nullable String s,
                        @Nullable String r,
                        boolean c2mc,
-                       boolean novar,
                        boolean recursive) {
     Preconditions.checkNotNull(i);
     Preconditions.checkNotNull(p);
@@ -129,7 +128,7 @@ public class Arc2FDTool extends MontiArcTool {
     Preconditions.checkArgument(i.length > 0);
 
     this.prepareGlobalScope(p, c2mc);
-    Set<ASTMACompilationUnit> asts = this.compile(i, pp, s, r, c2mc, novar);
+    Set<ASTMACompilationUnit> asts = this.compile(i, pp, s, r, c2mc, false);
     this.writeFeatureDiagrams(o, this.toFeatureDiagrams(asts, recursive));
 
     // terminates if errors were reported
@@ -167,7 +166,7 @@ public class Arc2FDTool extends MontiArcTool {
                                                      boolean recursive) {
     Preconditions.checkNotNull(asts);
 
-    Arc2FDTransformer transformer = new Arc2FDTransformer(recursive);
+    Arc2FDTransformer transformer = new Arc2FDTransformer(recursive, this.withinComponentResolver, this.presenceResolver);
     Set<ASTFDCompilationUnit> fds = new LinkedHashSet<>();
     asts.forEach(ast -> transformer.transform(ast).ifPresent(fds::add));
     return fds;

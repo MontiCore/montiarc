@@ -17,7 +17,6 @@ import de.monticore.scbasis._ast.ASTSCState;
 import de.monticore.scbasis._ast.ASTSCStateElement;
 import de.monticore.scbasis._ast.ASTSCTransition;
 import de.monticore.scdoactions._ast.ASTSCDoAction;
-import de.monticore.scevents._symboltable.SCEventDefSymbol;
 import de.monticore.scstatehierarchy._ast.ASTSCHierarchyBody;
 import de.monticore.scstatehierarchy._ast.ASTSCInternTransition;
 import de.monticore.scstateinvariants._ast.ASTSCInvState;
@@ -26,8 +25,6 @@ import de.monticore.sctransitions4code._ast.ASTTransitionBody;
 import de.monticore.statements.mcstatementsbasis._ast.ASTMCStatement;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import montiarc._prettyprint.MontiArcFullPrettyPrinter;
-import variablearc._ast.ASTVariantArcComponentType;
-import variablearc._symboltable.VariableArcVariantComponentTypeSymbol;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -214,17 +210,11 @@ public class BehaviorHelper {
   }
 
   public Optional<PortSymbol> getTriggeringPortSymbol(ASTArcComponentType componentType, ASTTransitionBody body) {
-    Predicate<SCEventDefSymbol> predicate;
-    if (componentType instanceof ASTVariantArcComponentType) {
-      predicate = ((VariableArcVariantComponentTypeSymbol) componentType.getSymbol())::containsSymbol;
-    } else {
-      predicate = e -> true;
-    }
     return Optional.of(body)
       .filter(ASTTransitionBody::isPresentSCEvent)
       .filter(bdy -> bdy.getSCEvent() instanceof ASTMsgEvent)
       .map(bdy -> (ASTMsgEvent) bdy.getSCEvent())
-      .map(event -> event.getEnclosingScope().resolveSCEventDefMany(event.getName(), predicate).stream().findFirst())
+      .map(event -> event.getEnclosingScope().resolveSCEventDefMany(event.getName()).stream().findFirst())
       .filter(Optional::isPresent)
       .filter(sym -> sym.get() instanceof Port2EventDefAdapter)
       .map(sym -> ((Port2EventDefAdapter) sym.get()).getAdaptee());

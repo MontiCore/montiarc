@@ -34,7 +34,7 @@ class BehaviorInDecomposedTest extends MontiArcTestBase {
     Preconditions.checkNotNull(model);
 
     // Given
-    ASTMACompilationUnit ast = MontiArcTestBase.compile(model);
+    ASTMACompilationUnit ast = this.compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new BehaviorInDecomposed());
@@ -51,7 +51,7 @@ class BehaviorInDecomposedTest extends MontiArcTestBase {
   void shouldReportError(@NotNull String model,
                          @NotNull Error[] expectedErrors) {
     // Given
-    ASTMACompilationUnit ast = MontiArcTestBase.compile(model);
+    ASTMACompilationUnit ast = this.compile(model);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new BehaviorInDecomposed());

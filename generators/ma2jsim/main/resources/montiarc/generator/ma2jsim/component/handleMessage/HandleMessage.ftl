@@ -11,7 +11,7 @@
 @Override
 protected void handleMessageWithModeAutomaton(montiarc.rte.port.InPort<?> p) {
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-    <#assign portNameWithSuffix>${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)}</#assign>
+    <#assign portNameWithSuffix>${inPort.getName()}</#assign>
     <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
     if (p == ${prefixes.port()}${portNameWithSuffix}) {
       getModeAutomaton().${prefixes.message()}${inPort.getName()}(${prefixes.portValueOf()}${portNameWithSuffix}());
@@ -25,7 +25,7 @@ protected void handleMessageWithBehavior(montiarc.rte.port.InPort<?> p) {
   if (this.getBehavior() == null) throw new IllegalStateException();
 
   <#list ast.getSymbol().getAllIncomingPorts() as inPort>
-    <#assign portNameWithSuffix>${inPort.getName()}${helper.getVariantHelper().portVariantSuffix(ast, inPort)}</#assign>
+    <#assign portNameWithSuffix>${inPort.getName()}</#assign>
     <#assign eventClass>${ast.getName()}${suffixes.events()}<@Util.printTypeParameters ast false/></#assign>
     if (p == ${prefixes.port()}${portNameWithSuffix}) {
       this.getBehavior().${prefixes.message()}${portNameWithSuffix}(${prefixes.portValueOf()}${portNameWithSuffix}());

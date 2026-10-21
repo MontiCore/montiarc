@@ -2,259 +2,98 @@
 package variablearc._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTArcElement;
-import arcbasis._ast.ASTArcField;
-import arcbasis._ast.ASTArcFieldDeclaration;
-import arcbasis._ast.ASTArcPort;
-import arcbasis._ast.ASTComponentInstance;
-import arcbasis._ast.ASTComponentInstantiation;
-import arcbasis._ast.ASTComponentInterface;
-import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Status;
-import de.monticore.ast.ASTNode;
-import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
-import de.monticore.symbols.basicsymbols._symboltable.VariableSymbol;
+import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symboltable.ISymbol;
-import de.se_rwth.commons.SourcePosition;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcFeature;
-import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTVariableArcFullVariantComponentType;
-import variablearc._cocos.util.DuplicateElementsService;
-import variablearc._cocos.util.ExpressionSolverService;
-import variablearc._cocos.util.VariationConditionHelper;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.ExpressionSolver;
+import variablearc._symboltable.IVariableArcScope;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
+/**
+ * Checks that the identifiers of the elements declared by a component type
+ * (inner component types, subcomponents, ports, fields, parameters, type
+ * parameters, and features) are unique in every configuration, i.e., that no
+ * two elements of the same name are present together.
+ */
 public class UniqueIdentifier4Family implements ArcBasisASTArcComponentTypeCoCo {
 
-  private List<ElementCondition> allElementList = new ArrayList<>();
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
 
-  protected static Optional<SourcePosition> optSourcePosOf(@NotNull ISymbol sym) {
-    Preconditions.checkNotNull(sym);
-
-    if (!sym.isPresentAstNode()) {
-      return Optional.empty();
-    }
-    ASTNode node = sym.getAstNode();
-
-    if (!node.isPresent_SourcePositionStart()) {
-      return Optional.empty();
-    }
-    return Optional.of(node.get_SourcePositionStart());
+  public UniqueIdentifier4Family(@NotNull WithinComponentResolver withinComponentResolver,
+                                 @NotNull PresenceResolver presenceResolver) {
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
   }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
+    Preconditions.checkArgument(node.isPresentSymbol());
 
-    DuplicateElementsService.setComponent(node, false);
-
-    ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    Context ctx = ExpressionSolverService.getContext();
-
-    allElementList = new ArrayList<>();
-    Map<ASTArcElement, BoolExpr> elementConditions;
-
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
-
-    List<String> allFeatures;
-    ExpressionSet constraints;
-
-    allFeatures = new ArrayList<>(mainFeatures);
-
-    if (!node.getSymbol().isPresentAstNode())
-      return;
-
-    // Adding names from the main-component
-    var mainParmeters = node.getSymbol().getAstNode().getSymbol().getParameterList();
-    for (VariableSymbol mainParameterSymbol : mainParmeters) {
-      allElementList.add(new ElementCondition(mainParameterSymbol.getName(), ctx.mkTrue(), optSourcePosOf(mainParameterSymbol).orElse(new SourcePosition(-1, -1))));
+    ComponentTypeSymbol component = node.getSymbol();
+    Map<String, List<ISymbol>> byName = new LinkedHashMap<>();
+    for (ISymbol element : this.getElements(component)) {
+      byName.computeIfAbsent(element.getName(), n -> new ArrayList<>()).add(element);
     }
 
-    var mainTypeParameters = node.getSymbol().getAstNode().getSymbol().getTypeParameters();
-    for (TypeVarSymbol mainTypeParamterSymbol : mainTypeParameters) {
-      allElementList.add(new ElementCondition(mainTypeParamterSymbol.getName(), ctx.mkTrue(), optSourcePosOf(mainTypeParamterSymbol).orElse(new SourcePosition(-1, -1))));
-    }
-
-    if (node instanceof ASTVariableArcFullVariantComponentType) {
-      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-
-      elementConditions = ((ASTVariableArcFullVariantComponentType) node).getElementConditions();
-
-      for (Map.Entry<ASTArcElement, BoolExpr> elementEntry : elementConditions.entrySet()) {
-        ArrayList<ASTArcElement> elementList = new ArrayList<>(Collections.singletonList(elementEntry.getKey()));
-        addFieldNameOccurences(elementList, elementEntry.getValue());
-        addFeatureNameOccurences(elementList, elementEntry.getValue());
-        addPortNameOccurences(elementList, elementEntry.getValue());
-        addComponentNameOccurences(elementList, elementEntry.getValue());
-      }
-
-    } else {
-      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-
-      // Adding names of the arc-elements that belong to the main-component
-      var mainElements = (ArrayList<ASTArcElement>) node.getBody().getArcElementList();
-      addFieldNameOccurences(mainElements, ctx.mkTrue());
-      addFeatureNameOccurences(mainElements, ctx.mkTrue());
-      addPortNameOccurences(mainElements, ctx.mkTrue());
-      addComponentNameOccurences(mainElements, ctx.mkTrue());
-
-    }
-
-    // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
-
-    // Grouping elements by name
-    Map<String, List<ElementCondition>> grouped = new HashMap<>();
-    for (ElementCondition element : allElementList) {
-      grouped.computeIfAbsent(element.name, e -> new ArrayList<>()).add(element);
-    }
-
-    Map<String, List<ElementCondition>> nameToConditions = new HashMap<>();
-
-    // Grouping the entries by name
-    for (ElementCondition entry : allElementList) {
-      nameToConditions.computeIfAbsent(entry.name, e -> new ArrayList<>())
-        .add(entry);
-    }
-
-    // Adding overlapping constraints for each name that has more than 1 entry
-    Map<String, BoolExpr> nameConflicts = new HashMap<>();
-    for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet()) {
-      List<ElementCondition> group = entry.getValue();
-      if (group.size() <= 1) continue; // No conflict possible
-
-      List<BoolExpr> conflictPairs = new ArrayList<>();
-      for (int i = 0; i < group.size(); i++) {
-        for (int j = i + 1; j < group.size(); j++) {
-          conflictPairs.add(ctx.mkAnd(group.get(i).condition, group.get(j).condition));
-        }
-      }
-
-      if (!conflictPairs.isEmpty()) {
-        nameConflicts.put(entry.getKey(), ctx.mkOr(conflictPairs.toArray(new BoolExpr[0])));
-      }
-
-    }
-
-    // Adding all constraints for the possible conflicts to the solver
-    List<BoolExpr> nameConflictExpressionList = new ArrayList<>(List.of(ctx.mkOr(nameConflicts.values().toArray(new BoolExpr[0])), featureConstraints));
-
-    if (nameConflicts.isEmpty()) {
-      return;
-    }
-
-    for (Map.Entry<String, BoolExpr> potentialConflict : nameConflicts.entrySet()) {
-
-      if (ExpressionSolverService.solve(List.of(potentialConflict.getValue(), featureConstraints)) == Status.SATISFIABLE) {
-
-        for (Map.Entry<String, List<ElementCondition>> entry : nameToConditions.entrySet().stream().filter(e -> e.getKey().equals(potentialConflict.getKey())).toList()) {
-          List<ElementCondition> group = entry.getValue();
-          List<ElementCondition> active = new ArrayList<>();
-          for (ElementCondition element : group) {
-            if (ExpressionSolverService.solve(List.of(element.condition, featureConstraints)) == Status.SATISFIABLE) {
-              active.add(element);
-            }
-          }
-
-          if (active.size() > 1) {
-            DuplicateElementsService.setComponent(node, true);
-            if (ExpressionSolverService.isSatisfiableForAllUnknownValues(List.of(potentialConflict.getValue(), featureConstraints))) {
-              Log.error(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
-                node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
-            } else {
-              Log.warn(ArcError.UNIQUE_IDENTIFIER_NAMES.format(active.get(0).name),
-                node.getSymbol().getAstNode().get_SourcePositionStart(), node.getSymbol().getAstNode().get_SourcePositionEnd());
-            }
-          }
-        }
+    FormulaSolver solver = this.presenceResolver.solverFor(component);
+    for (Map.Entry<String, List<ISymbol>> entry : byName.entrySet()) {
+      if (entry.getValue().size() < 2) continue;
+      String message = ArcError.UNIQUE_IDENTIFIER_NAMES.format(entry.getKey());
+      switch (solver.check(this.conflict(solver, component, entry.getValue()))) {
+        case SATISFIABLE -> Log.error(message, node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+        case UNKNOWN -> Log.warn(message, node.get_SourcePositionStart(), node.get_SourcePositionEnd());
+        case UNSATISFIABLE -> { }
       }
     }
   }
 
-  protected void addFieldNameOccurences(ArrayList<ASTArcElement> arcElements, BoolExpr constriantExpr) {
-    arcElements.stream().filter(e -> e instanceof ASTArcFieldDeclaration).forEach(e -> {
-      for (ASTArcField field : ((ASTArcFieldDeclaration) e).getArcFieldList()) {
-        allElementList.add(new ElementCondition(field.getName(), constriantExpr, optSourcePosOf(field.getSymbol()).orElse(new SourcePosition(-1, -1))));
+  /**
+   * @return the condition under which at least two of the elements are present
+   */
+  protected BoolExpr conflict(@NotNull FormulaSolver solver,
+                              @NotNull ComponentTypeSymbol component,
+                              @NotNull List<ISymbol> elements) {
+    List<BoolExpr> presences = elements.stream().map(element -> this.presenceOf(solver, component, element)).toList();
+    List<BoolExpr> pairs = new ArrayList<>();
+    for (int i = 0; i < presences.size(); i++) {
+      for (int j = i + 1; j < presences.size(); j++) {
+        pairs.add(solver.and(presences.get(i), presences.get(j)));
       }
-    });
-  }
-
-  protected void addPortNameOccurences(ArrayList<ASTArcElement> arcElements, BoolExpr constraintExpr) {
-    arcElements.stream().filter(e -> e instanceof ASTPortDeclaration).forEach(e -> {
-      for (ASTArcPort port : ((ASTPortDeclaration) e).getArcPortList()) {
-        allElementList.add(new ElementCondition(port.getName(), constraintExpr, optSourcePosOf(port.getSymbol()).orElse(new SourcePosition(-1, -1))));
-      }
-    });
-    arcElements.stream().filter(e -> e instanceof ASTComponentInterface).forEach(e -> {
-      for (ASTPortDeclaration portDeclaration : ((ASTComponentInterface) e).getPortDeclarationList()) {
-        for (ASTArcPort port : portDeclaration.getArcPortList()) {
-          allElementList.add(new ElementCondition(port.getName(), constraintExpr, optSourcePosOf(port.getSymbol()).orElse(new SourcePosition(-1, -1))));
-        }
-      }
-    });
-  }
-
-  protected void addComponentNameOccurences(ArrayList<ASTArcElement> arcElements, BoolExpr constraintExpr) {
-    arcElements.stream().filter(e -> e instanceof ASTArcComponentType).forEach(e -> {
-      allElementList.add(new ElementCondition(((ASTArcComponentType) e).getSymbol().getName(), constraintExpr, optSourcePosOf(((ASTArcComponentType) e).getSymbol()).orElse(new SourcePosition(-1, -1))));
-      for (ASTComponentInstance componentInstance : ((ASTArcComponentType) e).getComponentInstanceList()) {
-        allElementList.add(new ElementCondition(componentInstance.getName(), constraintExpr, optSourcePosOf(componentInstance.getSymbol()).orElse(new SourcePosition(-1, -1))));
-      }
-    });
-    arcElements.stream().filter(e -> e instanceof ASTComponentInstantiation).forEach(e -> {
-      for (ASTComponentInstance componentInstance : ((ASTComponentInstantiation) e).getComponentInstanceList()) {
-        allElementList.add(new ElementCondition(componentInstance.getName(), constraintExpr, optSourcePosOf(componentInstance.getSymbol()).orElse(new SourcePosition(-1, -1))));
-      }
-    });
-  }
-
-  protected void addFeatureNameOccurences(ArrayList<ASTArcElement> arcElements, BoolExpr constraintExpr) {
-    arcElements.stream().filter(e -> e instanceof ASTArcFeatureDeclaration).forEach(e -> {
-      for (ASTArcFeature feature : ((ASTArcFeatureDeclaration) e).getArcFeatureList()) {
-        allElementList.add(new ElementCondition(feature.getName(), constraintExpr, optSourcePosOf(feature.getSymbol()).orElse(new SourcePosition(-1, -1))));
-      }
-    });
-  }
-
-  public static class ElementCondition {
-
-    String name;
-    BoolExpr condition;
-    SourcePosition sourcePosition;
-
-    ElementCondition(String name, BoolExpr condition, SourcePosition sourcePosition) {
-      this.name = name;
-      this.condition = condition;
-      this.sourcePosition = sourcePosition;
     }
-
-    public String getName() {
-      return this.name;
-    }
-
-    public BoolExpr getCondition() {
-      return this.condition;
-    }
-
-    public SourcePosition getSourcePosition() {
-      return this.sourcePosition;
-    }
+    return solver.or(pairs);
   }
 
+  protected BoolExpr presenceOf(@NotNull FormulaSolver solver,
+                                @NotNull ComponentTypeSymbol component,
+                                @NotNull ISymbol element) {
+    return element.isPresentAstNode() ? this.presenceResolver.presenceOf(component, element.getAstNode())
+      : this.presenceResolver.presenceOf(component);
+  }
+
+  protected List<ISymbol> getElements(@NotNull ComponentTypeSymbol component) {
+    List<ISymbol> elements = new ArrayList<>();
+    elements.addAll(component.getSpannedScope().getLocalComponentTypeSymbols());
+    elements.addAll(component.getSubcomponents());
+    elements.addAll(component.getPorts());
+    elements.addAll(component.getFields());
+    elements.addAll(component.getParameterList());
+    elements.addAll(component.getTypeParameters());
+    if (component.getSpannedScope() instanceof IVariableArcScope scope) {
+      elements.addAll(scope.getLocalArcFeatureSymbols());
+    }
+    return elements;
+  }
 }

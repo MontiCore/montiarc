@@ -8,7 +8,7 @@
   ${tc.include("montiarc.generator.Package.ftl", ast.getPackage())}
 </#if>
 
-<#assign comp=variant!ast.getArcComponentType().getSymbol()/>
+<#assign comp=ast.getArcComponentType().getSymbol()/>
 <#-- @ftlvariable name="comp" type="de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol" -->
 
 @de.se_rwth.commons.Generated("montiarc.generators.ma2jsim")
@@ -33,11 +33,6 @@ public ${prefixes.deploy()}${comp.getName()}<#if isTop>${suffixes.top()}</#if>(m
 protected ${comp.getName()}${suffixes.comp()} buildComponent(montiarc.rte.scheduling.CoordinatingScheduler scheduler, java.util.Map<String, String> parameters) {
   ${comp.getName()}${suffixes.comp()}${suffixes.builder()} builder = new ${comp.getName()}${suffixes.comp()}${suffixes.builder()}("${comp.getName()}")
     .setScheduler(scheduler)
-<#if variant??>
-  <#list variant.getFeatureSymbolBooleanMap() as feature, value>
-    .${prefixes.setterMethod()}${prefixes.feature()}${feature.getName()}(${value?c})
-  </#list>
-</#if>
     ;
 
 <#list comp.getParameterList() as param>

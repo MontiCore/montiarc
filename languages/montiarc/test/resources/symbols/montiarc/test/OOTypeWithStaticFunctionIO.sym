@@ -12,8 +12,8 @@
             "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
             "name": "i",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             },
             "isStatic": true
           },
@@ -21,27 +21,29 @@
             "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
             "name": "i",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             },
             "isStatic": true,
-            "parameters": [
-              {
-                "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
-                "name": "p",
-                "type": {
-                  "kind": "de.monticore.types.check.SymTypePrimitive",
-                  "primitiveName": "int"
+            "spannedScope": {
+              "symbols": [
+                {
+                  "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+                  "name": "p",
+                  "type": {
+                    "kind": "de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName": "int"
+                  }
                 }
-              }
-            ]
+              ]
+            }
           },
           {
             "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
             "name": "o",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             },
             "isStatic": true
           },
@@ -49,20 +51,22 @@
             "kind": "de.monticore.symbols.basicsymbols._symboltable.FunctionSymbol",
             "name": "o",
             "type": {
-              "kind":"de.monticore.types.check.SymTypePrimitive",
-              "primitiveName":"int"
+              "kind": "de.monticore.types.check.SymTypePrimitive",
+              "primitiveName": "int"
             },
             "isStatic": true,
-            "parameters": [
-              {
-                "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
-                "name": "p",
-                "type": {
-                  "kind": "de.monticore.types.check.SymTypePrimitive",
-                  "primitiveName": "int"
+            "spannedScope": {
+              "symbols": [
+                {
+                  "kind": "de.monticore.symbols.basicsymbols._symboltable.VariableSymbol",
+                  "name": "p",
+                  "type": {
+                    "kind": "de.monticore.types.check.SymTypePrimitive",
+                    "primitiveName": "int"
+                  }
                 }
-              }
-            ]
+              ]
+            }
           }
         ]
       }

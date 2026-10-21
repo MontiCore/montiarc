@@ -27,7 +27,6 @@ public class Suffixes {
   public final static String COMPUTE = "Compute";
   public final static String FIELDS = "Fields";
   public final static String PARAMETERS = "Parameters";
-  public final static String FEATURES = "Features";
   public final static String EVENTS = "Events";
   public final static String SYNC_MSG = "SyncMsg";
   public final static String MSG_GUARD = "MsgGuard";
@@ -48,7 +47,6 @@ public class Suffixes {
   public String compute() { return COMPUTE; }
   public String fields() { return FIELDS; }
   public String parameters() { return PARAMETERS; }
-  public String features() { return FEATURES; }
   public String events() { return EVENTS; }
   public String syncMsg() { return SYNC_MSG; }
   public String msgGuard() { return MSG_GUARD; }

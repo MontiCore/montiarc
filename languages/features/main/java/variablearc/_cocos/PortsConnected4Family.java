@@ -2,146 +2,118 @@
 package variablearc._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
-import arcbasis._ast.ASTArcPort;
-import arcbasis._ast.ASTComponentInterface;
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
-import arcbasis._ast.ASTPortDeclaration;
 import arcbasis._cocos.ArcBasisASTArcComponentTypeCoCo;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.microsoft.z3.BoolExpr;
-import com.microsoft.z3.Context;
-import com.microsoft.z3.Status;
-import de.monticore.symbols.compsymbols._ast.ASTPort;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
+import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
-import variablearc._ast.ASTArcFeatureDeclaration;
-import variablearc._ast.ASTVariableArcFullVariantComponentType;
-import variablearc._cocos.util.ExpressionSolverService;
-import variablearc._cocos.util.VariationConditionHelper;
-import variablearc._symboltable.IVariableArcComponentTypeSymbol;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.ExpressionSolver;
+import variablearc._ast.VariableArcElements;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Stream;
 
+/**
+ * Checks that every port of a component is used by at least one connector of
+ * the component or of the super component it inherits the port from in every
+ * configuration in which the port is present and the component is
+ * decomposed, i.e., has a present subcomponent. Unused inherited ports are
+ * reported at the component.
+ */
 public class PortsConnected4Family implements ArcBasisASTArcComponentTypeCoCo {
+
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
+
+  public PortsConnected4Family(@NotNull WithinComponentResolver withinComponentResolver,
+                               @NotNull PresenceResolver presenceResolver) {
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
+  }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
     Preconditions.checkNotNull(node);
-    Preconditions.checkNotNull(node.getSymbol());
+    Preconditions.checkArgument(node.isPresentSymbol());
 
-    ExpressionSolver expSolver = ExpressionSolverService.getExpressionSolver();
-    Context ctx = ExpressionSolverService.getContext();
+    ComponentTypeSymbol component = node.getSymbol();
+    if (this.withinComponentResolver.getAll(component, SubcomponentSymbol.class).isEmpty()) return;
 
-    ComponentTypeSymbol symbol = node.getSymbol();
-
-    if (symbol.isAtomic()) {
-      return;
-    }
-
-    // Reading and processing parts of the Main-Component
-    List<String> mainFeatures = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTArcFeatureDeclaration).map(v -> ((ASTArcFeatureDeclaration) v)).map(ASTArcFeatureDeclaration::getArcFeatureList).flatMap(List::stream).map(e -> node.getSymbol().getFullName() + "." + e.getSymbol().getName()).toList();
-
-    // Managing all features, variations, constraints and connectors
-    List<String> allFeatures;
-    ExpressionSet constraints;
-    List<ASTConnector> allConnectors;
-
-    // Getting all features, ports and variations from the Main-Component
-    allFeatures = new ArrayList<>(mainFeatures);
-    allConnectors = new ArrayList<>();
-
-    Map<ASTConnector, BoolExpr> connectorConditions = new HashMap<>();
-    Map<ASTArcPort, BoolExpr> portConditions = new HashMap<>();
-
-    Map<String, BoolExpr> portNameConditions = new HashMap<>();
-    Map<String, BoolExpr> portConnected = new HashMap<>();
-
-    if (node instanceof ASTVariableArcFullVariantComponentType) {
-      constraints = ((IVariableArcComponentTypeSymbol) ((ASTVariableArcFullVariantComponentType) node).getOriginal().getSymbol()).getConstraints();
-
-      connectorConditions = ((ASTVariableArcFullVariantComponentType) node).getConnectorConditions();
-      allConnectors.addAll(connectorConditions.keySet());
-      portConditions = ((ASTVariableArcFullVariantComponentType) node).getPortConditions();
-      for (Map.Entry<ASTArcPort, BoolExpr> portEntry : portConditions.entrySet()) {
-        String portName = node.getSymbol().getFullName() + "." + portEntry.getKey().getName();
-        portNameConditions.put(portName, portEntry.getValue());
-      }
-    } else {
-      constraints = ((IVariableArcComponentTypeSymbol) node.getSymbol()).getConstraints();
-
-      List<ASTArcPort> mainPorts = node.getBody().getArcElementList().stream().filter(e -> e instanceof ASTComponentInterface).map(v -> ((ASTComponentInterface) v).getPortDeclarationList()).flatMap(List::stream).map(ASTPortDeclaration::getArcPortList).flatMap(List::stream).toList();
-      for (ASTArcPort mainPort : mainPorts) {
-        String portName = node.getSymbol().getFullName() + "." + mainPort.getName();
-        portConditions.put(mainPort, ctx.mkTrue());
-        portNameConditions.put(portName, ctx.mkTrue());
-      }
-
-      List<ASTConnector> mainConnectors = node.getConnectors();
-      allConnectors.addAll(mainConnectors);
-      for (ASTConnector connector : mainConnectors) {
-        connectorConditions.put(connector, ctx.mkTrue());
-      }
-    }
-
-    // Adding Constraints
-    BoolExpr featureConstraints = VariationConditionHelper.getFeatureConstraints(node, constraints, allFeatures, expSolver);
-
-    // Define connectivity with implications
-    for (ASTConnector connector : allConnectors) {
-      if (!connector.getSource().isPresentComponentSymbol()) {
-        String sourceName = connector.getSource().isPresentPortSymbol() ? connector.getSource().getPortSymbol().getFullName() : node.getSymbol().getFullName() + "." + connector.getSource().getPort();
-        if (portConnected.containsKey(sourceName)) {
-          var existingCondition = portConnected.get(sourceName);
-          portConnected.put(sourceName, ctx.mkOr(existingCondition, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector))));
-        } else {
-          if (portNameConditions.containsKey(sourceName) && connectorConditions.containsKey(connector))
-            portConnected.put(sourceName, ctx.mkImplies(portNameConditions.get(sourceName), connectorConditions.get(connector)));
+    FormulaSolver solver = this.presenceResolver.solverFor(component);
+    BoolExpr decomposed = this.decomposed(solver, component);
+    for (PortSymbol port : this.withinComponentResolver.getAll(component, PortSymbol.class)) {
+      List<CompKindExpression> path = this.withinComponentResolver.superPathTo(component, port).orElseThrow();
+      Optional<BoolExpr> connected = this.connected(solver, component, path, port);
+      if (connected.isEmpty()) continue;
+      BoolExpr violation = solver.and(decomposed, this.presenceResolver.presenceOf(component, port), solver.not(connected.get()));
+      String message = port.isIncoming() ? ArcError.IN_PORT_UNUSED.format(port.getName())
+        : ArcError.OUT_PORT_UNUSED.format(port.getName());
+      switch (solver.check(violation)) {
+        case SATISFIABLE, UNKNOWN -> {
+          if (path.isEmpty()) {
+            Log.warn(message, port.getAstNode().get_SourcePositionStart(), port.getAstNode().get_SourcePositionEnd());
+          } else {
+            Log.warn(message, node.get_SourcePositionStart(), node.getHead().get_SourcePositionEnd());
+          }
         }
-      }
-      for (ASTPortAccess target : connector.getTargetList()) {
-        if (target.isPresentComponentSymbol())
-          continue;
-        String targetName = target.isPresentPortSymbol() ? target.getPortSymbol().getFullName() : node.getSymbol().getFullName() + "." + target.getPort();
-        if (portConnected.containsKey(targetName)) {
-          var existingCondition = portConnected.get(targetName);
-          portConnected.put(targetName, ctx.mkOr(existingCondition, ctx.mkImplies(portNameConditions.get(targetName), connectorConditions.get(connector))));
-        } else {
-          if (portNameConditions.containsKey(targetName) && connectorConditions.containsKey(connector))
-            portConnected.put(targetName, ctx.mkImplies(portNameConditions.get(targetName), connectorConditions.get(connector)));
-        }
+        case UNSATISFIABLE -> { }
       }
     }
+  }
 
-    for (ASTPort port : portConditions.keySet()) {
-      PortSymbol portSymbol = port.getSymbol();
-      BoolExpr portisPresent = portNameConditions.get(portSymbol.getFullName());
-      BoolExpr portisConnected = portConnected.get(portSymbol.getFullName()) != null ? portConnected.get(portSymbol.getFullName()) : ctx.mkFalse();
-
-      BoolExpr portUnConnected = ctx.mkAnd(featureConstraints, portisPresent, ctx.mkNot(portisConnected));
-
-      List<BoolExpr> expressionList = new ArrayList<>();
-      expressionList.add(portUnConnected);
-
-      if (ExpressionSolverService.solve(expressionList) == Status.SATISFIABLE) {
-        if (portSymbol.isIncoming()) {
-          Log.warn(ArcError.IN_PORT_UNUSED.format(portSymbol.getName()),
-            portSymbol.getAstNode().get_SourcePositionStart(), portSymbol.getAstNode().get_SourcePositionEnd()
-          );
-        } else {
-          Log.warn(ArcError.OUT_PORT_UNUSED.format(portSymbol.getName()),
-            portSymbol.getAstNode().get_SourcePositionStart(), portSymbol.getAstNode().get_SourcePositionEnd());
+  /**
+   * @param path the super components along which the port is inherited
+   * @return the condition under which a connector of the component type or of
+   * a super component on the path uses the port, or empty if one of them has
+   * no AST, e.g., as it is loaded from a symbol file, such that its
+   * connectors are unknown
+   */
+  protected Optional<BoolExpr> connected(@NotNull FormulaSolver solver,
+                                         @NotNull ComponentTypeSymbol component,
+                                         @NotNull List<CompKindExpression> path,
+                                         @NotNull PortSymbol port) {
+    List<ComponentTypeSymbol> types = new ArrayList<>();
+    types.add(component);
+    path.forEach(superComponent -> types.add(superComponent.getTypeInfo()));
+    List<BoolExpr> connections = new ArrayList<>();
+    for (int i = 0; i < types.size(); i++) {
+      ComponentTypeSymbol type = types.get(i);
+      if (!type.isPresentAstNode() || !(type.getAstNode() instanceof ASTArcComponentType ast)) return Optional.empty();
+      for (ASTConnector connector : VariableArcElements.of(ast, ASTConnector.class)) {
+        if (!this.connects(type, connector, port)) continue;
+        BoolExpr presence = this.presenceResolver.presenceOf(type, connector);
+        for (int j = i - 1; j >= 0; j--) {
+          presence = this.presenceResolver.liftFromSuper(types.get(j), path.get(j), presence);
         }
+        connections.add(presence);
       }
-      ExpressionSolverService.getSolver().reset();
     }
+    return Optional.of(solver.or(connections));
+  }
+
+  protected boolean connects(@NotNull ComponentTypeSymbol component,
+                             @NotNull ASTConnector connector,
+                             @NotNull PortSymbol port) {
+    return Stream.concat(Stream.of(connector.getSource()), connector.getTargetList().stream())
+      .filter(access -> !access.isPresentComponent())
+      .map(ASTPortAccess::getPort)
+      .anyMatch(name -> this.withinComponentResolver.resolveMany(component, name, PortSymbol.class).contains(port));
+  }
+
+  protected BoolExpr decomposed(@NotNull FormulaSolver solver, @NotNull ComponentTypeSymbol component) {
+    return solver.or(this.withinComponentResolver.getAll(component, SubcomponentSymbol.class).stream()
+      .map(subcomponent -> this.presenceResolver.presenceOf(component, subcomponent))
+      .toList());
   }
 }

@@ -2,19 +2,20 @@
 package montiarc.arc2fd;
 
 import com.google.common.base.Preconditions;
+import arcbasis.context.WithinComponentResolver;
 import com.microsoft.z3.BoolExpr;
 import com.microsoft.z3.Context;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
+import de.monticore.symbols.compsymbols._symboltable.SubcomponentSymbol;
 import de.se_rwth.commons.logging.Log;
-import montiarc.MontiArcMill;
 import org.codehaus.commons.nullanalysis.NotNull;
 import variablearc._symboltable.IVariableArcComponentTypeSymbol;
 import variablearc._symboltable.IVariableArcScope;
-import variablearc.evaluation.ExpressionSet;
-import variablearc.evaluation.exp2smt.IDeriveSMTExpr;
-import variablearc.evaluation.expressions.Expression;
+import variablearc.presence.PresenceResolver;
+import variablearc.smt.FormulaSolver;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -46,12 +47,18 @@ public class FeatureCollector {
   public static final String SEPARATOR = "$";
 
   protected final boolean recursive;
+  protected final WithinComponentResolver withinComponentResolver;
+  protected final PresenceResolver presenceResolver;
 
   /**
    * @param recursive Whether to include the features and constraints of subcomponents
    */
-  public FeatureCollector(boolean recursive) {
+  public FeatureCollector(boolean recursive,
+                          @NotNull WithinComponentResolver withinComponentResolver,
+                          @NotNull PresenceResolver presenceResolver) {
     this.recursive = recursive;
+    this.withinComponentResolver = Preconditions.checkNotNull(withinComponentResolver);
+    this.presenceResolver = Preconditions.checkNotNull(presenceResolver);
   }
 
   /**
@@ -118,43 +125,51 @@ public class FeatureCollector {
 
   /**
    * Converts the constraints of the component into SMT assertions. These are
-   * the constraints computed by VariableArc ({@link IVariableArcComponentTypeSymbol#getConstraints()}),
-   * i.e., including those of parents and subcomponents, and the bindings of
-   * parameters. Subcomponent constraints are included regardless of
-   * {@link #recursive}, as they may restrict the features of the component.
+   * the constraints of the component, of its parents, and of its
+   * subcomponents where these are present, with the parameters of
+   * subcomponents bound to their arguments. Subcomponent constraints are
+   * included regardless of {@link #recursive}, as they may restrict the
+   * features of the component.
    *
-   * @param root    Component to analyze
-   * @param context Context for SMT conversion
-   * @return Assertions, or <code>Optional.empty()</code> if some constraint cannot be converted
+   * @param root Component to analyze
+   * @return Assertions in the context of {@link #getContext()}, or <code>Optional.empty()</code> if the type of
+   * some constraint is obscure
    */
-  public Optional<List<BoolExpr>> collectConstraints(@NotNull IVariableArcComponentTypeSymbol root,
-                                                     @NotNull Context context) {
+  public Optional<List<BoolExpr>> collectConstraints(@NotNull IVariableArcComponentTypeSymbol root) {
     Preconditions.checkNotNull(root);
-    Preconditions.checkNotNull(context);
 
-    IDeriveSMTExpr converter = MontiArcMill.fullConverter(context);
-    List<BoolExpr> assertions = new ArrayList<>();
-    ExpressionSet constraints = root.getConstraints();
+    FormulaSolver solver = this.presenceResolver.solver();
+    BoolExpr constraints = this.constraintsOf(solver, root.getTypeInfo(), new HashSet<>());
+    if (solver.isObscure(constraints))
+      return Optional.empty();
+    return Optional.of(List.of(constraints));
+  }
 
-    for (Expression expr : constraints.getExpressions()) {
-      Optional<BoolExpr> converted = expr.convert(context, converter);
-      if (converted.isEmpty())
-        return Optional.empty();
-      assertions.add(converted.get());
-    }
+  /**
+   * @return The context of the assertions of {@link #collectConstraints}
+   */
+  public Context getContext() {
+    return this.presenceResolver.getContext();
+  }
 
-    for (List<Expression> conjunction : constraints.getNegatedConjunctions()) {
-      List<BoolExpr> parts = new ArrayList<>();
-      for (Expression expr : conjunction) {
-        Optional<BoolExpr> converted = expr.convert(context, converter);
-        if (converted.isEmpty())
-          return Optional.empty();
-        parts.add(converted.get());
+  /**
+   * @param path The full names of the component types on the path from the root, to terminate on cycles
+   */
+  protected BoolExpr constraintsOf(@NotNull FormulaSolver solver, @NotNull ComponentTypeSymbol type, @NotNull Set<String> path) {
+    if (!path.add(type.getFullName()))
+      return solver.top();
+
+    List<BoolExpr> operands = new ArrayList<>();
+    operands.add(this.presenceResolver.presenceOf(type));
+    for (SubcomponentSymbol subcomponent : this.withinComponentResolver.getAll(type, SubcomponentSymbol.class)) {
+      if (subcomponent.isTypePresent()) {
+        operands.add(solver.implies(this.presenceResolver.presenceOf(type, subcomponent),
+          this.presenceResolver.lift(type, subcomponent,
+            this.constraintsOf(solver, subcomponent.getType().getTypeInfo(), path))));
       }
-      assertions.add(context.mkNot(context.mkAnd(parts.toArray(BoolExpr[]::new))));
     }
-
-    return Optional.of(assertions);
+    path.remove(type.getFullName());
+    return solver.and(operands);
   }
 
   /* ---------------------------------------------------------------------- */

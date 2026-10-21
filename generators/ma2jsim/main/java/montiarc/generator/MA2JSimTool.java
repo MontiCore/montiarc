@@ -151,6 +151,8 @@ public class MA2JSimTool extends MontiArcTool {
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(i.length > 0);
 
+    MontiArcMill.globalScope().clear();
+    MontiArcMill.globalScope().init(novar || o != null);
     this.initGlobalScope(p);
     this.initBuiltInSymbols(c2mc);
     this.compile(i, hwc, o, pp, s, r, c2mc, novar);
@@ -163,8 +165,10 @@ public class MA2JSimTool extends MontiArcTool {
    * and translates the models to java code.
    * <p>
    * Class2MC (c2mc) can be enabled to import symbols from the Java runtime
-   * environment (Java RTE). Context-condition checking for variable components
-   * can be skipped (novar) to improve performance.
+   * environment (Java RTE). The analysis of variable components can be
+   * disabled (novar), in which case features, variation points, and
+   * constraints are rejected. Code generation does not support variable
+   * components, thus generating code (o) disables their analysis, too.
    *
    * @param i     Array of file and directory paths that form the model path,
    *              i.e, the paths that contain the MontiArc models to be compiled.
@@ -182,7 +186,8 @@ public class MA2JSimTool extends MontiArcTool {
    * @param r     Path to the directory where reports should be stored.
    *              If {@code null}, report generation is disabled.
    * @param c2mc  Enables importing of Java symbols (via Class2MC).
-   * @param novar Disables context-condition checking for variable components to improve performance.
+   * @param novar Disables the analysis of variable components and rejects features, variation points, and constraints;
+   *              implied by {@code o}.
    * @return A collection of the abstract syntay trees (ASTs) of the parsed
    * input models found in the given model paths.
    */
@@ -198,7 +203,7 @@ public class MA2JSimTool extends MontiArcTool {
     Preconditions.checkNotNull(hwc);
     Preconditions.checkArgument(i.length > 0);
 
-    Set<ASTMACompilationUnit> asts = super.compile(i, pp, s, r, c2mc, novar);
+    Set<ASTMACompilationUnit> asts = super.compile(i, pp, s, r, c2mc, novar || o != null);
 
     if (o != null) {
       Log.info(() -> "Generate java", "MontiArcTool");
@@ -269,9 +274,9 @@ public class MA2JSimTool extends MontiArcTool {
   }
 
   @Override
-  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean checkVariability) {
+  public void runAdditionalCoCos(@NotNull ASTMACompilationUnit ast, boolean novar) {
     Preconditions.checkNotNull(ast);
-    super.runAdditionalCoCos(ast, checkVariability);
+    super.runAdditionalCoCos(ast, novar);
 
     MontiArcCoCoChecker checker = new MontiArcCoCoChecker();
     checker.addCoCo(new IdentifiersAreNoJavaKeywords.TypeParameterNamesAreNoJavaKeywords());
