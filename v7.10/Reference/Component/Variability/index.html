@@ -2294,6 +2294,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analysis-and-code-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis and code generation
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3505,6 +3527,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#analysis" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#analysis-and-code-generation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Analysis and code generation
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3530,10 +3574,15 @@
 <!-- (c) https://github.com/MontiCore/monticore -->
 
 <h1 id="variability">Variability<a class="headerlink" href="#variability" title="Permanent link">&para;</a></h1>
+<p>A component with features and variation points describes a family of components.
+MontiArc checks such a component family as a whole: instead of checking each 
+variant individually, MontiArc reason about the conditions under which the 
+elements of a component are present.</p>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
-<p>Variability support is rudimentary. Expect significant performance impacts during compilation.
-Not all features are supported by the simulator.</p>
+<p>Code generation does not support variability. Components with features or 
+variation points can be statically analyzed, but not simulated. The analysis 
+of variable components is therefore disabled when generating code.</p>
 </div>
 <h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
 <p>Features have a name and are of type Boolean. They act similar to parameters as they are assigned by during and instantiation.</p>
@@ -3544,21 +3593,84 @@ Not all features are supported by the simulator.</p>
 Variation points have a condition that needs to be satisfied for the included elements to be added to the base component.</p>
 <div class="highlight"><pre><span></span><code><span class="n">varif</span><span class="w"> </span><span class="p">(</span><span class="n">BOOLEAN_EXPRESSION</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
 <span class="w">  </span><span class="c1">// MontiArc elements</span>
+<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="c1">// MontiArc elements</span>
 <span class="p">}</span>
 </code></pre></div>
 <p>Inside of variation points we can include all types of MontiArc elements (e.g., ports, connectors, subcomponents, automata, other variation points, etc.).
-Only features and constraints need to be defined outside of these.</p>
-<p>The Boolean expression has to be evaluated statically; this means it cannot contain references to <a href="../Interfaces/">ports</a> and <a href="../../Behavior/Fields/">fields</a>.</p>
+Elements of the same name may be declared in variation points that are never present together, e.g., a port <code>i</code> of
+type <code>int</code> in the <code>then</code> branch and a port <code>i</code> of type <code>boolean</code> in the <code>else</code> branch.
+Only features need to be defined outside of variation points.</p>
+<p>The Boolean expression has to be evaluated statically; this means it cannot contain references to <a href="../Interfaces/">ports</a> and <a href="../../Behavior/Fields/">fields</a>.
+It may refer to the features and parameters of the component and to the features of its subcomponents (e.g., <code>sub.f</code>).</p>
 <h2 id="constraints">Constraints<a class="headerlink" href="#constraints" title="Permanent link">&para;</a></h2>
-<p>Constraints can restrict the possible variants of a component by defining Boolean expressions that have to be satisfied for a component to be considered valid.</p>
+<p>Constraints restrict the valid configurations of a component by defining Boolean expressions that have to be
+satisfied for a configuration to be valid. A constraint inside a variation point only applies to the configurations in
+which the variation point is present.</p>
 <div class="highlight"><pre><span></span><code>constraint(BOOLEAN_EXPRESSION);
 </code></pre></div>
 <h3 id="binding-features">Binding Features<a class="headerlink" href="#binding-features" title="Permanent link">&para;</a></h3>
-<p>Constraints are also used to bind features to specific values. </p>
-<p>Given a subcomponent named <code>sub</code> with a feature <code>f</code>, we can constrain the feature to a specific value:
+<p>Constraints are also used to bind the features of subcomponents.
+Given a subcomponent named <code>sub</code> with a feature <code>f</code>, we can constrain the feature to a specific value:
 <div class="highlight"><pre><span></span><code>constraint(sub.f);
 </code></pre></div></p>
-<p>This binding respects subcomponents and other constraints defined in the component and is solved automatically. </p>
+<p>The constraints of a component have to determine the features of its subcomponents, and they have to imply the
+constraints of its subcomponents: if <code>sub</code> has the constraint <code>constraint(f);</code>, the component instantiating it has to
+restate <code>constraint(sub.f);</code>. Constraints over the parameters of a subcomponent are implied by its arguments or the
+default values of its parameters.</p>
+<h2 id="analysis">Analysis<a class="headerlink" href="#analysis" title="Permanent link">&para;</a></h2>
+<p>MontiArc checks all valid configurations of a family of components at once 
+and reports an error if a context-condition is violated in some valid 
+configuration. For example, an error is reported if a connector connects two 
+ports of incompatible types in some configuration, even if there are other 
+configurations in which the same connector connects ports of compatible types.</p>
+<p>However, the values of some constraint expressions cannot be determined 
+statically, e.g., the results of method calls, comparisons of strings or other
+values of types without a logical representation. The analysis considers every 
+possible value of these. A context condition that is violated for
+some, but not all, of these values reports a warning instead of an error.</p>
+<p>Besides the usual context conditions, the analysis reports the following findings:</p>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Severity</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The constraints of a component cannot be satisfied (<code>0xC1401</code>)</td>
+<td>Error</td>
+</tr>
+<tr>
+<td>The constraints do not determine the features of subcomponents (<code>0xC1404</code>)</td>
+<td>Error</td>
+</tr>
+<tr>
+<td>The constraints do not imply the constraints of a subcomponent (<code>0xC1406</code>)</td>
+<td>Error</td>
+</tr>
+<tr>
+<td>A feature is not selected in any valid configuration (<code>0xC1407</code>)</td>
+<td>Warning</td>
+</tr>
+<tr>
+<td>A variation point is not present in any valid configuration (<code>0xC1408</code>)</td>
+<td>Warning</td>
+</tr>
+</tbody>
+</table>
+<p>The analysis requires an SMT solver and may slow down the compilation of large component families.</p>
+<h2 id="analysis-and-code-generation">Analysis and code generation<a class="headerlink" href="#analysis-and-code-generation" title="Permanent link">&para;</a></h2>
+<p>The analysis of variable components and code generation exclude each other:</p>
+<ul>
+<li>The MontiArc CLI analyzes variable components unless the option <code>-novar</code> is set. Generating code (option <code>-o</code>)
+  implies <code>-novar</code>.</li>
+<li>The Gradle plugin analyzes variable components if the option <code>checkVariability</code> is set to <code>true</code>. Generating code
+  (option <code>generateCode</code>) implies <code>checkVariability</code> set to <code>false</code>.</li>
+</ul>
+<p>Without the analysis of variable components, features, variation points, and constraints are rejected (<code>0xC1198</code>),
+as they cannot be checked without it.</p>
 
 
 
