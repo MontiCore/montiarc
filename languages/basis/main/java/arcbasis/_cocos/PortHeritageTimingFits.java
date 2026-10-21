@@ -2,11 +2,11 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
 import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
 import de.monticore.symbols.compsymbols._symboltable.Timing;
-import de.monticore.types.check.CompKindExpression;
 import de.se_rwth.commons.logging.Log;
 import montiarc.util.ArcError;
 import org.codehaus.commons.nullanalysis.NotNull;
@@ -14,6 +14,16 @@ import org.codehaus.commons.nullanalysis.NotNull;
 import java.util.Optional;
 
 public class PortHeritageTimingFits implements ArcBasisASTArcComponentTypeCoCo {
+
+  protected final WithinComponentResolver resolver;
+
+  public PortHeritageTimingFits() {
+    this(new WithinComponentResolver());
+  }
+
+  public PortHeritageTimingFits(@NotNull WithinComponentResolver resolver) {
+    this.resolver = Preconditions.checkNotNull(resolver);
+  }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
@@ -53,15 +63,8 @@ public class PortHeritageTimingFits implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(componentSymbol);
     Preconditions.checkNotNull(portName);
 
-    // Traverse the parent components
-    for (CompKindExpression parent : componentSymbol.getSuperComponentsList()) {
-      // Check if the parent has a port with the given name
-      Optional<PortSymbol> parentPort = parent.getTypeInfo().getPort(portName, true);
-      if (parentPort.isPresent()) {
-        return parentPort;
-      }
-    }
-
-    return Optional.empty();
+    return componentSymbol.getSuperComponentsList().stream()
+      .flatMap(parent -> this.resolver.resolveMany(parent.getTypeInfo(), portName, PortSymbol.class).stream())
+      .findFirst();
   }
 }

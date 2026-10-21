@@ -3,10 +3,8 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTConnector;
 import arcbasis._ast.ASTPortAccess;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
-import de.monticore.symbols.compsymbols._symboltable.ComponentTypeSymbol;
-import de.monticore.symbols.compsymbols._symboltable.PortSymbol;
-import de.monticore.symboltable.IScopeSpanningSymbol;
 import de.monticore.symboltable.resolving.ResolvedSeveralEntriesForSymbolException;
 import de.monticore.types.check.SymTypeExpression;
 import de.monticore.types.check.SymTypeObscure;
@@ -27,6 +25,16 @@ import java.util.Optional;
  * supertype of the source port type. (p. 66, lst. 3.43)
  */
 public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
+
+  protected final WithinComponentResolver resolver;
+
+  public ConnectorTypesFit() {
+    this(new WithinComponentResolver());
+  }
+
+  public ConnectorTypesFit(@NotNull WithinComponentResolver resolver) {
+    this.resolver = Preconditions.checkNotNull(resolver);
+  }
 
   @Override
   public void check(@NotNull ASTConnector conn) {
@@ -76,23 +84,12 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
   }
 
   /**
-   * When we can find a port symbol that fits the given port access and we when its type has already been set then we
-   * return the type. When we can not find the port symbol or when we do not find the component instance of the port
-   * access or the type of that instance or if we do not find the type of the port then we return an empty Optional.
+   * @return the type of the accessed port as resolved by
+   * {@link WithinComponentResolver#typeOf(ASTPortAccess)}
    */
   protected Optional<SymTypeExpression> getTypeOfPortIfPresent(@NotNull ASTPortAccess astPort) {
     Preconditions.checkNotNull(astPort);
-
-    if (astPort.isPresentComponent()) {
-      if (astPort.isPresentComponentSymbol() && astPort.getComponentSymbol().isTypePresent()) {
-        return astPort.getComponentSymbol().getType().getTypeOfPort(astPort.getPort());
-      }
-    } else if (getEnclosingComponent(astPort).isPresent()) {
-      return getEnclosingComponent(astPort).get().getPort(astPort.getPort()).map(PortSymbol::getType);
-    } else if (astPort.isPresentPortSymbol() && astPort.getPortSymbol().isTypePresent()) {
-      return Optional.ofNullable(astPort.getPortSymbol().getType());
-    }
-    return Optional.empty();
+    return this.resolver.typeOf(astPort);
   }
 
   protected static void logInfoThatCoCoIsNotChecked4TargetPort(@NotNull ASTPortAccess targetPort) {
@@ -101,25 +98,5 @@ public class ConnectorTypesFit implements ArcBasisASTConnectorCoCo {
         "seem to exist or the type of the port does not seem to be set.", targetPort.getQName(),
       targetPort.get_SourcePositionStart()), ConnectorDirectionsFit.class.getSimpleName()
     );
-  }
-
-  /**
-   * @return an {@code Optional} of the component type this portAccess belongs to. The {@code Optional} is empty if the access
-   * does not belong to a component type.
-   */
-  protected Optional<ComponentTypeSymbol> getEnclosingComponent(@NotNull ASTPortAccess portAccess) {
-    Preconditions.checkNotNull(portAccess);
-    if (portAccess.getEnclosingScope() == null) {
-      return Optional.empty();
-    }
-    if (!portAccess.getEnclosingScope().isPresentSpanningSymbol()) {
-      return Optional.empty();
-    }
-    IScopeSpanningSymbol symbol = portAccess.getEnclosingScope().getSpanningSymbol();
-    if (symbol instanceof ComponentTypeSymbol) {
-      return Optional.of((ComponentTypeSymbol) symbol);
-    } else {
-      return Optional.empty();
-    }
   }
 }

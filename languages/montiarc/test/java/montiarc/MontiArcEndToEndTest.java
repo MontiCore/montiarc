@@ -54,6 +54,7 @@ import static montiarc.util.ArcError.PARAMETER_UPPER_CASE;
 import static montiarc.util.ArcError.PARAM_DEFAULT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.PORT_MULTIPLE_SENDER;
 import static montiarc.util.ArcError.PORT_UPPER_CASE;
+import static montiarc.util.ArcError.REFINEMENT_IN_PORT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.SOURCE_DIRECTION_MISMATCH;
 import static montiarc.util.ArcError.SUBCOMPONENT_UPPER_CASE;
 import static montiarc.util.ArcError.TARGET_DIRECTION_MISMATCH;
@@ -1105,6 +1106,10 @@ public class MontiArcEndToEndTest extends MontiArcTestBase {
 
   protected static Stream<Arguments> invalidModelAndErrorNoVariabilityProvider() {
     return Stream.of(
+      arg("RefinementPortTypeMismatchTest1",
+        mpk(PKG_COMP, "RefinementPortTypeMismatch1A.arc", "RefinementPortTypeMismatch1B.arc", "RefinementPortTypeMismatch1C.arc"),
+        fn(ERROR, PKG_COMP, "RefinementPortTypeMismatch1C.arc", 8, 48, 8, 81, REFINEMENT_IN_PORT_TYPE_MISMATCH, "i", "int", "long", "RefinementPortTypeMismatch1B")
+      ),
       arg("UnsupportedModelElementVarifTest1",
         mpk(PKG_VARI, "MissingSymbolsInVarIf1.arc"),
         fn(ERROR, PKG_VARI, "MissingSymbolsInVarIf1.arc", 10, 3, 10, 15, UNSUPPORTED_MODEL_ELEMENT, "varif")

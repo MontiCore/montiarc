@@ -2,6 +2,7 @@
 package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.MultimapBuilder;
@@ -58,6 +59,16 @@ import java.util.stream.Collectors;
  */
 public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
 
+  protected final WithinComponentResolver resolver;
+
+  public RefinementPortsMatch() {
+    this(new WithinComponentResolver());
+  }
+
+  public RefinementPortsMatch(@NotNull WithinComponentResolver resolver) {
+    this.resolver = Preconditions.checkNotNull(resolver);
+  }
+
   /**
    * Provides more self speaking access to a port collection.<br>
    * Utility functions are introduced that allow nicer handling for the case
@@ -66,7 +77,7 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
   protected static final class NameToPorts {
     public final Multimap<String, PortSymbol> portsByName;
 
-    public NameToPorts(@NotNull Set<PortSymbol> ports) {
+    public NameToPorts(@NotNull Collection<PortSymbol> ports) {
       Preconditions.checkNotNull(ports);
 
       portsByName = MultimapBuilder.hashKeys().hashSetValues().build();
@@ -108,10 +119,10 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
     // Some ports may be declared multiple times with the same name.
     // We do not log this error, but we still want to check the coco for
     // the ports with unique names
-    NameToPorts ownPortsByName = new NameToPorts(compSym.getAllPorts());
+    NameToPorts ownPortsByName = new NameToPorts(this.resolver.getAll(compSym, PortSymbol.class));
 
     for (CompKindExpression specification : compSym.getRefinementsList()) {
-      NameToPorts specPortsByName = new NameToPorts(specification.getTypeInfo().getAllPorts());
+      NameToPorts specPortsByName = new NameToPorts(this.resolver.getAll(specification.getTypeInfo(), PortSymbol.class));
 
       checkChangedPortNames(compSym, ownPortsByName, specification, specPortsByName);
       checkMatchingPortDirections(compSym, ownPortsByName, specification, specPortsByName);
@@ -212,7 +223,8 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
           () -> String.format("Not checking port direction conformance of coco '%s' on port" +
             " '%s' with respect to specification '%s', as the specification's port direction is " +
             "ambiguous.", this.getClass().getName(), portName, specification.getTypeInfo().getName()),
-          compSym.getPort(portName, true).flatMap(p -> deriveLogLocationForPort(p, compSym))
+          this.resolver.resolveMany(compSym, portName, PortSymbol.class).stream().findFirst()
+            .flatMap(p -> deriveLogLocationForPort(p, compSym))
         );
       }
     }
@@ -279,7 +291,8 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
             portName,
             specification.getTypeInfo().getName(),
             specDirection.isEmpty() ? "direction" : "timing"),
-          compSym.getPort(portName, true).flatMap(p -> deriveLogLocationForPort(p, compSym))
+          this.resolver.resolveMany(compSym, portName, PortSymbol.class).stream().findFirst()
+            .flatMap(p -> deriveLogLocationForPort(p, compSym))
         );
       }
     }
@@ -445,7 +458,8 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
           () -> String.format("Not checking port type conformance of coco '%s' on port" +
             " '%s' with respect to specification '%s', as the specification's port direction is " +
             "ambiguous.", this.getClass().getName(), portName, specification.getTypeInfo().getName()),
-          compSym.getPort(portName, true).flatMap(p -> deriveLogLocationForPort(p, compSym))
+          this.resolver.resolveMany(compSym, portName, PortSymbol.class).stream().findFirst()
+            .flatMap(p -> deriveLogLocationForPort(p, compSym))
         );
       }
     }
@@ -480,10 +494,19 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(compSym);
     Preconditions.checkNotNull(specification);
 
+    CompKindExpression self = this.resolver.kindOf(compSym);
     for (PortSymbol specPort : specificationPorts) {
-      SymTypeExpression specType = specPort.getType();
+      Optional<SymTypeExpression> boundSpecType = this.resolver.typeOf(specification, specPort);
+      if (boundSpecType.isEmpty()) {
+        continue;
+      }
+      SymTypeExpression specType = boundSpecType.get();
       for (PortSymbol ownPortSameDirection : concretizationPorts) {
-        SymTypeExpression ownType = ownPortSameDirection.getType();
+        Optional<SymTypeExpression> boundOwnType = this.resolver.typeOf(self, ownPortSameDirection);
+        if (boundOwnType.isEmpty()) {
+          continue;
+        }
+        SymTypeExpression ownType = boundOwnType.get();
 
         // Incoming ports may turn into super types during refinement
         if (directionInSpecification == PortDirection.INCOMING
@@ -581,19 +604,11 @@ public class RefinementPortsMatch implements ArcBasisASTArcComponentTypeCoCo {
     Preconditions.checkNotNull(comp);
     Preconditions.checkNotNull(port);
 
-    boolean portIsInherited = !comp.getPorts().contains(port);  // getPorts omits inherited ports
-    if (portIsInherited) {
-      // Inherited port -> there must be a parent declaration to which we can refer to
-      // We check wich direct super component has the port (no matter whether inherited
-      // transitively or not) and use the first match as finding location.
-      return
-        comp.getSuperComponentsList().stream().filter(
-          c -> c.getTypeInfo().getAllPorts().contains(port)  // getAllPorts includes inherited ports
-        )
-        .findFirst()
-        .flatMap(CompKindExpression::getSourceNode);
-    } else {
+    List<CompKindExpression> superPath = this.resolver.superPathTo(comp, port).orElse(List.of());
+    if (superPath.isEmpty()) {
       return port.isPresentAstNode() ? Optional.of(port.getAstNode()) : Optional.empty();
+    } else {
+      return superPath.get(0).getSourceNode();
     }
   }
 

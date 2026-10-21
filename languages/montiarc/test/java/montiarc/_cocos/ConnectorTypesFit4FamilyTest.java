@@ -37,7 +37,10 @@ class ConnectorTypesFit4FamilyTest extends ConnectorTypesFitTest {
   @DisableIfDisplayName(contains = {
     "ValidCompWithVariability7 ",
     "ValidCompWithVariability8 ",
-    "ValidCompWithVariability9 "
+    "ValidCompWithVariability9 ",
+    "ValidComp33 ",
+    "ValidComp34 ",
+    "ValidComp35 "
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -59,6 +62,10 @@ class ConnectorTypesFit4FamilyTest extends ConnectorTypesFitTest {
   @ParameterizedTest
   @MethodSource("invalidModels")
   @MethodSource("invalidModelsWithVariability")
+  @DisableIfDisplayName(contains = {
+    "InvalidComp19 ",
+    "InvalidComp20 "
+  })
   void shouldReportError(@NotNull String model,
                          @NotNull Error... errors) {
     Preconditions.checkNotNull(model);

@@ -35,6 +35,11 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
   @BeforeEach
   protected void setUp() {
     MontiArcMill.globalScope().setSymbolPath(new MCPath(Paths.get(TEST_RESOURCE, TEST_DIR)));
+    compile("package a.b; component S<T> { port in T i; port out T o; }");
+    compile("package a.b; component G<T> { port in T i; port out T o; }");
+    compile("package a.b; component Q extends a.b.G<int> { }");
+    compile("package a.b; component R { port in int i; port out int o; }");
+    compile("package a.b; component W { port in long i; port out byte o; }");
   }
 
   @ParameterizedTest
@@ -177,7 +182,17 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
         }
         """),
       // refining validly with all ports inherited from a distinct supertype
-      arg("component ValidComp16 extends Super2 refines Restrictive { }")
+      arg("component ValidComp16 extends Super2 refines Restrictive { }"),
+      // refining a generic abstraction with ports matching the type argument
+      arg("component ValidComp17 refines a.b.S<int> { port in int i; port out int o; }"),
+      // generic refinement of a generic abstraction with its own type parameter
+      arg("component ValidComp18<T> refines a.b.S<T> { port in T i; port out T o; }"),
+      // inheriting ports bound by a super component that match the abstraction
+      arg("component ValidComp19 extends a.b.G<int> refines a.b.R { }"),
+      // inheriting ports bound by the super component's super component that match the abstraction
+      arg("component ValidComp20 extends a.b.Q refines a.b.R { }"),
+      // inheriting ports bound by a super component that match a generic abstraction
+      arg("component ValidComp21 extends a.b.Q refines a.b.S<int> { }")
     );
   }
 
@@ -529,6 +544,21 @@ class RefinementPortsMatchTest extends MontiArcTestBase {
       // super comp changes type of a port
       arg("component InvalidComp39 extends Super7 refines Restrictive { }",
         REFINEMENT_IN_PORT_TYPE_MISMATCH
+      ),
+      // refining a generic abstraction with ports not matching the type argument
+      arg("component InvalidComp40 refines a.b.S<int> { port in boolean i; port out boolean o; }",
+        REFINEMENT_IN_PORT_TYPE_MISMATCH,
+        REFINEMENT_OUT_PORT_TYPE_MISMATCH
+      ),
+      // inheriting ports bound by a super component that do not match the abstraction
+      arg("component InvalidComp41 extends a.b.G<boolean> refines a.b.R { }",
+        REFINEMENT_IN_PORT_TYPE_MISMATCH,
+        REFINEMENT_OUT_PORT_TYPE_MISMATCH
+      ),
+      // inheriting ports bound by the super component's super component that do not match the abstraction
+      arg("component InvalidComp42 extends a.b.Q refines a.b.W { }",
+        REFINEMENT_IN_PORT_TYPE_MISMATCH,
+        REFINEMENT_OUT_PORT_TYPE_MISMATCH
       )
     );
   }

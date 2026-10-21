@@ -4,6 +4,7 @@ package arcbasis._cocos;
 import arcbasis._ast.ASTComponentInstance;
 import arcbasis._ast.ASTComponentInstantiation;
 import arcbasis._ast.ASTArcComponentType;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.symbols.basicsymbols._symboltable.TypeVarSymbol;
@@ -29,6 +30,16 @@ import java.util.Optional;
  * Therefore, this the second check method also checks for refinement declarations that are not raw, i.e., that do not omit type arguments.
  */
 public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasisASTArcComponentTypeCoCo {
+
+  protected final WithinComponentResolver resolver;
+
+  public TypeBound() {
+    this(new WithinComponentResolver());
+  }
+
+  public TypeBound(@NotNull WithinComponentResolver resolver) {
+    this.resolver = Preconditions.checkNotNull(resolver);
+  }
 
   // type arguments passed for bounded type parameters
   @Override
@@ -127,10 +138,7 @@ public class TypeBound implements ArcBasisASTComponentInstantiationCoCo, ArcBasi
     for (TypeVarSymbol typeVar : typeSym.getTypeParameters()) {
       Optional<SymTypeExpression> typeVarBinding = typeExpr.getTypeBindingFor(typeVar);
       if (typeVarBinding.isPresent()) {
-        for (SymTypeExpression aBound : typeVar.getSuperTypesList()) {
-          SymTypeExpression bound = aBound.deepClone();
-          bound.replaceTypeVariables(typeExpr.getTypeVarBindings());
-
+        for (SymTypeExpression bound : this.resolver.boundsOf(typeExpr, typeVar)) {
           boolean isValid = checkMode
             ? SymTypeRelations.isSubTypeOf(typeVarBinding.get(), bound)
             : SymTypeRelations.isCompatible(bound, typeVarBinding.get());

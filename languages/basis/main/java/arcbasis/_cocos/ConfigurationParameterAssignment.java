@@ -3,6 +3,7 @@ package arcbasis._cocos;
 
 import arcbasis._ast.ASTArcComponentType;
 import arcbasis._ast.ASTComponentInstance;
+import arcbasis.context.WithinComponentResolver;
 import com.google.common.base.Preconditions;
 import de.monticore.ast.ASTNode;
 import de.monticore.expressions.expressionsbasis._ast.ASTExpression;
@@ -46,7 +47,15 @@ import java.util.stream.IntStream;
 public class ConfigurationParameterAssignment
   implements ArcBasisASTComponentInstanceCoCo, ArcBasisASTArcComponentTypeCoCo {
 
-  public ConfigurationParameterAssignment() { }
+  protected final WithinComponentResolver resolver;
+
+  public ConfigurationParameterAssignment() {
+    this(new WithinComponentResolver());
+  }
+
+  public ConfigurationParameterAssignment(@NotNull WithinComponentResolver resolver) {
+    this.resolver = Preconditions.checkNotNull(resolver);
+  }
 
   @Override
   public void check(@NotNull ASTArcComponentType node) {
@@ -202,7 +211,9 @@ public class ConfigurationParameterAssignment
       .map(ASTSubcomponentArgument::getExpression)
       .toList();
 
-    List<Optional<SymTypeExpression>> paramTypes = componentExpression.getParameterTypes();
+    List<Optional<SymTypeExpression>> paramTypes = parameters.stream()
+      .map(parameter -> this.resolver.typeOf(componentExpression, parameter))
+      .toList();
 
     for (int i = 0; i < Math.min(exprs.size(), paramTypes.size()); i++) {
 

@@ -19,6 +19,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.stream.Stream;
 
 import static montiarc.util.ArcError.CONNECTOR_TYPE_MISMATCH;
+import static montiarc.util.ArcError.MISSING_PORT;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -46,6 +47,8 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
     compile("package a.b;component J { port out java.lang.Comparable<java.lang.Integer> o;}");
     compile("package a.b;component K<T> { port in T i;} ");
     compile("package a.b;component L<T> { port out T o;}");
+    compile("package a.b;component P<T> { port in T pi; port out T po; }");
+    compile("package a.b;component Q extends a.b.P<int> { }");
   }
 
   @ParameterizedTest
@@ -383,6 +386,30 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
           i -> sub.i;
         }
         """
+      ),
+      // int -> int (input forward, inherited port bound by the super component)
+      arg("""
+        component ValidComp33 extends a.b.P<int> {
+          a.b.D sub;
+          pi -> sub.i;
+        }
+        """
+      ),
+      // int -> int (output forward, inherited port bound by the super component)
+      arg("""
+        component ValidComp34 extends a.b.P<int> {
+          a.b.E sub;
+          sub.o -> po;
+        }
+        """
+      ),
+      // int -> int (input forward, port inherited from a super component of the super component)
+      arg("""
+        component ValidComp35 extends a.b.Q {
+          a.b.D sub;
+          pi -> sub.i;
+        }
+        """
       )
     );
   }
@@ -574,6 +601,36 @@ class ConnectorTypesFitTest extends MontiArcTestBase {
         }
         """,
         CONNECTOR_TYPE_MISMATCH
+      ),
+      // boolean -> int (input forward, inherited port bound by the super component)
+      arg("""
+        component InvalidComp19 extends a.b.P<boolean> {
+          a.b.D sub;
+          pi -> sub.i;
+        }
+        """,
+        CONNECTOR_TYPE_MISMATCH
+      ),
+      // boolean -> int (output forward, inherited port bound by the super component)
+      arg("""
+        component InvalidComp20 extends a.b.P<int> {
+          a.b.C sub;
+          sub.o -> po;
+        }
+        """,
+        CONNECTOR_TYPE_MISMATCH
+      ),
+      // unresolvable source and target ports are not type checked
+      arg("""
+        component InvalidComp21 {
+          port in int i;
+          a.b.D sub;
+          i -> unknown;
+          unknown -> sub.i;
+        }
+        """,
+        MISSING_PORT,
+        MISSING_PORT
       )
     );
   }

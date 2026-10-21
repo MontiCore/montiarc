@@ -18,6 +18,7 @@ import java.util.stream.Stream;
 
 import static montiarc.util.ArcError.HERITAGE_IN_PORT_TYPE_MISMATCH;
 import static montiarc.util.ArcError.HERITAGE_OUT_PORT_TYPE_MISMATCH;
+import static montiarc.util.ArcError.HERITAGE_PORT_DIRECTION_MISMATCH;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -32,6 +33,7 @@ class PortHeritageTypeFitsTest extends MontiArcTestBase {
     compile("package a.b; component C<T> { port in T i; port out T o; } ");
     compile("package a.b; component D { port in int i; }");
     compile("package a.b; component E { port out int o; }");
+    compile("package a.b; component F extends a.b.C<int> { }");
   }
 
   @ParameterizedTest
@@ -60,6 +62,8 @@ class PortHeritageTypeFitsTest extends MontiArcTestBase {
     "component ValidComp11<T> extends a.b.C<T> { port in T i; port out T o; }",
     // multi-heritage overriding the outgoing super port with a supertype
     "component ValidComp12 extends a.b.D, a.b.E { port in int i; port out long o; }",
+    // heritage overriding generic typed ports of the super component's super component with a matching bound type
+    "component ValidComp13 extends a.b.F { port in int i; port out int o; }",
   })
   void shouldNotReportError(@NotNull String model) {
     Preconditions.checkNotNull(model);
@@ -119,7 +123,14 @@ class PortHeritageTypeFitsTest extends MontiArcTestBase {
       // multi-heritage with both incoming and outgoing port type mismatches
       arg("component InvalidComp6 extends a.b.D, a.b.E { port in double i; port out byte o; }",
         HERITAGE_IN_PORT_TYPE_MISMATCH,
-        HERITAGE_OUT_PORT_TYPE_MISMATCH)
+        HERITAGE_OUT_PORT_TYPE_MISMATCH),
+      // heritage overriding generic typed ports of the super component's super component with incompatible types
+      arg("component InvalidComp7 extends a.b.F { port in double i; port out byte o; }",
+        HERITAGE_IN_PORT_TYPE_MISMATCH,
+        HERITAGE_OUT_PORT_TYPE_MISMATCH),
+      // heritage overriding an incoming super port with an outgoing port
+      arg("component InvalidComp8 extends a.b.D { port out int i; }",
+        HERITAGE_PORT_DIRECTION_MISMATCH)
     );
   }
 }
