@@ -3,8 +3,9 @@ package elevator;
 
 /**
  * Adapted from the specification of an elevator control system presented in
- * Strobl, Frank, Alexander Wisspeintner, and A. Marz. "Specification of an
- * elevator control system." Technische Universitat Munchen (1999).
+ * Frank Strobl and Alexander Wisspeintner. "Specification of an Elevator
+ * Control System - An AutoFocus Case Study." Technical Report TUM-I9906,
+ * Technische Universität München (1999).
  */
 component ElevatorSystem {
 
