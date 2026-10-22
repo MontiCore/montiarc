@@ -25,7 +25,7 @@ before_script:
       - gradle-fallback
     paths:
       - .gradle/caches/
-    policy: pull-push
+    policy: pull
 
 stages:
   - build
@@ -67,7 +67,7 @@ Unit Test:
 
 Test Templates:
   stage: test
-  <<: *cache_gradle_pull_push
+  <<: *cache_gradle_pull_only
   image: registry.git.rwth-aachen.de/monticore/container-registry/gradle:8.14.4-jdk21
   needs: ["Build"]
   allow_failure: false
@@ -75,7 +75,7 @@ Test Templates:
     - gradle publishToMavenLocal :gradle-plugins:publishAllToMavenLocal --stacktrace --build-cache -PenableLanguageServer --refresh-dependencies
     - |
       for template_dir in templates/*/; do
-        gradle -I ../test-templates.init.gradle -p "$template_dir" build --stacktrace
+        gradle -I ../test-templates.init.gradle -p "$template_dir" build --stacktrace --build-cache
       done
 
 Deploy Nexus:
