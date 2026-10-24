@@ -1,0 +1,23 @@
+/* (c) https://github.com/MontiCore/monticore */
+
+plugins {
+  id("montiarc.build.java-library")
+  id("montiarc-jsim")
+  id("cd2pojo")
+}
+
+sourceSets {
+  main {
+    cd2pojo {
+      setSrcDirs(setOf("$projectDir/main/cd2pojo"))
+    }
+    montiarc {
+      setSrcDirs(setOf("$projectDir/main/montiarc"))
+    }
+  }
+}
+
+tasks.compileMontiarc {
+  checkVariability.set(true)
+  generateCode.set(false)
+}

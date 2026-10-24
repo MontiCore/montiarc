@@ -1,0 +1,19 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.example.automotive.bcu;
+
+public classdiagram Datatypes {
+
+  public enum Move {
+    UP, DN;
+  }
+
+  public enum AutoMove {
+    UP, DN, STOP;
+  }
+
+  public enum Direction {
+    UP, DN, LEFT, RIGHT;
+  }
+
+  public class Trigger { }
+}
