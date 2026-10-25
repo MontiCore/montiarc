@@ -5,20 +5,21 @@ import montiarc.example.automotive.bcu.Datatypes.*;
 
 component ExteriorMirror(boolean Heatable, boolean LEDExteriorMirror) {
 
-  port sync in boolean em_but_right, em_but_down, em_but_up, em_but_left,
-                       em_pos_left, em_pos_right, em_pos_top, em_pos_bottom;
+  port in Direction cmd;
 
-  port out Direction em_mv;
+  port sync in boolean pos_left, pos_right, pos_top, pos_bottom;
+
+  port out Direction mv;
 
   varif (Heatable) {
-    port sync in boolean em_too_cold;
+    port sync in boolean too_cold;
     port in Trigger time_heating_elapsed;
     port out Trigger heating_on, heating_off;
   }
 
   varif (LEDExteriorMirror) {
-    port out Trigger em_pos_vert_top, em_pos_vert_pend, em_pos_vert_bottom,
-                     em_pos_hor_left, em_pos_hor_pend, em_pos_hor_right;
+    port out Trigger pos_vert_top, pos_vert_pend, pos_vert_bottom,
+                     pos_hor_left, pos_hor_pend, pos_hor_right;
   }
 
 }

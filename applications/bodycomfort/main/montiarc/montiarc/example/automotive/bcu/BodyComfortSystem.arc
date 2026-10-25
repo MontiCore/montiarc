@@ -115,22 +115,19 @@ component BodyComfortSystem {
 
   ExteriorMirror em(Heatable, LEDExteriorMirror);
 
-  hmi.em_but_right -> em.em_but_right;
-  hmi.em_but_down -> em.em_but_down;
-  hmi.em_but_up -> em.em_but_up;
-  hmi.em_but_left -> em.em_but_left;
-  em_pos_left -> em.em_pos_left;
-  em_pos_right -> em.em_pos_right;
-  em_pos_top -> em.em_pos_top;
-  em_pos_bottom -> em.em_pos_bottom;
-  em.em_mv -> em_mv;
+  hmi.em_cmd -> em.cmd;
+  em_pos_left -> em.pos_left;
+  em_pos_right -> em.pos_right;
+  em_pos_top -> em.pos_top;
+  em_pos_bottom -> em.pos_bottom;
+  em.mv -> em_mv;
 
   varif (Heatable) {
     port sync in boolean em_too_cold;
     port in Trigger time_heating_elapsed;
     port out Trigger heating_on, heating_off;
 
-    em_too_cold -> em.em_too_cold;
+    em_too_cold -> em.too_cold;
     time_heating_elapsed -> em.time_heating_elapsed;
     em.heating_on -> heating_on;
     em.heating_off -> heating_off;
@@ -306,12 +303,12 @@ component BodyComfortSystem {
 
     LED ledEMT, ledEMB, ledEML, ledEMR;
 
-    em.em_pos_vert_top -> ledEMT.turn_on;
-    em.em_pos_vert_bottom -> ledEMB.turn_on;
-    em.em_pos_vert_pend -> ledEMT.turn_off, ledEMB.turn_off;
-    em.em_pos_hor_left -> ledEML.turn_on;
-    em.em_pos_hor_right -> ledEMR.turn_on;
-    em.em_pos_hor_pend -> ledEML.turn_off, ledEMR.turn_off;
+    em.pos_vert_top -> ledEMT.turn_on;
+    em.pos_vert_bottom -> ledEMB.turn_on;
+    em.pos_vert_pend -> ledEMT.turn_off, ledEMB.turn_off;
+    em.pos_hor_left -> ledEML.turn_on;
+    em.pos_hor_right -> ledEMR.turn_on;
+    em.pos_hor_pend -> ledEML.turn_off, ledEMR.turn_off;
     ledEMT.led -> led_em_top;
     ledEMB.led -> led_em_bottom;
     ledEML.led -> led_em_left;

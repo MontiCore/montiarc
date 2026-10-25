@@ -9,8 +9,10 @@ component HumanMachineInterface(boolean AlarmSystem, boolean LEDAlarmSystem,
   port sync in boolean pw_but_mv_dn, pw_but_mv_up,
                        em_but_mv_left, em_but_mv_right, em_but_mv_up, em_but_mv_dn;
 
-  port sync out boolean pw_but_dn, pw_but_up,
-                        em_but_right, em_but_down, em_but_up, em_but_left;
+  port sync out boolean pw_but_dn, pw_but_up;
+
+  // emits a movement command on the rising edge of a mirror button
+  port out Direction em_cmd;
 
   varif (AlarmSystem) {
     port in Trigger activate_as, deactivate_as;
