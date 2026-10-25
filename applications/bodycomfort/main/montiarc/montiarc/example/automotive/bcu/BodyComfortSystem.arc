@@ -77,35 +77,23 @@ component BodyComfortSystem {
 
   finger_detected -> fp.finger_detected;
 
-  varif (ManualPowerWindow) {
-    port out Move pw_mv;
-
-    ManualPowerWindow manPW(CentralLockingSystem);
-
-    hmi.pw_but_up -> manPW.but_up;
-    hmi.pw_but_dn -> manPW.but_dn, fp.pw_but_dn;
-    pw_pos_up -> manPW.pos_up;
-    pw_pos_dn -> manPW.pos_dn;
-    fp.on -> manPW.fp_on;
-    fp.off -> manPW.fp_off;
-    manPW.mv -> pw_mv;
-  }
-
   varif (AutomaticPowerWindow) {
-    port out AutoMove pw_auto_mv;
-
-    AutomaticPowerWindow autoPW(CentralLockingSystem);
-
-    pw_pos_up -> autoPW.pos_up;
-    pw_pos_dn -> autoPW.pos_dn;
-    fp.on -> autoPW.fp_on;
-    fp.off -> autoPW.fp_off;
-    autoPW.mv -> pw_auto_mv;
+    port out AutoMove pw_mv;
+  } else {
+    port out Move pw_mv;
   }
 
-  varif (AutomaticPowerWindow && !ControlAutomaticPowerWindow) {
-    hmi.pw_but_up -> autoPW.but_up;
-    hmi.pw_but_dn -> autoPW.but_dn, fp.pw_but_dn;
+  PowerWindow pw(AutomaticPowerWindow, CentralLockingSystem);
+
+  pw_pos_up -> pw.pos_up;
+  pw_pos_dn -> pw.pos_dn;
+  fp.on -> pw.fp_on;
+  fp.off -> pw.fp_off;
+  pw.mv -> pw_mv;
+
+  varif (!ControlAutomaticPowerWindow) {
+    hmi.pw_but_up -> pw.but_up;
+    hmi.pw_but_dn -> pw.but_dn, fp.pw_but_dn;
   }
 
   // ===== Exterior Mirror ===== //
@@ -186,16 +174,8 @@ component BodyComfortSystem {
     key_pos_unlock -> cls.key_pos_unlock;
     cls.lock -> cls_lock;
     cls.unlock -> cls_unlock;
-  }
-
-  varif (CentralLockingSystem && ManualPowerWindow) {
-    cls.lock -> manPW.cls_lock;
-    cls.unlock -> manPW.cls_unlock;
-  }
-
-  varif (CentralLockingSystem && AutomaticPowerWindow) {
-    cls.lock -> autoPW.cls_lock;
-    cls.unlock -> autoPW.cls_unlock;
+    cls.lock -> pw.cls_lock;
+    cls.unlock -> pw.cls_unlock;
   }
 
   varif (SafetyFunction || AutomaticLocking) {
@@ -249,8 +229,8 @@ component BodyComfortSystem {
     rckCtrl.pw_but_up -> pwButUp.b;
     hmi.pw_but_dn -> pwButDn.a;
     rckCtrl.pw_but_dn -> pwButDn.b;
-    pwButUp.q -> autoPW.but_up;
-    pwButDn.q -> autoPW.but_dn, fp.pw_but_dn;
+    pwButUp.q -> pw.but_up;
+    pwButDn.q -> pw.but_dn, fp.pw_but_dn;
   }
 
   // ===== Status LEDs ===== //
@@ -276,7 +256,7 @@ component BodyComfortSystem {
 
     release_pw_but_up -> hmi.release_pw_but_up;
     release_pw_but_dn -> hmi.release_pw_but_dn;
-    manPW.mv -> ledManPW.pw_mv;
+    pw.mv -> ledManPW.pw_mv;
     hmi.release_pw_but -> ledManPW.release_pw_but;
     ledManPW.led_up -> led_pw_up;
     ledManPW.led_dn -> led_pw_dn;
@@ -285,7 +265,7 @@ component BodyComfortSystem {
   varif (LEDPowerWindow && AutomaticPowerWindow) {
     LEDAutomaticPowerWindow ledAutoPW(CentralLockingSystem);
 
-    autoPW.mv -> ledAutoPW.pw_auto_mv;
+    pw.mv -> ledAutoPW.pw_auto_mv;
     ledAutoPW.led_up -> led_pw_up;
     ledAutoPW.led_dn -> led_pw_dn;
   }
