@@ -7,11 +7,11 @@ component LEDAutomaticPowerWindow(boolean CentralLockingSystem) {
 
   port in AutoMove pw_auto_mv;
 
-  port sync out boolean led_pw_up, led_pw_dn;
+  port sync out boolean led_up, led_dn;
 
   varif (CentralLockingSystem) {
     port in Trigger cls_lock, cls_unlock;
-    port sync out boolean led_pw_cls_up;
+    port sync out boolean led_cls_up;
   }
 
 }

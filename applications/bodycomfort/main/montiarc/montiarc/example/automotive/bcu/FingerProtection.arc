@@ -9,6 +9,6 @@ component FingerProtection {
 
   port sync in boolean pw_but_dn;
 
-  port out Trigger fp_on, fp_off;
+  port out Trigger on, off;
 
 }

@@ -5,9 +5,9 @@ import montiarc.example.automotive.bcu.Datatypes.*;
 
 component RemoteControlKeyController(boolean ControlAutomaticPowerWindow, boolean SafetyFunction) {
 
-  port in Trigger rck_but_lock, rck_but_unlock;
+  port in Trigger but_lock, but_unlock;
 
-  port out Trigger rck_lock, rck_unlock;
+  port out Trigger lock, unlock;
 
   varif (ControlAutomaticPowerWindow) {
     port sync in boolean pw_rm_up, pw_rm_dn;
@@ -16,7 +16,7 @@ component RemoteControlKeyController(boolean ControlAutomaticPowerWindow, boolea
 
   varif (SafetyFunction) {
     port sync in boolean door_open;
-    port in Trigger time_rck_sf_elapsed;
+    port in Trigger time_sf_elapsed;
   }
 
 }

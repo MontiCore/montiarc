@@ -82,13 +82,13 @@ component BodyComfortSystem {
 
     ManualPowerWindow manPW(CentralLockingSystem);
 
-    hmi.pw_but_up -> manPW.pw_but_up;
-    hmi.pw_but_dn -> manPW.pw_but_dn, fp.pw_but_dn;
-    pw_pos_up -> manPW.pw_pos_up;
-    pw_pos_dn -> manPW.pw_pos_dn;
-    fp.fp_on -> manPW.fp_on;
-    fp.fp_off -> manPW.fp_off;
-    manPW.pw_mv -> pw_mv;
+    hmi.pw_but_up -> manPW.but_up;
+    hmi.pw_but_dn -> manPW.but_dn, fp.pw_but_dn;
+    pw_pos_up -> manPW.pos_up;
+    pw_pos_dn -> manPW.pos_dn;
+    fp.on -> manPW.fp_on;
+    fp.off -> manPW.fp_off;
+    manPW.mv -> pw_mv;
   }
 
   varif (AutomaticPowerWindow) {
@@ -96,16 +96,16 @@ component BodyComfortSystem {
 
     AutomaticPowerWindow autoPW(CentralLockingSystem);
 
-    pw_pos_up -> autoPW.pw_pos_up;
-    pw_pos_dn -> autoPW.pw_pos_dn;
-    fp.fp_on -> autoPW.fp_on;
-    fp.fp_off -> autoPW.fp_off;
-    autoPW.pw_auto_mv -> pw_auto_mv;
+    pw_pos_up -> autoPW.pos_up;
+    pw_pos_dn -> autoPW.pos_dn;
+    fp.on -> autoPW.fp_on;
+    fp.off -> autoPW.fp_off;
+    autoPW.mv -> pw_auto_mv;
   }
 
   varif (AutomaticPowerWindow && !ControlAutomaticPowerWindow) {
-    hmi.pw_but_up -> autoPW.pw_but_up;
-    hmi.pw_but_dn -> autoPW.pw_but_dn, fp.pw_but_dn;
+    hmi.pw_but_up -> autoPW.but_up;
+    hmi.pw_but_dn -> autoPW.but_dn, fp.pw_but_dn;
   }
 
   // ===== Exterior Mirror ===== //
@@ -144,22 +144,22 @@ component BodyComfortSystem {
 
     activate_as -> hmi.activate_as;
     deactivate_as -> hmi.deactivate_as;
-    hmi.as_activated -> as.as_activated;
-    hmi.as_deactivated -> as.as_deactivated;
-    as_alarm_detected -> as.as_alarm_detected;
+    hmi.as_activated -> as.activated;
+    hmi.as_deactivated -> as.deactivated;
+    as_alarm_detected -> as.alarm_detected;
     time_alarm_elapsed -> as.time_alarm_elapsed;
     key_pos_lock -> as.key_pos_lock;
     key_pos_unlock -> as.key_pos_unlock;
-    as.as_active_on -> as_active_on;
-    as.as_active_off -> as_active_off;
-    as.as_alarm_on -> as_alarm_on;
-    as.as_alarm_off -> as_alarm_off;
+    as.active_on -> as_active_on;
+    as.active_off -> as_active_off;
+    as.alarm_on -> as_alarm_on;
+    as.alarm_off -> as_alarm_off;
   }
 
   varif (AlarmSystem && !LEDAlarmSystem) {
     port out Trigger as_alarm_was_detected;
 
-    as.as_alarm_was_detected -> as_alarm_was_detected;
+    as.alarm_was_detected -> as_alarm_was_detected;
   }
 
   varif (InteriorMonitoring) {
@@ -167,8 +167,8 @@ component BodyComfortSystem {
     port out Trigger as_im_alarm_on, as_im_alarm_off;
 
     im_alarm_detected -> as.im_alarm_detected;
-    as.as_im_alarm_on -> as_im_alarm_on;
-    as.as_im_alarm_off -> as_im_alarm_off;
+    as.im_alarm_on -> as_im_alarm_on;
+    as.im_alarm_off -> as_im_alarm_off;
   }
 
   // ===== Central Locking System ===== //
@@ -184,18 +184,18 @@ component BodyComfortSystem {
 
     key_pos_lock -> cls.key_pos_lock;
     key_pos_unlock -> cls.key_pos_unlock;
-    cls.cls_lock -> cls_lock;
-    cls.cls_unlock -> cls_unlock;
+    cls.lock -> cls_lock;
+    cls.unlock -> cls_unlock;
   }
 
   varif (CentralLockingSystem && ManualPowerWindow) {
-    cls.cls_lock -> manPW.cls_lock;
-    cls.cls_unlock -> manPW.cls_unlock;
+    cls.lock -> manPW.cls_lock;
+    cls.unlock -> manPW.cls_unlock;
   }
 
   varif (CentralLockingSystem && AutomaticPowerWindow) {
-    cls.cls_lock -> autoPW.cls_lock;
-    cls.cls_unlock -> autoPW.cls_unlock;
+    cls.lock -> autoPW.cls_lock;
+    cls.unlock -> autoPW.cls_unlock;
   }
 
   varif (SafetyFunction || AutomaticLocking) {
@@ -219,22 +219,22 @@ component BodyComfortSystem {
 
     RemoteControlKeyController rckCtrl(ControlAutomaticPowerWindow, SafetyFunction);
 
-    rck_but_lock -> rckCtrl.rck_but_lock;
-    rck_but_unlock -> rckCtrl.rck_but_unlock;
-    rckCtrl.rck_lock -> cls.rck_lock;
-    rckCtrl.rck_unlock -> cls.rck_unlock;
+    rck_but_lock -> rckCtrl.but_lock;
+    rck_but_unlock -> rckCtrl.but_unlock;
+    rckCtrl.lock -> cls.rck_lock;
+    rckCtrl.unlock -> cls.rck_unlock;
   }
 
   varif (SafetyFunction) {
     port in Trigger time_rck_sf_elapsed;
 
     door_open -> rckCtrl.door_open;
-    time_rck_sf_elapsed -> rckCtrl.time_rck_sf_elapsed;
+    time_rck_sf_elapsed -> rckCtrl.time_sf_elapsed;
   }
 
   varif (ControlAlarmSystem) {
-    rckCtrl.rck_lock -> as.rck_lock;
-    rckCtrl.rck_unlock -> as.rck_unlock;
+    rckCtrl.lock -> as.rck_lock;
+    rckCtrl.unlock -> as.rck_unlock;
   }
 
   varif (ControlAutomaticPowerWindow) {
@@ -249,8 +249,8 @@ component BodyComfortSystem {
     rckCtrl.pw_but_up -> pwButUp.b;
     hmi.pw_but_dn -> pwButDn.a;
     rckCtrl.pw_but_dn -> pwButDn.b;
-    pwButUp.q -> autoPW.pw_but_up;
-    pwButDn.q -> autoPW.pw_but_dn, fp.pw_but_dn;
+    pwButUp.q -> autoPW.but_up;
+    pwButDn.q -> autoPW.but_dn, fp.pw_but_dn;
   }
 
   // ===== Status LEDs ===== //
@@ -260,8 +260,8 @@ component BodyComfortSystem {
 
     LED ledFP;
 
-    fp.fp_on -> ledFP.turn_on;
-    fp.fp_off -> ledFP.turn_off;
+    fp.on -> ledFP.turn_on;
+    fp.off -> ledFP.turn_off;
     ledFP.led -> led_fp;
   }
 
@@ -276,26 +276,26 @@ component BodyComfortSystem {
 
     release_pw_but_up -> hmi.release_pw_but_up;
     release_pw_but_dn -> hmi.release_pw_but_dn;
-    manPW.pw_mv -> ledManPW.pw_mv;
+    manPW.mv -> ledManPW.pw_mv;
     hmi.release_pw_but -> ledManPW.release_pw_but;
-    ledManPW.led_pw_up -> led_pw_up;
-    ledManPW.led_pw_dn -> led_pw_dn;
+    ledManPW.led_up -> led_pw_up;
+    ledManPW.led_dn -> led_pw_dn;
   }
 
   varif (LEDPowerWindow && AutomaticPowerWindow) {
     LEDAutomaticPowerWindow ledAutoPW(CentralLockingSystem);
 
-    autoPW.pw_auto_mv -> ledAutoPW.pw_auto_mv;
-    ledAutoPW.led_pw_up -> led_pw_up;
-    ledAutoPW.led_pw_dn -> led_pw_dn;
+    autoPW.mv -> ledAutoPW.pw_auto_mv;
+    ledAutoPW.led_up -> led_pw_up;
+    ledAutoPW.led_dn -> led_pw_dn;
   }
 
   varif (LEDPowerWindow && AutomaticPowerWindow && CentralLockingSystem) {
     port sync out boolean led_pw_cls_up;
 
-    cls.cls_lock -> ledAutoPW.cls_lock;
-    cls.cls_unlock -> ledAutoPW.cls_unlock;
-    ledAutoPW.led_pw_cls_up -> led_pw_cls_up;
+    cls.lock -> ledAutoPW.cls_lock;
+    cls.unlock -> ledAutoPW.cls_unlock;
+    ledAutoPW.led_cls_up -> led_pw_cls_up;
   }
 
   varif (LEDExteriorMirror) {
@@ -330,8 +330,8 @@ component BodyComfortSystem {
 
     LED ledCLS;
 
-    cls.cls_lock -> ledCLS.turn_on;
-    cls.cls_unlock -> ledCLS.turn_off;
+    cls.lock -> ledCLS.turn_on;
+    cls.unlock -> ledCLS.turn_off;
     ledCLS.led -> led_cls;
   }
 
@@ -342,11 +342,11 @@ component BodyComfortSystem {
     LED ledASAC, ledASAL, ledASAD;
 
     confirm_alarm -> hmi.confirm_alarm;
-    as.as_active_on -> ledASAC.turn_on;
-    as.as_active_off -> ledASAC.turn_off;
-    as.as_alarm_on -> ledASAL.turn_on;
-    as.as_alarm_off -> ledASAL.turn_off;
-    as.as_alarm_was_detected -> ledASAD.turn_on;
+    as.active_on -> ledASAC.turn_on;
+    as.active_off -> ledASAC.turn_off;
+    as.alarm_on -> ledASAL.turn_on;
+    as.alarm_off -> ledASAL.turn_off;
+    as.alarm_was_detected -> ledASAD.turn_on;
     hmi.as_alarm_was_confirmed -> ledASAD.turn_off;
     ledASAC.led -> led_as_active;
     ledASAL.led -> led_as_alarm;
@@ -358,8 +358,8 @@ component BodyComfortSystem {
 
     LED ledASIM;
 
-    as.as_im_alarm_on -> ledASIM.turn_on;
-    as.as_im_alarm_off -> ledASIM.turn_off;
+    as.im_alarm_on -> ledASIM.turn_on;
+    as.im_alarm_off -> ledASIM.turn_off;
     ledASIM.led -> led_as_im_alarm;
   }
 

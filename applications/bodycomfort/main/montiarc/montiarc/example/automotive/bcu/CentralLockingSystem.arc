@@ -7,7 +7,7 @@ component CentralLockingSystem(boolean RemoteControlKey, boolean AutomaticLockin
 
   port in Trigger key_pos_lock, key_pos_unlock;
 
-  port out Trigger cls_lock, cls_unlock;
+  port out Trigger lock, unlock;
 
   varif (RemoteControlKey) {
     port in Trigger rck_lock, rck_unlock;

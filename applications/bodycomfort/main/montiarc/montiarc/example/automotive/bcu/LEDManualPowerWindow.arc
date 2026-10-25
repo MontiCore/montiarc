@@ -9,6 +9,6 @@ component LEDManualPowerWindow {
 
   port in Trigger release_pw_but;
 
-  port sync out boolean led_pw_up, led_pw_dn;
+  port sync out boolean led_up, led_dn;
 
 }
