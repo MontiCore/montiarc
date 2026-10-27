@@ -16,34 +16,30 @@ component BodyComfortSystem {
           LEDAlarmSystem, LEDFingerProtection, LEDCentralLockingSystem,
           LEDPowerWindow, LEDExteriorMirror, LEDHeatable;
 
-  feature DoorSystem, PowerWindow, ManualPowerWindow, AutomaticPowerWindow, FingerProtection,
-          ExteriorMirror, Electric, Heatable;
+  feature DoorSystem, ExteriorMirror, Electric, Heatable, PowerWindow,
+          ManualPowerWindow, AutomaticPowerWindow, FingerProtection;
 
-  feature Security, AlarmSystem, InteriorMonitoring, CentralLockingSystem, AutomaticLocking,
-          RemoteControlKey, ControlAlarmSystem, SafetyFunction, ControlAutomaticPowerWindow,
-          AdjustExteriorMirror;
+  feature Security, AlarmSystem, InteriorMonitoring, CentralLockingSystem,
+          AutomaticLocking, RemoteControlKey, ControlAlarmSystem,
+          SafetyFunction, ControlAutomaticPowerWindow, AdjustExteriorMirror;
 
   // ===== Feature Tree ===== //
 
-  constraint(HumanMachineInterface);
-  constraint(!StatusLED || HumanMachineInterface);
-  constraint(StatusLED == (LEDAlarmSystem || LEDFingerProtection || LEDCentralLockingSystem
-                           || LEDPowerWindow || LEDExteriorMirror || LEDHeatable));
+  constraint(HumanMachineInterface && (!StatusLED || HumanMachineInterface));
+  constraint((LEDAlarmSystem || LEDFingerProtection || LEDCentralLockingSystem
+      || LEDPowerWindow || LEDExteriorMirror || LEDHeatable) == StatusLED);
 
-  constraint(DoorSystem);
-  constraint(PowerWindow == DoorSystem);
-  constraint(PowerWindow == (ManualPowerWindow || AutomaticPowerWindow));
-  constraint(FingerProtection == PowerWindow);
+  constraint(DoorSystem && ((PowerWindow && ExteriorMirror) == DoorSystem));
+  constraint((ManualPowerWindow || AutomaticPowerWindow) == PowerWindow);
   constraint(!(ManualPowerWindow && AutomaticPowerWindow));
-  constraint(ExteriorMirror == DoorSystem);
-  constraint(Electric == ExteriorMirror);
-  constraint(!Heatable || ExteriorMirror);
+  constraint(FingerProtection == PowerWindow);
+  constraint((Electric == ExteriorMirror) && (!Heatable || ExteriorMirror));
 
   constraint(!(AlarmSystem || CentralLockingSystem || RemoteControlKey) || Security);
   constraint(!InteriorMonitoring || AlarmSystem);
   constraint(!AutomaticLocking || CentralLockingSystem);
-  constraint(!(ControlAlarmSystem || SafetyFunction || ControlAutomaticPowerWindow
-               || AdjustExteriorMirror) || RemoteControlKey);
+  constraint(!(ControlAlarmSystem || ControlAutomaticPowerWindow
+      || SafetyFunction || AdjustExteriorMirror) || RemoteControlKey);
 
   // ===== Cross-tree Constraints ===== //
 
