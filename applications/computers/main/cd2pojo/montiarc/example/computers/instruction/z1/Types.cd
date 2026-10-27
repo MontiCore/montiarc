@@ -1,0 +1,44 @@
+/* (c) https://github.com/MontiCore/monticore */
+package montiarc.example.computers.instruction.z1;
+
+classdiagram Types {
+
+  // The instructions of the Z1 as punched into the program tape:
+  // Lu (read keyboard), Ld (display), Pr z (load), Ps z (store),
+  // Ls1 (add), Ls2 (subtract), Lm (multiply), Li (divide)
+  public enum Opcode {
+    LU,
+    LD,
+    PR,
+    PS,
+    LS1,
+    LS2,
+    LM,
+    LI;
+  }
+
+  public enum AluOp {
+    NONE,
+    ADD,
+    SUB,
+    MUL,
+    DIV;
+  }
+
+  public enum Source {
+    NONE,
+    MEMORY,
+    KEYBOARD,
+    ALU;
+  }
+
+  public enum Register {
+    R1,
+    R2;
+  }
+
+  public class Instruction {
+    public Opcode op;
+    public int address;
+  }
+}
