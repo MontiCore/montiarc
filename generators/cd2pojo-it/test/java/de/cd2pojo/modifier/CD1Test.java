@@ -4,6 +4,7 @@ package de.cd2pojo.modifier;
 import de.cd2pojo.modifier.CD1.CPackage;
 import de.cd2pojo.modifier.CD1.EPackage;
 import de.cd2pojo.modifier.CD1.IPackage;
+import de.se_rwth.commons.Generated;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Modifier;
@@ -15,6 +16,15 @@ import static org.assertj.core.api.Assertions.assertThat;
  * However, as a workaround, we currently expect them to be public instead.
  */
 class CD1Test {
+
+  protected static final String GENERATOR = "montiarc.generators.cd2pojo";
+
+  @Test
+  void test_generated_annotation() {
+    assertThat(CPackage.class.getAnnotation(Generated.class).value()).isEqualTo(GENERATOR);
+    assertThat(IPackage.class.getAnnotation(Generated.class).value()).isEqualTo(GENERATOR);
+    assertThat(EPackage.class.getAnnotation(Generated.class).value()).isEqualTo(GENERATOR);
+  }
 
   @Test
   void test_modifier_interface() {

@@ -21,3 +21,8 @@ ${decConfig.withAbstractMethodSignatures().defaultIgnore()}
 
 <#-- Replace default templates -->
 ${glex.replaceTemplate("cd2java.EmptyBody", glex.templateHP("cd2pojo.EmptyBody.ftl"))}
+
+<#-- Mark every generated Java type as CD2Pojo output -->
+${glex.bindTemplateHookPoint("ClassContent:Annotations", "cd2pojo.Annotations")}
+${glex.bindTemplateHookPoint("InterfaceContent:Annotations", "cd2pojo.Annotations")}
+${glex.bindTemplateHookPoint("EnumContent:Annotations", "cd2pojo.Annotations")}
